@@ -40,15 +40,15 @@ interface MySubmissionRow {
 function getNextAction(status: string): string | null {
   switch (status) {
     case APPROVAL_STATUS.PENDING:
-      return 'Wir prüfen Ihren Beitrag. Sie werden informiert, sobald eine Entscheidung vorliegt.'
+      return 'Wir prüfen deinen Beitrag. Du wirst informiert, sobald eine Entscheidung vorliegt.'
     case APPROVAL_STATUS.APPROVED:
       return 'Ihr Beitrag wurde genehmigt und wird in Kürze veröffentlicht.'
     case APPROVAL_STATUS.PUBLISHED:
       return 'Ihr Beitrag ist live.'
     case APPROVAL_STATUS.REJECTED:
-      return 'Dieser Beitrag wurde abgelehnt. Sie können jederzeit einen neuen Beitrag einreichen.'
+      return 'Dieser Beitrag wurde abgelehnt. Du kannst jederzeit einen neuen Beitrag einreichen.'
     case APPROVAL_STATUS.REQUIRES_CHANGES:
-      return 'Bitte überarbeiten Sie den Beitrag basierend auf dem Feedback und reichen Sie ihn erneut ein.'
+      return 'Bitte überarbeite den Beitrag basierend auf dem Feedback und reiche ihn erneut ein.'
     default:
       return null
   }

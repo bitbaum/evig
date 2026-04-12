@@ -30,7 +30,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     }
 
     if (!user.passwordHash) {
-      return apiBadRequest('Kein Passwort gesetzt. Bitte verwenden Sie die Passwort-zurücksetzen Funktion.')
+      return apiBadRequest('Kein Passwort gesetzt. Bitte verwende die Passwort-zurücksetzen Funktion.')
     }
 
     // Verify current password against stored hash

@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Newsletter subscription schema
 export const NewsletterSubscribeSchema = z.object({
   email: z.string()
-    .email('Bitte geben Sie eine gültige E-Mail-Adresse ein')
+    .email('Bitte gib eine gültige E-Mail-Adresse ein')
     .transform(email => email.toLowerCase().trim()),
 });
 
@@ -21,7 +21,7 @@ export type NewsletterConfirmInput = z.infer<typeof NewsletterConfirmSchema>;
 // Newsletter unsubscribe schema
 export const NewsletterUnsubscribeSchema = z.object({
   email: z.string()
-    .email('Bitte geben Sie eine gültige E-Mail-Adresse ein')
+    .email('Bitte gib eine gültige E-Mail-Adresse ein')
     .transform(email => email.toLowerCase().trim()),
   token: z.string().optional(),
 });

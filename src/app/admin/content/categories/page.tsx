@@ -300,7 +300,7 @@ export default async function AdminCategoriesPage() {
               Noch keine Kategorien
             </Heading>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Erstellen Sie Kategorien, um Ihre Blog-Artikel zu organisieren.
+              Erstelle Kategorien, um deine Blog-Artikel zu organisieren.
             </p>
             <Link
               href="/admin/content/categories/new"

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Password reset rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
         retryAfter: rateLimitResult.retryAfter,
       })
     }

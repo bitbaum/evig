@@ -111,7 +111,7 @@ export default function BlogSubmissionsClient() {
 
   const resubmit = async (id: string) => {
     if (!editContent.trim()) {
-      setError('Bitte geben Sie den überarbeiteten Inhalt ein.')
+      setError('Bitte gib den überarbeiteten Inhalt ein.')
       return
     }
     setSaving(true)
@@ -337,7 +337,7 @@ export default function BlogSubmissionsClient() {
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
                               rows={10}
-                              placeholder="Fügen Sie Ihren überarbeiteten Beitrag hier ein..."
+                              placeholder="Füge Ihren überarbeiteten Beitrag hier ein..."
                               className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
                             />
                           </div>
@@ -412,10 +412,10 @@ function EmptyState() {
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-8 text-center border-2 border-neutral-200 dark:border-neutral-700">
       <FileText className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
       <Heading level={3} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
-        Sie haben noch keine Blogbeiträge eingereicht
+        Du hast noch keine Blogbeiträge eingereicht
       </Heading>
       <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-        Teilen Sie Ihr Wissen mit der Community.
+        Teile Ihr Wissen mit der Community.
       </p>
       <Link
         href="/blog/submit"

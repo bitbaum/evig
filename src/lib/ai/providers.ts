@@ -424,7 +424,7 @@ export function buildFailureMessage(failedProviders: ProviderError[]): string {
 
   const allNetwork = failedProviders.every(p => p.reason === 'network' || p.reason === 'no_key')
   if (allNetwork) {
-    return 'Kein KI-Service erreichbar. Bitte prüfen Sie die Konfiguration.'
+    return 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.'
   }
 
   return 'KI-Verarbeitung fehlgeschlagen. Bitte später erneut versuchen.'

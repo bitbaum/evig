@@ -116,7 +116,7 @@ export default function MyListingsPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Möchten Sie dieses Inserat wirklich löschen?')) return
+    if (!confirm('Möchtest du dieses Inserat wirklich löschen?')) return
     setDeletingId(id)
     const result = await apiFetch<void>(`/api/listings/${id}`, { method: 'DELETE' })
     if (result.success) {
@@ -207,7 +207,7 @@ export default function MyListingsPage() {
             {statusFilter ? 'Keine Inserate in dieser Kategorie' : 'Noch keine Inserate'}
           </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Erstellen Sie Ihr erstes Inserat und verkaufen Sie direkt an die Community.
+            Erstelle dein erstes Inserat und verkaufe direkt an die Community.
           </p>
           <Link
             href="/marketplace/sell"

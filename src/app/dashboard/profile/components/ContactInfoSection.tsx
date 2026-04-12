@@ -21,7 +21,7 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Kontaktdaten
           </Heading>
-          <p className="text-sm text-gray-500">So können wir Sie erreichen</p>
+          <p className="text-sm text-gray-500">So können wir dich erreichen</p>
         </div>
       </div>
 

@@ -131,7 +131,7 @@ export const authConfig = {
           const lockoutCheck = isAccountLocked(`${user.id}:login`)
           if (lockoutCheck.locked) {
             const minutes = Math.ceil((lockoutCheck.retryAfter ?? 60) / 60)
-            throw new Error(`Konto vorübergehend gesperrt. Versuchen Sie es in ${minutes} Minuten erneut.`)
+            throw new Error(`Konto vorübergehend gesperrt. Versuche es in ${minutes} Minuten erneut.`)
           }
 
           if (!user.password_hash) {
@@ -157,7 +157,7 @@ export const authConfig = {
 
           // SECURITY: Require email verification before login
           if (!user.emailVerified) {
-            throw new Error('Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse. Überprüfen Sie Ihren Posteingang.')
+            throw new Error('Bitte bestätige zuerst deine E-Mail-Adresse. Überprüfe deinen Posteingang.')
           }
 
           // Determine staff status — DB flag is SSOT, email domain only for initial setup
@@ -188,7 +188,7 @@ export const authConfig = {
               provider: 'credentials',
               reason: errorMessage,
             })
-            throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
+            throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.')
           }
 
           logger.warn('AUTH_LOGIN_REJECTED', {
@@ -388,6 +388,6 @@ export async function registerUser(data: {
     }
   } catch (error) {
     logger.error('Registration error', { error })
-    return { success: false, error: 'Registrierung fehlgeschlagen. Bitte versuchen Sie es später erneut.' }
+    return { success: false, error: 'Registrierung fehlgeschlagen. Bitte versuche es später erneut.' }
   }
 }

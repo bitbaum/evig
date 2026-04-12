@@ -58,7 +58,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     // Ownership check — only the original submitter may resubmit.
     if (existing.userId !== session.user.id) {
-      return apiForbidden('Sie dürfen diese Einreichung nicht bearbeiten')
+      return apiForbidden('Du darfst diese Einreichung nicht bearbeiten')
     }
 
     if (existing.status !== APPROVAL_STATUS.REQUIRES_CHANGES) {

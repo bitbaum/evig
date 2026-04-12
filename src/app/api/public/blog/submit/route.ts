@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       logger.warn('Blog submission rate limit exceeded', { ip: clientIp })
       return apiError(
         null,
-        'Zu viele Einreichungen. Bitte versuchen Sie es später erneut.',
+        'Zu viele Einreichungen. Bitte versuche es später erneut.',
         429
       )
     }

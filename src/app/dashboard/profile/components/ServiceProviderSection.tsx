@@ -35,7 +35,7 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
             onChange={(e) => handleChange('bio', e.target.value)}
             rows={4}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Beschreiben Sie sich und Ihre Dienstleistungen..."
+            placeholder="Beschreibe sich und Ihre Dienstleistungen..."
           />
         </div>
 
@@ -65,7 +65,7 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
             placeholder="Hardware-Reparatur, Software-Installation, Datenrettung"
           />
-          <p className="text-xs text-gray-500 mt-1">Trennen Sie Fähigkeiten mit Kommas</p>
+          <p className="text-xs text-gray-500 mt-1">Trenne Fähigkeiten mit Kommas</p>
         </div>
 
         {/* Expertise Areas */}
@@ -80,7 +80,7 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
             placeholder="Laptops, Desktops, Smartphones, Linux, Windows"
           />
-          <p className="text-xs text-gray-500 mt-1">Trennen Sie Fachgebiete mit Kommas</p>
+          <p className="text-xs text-gray-500 mt-1">Trenne Fachgebiete mit Kommas</p>
         </div>
 
         {/* Service Radius */}

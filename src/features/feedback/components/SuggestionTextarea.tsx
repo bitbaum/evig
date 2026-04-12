@@ -38,7 +38,7 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
           placeholder={
             feedbackScope === 'element'
               ? selectedElements.length === 0
-                ? "Wählen Sie zuerst Elemente aus..."
+                ? "Wähle zuerst Elemente aus..."
                 : `Verbesserungsvorschlag für ${selectedElements.length} Element${selectedElements.length > 1 ? 'e' : ''}...`
               : feedbackScope === 'page'
               ? "Was können wir auf dieser Seite verbessern?"

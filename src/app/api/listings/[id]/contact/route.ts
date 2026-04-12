@@ -62,7 +62,7 @@ export const POST = withAuth<{ id: string }>(async (
     }
 
     if (listing.sellerId === session.user.id) {
-      return apiBadRequest('Sie können sich nicht selbst kontaktieren');
+      return apiBadRequest('Du kannst dich nicht selbst kontaktieren');
     }
 
     // Send message via shared service (handles transaction, metadata, participant ordering)

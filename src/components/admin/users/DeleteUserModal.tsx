@@ -34,7 +34,7 @@ export function DeleteUserModal({
 
       <div className="mb-6">
         <p className="text-gray-700 dark:text-gray-300 mb-2">
-          Sind Sie sicher, dass Sie diesen Benutzer löschen möchten?
+          Bist du sicher, dass du diesen Benutzer löschen möchten?
         </p>
         <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
           <p className="font-medium text-gray-900 dark:text-white">

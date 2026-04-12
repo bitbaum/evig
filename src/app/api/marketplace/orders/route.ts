@@ -139,7 +139,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       await db.update(listings)
         .set({ status: LISTING_STATUS.ACTIVE })
         .where(eq(listings.id, listing.id));
-      return apiError(gatewayError, 'Zahlungsgateway konnte nicht erstellt werden. Bitte versuchen Sie es erneut.');
+      return apiError(gatewayError, 'Zahlungsgateway konnte nicht erstellt werden. Bitte versuche es erneut.');
     }
 
     // Store gateway ID on order

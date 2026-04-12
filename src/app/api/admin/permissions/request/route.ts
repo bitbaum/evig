@@ -33,7 +33,7 @@ export const POST = withAdmin(async (request, session) => {
 
     // Validate reason
     if (!reason || typeof reason !== 'string' || reason.trim().length < 10) {
-      return apiBadRequest('Bitte geben Sie einen Grund an (mindestens 10 Zeichen)')
+      return apiBadRequest('Bitte gib einen Grund an (mindestens 10 Zeichen)')
     }
 
     // Check if user already has a pending request for any of these sections
@@ -47,7 +47,7 @@ export const POST = withAdmin(async (request, session) => {
       ))
 
     if (existing) {
-      return apiBadRequest('Sie haben bereits eine ausstehende Anfrage für einen oder mehrere dieser Bereiche')
+      return apiBadRequest('Du hast bereits eine ausstehende Anfrage für einen oder mehrere dieser Bereiche')
     }
 
     // Create the permission request

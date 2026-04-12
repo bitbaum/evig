@@ -350,7 +350,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             Keine strukturierten Notizen
           </Heading>
           <p className="text-gray-600">
-            Fügen Sie ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
+            Füge ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
           </p>
         </div>
       )}

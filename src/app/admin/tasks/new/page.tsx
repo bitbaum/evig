@@ -35,7 +35,7 @@ export default function NewTaskPage() {
           </div>
           <div>
             <Heading level={1} className="text-2xl font-bold text-gray-900">Neue Aufgabe</Heading>
-            <p className="text-gray-600">Erstellen Sie eine neue Teamaufgabe</p>
+            <p className="text-gray-600">Erstelle eine neue Teamaufgabe</p>
           </div>
         </div>
       </div>

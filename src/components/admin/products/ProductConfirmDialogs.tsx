@@ -69,7 +69,7 @@ export function ProductConfirmDialogs({
       <ConfirmDialog
         isOpen={!!deleteTarget}
         title="Produkt löschen"
-        message="Sind Sie sicher, dass Sie dieses Produkt löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+        message="Bist du sicher, dass du dieses Produkt löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
         itemName={deleteTarget?.name}
         confirmLabel="Endgültig löschen"
         cancelLabel="Abbrechen"
@@ -83,7 +83,7 @@ export function ProductConfirmDialogs({
       <ConfirmDialog
         isOpen={!!unpublishTarget}
         title="Aus Shop entfernen"
-        message="Möchten Sie dieses Produkt aus dem Shop entfernen? Es bleibt in den erfassten Produkten erhalten und kann jederzeit wieder veröffentlicht werden."
+        message="Möchtest du dieses Produkt aus dem Shop entfernen? Es bleibt in den erfassten Produkten erhalten und kann jederzeit wieder veröffentlicht werden."
         itemName={unpublishTarget?.name}
         confirmLabel="Aus Shop entfernen"
         cancelLabel="Abbrechen"
@@ -97,7 +97,7 @@ export function ProductConfirmDialogs({
       <ConfirmDialog
         isOpen={!!publishTarget}
         title="Im Shop veröffentlichen"
-        message="Möchten Sie dieses Produkt im Shop veröffentlichen? Es wird sofort für Kunden sichtbar."
+        message="Möchtest du dieses Produkt im Shop veröffentlichen? Es wird sofort für Kunden sichtbar."
         itemName={publishTarget?.name}
         confirmLabel="Veröffentlichen"
         cancelLabel="Abbrechen"
@@ -111,7 +111,7 @@ export function ProductConfirmDialogs({
       <ConfirmDialog
         isOpen={bulkDeletePending}
         title={`${selectedCount} Produkte löschen`}
-        message={`Sind Sie sicher, dass Sie ${selectedCount} Produkte löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`}
+        message={`Bist du sicher, dass du ${selectedCount} Produkte löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`}
         confirmLabel={`${selectedCount} Produkte löschen`}
         cancelLabel="Abbrechen"
         isLoading={isBulkDeleting}

@@ -58,7 +58,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       return NextResponse.json(
         {
           success: false,
-          error: `Maximale Anzahl Exporte pro Tag erreicht (${MAX_EXPORTS_PER_DAY}). Bitte versuchen Sie es später erneut.`,
+          error: `Maximale Anzahl Exporte pro Tag erreicht (${MAX_EXPORTS_PER_DAY}). Bitte versuche es später erneut.`,
         },
         { status: 429 },
       )
@@ -134,7 +134,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
         legalBasis:
           'Schweizer Datenschutzgesetz (DSG) Art. 25, EU-DSGVO Art. 15 und Art. 20',
         note:
-          'Diese Datei enthält alle personenbezogenen Daten, die Revamp-IT zu Ihrem Konto gespeichert hat.',
+          'Diese Datei enthält alle personenbezogenen Daten, die Revamp-IT zu deinem Konto gespeichert hat.',
       },
       profile: profile[0] ?? null,
       listings,
@@ -203,7 +203,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       userId,
     })
     return NextResponse.json(
-      { success: false, error: 'Export fehlgeschlagen. Bitte versuchen Sie es später erneut.' },
+      { success: false, error: 'Export fehlgeschlagen. Bitte versuche es später erneut.' },
       { status: 500 },
     )
   }

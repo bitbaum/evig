@@ -313,7 +313,7 @@ export function useITHilfeDetail(id: string) {
 
   const handleMarkCompleted = async () => {
     if (!request) return
-    if (!confirm('Bestätigen Sie, dass die Hilfe abgeschlossen ist?')) return
+    if (!confirm('Bestätige, dass die Hilfe abgeschlossen ist?')) return
 
     setMarkingCompleted(true)
     try {

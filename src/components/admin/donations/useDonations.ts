@@ -138,7 +138,7 @@ export function useDonations() {
       if (formType === DONATION_TYPES.MONETARY) {
         const amountCents = Math.round(parseFloat(formData.amount_chf) * 100)
         if (isNaN(amountCents) || amountCents < 100) {
-          alert('Bitte geben Sie einen gültigen Betrag ein (mind. CHF 1.00)')
+          alert('Bitte gib einen gültigen Betrag ein (mind. CHF 1.00)')
           setSubmitting(false)
           return
         }
@@ -146,7 +146,7 @@ export function useDonations() {
         payload.payment_method = formData.payment_method || null
       } else {
         if (!formData.device_category) {
-          alert('Bitte wählen Sie eine Gerätekategorie')
+          alert('Bitte wähle eine Gerätekategorie')
           setSubmitting(false)
           return
         }

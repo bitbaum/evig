@@ -237,8 +237,8 @@ export function ShopProductsTable({
           </Heading>
           <p className="text-gray-600">
             {searchQuery
-              ? 'Versuchen Sie eine andere Suche.'
-              : 'Veröffentlichen Sie Produkte aus dem "Erfasste Produkte" Tab.'}
+              ? 'Versuche eine andere Suche.'
+              : 'Veröffentliche Produkte aus dem "Erfasste Produkte" Tab.'}
           </p>
         </div>
       )}

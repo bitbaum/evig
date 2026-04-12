@@ -89,7 +89,7 @@ export function useSuggestionForm({ onSuccess }: UseSuggestionFormProps = {}): U
       return true
     } catch (error) {
       logger.error('Error submitting suggestion', { error })
-      setSubmitError('Fehler beim Senden. Bitte versuchen Sie es später erneut.')
+      setSubmitError('Fehler beim Senden. Bitte versuche es später erneut.')
       return false
     } finally {
       setIsSubmitting(false)

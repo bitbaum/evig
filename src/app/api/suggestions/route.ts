@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     // Rate limit: 5 submissions per hour per IP
     const clientIp = getClientIdentifier(request)
     if (!rateLimiters.apiGeneral(clientIp)) {
-      return apiBadRequest('Zu viele Anfragen. Bitte versuchen Sie es später erneut.')
+      return apiBadRequest('Zu viele Anfragen. Bitte versuche es später erneut.')
     }
 
     const body = await request.json()

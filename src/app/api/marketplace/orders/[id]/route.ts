@@ -233,8 +233,8 @@ export const PATCH = withAuth<{ id: string }>(async (
     const counterpartyName = role === 'buyer' ? order.sellerName : order.buyerName;
 
     const actionHints: Record<string, string> = {
-      [ORDER_STATUS.SHIPPED]: 'Ihr Paket ist unterwegs. Bitte bestätigen Sie den Empfang.',
-      [ORDER_STATUS.DELIVERED]: 'Bitte überprüfen Sie den Artikel und bestätigen Sie den Empfang.',
+      [ORDER_STATUS.SHIPPED]: 'Dein Paket ist unterwegs. Bitte bestätige den Empfang.',
+      [ORDER_STATUS.DELIVERED]: 'Bitte überprüfe den Artikel und bestätige den Empfang.',
       [ORDER_STATUS.COMPLETED]: 'Die Zahlung wurde freigegeben. Vielen Dank!',
       [ORDER_STATUS.CANCELLED]: 'Die Bestellung wurde storniert.',
     };

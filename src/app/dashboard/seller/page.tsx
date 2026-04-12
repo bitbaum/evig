@@ -118,7 +118,7 @@ export default function SellerDashboard() {
     },
     {
       title: 'Meine Produkte',
-      description: 'Alle Ihre Produkte verwalten',
+      description: 'Alle deine Produkte verwalten',
       href: '/dashboard/listings',
       icon: Package,
       color: 'bg-blue-500',
@@ -274,7 +274,7 @@ export default function SellerDashboard() {
               <div className="text-center py-8">
                 <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Sie haben noch keine Produkte erstellt.
+                  Du hast noch keine Produkte erstellt.
                 </p>
                 <Link
                   href="/marketplace/sell"
@@ -374,8 +374,8 @@ export default function SellerDashboard() {
               RevampIT Marketplace
             </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              Als Seller können Sie Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
-              Ihre Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,
+              Als Seller kannst du Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
+              deine Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,
               die Kreislaufwirtschaft zu fördern.
             </p>
             <div className="mt-3 flex gap-3">

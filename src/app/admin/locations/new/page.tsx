@@ -44,7 +44,7 @@ export default function NewLocationPage() {
               Neuen Ort erstellen
             </Heading>
             <p className="text-gray-600">
-              Fügen Sie einen neuen Veranstaltungsort zur Plattform hinzu
+              Füge einen neuen Veranstaltungsort zur Plattform hinzu
             </p>
           </div>
         </div>

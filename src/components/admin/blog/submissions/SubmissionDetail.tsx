@@ -44,7 +44,7 @@ export function SubmissionDetail({
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
         <Eye className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <p className="text-gray-600 dark:text-gray-400">
-          Wählen Sie eine Einreichung aus, um Details anzuzeigen
+          Wähle eine Einreichung aus, um Details anzuzeigen
         </p>
       </div>
     )

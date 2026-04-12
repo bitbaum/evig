@@ -252,7 +252,7 @@ export async function registryExtract(
   })
 
   if (!result) {
-    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfen Sie die Konfiguration.' }
+    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.' }
   }
 
   const parsed = robustJsonExtract(result.text)
@@ -317,7 +317,7 @@ export async function extractWithFallback(
   })
 
   if (!result) {
-    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfen Sie die Konfiguration.' }
+    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.' }
   }
 
   const raw = extractJson(result.text, /\{[\s\S]*\}/)

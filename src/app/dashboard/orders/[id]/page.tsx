@@ -224,8 +224,8 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             </Heading>
             <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
               {order.role === 'buyer'
-                ? 'Ihre Zahlung wird noch verarbeitet. Bitte schliessen Sie den Zahlungsvorgang ab, um die Bestellung zu bestätigen.'
-                : 'Der Käufer hat die Zahlung noch nicht abgeschlossen. Sie werden benachrichtigt, sobald die Zahlung eingegangen ist.'}
+                ? 'Deine Zahlung wird noch verarbeitet. Bitte schliesse den Zahlungsvorgang ab, um die Bestellung zu bestätigen.'
+                : 'Der Käufer hat die Zahlung noch nicht abgeschlossen. Du wirst benachrichtigt, sobald die Zahlung eingegangen ist.'}
             </p>
             {order.role === 'buyer' && (
               <Link
@@ -463,12 +463,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       {order.role === 'buyer' && order.status === ORDER_STATUS.COMPLETED && (
         <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
           <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
-            {hasReview ? 'Ihre Bewertung' : 'Bewertung abgeben'}
+            {hasReview ? 'deine Bewertung' : 'Bewertung abgeben'}
           </Heading>
           {hasReview ? (
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
               <CheckCircle className="w-4 h-4 text-green-600" />
-              Sie haben diese Bestellung am {order.reviewed_at ? formatDateShort(order.reviewed_at) : ''} bewertet. Vielen Dank!
+              Du hast diese Bestellung am {order.reviewed_at ? formatDateShort(order.reviewed_at) : ''} bewertet. Vielen Dank!
             </div>
           ) : (
             <OrderReviewForm

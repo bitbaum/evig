@@ -58,13 +58,13 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     if (existingApplication.length > 0) {
       const app = existingApplication[0]
       if (app.status === APPROVAL_STATUS.APPROVED) {
-        return apiBadRequest('Ihr Profil wurde bereits freigeschaltet')
+        return apiBadRequest('dein Profil wurde bereits freigeschaltet')
       }
       if (app.status === APPROVAL_STATUS.PENDING) {
         return apiBadRequest(ERROR_MESSAGES.PENDING_APPLICATION)
       }
       // For any other status (rejected, etc.), they already have an application
-      return apiBadRequest('Sie haben bereits ein Reparateur-Profil')
+      return apiBadRequest('Du hast bereits ein Reparateur-Profil')
     }
 
     // Handle file uploads (simplified - in production, you'd upload to cloud storage)

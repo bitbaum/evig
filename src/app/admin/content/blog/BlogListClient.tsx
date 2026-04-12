@@ -181,8 +181,8 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             {search.trim() || statusFilter
-              ? 'Versuchen Sie andere Suchkriterien.'
-              : 'Erstellen Sie Ihren ersten Blog-Artikel.'}
+              ? 'Versuche andere Suchkriterien.'
+              : 'Erstelle deinen ersten Blog-Artikel.'}
           </p>
           {!search.trim() && !statusFilter && (
             <Link

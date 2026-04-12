@@ -75,7 +75,7 @@ export function useWorkshopForm() {
 
     try {
       if (!formData.title || !formData.description || !formData.date || !formData.instructor) {
-        alert('Bitte füllen Sie alle Pflichtfelder aus')
+        alert('Bitte fülle alle Pflichtfelder aus')
         return
       }
 

@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   try {
     const clientId = getClientIdentifier(req)
     if (!loginStatusLimiter(clientId)) {
-      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.')
+      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.')
     }
 
     const { email } = await req.json()
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
       // Handle database connection errors gracefully
       const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)
       if (errorMessage.includes('connect') || errorMessage.includes('ECONNREFUSED') || errorMessage.includes('timeout')) {
-        return apiError(dbError, 'Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.', 503)
+        return apiError(dbError, 'Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.', 503)
       }
       throw dbError
     }

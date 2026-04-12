@@ -490,7 +490,7 @@ export default async function TechnikerDashboardPage() {
                 <div className="text-center py-8">
                   <span className="text-3xl block mb-3">📋</span>
                   <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                    Sie haben noch keine Angebote gemacht.
+                    Du hast noch keine Angebote gemacht.
                   </p>
                   <Link
                     href={IT_HILFE.routes.browse}

@@ -166,7 +166,7 @@ export default function AppointmentsDashboard() {
           <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
             <Heading level={1} className="text-xl sm:text-2xl font-bold mb-4 text-neutral-900">Anmeldung erforderlich</Heading>
             <p className="text-neutral-600 mb-6 text-sm sm:text-base">
-              Bitte melden Sie sich an, um Ihre Termine zu sehen.
+              Bitte melde dich an, um deine Termine zu sehen.
             </p>
             <Link
               href="/auth/login"
@@ -248,7 +248,7 @@ export default function AppointmentsDashboard() {
                       <span className="font-medium text-sm sm:text-base">Terminanfrage ausstehend</span>
                     </div>
                     <p className="text-warning-700 text-xs sm:text-sm mt-1 ml-7">
-                      Ihre Anfrage wird von unserem Team geprüft. Sie erhalten in Kürze eine Bestätigung per E-Mail.
+                      deine Anfrage wird von unserem Team geprüft. Du erhältst in Kürze eine Bestätigung per E-Mail.
                     </p>
                   </div>
                 )}
@@ -260,7 +260,7 @@ export default function AppointmentsDashboard() {
                       <span className="font-medium text-sm sm:text-base">Termin bestätigt!</span>
                     </div>
                     <p className="text-success-700 text-xs sm:text-sm mt-1 ml-7">
-                      Ihr Termin wurde bestätigt. Sie erhalten weitere Details per E-Mail.
+                      Ihr Termin wurde bestätigt. Du erhältst weitere Details per E-Mail.
                     </p>
                   </div>
                 )}
@@ -291,7 +291,7 @@ export default function AppointmentsDashboard() {
                   <div className="mt-4 flex gap-3">
                     <button
                       onClick={async () => {
-                        if (!confirm('Möchten Sie diesen Termin wirklich stornieren?')) return
+                        if (!confirm('Möchtest du diesen Termin wirklich stornieren?')) return
                         const result = await apiFetch<void>(`/api/appointments/${appointment.id}`, {
                           method: 'PATCH',
                           body: { action: 'cancel' }
@@ -326,7 +326,7 @@ export default function AppointmentsDashboard() {
               Noch keine Termine
             </Heading>
             <p className="text-neutral-600 mb-6 text-sm sm:text-base">
-              Sie haben noch keine Service-Termine gebucht.
+              Du hast noch keine Service-Termine gebucht.
             </p>
             <Link
               href="/services"

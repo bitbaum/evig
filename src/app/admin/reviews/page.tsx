@@ -259,7 +259,7 @@ export default function AdminReviewsPage() {
           <textarea
             value={moderationReason}
             onChange={(e) => setModerationReason(e.target.value)}
-            placeholder="Bitte geben Sie einen Grund an..."
+            placeholder="Bitte gib einen Grund an..."
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
             autoFocus

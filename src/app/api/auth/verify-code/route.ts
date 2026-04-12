@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Verification rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Versuche. Bitte versuchen Sie es später erneut.', {
+      return apiRateLimited('Zu viele Versuche. Bitte versuche es später erneut.', {
         retryAfter: rateLimitResult.retryAfter,
         remaining: rateLimitResult.remaining,
         resetAt: rateLimitResult.resetAt,

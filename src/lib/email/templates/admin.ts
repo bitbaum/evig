@@ -31,7 +31,7 @@ export const adminNewRepairerApplication = (
           <p>Eine neue Techniker-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.</p>
           <p><strong>Bewerber:</strong> ${applicantName}</p>
           <p><strong>E-Mail:</strong> ${applicantEmail}</p>
-          <p>Bitte prüfen Sie die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
+          <p>Bitte prüfe die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
           <a href="${adminDashboardUrl}" class="button button-green">Bewerbung prüfen</a>
         </div>
         <div class="footer">
@@ -48,7 +48,7 @@ Eine neue Techniker-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.
 Bewerber: ${applicantName}
 E-Mail: ${applicantEmail}
 
-Bitte prüfen Sie die Bewerbung zeitnah:
+Bitte prüfe die Bewerbung zeitnah:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
@@ -82,7 +82,7 @@ export const adminNewWorkshopProposal = (
           <p><strong>Eingereicht von:</strong> ${proposerName}</p>
           <p><strong>E-Mail:</strong> ${proposerEmail}</p>
           <p><strong>Workshop-Titel:</strong> ${workshopTitle}</p>
-          <p>Bitte prüfen Sie den Vorschlag zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
+          <p>Bitte prüfe den Vorschlag zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
           <a href="${adminDashboardUrl}" class="button button-green">Vorschlag prüfen</a>
         </div>
         <div class="footer">
@@ -100,7 +100,7 @@ Eingereicht von: ${proposerName}
 E-Mail: ${proposerEmail}
 Workshop-Titel: ${workshopTitle}
 
-Bitte prüfen Sie den Vorschlag zeitnah:
+Bitte prüfe den Vorschlag zeitnah:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
@@ -134,7 +134,7 @@ export const adminNewBlogSubmission = (
           <p><strong>Eingereicht von:</strong> ${submitterName}</p>
           <p><strong>E-Mail:</strong> ${submitterEmail}</p>
           <p><strong>Titel:</strong> ${articleTitle}</p>
-          <p>Bitte prüfen Sie den Beitrag und entscheiden Sie über die Veröffentlichung.</p>
+          <p>Bitte prüfe den Beitrag und entscheide über die Veröffentlichung.</p>
           <a href="${adminDashboardUrl}" class="button button-green">Beitrag prüfen</a>
         </div>
         <div class="footer">
@@ -152,7 +152,7 @@ Eingereicht von: ${submitterName}
 E-Mail: ${submitterEmail}
 Titel: ${articleTitle}
 
-Bitte prüfen Sie den Beitrag:
+Bitte prüfe den Beitrag:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
@@ -184,7 +184,7 @@ export const adminNewSellerApplication = (
           <p>Eine neue Verkäufer-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.</p>
           <p><strong>Bewerber:</strong> ${applicantName}</p>
           <p><strong>E-Mail:</strong> ${applicantEmail}</p>
-          <p>Bitte prüfen Sie die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
+          <p>Bitte prüfe die Bewerbung zeitnah, um eine schnelle Bearbeitung zu gewährleisten.</p>
           <a href="${adminDashboardUrl}" class="button button-green">Bewerbung prüfen</a>
         </div>
         <div class="footer">
@@ -201,7 +201,7 @@ Eine neue Verkäufer-Bewerbung wurde eingereicht und wartet auf Ihre Prüfung.
 Bewerber: ${applicantName}
 E-Mail: ${applicantEmail}
 
-Bitte prüfen Sie die Bewerbung zeitnah:
+Bitte prüfe die Bewerbung zeitnah:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,

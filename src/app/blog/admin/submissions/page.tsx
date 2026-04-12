@@ -103,7 +103,7 @@ ${submission.content}
             <div>
               <Heading level={1} className="text-4xl font-bold mb-2">Einreichungen verwalten</Heading>
               <p className="text-green-100">
-                Überprüfen und veröffentlichen Sie von Benutzern eingereichte Inhalte
+                Überprüfe und veröffentliche von Benutzern eingereichte Inhalte
               </p>
             </div>
             <div className="flex gap-4">
@@ -299,14 +299,14 @@ ${submission.content}
                   </div>
 
                   <p className="mt-4 text-xs text-gray-500 bg-blue-50 border border-blue-200 rounded p-3">
-                    💡 <strong>Tipp:</strong> Laden Sie die Markdown-Datei herunter und kopieren Sie sie in den <code>content/posts/</code> Ordner. Dann können Sie sie in TinaCMS bearbeiten und veröffentlichen!
+                    💡 <strong>Tipp:</strong> Lade die Markdown-Datei herunter und kopiere sie in den <code>content/posts/</code> Ordner. Dann kannst du sie in TinaCMS bearbeiten und veröffentlichen!
                   </p>
                 </div>
               ) : (
                 <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                   <Eye className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-600">
-                    Wählen Sie eine Einreichung aus, um Details anzuzeigen
+                    Wähle eine Einreichung aus, um Details anzuzeigen
                   </p>
                 </div>
               )}

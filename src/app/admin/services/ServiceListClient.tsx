@@ -201,8 +201,8 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
           </Heading>
           <p className="text-gray-600 dark:text-gray-400">
             {search.trim() || categoryFilter || statusFilter
-              ? 'Versuchen Sie andere Suchkriterien.'
-              : 'Erstellen Sie Ihre erste Dienstleistung, um Service-Termine anzubieten.'}
+              ? 'Versuche andere Suchkriterien.'
+              : 'Erstelle Ihre erste Dienstleistung, um Service-Termine anzubieten.'}
           </p>
         </div>
       )}

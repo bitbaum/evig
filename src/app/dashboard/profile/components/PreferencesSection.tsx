@@ -54,7 +54,7 @@ export function PreferencesSection({ profile, handleChange }: PreferencesSection
           <label htmlFor="newsletter" className="text-sm text-gray-700 dark:text-gray-300">
             <span className="font-medium">Newsletter abonnieren</span>
             <p className="text-gray-500 dark:text-gray-400 mt-0.5">
-              Erhalten Sie Updates zu Workshops, Angeboten und Neuigkeiten von RevampIT
+              Erhalte Updates zu Workshops, Angeboten und Neuigkeiten von RevampIT
             </p>
           </label>
         </div>

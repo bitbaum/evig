@@ -17,11 +17,11 @@ export const PROFILE_CONFIG = {
   labels: {
     // Page header
     pageTitle: 'Profil',
-    pageDescription: 'Verwalten Sie Ihr öffentliches Profil',
+    pageDescription: 'Verwalte dein öffentliches Profil',
 
     // Avatar section
     avatar: 'Profilbild',
-    avatarDescription: 'Ihr öffentliches Profilbild',
+    avatarDescription: 'Dein öffentliches Profilbild',
     uploadAvatar: 'Bild hochladen',
     removeAvatar: 'Bild entfernen',
     changeAvatar: 'Bild ändern',
@@ -29,22 +29,22 @@ export const PROFILE_CONFIG = {
     // Public profile section
     publicProfile: 'Öffentliches Profil',
     displayName: 'Anzeigename',
-    displayNamePlaceholder: 'Wie möchten Sie genannt werden?',
+    displayNamePlaceholder: 'Wie möchtest du genannt werden?',
     displayNameDescription: 'Dieser Name wird öffentlich angezeigt',
 
     bio: 'Bio',
-    bioPlaceholder: 'Erzählen Sie etwas über sich...',
-    bioDescription: 'Kurze Beschreibung über Sie (max. 500 Zeichen)',
+    bioPlaceholder: 'Erzähl etwas über dich...',
+    bioDescription: 'Kurze Beschreibung über dich (max. 500 Zeichen)',
 
     profileVisibility: 'Profil-Sichtbarkeit',
     profileVisibilityPublic: 'Öffentlich',
     profileVisibilityPrivate: 'Privat',
-    profileVisibilityDescription: 'Bestimmen Sie, wer Ihr Profil sehen kann',
+    profileVisibilityDescription: 'Bestimme, wer dein Profil sehen kann',
 
     // Service provider section
     serviceProvider: 'Dienstleister-Profil',
     serviceProviderActive: 'Als Dienstleister aktiv',
-    serviceProviderDescription: 'Bieten Sie Dienstleistungen auf dem Marktplatz an',
+    serviceProviderDescription: 'Biete Dienstleistungen auf dem Marktplatz an',
 
     // Actions
     save: 'Speichern',
@@ -90,7 +90,7 @@ export const PROFILE_CONFIG = {
     errorMessages: {
       fileType: 'Nur JPG, PNG und WebP Bilder sind erlaubt',
       fileSize: 'Bild darf maximal 5MB gross sein',
-      uploadFailed: 'Upload fehlgeschlagen. Bitte versuchen Sie es erneut.',
+      uploadFailed: 'Upload fehlgeschlagen. Bitte versuche es erneut.',
     },
   },
 } as const;
@@ -103,7 +103,7 @@ export const SETTINGS_CONFIG = {
   labels: {
     // Page header
     pageTitle: 'Einstellungen',
-    pageDescription: 'Verwalten Sie Ihre Kontoeinstellungen',
+    pageDescription: 'Verwalte deine Kontoeinstellungen',
 
     // Tabs
     tabs: {
@@ -116,16 +116,16 @@ export const SETTINGS_CONFIG = {
     // Account tab
     account: {
       title: 'Konto-Verwaltung',
-      description: 'Verwalten Sie Ihre Konto-Informationen',
+      description: 'Verwalte deine Konto-Informationen',
 
       name: 'Name',
       firstName: 'Vorname',
-      firstNamePlaceholder: 'Ihr Vorname',
+      firstNamePlaceholder: 'Dein Vorname',
       lastName: 'Nachname',
-      lastNamePlaceholder: 'Ihr Nachname',
+      lastNamePlaceholder: 'Dein Nachname',
 
       email: 'E-Mail',
-      emailDescription: 'Ihre E-Mail-Adresse kann nicht geändert werden',
+      emailDescription: 'deine E-Mail-Adresse kann nicht geändert werden',
       emailReadonly: 'E-Mail-Adresse (schreibgeschützt)',
 
       password: 'Passwort',
@@ -133,7 +133,7 @@ export const SETTINGS_CONFIG = {
       newPassword: 'Neues Passwort',
       confirmPassword: 'Passwort bestätigen',
       changePassword: 'Passwort ändern',
-      passwordDescription: 'Ändern Sie Ihr Passwort für mehr Sicherheit',
+      passwordDescription: 'Ändere dein Passwort für mehr Sicherheit',
 
       deleteAccount: 'Konto löschen',
       deleteAccountWarning: 'Diese Aktion kann nicht rückgängig gemacht werden',
@@ -143,16 +143,16 @@ export const SETTINGS_CONFIG = {
     // Notifications tab
     notifications: {
       title: 'Benachrichtigungs-Einstellungen',
-      description: 'Verwalten Sie, wie Sie benachrichtigt werden möchten',
+      description: 'Verwalte, wie du benachrichtigt werden möchtest',
 
       emailNotifications: 'E-Mail-Benachrichtigungen',
-      emailNotificationsDescription: 'Erhalten Sie Updates per E-Mail',
+      emailNotificationsDescription: 'Erhalte Updates per E-Mail',
 
       smsNotifications: 'SMS-Benachrichtigungen',
-      smsNotificationsDescription: 'Erhalten Sie wichtige Updates per SMS',
+      smsNotificationsDescription: 'Erhalte wichtige Updates per SMS',
 
       marketplaceUpdates: 'Marktplatz-Updates',
-      marketplaceUpdatesDescription: 'Benachrichtigungen über Ihre Marktplatz-Aktivitäten',
+      marketplaceUpdatesDescription: 'Benachrichtigungen über deine Marktplatz-Aktivitäten',
 
       workshopReminders: 'Workshop-Erinnerungen',
       workshopRemindersDescription: 'Erinnerungen für bevorstehende Workshops',
@@ -161,31 +161,31 @@ export const SETTINGS_CONFIG = {
     // Privacy tab
     privacy: {
       title: 'Privatsphäre-Einstellungen',
-      description: 'Kontrollieren Sie, welche Informationen öffentlich sind',
+      description: 'Kontrolliere, welche Informationen öffentlich sind',
 
       profileVisibility: 'Profil-Sichtbarkeit',
-      profileVisibilityDescription: 'Bestimmen Sie, wer Ihr Profil sehen kann',
+      profileVisibilityDescription: 'Bestimme, wer dein Profil sehen kann',
       profilePublic: 'Öffentlich',
       profilePrivate: 'Privat',
 
       contactVisibility: 'Kontaktinformationen',
-      contactVisibilityDescription: 'Kontrollieren Sie die Sichtbarkeit Ihrer Kontaktdaten',
+      contactVisibilityDescription: 'Kontrolliere die Sichtbarkeit deiner Kontaktdaten',
 
       showEmail: 'E-Mail-Adresse anzeigen',
-      showEmailDescription: 'Zeigen Sie Ihre E-Mail auf Ihrem öffentlichen Profil',
+      showEmailDescription: 'Zeige deine E-Mail auf deinem öffentlichen Profil',
 
       showPhone: 'Telefonnummer anzeigen',
-      showPhoneDescription: 'Zeigen Sie Ihre Telefonnummer auf Ihrem öffentlichen Profil',
+      showPhoneDescription: 'Zeige deine Telefonnummer auf deinem öffentlichen Profil',
     },
 
     // Personal Info tab
     personalInfo: {
       title: 'Persönliche Informationen',
-      description: 'Verwalten Sie Ihre persönlichen Daten',
+      description: 'Verwalte deine persönlichen Daten',
 
       company: 'Firma',
       companyName: 'Firmenname',
-      companyNamePlaceholder: 'Name Ihrer Firma',
+      companyNamePlaceholder: 'Name deiner Firma',
 
       contact: 'Kontaktinformationen',
       phone: 'Telefon',

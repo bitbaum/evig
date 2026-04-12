@@ -63,7 +63,7 @@ export function ProtocolActionItemsList({
       <div id="protocol-step-tasks" className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <Heading level={3} className="text-sm text-blue-900 mb-1">Keine Aktionen erkannt</Heading>
         <p className="text-sm text-blue-800">
-          Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeiten Sie den Inhalt oben und starten Sie die Verarbeitung erneut.
+          Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
         </p>
       </div>
     )

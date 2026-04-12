@@ -102,7 +102,7 @@ export function useSuggestionForm({ feedbackScope, selectedElements, onSubmitSuc
 
     } catch (error) {
       logger.error('Submission error', { error })
-      setSubmitError('Fehler beim Senden. Bitte versuchen Sie es erneut.')
+      setSubmitError('Fehler beim Senden. Bitte versuche es erneut.')
     } finally {
       setIsSubmitting(false)
     }

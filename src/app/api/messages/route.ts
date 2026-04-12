@@ -84,7 +84,7 @@ export const POST = withAuth(async (
 ) => {
   try {
     if (!rateLimiters.messageCreate(session.user.id + ':message')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Nachrichten. Bitte versuchen Sie es später erneut.', 429)
+      return apiError(new Error('Rate limit'), 'Zu viele Nachrichten. Bitte versuche es später erneut.', 429)
     }
 
     const body = await request.json()

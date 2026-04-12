@@ -255,7 +255,7 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
       <div class="footer">
         <p>
           Vielen Dank für Ihr Vertrauen in RevampIT.<br>
-          Bei Fragen zu dieser Rechnung kontaktieren Sie uns bitte unter ${SUPPORT_EMAIL}
+          Bei Fragen zu dieser Rechnung kontaktiere uns bitte unter ${SUPPORT_EMAIL}
         </p>
         <p>
           Zahlungsbedingungen: ${invoice.payment_terms || 'Zahlbar innerhalb von 30 Tagen ab Rechnungsdatum'}

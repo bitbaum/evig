@@ -34,7 +34,7 @@ export const appointmentNewBooking = (
         </div>
         <div class="content">
           <p>Hallo ${repairerName},</p>
-          <p>Sie haben einen neuen Reparaturauftrag erhalten!</p>
+          <p>Du hast einen neuen Reparaturauftrag erhalten!</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
@@ -51,7 +51,7 @@ export const appointmentNewBooking = (
             </tr>
           </table>
 
-          <p>Bitte bestätigen oder lehnen Sie den Auftrag innerhalb von 24 Stunden ab.</p>
+          <p>Bitte bestätige oder lehne den Auftrag innerhalb von 24 Stunden ab.</p>
 
           <a href="${appointmentUrl}" class="button button-green">Auftrag ansehen</a>
         </div>
@@ -66,13 +66,13 @@ export const appointmentNewBooking = (
   text: `
 Hallo ${repairerName},
 
-Sie haben einen neuen Reparaturauftrag erhalten!
+Du hast einen neuen Reparaturauftrag erhalten!
 
 Kunde: ${customerName}
 Service: ${serviceName}
 Beschreibung: ${description}
 
-Bitte bestätigen oder lehnen Sie den Auftrag innerhalb von 24 Stunden ab.
+Bitte bestätige oder lehne den Auftrag innerhalb von 24 Stunden ab.
 
 Auftrag ansehen: ${appointmentUrl}
 
@@ -91,7 +91,7 @@ export const appointmentQuoteReceived = (
   diagnosisNotes: string | null,
   appointmentUrl: string
 ): EmailContent => ({
-  subject: 'Neues Angebot für Ihre Reparatur - RevampIT',
+  subject: 'Neues Angebot für deine Reparatur - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -108,7 +108,7 @@ export const appointmentQuoteReceived = (
         </div>
         <div class="content">
           <p>Hallo ${customerName},</p>
-          <p>${repairerName} hat Ihnen ein Angebot für Ihre Reparatur geschickt.</p>
+          <p>${repairerName} hat dir ein Angebot für deine Reparatur geschickt.</p>
 
           <div style="background-color: #f5f3ff; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center;">
             <p style="font-size: 14px; color: #6b21a8; margin: 0;">Preis</p>
@@ -122,7 +122,7 @@ export const appointmentQuoteReceived = (
           </div>
           ` : ''}
 
-          <p>Bitte bestätigen oder lehnen Sie das Angebot ab.</p>
+          <p>Bitte bestätige oder lehne das Angebot ab.</p>
 
           <a href="${appointmentUrl}" class="button button-purple">Angebot ansehen</a>
         </div>
@@ -137,11 +137,11 @@ export const appointmentQuoteReceived = (
   text: `
 Hallo ${customerName},
 
-${repairerName} hat Ihnen ein Angebot für Ihre Reparatur geschickt.
+${repairerName} hat dir ein Angebot für deine Reparatur geschickt.
 
 Preis: CHF ${priceCHF}
 ${diagnosisNotes ? `Diagnose: ${diagnosisNotes}\n` : ''}
-Bitte bestätigen oder lehnen Sie das Angebot ab.
+Bitte bestätige oder lehne das Angebot ab.
 
 Angebot ansehen: ${appointmentUrl}
 
@@ -177,7 +177,7 @@ export const appointmentStatusUpdate = (
         </div>
         <div class="content">
           <p>Hallo ${recipientName},</p>
-          <p>Der Status Ihres Reparaturauftrags wurde aktualisiert.</p>
+          <p>Der Status deines Reparaturauftrags wurde aktualisiert.</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
@@ -207,7 +207,7 @@ export const appointmentStatusUpdate = (
   text: `
 Hallo ${recipientName},
 
-Der Status Ihres Reparaturauftrags wurde aktualisiert.
+Der Status deines Reparaturauftrags wurde aktualisiert.
 
 Service: ${serviceName}
 Neuer Status: ${newStatusLabel}

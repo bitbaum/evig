@@ -233,7 +233,7 @@ export function InventoryProductsTable({
             Keine erfassten Produkte
           </Heading>
           <p className="text-gray-600 mb-4">
-            Erfassen Sie Ihr erstes Produkt, um zu beginnen.
+            Erfasse dein erstes Produkt, um zu beginnen.
           </p>
           <Link
             href="/admin/erfassung"

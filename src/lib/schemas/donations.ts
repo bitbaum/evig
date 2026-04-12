@@ -68,7 +68,7 @@ export const CreateDeviceDonationSchema = z.object({
 
   // Device details (required)
   device_category: z.enum(deviceCategories, {
-    message: 'Bitte wählen Sie eine Gerätekategorie',
+    message: 'Bitte wähle eine Gerätekategorie',
   }),
 
   // Optional device details

@@ -358,7 +358,7 @@ export default function TaskActionsClient({
           ) : (
             <div className="p-4 bg-red-50 rounded-lg border border-red-200">
               <p className="text-sm text-red-700 mb-3">
-                Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Sie wird aus der Liste entfernt.
+                Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Diese wird aus der Liste entfernt.
               </p>
               <div className="flex gap-2">
                 <button

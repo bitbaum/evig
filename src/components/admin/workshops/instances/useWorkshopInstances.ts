@@ -105,7 +105,7 @@ export function useWorkshopInstances() {
   }
 
   const handleDelete = async (instanceId: string) => {
-    if (!confirm('Möchten Sie diesen Termin wirklich löschen?')) {
+    if (!confirm('Möchtest du diesen Termin wirklich löschen?')) {
       return
     }
 

@@ -95,7 +95,7 @@ export async function query<T = unknown>(
     attempts: MAX_RETRIES + 1,
     query: text.substring(0, 100),
   })
-  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
+  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.')
 }
 
 /**
@@ -131,7 +131,7 @@ export async function getClient(): Promise<PoolClient> {
   logger.error('Database client connection failed after retries', {
     attempts: MAX_RETRIES + 1,
   })
-  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.')
+  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.')
 }
 
 // Cache user columns to keep queries schema-safe across migrations (5-minute TTL)

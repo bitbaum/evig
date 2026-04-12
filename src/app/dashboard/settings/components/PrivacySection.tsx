@@ -38,7 +38,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
       URL.revokeObjectURL(url)
     } catch (error) {
       setExportError(
-        error instanceof Error ? error.message : 'Export fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+        error instanceof Error ? error.message : 'Export fehlgeschlagen. Bitte versuche es später erneut.',
       )
     } finally {
       setIsExporting(false)
@@ -188,7 +188,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           Datenschutz & Export
         </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Gemäss Schweizer Datenschutzgesetz (DSG) und EU-DSGVO können Sie jederzeit
+          Gemäss Schweizer Datenschutzgesetz (DSG) und EU-DSGVO kannst du jederzeit
           eine Kopie Ihrer Daten anfordern.
         </p>
 

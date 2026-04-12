@@ -293,7 +293,7 @@ export class ResponseQualityService {
         'I can help you navigate our website. What exactly are you looking for?'
     } else {
       content = language === 'de' ?
-        'Entschuldigung, ich verstehe Ihre Anfrage nicht ganz. Aber ich kann Ihnen in diesen Bereichen helfen:' :
+        'Entschuldigung, ich verstehe deine Anfrage nicht ganz. Aber ich kann Ihnen in diesen Bereichen helfen:' :
         'Sorry, I don\'t quite understand your request. But I can help you in these areas:'
     }
 

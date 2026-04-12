@@ -119,7 +119,7 @@ export class ModernChatbotEngine {
         '/workshops': 'Interessieren Sie sich für unsere Workshops? Grossartig - Bildung ist der Schlüssel zur nachhaltigen IT!',
         '/get-involved': 'Fantastisch, dass Sie sich engagieren möchten! Es gibt viele Wege, wie Sie bei Revamp-IT mitmachen können.',
         '/get-involved/volunteer': 'Sie interessieren sich fürs Ehrenamt bei uns? Wunderbar - freiwillige Helfer sind das Herz von Revamp-IT!',
-        '/get-involved/donate': 'Vielen Dank, dass Sie uns unterstützen möchten! Ihre Spende hilft uns, unsere Mission voranzutreiben.',
+        '/get-involved/donate': 'Vielen Dank, dass Sie uns unterstützen möchten! deine Spende hilft uns, unsere Mission voranzutreiben.',
         '/get-involved/internships': 'Sie schauen sich unsere Praktikumsmöglichkeiten an? Perfekt - wir bieten spannende Lernerfahrungen!',
         '/get-involved/partnerships': 'Sie denken über eine Partnerschaft nach? Grossartig - gemeinsam können wir mehr erreichen!',
         '/get-involved/technical-experts': 'Als technischer Experte können Sie einen enormen Beitrag leisten! Lassen Sie uns sprechen.',

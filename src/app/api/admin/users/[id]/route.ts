@@ -171,7 +171,7 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
 
     // Prevent self-deletion
     if (targetUser.id === session.user.id) {
-      return apiBadRequest('Sie können sich nicht selbst löschen')
+      return apiBadRequest('Du kannst dich nicht selbst löschen')
     }
 
     // Delete related data first (foreign key constraints)

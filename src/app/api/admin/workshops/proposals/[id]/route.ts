@@ -101,7 +101,7 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
 
     if (action !== 'edit') {
       return apiBadRequest(
-        'Ungültige Aktion. Verwenden Sie /approve für Genehmigungsaktionen.'
+        'Ungültige Aktion. Verwende /approve für Genehmigungsaktionen.'
       );
     }
 

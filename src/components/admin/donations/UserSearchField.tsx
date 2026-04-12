@@ -86,7 +86,7 @@ export function UserSearchField({
         </div>
       )}
       <p className="mt-1 text-xs text-gray-500">
-        Suchen Sie nach einem bestehenden Benutzer oder geben Sie die Daten manuell ein.
+        Suche nach einem bestehenden Benutzer oder gib die Daten manuell ein.
       </p>
     </div>
   )

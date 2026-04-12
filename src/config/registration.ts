@@ -28,7 +28,7 @@ export const REGISTRATION_ROLE_LABELS: Record<RegistrationRole, string> = {
  * Registration role descriptions (Swiss German)
  */
 export const REGISTRATION_ROLE_DESCRIPTIONS: Record<RegistrationRole, string> = {
-  customer: 'Kaufen Sie refurbished Produkte und buchen Sie Reparaturen',
-  seller: 'Verkaufen Sie Ihre eigenen refurbished Produkte',
-  repairer: 'Bieten Sie IT-Dienstleistungen und Reparaturen an',
+  customer: 'Kaufe refurbished Produkte und buche Reparaturen',
+  seller: 'Verkaufe deine eigenen refurbished Produkte',
+  repairer: 'Biete IT-Dienstleistungen und Reparaturen an',
 }

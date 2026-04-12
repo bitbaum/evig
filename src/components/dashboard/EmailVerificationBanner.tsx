@@ -57,7 +57,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
           </Heading>
           <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
             <p>
-              Bitte bestätigen Sie Ihre E-Mail-Adresse <strong>{email}</strong>, um alle Funktionen nutzen zu können.
+              Bitte bestätige deine E-Mail-Adresse <strong>{email}</strong>, um alle Funktionen nutzen zu können.
             </p>
           </div>
           <div className="mt-4">

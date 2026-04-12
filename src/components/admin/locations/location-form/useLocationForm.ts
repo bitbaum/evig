@@ -14,13 +14,13 @@ export function useLocationForm() {
     createSuccessMessage: 'Ort erfolgreich erstellt und zur Genehmigung eingereicht',
     validate: (data) => {
       if (!data.name || !data.type || !data.city) {
-        return 'Bitte füllen Sie alle erforderlichen Felder aus'
+        return 'Bitte fülle alle erforderlichen Felder aus'
       }
       if (data.postal_code && !/^[0-9]{4}$/.test(data.postal_code)) {
-        return 'Bitte geben Sie eine gültige Schweizer Postleitzahl ein (4 Ziffern)'
+        return 'Bitte gib eine gültige Schweizer Postleitzahl ein (4 Ziffern)'
       }
       if ((data.latitude && !data.longitude) || (!data.latitude && data.longitude)) {
-        return 'Bitte geben Sie beide Koordinaten an oder keine'
+        return 'Bitte gib beide Koordinaten an oder keine'
       }
       return null
     },

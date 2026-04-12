@@ -76,7 +76,7 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
 
     // Prevent self-demotion
     if (newSuperAdminStatus === false && targetUser.id === session.user.id) {
-      return apiBadRequest('Sie können sich nicht selbst herabstufen')
+      return apiBadRequest('Du kannst dich nicht selbst herabstufen')
     }
 
     // Build the update object

@@ -42,7 +42,7 @@ export function WelcomeCard() {
         Willkommen bei RevampIT!
       </Heading>
       <p className="text-base text-gray-600 mb-6">
-        Was möchten Sie tun?
+        Was möchtest du tun?
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -84,9 +84,9 @@ export function WelcomeCard() {
       </div>
 
       <p className="mt-4 text-sm text-gray-500">
-        Sie können auch{' '}
+        Du kannst auch{' '}
         <Link href="/dashboard/profile" className="font-semibold text-green-600 hover:text-green-700">
-          Ihr Profil vervollständigen
+          dein Profil vervollständigen
         </Link>
         {' '}
         <User className="inline h-3.5 w-3.5 text-green-600" aria-hidden="true" />

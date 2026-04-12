@@ -120,7 +120,7 @@ export function apiForbidden(message = 'Forbidden'): NextResponse {
  * @param options - Rate limit details (retryAfter, remaining, resetAt)
  */
 export function apiRateLimited(
-  message = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.',
+  message = 'Zu viele Anfragen. Bitte versuche es später erneut.',
   options?: { retryAfter?: number; remaining?: number; resetAt?: number }
 ): NextResponse {
   const retryAfter = options?.retryAfter || 60

@@ -40,7 +40,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       title: 'Computerreparatur & Aufrüstungen',
       subtitle: 'Vertrauensvolle Expertenreparaturen',
       description:
-        'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer Ihrer Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht können, und sparen Ihnen Geld und reduzieren Elektroschrott.',
+        'Wir kombinieren technische Expertise mit nachhaltigen Praktiken, um die Lebensdauer deiner Geräte zu verlängern. Unsere Reparaturdienste konzentrieren sich darauf zu reparieren, was andere nicht können, und sparen dir Geld und reduzieren Elektroschrott.',
     },
     features: [
       {
@@ -52,7 +52,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       {
         title: 'Hardware-Aufrüstungen',
         description:
-          'Verlängern Sie die Lebensdauer Ihres Computers mit strategischen Aufrüstungen. Wir helfen Ihnen bei der Auswahl und Installation der richtigen Komponenten für Ihre Bedürfnisse.',
+          'Verlängere die Lebensdauer deines Computers mit strategischen Aufrüstungen. Wir helfen dir bei der Auswahl und Installation der richtigen Komponenten für deine Bedürfnisse.',
         icon: Zap,
       },
       {
@@ -73,25 +73,25 @@ export const servicePresentation: Record<string, ServicePresentation> = {
         step: 1,
         title: 'Bewertung',
         description:
-          'Wir untersuchen Ihr Gerät und erstellen eine detaillierte Bewertung des Problems. Die CHF 30 Bewertungsgebühr wird in Ihre endgültigen Reparaturkosten einbezogen.',
+          'Wir untersuchen dein Gerät und erstellen eine detaillierte Bewertung des Problems. Die CHF 30 Bewertungsgebühr wird in deine endgültigen Reparaturkosten einbezogen.',
       },
       {
         step: 2,
         title: 'Kostenvoranschlag',
         description:
-          'Sie erhalten einen transparenten Kostenvoranschlag für die Reparatur, einschliesslich Teile- und Arbeitskosten.',
+          'Du erhältst einen transparenten Kostenvoranschlag für die Reparatur, einschliesslich Teile- und Arbeitskosten.',
       },
       {
         step: 3,
         title: 'Reparatur',
         description:
-          'Unsere Techniker reparieren Ihr Gerät mit hochwertigen Teilen. Die typische Reparaturzeit beträgt einige Wochen aufgrund der Teileverfügbarkeit.',
+          'Unsere Techniker reparieren dein Gerät mit hochwertigen Teilen. Die typische Reparaturzeit beträgt einige Wochen aufgrund der Teileverfügbarkeit.',
       },
       {
         step: 4,
         title: 'Testen',
         description:
-          'Wir testen alle Reparaturen gründlich, um sicherzustellen, dass Ihr Gerät perfekt funktioniert, bevor es zurückgegeben wird.',
+          'Wir testen alle Reparaturen gründlich, um sicherzustellen, dass dein Gerät perfekt funktioniert, bevor es zurückgegeben wird.',
       },
     ],
     pricingOverride: {
@@ -109,9 +109,9 @@ export const servicePresentation: Record<string, ServicePresentation> = {
     icon: HardDrive,
     hero: {
       title: 'Datenrettung & Transfer',
-      subtitle: 'Zugang zu Ihren Daten, Bewahrung Ihrer Geschichte',
+      subtitle: 'Zugang zu deinen Daten, Bewahrung deiner Geschichte',
       description:
-        'Ob Sie Daten von einem nicht funktionierenden Gerät wiederherstellen, Daten zwischen Computern übertragen oder auf Daten von alten Speichermedien zugreifen müssen - wir haben die Expertise und Ausrüstung, um zu helfen.',
+        'Ob du Daten von einem nicht funktionierenden Gerät wiederherstellen, Daten zwischen Computern übertragen oder auf Daten von alten Speichermedien zugreifen musst - wir haben die Expertise und Ausrüstung, um zu helfen.',
     },
     features: [
       {
@@ -123,19 +123,19 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       {
         title: 'Datenübertragung',
         description:
-          'Übertragen Sie Daten zwischen Computern, migrieren Sie Einstellungen oder erstellen Sie Backups. Wir können grosse Datenmengen effizient verarbeiten.',
+          'Übertrage Daten zwischen Computern, migriere Einstellungen oder erstelle Backups. Wir können grosse Datenmengen effizient verarbeiten.',
         icon: FolderInput,
       },
       {
         title: 'Zugang zu alten Medien',
         description:
-          'Zugang zu Daten von jedem Speichermedium, auch wenn Sie das erforderliche Laufwerk nicht mehr haben. Wir unterstützen alle Formate einschliesslich Disketten, ZIP-Laufwerke, MO-Laufwerke und mehr.',
+          'Zugang zu Daten von jedem Speichermedium, auch wenn du das erforderliche Laufwerk nicht mehr hast. Wir unterstützen alle Formate einschliesslich Disketten, ZIP-Laufwerke, MO-Laufwerke und mehr.',
         icon: Disc,
       },
       {
         title: 'Massgeschneiderte Lösungen',
         description:
-          'Benötigen Sie eine ähnliche Server-Einrichtung für Ihren Standort? Wir können eine massgeschneiderte Lösung erstellen, die auf Ihre spezifischen Bedürfnisse zugeschnitten ist.',
+          'Benötigst du eine ähnliche Server-Einrichtung für deinen Standort? Wir können eine massgeschneiderte Lösung erstellen, die auf deine spezifischen Bedürfnisse zugeschnitten ist.',
         icon: Database,
       },
     ],
@@ -144,13 +144,13 @@ export const servicePresentation: Record<string, ServicePresentation> = {
         step: 1,
         title: 'Assessment',
         description:
-          'Wir bewerten Ihre Speichermedien und bestimmen den besten Ansatz für Datenübertragung oder -wiederherstellung.',
+          'Wir bewerten deine Speichermedien und bestimmen den besten Ansatz für Datenübertragung oder -wiederherstellung.',
       },
       {
         step: 2,
         title: 'Transfer',
         description:
-          'Mit unserer spezialisierten Ausrüstung übertragen wir Ihre Daten auf das Medium Ihrer Wahl.',
+          'Mit unserer spezialisierten Ausrüstung übertragen wir deine Daten auf das Medium deiner Wahl.',
       },
       {
         step: 3,
@@ -162,7 +162,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
         step: 4,
         title: 'Lieferung',
         description:
-          'Ihre Daten werden Ihnen auf dem Medium Ihrer Wahl zurückgegeben, bereit zur Verwendung.',
+          'Deine Daten werden dir auf dem Medium deiner Wahl zurückgegeben, bereit zur Verwendung.',
       },
     ],
     pricingOverride: {
@@ -188,9 +188,9 @@ export const servicePresentation: Record<string, ServicePresentation> = {
     icon: Archive,
     hero: {
       title: 'Hardware-Recycling',
-      subtitle: 'Ein neues Leben für Ihre alte Ausrüstung',
+      subtitle: 'Ein neues Leben für deine alte Ausrüstung',
       description:
-        'Wir nehmen Ihre alte IT-Ausrüstung und geben ihr ein zweites Leben. Durch unsere verantwortungsvollen Recycling-Praktiken reduzieren wir Elektroschrott und machen Technologie für alle zugänglich.',
+        'Wir nehmen deine alte IT-Ausrüstung und geben ihr ein zweites Leben. Durch unsere verantwortungsvollen Recycling-Praktiken reduzieren wir Elektroschrott und machen Technologie für alle zugänglich.',
     },
     features: [
       {
@@ -223,7 +223,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       details: [
         'Kostenlose Annahme für die meisten Artikel',
         'Für grössere Mengen Abholservice verfügbar',
-        'Spezielle Geräte: Bitte kontaktieren Sie uns',
+        'Spezielle Geräte: Bitte kontaktiere uns',
       ],
     },
   },
@@ -234,7 +234,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       title: 'Linux & Open Source Lösungen',
       subtitle: 'Experten Open Source Support',
       description:
-        'Wir helfen Ihnen beim Übergang zu und der Wartung von Linux- und Open-Source-Software-Lösungen und bieten fachkundige Unterstützung und Schulung.',
+        'Wir helfen dir beim Übergang zu und der Wartung von Linux- und Open-Source-Software-Lösungen und bieten fachkundige Unterstützung und Schulung.',
     },
     features: [
       {
@@ -252,7 +252,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       {
         title: 'Schulung und Support',
         description:
-          'Umfassende Schulung und laufender Support, um sicherzustellen, dass Sie das Beste aus Ihrem Linux-System herausholen.',
+          'Umfassende Schulung und laufender Support, um sicherzustellen, dass du das Beste aus deinem Linux-System herausholst.',
         icon: Clock,
       },
       {
@@ -297,13 +297,13 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       {
         title: 'Responsive Design',
         description:
-          'Mobile-first-Ansatz, der sicherstellt, dass Ihre Website auf allen Geräten grossartig aussieht.',
+          'Mobile-first-Ansatz, der sicherstellt, dass deine Website auf allen Geräten grossartig aussieht.',
         icon: Palette,
       },
       {
         title: 'Laufender Support',
         description:
-          'Umfassende Wartung und Support, um Ihre Website sicher, aktuell und leistungsfähig zu halten.',
+          'Umfassende Wartung und Support, um deine Website sicher, aktuell und leistungsfähig zu halten.',
         icon: Shield,
       },
     ],
@@ -324,14 +324,14 @@ export const servicePresentation: Record<string, ServicePresentation> = {
     icon: Clock,
     hero: {
       title: 'Beratung',
-      subtitle: 'Technische Expertise für Ihre Fragen',
+      subtitle: 'Technische Expertise für deine Fragen',
       description:
         'Persönliche Beratung zu Linux, Open-Source oder Hardware-Themen.',
     },
     features: [
       {
         title: 'Individuelle Beratung',
-        description: 'Persönliche Beratung zu Ihren spezifischen Fragen und Anforderungen.',
+        description: 'Persönliche Beratung zu deinen spezifischen Fragen und Anforderungen.',
         icon: Clock,
       },
     ],
@@ -341,19 +341,19 @@ export const servicePresentation: Record<string, ServicePresentation> = {
     icon: Wrench,
     hero: {
       title: 'Massgeschneiderter PC',
-      subtitle: 'Ihr Traumcomputer, von Experten gebaut',
+      subtitle: 'Dein Traumcomputer, von Experten gebaut',
       description:
-        'Wir bauen Ihren individuellen Computer nach Ihren Spezifikationen und Bedürfnissen.',
+        'Wir bauen deinen individuellen Computer nach deinen Spezifikationen und Bedürfnissen.',
     },
     features: [
       {
         title: 'Individuelle Konfiguration',
-        description: 'Wir beraten Sie bei der Auswahl der besten Komponenten für Ihre Bedürfnisse.',
+        description: 'Wir beraten dich bei der Auswahl der besten Komponenten für deine Bedürfnisse.',
         icon: Wrench,
       },
       {
         title: 'Professioneller Zusammenbau',
-        description: 'Erfahrene Techniker bauen Ihren PC mit Sorgfalt und Präzision.',
+        description: 'Erfahrene Techniker bauen deinen PC mit Sorgfalt und Präzision.',
         icon: HardDrive,
       },
     ],

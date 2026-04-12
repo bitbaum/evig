@@ -286,7 +286,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     path: '/dashboard/listings',
     ui: {
       label: 'Meine Inserate',
-      description: 'Ihre Inserate im Marketplace verwalten',
+      description: 'deine Inserate im Marketplace verwalten',
       icon: Package,
       emoji: '📦',
       color: 'primary',

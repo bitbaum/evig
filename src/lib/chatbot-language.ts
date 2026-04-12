@@ -23,20 +23,20 @@ export interface ChatbotMessages {
 export const chatbotMessages: Record<Language, ChatbotMessages> = {
   de: {
     welcome: {
-      default: 'Hallo! Ich bin Ihr persönlicher Revamp IT Navigator. Wie kann ich Ihnen heute dabei helfen, das zu finden, was Sie suchen?',
-      '/': 'Hallo! Ich bin Ihr persönlicher Revamp IT Assistent. Wie kann ich Ihnen heute helfen, unsere nachhaltigen IT-Lösungen zu entdecken?',
-      '/about': 'Sie sind auf unserer "Über uns" Seite! Möchten Sie mehr über unsere Mission erfahren oder zu anderen Bereichen navigieren?',
-      '/services': 'Perfekt! Sie schauen sich unsere Dienstleistungen an. Suchen Sie etwas Bestimmtes oder brauchen Sie Hilfe bei der Auswahl?',
-      '/projects': 'Interessant! Sie entdecken unsere Projekte. Möchten Sie mehr über ein spezielles Projekt erfahren oder andere Bereiche erkunden?',
-      '/workshops': 'Sie interessieren sich für unsere Workshops! Suchen Sie nach bestimmten Kursen oder haben Sie Fragen zu unserem Bildungsangebot?',
-      '/get-involved': 'Fantastisch, dass Sie sich engagieren möchten! Wie können Sie am besten bei Revamp IT mitmachen?',
-      '/contact': 'Sie sind auf unserer Kontaktseite. Brauchen Sie Hilfe dabei, den richtigen Ansprechpartner zu finden?',
-      '/blog': 'Sie lesen unseren Blog! Suchen Sie nach bestimmten Themen oder möchten Sie andere Bereiche erkunden?'
+      default: 'Hallo! Ich bin dein persönlicher Revamp IT Navigator. Wie kann ich dir heute dabei helfen, das zu finden, was du suchst?',
+      '/': 'Hallo! Ich bin dein persönlicher Revamp IT Assistent. Wie kann ich dir heute helfen, unsere nachhaltigen IT-Lösungen zu entdecken?',
+      '/about': 'Du bist auf unserer "Über uns" Seite! Möchtest du mehr über unsere Mission erfahren oder zu anderen Bereichen navigieren?',
+      '/services': 'Perfekt! Du schaust dir unsere Dienstleistungen an. Suchst du etwas Bestimmtes oder brauchst du Hilfe bei der Auswahl?',
+      '/projects': 'Interessant! Du entdeckst unsere Projekte. Möchtest du mehr über ein spezielles Projekt erfahren oder andere Bereiche erkunden?',
+      '/workshops': 'Du interessierst dich für unsere Workshops! Suchst du nach bestimmten Kursen oder hast du Fragen zu unserem Bildungsangebot?',
+      '/get-involved': 'Fantastisch, dass du dich engagieren möchtest! Wie kannst du am besten bei Revamp IT mitmachen?',
+      '/contact': 'Du bist auf unserer Kontaktseite. Brauchst du Hilfe dabei, den richtigen Ansprechpartner zu finden?',
+      '/blog': 'Du liest unseren Blog! Suchst du nach bestimmten Themen oder möchtest du andere Bereiche erkunden?'
     },
-    placeholder: 'Fragen Sie mich nach unseren Services, Shop, Spenden...',
+    placeholder: 'Frag mich nach unseren Services, Shop, Spenden...',
     typing: 'Assistent tippt...',
-    error: 'Entschuldigung, ich habe gerade technische Probleme. Sie können gerne unser Hauptmenü nutzen oder uns direkt kontaktieren!',
-    fallback: 'Entschuldigung, ich verstehe Ihre Frage nicht ganz. Hier sind einige Bereiche, bei denen ich Ihnen helfen kann:',
+    error: 'Entschuldigung, ich habe gerade technische Probleme. Du kannst gerne unser Hauptmenü nutzen oder uns direkt kontaktieren!',
+    fallback: 'Entschuldigung, ich verstehe deine Frage nicht ganz. Hier sind einige Bereiche, bei denen ich dir helfen kann:',
     buttons: {
       minimize: 'Minimieren',
       maximize: 'Maximieren',
@@ -140,7 +140,7 @@ export function getContextualSuggestions(page: string, language: Language) {
     '/about': language === 'de' ? [
       { label: '🏷️ REVAMPED-Zertifizierung', href: '/revamped', description: 'Unsere nachhaltige Computer-Zertifizierung' },
       { label: '📚 Wiki besuchen', href: EXTERNAL_LINKS.wiki, description: 'Unser Wissensportal', external: true },
-      { label: '🔧 Dienstleistungen ansehen', href: '/services', description: 'Was wir für Sie tun können' },
+      { label: '🔧 Dienstleistungen ansehen', href: '/services', description: 'Was wir für dich tun können' },
       { label: '💼 Projekte entdecken', href: '/projects', description: 'Unsere aktuellen Initiativen' }
     ] : [
       { label: '🏷️ REVAMPED Certification', href: '/revamped', description: 'Our sustainable computer certification' },

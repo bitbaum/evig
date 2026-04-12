@@ -58,7 +58,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               {isEdit ? 'Artikel bearbeiten' : 'Neuer Artikel'}
             </Heading>
             <p className="text-gray-600 dark:text-gray-400 mt-1">
-              {isEdit ? 'Änderungen am Artikel vornehmen' : 'Erstellen Sie einen neuen Blog-Artikel'}
+              {isEdit ? 'Änderungen am Artikel vornehmen' : 'Erstelle einen neuen Blog-Artikel'}
             </p>
           </div>
         </div>

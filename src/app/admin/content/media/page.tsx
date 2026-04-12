@@ -165,7 +165,7 @@ export default async function AdminMediaPage() {
             Noch keine Medien hochgeladen
           </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
-            Laden Sie Bilder, Videos und Dokumente hoch, um sie in Ihren
+            Lade Bilder, Videos und Dokumente hoch, um sie in Ihren
             Blog-Artikeln und Seiten zu verwenden.
           </p>
 
@@ -246,9 +246,9 @@ export default async function AdminMediaPage() {
               In Entwicklung
             </Heading>
             <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-              Die Medienbibliothek wird gerade entwickelt. Bald können Sie hier
-              Bilder und Dokumente hochladen, organisieren und in Ihren Inhalten
-              verwenden. Für Produktbilder nutzen Sie bitte weiterhin die
+              Die Medienbibliothek wird gerade entwickelt. Bald kannst du hier
+              Bilder und Dokumente hochladen, organisieren und in deinen Inhalten
+              verwenden. Für Produktbilder nutze bitte weiterhin die
               Produkterfassung.
             </p>
           </div>

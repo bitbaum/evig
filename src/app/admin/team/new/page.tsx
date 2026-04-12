@@ -78,7 +78,7 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
           Neues Team-Profil erstellen
         </Heading>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Erstellen Sie ein Profil für ein Staff-Mitglied
+          Erstelle ein Profil für ein Staff-Mitglied
         </p>
       </div>
 

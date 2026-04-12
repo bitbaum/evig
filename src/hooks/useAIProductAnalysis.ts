@@ -83,7 +83,7 @@ export function useAIProductAnalysis(options: UseAIProductAnalysisOptions = {}) 
 
       const result = data.data?.analysis || data.analysis
       if (!result) {
-        setError('Keine Produktdaten erkannt. Versuchen Sie es mit der Text-Eingabe.')
+        setError('Keine Produktdaten erkannt. Versuche es mit der Text-Eingabe.')
         return null
       }
 
@@ -99,7 +99,7 @@ export function useAIProductAnalysis(options: UseAIProductAnalysisOptions = {}) 
       return result
     } catch (err) {
       logger.error('AI image analysis failed', { error: err })
-      setError('Netzwerkfehler. Bitte versuchen Sie es erneut.')
+      setError('Netzwerkfehler. Bitte versuche es erneut.')
       return null
     } finally {
       setIsAnalyzing(false)
@@ -117,7 +117,7 @@ export function useAIProductAnalysis(options: UseAIProductAnalysisOptions = {}) 
       }
     } catch (err) {
       logger.error('Camera access failed', { error: err })
-      setError('Kamera-Zugriff fehlgeschlagen. Bitte erlauben Sie den Zugriff.')
+      setError('Kamera-Zugriff fehlgeschlagen. Bitte erlaube den Zugriff.')
     }
   }, [])
 

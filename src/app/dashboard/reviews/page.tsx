@@ -117,7 +117,7 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
           onChange={(e) => setEditForm({...editForm, content: e.target.value})}
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          placeholder="Teilen Sie Ihre Erfahrung..."
+          placeholder="Teile deine Erfahrung..."
         />
       </div>
 
@@ -320,7 +320,7 @@ export default function UserReviewsPage() {
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Noch keine Bewertungen</Heading>
             <p className="text-gray-600 mb-4">
-              Sie haben noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen.
+              Du hast noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen.
             </p>
           </div>
         ) : (

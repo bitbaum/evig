@@ -78,7 +78,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
             onChange={(e) => onFieldChange('description', e.target.value)}
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Beschreiben Sie den Ort, seine Ausstattung und besondere Merkmale..."
+            placeholder="Beschreibe den Ort, seine Ausstattung und besondere Merkmale..."
           />
         </div>
       </div>

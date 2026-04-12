@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Password reset rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
         retryAfter: rateLimitResult.retryAfter,
       })
     }
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     if (!user) {
       // Don't reveal if email exists or not for security
       return apiSuccess({
-        message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir Ihnen einen Reset-Link gesendet.',
+        message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir dir einen Reset-Link gesendet.',
       })
     }
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     }
 
     return apiSuccess({
-      message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir Ihnen einen Reset-Link gesendet.',
+      message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir dir einen Reset-Link gesendet.',
     })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

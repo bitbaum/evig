@@ -21,7 +21,7 @@ export const benefits = [
   },
   {
     title: 'Open-Source-Grundlage',
-    description: 'Aufgebaut auf transparenten, überprüfbaren Technologien, die Ihnen vollständige Kontrolle und Freiheit geben. Keine Anbieterbindung, keine proprietären Black Boxes.',
+    description: 'Aufgebaut auf transparenten, überprüfbaren Technologien, die dir vollständige Kontrolle und Freiheit geben. Keine Anbieterbindung, keine proprietären Black Boxes.',
     icon: Code
   },
   {
@@ -154,7 +154,7 @@ export const services = [
   },
   {
     title: 'CMS-Entwicklung',
-    description: 'Moderne Content-Management-Systeme, die Ihnen die volle Kontrolle über Ihre Website-Inhalte mit entwicklerfreundlichen APIs geben.',
+    description: 'Moderne Content-Management-Systeme, die dir die volle Kontrolle über Ihre Website-Inhalte mit entwicklerfreundlichen APIs geben.',
     icon: Globe,
     features: [
       'Headless-CMS-Lösungen (Strapi, Payload, Tina)',
@@ -185,8 +185,8 @@ export const whyOpenSource = [
     icon: Code
   },
   {
-    title: 'Sie besitzen Ihre Daten',
-    description: 'Ihre Daten gehören Ihnen, nicht den Tech-Giganten. Wir entwickeln Lösungen, die Ihre Informationen unter Ihrer Kontrolle halten, mit Optionen für Self-Hosting und Datenportabilität.',
+    title: 'Sie besitzen deine Daten',
+    description: 'deine Daten gehören Ihnen, nicht den Tech-Giganten. Wir entwickeln Lösungen, die Ihre Informationen unter Ihrer Kontrolle halten, mit Optionen für Self-Hosting und Datenportabilität.',
     icon: Database
   },
   {
@@ -196,7 +196,7 @@ export const whyOpenSource = [
   },
   {
     title: 'Dezentrale Architektur',
-    description: 'Lösen Sie sich von zentralisierten Plattformen, die Ihre Online-Präsenz kontrollieren. Wir entwickeln Lösungen, die überall gehostet werden können und Ihnen Unabhängigkeit von Big Tech geben.',
+    description: 'Löse dich von zentralisierten Plattformen, die deine Online-Präsenz kontrollieren. Wir entwickeln Lösungen, die überall gehostet werden können und dir Unabhängigkeit von Big Tech geben.',
     icon: Globe
   },
   {

@@ -4,7 +4,7 @@ import { REGISTRATION_ROLES } from '@/config/registration';
 
 // Email validation (RFC 5322 compliant)
 const emailSchema = z.string()
-  .email('Bitte geben Sie eine gültige E-Mail-Adresse ein')
+  .email('Bitte gib eine gültige E-Mail-Adresse ein')
   .transform(email => email.toLowerCase().trim());
 
 // ============================================================================

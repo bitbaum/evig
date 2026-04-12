@@ -49,7 +49,7 @@ export default function ProductManagement() {
             Fehler beim Laden der Produkte
           </Heading>
           <p className="text-gray-600 mb-4">
-            {actions.error.message || 'Bitte versuchen Sie es später erneut.'}
+            {actions.error.message || 'Bitte versuche es später erneut.'}
           </p>
           <button
             onClick={() => actions.refetch()}

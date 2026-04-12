@@ -25,7 +25,7 @@ export const BASE_STYLES = `
 `;
 
 export const COPYRIGHT_TEXT = '© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung';
-export const AUTO_GENERATED_TEXT = 'Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht darauf.';
+export const AUTO_GENERATED_TEXT = 'Diese E-Mail wurde automatisch generiert. Bitte antworte nicht darauf.';
 
 export const createEmailLayout = (
   headerText: string,

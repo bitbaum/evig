@@ -25,16 +25,16 @@ export const repairerApplicationSubmitted = (name: string, applicationId: string
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Vielen Dank für Ihre Bewerbung als Techniker bei RevampIT! Wir haben Ihre Unterlagen erhalten und werden diese zeitnah prüfen.</p>
+          <p>Vielen Dank für deine Bewerbung als Techniker bei RevampIT! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.</p>
           <p><strong>Bewerbungs-ID:</strong> ${applicationId}</p>
           <p>Der Prüfungsprozess umfasst:</p>
           <ul>
-            <li>Verifizierung Ihrer Dokumente</li>
-            <li>Überprüfung Ihrer Zertifizierungen</li>
-            <li>Qualitätssicherung Ihrer Angaben</li>
+            <li>Verifizierung deiner Dokumente</li>
+            <li>Überprüfung deiner Zertifizierungen</li>
+            <li>Qualitätssicherung deiner Angaben</li>
           </ul>
-          <p>Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben. Dies kann bis zu 7 Werktage dauern.</p>
-          <p>Bei Fragen können Sie uns jederzeit kontaktieren.</p>
+          <p>Du erhältst eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben. Dies kann bis zu 7 Werktage dauern.</p>
+          <p>Bei Fragen kannst du uns jederzeit kontaktieren.</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -47,18 +47,18 @@ export const repairerApplicationSubmitted = (name: string, applicationId: string
   text: `
 Hallo ${name},
 
-Vielen Dank für Ihre Bewerbung als Techniker bei RevampIT! Wir haben Ihre Unterlagen erhalten und werden diese zeitnah prüfen.
+Vielen Dank für deine Bewerbung als Techniker bei RevampIT! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.
 
 Bewerbungs-ID: ${applicationId}
 
 Der Prüfungsprozess umfasst:
-- Verifizierung Ihrer Dokumente
-- Überprüfung Ihrer Zertifizierungen
-- Qualitätssicherung Ihrer Angaben
+- Verifizierung deiner Dokumente
+- Überprüfung deiner Zertifizierungen
+- Qualitätssicherung deiner Angaben
 
-Sie erhalten eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben. Dies kann bis zu 7 Werktage dauern.
+Du erhältst eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben. Dies kann bis zu 7 Werktage dauern.
 
-Bei Fragen können Sie uns jederzeit kontaktieren.
+Bei Fragen kannst du uns jederzeit kontaktieren.
 ${createTextFooter()}
   `.trim(),
 });
@@ -81,16 +81,16 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Wir freuen uns, Ihnen mitteilen zu können, dass Ihre Bewerbung als Techniker bei RevampIT <strong>genehmigt</strong> wurde!</p>
-          <p>Sie haben jetzt Zugriff auf:</p>
+          <p>Wir freuen uns, dir mitteilen zu können, dass deine Bewerbung als Techniker bei RevampIT <strong>genehmigt</strong> wurde!</p>
+          <p>Du hast jetzt Zugriff auf:</p>
           <ul>
             <li>Techniker-Dashboard mit Service-Verwaltung</li>
             <li>Kundenanfragen und Terminplanung</li>
             <li>Bewertungs- und Reputationssystem</li>
-            <li>Verkaufsplattform für Ihre Dienstleistungen</li>
+            <li>Verkaufsplattform für deine Dienstleistungen</li>
           </ul>
           <a href="${dashboardUrl}" class="button button-green">Zum Techniker-Dashboard</a>
-          <p>Bitte aktualisieren Sie Ihre Verfügbarkeit und Dienstleistungen in Ihrem Profil, um sofort mit Kunden in Kontakt zu treten.</p>
+          <p>Bitte aktualisiere deine Verfügbarkeit und Dienstleistungen in deinem Profil, um sofort mit Kunden in Kontakt zu treten.</p>
           <p>Willkommen im RevampIT Techniker-Netzwerk!</p>
         </div>
         <div class="footer">
@@ -104,15 +104,15 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
   text: `
 Hallo ${name},
 
-Herzlichen Glückwunsch! Ihre Bewerbung als Techniker bei RevampIT wurde genehmigt!
+Herzlichen Glückwunsch! Deine Bewerbung als Techniker bei RevampIT wurde genehmigt!
 
-Sie haben jetzt Zugriff auf:
+Du hast jetzt Zugriff auf:
 - Techniker-Dashboard mit Service-Verwaltung
 - Kundenanfragen und Terminplanung
 - Bewertungs- und Reputationssystem
-- Verkaufsplattform für Ihre Dienstleistungen
+- Verkaufsplattform für deine Dienstleistungen
 
-Bitte aktualisieren Sie Ihre Verfügbarkeit und Dienstleistungen in Ihrem Profil:
+Bitte aktualisiere deine Verfügbarkeit und Dienstleistungen in deinem Profil:
 ${dashboardUrl}
 
 Willkommen im RevampIT Techniker-Netzwerk!
@@ -142,11 +142,11 @@ export const repairerApplicationRejected = (
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Nach sorgfältiger Prüfung Ihrer Bewerbung als Techniker bei RevampIT müssen wir Ihnen mitteilen, dass wir Ihre Bewerbung derzeit nicht genehmigen können.</p>
+          <p>Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei RevampIT müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.</p>
           <p><strong>Grund:</strong></p>
           <p>${rejectionReason}</p>
-          <p>Sie können sich jederzeit erneut bewerben, nachdem Sie die genannten Punkte behoben haben. Bei Fragen stehen wir Ihnen gerne zur Verfügung.</p>
-          <p>Kontaktieren Sie uns unter: <a href="mailto:${supportEmail}">${supportEmail}</a></p>
+          <p>Du kannst dich jederzeit erneut bewerben, nachdem du die genannten Punkte behoben hast. Bei Fragen stehen wir dir gerne zur Verfügung.</p>
+          <p>Kontaktiere uns unter: <a href="mailto:${supportEmail}">${supportEmail}</a></p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -159,14 +159,14 @@ export const repairerApplicationRejected = (
   text: `
 Hallo ${name},
 
-Nach sorgfältiger Prüfung Ihrer Bewerbung als Techniker bei RevampIT müssen wir Ihnen mitteilen, dass wir Ihre Bewerbung derzeit nicht genehmigen können.
+Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei RevampIT müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.
 
 Grund:
 ${rejectionReason}
 
-Sie können sich jederzeit erneut bewerben, nachdem Sie die genannten Punkte behoben haben. Bei Fragen stehen wir Ihnen gerne zur Verfügung.
+Du kannst dich jederzeit erneut bewerben, nachdem du die genannten Punkte behoben hast. Bei Fragen stehen wir dir gerne zur Verfügung.
 
-Kontaktieren Sie uns unter: ${supportEmail}
+Kontaktiere uns unter: ${supportEmail}
 ${createTextFooter()}
   `.trim(),
 });
@@ -193,12 +193,12 @@ export const repairerApplicationChangesRequested = (
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Wir haben Ihre Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
+          <p>Wir haben deine Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
           <p><strong>Erforderliche Änderungen:</strong></p>
           <div class="highlight-box">
             ${requestedChanges.replace(/\n/g, '<br>')}
           </div>
-          <p>Bitte nehmen Sie diese Änderungen in Ihrem Bewerbungsformular vor und reichen Sie Ihre Bewerbung erneut ein.</p>
+          <p>Bitte nimm diese Änderungen in deinem Bewerbungsformular vor und reiche deine Bewerbung erneut ein.</p>
           <a href="${dashboardUrl}" class="button button-orange">Bewerbung bearbeiten</a>
           <p>Nach Einreichung der korrigierten Bewerbung werden wir diese zeitnah erneut prüfen.</p>
         </div>
@@ -213,12 +213,12 @@ export const repairerApplicationChangesRequested = (
   text: `
 Hallo ${name},
 
-Wir haben Ihre Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.
+Wir haben deine Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.
 
 Erforderliche Änderungen:
 ${requestedChanges}
 
-Bitte nehmen Sie diese Änderungen in Ihrem Bewerbungsformular vor und reichen Sie Ihre Bewerbung erneut ein.
+Bitte nimm diese Änderungen in deinem Bewerbungsformular vor und reiche deine Bewerbung erneut ein.
 
 Bewerbung bearbeiten: ${dashboardUrl}
 

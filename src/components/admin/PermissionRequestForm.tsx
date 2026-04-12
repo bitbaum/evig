@@ -28,10 +28,10 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
     createSuccessMessage: 'Anfrage gesendet',
     validate: (data) => {
       if (data.sections.length === 0) {
-        return 'Bitte wählen Sie mindestens einen Bereich aus.'
+        return 'Bitte wähle mindestens einen Bereich aus.'
       }
       if (data.reason.trim().length < 10) {
-        return 'Bitte geben Sie einen Grund an (mindestens 10 Zeichen).'
+        return 'Bitte gib einen Grund an (mindestens 10 Zeichen).'
       }
       return null
     },
@@ -62,7 +62,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               Anfrage gesendet
             </Heading>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Ein Super Admin wird Ihre Anfrage prüfen.
+              Ein Super Admin wird deine Anfrage prüfen.
             </p>
           </div>
         </div>
@@ -89,7 +89,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
             Zugriff anfordern
           </Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Wählen Sie die Bereiche aus, auf die Sie Zugriff benötigen.
+            Wähle die Bereiche aus, auf die du Zugriff benötigst.
           </p>
         </div>
         {onClose && (
@@ -139,7 +139,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         <textarea
           value={form.data.reason}
           onChange={e => form.updateField('reason', e.target.value)}
-          placeholder="Warum benötigen Sie Zugriff auf diese Bereiche?"
+          placeholder="Warum benötigst du Zugriff auf diese Bereiche?"
           rows={3}
           aria-required="true"
           aria-invalid={!!form.error}

@@ -47,7 +47,7 @@ export function getProtocolWorkflowProgress({
       currentStepId: 'input',
       nextStepId: 'ai',
       ctaLabel: 'Input erfassen und KI starten',
-      ctaHint: 'Fügen Sie Transkript, Notizen oder Audio hinzu.',
+      ctaHint: 'Füge Transkript, Notizen oder Audio hinzu.',
     }
   }
 

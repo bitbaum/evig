@@ -69,7 +69,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
           onChange={(e) => onFormDataChange({ ...formData, content: e.target.value })}
           rows={20}
           className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          placeholder="# Überschrift&#10;&#10;Schreiben Sie hier Ihren Artikel in Markdown..."
+          placeholder="# Überschrift&#10;&#10;Schreibe hier deinen Artikel in Markdown..."
         />
       </div>
     </div>

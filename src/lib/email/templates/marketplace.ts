@@ -33,19 +33,19 @@ export interface ListingReviewData extends MarketplaceEmailData {
  */
 export function listingPublishedConfirmation(data: ListingPublishedData): { subject: string; html: string; text: string } {
   return {
-    subject: `Ihr Inserat "${data.listingTitle}" ist jetzt live`,
-    text: `Hallo ${data.recipientName}, Ihr Inserat "${data.listingTitle}" wurde erfolgreich veröffentlicht. Ansehen: ${data.listingUrl}`,
+    subject: `Dein Inserat "${data.listingTitle}" ist jetzt live`,
+    text: `Hallo ${data.recipientName}, dein Inserat "${data.listingTitle}" wurde erfolgreich veröffentlicht. Ansehen: ${data.listingUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Ihr Inserat ist online!</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p>Ihr Inserat <strong>"${data.listingTitle}"</strong> wurde erfolgreich veröffentlicht und ist jetzt im Marketplace sichtbar.</p>
+        <p>Dein Inserat <strong>"${data.listingTitle}"</strong> wurde erfolgreich veröffentlicht und ist jetzt im Marketplace sichtbar.</p>
         <p>
           <a href="${data.listingUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Inserat ansehen
           </a>
         </p>
-        <p style="color: #6b7280; font-size: 14px;">Sie erhalten eine Benachrichtigung, wenn jemand Ihr Inserat kontaktiert.</p>
+        <p style="color: #6b7280; font-size: 14px;">Du erhältst eine Benachrichtigung, wenn jemand dein Inserat kontaktiert.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
         <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
       </div>
@@ -59,12 +59,12 @@ export function listingPublishedConfirmation(data: ListingPublishedData): { subj
 export function newMarketplaceMessage(data: NewMarketplaceMessageData): { subject: string; html: string; text: string } {
   return {
     subject: `Neue Nachricht zu "${data.listingTitle}"`,
-    text: `Hallo ${data.recipientName}, ${data.senderName} hat Ihnen eine Nachricht zu "${data.listingTitle}" geschickt: "${data.messagePreview}" Antworten: ${data.conversationUrl}`,
+    text: `Hallo ${data.recipientName}, ${data.senderName} hat dir eine Nachricht zu "${data.listingTitle}" geschickt: "${data.messagePreview}" Antworten: ${data.conversationUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Nachricht erhalten</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p><strong>${data.senderName}</strong> hat Ihnen eine Nachricht zu Ihrem Inserat <strong>"${data.listingTitle}"</strong> geschickt:</p>
+        <p><strong>${data.senderName}</strong> hat dir eine Nachricht zu deinem Inserat <strong>"${data.listingTitle}"</strong> geschickt:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; color: #374151;">${data.messagePreview}</p>
         </div>
@@ -120,12 +120,12 @@ export interface OrderStatusUpdateData extends MarketplaceEmailData {
 export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): { subject: string; html: string; text: string } {
   return {
     subject: `Bestellung aufgegeben: "${data.listingTitle}"`,
-    text: `Hallo ${data.recipientName}, Ihre Bestellung für "${data.listingTitle}" (${data.amountChf}) wurde aufgegeben. Lieferart: ${data.deliveryMethod}. Details: ${data.orderUrl}`,
+    text: `Hallo ${data.recipientName}, deine Bestellung für "${data.listingTitle}" (${data.amountChf}) wurde aufgegeben. Lieferart: ${data.deliveryMethod}. Details: ${data.orderUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Bestellung aufgegeben</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p>Ihre Bestellung für <strong>"${data.listingTitle}"</strong> wurde erfolgreich aufgegeben.</p>
+        <p>deine Bestellung für <strong>"${data.listingTitle}"</strong> wurde erfolgreich aufgegeben.</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <table style="width: 100%; border-collapse: collapse;">
             <tr><td style="padding: 4px 0; color: #6b7280;">Betrag</td><td style="padding: 4px 0; text-align: right; font-weight: 600;">${data.amountChf}</td></tr>
@@ -157,10 +157,10 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Bestellung erhalten!</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p><strong>${data.buyerName}</strong> hat Ihr Inserat <strong>"${data.listingTitle}"</strong> bestellt.</p>
+        <p><strong>${data.buyerName}</strong> hat dein Inserat <strong>"${data.listingTitle}"</strong> bestellt.</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 4px 0; color: #6b7280;">Ihre Auszahlung</td><td style="padding: 4px 0; text-align: right; font-weight: 600; color: #16a34a;">${data.payoutAmountChf}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">Deine Auszahlung</td><td style="padding: 4px 0; text-align: right; font-weight: 600; color: #16a34a;">${data.payoutAmountChf}</td></tr>
             <tr><td style="padding: 4px 0; color: #6b7280;">Lieferart</td><td style="padding: 4px 0; text-align: right;">${data.deliveryMethod}</td></tr>
           </table>
         </div>
@@ -169,7 +169,7 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
             Bestellung verwalten
           </a>
         </p>
-        <p style="color: #6b7280; font-size: 14px;">Bitte versenden Sie den Artikel so schnell wie möglich.</p>
+        <p style="color: #6b7280; font-size: 14px;">Bitte versende den Artikel so schnell wie möglich.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
         <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
       </div>
@@ -183,12 +183,12 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
 export function orderStatusUpdate(data: OrderStatusUpdateData): { subject: string; html: string; text: string } {
   return {
     subject: `Bestellstatus: ${data.newStatusLabel} — "${data.listingTitle}"`,
-    text: `Hallo ${data.recipientName}, der Status Ihrer Bestellung "${data.listingTitle}" wurde aktualisiert: ${data.newStatusLabel}. ${data.actionHint} Details: ${data.orderUrl}`,
+    text: `Hallo ${data.recipientName}, der Status deiner Bestellung "${data.listingTitle}" wurde aktualisiert: ${data.newStatusLabel}. ${data.actionHint} Details: ${data.orderUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Bestellstatus aktualisiert</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p>Der Status Ihrer Bestellung <strong>"${data.listingTitle}"</strong> wurde aktualisiert:</p>
+        <p>Der Status deiner Bestellung <strong>"${data.listingTitle}"</strong> wurde aktualisiert:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
           <p style="font-size: 18px; font-weight: 600; margin: 0;">${data.newStatusLabel}</p>
         </div>
@@ -238,7 +238,7 @@ export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subjec
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Der Käufer hat den Erhalt bestätigt</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p>Der Käufer hat den Erhalt von <strong>"${data.listingTitle}"</strong> bestätigt. Die Zahlung wurde freigegeben und wird Ihnen in Kürze ausbezahlt.</p>
+        <p>Der Käufer hat den Erhalt von <strong>"${data.listingTitle}"</strong> bestätigt. Die Zahlung wurde freigegeben und wird dir in Kürze ausbezahlt.</p>
         <p style="color: #6b7280; font-size: 14px;">Bestellnummer: ${data.orderNumber}</p>
         <p>
           <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
@@ -257,13 +257,13 @@ export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subjec
  */
 export function orderReviewPrompt(data: OrderReviewPromptData): { subject: string; html: string; text: string } {
   return {
-    subject: `Wie war Ihr Kauf von "${data.listingTitle}"?`,
-    text: `Hallo ${data.recipientName}, vielen Dank für Ihren Kauf von "${data.listingTitle}". Teilen Sie Ihre Erfahrung mit einer Bewertung: ${data.reviewUrl}`,
+    subject: `Wie war dein Kauf von "${data.listingTitle}"?`,
+    text: `Hallo ${data.recipientName}, vielen Dank für deinen Kauf von "${data.listingTitle}". Teile deine Erfahrung mit einer Bewertung: ${data.reviewUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2>Vielen Dank für Ihren Kauf!</h2>
+        <h2>Vielen Dank für deinen Kauf!</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p>Wir hoffen, Sie sind zufrieden mit <strong>"${data.listingTitle}"</strong>. Ihre Bewertung hilft anderen Käuferinnen und Käufern bei der Entscheidung und unterstützt verantwortungsvolle Verkäufer.</p>
+        <p>Wir hoffen, du bist zufrieden mit <strong>"${data.listingTitle}"</strong>. Deine Bewertung hilft anderen Käuferinnen und Käufern bei der Entscheidung und unterstützt verantwortungsvolle Verkäufer.</p>
         <p>
           <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Jetzt bewerten
@@ -284,12 +284,12 @@ export function orderReviewReceived(data: OrderReviewReceivedData): { subject: s
   const stars = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
   return {
     subject: `Neue Bewertung (${data.rating}/5) für "${data.listingTitle}"`,
-    text: `Hallo ${data.recipientName}, Sie haben eine neue Bewertung für "${data.listingTitle}" erhalten: ${data.rating}/5 Sterne. "${data.content}" Details: ${data.reviewUrl}`,
+    text: `Hallo ${data.recipientName}, du hast eine neue Bewertung für "${data.listingTitle}" erhalten: ${data.rating}/5 Sterne. "${data.content}" Details: ${data.reviewUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Bewertung erhalten</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p>Sie haben eine neue Bewertung für Ihr Inserat <strong>"${data.listingTitle}"</strong> erhalten:</p>
+        <p>Du hast eine neue Bewertung für dein Inserat <strong>"${data.listingTitle}"</strong> erhalten:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
           <p style="font-size: 24px; margin: 0; color: #f59e0b;">${stars}</p>
           <p style="margin: 8px 0 0; color: #374151; font-weight: 600;">${data.rating} von 5 Sternen</p>
@@ -313,12 +313,12 @@ export function listingReviewNotification(data: ListingReviewData): { subject: s
   const stars = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
   return {
     subject: `Neue Bewertung für "${data.listingTitle}"`,
-    text: `Hallo ${data.recipientName}, ${data.reviewerName} hat Ihr Inserat "${data.listingTitle}" mit ${data.rating}/5 Sternen bewertet. Ansehen: ${data.reviewUrl}`,
+    text: `Hallo ${data.recipientName}, ${data.reviewerName} hat dein Inserat "${data.listingTitle}" mit ${data.rating}/5 Sternen bewertet. Ansehen: ${data.reviewUrl}`,
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Bewertung erhalten</h2>
         <p>Hallo ${data.recipientName},</p>
-        <p><strong>${data.reviewerName}</strong> hat Ihr Inserat <strong>"${data.listingTitle}"</strong> bewertet:</p>
+        <p><strong>${data.reviewerName}</strong> hat dein Inserat <strong>"${data.listingTitle}"</strong> bewertet:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
           <p style="font-size: 24px; margin: 0; color: #f59e0b;">${stars}</p>
           <p style="margin: 8px 0 0; color: #374151; font-weight: 600;">${data.rating} von 5 Sternen</p>

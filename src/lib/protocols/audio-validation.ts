@@ -17,7 +17,7 @@ const ALLOWED_AUDIO_MIME_TYPES = new Set([
 ])
 
 export function validateAudioUpload(file: AudioFileLike): string | null {
-  if (!file) return 'Bitte wählen Sie eine Audiodatei aus.'
+  if (!file) return 'Bitte wähle eine Audiodatei aus.'
 
   if (file.size <= 0) {
     return 'Die Audiodatei ist leer.'

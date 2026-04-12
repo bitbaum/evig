@@ -122,7 +122,7 @@ export default async function AdminServicesPage() {
   return (
     <AdminPageWrapper
       title="Dienstleistungen verwalten"
-      description="Erstellen und verwalten Sie Ihre Service-Angebote"
+      description="Erstelle und verwalte die Service-Angebote"
       icon={Wrench}
       iconColor="green"
       actions={
@@ -192,7 +192,7 @@ export default async function AdminServicesPage() {
               Dienstleistungs-Verwaltung
             </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
-              Dienstleistungen sind die Kernkompetenz von RevampIT. Bieten Sie Reparaturen, Installationen,
+              Dienstleistungen sind die Kernkompetenz von RevampIT. Biete Reparaturen, Installationen,
               Beratungen und andere technische Services an. Kunden können online Termine buchen.
             </p>
             <div className="flex gap-3">

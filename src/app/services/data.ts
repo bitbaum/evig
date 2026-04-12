@@ -98,7 +98,7 @@ export const services: Service[] = [
   {
     slug: 'linux-installation',
     title: 'Linux & Open Source',
-    description: 'Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen Ihnen, das Beste aus Ihrem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.',
+    description: 'Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen dir, das Beste aus Ihrem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.',
     icon: Server,
     category: 'Software-Lösungen',
     features: [
@@ -114,7 +114,7 @@ export const services: Service[] = [
   },
   {
     title: 'Open Source Solutions',
-    description: 'Fachkundige Implementierung und Support für Open-Source-Software. Wir helfen Ihnen beim Übergang zu und der Wartung von Open-Source-Lösungen für Ihre Geschäftsanforderungen.',
+    description: 'Fachkundige Implementierung und Support für Open-Source-Software. Wir helfen dir beim Übergang zu und der Wartung von Open-Source-Lösungen für Ihre Geschäftsanforderungen.',
     icon: Code,
     category: 'Software-Lösungen',
     features: [
@@ -132,7 +132,7 @@ export const services: Service[] = [
   // Coming Soon
   {
     title: 'Build Your Computer',
-    description: 'Erhalten Sie einen massgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.',
+    description: 'Erhalte einen massgeschneiderten Computer für Ihre spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.',
     icon: Cpu,
     category: 'Bald verfügbar',
     features: [

@@ -47,7 +47,7 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'complete-profile',
       label: 'Profil vervollständigen',
-      description: 'Fügen Sie Ihre persönlichen Informationen hinzu',
+      description: 'Füge Ihre persönlichen Informationen hinzu',
       href: '/dashboard/profile',
       completed: completedIds.includes('complete-profile'),
     },
@@ -64,7 +64,7 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'browse-workshops',
       label: 'Workshops erkunden',
-      description: 'Lernen Sie in unseren kostenlosen Workshops',
+      description: 'Lerne in unseren kostenlosen Workshops',
       href: '/workshops',
       completed: completedIds.includes('browse-workshops'),
     },
@@ -74,21 +74,21 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'add-services',
       label: 'Dienstleistungen hinzufügen',
-      description: 'Definieren Sie Ihre angebotenen Reparaturdienste',
+      description: 'Definiere Ihre angebotenen Reparaturdienste',
       href: '/profil/techniker',
       completed: completedIds.includes('add-services'),
     },
     {
       id: 'set-availability',
       label: 'Verfügbarkeit festlegen',
-      description: 'Legen Sie Ihre Arbeitszeiten fest',
+      description: 'Lege Ihre Arbeitszeiten fest',
       href: '/profil/techniker',
       completed: completedIds.includes('set-availability'),
     },
     {
       id: 'upload-certifications',
       label: 'Zertifizierungen hochladen',
-      description: 'Zeigen Sie Ihre Qualifikationen',
+      description: 'Zeige deine Qualifikationen',
       href: '/profil/techniker',
       completed: completedIds.includes('upload-certifications'),
     },
@@ -98,7 +98,7 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'add-first-product',
       label: 'Erstes Produkt hinzufügen',
-      description: 'Listen Sie Ihr erstes refurbished Gerät',
+      description: 'Liste dein erstes refurbished Gerät',
       href: '/marketplace/sell',
       completed: completedIds.includes('add-first-product'),
     },

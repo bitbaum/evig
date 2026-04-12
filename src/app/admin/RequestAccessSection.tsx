@@ -44,8 +44,8 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
         ) : (
           <div>
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Es gibt {inaccessibleSections.length} Bereiche, auf die Sie keinen Zugriff haben.
-              Sie können bei einem Super Admin Zugriff anfordern.
+              Es gibt {inaccessibleSections.length} Bereiche, auf die du keinen Zugriff hast.
+              Du kannst bei einem Super Admin Zugriff anfordern.
             </p>
             <div className="flex flex-wrap gap-2 mb-4">
               {inaccessibleSections.slice(0, 6).map(section => (

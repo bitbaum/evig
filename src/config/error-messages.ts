@@ -64,7 +64,7 @@ export const ERROR_MESSAGES = {
   WORKSHOP_APPROVAL_FAILED: 'Fehler bei der Workshop-Genehmigung',
   NETWORK_ERROR: 'Netzwerkfehler',
   ALREADY_APPROVED: 'Sie sind bereits als Verkäufer zugelassen',
-  PENDING_APPLICATION: 'Sie haben bereits eine ausstehende Bewerbung',
+  PENDING_APPLICATION: 'Du hast bereits eine ausstehende Bewerbung',
   CANNOT_CANCEL_COMPLETED: 'Abgeschlossene Termine können nicht storniert werden',
   CAN_ONLY_EDIT_REQUESTED: 'Nur angefragte Termine können bearbeitet werden',
 
@@ -112,9 +112,9 @@ export const ERROR_MESSAGES = {
 export const SUCCESS_MESSAGES = {
   ACCOUNT_CREATED: 'Konto erfolgreich erstellt',
   REGISTRATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht',
-  SELLER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht. Sie erhalten in Kürze eine Bestätigung per E-Mail.',
-  REPAIRER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht! Sie erhalten in Kürze eine E-Mail mit weiteren Informationen.',
-  APPOINTMENT_REQUESTED: 'Terminanfrage eingereicht. Wir kontaktieren Sie bald für die Terminbestätigung.',
+  SELLER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht. Du erhältst in Kürze eine Bestätigung per E-Mail.',
+  REPAIRER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht! Du erhältst in Kürze eine E-Mail mit weiteren Informationen.',
+  APPOINTMENT_REQUESTED: 'Terminanfrage eingereicht. Wir kontaktieren dich bald für die Terminbestätigung.',
   APPOINTMENT_BOOKED: 'Termin erfolgreich gebucht!',
   APPOINTMENT_CANCELLED: 'Termin erfolgreich storniert',
 

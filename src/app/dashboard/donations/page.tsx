@@ -132,7 +132,7 @@ export default function DonationsDashboard() {
               Anmeldung erforderlich
             </Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Bitte melden Sie sich an, um Ihre Spenden zu sehen.
+              Bitte melde dich an, um deine Spenden zu sehen.
             </p>
             <Link
               href="/auth/login"
@@ -241,7 +241,7 @@ export default function DonationsDashboard() {
               Noch keine Spenden erfasst
             </Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Ihre Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden.
+              deine Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden.
             </p>
             <Link
               href="/get-involved/donate"

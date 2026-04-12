@@ -110,33 +110,33 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     icon: Wrench,
     iconBgColor: 'bg-blue-100',
     iconColor: 'text-blue-600',
-    title: 'Werden Sie Reparatur-Experte bei Revamp-IT',
-    subtitle: 'Bieten Sie Ihre Reparaturdienste an und verbinden Sie sich mit Kunden, die Ihre Fachkenntnisse brauchen.'
+    title: 'Wirst du Reparatur-Experte bei Revamp-IT',
+    subtitle: 'Biete deine Reparaturdienste an und verbinde dich mit Kunden, die deine Fachkenntnisse brauchen.'
   },
   benefits: [
     {
       icon: Users,
       iconColor: 'text-green-600',
       title: 'Direkt mit Kunden verbinden',
-      description: 'Erhalten Sie direkte Anfragen von Kunden in Ihrem Einzugsgebiet. Keine Zwischenhändler, volle Kontrolle über Ihre Dienstleistungen.'
+      description: 'Erhalte direkte Anfragen von Kunden in Ihrem Einzugsgebiet. Keine Zwischenhändler, volle Kontrolle über Ihre Dienstleistungen.'
     },
     {
       icon: TrendingUp,
       iconColor: 'text-blue-600',
-      title: 'Erhöhen Sie Ihre Sichtbarkeit',
-      description: 'Zeigen Sie Ihr Fachwissen, Bewertungen und Zertifizierungen. Bauen Sie Vertrauen mit einem professionellen Profil auf.'
+      title: 'Erhöhe deine Sichtbarkeit',
+      description: 'Zeige dein Fachwissen, Bewertungen und Zertifizierungen. Baue Vertrauen mit einem professionellen Profil auf.'
     },
     {
       icon: Star,
       iconColor: 'text-yellow-600',
       title: 'Bewertungssystem',
-      description: 'Sammeln Sie Bewertungen und bauen Sie eine Reputation auf. Hervorragende Bewertungen helfen Ihnen, mehr Kunden zu gewinnen.'
+      description: 'Sammle Bewertungen und baue eine Reputation auf. Hervorragende Bewertungen helfen dir, mehr Kunden zu gewinnen.'
     },
     {
       icon: Clock,
       iconColor: 'text-purple-600',
       title: 'Flexible Arbeitszeiten',
-      description: 'Legen Sie Ihre eigenen Verfügbarkeiten fest. Arbeiten Sie wann und wo Sie möchten, solange es zu Ihren Kunden passt.'
+      description: 'Lege deine eigenen Verfügbarkeiten fest. Arbeite wann und wo du möchtest, solange es zu deinen Kunden passt.'
     }
   ],
   requirements: {
@@ -204,7 +204,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     items: [
       {
         question: 'Wie funktioniert die Bezahlung?',
-        answer: 'Kunden bezahlen direkt über die Plattform. Sie erhalten Ihr Geld abzüglich der Servicegebühr innerhalb von 3-5 Werktagen nach erfolgreichem Abschluss der Reparatur.'
+        answer: 'Kunden bezahlen direkt über die Plattform. Du erhältst Ihr Geld abzüglich der Servicegebühr innerhalb von 3-5 Werktagen nach erfolgreichem Abschluss der Reparatur.'
       },
       {
         question: 'Was passiert bei Streitigkeiten?',
@@ -212,7 +212,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
       },
       {
         question: 'Kann ich meine Preise selbst festlegen?',
-        answer: 'Ja, Sie legen Ihre Stundensätze und Servicepreise selbst fest. Wir empfehlen wettbewerbsfähige Preise basierend auf Marktstandards in Ihrer Region.'
+        answer: 'Ja, du legst deine Stundensätze und Servicepreise selbst fest. Wir empfehlen wettbewerbsfähige Preise basierend auf Marktstandards in deiner Region.'
       }
     ]
   },

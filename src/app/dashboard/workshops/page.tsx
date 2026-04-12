@@ -140,7 +140,7 @@ export default function WorkshopsDashboard() {
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
             <Heading level={1} className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Bitte melden Sie sich an, um Ihre Workshop-Anmeldungen zu sehen.
+              Bitte melde dich an, um Ihre Workshop-Anmeldungen zu sehen.
             </p>
             <Link
               href="/auth/login"
@@ -210,7 +210,7 @@ export default function WorkshopsDashboard() {
                       <span className="font-medium">Ihre Anmeldung wurde bestätigt!</span>
                     </div>
                     <p className="text-green-700 text-sm mt-1">
-                      Sie erhalten in Kürze weitere Informationen zu Datum und Ort.
+                      Du erhältst in Kürze weitere Informationen zu Datum und Ort.
                     </p>
                   </div>
                 )}
@@ -222,7 +222,7 @@ export default function WorkshopsDashboard() {
                       <span className="font-medium">Anmeldung ausstehend</span>
                     </div>
                     <p className="text-yellow-700 text-sm mt-1">
-                      Ihre Anmeldung wird von unserem Team geprüft. Sie erhalten eine Bestätigung per E-Mail.
+                      Ihre Anmeldung wird von unserem Team geprüft. Du erhältst eine Bestätigung per E-Mail.
                     </p>
                   </div>
                 )}
@@ -246,7 +246,7 @@ export default function WorkshopsDashboard() {
                   <div className="mt-4 flex gap-3">
                     <button
                       onClick={async () => {
-                        if (!confirm('Möchten Sie diese Anmeldung wirklich stornieren?')) return
+                        if (!confirm('Möchtest du diese Anmeldung wirklich stornieren?')) return
                         const result = await apiFetch<void>(`/api/workshops/registrations/${registration.id}`, {
                           method: 'PATCH',
                           body: { action: 'cancel' }
@@ -279,7 +279,7 @@ export default function WorkshopsDashboard() {
               Noch keine Workshop-Anmeldungen
             </Heading>
             <p className="text-gray-600 mb-6">
-              Sie haben sich noch für keine Workshops angemeldet.
+              Du hast dich noch für keine Workshops angemeldet.
             </p>
             <Link
               href="/workshops"
@@ -311,7 +311,7 @@ export default function WorkshopsDashboard() {
               onChange={(e) => setEditFeedback(e.target.value)}
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-              placeholder="Wie war Ihre Erfahrung?"
+              placeholder="Wie war deine Erfahrung?"
             />
           </div>
         </div>

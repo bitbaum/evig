@@ -58,7 +58,7 @@ export default function NewWorkshopPage() {
         </Link>
         <div>
           <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Workshop erstellen</Heading>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Planen und veröffentlichen Sie einen neuen Workshop</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Plane und veröffentliche einen neuen Workshop</p>
         </div>
       </div>
 

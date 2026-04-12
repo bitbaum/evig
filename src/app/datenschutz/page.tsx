@@ -23,7 +23,7 @@ export default function DatenschutzPage() {
 
         <Heading level={2}>2. Erhebung und Verarbeitung personenbezogener Daten</Heading>
         <p>
-          Wir erheben personenbezogene Daten, wenn Sie sich auf unserer Plattform registrieren,
+          Wir erheben personenbezogene Daten, wenn du sich auf unserer Plattform registrieren,
           unsere Dienstleistungen nutzen oder mit uns in Kontakt treten. Dies umfasst:
         </p>
         <ul>
@@ -33,9 +33,9 @@ export default function DatenschutzPage() {
         </ul>
 
         <Heading level={2}>3. Zweck der Datenverarbeitung</Heading>
-        <p>Ihre Daten werden verwendet für:</p>
+        <p>deine Daten werden verwendet für:</p>
         <ul>
-          <li>Bereitstellung und Verwaltung Ihres Benutzerkontos</li>
+          <li>Bereitstellung und Verwaltung deines Benutzerkontos</li>
           <li>Durchführung von Reparaturaufträgen und Dienstleistungen</li>
           <li>Verwaltung von Workshop-Anmeldungen</li>
           <li>Betrieb des P2P-Marktplatzes</li>
@@ -44,7 +44,7 @@ export default function DatenschutzPage() {
 
         <Heading level={2}>4. Datenweitergabe</Heading>
         <p>
-          Ihre Daten werden nicht an Dritte verkauft. Eine Weitergabe erfolgt nur, wenn
+          deine Daten werden nicht an Dritte verkauft. Eine Weitergabe erfolgt nur, wenn
           dies zur Erbringung unserer Dienstleistungen erforderlich ist (z.B. an
           Reparaturdienstleister bei gebuchten Reparaturen) oder wenn wir gesetzlich
           dazu verpflichtet sind.
@@ -52,7 +52,7 @@ export default function DatenschutzPage() {
 
         <Heading level={2}>5. Datensicherheit</Heading>
         <p>
-          Wir setzen technische und organisatorische Massnahmen ein, um Ihre Daten
+          Wir setzen technische und organisatorische Massnahmen ein, um deine Daten
           vor unbefugtem Zugriff, Verlust oder Missbrauch zu schützen. Passwörter
           werden ausschliesslich gehasht gespeichert.
         </p>
@@ -80,7 +80,7 @@ export default function DatenschutzPage() {
           <a href="/dashboard/settings" className="text-green-700 underline">
             Einstellungen → Datenschutz
           </a>
-          . Für alle weiteren Anliegen wenden Sie sich bitte an:{' '}
+          . Für alle weiteren Anliegen wende dich bitte an:{' '}
           <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
         </p>
 

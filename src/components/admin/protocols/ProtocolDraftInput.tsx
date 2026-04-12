@@ -29,8 +29,8 @@ export function ProtocolDraftInput({
       </Heading>
       <p className="text-sm text-gray-600">
         {inputMethod === 'audio'
-          ? 'Laden Sie eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'
-          : 'Fügen Sie das Transkript ein, um es von der KI strukturieren zu lassen.'}
+          ? 'Lade eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'
+          : 'Füge das Transkript ein, um es von der KI strukturieren zu lassen.'}
       </p>
 
       {inputMethod === 'audio' ? (

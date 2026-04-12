@@ -128,7 +128,7 @@ function ResetPasswordContent() {
             Passwort geändert!
           </Heading>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Ihr Passwort wurde erfolgreich geändert. du kannst sich jetzt mit deinem neuen Passwort anmelden.
+            dein Passwort wurde erfolgreich geändert. du kannst sich jetzt mit deinem neuen Passwort anmelden.
           </p>
         </div>
 

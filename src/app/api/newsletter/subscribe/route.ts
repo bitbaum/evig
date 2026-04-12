@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Newsletter subscription rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
         retryAfter: rateLimitResult.retryAfter,
         remaining: rateLimitResult.remaining,
         resetAt: rateLimitResult.resetAt,
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
       message: 'Bestätigungs-E-Mail gesendet',
     })
   } catch (error) {
-    return apiError(error, 'Serverfehler. Bitte versuchen Sie es später erneut.')
+    return apiError(error, 'Serverfehler. Bitte versuche es später erneut.')
   }
 }
 

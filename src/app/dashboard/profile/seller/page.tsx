@@ -151,8 +151,8 @@ export default function SellerProfileEditPage() {
           </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {noProfile
-              ? 'Erstellen Sie Ihr Verkäuferprofil. Es wird automatisch erstellt, wenn Sie Ihr erstes Inserat veröffentlichen.'
-              : 'Bearbeiten Sie Ihr öffentliches Verkäuferprofil.'}
+              ? 'Erstelle Ihr Verkäuferprofil. Es wird automatisch erstellt, wenn du Ihr erstes Inserat veröffentlichen.'
+              : 'Bearbeite dein öffentliches Verkäuferprofil.'}
           </p>
         </div>
 
@@ -178,7 +178,7 @@ export default function SellerProfileEditPage() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={3}
-              placeholder="Erzählen Sie etwas über sich..."
+              placeholder="Erzähle etwas über dich..."
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
             />
           </div>

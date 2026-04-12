@@ -104,7 +104,7 @@ export default function AdminLocationsPage() {
   }, [status, filters.status, filters.type, filters.city, currentPage])
 
   const handleApproval = async (locationId: string, action: 'approve' | 'reject') => {
-    if (!confirm(`Möchten Sie diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
+    if (!confirm(`Möchtest du diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
       return
     }
 

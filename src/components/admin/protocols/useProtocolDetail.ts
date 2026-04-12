@@ -170,7 +170,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
       const endpoint = getReprocessEndpoint()
 
       if (protocol.input_method === 'audio') {
-        if (!audioFile) throw new Error('Bitte wählen Sie eine Audiodatei aus.')
+        if (!audioFile) throw new Error('Bitte wähle eine Audiodatei aus.')
         const validationError = validateAudioUpload(audioFile)
         if (validationError) throw new Error(validationError)
 

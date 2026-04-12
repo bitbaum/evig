@@ -90,7 +90,7 @@ function NewStaticPageContent() {
             Neue Seite erstellen
           </Heading>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Erstellen Sie eine neue statische Seite
+            Erstelle eine neue statische Seite
           </p>
         </div>
       </div>

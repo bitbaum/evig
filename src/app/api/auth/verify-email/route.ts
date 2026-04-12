@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     })
 
     return apiSuccess({
-      message: 'E-Mail-Adresse erfolgreich bestätigt! Sie können sich jetzt anmelden.',
+      message: 'E-Mail-Adresse erfolgreich bestätigt! Du kannst dich jetzt anmelden.',
     })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

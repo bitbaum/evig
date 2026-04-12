@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
 
     // Rate limit — 5 AI analyses per hour per user
     if (!rateLimiters.aiAnalyze(session.user.id + ':ai-analyze')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.', 429)
+      return apiError(new Error('Rate limit'), 'Zu viele Anfragen. Bitte versuche es später erneut.', 429)
     }
 
     const body = await request.json()

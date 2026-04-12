@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Registration rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Registrierungsversuche. Bitte versuchen Sie es später erneut.', {
+      return apiRateLimited('Zu viele Registrierungsversuche. Bitte versuche es später erneut.', {
         retryAfter: rateLimitResult.retryAfter,
         remaining: rateLimitResult.remaining,
         resetAt: rateLimitResult.resetAt,
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       }
 
       return apiSuccess({
-        message: 'Konto erfolgreich erstellt. Bitte bestätigen Sie Ihre E-Mail-Adresse.',
+        message: 'Konto erfolgreich erstellt. Bitte bestätige deine E-Mail-Adresse.',
         data: result.data,
       })
     } catch (dbError) {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         logger.error('Database connection failed during registration', { error: dbError })
         return apiError(
           new Error('Database connection failed'),
-          'Datenbankverbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+          'Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.',
           503
         )
       }

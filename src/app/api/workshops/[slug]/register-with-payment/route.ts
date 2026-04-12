@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
       workshopTitle: workshop.title,
       registrationType,
       escrowEnabled: useEscrow,
-      message: 'Workshop-Anmeldung erstellt. Schliessen Sie die Zahlung ab, um Ihren Platz zu bestätigen.'
+      message: 'Workshop-Anmeldung erstellt. Schliesse die Zahlung ab, um deinen Platz zu bestätigen.'
     })
   } catch (error) {
     logger.error('Workshop registration with payment error', { error })

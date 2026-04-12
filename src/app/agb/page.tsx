@@ -88,7 +88,7 @@ export default function AGBPage() {
         <p>
           RevampIT behält sich vor, diese AGB jederzeit zu ändern. Die jeweils aktuelle
           Fassung ist auf dieser Seite abrufbar. Rechtliche Angaben zum Anbieter finden
-          Sie im <a href="/impressum" className="text-green-700 underline">Impressum</a>.
+          findest du im <a href="/impressum" className="text-green-700 underline">Impressum</a>.
         </p>
 
         <p className="mt-12 text-sm text-neutral-500">Stand: April 2026</p>

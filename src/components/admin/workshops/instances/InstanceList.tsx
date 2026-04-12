@@ -128,7 +128,7 @@ export function InstanceList({
             <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg text-gray-900 mb-2">Keine Termine gefunden</Heading>
             <p className="text-gray-600 mb-4">
-              Erstellen Sie einen neuen Termin für einen Workshop.
+              Erstelle einen neuen Termin für einen Workshop.
             </p>
             <button
               onClick={onCreateNew}

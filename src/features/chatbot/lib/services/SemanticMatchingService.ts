@@ -287,7 +287,7 @@ export class SemanticMatchingService {
           conditions: { language: 'en' }
         },
         {
-          template: 'Vielen Dank, dass Sie eine Spende in Erwägung ziehen! Ihre Unterstützung hilft uns, Technologie für alle zugänglich zu machen und Elektroschrott zu reduzieren.',
+          template: 'Vielen Dank, dass Sie eine Spende in Erwägung ziehen! Deine Unterstützung hilft uns, Technologie für alle zugänglich zu machen und Elektroschrott zu reduzieren.',
           confidence: 0.9,
           conditions: { language: 'de' }
         }

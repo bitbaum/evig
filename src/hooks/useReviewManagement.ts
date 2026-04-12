@@ -128,7 +128,7 @@ export function useReviewManagement(authStatus: string) {
   }
 
   const handleDeleteReview = async (reviewId: string) => {
-    if (!confirm('Sind Sie sicher, dass Sie diese Bewertung löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+    if (!confirm('Bist du sicher, dass du diese Bewertung löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.')) {
       return
     }
 

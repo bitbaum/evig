@@ -111,7 +111,7 @@ export const POST = withAuth<{ id: string }>(async (
       recipientIds: [row.requesterId],
       title: 'Hilfe abgeschlossen - bitte bestätigen',
       content:
-        'Die Hilfe wurde als abgeschlossen markiert. Bitte bestätigen Sie und geben Sie eine Bewertung ab.',
+        'Die Hilfe wurde als abgeschlossen markiert. Bitte bestätige und gib eine Bewertung ab.',
       requestId: id,
     })
 

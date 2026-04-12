@@ -52,7 +52,7 @@ export function ContentInputStep({
       <div className="bg-white rounded-lg border p-6 space-y-5">
         <Heading level={2} className="text-lg text-gray-900">Audio hochladen</Heading>
         <p className="text-sm text-gray-600">
-          Laden Sie eine Audiodatei hoch. Die Aufnahme wird automatisch transkribiert und danach in Aufgaben umgewandelt.
+          Lade eine Audiodatei hoch. Die Aufnahme wird automatisch transkribiert und danach in Aufgaben umgewandelt.
         </p>
 
         <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
@@ -229,7 +229,7 @@ const CONTENT_CONFIG: Record<Exclude<InputMethod, 'audio'>, {
 }> = {
   transcript: {
     title: 'Transkript',
-    description: 'Fügen Sie das Transkript ein oder laden Sie eine .txt-Datei hoch. Sie können diesen Schritt auch überspringen und das Transkript später hinzufügen.',
+    description: 'Füge das Transkript ein oder lade eine .txt-Datei hoch. Du kannst diesen Schritt auch überspringen und das Transkript später hinzufügen.',
     fieldLabel: 'Transkript',
     uploadLabel: '.txt hochladen',
     fileAccept: '.txt,.md,.text',
@@ -242,7 +242,7 @@ const CONTENT_CONFIG: Record<Exclude<InputMethod, 'audio'>, {
   },
   notes: {
     title: 'Strukturierte Notizen',
-    description: 'Fügen Sie Ihre Notizen ein (Stichpunkte, Abschnitte) oder laden Sie eine JSON-/.txt-Datei hoch. JSON wird direkt übernommen, Freitext wird von der KI strukturiert.',
+    description: 'Füge deine Notizen ein (Stichpunkte, Abschnitte) oder lade eine JSON-/.txt-Datei hoch. JSON wird direkt übernommen, Freitext wird von der KI strukturiert.',
     fieldLabel: 'Notizen',
     uploadLabel: '.json/.txt hochladen',
     fileAccept: '.txt,.md,.text,.json',
@@ -255,7 +255,7 @@ const CONTENT_CONFIG: Record<Exclude<InputMethod, 'audio'>, {
   },
   tasks: {
     title: 'Aufgabenliste',
-    description: 'Fügen Sie Aufgaben ein — eine pro Zeile. Die KI erkennt Zuweisungen, Prioritäten und Fristen. JSON-Arrays werden direkt importiert.',
+    description: 'Füge Aufgaben ein — eine pro Zeile. Die KI erkennt Zuweisungen, Prioritäten und Fristen. JSON-Arrays werden direkt importiert.',
     fieldLabel: 'Aufgaben',
     uploadLabel: '.txt hochladen',
     fileAccept: '.txt,.md,.text,.json',

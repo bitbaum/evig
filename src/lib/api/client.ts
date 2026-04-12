@@ -56,7 +56,7 @@ export async function apiFetch<T = unknown>(
   } catch {
     return {
       success: false,
-      error: 'Netzwerkfehler. Bitte versuchen Sie es erneut.',
+      error: 'Netzwerkfehler. Bitte versuche es erneut.',
     }
   }
 }

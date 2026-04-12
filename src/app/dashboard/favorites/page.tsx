@@ -129,7 +129,7 @@ export default function FavoritesPage() {
             Noch keine Favoriten
           </Heading>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Klicken Sie auf das Herz-Symbol bei einem Inserat, um es hier zu speichern.
+            Klicke auf das Herz-Symbol bei einem Inserat, um es hier zu speichern.
           </p>
           <Link
             href="/marketplace"

@@ -221,7 +221,7 @@ export async function GET(request: NextRequest) {
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     if (!rateLimiters.reviewCreate(session.user.id + ':review')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Bewertungen. Bitte versuchen Sie es später erneut.', 429)
+      return apiError(new Error('Rate limit'), 'Zu viele Bewertungen. Bitte versuche es später erneut.', 429)
     }
 
     const body = await request.json()
@@ -237,7 +237,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     // Duplicate check
     const existingId = await findDuplicateReview(session.user.id, targetType, targetId, bookingId)
     if (existingId) {
-      return apiBadRequest('Sie haben bereits eine Bewertung für dieses Ziel abgegeben')
+      return apiBadRequest('Du hast bereits eine Bewertung für dieses Ziel abgegeben')
     }
 
     // Verify target exists

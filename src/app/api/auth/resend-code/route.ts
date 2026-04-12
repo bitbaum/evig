@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Resend code rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Anfragen. Bitte versuchen Sie es später erneut.', {
+      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
         retryAfter: rateLimitResult.retryAfter,
         remaining: rateLimitResult.remaining,
         resetAt: rateLimitResult.resetAt,
@@ -54,16 +54,16 @@ export async function POST(request: NextRequest) {
       const emailResult = await sendEmail(email, 'verificationCode', user.name || 'Benutzer', verificationCode)
       if (!emailResult.success) {
         logger.error('Resend verification email returned failure', { error: emailResult.error, email, userId: user.id })
-        return apiError(new Error(emailResult.error || 'Email send failed'), 'E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.')
+        return apiError(new Error(emailResult.error || 'Email send failed'), 'E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut.')
       }
       logger.info('Verification code resent', { email, userId: user.id })
     } catch (emailError) {
       logger.error('Failed to resend verification email', { error: emailError, email })
-      return apiError(emailError, 'E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.')
+      return apiError(emailError, 'E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut.')
     }
 
     return apiSuccess({
-      message: 'Ein neuer Bestätigungscode wurde an Ihre E-Mail-Adresse gesendet.',
+      message: 'Ein neuer Bestätigungscode wurde an deine E-Mail-Adresse gesendet.',
     })
   } catch (error) {
     logger.error('Resend code error', { error })

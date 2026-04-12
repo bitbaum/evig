@@ -26,7 +26,7 @@ export const POST = withAdmin<{ id: string }>(async (request, session, context) 
     const { action, notes } = body
 
     if (!action || !['approve', 'reject'].includes(action)) {
-      return apiBadRequest('Ungültige Aktion. Verwenden Sie "approve" oder "reject"')
+      return apiBadRequest('Ungültige Aktion. Verwende "approve" oder "reject"')
     }
 
     // Get the request details

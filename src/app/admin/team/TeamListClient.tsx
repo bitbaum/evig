@@ -91,7 +91,7 @@ export function TeamListClient() {
           <p className="text-gray-500 dark:text-gray-400 mb-4">
             {filters.search || filters.department || filters.employmentType
               ? 'Keine Profile entsprechen Ihren Filterkriterien.'
-              : 'Erstellen Sie ein Profil, um loszulegen.'}
+              : 'Erstelle ein Profil, um loszulegen.'}
           </p>
           {(filters.search || filters.department || filters.employmentType) && (
             <button

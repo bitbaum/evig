@@ -150,7 +150,7 @@ export default function CustomerBookings() {
         {needsAction > 0 && (
           <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg flex items-center gap-2 text-purple-700">
             <Euro className="h-5 w-5" />
-            Sie haben {needsAction} Angebot{needsAction > 1 ? 'e' : ''} zur Bestätigung
+            Du hast {needsAction} Angebot{needsAction > 1 ? 'e' : ''} zur Bestätigung
           </div>
         )}
 
@@ -328,7 +328,7 @@ export default function CustomerBookings() {
               <textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
-                placeholder="Wie war Ihre Erfahrung?"
+                placeholder="Wie war deine Erfahrung?"
                 rows={3}
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
               />

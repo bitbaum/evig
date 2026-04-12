@@ -51,7 +51,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       ))
 
     if (Number(proposalCount?.count ?? 0) >= 3) {
-      return apiBadRequest('Sie haben bereits 3 ausstehende oder genehmigte Workshop-Vorschläge. Bitte warten Sie auf deren Bearbeitung.')
+      return apiBadRequest('Du hast bereits 3 ausstehende oder genehmigte Workshop-Vorschläge. Bitte warte auf deren Bearbeitung.')
     }
 
     // Calculate duration in minutes and price in cents

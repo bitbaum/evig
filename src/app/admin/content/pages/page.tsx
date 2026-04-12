@@ -258,7 +258,7 @@ export default async function AdminPagesPage() {
               Noch keine Seiten
             </Heading>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Erstellen Sie statische Seiten wie Über uns, Kontakt oder FAQ.
+              Erstelle statische Seiten wie Über uns, Kontakt oder FAQ.
             </p>
             <Link
               href="/admin/content/pages/new"
@@ -315,8 +315,8 @@ export default async function AdminPagesPage() {
             </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Statische Seiten enthalten wichtige Informationen über Ihre
-              Organisation. Sie erscheinen in der Navigation und im Footer der
-              Website. Vergessen Sie nicht, rechtlich erforderliche Seiten wie
+              Organisation. Diese erscheinen in der Navigation und im Footer der
+              Website. Vergiss nicht, rechtlich erforderliche Seiten wie
               Impressum und Datenschutz zu erstellen.
             </p>
           </div>

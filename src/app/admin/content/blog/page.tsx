@@ -204,9 +204,9 @@ export default async function AdminBlogPage() {
               Blog-Verwaltung
             </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
-              Blog-Artikel sind ein wichtiger Kommunikationskanal. Teilen Sie
-              News über RevampIT, schreiben Sie Tutorials zur
-              Computeraufarbeitung oder kündigen Sie Workshops und Events an.
+              Blog-Artikel sind ein wichtiger Kommunikationskanal. Teile
+              News über RevampIT, schreibe Tutorials zur
+              Computeraufarbeitung oder kündige Workshops und Events an.
             </p>
             <div className="flex gap-3">
               <Link

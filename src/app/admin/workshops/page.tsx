@@ -54,7 +54,7 @@ const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-gray-400" />
 // ─── Inline strings (can be moved to src/config/admin-content.ts later) ──────
 
 const STRINGS = {
-  APPROVE_CONFIRM: 'Möchten Sie diesen Workshop-Vorschlag wirklich genehmigen?',
+  APPROVE_CONFIRM: 'Möchtest du diesen Workshop-Vorschlag wirklich genehmigen?',
   APPROVE_ERROR: 'Fehler bei der Genehmigung',
   REJECT_ERROR: 'Fehler bei der Ablehnung',
   EMPTY_SEARCH: (term: string) => `Keine Vorschläge für "${term}" gefunden.`,
@@ -188,7 +188,7 @@ export default function AdminWorkshopsPage() {
   return (
     <AdminPageWrapper
       title="Workshop-Verwaltung"
-      description="Genehmigen und verwalten Sie Workshop-Vorschläge"
+      description="Genehmige und verwalte Workshop-Vorschläge"
       icon={GraduationCap}
       iconColor="blue"
       actions={
@@ -336,7 +336,7 @@ export default function AdminWorkshopsPage() {
                     <textarea
                       value={rejectionReason}
                       onChange={(e) => setRejectionReason(e.target.value)}
-                      placeholder="Bitte geben Sie einen Ablehnungsgrund an..."
+                      placeholder="Bitte gib einen Ablehnungsgrund an..."
                       rows={3}
                       className="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
                       autoFocus

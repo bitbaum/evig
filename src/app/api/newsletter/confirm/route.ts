@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     logger.info('Newsletter subscription confirmed', { email: confirmed.email })
 
     return apiSuccess({
-      message: 'Newsletter-Anmeldung erfolgreich bestätigt! Sie erhalten ab sofort unsere Neuigkeiten.',
+      message: 'Newsletter-Anmeldung erfolgreich bestätigt! Du erhältst ab sofort unsere Neuigkeiten.',
     })
   } catch (error) {
     return apiError(error, 'Fehler bei der Bestätigung')

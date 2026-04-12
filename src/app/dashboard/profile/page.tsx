@@ -76,7 +76,7 @@ export default function ProfilePage() {
                 Kontoübersicht
               </Heading>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
-                Status und Sicherheit Ihres Kontos
+                Status und Sicherheit deines Kontos
               </p>
             </div>
           </div>

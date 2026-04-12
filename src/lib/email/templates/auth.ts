@@ -9,7 +9,7 @@ import { createEmailLayout, createTextFooter, BASE_STYLES, COPYRIGHT_TEXT, AUTO_
 import { CONTACT, ORG } from '@/config/org';
 
 export const verificationCode = (name: string, code: string): EmailContent => ({
-  subject: 'Ihr Bestätigungscode - RevampIT',
+  subject: 'Dein Bestätigungscode - RevampIT',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -26,10 +26,10 @@ export const verificationCode = (name: string, code: string): EmailContent => ({
         </div>
         <div class="content">
           <h2>Hallo ${name || 'Benutzer'},</h2>
-          <p>Vielen Dank für Ihre Registrierung bei RevampIT! Geben Sie den folgenden Code ein, um Ihre E-Mail-Adresse zu bestätigen:</p>
+          <p>Vielen Dank für deine Registrierung bei RevampIT! Gib den folgenden Code ein, um deine E-Mail-Adresse zu bestätigen:</p>
           <div class="code">${code}</div>
-          <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teilen Sie diesen Code mit niemandem.</p>
-          <p>Wenn Sie diese E-Mail nicht angefordert haben, ignorieren Sie sie bitte.</p>
+          <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teile diesen Code mit niemandem.</p>
+          <p>Wenn du diese E-Mail nicht angefordert hast, ignoriere sie bitte.</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -42,13 +42,13 @@ export const verificationCode = (name: string, code: string): EmailContent => ({
   text: `
 Hallo ${name || 'Benutzer'},
 
-Vielen Dank für Ihre Registrierung bei RevampIT!
+Vielen Dank für deine Registrierung bei RevampIT!
 
-Ihr Bestätigungscode lautet: ${code}
+Dein Bestätigungscode lautet: ${code}
 
 Dieser Code ist 15 Minuten gültig.
 
-Falls Sie diese E-Mail nicht angefordert haben, ignorieren Sie sie bitte.
+Falls du diese E-Mail nicht angefordert hast, ignoriere sie bitte.
 ${createTextFooter()}
   `.trim(),
 });
@@ -71,11 +71,11 @@ export const emailVerification = (name: string, verificationUrl: string): EmailC
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Vielen Dank für Ihre Registrierung bei RevampIT! Um Ihr Konto zu aktivieren, bestätigen Sie bitte Ihre E-Mail-Adresse.</p>
-          <p>Klicken Sie auf den folgenden Button, um Ihre E-Mail-Adresse zu bestätigen:</p>
+          <p>Vielen Dank für deine Registrierung bei RevampIT! Um dein Konto zu aktivieren, bestätige bitte deine E-Mail-Adresse.</p>
+          <p>Klicke auf den folgenden Button, um deine E-Mail-Adresse zu bestätigen:</p>
           <a href="${verificationUrl}" class="button button-green">E-Mail-Adresse bestätigen</a>
-          <p><strong>Sicherheitshinweis:</strong> Dieser Link ist 24 Stunden gültig. Wenn Sie diese E-Mail nicht angefordert haben, ignorieren Sie sie bitte.</p>
-          <p>Falls der Button nicht funktioniert, kopieren Sie diesen Link in Ihren Browser:</p>
+          <p><strong>Sicherheitshinweis:</strong> Dieser Link ist 24 Stunden gültig. Wenn du diese E-Mail nicht angefordert hast, ignoriere sie bitte.</p>
+          <p>Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:</p>
           <p><a href="${verificationUrl}">${verificationUrl}</a></p>
         </div>
         <div class="footer">
@@ -89,15 +89,15 @@ export const emailVerification = (name: string, verificationUrl: string): EmailC
   text: `
 Hallo ${name},
 
-Vielen Dank für Ihre Registrierung bei RevampIT!
+Vielen Dank für deine Registrierung bei RevampIT!
 
-Um Ihr Konto zu aktivieren, bestätigen Sie bitte Ihre E-Mail-Adresse, indem Sie auf diesen Link klicken:
+Um dein Konto zu aktivieren, bestätige bitte deine E-Mail-Adresse, indem du auf diesen Link klickst:
 
 ${verificationUrl}
 
 Dieser Link ist 24 Stunden gültig.
 
-Falls Sie diese E-Mail nicht angefordert haben, ignorieren Sie sie bitte.
+Falls du diese E-Mail nicht angefordert hast, ignoriere sie bitte.
 ${createTextFooter()}
   `.trim(),
 });
@@ -120,15 +120,15 @@ export const welcome = (name: string): EmailContent => ({
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Herzlich willkommen bei RevampIT! Ihr Konto wurde erfolgreich aktiviert.</p>
-          <p>Sie können jetzt:</p>
+          <p>Herzlich willkommen bei RevampIT! Dein Konto wurde erfolgreich aktiviert.</p>
+          <p>Du kannst jetzt:</p>
           <ul>
             <li>Workshops und Kurse buchen</li>
             <li>Service-Termine vereinbaren</li>
             <li>Unseren Shop durchsuchen</li>
-            <li>Ihre Bestellungen und Termine verwalten</li>
+            <li>deine Bestellungen und Termine verwalten</li>
           </ul>
-          <p>Wir freuen uns auf Ihre Zusammenarbeit!</p>
+          <p>Wir freuen uns auf die Zusammenarbeit!</p>
         </div>
         <div class="footer">
           <p>${COPYRIGHT_TEXT}</p>
@@ -140,11 +140,11 @@ export const welcome = (name: string): EmailContent => ({
   text: `
 Hallo ${name},
 
-Herzlich willkommen bei RevampIT! Ihr Konto wurde erfolgreich aktiviert.
+Herzlich willkommen bei RevampIT! Dein Konto wurde erfolgreich aktiviert.
 
-Sie können jetzt Workshops und Kurse buchen, Service-Termine vereinbaren, unseren Shop durchsuchen und Ihre Bestellungen und Termine verwalten.
+Du kannst jetzt Workshops und Kurse buchen, Service-Termine vereinbaren, unseren Shop durchsuchen und deine Bestellungen und Termine verwalten.
 
-Wir freuen uns auf Ihre Zusammenarbeit!
+Wir freuen uns auf die Zusammenarbeit!
 ${createTextFooter()}
   `.trim(),
 });
@@ -297,11 +297,11 @@ export const passwordReset = (name: string, resetUrl: string): EmailContent => (
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts erhalten.</p>
-          <p>Klicken Sie auf den folgenden Button, um Ihr Passwort zurückzusetzen:</p>
+          <p>Du hast eine Anfrage zum Zurücksetzen deines Passworts erhalten.</p>
+          <p>Klicke auf den folgenden Button, um dein Passwort zurückzusetzen:</p>
           <a href="${resetUrl}" class="button button-green">Passwort zurücksetzen</a>
-          <p><strong>Sicherheitshinweis:</strong> Dieser Link ist 1 Stunde gültig. Wenn Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail.</p>
-          <p>Falls der Button nicht funktioniert, kopieren Sie diesen Link in Ihren Browser:</p>
+          <p><strong>Sicherheitshinweis:</strong> Dieser Link ist 1 Stunde gültig. Wenn du diese Anfrage nicht gestellt hast, ignoriere diese E-Mail.</p>
+          <p>Falls der Button nicht funktioniert, kopiere diesen Link in deinen Browser:</p>
           <p><a href="${resetUrl}">${resetUrl}</a></p>
         </div>
         <div class="footer">
@@ -315,15 +315,15 @@ export const passwordReset = (name: string, resetUrl: string): EmailContent => (
   text: `
 Hallo ${name},
 
-Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts erhalten.
+Du hast eine Anfrage zum Zurücksetzen deines Passworts erhalten.
 
-Klicken Sie auf diesen Link, um Ihr Passwort zurückzusetzen:
+Klicke auf diesen Link, um dein Passwort zurückzusetzen:
 
 ${resetUrl}
 
 Dieser Link ist 1 Stunde gültig.
 
-Falls Sie diese Anfrage nicht gestellt haben, ignorieren Sie diese E-Mail.
+Falls du diese Anfrage nicht gestellt hast, ignoriere diese E-Mail.
 ${createTextFooter()}
   `.trim(),
 });
@@ -350,8 +350,8 @@ export const passwordChangeConfirmation = (name: string): EmailContent => ({
         </div>
         <div class="content">
           <h2>Hallo ${name},</h2>
-          <p>Ihr Passwort wurde erfolgreich geändert.</p>
-          <p><strong>Sicherheitshinweis:</strong> Falls Sie diese Änderung nicht vorgenommen haben, kontaktieren Sie uns bitte umgehend unter ${CONTACT.email}.</p>
+          <p>Dein Passwort wurde erfolgreich geändert.</p>
+          <p><strong>Sicherheitshinweis:</strong> Falls du diese Änderung nicht vorgenommen hast, kontaktiere uns bitte umgehend unter ${CONTACT.email}.</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -364,9 +364,9 @@ export const passwordChangeConfirmation = (name: string): EmailContent => ({
   text: `
 Hallo ${name},
 
-Ihr Passwort wurde erfolgreich geändert.
+Dein Passwort wurde erfolgreich geändert.
 
-Sicherheitshinweis: Falls Sie diese Änderung nicht vorgenommen haben, kontaktieren Sie uns bitte umgehend unter ${CONTACT.email}.
+Sicherheitshinweis: Falls du diese Änderung nicht vorgenommen hast, kontaktiere uns bitte umgehend unter ${CONTACT.email}.
 ${createTextFooter()}
   `.trim(),
 });
