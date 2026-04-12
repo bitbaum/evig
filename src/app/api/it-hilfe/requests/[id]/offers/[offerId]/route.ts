@@ -49,7 +49,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     }
 
     if (offer.helperId !== session.user.id) {
-      return apiForbidden('Sie können nur Ihre eigenen Angebote zurückziehen')
+      return apiForbidden('Du kannst nur deine eigenen Angebote zurückziehen')
     }
 
     if (offer.status !== OFFER_STATUS.PENDING) {

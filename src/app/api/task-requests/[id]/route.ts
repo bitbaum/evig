@@ -75,11 +75,11 @@ export const PATCH = withAdmin<RouteParams>(async (
     const isRequester = taskRequest.requestedBy === session.user.id;
 
     if (!isTargetUser && !isBroadcast) {
-      return apiBadRequest('Sie können nur auf Anfragen antworten, die an Sie gerichtet sind');
+      return apiBadRequest('Du kannst nur auf Anfragen antworten, die an dich gerichtet sind');
     }
 
     if (isRequester) {
-      return apiBadRequest('Sie können nicht auf Ihre eigenen Anfragen antworten');
+      return apiBadRequest('Du kannst nicht auf deine eigenen Anfragen antworten');
     }
 
     // Update request status

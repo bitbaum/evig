@@ -207,7 +207,7 @@ export const PUT = withAuth<{ id: string }>(async (
 
     // Check if user owns this review
     if (review.reviewerId !== session.user.id) {
-      return apiForbidden('Sie können nur Ihre eigenen Bewertungen bearbeiten')
+      return apiForbidden('Du kannst nur deine eigenen Bewertungen bearbeiten')
     }
 
     // Check if review can still be edited (within time limit, e.g., 30 days)
@@ -278,7 +278,7 @@ export const DELETE = withAuth<{ id: string }>(async (
     const isOwner = review.reviewerId === session.user.id
 
     if (!isOwner && !isAdmin) {
-      return apiForbidden('Sie können nur Ihre eigenen Bewertungen löschen')
+      return apiForbidden('Du kannst nur deine eigenen Bewertungen löschen')
     }
 
     // Soft delete by setting status to 'deleted'

@@ -62,12 +62,12 @@ export interface PageContent {
 export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
   {
     title: 'Freiwilligenarbeit',
-    description: 'Schliessen Sie sich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erforderlich - bringen Sie einfach Ihr Interesse und Ihre Begeisterung für unsere Mission mit.',
+    description: 'Schliesse dich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erforderlich - bring einfach dein Interesse und deine Begeisterung für unsere Mission mit.',
     icon: Users,
     features: [
       'Mit Hardware und Software arbeiten',
       'Neue Fähigkeiten erlernen',
-      'Einen Unterschied in Ihrer Gemeinschaft machen',
+      'Einen Unterschied in deiner Gemeinschaft machen',
       'Gleichgesinnte Menschen treffen'
     ],
     cta: 'Freiwilligenarbeit beginnen',
@@ -75,15 +75,15 @@ export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
   },
   {
     title: 'Technische Experten',
-    description: 'Wenn Sie Erfahrung mit Open-Source-Software, Hardware oder Elektronik haben, würden wir uns freuen, Sie in unserem Team zu haben oder Ihnen bei der Umsetzung Ihrer eigenen Ideen zu helfen.',
+    description: 'Wenn du Erfahrung mit Open-Source-Software, Hardware oder Elektronik hast, würden wir uns freuen, dich in unserem Team zu haben oder dir bei der Umsetzung deiner eigenen Ideen zu helfen.',
     icon: Code,
     features: [
       'An sinnvollen Projekten arbeiten',
-      'Ihre Expertise teilen',
+      'Deine Expertise teilen',
       'Mit der Gemeinschaft zusammenarbeiten',
       'Neue Lösungen entwickeln'
     ],
-    cta: 'Ihre Expertise teilen',
+    cta: 'Deine Expertise teilen',
     href: '/get-involved/technical-experts'
   },
   {
@@ -185,8 +185,8 @@ export const PARTNER_INSTITUTIONS: PartnerInstitution[] = [
 // Get Involved Page Configuration
 export const GET_INVOLVED_CONFIG = {
   hero: {
-    title: 'Schliessen Sie sich unserer Mission an',
-    description: 'Werden Sie Teil einer Gemeinschaft, die Technologie nachhaltig und für alle zugänglich macht.'
+    title: 'Schliesse dich unserer Mission an',
+    description: 'Werde Teil einer Gemeinschaft, die Technologie nachhaltig und für alle zugänglich macht.'
   },
   coreValues: {
     title: 'Unsere Grundwerte',
@@ -194,8 +194,8 @@ export const GET_INVOLVED_CONFIG = {
   },
   cta: {
     title: 'Bereit anzufangen?',
-    description: 'Haben Sie Fragen oder möchten Sie mehr erfahren? Wir sind da, um Ihnen beim nächsten Schritt zu helfen.',
-    contactButton: 'Kontaktieren Sie uns',
+    description: 'Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten Schritt zu helfen.',
+    contactButton: 'Kontaktiere uns',
     learnMoreButton: 'Mehr erfahren'
   }
 } as const
@@ -204,27 +204,27 @@ export const GET_INVOLVED_CONFIG = {
 export const VOLUNTEER_PAGE: PageContent = {
   overview: {
     title: 'Warum Freiwilligenarbeit bei Revamp-IT?',
-    content: 'Bei Revamp-IT glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwilliger werden Sie Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob Sie sich für Technologie, Nachhaltigkeit oder Gemeindedienst begeistern - in unserem Team ist Platz für Sie.'
+    content: 'Bei Revamp-IT glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwillige/r wirst du Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob du dich für Technologie, Nachhaltigkeit oder Gemeindedienst begeisterst - in unserem Team ist Platz für dich.'
   },
   benefits: [
     {
       title: 'Praktische Erfahrung',
-      description: 'Arbeiten Sie direkt mit Hardware und Software und sammeln Sie praktische Erfahrungen in Technologie und Nachhaltigkeit.',
+      description: 'Arbeite direkt mit Hardware und Software und sammle praktische Erfahrungen in Technologie und Nachhaltigkeit.',
       icon: Wrench
     },
     {
       title: 'Neue Fähigkeiten erlernen',
-      description: 'Entwickeln Sie technische und soziale Fähigkeiten durch unsere Schulungsprogramme und Mentoring-Möglichkeiten.',
+      description: 'Entwickle technische und soziale Fähigkeiten durch unsere Schulungsprogramme und Mentoring-Möglichkeiten.',
       icon: BookOpen
     },
     {
       title: 'Gemeinschaftswirkung',
-      description: 'Bewirken Sie einen echten Unterschied in Ihrer Gemeinschaft, indem Sie dabei helfen, Technologie für alle zugänglich zu machen.',
+      description: 'Bewirke einen echten Unterschied in deiner Gemeinschaft, indem du dabei hilfst, Technologie für alle zugänglich zu machen.',
       icon: Heart
     },
     {
       title: 'Unserem Team beitreten',
-      description: 'Werden Sie Teil eines vielfältigen und leidenschaftlichen Teams, das auf ein gemeinsames Ziel hinarbeitet.',
+      description: 'Werde Teil eines vielfältigen und leidenschaftlichen Teams, das auf ein gemeinsames Ziel hinarbeitet.',
       icon: Users
     }
   ],
@@ -251,11 +251,11 @@ export const VOLUNTEER_PAGE: PageContent = {
   callouts: [
     {
       title: 'Keine Erfahrung erforderlich',
-      content: 'Machen Sie sich keine Sorgen, wenn Sie keine technischen Erfahrungen haben. Wir bieten alle Schulungen, die Sie benötigen, und es gibt viele Möglichkeiten, über die technische Arbeit hinaus beizutragen. Was am wichtigsten ist, sind Ihre Begeisterung und Ihre Lernbereitschaft.'
+      content: 'Mach dir keine Sorgen, wenn du keine technischen Erfahrungen hast. Wir bieten alle Schulungen, die du benötigst, und es gibt viele Möglichkeiten, über die technische Arbeit hinaus beizutragen. Was am wichtigsten ist, sind deine Begeisterung und deine Lernbereitschaft.'
     },
     {
-      title: 'Ihre Wirkung',
-      content: 'Als Freiwilliger werden Sie Teil einer Bewegung, die Technologie nachhaltiger und zugänglicher macht. Ihr Beitrag hilft uns, Elektroschrott zu reduzieren, Technologie für diejenigen bereitzustellen, die sie benötigen, und eine inklusivere digitale Zukunft für unsere Gemeinschaft aufzubauen.'
+      title: 'Deine Wirkung',
+      content: 'Als Freiwillige/r wirst du Teil einer Bewegung, die Technologie nachhaltiger und zugänglicher macht. Dein Beitrag hilft uns, Elektroschrott zu reduzieren, Technologie für diejenigen bereitzustellen, die sie benötigen, und eine inklusivere digitale Zukunft für unsere Gemeinschaft aufzubauen.'
     }
   ]
 }
@@ -264,7 +264,7 @@ export const VOLUNTEER_PAGE: PageContent = {
 export const DONATE_PAGE: PageContent = {
   overview: {
     title: 'Warum spenden?',
-    content: 'Ihre Unterstützung ermöglicht es uns, unsere Mission fortzusetzen, Technologie nachhaltig und zugänglich zu machen. Jede Spende, unabhängig von der Grösse, hilft uns, mehr Geräte aufzuarbeiten, mehr Gemeinschaften zu unterstützen und eine nachhaltigere Zukunft zu schaffen.'
+    content: 'Deine Unterstützung ermöglicht es uns, unsere Mission fortzusetzen, Technologie nachhaltig und zugänglich zu machen. Jede Spende, unabhängig von der Grösse, hilft uns, mehr Geräte aufzuarbeiten, mehr Gemeinschaften zu unterstützen und eine nachhaltigere Zukunft zu schaffen.'
   },
   benefits: [
     {
@@ -274,17 +274,17 @@ export const DONATE_PAGE: PageContent = {
     },
     {
       title: 'Gemeinschaftsunterstützung',
-      description: 'Ermöglichen Sie Zugang zu Technologie für diejenigen, die sie am meisten benötigen.',
+      description: 'Ermögliche Zugang zu Technologie für diejenigen, die sie am meisten benötigen.',
       icon: Heart
     },
     {
       title: 'Bildung & Ausbildung',
-      description: 'Unterstützen Sie unsere Bildungsprogramme und Fähigkeitsentwicklungsinitiativen.',
+      description: 'Unterstütze unsere Bildungsprogramme und Fähigkeitsentwicklungsinitiativen.',
       icon: GraduationCap
     },
     {
       title: 'Nachhaltige Zukunft',
-      description: 'Tragen Sie zum Aufbau eines nachhaltigeren Technologie-Ökosystems bei.',
+      description: 'Trage zum Aufbau eines nachhaltigeren Technologie-Ökosystems bei.',
       icon: Globe
     }
   ],
@@ -300,7 +300,7 @@ export const DONATE_PAGE: PageContent = {
       ]
     },
     {
-      title: 'Ihre Spendenwirkung',
+      title: 'Deine Spendenwirkung',
       items: [
         { text: 'Technologie-Aufarbeitung und -Verteilung' },
         { text: 'Bildungsprogramme und Workshops' },
@@ -322,11 +322,11 @@ export const DONATE_PAGE: PageContent = {
   callouts: [
     {
       title: 'Transparenz und Verantwortlichkeit',
-      content: 'Wir verpflichten uns, Ihre Spenden effektiv und transparent zu verwenden. Sie erhalten regelmässige Updates darüber, wie Ihr Beitrag eine Wirkung erzielt, und wir führen klare Finanzunterlagen, die zur Überprüfung zur Verfügung stehen.'
+      content: 'Wir verpflichten uns, deine Spenden effektiv und transparent zu verwenden. Du erhältst regelmässige Updates darüber, wie dein Beitrag eine Wirkung erzielt, und wir führen klare Finanzunterlagen, die zur Überprüfung zur Verfügung stehen.'
     },
     {
       title: 'Vielen Dank',
-      content: 'Ihre Grosszügigkeit macht unsere Arbeit möglich. Gemeinsam können wir eine nachhaltigere und zugänglichere Technologiezukunft für alle schaffen.'
+      content: 'Deine Grosszügigkeit macht unsere Arbeit möglich. Gemeinsam können wir eine nachhaltigere und zugänglichere Technologiezukunft für alle schaffen.'
     }
   ]
 }
@@ -334,28 +334,28 @@ export const DONATE_PAGE: PageContent = {
 // Technical Experts Page Content
 export const TECHNICAL_EXPERTS_PAGE: PageContent = {
   overview: {
-    title: 'Treten Sie unserem technischen Team bei',
-    content: 'Wir suchen immer technische Experten, die unsere Leidenschaft für nachhaltige Technologie und Open-Source-Lösungen teilen. Ob Sie Softwareentwickler, Hardware-Ingenieur oder Systemadministrator sind - Ihre Expertise kann uns dabei helfen, eine grössere Wirkung zu erzielen.'
+    title: 'Tritt unserem technischen Team bei',
+    content: 'Wir suchen immer technische Experten, die unsere Leidenschaft für nachhaltige Technologie und Open-Source-Lösungen teilen. Ob du Softwareentwickler, Hardware-Ingenieur oder Systemadministrator bist - deine Expertise kann uns dabei helfen, eine grössere Wirkung zu erzielen.'
   },
   benefits: [
     {
       title: 'Open-Source-Entwicklung',
-      description: 'Tragen Sie zu unseren Open-Source-Projekten bei und helfen Sie, unsere Software-Lösungen zu verbessern.',
+      description: 'Trage zu unseren Open-Source-Projekten bei und hilf, unsere Software-Lösungen zu verbessern.',
       icon: Code
     },
     {
       title: 'Hardware-Innovation',
-      description: 'Arbeiten Sie an Hardware-Projekten, die Technologie nachhaltiger und zugänglicher machen.',
+      description: 'Arbeite an Hardware-Projekten, die Technologie nachhaltiger und zugänglicher machen.',
       icon: Cpu
     },
     {
       title: 'Wissensaustausch',
-      description: 'Teilen Sie Ihr Fachwissen durch Workshops, Dokumentation und Mentoring.',
+      description: 'Teile dein Fachwissen durch Workshops, Dokumentation und Mentoring.',
       icon: Users
     },
     {
       title: 'Projektleitung',
-      description: 'Leiten Sie technische Initiativen und helfen Sie, die Zukunft nachhaltiger Technologie zu gestalten.',
+      description: 'Leite technische Initiativen und hilf, die Zukunft nachhaltiger Technologie zu gestalten.',
       icon: Lightbulb
     }
   ],
@@ -385,7 +385,7 @@ export const TECHNICAL_EXPERTS_PAGE: PageContent = {
     {
       title: 'Vorteile der Mitgliedschaft',
       items: [
-        { text: 'Arbeiten Sie an sinnvollen Projekten, die eine echte Wirkung haben' },
+        { text: 'Arbeite an sinnvollen Projekten, die eine echte Wirkung haben' },
         { text: 'Zusammenarbeit mit einem vielfältigen Expertenteam' },
         { text: 'Zugang zu unserer Werkstatt und unseren Testeinrichtungen' },
         { text: 'Möglichkeiten zur Führung und Betreuung anderer' },
@@ -396,7 +396,7 @@ export const TECHNICAL_EXPERTS_PAGE: PageContent = {
   callouts: [
     {
       title: 'Open-Source-Fokus',
-      content: 'Wir glauben an die Kraft von Open-Source-Software und -Hardware. Als technischer Experte haben Sie die Möglichkeit, zu Open-Source-Projekten beizutragen und dabei zu helfen, Technologie für alle zugänglicher zu machen.'
+      content: 'Wir glauben an die Kraft von Open-Source-Software und -Hardware. Als technischer Experte hast du die Möglichkeit, zu Open-Source-Projekten beizutragen und dabei zu helfen, Technologie für alle zugänglicher zu machen.'
     }
   ]
 }
@@ -405,22 +405,22 @@ export const TECHNICAL_EXPERTS_PAGE: PageContent = {
 export const INTERNSHIPS_PAGE: PageContent = {
   overview: {
     title: 'Über unser Praktikumsprogramm',
-    content: 'Unser Praktikumsprogramm bietet eine einzigartige Gelegenheit, praktische Erfahrungen in nachhaltiger Technologie zu sammeln und gleichzeitig zu sinnvollen Projekten beizutragen. Ob Sie ein Student sind, der sein Studium ergänzen möchte, oder jemand, der in die Technologiebranche wechseln möchte - unser Programm bietet wertvolle Lern- und Wachstumsmöglichkeiten.'
+    content: 'Unser Praktikumsprogramm bietet eine einzigartige Gelegenheit, praktische Erfahrungen in nachhaltiger Technologie zu sammeln und gleichzeitig zu sinnvollen Projekten beizutragen. Ob du ein Student bist, der sein Studium ergänzen möchte, oder jemand, der in die Technologiebranche wechseln möchte - unser Programm bietet wertvolle Lern- und Wachstumsmöglichkeiten.'
   },
   benefits: [
     {
       title: 'Praktische Erfahrung',
-      description: 'Arbeiten Sie an echten Projekten, die einen Unterschied in der Gemeinschaft machen.',
+      description: 'Arbeite an echten Projekten, die einen Unterschied in der Gemeinschaft machen.',
       icon: Briefcase
     },
     {
       title: 'Berufliche Entwicklung',
-      description: 'Lernen Sie von erfahrenen Mentoren und entwickeln Sie wertvolle Fähigkeiten.',
+      description: 'Lerne von erfahrenen Mentoren und entwickle wertvolle Fähigkeiten.',
       icon: GraduationCap
     },
     {
       title: 'Teamzusammenarbeit',
-      description: 'Arbeiten Sie mit einem vielfältigen Team von Fachleuten und Freiwilligen.',
+      description: 'Arbeite mit einem vielfältigen Team von Fachleuten und Freiwilligen.',
       icon: Users
     },
     {
@@ -442,7 +442,7 @@ export const INTERNSHIPS_PAGE: PageContent = {
       ]
     },
     {
-      title: 'Was Sie lernen werden',
+      title: 'Was du lernen wirst',
       items: [
         { text: 'Hardware- und Software-Fehlerbehebung' },
         { text: 'Projektmanagement und Zusammenarbeit' },
@@ -465,7 +465,7 @@ export const INTERNSHIPS_PAGE: PageContent = {
   callouts: [
     {
       title: 'Flexible Vereinbarungen',
-      content: 'Wir verstehen, dass Studenten und Berufstätige unterschiedliche Zeitpläne haben. Wir bieten flexible Vereinbarungen, um Ihren akademischen oder beruflichen Verpflichtungen gerecht zu werden und gleichzeitig sicherzustellen, dass Sie das Beste aus Ihrer Praktikumserfahrung herausholen.'
+      content: 'Wir verstehen, dass Studenten und Berufstätige unterschiedliche Zeitpläne haben. Wir bieten flexible Vereinbarungen, um deinen akademischen oder beruflichen Verpflichtungen gerecht zu werden und gleichzeitig sicherzustellen, dass du das Beste aus deiner Praktikumserfahrung herausholst.'
     }
   ]
 }
@@ -479,12 +479,12 @@ export const PARTNERSHIPS_PAGE: PageContent = {
   benefits: [
     {
       title: 'Geteilte Wirkung',
-      description: 'Verstärken Sie die Wirkung Ihrer Organisation durch gemeinsame Initiativen.',
+      description: 'Verstärke die Wirkung deiner Organisation durch gemeinsame Initiativen.',
       icon: Target
     },
     {
       title: 'Globales Netzwerk',
-      description: 'Verbinden Sie sich mit gleichgesinnten Organisationen und erweitern Sie Ihre Reichweite.',
+      description: 'Verbinde dich mit gleichgesinnten Organisationen und erweitere deine Reichweite.',
       icon: Globe
     },
     {
@@ -494,7 +494,7 @@ export const PARTNERSHIPS_PAGE: PageContent = {
     },
     {
       title: 'Strategische Zusammenarbeit',
-      description: 'Entwickeln Sie innovative Lösungen durch gemeinsame Anstrengungen.',
+      description: 'Entwickle innovative Lösungen durch gemeinsame Anstrengungen.',
       icon: Users
     }
   ],
@@ -523,7 +523,7 @@ export const PARTNERSHIPS_PAGE: PageContent = {
   callouts: [
     {
       title: 'Massgeschneiderte Partnerschaftsprogramme',
-      content: 'Wir verstehen, dass jede Organisation einzigartige Bedürfnisse und Ziele hat. Unsere Partnerschaftsprogramme sind darauf zugeschnitten, sich an den Zielen Ihrer Organisation auszurichten und gleichzeitig die Wirkung unserer gemeinsamen Bemühungen zu maximieren.'
+      content: 'Wir verstehen, dass jede Organisation einzigartige Bedürfnisse und Ziele hat. Unsere Partnerschaftsprogramme sind darauf zugeschnitten, sich an den Zielen eurer Organisation auszurichten und gleichzeitig die Wirkung unserer gemeinsamen Bemühungen zu maximieren.'
     }
   ]
 }
@@ -532,27 +532,27 @@ export const PARTNERSHIPS_PAGE: PageContent = {
 export const WORK_REINTEGRATION_PAGE: PageContent = {
   overview: {
     title: 'Über unser Programm',
-    content: 'Unser Arbeitsreintegrationsprogramm ist darauf ausgelegt, Menschen dabei zu helfen, ihre Karriere in einem unterstützenden und verständnisvollen Umfeld wieder aufzubauen. Wir konzentrieren uns darauf, praktische Erfahrungen in Technologie und Nachhaltigkeit zu vermitteln und Ihnen dabei zu helfen, die Fähigkeiten und das Selbstvertrauen zu entwickeln, die für eine langfristige Beschäftigung erforderlich sind.'
+    content: 'Unser Arbeitsreintegrationsprogramm ist darauf ausgelegt, Menschen dabei zu helfen, ihre Karriere in einem unterstützenden und verständnisvollen Umfeld wieder aufzubauen. Wir konzentrieren uns darauf, praktische Erfahrungen in Technologie und Nachhaltigkeit zu vermitteln und dir dabei zu helfen, die Fähigkeiten und das Selbstvertrauen zu entwickeln, die für eine langfristige Beschäftigung erforderlich sind.'
   },
   benefits: [
     {
       title: 'Fähigkeitsentwicklung',
-      description: 'Lernen Sie praktische Fähigkeiten in Technologie und Nachhaltigkeit.',
+      description: 'Lerne praktische Fähigkeiten in Technologie und Nachhaltigkeit.',
       icon: GraduationCap
     },
     {
       title: 'Berufliches Wachstum',
-      description: 'Erweitern Sie Ihren Lebenslauf mit realer Erfahrung.',
+      description: 'Erweitere deinen Lebenslauf mit realer Erfahrung.',
       icon: Briefcase
     },
     {
       title: 'Unterstützendes Umfeld',
-      description: 'Arbeiten Sie in einem unterstützenden und verständnisvollen Team.',
+      description: 'Arbeite in einem unterstützenden und verständnisvollen Team.',
       icon: Users
     },
     {
       title: 'Sinnvolle Arbeit',
-      description: 'Tragen Sie zu Projekten bei, die einen Unterschied machen.',
+      description: 'Trage zu Projekten bei, die einen Unterschied machen.',
       icon: Heart
     }
   ],
@@ -568,7 +568,7 @@ export const WORK_REINTEGRATION_PAGE: PageContent = {
       ]
     },
     {
-      title: 'Was Sie lernen werden',
+      title: 'Was du lernen wirst',
       items: [
         { text: 'Computer-Hardware und -Software' },
         { text: 'Technische Fehlerbehebung' },
@@ -591,11 +591,11 @@ export const WORK_REINTEGRATION_PAGE: PageContent = {
   callouts: [
     {
       title: 'Individualisierter Ansatz',
-      content: 'Wir verstehen, dass jeder Weg einzigartig ist. Unser Programm ist flexibel und kann auf Ihre spezifischen Bedürfnisse und Ziele zugeschnitten werden. Wir arbeiten mit Ihnen zusammen, um einen Plan zu erstellen, der Ihre erfolgreiche Wiedereingliederung in das Arbeitsleben unterstützt.'
+      content: 'Wir verstehen, dass jeder Weg einzigartig ist. Unser Programm ist flexibel und kann auf deine spezifischen Bedürfnisse und Ziele zugeschnitten werden. Wir arbeiten mit dir zusammen, um einen Plan zu erstellen, der deine erfolgreiche Wiedereingliederung in das Arbeitsleben unterstützt.'
     },
     {
       title: 'Vertraulichkeit',
-      content: 'Wir wahren während des gesamten Programms strenge Vertraulichkeit. Ihre Privatsphäre und Würde sind unsere obersten Prioritäten, und wir stellen sicher, dass alle Informationen mit äusserster Sorgfalt und Respekt behandelt werden.'
+      content: 'Wir wahren während des gesamten Programms strenge Vertraulichkeit. Deine Privatsphäre und Würde sind unsere obersten Prioritäten, und wir stellen sicher, dass alle Informationen mit äusserster Sorgfalt und Respekt behandelt werden.'
     }
   ]
 }

@@ -40,7 +40,7 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'verify-email',
       label: 'E-Mail bestätigen',
-      description: 'Bestätigen Sie Ihre E-Mail-Adresse für volle Funktionalität',
+      description: 'Bestätige deine E-Mail-Adresse für volle Funktionalität',
       href: '/dashboard/profile',
       completed: emailVerified,
     },
@@ -57,7 +57,7 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'browse-services',
       label: 'Techniker entdecken',
-      description: 'Finden Sie lokale Techniker für Ihre Geräte',
+      description: 'Finde lokale Techniker für deine Geräte',
       href: '/techniker',
       completed: completedIds.includes('browse-services'),
     },
@@ -105,15 +105,15 @@ const getChecklistItems = (role: string, emailVerified: boolean, completedIds: s
     {
       id: 'set-payment-method',
       label: 'Zahlungsmethode einrichten',
-      description: 'Konfigurieren Sie Ihre Zahlungsoptionen',
-      href: '/dashboard/seller/payments',
+      description: 'Konfiguriere deine Zahlungsoptionen',
+      href: '/dashboard/seller',
       completed: completedIds.includes('set-payment-method'),
     },
     {
       id: 'complete-shop-profile',
       label: 'Shop-Profil vervollständigen',
-      description: 'Machen Sie Ihren Shop attraktiv',
-      href: '/dashboard/seller/profile',
+      description: 'Mach deinen Shop attraktiv',
+      href: '/dashboard/seller',
       completed: completedIds.includes('complete-shop-profile'),
     },
   ]
@@ -256,7 +256,7 @@ export function OnboardingChecklist({ role, emailVerified, className }: Onboardi
       {progressPercent === 100 && isExpanded && (
         <div className="px-4 py-3 bg-primary-50 dark:bg-primary-900/20 text-center">
           <p className="text-sm text-primary-700 dark:text-primary-300">
-            Alles erledigt! Sie sind startklar.
+            Alles erledigt! Du bist startklar.
           </p>
           <button
             onClick={() => setIsVisible(false)}

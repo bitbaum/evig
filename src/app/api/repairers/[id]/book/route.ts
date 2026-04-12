@@ -19,7 +19,7 @@ export const POST = withAuth<{ id: string }>(async (
 ) => {
   try {
     if (!rateLimiters.bookingCreate(session.user.id + ':booking')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Buchungsanfragen. Bitte versuchen Sie es später erneut.', 429)
+      return apiError(new Error('Rate limit'), 'Zu viele Buchungsanfragen. Bitte versuche es später erneut.', 429)
     }
 
     const repairerId = context?.params?.id
@@ -74,7 +74,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     // Prevent booking with yourself
     if (repairer.userId === session.user.id) {
-      return apiBadRequest('Sie können keinen Termin bei sich selbst buchen')
+      return apiBadRequest('Du kannst keinen Termin bei dir selbst buchen')
     }
 
     // Find or create service type based on category
@@ -212,7 +212,7 @@ export const POST = withAuth<{ id: string }>(async (
     })
 
     return apiSuccess({
-      message: 'Ihre Anfrage wurde erfolgreich gesendet. Der Reparateur wird sich in Kürze bei Ihnen melden.',
+      message: 'Deine Anfrage wurde erfolgreich gesendet. Der Reparateur wird sich in Kürze bei dir melden.',
       appointment: {
         id: result.id,
         created_at: result.createdAt,

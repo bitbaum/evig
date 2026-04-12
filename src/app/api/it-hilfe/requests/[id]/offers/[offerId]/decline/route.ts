@@ -50,7 +50,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     if (requestData.requesterId !== session.user.id) {
-      return apiForbidden('Sie können nur Angebote für Ihre eigenen Anfragen ablehnen')
+      return apiForbidden('Du kannst nur Angebote für deine eigenen Anfragen ablehnen')
     }
 
     // Get offer with helper info

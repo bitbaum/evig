@@ -120,7 +120,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     if (existing.requesterId !== session.user.id) {
-      return apiForbidden('Sie können nur Ihre eigenen Anfragen bearbeiten')
+      return apiForbidden('Du kannst nur deine eigenen Anfragen bearbeiten')
     }
 
     const body = await request.json()

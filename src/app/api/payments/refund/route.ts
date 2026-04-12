@@ -55,7 +55,7 @@ export const POST = withAuth(async (request, session) => {
     const isAdmin = session.user.isStaff
 
     if (txn.userId !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Sie können nur eigene Transaktionen erstatten')
+      return apiUnauthorized('Du kannst nur eigene Transaktionen erstatten')
     }
 
     const refundAmountCents = Math.round(amount * 100)

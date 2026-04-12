@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     // Check ownership - owner or admin can pay
     if (appointment.user_id !== session.user.id && !session.user.isStaff) {
-      return apiUnauthorized('Sie können nur für Ihre eigenen Termine bezahlen')
+      return apiUnauthorized('Du kannst nur für deine eigenen Termine bezahlen')
     }
 
     // Check if appointment is in payable status

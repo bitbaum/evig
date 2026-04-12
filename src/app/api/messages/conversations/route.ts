@@ -87,7 +87,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const { participantId, type, contextId, initialMessage } = validation.data
 
     if (participantId === session.user.id) {
-      return apiBadRequest('Sie können keine Unterhaltung mit sich selbst starten')
+      return apiBadRequest('Du kannst keine Unterhaltung mit dir selbst starten')
     }
 
     // Ensure consistent ordering of participants

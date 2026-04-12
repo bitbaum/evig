@@ -47,7 +47,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     if (requestData.requesterId !== session.user.id) {
-      return apiForbidden('Sie können nur Angebote für Ihre eigenen Anfragen einsehen')
+      return apiForbidden('Du kannst nur Angebote für deine eigenen Anfragen einsehen')
     }
 
     // Get offers with helper details + repairer profile info
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     if (!rateLimiters.offerCreate(session.user.id + ':offer')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Angebote. Bitte versuchen Sie es später erneut.', 429)
+      return apiError(new Error('Rate limit'), 'Zu viele Angebote. Bitte versuche es später erneut.', 429)
     }
 
     const { id } = await params
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Cannot offer on own request
     if (requestData.requesterId === session.user.id) {
-      return apiBadRequest('Sie können kein Angebot für Ihre eigene Anfrage abgeben')
+      return apiBadRequest('Du kannst kein Angebot für deine eigene Anfrage abgeben')
     }
 
     // Only allow offers on open or in_discussion requests
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       ))
 
     if (existingOffer) {
-      return apiBadRequest('Sie haben bereits ein Angebot für diese Anfrage abgegeben')
+      return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben')
     }
 
     const body = await request.json()
@@ -262,7 +262,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   } catch (error) {
     // Handle unique constraint violation
     if (error instanceof Error && error.message.includes('unique_offer_per_user_request')) {
-      return apiBadRequest('Sie haben bereits ein Angebot für diese Anfrage abgegeben')
+      return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben')
     }
     logger.error('Error creating offer', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

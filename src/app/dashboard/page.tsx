@@ -227,7 +227,7 @@ export default async function DashboardPage() {
 
           {userRole === ROLES.REPAIRER && (
             <Link
-              href="/profil/techniker"
+              href="/dashboard/techniker"
               className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
@@ -236,10 +236,10 @@ export default async function DashboardPage() {
                 </div>
                 <div className="ml-4">
                   <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                    Repairer Dashboard
+                    Techniker Dashboard
                   </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                    Reparaturen verwalten
+                    Anfragen und Angebote verwalten
                   </p>
                 </div>
               </div>
@@ -270,7 +270,7 @@ export default async function DashboardPage() {
 
           {userRole !== ROLES.REPAIRER && (
             <Link
-              href="/profil/techniker"
+              href="/dashboard/techniker"
               className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
             >
               <div className="flex items-center">
@@ -313,7 +313,7 @@ export default async function DashboardPage() {
 
           {/* IT-Hilfe Helper Card */}
           <Link
-            href="/profil/techniker"
+            href="/dashboard/techniker"
             className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center">
