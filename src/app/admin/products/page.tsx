@@ -6,14 +6,14 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
   title: 'Produktverwaltung | RevampIT Admin',
-  description: 'Verwalten Sie Ihre RevampIT Shop-Produkte.',
+  description: 'Verwalte die RevampIT Shop-Produkte.',
 }
 
 export default async function ProductsAdminPage() {
   return (
     <AdminPageWrapper
       title="Produktverwaltung"
-      description="Verwalten Sie Ihre Shop-Produkte und deren Details"
+      description="Verwalte die Shop-Produkte und deren Details"
       icon={Package}
       iconColor="indigo"
       backButton={{ href: '/admin', label: 'Zurück zum Dashboard' }}

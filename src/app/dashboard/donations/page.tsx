@@ -258,8 +258,8 @@ export default function DonationsDashboard() {
             Hinweis zu Spendenquittungen
           </Heading>
           <p className="text-sm text-info-700">
-            RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir Ihnen gerne
-            eine Spendenbestätigung für die Steuererklärung aus. Kontaktieren Sie uns unter{' '}
+            RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne
+            eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter{' '}
             <a href={`mailto:${CONTACT.email}`} className="underline text-info-800 hover:text-info-900">{CONTACT.email}</a>.
           </p>
         </div>

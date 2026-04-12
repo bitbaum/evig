@@ -36,7 +36,7 @@ export default function AdminWorkshopInstancesPage() {
             <div>
               <Heading level={1} className="text-2xl font-bold text-gray-900">Workshop-Termine</Heading>
               <p className="mt-1 text-sm text-gray-600">
-                Verwalten Sie Termine für Ihre Workshops
+                Verwalte Termine für Workshops
               </p>
             </div>
             <div className="flex gap-3">

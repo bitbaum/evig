@@ -165,7 +165,7 @@ export default function AdminLocationsPage() {
             <div>
               <Heading level={1} className="text-2xl font-bold text-gray-900">Ortsverwaltung</Heading>
               <p className="mt-1 text-sm text-gray-600">
-                Verwalten Sie Veranstaltungsorte und deren Genehmigungen
+                Verwalte Veranstaltungsorte und deren Genehmigungen
               </p>
             </div>
             <Link

@@ -17,7 +17,7 @@ import { formatDate } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
-  description: 'Verwalten Sie Ihr RevampIT-Konto, Workshops, Bestellungen und mehr.',
+  description: 'Verwalte dein RevampIT-Konto, Workshops, Bestellungen und mehr.',
 }
 
 interface MemberStatus {
@@ -88,7 +88,7 @@ export default async function DashboardPage() {
             Willkommen zurück, {session.user.name || session.user.email}!
           </Heading>
           <p className={cn('mt-2 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-            Verwalten Sie Ihr Konto und entdecken Sie alle verfügbaren Funktionen.
+            Verwalte dein Konto und entdecke alle verfügbaren Funktionen.
           </p>
         </div>
 

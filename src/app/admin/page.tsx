@@ -31,7 +31,7 @@ import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | RevampIT',
-  description: 'Verwalten Sie Ihr RevampIT-System als Administrator.',
+  description: 'Verwalte das RevampIT-System.',
 }
 
 export default async function AdminDashboard() {

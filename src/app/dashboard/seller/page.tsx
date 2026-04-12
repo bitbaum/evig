@@ -192,7 +192,7 @@ export default function SellerDashboard() {
               Seller Dashboard
             </Heading>
             <p className="text-green-100">
-              Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
+              Verwalte deine Produkte im RevampIT Marketplace und verfolge deine Verkäufe.
             </p>
           </div>
           <button

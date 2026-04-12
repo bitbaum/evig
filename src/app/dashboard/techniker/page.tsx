@@ -17,7 +17,7 @@ import {
 
 export const metadata: Metadata = {
   title: 'Techniker Dashboard | RevampIT',
-  description: 'Verwalten Sie Ihre IT-Hilfe Anfragen und Angebote.',
+  description: 'Verwalte deine IT-Hilfe Anfragen und Angebote.',
 }
 
 // ---------------------------------------------------------------------------

@@ -42,7 +42,7 @@ export function PasswordChangeSection({
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
             Passwort ändern
           </Heading>
-          <p className="text-sm text-gray-500">Halten Sie Ihr Konto sicher</p>
+          <p className="text-sm text-gray-500">Halte dein Konto sicher</p>
         </div>
       </div>
 

@@ -309,7 +309,7 @@ export default function UserReviewsPage() {
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <Heading level={1} className="text-2xl font-bold text-gray-900 mb-2">Meine Bewertungen</Heading>
         <p className="text-gray-600">
-          Verwalten Sie Ihre Bewertungen und sehen Sie, wie andere Benutzer Ihre Bewertungen gefunden haben.
+          Verwalte deine Bewertungen und sieh, wie andere Nutzer:innen deine Bewertungen gefunden haben.
         </p>
       </div>
 
