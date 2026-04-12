@@ -59,6 +59,17 @@ const nextConfig = {
         destination: '/admin/hirn',
         permanent: true,
       },
+      // Decisions — member-friendly URL aliases
+      {
+        source: '/decisions',
+        destination: '/admin/decisions',
+        permanent: false,
+      },
+      {
+        source: '/decisions/:id',
+        destination: '/admin/decisions/:id',
+        permanent: false,
+      },
       // Techniker unification redirects
       {
         source: '/repairers',
