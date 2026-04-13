@@ -234,7 +234,7 @@ export async function sendAppointmentNotification(
       party.repairer_name || 'Techniker',
       actionData.quoted_price_chf!,
       actionData.diagnosis_notes || null,
-      baseUrl + '/dashboard/bookings/' + appointmentId
+      baseUrl + '/dashboard/bookings'
     )
     sendCustomEmail(party.customer_email, emailContent).catch(err => {
       logger.warn('Failed to send quote email', { error: err, appointmentId })
@@ -245,7 +245,7 @@ export async function sendAppointmentNotification(
       party.repairer_name || 'Techniker',
       statusLabel,
       serviceName,
-      baseUrl + '/dashboard/bookings/' + appointmentId
+      baseUrl + '/dashboard/bookings'
     )
     sendCustomEmail(party.customer_email, emailContent).catch(err => {
       logger.warn('Failed to send status email to customer', { error: err, appointmentId })

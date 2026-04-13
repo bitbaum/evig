@@ -1,6 +1,6 @@
 import React from 'react'
 import { Metadata } from 'next'
-import { Leaf, Monitor, Building2, ArrowDown } from 'lucide-react'
+import { Leaf, Monitor, Building2, ArrowDown, Laptop, MonitorSpeaker, Keyboard, HardDrive } from 'lucide-react'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CopyButton } from '@/components/community/CopyButton'
 import { getEnvironmentalSummary } from '@/data/impact-metrics'
@@ -186,6 +186,49 @@ export default function DonatePage() {
                 </div>
                 <CopyButton value={verwendungszweck} label="Kopieren" />
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Geräte spenden — anchor target from nav */}
+        <section id="geraete" className="mb-12 scroll-mt-8">
+          <Heading level={2} className="text-gray-900 mb-2">Geräte spenden</Heading>
+          <p className="text-sm text-gray-500 mb-6">
+            Hardware, die du nicht mehr brauchst, kann einem anderen Menschen eine echte Chance geben.
+            Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter.
+          </p>
+          <div className="rounded-xl border-2 border-orange-200 bg-orange-50 p-6 sm:p-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+              {[
+                { icon: Laptop, label: 'Laptops' },
+                { icon: MonitorSpeaker, label: 'Desktop-PCs' },
+                { icon: Monitor, label: 'Monitore' },
+                { icon: Keyboard, label: 'Peripherie' },
+              ].map(({ icon: Icon, label }) => (
+                <div key={label} className="flex flex-col items-center gap-2 text-center">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
+                    <Icon className="h-5 w-5 text-orange-600" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-700">{label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-3 text-sm text-gray-700 mb-6">
+              <p><span className="font-semibold">Was wir annehmen:</span> Laptops, Desktop-PCs, Monitore, Tastaturen, Mäuse, Drucker — funktionierend oder reparierbar.</p>
+              <p><span className="font-semibold">Was wir nicht annehmen:</span> Geräte mit physischen Schäden, defekte Bildschirme ohne Rahmen, CRT-Monitore.</p>
+              <p><span className="font-semibold">Vorbereitung:</span> Bitte lösche deine persönlichen Daten vor der Abgabe (wir helfen dir dabei falls nötig).</p>
+            </div>
+            <div className="rounded-lg bg-white border border-orange-200 p-4">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Abgabe-Adresse</p>
+              <p className="text-sm font-semibold text-gray-900">Revamp-IT Werkstatt</p>
+              <p className="text-sm text-gray-600">Birmensdorferstrasse 379, 8055 Zürich</p>
+              <p className="text-xs text-gray-500 mt-2">Mo 9–12 Uhr · Di–Fr 13–17 Uhr</p>
+              <a
+                href="mailto:empfang@revamp-it.ch"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 hover:text-orange-600"
+              >
+                Fragen? Schreib uns →
+              </a>
             </div>
           </div>
         </section>

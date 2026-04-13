@@ -66,10 +66,10 @@ export default function VolunteerPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen können"
+          title="Wie du anfangen kannst"
           steps={[
             { text: 'Kontaktiere uns, um dein Interesse zu bekunden' },
-            { text: 'Triff sich mit unserem Team, um deine Fähigkeiten und Interessen zu besprechen' },
+            { text: 'Triff dich mit unserem Team, um deine Fähigkeiten und Interessen zu besprechen' },
             { text: 'Nimm an einer kurzen Einführungssitzung teil' },
             { text: 'Beginne, einen Unterschied zu machen!' }
           ]}

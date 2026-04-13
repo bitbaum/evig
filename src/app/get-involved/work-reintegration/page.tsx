@@ -61,7 +61,7 @@ export default function WorkReintegrationPage() {
           </Heading>
           <p className={`${responsiveTypography.lead} text-gray-600 leading-relaxed`}>
             Viele unserer Teilnehmer sind erfolgreich in eine Vollzeitbeschäftigung in
-            der Technologie und verwandten Bereichen übergegangen. dein Erfolg ist ein Zeugnis für die Wirksamkeit
+            der Technologie und verwandten Bereichen übergegangen. Dein Erfolg ist ein Zeugnis für die Wirksamkeit
             unseres Programms und das Engagement unseres Teams.
           </p>
         </section>
@@ -77,10 +77,10 @@ export default function WorkReintegrationPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen können"
+          title="Wie du anfangen kannst"
           steps={[
             { text: 'Kontaktiere uns, um deine Situation zu besprechen' },
-            { text: 'Triff sich mit unserem Team für eine Bewertung' },
+            { text: 'Triff dich mit unserem Team für eine Bewertung' },
             { text: 'Entwickle deinen personalisierten Plan' },
             { text: 'Beginne deine Arbeitsreintegrationsreise' }
           ]}

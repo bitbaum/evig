@@ -43,6 +43,7 @@ import {
   ClipboardList,
   Vote,
   BadgeCheck,
+  Lightbulb,
 } from 'lucide-react'
 
 // =============================================================================
@@ -252,14 +253,29 @@ export const SECTIONS: Record<string, SectionConfig> = {
     id: 'appointments',
     path: '/dashboard/appointments',
     ui: {
-      label: 'Termine',
-      description: 'Service-Termin buchen',
+      label: 'Service-Termine',
+      description: 'Termin bei der Revamp-IT Werkstatt buchen',
       icon: Calendar,
       emoji: '📅',
       color: 'warning',
     },
     visibility: { admin: false, dashboard: true },
     priority: 11,
+    category: 'activities',
+  },
+
+  bookings: {
+    id: 'bookings',
+    path: '/dashboard/bookings',
+    ui: {
+      label: 'Peer-Buchungen',
+      description: 'Reparaturaufträge mit Community-Technikern verfolgen',
+      icon: Wrench,
+      emoji: '🛠️',
+      color: 'error',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 12,
     category: 'activities',
   },
 
@@ -278,6 +294,21 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: false, dashboard: true, communityRole: 'seller' },
     priority: 20,
+    category: 'commerce',
+  },
+
+  'seller-onboarding': {
+    id: 'seller-onboarding',
+    path: '/dashboard/seller',
+    ui: {
+      label: 'Auf RevampIT verkaufen',
+      description: 'Eigene Produkte anbieten – Versand direkt an Käufer',
+      icon: Store,
+      emoji: '🏬',
+      color: 'secondary',
+    },
+    visibility: { admin: false, dashboard: true, hideIfRole: 'seller' },
+    priority: 21,
     category: 'commerce',
   },
 
@@ -301,7 +332,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     path: '/dashboard/orders',
     ui: {
       label: 'Meine Bestellungen',
-      description: 'Ihre Käufe und Verkäufe verwalten',
+      description: 'deine Käufe und Verkäufe verwalten',
       icon: ShoppingBag,
       emoji: '🛒',
       color: 'info',
@@ -351,7 +382,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
       label: 'Als Techniker anbieten',
       description: 'Techniker-Profil erstellen und Anfragen erhalten',
       icon: Hammer,
-      emoji: '🔧',
+      emoji: '🪛',
       color: 'warning',
     },
     visibility: { admin: false, dashboard: true, hideIfRole: 'repairer' },
@@ -374,6 +405,36 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: false, dashboard: true },
     priority: 40,
+    category: 'content',
+  },
+
+  'blog-submissions': {
+    id: 'blog-submissions',
+    path: '/dashboard/blog-submissions',
+    ui: {
+      label: 'Meine Einreichungen',
+      description: 'Status deiner Blog-Beiträge verfolgen',
+      icon: FileText,
+      emoji: '📋',
+      color: 'primary',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 41,
+    category: 'content',
+  },
+
+  'workshop-propose': {
+    id: 'workshop-propose',
+    path: '/workshops/propose',
+    ui: {
+      label: 'Workshop vorschlagen',
+      description: 'Eigene Workshops anbieten',
+      icon: Lightbulb,
+      emoji: '💡',
+      color: 'success',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 42,
     category: 'content',
   },
 

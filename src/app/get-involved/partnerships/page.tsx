@@ -77,7 +77,7 @@ export default function PartnershipsPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen können"
+          title="Wie du anfangen kannst"
           steps={[
             { text: 'Kontaktiere uns, um Partnerschaftsmöglichkeiten zu besprechen' },
             { text: 'Teile die Ziele und Interessen deiner Organisation mit' },

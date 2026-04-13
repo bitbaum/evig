@@ -203,6 +203,26 @@ export default async function DashboardPage() {
             </div>
           </Link>
 
+          {/* Bookings Card — peer repair bookings */}
+          <Link
+            href="/dashboard/bookings"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
+                <span className="text-red-600 dark:text-red-400 text-xl">🔧</span>
+              </div>
+              <div className="ml-4">
+                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  Meine Buchungen
+                </Heading>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
+                  Reparaturaufträge verfolgen
+                </p>
+              </div>
+            </div>
+          </Link>
+
           {/* Seller card — role dashboard if seller, upsell otherwise */}
           <Link
             href="/dashboard/seller"

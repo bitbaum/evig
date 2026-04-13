@@ -65,7 +65,7 @@ export default function TechnicalExpertsPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen können"
+          title="Wie du anfangen kannst"
           steps={[
             { text: 'Kontaktiere uns mit deinem Fachbereich und deinen Interessen' },
             { text: 'Besprich mögliche Projekte und Beiträge' },

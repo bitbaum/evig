@@ -65,7 +65,7 @@ export default function InternshipsPage() {
 
         {/* How to Apply */}
         <NumberedSteps
-          title="Wie du sich bewerben"
+          title="Wie du dich bewerben kannst"
           steps={[
             { text: 'Sende uns deinen Lebenslauf und ein Anschreiben' },
             { text: 'Gib deinen Interessensbereich und deine Verfügbarkeit an' },

@@ -119,7 +119,7 @@ export default function CustomerBookings() {
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
             <Heading level={1} className="text-2xl font-bold text-gray-900">Meine Buchungen</Heading>
-            <p className="text-gray-600">Ihre Reparaturaufträge im Überblick</p>
+            <p className="text-gray-600">Deine Reparaturaufträge im Überblick</p>
           </div>
           <div className="flex gap-2">
             <button

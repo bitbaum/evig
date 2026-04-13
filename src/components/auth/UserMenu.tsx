@@ -16,6 +16,7 @@ import {
   Shield,
   Store,
   MessageSquare,
+  Wrench,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -120,6 +121,7 @@ export function UserMenu() {
     [
       { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
       { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
+      { href: '/dashboard/bookings', icon: Wrench, label: 'Meine Buchungen' },
     ],
   ]
 
