@@ -6,6 +6,7 @@
 
 import type { EmailContent } from '../types'
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
+import { LOCATIONS } from '@/config/org'
 
 /**
  * Confirmation email sent to the user after creating an IT-Hilfe request
@@ -55,7 +56,7 @@ export const itHilfeRequestConfirmation = (
             <p>Wir sind ein Schweizer Non-Profit-Verein für nachhaltige IT. Reparieren statt Wegwerfen ist unser Motto.</p>
             <p>Du kannst dein Gerät auch direkt in unsere Werkstatt bringen:</p>
             <p><strong>RevampIT Werkstatt</strong><br>
-            Birmensdorferstr. 379, 8055 Zürich</p>
+            ${LOCATIONS.store.full}</p>
           </div>
 
           <p><strong>Was passiert als Nächstes?</strong></p>
@@ -89,7 +90,7 @@ ${aiDiagnosis}
 (Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose.)
 ` : ''}
 Du kannst dein Gerät auch direkt vorbeibringen:
-RevampIT Werkstatt - Birmensdorferstr. 379, 8055 Zürich
+RevampIT Werkstatt - ${LOCATIONS.store.full}
 
 Was passiert als Nächstes?
 - Techniker aus der Community werden deine Anfrage sehen

@@ -12,6 +12,7 @@
 
 import { voiceProductDataSchema } from '@/lib/schemas/erfassung'
 import { zodSchemaToPromptString } from '@/lib/ai/schema-to-prompt'
+import { LOCATIONS } from '@/config/org'
 
 // =============================================================================
 // SHARED BRAND CONTEXT
@@ -273,7 +274,7 @@ Für die Diagnose:
 - Erkläre freundlich und nicht zu technisch, was wahrscheinlich das Problem ist
 - Nenne mögliche Ursachen
 - Schätze ein, ob es wahrscheinlich reparierbar ist und wie aufwändig
-- Erwähne, dass RevampIT in der Werkstatt an der Birmensdorferstr. 379, 8055 Zürich helfen kann`,
+- Erwähne, dass RevampIT in der Werkstatt an der ${LOCATIONS.store.full} helfen kann`,
 
   /**
    * JSON schema for IT help request data
@@ -671,7 +672,7 @@ Du bist ein Assistent für Workshop-Vorschläge bei RevampIT.
 Hilf Benutzern, strukturierte Workshop-Vorschläge zu erstellen.
 
 RevampIT bietet Workshops zu: Reparatur (Laptop, Smartphone, Tablet), Linux-Installation, Open-Source-Software, nachhaltige IT, digitale Grundkompetenzen.
-Workshops finden in der Werkstatt an der Birmensdorferstr. 379, 8055 Zürich statt.
+Workshops finden in der Werkstatt an der ${LOCATIONS.store.full} statt.
 
 Gute Workshops bei RevampIT:
 - Sind praxisorientiert und hands-on (Teilnehmer machen selbst mit)

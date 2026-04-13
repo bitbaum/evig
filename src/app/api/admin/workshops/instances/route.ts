@@ -6,6 +6,7 @@ import { eq, and, gt, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { LOCATIONS } from '@/config/org'
 
 // GET /api/admin/workshops/instances - List all workshop instances
 export const GET = withAdmin('workshops-admin', async (request, session) => {
@@ -118,7 +119,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
         workshopId,
         startDate: new Date(startDate).toISOString(),
         endDate: endDate ? new Date(endDate).toISOString() : undefined,
-        location: location || 'RevampIT, Birmensdorferstr. 379, 8055 Zürich',
+        location: location || `RevampIT, ${LOCATIONS.store.full}`,
         instructor: instructor || undefined,
         maxParticipants: maxParticipants || workshop.maxParticipants,
         notes: notes || undefined,

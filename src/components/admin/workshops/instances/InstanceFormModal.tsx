@@ -3,6 +3,7 @@
 import { X, Loader2, Save } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData } from './types'
+import { LOCATIONS } from '@/config/org'
 
 interface InstanceFormModalProps {
   editingInstance: WorkshopInstanceWithDetails | null
@@ -95,7 +96,7 @@ export function InstanceFormModal({
               type="text"
               value={formData.location}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-              placeholder="z.B. RevampIT, Birmensdorferstr. 379, 8055 Zürich"
+              placeholder={`z.B. RevampIT, ${LOCATIONS.store.full}`}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>

@@ -1,4 +1,5 @@
 export type { Workshop, WorkshopInstanceWithDetails } from '@/components/workshops/types'
+import { LOCATIONS } from '@/config/org'
 
 export interface InstanceFormData {
   workshopId: string
@@ -15,7 +16,7 @@ export const initialFormData: InstanceFormData = {
   workshopId: '',
   startDate: '',
   endDate: '',
-  location: 'RevampIT, Birmensdorferstr. 379, 8055 Zürich',
+  location: `RevampIT, ${LOCATIONS.store.full}`,
   instructor: '',
   maxParticipants: '',
   notes: '',
