@@ -93,6 +93,27 @@ export const OPENING_HOURS = {
 } as const
 
 // ============================================================================
+// BANK & PAYMENT (SSOT for all payment references)
+// ============================================================================
+
+export const BANK = {
+  name: 'PostFinance AG',
+  iban: 'CH16 0900 0000 8725 0971 7',
+  bic: 'POFICHBEXXX',
+  accountHolder: 'Verein Revamp-IT',
+} as const
+
+export const MEMBERSHIP = {
+  fees: {
+    regular: 50,
+    reduced: 20,
+  },
+  currency: 'CHF',
+  /** Payment reference prefix for bank transfers */
+  referencePrefix: 'MITGLIED',
+} as const
+
+// ============================================================================
 // EXTERNAL LINKS
 // ============================================================================
 

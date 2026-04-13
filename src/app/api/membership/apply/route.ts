@@ -5,23 +5,20 @@ import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { z } from 'zod'
 import { db } from '@/db'
-import { membershipApplications } from '@/db/schema'
-import { eq, and, desc } from 'drizzle-orm'
+import { users, membershipApplications } from '@/db/schema'
+import { eq, and } from 'drizzle-orm'
 
-const MembershipApplicationSchema = z.object({
+const MembershipSchema = z.object({
   applicantName: z.string().min(2, 'Name erforderlich').max(200),
   applicantEmail: z.string().email('Ungültige E-Mail-Adresse'),
   addressStreet: z.string().min(2, 'Adresse erforderlich').max(200),
   addressPostalCode: z.string().regex(/^\d{4}$/, 'Ungültige PLZ'),
   addressCity: z.string().min(2, 'Ort erforderlich').max(100),
-  birthDate: z.string().optional(),
   memberType: z.enum(['regular', 'reduced']).default('regular'),
-  motivation: z.string().max(2000).optional(),
 })
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting to prevent spam
     const clientIp = getClientIp(request.headers)
     const rateLimit = checkRateLimit(clientIp, 'newsletter')
     if (!rateLimit.allowed) {
@@ -33,33 +30,28 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const result = MembershipApplicationSchema.safeParse(body)
+    const result = MembershipSchema.safeParse(body)
     if (!result.success) {
       return apiBadRequest('Ungültige Anfrage', result.error.flatten().fieldErrors)
     }
 
-    // If logged in, link the application to the user account
     const session = await auth()
     const userId = session?.user?.id ?? null
 
-    // Prevent duplicate pending applications from same user
+    // Check if already a member
     if (userId) {
-      const existing = await db
-        .select({ id: membershipApplications.id })
-        .from(membershipApplications)
-        .where(
-          and(
-            eq(membershipApplications.userId, userId),
-            eq(membershipApplications.status, 'pending')
-          )
-        )
+      const [existing] = await db
+        .select({ isMember: users.isMember })
+        .from(users)
+        .where(eq(users.id, userId))
         .limit(1)
 
-      if (existing.length > 0) {
-        return apiBadRequest('Du hast bereits einen offenen Antrag. Wir melden uns in Kürze.')
+      if (existing?.isMember) {
+        return apiBadRequest('Du bist bereits Mitglied.')
       }
     }
 
+    // Record the application (for audit trail)
     const [application] = await db
       .insert(membershipApplications)
       .values({
@@ -69,14 +61,49 @@ export async function POST(request: NextRequest) {
         addressStreet: result.data.addressStreet,
         addressPostalCode: result.data.addressPostalCode,
         addressCity: result.data.addressCity,
-        birthDate: result.data.birthDate || null,
         memberType: result.data.memberType,
-        motivation: result.data.motivation || null,
-        status: 'pending',
+        status: 'approved',
+        reviewedAt: new Date().toISOString(),
       })
       .returning({ id: membershipApplications.id })
 
-    logger.info('Membership application submitted', {
+    // Instantly activate membership if logged in
+    if (userId) {
+      await db
+        .update(users)
+        .set({
+          isMember: true,
+          memberSince: new Date().toISOString(),
+          memberType: result.data.memberType,
+        })
+        .where(eq(users.id, userId))
+    } else {
+      // Try to find user by email and activate
+      const [existingUser] = await db
+        .select({ id: users.id })
+        .from(users)
+        .where(eq(users.email, result.data.applicantEmail))
+        .limit(1)
+
+      if (existingUser) {
+        await db
+          .update(users)
+          .set({
+            isMember: true,
+            memberSince: new Date().toISOString(),
+            memberType: result.data.memberType,
+          })
+          .where(eq(users.id, existingUser.id))
+
+        // Link application to user
+        await db
+          .update(membershipApplications)
+          .set({ userId: existingUser.id })
+          .where(eq(membershipApplications.id, application.id))
+      }
+    }
+
+    logger.info('Membership activated', {
       applicationId: application.id,
       userId,
       memberType: result.data.memberType,
@@ -84,9 +111,9 @@ export async function POST(request: NextRequest) {
 
     return apiSuccess({
       id: application.id,
-      message: 'Dein Antrag wurde erfolgreich eingereicht.',
+      memberType: result.data.memberType,
     })
   } catch (error) {
-    return apiError(error, 'Fehler beim Einreichen des Antrags')
+    return apiError(error, 'Fehler beim Beitreten')
   }
 }

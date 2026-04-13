@@ -14,9 +14,11 @@ export const metadata: Metadata = {
 // Bypass Next.js page cache so Verwendungszweck always shows the current month
 export const revalidate = 0
 
-const BANK_IBAN = 'CH16 0900 0000 8725 0971 7'
-const BANK_BIC = 'POFICHBEXXX'
-const BANK_EMPFAENGER = 'Verein Revamp-IT'
+import { BANK } from '@/config/org'
+
+const BANK_IBAN = BANK.iban
+const BANK_BIC = BANK.bic
+const BANK_EMPFAENGER = BANK.accountHolder
 
 function getVerwendungszweck() {
   const now = new Date()
