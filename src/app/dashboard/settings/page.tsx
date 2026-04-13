@@ -3,34 +3,25 @@
 import Link from 'next/link'
 import Heading from '@/components/ui/Heading'
 import { useState } from 'react'
-import { User, Bell, Shield, FileText, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
+import { User, Bell, Shield, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SETTINGS_CONFIG } from '@/config/profile'
 
 // Hooks (reuse from profile)
 import { useProfileData } from '../profile/hooks/useProfileData'
 import { useProfileForm } from '../profile/hooks/useProfileForm'
-import { usePostalCodeLookup } from '../profile/hooks/usePostalCodeLookup'
 
 // Components
 import { ProfileSkeleton } from '@/components/profile/ProfileSkeleton'
 import { AccountSection } from './components/AccountSection'
 import { NotificationsSection } from './components/NotificationsSection'
 import { PrivacySection } from './components/PrivacySection'
-import { PersonalInfoSection } from './components/PersonalInfoSection'
 
-type TabId = 'account' | 'notifications' | 'privacy' | 'personalInfo'
+type TabId = 'account' | 'notifications' | 'privacy'
 
 export default function SettingsPage() {
   const { session, status, isLoading, profile, setProfile } = useProfileData()
   const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({ profile, setProfile })
-  const {
-    postalCodeSuggestions,
-    showSuggestions,
-    handlePostalCodeChange,
-    handleCitySearch,
-    selectPostalSuggestion,
-  } = usePostalCodeLookup({ setProfile })
 
   const [activeTab, setActiveTab] = useState<TabId>('account')
 
@@ -40,7 +31,6 @@ export default function SettingsPage() {
     { id: 'account' as const, label: labels.tabs.account, icon: User },
     { id: 'notifications' as const, label: labels.tabs.notifications, icon: Bell },
     { id: 'privacy' as const, label: labels.tabs.privacy, icon: Shield },
-    { id: 'personalInfo' as const, label: labels.tabs.personalInfo, icon: FileText },
   ]
 
   if (status === 'loading' || isLoading) {
@@ -59,12 +49,23 @@ export default function SettingsPage() {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
-            {labels.pageTitle}
-          </Heading>
-          <p className="mt-1 text-sm sm:text-base text-gray-600 dark:text-neutral-400">
-            {labels.pageDescription}
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+                {labels.pageTitle}
+              </Heading>
+              <p className="mt-1 text-sm sm:text-base text-gray-600 dark:text-neutral-400">
+                {labels.pageDescription}
+              </p>
+            </div>
+            <Link
+              href="/dashboard/profile"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors text-sm"
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:inline">Profil bearbeiten</span>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -130,18 +131,6 @@ export default function SettingsPage() {
               <PrivacySection
                 profile={profile}
                 handleChange={handleChange}
-              />
-            )}
-
-            {activeTab === 'personalInfo' && (
-              <PersonalInfoSection
-                profile={profile}
-                handleChange={handleChange}
-                handlePostalCodeChange={handlePostalCodeChange}
-                handleCitySearch={handleCitySearch}
-                postalCodeSuggestions={postalCodeSuggestions}
-                showSuggestions={showSuggestions}
-                selectPostalSuggestion={selectPostalSuggestion}
               />
             )}
           </div>

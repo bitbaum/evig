@@ -12,7 +12,6 @@ import {
   Calendar,
   ShoppingBag,
   ChevronDown,
-  Heart,
   ArrowRight,
   Shield,
   Store,
@@ -101,21 +100,32 @@ export function UserMenu() {
     .toUpperCase()
     .slice(0, 2) || session.user.email?.charAt(0).toUpperCase() || 'U'
 
-  // Build menu items - include admin link for staff members
+  // Build menu item groups - include admin link for staff members
   const isStaff = session.user.isStaff
 
-  const menuItems = [
-    // Admin link - only for staff
-    ...(isStaff ? [{ href: '/admin', icon: Shield, label: 'Admin-Bereich', highlight: true }] : []),
-    { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
-    { href: '/dashboard/listings', icon: Store, label: 'Meine Inserate' },
-    { href: '/dashboard/messages', icon: MessageSquare, label: 'Nachrichten' },
-    { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
-    { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
-    { href: '/dashboard/orders', icon: ShoppingBag, label: 'Meine Bestellungen' },
-    { href: '/dashboard/reviews', icon: Star, label: 'Meine Bewertungen' },
-    { href: '/dashboard/donations', icon: Heart, label: 'Meine Spenden' },
+  // Groups are rendered with visual separators between them
+  const menuGroups = [
+    // Core navigation
+    [
+      ...(isStaff ? [{ href: '/admin', icon: Shield, label: 'Admin-Bereich', highlight: true }] : []),
+      { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+      { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
+      { href: '/dashboard/messages', icon: MessageSquare, label: 'Nachrichten' },
+    ],
+    // Marketplace
+    [
+      { href: '/dashboard/listings', icon: Store, label: 'Meine Inserate' },
+      { href: '/dashboard/orders', icon: ShoppingBag, label: 'Meine Bestellungen' },
+    ],
+    // Services
+    [
+      { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
+      { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
+    ],
+    // Secondary
+    [
+      { href: '/dashboard/reviews', icon: Star, label: 'Meine Bewertungen' },
+    ],
   ]
 
   return (
@@ -198,27 +208,34 @@ export function UserMenu() {
 
           {/* Menu Items */}
           <div className="py-2">
-            {menuItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={cn(
-                  "group flex items-center gap-3 px-5 py-2.5",
-                  "text-sm transition-colors duration-150",
-                  'highlight' in item && item.highlight
-                    ? "text-amber-700 bg-amber-50 hover:bg-amber-100 font-medium"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+            {menuGroups.map((group, groupIndex) => (
+              <div key={groupIndex}>
+                {groupIndex > 0 && (
+                  <div className="my-1 mx-3 border-t border-gray-100" />
                 )}
-              >
-                <item.icon className={cn(
-                  "w-4 h-4 transition-colors",
-                  'highlight' in item && item.highlight
-                    ? "text-amber-600"
-                    : "text-gray-400 group-hover:text-emerald-600"
-                )} />
-                {item.label}
-              </Link>
+                {group.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className={cn(
+                      "group flex items-center gap-3 px-5 py-2.5",
+                      "text-sm transition-colors duration-150",
+                      'highlight' in item && item.highlight
+                        ? "text-amber-700 bg-amber-50 hover:bg-amber-100 font-medium"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                    )}
+                  >
+                    <item.icon className={cn(
+                      "w-4 h-4 transition-colors",
+                      'highlight' in item && item.highlight
+                        ? "text-amber-600"
+                        : "text-gray-400 group-hover:text-emerald-600"
+                    )} />
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
             ))}
           </div>
 
