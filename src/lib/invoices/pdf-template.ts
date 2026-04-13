@@ -8,6 +8,7 @@
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import { SUPPORT_EMAIL } from '@/lib/constants'
+import { BANK } from '@/config/org'
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -254,11 +255,14 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
 
       <div class="footer">
         <p>
-          Vielen Dank für Ihr Vertrauen in RevampIT.<br>
-          Bei Fragen zu dieser Rechnung kontaktiere uns bitte unter ${SUPPORT_EMAIL}
+          <strong>Bankverbindung:</strong> ${BANK.accountHolder} · IBAN: ${BANK.iban} · ${BANK.name} · BIC: ${BANK.bic}
         </p>
         <p>
           Zahlungsbedingungen: ${invoice.payment_terms || 'Zahlbar innerhalb von 30 Tagen ab Rechnungsdatum'}
+        </p>
+        <p>
+          Vielen Dank für dein Vertrauen in RevampIT.<br>
+          Bei Fragen: ${SUPPORT_EMAIL}
         </p>
       </div>
     </body>
