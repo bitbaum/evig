@@ -69,7 +69,7 @@ interface BreadcrumbsProps {
   className?: string
 }
 
-export function Breadcrumbs({ homePath, className = '' }: BreadcrumbsProps) {
+export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
   const pathname = usePathname()
   const segments = pathname.split('/').filter(Boolean)
 
@@ -94,8 +94,8 @@ export function Breadcrumbs({ homePath, className = '' }: BreadcrumbsProps) {
   })
 
   return (
-    <nav aria-label="Breadcrumb" className={`mb-4 ${className}`}>
-      <ol className="flex items-center gap-1.5 text-sm text-gray-600">
+    <nav aria-label="Breadcrumb" className={className}>
+      <ol className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
         <li>
           <Link
             href={resolvedHomePath}
@@ -109,13 +109,13 @@ export function Breadcrumbs({ homePath, className = '' }: BreadcrumbsProps) {
           <li key={path} className="flex items-center gap-1.5">
             <ChevronRight className="h-3.5 w-3.5 text-gray-300 flex-shrink-0" />
             {isLast ? (
-              <span className="font-medium text-gray-900 truncate max-w-[200px]" aria-current="page">
+              <span className="font-medium text-gray-800 dark:text-gray-200 truncate max-w-[200px]" aria-current="page">
                 {label}
               </span>
             ) : (
               <Link
                 href={path}
-                className="hover:text-gray-900 transition-colors truncate max-w-[200px]"
+                className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors truncate max-w-[200px]"
               >
                 {label}
               </Link>

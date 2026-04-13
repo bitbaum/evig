@@ -8,7 +8,6 @@ import { AdminSidebar } from './AdminSidebar'
 import { UserMenuDropdown } from './UserMenuDropdown'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
-import Heading from '@/components/ui/Heading'
 import { NotificationBell } from '@/components/admin/NotificationBell'
 import { getHirnSection } from '@/config/sections'
 
@@ -75,33 +74,32 @@ export function AdminLayoutClient({
       >
         {/* Top Bar */}
         <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between h-16 px-6">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between h-14 px-4 lg:px-6">
+            <div className="flex items-center gap-3 min-w-0">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
               >
                 <Menu className="w-5 h-5" />
               </button>
 
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden lg:flex xl:hidden w-10 h-10 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="hidden lg:flex xl:hidden w-9 h-9 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
               >
-                <Menu className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                <Menu className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               </button>
 
-              <Heading level={1} className="text-xl font-semibold text-gray-900 dark:text-white">
-                RevampIT Admin
-              </Heading>
+              {/* Breadcrumbs in top bar — saves a full content line */}
+              <Breadcrumbs className="mb-0 hidden sm:flex" />
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 flex-shrink-0">
               <Link
                 href="/"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
               >
-                <Globe className="w-4 h-4" />
+                <Globe className="w-3.5 h-3.5" />
                 Website
               </Link>
 
@@ -112,8 +110,7 @@ export function AdminLayoutClient({
         </div>
 
         {/* Page Content */}
-        <main className="p-6">
-          <Breadcrumbs />
+        <main className="p-4 lg:p-6">
           {children}
         </main>
       </div>
