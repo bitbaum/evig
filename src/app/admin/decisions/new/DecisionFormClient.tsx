@@ -353,7 +353,6 @@ export default function DecisionFormClient() {
                       className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     {opt.imageUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={opt.imageUrl}
                         alt=""

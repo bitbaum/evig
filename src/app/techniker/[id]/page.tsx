@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ORG } from '@/config/org'
 import Link from 'next/link'
 import {
   ArrowLeft,
