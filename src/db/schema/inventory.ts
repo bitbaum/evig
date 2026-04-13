@@ -119,6 +119,13 @@ export const inventoryItems = pgTable('inventory_items', {
   kivitendoArticleNumber: text('kivitendo_article_number').unique(),
   legacyCsvData: jsonb('legacy_csv_data').default({}),
 
+  // Kivvi ERP integration — canonical ERP record reference
+  // Set after successful push to Kivvi API on erfassung
+  kivviInventoryItemId: uuid('kivvi_inventory_item_id').unique(),
+  // 'pending' = not yet pushed | 'synced' = Kivvi has it | 'error' = last push failed
+  kivviSyncStatus: text('kivvi_sync_status').default('pending'),
+  kivviSyncedAt: timestamp('kivvi_synced_at', { withTimezone: true, mode: 'string' }),
+
   // Physical inventory tracking
   location: text('location'),
   quantityAvailable: integer('quantity_available').default(0),

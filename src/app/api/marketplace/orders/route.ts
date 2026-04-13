@@ -14,6 +14,7 @@ import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
 import { APP_URL } from '@/config/urls';
+import { sendCustomEmail, orderConfirmationBuyer, newOrderNotificationSeller } from '@/lib/email';
 
 class OrderValidationError extends Error {
   statusCode: number;
@@ -157,8 +158,52 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       payrexxGatewayId: gateway.id,
     });
 
-    // Email notifications are now sent by the webhook handler after payment
-    // is confirmed (reserved status), since payment is asynchronous.
+    // Send order notifications (fire-and-forget)
+    const orderUrl = `${APP_URL}/marketplace/orders/${orderId}`;
+    const deliveryLabel = data.delivery_method === 'shipping' ? 'Versand' : 'Abholung';
+
+    // Notify buyer
+    try {
+      const [buyer] = await db
+        .select({ email: users.email, name: users.name })
+        .from(users)
+        .where(eq(users.id, session.user.id))
+        .limit(1);
+      if (buyer?.email) {
+        sendCustomEmail(buyer.email, orderConfirmationBuyer({
+          recipientName: buyer.name || 'Käufer',
+          listingTitle: listing.title,
+          amountChf: `CHF ${totalChf.toFixed(2)}`,
+          commissionChf: `CHF ${(Math.round(totalChf * COMMISSION_RATE * 100) / 100).toFixed(2)}`,
+          deliveryMethod: deliveryLabel,
+          orderUrl,
+        })).catch(err => logger.error('Failed to send buyer order confirmation', { err, orderId }));
+      }
+    } catch (err) {
+      logger.error('Failed to look up buyer for order email', { err, orderId });
+    }
+
+    // Notify seller
+    try {
+      const [seller] = await db
+        .select({ email: users.email, name: users.name })
+        .from(users)
+        .where(eq(users.id, listing.seller_id))
+        .limit(1);
+      const payoutChf = Math.round((totalChf - Math.round(totalChf * COMMISSION_RATE * 100) / 100) * 100) / 100;
+      if (seller?.email) {
+        sendCustomEmail(seller.email, newOrderNotificationSeller({
+          recipientName: seller.name || 'Verkäufer',
+          buyerName: session.user.name || 'Käufer',
+          listingTitle: listing.title,
+          payoutAmountChf: `CHF ${payoutChf.toFixed(2)}`,
+          deliveryMethod: deliveryLabel,
+          orderUrl,
+        })).catch(err => logger.error('Failed to send seller order notification', { err, orderId }));
+      }
+    } catch (err) {
+      logger.error('Failed to look up seller for order email', { err, orderId });
+    }
 
     return apiSuccess({
       orderId,

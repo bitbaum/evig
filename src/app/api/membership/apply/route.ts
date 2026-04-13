@@ -7,6 +7,8 @@ import { z } from 'zod'
 import { db } from '@/db'
 import { users, membershipApplications } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
+import { sendCustomEmail } from '@/lib/email'
+import { BANK, MEMBERSHIP } from '@/config/org'
 
 const MembershipSchema = z.object({
   applicantName: z.string().min(2, 'Name erforderlich').max(200),
@@ -108,6 +110,14 @@ export async function POST(request: NextRequest) {
       userId,
       memberType: result.data.memberType,
     })
+
+    // Send welcome email with payment instructions (fire-and-forget)
+    const fee = result.data.memberType === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
+    sendCustomEmail(result.data.applicantEmail, {
+      subject: 'Willkommen im Verein Revamp-IT!',
+      html: `<p>Hallo ${result.data.applicantName},</p><p>du bist jetzt Mitglied von Revamp-IT! Bitte überweise den Jahresbeitrag von CHF ${fee} an:</p><p><strong>IBAN:</strong> ${BANK.iban}<br><strong>Bank:</strong> ${BANK.name}<br><strong>Empfänger:</strong> ${BANK.accountHolder}</p><p>Vielen Dank!</p>`,
+      text: `Hallo ${result.data.applicantName}, du bist jetzt Mitglied von Revamp-IT! Jahresbeitrag CHF ${fee} an IBAN ${BANK.iban} (${BANK.name}, ${BANK.accountHolder}).`,
+    }).catch(err => logger.error('Failed to send membership welcome email', { err, applicationId: application.id }))
 
     return apiSuccess({
       id: application.id,

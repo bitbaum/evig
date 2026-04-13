@@ -9,6 +9,8 @@ import { logger } from '@/lib/logger'
 import { validateBody, SendMessageSchema } from '@/lib/schemas'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { sendMessageInConversation } from '@/lib/messaging/send-message'
+import { sendCustomEmail, newMarketplaceMessage } from '@/lib/email'
+import { APP_URL } from '@/config/urls'
 
 // GET /api/messages - Get conversations for current user
 export const GET = withAuth(async (
@@ -101,6 +103,25 @@ export const POST = withAuth(async (
       type: context_type,
       contextId: context_id,
     })
+
+    // Notify recipient by email (fire-and-forget)
+    db.select({ email: users.email, name: users.name })
+      .from(users)
+      .where(eq(users.id, recipient_id))
+      .limit(1)
+      .then(([recipient]) => {
+        if (!recipient?.email) return
+        const conversationUrl = `${APP_URL}/messages/${result.conversationId}`
+        const preview = content.length > 200 ? content.slice(0, 200) + '...' : content
+        sendCustomEmail(recipient.email, newMarketplaceMessage({
+          recipientName: recipient.name || 'Nutzer',
+          senderName: session.user.name || 'Jemand',
+          listingTitle: context_id ? 'deiner Anfrage' : 'RevampIT',
+          messagePreview: preview,
+          conversationUrl,
+        })).catch(err => logger.error('Failed to send new message notification email', { err, conversationId: result.conversationId }))
+      })
+      .catch(err => logger.error('Failed to look up recipient for message email', { err, recipientId: recipient_id }))
 
     return apiSuccess({
       message: 'Nachricht gesendet',

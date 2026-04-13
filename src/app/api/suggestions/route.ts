@@ -46,6 +46,15 @@ export async function POST(request: NextRequest) {
       ip: clientIp,
     })
 
+    // Send confirmation to submitter if they provided an email (fire-and-forget)
+    if (data.contact && data.contact.includes('@')) {
+      sendCustomEmail(data.contact, {
+        subject: 'Deine Nachricht wurde empfangen — Revamp-IT',
+        html: `<p>Hallo,</p><p>vielen Dank für deine Nachricht an Revamp-IT. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.</p><p>Deine Nachricht:<br><em>${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}</em></p><p>Mit freundlichen Grüssen,<br>Das Revamp-IT Team</p>`,
+        text: `Hallo,\n\nvielen Dank für deine Nachricht an Revamp-IT. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.\n\nDeine Nachricht:\n${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}\n\nMit freundlichen Grüssen,\nDas Revamp-IT Team`,
+      }).catch(err => logger.warn('Failed to send suggestion confirmation email', { error: err }))
+    }
+
     // Send notification email to team
     sendCustomEmail(CONTACT.email, {
       subject: `Neue Nachricht von ${data.contact || 'Anonym'} — ${data.pageTitle || 'Kontaktformular'}`,
