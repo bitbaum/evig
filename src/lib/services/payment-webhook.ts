@@ -7,6 +7,7 @@
 
 import { db } from '@/db'
 import { marketplaceOrders, listings, users, paymentTransactions, workshopRegistrations, serviceAppointments } from '@/db/schema'
+import { inventoryItems } from '@/db/schema/inventory'
 import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
@@ -20,6 +21,12 @@ import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { APP_URL } from '@/config/urls'
 import type { DeliveryOption } from '@/config/marketplace'
+import {
+  createKivviInvoice,
+  updateKivviDocumentStatus,
+  recordKivviPayment,
+  updateKivviInventoryItem,
+} from '@/lib/kivvi/client'
 
 // ============================================================================
 // Types
@@ -137,6 +144,15 @@ export async function handleMarketplacePayment(
       // Fire-and-forget email notifications
       sendOrderEmails(order).catch(err =>
         logger.error('Failed to send order emails', { error: err, orderId: order.id })
+      )
+
+      // Fire-and-forget Kivvi accounting sync
+      // Creates invoice → marks sent (GL entries) → records payment (clears AR)
+      syncOrderToKivvi(order, transactionId).catch(err =>
+        logger.error('Kivvi accounting sync failed — order paid but not in GL', {
+          error: err,
+          orderId: order.id,
+        })
       )
       break
     }
@@ -349,6 +365,112 @@ export async function handleGenericPayment(
         status,
         transactionId: paymentTx.id,
       })
+  }
+}
+
+// ============================================================================
+// Kivvi ERP accounting sync
+// ============================================================================
+
+/**
+ * Push a confirmed marketplace sale to Kivvi ERP so it hits the general ledger.
+ *
+ * Flow:
+ *   1. Fetch listing title + buyer info + Kivvi inventory item ID
+ *   2. Create invoice in Kivvi (RE-YYYY-NNNNN)
+ *   3. Mark invoice as "sent" → triggers GL entries (AR debit / Revenue credit)
+ *   4. Record payment → closes the loop (Bank debit / AR credit)
+ *   5. Mark Kivvi inventory item as sold (status: "sold")
+ *
+ * This is fire-and-forget — the order is already marked paid in RevampIT.
+ * Any error here is logged but does not affect the buyer/seller experience.
+ */
+async function syncOrderToKivvi(
+  order: MarketplaceOrder,
+  payrexxTransactionId: string | null,
+): Promise<void> {
+  // 1. Fetch listing details + buyer info + inventory item Kivvi ID
+  const rows = await db
+    .select({
+      listingTitle: listings.title,
+      priceChf: listings.priceChf,
+      buyerName: users.name,
+      buyerEmail: users.email,
+      inventoryItemId: listings.inventoryItemId,
+    })
+    .from(marketplaceOrders)
+    .innerJoin(listings, eq(marketplaceOrders.listingId, listings.id))
+    .innerJoin(users, eq(marketplaceOrders.buyerId, users.id))
+    .where(eq(marketplaceOrders.id, order.id))
+    .limit(1)
+
+  const info = rows[0]
+  if (!info) {
+    logger.warn('Kivvi sync: could not fetch order details', { orderId: order.id })
+    return
+  }
+
+  // Look up the Kivvi inventory item ID (if this listing is backed by an inventory item)
+  let kivviInventoryItemId: string | undefined
+  if (info.inventoryItemId) {
+    const itemRows = await db
+      .select({ kivviInventoryItemId: inventoryItems.kivviInventoryItemId })
+      .from(inventoryItems)
+      .where(eq(inventoryItems.id, info.inventoryItemId))
+      .limit(1)
+    kivviInventoryItemId = itemRows[0]?.kivviInventoryItemId ?? undefined
+  }
+
+  // 2. Create Kivvi invoice
+  const invoice = await createKivviInvoice({
+    contactName: info.buyerName || 'Unbekannter Käufer',
+    contactEmail: info.buyerEmail || undefined,
+    items: [
+      {
+        description: info.listingTitle,
+        quantity: '1',
+        unitPrice: order.amountChf,
+        vatRate: '8.1', // Standard Swiss MWST — marketplace items are CHF-priced incl. VAT
+        kivviInventoryItemId,
+      },
+    ],
+    notes: payrexxTransactionId
+      ? `Payrexx Transaktion: ${payrexxTransactionId}`
+      : undefined,
+  })
+
+  logger.info('Kivvi invoice created for marketplace order', {
+    orderId: order.id,
+    kivviDocumentId: invoice.id,
+    invoiceNumber: invoice.number,
+  })
+
+  // 3. Mark invoice as sent → triggers GL: Debit 1100 AR / Credit 3000 Revenue + 2200 VAT
+  await updateKivviDocumentStatus(invoice.id, 'sent')
+
+  // 4. Record payment → GL: Debit 1020 Bank / Credit 1100 AR
+  const today = new Date().toISOString().split('T')[0]
+  await recordKivviPayment(invoice.id, {
+    amount: order.amountChf,
+    date: today,
+    method: 'payrexx',
+    reference: payrexxTransactionId || undefined,
+  })
+
+  logger.info('Kivvi accounting loop closed for marketplace order', {
+    orderId: order.id,
+    kivviDocumentId: invoice.id,
+    amount: order.amountChf,
+  })
+
+  // 5. Mark Kivvi inventory item as sold (fire-and-forget, best effort)
+  if (kivviInventoryItemId) {
+    updateKivviInventoryItem(kivviInventoryItemId, { status: 'sold' }).catch(err =>
+      logger.warn('Kivvi: failed to mark inventory item sold', {
+        kivviInventoryItemId,
+        error: err,
+      })
+    )
   }
 }
 
