@@ -54,18 +54,6 @@ export default function WorkReintegrationPage() {
           />
         ))}
 
-        {/* Success Stories */}
-        <section className="space-y-6">
-          <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Erfolgsgeschichten
-          </Heading>
-          <p className={`${responsiveTypography.lead} text-gray-600 leading-relaxed`}>
-            Viele unserer Teilnehmer sind erfolgreich in eine Vollzeitbeschäftigung in
-            der Technologie und verwandten Bereichen übergegangen. Dein Erfolg ist ein Zeugnis für die Wirksamkeit
-            unseres Programms und das Engagement unseres Teams.
-          </p>
-        </section>
-
         {/* Callouts from config */}
         {WORK_REINTEGRATION_PAGE.callouts?.map((callout, index) => (
           <Callout

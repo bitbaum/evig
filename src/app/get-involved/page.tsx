@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Heart, Globe, Recycle, Lightbulb, Users } from 'lucide-react'
+import { Heart, Globe, Recycle, Lightbulb, Users, Zap } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons, responsiveGrid } from '@/lib/responsive'
@@ -21,12 +21,12 @@ const coreValues = [
   {
     title: 'Gemeinschaft',
     description: 'Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen.',
-    icon: Lightbulb
+    icon: Users
   },
   {
     title: 'Innovation',
     description: 'Kreative Lösungen finden, um Technologie zugänglich und umweltfreundlich zu machen.',
-    icon: Lightbulb
+    icon: Zap
   },
   {
     title: 'Globale Wirkung',

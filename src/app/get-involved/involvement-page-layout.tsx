@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import { ContactLink } from '@/components/ui/contact-link'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
@@ -49,9 +48,12 @@ export function InvolvementPageLayout({
             Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten Schritt zu helfen.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <ContactLink variant="default" size="lg">
-              Kontaktiere uns
-            </ContactLink>
+            <a
+              href="/get-involved/kontakt"
+              className={`${responsiveButtons.large} bg-green-600 text-white hover:bg-green-700`}
+            >
+              Interesse bekunden
+            </a>
             <a
               href="/get-involved"
               className={`${responsiveButtons.large} bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-50`}

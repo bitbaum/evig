@@ -16,6 +16,7 @@ const TOPIC_LABELS: Record<string, string> = {
   wiedereinstieg: 'Wiedereinstieg',
   'technische-experten': 'Technische Experten',
   partnerschaft: 'Partnerschaft',
+  'it-hilfe-techniker': 'IT-Hilfe Techniker',
 }
 
 interface Props {
