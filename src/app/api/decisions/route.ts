@@ -7,7 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { createDecisionSchema } from '@/lib/schemas/decisions'
 import { getDecisions, createDecision } from '@/lib/services/decisions'
@@ -25,12 +25,13 @@ export const GET = withAdmin(async (
     const { dbUserId } = userLookup
 
     const { searchParams } = request.nextUrl
+    const { page, limit } = parsePagination(request, { defaultLimit: 20 })
     const filters = {
       status: (searchParams.get('status') as DecisionStatus) || undefined,
       decisionType: searchParams.get('decisionType') || undefined,
       createdBy: searchParams.get('createdBy') || undefined,
-      page: Number(searchParams.get('page')) || 1,
-      limit: Number(searchParams.get('limit')) || 20,
+      page,
+      limit,
     }
 
     const result = await getDecisions(filters, dbUserId)

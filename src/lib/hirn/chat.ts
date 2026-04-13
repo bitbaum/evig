@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger'
 import { getDefaultChatProvider, type Message } from './providers'
 import { SYSTEM_PROMPT } from './system-prompt'
 import { parseActionEnvelope, stripActionBlock, type HirnActionCard } from './action-cockpit'
+import { API_DEFAULTS } from '@/config/api-defaults'
 
 export interface ChatOptions {
   sessionId: string
@@ -57,7 +58,7 @@ export async function chat(
     .from(hirnChatHistory)
     .where(and(eq(hirnChatHistory.sessionId, sessionId), userCondition))
     .orderBy(asc(hirnChatHistory.createdAt))
-    .limit(20)
+    .limit(API_DEFAULTS.CHAT_HISTORY_LIMIT)
 
   const history: Message[] = historyRows.map(h => ({
     role: h.role as 'user' | 'assistant' | 'system',

@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { repairerProfiles, reviews, reviewResponses, users } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
@@ -61,7 +62,7 @@ export async function GET(
         eq(reviews.status, REVIEW_STATUS.PUBLISHED)
       ))
       .orderBy(desc(reviews.createdAt))
-      .limit(10)
+      .limit(API_DEFAULTS.RECENT_RATINGS_LIMIT)
 
     // Get rating breakdown
     const ratingBreakdownRows = await db

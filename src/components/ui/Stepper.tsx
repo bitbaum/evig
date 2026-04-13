@@ -26,19 +26,19 @@ const StepperComponent: React.FC<StepperProps> = ({
     <nav aria-label="Fortschritt" className={cn('w-full', className)}>
       {/* Mobile view - compact */}
       <div className="sm:hidden">
-        <p className="text-sm font-medium text-gray-600">
+        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
           Schritt {currentStep + 1} von {steps.length}
         </p>
-        <p className="text-lg font-semibold text-gray-900 mt-1">
+        <p className="text-lg font-semibold text-gray-900 dark:text-white mt-1">
           {steps[currentStep]?.label}
         </p>
         {steps[currentStep]?.description && (
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
             {steps[currentStep].description}
           </p>
         )}
         {/* Progress bar */}
-        <div className="mt-4 h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="mt-4 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <div
             className="h-full bg-primary-600 transition-all duration-300"
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
@@ -76,9 +76,9 @@ const StepperComponent: React.FC<StepperProps> = ({
                   className={cn(
                     'flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-200',
                     isCompleted && 'bg-primary-600 border-primary-600',
-                    isCurrent && 'border-primary-600 bg-white',
-                    !isCompleted && !isCurrent && 'border-gray-300 bg-white',
-                    isClickable && 'group-hover:border-primary-500 group-hover:bg-primary-50'
+                    isCurrent && 'border-primary-600 bg-white dark:bg-gray-800',
+                    !isCompleted && !isCurrent && 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800',
+                    isClickable && 'group-hover:border-primary-500 group-hover:bg-primary-50 dark:group-hover:bg-primary-900/20'
                   )}
                 >
                   {isCompleted ? (
@@ -88,7 +88,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                       className={cn(
                         'text-sm font-semibold',
                         isCurrent && 'text-primary-600',
-                        !isCurrent && 'text-gray-500'
+                        !isCurrent && 'text-gray-500 dark:text-gray-400'
                       )}
                     >
                       {index + 1}
@@ -103,13 +103,13 @@ const StepperComponent: React.FC<StepperProps> = ({
                       'text-sm font-medium',
                       isCompleted && 'text-primary-600',
                       isCurrent && 'text-primary-600',
-                      !isCompleted && !isCurrent && 'text-gray-500'
+                      !isCompleted && !isCurrent && 'text-gray-500 dark:text-gray-400'
                     )}
                   >
                     {step.label}
                   </p>
                   {step.description && (
-                    <p className="text-xs text-gray-600 mt-0.5">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
                       {step.description}
                     </p>
                   )}
@@ -121,7 +121,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                 <div
                   className={cn(
                     'flex-1 h-0.5 mx-4 transition-colors duration-200',
-                    isCompleted ? 'bg-primary-600' : 'bg-gray-200'
+                    isCompleted ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
                   )}
                 />
               )}

@@ -14,13 +14,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Tag
         className={cn(
-          'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
+          'inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
           {
             'bg-green-600 text-white hover:bg-green-700': variant === 'default',
             'bg-blue-600 text-white hover:bg-blue-700': variant === 'primary',
-            'border border-gray-300 bg-white hover:bg-gray-50 text-gray-900': variant === 'outline',
+            'border border-gray-300 bg-white hover:bg-gray-50 text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700': variant === 'outline',
             'border border-white/70 bg-transparent text-white hover:bg-white hover:text-gray-900': variant === 'outline-light',
-            'bg-gray-100 text-gray-900 hover:bg-gray-200': variant === 'secondary',
+            'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600': variant === 'secondary',
             'bg-transparent hover:bg-white/10 text-inherit': variant === 'ghost',
             'bg-red-600 text-white hover:bg-red-700': variant === 'destructive',
             'h-10 px-4 py-2': size === 'default',

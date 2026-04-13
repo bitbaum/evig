@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { workshops, workshopRegistrations, workshopInstances, users } from '@/db/schema'
 import { eq, and, isNotNull, ne, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import { logger } from '@/lib/logger'
 
 // GET /api/workshops/[slug]/reviews - Get reviews for a workshop
@@ -44,7 +45,7 @@ export async function GET(
           ne(workshopRegistrations.feedback, ''),
         ))
         .orderBy(desc(workshopRegistrations.createdAt))
-        .limit(20),
+        .limit(API_DEFAULTS.RECENT_REVIEWS_LIMIT),
 
       db
         .select({

@@ -11,6 +11,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { validateBody, UpdateLocationSchema } from '@/lib/schemas'
+import { API_DEFAULTS } from '@/config/api-defaults'
 
 // GET /api/locations/[id] - Get location details
 export async function GET(
@@ -86,7 +87,7 @@ export async function GET(
         sql`${locationBookings.startTime} > CURRENT_TIMESTAMP`
       ))
       .orderBy(locationBookings.startTime)
-      .limit(10)
+      .limit(API_DEFAULTS.RECENT_BOOKINGS_LIMIT)
 
     return apiSuccess({
       location,

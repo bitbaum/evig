@@ -37,6 +37,21 @@ export const API_DEFAULTS = {
 
   /** Maximum number of images per product */
   MAX_IMAGES_PER_PRODUCT: 10,
+
+  /** Notifications fetched per request */
+  NOTIFICATION_FETCH_LIMIT: 30,
+
+  /** HIRN chat history messages loaded per session */
+  CHAT_HISTORY_LIMIT: 20,
+
+  /** Recent reviews shown on workshop/repairer pages */
+  RECENT_REVIEWS_LIMIT: 20,
+
+  /** Recent ratings shown on repairer profile */
+  RECENT_RATINGS_LIMIT: 10,
+
+  /** Recent bookings shown on location page */
+  RECENT_BOOKINGS_LIMIT: 10,
 } as const;
 
 export type ApiDefault = typeof API_DEFAULTS[keyof typeof API_DEFAULTS];

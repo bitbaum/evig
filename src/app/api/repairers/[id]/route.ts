@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { repairerProfiles, repairerServices, repairerReviews, repairerAvailability, users } from '@/db/schema'
 import { eq, and, sql, desc, gte, lte } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
+import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -111,7 +112,7 @@ export async function GET(
         eq(repairerReviews.isPublic, true)
       ))
       .orderBy(desc(repairerReviews.createdAt))
-      .limit(10)
+      .limit(API_DEFAULTS.RECENT_RATINGS_LIMIT)
 
     // Fetch rating distribution and review summary in parallel
     const [ratingDistRows, [reviewSummary]] = await Promise.all([

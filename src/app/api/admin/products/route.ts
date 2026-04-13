@@ -4,7 +4,7 @@ import { aiExtractedProducts, inventoryItems } from "@/db/schema"
 import { eq, and, or, ilike, sql, desc } from "drizzle-orm"
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from "@/lib/logger"
-import { apiError, apiSuccess } from "@/lib/api/helpers"
+import { apiError, apiSuccess, parsePagination } from "@/lib/api/helpers"
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 import { validateBody, AdminCreateProductSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
@@ -13,8 +13,7 @@ import { createErfassungProduct } from '@/lib/erfassung/create-product'
 export const GET = withAdmin('products', async (request, session) => {
   try {
     const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get("limit") || "50", 10)
-    const offset = parseInt(searchParams.get("offset") || "0", 10)
+    const { limit, offset } = parsePagination(request, { defaultLimit: 50 })
     const status = searchParams.get("status")
     const q = searchParams.get("q")
 

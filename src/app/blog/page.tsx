@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { BookOpen } from 'lucide-react'
@@ -9,6 +10,12 @@ import BlogLatestList from '@/components/blog/BlogLatestList'
 import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
+import { ORG } from '@/config/org'
+
+export const metadata: Metadata = {
+  title: `Blog | ${ORG.name}`,
+  description: 'Tipps, Geschichten und Hintergründe rund um nachhaltige Technologie.',
+}
 
 // Revalidate every 60 seconds to show new posts
 export const revalidate = 60

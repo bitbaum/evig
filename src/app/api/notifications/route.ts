@@ -12,6 +12,7 @@ import { notifications } from '@/db/schema'
 import { eq, and, asc, desc, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { API_DEFAULTS } from '@/config/api-defaults'
 
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
@@ -30,7 +31,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       .from(notifications)
       .where(eq(notifications.userId, session.user.id))
       .orderBy(asc(notifications.isRead), desc(notifications.createdAt))
-      .limit(30)
+      .limit(API_DEFAULTS.NOTIFICATION_FETCH_LIMIT)
 
     const unreadCount = rows.filter(n => !n.is_read).length
 

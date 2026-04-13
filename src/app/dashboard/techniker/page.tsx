@@ -2,284 +2,30 @@ import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { IT_HILFE, formatBudget } from '@/config/it-hilfe'
 import {
-  URGENCY_LEVELS,
-  OFFER_STATUSES,
-  IT_HILFE,
-  formatBudget,
-} from '@/config/it-hilfe'
+  getTechnicianProfile,
+  getActiveOfferCount,
+  getMatchingRequests,
+  getMyOffers,
+} from '@/lib/dashboard/techniker'
+import { UrgencyBadge, OfferStatusBadge } from '@/components/dashboard/TechnikerBadges'
 
 export const metadata: Metadata = {
   title: 'Techniker Dashboard | RevampIT',
   description: 'Verwalte deine IT-Hilfe Anfragen und Angebote.',
 }
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-interface TechnicianProfile {
-  id: string
-  totalJobsCompleted: number
-  averageRating: string
-  isActive: boolean
-  city: string
+const REQUEST_STATUS_LABELS: Record<string, string> = {
+  open: 'Offen',
+  in_discussion: 'In Gespräch',
+  matched: 'Vergeben',
+  completed: 'Abgeschlossen',
+  cancelled: 'Abgebrochen',
 }
-
-interface MatchingRequest {
-  id: string
-  title: string
-  categoryId: string
-  urgency: string
-  budgetTier: string | null
-  budgetAmountCents: number | null
-  city: string
-  canton: string
-  offerCount: number
-  createdAt: string
-}
-
-interface MyOffer {
-  offerId: string
-  offerStatus: string
-  offerCreatedAt: string
-  requestId: string
-  requestTitle: string
-  categoryId: string
-  urgency: string
-  city: string
-  canton: string
-  requestStatus: string
-}
-
-// ---------------------------------------------------------------------------
-// Data fetching
-// ---------------------------------------------------------------------------
-
-async function getTechnicianProfile(userId: string): Promise<TechnicianProfile | null> {
-  try {
-    const result = await query<{
-      id: string
-      total_jobs_completed: number
-      average_rating: string
-      is_active: boolean
-      city: string
-    }>(
-      `SELECT id, total_jobs_completed, average_rating, is_active, city
-       FROM ${TABLE_NAMES.REPAIRER_PROFILES}
-       WHERE user_id = $1
-       LIMIT 1`,
-      [userId]
-    )
-    const row = result.rows[0]
-    if (!row) return null
-    return {
-      id: row.id,
-      totalJobsCompleted: row.total_jobs_completed ?? 0,
-      averageRating: row.average_rating ?? '0.0',
-      isActive: row.is_active ?? false,
-      city: row.city ?? '',
-    }
-  } catch (error) {
-    logger.error('Error fetching technician profile', { error, userId })
-    return null
-  }
-}
-
-async function getActiveOfferCount(userId: string): Promise<number> {
-  try {
-    const result = await query<{ count: string }>(
-      `SELECT COUNT(*) AS count
-       FROM ${TABLE_NAMES.IT_HILFE_OFFERS}
-       WHERE helper_id = $1 AND status = 'pending'`,
-      [userId]
-    )
-    return parseInt(result.rows[0]?.count ?? '0', 10)
-  } catch (error) {
-    logger.error('Error fetching active offer count', { error, userId })
-    return 0
-  }
-}
-
-async function getMatchingRequests(userId: string): Promise<MatchingRequest[]> {
-  try {
-    // Get helper's skill IDs from user_skills
-    const skillResult = await query<{ skill_id: string }>(
-      `SELECT skill_id FROM ${TABLE_NAMES.USER_SKILLS} WHERE user_id = $1`,
-      [userId]
-    )
-    const skillIds = skillResult.rows.map(r => r.skill_id)
-
-    if (skillIds.length === 0) {
-      // No skills registered: return open requests (fallback)
-      const result = await query<{
-        id: string
-        title: string
-        category_id: string
-        urgency: string
-        budget_tier: string | null
-        budget_amount_cents: number | null
-        city: string
-        canton: string
-        offer_count: number
-        created_at: string
-      }>(
-        `SELECT r.id, r.title, r.category_id, r.urgency, r.budget_tier,
-                r.budget_amount_cents, r.city, r.canton, r.offer_count, r.created_at
-         FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-         LEFT JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} o
-           ON o.request_id = r.id AND o.helper_id = $1
-         WHERE r.status = 'open'
-           AND (r.expires_at IS NULL OR r.expires_at > NOW())
-           AND o.id IS NULL
-         ORDER BY r.created_at DESC
-         LIMIT 5`,
-        [userId]
-      )
-      return result.rows.map(row => ({
-        id: row.id,
-        title: row.title,
-        categoryId: row.category_id,
-        urgency: row.urgency,
-        budgetTier: row.budget_tier,
-        budgetAmountCents: row.budget_amount_cents,
-        city: row.city,
-        canton: row.canton,
-        offerCount: row.offer_count ?? 0,
-        createdAt: row.created_at,
-      }))
-    }
-
-    // Build parameterized skill array for overlap check
-    const skillParams = skillIds.map((_, i) => `$${i + 2}`).join(', ')
-    const result = await query<{
-      id: string
-      title: string
-      category_id: string
-      urgency: string
-      budget_tier: string | null
-      budget_amount_cents: number | null
-      city: string
-      canton: string
-      offer_count: number
-      created_at: string
-    }>(
-      `SELECT r.id, r.title, r.category_id, r.urgency, r.budget_tier,
-              r.budget_amount_cents, r.city, r.canton, r.offer_count, r.created_at
-       FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
-       LEFT JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} o
-         ON o.request_id = r.id AND o.helper_id = $1
-       WHERE r.status = 'open'
-         AND (r.expires_at IS NULL OR r.expires_at > NOW())
-         AND r.skills_needed && ARRAY[${skillParams}]::text[]
-         AND o.id IS NULL
-       ORDER BY r.created_at DESC
-       LIMIT 5`,
-      [userId, ...skillIds]
-    )
-
-    return result.rows.map(row => ({
-      id: row.id,
-      title: row.title,
-      categoryId: row.category_id,
-      urgency: row.urgency,
-      budgetTier: row.budget_tier,
-      budgetAmountCents: row.budget_amount_cents,
-      city: row.city,
-      canton: row.canton,
-      offerCount: row.offer_count ?? 0,
-      createdAt: row.created_at,
-    }))
-  } catch (error) {
-    logger.error('Error fetching matching requests', { error, userId })
-    return []
-  }
-}
-
-async function getMyOffers(userId: string): Promise<MyOffer[]> {
-  try {
-    const result = await query<{
-      offer_id: string
-      offer_status: string
-      offer_created_at: string
-      request_id: string
-      request_title: string
-      category_id: string
-      urgency: string
-      city: string
-      canton: string
-      request_status: string
-    }>(
-      `SELECT
-         o.id AS offer_id,
-         o.status AS offer_status,
-         o.created_at AS offer_created_at,
-         r.id AS request_id,
-         r.title AS request_title,
-         r.category_id,
-         r.urgency,
-         r.city,
-         r.canton,
-         r.status AS request_status
-       FROM ${TABLE_NAMES.IT_HILFE_OFFERS} o
-       JOIN ${TABLE_NAMES.IT_HILFE_REQUESTS} r ON o.request_id = r.id
-       WHERE o.helper_id = $1
-       ORDER BY o.created_at DESC
-       LIMIT 5`,
-      [userId]
-    )
-
-    return result.rows.map(row => ({
-      offerId: row.offer_id,
-      offerStatus: row.offer_status,
-      offerCreatedAt: row.offer_created_at,
-      requestId: row.request_id,
-      requestTitle: row.request_title,
-      categoryId: row.category_id,
-      urgency: row.urgency,
-      city: row.city,
-      canton: row.canton,
-      requestStatus: row.request_status,
-    }))
-  } catch (error) {
-    logger.error('Error fetching my offers', { error, userId })
-    return []
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Helper UI components
-// ---------------------------------------------------------------------------
-
-function UrgencyBadge({ urgency }: { urgency: string }) {
-  const level = URGENCY_LEVELS.find(u => u.id === urgency)
-  if (!level) return null
-  return (
-    <span className={cn('inline-flex items-center px-2 py-0.5 rounded text-xs font-medium', level.badgeClass)}>
-      {level.name}
-    </span>
-  )
-}
-
-function OfferStatusBadge({ status }: { status: string }) {
-  const s = OFFER_STATUSES.find(o => o.id === status)
-  if (!s) return null
-  return (
-    <span className={cn('inline-flex items-center px-2 py-0.5 rounded text-xs font-medium', s.badgeClass)}>
-      {s.name}
-    </span>
-  )
-}
-
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
 
 export default async function TechnikerDashboardPage() {
   const session = await auth()
@@ -297,7 +43,6 @@ export default async function TechnikerDashboardPage() {
     getMyOffers(userId),
   ])
 
-  // No profile yet — show CTA
   if (!profile) {
     return (
       <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
@@ -345,7 +90,7 @@ export default async function TechnikerDashboardPage() {
               Techniker Dashboard
             </Heading>
             <p className={cn('mt-1 text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-              Übersicht Ihrer IT-Hilfe Aktivitäten
+              Übersicht deiner IT-Hilfe Aktivitäten
               {profile.city ? ` · ${profile.city}` : ''}
               {!profile.isActive && (
                 <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
@@ -420,7 +165,7 @@ export default async function TechnikerDashboardPage() {
                   Passende Anfragen
                 </Heading>
                 <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                  Offene Anfragen, die Ihren Skills entsprechen
+                  Offene Anfragen, die deinen Skills entsprechen
                 </p>
               </div>
               <Link
@@ -480,7 +225,7 @@ export default async function TechnikerDashboardPage() {
                   Meine Angebote
                 </Heading>
                 <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                  Ihre zuletzt gemachten Angebote
+                  Deine zuletzt gemachten Angebote
                 </p>
               </div>
             </div>
@@ -516,17 +261,7 @@ export default async function TechnikerDashboardPage() {
                       <p className={cn('text-xs mt-1', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
                         {offer.city}, {offer.canton}
                         {' · '}
-                        Anfrage: {
-                          (() => {
-                            const rs = offer.requestStatus
-                            if (rs === 'open') return 'Offen'
-                            if (rs === 'in_discussion') return 'In Gespräch'
-                            if (rs === 'matched') return 'Vergeben'
-                            if (rs === 'completed') return 'Abgeschlossen'
-                            if (rs === 'cancelled') return 'Abgebrochen'
-                            return rs
-                          })()
-                        }
+                        Anfrage: {REQUEST_STATUS_LABELS[offer.requestStatus] ?? offer.requestStatus}
                       </p>
                     </Link>
                   ))}
