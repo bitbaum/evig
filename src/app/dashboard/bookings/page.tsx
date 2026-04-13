@@ -114,17 +114,17 @@ export default function CustomerBookings() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl font-bold text-gray-900">Meine Buchungen</Heading>
-            <p className="text-gray-600">Deine Reparaturaufträge im Überblick</p>
+            <Heading level={1} className="text-2xl font-bold text-neutral-900">Meine Buchungen</Heading>
+            <p className="text-neutral-600">Deine Reparaturaufträge im Überblick</p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={fetchAppointments}
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white border rounded-lg hover:bg-gray-50 text-sm md:text-base"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white border rounded-lg hover:bg-neutral-50 text-sm md:text-base"
             >
               <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">Aktualisieren</span>
@@ -159,7 +159,7 @@ export default function CustomerBookings() {
           <button
             onClick={() => setActiveTab('active')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-white text-gray-600 hover:bg-gray-50')}
+              (activeTab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
           >
             <Clock className="h-4 w-4" />
             Aktiv
@@ -170,7 +170,7 @@ export default function CustomerBookings() {
           <button
             onClick={() => setActiveTab('completed')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'completed' ? 'bg-green-100 text-green-800' : 'bg-white text-gray-600 hover:bg-gray-50')}
+              (activeTab === 'completed' ? 'bg-green-100 text-green-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
           >
             <CheckCircle className="h-4 w-4" />
             Abgeschlossen
@@ -181,8 +181,8 @@ export default function CustomerBookings() {
         <div className="space-y-4">
           {filteredAppointments.length === 0 ? (
             <div className="bg-white rounded-lg p-8 text-center">
-              <Wrench className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500 mb-4">Keine Buchungen in dieser Kategorie</p>
+              <Wrench className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
+              <p className="text-neutral-500 mb-4">Keine Buchungen in dieser Kategorie</p>
               <Link
                 href="/techniker"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
@@ -196,12 +196,12 @@ export default function CustomerBookings() {
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
-                      (STATUS_CONFIG[apt.status]?.color || 'bg-gray-100')}>
+                      (STATUS_CONFIG[apt.status]?.color || 'bg-neutral-100')}>
                       {STATUS_CONFIG[apt.status]?.label || apt.status}
                     </span>
-                    <p className="text-xs text-gray-500 mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
+                    <p className="text-xs text-neutral-500 mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
                   </div>
-                  <div className="text-right text-sm text-gray-500">
+                  <div className="text-right text-sm text-neutral-500">
                     {formatDateShort(apt.created_at)}
                   </div>
                 </div>
@@ -211,12 +211,12 @@ export default function CustomerBookings() {
                     <Wrench className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <Heading level={3} className="font-semibold text-gray-900">{apt.business_name || apt.repairer_name}</Heading>
-                    <p className="text-sm text-gray-500">{apt.service_name || 'Reparatur'}</p>
+                    <Heading level={3} className="font-semibold text-neutral-900">{apt.business_name || apt.repairer_name}</Heading>
+                    <p className="text-sm text-neutral-500">{apt.service_name || 'Reparatur'}</p>
                   </div>
                 </div>
 
-                <p className="text-gray-700 mb-4">{apt.description}</p>
+                <p className="text-neutral-700 mb-4">{apt.description}</p>
 
                 {apt.quoted_price_chf && (
                   <div className="bg-purple-50 rounded-lg p-4 mb-4">
@@ -232,7 +232,7 @@ export default function CustomerBookings() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+                <div className="flex flex-wrap gap-4 text-sm text-neutral-600 mb-4">
                   {apt.preferred_date && (
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
@@ -293,7 +293,7 @@ export default function CustomerBookings() {
 
                   <Link
                     href={'/dashboard/bookings/' + apt.id}
-                    className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2 sm:ml-auto"
+                    className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 flex items-center gap-2 sm:ml-auto"
                   >
                     Details
                     <ChevronRight className="h-4 w-4" />
@@ -308,7 +308,7 @@ export default function CustomerBookings() {
         <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title="Bewertung abgeben" size="sm">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Bewertung</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">Bewertung</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
@@ -317,27 +317,27 @@ export default function CustomerBookings() {
                     className="p-1"
                   >
                     <Star
-                      className={'h-8 w-8 ' + (star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300')}
+                      className={'h-8 w-8 ' + (star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-neutral-300')}
                     />
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kommentar (optional)</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">Kommentar (optional)</label>
               <textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 placeholder="Wie war deine Erfahrung?"
                 rows={3}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
           <div className="flex gap-2 mt-6">
             <button
               onClick={() => setRatingModal(null)}
-              className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+              className="flex-1 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200"
             >
               Abbrechen
             </button>

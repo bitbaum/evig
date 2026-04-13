@@ -237,7 +237,7 @@ export async function sendAppointmentNotification(
       baseUrl + '/dashboard/bookings'
     )
     sendCustomEmail(party.customer_email, emailContent).catch(err => {
-      logger.warn('Failed to send quote email', { error: err, appointmentId })
+      logger.error('Failed to send quote email', { error: err, appointmentId })
     })
   } else if (['accept', 'reject', 'start', 'complete'].includes(action) && party.customer_email) {
     const emailContent = appointmentStatusUpdate(
@@ -248,7 +248,7 @@ export async function sendAppointmentNotification(
       baseUrl + '/dashboard/bookings'
     )
     sendCustomEmail(party.customer_email, emailContent).catch(err => {
-      logger.warn('Failed to send status email to customer', { error: err, appointmentId })
+      logger.error('Failed to send status email to customer', { error: err, appointmentId })
     })
   } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && party.repairer_email) {
     const emailContent = appointmentStatusUpdate(
@@ -259,7 +259,7 @@ export async function sendAppointmentNotification(
       baseUrl + '/dashboard/appointments'
     )
     sendCustomEmail(party.repairer_email, emailContent).catch(err => {
-      logger.warn('Failed to send status email to repairer', { error: err, appointmentId })
+      logger.error('Failed to send status email to repairer', { error: err, appointmentId })
     })
   }
 }

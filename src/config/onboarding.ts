@@ -118,7 +118,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
       icon: Users,
       iconColor: 'text-green-600',
       title: 'Direkt mit Kunden verbinden',
-      description: 'Erhalte direkte Anfragen von Kunden in Ihrem Einzugsgebiet. Keine Zwischenhändler, volle Kontrolle über Ihre Dienstleistungen.'
+      description: 'Erhalte direkte Anfragen von Kunden in deinem Einzugsgebiet. Keine Zwischenhändler, volle Kontrolle über deine Dienstleistungen.'
     },
     {
       icon: TrendingUp,
@@ -204,7 +204,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     items: [
       {
         question: 'Wie funktioniert die Bezahlung?',
-        answer: 'Kunden bezahlen direkt über die Plattform. Du erhältst Ihr Geld abzüglich der Servicegebühr innerhalb von 3-5 Werktagen nach erfolgreichem Abschluss der Reparatur.'
+        answer: 'Kunden bezahlen direkt über die Plattform. Du erhältst dein Geld abzüglich der Servicegebühr innerhalb von 3-5 Werktagen nach erfolgreichem Abschluss der Reparatur.'
       },
       {
         question: 'Was passiert bei Streitigkeiten?',

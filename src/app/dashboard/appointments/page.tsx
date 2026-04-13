@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
@@ -28,6 +29,7 @@ interface ServiceAppointment {
 
 export default function AppointmentsDashboard() {
   const { data: session, status } = useSession()
+  const router = useRouter()
   const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
@@ -37,6 +39,10 @@ export default function AppointmentsDashboard() {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login?callbackUrl=/dashboard/appointments')
+      return
+    }
     if (!session?.user) return
     let cancelled = false
     async function load() {
@@ -51,7 +57,7 @@ export default function AppointmentsDashboard() {
     }
     load()
     return () => { cancelled = true }
-  }, [session])
+  }, [session, status, router])
 
   const fetchAppointments = async () => {
     const result = await apiFetch<{ appointments: ServiceAppointment[] }>('/api/appointments')
@@ -159,41 +165,20 @@ export default function AppointmentsDashboard() {
     )
   }
 
-  if (!session?.user) {
-    return (
-      <div className="min-h-screen bg-neutral-50 py-4 sm:py-8">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
-            <Heading level={1} className="text-xl sm:text-2xl font-bold mb-4 text-neutral-900">Anmeldung erforderlich</Heading>
-            <p className="text-neutral-600 mb-6 text-sm sm:text-base">
-              Bitte melde dich an, um deine Termine zu sehen.
-            </p>
-            <Link
-              href="/auth/login"
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target font-medium"
-            >
-              Anmelden
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
+            className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zum Dashboard
           </Link>
-          <Heading level={1} className="text-3xl font-bold text-gray-900 mb-2">Meine Termine</Heading>
-          <p className="text-gray-600">
+          <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">Meine Termine</Heading>
+          <p className="text-neutral-600">
             Übersicht deiner Service-Termin-Anfragen und gebuchten Dienstleistungen
           </p>
         </div>
@@ -302,14 +287,14 @@ export default function AppointmentsDashboard() {
                           setError(result.error || 'Stornierung fehlgeschlagen')
                         }
                       }}
-                      className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       Termin stornieren
                     </button>
                     {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
                       <button
                         onClick={() => openEdit(appointment)}
-                        className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50"
+                        className="px-4 py-2 rounded-lg border border-primary-300 text-primary-700 hover:bg-primary-50"
                       >
                         Angaben bearbeiten
                       </button>
@@ -340,28 +325,28 @@ export default function AppointmentsDashboard() {
       <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title="Termindetails bearbeiten">
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Beschreibung</label>
             <textarea
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
               placeholder="Problem oder Wunsch genauer beschreiben"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Bevorzugtes Datum/Zeit</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">Bevorzugtes Datum/Zeit</label>
             <input
               type="datetime-local"
               value={editPreferredDate}
               onChange={(e) => setEditPreferredDate(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg"
+              className="px-3 py-2 border border-neutral-300 rounded-lg"
             />
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
-          <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
+          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">Abbrechen</button>
+          <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-primary-600 text-white disabled:opacity-50">
             {saving ? 'Speichern…' : 'Speichern'}
           </button>
         </div>

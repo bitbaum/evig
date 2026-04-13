@@ -2,18 +2,21 @@ import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { ROLES } from '@/lib/constants'
-import { getCurrentUserRole } from '@/middleware/admin'
-import { getTextColor } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
+import { AlertCircle } from 'lucide-react'
 import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
-import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
-import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
-import { isStaffEmail } from '@/lib/permissions'
+import { DashboardCard } from '@/components/dashboard/DashboardCard'
+import {
+  getAllDashboardCards,
+  groupCardsByCategory,
+  DASHBOARD_CATEGORIES,
+} from '@/config/dashboard'
 import Heading from '@/components/ui/Heading'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { formatDate } from '@/lib/date-formats'
+import { logger } from '@/lib/logger'
+import { cn } from '@/lib/utils'
+import { getTextColor } from '@/lib/design-system'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
@@ -24,6 +27,17 @@ interface MemberStatus {
   isMember: boolean
   memberSince: string | null
   memberType: string | null
+}
+
+interface ActivityCounts {
+  activeAppointments: number
+  pendingQuotes: number
+}
+
+const MEMBER_TYPE_LABELS: Record<string, string> = {
+  regular: 'Ordentliches Mitglied',
+  reduced: 'Ermässigtes Mitglied',
+  honorary: 'Ehrenmitglied',
 }
 
 async function getMemberStatus(userId: string): Promise<MemberStatus> {
@@ -44,15 +58,33 @@ async function getMemberStatus(userId: string): Promise<MemberStatus> {
       memberSince: row?.member_since ?? null,
       memberType: row?.member_type ?? null,
     }
-  } catch {
+  } catch (error) {
+    logger.error('Failed to fetch member status', { userId, error })
     return { isMember: false, memberSince: null, memberType: null }
   }
 }
 
-const MEMBER_TYPE_LABELS: Record<string, string> = {
-  regular: 'Ordentliches Mitglied',
-  reduced: 'Ermässigtes Mitglied',
-  honorary: 'Ehrenmitglied',
+async function getActivityCounts(userId: string): Promise<ActivityCounts> {
+  try {
+    const result = await query<{
+      active_appointments: string
+      pending_quotes: string
+    }>(
+      `SELECT
+        COUNT(CASE WHEN status NOT IN ('completed', 'cancelled', 'rejected') THEN 1 END) AS active_appointments,
+        COUNT(CASE WHEN status = 'quoted' THEN 1 END) AS pending_quotes
+       FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS}
+       WHERE user_id = $1`,
+      [userId]
+    )
+    return {
+      activeAppointments: parseInt(result.rows[0]?.active_appointments ?? '0', 10),
+      pendingQuotes: parseInt(result.rows[0]?.pending_quotes ?? '0', 10),
+    }
+  } catch (error) {
+    logger.error('Failed to fetch activity counts', { userId, error })
+    return { activeAppointments: 0, pendingQuotes: 0 }
+  }
 }
 
 export default async function DashboardPage() {
@@ -62,290 +94,116 @@ export default async function DashboardPage() {
     redirect('/auth/login?callbackUrl=/dashboard')
   }
 
-  const userRole = await getCurrentUserRole()
-  const memberStatus = await getMemberStatus(session.user.id!)
+  const [memberStatus, counts] = await Promise.all([
+    getMemberStatus(session.user.id!),
+    getActivityCounts(session.user.id!),
+  ])
+
+  const allCards = getAllDashboardCards({
+    role: session.user.role ?? null,
+    isStaff: session.user.isStaff,
+    isSuperAdmin: false,
+  })
+
+  // Inject live count badges on relevant cards
+  const cardsWithBadges = allCards.map(card => {
+    if (card.id === 'appointments' && counts.activeAppointments > 0)
+      return { ...card, badge: `${counts.activeAppointments} aktiv` }
+    if (card.id === 'bookings' && counts.activeAppointments > 0)
+      return { ...card, badge: `${counts.activeAppointments} aktiv` }
+    return card
+  })
+
+  const grouped = groupCardsByCategory(cardsWithBadges)
+
+  const userName = session.user.name || session.user.email || 'Unbekannt'
 
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
         {/* Email Verification Banner */}
         {!session.user.emailVerified && session.user.email && (
           <EmailVerificationBanner email={session.user.email} className="mb-6" />
         )}
 
-        {/* Welcome Card for new users */}
-        <WelcomeCard />
-
-        {/* Onboarding Checklist */}
-        <OnboardingChecklist
-          role={userRole || ROLES.CUSTOMER}
-          emailVerified={session.user.emailVerified ?? false}
-          className="mb-6"
-        />
-
-        <div className="mb-8">
-          <Heading level={1} className={cn('text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-            Willkommen zurück, {session.user.name || session.user.email}!
-          </Heading>
-          <p className={cn('mt-2 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-            Verwalte dein Konto und entdecke alle verfügbaren Funktionen.
-          </p>
-        </div>
-
-        {/* Member Status Card */}
-        {memberStatus.isMember ? (
-          <div className="mb-6 bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 sm:p-5 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-green-600 dark:text-green-400 text-xl">🏅</span>
-              </div>
-              <div>
-                <Heading level={3} className={cn('text-base font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Du bist Mitglied
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-green-300')}>
-                  {memberStatus.memberType ? MEMBER_TYPE_LABELS[memberStatus.memberType] ?? memberStatus.memberType : 'Mitglied'}
-                  {memberStatus.memberSince ? ` · Dabei seit ${formatDate(memberStatus.memberSince)}` : ''}
-                </p>
-              </div>
-            </div>
-            <Link
-              href="/decisions"
-              className="shrink-0 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6">
+          <div>
+            <Heading
+              level={1}
+              className={cn('text-2xl sm:text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}
             >
-              Abstimmungen
-            </Link>
+              Willkommen zurück, {userName}!
+            </Heading>
+            <p className={cn('mt-1 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
+              Verwalte dein Konto und entdecke alle verfügbaren Funktionen.
+            </p>
           </div>
-        ) : (
-          <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-4 sm:p-5 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-blue-600 dark:text-blue-400 text-xl">🤝</span>
-              </div>
-              <div>
-                <Heading level={3} className={cn('text-base font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Werde Mitglied
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-blue-300')}>
-                  Unterstütze unsere Mission und nimm an Abstimmungen teil
-                </p>
-              </div>
+
+          {/* Member status — inline badge, not full banner */}
+          {memberStatus.isMember ? (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium shrink-0">
+              <span>🏅</span>
+              <span>
+                {memberStatus.memberType
+                  ? MEMBER_TYPE_LABELS[memberStatus.memberType] ?? 'Mitglied'
+                  : 'Mitglied'}
+                {memberStatus.memberSince && (
+                  <span className="font-normal opacity-75"> · seit {formatDate(memberStatus.memberSince)}</span>
+                )}
+              </span>
             </div>
+          ) : (
             <Link
               href="/mitglied-werden"
-              className="shrink-0 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+              className="shrink-0 text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium"
             >
-              Mitglied werden
+              Mitglied werden →
+            </Link>
+          )}
+        </div>
+
+        {/* Pending quotes alert */}
+        {counts.pendingQuotes > 0 && (
+          <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg flex items-center gap-3 text-amber-800 dark:text-amber-300">
+            <AlertCircle className="h-5 w-5 shrink-0" />
+            <span>
+              Du hast{' '}
+              <strong>{counts.pendingQuotes} {counts.pendingQuotes === 1 ? 'Angebot' : 'Angebote'}</strong>{' '}
+              zur Bestätigung.
+            </span>
+            <Link
+              href="/dashboard/bookings"
+              className="ml-auto text-sm font-medium text-amber-900 dark:text-amber-200 hover:underline shrink-0"
+            >
+              Ansehen →
             </Link>
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {/* Profile Card */}
-          <Link
-            href="/dashboard/profile"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-info-100 dark:bg-info-900 rounded-lg flex items-center justify-center">
-                <span className="text-info-600 dark:text-info-400 font-semibold text-lg">
-                  {session.user.name?.charAt(0) || session.user.email?.charAt(0) || 'U'}
-                </span>
+        {/* Grouped card sections */}
+        {Array.from(grouped.entries()).map(([category, cards]) => {
+          if (cards.length === 0) return null
+          const categoryConfig = DASHBOARD_CATEGORIES[category]
+          return (
+            <section key={category} className="mb-8">
+              <h2 className={cn(
+                'text-xs font-semibold uppercase tracking-wider mb-3',
+                getTextColor('neutral', 'muted'),
+                'dark:text-neutral-500'
+              )}>
+                {categoryConfig.title}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {cards.map(card => (
+                  <DashboardCard key={card.id} card={card} />
+                ))}
               </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Mein Profil
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Persönliche Daten verwalten
-                </p>
-              </div>
-            </div>
-          </Link>
+            </section>
+          )
+        })}
 
-          {/* Workshops Card */}
-          <Link
-            href="/dashboard/workshops"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                <span className="text-green-600 dark:text-green-400 text-xl">🎓</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Meine Workshops
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Angemeldete Kurse verwalten
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Appointments Card */}
-          <Link
-            href="/dashboard/appointments"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
-                <span className="text-orange-600 dark:text-orange-400 text-xl">📅</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Termine
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Service-Termin buchen
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Bookings Card — peer repair bookings */}
-          <Link
-            href="/dashboard/bookings"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center">
-                <span className="text-red-600 dark:text-red-400 text-xl">🔧</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Meine Buchungen
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Reparaturaufträge verfolgen
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Seller card — role dashboard if seller, upsell otherwise */}
-          <Link
-            href="/dashboard/seller"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-secondary-100 dark:bg-secondary-900 rounded-lg flex items-center justify-center">
-                <span className="text-secondary-600 dark:text-secondary-400 text-xl">🏪</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  {userRole === ROLES.SELLER ? 'Seller Dashboard' : 'Auf Revamp‑IT verkaufen'}
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  {userRole === ROLES.SELLER ? 'Produkte und Verkäufe' : 'Eigene Produkte anbieten – Versand direkt an Käufer'}
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Techniker card — role dashboard if repairer, upsell otherwise */}
-          <Link
-            href="/dashboard/techniker"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900 rounded-lg flex items-center justify-center">
-                <span className="text-warning-600 dark:text-warning-400 text-xl">🔧</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  {userRole === ROLES.REPAIRER ? 'Techniker Dashboard' : 'Reparaturen anbieten'}
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  {userRole === ROLES.REPAIRER ? 'Anfragen und Angebote verwalten' : 'Dienstleistungen publizieren und Anfragen erhalten'}
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Show admin card for staff users */}
-          {(session.user.isStaff || isStaffEmail(session.user.email || '')) && (
-            <Link
-              href="/admin"
-              className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-error-100 dark:bg-error-900 rounded-lg flex items-center justify-center">
-                  <span className="text-error-600 dark:text-error-400 text-xl">⚙️</span>
-                </div>
-                <div className="ml-4">
-                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                    Admin-Bereich
-                  </Heading>
-                  <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                    System verwalten
-                  </p>
-                </div>
-              </div>
-            </Link>
-          )}
-
-          {/* Workshop Proposal Card */}
-          <Link
-            href="/workshops/propose"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                <span className="text-purple-600 dark:text-purple-400 text-xl">🎓</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Workshop vorschlagen
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Eigene Workshops anbieten
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          
-          {/* My Blog Submissions Card */}
-          <Link
-            href="/dashboard/blog-submissions"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
-                <span className="text-primary-600 dark:text-primary-400 text-xl">📝</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Meine Einreichungen
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Status deiner Blog-Beiträge verfolgen
-                </p>
-              </div>
-            </div>
-          </Link>
-
-          {/* Blog Submit Card */}
-          <Link
-            href="/blog/submit"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-info-100 dark:bg-info-900 rounded-lg flex items-center justify-center">
-                <span className="text-info-600 dark:text-info-400 text-xl">✍️</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  Beitrag verfassen
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Idee teilen oder Tutorial schreiben
-                </p>
-              </div>
-            </div>
-          </Link>
-        </div>
       </div>
     </main>
   )

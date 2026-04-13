@@ -44,6 +44,7 @@ import {
   Vote,
   BadgeCheck,
   Lightbulb,
+  MessageSquare,
 } from 'lucide-react'
 
 // =============================================================================
@@ -228,6 +229,21 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: false, dashboard: true },
     priority: 1,
+    category: 'core',
+  },
+
+  messages: {
+    id: 'messages',
+    path: '/dashboard/messages',
+    ui: {
+      label: 'Nachrichten',
+      description: 'Direktnachrichten mit Käufern und Verkäufern',
+      icon: MessageSquare,
+      emoji: '💬',
+      color: 'info',
+    },
+    visibility: { admin: false, dashboard: true },
+    priority: 2,
     category: 'core',
   },
 
@@ -437,6 +453,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     priority: 42,
     category: 'content',
   },
+
 
   // ---------------------------------------------------------------------------
   // DONATIONS - User donation history
