@@ -17,6 +17,7 @@ import {
   Store,
   MessageSquare,
   Wrench,
+  BadgeCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -111,6 +112,7 @@ export function UserMenu() {
       { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
       { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
       { href: '/dashboard/messages', icon: MessageSquare, label: 'Nachrichten' },
+      { href: '/dashboard/membership', icon: BadgeCheck, label: 'Mitgliedschaft' },
     ],
     // Marketplace
     [
@@ -194,7 +196,7 @@ export function UserMenu() {
               )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 truncate">
-                  {session.user.name || 'RevampIT Benutzer'}
+                  {session.user.name || 'Benutzer'}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
                   {session.user.email}

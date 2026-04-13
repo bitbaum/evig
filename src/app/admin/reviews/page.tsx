@@ -79,19 +79,19 @@ export default function AdminReviewsPage() {
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
-    setError(null)
-    apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`).then(
-      (result) => {
-        if (cancelled) return
-        setLoading(false)
-        if (result.success && result.data) {
-          setReviews(result.data.reviews || [])
-        } else {
-          setError(result.error || ADMIN_CONTENT.reviews.errorMessage)
-        }
+    const fetchReviews = async () => {
+      setLoading(true)
+      setError(null)
+      const result = await apiFetch<{ reviews: Review[] }>(`/api/admin/reviews?status=${selectedStatus}&limit=50`)
+      if (cancelled) return
+      setLoading(false)
+      if (result.success && result.data) {
+        setReviews(result.data.reviews || [])
+      } else {
+        setError(result.error || ADMIN_CONTENT.reviews.errorMessage)
       }
-    )
+    }
+    fetchReviews()
     return () => { cancelled = true }
   }, [selectedStatus])
 

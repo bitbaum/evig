@@ -319,10 +319,20 @@ export type AiProcessingLog = typeof aiProcessingLogs.$inferSelect
 export type NewAiProcessingLog = typeof aiProcessingLogs.$inferInsert
 
 // =============================================================================
-// MARKETPLACE LISTINGS (RevampIT internal — for inventory items)
+// MARKETPLACE LISTINGS (RevampIT internal shop — not P2P)
 // =============================================================================
-// Tracks listings of RevampIT inventory on external platforms (Medusa, etc.).
-// Not to be confused with the P2P `listings` table in marketplace.ts.
+// Tracks RevampIT's own inventory items as shop listings (platform = 'internal').
+//
+// Written by:
+//   - src/lib/erfassung/create-product.ts  (on publish action during erfassung)
+//   - src/lib/admin/inventory-actions.ts   (publishProduct / unpublishProduct)
+//   - src/app/api/admin/intake/[id]/publish/route.ts  (intake publish)
+//
+// Served by: /api/shop/inventory/ routes (NOT /api/listings/)
+//
+// IMPORTANT: Do NOT confuse with the P2P `listings` table in marketplace.ts.
+// The `listings` table is for community peer-to-peer sales.
+// This table is exclusively for RevampIT's own refurbished stock.
 
 export const marketplaceListings = pgTable('marketplace_listings', {
   id: uuid('id').primaryKey().defaultRandom(),

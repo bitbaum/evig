@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MessageSquare, Loader2 } from 'lucide-react'
@@ -12,7 +12,7 @@ import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 
-export default function MessagesPage() {
+function MessagesContent() {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -139,5 +139,17 @@ export default function MessagesPage() {
         </div>
       )}
     </div>
+  )
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 text-green-600 animate-spin" aria-hidden="true" />
+      </div>
+    }>
+      <MessagesContent />
+    </Suspense>
   )
 }

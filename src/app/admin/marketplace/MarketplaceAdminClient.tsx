@@ -1,6 +1,7 @@
 'use client'
 
 import { Package, AlertTriangle, Clock, Store, Loader2 } from 'lucide-react'
+import { ORG } from '@/config/org'
 import { useMarketplaceAdmin } from './useMarketplaceAdmin'
 import { TABS } from './types'
 import { StatsCard } from './StatsCard'
@@ -21,7 +22,7 @@ export default function MarketplaceAdminClient() {
           <StatsCard label="Aktive Inserate" value={m.stats.byStatus.active ?? 0} icon={Package} color="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200" />
           <StatsCard label="Ungeprüft" value={m.stats.unverified} icon={Clock} color="bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200" />
           <StatsCard label="Offene Meldungen" value={m.stats.openReports} icon={AlertTriangle} color="bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200" />
-          <StatsCard label="Revamp-IT" value={m.stats.revampit} icon={Store} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
+          <StatsCard label={ORG.name} value={m.stats.revampit} icon={Store} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
         </div>
       )}
 

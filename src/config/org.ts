@@ -88,6 +88,8 @@ export const OPENING_HOURS = {
   tuesdayToFriday: '13:00 - 17:00',
   /** Pre-formatted multi-line string for display */
   formatted: 'Montag: 9:00 - 12:00\nDienstag - Freitag: 13:00 - 17:00',
+  /** Compact single-line format for tight UI */
+  compact: 'Mo 9–12 Uhr · Di–Fr 13–17 Uhr',
   /** Schema.org format */
   schemaOrg: 'Mo 09:00-12:00, Tu-Fr 13:00-17:00',
 } as const

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 // Bypass Next.js page cache so Verwendungszweck always shows the current month
 export const revalidate = 0
 
-import { BANK } from '@/config/org'
+import { BANK, LOCATIONS, CONTACT, OPENING_HOURS, ORG } from '@/config/org'
 
 const BANK_IBAN = BANK.iban
 const BANK_BIC = BANK.bic
@@ -175,7 +175,7 @@ export default function DonatePage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-0.5">Bank</p>
-                  <p className="text-sm text-gray-700">PostFinance AG</p>
+                  <p className="text-sm text-gray-700">{BANK.name}</p>
                 </div>
                 <CopyButton value={BANK_BIC} label={`BIC ${BANK_BIC}`} />
               </div>
@@ -220,11 +220,11 @@ export default function DonatePage() {
             </div>
             <div className="rounded-lg bg-white border border-orange-200 p-4">
               <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Abgabe-Adresse</p>
-              <p className="text-sm font-semibold text-gray-900">Revamp-IT Werkstatt</p>
-              <p className="text-sm text-gray-600">Birmensdorferstrasse 379, 8055 Zürich</p>
-              <p className="text-xs text-gray-500 mt-2">Mo 9–12 Uhr · Di–Fr 13–17 Uhr</p>
+              <p className="text-sm font-semibold text-gray-900">{ORG.name} {LOCATIONS.store.name}</p>
+              <p className="text-sm text-gray-600">{LOCATIONS.store.full}</p>
+              <p className="text-xs text-gray-500 mt-2">{OPENING_HOURS.compact}</p>
               <a
-                href="mailto:empfang@revamp-it.ch"
+                href={`mailto:${CONTACT.email}`}
                 className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 hover:text-orange-600"
               >
                 Fragen? Schreib uns →

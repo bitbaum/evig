@@ -139,7 +139,7 @@ export const DECISION_TYPE_DEFAULTS: Record<
     blindVoting: true,
   },
   choose: {
-    votingMethod: 'consent',
+    votingMethod: 'approval',
     quorum: { type: 'percentage', value: 66 },
     durationHours: 120,
     blindVoting: true,

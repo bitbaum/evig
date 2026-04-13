@@ -47,7 +47,6 @@ export function useErfassungForm() {
       setIsLoadingProduct(true)
       setShowAdvanced(true)
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiFetch<{ product: any }>(`/api/admin/inventory/${editId}`)
         .then(result => {
           if (result.success && result.data?.product) {

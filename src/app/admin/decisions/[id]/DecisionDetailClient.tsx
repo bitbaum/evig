@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { apiFetch } from '@/lib/api/client';
 import {
   DECISION_STATUS,
@@ -31,6 +32,7 @@ interface DecisionOption {
   id: string;
   label: string;
   description?: string;
+  imageUrl?: string;
 }
 
 interface DecisionDetail {
@@ -313,25 +315,51 @@ export default function DecisionDetailClient({
         {decision.options.length > 0 && (
           <div className="mt-4">
             <Heading level={3} className="mb-2 text-sm font-medium text-gray-700">
-              Optionen
+              Optionen ({decision.options.length})
             </Heading>
-            <div className="space-y-1">
-              {decision.options.map((opt) => (
-                <div
-                  key={opt.id}
-                  className="rounded-md border border-gray-200 px-3 py-2"
-                >
-                  <span className="font-medium text-gray-800">
-                    {opt.label}
-                  </span>
-                  {opt.description && (
-                    <span className="ml-2 text-sm text-gray-500">
-                      – {opt.description}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+            {decision.options.some((o) => o.imageUrl) ? (
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                {decision.options.map((opt) => (
+                  <div key={opt.id} className="rounded-xl border border-gray-200 bg-gray-50 overflow-hidden">
+                    {opt.imageUrl ? (
+                      <div className="relative aspect-square w-full bg-white">
+                        <Image
+                          src={opt.imageUrl}
+                          alt={opt.label}
+                          fill
+                          className="object-contain p-2"
+                          unoptimized
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex aspect-square w-full items-center justify-center bg-gray-100 text-3xl font-bold text-gray-400">
+                        {opt.label.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div className="p-2">
+                      <p className="truncate text-xs font-medium text-gray-700">{opt.label}</p>
+                      {opt.description && (
+                        <p className="truncate text-xs text-gray-500">{opt.description}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {decision.options.map((opt) => (
+                  <div
+                    key={opt.id}
+                    className="rounded-md border border-gray-200 px-3 py-2"
+                  >
+                    <span className="font-medium text-gray-800">{opt.label}</span>
+                    {opt.description && (
+                      <span className="ml-2 text-sm text-gray-500">– {opt.description}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

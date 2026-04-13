@@ -92,7 +92,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         setTitle(`${MEETING_TYPE_LABELS[meetingType]} — ${formatDateShort(meetingDate)}`)
       }
     }
-  }, [meetingType])
+  }, [meetingType, meetingDate, title])
 
   const filteredTeamMembers = useMemo(() => {
     if (!attendeeSearch.trim()) return teamMembers

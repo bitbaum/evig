@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import {
   CONSENT_RESPONSE_CONFIG,
   SIMPLE_MAJORITY_RESPONSE_CONFIG,
@@ -9,12 +10,22 @@ import {
 } from '@/config/decisions';
 import Heading from '@/components/ui/Heading';
 
-/** Covers all voting method outcome shapes (consent, approval, dot, score, simple_majority) */
+interface RankedOption {
+  id: string;
+  label: string;
+  imageUrl?: string;
+  votes?: number;
+  dots?: number;
+  averageScore?: number;
+  voteCount?: number;
+}
+
+/** Covers all voting method outcome shapes */
 interface OutcomeData {
   passed?: boolean;
   totalVotes?: number;
   counts?: Record<string, number>;
-  ranked?: Array<{ id: string; label: string; votes?: number; dots?: number; averageScore?: number; voteCount?: number }>;
+  ranked?: RankedOption[];
   blocks?: Array<{ rationale?: string }>;
 }
 
@@ -24,43 +35,67 @@ interface Props {
   votingMethod: VotingMethod;
 }
 
-// Generic bar component
 function Bar({
   label,
   value,
   max,
   color,
+  imageUrl,
+  isWinner,
 }: {
   label: string;
   value: number;
   max: number;
   color: string;
+  imageUrl?: string;
+  isWinner?: boolean;
 }) {
   const pct = max > 0 ? (value / max) * 100 : 0;
   return (
     <div className="flex items-center gap-3">
-      <span className="w-28 text-sm text-gray-700">{label}</span>
+      {imageUrl ? (
+        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 bg-white">
+          <Image src={imageUrl} alt={label} fill className="object-contain p-0.5" unoptimized />
+        </div>
+      ) : (
+        isWinner !== undefined && (
+          <span className={`text-sm ${isWinner ? 'font-bold text-amber-500' : 'text-transparent'}`}>★</span>
+        )
+      )}
+      <span className="w-28 truncate text-sm text-gray-700">{label}</span>
       <div className="flex-1">
         <div className="h-6 overflow-hidden rounded-md bg-gray-100">
-          <div
-            className={`h-full rounded-md ${color}`}
-            style={{ width: `${pct}%` }}
-          />
+          <div className={`h-full rounded-md ${color}`} style={{ width: `${pct}%` }} />
         </div>
       </div>
-      <span className="w-10 text-right text-sm font-medium text-gray-700">
-        {value}
-      </span>
+      <span className="w-10 text-right text-sm font-medium text-gray-700">{value}</span>
     </div>
   );
 }
 
-export default function ResultsPanel({
-  outcome,
-  outcomeSummary,
-  votingMethod,
-}: Props) {
-  // Outcome shape varies by voting method — typed per-branch below
+function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
+  return (
+    <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-amber-400 bg-amber-50 p-4">
+      {opt.imageUrl ? (
+        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-amber-200 bg-white shadow">
+          <Image src={opt.imageUrl} alt={opt.label} fill className="object-contain p-1" unoptimized />
+        </div>
+      ) : (
+        <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100 text-3xl font-bold text-amber-600">
+          {opt.label.charAt(0).toUpperCase()}
+        </div>
+      )}
+      <div>
+        <div className="text-xs font-medium uppercase tracking-wide text-amber-600">Gewinner</div>
+        <div className="text-lg font-bold text-gray-900">{opt.label}</div>
+        <div className="text-sm text-gray-600">{metric}</div>
+      </div>
+      <span className="ml-auto text-3xl">★</span>
+    </div>
+  );
+}
+
+export default function ResultsPanel({ outcome, outcomeSummary, votingMethod }: Props) {
   const data = outcome as OutcomeData | null;
   if (!data) return null;
 
@@ -73,53 +108,40 @@ export default function ResultsPanel({
         <div className="mb-4">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              data.passed
-                ? 'bg-green-100 text-green-700'
-                : 'bg-red-100 text-red-700'
+              data.passed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
             }`}
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
           </span>
-          <span className="ml-2 text-sm text-gray-500">
-            {data.totalVotes} Stimmen
-          </span>
+          <span className="ml-2 text-sm text-gray-500">{data.totalVotes} Stimmen</span>
         </div>
       )}
 
       {/* Consent results */}
       {votingMethod === 'consent' && data.counts && (
         <div className="space-y-2">
-          {(
-            Object.entries(data.counts) as [ConsentResponse, number][]
-          ).map(([key, count]) => (
+          {(Object.entries(data.counts) as [ConsentResponse, number][]).map(([key, count]) => (
             <Bar
               key={key}
               label={CONSENT_RESPONSE_CONFIG[key]?.label || key}
               value={count}
               max={data.totalVotes || 0}
               color={
-                key === 'agree'
-                  ? 'bg-green-400'
-                  : key === 'block'
-                    ? 'bg-red-400'
-                    : key === 'disagree'
-                      ? 'bg-orange-400'
-                      : 'bg-gray-300'
+                key === 'agree' ? 'bg-green-400'
+                  : key === 'block' ? 'bg-red-400'
+                  : key === 'disagree' ? 'bg-orange-400'
+                  : 'bg-gray-300'
               }
             />
           ))}
           {data.blocks && data.blocks.length > 0 && (
             <div className="mt-3 rounded-md bg-red-50 p-3">
-              <p className="text-sm font-medium text-red-700">
-                Blockierungen:
-              </p>
-              {data.blocks.map(
-                (b, i) => (
-                  <p key={i} className="mt-1 text-sm text-red-600">
-                    &bull; {b.rationale || '(Keine Begründung)'}
-                  </p>
-                )
-              )}
+              <p className="text-sm font-medium text-red-700">Blockierungen:</p>
+              {data.blocks.map((b, i) => (
+                <p key={i} className="mt-1 text-sm text-red-600">
+                  &bull; {b.rationale || '(Keine Begründung)'}
+                </p>
+              ))}
             </div>
           )}
         </div>
@@ -128,80 +150,82 @@ export default function ResultsPanel({
       {/* Approval results */}
       {votingMethod === 'approval' && data.ranked && (
         <div className="space-y-2">
-          {data.ranked.map(
-            (opt, i) => (
-              <div key={opt.id} className="flex items-center gap-2">
-                {i === 0 && (
-                  <span className="text-sm font-bold text-amber-500">
-                    &#9733;
-                  </span>
-                )}
-                <div className="flex-1">
-                  <Bar
-                    label={opt.label}
-                    value={opt.votes || 0}
-                    max={data.totalVotes || 0}
-                    color={i === 0 ? 'bg-blue-500' : 'bg-blue-300'}
-                  />
-                </div>
-              </div>
-            )
+          {data.ranked[0] && (
+            <WinnerCard
+              opt={data.ranked[0]}
+              metric={`${data.ranked[0].votes || 0} Stimmen`}
+            />
           )}
+          {data.ranked.map((opt, i) => (
+            <Bar
+              key={opt.id}
+              label={opt.label}
+              value={opt.votes || 0}
+              max={data.totalVotes || 0}
+              color={i === 0 ? 'bg-blue-500' : 'bg-blue-300'}
+              imageUrl={opt.imageUrl}
+              isWinner={i === 0}
+            />
+          ))}
         </div>
       )}
 
       {/* Dot results */}
       {votingMethod === 'dot' && data.ranked && (
         <div className="space-y-2">
-          {data.ranked.map(
-            (opt, i) => (
-              <Bar
-                key={opt.id}
-                label={`${i === 0 ? '★ ' : ''}${opt.label}`}
-                value={opt.dots || 0}
-                max={data.ranked?.[0]?.dots || 1}
-                color={i === 0 ? 'bg-purple-500' : 'bg-purple-300'}
-              />
-            )
+          {data.ranked[0] && (
+            <WinnerCard
+              opt={data.ranked[0]}
+              metric={`${data.ranked[0].dots || 0} Punkte`}
+            />
           )}
+          {data.ranked.map((opt, i) => (
+            <Bar
+              key={opt.id}
+              label={opt.label}
+              value={opt.dots || 0}
+              max={data.ranked?.[0]?.dots || 1}
+              color={i === 0 ? 'bg-purple-500' : 'bg-purple-300'}
+              imageUrl={opt.imageUrl}
+              isWinner={i === 0}
+            />
+          ))}
         </div>
       )}
 
       {/* Score results */}
       {votingMethod === 'score' && data.ranked && (
         <div className="space-y-2">
-          {data.ranked.map(
-            (opt, i) => (
-              <Bar
-                key={opt.id}
-                label={`${i === 0 ? '★ ' : ''}${opt.label} (Ø ${opt.averageScore || 0})`}
-                value={(opt.averageScore || 0) * 20} // scale to percentage
-                max={100}
-                color={i === 0 ? 'bg-amber-500' : 'bg-amber-300'}
-              />
-            )
+          {data.ranked[0] && (
+            <WinnerCard
+              opt={data.ranked[0]}
+              metric={`Ø ${data.ranked[0].averageScore || 0} Sterne`}
+            />
           )}
+          {data.ranked.map((opt, i) => (
+            <Bar
+              key={opt.id}
+              label={`${opt.label} (Ø ${opt.averageScore || 0})`}
+              value={(opt.averageScore || 0) * 20}
+              max={100}
+              color={i === 0 ? 'bg-amber-500' : 'bg-amber-300'}
+              imageUrl={opt.imageUrl}
+              isWinner={i === 0}
+            />
+          ))}
         </div>
       )}
 
       {/* Simple majority results */}
       {votingMethod === 'simple_majority' && data.counts && (
         <div className="space-y-2">
-          {(
-            Object.entries(data.counts) as [SimpleMajorityResponse, number][]
-          ).map(([key, count]) => (
+          {(Object.entries(data.counts) as [SimpleMajorityResponse, number][]).map(([key, count]) => (
             <Bar
               key={key}
               label={SIMPLE_MAJORITY_RESPONSE_CONFIG[key]?.label || key}
               value={count}
               max={data.totalVotes || 0}
-              color={
-                key === 'yes'
-                  ? 'bg-green-400'
-                  : key === 'no'
-                    ? 'bg-red-400'
-                    : 'bg-gray-300'
-              }
+              color={key === 'yes' ? 'bg-green-400' : key === 'no' ? 'bg-red-400' : 'bg-gray-300'}
             />
           ))}
         </div>

@@ -194,7 +194,7 @@ export default function ServicesPage() {
             'description': 'Professional computer repair, web development, data recovery, Linux support, and hardware recycling services.',
             'provider': {
               '@type': 'Organization',
-              'name': 'Revamp-IT',
+              'name': ORG.name,
               'url': ORG.website,
               'logo': `${ORG.website}/logo.png`
             },

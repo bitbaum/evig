@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 
 const CONSENT_KEY = 'cookie_consent'
@@ -15,17 +15,16 @@ const CONSENT_VALUE = 'accepted'
  * Hidden until hydration completes to prevent flash of banner on accepted state.
  */
 export function CookieBanner() {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
+  // Lazy initializer: read localStorage once on mount (client-only).
+  // Falls back to true (show banner) when localStorage is unavailable (SSR, private mode).
+  const [visible, setVisible] = useState(() => {
+    if (typeof window === 'undefined') return false
     try {
-      const accepted = localStorage.getItem(CONSENT_KEY) === CONSENT_VALUE
-      if (!accepted) setVisible(true)
+      return localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE
     } catch {
-      // localStorage unavailable (private mode, SSR edge) — show banner
-      setVisible(true)
+      return true
     }
-  }, [])
+  })
 
   if (!visible) return null
 

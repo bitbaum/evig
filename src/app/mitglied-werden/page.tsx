@@ -64,17 +64,22 @@ async function getMemberStatus() {
   const session = await auth()
   if (!session?.user?.id) return { isLoggedIn: false, isMember: false }
 
-  const [user] = await db
-    .select({ isMember: users.isMember, memberSince: users.memberSince, memberType: users.memberType })
-    .from(users)
-    .where(eq(users.id, session.user.id))
-    .limit(1)
+  try {
+    const [user] = await db
+      .select({ isMember: users.isMember, memberSince: users.memberSince, memberType: users.memberType })
+      .from(users)
+      .where(eq(users.id, session.user.id))
+      .limit(1)
 
-  return {
-    isLoggedIn: true,
-    isMember: user?.isMember ?? false,
-    memberSince: user?.memberSince,
-    memberType: user?.memberType,
+    return {
+      isLoggedIn: true,
+      isMember: user?.isMember ?? false,
+      memberSince: user?.memberSince,
+      memberType: user?.memberType,
+    }
+  } catch {
+    // Membership columns may not exist yet if migration is pending
+    return { isLoggedIn: true, isMember: false }
   }
 }
 

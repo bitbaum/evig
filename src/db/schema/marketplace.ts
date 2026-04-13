@@ -37,7 +37,11 @@ export const listings = pgTable('listings', {
   // CHECK (status IN ('active', 'sold', 'reserved', 'draft', 'removed'))
   status: text('status').notNull().default('active'),
 
-  // RevampIT inventory link (nullable — only for RevampIT's own stock)
+  // RevampIT inventory link — STUB, currently unimplemented.
+  // These columns were designed for a future unified marketplace where RevampIT stock
+  // would appear alongside P2P listings. That was never built.
+  // RevampIT products are served via `marketplace_listings` (inventory.ts) + /api/shop/inventory/,
+  // NOT via this table. Do not write to these columns without first implementing that unified flow.
   isRevampit: boolean('is_revampit').notNull().default(false),
   inventoryItemId: uuid('inventory_item_id').references(() => inventoryItems.id, { onDelete: 'set null' }),
 
@@ -273,9 +277,12 @@ export type SellerProfile = typeof sellerProfiles.$inferSelect
 export type NewSellerProfile = typeof sellerProfiles.$inferInsert
 
 // =============================================================================
-// SELLER APPLICATIONS
+// SELLER APPLICATIONS — DEPRECATED, UNUSED
 // =============================================================================
-// Application workflow for becoming a seller (legacy flow from 006).
+// Legacy application workflow from migration 006. Superseded by auto-creation
+// of seller profiles on first P2P listing (migration 031).
+// Zero references in application code. Retained as schema history only.
+// Do not add new code that writes to or reads from this table.
 
 export const sellerApplications = pgTable('seller_applications', {
   id: uuid('id').primaryKey().defaultRandom(),

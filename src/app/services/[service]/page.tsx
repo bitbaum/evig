@@ -88,7 +88,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               'description': 'Professional data recovery and transfer services for all types of storage media.',
               'provider': {
                 '@type': 'Organization',
-                'name': 'Revamp-IT',
+                'name': ORG.name,
                 'url': ORG.website,
                 'logo': `${ORG.website}/logo.png`,
                 'address': {

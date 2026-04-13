@@ -13,6 +13,7 @@ import {
   User,
   Brain,
 } from 'lucide-react'
+import { ORG } from '@/config/org'
 import {
   getSidebarGroupsWithSections,
   getHirnSection,
@@ -81,7 +82,7 @@ export function AdminSidebar({
           <Link href="/admin" className="flex items-center gap-2">
             <Image
               src="/images/logo/revampit-favicon.png"
-              alt="Revamp-IT"
+              alt={ORG.name}
               width={32}
               height={32}
               className="w-8 h-8 object-contain"
@@ -95,7 +96,7 @@ export function AdminSidebar({
           <Link href="/admin" className="mx-auto">
             <Image
               src="/images/logo/revampit-favicon.png"
-              alt="Revamp-IT"
+              alt={ORG.name}
               width={32}
               height={32}
               className="w-8 h-8 object-contain"

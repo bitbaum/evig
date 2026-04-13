@@ -46,7 +46,7 @@ export const LISTMONK_CONFIG = {
   USERNAME: process.env.LISTMONK_USERNAME || 'admin',
   PASSWORD: process.env.LISTMONK_PASSWORD || 'revampit2024',
   FROM_EMAIL: process.env.LISTMONK_FROM_EMAIL || `noreply@${ORG.emailDomain}`,
-  FROM_NAME: process.env.LISTMONK_FROM_NAME || 'Revamp-IT',
+  FROM_NAME: process.env.LISTMONK_FROM_NAME || ORG.name,
   ENABLED: process.env.LISTMONK_ENABLED === 'true',
 } as const;
 

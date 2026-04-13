@@ -82,7 +82,21 @@ export default function BlogSubmissionsClient() {
   }
 
   useEffect(() => {
-    load()
+    let cancelled = false
+    const fetchSubmissions = async () => {
+      setLoading(true)
+      const result = await apiFetch<ApiResponse>('/api/blog/my-submissions')
+      if (cancelled) return
+      if (result.success && result.data) {
+        setSubmissions(result.data.submissions || [])
+        setError('')
+      } else {
+        setError(result.error || 'Fehler beim Laden Ihrer Einreichungen')
+      }
+      setLoading(false)
+    }
+    fetchSubmissions()
+    return () => { cancelled = true }
   }, [])
 
   const toggleFeedback = (id: string) => {
