@@ -42,9 +42,9 @@ function getNextAction(status: string): string | null {
     case APPROVAL_STATUS.PENDING:
       return 'Wir prüfen deinen Beitrag. Du wirst informiert, sobald eine Entscheidung vorliegt.'
     case APPROVAL_STATUS.APPROVED:
-      return 'Ihr Beitrag wurde genehmigt und wird in Kürze veröffentlicht.'
+      return 'Dein Beitrag wurde genehmigt und wird in Kürze veröffentlicht.'
     case APPROVAL_STATUS.PUBLISHED:
-      return 'Ihr Beitrag ist live.'
+      return 'Dein Beitrag ist live.'
     case APPROVAL_STATUS.REJECTED:
       return 'Dieser Beitrag wurde abgelehnt. Du kannst jederzeit einen neuen Beitrag einreichen.'
     case APPROVAL_STATUS.REQUIRES_CHANGES:

@@ -24,7 +24,7 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
         <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
         <CardTitle className="text-green-800">Buchung erfolgreich!</CardTitle>
         <CardDescription>
-          Ihre Service-Buchung wurde erfolgreich erstellt und bezahlt.
+          Deine Service-Buchung wurde erfolgreich erstellt und bezahlt.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -48,7 +48,7 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
           <Alert>
             <Shield className="h-4 w-4" />
             <AlertDescription>
-              Ihre Zahlung ist durch Escrow geschützt. Die Mittel werden freigegeben,
+              Deine Zahlung ist durch Escrow geschützt. Die Mittel werden freigegeben,
               sobald der Service abgeschlossen ist.
             </AlertDescription>
           </Alert>

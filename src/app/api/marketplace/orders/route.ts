@@ -64,7 +64,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       }
 
       if (listing.seller_id === session.user.id) {
-        throw new OrderValidationError('Sie können Ihr eigenes Inserat nicht kaufen', 403);
+        throw new OrderValidationError('Du kannst dein eigenes Inserat nicht kaufen', 403);
       }
 
       if (data.delivery_method === 'shipping' && listing.delivery_options === 'pickup') {

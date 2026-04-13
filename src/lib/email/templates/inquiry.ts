@@ -63,7 +63,7 @@ export const inquiryConfirmation = (
           <li>Falls wir mehr Informationen brauchen, melden wir uns direkt bei dir.</li>
         </ul>
       </div>
-      <p>In der Zwischenzeit kannst du mehr über uns erfahren auf <a href="https://revamp-it.ch">revamp-it.ch</a>.</p>
+      <p>In der Zwischenzeit kannst du mehr über uns erfahren auf <a href="${ORG.website}">${ORG.emailDomain}</a>.</p>
       <p>Bis bald!<br>Das Revamp-IT Team</p>
     `
   ),

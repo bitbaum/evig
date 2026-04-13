@@ -38,7 +38,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     // Prevent self-report
     if (listing.sellerId === session.user.id) {
-      return apiBadRequest('Sie können Ihr eigenes Inserat nicht melden');
+      return apiBadRequest('Du kannst dein eigenes Inserat nicht melden');
     }
 
     // Insert report (UNIQUE constraint prevents duplicates)

@@ -46,6 +46,38 @@ DATABASE_URL=postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=r
 
 **Never assume local PostgreSQL.** Always check for `DATABASE_URL` in `.env.local`.
 
+### ERP Systems
+
+Two ERP systems exist — do not confuse them:
+
+| System | Status | Purpose | Key column |
+|--------|--------|---------|------------|
+| **Kivitendo** | Legacy (on-premise) | Historical CSV imports; article numbers from old ERP | `kivitendo_article_number` on `ai_extracted_products` + `inventory_items` |
+| **Kivvi** | Current (cloud) | Async sync on erfassung; canonical business record | `kivvi_inventory_item_id` + `kivvi_sync_status` on `inventory_items` |
+
+Kivitendo article numbers are **read-only historical references** for items imported via CSV (`/api/inventory/import-csv`). Never write new Kivitendo article numbers.
+
+Kivvi sync happens non-blocking after erfassung commits via `syncToKivvi()` in `src/lib/kivvi/client.ts`. If Kivvi is not configured (`KIVVI_API_URL` / `KIVVI_API_TOKEN` env vars missing), sync silently skips — expected in dev.
+
+### Storefront Architecture
+
+RevampIT runs **two separate storefronts** — not a unified marketplace:
+
+```
+RevampIT Shop (internal stock)
+  erfassung → ai_extracted_products + inventory_items
+            → marketplace_listings (platform='internal')
+            → /api/shop/inventory/
+
+P2P Marketplace (community)
+  /marketplace/sell → listings (is_revampit=false)
+                    → /api/listings/
+```
+
+**The `listings` table has `is_revampit` and `inventory_item_id` columns, but these are unimplemented stubs.** RevampIT products do NOT appear in the P2P `listings` table. They are served exclusively via `marketplace_listings` + `/api/shop/inventory/`.
+
+Do not attempt to merge the two storefronts without a deliberate architectural decision — both schemas, routes, and UI pages are currently independent.
+
 ## Quick Start
 
 ```bash
@@ -320,4 +352,4 @@ Run `scripts/db/migrations/002-simplified-auth.sql` to add:
 
 ---
 
-**Last Updated**: 2026-04-09
+**Last Updated**: 2026-04-13

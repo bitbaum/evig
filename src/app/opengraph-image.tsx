@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og'
+import { ORG } from '@/config/org'
 
 export const runtime = 'edge'
 export const alt = 'Revamp-IT — Alte Hardware. Neues Leben.'
@@ -35,7 +36,7 @@ export default async function Image() {
           Computer reparieren · Gebrauchte Hardware · Linux & Open Source
         </div>
         <div style={{ fontSize: 22, color: '#9ca3af', marginTop: 44, letterSpacing: 1 }}>
-          revamp-it.ch
+          {ORG.emailDomain}
         </div>
       </div>
     ),

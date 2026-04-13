@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { ORG } from '@/config/org'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -15,6 +16,7 @@ import {
 import Heading from '@/components/ui/Heading'
 import { getSkillById } from '@/config/it-hilfe'
 import { BUDGET_TIERS } from '@/config/it-hilfe'
+import { ORG } from '@/config/org'
 
 interface Service {
   id: string
@@ -55,7 +57,7 @@ interface Props {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ORG.website
 
   try {
     const res = await fetch(`${baseUrl}/api/technicians/${id}`, { cache: 'no-store' })
@@ -74,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TechnikerDetailPage({ params }: Props) {
   const { id } = await params
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://revamp-it.ch'
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ORG.website
 
   const res = await fetch(`${baseUrl}/api/technicians/${id}`, { cache: 'no-store' })
   if (!res.ok) notFound()

@@ -32,9 +32,8 @@ export {
 } from './db-workshops'
 
 // Service queries
-export type { DbServiceAppointment, DbServiceType } from './db-services'
+export type { DbServiceAppointment } from './db-services'
 export {
-  getServiceTypeBySlug,
   getUserServiceAppointments,
   hasPendingAppointmentForService,
 } from './db-services'

@@ -142,7 +142,7 @@ export const PUT = withAuth<{ id: string }>(async (
     const isRepairer = response.targetType === REVIEW_TARGET_TYPES.REPAIRER && response.repairerUserId === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
-      return apiForbidden('Sie können diese Antwort nicht bearbeiten')
+      return apiForbidden('Du kannst diese Antwort nicht bearbeiten')
     }
 
     // Update response
@@ -207,7 +207,7 @@ export const DELETE = withAuth<{ id: string }>(async (
     const isRepairer = responseToDelete.targetType === REVIEW_TARGET_TYPES.REPAIRER && responseToDelete.repairerUserId === session.user.id
 
     if (!isOwner && !isAdmin && !isRepairer) {
-      return apiForbidden('Sie können diese Antwort nicht löschen')
+      return apiForbidden('Du kannst diese Antwort nicht löschen')
     }
 
     // Delete response

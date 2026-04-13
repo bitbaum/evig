@@ -121,8 +121,8 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       sendCustomEmail(
         document.user_email,
         notificationEmail(
-          'Ihr Dokument wurde genehmigt',
-          `Ihr eingereichtes Dokument wurde erfolgreich überprüft und genehmigt.`,
+          'Dein Dokument wurde genehmigt',
+          `Dein eingereichtes Dokument wurde erfolgreich überprüft und genehmigt.`,
         ),
       ).catch((err) =>
         logger.error('Failed to send document approval email', {

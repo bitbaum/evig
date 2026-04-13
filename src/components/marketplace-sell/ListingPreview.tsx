@@ -37,7 +37,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
             Vorschau
           </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            So wird Ihr Inserat im Marketplace angezeigt.
+            So wird dein Inserat im Marketplace angezeigt.
           </p>
         </div>
 

@@ -94,7 +94,7 @@ export function AccountStep({
             value={name}
             onChange={(e) => onNameChange(e.target.value)}
             autoComplete="name"
-            placeholder="Ihr Name"
+            placeholder="Dein Name"
             className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>

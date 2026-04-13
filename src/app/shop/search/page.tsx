@@ -45,7 +45,7 @@ function SearchForm({ initialQuery }: { initialQuery?: string }) {
           type="search"
           name="q"
           defaultValue={initialQuery}
-          placeholder="Was suchen Sie? z.B. Laptop, Monitor, Tastatur..."
+          placeholder="Was suchst du? z.B. Laptop, Monitor, Tastatur..."
           className="w-full pl-12 pr-4 py-4 text-lg border-2 border-gray-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none"
           autoFocus
         />

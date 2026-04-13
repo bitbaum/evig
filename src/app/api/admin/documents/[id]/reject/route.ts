@@ -96,7 +96,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       sendCustomEmail(
         document.user_email,
         notificationEmail(
-          'Ihr Dokument wurde abgelehnt',
+          'Dein Dokument wurde abgelehnt',
           `Dein eingereichtes Dokument wurde leider abgelehnt. Grund: ${rejectionReason}\n\nBei Fragen wende dich bitte an ${CONTACT.supportEmail}.`,
         ),
       ).catch((err) =>

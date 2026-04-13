@@ -26,40 +26,6 @@ export interface DbServiceAppointment {
   updated_at: string | null
 }
 
-export interface DbServiceType {
-  id: string
-  slug: string
-  name: string
-  description: string | null
-  duration_minutes: number | null
-  price_cents: number | null
-  requires_approval: boolean | null
-  is_active: boolean | null
-  created_at: string | null
-}
-
-/**
- * Get service type by slug
- */
-export async function getServiceTypeBySlug(slug: string): Promise<DbServiceType | null> {
-  const rows = await db
-    .select({
-      id: serviceTypes.id,
-      slug: serviceTypes.slug,
-      name: serviceTypes.name,
-      description: serviceTypes.description,
-      duration_minutes: serviceTypes.durationMinutes,
-      price_cents: serviceTypes.priceCents,
-      requires_approval: serviceTypes.requiresApproval,
-      is_active: serviceTypes.isActive,
-      created_at: serviceTypes.createdAt,
-    })
-    .from(serviceTypes)
-    .where(and(eq(serviceTypes.slug, slug), eq(serviceTypes.isActive, true)))
-
-  return rows[0] ?? null
-}
-
 /**
  * Get user's service appointments
  */

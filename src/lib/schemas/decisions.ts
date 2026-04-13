@@ -19,6 +19,7 @@ const optionSchema = z.object({
   id: z.string().optional(),
   label: z.string().min(1),
   description: z.string().optional(),
+  imageUrl: z.string().url().optional().or(z.literal('')).transform(v => v || undefined),
 });
 
 export type DecisionOption = z.infer<typeof optionSchema>;

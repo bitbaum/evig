@@ -25,6 +25,7 @@ import {
   Smartphone,
 } from 'lucide-react'
 import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
+import { ORG, LOCATIONS } from '@/config/org'
 import { CONDITION_COLORS } from '@/config/ui-colors'
 import Heading from '@/components/ui/Heading'
 
@@ -175,7 +176,7 @@ export default function FactSheetPage() {
                   <span className="text-green-600 font-bold text-2xl">R</span>
                 </div>
                 <div>
-                  <Heading level={1} className="text-2xl font-bold tracking-tight">Revamp-IT</Heading>
+                  <Heading level={1} className="text-2xl font-bold tracking-tight">{ORG.name}</Heading>
                   <p className="text-green-100 text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
                 </div>
               </div>
@@ -336,10 +337,10 @@ export default function FactSheetPage() {
           <div className="mt-auto px-8 py-4 bg-gray-50 border-t border-gray-200">
             <div className="flex items-center justify-between text-sm">
               <div className="text-gray-600">
-                <span className="font-medium">Revamp-IT</span> | Genossenschaft für nachhaltige IT
+                <span className="font-medium">{ORG.name}</span> | {ORG.legalForm}
               </div>
               <div className="text-gray-500">
-                revamp-it.ch | Zürich
+                {ORG.emailDomain} | {LOCATIONS.store.city}
               </div>
             </div>
           </div>

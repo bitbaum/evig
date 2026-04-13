@@ -49,7 +49,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                   CSV-Datei auswählen
                 </Heading>
                 <p className="text-gray-600 mb-4">
-                  Lade eine CSV-Datei mit Ihren Produkten hoch
+                  Lade eine CSV-Datei mit deinen Produkten hoch
                 </p>
                 <input
                   type="file"

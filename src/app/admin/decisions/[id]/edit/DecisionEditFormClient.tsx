@@ -18,6 +18,7 @@ interface OptionItem {
   id: string;
   label: string;
   description: string;
+  imageUrl: string;
 }
 
 interface DecisionData {
@@ -50,6 +51,7 @@ export default function DecisionEditFormClient({
   const [description, setDescription] = useState('');
   const [votingMethod, setVotingMethod] = useState<VotingMethod>('simple_majority');
   const [options, setOptions] = useState<OptionItem[]>([]);
+  const [showImageUrls, setShowImageUrls] = useState(false);
   const [blindVoting, setBlindVoting] = useState(true);
   const [dotCount, setDotCount] = useState(DOT_VOTING_DEFAULTS.default);
   const [quorumType, setQuorumType] = useState<'percentage' | 'absolute'>('percentage');
@@ -65,14 +67,19 @@ export default function DecisionEditFormClient({
           setTitle(d.title);
           setDescription(d.description);
           setVotingMethod(d.votingMethod);
-          setOptions(
-            d.options.length > 0
-              ? d.options
-              : [
-                  { id: crypto.randomUUID(), label: '', description: '' },
-                  { id: crypto.randomUUID(), label: '', description: '' },
-                ]
-          );
+          const loadedOptions = d.options.length > 0
+            ? d.options.map((o: { id: string; label: string; description?: string; imageUrl?: string }) => ({
+                id: o.id,
+                label: o.label,
+                description: o.description || '',
+                imageUrl: o.imageUrl || '',
+              }))
+            : [
+                { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+                { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+              ];
+          setOptions(loadedOptions);
+          if (loadedOptions.some((o: OptionItem) => o.imageUrl)) setShowImageUrls(true);
           setBlindVoting(d.blindVoting);
           setDotCount(d.dotCount || DOT_VOTING_DEFAULTS.default);
           setQuorumType(d.quorum.type);
@@ -85,7 +92,7 @@ export default function DecisionEditFormClient({
   function addOption() {
     setOptions([
       ...options,
-      { id: crypto.randomUUID(), label: '', description: '' },
+      { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
     ]);
   }
 
@@ -94,7 +101,7 @@ export default function DecisionEditFormClient({
     setOptions(options.filter((o) => o.id !== id));
   }
 
-  function updateOption(id: string, field: 'label' | 'description', value: string) {
+  function updateOption(id: string, field: 'label' | 'description' | 'imageUrl', value: string) {
     setOptions(options.map((o) => (o.id === id ? { ...o, [field]: value } : o)));
   }
 
@@ -110,7 +117,12 @@ export default function DecisionEditFormClient({
       description,
       decisionType,
       votingMethod,
-      options: needsOptions ? options.filter((o) => o.label.trim()) : [],
+      options: needsOptions
+        ? options.filter((o) => o.label.trim()).map((o) => ({
+            ...o,
+            imageUrl: o.imageUrl.trim() || undefined,
+          }))
+        : [],
       quorum: { type: quorumType, value: quorumValue },
       blindVoting,
       dotCount: votingMethod === 'dot' ? dotCount : null,
@@ -218,36 +230,65 @@ export default function DecisionEditFormClient({
       {/* Options */}
       {needsOptions && (
         <div>
-          <span className="mb-2 block text-sm font-medium text-gray-700">
-            Optionen
-          </span>
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-700">Optionen</span>
+            <label className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-500">
+              <input
+                type="checkbox"
+                checked={showImageUrls}
+                onChange={(e) => setShowImageUrls(e.target.checked)}
+                className="rounded"
+              />
+              Bild-URLs (für visuelle Abstimmung)
+            </label>
+          </div>
           <div className="space-y-2">
             {options.map((opt, i) => (
-              <div key={opt.id} className="flex gap-2">
-                <input
-                  type="text"
-                  value={opt.label}
-                  onChange={(e) => updateOption(opt.id, 'label', e.target.value)}
-                  placeholder={`Option ${i + 1}`}
-                  className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <input
-                  type="text"
-                  value={opt.description}
-                  onChange={(e) =>
-                    updateOption(opt.id, 'description', e.target.value)
-                  }
-                  placeholder="Beschreibung (optional)"
-                  className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeOption(opt.id)}
-                  disabled={options.length <= 2}
-                  className="rounded-md px-2 text-gray-500 hover:text-red-500 disabled:opacity-30"
-                >
-                  &times;
-                </button>
+              <div key={opt.id} className="rounded-md border border-gray-200 p-2">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={opt.label}
+                    onChange={(e) => updateOption(opt.id, 'label', e.target.value)}
+                    placeholder={`Option ${i + 1}`}
+                    className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <input
+                    type="text"
+                    value={opt.description}
+                    onChange={(e) => updateOption(opt.id, 'description', e.target.value)}
+                    placeholder="Beschreibung (optional)"
+                    className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeOption(opt.id)}
+                    disabled={options.length <= 2}
+                    className="rounded-md px-2 text-gray-500 hover:text-red-500 disabled:opacity-30"
+                  >
+                    &times;
+                  </button>
+                </div>
+                {showImageUrls && (
+                  <div className="mt-1.5 flex gap-2">
+                    <input
+                      type="url"
+                      value={opt.imageUrl}
+                      onChange={(e) => updateOption(opt.id, 'imageUrl', e.target.value)}
+                      placeholder="Bild-URL (https://...)"
+                      className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                    {opt.imageUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={opt.imageUrl}
+                        alt=""
+                        className="h-8 w-8 rounded object-contain border border-gray-200"
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>

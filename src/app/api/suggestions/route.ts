@@ -8,7 +8,7 @@ import { NextRequest } from 'next/server'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
-import { CONTACT } from '@/config/org'
+import { CONTACT, ORG } from '@/config/org'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { z } from 'zod'
 
@@ -49,9 +49,9 @@ export async function POST(request: NextRequest) {
     // Send confirmation to submitter if they provided an email (fire-and-forget)
     if (data.contact && data.contact.includes('@')) {
       sendCustomEmail(data.contact, {
-        subject: 'Deine Nachricht wurde empfangen — Revamp-IT',
-        html: `<p>Hallo,</p><p>vielen Dank für deine Nachricht an Revamp-IT. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.</p><p>Deine Nachricht:<br><em>${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}</em></p><p>Mit freundlichen Grüssen,<br>Das Revamp-IT Team</p>`,
-        text: `Hallo,\n\nvielen Dank für deine Nachricht an Revamp-IT. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.\n\nDeine Nachricht:\n${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}\n\nMit freundlichen Grüssen,\nDas Revamp-IT Team`,
+        subject: `Deine Nachricht wurde empfangen — ${ORG.name}`,
+        html: `<p>Hallo,</p><p>vielen Dank für deine Nachricht an ${ORG.name}. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.</p><p>Deine Nachricht:<br><em>${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}</em></p><p>Mit freundlichen Grüssen,<br>Das ${ORG.name} Team</p>`,
+        text: `Hallo,\n\nvielen Dank für deine Nachricht an ${ORG.name}. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.\n\nDeine Nachricht:\n${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}\n\nMit freundlichen Grüssen,\nDas ${ORG.name} Team`,
       }).catch(err => logger.warn('Failed to send suggestion confirmation email', { error: err }))
     }
 

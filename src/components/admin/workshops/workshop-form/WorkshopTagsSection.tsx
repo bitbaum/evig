@@ -34,7 +34,7 @@ export function WorkshopTagsSection({ tags, onAddTag, onRemoveTag }: Props) {
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
           <p className="text-xs text-gray-500 mt-1">
-            Tags helfen Teilnehmern, Ihren Workshop zu finden (z.B. &quot;Linux&quot;, &quot;Reparatur&quot;, &quot;Anfänger&quot;)
+            Tags helfen Teilnehmern, deinen Workshop zu finden (z.B. &quot;Linux&quot;, &quot;Reparatur&quot;, &quot;Anfänger&quot;)
           </p>
         </div>
 

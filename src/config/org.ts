@@ -71,9 +71,11 @@ export const LOCATIONS = {
 // CONTACT
 // ============================================================================
 
+const DEFAULT_CONTACT_EMAIL = 'empfang@revamp-it.ch' as const
+
 export const CONTACT = {
-  email: 'empfang@revamp-it.ch',
-  supportEmail: process.env.SUPPORT_EMAIL || 'empfang@revamp-it.ch',
+  email: DEFAULT_CONTACT_EMAIL,
+  supportEmail: process.env.SUPPORT_EMAIL || DEFAULT_CONTACT_EMAIL,
   phone: '+41 (0)43 960 32 64',
   /** Phone in tel: URI format */
   phoneTel: 'tel:+41439603264',
@@ -122,5 +124,7 @@ export const MEMBERSHIP = {
 export const EXTERNAL_LINKS = {
   shopOnline: 'https://revamp-it.ch/shop',
   shopware: 'https://revamp-it.ch/shop-sw',
+  /** Legacy WordPress shop — used in chatbot and external links */
+  shopLegacy: 'https://www.revamp-it.ch/index.php/de/shop-de',
   wiki: 'https://revamp-it.ch/index.php/de/wiki-de',
 } as const

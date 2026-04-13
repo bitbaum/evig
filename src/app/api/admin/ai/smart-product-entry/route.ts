@@ -21,7 +21,7 @@ import { callWithFallback } from '@/lib/ai/providers'
 import { robustJsonExtract } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY, fillPromptTemplate } from '@/lib/ai/config/prompts'
 
-interface ProductFormData {
+interface AiExtractedProduct {
   title: string
   handle: string
   description: string
@@ -69,7 +69,7 @@ export const POST = withAdmin('products', async (request: NextRequest) => {
     const processingTime = Date.now() - startTime
 
     // Parse JSON from response
-    const productData = robustJsonExtract<ProductFormData>(result.text)
+    const productData = robustJsonExtract<AiExtractedProduct>(result.text)
     if (!productData) {
       logger.error('Failed to parse AI response', { response: result.text.substring(0, 500) })
       return apiError(

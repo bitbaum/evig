@@ -108,14 +108,14 @@ export function getMessage(key: keyof ChatbotMessages, language: Language): Chat
 export function getDefaultSuggestions(language: Language, currentPage: string) {
   if (language === 'de') {
     return [
-      { label: '🛒 Refurbished Computer kaufen', href: 'https://www.revamp-it.ch/index.php/de/shop-de', description: 'Hochwertige aufbereitete Elektronik', external: true },
+      { label: '🛒 Refurbished Computer kaufen', href: EXTERNAL_LINKS.shopLegacy, description: 'Hochwertige aufbereitete Elektronik', external: true },
       { label: '🔧 Computer reparieren lassen', href: '/services', description: 'Professionelle Reparaturen und Upgrades' },
       { label: '💝 Mission unterstützen', href: '/get-involved/donate', description: 'Spenden für nachhaltige IT' },
       { label: '🤝 Freiwillig mithelfen', href: '/get-involved/volunteer', description: 'Teil unseres Teams werden' }
     ]
   } else {
     return [
-      { label: '🛒 Buy Refurbished Computers', href: 'https://www.revamp-it.ch/index.php/de/shop-de', description: 'High-quality refurbished electronics', external: true },
+      { label: '🛒 Buy Refurbished Computers', href: EXTERNAL_LINKS.shopLegacy, description: 'High-quality refurbished electronics', external: true },
       { label: '🔧 Get Computer Repair', href: '/services', description: 'Professional repairs and upgrades' },
       { label: '💝 Support Our Mission', href: '/get-involved/donate', description: 'Donate for sustainable IT' },
       { label: '🤝 Volunteer', href: '/get-involved/volunteer', description: 'Join our team' }
@@ -126,12 +126,12 @@ export function getDefaultSuggestions(language: Language, currentPage: string) {
 export function getContextualSuggestions(page: string, language: Language) {
   const suggestions = {
     '/': language === 'de' ? [
-      { label: '🛒 Refurbished Computer kaufen', href: 'https://www.revamp-it.ch/index.php/de/shop-de', description: 'Hochwertige aufbereitete Elektronik', external: true },
+      { label: '🛒 Refurbished Computer kaufen', href: EXTERNAL_LINKS.shopLegacy, description: 'Hochwertige aufbereitete Elektronik', external: true },
       { label: '🔧 Computer reparieren lassen', href: '/services', description: 'Professionelle Reparaturen und Upgrades' },
       { label: '💝 Mission unterstützen', href: '/get-involved/donate', description: 'Spenden für nachhaltige IT' },
       { label: '🤝 Freiwillig mithelfen', href: '/get-involved/volunteer', description: 'Teil unseres Teams werden' }
     ] : [
-      { label: '🛒 Buy Refurbished Computers', href: 'https://www.revamp-it.ch/index.php/de/shop-de', description: 'High-quality refurbished electronics', external: true },
+      { label: '🛒 Buy Refurbished Computers', href: EXTERNAL_LINKS.shopLegacy, description: 'High-quality refurbished electronics', external: true },
       { label: '🔧 Get Computer Repair', href: '/services', description: 'Professional repairs and upgrades' },
       { label: '💝 Support Our Mission', href: '/get-involved/donate', description: 'Donate for sustainable IT' },
       { label: '🤝 Volunteer', href: '/get-involved/volunteer', description: 'Join our team' }
