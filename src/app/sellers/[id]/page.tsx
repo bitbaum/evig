@@ -18,6 +18,7 @@ import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 interface SellerProfile {
   id: string
@@ -192,12 +193,11 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         </Heading>
 
         {seller.listings.length === 0 ? (
-          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-            <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-            <p className="text-gray-500 dark:text-gray-400">
-              Dieser Verkäufer hat momentan keine aktiven Inserate.
-            </p>
-          </div>
+          <EmptyState
+            icon={Package}
+            title="Keine aktiven Inserate"
+            description="Dieser Verkäufer hat momentan keine aktiven Inserate."
+          />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {seller.listings.map((listing) => {

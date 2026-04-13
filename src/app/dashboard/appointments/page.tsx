@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
+import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
 import { formatDateTime } from '@/lib/date-formats'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
@@ -305,21 +306,21 @@ export default function AppointmentsDashboard() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 text-center">
-            <Calendar className="w-12 h-12 sm:w-16 sm:h-16 text-neutral-300 mx-auto mb-4" />
-            <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
-              Noch keine Termine
-            </Heading>
-            <p className="text-neutral-600 mb-6 text-sm sm:text-base">
-              Du hast noch keine Service-Termine gebucht.
-            </p>
-            <Link
-              href="/services"
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target font-medium"
-            >
-              Dienstleistungen entdecken
-            </Link>
-          </div>
+          <EmptyState
+            icon={Calendar}
+            iconBg="bg-teal-50 dark:bg-teal-900/20"
+            iconColor="text-teal-500 dark:text-teal-400"
+            title="Noch keine Termine"
+            description="Du hast noch keine Service-Termine gebucht."
+            action={
+              <Link
+                href="/services"
+                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Dienstleistungen entdecken
+              </Link>
+            }
+          />
         )}
       </div>
       <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title="Termindetails bearbeiten">

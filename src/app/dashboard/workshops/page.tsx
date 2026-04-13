@@ -3,7 +3,8 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
-import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft, LogIn } from 'lucide-react'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
@@ -137,18 +138,19 @@ export default function WorkshopsDashboard() {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <Heading level={1} className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</Heading>
-            <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Bitte melde dich an, um deine Workshop-Anmeldungen zu sehen.
-            </p>
-            <Link
-              href="/auth/login"
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
-            >
-              Anmelden
-            </Link>
-          </div>
+          <EmptyState
+            icon={LogIn}
+            title="Anmeldung erforderlich"
+            description="Bitte melde dich an, um deine Workshop-Anmeldungen zu sehen."
+            action={
+              <Link
+                href="/auth/login"
+                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Anmelden
+              </Link>
+            }
+          />
         </div>
       </div>
     )
@@ -273,21 +275,21 @@ export default function WorkshopsDashboard() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <Heading level={3} className="text-xl font-semibold text-gray-900 mb-2">
-              Noch keine Workshop-Anmeldungen
-            </Heading>
-            <p className="text-gray-600 mb-6">
-              Du hast dich noch für keine Workshops angemeldet.
-            </p>
-            <Link
-              href="/workshops"
-              className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
-            >
-              Workshops entdecken
-            </Link>
-          </div>
+          <EmptyState
+            icon={Calendar}
+            iconBg="bg-green-50 dark:bg-green-900/20"
+            iconColor="text-green-600 dark:text-green-400"
+            title="Noch keine Workshop-Anmeldungen"
+            description="Du hast dich noch für keine Workshops angemeldet."
+            action={
+              <Link
+                href="/workshops"
+                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Workshops entdecken
+              </Link>
+            }
+          />
         )}
       </div>
 

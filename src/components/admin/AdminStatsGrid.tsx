@@ -1,12 +1,22 @@
 import type { LucideIcon } from 'lucide-react'
+import { adminIconBox, adminIconColor, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 
 export interface StatCardItem {
   icon: LucideIcon
-  iconBgColor: string
-  iconColor: string
+  /** Semantic color key from adminIconColor */
+  color?: AdminIconColorKey
+  /** @deprecated use color instead */
+  iconBgColor?: string
+  /** @deprecated use color instead */
+  iconColor?: string
   label: string
   value: number | string
+  /** Optional override for the value text color */
   valueColor?: string
+  /** Optional trend or secondary text below label */
+  trend?: string
+  trendColor?: 'green' | 'red' | 'amber'
 }
 
 interface AdminStatsGridProps {
@@ -21,23 +31,43 @@ const GRID_COLS: Record<2 | 3 | 4 | 5, string> = {
   5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
 }
 
+const TREND_COLOR = {
+  green: 'text-green-600 dark:text-green-400',
+  red:   'text-red-600 dark:text-red-400',
+  amber: 'text-amber-600 dark:text-amber-400',
+}
+
 export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
   return (
     <div className={`grid ${GRID_COLS[columns]} gap-4`}>
       {items.map((item, index) => {
         const Icon = item.icon
-        const valueColor = item.valueColor ?? 'text-gray-900'
+        // Resolve color: new API (color key) takes priority over deprecated raw strings
+        const colorClasses = item.color
+          ? adminIconColor[item.color]
+          : `${item.iconBgColor ?? 'bg-gray-100'} ${item.iconColor ?? 'text-gray-600'}`
+        const valueColor = item.valueColor ?? ''
+
         return (
-          <div key={index} className="bg-white rounded-lg border p-4">
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-10 h-10 ${item.iconBgColor} rounded-lg flex items-center justify-center`}
-              >
-                <Icon className={`w-5 h-5 ${item.iconColor}`} />
+          <div
+            key={index}
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"
+          >
+            <div className="flex items-start gap-3">
+              {/* Icon box */}
+              <div className={cn(adminIconBox.sm, colorClasses)}>
+                <Icon className={adminIconBox.icon} />
               </div>
-              <div>
-                <p className={`text-2xl font-bold ${valueColor}`}>{item.value}</p>
-                <p className="text-sm text-gray-600">{item.label}</p>
+
+              {/* Value + label */}
+              <div className="min-w-0">
+                <p className={cn(adminType.stat, valueColor)}>{item.value}</p>
+                <p className={adminType.statLabel}>{item.label}</p>
+                {item.trend && (
+                  <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-gray-400')}>
+                    {item.trend}
+                  </p>
+                )}
               </div>
             </div>
           </div>

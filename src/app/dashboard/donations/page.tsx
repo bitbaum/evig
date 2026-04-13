@@ -2,7 +2,8 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt } from 'lucide-react'
+import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react'
+import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
@@ -127,20 +128,19 @@ export default function DonationsDashboard() {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <Heading level={1} className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>
-              Anmeldung erforderlich
-            </Heading>
-            <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Bitte melde dich an, um deine Spenden zu sehen.
-            </p>
-            <Link
-              href="/auth/login"
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
-            >
-              Anmelden
-            </Link>
-          </div>
+          <EmptyState
+            icon={LogIn}
+            title="Anmeldung erforderlich"
+            description="Bitte melde dich an, um deine Spenden zu sehen."
+            action={
+              <Link
+                href="/auth/login"
+                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Anmelden
+              </Link>
+            }
+          />
         </div>
       </div>
     )
@@ -235,21 +235,21 @@ export default function DonationsDashboard() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <Heart className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <Heading level={3} className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
-              Noch keine Spenden erfasst
-            </Heading>
-            <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              deine Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden.
-            </p>
-            <Link
-              href="/get-involved/donate"
-              className="inline-block bg-success-600 text-white px-6 py-3 rounded-lg hover:bg-success-700 transition-colors"
-            >
-              Jetzt spenden
-            </Link>
-          </div>
+          <EmptyState
+            icon={Heart}
+            iconBg="bg-rose-50 dark:bg-rose-900/20"
+            iconColor="text-rose-500 dark:text-rose-400"
+            title="Noch keine Spenden erfasst"
+            description="Deine Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden."
+            action={
+              <Link
+                href="/get-involved/donate"
+                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+              >
+                Jetzt spenden
+              </Link>
+            }
+          />
         )}
 
         {/* Info Box */}

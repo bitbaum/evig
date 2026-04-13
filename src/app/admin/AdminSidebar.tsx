@@ -77,18 +77,18 @@ export function AdminSidebar({
       } ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
     >
       {/* Sidebar Header */}
-      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex items-center justify-between h-14 px-3 border-b border-gray-200 dark:border-gray-700">
         {!sidebarCollapsed && (
-          <Link href="/admin" className="flex items-center gap-2">
+          <Link href="/admin" className="flex items-center gap-2.5 min-w-0">
             <Image
               src="/images/logo/revampit-favicon.png"
               alt={ORG.name}
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain"
+              width={28}
+              height={28}
+              className="w-7 h-7 object-contain flex-shrink-0"
             />
-            <span className="text-lg font-bold text-gray-900 dark:text-white">
-              Admin
+            <span className="text-sm font-bold text-gray-900 dark:text-white tracking-tight">
+              RevampIT Admin
             </span>
           </Link>
         )}
@@ -97,16 +97,16 @@ export function AdminSidebar({
             <Image
               src="/images/logo/revampit-favicon.png"
               alt={ORG.name}
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain"
+              width={28}
+              height={28}
+              className="w-7 h-7 object-contain"
             />
           </Link>
         )}
 
         <button
           onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="hidden lg:flex w-10 h-10 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          className="hidden lg:flex w-8 h-8 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0"
         >
           {sidebarCollapsed ? (
             <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-400" />
@@ -117,14 +117,14 @@ export function AdminSidebar({
 
         <button
           onClick={() => setMobileMenuOpen(false)}
-          className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+          className="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
         >
           <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </button>
       </div>
 
       {/* Navigation */}
-      <nav className="mt-2 px-3 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+      <nav className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
         {groupedSections.map(({ group, sections }) => {
           const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
           if (accessibleGroupSections.length === 0) return null
@@ -137,15 +137,15 @@ export function AdminSidebar({
               {!sidebarCollapsed && (
                 <button
                   onClick={() => toggleGroup(group.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-lg transition-colors ${
+                  className={`w-full flex items-center justify-between px-2 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-lg transition-colors ${
                     hasActive
-                      ? 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                      ? 'text-green-700 dark:text-green-400'
+                      : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
                   }`}
                 >
                   <span>{group.label}</span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
+                    className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
                   />
                 </button>
               )}
@@ -163,22 +163,22 @@ export function AdminSidebar({
                         key={section.path}
                         href={section.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                        className={`flex items-center gap-2.5 px-2 py-1.5 rounded-lg transition-colors ${
                           sidebarCollapsed ? 'justify-center' : ''
                         } ${
                           active
                             ? 'bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                            : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                         }`}
                         title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
                       >
-                        <Icon className={`w-5 h-5 flex-shrink-0 ${active ? 'text-green-600' : ''}`} />
+                        <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-green-600' : 'text-gray-400 dark:text-gray-500'}`} />
                         {!sidebarCollapsed && (
-                          <span className="flex-1 text-sm font-medium flex items-center gap-2">
+                          <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
                             {section.ui.label}
                             {sensitive && (
                               <span title={sensitivityReason}>
-                                <Shield className="w-3.5 h-3.5 text-amber-500" />
+                                <Shield className="w-3 h-3 text-amber-400" />
                               </span>
                             )}
                           </span>
@@ -221,46 +221,31 @@ export function AdminSidebar({
         )}
 
         {/* Website links */}
-        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
           {!sidebarCollapsed && (
-            <p className="px-3 mb-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <p className="px-2 mb-1 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
               Website
             </p>
           )}
-          <div className="space-y-1">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
-                sidebarCollapsed ? 'justify-center' : ''
-              }`}
-              title={sidebarCollapsed ? 'Startseite' : undefined}
-            >
-              <Home className="w-5 h-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span className="text-sm">Startseite</span>}
-            </Link>
-            <Link
-              href="/shop"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
-                sidebarCollapsed ? 'justify-center' : ''
-              }`}
-              title={sidebarCollapsed ? 'Shop' : undefined}
-            >
-              <Store className="w-5 h-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span className="text-sm">Shop</span>}
-            </Link>
-            <Link
-              href="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${
-                sidebarCollapsed ? 'justify-center' : ''
-              }`}
-              title={sidebarCollapsed ? 'Mein Bereich' : undefined}
-            >
-              <User className="w-5 h-5 flex-shrink-0" />
-              {!sidebarCollapsed && <span className="text-sm">Mein Bereich</span>}
-            </Link>
+          <div className="space-y-0.5">
+            {[
+              { href: '/', icon: Home, label: 'Startseite' },
+              { href: '/shop', icon: Store, label: 'Shop' },
+              { href: '/dashboard', icon: User, label: 'Mein Bereich' },
+            ].map(({ href, icon: Icon, label }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`flex items-center gap-2.5 px-2 py-1.5 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-lg transition-colors ${
+                  sidebarCollapsed ? 'justify-center' : ''
+                }`}
+                title={sidebarCollapsed ? label : undefined}
+              >
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {!sidebarCollapsed && <span className="text-sm">{label}</span>}
+              </Link>
+            ))}
           </div>
         </div>
       </nav>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { Vote, MessageSquare, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 import {
   DECISION_STATUS,
   DECISION_STATUS_CONFIG,
@@ -16,6 +17,10 @@ import {
 import { formatDeadline } from '@/lib/utils/date';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Pagination } from '@/components/ui/Pagination';
+import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { adminSurface, adminTable, adminForm, adminType } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
 
 interface DecisionListItem {
@@ -59,7 +64,7 @@ export default function DecisionListClient({
   useEffect(() => {
     let cancelled = false;
 
-    const loadDecisions = async () => {
+    async function loadDecisions() {
       setLoading(true);
       setErrorMessage(null);
 
@@ -87,25 +92,17 @@ export default function DecisionListClient({
           setDecisions([]);
           setTotal(0);
           setErrorMessage(
-            error instanceof Error
-              ? error.message
-              : 'Entscheidungen konnten nicht geladen werden.'
+            error instanceof Error ? error.message : 'Entscheidungen konnten nicht geladen werden.'
           );
         }
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
-    };
+    }
 
     void loadDecisions();
-
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [statusFilter, typeFilter, page, reloadToken]);
-
 
   async function handleDelete() {
     if (!deleteTarget) return;
@@ -128,140 +125,131 @@ export default function DecisionListClient({
   }
 
   return (
-    <div>
-      {/* Stats — always reflect full DB counts, independent of active filters */}
-      <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-amber-600">{stats.voting}</p>
-          <p className="text-xs text-gray-500">Aktive Abstimmungen</p>
-        </div>
-        <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-blue-600">{stats.discussion}</p>
-          <p className="text-xs text-gray-500">Offene Diskussionen</p>
-        </div>
-        <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-green-600">{stats.closed}</p>
-          <p className="text-xs text-gray-500">Abgeschlossen</p>
-        </div>
-        <div className="rounded-lg bg-white p-4 border">
-          <p className="text-2xl font-bold text-red-600">{stats.pendingVotes}</p>
-          <p className="text-xs text-gray-500">Deine ausstehenden Stimmen</p>
-        </div>
-      </div>
+    <div className="space-y-4">
+      {/* Stats — full DB counts, independent of active filters */}
+      <AdminStatsGrid
+        columns={4}
+        items={[
+          { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-amber-600 dark:text-amber-400' },
+          { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-blue-600 dark:text-blue-400' },
+          { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-green-600 dark:text-green-400' },
+          { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-red-600 dark:text-red-400' },
+        ]}
+      />
 
       {/* Filters */}
-      <div className="mb-4 flex gap-3">
+      <div className="flex flex-wrap gap-2">
         <select
           value={statusFilter}
           onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-          className="rounded-md border border-gray-300 px-3 py-1.5 text-sm"
+          className={adminForm.select}
         >
           <option value="">Alle Status</option>
           {DECISION_STATUSES.map((s) => (
-            <option key={s} value={s}>
-              {DECISION_STATUS_CONFIG[s].label}
-            </option>
+            <option key={s} value={s}>{DECISION_STATUS_CONFIG[s].label}</option>
           ))}
         </select>
         <select
           value={typeFilter}
           onChange={(e) => { setTypeFilter(e.target.value); setPage(1); }}
-          className="rounded-md border border-gray-300 px-3 py-1.5 text-sm"
+          className={adminForm.select}
         >
           <option value="">Alle Typen</option>
           {DECISION_TYPES.map((t) => (
-            <option key={t} value={t}>
-              {DECISION_TYPE_CONFIG[t].label}
-            </option>
+            <option key={t} value={t}>{DECISION_TYPE_CONFIG[t].label}</option>
           ))}
         </select>
       </div>
 
-      {/* Table */}
+      {/* Content */}
       {loading ? (
-        <div className="py-12 text-center text-gray-500">Laden...</div>
+        <div className={cn(adminSurface.card, 'py-12 text-center', adminType.meta)}>
+          Laden...
+        </div>
       ) : errorMessage ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
-          <p className="text-sm font-medium text-red-700">{errorMessage}</p>
-          <button
+        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 p-6 text-center">
+          <p className="text-sm font-medium text-red-700 dark:text-red-400">{errorMessage}</p>
+          <AdminButton
+            variant="danger"
+            className="mt-3"
             onClick={() => setReloadToken((prev) => prev + 1)}
-            className="mt-3 inline-flex items-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-700"
           >
             Erneut versuchen
-          </button>
+          </AdminButton>
         </div>
       ) : decisions.length === 0 ? (
-        <div className="rounded-lg bg-white py-12 text-center shadow-sm">
-          <p className="text-gray-500">Keine Entscheidungen gefunden</p>
-          <Link
-            href="/admin/decisions/new"
-            className="mt-2 inline-block text-sm text-blue-600 hover:underline"
-          >
+        <div className={cn(adminSurface.card, 'py-12 text-center')}>
+          <p className={adminType.meta}>Keine Entscheidungen gefunden</p>
+          <AdminButton variant="action" href="/admin/decisions/new" className="mt-3">
             Ersten Vorschlag erstellen
-          </Link>
+          </AdminButton>
         </div>
       ) : (
-        <div className="overflow-hidden overflow-x-auto rounded-lg bg-white border">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b bg-gray-50 text-xs uppercase text-gray-500">
+        <div className={adminSurface.table}>
+          <table className="w-full text-left">
+            <thead className={adminTable.thead}>
               <tr>
-                <th className="px-4 py-3">Titel</th>
-                <th className="px-4 py-3">Typ</th>
-                <th className="px-4 py-3">Methode</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Frist</th>
-                <th className="px-4 py-3">Beteiligung</th>
-                <th className="px-4 py-3">Erstellt von</th>
-                <th className="px-4 py-3"></th>
+                <th className={adminTable.th}>Titel</th>
+                <th className={cn(adminTable.th, 'hidden md:table-cell')}>Typ</th>
+                <th className={cn(adminTable.th, 'hidden lg:table-cell')}>Methode</th>
+                <th className={adminTable.th}>Status</th>
+                <th className={cn(adminTable.th, 'hidden sm:table-cell')}>Frist</th>
+                <th className={cn(adminTable.th, 'hidden sm:table-cell')}>Stimmen</th>
+                <th className={cn(adminTable.th, 'hidden lg:table-cell')}>Erstellt von</th>
+                <th className={adminTable.th}></th>
               </tr>
             </thead>
-            <tbody className="divide-y">
+            <tbody>
               {decisions.map((d) => {
                 const statusConf = DECISION_STATUS_CONFIG[d.status];
-                const deadline =
-                  d.status === DECISION_STATUS.VOTING
-                    ? d.votingDeadline
-                    : d.discussionDeadline;
+                const deadline = d.status === DECISION_STATUS.VOTING
+                  ? d.votingDeadline
+                  : d.discussionDeadline;
 
                 return (
-                  <tr key={d.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
+                  <tr key={d.id} className={adminTable.tr}>
+                    <td className={adminTable.td}>
                       <Link
                         href={`/admin/decisions/${d.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                       >
                         {d.title}
                       </Link>
+                      {d.hasUserVoted && (
+                        <span className="ml-2 text-xs text-green-600 dark:text-green-400">✓ abgestimmt</span>
+                      )}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className={cn(adminTable.td, 'hidden md:table-cell')}>
                       {DECISION_TYPE_CONFIG[d.decisionType]?.label || d.decisionType}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className={cn(adminTable.td, 'hidden lg:table-cell')}>
                       {VOTING_METHOD_CONFIG[d.votingMethod]?.label || d.votingMethod}
                     </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${statusConf?.color || ''}`}
-                      >
+                    <td className={adminTable.td}>
+                      <span className={cn(
+                        'inline-block rounded-full px-2 py-0.5 text-xs font-medium',
+                        statusConf?.color || ''
+                      )}>
                         {statusConf?.label || d.status}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>
                       {formatDeadline(deadline)}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
-                      {d.voteCount} Stimmen
+                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>
+                      {d.voteCount}
                     </td>
-                    <td className="px-4 py-3 text-gray-600">
+                    <td className={cn(adminTable.td, 'hidden lg:table-cell')}>
                       {d.creator.email}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className={adminTable.td}>
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
                         <button
                           onClick={() => setDeleteTarget(d)}
-                          className="text-xs text-red-600 hover:text-red-800 hover:underline"
+                          className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 rounded"
+                          title="Löschen"
                         >
-                          Löschen
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       )}
                     </td>
@@ -274,7 +262,7 @@ export default function DecisionListClient({
       )}
 
       {!loading && !errorMessage && total > DECISIONS_PAGE_SIZE && (
-        <div className="mt-4 bg-white border rounded-lg overflow-hidden">
+        <div className={cn(adminSurface.card, 'overflow-hidden')}>
           <Pagination
             currentPage={page}
             totalPages={Math.ceil(total / DECISIONS_PAGE_SIZE)}
@@ -286,7 +274,7 @@ export default function DecisionListClient({
       )}
 
       {deleteError && (
-        <div className="mt-3 rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
           {deleteError}
         </div>
       )}
@@ -301,10 +289,7 @@ export default function DecisionListClient({
         variant="danger"
         isLoading={deleting}
         onConfirm={handleDelete}
-        onClose={() => {
-          setDeleteTarget(null);
-          setDeleteError(null);
-        }}
+        onClose={() => { setDeleteTarget(null); setDeleteError(null); }}
       />
     </div>
   );

@@ -204,8 +204,8 @@ export default function SellerProfileEditPage() {
                   </button>
                 </div>
               ) : (
-                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-                  <User className="w-6 h-6 text-gray-400" />
+                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center border border-gray-200 dark:border-gray-600">
+                  <User className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 </div>
               )}
               <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">

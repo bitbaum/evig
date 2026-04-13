@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
@@ -123,21 +124,21 @@ export default function FavoritesPage() {
       )}
 
       {!isLoading && !error && favorites.length === 0 && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <Heart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Noch keine Favoriten
-          </Heading>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Klicke auf das Herz-Symbol bei einem Inserat, um es hier zu speichern.
-          </p>
-          <Link
-            href="/marketplace"
-            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
-          >
-            Marketplace durchsuchen
-          </Link>
-        </div>
+        <EmptyState
+          icon={Heart}
+          iconBg="bg-rose-50 dark:bg-rose-900/20"
+          iconColor="text-rose-500 dark:text-rose-400"
+          title="Noch keine Favoriten"
+          description="Klicke auf das Herz-Symbol bei einem Inserat, um es hier zu speichern."
+          action={
+            <Link
+              href="/marketplace"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+            >
+              Marketplace durchsuchen
+            </Link>
+          }
+        />
       )}
 
       {!isLoading && !error && favorites.length > 0 && (

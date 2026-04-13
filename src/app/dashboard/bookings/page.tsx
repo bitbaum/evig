@@ -14,6 +14,7 @@ import { BOOKING_STATUS_BADGES } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 interface Appointment {
   id: string
@@ -180,16 +181,20 @@ export default function CustomerBookings() {
         {/* Appointments List */}
         <div className="space-y-4">
           {filteredAppointments.length === 0 ? (
-            <div className="bg-white rounded-lg p-8 text-center">
-              <Wrench className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
-              <p className="text-neutral-500 mb-4">Keine Buchungen in dieser Kategorie</p>
-              <Link
-                href="/techniker"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
-                Techniker finden
-              </Link>
-            </div>
+            <EmptyState
+              icon={Wrench}
+              iconBg="bg-blue-50 dark:bg-blue-900/20"
+              iconColor="text-blue-500 dark:text-blue-400"
+              title="Keine Buchungen in dieser Kategorie"
+              action={
+                <Link
+                  href="/techniker"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                >
+                  Techniker finden
+                </Link>
+              }
+            />
           ) : (
             filteredAppointments.map(apt => (
               <div key={apt.id} className="bg-white rounded-lg shadow-sm border p-4 md:p-6">

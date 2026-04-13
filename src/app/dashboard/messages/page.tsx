@@ -11,6 +11,7 @@ import MessageThread from '@/components/messages/MessageThread'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 function MessagesContent() {
   const { data: session, status: sessionStatus } = useSession()
@@ -85,21 +86,21 @@ function MessagesContent() {
       </div>
 
       {conversations.length === 0 ? (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <MessageSquare className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
-          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Keine Nachrichten
-          </Heading>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Stöbere im Marketplace und kontaktiere Verkäufer, um eine Konversation zu starten.
-          </p>
-          <Link
-            href="/marketplace"
-            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-          >
-            Zum Marketplace
-          </Link>
-        </div>
+        <EmptyState
+          icon={MessageSquare}
+          iconBg="bg-blue-50 dark:bg-blue-900/20"
+          iconColor="text-blue-500 dark:text-blue-400"
+          title="Keine Nachrichten"
+          description="Stöbere im Marketplace und kontaktiere Verkäufer, um eine Konversation zu starten."
+          action={
+            <Link
+              href="/marketplace"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+            >
+              Zum Marketplace
+            </Link>
+          }
+        />
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
           <div className="flex h-full">

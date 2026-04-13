@@ -16,6 +16,7 @@ import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF } from '@/config/marketpla
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 interface OrderItem {
   id: string
@@ -141,25 +142,27 @@ export default function DashboardOrdersPage() {
           <Loader2 className="w-6 h-6 text-green-600 animate-spin" />
         </div>
       ) : orders.length === 0 ? (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl">
-          <ShoppingBag className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
-          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-1">
-            Noch keine Bestellungen
-          </Heading>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
-            {role === 'buyer'
+        <EmptyState
+          icon={ShoppingBag}
+          iconBg="bg-green-50 dark:bg-green-900/20"
+          iconColor="text-green-600 dark:text-green-400"
+          title="Noch keine Bestellungen"
+          description={
+            role === 'buyer'
               ? 'Stöbere im Marketplace und finde tolle Angebote.'
-              : 'Sobald jemand eines deiner Inserate kauft, erscheint die Bestellung hier.'}
-          </p>
-          {role === 'buyer' && (
-            <Link
-              href="/marketplace"
-              className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors"
-            >
-              Zum Marketplace
-            </Link>
-          )}
-        </div>
+              : 'Sobald jemand eines deiner Inserate kauft, erscheint die Bestellung hier.'
+          }
+          action={
+            role === 'buyer' ? (
+              <Link
+                href="/marketplace"
+                className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors"
+              >
+                Zum Marketplace
+              </Link>
+            ) : undefined
+          }
+        />
       ) : (
         <div className="space-y-3">
           {orders.map(order => {

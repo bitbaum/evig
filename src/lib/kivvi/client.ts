@@ -190,6 +190,47 @@ export async function createKivviInvoice(
 }
 
 // ============================================================================
+// DOCUMENT STATUS TRANSITIONS
+// ============================================================================
+
+/**
+ * Transition a Kivvi document to a new status (e.g. "sent", "paid").
+ * Use this after creating an invoice to trigger GL entries ("sent") and
+ * to close the accounting loop after payment is confirmed.
+ */
+export async function updateKivviDocumentStatus(
+  kivviDocumentId: string,
+  status: string,
+): Promise<KivviDocument> {
+  return kivviFetch<KivviDocument>(`/documents/${kivviDocumentId}`, {
+    method: "PUT",
+    body: JSON.stringify({ status }),
+  });
+}
+
+export interface RecordKivviPaymentInput {
+  amount: string;
+  date: string; // YYYY-MM-DD
+  method?: "bank_transfer" | "cash" | "card" | "payrexx" | "other";
+  reference?: string;
+}
+
+/**
+ * Record a payment against a Kivvi invoice.
+ * The invoice must already be in "sent" or "partially_paid" status.
+ * This creates the GL entry: Debit 1020 (Bank) / Credit 1100 (AR).
+ */
+export async function recordKivviPayment(
+  kivviDocumentId: string,
+  input: RecordKivviPaymentInput,
+): Promise<{ id: string }> {
+  return kivviFetch<{ id: string }>(`/documents/${kivviDocumentId}/payments`, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+// ============================================================================
 // SYNC HELPER — safe wrapper with error handling for use in erfassung flow
 // ============================================================================
 

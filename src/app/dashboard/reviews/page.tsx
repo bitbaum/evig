@@ -16,6 +16,7 @@ import {
 import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 
 const STATUS_STYLES: Record<string, string> = {
   published: 'bg-green-100 text-green-800',
@@ -316,13 +317,13 @@ export default function UserReviewsPage() {
       {/* Reviews List */}
       <div className="space-y-4">
         {reviews.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-            <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Noch keine Bewertungen</Heading>
-            <p className="text-gray-600 mb-4">
-              Du hast noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen.
-            </p>
-          </div>
+          <EmptyState
+            icon={MessageSquare}
+            iconBg="bg-amber-50 dark:bg-amber-900/20"
+            iconColor="text-amber-500 dark:text-amber-400"
+            title="Noch keine Bewertungen"
+            description="Du hast noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen."
+          />
         ) : (
           reviews.map((review) => (
             <ReviewCard

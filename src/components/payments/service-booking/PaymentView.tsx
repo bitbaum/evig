@@ -6,6 +6,7 @@
 
 import { CreditCard } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { EmptyState } from '@/components/ui/EmptyState'
 import type { PaymentResult } from '@/types/common'
 import type { ServiceInfo, PaymentData } from './types'
 
@@ -57,15 +58,13 @@ export function PaymentView({
         </div>
 
         {/* Placeholder until payment provider is integrated */}
-        <div className="text-center py-8 border border-dashed border-gray-300 rounded-lg">
-          <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-          <p className="text-gray-600 mb-2">
-            Online-Zahlung wird bald verfügbar sein
-          </p>
-          <p className="text-sm text-gray-500">
-            Kontaktiere uns direkt für Buchungen
-          </p>
-        </div>
+        <EmptyState
+          icon={CreditCard}
+          iconBg="bg-orange-50 dark:bg-orange-900/20"
+          iconColor="text-orange-500 dark:text-orange-400"
+          title="Online-Zahlung wird bald verfügbar sein"
+          description="Kontaktiere uns direkt für Buchungen."
+        />
       </CardContent>
     </Card>
   )

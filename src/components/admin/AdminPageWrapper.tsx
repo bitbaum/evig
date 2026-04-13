@@ -1,29 +1,24 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-
-const ICON_COLOR_CLASSES = {
-  blue: 'bg-blue-100 text-blue-600',
-  indigo: 'bg-indigo-100 text-indigo-600',
-  purple: 'bg-purple-100 text-purple-600',
-  orange: 'bg-orange-100 text-orange-600',
-  green: 'bg-green-100 text-green-600',
-  red: 'bg-red-100 text-red-600',
-  teal: 'bg-teal-100 text-teal-600',
-  gray: 'bg-gray-100 text-gray-600',
-} as const
+import { adminIconBox, adminIconColor, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
+import { cn } from '@/lib/utils'
 
 interface AdminPageWrapperProps {
   title: string
   description?: string
   icon?: LucideIcon
-  iconColor?: keyof typeof ICON_COLOR_CLASSES
+  iconColor?: AdminIconColorKey
   backButton?: { href: string; label: string }
   actions?: React.ReactNode
   children: React.ReactNode
 }
 
+/**
+ * Standard admin page shell.
+ * Provides: back link, icon, title, description, and right-side actions slot.
+ * Used by all admin pages — changing this cascades to the whole admin UI.
+ */
 export default function AdminPageWrapper({
   title,
   description,
@@ -34,42 +29,41 @@ export default function AdminPageWrapper({
   children,
 }: AdminPageWrapperProps) {
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-4 min-w-0">
-          {backButton && (
-            <>
+    <div className="space-y-5">
+      {/* Page Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start gap-3 min-w-0">
+          {/* Icon box */}
+          {Icon && (
+            <div className={cn(adminIconBox.md, adminIconColor[iconColor], 'mt-0.5')}>
+              <Icon className={adminIconBox.iconMd} />
+            </div>
+          )}
+
+          <div className="min-w-0">
+            {/* Back link — above the title, low visual weight */}
+            {backButton && (
               <Link
                 href={backButton.href}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors shrink-0"
+                className="inline-flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors mb-1"
               >
-                <ArrowLeft className="w-5 h-5" />
-                <span className="hidden sm:inline">{backButton.label}</span>
+                <ArrowLeft className="w-3 h-3" />
+                {backButton.label}
               </Link>
-              <div className="w-px h-6 bg-gray-300 shrink-0" />
-            </>
-          )}
-          <div className="flex items-center gap-3 min-w-0">
-            {Icon && (
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center shrink-0 ${ICON_COLOR_CLASSES[iconColor]}`}>
-                <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
             )}
-            <div className="min-w-0">
-              <Heading level={1} className="text-xl sm:text-2xl text-gray-900 dark:text-white truncate">
-                {title}
-              </Heading>
-              {description && (
-                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 line-clamp-2">
-                  {description}
-                </p>
-              )}
-            </div>
+
+            {/* Page title — primary visual anchor */}
+            <h1 className={adminType.pageTitle}>{title}</h1>
+
+            {description && (
+              <p className={cn(adminType.meta, 'mt-0.5')}>{description}</p>
+            )}
           </div>
         </div>
+
+        {/* Actions slot */}
         {actions && (
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0 sm:mt-0.5">
             {actions}
           </div>
         )}

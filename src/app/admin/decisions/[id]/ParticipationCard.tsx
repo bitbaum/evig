@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Heading from '@/components/ui/Heading';
+import { adminSurface, adminType, adminStatus } from '@/lib/admin-ui';
+import { AdminSectionHeader } from '@/components/admin/AdminSectionHeader';
+import { cn } from '@/lib/utils';
 
 interface ParticipationData {
   total: number;
@@ -13,11 +15,7 @@ interface ParticipationData {
   quorumPercent?: number;
 }
 
-export default function ParticipationCard({
-  decisionId,
-}: {
-  decisionId: string;
-}) {
+export default function ParticipationCard({ decisionId }: { decisionId: string }) {
   const [data, setData] = useState<ParticipationData | null>(null);
 
   useEffect(() => {
@@ -29,7 +27,7 @@ export default function ParticipationCard({
         });
     }
     fetchParticipation();
-    const interval = setInterval(fetchParticipation, 30000);
+    const interval = setInterval(fetchParticipation, 30_000);
     return () => clearInterval(interval);
   }, [decisionId]);
 
@@ -38,43 +36,37 @@ export default function ParticipationCard({
   const quorumPct = data.quorumPercent ?? (data.total > 0 ? Math.round((data.quorumTarget / data.total) * 100) : 0);
 
   return (
-    <div className="rounded-lg bg-white p-4 shadow-sm">
-      <div className="flex items-center justify-between">
-        <Heading level={3} className="text-sm font-medium text-gray-700">Beteiligung</Heading>
-        <span
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-            data.quorumMet
-              ? 'bg-green-100 text-green-700'
-              : 'bg-amber-100 text-amber-700'
-          }`}
-        >
-          {data.quorumMet ? 'Quorum erreicht' : 'Quorum ausstehend'}
-        </span>
-      </div>
+    <div className={cn(adminSurface.card, 'p-4')}>
+      <AdminSectionHeader
+        title="Beteiligung"
+        actions={
+          <span className={cn('rounded-full px-2 py-0.5 text-xs font-medium', data.quorumMet ? adminStatus.success : adminStatus.warning)}>
+            {data.quorumMet ? 'Quorum erreicht' : 'Quorum ausstehend'}
+          </span>
+        }
+      />
 
       {/* Progress bar */}
-      <div className="mt-2">
-        <div className="flex items-center justify-between text-xs text-gray-500">
-          <span>
+      <div className="mt-3">
+        <div className="flex items-center justify-between mb-1">
+          <span className={adminType.meta}>
             {data.voted.length} / {data.total} abgestimmt ({data.progressPercent}%)
           </span>
-          <span className={data.quorumMet ? 'text-green-600' : 'text-amber-600'}>
+          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400')}>
             Quorum: {quorumPct}% erforderlich
           </span>
         </div>
-        <div className="mt-1 h-2 overflow-hidden rounded-full bg-gray-200">
+        <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
           <div
-            className={`h-full rounded-full transition-all ${
-              data.quorumMet ? 'bg-green-500' : 'bg-amber-500'
-            }`}
+            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-green-500' : 'bg-amber-500')}
             style={{ width: `${data.progressPercent}%` }}
           />
         </div>
       </div>
 
-      {/* Quorum warning */}
+      {/* Quorum not yet met */}
       {!data.quorumMet && (
-        <div className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700">
+        <div className="mt-3 rounded-md bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-700 dark:text-amber-300">
           Quorum noch nicht erreicht. {data.quorumTarget - data.voted.length} weitere Stimme(n) benötigt.
         </div>
       )}
@@ -82,13 +74,10 @@ export default function ParticipationCard({
       {/* Who hasn't voted */}
       {data.notVoted.length > 0 && (
         <div className="mt-3">
-          <p className="text-xs text-gray-500">Noch nicht abgestimmt:</p>
-          <div className="mt-1 flex flex-wrap gap-1">
+          <p className={cn(adminType.meta, 'mb-1.5')}>Noch nicht abgestimmt:</p>
+          <div className="flex flex-wrap gap-1">
             {data.notVoted.map((u) => (
-              <span
-                key={u.id}
-                className="rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-600"
-              >
+              <span key={u.id} className="rounded-md bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-400">
                 {u.email}
               </span>
             ))}

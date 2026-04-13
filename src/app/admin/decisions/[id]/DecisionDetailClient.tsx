@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import Image from 'next/image';
 import { apiFetch } from '@/lib/api/client';
 import {
@@ -21,12 +20,14 @@ import {
   type VotingMethod,
 } from '@/config/decisions';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { adminSurface, adminType, adminForm } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
 import { formatDateShort } from '@/lib/date-formats';
 import VotingPanel from './VotingPanel';
 import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
 import ResultsPanel from './ResultsPanel';
-import Heading from '@/components/ui/Heading';
 
 interface DecisionOption {
   id: string;
@@ -133,12 +134,12 @@ export default function DecisionDetailClient({
     : false;
 
   if (loading) {
-    return <div className="py-12 text-center text-gray-500">Laden...</div>;
+    return <div className={cn('py-12 text-center', adminType.meta)}>Laden...</div>;
   }
 
   if (!decision) {
     return (
-      <div className="py-12 text-center text-red-500">
+      <div className="py-12 text-center text-red-500 text-sm">
         Entscheidung nicht gefunden
       </div>
     );
@@ -152,177 +153,148 @@ export default function DecisionDetailClient({
   return (
     <div className="space-y-6">
       {actionError && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
           {actionError}
         </div>
       )}
 
-      {/* Header */}
-      <div className="rounded-lg bg-white p-4 md:p-6 shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-          <div>
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${statusConf.color}`}
-              >
-                {statusConf.label}
-              </span>
-              <span className="text-xs text-gray-500">{typeConf.label}</span>
-              <span className="text-xs text-gray-400">&middot;</span>
-              <span className="text-xs text-gray-500">{methodConf.label}</span>
-              <span className="text-xs text-gray-400">&middot;</span>
-              <span className="text-xs text-gray-500">{DECISION_CATEGORY_LABELS[decision.category] || decision.category}</span>
-            </div>
-            <Heading level={1} className="text-xl font-bold text-gray-900">
-              {decision.title}
-            </Heading>
-            <p className="mt-1 text-sm text-gray-500">
-              Erstellt von {decision.creator.email} am{' '}
-              {formatDateShort(decision.createdAt)}
-            </p>
+      {/* Header card — metadata + actions (title is in AdminPageWrapper) */}
+      <div className={cn(adminSurface.card, 'p-4 md:p-6')}>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          {/* Metadata row */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConf.color}`}>
+              {statusConf.label}
+            </span>
+            <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+              {typeConf.label}
+            </span>
+            <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+              {methodConf.label}
+            </span>
+            <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+              {DECISION_CATEGORY_LABELS[decision.category] || decision.category}
+            </span>
+            <span className={adminType.meta}>
+              {decision.creator.email} · {formatDateShort(decision.createdAt)}
+            </span>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 flex-shrink-0">
             {(EDITABLE_STATUSES as readonly string[]).includes(decision.status) && (
-              <Link
-                href={`/admin/decisions/${decision.id}/edit`}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-              >
+              <AdminButton variant="secondary" href={`/admin/decisions/${decision.id}/edit`}>
                 Bearbeiten
-              </Link>
+              </AdminButton>
             )}
             {validTargets.includes('discussion') && (
-              <button
-                onClick={() => handleTransition('discussion')}
-                className="rounded-md bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
-              >
+              <AdminButton variant="action" onClick={() => handleTransition('discussion')}>
                 Zur Diskussion
-              </button>
+              </AdminButton>
             )}
             {validTargets.includes('voting') && (
-              <button
-                onClick={() => handleTransition('voting')}
-                className="rounded-md bg-amber-600 px-3 py-1.5 text-sm text-white hover:bg-amber-700"
-              >
+              <AdminButton variant="warning" onClick={() => handleTransition('voting')}>
                 Zur Abstimmung
-              </button>
+              </AdminButton>
             )}
             {validTargets.includes('closed') && !showCloseInput && (
-              <button
-                onClick={() => setShowCloseInput(true)}
-                className="rounded-md bg-green-600 px-3 py-1.5 text-sm text-white hover:bg-green-700"
-              >
+              <AdminButton variant="primary" onClick={() => setShowCloseInput(true)}>
                 Abstimmung schliessen
-              </button>
+              </AdminButton>
             )}
             {validTargets.includes('cancelled') && !showCancelInput && (
-              <button
-                onClick={() => setShowCancelInput(true)}
-                className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
-              >
+              <AdminButton variant="dangerOutline" onClick={() => setShowCancelInput(true)}>
                 Abbrechen
-              </button>
+              </AdminButton>
             )}
             {canDelete && (
-              <button
-                onClick={() => setShowDeleteDialog(true)}
-                className="rounded-md border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50"
-              >
+              <AdminButton variant="dangerOutline" onClick={() => setShowDeleteDialog(true)}>
                 Löschen
-              </button>
+              </AdminButton>
             )}
           </div>
         </div>
 
         {/* Close confirmation */}
         {showCloseInput && (
-          <div className="mt-3 rounded-md border border-green-200 bg-green-50 p-3">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+          <div className="mt-3 rounded-md border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3">
+            <label className={cn('mb-1 block', adminType.subTitle)}>
               Zusammenfassung (optional)
             </label>
             <textarea
               value={closeSummary}
               onChange={(e) => setCloseSummary(e.target.value)}
               rows={2}
-              className="mb-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
+              className={cn(adminForm.textarea, 'mb-2')}
               placeholder="Zusammenfassung des Ergebnisses..."
             />
             <div className="flex gap-2">
-              <button
+              <AdminButton
+                variant="primary"
                 onClick={() => {
-                  handleTransition('closed', {
-                    outcomeSummary: closeSummary || undefined,
-                  });
+                  handleTransition('closed', { outcomeSummary: closeSummary || undefined });
                   setShowCloseInput(false);
                 }}
-                className="rounded-md bg-green-600 px-3 py-1.5 text-sm text-white hover:bg-green-700"
               >
                 Bestätigen
-              </button>
-              <button
-                onClick={() => setShowCloseInput(false)}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
-              >
+              </AdminButton>
+              <AdminButton variant="secondary" onClick={() => setShowCloseInput(false)}>
                 Zurück
-              </button>
+              </AdminButton>
             </div>
           </div>
         )}
 
         {/* Cancel confirmation */}
         {showCancelInput && (
-          <div className="mt-3 rounded-md border border-red-200 bg-red-50 p-3">
-            <label className="mb-1 block text-sm font-medium text-gray-700">
+          <div className="mt-3 rounded-md border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3">
+            <label className={cn('mb-1 block', adminType.subTitle)}>
               Grund für Abbruch
             </label>
             <textarea
               value={cancelReason}
               onChange={(e) => setCancelReason(e.target.value)}
               rows={2}
-              className="mb-2 w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+              className={cn(adminForm.textarea, 'mb-2')}
               placeholder="Warum wird abgebrochen?"
             />
             <div className="flex gap-2">
-              <button
+              <AdminButton
+                variant="danger"
+                disabled={!cancelReason.trim()}
                 onClick={() => {
                   if (cancelReason.trim()) {
                     handleTransition('cancelled', { cancelReason });
                     setShowCancelInput(false);
                   }
                 }}
-                disabled={!cancelReason.trim()}
-                className="rounded-md bg-red-600 px-3 py-1.5 text-sm text-white hover:bg-red-700 disabled:opacity-50"
               >
                 Abbrechen bestätigen
-              </button>
-              <button
-                onClick={() => setShowCancelInput(false)}
-                className="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"
-              >
+              </AdminButton>
+              <AdminButton variant="secondary" onClick={() => setShowCancelInput(false)}>
                 Zurück
-              </button>
+              </AdminButton>
             </div>
           </div>
         )}
 
         {/* Description */}
-        <div className="mt-4 whitespace-pre-wrap text-sm text-gray-700">
+        <div className={cn('mt-4 whitespace-pre-wrap leading-relaxed', adminType.body)}>
           {decision.description}
         </div>
 
         {/* Options Display */}
         {decision.options.length > 0 && (
           <div className="mt-4">
-            <Heading level={3} className="mb-2 text-sm font-medium text-gray-700">
+            <p className={cn(adminType.subTitle, 'mb-2')}>
               Optionen ({decision.options.length})
-            </Heading>
+            </p>
             {decision.options.some((o) => o.imageUrl) ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {decision.options.map((opt) => (
-                  <div key={opt.id} className="rounded-xl border border-gray-200 bg-gray-50 overflow-hidden">
+                  <div key={opt.id} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 overflow-hidden">
                     {opt.imageUrl ? (
-                      <div className="relative aspect-square w-full bg-white">
+                      <div className="relative aspect-square w-full bg-white dark:bg-gray-800">
                         <Image
                           src={opt.imageUrl}
                           alt={opt.label}
@@ -332,14 +304,14 @@ export default function DecisionDetailClient({
                         />
                       </div>
                     ) : (
-                      <div className="flex aspect-square w-full items-center justify-center bg-gray-100 text-3xl font-bold text-gray-400">
+                      <div className="flex aspect-square w-full items-center justify-center bg-gray-100 dark:bg-gray-700 text-3xl font-bold text-gray-400">
                         {opt.label.charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="p-2">
-                      <p className="truncate text-xs font-medium text-gray-700">{opt.label}</p>
+                      <p className={cn('truncate text-xs font-medium', adminType.body)}>{opt.label}</p>
                       {opt.description && (
-                        <p className="truncate text-xs text-gray-500">{opt.description}</p>
+                        <p className={cn('truncate', adminType.meta)}>{opt.description}</p>
                       )}
                     </div>
                   </div>
@@ -350,11 +322,11 @@ export default function DecisionDetailClient({
                 {decision.options.map((opt) => (
                   <div
                     key={opt.id}
-                    className="rounded-md border border-gray-200 px-3 py-2"
+                    className="rounded-md border border-gray-200 dark:border-gray-700 px-3 py-2"
                   >
-                    <span className="font-medium text-gray-800">{opt.label}</span>
+                    <span className={cn('font-medium', adminType.body)}>{opt.label}</span>
                     {opt.description && (
-                      <span className="ml-2 text-sm text-gray-500">– {opt.description}</span>
+                      <span className={cn('ml-2', adminType.meta)}>– {opt.description}</span>
                     )}
                   </div>
                 ))}
@@ -365,7 +337,7 @@ export default function DecisionDetailClient({
 
         {/* Cancel Reason */}
         {decision.status === DECISION_STATUS.CANCELLED && decision.cancelReason && (
-          <div className="mt-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+          <div className="mt-4 rounded-md bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
             <strong>Abbruchgrund:</strong> {decision.cancelReason}
           </div>
         )}

@@ -6,6 +6,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { BadgeCheck, CheckCircle, AlertCircle, ArrowRight, CreditCard, Calendar } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { MEMBERSHIP, ORG } from '@/config/org'
 import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
@@ -168,22 +169,22 @@ export default async function MembershipPage() {
           </div>
         </div>
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 p-8 text-center">
-          <BadgeCheck className="w-16 h-16 text-gray-400 mx-auto mb-4" aria-hidden="true" />
-          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            Noch kein Mitglied
-          </Heading>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm mx-auto">
-            Werde Mitglied des {ORG.legalName} — Stimmrecht, offizielle Mitgliedschaft, {MEMBERSHIP.currency} {MEMBERSHIP.fees.regular}/Jahr.
-          </p>
-          <Link
-            href="/mitglied-werden"
-            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Jetzt Mitglied werden
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
-          </Link>
-        </div>
+        <EmptyState
+          icon={BadgeCheck}
+          iconBg="bg-green-50 dark:bg-green-900/20"
+          iconColor="text-green-600 dark:text-green-400"
+          title="Noch kein Mitglied"
+          description={`Werde Mitglied des ${ORG.legalName} — Stimmrecht, offizielle Mitgliedschaft, ${MEMBERSHIP.currency} ${MEMBERSHIP.fees.regular}/Jahr.`}
+          action={
+            <Link
+              href="/mitglied-werden"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Jetzt Mitglied werden
+              <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            </Link>
+          }
+        />
       )}
     </div>
   )

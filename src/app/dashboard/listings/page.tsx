@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
+import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marketplace'
@@ -201,22 +202,22 @@ export default function MyListingsPage() {
 
       {/* Empty State */}
       {!isLoading && !error && listings.length === 0 && (
-        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-8 text-center border-2 border-dashed border-gray-300 dark:border-gray-600">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            {statusFilter ? 'Keine Inserate in dieser Kategorie' : 'Noch keine Inserate'}
-          </Heading>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Erstelle dein erstes Inserat und verkaufe direkt an die Community.
-          </p>
-          <Link
-            href="/marketplace/sell"
-            className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
-          >
-            <Plus className="w-4 h-4" />
-            Erstes Inserat erstellen
-          </Link>
-        </div>
+        <EmptyState
+          icon={Package}
+          iconBg="bg-violet-50 dark:bg-violet-900/20"
+          iconColor="text-violet-500 dark:text-violet-400"
+          title={statusFilter ? 'Keine Inserate in dieser Kategorie' : 'Noch keine Inserate'}
+          description="Erstelle dein erstes Inserat und verkaufe direkt an die Community."
+          action={
+            <Link
+              href="/marketplace/sell"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+            >
+              <Plus className="w-4 h-4" />
+              Erstes Inserat erstellen
+            </Link>
+          }
+        />
       )}
 
       {/* Listings List */}
