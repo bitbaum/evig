@@ -194,7 +194,7 @@ export default function AppointmentsDashboard() {
           </Link>
           <Heading level={1} className="text-3xl font-bold text-gray-900 mb-2">Meine Termine</Heading>
           <p className="text-gray-600">
-            Übersicht Ihrer Service-Termin-Anfragen und gebuchten Dienstleistungen
+            Übersicht deiner Service-Termin-Anfragen und gebuchten Dienstleistungen
           </p>
         </div>
 
@@ -260,7 +260,7 @@ export default function AppointmentsDashboard() {
                       <span className="font-medium text-sm sm:text-base">Termin bestätigt!</span>
                     </div>
                     <p className="text-success-700 text-xs sm:text-sm mt-1 ml-7">
-                      Ihr Termin wurde bestätigt. Du erhältst weitere Details per E-Mail.
+                      Dein Termin wurde bestätigt. Du erhältst weitere Details per E-Mail.
                     </p>
                   </div>
                 )}

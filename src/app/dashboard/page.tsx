@@ -203,91 +203,45 @@ export default async function DashboardPage() {
             </div>
           </Link>
 
-          {/* Role-specific cards */}
-          {userRole === ROLES.SELLER && (
-            <Link
-              href="/dashboard/seller"
-              className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-secondary-100 dark:bg-secondary-900 rounded-lg flex items-center justify-center">
-                  <span className="text-secondary-600 dark:text-secondary-400 text-xl">🏪</span>
-                </div>
-                <div className="ml-4">
-                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                    Seller Dashboard
-                  </Heading>
-                  <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                    Produkte und Verkäufe
-                  </p>
-                </div>
+          {/* Seller card — role dashboard if seller, upsell otherwise */}
+          <Link
+            href="/dashboard/seller"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-secondary-100 dark:bg-secondary-900 rounded-lg flex items-center justify-center">
+                <span className="text-secondary-600 dark:text-secondary-400 text-xl">🏪</span>
               </div>
-            </Link>
-          )}
+              <div className="ml-4">
+                <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  {userRole === ROLES.SELLER ? 'Seller Dashboard' : 'Auf Revamp‑IT verkaufen'}
+                </Heading>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
+                  {userRole === ROLES.SELLER ? 'Produkte und Verkäufe' : 'Eigene Produkte anbieten – Versand direkt an Käufer'}
+                </p>
+              </div>
+            </div>
+          </Link>
 
-          {userRole === ROLES.REPAIRER && (
-            <Link
-              href="/dashboard/techniker"
-              className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900 rounded-lg flex items-center justify-center">
-                  <span className="text-warning-600 dark:text-warning-400 text-xl">🔧</span>
-                </div>
-                <div className="ml-4">
-                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                    Techniker Dashboard
-                  </Heading>
-                  <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                    Anfragen und Angebote verwalten
-                  </p>
-                </div>
+          {/* Techniker card — role dashboard if repairer, upsell otherwise */}
+          <Link
+            href="/dashboard/techniker"
+            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center">
+              <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900 rounded-lg flex items-center justify-center">
+                <span className="text-warning-600 dark:text-warning-400 text-xl">🔧</span>
               </div>
-            </Link>
-          )}
-
-          {/* Upsell cards for capabilities (visible if user doesn't have role yet) */}
-          {userRole !== ROLES.SELLER && (
-            <Link
-              href="/dashboard/seller"
-              className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-secondary-100 dark:bg-secondary-900 rounded-lg flex items-center justify-center">
-                  <span className="text-secondary-600 dark:text-secondary-400 text-xl">🏪</span>
-                </div>
-                <div className="ml-4">
-                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                    Auf Revamp‑IT verkaufen
-                  </Heading>
-                  <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                    Eigene Produkte anbieten – Versand direkt an Käufer
-                  </p>
-                </div>
+              <div className="ml-4">
+                <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
+                  {userRole === ROLES.REPAIRER ? 'Techniker Dashboard' : 'Reparaturen anbieten'}
+                </Heading>
+                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
+                  {userRole === ROLES.REPAIRER ? 'Anfragen und Angebote verwalten' : 'Dienstleistungen publizieren und Anfragen erhalten'}
+                </p>
               </div>
-            </Link>
-          )}
-
-          {userRole !== ROLES.REPAIRER && (
-            <Link
-              href="/dashboard/techniker"
-              className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-warning-100 dark:bg-warning-900 rounded-lg flex items-center justify-center">
-                  <span className="text-warning-600 dark:text-warning-400 text-xl">🔧</span>
-                </div>
-                <div className="ml-4">
-                  <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'), 'dark:text-white')}>
-                    Reparaturen anbieten
-                  </Heading>
-                  <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                    Dienstleistungen publizieren und Anfragen erhalten
-                  </p>
-                </div>
-              </div>
-            </Link>
-          )}
+            </div>
+          </Link>
 
           {/* Show admin card for staff users */}
           {(session.user.isStaff || isStaffEmail(session.user.email || '')) && (
@@ -310,26 +264,6 @@ export default async function DashboardPage() {
               </div>
             </Link>
           )}
-
-          {/* IT-Hilfe Helper Card */}
-          <Link
-            href="/dashboard/techniker"
-            className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-4 sm:p-6 hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900 rounded-lg flex items-center justify-center">
-                <span className="text-cyan-600 dark:text-cyan-400 text-xl">💻</span>
-              </div>
-              <div className="ml-4">
-                <Heading level={3} className={cn('text-lg', getTextColor('white', 'primary'), 'dark:text-white')}>
-                  IT-Hilfe
-                </Heading>
-                <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Anfragen finden und Hilfe anbieten
-                </p>
-              </div>
-            </div>
-          </Link>
 
           {/* Workshop Proposal Card */}
           <Link
@@ -366,7 +300,7 @@ export default async function DashboardPage() {
                   Meine Einreichungen
                 </Heading>
                 <p className={cn('text-sm', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-                  Status Ihrer Blog-Beiträge verfolgen
+                  Status deiner Blog-Beiträge verfolgen
                 </p>
               </div>
             </div>

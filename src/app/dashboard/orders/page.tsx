@@ -149,7 +149,7 @@ export default function DashboardOrdersPage() {
           <p className="text-gray-500 dark:text-gray-400 mb-4">
             {role === 'buyer'
               ? 'Stöbere im Marketplace und finde tolle Angebote.'
-              : 'Sobald jemand eines Ihrer Inserate kauft, erscheint die Bestellung hier.'}
+              : 'Sobald jemand eines deiner Inserate kauft, erscheint die Bestellung hier.'}
           </p>
           {role === 'buyer' && (
             <Link

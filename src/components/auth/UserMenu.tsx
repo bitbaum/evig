@@ -14,7 +14,10 @@ import {
   ChevronDown,
   Heart,
   ArrowRight,
-  Shield
+  Shield,
+  Store,
+  MessageSquare,
+  Star
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -106,9 +109,12 @@ export function UserMenu() {
     ...(isStaff ? [{ href: '/admin', icon: Shield, label: 'Admin-Bereich', highlight: true }] : []),
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
+    { href: '/dashboard/listings', icon: Store, label: 'Meine Inserate' },
+    { href: '/dashboard/messages', icon: MessageSquare, label: 'Nachrichten' },
     { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
-    { href: '/dashboard/bookings', icon: Calendar, label: 'Meine Termine' },
+    { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
     { href: '/dashboard/orders', icon: ShoppingBag, label: 'Meine Bestellungen' },
+    { href: '/dashboard/reviews', icon: Star, label: 'Meine Bewertungen' },
     { href: '/dashboard/donations', icon: Heart, label: 'Meine Spenden' },
   ]
 

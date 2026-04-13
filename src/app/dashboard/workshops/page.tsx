@@ -140,7 +140,7 @@ export default function WorkshopsDashboard() {
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
             <Heading level={1} className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</Heading>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Bitte melde dich an, um Ihre Workshop-Anmeldungen zu sehen.
+              Bitte melde dich an, um deine Workshop-Anmeldungen zu sehen.
             </p>
             <Link
               href="/auth/login"
@@ -168,7 +168,7 @@ export default function WorkshopsDashboard() {
           </Link>
           <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            Übersicht Ihrer Workshop-Anmeldungen und Teilnahmen
+            Übersicht deiner Workshop-Anmeldungen und Teilnahmen
           </p>
         </div>
 
@@ -207,7 +207,7 @@ export default function WorkshopsDashboard() {
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center text-green-800">
                       <CheckCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Ihre Anmeldung wurde bestätigt!</span>
+                      <span className="font-medium">Deine Anmeldung wurde bestätigt!</span>
                     </div>
                     <p className="text-green-700 text-sm mt-1">
                       Du erhältst in Kürze weitere Informationen zu Datum und Ort.
@@ -222,7 +222,7 @@ export default function WorkshopsDashboard() {
                       <span className="font-medium">Anmeldung ausstehend</span>
                     </div>
                     <p className="text-yellow-700 text-sm mt-1">
-                      Ihre Anmeldung wird von unserem Team geprüft. Du erhältst eine Bestätigung per E-Mail.
+                      Deine Anmeldung wird von unserem Team geprüft. Du erhältst eine Bestätigung per E-Mail.
                     </p>
                   </div>
                 )}

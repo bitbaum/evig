@@ -1,0 +1,224 @@
+/**
+ * Kivvi ERP API client for RevampIT.
+ *
+ * RevampIT calls this module after erfassung to push inventory records to
+ * Kivvi, where they become the canonical ERP entries (accounting, stock,
+ * documents). The Kivvi API token is scoped to the RevampIT company account.
+ *
+ * Configuration (add to .env):
+ *   KIVVI_API_URL=https://kivvi.vercel.app
+ *   KIVVI_API_TOKEN=kv_...
+ *
+ * All calls are server-side only. Never import this in client components.
+ */
+
+// ============================================================================
+// CONFIG
+// ============================================================================
+
+function getConfig(): { baseUrl: string; token: string } {
+  const baseUrl = process.env.KIVVI_API_URL;
+  const token = process.env.KIVVI_API_TOKEN;
+
+  if (!baseUrl || !token) {
+    throw new Error(
+      "Kivvi integration not configured. Set KIVVI_API_URL and KIVVI_API_TOKEN in .env",
+    );
+  }
+
+  return { baseUrl: baseUrl.replace(/\/$/, ""), token };
+}
+
+function isConfigured(): boolean {
+  return !!(process.env.KIVVI_API_URL && process.env.KIVVI_API_TOKEN);
+}
+
+function getDefaultWarehouseId(): string | undefined {
+  return process.env.KIVVI_DEFAULT_WAREHOUSE_ID || undefined;
+}
+
+// ============================================================================
+// TYPES — mirror Kivvi API shapes (subset we actually use)
+// ============================================================================
+
+export interface KivviInventoryItem {
+  id: string;
+  itemNumber: string;
+  description: string;
+  condition: string;
+  status: string;
+  warehouseId: string | null;
+  askingPrice: string | null;
+  estimatedValue: string | null;
+  minPrice: string | null;
+  specs: Record<string, string> | null;
+  serialNumber: string | null;
+  location: string | null;
+  createdAt: string;
+}
+
+export interface CreateKivviInventoryItemInput {
+  description: string;
+  condition?:
+    | "untested"
+    | "like_new"
+    | "good"
+    | "fair"
+    | "poor"
+    | "parts_only"
+    | "scrap";
+  warehouseId?: string;
+  estimatedValue?: string;
+  askingPrice?: string;
+  minPrice?: string;
+  specs?: Record<string, string>;
+  serialNumber?: string;
+  location?: string;
+  notes?: string;
+}
+
+export interface KivviDocument {
+  id: string;
+  number: string;
+  type: string;
+  status: string;
+  total: string;
+  currency: string;
+}
+
+export interface CreateKivviInvoiceInput {
+  contactName: string;
+  contactEmail?: string;
+  items: Array<{
+    description: string;
+    kivviInventoryItemId?: string;
+    quantity: number;
+    unitPrice: string;
+    vatRate?: string;
+  }>;
+  notes?: string;
+}
+
+// ============================================================================
+// HTTP HELPER
+// ============================================================================
+
+async function kivviFetch<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
+  const { baseUrl, token } = getConfig();
+
+  const response = await fetch(`${baseUrl}/api/v1${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      ...options.headers,
+    },
+  });
+
+  const json = (await response.json()) as { success: boolean; data?: T; error?: string };
+
+  if (!json.success || !response.ok) {
+    throw new Error(
+      `Kivvi API error (${response.status}): ${json.error || "Unknown error"}`,
+    );
+  }
+
+  return json.data as T;
+}
+
+// ============================================================================
+// INVENTORY ITEMS
+// ============================================================================
+
+/**
+ * Create a canonical inventory item in Kivvi after RevampIT erfassung.
+ * Returns the Kivvi item ID to store on RevampIT's inventoryItems record.
+ */
+export async function createKivviInventoryItem(
+  input: CreateKivviInventoryItemInput,
+): Promise<KivviInventoryItem> {
+  return kivviFetch<KivviInventoryItem>("/inventory-items", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+/**
+ * Update an existing Kivvi inventory item — e.g. when checklist passes
+ * and status changes from intake → ready_for_sale, or when sold.
+ */
+export async function updateKivviInventoryItem(
+  kivviId: string,
+  input: Partial<CreateKivviInventoryItemInput> & { status?: string },
+): Promise<KivviInventoryItem> {
+  return kivviFetch<KivviInventoryItem>(`/inventory-items/${kivviId}`, {
+    method: "PATCH",
+    body: JSON.stringify(input),
+  });
+}
+
+/**
+ * Get a Kivvi inventory item by ID.
+ */
+export async function getKivviInventoryItem(
+  kivviId: string,
+): Promise<KivviInventoryItem> {
+  return kivviFetch<KivviInventoryItem>(`/inventory-items/${kivviId}`);
+}
+
+// ============================================================================
+// DOCUMENTS (Invoice creation after sale)
+// ============================================================================
+
+/**
+ * Create a sales invoice in Kivvi when a RevampIT order is confirmed.
+ * Returns the Kivvi document with its RE- number for sending to the buyer.
+ */
+export async function createKivviInvoice(
+  input: CreateKivviInvoiceInput,
+): Promise<KivviDocument> {
+  return kivviFetch<KivviDocument>("/documents", {
+    method: "POST",
+    body: JSON.stringify({
+      type: "invoice",
+      ...input,
+    }),
+  });
+}
+
+// ============================================================================
+// SYNC HELPER — safe wrapper with error handling for use in erfassung flow
+// ============================================================================
+
+export type KivviSyncResult =
+  | { success: true; kivviInventoryItemId: string; itemNumber: string }
+  | { success: false; error: string };
+
+/**
+ * Push an erfassung result to Kivvi. Never throws — returns success/error.
+ * If Kivvi is not configured (KIVVI_API_URL/TOKEN not set), returns success: false
+ * without logging an error (allows development without Kivvi configured).
+ */
+export async function syncToKivvi(
+  input: CreateKivviInventoryItemInput,
+): Promise<KivviSyncResult> {
+  if (!isConfigured()) {
+    return { success: false, error: "Kivvi not configured" };
+  }
+
+  try {
+    const warehouseId = getDefaultWarehouseId();
+    const item = await createKivviInventoryItem(
+      warehouseId && !input.warehouseId ? { ...input, warehouseId } : input,
+    );
+    return { success: true, kivviInventoryItemId: item.id, itemNumber: item.itemNumber };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Kivvi sync failed",
+    };
+  }
+}

@@ -162,7 +162,7 @@ export default function DonationsDashboard() {
             Meine Spenden
           </Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            Übersicht Ihrer Geld- und Sachspenden an RevampIT
+            Übersicht deiner Geld- und Sachspenden an RevampIT
           </p>
         </div>
 
