@@ -8,7 +8,7 @@
 import {
   Users, Code, GraduationCap, Handshake, Building2, Gift,
   Leaf, Heart, Globe, Wrench, BookOpen, Briefcase,
-  Lightbulb, Cpu, Share2, Target, Vote, LucideIcon
+  Lightbulb, Cpu, Share2, Target, Vote, Calendar, LucideIcon
 } from 'lucide-react'
 
 // Types
@@ -156,7 +156,7 @@ export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
 // Testimonials Configuration
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote: "As a refugee, Revamp-IT gave me the opportunity to work with them. I learn a lot and have the freedom to develop skills aligned with my goals. Now I write code and can learn anything I find interesting, as everyone is willing to share knowledge. This is a real community.",
+    quote: "Als Geflüchteter hat mir Revamp-IT die Möglichkeit gegeben, hier mitzumachen. Ich lerne viel und habe die Freiheit, Fähigkeiten zu entwickeln, die zu meinen Zielen passen. Ich schreibe jetzt Code und kann alles lernen, was mich interessiert — denn hier teilt jeder sein Wissen. Das ist eine echte Gemeinschaft.",
     author: "G.",
     role: "Freiwilliger"
   }
@@ -524,6 +524,63 @@ export const PARTNERSHIPS_PAGE: PageContent = {
     {
       title: 'Massgeschneiderte Partnerschaftsprogramme',
       content: 'Wir verstehen, dass jede Organisation einzigartige Bedürfnisse und Ziele hat. Unsere Partnerschaftsprogramme sind darauf zugeschnitten, sich an den Zielen eurer Organisation auszurichten und gleichzeitig die Wirkung unserer gemeinsamen Bemühungen zu maximieren.'
+    }
+  ]
+}
+
+// IT-Hilfe Techniker Page Content
+export const IT_HILFE_TECHNIKER_PAGE: PageContent = {
+  overview: {
+    title: 'Was IT-Hilfe bedeutet',
+    content: 'Viele Menschen — ältere Personen, Geflüchtete, Menschen mit wenig Erfahrung — kämpfen täglich mit ihrem Computer. Du hast das Wissen, um zu helfen. Als IT-Hilfe Techniker bei Revamp-IT vermittelst du dein Können direkt an Menschen, die es brauchen: in der Werkstatt, bei Hausbesuchen oder in kleinen Kursen.'
+  },
+  benefits: [
+    {
+      title: 'Wissen einsetzen',
+      description: 'Dein IT-Wissen wird gebraucht — nicht in einem Büro, sondern für Menschen in deiner Gemeinschaft.',
+      icon: Cpu
+    },
+    {
+      title: 'Flexibel helfen',
+      description: 'Du bestimmst, wann und wie viel. Ab zwei Stunden pro Monat — alles ist wertvoll.',
+      icon: Calendar
+    },
+    {
+      title: 'Community aufbauen',
+      description: 'Du wirst Teil eines Netzwerks aus Freiwilligen, die alle dasselbe Ziel haben: Technologie für alle zugänglich machen.',
+      icon: Users
+    },
+    {
+      title: 'Erfahrung gewinnen',
+      description: 'Erkläre, dokumentiere, löse Probleme in der Praxis — das schärft deine Fähigkeiten mehr als jeder Kurs.',
+      icon: BookOpen
+    }
+  ],
+  sections: [
+    {
+      title: 'Was Techniker tun',
+      items: [
+        { text: 'Software-Probleme diagnostizieren und lösen (Windows, Linux, macOS)' },
+        { text: 'Geräte einrichten und konfigurieren' },
+        { text: 'Linux-Installationen auf aufbereiteten Laptops durchführen' },
+        { text: 'Kurzeinführungen zu Computer, Internet und Datensicherheit geben' },
+        { text: 'Auf Anfrage Hausbesuche für mobilitätseingeschränkte Personen' }
+      ]
+    },
+    {
+      title: 'Anforderungen',
+      items: [
+        { text: 'Grundkenntnisse in IT — kein Abschluss, kein Zertifikat nötig' },
+        { text: 'Freude daran, Dinge einfach zu erklären' },
+        { text: 'Geduld und Offenheit gegenüber Menschen mit wenig Technikerfahrung' },
+        { text: 'Zeitbereitschaft ab ca. 2 Stunden pro Monat' }
+      ]
+    }
+  ],
+  callouts: [
+    {
+      title: 'Keine Perfektionisten gesucht',
+      content: 'Du musst nicht alles wissen. Wir suchen Menschen, die gerne helfen und etwas erklären können. Wenn du weisst, wie man einen Laptop neu aufsetzt oder jemandem beim E-Mail-Konto hilft — dann bist du genau richtig.'
     }
   ]
 }

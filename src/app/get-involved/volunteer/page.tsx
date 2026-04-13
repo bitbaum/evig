@@ -5,7 +5,7 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { VOLUNTEER_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
-import { ORG, CONTACT } from '@/config/org'
+import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
@@ -18,8 +18,8 @@ export default function VolunteerPage() {
     <InvolvementPageLayout
       title="Freiwilliger werden"
       description="Schliess dich unserem Team engagierter Freiwilliger an und hilf, Technologie nachhaltig und für alle zugänglich zu machen."
-      ctaText="Freiwilligenarbeit beginnen"
-      ctaHref={`mailto:${CONTACT.email}`}
+      ctaText="Interesse bekunden"
+      ctaHref="/get-involved/kontakt?thema=freiwilligenarbeit"
     >
       <div className="space-y-16">
         {/* Overview Section */}

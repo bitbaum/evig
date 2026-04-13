@@ -95,5 +95,8 @@ export {
 // Notification template (generic, used by notification service)
 export { notificationEmail } from './notification';
 
+// Inquiry (Mitmachen contact form)
+export { inquiryNotification, inquiryConfirmation } from './inquiry';
+
 // Base styles (for custom templates)
 export { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createEmailLayout, createTextFooter } from './base-styles';

@@ -5,7 +5,7 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { WORK_REINTEGRATION_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
-import { ORG, CONTACT } from '@/config/org'
+import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
@@ -18,8 +18,8 @@ export default function WorkReintegrationPage() {
     <InvolvementPageLayout
       title="Arbeitsreintegrationsprogramm"
       description="Schliess dich unserem unterstützenden Programm an, um deine Karriere in Technologie und Nachhaltigkeit wieder aufzubauen."
-      ctaText="deine Reise beginnen"
-      ctaHref={`mailto:${CONTACT.email}`}
+      ctaText="Interesse bekunden"
+      ctaHref="/get-involved/kontakt?thema=wiedereinstieg"
     >
       <div className="space-y-16">
         {/* Overview Section */}

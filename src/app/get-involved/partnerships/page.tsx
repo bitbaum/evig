@@ -5,7 +5,7 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { PARTNERSHIPS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
-import { ORG, CONTACT } from '@/config/org'
+import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
@@ -18,8 +18,8 @@ export default function PartnershipsPage() {
     <InvolvementPageLayout
       title="Partnerschaftsmöglichkeiten"
       description={`Schliess dich mit ${ORG.name} zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.`}
-      ctaText="Partner werden"
-      ctaHref={`mailto:${CONTACT.email}`}
+      ctaText="Interesse bekunden"
+      ctaHref="/get-involved/kontakt?thema=partnerschaft"
     >
       <div className="space-y-16">
         {/* Overview Section */}

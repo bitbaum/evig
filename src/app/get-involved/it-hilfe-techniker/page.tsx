@@ -3,38 +3,38 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
 import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
 import { PageSection } from '@/components/community/PageSection'
-import { INTERNSHIPS_PAGE } from '@/config/community'
+import { IT_HILFE_TECHNIKER_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
-  title: `Praktika | ${ORG.name}`,
-  description: 'Sammle praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.',
+  title: `IT-Hilfe Techniker | ${ORG.name}`,
+  description: 'Teile dein IT-Wissen und hilf Menschen in deiner Gemeinschaft — flexibel, ohne Vorkenntnisse und mit echter Wirkung.',
 }
 
-export default function InternshipsPage() {
+export default function ITHilfeTechnikerPage() {
   return (
     <InvolvementPageLayout
-      title="Praktikumsmöglichkeiten"
-      description="Sammle wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirke echte Veränderungen."
-      ctaText="Interesse bekunden"
-      ctaHref="/get-involved/kontakt?thema=praktikum"
+      title="IT-Hilfe Techniker werden"
+      description="Dein IT-Wissen kann anderen das Leben leichtern. Hilf Menschen in der Gemeinschaft mit ihren Computern — flexibel, unkompliziert, wirkungsvoll."
+      ctaText="Als Techniker registrieren"
+      ctaHref="/profil/techniker"
     >
       <div className="space-y-16">
-        {/* Overview Section */}
+        {/* Overview */}
         <PageSection
-          title={INTERNSHIPS_PAGE.overview.title}
-          content={INTERNSHIPS_PAGE.overview.content}
+          title={IT_HILFE_TECHNIKER_PAGE.overview.title}
+          content={IT_HILFE_TECHNIKER_PAGE.overview.content}
         />
 
-        {/* Benefits Section */}
+        {/* Benefits */}
         <section className="space-y-8">
           <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Programmvorteile
+            Was du davon hast
           </Heading>
           <BenefitCardGrid>
-            {INTERNSHIPS_PAGE.benefits?.map((benefit, index) => (
+            {IT_HILFE_TECHNIKER_PAGE.benefits?.map((benefit, index) => (
               <BenefitCard
                 key={index}
                 icon={benefit.icon}
@@ -46,7 +46,7 @@ export default function InternshipsPage() {
         </section>
 
         {/* Sections from config */}
-        {INTERNSHIPS_PAGE.sections?.map((section, index) => (
+        {IT_HILFE_TECHNIKER_PAGE.sections?.map((section, index) => (
           <InfoSection
             key={index}
             title={section.title}
@@ -54,8 +54,8 @@ export default function InternshipsPage() {
           />
         ))}
 
-        {/* Callouts from config */}
-        {INTERNSHIPS_PAGE.callouts?.map((callout, index) => (
+        {/* Callouts */}
+        {IT_HILFE_TECHNIKER_PAGE.callouts?.map((callout, index) => (
           <Callout
             key={index}
             title={callout.title}
@@ -63,14 +63,14 @@ export default function InternshipsPage() {
           />
         ))}
 
-        {/* How to Apply */}
+        {/* How to get started */}
         <NumberedSteps
-          title="Wie du dich bewerben kannst"
+          title="Wie du anfangen kannst"
           steps={[
-            { text: 'Sende uns deinen Lebenslauf und ein Anschreiben' },
-            { text: 'Gib deinen Interessensbereich und deine Verfügbarkeit an' },
-            { text: 'Führe ein kurzes Gespräch' },
-            { text: 'Beginne deine Praktikumsreise!' }
+            { text: 'Erstelle dein Techniker-Profil mit deinen Fähigkeiten und Verfügbarkeit' },
+            { text: 'Warte auf Anfragen — du entscheidest, welche du annimmst' },
+            { text: 'Vereinbare einen Termin direkt mit der anfragenden Person' },
+            { text: 'Hilf, lerne, mach einen Unterschied' },
           ]}
         />
       </div>

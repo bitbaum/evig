@@ -249,7 +249,7 @@ export const mainNavigation: NavigationItem[] = [
       },
       {
         name: 'IT-Hilfe Techniker',
-        href: '/profil/techniker',
+        href: '/get-involved/it-hilfe-techniker',
         description: 'IT-Wissen teilen und helfen',
         badge: 'Neu',
       },

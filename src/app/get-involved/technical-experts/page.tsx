@@ -5,7 +5,7 @@ import { InfoSection, NumberedSteps, Callout } from '@/components/community/Info
 import { PageSection } from '@/components/community/PageSection'
 import { TECHNICAL_EXPERTS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
-import { ORG, CONTACT } from '@/config/org'
+import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
@@ -18,8 +18,8 @@ export default function TechnicalExpertsPage() {
     <InvolvementPageLayout
       title="Technische Experten"
       description="Teile deine Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln."
-      ctaText="deine Expertise teilen"
-      ctaHref={`mailto:${CONTACT.email}`}
+      ctaText="Interesse bekunden"
+      ctaHref="/get-involved/kontakt?thema=technische-experten"
     >
       <div className="space-y-16">
         {/* Overview Section */}
