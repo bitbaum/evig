@@ -211,7 +211,7 @@ export async function updateKivviDocumentStatus(
 export interface RecordKivviPaymentInput {
   amount: string;
   date: string; // YYYY-MM-DD
-  method?: "bank_transfer" | "cash" | "card" | "payrexx" | "other";
+  method?: "bank_transfer" | "cash" | "card" | "other";
   reference?: string;
 }
 

@@ -453,7 +453,7 @@ async function syncOrderToKivvi(
   await recordKivviPayment(invoice.id, {
     amount: order.amountChf,
     date: today,
-    method: 'payrexx',
+    method: 'other', // Payrexx online payment
     reference: payrexxTransactionId || undefined,
   })
 
