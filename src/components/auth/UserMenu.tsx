@@ -16,7 +16,6 @@ import {
   Shield,
   Store,
   MessageSquare,
-  Star
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -121,10 +120,6 @@ export function UserMenu() {
     [
       { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
       { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
-    ],
-    // Secondary
-    [
-      { href: '/dashboard/reviews', icon: Star, label: 'Meine Bewertungen' },
     ],
   ]
 
