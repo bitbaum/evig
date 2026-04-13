@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Computer Repair & IT Services | RevampIT',
-  description: 'Professional computer repair, web development, data recovery, Linux support, and hardware recycling services. Affordable and eco-friendly solutions for your tech needs.',
+  title: 'Computer Reparatur & IT Services | RevampIT',
+  description: 'Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling. Günstige und nachhaltige Lösungen für deine Technik.',
   openGraph: {
-    title: 'Computer Repair & IT Services | RevampIT',
-    description: 'Professional computer repair, web development, data recovery, Linux support, and hardware recycling services. Affordable and eco-friendly solutions for your tech needs.',
+    title: 'Computer Reparatur & IT Services | RevampIT',
+    description: 'Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling. Günstige und nachhaltige Lösungen für deine Technik.',
     type: 'website',
-    url: 'https://revampit.org/services',
+    url: 'https://revamp-it.ch/services',
   },
 }
 

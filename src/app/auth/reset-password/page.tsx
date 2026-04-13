@@ -161,7 +161,7 @@ function ResetPasswordContent() {
           Neues Passwort festlegen
         </Heading>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Gib Ihr neues Passwort ein.
+          Gib dein neues Passwort ein.
         </p>
       </div>
 

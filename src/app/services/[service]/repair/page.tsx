@@ -3,69 +3,70 @@ import { Wrench, CheckCircle2, Clock, Shield, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { ORG } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Computer Repair & Upgrades | RevampIT',
-  description: 'Expert computer repairs and upgrades. We specialize in fixing what others can\'t, including motherboard repairs and component-level fixes.',
+  title: `Computer Reparaturen & Upgrades | ${ORG.name}`,
+  description: 'Professionelle Computer-Reparaturen und Upgrades. Wir spezialisieren uns auf das, was andere nicht reparieren können — inklusive Mainboard-Reparaturen und komponentenseitige Fehler.',
 }
 
 const repairDetails = {
   hero: {
-    title: 'Computer Repair & Upgrades',
-    subtitle: 'Expert Repairs You Can Trust',
-    description: 'We combine technical expertise with sustainable practices to extend the life of your devices. Our repair services focus on fixing what others can\'t, saving you money and reducing electronic waste.'
+    title: 'Computer Reparaturen & Upgrades',
+    subtitle: 'Reparaturen, auf die du dich verlassen kannst',
+    description: 'Wir verbinden technisches Know-how mit nachhaltigem Handeln, um die Lebensdauer deiner Geräte zu verlängern. Unsere Reparaturleistungen fokussieren auf das, was andere aufgeben — das spart Geld und reduziert Elektroschrott.'
   },
   features: [
     {
-      title: 'Component-Level Repairs',
-      description: 'We don\'t just replace parts - we fix them. Our technicians can repair motherboards, power supplies, and other components at the circuit level.',
+      title: 'Reparaturen auf Komponentenebene',
+      description: 'Wir tauschen nicht einfach Teile aus — wir reparieren sie. Unsere Techniker können Mainboards, Netzteile und andere Komponenten auf Schaltkreisebene instand setzen.',
       icon: Wrench
     },
     {
-      title: 'Hardware Upgrades',
-      description: 'Extend the life of your computer with strategic upgrades. We can help you choose and install the right components to meet your needs.',
+      title: 'Hardware-Upgrades',
+      description: 'Verlängere die Lebensdauer deines Computers mit gezielten Upgrades. Wir helfen dir, die richtigen Komponenten auszuwählen und einzubauen.',
       icon: Zap
     },
     {
-      title: 'Diagnostic Services',
-      description: 'Comprehensive diagnostics to identify and fix issues quickly. We use professional tools and years of experience to pinpoint problems accurately.',
+      title: 'Diagnose-Service',
+      description: 'Umfassende Diagnose, um Probleme schnell zu identifizieren und zu beheben. Mit professionellem Werkzeug und jahrelanger Erfahrung treffen wir den Punkt.',
       icon: Shield
     },
     {
-      title: 'Same-Day Service',
-      description: 'Need your device back quickly? We offer same-day repairs for many common issues. Just bring it in during our opening hours.',
+      title: 'Express-Service',
+      description: 'Dringend? Für viele gängige Probleme bieten wir Same-Day-Reparaturen an. Bring das Gerät einfach während unserer Öffnungszeiten vorbei.',
       icon: Clock
     }
   ],
   pricing: {
-    base: 'Starting from CHF 70/hour',
+    base: 'Ab CHF 70/Stunde',
     details: [
-      'Free initial diagnosis',
-      'No fix, no fee policy',
-      'Transparent pricing',
-      'Warranty on repairs'
+      'Kostenlose Erstdiagnose',
+      'Keine Reparatur = keine Kosten',
+      'Transparente Preisgestaltung',
+      'Garantie auf Reparaturen'
     ]
   },
   process: [
     {
       step: 1,
-      title: 'Diagnosis',
-      description: 'We\'ll examine your device and provide a detailed assessment of the issue.'
+      title: 'Diagnose',
+      description: 'Wir untersuchen dein Gerät und liefern eine genaue Einschätzung des Problems.'
     },
     {
       step: 2,
-      title: 'Quote',
-      description: 'You\'ll receive a transparent quote for the repair, with no hidden fees.'
+      title: 'Kostenvoranschlag',
+      description: 'Du erhältst einen transparenten Kostenvoranschlag — ohne versteckte Gebühren.'
     },
     {
       step: 3,
-      title: 'Repair',
-      description: 'Our technicians will fix your device using high-quality parts and proven techniques.'
+      title: 'Reparatur',
+      description: 'Unsere Techniker reparieren dein Gerät mit hochwertigen Teilen und bewährten Methoden.'
     },
     {
       step: 4,
-      title: 'Testing',
-      description: 'We thoroughly test all repairs to ensure your device is working perfectly.'
+      title: 'Test',
+      description: 'Alle Reparaturen werden gründlich geprüft, damit dein Gerät einwandfrei funktioniert.'
     }
   ]
 }
@@ -108,7 +109,7 @@ export default function RepairPage() {
       {/* Process Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-white">
         <div className="container mx-auto px-4">
-          <Heading level={2} className="text-3xl font-bold mb-12 text-center">Our Repair Process</Heading>
+          <Heading level={2} className="text-3xl font-bold mb-12 text-center">Unser Reparaturprozess</Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {repairDetails.process.map((step) => (
               <div key={step.step} className="bg-gray-50 rounded-xl p-8">
@@ -127,7 +128,7 @@ export default function RepairPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 shadow-lg">
-            <Heading level={2} className="text-3xl font-bold mb-8 text-center">Pricing</Heading>
+            <Heading level={2} className="text-3xl font-bold mb-8 text-center">Preise</Heading>
             <div className="text-center mb-8">
               <p className="text-2xl font-bold text-green-600">{repairDetails.pricing.base}</p>
             </div>
@@ -146,26 +147,26 @@ export default function RepairPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
         <div className="container mx-auto px-4 text-center">
-          <Heading level={2} className="text-4xl font-bold mb-6">Ready to Repair Your Device?</Heading>
+          <Heading level={2} className="text-4xl font-bold mb-6">Gerät reparieren lassen?</Heading>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
-            Contact us today for a free diagnosis and quote. We'll help you get your device back in working order quickly and affordably.
+            Melde dich für eine kostenlose Diagnose und ein Angebot. Wir helfen dir, dein Gerät schnell und günstig wieder zum Laufen zu bringen.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
               className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
             >
-              Contact Us
+              Kontakt aufnehmen
             </Link>
             <Link
               href="/services"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition-colors duration-300 text-lg"
             >
-              Back to Services
+              Alle Services
             </Link>
           </div>
         </div>
       </section>
     </main>
   )
-} 
+}

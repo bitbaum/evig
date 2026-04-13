@@ -15,7 +15,7 @@ export function ProcessingView() {
         <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-4" />
         <Heading level={3} className="text-lg font-semibold mb-2">Buchung wird verarbeitet...</Heading>
         <p className="text-gray-600 text-center">
-          Bitte warten Sie, während wir deine Buchung erstellen und die Zahlung vorbereiten.
+          Bitte warte, während wir deine Buchung erstellen und die Zahlung vorbereiten.
         </p>
       </CardContent>
     </Card>

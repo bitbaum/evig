@@ -190,8 +190,8 @@ export default function ServicesPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Service',
-            'name': 'Computer Repair & IT Services',
-            'description': 'Professional computer repair, web development, data recovery, Linux support, and hardware recycling services.',
+            'name': 'Computer Reparatur & IT Services',
+            'description': 'Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling.',
             'provider': {
               '@type': 'Organization',
               'name': ORG.name,
@@ -199,17 +199,17 @@ export default function ServicesPage() {
               'logo': `${ORG.website}/logo.png`
             },
             'serviceType': [
-              'Computer Repair',
-              'Web Design & Development',
-              'Data Recovery',
+              'Computer Reparatur',
+              'Webdesign & Entwicklung',
+              'Datenrettung',
               'Linux Support',
               'Hardware Recycling',
-              'Open Source Solutions',
-              'Enterprise AI Solutions'
+              'Open Source Lösungen',
+              'KI-Lösungen'
             ],
             'areaServed': {
               '@type': 'City',
-              'name': 'Your City'
+              'name': 'Zürich'
             }
           })
         }}

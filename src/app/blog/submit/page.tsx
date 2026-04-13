@@ -361,7 +361,7 @@ export default function SubmitPostPage() {
               placeholder={
                 submissionType === 'idea'
                   ? 'Beschreibe deine Idee für einen Blogbeitrag...'
-                  : '## Einleitung\n\nIhr Artikel in Markdown...\n\n### Abschnitt 1\n\nInhalt hier...'
+                  : '## Einleitung\n\nDein Artikel in Markdown...\n\n### Abschnitt 1\n\nInhalt hier...'
               }
             />
             {submissionType === 'draft' && (
