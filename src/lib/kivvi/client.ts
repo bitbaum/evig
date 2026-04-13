@@ -92,7 +92,7 @@ export interface CreateKivviInvoiceInput {
   items: Array<{
     description: string;
     kivviInventoryItemId?: string;
-    quantity: number;
+    quantity: string; // Kivvi uses decimal strings for all financial values
     unitPrice: string;
     vatRate?: string;
   }>;
