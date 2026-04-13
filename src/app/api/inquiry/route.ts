@@ -17,7 +17,7 @@ const InquirySchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const clientIp = getClientIp(request.headers)
-    const rateLimit = checkRateLimit(clientIp, 'inquiry')
+    const rateLimit = checkRateLimit(clientIp, 'submission')
     if (!rateLimit.allowed) {
       return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
         retryAfter: rateLimit.retryAfter,
