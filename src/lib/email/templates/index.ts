@@ -44,17 +44,29 @@ export {
   adminNewSellerApplication,
 } from './admin';
 
-// Misc templates
+// Newsletter templates
+export { newsletterConfirmation } from './newsletter';
+
+// Blog submission templates
 export {
-  newsletterConfirmation,
   blogSubmissionReceived,
-  newReviewNotification,
-  sellerApplicationSubmitted,
-  locationApprovalNotification,
-  locationSubmissionConfirmation,
-  contentSubmissionApproved,
-  contentSubmissionRejected,
-} from './misc';
+  blogSubmissionApproved,
+  blogSubmissionRejected,
+  blogSubmissionPublished,
+  blogSubmissionChangesRequested,
+} from './blog';
+
+// Review templates
+export { newReviewNotification } from './reviews';
+
+// Seller templates
+export { sellerApplicationSubmitted } from './sellers';
+
+// Content moderation templates
+export { contentSubmissionApproved, contentSubmissionRejected } from './content';
+
+// Location templates
+export { locationApprovalNotification, locationSubmissionConfirmation } from './locations';
 
 // IT-Hilfe templates
 export {

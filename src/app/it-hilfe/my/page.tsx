@@ -34,6 +34,7 @@ export default function MyRequestsPage() {
   const [loading, setLoading] = useState(true)
   const [total, setTotal] = useState(0)
   const [statusFilter, setStatusFilter] = useState('')
+  const [fetchError, setFetchError] = useState(false)
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -45,6 +46,7 @@ export default function MyRequestsPage() {
   const fetchRequests = useCallback(async () => {
     try {
       setLoading(true)
+      setFetchError(false)
       const params = new URLSearchParams()
       if (statusFilter) params.set('status', statusFilter)
 
@@ -54,9 +56,12 @@ export default function MyRequestsPage() {
       if (data.success) {
         setRequests(data.data.requests)
         setTotal(data.data.total)
+      } else {
+        setFetchError(true)
       }
     } catch (error) {
       logger.error('Error fetching my requests', { error })
+      setFetchError(true)
     } finally {
       setLoading(false)
     }
@@ -134,8 +139,15 @@ export default function MyRequestsPage() {
           </div>
         </div>
 
+        {/* Fetch Error */}
+        {fetchError && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-red-800">Anfragen konnten nicht geladen werden. Bitte lade die Seite neu.</p>
+          </div>
+        )}
+
         {/* Requests List */}
-        {requests.length === 0 ? (
+        {requests.length === 0 && !fetchError ? (
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <Heading level={3} className="text-xl text-gray-900 mb-2">

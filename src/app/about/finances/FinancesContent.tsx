@@ -6,6 +6,7 @@ import AboutSubNav from '@/components/about/AboutSubNav'
 import { Wallet, TrendingUp, Heart, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { AlertCircle } from 'lucide-react'
 
 interface YearData {
   year: number
@@ -49,6 +50,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
 export default function FinancesContent() {
   const [data, setData] = useState<YearData[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     fetch('/api/public/financials')
@@ -56,9 +58,14 @@ export default function FinancesContent() {
       .then(result => {
         if (result.success && Array.isArray(result.data)) {
           setData(result.data)
+        } else {
+          setError(true)
         }
       })
-      .catch(error => logger.error('Failed to load financials', { error }))
+      .catch(err => {
+        logger.error('Failed to load financials', { error: err })
+        setError(true)
+      })
       .finally(() => setLoading(false))
   }, [])
 
@@ -84,6 +91,11 @@ export default function FinancesContent() {
               ))}
             </div>
             <div className="bg-white rounded-xl p-6 h-64" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <p className="text-gray-600">Finanzdaten konnten nicht geladen werden.</p>
           </div>
         ) : data.length === 0 ? (
           <div className="text-center py-12">

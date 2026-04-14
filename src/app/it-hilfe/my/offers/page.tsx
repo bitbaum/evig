@@ -74,9 +74,13 @@ export default function MyOffersPage() {
       if (data.success) {
         setOffers(data.data.offers)
         setTotal(data.data.total)
+      } else {
+        setError(data.error || 'Angebote konnten nicht geladen werden')
+        logger.error('Error fetching my offers', { error: data.error })
       }
-    } catch (error) {
-      logger.error('Error fetching my offers', { error })
+    } catch (err) {
+      logger.error('Error fetching my offers', { error: err })
+      setError('Angebote konnten nicht geladen werden. Bitte lade die Seite neu.')
     } finally {
       setLoading(false)
     }
