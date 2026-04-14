@@ -11,16 +11,23 @@ const STORAGE_KEY = 'dashboard_monatsueberblick_open'
 
 interface MonatsueberblickProps {
   stats: DashboardStats
+  /** When true, defaults to expanded (for 'lead' dashboard mode) */
+  defaultOpen?: boolean
 }
 
-export function Monatsueberblick({ stats }: MonatsueberblickProps) {
+export function Monatsueberblick({ stats, defaultOpen = false }: MonatsueberblickProps) {
   // Combined state so useEffect does a single setState call (avoids cascade-render lint warning)
-  const [{ open, hydrated }, setMeta] = useState({ open: false, hydrated: false })
+  const [{ open, hydrated }, setMeta] = useState({ open: defaultOpen, hydrated: false })
 
   useEffect(() => {
-    // Reading localStorage is an external system sync — legitimate setState in effect.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMeta({ open: localStorage.getItem(STORAGE_KEY) === 'true', hydrated: true })
+    const stored = localStorage.getItem(STORAGE_KEY)
+    // Reading localStorage is an external system sync — setState in effect is intentional.
+    setMeta({
+      // Stored preference wins; fall back to prop (defaultOpen for 'lead' mode)
+      open: stored !== null ? stored === 'true' : defaultOpen,
+      hydrated: true,
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const toggle = () => {

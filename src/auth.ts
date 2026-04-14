@@ -34,6 +34,7 @@ declare module 'next-auth' {
     is_staff?: boolean
     staff_permissions?: string[]
     is_super_admin?: boolean
+    dashboard_mode?: 'coordinator' | 'lead' | 'volunteer'
   }
 
   interface Session {
@@ -48,6 +49,7 @@ declare module 'next-auth' {
       isStaff: boolean
       staffPermissions: string[]
       isSuperAdmin: boolean
+      dashboardMode: 'coordinator' | 'lead' | 'volunteer'
     }
   }
 }
@@ -177,6 +179,7 @@ export const authConfig = {
             is_staff: userIsStaff,
             staff_permissions: userPermissions,
             is_super_admin: userIsSuperAdmin,
+            dashboard_mode: user.dashboard_mode ?? 'coordinator',
           }
         } catch (dbError) {
           // Handle database connection errors gracefully
@@ -219,6 +222,7 @@ export const authConfig = {
         isStaff?: boolean
         staffPermissions?: string[]
         isSuperAdmin?: boolean
+        dashboardMode?: 'coordinator' | 'lead' | 'volunteer'
       },
       user?: User
     }) {
@@ -236,6 +240,7 @@ export const authConfig = {
         token.isStaff = userIsStaff
         token.staffPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email ?? '') : [])
         token.isSuperAdmin = emailVerified ? (user.is_super_admin ?? isSuperAdmin(user.email ?? '')) : false
+        token.dashboardMode = user.dashboard_mode ?? 'coordinator'
       }
       return token
     },
@@ -250,6 +255,7 @@ export const authConfig = {
         isStaff?: boolean
         staffPermissions?: string[]
         isSuperAdmin?: boolean
+        dashboardMode?: 'coordinator' | 'lead' | 'volunteer'
       }
     }) {
       // Add all user info from JWT token to session
@@ -261,6 +267,7 @@ export const authConfig = {
         session.user.isStaff = token.isStaff ?? false
         session.user.staffPermissions = token.staffPermissions ?? []
         session.user.isSuperAdmin = token.isSuperAdmin ?? false
+        session.user.dashboardMode = token.dashboardMode ?? 'coordinator'
       }
       return session
     },

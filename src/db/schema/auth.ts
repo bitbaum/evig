@@ -20,6 +20,8 @@ export const users = pgTable('users', {
   staffPermissions: text('staff_permissions').array().default([]),
   // Super admin management (004)
   isSuperAdmin: boolean('is_super_admin').default(false),
+  // Dashboard layout preference (Phase 6)
+  dashboardMode: text('dashboard_mode').notNull().default('coordinator'),
   // Verein membership (062)
   isMember: boolean('is_member').default(false),
   memberSince: timestamp('member_since', { withTimezone: true, mode: 'string' }),

@@ -34,6 +34,7 @@ export interface DbUser {
   is_staff: boolean
   staff_permissions: string[]
   is_super_admin: boolean
+  dashboard_mode: 'coordinator' | 'lead' | 'volunteer'
 }
 
 export interface DbUserProfile {
@@ -171,6 +172,7 @@ function mapUserToDbUser(row: User): DbUser {
     is_staff: row.isStaff ?? false,
     staff_permissions: row.staffPermissions ?? [],
     is_super_admin: row.isSuperAdmin ?? false,
+    dashboard_mode: (row.dashboardMode as 'coordinator' | 'lead' | 'volunteer') ?? 'coordinator',
   }
 }
 

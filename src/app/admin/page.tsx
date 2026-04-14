@@ -35,9 +35,12 @@ import {
   BannerSkeleton,
   PersonalSectionSkeleton,
   UnifiedQueueSkeleton,
+  DashboardModeToggle,
 } from '@/components/admin/dashboard'
 import Heading from '@/components/ui/Heading'
 import type { DashboardStats } from '@/components/admin/dashboard'
+
+type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | RevampIT',
@@ -65,11 +68,13 @@ async function UnifiedQueueSection({
 
 async function MonatsueberblickSection({
   statsPromise,
+  mode,
 }: {
   statsPromise: Promise<DashboardStats>
+  mode: DashboardMode
 }) {
   const stats = await statsPromise
-  return <Monatsueberblick stats={stats} />
+  return <Monatsueberblick stats={stats} defaultOpen={mode === 'lead'} />
 }
 
 async function PermissionRequestsSection({
@@ -131,17 +136,21 @@ export default async function AdminDashboard() {
 
   const userId = session.user.id ?? ''
   const isMember = !!(session.user as { isMember?: boolean }).isMember
+  const dashboardMode: DashboardMode = (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator'
 
   return (
     <div className="space-y-4">
       {/* Greeting — renders immediately, no data needed */}
-      <div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
-          Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
-        </Heading>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {isSuper ? 'Super Admin' : 'Staff'}
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+            Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
+          </Heading>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {isSuper ? 'Super Admin' : 'Staff'}
+          </p>
+        </div>
+        <DashboardModeToggle current={dashboardMode} />
       </div>
 
       {/* VotingBanner — runs its own query, streams independently */}
@@ -175,9 +184,9 @@ export default async function AdminDashboard() {
         <PermissionRequestsSection statsPromise={statsPromise} isSuper={isSuper} />
       </Suspense>
 
-      {/* Monatsüberblick — shares statsPromise, collapsed by default */}
+      {/* Monatsüberblick — shares statsPromise; expanded by default for 'lead' mode */}
       <Suspense fallback={null}>
-        <MonatsueberblickSection statsPromise={statsPromise} />
+        <MonatsueberblickSection statsPromise={statsPromise} mode={dashboardMode} />
       </Suspense>
 
       {/* Request More Access — synchronous */}
