@@ -10,6 +10,7 @@ import { UserMenuDropdown } from './UserMenuDropdown'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { NotificationBell } from '@/components/admin/NotificationBell'
+import { CommandBar } from '@/components/admin/CommandBar'
 import { getHirnSection } from '@/config/sections'
 
 interface AdminLayoutClientProps {
@@ -105,6 +106,7 @@ export function AdminLayoutClient({
                 Website
               </Link>
 
+              <CommandBar />
               <NotificationBell />
               <UserMenuDropdown user={user} />
             </div>
