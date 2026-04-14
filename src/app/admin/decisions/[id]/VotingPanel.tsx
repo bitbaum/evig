@@ -173,6 +173,27 @@ export default function VotingPanel({
   // Simple majority state
   const [majorityResponse, setMajorityResponse] = useState<SimpleMajorityResponse>('yes');
 
+  // Ranked choice state — ordered list of option IDs
+  const [ranking, setRanking] = useState<string[]>(() => options.map((o) => o.id));
+
+  function moveRankingUp(index: number) {
+    if (index === 0) return;
+    setRanking((prev) => {
+      const next = [...prev];
+      [next[index - 1], next[index]] = [next[index], next[index - 1]];
+      return next;
+    });
+  }
+
+  function moveRankingDown(index: number) {
+    if (index === ranking.length - 1) return;
+    setRanking((prev) => {
+      const next = [...prev];
+      [next[index], next[index + 1]] = [next[index + 1], next[index]];
+      return next;
+    });
+  }
+
   // Detect gallery mode: any option has an image, or there are many options
   const hasImages = options.some((o) => o.imageUrl);
   const isGalleryMode = hasImages || (options.length > 5 && (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot'));
@@ -198,6 +219,9 @@ export default function VotingPanel({
         break;
       case 'simple_majority':
         voteData = { response: majorityResponse };
+        break;
+      case 'ranked_choice':
+        voteData = { ranking };
         break;
     }
 
@@ -500,6 +524,58 @@ export default function VotingPanel({
               ))}
             </>
           )}
+        </div>
+      )}
+
+      {/* Ranked Choice Voting */}
+      {votingMethod === 'ranked_choice' && (
+        <div className="space-y-3">
+          <p className="text-sm text-gray-500">
+            Bringe die Kandidatinnen in deine bevorzugte Reihenfolge (1 = höchste Priorität):
+          </p>
+          <div className="space-y-2">
+            {ranking.map((optId, index) => {
+              const opt = options.find((o) => o.id === optId);
+              if (!opt) return null;
+              return (
+                <div
+                  key={optId}
+                  className="flex items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2.5"
+                >
+                  <span className="w-6 text-center text-sm font-bold text-blue-600">
+                    {index + 1}.
+                  </span>
+                  <span className="flex-1 text-sm font-medium text-gray-800">{opt.label}</span>
+                  {opt.description && (
+                    <span className="hidden text-xs text-gray-400 sm:block">{opt.description}</span>
+                  )}
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={() => moveRankingUp(index)}
+                      disabled={index === 0}
+                      className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                      title="Höher"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveRankingDown(index)}
+                      disabled={index === ranking.length - 1}
+                      className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30"
+                      title="Tiefer"
+                    >
+                      ↓
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <p className="text-xs text-gray-400">
+            Punkte werden nach Borda-Methode berechnet: 1. Platz erhält die meisten Punkte.
+          </p>
         </div>
       )}
 

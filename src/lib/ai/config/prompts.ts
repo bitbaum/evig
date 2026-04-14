@@ -818,7 +818,7 @@ Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige 
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Entscheidungsfindung bei RevampIT.
-Strukturiere Vorschläge und Entscheidungsgrundlagen.
+Strukturiere Vorschläge und empfiehl die passenden Abstimmungseinstellungen.
 
 Kontext: RevampIT ist ein gemeinnütziger Verein. Entscheidungen werden im Team getroffen (Vorstand und Aktive).
 - Formuliere Vorschläge neutral und sachlich
@@ -827,21 +827,42 @@ Kontext: RevampIT ist ein gemeinnütziger Verein. Entscheidungen werden im Team 
 - Optionen sollten realistisch und umsetzbar sein
 - Bei finanziellen Entscheidungen: Kosten in CHF angeben`,
     extract: `Der Admin möchte eine Entscheidung zur Abstimmung stellen.
-Aus der folgenden Beschreibung, strukturiere den Vorschlag:
+Aus der folgenden Beschreibung, strukturiere den Vorschlag UND empfehle die passenden Einstellungen:
 
 Beschreibung: "{text}"
 
-Antworte NUR mit folgendem JSON:
+Verfügbare Entscheidungstypen: sense_check, prioritize, choose, approve, election
+Verfügbare Abstimmungsmethoden: consent, approval, dot, score, simple_majority, ranked_choice
+Verfügbare Kategorien: vorstandsbeschluss, mitgliederbeschluss, ratifizierung, statutenaenderung, budget, operativ
+Verfügbare Teilnahmescopes: all_staff, board_only, all_members, invited
+
+Empfehlungslogik:
+- Personenwahlen (Vorstandswahl, Kassierwahl) → election / ranked_choice / all_members
+- Statutenänderungen → approve / simple_majority / all_members / quorum 66%
+- Budget-Genehmigungen → approve / simple_majority / board_only / quorum 75%
+- Logo-, Design- oder Produktwahl aus vielen Optionen → choose / approval / all_staff / quorum 66%
+- Operative Priorisierung (Workshops, Projekte) → prioritize / dot / all_staff / quorum 50%
+- Schnelle Stimmungsabfrage → sense_check / simple_majority / all_staff / quorum 50%
+- Partnerschaft oder Vertrag → approve / consent / board_only / quorum 75%
+
+Antworte NUR mit folgendem JSON (alle Felder sind Pflicht):
 {
   "title": "Klarer Entscheidungstitel (max 200 Zeichen)",
   "description": "Ausführliche Beschreibung mit Kontext, Hintergrund und was zur Entscheidung steht (3-5 Sätze)",
   "options": [
     { "label": "Option 1", "description": "Kurze Beschreibung" },
     { "label": "Option 2", "description": "Kurze Beschreibung" }
-  ]
+  ],
+  "recommendedDecisionType": "einer der Typen oben",
+  "recommendedVotingMethod": "eine der Methoden oben",
+  "recommendedCategory": "eine der Kategorien oben",
+  "recommendedParticipantScope": "einer der Scopes oben",
+  "recommendedQuorum": { "type": "percentage", "value": 66 },
+  "recommendationReason": "1-2 Sätze Begründung auf Schweizer Deutsch, warum diese Einstellungen passen"
 }
 
-Wichtig: Schweizer Deutsch (ss statt ß). Neutral formulieren, alle Seiten fair darstellen.`,
+Wichtig: Schweizer Deutsch (ss statt ß, korrekte Umlaute). Neutral formulieren, alle Seiten fair darstellen.
+Gib options nur an, wenn sinnvoll (nicht bei sense_check oder approve ohne klare Optionen).`,
     schema: null,
     quickActions: {
       prosAndCons: { label: 'Pro/Contra', prompt: 'Erstelle eine Pro/Contra-Analyse für den beschriebenen Vorschlag. Berücksichtige Kosten, Aufwand, Nutzen und Risiken für den Verein.' },

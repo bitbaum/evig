@@ -27,12 +27,15 @@ interface OutcomeData {
   counts?: Record<string, number>;
   ranked?: RankedOption[];
   blocks?: Array<{ rationale?: string }>;
+  bordaPoints?: Record<string, number>;
+  maxPossiblePoints?: number;
 }
 
 interface Props {
   outcome: unknown;
   outcomeSummary: string | null;
   votingMethod: VotingMethod;
+  aiOutcomeNarrative?: string | null;
 }
 
 function Bar({
@@ -95,13 +98,25 @@ function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
   );
 }
 
-export default function ResultsPanel({ outcome, outcomeSummary, votingMethod }: Props) {
+export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, aiOutcomeNarrative }: Props) {
   const data = outcome as OutcomeData | null;
   if (!data) return null;
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
       <Heading level={2} className="mb-4 text-lg font-semibold text-gray-900">Ergebnis</Heading>
+
+      {/* AI Outcome Narrative — Beschluss hero */}
+      {aiOutcomeNarrative && (
+        <div className="mb-6 rounded-lg border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800 p-4">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+            Beschluss
+          </p>
+          <p className="text-sm font-medium leading-relaxed text-gray-900 dark:text-white">
+            {aiOutcomeNarrative}
+          </p>
+        </div>
+      )}
 
       {/* Passed/Failed badge */}
       {'passed' in data && (
@@ -228,6 +243,37 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod }: 
               color={key === 'yes' ? 'bg-green-400' : key === 'no' ? 'bg-red-400' : 'bg-gray-300'}
             />
           ))}
+        </div>
+      )}
+
+      {/* Ranked Choice (Borda Count) results */}
+      {votingMethod === 'ranked_choice' && data.ranked && (
+        <div className="space-y-2">
+          {data.ranked[0] && (
+            <WinnerCard
+              opt={data.ranked[0]}
+              metric={`${(data.ranked[0] as RankedOption & { bordaPoints?: number }).bordaPoints ?? 0} Borda-Punkte`}
+            />
+          )}
+          {data.ranked.map((opt, i) => {
+            const bp = (opt as RankedOption & { bordaPoints?: number; scorePercent?: number }).bordaPoints ?? 0;
+            const sp = (opt as RankedOption & { scorePercent?: number }).scorePercent ?? 0;
+            const maxBp = (data.ranked?.[0] as (RankedOption & { bordaPoints?: number }) | undefined)?.bordaPoints ?? 1;
+            return (
+              <Bar
+                key={opt.id}
+                label={`${opt.label} — ${bp} Punkte (${sp}%)`}
+                value={bp}
+                max={maxBp > 0 ? maxBp : 1}
+                color={i === 0 ? 'bg-indigo-500' : 'bg-indigo-300'}
+                imageUrl={opt.imageUrl}
+                isWinner={i === 0}
+              />
+            );
+          })}
+          <p className="text-xs text-gray-500">
+            Borda-Methode: {data.totalVotes} Stimmen · max. {data.maxPossiblePoints} mögliche Punkte
+          </p>
         </div>
       )}
 
