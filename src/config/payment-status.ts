@@ -31,6 +31,20 @@ export const PAYMENT_TRANSACTION_TYPE = {
 
 export type PaymentTransactionType = typeof PAYMENT_TRANSACTION_TYPE[keyof typeof PAYMENT_TRANSACTION_TYPE];
 
+/**
+ * Payment dispute status (payment_disputes.status column).
+ * CHECK (status IN ('opened', 'under_review', 'won', 'lost', 'cancelled'))
+ */
+export const PAYMENT_DISPUTE_STATUS = {
+  OPENED: 'opened',
+  UNDER_REVIEW: 'under_review',
+  WON: 'won',
+  LOST: 'lost',
+  CANCELLED: 'cancelled',
+} as const;
+
+export type PaymentDisputeStatus = typeof PAYMENT_DISPUTE_STATUS[keyof typeof PAYMENT_DISPUTE_STATUS];
+
 export const ESCROW_STATUS = {
   ACTIVE: 'active',
   RELEASED: 'released',

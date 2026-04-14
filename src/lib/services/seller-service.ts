@@ -10,6 +10,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { listings, listingImages, marketplaceOrders } from '@/db/schema'
 import { logger } from '@/lib/logger'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 // Table name refs for raw SQL
 const listingsTable = getTableName(listings)
@@ -108,11 +109,11 @@ async function fetchListingStats(userId: string) {
   const result = await db.execute(sql`
     SELECT
       COUNT(*) as total_products,
-      COUNT(*) FILTER (WHERE status = 'active') as active_products,
+      COUNT(*) FILTER (WHERE status = ${LISTING_STATUS.ACTIVE}) as active_products,
       COALESCE(SUM(view_count), 0) as total_views,
       COALESCE(SUM(favorite_count), 0) as total_favorites
     FROM ${sql.raw(listingsTable)}
-    WHERE seller_id = ${userId} AND status != 'removed'
+    WHERE seller_id = ${userId} AND status != ${LISTING_STATUS.REMOVED}
   `)
 
   const row = (result.rows as unknown as {

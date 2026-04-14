@@ -6,7 +6,7 @@ import { paymentTransactions, paymentProviders, escrowAccounts, refunds, payment
 import { users } from '@/db/schema/auth'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
+import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_DISPUTE_STATUS } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 
 interface OverviewRow {
@@ -207,8 +207,8 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     const disputeResult = await db.execute(sql`
       SELECT
         COUNT(*) as total_disputes,
-        COUNT(CASE WHEN status = 'opened' THEN 1 END) as open_disputes,
-        COUNT(CASE WHEN status = 'lost' THEN 1 END) as lost_disputes,
+        COUNT(CASE WHEN status = ${PAYMENT_DISPUTE_STATUS.OPENED} THEN 1 END) as open_disputes,
+        COUNT(CASE WHEN status = ${PAYMENT_DISPUTE_STATUS.LOST} THEN 1 END) as lost_disputes,
         COALESCE(SUM(amount_cents), 0) as total_dispute_amount_cents
       FROM ${sql.raw(pdTable)} pd
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'

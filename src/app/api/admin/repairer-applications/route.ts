@@ -6,6 +6,7 @@ import { repairerApplications, users } from '@/db/schema'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import { DOCUMENT_STATUS } from '@/config/document-status'
 import { logger } from '@/lib/logger'
 
 interface ApplicationRow {
@@ -64,7 +65,7 @@ export const GET = withAdmin('services', async (request, session) => {
         u.name as applicant_name,
         u.email as applicant_email,
         u."createdAt" as user_created_at,
-        COALESCE(ra.document_verification_status, 'pending') as document_verification_status,
+        COALESCE(ra.document_verification_status, ${DOCUMENT_STATUS.PENDING}) as document_verification_status,
         COUNT(*) OVER() as _total_count,
         CASE
           WHEN ra.status = ${APPROVAL_STATUS.PENDING} THEN 1

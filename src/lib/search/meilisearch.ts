@@ -7,7 +7,7 @@
 
 import { logger } from '@/lib/logger';
 import { MEILISEARCH_URL } from '@/config/urls';
-import { MARKETPLACE_SELLER_TYPE } from '@/config/marketplace';
+import { MARKETPLACE_SELLER_TYPE, LISTING_STATUS } from '@/config/marketplace';
 
 const MEILISEARCH_HOST = MEILISEARCH_URL;
 const MEILISEARCH_KEY = process.env.MEILISEARCH_KEY || '';
@@ -179,7 +179,7 @@ export async function searchListings(
 ): Promise<SearchResult | null> {
   try {
     // Build filter array
-    const filterParts: string[] = ['status = "active"'];
+    const filterParts: string[] = [`status = "${LISTING_STATUS.ACTIVE}"`];
 
     if (filters.category) filterParts.push(`category = "${filters.category}"`);
     if (filters.condition) filterParts.push(`condition = "${filters.condition}"`);

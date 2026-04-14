@@ -78,7 +78,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       // Update application document verification status to incomplete
       await tx.execute(sql`
         UPDATE ${sql.raw(getTableName(repairerApplications))}
-        SET document_verification_status = ${'incomplete'}, updated_at = CURRENT_TIMESTAMP
+        SET document_verification_status = ${DOCUMENT_STATUS.INCOMPLETE}, updated_at = CURRENT_TIMESTAMP
         WHERE id = ${document.application_id}
       `)
     })
@@ -111,7 +111,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     return apiSuccess({
       message: 'Dokument erfolgreich abgelehnt',
       documentId,
-      applicationDocumentStatus: 'incomplete'
+      applicationDocumentStatus: DOCUMENT_STATUS.INCOMPLETE
     })
 
   } catch (error) {

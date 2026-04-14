@@ -67,7 +67,8 @@ export async function createComment(
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
   const existingRow = existing.rows[0] as unknown as { id: string; status: string };
-  if (![DECISION_STATUS.DISCUSSION, DECISION_STATUS.VOTING].includes(existingRow.status as typeof DECISION_STATUS[keyof typeof DECISION_STATUS])) {
+  const commentableStatuses: string[] = [DECISION_STATUS.DISCUSSION, DECISION_STATUS.VOTING];
+  if (!commentableStatuses.includes(existingRow.status)) {
     return { error: 'not_commentable' as const };
   }
 
