@@ -7,6 +7,13 @@ export interface MissionStats {
   workshopAttendeesThisMonth: number
 }
 
+export interface MissionDelta {
+  devicesProcessed: number  // this month - last month
+  devicesSold: number
+  itHilfeCompleted: number
+  workshopAttendees: number
+}
+
 export interface DashboardStats {
   // Action items with age of oldest unresolved item
   pendingApprovals: number
@@ -41,6 +48,8 @@ export interface DashboardStats {
 
   // Mission / impact (this month)
   mission: MissionStats
+  // Delta vs last month (positive = improvement)
+  delta: MissionDelta
 }
 
 export type ActionItem = {

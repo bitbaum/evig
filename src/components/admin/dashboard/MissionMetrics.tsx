@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Users, UserCheck, Wrench, Monitor } from 'lucide-react'
-import type { DashboardStats } from './types'
+import type { DashboardStats, MissionDelta } from './types'
 
 interface MissionMetricsProps {
   stats: DashboardStats
@@ -8,12 +8,34 @@ interface MissionMetricsProps {
 
 const MONTH_LABEL = new Date().toLocaleString('de-CH', { month: 'long' })
 
-export function MissionMetrics({ stats }: MissionMetricsProps) {
-  const { mission } = stats
+function DeltaBadge({ value }: { value: number }) {
+  if (value === 0) return (
+    <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">±0</span>
+  )
+  const positive = value > 0
+  return (
+    <span className={`text-xs font-semibold ${positive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+      {positive ? '+' : ''}{value}
+    </span>
+  )
+}
 
-  const missionCards = [
+export function MissionMetrics({ stats }: MissionMetricsProps) {
+  const { mission, delta } = stats
+
+  const missionCards: Array<{
+    value: number
+    delta: number
+    label: string
+    sublabel: string
+    icon: typeof Monitor
+    iconBg: string
+    iconColor: string
+    href: string
+  }> = [
     {
       value: mission.devicesProcessedThisMonth,
+      delta: delta.devicesProcessed,
       label: 'Geräte erfasst',
       sublabel: MONTH_LABEL,
       icon: Monitor,
@@ -23,6 +45,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
     },
     {
       value: mission.devicesSoldThisMonth,
+      delta: delta.devicesSold,
       label: 'Geräte verkauft',
       sublabel: MONTH_LABEL,
       icon: Monitor,
@@ -32,6 +55,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
     },
     {
       value: mission.itHilfeCompletedThisMonth,
+      delta: delta.itHilfeCompleted,
       label: 'IT-Hilfen abgeschlossen',
       sublabel: MONTH_LABEL,
       icon: Wrench,
@@ -41,6 +65,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
     },
     {
       value: mission.workshopAttendeesThisMonth,
+      delta: delta.workshopAttendees,
       label: 'Workshop-Teilnahmen',
       sublabel: MONTH_LABEL,
       icon: Users,
@@ -48,7 +73,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       iconColor: 'text-amber-600 dark:text-amber-400',
       href: '/admin/workshops',
     },
-  ] as const
+  ]
 
   return (
     <div className="space-y-3">
@@ -67,9 +92,12 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
                   <Icon className={`w-5 h-5 ${card.iconColor}`} aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">
-                    {card.value}
-                  </p>
+                  <div className="flex items-baseline gap-1.5">
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">
+                      {card.value}
+                    </p>
+                    <DeltaBadge value={card.delta} />
+                  </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
                     {card.label}
                   </p>

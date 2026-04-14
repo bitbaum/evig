@@ -13,9 +13,11 @@ interface MonatsueberblickProps {
   stats: DashboardStats
   /** When true, defaults to expanded (for 'lead' dashboard mode) */
   defaultOpen?: boolean
+  /** Optional extra content (e.g. TeamActivityFeed for 'lead' mode) */
+  children?: React.ReactNode
 }
 
-export function Monatsueberblick({ stats, defaultOpen = false }: MonatsueberblickProps) {
+export function Monatsueberblick({ stats, defaultOpen = false, children }: MonatsueberblickProps) {
   // Combined state so useEffect does a single setState call (avoids cascade-render lint warning)
   const [{ open, hydrated }, setMeta] = useState({ open: defaultOpen, hydrated: false })
 
@@ -65,6 +67,7 @@ export function Monatsueberblick({ stats, defaultOpen = false }: Monatsueberblic
         >
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />
+          {children}
         </div>
       )}
     </div>

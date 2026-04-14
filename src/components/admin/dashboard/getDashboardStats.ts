@@ -68,6 +68,12 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
   monthStart.setHours(0, 0, 0, 0)
   const monthStartISO = monthStart.toISOString()
 
+  const prevMonthEnd = new Date(monthStart)
+  const prevMonthStart = new Date(monthStart)
+  prevMonthStart.setMonth(prevMonthStart.getMonth() - 1)
+  const prevMonthStartISO = prevMonthStart.toISOString()
+  const prevMonthEndISO = prevMonthEnd.toISOString()
+
   // Fire all queries in parallel — wall time = max latency, not sum
   const [
     usersRes,
@@ -88,6 +94,10 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     devicesSoldRes,
     itHilfeCompletedRes,
     workshopAttendeesRes,
+    prevDevicesProcessedRes,
+    prevDevicesSoldRes,
+    prevItHilfeCompletedRes,
+    prevWorkshopAttendeesRes,
   ] = await Promise.allSettled([
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
@@ -180,6 +190,28 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       FROM ${sql.raw(workshopRegTable)}
       WHERE attended = true AND created_at >= ${monthStartISO}
     `),
+
+    // Prev-month mission metrics for delta calculation
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(inventoryTable)}
+      WHERE created_at >= ${prevMonthStartISO} AND created_at < ${prevMonthEndISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(inventoryTable)}
+      WHERE status = 'sold' AND updated_at >= ${prevMonthStartISO} AND updated_at < ${prevMonthEndISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(itHilfeTable)}
+      WHERE status = 'completed' AND completed_at >= ${prevMonthStartISO} AND completed_at < ${prevMonthEndISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(workshopRegTable)}
+      WHERE attended = true AND created_at >= ${prevMonthStartISO} AND created_at < ${prevMonthEndISO}
+    `),
   ])
 
   // Extract approvals
@@ -234,6 +266,20 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       devicesSoldThisMonth: rowCount(devicesSoldRes, 'devicesSoldThisMonth'),
       itHilfeCompletedThisMonth: rowCount(itHilfeCompletedRes, 'itHilfeCompletedThisMonth'),
       workshopAttendeesThisMonth: rowCount(workshopAttendeesRes, 'workshopAttendeesThisMonth'),
+    },
+    delta: {
+      devicesProcessed:
+        rowCount(devicesProcessedRes, 'devicesProcessedThisMonth') -
+        rowCount(prevDevicesProcessedRes, 'prevDevicesProcessed'),
+      devicesSold:
+        rowCount(devicesSoldRes, 'devicesSoldThisMonth') -
+        rowCount(prevDevicesSoldRes, 'prevDevicesSold'),
+      itHilfeCompleted:
+        rowCount(itHilfeCompletedRes, 'itHilfeCompletedThisMonth') -
+        rowCount(prevItHilfeCompletedRes, 'prevItHilfeCompleted'),
+      workshopAttendees:
+        rowCount(workshopAttendeesRes, 'workshopAttendeesThisMonth') -
+        rowCount(prevWorkshopAttendeesRes, 'prevWorkshopAttendees'),
     },
   }
 }

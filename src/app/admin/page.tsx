@@ -37,6 +37,7 @@ import {
   UnifiedQueueSkeleton,
   DashboardModeToggle,
 } from '@/components/admin/dashboard'
+import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
 import Heading from '@/components/ui/Heading'
 import type { DashboardStats } from '@/components/admin/dashboard'
 
@@ -74,7 +75,11 @@ async function MonatsueberblickSection({
   mode: DashboardMode
 }) {
   const stats = await statsPromise
-  return <Monatsueberblick stats={stats} defaultOpen={mode === 'lead'} />
+  return (
+    <Monatsueberblick stats={stats} defaultOpen={mode === 'lead'}>
+      {mode === 'lead' && <TeamActivityFeed />}
+    </Monatsueberblick>
+  )
 }
 
 async function PermissionRequestsSection({
