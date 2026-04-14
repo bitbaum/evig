@@ -13,6 +13,7 @@ import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { getSkillIds } from '@/config/it-hilfe'
 import { REPAIRER_STATUS } from '@/config/repairer-status'
 
@@ -54,10 +55,10 @@ export async function GET(request: NextRequest) {
     const conditions: SQL[] = [eq(repairerProfiles.isActive, true)]
 
     // Tier filter — 'professional' maps to status='active'; 'community' maps to profile_tier='community'
-    if (tier === 'community') {
-      conditions.push(sql`${repairerProfiles.profileTier} = 'community'`)
-    } else if (tier === 'professional') {
-      conditions.push(sql`${repairerProfiles.profileTier} = 'professional'`)
+    if (tier === REPAIRER_PROFILE_TIER.COMMUNITY) {
+      conditions.push(eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.COMMUNITY))
+    } else if (tier === REPAIRER_PROFILE_TIER.PROFESSIONAL) {
+      conditions.push(eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.PROFESSIONAL))
       conditions.push(sql`${repairerProfiles.status} = ${REPAIRER_STATUS.ACTIVE}`)
     }
 

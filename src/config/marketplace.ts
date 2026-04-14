@@ -62,6 +62,17 @@ export const LISTING_STATUS = {
 export const LISTING_STATUSES = Object.values(LISTING_STATUS);
 export type ListingStatus = typeof LISTING_STATUS[keyof typeof LISTING_STATUS];
 
+/**
+ * Seller type filter values — identifies whether a listing comes from
+ * RevampIT's internal stock or the peer-to-peer community.
+ */
+export const MARKETPLACE_SELLER_TYPE = {
+  REVAMPIT: 'revampit',
+  COMMUNITY: 'community',
+} as const;
+
+export type MarketplaceSellerType = typeof MARKETPLACE_SELLER_TYPE[keyof typeof MARKETPLACE_SELLER_TYPE];
+
 export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color: string }> = {
   active:   { label: 'Aktiv',      color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' },
   sold:     { label: 'Verkauft',   color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },

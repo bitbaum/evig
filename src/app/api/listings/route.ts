@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
 import { normalizeSpecValue } from '@/config/marketplace';
 import { indexListingInSearch } from '@/lib/marketplace/listing-helpers';
-import { LISTING_STATUS } from '@/config/marketplace';
+import { LISTING_STATUS, MARKETPLACE_SELLER_TYPE } from '@/config/marketplace';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
@@ -65,9 +65,9 @@ export async function GET(request: NextRequest) {
     if (filters.price_max !== undefined) {
       conditions.push(lte(listings.priceChf, String(filters.price_max)));
     }
-    if (filters.seller_type === 'revampit') {
+    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT) {
       conditions.push(eq(listings.isRevampit, true));
-    } else if (filters.seller_type === 'community') {
+    } else if (filters.seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY) {
       conditions.push(eq(listings.isRevampit, false));
     }
     if (filters.gratis_only) {

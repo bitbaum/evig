@@ -7,6 +7,7 @@
 
 import { logger } from '@/lib/logger';
 import { MEILISEARCH_URL } from '@/config/urls';
+import { MARKETPLACE_SELLER_TYPE } from '@/config/marketplace';
 
 const MEILISEARCH_HOST = MEILISEARCH_URL;
 const MEILISEARCH_KEY = process.env.MEILISEARCH_KEY || '';
@@ -48,7 +49,7 @@ interface SearchFilters {
   payment?: string;
   price_min?: number;
   price_max?: number;
-  seller_type?: 'revampit' | 'community';
+  seller_type?: string;
   gratis_only?: boolean;
   verified_only?: boolean;
   spec_ram_min?: number;
@@ -190,8 +191,8 @@ export async function searchListings(
     }
     if (filters.price_min !== undefined) filterParts.push(`price_chf >= ${filters.price_min}`);
     if (filters.price_max !== undefined) filterParts.push(`price_chf <= ${filters.price_max}`);
-    if (filters.seller_type === 'revampit') filterParts.push('is_revampit = true');
-    if (filters.seller_type === 'community') filterParts.push('is_revampit = false');
+    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT) filterParts.push('is_revampit = true');
+    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY) filterParts.push('is_revampit = false');
     if (filters.gratis_only) filterParts.push('price_chf = 0');
     if (filters.verified_only) filterParts.push('is_verified = true');
     // Spec filters

@@ -3,7 +3,7 @@
 import { Search, ShieldCheck, Eye, Edit3, Trash2 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { formatPrice } from '@/config/marketplace'
-import { getCategoryLabel, LISTING_STATUS, LISTING_STATUS_CONFIG } from '@/config/marketplace'
+import { getCategoryLabel, LISTING_STATUS, LISTING_STATUS_CONFIG, MARKETPLACE_SELLER_TYPE } from '@/config/marketplace'
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { getConditionLabel } from '@/config/erfassung/conditions'
 import { VerifyActions } from './VerifyActions'
@@ -35,8 +35,8 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
         </select>
         <select value={filter.seller_type} onChange={e => { setFilter(f => ({ ...f, seller_type: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
           <option value="all">Alle Verkäufer</option>
-          <option value="revampit">RevampIT</option>
-          <option value="community">Community</option>
+          <option value={MARKETPLACE_SELLER_TYPE.REVAMPIT}>RevampIT</option>
+          <option value={MARKETPLACE_SELLER_TYPE.COMMUNITY}>Community</option>
         </select>
         <select value={filter.verified} onChange={e => { setFilter(f => ({ ...f, verified: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
           <option value="all">Verifizierung</option>

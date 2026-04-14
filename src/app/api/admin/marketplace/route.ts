@@ -7,6 +7,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REPORT_STATUS } from '@/config/report-status'
+import { MARKETPLACE_SELLER_TYPE } from '@/config/marketplace'
 import { validateQuery, AdminListingsQuerySchema } from '@/lib/schemas'
 
 // GET /api/admin/marketplace - List all listings with admin filters
@@ -31,9 +32,9 @@ export const GET = withAdmin('marketplace', async (request) => {
       conditions.push(eq(listings.category, category))
     }
 
-    if (seller_type === 'revampit') {
+    if (seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT) {
       conditions.push(eq(listings.isRevampit, true))
-    } else if (seller_type === 'community') {
+    } else if (seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY) {
       conditions.push(eq(listings.isRevampit, false))
     }
 

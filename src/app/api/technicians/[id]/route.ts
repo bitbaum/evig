@@ -13,6 +13,7 @@ import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -101,7 +102,7 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
       estimatedHours: string | null
     }> = []
 
-    if (profile.profileTier === 'professional') {
+    if (profile.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL) {
       services = await db
         .select({
           id: repairerServices.id,

@@ -8,6 +8,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { apiRateLimited, apiError } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -55,13 +56,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
 
     if (recentExports >= MAX_EXPORTS_PER_DAY) {
       logger.warn('Data export rate limit exceeded', { userId, recentExports })
-      return NextResponse.json(
-        {
-          success: false,
-          error: `Maximale Anzahl Exporte pro Tag erreicht (${MAX_EXPORTS_PER_DAY}). Bitte versuche es später erneut.`,
-        },
-        { status: 429 },
-      )
+      return apiRateLimited(`Maximale Anzahl Exporte pro Tag erreicht (${MAX_EXPORTS_PER_DAY}). Bitte versuche es später erneut.`)
     }
 
     // --- Collect all user data ---
@@ -202,9 +197,6 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       error: error instanceof Error ? error.message : String(error),
       userId,
     })
-    return NextResponse.json(
-      { success: false, error: 'Export fehlgeschlagen. Bitte versuche es später erneut.' },
-      { status: 500 },
-    )
+    return apiError(error, 'Export fehlgeschlagen. Bitte versuche es später erneut.')
   }
 })

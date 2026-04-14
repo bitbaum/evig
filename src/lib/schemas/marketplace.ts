@@ -15,6 +15,7 @@ import {
   LISTING_STATUSES,
   ORDER_STATUSES,
   REPORT_REASONS,
+  MARKETPLACE_SELLER_TYPE,
 } from '@/config/marketplace';
 import { paginationSchema } from './common';
 
@@ -54,7 +55,7 @@ export const ListingsQuerySchema = z.object({
   sort: z.enum(['newest', 'price_asc', 'price_desc', 'popular'] as const).default('newest'),
   price_min: z.coerce.number().min(0).optional(),
   price_max: z.coerce.number().max(MARKETPLACE_LIMITS.MAX_PRICE_CHF).optional(),
-  seller_type: z.enum(['revampit', 'community']).optional(),
+  seller_type: z.enum(Object.values(MARKETPLACE_SELLER_TYPE) as [string, ...string[]]).optional(),
   status: z.enum(LISTING_STATUSES as unknown as [string, ...string[]]).optional(),
   // Phase 1 additions
   gratis_only: z.coerce.boolean().optional(),
@@ -229,7 +230,7 @@ export type ReportListingInput = z.infer<typeof ReportListingSchema>;
 export const AdminListingsQuerySchema = z.object({
   status: z.enum(['all', ...LISTING_STATUSES] as [string, ...string[]]).default('all'),
   category: z.string().optional(),
-  seller_type: z.enum(['all', 'revampit', 'community'] as const).default('all'),
+  seller_type: z.enum(['all', ...Object.values(MARKETPLACE_SELLER_TYPE)] as [string, ...string[]]).default('all'),
   verified: z.enum(['all', 'yes', 'no'] as const).default('all'),
   reported: z.enum(['all', 'yes'] as const).default('all'),
   search: z.string().max(200).optional(),

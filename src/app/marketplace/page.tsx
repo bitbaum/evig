@@ -22,6 +22,7 @@ import {
   SORT_OPTIONS,
   MARKETPLACE_LIMITS,
   getSpecFiltersForCategory,
+  MARKETPLACE_SELLER_TYPE,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { MARKETPLACE_CONTENT } from '@/config/page-content'
@@ -110,20 +111,20 @@ export default function MarketplacePage() {
             {MARKETPLACE_CONTENT.sellerTypes.all}
           </button>
           <button
-            onClick={() => { filters.setSellerType('revampit'); resetOffset(); }}
+            onClick={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.REVAMPIT); resetOffset(); }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filters.sellerType === 'revampit' ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT ? 'bg-green-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
-            aria-pressed={filters.sellerType === 'revampit'}
+            aria-pressed={filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT}
           >
             {MARKETPLACE_CONTENT.sellerTypes.revampit}
           </button>
           <button
-            onClick={() => { filters.setSellerType('community'); resetOffset(); }}
+            onClick={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.COMMUNITY); resetOffset(); }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filters.sellerType === 'community' ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY ? 'bg-blue-600 text-white shadow-sm' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
-            aria-pressed={filters.sellerType === 'community'}
+            aria-pressed={filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY}
           >
             {MARKETPLACE_CONTENT.sellerTypes.community}
           </button>

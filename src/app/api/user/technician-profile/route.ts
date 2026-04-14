@@ -18,7 +18,7 @@ import {
   apiSuccess,
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { REPAIRER_STATUS } from '@/config/repairer-status'
+import { REPAIRER_STATUS, REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { logger } from '@/lib/logger'
 import { IT_SKILLS } from '@/config/it-hilfe'
 import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
@@ -123,7 +123,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
         address: '',
         maxTravelKm,
         isActive,
-        profileTier: 'community',
+        profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
         status: REPAIRER_STATUS.ACTIVE,
       })
       .onConflictDoUpdate({
@@ -140,7 +140,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
           isActive,
           // Only set tier to 'community' if it is not already 'professional'
           // (don't demote a verified professional via this endpoint)
-          profileTier: sql`CASE WHEN ${repairerProfiles.profileTier} = 'professional' THEN 'professional' ELSE 'community' END`,
+          profileTier: sql`CASE WHEN ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.PROFESSIONAL} THEN ${REPAIRER_PROFILE_TIER.PROFESSIONAL} ELSE ${REPAIRER_PROFILE_TIER.COMMUNITY} END`,
           updatedAt: sql`NOW()`,
         },
       })
