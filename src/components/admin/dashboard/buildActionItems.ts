@@ -7,7 +7,6 @@ export function buildActionItems(
 ): ActionItem[] {
   const items: ActionItem[] = []
 
-  // Pending approvals
   if (stats.pendingApprovals > 0 && canAccessSection('approvals')) {
     items.push({
       type: 'urgent',
@@ -15,10 +14,10 @@ export function buildActionItems(
       count: stats.pendingApprovals,
       href: '/admin/approvals',
       actionLabel: 'Jetzt prüfen',
+      oldestAt: stats.pendingApprovalsOldest,
     })
   }
 
-  // Pending permission requests (super admin only)
   if (isSuper && stats.pendingPermissionRequests > 0) {
     items.push({
       type: 'warning',
@@ -29,7 +28,6 @@ export function buildActionItems(
     })
   }
 
-  // Pending appointments
   if (stats.pendingAppointments > 0 && canAccessSection('services')) {
     items.push({
       type: 'warning',
@@ -37,10 +35,10 @@ export function buildActionItems(
       count: stats.pendingAppointments,
       href: '/admin/services/appointments',
       actionLabel: 'Ansehen',
+      oldestAt: stats.pendingAppointmentsOldest,
     })
   }
 
-  // Unverified marketplace listings
   if (stats.unverifiedListings > 0) {
     items.push({
       type: 'warning',
@@ -48,10 +46,10 @@ export function buildActionItems(
       count: stats.unverifiedListings,
       href: '/admin/marketplace',
       actionLabel: 'Prüfen',
+      oldestAt: stats.unverifiedListingsOldest,
     })
   }
 
-  // Urgent IT-Hilfe requests
   if (stats.urgentItHilfe > 0) {
     items.push({
       type: 'urgent',
@@ -59,10 +57,10 @@ export function buildActionItems(
       count: stats.urgentItHilfe,
       href: '/admin/it-hilfe',
       actionLabel: 'Ansehen',
+      oldestAt: stats.urgentItHilfeOldest,
     })
   }
 
-  // Overdue tasks
   if (stats.overdueTasks > 0) {
     items.push({
       type: 'urgent',
@@ -70,10 +68,10 @@ export function buildActionItems(
       count: stats.overdueTasks,
       href: '/admin/tasks',
       actionLabel: 'Ansehen',
+      oldestAt: stats.overdueTasksOldest,
     })
   }
 
-  // Pending blog submissions
   if (stats.pendingBlogSubmissions > 0) {
     items.push({
       type: 'warning',
@@ -81,10 +79,10 @@ export function buildActionItems(
       count: stats.pendingBlogSubmissions,
       href: '/admin/approvals',
       actionLabel: 'Prüfen',
+      oldestAt: stats.pendingBlogSubmissionsOldest,
     })
   }
 
-  // Pending repairer applications
   if (stats.pendingRepairerApplications > 0) {
     items.push({
       type: 'warning',
@@ -92,10 +90,10 @@ export function buildActionItems(
       count: stats.pendingRepairerApplications,
       href: '/admin/repairer-applications',
       actionLabel: 'Prüfen',
+      oldestAt: stats.pendingRepairerApplicationsOldest,
     })
   }
 
-  // Open decisions (voting)
   if (stats.openDecisions > 0) {
     items.push({
       type: 'warning',

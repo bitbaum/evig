@@ -1,16 +1,22 @@
 import type { Package } from 'lucide-react'
 
 export interface DashboardStats {
-  // Action items
+  // Action items with age of oldest unresolved item
   pendingApprovals: number
+  pendingApprovalsOldest: string | null
   pendingPermissionRequests: number
   pendingAppointments: number
-
-  // Alert counts
+  pendingAppointmentsOldest: string | null
+  unverifiedListings: number
+  unverifiedListingsOldest: string | null
   pendingBlogSubmissions: number
+  pendingBlogSubmissionsOldest: string | null
   urgentItHilfe: number
+  urgentItHilfeOldest: string | null
   pendingRepairerApplications: number
+  pendingRepairerApplicationsOldest: string | null
   overdueTasks: number
+  overdueTasksOldest: string | null
   openDecisions: number
 
   // Activity (this week)
@@ -25,7 +31,6 @@ export interface DashboardStats {
   // Marketplace
   totalListings: number
   activeListings: number
-  unverifiedListings: number
 }
 
 export type ActionItem = {
@@ -34,6 +39,8 @@ export type ActionItem = {
   count?: number
   href: string
   actionLabel: string
+  /** ISO timestamp of the oldest unresolved item — shown as age hint */
+  oldestAt?: string | null
 }
 
 export type QuickAction = {

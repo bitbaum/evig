@@ -9,9 +9,10 @@ import { blogPosts, blogSubmissions } from '@/db/schema/content'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { LISTING_STATUS } from '@/config/marketplace'
+import { logger } from '@/lib/logger'
 import type { DashboardStats } from './types'
 
-// Table name refs for raw SQL
+// Table name refs
 const usersTable = getTableName(users)
 const ucsTable = getTableName(userContentSubmissions)
 const sprTable = getTableName(staffPermissionRequests)
@@ -25,178 +26,174 @@ const repairerAppTable = getTableName(repairerApplications)
 const tasksTable = getTableName(tasks)
 const decisionsTable = getTableName(decisions)
 
+// ---- helpers ----------------------------------------------------------------
+
+type Row = Record<string, unknown>
+
+function rowCount(result: PromiseSettledResult<{ rows: unknown[] }>, label: string): number {
+  if (result.status === 'rejected') {
+    logger.warn(`Dashboard stat query failed: ${label}`, { error: result.reason })
+    return 0
+  }
+  return parseInt(String((result.value.rows as Row[])[0]?.count ?? '0'), 10)
+}
+
+function rowCountAndOldest(
+  result: PromiseSettledResult<{ rows: unknown[] }>,
+  label: string,
+): { count: number; oldest: string | null } {
+  if (result.status === 'rejected') {
+    logger.warn(`Dashboard stat query failed: ${label}`, { error: result.reason })
+    return { count: 0, oldest: null }
+  }
+  const row = (result.value.rows as Row[])[0] ?? {}
+  return {
+    count: parseInt(String(row.count ?? '0'), 10),
+    oldest: (row.oldest as string | null) ?? null,
+  }
+}
+
+// ---- main -------------------------------------------------------------------
+
 export async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
-  const stats: DashboardStats = {
-    pendingApprovals: 0,
-    pendingPermissionRequests: 0,
-    pendingAppointments: 0,
-    pendingBlogSubmissions: 0,
-    urgentItHilfe: 0,
-    pendingRepairerApplications: 0,
-    overdueTasks: 0,
-    openDecisions: 0,
-    newUsersThisWeek: 0,
-    postsPublishedThisWeek: 0,
-    totalUsers: 0,
-    totalStaff: 0,
-    totalTechnicians: 0,
-    totalListings: 0,
-    activeListings: 0,
-    unverifiedListings: 0,
+  const weekAgo = new Date()
+  weekAgo.setDate(weekAgo.getDate() - 7)
+  const weekAgoISO = weekAgo.toISOString()
+
+  // Fire all queries in parallel — wall time = max latency, not sum
+  const [
+    usersRes,
+    staffRes,
+    techRes,
+    approvalsRes,
+    permissionsRes,
+    appointmentsRes,
+    blogSubRes,
+    itHilfeRes,
+    repairerRes,
+    tasksRes,
+    decisionsRes,
+    listingsRes,
+    newUsersRes,
+    postsRes,
+  ] = await Promise.allSettled([
+    // Reference counts
+    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
+    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)} WHERE is_staff = true`),
+    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(hpTable)} WHERE is_active = true`),
+
+    // Action items — count + oldest unresolved
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
+      FROM ${sql.raw(ucsTable)}
+      WHERE status = ${APPROVAL_STATUS.PENDING}
+        AND content_type IN ('workshop', 'blog_post')
+    `),
+    isSuper
+      ? db.execute(sql`
+          SELECT COUNT(*) AS count
+          FROM ${sql.raw(sprTable)}
+          WHERE status = ${PERMISSION_REQUEST_STATUS.PENDING}
+        `)
+      : Promise.resolve({ rows: [{ count: '0' }] }),
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
+      FROM ${sql.raw(saTable)}
+      WHERE status = 'pending'
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
+      FROM ${sql.raw(blogSubTable)}
+      WHERE status = 'pending'
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
+      FROM ${sql.raw(itHilfeTable)}
+      WHERE status = 'open' AND urgency = 'urgent'
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(created_at) AS oldest
+      FROM ${sql.raw(repairerAppTable)}
+      WHERE status = 'pending'
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count, MIN(due_date) AS oldest
+      FROM ${sql.raw(tasksTable)}
+      WHERE due_date < CURRENT_DATE AND is_completed = false AND is_archived = false
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(decisionsTable)}
+      WHERE status = 'voting'
+    `),
+    db.execute(sql`
+      SELECT
+        COUNT(*) AS total,
+        COUNT(*) FILTER (WHERE status = ${LISTING_STATUS.ACTIVE}) AS active,
+        COUNT(*) FILTER (WHERE status = ${LISTING_STATUS.ACTIVE} AND verified_at IS NULL) AS unverified,
+        MIN(created_at) FILTER (WHERE status = ${LISTING_STATUS.ACTIVE} AND verified_at IS NULL) AS unverified_oldest
+      FROM ${sql.raw(listingsTable)}
+    `),
+
+    // Weekly activity
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(usersTable)}
+      WHERE "createdAt" >= ${weekAgoISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(blogTable)}
+      WHERE status = ${APPROVAL_STATUS.PUBLISHED} AND published_at >= ${weekAgoISO}
+    `),
+  ])
+
+  // Extract approvals
+  const approvals = rowCountAndOldest(approvalsRes, 'pendingApprovals')
+  const appointments = rowCountAndOldest(appointmentsRes, 'pendingAppointments')
+  const blogSubs = rowCountAndOldest(blogSubRes, 'pendingBlogSubmissions')
+  const itHilfe = rowCountAndOldest(itHilfeRes, 'urgentItHilfe')
+  const repairer = rowCountAndOldest(repairerRes, 'pendingRepairerApplications')
+  const overdueTasksData = rowCountAndOldest(tasksRes, 'overdueTasks')
+
+  // Listings (special shape)
+  let unverifiedListings = 0
+  let unverifiedListingsOldest: string | null = null
+  let totalListings = 0
+  let activeListings = 0
+  if (listingsRes.status === 'rejected') {
+    logger.warn('Dashboard stat query failed: listings', { error: listingsRes.reason })
+  } else {
+    const lr = (listingsRes.value.rows as Row[])[0] ?? {}
+    totalListings = parseInt(String(lr.total ?? '0'), 10)
+    activeListings = parseInt(String(lr.active ?? '0'), 10)
+    unverifiedListings = parseInt(String(lr.unverified ?? '0'), 10)
+    unverifiedListingsOldest = (lr.unverified_oldest as string | null) ?? null
   }
 
-  try {
-    // Get total user count
-    const usersResult = await db.execute(sql`
-      SELECT COUNT(*) as count FROM ${sql.raw(usersTable)}
-    `)
-    stats.totalUsers = parseInt((usersResult.rows as unknown as { count: string }[])[0]?.count || '0')
-
-    // Get staff count
-    const staffResult = await db.execute(sql`
-      SELECT COUNT(*) as count FROM ${sql.raw(usersTable)} WHERE is_staff = true
-    `)
-    stats.totalStaff = parseInt((staffResult.rows as unknown as { count: string }[])[0]?.count || '0')
-
-    // Get pending content approvals (workshops and blog posts only)
-    try {
-      const approvalsResult = await db.execute(sql`
-        SELECT COUNT(*) as count FROM ${sql.raw(ucsTable)}
-        WHERE status = ${APPROVAL_STATUS.PENDING} AND content_type IN (${sql.join(['workshop', 'blog_post'].map(v => sql`${v}`), sql`, `)})
-      `)
-      stats.pendingApprovals = parseInt((approvalsResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get pending permission requests (super admin only)
-    if (isSuper) {
-      try {
-        const permissionsResult = await db.execute(sql`
-          SELECT COUNT(*) as count FROM ${sql.raw(sprTable)} WHERE status = ${PERMISSION_REQUEST_STATUS.PENDING}
-        `)
-        stats.pendingPermissionRequests = parseInt((permissionsResult.rows as unknown as { count: string }[])[0]?.count || '0')
-      } catch {
-        // Table might not exist yet
-      }
-    }
-
-    // Get pending service appointments
-    try {
-      const appointmentsResult = await db.execute(sql`
-        SELECT COUNT(*) as count FROM ${sql.raw(saTable)} WHERE status = 'pending'
-      `)
-      stats.pendingAppointments = parseInt((appointmentsResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get technician count
-    try {
-      const techResult = await db.execute(sql`
-        SELECT COUNT(*) as count FROM ${sql.raw(hpTable)} WHERE is_active = true
-      `)
-      stats.totalTechnicians = parseInt((techResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get new users this week
-    try {
-      const weekAgo = new Date()
-      weekAgo.setDate(weekAgo.getDate() - 7)
-      const newUsersResult = await db.execute(sql`
-        SELECT COUNT(*) as count FROM ${sql.raw(usersTable)}
-        WHERE "createdAt" >= ${weekAgo.toISOString()}
-      `)
-      stats.newUsersThisWeek = parseInt((newUsersResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Column might not exist
-    }
-
-    // Get posts published this week
-    try {
-      const weekAgo = new Date()
-      weekAgo.setDate(weekAgo.getDate() - 7)
-      const postsResult = await db.execute(sql`
-        SELECT COUNT(*) as count FROM ${sql.raw(blogTable)}
-        WHERE status = ${APPROVAL_STATUS.PUBLISHED} AND published_at >= ${weekAgo.toISOString()}
-      `)
-      stats.postsPublishedThisWeek = parseInt((postsResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist
-    }
-
-    // Get pending blog submissions
-    try {
-      const blogSubResult = await db.execute(sql`
-        SELECT COUNT(*)::int as count FROM ${sql.raw(blogSubTable)} WHERE status = 'pending'
-      `)
-      stats.pendingBlogSubmissions = parseInt((blogSubResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get urgent IT-Hilfe requests
-    try {
-      const itHilfeResult = await db.execute(sql`
-        SELECT COUNT(*)::int as count FROM ${sql.raw(itHilfeTable)} WHERE status = 'open' AND urgency = 'urgent'
-      `)
-      stats.urgentItHilfe = parseInt((itHilfeResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get pending repairer applications
-    try {
-      const repairerResult = await db.execute(sql`
-        SELECT COUNT(*)::int as count FROM ${sql.raw(repairerAppTable)} WHERE status = 'pending'
-      `)
-      stats.pendingRepairerApplications = parseInt((repairerResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get overdue tasks (past due date, not completed, not archived)
-    try {
-      const tasksResult = await db.execute(sql`
-        SELECT COUNT(*)::int as count FROM ${sql.raw(tasksTable)}
-        WHERE due_date < CURRENT_DATE AND is_completed = false AND is_archived = false
-      `)
-      stats.overdueTasks = parseInt((tasksResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get open decisions (voting in progress)
-    try {
-      const decisionsResult = await db.execute(sql`
-        SELECT COUNT(*)::int as count FROM ${sql.raw(decisionsTable)} WHERE status = 'voting'
-      `)
-      stats.openDecisions = parseInt((decisionsResult.rows as unknown as { count: string }[])[0]?.count || '0')
-    } catch {
-      // Table might not exist yet
-    }
-
-    // Get marketplace listing stats
-    try {
-      const listingsResult = await db.execute(sql`
-        SELECT
-          COUNT(*) as total,
-          COUNT(*) FILTER (WHERE status = ${LISTING_STATUS.ACTIVE}) as active,
-          COUNT(*) FILTER (WHERE status = ${LISTING_STATUS.ACTIVE} AND verified_at IS NULL) as unverified
-        FROM ${sql.raw(listingsTable)}
-      `)
-      const lr = (listingsResult.rows as unknown as { total: string; active: string; unverified: string }[])[0]
-      stats.totalListings = parseInt(lr?.total || '0')
-      stats.activeListings = parseInt(lr?.active || '0')
-      stats.unverifiedListings = parseInt(lr?.unverified || '0')
-    } catch {
-      // Table might not exist
-    }
-
-    return stats
-  } catch {
-    return stats
+  return {
+    pendingApprovals: approvals.count,
+    pendingApprovalsOldest: approvals.oldest,
+    pendingPermissionRequests: rowCount(permissionsRes, 'pendingPermissionRequests'),
+    pendingAppointments: appointments.count,
+    pendingAppointmentsOldest: appointments.oldest,
+    unverifiedListings,
+    unverifiedListingsOldest,
+    pendingBlogSubmissions: blogSubs.count,
+    pendingBlogSubmissionsOldest: blogSubs.oldest,
+    urgentItHilfe: itHilfe.count,
+    urgentItHilfeOldest: itHilfe.oldest,
+    pendingRepairerApplications: repairer.count,
+    pendingRepairerApplicationsOldest: repairer.oldest,
+    overdueTasks: overdueTasksData.count,
+    overdueTasksOldest: overdueTasksData.oldest,
+    openDecisions: rowCount(decisionsRes, 'openDecisions'),
+    newUsersThisWeek: rowCount(newUsersRes, 'newUsersThisWeek'),
+    postsPublishedThisWeek: rowCount(postsRes, 'postsPublishedThisWeek'),
+    totalUsers: rowCount(usersRes, 'totalUsers'),
+    totalStaff: rowCount(staffRes, 'totalStaff'),
+    totalTechnicians: rowCount(techRes, 'totalTechnicians'),
+    totalListings,
+    activeListings,
   }
 }

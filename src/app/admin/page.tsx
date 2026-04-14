@@ -13,7 +13,6 @@
 
 import { Metadata } from 'next'
 import { auth } from '@/auth'
-import { Shield } from 'lucide-react'
 import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
 import { ADMIN_SECTIONS } from '@/lib/permissions'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
@@ -78,7 +77,7 @@ export default async function AdminDashboard() {
             Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
           </Heading>
           <p className="text-gray-600 dark:text-gray-400">
-            {isSuper ? 'Super Admin' : 'Staff'} &bull; {accessibleSections.length} Bereiche
+            {isSuper ? 'Super Admin' : 'Staff'}
           </p>
         </div>
       </div>
@@ -101,17 +100,6 @@ export default async function AdminDashboard() {
         <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
 
-      {/* Super Admin: No pending requests notice */}
-      {isSuper && stats.pendingPermissionRequests === 0 && (
-        <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-            <Shield className="w-4 h-4" />
-            <span className="text-sm">
-              Super Admin &bull; Keine offenen Berechtigungsanfragen
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
