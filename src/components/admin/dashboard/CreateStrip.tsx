@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Plus } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import type { QuickAction } from './types'
 
@@ -11,7 +12,8 @@ export function CreateStrip({ actions }: CreateStripProps) {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-      <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+      <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+        <Plus className="w-5 h-5 text-green-500 flex-shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
           Erstellen
         </Heading>
@@ -25,7 +27,7 @@ export function CreateStrip({ actions }: CreateStripProps) {
               <Link
                 key={action.href}
                 href={action.href}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${action.color}`}
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors min-h-[44px] ${action.color}`}
               >
                 <Icon className="w-4 h-4" aria-hidden="true" />
                 {action.label}

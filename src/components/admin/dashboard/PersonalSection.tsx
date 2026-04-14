@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CheckSquare, FileText, Calendar, AlertCircle } from 'lucide-react'
+import { CheckSquare, FileText, Calendar, AlertCircle, ArrowRight } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
@@ -24,6 +24,10 @@ interface MySubmission {
   status: string
   created_at: string
 }
+
+// Single source of truth for both the SQL LIMIT and the "view all" threshold
+const TASK_LIMIT = 5
+const SUBMISSION_LIMIT = 5
 
 function taskIsOverdue(dueDate: string | null): boolean {
   if (!dueDate) return false
@@ -62,7 +66,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         AND is_completed = false
         AND is_archived = false
       ORDER BY due_date ASC NULLS LAST, priority DESC
-      LIMIT 5
+      LIMIT ${TASK_LIMIT}
     `),
     db.execute(sql`
       SELECT id, content_type, title, status, created_at
@@ -70,7 +74,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
       WHERE user_id = ${userId}
         AND status = 'pending'
       ORDER BY created_at DESC
-      LIMIT 5
+      LIMIT ${SUBMISSION_LIMIT}
     `),
   ])
 
@@ -93,7 +97,6 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
       }))
     : (() => { logger.warn('PersonalSection submissions query failed', { error: (submissionsResult as PromiseRejectedResult).reason }); return [] })()
 
-  // Hide entirely when there's nothing personal to show
   if (myTasks.length === 0 && mySubmissions.length === 0) return null
 
   return (
@@ -109,12 +112,10 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         {/* My assigned tasks */}
         {myTasks.length > 0 && (
           <div>
-            {myTasks.length > 1 && (
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
-                Zugewiesene Aufgaben
-              </p>
-            )}
-            <ul className="space-y-1.5" role="list">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
+              Zugewiesene Aufgaben
+            </p>
+            <ul className="space-y-2" role="list">
               {myTasks.map(task => {
                 const overdue = taskIsOverdue(task.due_date)
                 const dueDateText = formatDueDate(task.due_date)
@@ -145,12 +146,13 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 )
               })}
             </ul>
-            {myTasks.length === 5 && (
+            {myTasks.length === TASK_LIMIT && (
               <Link
                 href="/admin/tasks"
-                className="block mt-2 text-sm text-center text-blue-600 dark:text-blue-400 hover:underline"
+                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
               >
-                Alle Aufgaben ansehen →
+                Alle Aufgaben ansehen
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             )}
           </div>
@@ -162,7 +164,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
               Eingereichte Inhalte
             </p>
-            <ul className="space-y-1.5" role="list">
+            <ul className="space-y-2" role="list">
               {mySubmissions.map(sub => (
                 <li key={sub.id}>
                   <Link
@@ -170,7 +172,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                     className="flex items-start gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     <FileText className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="font-medium text-gray-900 dark:text-white leading-snug">
                         {sub.title ?? contentTypeLabel(sub.content_type)}
                       </p>
@@ -182,6 +184,15 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 </li>
               ))}
             </ul>
+            {mySubmissions.length === SUBMISSION_LIMIT && (
+              <Link
+                href="/admin/approvals"
+                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+              >
+                Alle Einreichungen ansehen
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
+            )}
           </div>
         )}
       </div>

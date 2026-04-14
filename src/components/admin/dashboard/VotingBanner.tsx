@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Vote, Clock, ChevronRight } from 'lucide-react'
+import { Vote, Clock, ArrowRight } from 'lucide-react'
+import Heading from '@/components/ui/Heading'
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { decisions, decisionVotes, users } from '@/db/schema'
@@ -31,14 +32,15 @@ function formatDeadline(iso: string | null): string | null {
 export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerProps) {
   const decisionsTable = getTableName(decisions)
   const votesTable = getTableName(decisionVotes)
-  const usersTable = getTableName(users)
+  // users table imported to satisfy Drizzle's schema reference — not used in raw SQL
+  void getTableName(users)
 
   let pending: PendingDecision[] = []
 
   try {
     // Find decisions in 'voting' status where this user is eligible and hasn't voted yet.
     // Scope resolution:
-    //   all_staff   → any staff user (admin users are all staff)
+    //   all_staff   → any staff user (all admin users are staff)
     //   board_only  → super admin only
     //   all_members → users with is_member = true
     //   invited     → user ID appears in invited_participants JSON array
@@ -91,15 +93,15 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-teal-800 dark:text-teal-200 uppercase tracking-wide mb-0.5">
+          <p className="text-xs font-semibold text-teal-700 dark:text-teal-300 uppercase tracking-wide mb-0.5">
             Deine Stimme fehlt
           </p>
-          <p className="font-semibold text-gray-900 dark:text-white leading-snug">
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white leading-snug">
             {first.title}
-          </p>
+          </Heading>
           {deadline && (
-            <p className="flex items-center gap-1 text-sm text-teal-700 dark:text-teal-300 mt-0.5">
-              <Clock className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
+            <p className="flex items-center gap-1.5 text-sm text-teal-700 dark:text-teal-300 mt-1">
+              <Clock className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               {deadline}
             </p>
           )}
@@ -110,13 +112,13 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
           )}
         </div>
 
-        {/* CTA */}
+        {/* CTA — min-h-[44px] ensures touch target */}
         <Link
           href={`/admin/decisions/${first.id}`}
-          className="flex items-center gap-1 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg transition-colors flex-shrink-0 self-center"
+          className="flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg transition-colors flex-shrink-0 self-center"
         >
           Abstimmen
-          <ChevronRight className="w-4 h-4" aria-hidden="true" />
+          <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       </div>
     </div>

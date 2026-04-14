@@ -40,9 +40,9 @@ export function Monatsueberblick({ stats }: MonatsueberblickProps) {
       >
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-green-500 flex-shrink-0" aria-hidden="true" />
-          <span className="text-sm font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
             Monatsüberblick
-          </span>
+          </Heading>
         </div>
         <ChevronDown
           className={`w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
