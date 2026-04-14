@@ -9,7 +9,7 @@ import { db } from '@/db';
 import { sql, getTableName } from 'drizzle-orm';
 import { decisions, decisionVotes } from '@/db/schema/misc';
 import { users } from '@/db/schema/auth';
-import { notifyAllStaff, createNotification, fireNotification } from '@/lib/services/notifications';
+import { notifyUsers, createNotification, fireNotification } from '@/lib/services/notifications';
 import {
   VALID_TRANSITIONS,
   DECISION_STATUS,
@@ -21,11 +21,15 @@ import {
   type DecisionOption,
 } from '@/lib/schemas/decisions';
 import { type DbDecisionRow, asArray, asObject } from './decisions-crud';
-import { computeTallies } from './decisions-voting';
+import { computeTallies, resolveEligibleUserIds } from './decisions-voting';
+import { generateOutcomeNarrative } from '@/lib/ai/decisions-narrative';
 
 // Table name refs
 const dTable = getTableName(decisions);
 const dvTable = getTableName(decisionVotes);
+
+// users table name for resolveEligibleUserIds (passed from voting.ts via import)
+// We still need uTable for the narrative update
 const uTable = getTableName(users);
 
 export async function transitionDecision(
@@ -64,17 +68,11 @@ export async function transitionDecision(
     // Enforce quorum before closing
     const quorumConfig = asObject<{ type: string; value: number }>(decision.quorum, { type: 'percentage', value: 50 });
     const invitedParticipants = asArray<string>(decision.invited_participants, []);
+    const participantScope = (decision.participant_scope as string) || 'all_staff';
 
-    // Determine total eligible voters
-    let totalEligible: number;
-    if (invitedParticipants.length > 0) {
-      totalEligible = invitedParticipants.length;
-    } else {
-      const staffCount = await db.execute(sql`
-        SELECT COUNT(*) AS cnt FROM ${sql.raw(uTable)} WHERE is_staff = true
-      `);
-      totalEligible = parseInt((staffCount.rows[0] as unknown as { cnt: string }).cnt || '0', 10);
-    }
+    // Resolve eligible voters via scope
+    const eligibleIds = await resolveEligibleUserIds(participantScope, invitedParticipants);
+    const totalEligible = eligibleIds.length;
 
     const voteCountResult = await db.execute(sql`
       SELECT COUNT(*) AS cnt FROM ${sql.raw(dvTable)} WHERE decision_id = ${id}
@@ -94,7 +92,7 @@ export async function transitionDecision(
       };
     }
 
-    // Closing requires reading votes + computing tallies + updating atomically
+    // Closing: read votes + compute tallies + update atomically
     const txResult = await db.transaction(async (tx) => {
       const votesResult = await tx.execute(sql`
         SELECT vote_data FROM ${sql.raw(dvTable)} WHERE decision_id = ${id}
@@ -133,9 +131,36 @@ export async function transitionDecision(
         content: `"${txResult.title}" wurde abgeschlossen.`,
         related_type: 'decision',
         related_id: txResult.id,
+        metadata: { decisionId: txResult.id },
       }),
       `decision_closed:${txResult.id}`
-    )
+    );
+
+    // Generate AI outcome narrative asynchronously (non-blocking)
+    fireNotification(
+      async () => {
+        const options = asArray<DecisionOption>(txResult.options, []);
+        const outcome = (txResult.outcome || {}) as Record<string, unknown>;
+        const narrative = await generateOutcomeNarrative({
+          title: txResult.title,
+          description: txResult.description,
+          votingMethod: txResult.voting_method,
+          options,
+          outcome,
+          outcomeSummary: txResult.outcome_summary,
+          participantScope: (txResult.participant_scope as string) || 'all_staff',
+          category: txResult.category || 'operativ',
+        });
+        if (narrative) {
+          await db.execute(sql`
+            UPDATE ${sql.raw(dTable)}
+            SET ai_outcome_narrative = ${narrative}
+            WHERE id = ${txResult.id}
+          `);
+        }
+      },
+      `decision_narrative:${txResult.id}`
+    );
 
     return { decision: txResult };
   }
@@ -150,25 +175,37 @@ export async function transitionDecision(
 
   const updatedDecision = updated.rows[0] as unknown as DbDecisionRow;
 
-  // Notify all staff when voting opens
+  // Notify eligible voters when voting opens (scope-aware)
   if (newStatus === DECISION_STATUS.VOTING && updatedDecision) {
+    const invited = asArray<string>(updatedDecision.invited_participants, []);
+    const scope = (updatedDecision.participant_scope as string) || 'all_staff';
+    const eligibleIds = await resolveEligibleUserIds(scope, invited);
+
     const deadlineInfo = updatedDecision.voting_deadline
       ? ` Frist: ${new Date(updatedDecision.voting_deadline).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric' })}`
       : '';
+
     fireNotification(
-      () => notifyAllStaff(
+      () => notifyUsers(
+        eligibleIds.filter(id => id !== userId),
         {
           type: 'decision_voting',
           title: 'Abstimmung geöffnet',
           content: `"${updatedDecision.title}" wartet auf deine Stimme.${deadlineInfo}`,
           related_type: 'decision',
           related_id: updatedDecision.id,
+          metadata: {
+            decisionId: updatedDecision.id,
+            votingDeadline: updatedDecision.voting_deadline ?? '',
+          },
         },
-        userId, // don't notify the person who opened voting
       ),
       `decision_voting:${updatedDecision.id}`
-    )
+    );
   }
+
+  // Suppress unused uTable import warning — used indirectly via resolveEligibleUserIds
+  void uTable;
 
   return { decision: updatedDecision };
 }

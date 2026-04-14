@@ -90,6 +90,7 @@ export {
 export {
   decisionVotingOpened,
   decisionDeadlineReminder,
+  decisionClosed,
 } from './decisions';
 
 // Notification template (generic, used by notification service)

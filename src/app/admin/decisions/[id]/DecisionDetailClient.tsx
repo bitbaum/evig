@@ -28,6 +28,7 @@ import VotingPanel from './VotingPanel';
 import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
 import ResultsPanel from './ResultsPanel';
+import BeschlussPdfExport from '@/components/decisions/BeschlussPdfExport';
 
 interface DecisionOption {
   id: string;
@@ -40,6 +41,7 @@ interface DecisionDetail {
   id: string;
   title: string;
   description: string;
+  background: string | null;
   category: DecisionCategory;
   decisionType: DecisionType;
   votingMethod: VotingMethod;
@@ -52,6 +54,7 @@ interface DecisionDetail {
   discussionDeadline: string | null;
   outcome: Record<string, unknown> | null;
   outcomeSummary: string | null;
+  aiOutcomeNarrative: string | null;
   cancelReason: string | null;
   voteCount: number;
   commentCount: number;
@@ -207,6 +210,20 @@ export default function DecisionDetailClient({
                 Abbrechen
               </AdminButton>
             )}
+            {decision.status === DECISION_STATUS.CLOSED && (
+              <BeschlussPdfExport
+                decision={{
+                  id: decision.id,
+                  title: decision.title,
+                  description: decision.description,
+                  votingMethod: decision.votingMethod,
+                  category: decision.category,
+                  outcome: decision.outcome,
+                  outcomeSummary: decision.outcomeSummary,
+                  aiOutcomeNarrative: decision.aiOutcomeNarrative,
+                }}
+              />
+            )}
             {canDelete && (
               <AdminButton variant="dangerOutline" onClick={() => setShowDeleteDialog(true)}>
                 Löschen
@@ -282,6 +299,20 @@ export default function DecisionDetailClient({
         <div className={cn('mt-4 whitespace-pre-wrap leading-relaxed', adminType.body)}>
           {decision.description}
         </div>
+
+        {/* Background / rationale */}
+        {decision.background && (
+          <details className="mt-3 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30">
+            <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium text-amber-800 dark:text-amber-300 select-none">
+              📄 Begründung & Hintergrund
+            </summary>
+            <div className="border-t border-amber-200 dark:border-amber-800 px-4 py-3">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-amber-900 dark:text-amber-200">
+                {decision.background}
+              </p>
+            </div>
+          </details>
+        )}
 
         {/* Options Display */}
         {decision.options.length > 0 && (
@@ -368,6 +399,7 @@ export default function DecisionDetailClient({
           outcome={decision.outcome}
           outcomeSummary={decision.outcomeSummary}
           votingMethod={decision.votingMethod}
+          aiOutcomeNarrative={decision.aiOutcomeNarrative}
         />
       )}
 

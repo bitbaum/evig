@@ -18,12 +18,14 @@ import {
   dotVoteSchema,
   scoreVoteSchema,
   simpleMajorityVoteSchema,
+  rankedChoiceVoteSchema,
   type VoteData,
   type ConsentVoteInput,
   type ApprovalVoteInput,
   type DotVoteInput,
   type ScoreVoteInput,
   type SimpleMajorityVoteInput,
+  type RankedChoiceVoteInput,
   type DecisionOption,
   type QuorumConfig,
 } from '@/lib/schemas/decisions';
@@ -45,6 +47,45 @@ interface DbVoteRow {
   updated_at: string;
   user_email?: string;
   user_name?: string | null;
+}
+
+// ---- Eligible Participant Resolution ----
+
+/**
+ * Resolves the list of eligible voter IDs based on participant_scope.
+ * - all_staff:   users with is_staff = true
+ * - board_only:  staff with 'vorstand' in staff_permissions
+ * - all_members: users with is_member = true
+ * - invited:     the explicit invited_participants list
+ */
+async function resolveEligibleUserIds(
+  participantScope: string,
+  invitedParticipants: string[]
+): Promise<string[]> {
+  switch (participantScope) {
+    case 'board_only': {
+      const result = await db.execute(sql`
+        SELECT id FROM ${sql.raw(uTable)}
+        WHERE is_staff = true AND staff_permissions @> ARRAY['vorstand']::text[]
+      `);
+      return (result.rows as unknown as { id: string }[]).map(r => r.id);
+    }
+    case 'all_members': {
+      const result = await db.execute(sql`
+        SELECT id FROM ${sql.raw(uTable)} WHERE is_member = true
+      `);
+      return (result.rows as unknown as { id: string }[]).map(r => r.id);
+    }
+    case 'invited':
+      return invitedParticipants;
+    default: // 'all_staff'
+      {
+        const result = await db.execute(sql`
+          SELECT id FROM ${sql.raw(uTable)} WHERE is_staff = true
+        `);
+        return (result.rows as unknown as { id: string }[]).map(r => r.id);
+      }
+  }
 }
 
 // ---- Voting ----
@@ -102,6 +143,17 @@ export function validateVoteData(
         return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
       return { success: true, data: result.data };
     }
+    case 'ranked_choice': {
+      const result = rankedChoiceVoteSchema.safeParse(data);
+      if (!result.success)
+        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
+      const options = asArray<DecisionOption>(decision.options, []);
+      const optionIds = new Set(options.map((o) => o.id));
+      const invalid = result.data.ranking.filter((id) => !optionIds.has(id));
+      if (invalid.length > 0)
+        return { success: false, error: 'Ungültige Kandidaten in der Rangfolge' };
+      return { success: true, data: result.data };
+    }
     default:
       return { success: false, error: 'Unbekannte Abstimmungsmethode' };
   }
@@ -113,7 +165,7 @@ export async function submitVote(
   voteData: VoteData
 ) {
   const existing = await db.execute(sql`
-    SELECT id, status, voting_method, options, dot_count, invited_participants
+    SELECT id, status, voting_method, options, dot_count, invited_participants, participant_scope
     FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
   `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
@@ -122,9 +174,11 @@ export async function submitVote(
   if (decision.status !== 'voting')
     return { error: 'not_voting_phase' as const };
 
-  // Check participant
+  // Check participant eligibility via scope
+  const participantScope = (decision.participant_scope as string) || 'all_staff';
   const invited = asArray<string>(decision.invited_participants, []);
-  if (invited.length > 0 && !invited.includes(userId)) {
+  const eligibleIds = await resolveEligibleUserIds(participantScope, invited);
+  if (!eligibleIds.includes(userId)) {
     return { error: 'not_participant' as const };
   }
 
@@ -177,7 +231,6 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
   const showAll = !decision.blind_voting || !!userVote || decision.status === 'closed';
 
   if (!showAll) {
-    // In this branch, userVote is always null (blind + not voted + not closed)
     return {
       votes: [] as Array<DbVoteRow & { voteData: VoteData; user: { id: string; email: string; name: string | null } }>,
       blind: true,
@@ -204,24 +257,28 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
 
 export async function getParticipationStatus(decisionId: string) {
   const existing = await db.execute(sql`
-    SELECT id, invited_participants, quorum FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
+    SELECT id, invited_participants, participant_scope, quorum FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
   `);
   if (existing.rows.length === 0) return null;
 
-  const decision = existing.rows[0] as unknown as { id: string; invited_participants: string[]; quorum: QuorumConfig };
+  const decision = existing.rows[0] as unknown as {
+    id: string;
+    invited_participants: string[];
+    participant_scope: string;
+    quorum: QuorumConfig;
+  };
   const invited = asArray<string>(decision.invited_participants, []);
+  const participantScope = (decision.participant_scope as string) || 'all_staff';
 
-  // Get eligible participants
-  let eligibleUsers: { id: string; email: string }[];
-  if (invited.length > 0) {
+  // Get eligible participant IDs via scope
+  const eligibleIds = await resolveEligibleUserIds(participantScope, invited);
+
+  // Fetch user details for eligible participants
+  let eligibleUsers: { id: string; email: string }[] = [];
+  if (eligibleIds.length > 0) {
     const result = await db.execute(sql`
-      SELECT id, email FROM ${sql.raw(uTable)} WHERE id IN (${sql.join(invited.map(id => sql`${id}`), sql`, `)})
-    `);
-    eligibleUsers = result.rows as unknown as { id: string; email: string }[];
-  } else {
-    // Default: all staff users
-    const result = await db.execute(sql`
-      SELECT id, email FROM ${sql.raw(uTable)} WHERE is_staff = true
+      SELECT id, email FROM ${sql.raw(uTable)}
+      WHERE id IN (${sql.join(eligibleIds.map(id => sql`${id}`), sql`, `)})
     `);
     eligibleUsers = result.rows as unknown as { id: string; email: string }[];
   }
@@ -358,7 +415,46 @@ export function computeTallies(
         totalVotes: votes.length,
       };
     }
+    case 'ranked_choice': {
+      // Borda count: with N candidates, 1st choice gets N-1 pts, 2nd gets N-2, ..., last gets 0
+      const N = options.length;
+      const bordaPoints: Record<string, number> = {};
+      for (const opt of options) bordaPoints[opt.id!] = 0;
+
+      for (const vote of votes) {
+        const v = vote as RankedChoiceVoteInput;
+        v.ranking.forEach((optId, position) => {
+          const points = N - 1 - position;
+          if (optId in bordaPoints && points > 0) {
+            bordaPoints[optId] += points;
+          }
+        });
+      }
+
+      const maxPossible = votes.length * (N - 1);
+      const ranked = options
+        .map(o => ({
+          ...o,
+          bordaPoints: bordaPoints[o.id!] ?? 0,
+          scorePercent: maxPossible > 0
+            ? Math.round(((bordaPoints[o.id!] ?? 0) / maxPossible) * 100)
+            : 0,
+        }))
+        .sort((a, b) => b.bordaPoints - a.bordaPoints);
+
+      return {
+        method: 'ranked_choice',
+        ranked,
+        bordaPoints,
+        winner: ranked[0] ?? null,
+        totalVotes: votes.length,
+        maxPossiblePoints: maxPossible,
+      };
+    }
     default:
       return { method, totalVotes: votes.length };
   }
 }
+
+// Export resolveEligibleUserIds so transitions.ts can reuse it
+export { resolveEligibleUserIds };

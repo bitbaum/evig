@@ -7,7 +7,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { withAdmin, ValidSession } from '@/lib/api/middleware'
+import { withAuth, withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { updateDecisionSchema } from '@/lib/schemas/decisions'
@@ -18,7 +18,7 @@ import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
 
-export const GET = withAdmin<RouteParams>(async (
+export const GET = withAuth<RouteParams>(async (
   request: NextRequest,
   session: ValidSession,
   context,

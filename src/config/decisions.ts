@@ -43,29 +43,44 @@ export const DECISION_TYPES = [
   'prioritize',
   'choose',
   'approve',
+  'election',
 ] as const;
 
 export type DecisionType = (typeof DECISION_TYPES)[number];
 
 export const DECISION_TYPE_CONFIG: Record<
   DecisionType,
-  { label: string; description: string }
+  { label: string; description: string; mechanic: string; icon: string }
 > = {
   sense_check: {
-    label: 'Stimmungsabfrage',
-    description: 'Schnelle Abfrage zur Stimmung im Team',
+    label: 'Ja / Nein',
+    description: 'Klare Frage, bindende Antwort',
+    mechanic: 'Ja · Nein · Enthaltung — einfache Mehrheit entscheidet',
+    icon: '✓',
   },
   prioritize: {
     label: 'Priorisierung',
-    description: 'Optionen nach Wichtigkeit ordnen',
+    description: 'Mehrere Optionen gewichten',
+    mechanic: 'Punkte auf Optionen verteilen — meiste Punkte gewinnt',
+    icon: '⬡',
   },
   choose: {
     label: 'Auswahl',
-    description: 'Zwischen mehreren Optionen entscheiden',
+    description: 'Eine oder mehrere Optionen wählen',
+    mechanic: 'Optionen ankreuzen — meiste Stimmen gewinnt',
+    icon: '◎',
   },
   approve: {
     label: 'Genehmigung',
-    description: 'Vorschlag genehmigen oder ablehnen',
+    description: 'Formelle Annahme per Konsent',
+    mechanic: 'Zustimmung · Enthaltung · Einwand · Blockierung — kein Block = angenommen',
+    icon: '◈',
+  },
+  election: {
+    label: 'Wahl',
+    description: 'Personen in Ämter wählen',
+    mechanic: 'Kandidaten in Rangfolge reihen — Borda-Zählung bestimmt Gewinner',
+    icon: '★',
   },
 };
 
@@ -77,6 +92,7 @@ export const VOTING_METHODS = [
   'dot',
   'score',
   'simple_majority',
+  'ranked_choice',
 ] as const;
 
 export type VotingMethod = (typeof VOTING_METHODS)[number];
@@ -106,13 +122,18 @@ export const VOTING_METHOD_CONFIG: Record<
     label: 'Einfache Mehrheit',
     description: 'Ja, Nein oder Enthaltung. Mehr Ja als Nein = angenommen.',
   },
+  ranked_choice: {
+    label: 'Rangwahl',
+    description: 'Kandidaten in Rangfolge ordnen. Borda-Zählmethode bestimmt den Gewinner.',
+  },
 };
 
-// Methods that require options
+// Methods that require options (candidates/choices must be defined)
 export const METHODS_REQUIRING_OPTIONS: VotingMethod[] = [
   'approval',
   'dot',
   'score',
+  'ranked_choice',
 ];
 
 // ─── Per-Type Defaults ────────────────────────────────────────────────────
@@ -150,7 +171,161 @@ export const DECISION_TYPE_DEFAULTS: Record<
     durationHours: 120,
     blindVoting: true,
   },
+  election: {
+    votingMethod: 'ranked_choice',
+    quorum: { type: 'percentage', value: 50 },
+    durationHours: 168,
+    blindVoting: true,
+  },
 };
+
+// ─── Participant Scopes ───────────────────────────────────────────────────
+
+export const PARTICIPANT_SCOPES = [
+  'all_staff',
+  'board_only',
+  'all_members',
+  'invited',
+] as const;
+
+export type ParticipantScope = (typeof PARTICIPANT_SCOPES)[number];
+
+export const PARTICIPANT_SCOPE_CONFIG: Record<
+  ParticipantScope,
+  { label: string; description: string }
+> = {
+  all_staff: {
+    label: 'Alle Mitarbeitenden',
+    description: 'Alle aktiven Mitarbeitenden können abstimmen',
+  },
+  board_only: {
+    label: 'Nur Vorstand',
+    description: 'Nur Vorstandsmitglieder (Berechtigung: vorstand)',
+  },
+  all_members: {
+    label: 'Alle Vereinsmitglieder',
+    description: 'Alle eingetragenen Vereinsmitglieder',
+  },
+  invited: {
+    label: 'Eingeladene Personen',
+    description: 'Nur explizit eingeladene Personen',
+  },
+};
+
+// Advisory scope defaults per category (used by AI recommender and templates)
+export const CATEGORY_SCOPE_DEFAULTS: Record<DecisionCategory, ParticipantScope> = {
+  vorstandsbeschluss: 'board_only',
+  mitgliederbeschluss: 'all_members',
+  ratifizierung: 'board_only',
+  statutenaenderung: 'all_members',
+  budget: 'board_only',
+  operativ: 'all_staff',
+};
+
+// ─── Decision Templates ───────────────────────────────────────────────────
+
+export interface DecisionTemplate {
+  id: string;
+  label: string;
+  description: string;
+  category: DecisionCategory;
+  decisionType: DecisionType;
+  votingMethod: VotingMethod;
+  participantScope: ParticipantScope;
+  quorum: { type: 'percentage' | 'absolute'; value: number };
+  blindVoting: boolean;
+  durationHours: number;
+  sampleOptions?: Array<{ label: string; description: string }>;
+}
+
+export const DECISION_TEMPLATES: DecisionTemplate[] = [
+  {
+    id: 'logo_vote',
+    label: 'Logowahl',
+    description: 'Abstimmung über ein neues Logo oder visuelles Design aus mehreren Optionen',
+    category: 'operativ',
+    decisionType: 'choose',
+    votingMethod: 'approval',
+    participantScope: 'all_staff',
+    quorum: { type: 'percentage', value: 66 },
+    blindVoting: true,
+    durationHours: 120,
+    sampleOptions: [
+      { label: 'Logo A', description: 'Variante A' },
+      { label: 'Logo B', description: 'Variante B' },
+      { label: 'Logo C', description: 'Variante C' },
+    ],
+  },
+  {
+    id: 'budget_approval',
+    label: 'Budget-Genehmigung',
+    description: 'Genehmigung eines Budget-Antrags durch den Vorstand',
+    category: 'budget',
+    decisionType: 'approve',
+    votingMethod: 'simple_majority',
+    participantScope: 'board_only',
+    quorum: { type: 'percentage', value: 75 },
+    blindVoting: false,
+    durationHours: 72,
+  },
+  {
+    id: 'workshop_priority',
+    label: 'Workshop-Priorisierung',
+    description: 'Welche Workshops sollen im nächsten Quartal Priorität haben?',
+    category: 'operativ',
+    decisionType: 'prioritize',
+    votingMethod: 'dot',
+    participantScope: 'all_staff',
+    quorum: { type: 'percentage', value: 50 },
+    blindVoting: true,
+    durationHours: 72,
+    sampleOptions: [
+      { label: 'Linux-Einführung', description: 'Grundlagen für Einsteiger' },
+      { label: 'Repair-Café', description: 'Geräte reparieren und weitergeben' },
+      { label: 'Hardware-Kurs', description: 'PC-Aufbau und Komponenten' },
+    ],
+  },
+  {
+    id: 'statute_change',
+    label: 'Statutenänderung',
+    description: 'Abstimmung über eine Änderung der Vereinsstatuten — erfordert Mitgliedermehrheit',
+    category: 'statutenaenderung',
+    decisionType: 'approve',
+    votingMethod: 'simple_majority',
+    participantScope: 'all_members',
+    quorum: { type: 'percentage', value: 66 },
+    blindVoting: false,
+    durationHours: 168,
+  },
+  {
+    id: 'board_election',
+    label: 'Vorstandswahl',
+    description: 'Wahl von Vorstandsmitgliedern durch alle Vereinsmitglieder (Rangwahl)',
+    category: 'vorstandsbeschluss',
+    decisionType: 'election',
+    votingMethod: 'ranked_choice',
+    participantScope: 'all_members',
+    quorum: { type: 'percentage', value: 50 },
+    blindVoting: true,
+    durationHours: 168,
+    sampleOptions: [
+      { label: 'Kandidat/in 1', description: 'Funktion / Motivation' },
+      { label: 'Kandidat/in 2', description: 'Funktion / Motivation' },
+    ],
+  },
+  {
+    id: 'partnership_approval',
+    label: 'Partnerschaft-Genehmigung',
+    description: 'Konsent-Entscheid über eine neue Partnerschaft oder Kooperation',
+    category: 'vorstandsbeschluss',
+    decisionType: 'approve',
+    votingMethod: 'consent',
+    participantScope: 'board_only',
+    quorum: { type: 'percentage', value: 75 },
+    blindVoting: false,
+    durationHours: 120,
+  },
+];
 
 // ─── Consent Responses ────────────────────────────────────────────────────
 

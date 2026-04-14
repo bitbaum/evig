@@ -12,7 +12,9 @@ import { db } from '@/db'
 import { decisions } from '@/db/schema'
 import { and, eq, lt, isNotNull, sql } from 'drizzle-orm'
 import { transitionDecision } from '@/lib/services/decisions'
-import { notifyAllStaff } from '@/lib/services/notifications'
+import { notifyAllStaff, notifyUsers } from '@/lib/services/notifications'
+import { resolveEligibleUserIds } from '@/lib/services/decisions-voting'
+import { asArray } from '@/lib/services/decisions-crud'
 import { logger } from '@/lib/logger'
 
 export async function GET(request: NextRequest) {
@@ -26,13 +28,15 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Send 24h deadline reminders for decisions expiring tomorrow
+    // Send 24h deadline reminders to non-voters for decisions expiring tomorrow
     try {
       const upcomingDecisions = await db
         .select({
           id: decisions.id,
           title: decisions.title,
           votingDeadline: decisions.votingDeadline,
+          participantScope: decisions.participantScope,
+          invitedParticipants: decisions.invitedParticipants,
         })
         .from(decisions)
         .where(
@@ -46,13 +50,32 @@ export async function GET(request: NextRequest) {
 
       for (const decision of upcomingDecisions) {
         try {
-          await notifyAllStaff({
-            type: 'decision_reminder',
-            title: `Abstimmung endet morgen: ${decision.title}`,
-            content: `Die Abstimmungsfrist für "${decision.title}" endet morgen. Bitte gib deine Stimme ab.`,
-            related_type: 'decision',
-            related_id: decision.id,
-          })
+          const scope = decision.participantScope ?? 'all_staff'
+          const invited = asArray<string>(decision.invitedParticipants, [])
+          const eligibleIds = await resolveEligibleUserIds(scope, invited)
+
+          // Find who hasn't voted yet
+          const votedResult = await db.execute(
+            sql`SELECT user_id FROM decision_votes WHERE decision_id = ${decision.id}`
+          )
+          const votedIds = new Set(
+            (votedResult.rows as Array<{ user_id: string }>).map(r => r.user_id)
+          )
+          const nonVoterIds = eligibleIds.filter(id => !votedIds.has(id))
+
+          if (nonVoterIds.length > 0) {
+            await notifyUsers(nonVoterIds, {
+              type: 'decision_deadline',
+              title: `Abstimmung endet morgen: ${decision.title}`,
+              content: `Die Abstimmungsfrist für "${decision.title}" endet morgen. Bitte gib noch deine Stimme ab.`,
+              related_type: 'decision',
+              related_id: decision.id,
+              metadata: {
+                decisionId: decision.id,
+                votingDeadline: decision.votingDeadline ?? '',
+              },
+            })
+          }
         } catch (err) {
           logger.error('Failed to send deadline reminder', { decisionId: decision.id, error: err })
         }
@@ -102,6 +125,7 @@ export async function GET(request: NextRequest) {
             content: 'Die Abstimmungsfrist ist abgelaufen. Die Entscheidung wurde automatisch geschlossen.',
             related_type: 'decision',
             related_id: decision.id,
+            metadata: { decisionId: decision.id },
           })
         } else {
           errors.push(`${decision.id}: ${result.error}`)

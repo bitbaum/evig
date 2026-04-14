@@ -8,6 +8,7 @@ import {
   COMMENT_POSITIONS,
   SCORE_RANGE,
   METHODS_REQUIRING_OPTIONS,
+  PARTICIPANT_SCOPES,
   type DecisionType,
   type VotingMethod,
   type DecisionStatus,
@@ -39,6 +40,7 @@ export const createDecisionSchema = z
   .object({
     title: z.string().min(1).max(200),
     description: z.string().min(1),
+    background: z.string().optional().nullable(),
     category: z.string().optional(),
     decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]) as z.ZodType<DecisionType>,
     votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]) as z.ZodType<VotingMethod>,
@@ -47,6 +49,7 @@ export const createDecisionSchema = z
     blindVoting: z.boolean().optional().default(true),
     dotCount: z.number().int().min(1).max(20).optional().nullable(),
     invitedParticipants: z.array(z.string()).optional().default([]),
+    participantScope: z.enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]]).optional().default('all_staff'),
     discussionDeadline: z.string().datetime().optional().nullable(),
     votingDeadline: z.string().datetime().optional().nullable(),
     // Allow immediate transition on create
@@ -57,7 +60,7 @@ export const createDecisionSchema = z
   })
   .refine(
     (data) => {
-      // Options required for approval/dot/score
+      // Options required for approval/dot/score/ranked_choice
       if (
         METHODS_REQUIRING_OPTIONS.includes(data.votingMethod) &&
         (!data.options || data.options.length < 2)
@@ -86,6 +89,7 @@ export type CreateDecisionInput = z.infer<typeof createDecisionSchema>;
 export const updateDecisionSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().min(1).optional(),
+  background: z.string().optional().nullable(),
   category: z.string().optional(),
   decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]).optional() as z.ZodType<DecisionType | undefined>,
   votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]).optional() as z.ZodType<VotingMethod | undefined>,
@@ -94,6 +98,7 @@ export const updateDecisionSchema = z.object({
   blindVoting: z.boolean().optional(),
   dotCount: z.number().int().min(1).max(20).optional().nullable(),
   invitedParticipants: z.array(z.string()).optional(),
+  participantScope: z.enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]]).optional(),
   discussionDeadline: z.string().datetime().optional().nullable(),
   votingDeadline: z.string().datetime().optional().nullable(),
   outcomeSummary: z.string().optional().nullable(),
@@ -157,13 +162,21 @@ export const simpleMajorityVoteSchema = z.object({
 
 export type SimpleMajorityVoteInput = z.infer<typeof simpleMajorityVoteSchema>;
 
+export const rankedChoiceVoteSchema = z.object({
+  // Ordered array of optionIds: index 0 = first choice (most preferred)
+  ranking: z.array(z.string()).min(2, 'Mindestens 2 Kandidaten einordnen'),
+});
+
+export type RankedChoiceVoteInput = z.infer<typeof rankedChoiceVoteSchema>;
+
 // Union type for all vote data
 export type VoteData =
   | ConsentVoteInput
   | ApprovalVoteInput
   | DotVoteInput
   | ScoreVoteInput
-  | SimpleMajorityVoteInput;
+  | SimpleMajorityVoteInput
+  | RankedChoiceVoteInput;
 
 // ─── Comments ─────────────────────────────────────────────────────────────
 

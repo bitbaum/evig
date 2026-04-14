@@ -6,7 +6,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { withAdmin, ValidSession } from '@/lib/api/middleware'
+import { withAuth, withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { createDecisionSchema } from '@/lib/schemas/decisions'
@@ -15,7 +15,7 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import type { DecisionStatus } from '@/config/decisions'
 
-export const GET = withAdmin(async (
+export const GET = withAuth(async (
   request: NextRequest,
   session: ValidSession,
 ) => {

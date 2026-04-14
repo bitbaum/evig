@@ -116,6 +116,7 @@ export const emailTemplates = {
   // Decisions
   decisionVotingOpened: decisionTemplates.decisionVotingOpened,
   decisionDeadlineReminder: decisionTemplates.decisionDeadlineReminder,
+  decisionClosed: decisionTemplates.decisionClosed,
 
   // Appointments
   appointmentNewBooking: appointmentTemplates.appointmentNewBooking,

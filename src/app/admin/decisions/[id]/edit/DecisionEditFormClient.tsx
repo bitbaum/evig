@@ -25,6 +25,7 @@ interface DecisionData {
   id: string;
   title: string;
   description: string;
+  background: string | null;
   decisionType: DecisionType;
   votingMethod: VotingMethod;
   options: OptionItem[];
@@ -49,6 +50,7 @@ export default function DecisionEditFormClient({
   const [decisionType, setDecisionType] = useState<DecisionType>('sense_check');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [background, setBackground] = useState('');
   const [votingMethod, setVotingMethod] = useState<VotingMethod>('simple_majority');
   const [options, setOptions] = useState<OptionItem[]>([]);
   const [showImageUrls, setShowImageUrls] = useState(false);
@@ -66,6 +68,7 @@ export default function DecisionEditFormClient({
           setDecisionType(d.decisionType);
           setTitle(d.title);
           setDescription(d.description);
+          setBackground(d.background ?? '');
           setVotingMethod(d.votingMethod);
           const loadedOptions = d.options.length > 0
             ? d.options.map((o: { id: string; label: string; description?: string; imageUrl?: string }) => ({
@@ -115,6 +118,7 @@ export default function DecisionEditFormClient({
     const payload = {
       title,
       description,
+      background: background.trim() || null,
       decisionType,
       votingMethod,
       options: needsOptions
@@ -166,24 +170,35 @@ export default function DecisionEditFormClient({
         <span className="mb-2 block text-sm font-medium text-gray-700">
           Entscheidungstyp
         </span>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {DECISION_TYPES.map((type) => {
             const conf = DECISION_TYPE_CONFIG[type];
+            const selected = decisionType === type;
             return (
               <button
                 key={type}
                 type="button"
                 onClick={() => setDecisionType(type)}
-                className={`rounded-lg border-2 p-3 text-left transition ${
-                  decisionType === type
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                className={`rounded-lg border-2 p-3 text-left transition-all ${
+                  selected
+                    ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
-                <div className="font-medium text-gray-900">{conf.label}</div>
-                <div className="mt-0.5 text-xs text-gray-500">
-                  {conf.description}
+                <div className="flex items-center gap-2">
+                  <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
+                    selected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'
+                  }`}>
+                    {conf.icon}
+                  </span>
+                  <span className="font-medium text-gray-900">{conf.label}</span>
                 </div>
+                <p className="mt-1.5 text-xs text-gray-500">{conf.description}</p>
+                {selected && (
+                  <p className="mt-1.5 rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">
+                    {conf.mechanic}
+                  </p>
+                )}
               </button>
             );
           })}
@@ -215,15 +230,34 @@ export default function DecisionEditFormClient({
           htmlFor="description"
           className="mb-1 block text-sm font-medium text-gray-700"
         >
-          Beschreibung
+          Was wird entschieden?
         </label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
+          rows={3}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
+
+      {/* Background / rationale */}
+      <div>
+        <label
+          htmlFor="background"
+          className="mb-1 block text-sm font-medium text-gray-700"
+        >
+          Begründung & Hintergrund
+          <span className="ml-1.5 font-normal text-gray-400">(optional)</span>
+        </label>
+        <textarea
+          id="background"
+          value={background}
+          onChange={(e) => setBackground(e.target.value)}
           rows={4}
           className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          placeholder="Begründung, Alternativen, Risiken — sichtbar für Abstimmungsberechtigte vor dem Abstimmen."
         />
       </div>
 

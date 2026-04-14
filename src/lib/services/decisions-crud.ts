@@ -32,6 +32,7 @@ export interface DbDecisionRow {
   id: string;
   title: string;
   description: string;
+  background: string | null;
   category: string | null;
   decision_type: string;
   voting_method: string;
@@ -43,8 +44,10 @@ export interface DbDecisionRow {
   status: string;
   discussion_deadline: string | null;
   voting_deadline: string | null;
+  participant_scope: string;
   outcome: Record<string, unknown> | null;
   outcome_summary: string | null;
+  ai_outcome_narrative: string | null;
   revealed_at: string | null;
   closed_at: string | null;
   closed_by: string | null;
@@ -171,6 +174,7 @@ export async function getDecisions(
       id: d.id,
       title: d.title,
       description: d.description,
+      background: d.background,
       category: d.category || 'operativ',
       decisionType: d.decision_type,
       votingMethod: d.voting_method,
@@ -184,7 +188,9 @@ export async function getDecisions(
       votingDeadline: d.voting_deadline,
       outcome: d.outcome,
       outcomeSummary: d.outcome_summary,
+      aiOutcomeNarrative: d.ai_outcome_narrative,
       cancelReason: d.cancel_reason,
+      participantScope: d.participant_scope || 'all_staff',
       creator: { id: d.creator_id!, email: d.creator_email!, name: d.creator_name },
       createdAt: d.created_at,
       voteCount: parseInt(d.vote_count || '0', 10),
@@ -221,6 +227,7 @@ export async function getDecisionById(id: string, requestingUserId: string) {
     id: d.id,
     title: d.title,
     description: d.description,
+    background: d.background,
     category: d.category || 'operativ',
     decisionType: d.decision_type,
     votingMethod: d.voting_method,
@@ -234,7 +241,9 @@ export async function getDecisionById(id: string, requestingUserId: string) {
     votingDeadline: d.voting_deadline,
     outcome: d.outcome,
     outcomeSummary: d.outcome_summary,
+    aiOutcomeNarrative: d.ai_outcome_narrative,
     cancelReason: d.cancel_reason,
+    participantScope: d.participant_scope || 'all_staff',
     revealedAt: d.revealed_at,
     closedAt: d.closed_at,
     closedBy: d.closed_by,
@@ -249,6 +258,7 @@ export async function getDecisionById(id: string, requestingUserId: string) {
 interface CreateDecisionData {
   title: string;
   description: string;
+  background?: string | null;
   category?: string;
   decisionType: string;
   votingMethod: string;
@@ -257,6 +267,7 @@ interface CreateDecisionData {
   blindVoting?: boolean;
   dotCount?: number | null;
   invitedParticipants?: string[];
+  participantScope?: string;
   discussionDeadline?: string | null;
   votingDeadline?: string | null;
   initialStatus?: string;
@@ -275,12 +286,13 @@ export async function createDecision(
   const result = await db.execute(sql`
     WITH inserted AS (
       INSERT INTO ${sql.raw(dTable)}
-        (title, description, category, decision_type, voting_method, options, quorum,
-         blind_voting, dot_count, invited_participants, discussion_deadline,
-         voting_deadline, status, created_by)
+        (title, description, background, category, decision_type, voting_method, options, quorum,
+         blind_voting, dot_count, invited_participants, participant_scope,
+         discussion_deadline, voting_deadline, status, created_by)
       VALUES (
         ${data.title},
         ${data.description},
+        ${data.background ?? null},
         ${data.category || 'operativ'},
         ${data.decisionType},
         ${data.votingMethod},
@@ -289,6 +301,7 @@ export async function createDecision(
         ${data.blindVoting ?? true},
         ${data.dotCount ?? null},
         ${JSON.stringify(data.invitedParticipants || [])}::jsonb,
+        ${data.participantScope || 'all_staff'},
         ${data.discussionDeadline ? new Date(data.discussionDeadline) : null},
         ${data.votingDeadline ? new Date(data.votingDeadline) : null},
         ${data.initialStatus || DECISION_STATUS.DRAFT},
@@ -315,6 +328,7 @@ export async function createDecision(
 interface UpdateDecisionData {
   title?: string;
   description?: string;
+  background?: string | null;
   category?: string;
   decisionType?: string;
   votingMethod?: string;
@@ -323,6 +337,7 @@ interface UpdateDecisionData {
   blindVoting?: boolean;
   dotCount?: number | null;
   invitedParticipants?: string[];
+  participantScope?: string;
   discussionDeadline?: string | null;
   votingDeadline?: string | null;
   outcomeSummary?: string | null;
@@ -367,6 +382,9 @@ export async function updateDecision(
   if (data.description !== undefined) {
     setClauses.push(sql`description = ${data.description}`);
   }
+  if (data.background !== undefined) {
+    setClauses.push(sql`background = ${data.background}`);
+  }
   if (data.category !== undefined) {
     setClauses.push(sql`category = ${data.category}`);
   }
@@ -390,6 +408,9 @@ export async function updateDecision(
   }
   if (data.invitedParticipants !== undefined) {
     setClauses.push(sql`invited_participants = ${JSON.stringify(data.invitedParticipants)}::jsonb`);
+  }
+  if (data.participantScope !== undefined) {
+    setClauses.push(sql`participant_scope = ${data.participantScope}`);
   }
   if (data.discussionDeadline !== undefined) {
     setClauses.push(sql`discussion_deadline = ${data.discussionDeadline ? new Date(data.discussionDeadline) : null}`);

@@ -5,23 +5,35 @@
  * but never propagate to callers — a failed notification must never break
  * the action that triggered it.
  *
- * Each function now also sends an email when the user has opted in
+ * Each function also sends an email when the user has opted in
  * (email_notifications = true in user_profiles, which is the default).
+ *
+ * Decision-specific notification types (decision_voting, decision_closed)
+ * use rich HTML templates with deep links to the specific decision page.
+ * All other types fall back to the generic notification email.
  */
 
 import { db } from '@/db'
 import { notifications, users, userProfiles } from '@/db/schema'
-import { eq, inArray, and, ne, sql } from 'drizzle-orm'
+import { eq, inArray, and, ne } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { notificationEmail } from '@/lib/email/templates/notification'
+import {
+  decisionVotingOpened,
+  decisionDeadlineReminder,
+  decisionClosed,
+} from '@/lib/email/templates/decisions'
+import type { EmailContent } from '@/lib/email/types'
 
-interface NotificationPayload {
+export interface NotificationPayload {
   type: string
   title: string
   content: string
   related_type?: string
   related_id?: string
+  /** Optional structured metadata for type-specific email templates. */
+  metadata?: Record<string, string>
 }
 
 // ---- helpers ----------------------------------------------------------------
@@ -32,14 +44,32 @@ interface UserEmailInfo {
   email_notifications: boolean | null
 }
 
+/** Pick the richest email template available for this notification type. */
+function getEmailContent(payload: NotificationPayload): EmailContent {
+  const { type, title, content, metadata } = payload
+  const id = metadata?.decisionId ?? payload.related_id
+  const deadline = metadata?.votingDeadline ?? undefined
+
+  if (type === 'decision_voting') {
+    return decisionVotingOpened(title, deadline || undefined, id)
+  }
+  if (type === 'decision_closed') {
+    return decisionClosed(title, id)
+  }
+  if (type === 'decision_deadline') {
+    return decisionDeadlineReminder(title, deadline ?? '', id)
+  }
+
+  return notificationEmail(title, content)
+}
+
 /** Send email + mark sent_email, swallowing errors. */
 async function trySendEmail(
   notificationIds: string[],
   recipients: UserEmailInfo[],
-  title: string,
-  content: string,
+  payload: NotificationPayload,
 ): Promise<void> {
-  const emailContent = notificationEmail(title, content)
+  const emailContent = getEmailContent(payload)
   let anySent = false
 
   for (const r of recipients) {
@@ -102,7 +132,7 @@ export async function createNotification(
     .where(eq(users.id, userId))
 
   if (userRows.length > 0 && notificationId) {
-    await trySendEmail([notificationId], userRows, payload.title, payload.content)
+    await trySendEmail([notificationId], userRows, payload)
   }
 }
 
@@ -147,11 +177,11 @@ export async function notifyAllStaff(
     .returning({ id: notifications.id })
 
   const ids = insertResult.map(r => r.id)
-  await trySendEmail(ids, staff, payload.title, payload.content)
+  await trySendEmail(ids, staff, payload)
 }
 
 /**
- * Notify a list of specific users (e.g. protocol attendees).
+ * Notify a list of specific users (e.g. eligible voters, protocol attendees).
  */
 export async function notifyUsers(
   userIds: string[],
@@ -194,7 +224,7 @@ export async function notifyUsers(
     .map(id => emailInfoMap.get(id))
     .filter((r): r is UserEmailInfo => r !== undefined)
 
-  await trySendEmail(ids, recipients, payload.title, payload.content)
+  await trySendEmail(ids, recipients, payload)
 }
 
 /**

@@ -6,7 +6,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { withAdmin, ValidSession } from '@/lib/api/middleware'
+import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { getVotes, submitVote } from '@/lib/services/decisions'
@@ -15,7 +15,7 @@ import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
 
-export const GET = withAdmin<RouteParams>(async (
+export const GET = withAuth<RouteParams>(async (
   request: NextRequest,
   session: ValidSession,
   context,
@@ -38,7 +38,7 @@ export const GET = withAdmin<RouteParams>(async (
   }
 })
 
-export const POST = withAdmin<RouteParams>(async (
+export const POST = withAuth<RouteParams>(async (
   request: NextRequest,
   session: ValidSession,
   context,

@@ -560,6 +560,8 @@ export const decisions = pgTable('decisions', {
   id: uuid('id').primaryKey().defaultRandom(),
   title: text('title').notNull(),
   description: text('description').notNull(),
+  // Background/rationale — the "why" context voters can read before voting (nullable)
+  background: text('background'),
 
   // Category (Verein)
   category: text('category').default('operativ'),
@@ -587,9 +589,13 @@ export const decisions = pgTable('decisions', {
   discussionDeadline: timestamp('discussion_deadline', { withTimezone: true, mode: 'string' }),
   votingDeadline: timestamp('voting_deadline', { withTimezone: true, mode: 'string' }),
 
+  // Participant scope: all_staff | board_only | all_members | invited
+  participantScope: text('participant_scope').notNull().default('all_staff'),
+
   // Outcome
   outcome: jsonb('outcome'),
   outcomeSummary: text('outcome_summary'),
+  aiOutcomeNarrative: text('ai_outcome_narrative'),
   revealedAt: timestamp('revealed_at', { withTimezone: true, mode: 'string' }),
   closedAt: timestamp('closed_at', { withTimezone: true, mode: 'string' }),
   closedBy: uuid('closed_by'),
