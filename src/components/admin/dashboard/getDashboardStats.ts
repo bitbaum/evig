@@ -4,6 +4,7 @@ import {
   users, userContentSubmissions, staffPermissionRequests,
   serviceAppointments, helperProfiles, listings,
   tasks, decisions, itHilfeRequests, repairerApplications,
+  inventoryItems, workshopRegistrations,
 } from '@/db/schema'
 import { blogPosts, blogSubmissions } from '@/db/schema/content'
 import { APPROVAL_STATUS } from '@/config/approval-status'
@@ -25,6 +26,8 @@ const itHilfeTable = getTableName(itHilfeRequests)
 const repairerAppTable = getTableName(repairerApplications)
 const tasksTable = getTableName(tasks)
 const decisionsTable = getTableName(decisions)
+const inventoryTable = getTableName(inventoryItems)
+const workshopRegTable = getTableName(workshopRegistrations)
 
 // ---- helpers ----------------------------------------------------------------
 
@@ -60,6 +63,11 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
   weekAgo.setDate(weekAgo.getDate() - 7)
   const weekAgoISO = weekAgo.toISOString()
 
+  const monthStart = new Date()
+  monthStart.setDate(1)
+  monthStart.setHours(0, 0, 0, 0)
+  const monthStartISO = monthStart.toISOString()
+
   // Fire all queries in parallel — wall time = max latency, not sum
   const [
     usersRes,
@@ -76,6 +84,10 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     listingsRes,
     newUsersRes,
     postsRes,
+    devicesProcessedRes,
+    devicesSoldRes,
+    itHilfeCompletedRes,
+    workshopAttendeesRes,
   ] = await Promise.allSettled([
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
@@ -146,6 +158,28 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       FROM ${sql.raw(blogTable)}
       WHERE status = ${APPROVAL_STATUS.PUBLISHED} AND published_at >= ${weekAgoISO}
     `),
+
+    // Mission metrics — this month's impact
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(inventoryTable)}
+      WHERE created_at >= ${monthStartISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(inventoryTable)}
+      WHERE status = 'sold' AND updated_at >= ${monthStartISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(itHilfeTable)}
+      WHERE status = 'completed' AND completed_at >= ${monthStartISO}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) AS count
+      FROM ${sql.raw(workshopRegTable)}
+      WHERE attended = true AND created_at >= ${monthStartISO}
+    `),
   ])
 
   // Extract approvals
@@ -195,5 +229,11 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     totalTechnicians: rowCount(techRes, 'totalTechnicians'),
     totalListings,
     activeListings,
+    mission: {
+      devicesProcessedThisMonth: rowCount(devicesProcessedRes, 'devicesProcessedThisMonth'),
+      devicesSoldThisMonth: rowCount(devicesSoldRes, 'devicesSoldThisMonth'),
+      itHilfeCompletedThisMonth: rowCount(itHilfeCompletedRes, 'itHilfeCompletedThisMonth'),
+      workshopAttendeesThisMonth: rowCount(workshopAttendeesRes, 'workshopAttendeesThisMonth'),
+    },
   }
 }

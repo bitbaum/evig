@@ -1,5 +1,12 @@
 import type { Package } from 'lucide-react'
 
+export interface MissionStats {
+  devicesProcessedThisMonth: number
+  devicesSoldThisMonth: number
+  itHilfeCompletedThisMonth: number
+  workshopAttendeesThisMonth: number
+}
+
 export interface DashboardStats {
   // Action items with age of oldest unresolved item
   pendingApprovals: number
@@ -31,6 +38,9 @@ export interface DashboardStats {
   // Marketplace
   totalListings: number
   activeListings: number
+
+  // Mission / impact (this month)
+  mission: MissionStats
 }
 
 export type ActionItem = {
@@ -48,4 +58,11 @@ export type QuickAction = {
   href: string
   icon: typeof Package
   color: string
+}
+
+export type FulfillAction = {
+  label: string
+  href: string
+  icon: typeof Package
+  count: number
 }

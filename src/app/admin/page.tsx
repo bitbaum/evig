@@ -21,10 +21,11 @@ import {
   getDashboardStats,
   buildActionItems,
   buildQuickActions,
+  buildFulfillActions,
   ActionItemsSection,
   QuickActionsSection,
   WeeklyActivitySection,
-  StatsOverview,
+  MissionMetrics,
 } from '@/components/admin/dashboard'
 import Heading from '@/components/ui/Heading'
 
@@ -67,6 +68,7 @@ export default async function AdminDashboard() {
   const canAccess = (section: string) => canAccessSection(userForPermissions, section)
   const actionItems = buildActionItems(stats, isSuper, canAccess)
   const quickActions = buildQuickActions(canAccess)
+  const fulfillActions = buildFulfillActions(stats, canAccess)
 
   return (
     <div className="space-y-6">
@@ -83,7 +85,7 @@ export default async function AdminDashboard() {
       </div>
 
       <ActionItemsSection actionItems={actionItems} />
-      <QuickActionsSection quickActions={quickActions} />
+      <QuickActionsSection quickActions={quickActions} fulfillActions={fulfillActions} />
       <WeeklyActivitySection stats={stats} />
 
       {/* Super Admin: Permission Requests (inline) */}
@@ -93,7 +95,7 @@ export default async function AdminDashboard() {
         </div>
       )}
 
-      <StatsOverview stats={stats} />
+      <MissionMetrics stats={stats} />
 
       {/* Request More Access (for staff without full access) */}
       {!isSuper && !hasFullAccess && inaccessibleSections.length > 0 && (
