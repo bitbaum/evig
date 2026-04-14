@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger";
 import { withAuth, ValidSession } from "@/lib/api/middleware";
 import { validateBody, ImportCSVSchema } from '@/lib/schemas';
 import { APPROVAL_STATUS } from '@/config/approval-status';
+import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status';
 import { analyzeProductDescription, calculateSustainabilityScore } from '@/lib/inventory/csv-analysis';
 import { rateLimiters } from '@/lib/security/rate-limit';
 
@@ -150,7 +151,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
             aiProductId: aiProduct.id,
             kivitendoArticleNumber: row.Artikelnummer,
             legacyCsvData: row,
-            status: 'available',
+            status: INVENTORY_ITEM_STATUS.AVAILABLE,
             acquisitionCostChf: String(parseFloat(row.Verkaufspreis) * 0.7 || 0),
             sellingPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
             assignedTo: session.user.id,

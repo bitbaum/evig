@@ -11,6 +11,7 @@ import { eq, and } from 'drizzle-orm'
 import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 import { logger } from '@/lib/logger'
 import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
+import { MARKETPLACE_LISTING_PLATFORM } from '@/config/shop'
 
 // ─── Publish/Unpublish ─────────────────────────────────────────────
 
@@ -55,7 +56,7 @@ export async function publishProduct(productId: string, userId: string): Promise
     .where(
       and(
         eq(marketplaceListings.inventoryItemId, inventoryItemId),
-        eq(marketplaceListings.platform, 'internal'),
+        eq(marketplaceListings.platform, MARKETPLACE_LISTING_PLATFORM.INTERNAL),
       )
     )
 
@@ -74,7 +75,7 @@ export async function publishProduct(productId: string, userId: string): Promise
       title: `${productInfo.brand} ${productInfo.productName}`,
       description: productInfo.shortDescription || '',
       priceChf: productInfo.estimatedPriceChf || '0',
-      platform: 'internal',
+      platform: MARKETPLACE_LISTING_PLATFORM.INTERNAL,
       status: MARKETPLACE_STATUS.PUBLISHED,
       publishedAt: new Date().toISOString(),
       createdBy: userId,

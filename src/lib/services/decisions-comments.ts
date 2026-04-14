@@ -6,6 +6,7 @@ import { db } from '@/db';
 import { sql, getTableName } from 'drizzle-orm';
 import { decisionComments, decisions } from '@/db/schema/misc';
 import { users } from '@/db/schema/auth';
+import { DECISION_STATUS } from '@/config/decisions';
 
 // Table name refs
 const dcTable = getTableName(decisionComments);
@@ -66,7 +67,7 @@ export async function createComment(
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
   const existingRow = existing.rows[0] as unknown as { id: string; status: string };
-  if (!['discussion', 'voting'].includes(existingRow.status)) {
+  if (![DECISION_STATUS.DISCUSSION, DECISION_STATUS.VOTING].includes(existingRow.status as typeof DECISION_STATUS[keyof typeof DECISION_STATUS])) {
     return { error: 'not_commentable' as const };
   }
 

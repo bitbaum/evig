@@ -12,6 +12,8 @@ import { sellerProfiles } from '@/db/schema/marketplace'
 import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { REVIEW_STATUS } from '@/config/review-status'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
+import { OFFER_STATUS } from '@/config/it-hilfe'
 
 interface CreateReviewParams {
   reviewerId: string
@@ -121,13 +123,13 @@ async function updateHelperRating(requestId: string): Promise<void> {
         AVG(r.overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(r.id)::int AS review_count
       FROM reviews r
-      JOIN it_hilfe_offers o ON o.request_id = r.target_id AND o.status = 'accepted'
-      WHERE r.target_type = 'it_hilfe' AND r.status = 'published'
+      JOIN it_hilfe_offers o ON o.request_id = r.target_id AND o.status = ${OFFER_STATUS.ACCEPTED}
+      WHERE r.target_type = ${REVIEW_TARGET_TYPES.IT_HILFE} AND r.status = ${REVIEW_STATUS.PUBLISHED}
       GROUP BY o.user_id
     ) sub
     WHERE helper_profiles.user_id = sub.helper_user_id
     AND EXISTS (
-      SELECT 1 FROM it_hilfe_offers WHERE request_id = ${requestId} AND status = 'accepted' AND user_id = helper_profiles.user_id
+      SELECT 1 FROM it_hilfe_offers WHERE request_id = ${requestId} AND status = ${OFFER_STATUS.ACCEPTED} AND user_id = helper_profiles.user_id
     )
   `)
   logger.info('Updated helper rating', { requestId, rows: result.rowCount })
@@ -146,7 +148,7 @@ async function updateSellerRatingFromListing(listingId: string): Promise<void> {
         COUNT(r.id)::int AS review_count
       FROM reviews r
       JOIN listings l ON l.id = r.target_id
-      WHERE r.target_type = 'listing' AND r.status = 'published'
+      WHERE r.target_type = ${REVIEW_TARGET_TYPES.LISTING} AND r.status = ${REVIEW_STATUS.PUBLISHED}
       GROUP BY l.seller_id
     ) sub
     WHERE seller_profiles.user_id = sub.seller_id

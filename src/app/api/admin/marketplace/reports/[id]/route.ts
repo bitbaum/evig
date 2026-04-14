@@ -6,6 +6,8 @@ import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody } from '@/lib/schemas'
 import { HandleReportSchema } from '@/lib/schemas/marketplace'
+import { REPORT_STATUS } from '@/config/report-status'
+import { LISTING_STATUS } from '@/config/marketplace'
 import { removeListing } from '@/lib/search/meilisearch'
 import { logger } from '@/lib/logger'
 import { logAdminAction } from '@/lib/auth/audit'
@@ -41,7 +43,7 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
     await db
       .update(listingReports)
       .set({
-        status: 'reviewed',
+        status: REPORT_STATUS.REVIEWED,
         reviewedAt: sql`NOW()`,
         reviewedBy: session.user.id,
         resolutionAction: action,
@@ -54,7 +56,7 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
       await db
         .update(listings)
         .set({
-          status: 'removed',
+          status: LISTING_STATUS.REMOVED,
           updatedAt: sql`NOW()`,
         })
         .where(eq(listings.id, report.listing_id))

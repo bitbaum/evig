@@ -23,6 +23,20 @@ export const MARKETPLACE_STATUS_BADGES: Record<string, string> = {
 }
 
 /**
+ * Inventory item physical status.
+ * CHECK (status IN ('available', 'reserved', 'sold', 'damaged', 'missing'))
+ */
+export const INVENTORY_ITEM_STATUS = {
+  AVAILABLE: 'available',
+  RESERVED: 'reserved',
+  SOLD: 'sold',
+  DAMAGED: 'damaged',
+  MISSING: 'missing',
+} as const;
+
+export type InventoryItemStatus = typeof INVENTORY_ITEM_STATUS[keyof typeof INVENTORY_ITEM_STATUS];
+
+/**
  * Inventory product approval status.
  * Uses product-specific labels: 'Freigegeben' (released) instead of 'Genehmigt' (approved).
  */

@@ -18,6 +18,7 @@ import { INTAKE_STATUS } from '@/config/intake-status'
 import { isChecklistComplete } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { logger } from '@/lib/logger'
+import { MARKETPLACE_LISTING_PLATFORM } from '@/config/shop'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
 
 interface PublishRow {
@@ -93,7 +94,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
         title: listingTitle,
         description: listingDesc,
         priceChf: String(price_chf),
-        platform: 'internal',
+        platform: MARKETPLACE_LISTING_PLATFORM.INTERNAL,
         status: MARKETPLACE_STATUS.PUBLISHED,
         publishedAt: new Date().toISOString(),
         createdBy: session.user.id,

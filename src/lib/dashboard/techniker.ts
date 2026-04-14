@@ -1,6 +1,7 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -117,7 +118,7 @@ export async function getMatchingRequests(userId: string): Promise<MatchingReque
          FROM ${TABLE_NAMES.IT_HILFE_REQUESTS} r
          LEFT JOIN ${TABLE_NAMES.IT_HILFE_OFFERS} o
            ON o.request_id = r.id AND o.helper_id = $1
-         WHERE r.status = 'open'
+         WHERE r.status = '${REQUEST_STATUS.OPEN}'
            AND (r.expires_at IS NULL OR r.expires_at > NOW())
            AND o.id IS NULL
          ORDER BY r.created_at DESC

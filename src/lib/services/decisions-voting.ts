@@ -8,6 +8,7 @@
 import { db } from '@/db';
 import { sql, getTableName } from 'drizzle-orm';
 import { decisions, decisionVotes } from '@/db/schema/misc';
+import { DECISION_STATUS } from '@/config/decisions';
 import { users } from '@/db/schema/auth';
 import {
   type VotingMethod,
@@ -171,7 +172,7 @@ export async function submitVote(
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
   const decision = existing.rows[0] as unknown as DbDecisionRow;
-  if (decision.status !== 'voting')
+  if (decision.status !== DECISION_STATUS.VOTING)
     return { error: 'not_voting_phase' as const };
 
   // Check participant eligibility via scope
@@ -228,7 +229,7 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
   const userVote = userVoteResult.rows.length > 0 ? userVoteResult.rows[0] as unknown as DbVoteRow : null;
 
   // Blind voting: only show all votes if blind=false, user has voted, or decision is closed
-  const showAll = !decision.blind_voting || !!userVote || decision.status === 'closed';
+  const showAll = !decision.blind_voting || !!userVote || decision.status === DECISION_STATUS.CLOSED;
 
   if (!showAll) {
     return {

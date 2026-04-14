@@ -6,6 +6,7 @@ import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody } from '@/lib/schemas'
 import { AdminEditListingSchema } from '@/lib/schemas/marketplace'
+import { LISTING_STATUS } from '@/config/marketplace'
 import { removeListing } from '@/lib/search/meilisearch'
 import { logger } from '@/lib/logger'
 import { logAdminAction } from '@/lib/auth/audit'
@@ -139,7 +140,7 @@ export const DELETE = withAdmin<{ id: string }>('marketplace', async (request, s
 
     const [removed] = await db
       .update(listings)
-      .set({ status: 'removed', updatedAt: sql`NOW()` })
+      .set({ status: LISTING_STATUS.REMOVED, updatedAt: sql`NOW()` })
       .where(eq(listings.id, id))
       .returning({ id: listings.id })
 

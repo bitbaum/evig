@@ -106,6 +106,7 @@ export const DONATION_STATUSES = {
   RECORDED: 'recorded',
   THANKED: 'thanked',
   RECEIPT_SENT: 'receipt_sent',
+  ARCHIVED: 'archived',
   // Future phase 2: announced, pending_dropoff, received, processed
 } as const
 
@@ -115,6 +116,7 @@ export const DONATION_STATUS_LABELS: Record<DonationStatus, string> = {
   [DONATION_STATUSES.RECORDED]: 'Erfasst',
   [DONATION_STATUSES.THANKED]: 'Bedankt',
   [DONATION_STATUSES.RECEIPT_SENT]: 'Quittung gesendet',
+  [DONATION_STATUSES.ARCHIVED]: 'Archiviert',
 }
 
 // =============================================================================

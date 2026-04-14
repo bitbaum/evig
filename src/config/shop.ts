@@ -23,6 +23,17 @@ export interface QuickLink {
 }
 
 /**
+ * Marketplace listing platform types.
+ * 'internal' = RevampIT's own inventory; 'external' = third-party integrations.
+ */
+export const MARKETPLACE_LISTING_PLATFORM = {
+  INTERNAL: 'internal',
+  EXTERNAL: 'external',
+} as const;
+
+export type MarketplaceListingPlatform = typeof MARKETPLACE_LISTING_PLATFORM[keyof typeof MARKETPLACE_LISTING_PLATFORM];
+
+/**
  * Generate shop category URL from slug
  */
 export function getCategoryUrl(slug: string): string {

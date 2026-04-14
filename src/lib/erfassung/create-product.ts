@@ -10,7 +10,8 @@
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { PRODUCT_STATUS, MARKETPLACE_STATUS } from '@/config/marketplace-status'
+import { PRODUCT_STATUS, MARKETPLACE_STATUS, INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
+import { MARKETPLACE_LISTING_PLATFORM } from '@/config/shop'
 import { uploadImage, generateImageFilename } from '@/lib/storage/image-upload'
 import {
   aiExtractedProducts,
@@ -22,6 +23,7 @@ import {
 } from '@/db/schema/inventory'
 import { donations } from '@/db/schema/misc'
 import { getChecklistForDevice, type ChecklistState } from '@/config/intake-checklist'
+import { DONATION_STATUSES } from '@/config/donations'
 import type { ErfassungPayload } from '@/types/erfassung'
 import type { PoolClient } from 'pg'
 
@@ -174,7 +176,7 @@ export async function createErfassungProduct(
       donorName: options.donation.donorName || null,
       donorEmail: options.donation.donorEmail || null,
       notes: options.donation.notes || null,
-      status: 'recorded',
+      status: DONATION_STATUSES.RECORDED,
       recordedBy: userId,
     }).returning({ id: donations.id })
     donationId = donationRow.id
@@ -206,7 +208,7 @@ export async function createErfassungProduct(
       location: payload.location || null,
       boxId: payload.box_id || null,
       quantityAvailable: payload.auf_lager || 1,
-      status: 'available',
+      status: INVENTORY_ITEM_STATUS.AVAILABLE,
       sellingPriceChf: String(payload.verkaufspreis),
       marketplaceStatus: finalMarketplaceStatus,
       // Intake-specific fields (null/undefined for non-intake)
@@ -251,7 +253,7 @@ export async function createErfassungProduct(
         title: `${payload.hersteller} ${payload.produktname}`,
         description: payload.kurzbeschreibung || '',
         priceChf: String(payload.verkaufspreis),
-        platform: 'internal',
+        platform: MARKETPLACE_LISTING_PLATFORM.INTERNAL,
         status: MARKETPLACE_STATUS.PUBLISHED,
         publishedAt: new Date().toISOString(),
         createdBy: userId,

@@ -7,6 +7,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { UpdateDonationSchema } from '@/lib/schemas/donations'
+import { DONATION_STATUSES } from '@/config/donations'
 import { logger } from '@/lib/logger'
 
 const recorder = alias(users, 'recorder')
@@ -155,7 +156,7 @@ export const DELETE = withAdmin<{ id: string }>('donations', async (request, ses
     await db
       .update(donations)
       .set({
-        status: 'archived',
+        status: DONATION_STATUSES.ARCHIVED,
         notes: sql`COALESCE(${donations.notes}, '') || ${` [Archiviert am ${new Date().toISOString()} durch ${session.user.email}]`}`,
       })
       .where(eq(donations.id, id))
