@@ -154,16 +154,24 @@ export interface SidebarGroup {
 
 /**
  * Sidebar groups for admin navigation - SSOT
+ *
+ * Zone design:
+ * - Heute:        Dashboard + Freigaben — "what needs attention today"
+ * - Betrieb:      Operational tools — device intake, marketplace, IT-Hilfe, workshops, services
+ * - Organisation: Governance & internal content — decisions, protocols, blog/approvals
+ * - Personen:     People management — membership, users, team
+ * - Analyse:      Analytics & reporting — financials, KPIs, impact
+ * - System:       Configuration
  */
 export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
   uebersicht: {
     id: 'uebersicht',
-    label: 'Übersicht',
+    label: 'Heute',
     priority: 0,
   },
   angebot: {
     id: 'angebot',
-    label: 'Angebot',
+    label: 'Betrieb',
     priority: 1,
   },
   inhalte: {
@@ -173,7 +181,7 @@ export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
   },
   betrieb: {
     id: 'betrieb',
-    label: 'Betrieb',
+    label: 'Organisation',
     priority: 3,
   },
   analyse: {

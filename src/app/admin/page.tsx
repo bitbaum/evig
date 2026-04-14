@@ -1,14 +1,12 @@
 /**
- * Admin Dashboard - Task-Oriented UX
+ * Admin Dashboard — Task-Oriented UX
  *
- * Redesigned to show what needs action first, then quick actions,
- * then activity metrics, with reference stats at the bottom.
- *
- * Design principles:
- * 1. Task-first: Show what needs action, not abstract stats
- * 2. Clear hierarchy: Visual weight = importance
- * 3. 1-click actions: Most common workflows immediately accessible
- * 4. Progressive disclosure: Important first, details on demand
+ * Layout (top to bottom):
+ * 1. Greeting header
+ * 2. Unified queue — "Wartet auf Bearbeitung" (merged action items + fulfill actions)
+ * 3. Create strip — compact pill buttons for creation shortcuts
+ * 4. Monatsüberblick — collapsible mission metrics + weekly activity
+ * 5. Permission requests (super admin only, when pending)
  */
 
 import { Metadata } from 'next'
@@ -19,13 +17,11 @@ import { PermissionRequestsManager } from '@/components/admin/PermissionRequests
 import { RequestAccessSection } from './RequestAccessSection'
 import {
   getDashboardStats,
-  buildActionItems,
   buildQuickActions,
-  buildFulfillActions,
-  ActionItemsSection,
-  QuickActionsSection,
-  WeeklyActivitySection,
-  MissionMetrics,
+  buildUnifiedQueue,
+  UnifiedQueue,
+  CreateStrip,
+  Monatsueberblick,
 } from '@/components/admin/dashboard'
 import Heading from '@/components/ui/Heading'
 
@@ -66,42 +62,41 @@ export default async function AdminDashboard() {
         }))
 
   const canAccess = (section: string) => canAccessSection(userForPermissions, section)
-  const actionItems = buildActionItems(stats, isSuper, canAccess)
+  const queueItems = buildUnifiedQueue(stats, isSuper, canAccess)
   const quickActions = buildQuickActions(canAccess)
-  const fulfillActions = buildFulfillActions(stats, canAccess)
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
-            Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
-          </Heading>
-          <p className="text-gray-600 dark:text-gray-400">
-            {isSuper ? 'Super Admin' : 'Staff'}
-          </p>
-        </div>
+    <div className="space-y-4">
+      {/* Greeting */}
+      <div>
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+          Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
+        </Heading>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          {isSuper ? 'Super Admin' : 'Staff'}
+        </p>
       </div>
 
-      <ActionItemsSection actionItems={actionItems} />
-      <QuickActionsSection quickActions={quickActions} fulfillActions={fulfillActions} />
-      <WeeklyActivitySection stats={stats} />
+      {/* Unified queue — the single list of everything that needs action */}
+      <UnifiedQueue items={queueItems} />
 
-      {/* Super Admin: Permission Requests (inline) */}
+      {/* Create strip — compact shortcut pills */}
+      <CreateStrip actions={quickActions} />
+
+      {/* Super Admin: Permission Requests */}
       {isSuper && stats.pendingPermissionRequests > 0 && (
         <div id="permission-requests">
           <PermissionRequestsManager />
         </div>
       )}
 
-      <MissionMetrics stats={stats} />
+      {/* Monatsüberblick — collapsed by default */}
+      <Monatsueberblick stats={stats} />
 
       {/* Request More Access (for staff without full access) */}
       {!isSuper && !hasFullAccess && inaccessibleSections.length > 0 && (
         <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
-
     </div>
   )
 }

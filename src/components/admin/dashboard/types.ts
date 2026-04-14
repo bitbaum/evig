@@ -66,3 +66,7 @@ export type FulfillAction = {
   icon: typeof Package
   count: number
 }
+
+// UnifiedQueueItem is an ActionItem — same shape, used in the merged queue
+// that replaces the separate ActionItems + FulfillActions sections.
+export type UnifiedQueueItem = ActionItem
