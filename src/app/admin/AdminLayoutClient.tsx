@@ -11,6 +11,7 @@ import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { NotificationBell } from '@/components/admin/NotificationBell'
 import { CommandBar } from '@/components/admin/CommandBar'
+import { MobileBottomNav } from '@/components/admin/MobileBottomNav'
 import { getHirnSection } from '@/config/sections'
 
 interface AdminLayoutClientProps {
@@ -113,11 +114,14 @@ export function AdminLayoutClient({
           </div>
         </div>
 
-        {/* Page Content */}
-        <main className="p-4 lg:p-6">
+        {/* Page Content — pb-16 on mobile so bottom nav doesn't overlap */}
+        <main className="p-4 lg:p-6 pb-20 lg:pb-6">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom navigation */}
+      <MobileBottomNav onMenuClick={() => setMobileMenuOpen(true)} />
 
       {/* Hirn Floating Button */}
       <HirnFloatingButton hasAccess={!!hasHirnAccess} />

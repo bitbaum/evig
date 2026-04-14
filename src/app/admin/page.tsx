@@ -38,6 +38,7 @@ import {
   DashboardModeToggle,
 } from '@/components/admin/dashboard'
 import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
+import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
 import Heading from '@/components/ui/Heading'
 import type { DashboardStats } from '@/components/admin/dashboard'
 
@@ -78,6 +79,7 @@ async function MonatsueberblickSection({
   return (
     <Monatsueberblick stats={stats} defaultOpen={mode === 'lead'}>
       {mode === 'lead' && <TeamActivityFeed />}
+      <SystemHealthBar />
     </Monatsueberblick>
   )
 }
