@@ -2,11 +2,13 @@
  * Admin Dashboard — Task-Oriented UX
  *
  * Layout (top to bottom):
- * 1. Greeting header
- * 2. Unified queue — "Wartet auf Bearbeitung" (merged action items + fulfill actions)
- * 3. Create strip — compact pill buttons for creation shortcuts
- * 4. Monatsüberblick — collapsible mission metrics + weekly activity
- * 5. Permission requests (super admin only, when pending)
+ * 1. Greeting
+ * 2. VotingBanner — pending decisions the current user hasn't voted on
+ * 3. PersonalSection — my assigned tasks + my submitted content
+ * 4. UnifiedQueue — org-wide "Wartet auf Bearbeitung" (merged action items)
+ * 5. CreateStrip — compact creation shortcuts
+ * 6. Permission requests — super admin only
+ * 7. Monatsüberblick — collapsible mission metrics
  */
 
 import { Metadata } from 'next'
@@ -22,6 +24,8 @@ import {
   UnifiedQueue,
   CreateStrip,
   Monatsueberblick,
+  VotingBanner,
+  PersonalSection,
 } from '@/components/admin/dashboard'
 import Heading from '@/components/ui/Heading'
 
@@ -48,7 +52,7 @@ export default async function AdminDashboard() {
 
   const accessibleSections = getAccessibleSections(userForPermissions)
 
-  // Calculate sections the user doesn't have access to (for request form)
+  // Sections the user doesn't have access to (for request form)
   const allSections = Object.keys(ADMIN_SECTIONS)
   const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
   const inaccessibleSections = hasFullAccess
@@ -65,6 +69,9 @@ export default async function AdminDashboard() {
   const queueItems = buildUnifiedQueue(stats, isSuper, canAccess)
   const quickActions = buildQuickActions(canAccess)
 
+  const userId = session.user.id ?? ''
+  const isMember = !!(session.user as { isMember?: boolean }).isMember
+
   return (
     <div className="space-y-4">
       {/* Greeting */}
@@ -77,10 +84,20 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
-      {/* Unified queue — the single list of everything that needs action */}
+      {/* Voting banner — appears only when user has uncast votes */}
+      {userId && (
+        <VotingBanner userId={userId} isSuper={isSuper} isMember={isMember} />
+      )}
+
+      {/* Personal: my tasks + my submitted content */}
+      {userId && (
+        <PersonalSection userId={userId} />
+      )}
+
+      {/* Org-wide queue */}
       <UnifiedQueue items={queueItems} />
 
-      {/* Create strip — compact shortcut pills */}
+      {/* Create strip */}
       <CreateStrip actions={quickActions} />
 
       {/* Super Admin: Permission Requests */}
