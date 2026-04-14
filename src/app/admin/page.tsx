@@ -9,8 +9,14 @@
  * 5. CreateStrip — compact creation shortcuts
  * 6. Permission requests — super admin only
  * 7. Monatsüberblick — collapsible mission metrics
+ *
+ * Streaming: VotingBanner and PersonalSection run their own queries in
+ * parallel via Suspense. UnifiedQueue and Monatsüberblick share a single
+ * getDashboardStats() Promise so the DB is queried only once, then both
+ * sections stream when it resolves.
  */
 
+import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
@@ -26,13 +32,66 @@ import {
   Monatsueberblick,
   VotingBanner,
   PersonalSection,
+  BannerSkeleton,
+  PersonalSectionSkeleton,
+  UnifiedQueueSkeleton,
 } from '@/components/admin/dashboard'
 import Heading from '@/components/ui/Heading'
+import type { DashboardStats } from '@/components/admin/dashboard'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | RevampIT',
   description: 'Verwalte das RevampIT-System.',
 }
+
+// ---------------------------------------------------------------------------
+// Async section wrappers — await the shared statsPromise so the DB is only
+// queried once, then feed results to the respective rendering component.
+// ---------------------------------------------------------------------------
+
+async function UnifiedQueueSection({
+  statsPromise,
+  isSuper,
+  canAccess,
+}: {
+  statsPromise: Promise<DashboardStats>
+  isSuper: boolean
+  canAccess: (section: string) => boolean
+}) {
+  const stats = await statsPromise
+  const items = buildUnifiedQueue(stats, isSuper, canAccess)
+  return <UnifiedQueue items={items} />
+}
+
+async function MonatsueberblickSection({
+  statsPromise,
+}: {
+  statsPromise: Promise<DashboardStats>
+}) {
+  const stats = await statsPromise
+  return <Monatsueberblick stats={stats} />
+}
+
+async function PermissionRequestsSection({
+  statsPromise,
+  isSuper,
+}: {
+  statsPromise: Promise<DashboardStats>
+  isSuper: boolean
+}) {
+  if (!isSuper) return null
+  const stats = await statsPromise
+  if (stats.pendingPermissionRequests === 0) return null
+  return (
+    <div id="permission-requests">
+      <PermissionRequestsManager />
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Page
+// ---------------------------------------------------------------------------
 
 export default async function AdminDashboard() {
   const session = await auth()
@@ -42,7 +101,10 @@ export default async function AdminDashboard() {
   }
 
   const isSuper = isSuperAdmin(session.user.email)
-  const stats = await getDashboardStats(isSuper)
+
+  // Start stats fetch — NOT awaited here. Shared across Suspense sections so
+  // the DB is queried exactly once.
+  const statsPromise = getDashboardStats(isSuper)
 
   const userForPermissions = {
     email: session.user.email ?? '',
@@ -52,7 +114,6 @@ export default async function AdminDashboard() {
 
   const accessibleSections = getAccessibleSections(userForPermissions)
 
-  // Sections the user doesn't have access to (for request form)
   const allSections = Object.keys(ADMIN_SECTIONS)
   const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
   const inaccessibleSections = hasFullAccess
@@ -66,7 +127,6 @@ export default async function AdminDashboard() {
         }))
 
   const canAccess = (section: string) => canAccessSection(userForPermissions, section)
-  const queueItems = buildUnifiedQueue(stats, isSuper, canAccess)
   const quickActions = buildQuickActions(canAccess)
 
   const userId = session.user.id ?? ''
@@ -74,7 +134,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-4">
-      {/* Greeting */}
+      {/* Greeting — renders immediately, no data needed */}
       <div>
         <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
           Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
@@ -84,33 +144,43 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
-      {/* Voting banner — appears only when user has uncast votes */}
+      {/* VotingBanner — runs its own query, streams independently */}
       {userId && (
-        <VotingBanner userId={userId} isSuper={isSuper} isMember={isMember} />
+        <Suspense fallback={<BannerSkeleton />}>
+          <VotingBanner userId={userId} isSuper={isSuper} isMember={isMember} />
+        </Suspense>
       )}
 
-      {/* Personal: my tasks + my submitted content */}
+      {/* PersonalSection — runs its own queries, streams independently */}
       {userId && (
-        <PersonalSection userId={userId} />
+        <Suspense fallback={<PersonalSectionSkeleton />}>
+          <PersonalSection userId={userId} />
+        </Suspense>
       )}
 
-      {/* Org-wide queue */}
-      <UnifiedQueue items={queueItems} />
+      {/* UnifiedQueue — shares statsPromise, streams when stats resolve */}
+      <Suspense fallback={<UnifiedQueueSkeleton />}>
+        <UnifiedQueueSection
+          statsPromise={statsPromise}
+          isSuper={isSuper}
+          canAccess={canAccess}
+        />
+      </Suspense>
 
-      {/* Create strip */}
+      {/* CreateStrip — synchronous, renders immediately */}
       <CreateStrip actions={quickActions} />
 
-      {/* Super Admin: Permission Requests */}
-      {isSuper && stats.pendingPermissionRequests > 0 && (
-        <div id="permission-requests">
-          <PermissionRequestsManager />
-        </div>
-      )}
+      {/* PermissionRequestsManager — shares statsPromise, hidden for most users */}
+      <Suspense fallback={null}>
+        <PermissionRequestsSection statsPromise={statsPromise} isSuper={isSuper} />
+      </Suspense>
 
-      {/* Monatsüberblick — collapsed by default */}
-      <Monatsueberblick stats={stats} />
+      {/* Monatsüberblick — shares statsPromise, collapsed by default */}
+      <Suspense fallback={null}>
+        <MonatsueberblickSection statsPromise={statsPromise} />
+      </Suspense>
 
-      {/* Request More Access (for staff without full access) */}
+      {/* Request More Access — synchronous */}
       {!isSuper && !hasFullAccess && inaccessibleSections.length > 0 && (
         <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
