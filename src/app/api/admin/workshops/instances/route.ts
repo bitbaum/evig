@@ -6,6 +6,7 @@ import { eq, and, gt, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { LOCATIONS } from '@/config/org'
 
 // GET /api/admin/workshops/instances - List all workshop instances
@@ -96,7 +97,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       instructor,
       maxParticipants,
       notes,
-      status = 'scheduled'
+      status = WORKSHOP_INSTANCE_STATUS.SCHEDULED
     } = body
 
     if (!workshopId || !startDate) {

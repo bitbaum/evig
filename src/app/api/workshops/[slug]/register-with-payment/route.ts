@@ -6,6 +6,7 @@ import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { PAYMENT_STATUS } from '@/config/payment-status'
 import {
   processPayment,
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
           w.price_cents as workshop_price
         FROM ${sql.raw(wiTable)} wi
         JOIN ${sql.raw(wTable)} w ON wi.workshop_id = w.id
-        WHERE wi.id = ${instanceId} AND wi.status = 'scheduled'
+        WHERE wi.id = ${instanceId} AND wi.status = ${WORKSHOP_INSTANCE_STATUS.SCHEDULED}
       `)
 
       if (instanceResult.rows.length === 0) {

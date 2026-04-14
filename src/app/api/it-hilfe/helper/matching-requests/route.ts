@@ -7,7 +7,7 @@ import { users } from '@/db/schema/auth'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { getCategoryIds, URGENCY_LEVELS } from '@/config/it-hilfe'
+import { getCategoryIds, URGENCY_LEVELS, REQUEST_STATUS } from '@/config/it-hilfe'
 
 const rTable = getTableName(itHilfeRequests)
 const oTable = getTableName(itHilfeOffers)
@@ -46,7 +46,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
 
     // 2. Build WHERE conditions
     const conditions = [
-      sql`r.status = 'open'`,
+      sql`r.status = ${REQUEST_STATUS.OPEN}`,
       sql`r.expires_at > NOW()`,
       // Skills overlap: request's skills_needed overlaps with helper's skills
       sql`r.skills_needed && ARRAY[${sql.join(helperSkills.map(s => sql`${s}`), sql`, `)}]::text[]`,
