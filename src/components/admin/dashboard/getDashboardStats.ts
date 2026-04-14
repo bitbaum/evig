@@ -98,6 +98,9 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     prevDevicesSoldRes,
     prevItHilfeCompletedRes,
     prevWorkshopAttendeesRes,
+    topApprovalRes,
+    topListingRes,
+    topRepairerRes,
   ] = await Promise.allSettled([
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
@@ -212,6 +215,31 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       FROM ${sql.raw(workshopRegTable)}
       WHERE attended = true AND created_at >= ${prevMonthStartISO} AND created_at < ${prevMonthEndISO}
     `),
+
+    // Top pending items for inline actions in the dashboard queue
+    db.execute(sql`
+      SELECT id, COALESCE(title, content_type, 'Einreichung') AS label
+      FROM ${sql.raw(ucsTable)}
+      WHERE status = ${APPROVAL_STATUS.PENDING}
+        AND content_type IN ('workshop', 'blog_post')
+      ORDER BY created_at ASC
+      LIMIT 1
+    `),
+    db.execute(sql`
+      SELECT id, COALESCE(title, 'Inserat') AS label
+      FROM ${sql.raw(listingsTable)}
+      WHERE status = ${LISTING_STATUS.ACTIVE} AND verified_at IS NULL
+      ORDER BY created_at ASC
+      LIMIT 1
+    `),
+    db.execute(sql`
+      SELECT ra.id, COALESCE(ra.business_name, u.name, 'Bewerbung') AS label
+      FROM ${sql.raw(repairerAppTable)} ra
+      LEFT JOIN ${sql.raw(usersTable)} u ON u.id = ra.user_id
+      WHERE ra.status = 'pending'
+      ORDER BY ra.created_at ASC
+      LIMIT 1
+    `),
   ])
 
   // Extract approvals
@@ -281,5 +309,20 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
         rowCount(workshopAttendeesRes, 'workshopAttendeesThisMonth') -
         rowCount(prevWorkshopAttendeesRes, 'prevWorkshopAttendees'),
     },
+    topPendingApproval: (() => {
+      if (topApprovalRes.status !== 'fulfilled') return null
+      const r = (topApprovalRes.value.rows as Row[])[0]
+      return r ? { id: String(r.id), label: String(r.label) } : null
+    })(),
+    topUnverifiedListing: (() => {
+      if (topListingRes.status !== 'fulfilled') return null
+      const r = (topListingRes.value.rows as Row[])[0]
+      return r ? { id: String(r.id), label: String(r.label) } : null
+    })(),
+    topPendingRepairerApp: (() => {
+      if (topRepairerRes.status !== 'fulfilled') return null
+      const r = (topRepairerRes.value.rows as Row[])[0]
+      return r ? { id: String(r.id), label: String(r.label) } : null
+    })(),
   }
 }

@@ -13,6 +13,7 @@ import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
+import { logActivity } from '@/lib/activity'
 
 export const PATCH = withAdmin<{ id: string }>('approvals', async (request, session, context) => {
   try {
@@ -93,6 +94,16 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
       reviewerId: session.user.id,
       title: submission.title,
     })
+
+    if (action === 'approve' || action === 'reject') {
+      logActivity({
+        actorId: session.user.id,
+        action: action === 'approve' ? 'approved_blog' : 'rejected_listing',
+        subjectType: submission.contentType ?? undefined,
+        subjectId: submission.contentId ?? undefined,
+        subjectLabel: submission.title ?? submission.contentType ?? undefined,
+      })
+    }
 
     return apiSuccess({
       message: action === 'approve' ? 'Inhalt genehmigt' : 'Inhalt abgelehnt',

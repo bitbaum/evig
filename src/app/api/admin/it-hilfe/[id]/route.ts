@@ -8,6 +8,7 @@ import { REQUEST_STATUS, VALID_REQUEST_TRANSITIONS } from '@/config/it-hilfe'
 import { validateBody } from '@/lib/schemas'
 import { AdminEditRequestSchema } from '@/lib/schemas/it-hilfe'
 import { logger } from '@/lib/logger'
+import { logActivity } from '@/lib/activity'
 
 // GET /api/admin/it-hilfe/[id] - Request detail with offers
 export const GET = withAdmin<{ id: string }>('it-hilfe-admin', async (_request, _session, context) => {
@@ -137,6 +138,16 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
       adminEmail: session.user.email,
       changes: Object.keys(data),
     })
+
+    if (data.status === REQUEST_STATUS.COMPLETED) {
+      logActivity({
+        actorId: session.user.id,
+        action: 'closed_it_hilfe',
+        subjectType: 'it_hilfe',
+        subjectId: id,
+        subjectLabel: updated.title ?? undefined,
+      })
+    }
 
     return apiSuccess(updated)
   } catch (error) {

@@ -50,6 +50,10 @@ export interface DashboardStats {
   mission: MissionStats
   // Delta vs last month (positive = improvement)
   delta: MissionDelta
+  // Top pending items for inline actions in UnifiedQueue
+  topPendingApproval: { id: string; label: string } | null
+  topUnverifiedListing: { id: string; label: string } | null
+  topPendingRepairerApp: { id: string; label: string } | null
 }
 
 export type ActionItem = {
@@ -60,6 +64,12 @@ export type ActionItem = {
   actionLabel: string
   /** ISO timestamp of the oldest unresolved item — shown as age hint */
   oldestAt?: string | null
+  /** If set, renders an inline approve button in the queue row */
+  inlineAction?: {
+    itemId: string
+    itemLabel: string
+    actionType: 'approve_blog' | 'verify_listing' | 'approve_repairer'
+  }
 }
 
 export type QuickAction = {

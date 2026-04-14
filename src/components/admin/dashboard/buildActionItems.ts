@@ -15,6 +15,9 @@ export function buildActionItems(
       href: '/admin/approvals',
       actionLabel: 'Jetzt prüfen',
       oldestAt: stats.pendingApprovalsOldest,
+      inlineAction: stats.topPendingApproval
+        ? { itemId: stats.topPendingApproval.id, itemLabel: stats.topPendingApproval.label, actionType: 'approve_blog' }
+        : undefined,
     })
   }
 
@@ -47,6 +50,9 @@ export function buildActionItems(
       href: '/admin/marketplace',
       actionLabel: 'Prüfen',
       oldestAt: stats.unverifiedListingsOldest,
+      inlineAction: stats.topUnverifiedListing
+        ? { itemId: stats.topUnverifiedListing.id, itemLabel: stats.topUnverifiedListing.label, actionType: 'verify_listing' }
+        : undefined,
     })
   }
 
@@ -91,6 +97,9 @@ export function buildActionItems(
       href: '/admin/repairer-applications',
       actionLabel: 'Prüfen',
       oldestAt: stats.pendingRepairerApplicationsOldest,
+      inlineAction: stats.topPendingRepairerApp
+        ? { itemId: stats.topPendingRepairerApp.id, itemLabel: stats.topPendingRepairerApp.label, actionType: 'approve_repairer' }
+        : undefined,
     })
   }
 

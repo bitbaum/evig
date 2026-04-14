@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Zap, Check, ArrowRight } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { InlineActionButton } from './InlineActionButton'
 import type { UnifiedQueueItem } from './types'
 
 interface UnifiedQueueProps {
@@ -88,8 +89,14 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
                       </div>
                     </div>
 
-                    {/* Right: count badge + arrow */}
+                    {/* Right: inline action button (if set) + count badge + arrow */}
                     <div className="flex items-center gap-2 flex-shrink-0">
+                      {item.inlineAction && (
+                        <InlineActionButton
+                          itemId={item.inlineAction.itemId}
+                          actionType={item.inlineAction.actionType}
+                        />
+                      )}
                       {item.count !== undefined && (
                         <span
                           className={`inline-flex items-center justify-center min-w-[28px] h-6 px-2 rounded-full text-sm font-bold ${urgency.badge}`}

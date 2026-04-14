@@ -13,6 +13,7 @@ import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { BULK_LIMITS } from '@/config/erfassung'
+import { logActivity } from '@/lib/activity'
 import type { BulkSaveRequest, BulkSaveResponse } from '@/types/erfassung'
 
 export const POST = withAdmin('products', async (request, session) => {
@@ -92,6 +93,13 @@ export const POST = withAdmin('products', async (request, session) => {
             itemUUID: result.itemUUID,
           })
           succeeded++
+          logActivity({
+            actorId: session.user.id,
+            action: 'captured_device',
+            subjectType: 'inventory_item',
+            subjectId: result.itemUUID,
+            subjectLabel: `${product.hersteller} ${product.produktname}`,
+          })
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
           logger.error('Bulk save item failed', {
