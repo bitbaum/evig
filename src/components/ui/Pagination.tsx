@@ -14,8 +14,9 @@ interface PaginationProps {
   onPageChange?: (page: number) => void
 }
 
+// min-w/min-h ensure 44×44px touch targets (WCAG 2.5.5) even when visually smaller
 const btnClass = (active: boolean, disabled = false) =>
-  `inline-flex items-center justify-center w-8 h-8 text-sm rounded-md transition-colors ${
+  `inline-flex items-center justify-center min-w-[2.75rem] min-h-[2.75rem] w-9 h-9 text-sm rounded-md transition-colors ${
     disabled
       ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
       : active
@@ -116,7 +117,7 @@ export function Pagination({
   const pageList = Array.from(pages).sort((a, b) => a - b)
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-700">
+    <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-gray-100 dark:border-gray-700">
       <p className="text-sm text-gray-600 dark:text-gray-400">
         {from}–{to} von {totalItems}
       </p>
@@ -125,17 +126,30 @@ export function Pagination({
           <ChevronLeft className="w-4 h-4" />
         </NavButton>
 
-        {pageList.map((page, i) => {
-          const prev = pageList[i - 1]
-          return (
-            <div key={page} className="flex items-center gap-1">
-              {prev && page - prev > 1 && (
-                <span className="w-8 text-center text-sm text-gray-600">...</span>
-              )}
-              <PageItem page={page} active={page === currentPage} hrefBase={hrefBase} onPageChange={onPageChange} />
-            </div>
-          )
-        })}
+        {/* Page numbers hidden on mobile — only prev/next shown on small screens */}
+        <div className="hidden sm:flex items-center gap-1">
+          {pageList.map((page, i) => {
+            const prev = pageList[i - 1]
+            return (
+              <div key={page} className="flex items-center gap-1">
+                {prev && page - prev > 1 && (
+                  <span
+                    className="min-w-[2.75rem] text-center text-sm text-gray-400"
+                    aria-label="weitere Seiten"
+                  >
+                    …
+                  </span>
+                )}
+                <PageItem page={page} active={page === currentPage} hrefBase={hrefBase} onPageChange={onPageChange} />
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Mobile: show current/total instead of page buttons */}
+        <span className="sm:hidden text-sm text-gray-600 px-2">
+          {currentPage} / {totalPages}
+        </span>
 
         <NavButton page={currentPage + 1} disabled={currentPage >= totalPages} hrefBase={hrefBase} onPageChange={onPageChange}>
           <ChevronRight className="w-4 h-4" />

@@ -124,7 +124,7 @@ export function AdminSidebar({
       </div>
 
       {/* Navigation */}
-      <nav className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+      <nav aria-label="Admin-Navigation" className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
         {groupedSections.map(({ group, sections }) => {
           const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
           if (accessibleGroupSections.length === 0) return null
@@ -137,10 +137,11 @@ export function AdminSidebar({
               {!sidebarCollapsed && (
                 <button
                   onClick={() => toggleGroup(group.id)}
-                  className={`w-full flex items-center justify-between px-2 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-lg transition-colors ${
+                  aria-expanded={isExpanded}
+                  className={`w-full flex items-center justify-between px-2 py-1.5 text-xs font-semibold tracking-wide rounded-lg transition-colors ${
                     hasActive
                       ? 'text-green-700 dark:text-green-400'
-                      : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'
+                      : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                   }`}
                 >
                   <span>{group.label}</span>
@@ -172,7 +173,8 @@ export function AdminSidebar({
                         }`}
                         title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ' (Geschützt)' : ''}` : sensitivityReason}
                       >
-                        <Icon className={`w-4 h-4 flex-shrink-0 ${active ? 'text-green-600' : 'text-gray-400 dark:text-gray-500'}`} />
+                        {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
+                        <Icon className={`flex-shrink-0 ${sidebarCollapsed ? 'w-5 h-5' : 'w-4 h-4'} ${active ? 'text-green-600' : 'text-gray-400 dark:text-gray-500'}`} />
                         {!sidebarCollapsed && (
                           <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
                             {section.ui.label}
@@ -223,7 +225,7 @@ export function AdminSidebar({
         {/* Website links */}
         <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
           {!sidebarCollapsed && (
-            <p className="px-2 mb-1 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
+            <p className="px-2 mb-1 text-xs font-semibold text-gray-500 dark:text-gray-400 tracking-wide">
               Website
             </p>
           )}

@@ -59,10 +59,10 @@ export function AdminLayoutClient({
         pathname={pathname}
       />
 
-      {/* Mobile overlay */}
+      {/* Mobile overlay — /30 in light mode, /50 in dark so it's visible on both */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/20 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/30 dark:bg-black/50 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}

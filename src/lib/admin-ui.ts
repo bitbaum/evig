@@ -14,8 +14,8 @@
 // Admin-specific scale. NOT the public marketing site scale.
 
 export const adminType = {
-  /** h1: page title in AdminPageWrapper */
-  pageTitle:    'text-xl font-semibold text-gray-900 dark:text-white',
+  /** h1: page title in AdminPageWrapper — 24px, bold, strong hierarchy anchor */
+  pageTitle:    'text-2xl font-bold text-gray-900 dark:text-white',
   /** h2: card/section header */
   sectionTitle: 'text-sm font-semibold text-gray-900 dark:text-white',
   /** h3: sub-heading inside a card */
@@ -24,10 +24,10 @@ export const adminType = {
   tableHeader:  'text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide',
   /** Standard body text */
   body:         'text-sm text-gray-700 dark:text-gray-300',
-  /** Secondary / meta text */
-  meta:         'text-xs text-gray-500 dark:text-gray-400',
-  /** Large metric number in stat cards */
-  stat:         'text-2xl font-bold tabular-nums text-gray-900 dark:text-white',
+  /** Secondary / meta text — 14px minimum for readability (WCAG) */
+  meta:         'text-sm text-gray-500 dark:text-gray-400',
+  /** Large metric number in stat cards — font-mono ensures consistent digit widths */
+  stat:         'text-2xl font-bold tabular-nums font-mono text-gray-900 dark:text-white',
   /** Stat card label below the number */
   statLabel:    'text-xs text-gray-500 dark:text-gray-400 mt-0.5',
 } as const
@@ -128,22 +128,22 @@ export const adminBtn = {
     'inline-flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-md border border-gray-300 transition-colors dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700',
   /** Status transition: approve, publish, activate */
   action:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50',
+    'inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   /** Warning state: suspend, pause */
   warning:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50',
+    'inline-flex items-center gap-2 px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   /** Destructive confirm (inside modals only): permanently delete */
   danger:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors',
+    'inline-flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   /** Destructive inline (table rows): delete, remove — outline not filled */
   dangerOutline:
-    'inline-flex items-center gap-2 px-3 py-1.5 border border-red-300 hover:bg-red-50 text-red-600 text-sm font-medium rounded-md transition-colors dark:border-red-800 dark:hover:bg-red-900/20 dark:text-red-400',
+    'inline-flex items-center gap-2 px-3 py-1.5 border border-red-300 hover:bg-red-50 text-red-600 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:border-red-800 dark:hover:bg-red-900/20 dark:text-red-400',
   /** Ghost: low-emphasis, tertiary actions */
   ghost:
-    'inline-flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md transition-colors dark:text-gray-400 dark:hover:bg-gray-700',
-  /** Icon-only button */
+    'inline-flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:text-gray-400 dark:hover:bg-gray-700',
+  /** Icon-only button — 44×44px touch target (WCAG 2.5.5) */
   icon:
-    'inline-flex items-center justify-center w-8 h-8 text-gray-500 hover:bg-gray-100 rounded-md transition-colors dark:text-gray-400 dark:hover:bg-gray-700',
+    'inline-flex items-center justify-center min-w-[2.75rem] min-h-[2.75rem] w-9 h-9 text-gray-500 hover:bg-gray-100 rounded-md transition-colors dark:text-gray-400 dark:hover:bg-gray-700',
 } as const
 
 export type AdminBtnVariant = keyof typeof adminBtn

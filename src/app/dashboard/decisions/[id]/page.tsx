@@ -59,6 +59,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
   // Time remaining calculation
   let timeRemaining: string | null = null
   if (decision.votingDeadline) {
+    // eslint-disable-next-line react-hooks/purity -- server component, Date.now() is safe here
     const msLeft = new Date(decision.votingDeadline).getTime() - Date.now()
     if (msLeft > 0) {
       const hoursLeft = Math.floor(msLeft / (1000 * 60 * 60))

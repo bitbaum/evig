@@ -197,12 +197,12 @@ export default async function ProtocolsAdminPage({
             <p className="text-gray-600 mb-4">
               Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
             </p>
-            <a
-              href=""
+            <Link
+              href="/admin/protocols"
               className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Seite neu laden
-            </a>
+            </Link>
           </div>
         ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
@@ -225,25 +225,28 @@ export default async function ProtocolsAdminPage({
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Titel
                 </th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                {/* Typ hidden on mobile — narrow screens can't fit it */}
+                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Typ
                 </th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
                   Datum
                 </th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                {/* Teilnehmer hidden on mobile and tablet */}
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Teilnehmer
                 </th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Status
                 </th>
-                <th className="text-left px-4 py-3 text-sm font-medium text-gray-600">
+                {/* Workflow hidden on mobile */}
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Workflow
                 </th>
-                <th className="text-right px-4 py-3 text-sm font-medium text-gray-600">
+                <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
                   Aktionen
                 </th>
               </tr>
@@ -253,20 +256,20 @@ export default async function ProtocolsAdminPage({
                 const TypeIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType]
                 return (
                   <tr key={protocol.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
                         href={`/admin/protocols/${protocol.id}`}
-                        className="font-medium text-gray-900 hover:text-blue-600 underline-offset-2 hover:underline"
+                        className="font-medium text-gray-900 hover:text-blue-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                       >
                         {protocol.title}
                       </Link>
                       {protocol.created_by_name && (
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 truncate">
                           von {protocol.created_by_name}
                         </p>
                       )}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full ${
                           MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-gray-100 text-gray-800'
@@ -276,12 +279,12 @@ export default async function ProtocolsAdminPage({
                         {MEETING_TYPE_LABELS[protocol.meeting_type]}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span className="text-sm text-gray-600">
                         {formatDateShort(protocol.meeting_date)}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="hidden md:table-cell px-4 py-3">
                       {protocol.attendee_names && protocol.attendee_names.length > 0 ? (
                         <div className="flex flex-wrap gap-1">
                           {protocol.attendee_names.slice(0, 3).map((name, i) => (
@@ -294,7 +297,7 @@ export default async function ProtocolsAdminPage({
                           ))}
                           {protocol.attendee_names.length > 3 && (
                             <span className="inline-flex px-1.5 py-0.5 text-xs text-gray-500">
-                              +{protocol.attendee_names.length - 3} weitere
+                              +{protocol.attendee_names.length - 3}
                             </span>
                           )}
                         </div>
@@ -302,16 +305,16 @@ export default async function ProtocolsAdminPage({
                         <span className="text-xs text-gray-400">—</span>
                       )}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <span
-                        className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                        className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
                           PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-gray-100 text-gray-800'
                         }`}
                       >
                         {PROTOCOL_STATUS_LABELS[protocol.status]}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
                       {(() => {
                         const workflowStep = getProtocolWorkflowStep({
                           status: protocol.status,
@@ -321,7 +324,7 @@ export default async function ProtocolsAdminPage({
                         const workflowIndex = PROTOCOL_WORKFLOW_STEPS.findIndex((step) => step.id === workflowStep) + 1
                         const workflowLabel = PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowStep)?.label || 'Workflow'
                         return (
-                          <span className="inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full bg-slate-100 text-slate-700">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full bg-slate-100 text-slate-700">
                             <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-200 text-[10px] font-semibold">
                               {workflowIndex}
                             </span>
@@ -330,14 +333,14 @@ export default async function ProtocolsAdminPage({
                         )
                       })()}
                     </td>
-                    <td className="px-4 py-3 text-right">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">
                       <div className="inline-flex items-center gap-3">
                         {protocol.action_item_count > 0 && (
-                          <span className="text-sm text-gray-500">{protocol.action_item_count} Aktionen</span>
+                          <span className="hidden sm:inline text-sm text-gray-500">{protocol.action_item_count} Aktionen</span>
                         )}
                         <Link
                           href={`/admin/protocols/${protocol.id}`}
-                          className="text-sm text-blue-600 hover:text-blue-800 underline"
+                          className="text-sm text-blue-600 hover:text-blue-800 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                         >
                           Öffnen
                         </Link>
