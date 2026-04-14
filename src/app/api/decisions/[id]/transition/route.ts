@@ -13,6 +13,7 @@ import { transitionDecision } from '@/lib/services/decisions'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { notifyAllStaff } from '@/lib/services/notifications'
 import { logger } from '@/lib/logger'
+import { DECISION_STATUS } from '@/config/decisions'
 
 type RouteParams = { id: string }
 
@@ -59,7 +60,7 @@ export const POST = withAdmin<RouteParams>(async (
     })
 
     // Notify team on key transitions
-    if (parsed.data.status === 'voting') {
+    if (parsed.data.status === DECISION_STATUS.VOTING) {
       await notifyAllStaff({
         type: 'decision_voting',
         title: `Neue Abstimmung: ${decision.title}`,
@@ -67,7 +68,7 @@ export const POST = withAdmin<RouteParams>(async (
         related_type: 'decision',
         related_id: decisionId,
       }, dbUserId)
-    } else if (parsed.data.status === 'closed') {
+    } else if (parsed.data.status === DECISION_STATUS.CLOSED) {
       await notifyAllStaff({
         type: 'decision_closed',
         title: `Entscheidung getroffen: ${decision.title}`,

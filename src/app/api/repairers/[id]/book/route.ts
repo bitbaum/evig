@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { REPAIRER_STATUS } from '@/config/repairer-status'
 import { APP_URL } from '@/config/urls'
 
 // POST /api/repairers/[id]/book - Book an appointment with a specific repairer
@@ -68,7 +69,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     const repairer = repairerRows[0]
 
-    if (!repairer.isActive || repairer.status !== 'active') {
+    if (!repairer.isActive || repairer.status !== REPAIRER_STATUS.ACTIVE) {
       return apiBadRequest('Dieser Reparateur nimmt derzeit keine Aufträge an')
     }
 

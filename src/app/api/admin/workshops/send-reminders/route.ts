@@ -7,6 +7,7 @@ import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { validateBody, AdminSendRemindersSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { sendEmail } from '@/lib/email'
 import { formatDateWithWeekday } from '@/lib/date-formats'
 import { APP_URL } from '@/config/urls'
@@ -39,7 +40,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       .innerJoin(users, eq(workshopRegistrations.userId, users.id))
       .where(and(
         eq(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CONFIRMED),
-        eq(workshopInstances.status, 'scheduled'),
+        eq(workshopInstances.status, WORKSHOP_INSTANCE_STATUS.SCHEDULED),
         gte(workshopInstances.startDate, sql`NOW()`),
         lte(workshopInstances.startDate, sql`NOW() + make_interval(days => ${daysBeforeWorkshop})`)
       ))

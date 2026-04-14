@@ -6,6 +6,7 @@ import { eq, and } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { sendEmail } from '@/lib/email'
 import { logger } from '@/lib/logger'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
@@ -58,7 +59,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       .from(workshopInstances)
       .where(and(
         eq(workshopInstances.workshopId, workshop.id),
-        eq(workshopInstances.status, 'scheduled')
+        eq(workshopInstances.status, WORKSHOP_INSTANCE_STATUS.SCHEDULED)
       ))
       .orderBy(workshopInstances.startDate)
       .limit(1)

@@ -14,6 +14,23 @@ import { logger } from '@/lib/logger';
 import { PAYMENT_STATUS } from '@/config/payment-status';
 import { APP_URL } from '@/config/urls';
 
+/**
+ * Payrexx transaction status values (external API contract).
+ * These are the status strings Payrexx sends in webhook payloads.
+ */
+export const PAYREXX_TRANSACTION_STATUS = {
+  RESERVED: 'reserved',                    // authorized / funds held
+  CONFIRMED: 'confirmed',                  // captured / payment complete
+  REFUNDED: 'refunded',                    // fully refunded
+  PARTIALLY_REFUNDED: 'partially-refunded',// partially refunded
+  WAITING: 'waiting',                      // awaiting bank confirmation
+  CANCELLED: 'cancelled',                  // transaction cancelled
+  DECLINED: 'declined',                    // card declined
+  ERROR: 'error',                          // processing error
+} as const;
+
+export type PayrexxTransactionStatus = typeof PAYREXX_TRANSACTION_STATUS[keyof typeof PAYREXX_TRANSACTION_STATUS];
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -142,7 +159,7 @@ export async function createGateway(params: PayrexxGatewayParams): Promise<Payre
 export async function captureTransaction(transactionId: string, amount: number): Promise<PayrexxTransactionResult> {
   if (!isConfigured()) {
     logger.info('Mock: Payrexx capture', { transactionId, amount });
-    return { id: Number(transactionId), status: 'confirmed' };
+    return { id: Number(transactionId), status: PAYREXX_TRANSACTION_STATUS.CONFIRMED };
   }
 
   const result = await apiRequest<PayrexxTransactionResult>(

@@ -25,3 +25,16 @@ export const WORKSHOP_REGISTRATION_STATUS_LABELS: Record<string, string> = {
 export function getWorkshopRegistrationStatusLabel(status: string): string {
   return WORKSHOP_REGISTRATION_STATUS_LABELS[status] || status;
 }
+
+/**
+ * Workshop registration payment status constants (SSOT).
+ * Separate from the main registration status — tracks only the payment dimension.
+ */
+export const WORKSHOP_PAYMENT_STATUS = {
+  NOT_REQUIRED: 'not_required',
+  PENDING: 'pending',
+  PAID: 'paid',
+  REFUNDED: 'refunded',
+} as const;
+
+export type WorkshopPaymentStatus = typeof WORKSHOP_PAYMENT_STATUS[keyof typeof WORKSHOP_PAYMENT_STATUS];

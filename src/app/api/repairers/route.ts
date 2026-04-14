@@ -7,6 +7,7 @@ import { eq, and, ilike, gte, sql, desc, SQL, inArray } from 'drizzle-orm'
 import { apiError, apiSuccessCached, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_STATUS } from '@/config/repairer-status'
 
 // GET /api/repairers - Search and list repairers
 export async function GET(request: NextRequest) {
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
     // Build WHERE conditions
     const conditions: SQL[] = [
       eq(repairerProfiles.isActive, true),
-      sql`${repairerProfiles.status} = 'active'`,
+      eq(repairerProfiles.status, REPAIRER_STATUS.ACTIVE),
     ]
 
     // Search by business name or description

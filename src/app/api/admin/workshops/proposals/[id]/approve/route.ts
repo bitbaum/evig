@@ -6,6 +6,7 @@ import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
 
@@ -143,7 +144,7 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
               location: proposal.selectedLocationId ? null : proposal.proposedLocation,
               locationDetails: proposal.selectedLocationId ? JSON.stringify({ location_id: proposal.selectedLocationId }) : null,
               maxParticipants: proposal.maxParticipants,
-              status: 'scheduled',
+              status: WORKSHOP_INSTANCE_STATUS.SCHEDULED,
               instructorId: proposal.userId,
             })
         }

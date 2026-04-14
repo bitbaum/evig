@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 import { apiForbidden } from '@/lib/api/helpers';
 import { APP_URL } from '@/config/urls';
+import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client';
 
 export async function GET(request: NextRequest) {
   // Block in production
@@ -84,7 +85,7 @@ export async function GET(request: NextRequest) {
           body: JSON.stringify({
             transaction: {
               id: mockTxId,
-              status: 'reserved',
+              status: PAYREXX_TRANSACTION_STATUS.RESERVED,
               referenceId: referenceId,
             },
           }),

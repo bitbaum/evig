@@ -16,6 +16,7 @@ import { notifyAllStaff, notifyUsers } from '@/lib/services/notifications'
 import { resolveEligibleUserIds } from '@/lib/services/decisions-voting'
 import { asArray } from '@/lib/services/decisions-crud'
 import { logger } from '@/lib/logger'
+import { DECISION_STATUS } from '@/config/decisions'
 
 export async function GET(request: NextRequest) {
   // Verify cron secret (skip in dev if not set)
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
         .from(decisions)
         .where(
           and(
-            eq(decisions.status, 'voting'),
+            eq(decisions.status, DECISION_STATUS.VOTING),
             isNotNull(decisions.votingDeadline),
             // Deadline is between 23h and 25h from now (window for daily cron)
             sql`voting_deadline BETWEEN NOW() + INTERVAL '23 hours' AND NOW() + INTERVAL '25 hours'`
@@ -98,7 +99,7 @@ export async function GET(request: NextRequest) {
       .from(decisions)
       .where(
         and(
-          eq(decisions.status, 'voting'),
+          eq(decisions.status, DECISION_STATUS.VOTING),
           isNotNull(decisions.votingDeadline),
           lt(decisions.votingDeadline, sql`NOW()`)
         )

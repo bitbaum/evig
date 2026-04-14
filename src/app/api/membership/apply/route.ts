@@ -9,6 +9,7 @@ import { users, membershipApplications } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { sendCustomEmail } from '@/lib/email'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
+import { MEMBERSHIP_APPLICATION_STATUS } from '@/config/membership-status'
 
 const MembershipSchema = z.object({
   applicantName: z.string().min(2, 'Name erforderlich').max(200),
@@ -64,7 +65,7 @@ export async function POST(request: NextRequest) {
         addressPostalCode: result.data.addressPostalCode,
         addressCity: result.data.addressCity,
         memberType: result.data.memberType,
-        status: 'approved',
+        status: MEMBERSHIP_APPLICATION_STATUS.APPROVED,
         reviewedAt: new Date().toISOString(),
       })
       .returning({ id: membershipApplications.id })

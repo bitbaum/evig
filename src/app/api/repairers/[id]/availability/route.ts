@@ -5,6 +5,7 @@ import { eq, and, gte, lte, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_STATUS } from '@/config/repairer-status'
 
 interface AvailabilityRow {
   id: string
@@ -51,7 +52,7 @@ export async function GET(
       return apiNotFound('Reparateur nicht gefunden')
     }
 
-    if (!repairer.isActive || repairer.status !== 'active') {
+    if (!repairer.isActive || repairer.status !== REPAIRER_STATUS.ACTIVE) {
       return apiNotFound('Reparateur ist derzeit nicht verfügbar')
     }
 

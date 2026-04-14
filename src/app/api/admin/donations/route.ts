@@ -8,7 +8,7 @@ import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { CreateDonationSchema, GetDonationsQuerySchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
-import { DONATION_TYPES, getEstimatedValue } from '@/config/donations'
+import { DONATION_TYPES, getEstimatedValue, DONATION_STATUSES } from '@/config/donations'
 import { alias } from 'drizzle-orm/pg-core'
 
 const recorder = alias(users, 'recorder')
@@ -156,7 +156,7 @@ export const POST = withAdmin('donations', async (request: NextRequest, session)
           donorAddress: data.donor_address || null,
           receiptRequested: data.receipt_requested,
           notes: data.notes || null,
-          status: 'recorded',
+          status: DONATION_STATUSES.RECORDED,
           recordedBy: session.user.id,
         })
         .returning({ id: donations.id })
@@ -185,7 +185,7 @@ export const POST = withAdmin('donations', async (request: NextRequest, session)
         donorAddress: data.donor_address || null,
         receiptRequested: data.receipt_requested,
         notes: data.notes || null,
-        status: 'recorded',
+        status: DONATION_STATUSES.RECORDED,
         recordedBy: session.user.id,
       })
       .returning({ id: donations.id })

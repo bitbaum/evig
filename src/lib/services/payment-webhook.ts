@@ -17,8 +17,9 @@ import {
 } from '@/lib/email/templates/marketplace'
 import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
 import { PAYMENT_STATUS } from '@/config/payment-status'
+import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
 import { APP_URL } from '@/config/urls'
 import type { DeliveryOption } from '@/config/marketplace'
 import {
@@ -118,7 +119,7 @@ export async function handleMarketplacePayment(
   transactionId: string | null
 ): Promise<void> {
   switch (status) {
-    case 'reserved': {
+    case PAYREXX_TRANSACTION_STATUS.RESERVED: {
       if (order.status !== ORDER_STATUS.PENDING_PAYMENT) {
         logger.info('Payrexx webhook: order not in pending_payment, skipping', {
           orderId: order.id,
@@ -157,7 +158,7 @@ export async function handleMarketplacePayment(
       break
     }
 
-    case 'confirmed': {
+    case PAYREXX_TRANSACTION_STATUS.CONFIRMED: {
       if (order.status !== ORDER_STATUS.PAID && order.status !== ORDER_STATUS.DELIVERED) {
         logger.info('Payrexx webhook: unexpected confirmed status', {
           orderId: order.id,
@@ -176,8 +177,8 @@ export async function handleMarketplacePayment(
       break
     }
 
-    case 'cancelled':
-    case 'declined': {
+    case PAYREXX_TRANSACTION_STATUS.CANCELLED:
+    case PAYREXX_TRANSACTION_STATUS.DECLINED: {
       if (order.status === ORDER_STATUS.COMPLETED || order.status === ORDER_STATUS.CANCELLED) {
         return
       }
@@ -208,8 +209,8 @@ export async function handleMarketplacePayment(
       break
     }
 
-    case 'refunded':
-    case 'partially-refunded': {
+    case PAYREXX_TRANSACTION_STATUS.REFUNDED:
+    case PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED: {
       await db
         .update(marketplaceOrders)
         .set({
@@ -244,7 +245,7 @@ export async function handleGenericPayment(
   payrexxTransactionId: string | null
 ): Promise<void> {
   switch (status) {
-    case 'reserved': {
+    case PAYREXX_TRANSACTION_STATUS.RESERVED: {
       if (paymentTx.status !== PAYMENT_STATUS.PENDING) {
         logger.info('Payrexx webhook: payment transaction not pending, skipping', {
           transactionId: paymentTx.id,
@@ -268,8 +269,8 @@ export async function handleGenericPayment(
         await db
           .update(workshopRegistrations)
           .set({
-            paymentStatus: 'paid',
-            status: 'confirmed',
+            paymentStatus: WORKSHOP_PAYMENT_STATUS.PAID,
+            status: WORKSHOP_REGISTRATION_STATUS.CONFIRMED,
             confirmedAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
@@ -300,13 +301,13 @@ export async function handleGenericPayment(
       break
     }
 
-    case 'cancelled':
-    case 'declined': {
+    case PAYREXX_TRANSACTION_STATUS.CANCELLED:
+    case PAYREXX_TRANSACTION_STATUS.DECLINED: {
       await db
         .update(paymentTransactions)
         .set({
           status: PAYMENT_STATUS.FAILED,
-          failureReason: status === 'declined' ? 'Payment declined' : 'Payment cancelled',
+          failureReason: status === PAYREXX_TRANSACTION_STATUS.DECLINED ? 'Payment declined' : 'Payment cancelled',
           processedAt: sql`CURRENT_TIMESTAMP`,
           updatedAt: sql`CURRENT_TIMESTAMP`,
         })
@@ -317,7 +318,7 @@ export async function handleGenericPayment(
         await db
           .update(workshopRegistrations)
           .set({
-            paymentStatus: 'not_required',
+            paymentStatus: WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED,
             status: WORKSHOP_REGISTRATION_STATUS.CANCELLED,
             cancelledAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
@@ -343,12 +344,12 @@ export async function handleGenericPayment(
       break
     }
 
-    case 'refunded':
-    case 'partially-refunded': {
+    case PAYREXX_TRANSACTION_STATUS.REFUNDED:
+    case PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED: {
       await db
         .update(paymentTransactions)
         .set({
-          status: 'refunded',
+          status: PAYMENT_STATUS.REFUNDED,
           updatedAt: sql`CURRENT_TIMESTAMP`,
         })
         .where(eq(paymentTransactions.id, paymentTx.id))

@@ -10,6 +10,8 @@ export const PAYMENT_STATUS = {
   FAILED: 'failed',
   CANCELLED: 'cancelled',
   CONFIRMED: 'confirmed',
+  REFUNDED: 'refunded',
+  DISPUTED: 'disputed',
 } as const;
 
 export type PaymentStatus = typeof PAYMENT_STATUS[keyof typeof PAYMENT_STATUS];
