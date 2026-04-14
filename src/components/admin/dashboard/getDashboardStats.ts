@@ -10,6 +10,8 @@ import { blogPosts, blogSubmissions } from '@/db/schema/content'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { LISTING_STATUS } from '@/config/marketplace'
+import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REPAIRER_APPLICATION_STATUS } from '@/config/repairer-status'
 import { logger } from '@/lib/logger'
 import type { DashboardStats } from './types'
 
@@ -124,22 +126,22 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(saTable)}
-      WHERE status = 'pending'
+      WHERE status = ${APPROVAL_STATUS.PENDING}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(blogSubTable)}
-      WHERE status = 'pending'
+      WHERE status = ${APPROVAL_STATUS.PENDING}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(itHilfeTable)}
-      WHERE status = 'open' AND urgency = 'urgent'
+      WHERE status = ${REQUEST_STATUS.OPEN} AND urgency = 'urgent'
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(repairerAppTable)}
-      WHERE status = 'pending'
+      WHERE status = ${APPROVAL_STATUS.PENDING}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(due_date) AS oldest
@@ -236,7 +238,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       SELECT ra.id, COALESCE(ra.business_name, u.name, 'Bewerbung') AS label
       FROM ${sql.raw(repairerAppTable)} ra
       LEFT JOIN ${sql.raw(usersTable)} u ON u.id = ra.user_id
-      WHERE ra.status = 'pending'
+      WHERE ra.status = ${REPAIRER_APPLICATION_STATUS.PENDING}
       ORDER BY ra.created_at ASC
       LIMIT 1
     `),

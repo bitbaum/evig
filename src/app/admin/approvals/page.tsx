@@ -56,22 +56,22 @@ async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
     {
       label: 'Blog-Beiträge',
       href: '/admin/content/submissions',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE status = 'pending'`,
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Workshop-Vorschläge',
       href: '/admin/workshops',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE status = 'pending'`,
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Techniker-Bewerbungen',
       href: '/admin/repairer-applications',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = 'pending'`,
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Standorte',
       href: '/admin/locations',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LOCATIONS} WHERE approval_status = 'pending'`,
+      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LOCATIONS} WHERE approval_status = '${APPROVAL_STATUS.PENDING}'`,
     },
   ]
 

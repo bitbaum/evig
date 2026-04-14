@@ -133,7 +133,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           admin.email,
           'adminNewWorkshopProposal',
           session.user.name || 'Unbekannt',
-          session.user.email || 'unbekannt@example.com',
+          session.user.email ?? 'nicht angegeben',
           title,
           adminDashboardUrl
         )

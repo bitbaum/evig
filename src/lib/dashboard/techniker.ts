@@ -1,7 +1,7 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -80,7 +80,7 @@ export async function getActiveOfferCount(userId: string): Promise<number> {
     const result = await query<{ count: string }>(
       `SELECT COUNT(*) AS count
        FROM ${TABLE_NAMES.IT_HILFE_OFFERS}
-       WHERE helper_id = $1 AND status = 'pending'`,
+       WHERE helper_id = $1 AND status = '${OFFER_STATUS.PENDING}'`,
       [userId]
     )
     return parseInt(result.rows[0]?.count ?? '0', 10)
