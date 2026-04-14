@@ -181,7 +181,7 @@ export default async function AdminServicesPage() {
       {/* Services Table with Search/Filters */}
       <ServiceListClient services={services} />
 
-      {/* Quick Actions */}
+      {/* Info Box */}
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -191,18 +191,10 @@ export default async function AdminServicesPage() {
             <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
               Dienstleistungs-Verwaltung
             </Heading>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
+            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
               Dienstleistungen sind die Kernkompetenz von RevampIT. Biete Reparaturen, Installationen,
               Beratungen und andere technische Services an. Kunden können online Termine buchen.
             </p>
-            <div className="flex gap-3">
-              <Link
-                href="/admin/services/new"
-                className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
-              >
-                Dienstleistung erstellen
-              </Link>
-            </div>
           </div>
         </div>
       </div>

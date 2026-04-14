@@ -84,7 +84,7 @@ export function TeamListClient() {
       {/* Empty State */}
       {!loading && !error && profiles.length === 0 && (
         <div className="p-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-center">
-          <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             Keine Team-Profile gefunden
           </Heading>

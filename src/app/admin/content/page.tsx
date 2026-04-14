@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
-import { FileText, Plus } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import Link from 'next/link'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/ui/Heading'
 
 export const metadata: Metadata = {
@@ -10,33 +11,18 @@ export const metadata: Metadata = {
 
 export default function ContentPage() {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-            <FileText className="w-6 h-6 text-teal-600" />
-          </div>
-          <div>
-            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
-              Inhalte
-            </Heading>
-            <p className="text-gray-600 dark:text-gray-400">
-              Blog-Artikel, Seiten und Medien verwalten
-            </p>
-          </div>
-        </div>
-        <button className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors">
-          <Plus className="w-5 h-5" />
-          Neuer Inhalt
-        </button>
-      </div>
-
+    <AdminPageWrapper
+      title="Inhalte"
+      description="Blog-Artikel, Seiten und Medien verwalten"
+      icon={FileText}
+      iconColor="teal"
+    >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
           href="/admin/content/submissions"
-          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-yellow-500 transition-colors relative"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-yellow-500 transition-colors relative group"
         >
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Einreichungen</Heading>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">Einreichungen</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Benutzer-Einreichungen prüfen und veröffentlichen
           </p>
@@ -45,9 +31,9 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/blog"
-          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Blog-Artikel</Heading>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Blog-Artikel</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             News, Tutorials und Ankündigungen
           </p>
@@ -55,9 +41,9 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/categories"
-          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-purple-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Kategorien</Heading>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Kategorien</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Blog-Kategorien verwalten
           </p>
@@ -65,9 +51,9 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/pages"
-          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Seiten</Heading>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Seiten</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Statische Seiten wie Über uns, Kontakt, etc.
           </p>
@@ -75,9 +61,9 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/media"
-          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors"
+          className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-teal-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Medien</Heading>
+          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">Medien</Heading>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Bilder, Videos und Dokumente
           </p>
@@ -89,6 +75,6 @@ export default function ContentPage() {
           <strong>In Entwicklung:</strong> Die Inhaltsverwaltung wird mit dem AI-CMS verbunden.
         </p>
       </div>
-    </div>
+    </AdminPageWrapper>
   )
 }

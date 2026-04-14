@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { canAccessSection } from '@/lib/permissions'
@@ -87,20 +88,21 @@ export default async function SettingsPage() {
     >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {settingsSections.map(section => (
-          <div
+          <Link
             key={section.title}
-            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors cursor-pointer"
+            href={section.href}
+            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 hover:shadow-sm transition-all group"
           >
             <div className="flex items-start gap-4">
               <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getColorClasses(section.color)}`}>
                 <section.icon className="w-5 h-5" />
               </div>
               <div>
-                <Heading level={3} className="font-semibold text-gray-900 dark:text-white">{section.title}</Heading>
+                <Heading level={3} className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{section.title}</Heading>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{section.description}</p>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 

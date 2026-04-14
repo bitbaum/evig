@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, Globe } from 'lucide-react'
+import { Toaster } from 'sonner'
 import { AdminSidebar } from './AdminSidebar'
 import { UserMenuDropdown } from './UserMenuDropdown'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
@@ -85,7 +86,8 @@ export function AdminLayoutClient({
 
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden lg:flex xl:hidden w-9 h-9 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
+                className="hidden lg:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
+                title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
               >
                 <Menu className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               </button>
@@ -117,6 +119,8 @@ export function AdminLayoutClient({
 
       {/* Hirn Floating Button */}
       <HirnFloatingButton hasAccess={!!hasHirnAccess} />
+
+      <Toaster position="bottom-right" richColors closeButton />
     </div>
   )
 }

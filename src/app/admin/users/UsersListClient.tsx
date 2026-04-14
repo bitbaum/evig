@@ -161,7 +161,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       {/* Empty State */}
       {!loading && !error && users.length === 0 && (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-12 text-center">
-          <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+          <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
             Keine Benutzer gefunden
           </Heading>

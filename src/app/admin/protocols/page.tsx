@@ -81,10 +81,8 @@ export default async function ProtocolsAdminPage({
     ? stepFilter
     : undefined
 
-  // When step filter is active, fetch all (step is derived — can't paginate at DB level).
-  // When no step filter, paginate normally.
-  const currentPage = validStepFilter ? 1 : Math.max(1, parseInt(params.page ?? '1', 10) || 1)
-  const pageLimit = validStepFilter ? 200 : PROTOCOLS_PAGE_SIZE
+  const currentPage = Math.max(1, parseInt(params.page ?? '1', 10) || 1)
+  const pageLimit = PROTOCOLS_PAGE_SIZE
 
   let stats = { total: 0, draft: 0, review: 0, finalized: 0 }
   let protocols: ProtocolListItem[] = []
@@ -121,7 +119,7 @@ export default async function ProtocolsAdminPage({
     }) === validStepFilter)
     : protocols
 
-  const totalPages = validStepFilter ? 1 : Math.ceil(totalProtocols / PROTOCOLS_PAGE_SIZE)
+  const totalPages = Math.ceil(totalProtocols / PROTOCOLS_PAGE_SIZE)
 
   const protocolsHrefBase = (() => {
     const p = new URLSearchParams()
@@ -142,7 +140,7 @@ export default async function ProtocolsAdminPage({
       actions={
         <Link
           href="/admin/protocols/new"
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           Neues Protokoll
@@ -192,7 +190,7 @@ export default async function ProtocolsAdminPage({
       <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
         {listError ? (
           <div className="p-12 text-center">
-            <AlertTriangle className="w-12 h-12 text-red-300 mx-auto mb-4" />
+            <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
               {ADMIN_CONTENT.protocols.errorMessage}
             </Heading>
@@ -208,7 +206,7 @@ export default async function ProtocolsAdminPage({
           </div>
         ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
-            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
               {ADMIN_CONTENT.protocols.emptyTitle}
             </Heading>
@@ -217,7 +215,7 @@ export default async function ProtocolsAdminPage({
             </p>
             <Link
               href="/admin/protocols/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Neues Protokoll
@@ -351,15 +349,13 @@ export default async function ProtocolsAdminPage({
             </tbody>
           </table>
         )}
-        {!validStepFilter && (
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalProtocols}
-            pageSize={PROTOCOLS_PAGE_SIZE}
-            hrefBase={protocolsHrefBase}
-          />
-        )}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalProtocols}
+          pageSize={PROTOCOLS_PAGE_SIZE}
+          hrefBase={protocolsHrefBase}
+        />
       </div>
     </AdminPageWrapper>
   )

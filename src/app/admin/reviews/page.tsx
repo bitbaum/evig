@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
 import {
   type ReviewStatus,
@@ -14,6 +13,9 @@ import {
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { apiFetch } from '@/lib/api/client'
 import { AdminStatusBadge, type StatusConfig } from '@/components/admin/AdminStatusBadge'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { Modal } from '@/components/ui/Modal'
+import { toast } from 'sonner'
 import {
   EyeOff,
   Trash2,
@@ -23,9 +25,9 @@ import {
   MessageSquare,
   Star,
   Filter,
-  ArrowLeft,
   Flag,
-  RefreshCw
+  RefreshCw,
+  Loader2,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
@@ -65,7 +67,6 @@ const REVIEW_STATUS_CONFIG: Record<string, StatusConfig> = Object.fromEntries(
 )
 
 export default function AdminReviewsPage() {
-  const router = useRouter()
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -75,7 +76,6 @@ export default function AdminReviewsPage() {
   const [moderatingAction, setModerationAction] = useState<string>('')
   const [moderationReason, setModerationReason] = useState('')
   const [actionInProgress, setActionInProgress] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -138,8 +138,7 @@ export default function AdminReviewsPage() {
       const actionLabel = getReviewActionLabel(moderatingAction)
       cancelModeration()
       loadReviews()
-      setSuccessMessage(`Bewertung erfolgreich ${actionLabel}`)
-      setTimeout(() => setSuccessMessage(null), 3000)
+      toast.success(`Bewertung erfolgreich ${actionLabel}`)
     } else {
       setError('Fehler bei der Moderation: ' + (result.error || 'Unbekannter Fehler'))
     }
@@ -175,7 +174,7 @@ export default function AdminReviewsPage() {
     )
   }
 
-  if (error) {
+  if (error && reviews.length === 0) {
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-4">
         <div className="flex">
@@ -190,21 +189,12 @@ export default function AdminReviewsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => router.push('/admin')}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Zurück zum Admin-Bereich
-          </button>
-        </div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900">Bewertungs-Management</Heading>
-      </div>
-
+    <AdminPageWrapper
+      title="Bewertungs-Management"
+      description="Bewertungen moderieren und verwalten"
+      icon={MessageSquare}
+      iconColor="amber"
+    >
       {/* Filters and Search */}
       <AdminFilterBar
         searchValue={searchQuery}
@@ -243,42 +233,10 @@ export default function AdminReviewsPage() {
         </div>
       </AdminFilterBar>
 
-      {/* Success Message */}
-      {successMessage && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <p className="text-green-800">{successMessage}</p>
-        </div>
-      )}
-
-      {/* Moderation Dialog */}
-      {moderatingId && (
-        <div className="bg-white rounded-lg shadow-sm border border-orange-200 p-6">
-          <Heading level={3} className="text-sm font-semibold text-gray-900 mb-2">
-            Grund für {getReviewActionLabel(moderatingAction)}:
-          </Heading>
-          <textarea
-            value={moderationReason}
-            onChange={(e) => setModerationReason(e.target.value)}
-            placeholder="Bitte gib einen Grund an..."
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 text-sm"
-            autoFocus
-          />
-          <div className="flex gap-2 mt-3">
-            <button
-              onClick={handleModerate}
-              disabled={!moderationReason.trim()}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Bestätigen
-            </button>
-            <button
-              onClick={cancelModeration}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Abbrechen
-            </button>
-          </div>
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800">{error}</p>
         </div>
       )}
 
@@ -391,18 +349,20 @@ export default function AdminReviewsPage() {
                       <button
                         onClick={() => startModeration(review.id, 'flag_spam')}
                         disabled={actionInProgress === review.id}
-                        className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200 disabled:opacity-50"
+                        className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200 disabled:opacity-50 flex items-center gap-1"
                         title="Als Spam markieren"
                       >
                         <Flag className="w-3 h-3" />
+                        Spam
                       </button>
                       <button
                         onClick={() => startModeration(review.id, 'flag_inappropriate')}
                         disabled={actionInProgress === review.id}
-                        className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs hover:bg-orange-200 disabled:opacity-50"
+                        className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs hover:bg-orange-200 disabled:opacity-50 flex items-center gap-1"
                         title="Als unangemessen markieren"
                       >
                         <AlertTriangle className="w-3 h-3" />
+                        Unangemessen
                       </button>
                     </div>
                   </div>
@@ -423,6 +383,41 @@ export default function AdminReviewsPage() {
           ))
         )}
       </div>
-    </div>
+
+      {/* Moderation Modal */}
+      <Modal
+        isOpen={!!moderatingId}
+        onClose={cancelModeration}
+        title={`Grund für ${getReviewActionLabel(moderatingAction)}`}
+        size="md"
+      >
+        <div className="space-y-4">
+          <textarea
+            value={moderationReason}
+            onChange={(e) => setModerationReason(e.target.value)}
+            placeholder="Bitte gib einen Grund an..."
+            rows={4}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            autoFocus
+          />
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={cancelModeration}
+              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Abbrechen
+            </button>
+            <button
+              onClick={handleModerate}
+              disabled={!moderationReason.trim() || !!actionInProgress}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {actionInProgress && <Loader2 className="w-4 h-4 animate-spin" />}
+              Bestätigen
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </AdminPageWrapper>
   )
 }

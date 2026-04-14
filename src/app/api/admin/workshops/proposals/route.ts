@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { workshopProposals, users, locations } from '@/db/schema'
-import { eq, desc, sql } from 'drizzle-orm'
+import { eq, desc, sql, ilike } from 'drizzle-orm'
 import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
@@ -14,11 +14,13 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || APPROVAL_STATUS.PENDING
     const category = searchParams.get('category')
+    const q = searchParams.get('q')
     const { limit, offset } = parsePagination(request)
 
     const conditions: SQL[] = []
     if (status !== 'all') conditions.push(eq(workshopProposals.status, status))
     if (category) conditions.push(eq(workshopProposals.category, category))
+    if (q) conditions.push(ilike(workshopProposals.title, `%${q}%`))
 
     const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined
 

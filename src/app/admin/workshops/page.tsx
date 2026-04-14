@@ -16,6 +16,7 @@ import {
   MapPin,
   DollarSign,
   BookOpen,
+  Loader2,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -29,6 +30,7 @@ import {
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
 import Heading from '@/components/ui/Heading'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Pagination } from '@/components/ui/Pagination'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 
@@ -97,6 +99,10 @@ export default function AdminWorkshopsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [rejectingId, setRejectingId] = useState<string | null>(null)
   const [rejectionReason, setRejectionReason] = useState('')
+  const [rejectError, setRejectError] = useState<string | null>(null)
+  const [approveConfirmId, setApproveConfirmId] = useState<string | null>(null)
+  const [approveLoading, setApproveLoading] = useState(false)
+  const [rejectLoading, setRejectLoading] = useState(false)
 
   const loadProposals = useCallback(async (signal?: AbortSignal) => {
     setLoading(true)
@@ -106,6 +112,7 @@ export default function AdminWorkshopsPage() {
       offset: String((currentPage - 1) * PAGE_SIZE),
     })
     if (filters.category !== 'all') params.set('category', filters.category)
+    if (searchTerm.trim()) params.set('q', searchTerm.trim())
 
     const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(
       `/api/admin/workshops/proposals?${params}`
@@ -118,7 +125,7 @@ export default function AdminWorkshopsPage() {
       setError(result.error || ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
     }
     setLoading(false)
-  }, [filters.status, filters.category, currentPage])
+  }, [filters.status, filters.category, currentPage, searchTerm])
 
   useEffect(() => {
     if (status !== 'authenticated') return
@@ -127,25 +134,39 @@ export default function AdminWorkshopsPage() {
     return () => controller.abort()
   }, [status, loadProposals])
 
-  const handleApprove = async (proposalId: string) => {
-    if (!confirm(STRINGS.APPROVE_CONFIRM)) return
-    const result = await apiFetch<void>(`/api/admin/workshops/proposals/${proposalId}/approve`, {
+  const handleApprove = (proposalId: string) => {
+    setApproveConfirmId(proposalId)
+  }
+
+  const doApprove = async () => {
+    if (!approveConfirmId) return
+    setApproveLoading(true)
+    const result = await apiFetch<void>(`/api/admin/workshops/proposals/${approveConfirmId}/approve`, {
       method: 'POST',
       body: { action: 'approve', review_notes: 'Workshop genehmigt' },
     })
+    setApproveLoading(false)
     if (result.success) {
+      setApproveConfirmId(null)
       loadProposals()
     } else {
       setError(result.error || STRINGS.APPROVE_ERROR)
+      setApproveConfirmId(null)
     }
   }
 
   const handleReject = async (proposalId: string) => {
-    if (!rejectionReason.trim()) return
+    if (!rejectionReason.trim()) {
+      setRejectError('Bitte gib einen Ablehnungsgrund an.')
+      return
+    }
+    setRejectError(null)
+    setRejectLoading(true)
     const result = await apiFetch<void>(`/api/admin/workshops/proposals/${proposalId}/approve`, {
       method: 'POST',
       body: { action: 'reject', review_notes: rejectionReason },
     })
+    setRejectLoading(false)
     if (result.success) {
       setRejectingId(null)
       setRejectionReason('')
@@ -157,18 +178,12 @@ export default function AdminWorkshopsPage() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6" />
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-200 rounded" />
-                ))}
-              </div>
-            </div>
-          </div>
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 bg-gray-200 rounded"></div>
+          ))}
         </div>
       </div>
     )
@@ -178,10 +193,6 @@ export default function AdminWorkshopsPage() {
     router.push('/auth/login')
     return null
   }
-
-  const filteredProposals = searchTerm.trim()
-    ? proposals.filter(p => p.title.toLowerCase().includes(searchTerm.toLowerCase()))
-    : proposals
 
   const totalPages = Math.ceil(totalItems / PAGE_SIZE)
 
@@ -242,12 +253,12 @@ export default function AdminWorkshopsPage() {
       <div className="bg-white rounded-xl shadow-sm border">
         <div className="px-6 py-4 border-b border-gray-200">
           <Heading level={2} className="text-lg font-semibold text-gray-900">
-            Workshop-Vorschläge ({filteredProposals.length})
+            Workshop-Vorschläge ({proposals.length})
           </Heading>
         </div>
 
         <div className="divide-y divide-gray-200">
-          {filteredProposals.map((proposal) => {
+          {proposals.map((proposal) => {
             const statusIcon = PROPOSAL_STATUS_CONFIG[proposal.status]?.icon ?? DEFAULT_STATUS_ICON
             const statusLabel = PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status
 
@@ -311,13 +322,18 @@ export default function AdminWorkshopsPage() {
                       <>
                         <button
                           onClick={() => handleApprove(proposal.id)}
-                          className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
+                          disabled={approveLoading}
+                          className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <CheckCircle className="w-4 h-4 mr-1" />
+                          {approveLoading ? (
+                            <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                          ) : (
+                            <CheckCircle className="w-4 h-4 mr-1" />
+                          )}
                           Genehmigen
                         </button>
                         <button
-                          onClick={() => { setRejectingId(proposal.id); setRejectionReason('') }}
+                          onClick={() => { setRejectingId(proposal.id); setRejectionReason(''); setRejectError(null) }}
                           className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
                         >
                           <XCircle className="w-4 h-4 mr-1" />
@@ -335,22 +351,26 @@ export default function AdminWorkshopsPage() {
                     </label>
                     <textarea
                       value={rejectionReason}
-                      onChange={(e) => setRejectionReason(e.target.value)}
+                      onChange={(e) => { setRejectionReason(e.target.value); setRejectError(null) }}
                       placeholder="Bitte gib einen Ablehnungsgrund an..."
                       rows={3}
                       className="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
                       autoFocus
                     />
+                    {rejectError && (
+                      <p className="mt-1 text-sm text-red-700">{rejectError}</p>
+                    )}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => handleReject(proposal.id)}
-                        disabled={!rejectionReason.trim()}
-                        className="px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={rejectLoading}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
+                        {rejectLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                         Ablehnung bestätigen
                       </button>
                       <button
-                        onClick={() => { setRejectingId(null); setRejectionReason('') }}
+                        onClick={() => { setRejectingId(null); setRejectionReason(''); setRejectError(null) }}
                         className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
                       >
                         Abbrechen
@@ -362,7 +382,7 @@ export default function AdminWorkshopsPage() {
             )
           })}
 
-          {filteredProposals.length === 0 && (
+          {proposals.length === 0 && (
             <div className="px-6 py-12 text-center">
               <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
@@ -387,6 +407,18 @@ export default function AdminWorkshopsPage() {
           onPageChange={setCurrentPage}
         />
       </div>
+
+      <ConfirmDialog
+        isOpen={!!approveConfirmId}
+        title="Workshop genehmigen"
+        message={STRINGS.APPROVE_CONFIRM}
+        confirmLabel="Genehmigen"
+        cancelLabel="Abbrechen"
+        variant="success"
+        isLoading={approveLoading}
+        onConfirm={doApprove}
+        onClose={() => setApproveConfirmId(null)}
+      />
     </AdminPageWrapper>
   )
 }

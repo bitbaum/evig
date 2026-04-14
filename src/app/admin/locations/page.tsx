@@ -11,6 +11,8 @@ import { ADMIN_CONTENT } from '@/config/admin-content'
 import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
 import type { StatusConfig } from '@/components/admin/AdminStatusBadge'
 import { Pagination } from '@/components/ui/Pagination'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/ui/Heading'
 import {
   MapPin,
@@ -20,7 +22,8 @@ import {
   Eye,
   Calendar,
   Users,
-  Building2
+  Building2,
+  Loader2,
 } from 'lucide-react'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 
@@ -70,6 +73,9 @@ export default function AdminLocationsPage() {
   const [filters, setFilters] = useState({ status: 'all', type: 'all', city: '' })
   const [currentPage, setCurrentPage] = useState(1)
 
+  const [confirmTarget, setConfirmTarget] = useState<{ id: string; action: 'approve' | 'reject'; name: string } | null>(null)
+  const [actionLoading, setActionLoading] = useState(false)
+
   const totalPages = Math.ceil(totalItems / PAGE_SIZE)
 
   useEffect(() => {
@@ -103,41 +109,34 @@ export default function AdminLocationsPage() {
     return () => { cancelled = true }
   }, [status, filters.status, filters.type, filters.city, currentPage])
 
-  const handleApproval = async (locationId: string, action: 'approve' | 'reject') => {
-    if (!confirm(`Möchtest du diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
-      return
-    }
-
-    const result = await apiFetch<void>(`/api/locations/${locationId}/approve`, {
+  const doApproval = async () => {
+    if (!confirmTarget) return
+    setActionLoading(true)
+    const result = await apiFetch<void>(`/api/locations/${confirmTarget.id}/approve`, {
       method: 'POST',
       body: {
-        action,
-        review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt',
+        action: confirmTarget.action,
+        review_notes: confirmTarget.action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt',
       },
     })
-
+    setActionLoading(false)
     if (result.success) {
-      // Re-trigger the effect by nudging a stable dependency
+      setConfirmTarget(null)
       setFilters(prev => ({ ...prev }))
     } else {
       setError(result.error || 'Fehler bei der Genehmigung')
+      setConfirmTarget(null)
     }
   }
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
-              <div className="space-y-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-200 rounded"></div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <div className="animate-pulse space-y-4">
+        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+        <div className="space-y-3">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-16 bg-gray-200 rounded"></div>
+          ))}
         </div>
       </div>
     )
@@ -157,197 +156,215 @@ export default function AdminLocationsPage() {
     : locations
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <Heading level={1} className="text-2xl font-bold text-gray-900">Ortsverwaltung</Heading>
-              <p className="mt-1 text-sm text-gray-600">
-                Verwalte Veranstaltungsorte und deren Genehmigungen
-              </p>
-            </div>
-            <Link
-              href="/admin/locations/new"
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Neuer Ort
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filters */}
-        <AdminFilterBar
-          searchValue={searchName}
-          onSearchChange={setSearchName}
-          searchPlaceholder="Name suchen..."
-          dropdowns={[
-            {
-              key: 'status',
-              label: 'Status',
-              value: filters.status,
-              onChange: (value) => setFilters(prev => ({ ...prev, status: value })),
-              options: [
-                { value: LOCATION_STATUS.PENDING, label: 'Ausstehend' },
-                { value: LOCATION_STATUS.APPROVED, label: 'Genehmigt' },
-                { value: LOCATION_STATUS.REJECTED, label: 'Abgelehnt' },
-                { value: LOCATION_STATUS.SUSPENDED, label: 'Suspendiert' },
-              ],
-            },
-            {
-              key: 'type',
-              label: 'Typ',
-              value: filters.type,
-              onChange: (value) => setFilters(prev => ({ ...prev, type: value })),
-              options: [
-                { value: 'venue', label: 'Veranstaltungsort' },
-                { value: 'home', label: 'Zu Hause' },
-                { value: 'online', label: 'Online' },
-                { value: 'community_center', label: 'Gemeinschaftszentrum' },
-                { value: 'business', label: 'Geschäft' },
-              ],
-            },
-          ]}
+    <AdminPageWrapper
+      title="Ortsverwaltung"
+      description="Veranstaltungsorte und deren Genehmigungen verwalten"
+      icon={MapPin}
+      iconColor="blue"
+      actions={
+        <Link
+          href="/admin/locations/new"
+          className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors gap-2"
         >
-          <div className="flex-1 min-w-48">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
-            <input
-              type="text"
-              value={filters.city}
-              onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
-              placeholder="Stadt suchen..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-        </AdminFilterBar>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-800">{error}</p>
-          </div>
-        )}
-
-        {/* Locations List */}
-        <div className="bg-white rounded-xl shadow-sm border">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <Heading level={2} className="text-lg font-semibold text-gray-900">
-              Orte ({filteredLocations.length})
-            </Heading>
-          </div>
-
-          <div className="divide-y divide-gray-200">
-            {filteredLocations.map((location) => (
-              <div key={location.id} className="p-6 hover:bg-gray-50">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      {getTypeIcon(location.type)}
-                      <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
-                        {location.name}
-                      </Heading>
-                      <AdminStatusBadge
-                        status={location.approvalStatus}
-                        config={LOCATION_STATUS_CONFIG}
-                      />
-                      <span className="text-sm text-gray-600 sr-only">
-                        {getLocationStatusLabel(location.approvalStatus)}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4" />
-                        {location.city}, {location.canton}
-                      </div>
-
-                      {location.maxCapacity && (
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4" />
-                          Max. {location.maxCapacity} Personen
-                        </div>
-                      )}
-
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-4 h-4" />
-                        {location.usageCount} Buchungen
-                      </div>
-                    </div>
-
-                    <div className="text-sm text-gray-500">
-                      {location.createdAt && formatDateShort(location.createdAt)}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 ml-4">
-                    <Link
-                      href={`/admin/locations/${location.id}`}
-                      className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
-                    >
-                      <Eye className="w-4 h-4 mr-1" />
-                      Details
-                    </Link>
-
-                    {location.approvalStatus === LOCATION_STATUS.PENDING && (
-                      <>
-                        <button
-                          onClick={() => handleApproval(location.id, 'approve')}
-                          className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700"
-                        >
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Genehmigen
-                        </button>
-                        <button
-                          onClick={() => handleApproval(location.id, 'reject')}
-                          className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
-                        >
-                          <XCircle className="w-4 h-4 mr-1" />
-                          Ablehnen
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-
-            {filteredLocations.length === 0 && (
-              <div className="px-6 py-12 text-center">
-                <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
-                  {ADMIN_CONTENT.locations.emptyTitle}
-                </Heading>
-                <p className="text-gray-600 mb-4">
-                  {searchName.trim()
-                    ? `Keine Orte für "${searchName}" gefunden.`
-                    : filters.status !== 'all'
-                    ? `Keine Orte mit Status "${getLocationStatusLabel(filters.status)}" gefunden.`
-                    : ADMIN_CONTENT.locations.emptyDescription}
-                </p>
-                <Link
-                  href="/admin/locations/new"
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Ersten Ort erstellen
-                </Link>
-              </div>
-            )}
-          </div>
-
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            totalItems={totalItems}
-            pageSize={PAGE_SIZE}
-            onPageChange={setCurrentPage}
+          <Plus className="w-4 h-4" />
+          Neuer Ort
+        </Link>
+      }
+    >
+      {/* Filters */}
+      <AdminFilterBar
+        searchValue={searchName}
+        onSearchChange={setSearchName}
+        searchPlaceholder="Name suchen..."
+        dropdowns={[
+          {
+            key: 'status',
+            label: 'Status',
+            value: filters.status,
+            onChange: (value) => setFilters(prev => ({ ...prev, status: value })),
+            options: [
+              { value: LOCATION_STATUS.PENDING, label: 'Ausstehend' },
+              { value: LOCATION_STATUS.APPROVED, label: 'Genehmigt' },
+              { value: LOCATION_STATUS.REJECTED, label: 'Abgelehnt' },
+              { value: LOCATION_STATUS.SUSPENDED, label: 'Suspendiert' },
+            ],
+          },
+          {
+            key: 'type',
+            label: 'Typ',
+            value: filters.type,
+            onChange: (value) => setFilters(prev => ({ ...prev, type: value })),
+            options: [
+              { value: 'venue', label: 'Veranstaltungsort' },
+              { value: 'home', label: 'Zu Hause' },
+              { value: 'online', label: 'Online' },
+              { value: 'community_center', label: 'Gemeinschaftszentrum' },
+              { value: 'business', label: 'Geschäft' },
+            ],
+          },
+        ]}
+      >
+        <div className="flex-1 min-w-48">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
+          <input
+            type="text"
+            value={filters.city}
+            onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
+            placeholder="Stadt suchen..."
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
+      </AdminFilterBar>
+
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800">{error}</p>
+        </div>
+      )}
+
+      {/* Locations List */}
+      <div className="bg-white rounded-xl shadow-sm border">
+        <div className="px-6 py-4 border-b border-gray-200">
+          <Heading level={2} className="text-lg font-semibold text-gray-900">
+            Orte ({filteredLocations.length})
+          </Heading>
+        </div>
+
+        <div className="divide-y divide-gray-200">
+          {filteredLocations.map((location) => (
+            <div key={location.id} className="p-6 hover:bg-gray-50">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-3 mb-2">
+                    {getTypeIcon(location.type)}
+                    <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
+                      {location.name}
+                    </Heading>
+                    <AdminStatusBadge
+                      status={location.approvalStatus}
+                      config={LOCATION_STATUS_CONFIG}
+                    />
+                    <span className="text-sm text-gray-600 sr-only">
+                      {getLocationStatusLabel(location.approvalStatus)}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-4 h-4" />
+                      {location.city}, {location.canton}
+                    </div>
+
+                    {location.maxCapacity && (
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        Max. {location.maxCapacity} Personen
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-4 h-4" />
+                      {location.usageCount} Buchungen
+                    </div>
+                  </div>
+
+                  <div className="text-sm text-gray-500">
+                    {location.createdAt && formatDateShort(location.createdAt)}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 ml-4">
+                  <Link
+                    href={`/admin/locations/${location.id}`}
+                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    Details
+                  </Link>
+
+                  {location.approvalStatus === LOCATION_STATUS.PENDING && (
+                    <>
+                      <button
+                        onClick={() => setConfirmTarget({ id: location.id, action: 'approve', name: location.name })}
+                        disabled={actionLoading}
+                        className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {actionLoading ? (
+                          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                        ) : (
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                        )}
+                        Genehmigen
+                      </button>
+                      <button
+                        onClick={() => setConfirmTarget({ id: location.id, action: 'reject', name: location.name })}
+                        disabled={actionLoading}
+                        className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {actionLoading ? (
+                          <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                        ) : (
+                          <XCircle className="w-4 h-4 mr-1" />
+                        )}
+                        Ablehnen
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {filteredLocations.length === 0 && (
+            <div className="px-6 py-12 text-center">
+              <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+                {ADMIN_CONTENT.locations.emptyTitle}
+              </Heading>
+              <p className="text-gray-600 mb-4">
+                {searchName.trim()
+                  ? `Keine Orte für "${searchName}" gefunden.`
+                  : filters.status !== 'all'
+                  ? `Keine Orte mit Status "${getLocationStatusLabel(filters.status)}" gefunden.`
+                  : ADMIN_CONTENT.locations.emptyDescription}
+              </p>
+              <Link
+                href="/admin/locations/new"
+                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Ersten Ort erstellen
+              </Link>
+            </div>
+          )}
+        </div>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={PAGE_SIZE}
+          onPageChange={setCurrentPage}
+        />
       </div>
-    </div>
+
+      <ConfirmDialog
+        isOpen={!!confirmTarget}
+        title={confirmTarget?.action === 'approve' ? 'Ort genehmigen' : 'Ort ablehnen'}
+        message={
+          confirmTarget?.action === 'approve'
+            ? 'Möchtest du diesen Ort wirklich genehmigen?'
+            : 'Möchtest du diesen Ort wirklich ablehnen?'
+        }
+        itemName={confirmTarget?.name}
+        confirmLabel={confirmTarget?.action === 'approve' ? 'Genehmigen' : 'Ablehnen'}
+        cancelLabel="Abbrechen"
+        variant={confirmTarget?.action === 'approve' ? 'success' : 'danger'}
+        isLoading={actionLoading}
+        onConfirm={doApproval}
+        onClose={() => setConfirmTarget(null)}
+      />
+    </AdminPageWrapper>
   )
 }
