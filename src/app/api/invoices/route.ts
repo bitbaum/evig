@@ -7,31 +7,53 @@ import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/
 import { logger } from '@/lib/logger'
 import { calculateTaxes } from '@/lib/payments/tax-compliance'
 import { INVOICE_STATUS } from '@/config/invoice-status'
+import { z } from 'zod'
+import { validateBody } from '@/lib/schemas'
 
-interface LineItemInput {
-  description: string
-  quantity: number | string
-  unitPrice: number | string
-}
+const LineItemSchema = z.object({
+  description: z.string().min(1),
+  quantity: z.union([z.number(), z.string()]).transform(v => parseFloat(String(v))),
+  unitPrice: z.union([z.number(), z.string()]).transform(v => parseFloat(String(v))),
+})
+
+const CreateInvoiceSchema = z.object({
+  type: z.enum(['service', 'product', 'repair', 'membership', 'donation']).default('service'),
+  userId: z.string().uuid().optional(), // Only admins may pass this
+  orderId: z.string().optional(),
+  serviceAppointmentId: z.string().optional(),
+  workshopRegistrationId: z.string().optional(),
+  lineItems: z.array(LineItemSchema).min(1),
+  dueDate: z.string().optional(),
+  notes: z.string().optional(),
+  taxRate: z.number().min(0).max(1).default(0.077), // Swiss VAT
+  currency: z.string().length(3).default('CHF'),
+  customerCountry: z.string().length(2).default('CH'),
+  customerType: z.enum(['consumer', 'business']).default('consumer'),
+  businessType: z.enum(['service', 'digital', 'physical']).default('service'),
+})
 
 // POST /api/invoices - Create new invoice
 export const POST = withAuth(async (request, session) => {
   try {
+    const body = await request.json()
+    const validation = validateBody(CreateInvoiceSchema, body)
+    if (!validation.success) return validation.error
+
     const {
-      type = 'service',
-      userId, // For admin creating invoices for others
+      type,
+      userId,
       orderId,
       serviceAppointmentId,
       workshopRegistrationId,
       lineItems,
       dueDate,
       notes,
-      taxRate = 0.077, // Swiss VAT rate
-      currency = 'CHF',
-      customerCountry = 'CH',
-      customerType = 'consumer',
-      businessType = 'service'
-    } = await request.json()
+      taxRate,
+      currency,
+      customerCountry,
+      customerType,
+      businessType,
+    } = validation.data
 
     // Check if user is admin or creating invoice for themselves
     const isAdmin = session.user.isStaff
@@ -41,29 +63,12 @@ export const POST = withAuth(async (request, session) => {
       return apiBadRequest('Benutzer-ID erforderlich')
     }
 
-    // Validate line items
-    if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0) {
-      return apiBadRequest('Mindestens ein Rechnungsposten erforderlich')
-    }
-
     // Calculate totals with tax compliance
     let subtotalCents = 0
-    const processedLineItems = lineItems.map((item: LineItemInput) => {
-      if (!item.description || !item.quantity || !item.unitPrice) {
-        throw new Error('Invalid line item: description, quantity, and unitPrice required')
-      }
-
-      const quantity = parseFloat(String(item.quantity))
-      const unitPrice = parseFloat(String(item.unitPrice))
-      const total = quantity * unitPrice
+    const processedLineItems = lineItems.map((item) => {
+      const total = item.quantity * item.unitPrice
       subtotalCents += Math.round(total * 100)
-
-      return {
-        description: item.description,
-        quantity,
-        unitPrice,
-        total
-      }
+      return { description: item.description, quantity: item.quantity, unitPrice: item.unitPrice, total }
     })
 
     // Use tax compliance system for accurate tax calculation

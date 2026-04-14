@@ -9,6 +9,7 @@ import { sellerProfiles, listings, listingImages, users, reviews } from '@/db/sc
 import { eq, and, sql, getTableName } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 // ============================================================================
 // GET — Public seller profile
@@ -68,7 +69,7 @@ export async function GET(
         )`,
       })
       .from(listings)
-      .where(and(eq(listings.sellerId, id), eq(listings.status, 'active')))
+      .where(and(eq(listings.sellerId, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
       .orderBy(sql`${listings.createdAt} DESC`);
 
     // Aggregate review stats via raw SQL (cross-table join with listings)

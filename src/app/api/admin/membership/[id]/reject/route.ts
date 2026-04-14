@@ -13,6 +13,7 @@ import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { MEMBERSHIP_APPLICATION_STATUS } from '@/config/membership-status'
 
 type RouteContext = { params?: { id: string } }
 
@@ -51,7 +52,7 @@ export const POST = withAdmin<{ id: string }>(async (
     const application = appResult.rows[0]
     if (!application) return apiNotFound('Mitgliedschaftsantrag')
 
-    if (application.status !== 'pending') {
+    if (application.status !== MEMBERSHIP_APPLICATION_STATUS.PENDING) {
       return apiError(
         new Error(`Antrag hat bereits Status: ${application.status}`),
         'Dieser Antrag wurde bereits bearbeitet'
@@ -60,13 +61,13 @@ export const POST = withAdmin<{ id: string }>(async (
 
     await query(
       `UPDATE ${TABLE_NAMES.MEMBERSHIP_APPLICATIONS}
-       SET status = 'rejected',
-           admin_notes = $1,
-           reviewed_by = $2,
+       SET status = $1,
+           admin_notes = $2,
+           reviewed_by = $3,
            reviewed_at = NOW(),
            updated_at = NOW()
-       WHERE id = $3`,
-      [adminNotes, session.user.id, id]
+       WHERE id = $4`,
+      [MEMBERSHIP_APPLICATION_STATUS.REJECTED, adminNotes, session.user.id, id]
     )
 
     logger.info('Membership application rejected', {
@@ -76,7 +77,7 @@ export const POST = withAdmin<{ id: string }>(async (
       hasNotes: !!adminNotes,
     })
 
-    return apiSuccess({ id, status: 'rejected' })
+    return apiSuccess({ id, status: MEMBERSHIP_APPLICATION_STATUS.REJECTED })
   } catch (error) {
     return apiError(error, 'Fehler beim Ablehnen des Mitgliedschaftsantrags')
   }

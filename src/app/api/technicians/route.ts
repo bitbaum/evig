@@ -14,6 +14,7 @@ import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { getSkillIds } from '@/config/it-hilfe'
+import { REPAIRER_STATUS } from '@/config/repairer-status'
 
 /**
  * GET /api/technicians
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
       conditions.push(sql`${repairerProfiles.profileTier} = 'community'`)
     } else if (tier === 'professional') {
       conditions.push(sql`${repairerProfiles.profileTier} = 'professional'`)
-      conditions.push(sql`${repairerProfiles.status} = 'active'`)
+      conditions.push(sql`${repairerProfiles.status} = ${REPAIRER_STATUS.ACTIVE}`)
     }
 
     if (q) {

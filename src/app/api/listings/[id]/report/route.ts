@@ -12,6 +12,7 @@ import { listings, listingReports } from '@/db/schema';
 import { eq, and } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { validateBody, ReportListingSchema } from '@/lib/schemas';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 type RouteContext = { params?: { id: string } };
 
@@ -33,7 +34,7 @@ export const POST = withAuth<{ id: string }>(async (
     const [listing] = await db
       .select({ sellerId: listings.sellerId })
       .from(listings)
-      .where(and(eq(listings.id, id), eq(listings.status, 'active')));
+      .where(and(eq(listings.id, id), eq(listings.status, LISTING_STATUS.ACTIVE)));
     if (!listing) return apiNotFound('Inserat');
 
     // Prevent self-report

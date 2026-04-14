@@ -18,6 +18,7 @@ import {
   apiSuccess,
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { REPAIRER_STATUS } from '@/config/repairer-status'
 import { logger } from '@/lib/logger'
 import { IT_SKILLS } from '@/config/it-hilfe'
 import { validateBody, TechnicianProfileSchema } from '@/lib/schemas'
@@ -123,7 +124,7 @@ export const PUT = withAuth(async (request: NextRequest, session: ValidSession) 
         maxTravelKm,
         isActive,
         profileTier: 'community',
-        status: 'active',
+        status: REPAIRER_STATUS.ACTIVE,
       })
       .onConflictDoUpdate({
         target: repairerProfiles.userId,

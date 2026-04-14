@@ -14,6 +14,7 @@ import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { MEMBERSHIP_APPLICATION_STATUS } from '@/config/membership-status'
 
 type RouteContext = { params?: { id: string } }
 
@@ -43,7 +44,7 @@ export const POST = withAdmin<{ id: string }>(async (
     const application = appResult.rows[0]
     if (!application) return apiNotFound('Mitgliedschaftsantrag')
 
-    if (application.status !== 'pending') {
+    if (application.status !== MEMBERSHIP_APPLICATION_STATUS.PENDING) {
       return apiError(
         new Error(`Antrag hat bereits Status: ${application.status}`),
         'Dieser Antrag wurde bereits bearbeitet'
@@ -66,12 +67,12 @@ export const POST = withAdmin<{ id: string }>(async (
     // Update membership application status
     await query(
       `UPDATE ${TABLE_NAMES.MEMBERSHIP_APPLICATIONS}
-       SET status = 'approved',
-           reviewed_by = $1,
+       SET status = $1,
+           reviewed_by = $2,
            reviewed_at = NOW(),
            updated_at = NOW()
-       WHERE id = $2`,
-      [session.user.id, id]
+       WHERE id = $3`,
+      [MEMBERSHIP_APPLICATION_STATUS.APPROVED, session.user.id, id]
     )
 
     // Activate membership on users table if we have a user
@@ -106,7 +107,7 @@ export const POST = withAdmin<{ id: string }>(async (
 
     return apiSuccess({
       id,
-      status: 'approved',
+      status: MEMBERSHIP_APPLICATION_STATUS.APPROVED,
       userActivated: !!userId,
       message: userId
         ? 'Mitgliedschaft genehmigt und Konto aktiviert'

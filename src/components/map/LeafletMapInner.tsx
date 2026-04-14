@@ -12,6 +12,7 @@
 import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { MAP_MARKER_ICONS, MAP_TILES, MAP_DEFAULTS } from '@/config/map'
 
 // =============================================================================
 // TYPES
@@ -35,35 +36,12 @@ interface LeafletMapInnerProps {
 }
 
 // =============================================================================
-// CUSTOM ICONS
+// CUSTOM ICONS — derived from MAP_MARKER_ICONS config
 // =============================================================================
 
-const storeIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-  iconSize: [30, 49],
-  iconAnchor: [15, 49],
-  popupAnchor: [1, -40],
-  shadowSize: [49, 49],
-})
-
-const helperIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-  iconSize: [22, 36],
-  iconAnchor: [11, 36],
-  popupAnchor: [1, -30],
-  shadowSize: [36, 36],
-})
-
-const helperHighlightIcon = new L.Icon({
-  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-  iconSize: [30, 49],
-  iconAnchor: [15, 49],
-  popupAnchor: [1, -40],
-  shadowSize: [49, 49],
-})
+const storeIcon = new L.Icon(MAP_MARKER_ICONS.store)
+const helperIcon = new L.Icon(MAP_MARKER_ICONS.helper)
+const helperHighlightIcon = new L.Icon(MAP_MARKER_ICONS.helperHighlight)
 
 // =============================================================================
 // COMPONENT — uses vanilla Leaflet API to avoid react-leaflet StrictMode issues
@@ -81,8 +59,7 @@ export default function LeafletMapInner({
   const markersRef = useRef<L.Marker[]>([])
   const [ready, setReady] = useState(false)
 
-  // Default center: Switzerland
-  const mapCenter: [number, number] = center || [47.37, 8.54]
+  const mapCenter: [number, number] = center || MAP_DEFAULTS.center
 
   // Initialize map once
   useEffect(() => {
@@ -90,8 +67,8 @@ export default function LeafletMapInner({
 
     const map = L.map(containerRef.current).setView(mapCenter, zoom)
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    L.tileLayer(MAP_TILES.osm.url, {
+      attribution: MAP_TILES.osm.attribution,
     }).addTo(map)
 
     mapRef.current = map

@@ -1,10 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
 import { getAdminSections } from '@/config/sections'
 import { logger } from '@/lib/logger'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export const GET = withAdmin(async (_request: NextRequest, _session) => {
   try {
@@ -72,14 +74,9 @@ export const GET = withAdmin(async (_request: NextRequest, _session) => {
       logger.warn('search-index: listings query failed', { error: listingsResult.reason })
     }
 
-    return NextResponse.json({
-      sections,
-      recentUsers,
-      recentDecisions,
-      recentListings,
-    })
+    return apiSuccess({ sections, recentUsers, recentDecisions, recentListings })
   } catch (error) {
     logger.error('search-index GET failed', { error })
-    return NextResponse.json({ error: 'Server error' }, { status: 500 })
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })

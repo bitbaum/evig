@@ -29,9 +29,9 @@ const PAYREXX_WEBHOOK_SECRET = process.env.PAYREXX_WEBHOOK_SECRET;
  * In dev mock mode (no PAYREXX_INSTANCE), allow unsigned webhooks.
  */
 async function verifyPayrexxSignature(rawBody: string, signature: string | null): Promise<boolean> {
-  // Dev mock mode: allow unsigned webhooks when Payrexx is not configured
-  if (!process.env.PAYREXX_INSTANCE) {
-    logger.info('Payrexx webhook: mock mode — skipping signature verification');
+  // Dev mock mode: only skip in local development when Payrexx is explicitly not configured
+  if (process.env.NODE_ENV === 'development' && !process.env.PAYREXX_INSTANCE) {
+    logger.warn('Payrexx webhook: dev mode — skipping signature verification (no PAYREXX_INSTANCE set)');
     return true;
   }
 
