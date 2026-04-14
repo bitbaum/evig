@@ -2,7 +2,7 @@
 
 import {
   Check, RefreshCw, ExternalLink,
-  AlertCircle, ArrowDownUp, Clock,
+  AlertCircle, ArrowDownUp, Clock, CheckCheck,
 } from 'lucide-react'
 import {
   INTAKE_TIER_LABELS,
@@ -32,7 +32,8 @@ interface IntakeDetailViewProps {
   tierChanging: boolean
   onBack: () => void
   onRefresh: () => void
-  onToggleChecklist: (itemId: string, completed: boolean) => void
+  onToggleChecklist: (itemId: string, completed: boolean, notes?: string) => void
+  onMarkAllRequired: () => void
   onPublish: () => void
   onTierChange: () => void
 }
@@ -53,6 +54,7 @@ export function IntakeDetailView({
   onBack,
   onRefresh,
   onToggleChecklist,
+  onMarkAllRequired,
   onPublish,
   onTierChange,
 }: IntakeDetailViewProps) {
@@ -116,11 +118,24 @@ export function IntakeDetailView({
           <span className="text-sm font-medium">
             Fortschritt: {progress.requiredCompleted}/{progress.requiredTotal} Pflichtpunkte
           </span>
-          <span className={`text-sm font-bold ${
-            progress.percentage === 100 ? 'text-green-600' : 'text-gray-600'
-          }`}>
-            {progress.percentage}%
-          </span>
+          <div className="flex items-center gap-3">
+            {progress.percentage < 100 && (
+              <button
+                type="button"
+                onClick={onMarkAllRequired}
+                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-teal-600 hover:bg-teal-700 text-white transition-colors"
+                title="Alle Pflichtpunkte auf 'erledigt' setzen"
+              >
+                <CheckCheck className="w-3.5 h-3.5" />
+                Alles in Ordnung
+              </button>
+            )}
+            <span className={`text-sm font-bold ${
+              progress.percentage === 100 ? 'text-green-600' : 'text-gray-600'
+            }`}>
+              {progress.percentage}%
+            </span>
+          </div>
         </div>
         <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
           <div

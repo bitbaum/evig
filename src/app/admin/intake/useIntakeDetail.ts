@@ -45,16 +45,35 @@ export function useIntakeDetail() {
     setTierChangeReason('')
   }, [])
 
-  const toggleChecklist = useCallback(async (itemId: string, completed: boolean) => {
+  const toggleChecklist = useCallback(async (itemId: string, completed: boolean, notes?: string) => {
     if (!selectedId) return
+    const body: Record<string, unknown> = { item_id: itemId, completed }
+    if (notes !== undefined) body.notes = notes
     const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
       method: 'PATCH',
-      body: { item_id: itemId, completed },
+      body,
     })
     if (result.success) {
       fetchDetail(selectedId)
     }
   }, [selectedId, fetchDetail])
+
+  const markAllRequired = useCallback(async () => {
+    if (!selectedId || !detail) return
+    const uncompleted = detail.checklist_grouped
+      .flatMap(g => g.items)
+      .filter(i => i.required && !i.state.completed)
+    if (uncompleted.length === 0) return
+    await Promise.all(
+      uncompleted.map(item =>
+        apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
+          method: 'PATCH',
+          body: { item_id: item.id, completed: true },
+        })
+      )
+    )
+    fetchDetail(selectedId)
+  }, [selectedId, detail, fetchDetail])
 
   const handlePublish = useCallback(async () => {
     if (!selectedId) return
@@ -104,6 +123,7 @@ export function useIntakeDetail() {
     fetchDetail,
     clearDetail,
     toggleChecklist,
+    markAllRequired,
     handlePublish,
     handleTierChange,
   }
