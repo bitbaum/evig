@@ -5,7 +5,7 @@ import { serviceAppointments, serviceTypes, users, paymentTransactions } from '@
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { PAYMENT_STATUS } from '@/config/payment-status'
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import {
   processPaymentWithoutInvoice,
   centsToDisplay,
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         .where(and(
           eq(paymentTransactions.serviceAppointmentId, appointmentId),
           eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED),
-          eq(paymentTransactions.type, 'payment')
+          eq(paymentTransactions.type, PAYMENT_TRANSACTION_TYPE.PAYMENT)
         ))
 
       const totalPaid = paidRow?.total_paid ?? 0

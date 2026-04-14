@@ -8,7 +8,7 @@
 import { db } from '@/db'
 import { paymentProviders, paymentTransactions } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { PAYMENT_STATUS } from '@/config/payment-status'
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import type { SupportedCurrency } from '@/lib/payments/currency'
 import type { PaymentProvider } from './payments-fees'
@@ -99,7 +99,7 @@ export async function createTransaction(
       userId: params.userId,
       providerId: params.providerId,
       providerTransactionId: params.providerTransactionId || null,
-      type: 'payment',
+      type: PAYMENT_TRANSACTION_TYPE.PAYMENT,
       status: PAYMENT_STATUS.PENDING,
       amountCents: params.amountCents,
       currency: params.currency,

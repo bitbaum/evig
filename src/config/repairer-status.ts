@@ -37,6 +37,18 @@ export const REPAIRER_APPLICATION_STATUS = {
 export type RepairerApplicationStatus =
   (typeof REPAIRER_APPLICATION_STATUS)[keyof typeof REPAIRER_APPLICATION_STATUS]
 
+/**
+ * Availability slot types for repairer_availability table.
+ * CHECK (availability_type IN ('available', 'booked', 'blocked'))
+ */
+export const REPAIRER_AVAILABILITY_TYPE = {
+  AVAILABLE: 'available',
+  BOOKED: 'booked',
+  BLOCKED: 'blocked',
+} as const;
+
+export type RepairerAvailabilityType = typeof REPAIRER_AVAILABILITY_TYPE[keyof typeof REPAIRER_AVAILABILITY_TYPE];
+
 export const REPAIRER_APPLICATION_STATUS_LABELS: Record<RepairerApplicationStatus, string> = {
   pending: 'Ausstehend',
   approved: 'Genehmigt',

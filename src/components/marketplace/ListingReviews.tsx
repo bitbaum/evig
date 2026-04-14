@@ -7,6 +7,7 @@ import ReviewForm from './ReviewForm'
 import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 
 interface Review {
   id: string
@@ -37,7 +38,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
   const fetchReviews = useCallback(async () => {
     try {
-      const result = await apiFetch<{ reviews: Review[]; stats?: ReviewStats }>(`/api/reviews?targetType=listing&targetId=${listingId}`)
+      const result = await apiFetch<{ reviews: Review[]; stats?: ReviewStats }>(`/api/reviews?targetType=${REVIEW_TARGET_TYPES.LISTING}&targetId=${listingId}`)
       if (result.success && result.data) {
         const data = result.data
         setReviews(data.reviews || [])
@@ -156,7 +157,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
       {showForm && (
         <ReviewForm
-          targetType="listing"
+          targetType={REVIEW_TARGET_TYPES.LISTING}
           targetId={listingId}
           onSubmitted={handleReviewSubmitted}
           onCancel={() => setShowForm(false)}

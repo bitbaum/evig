@@ -9,7 +9,7 @@ import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { BOOKING_STATUS } from '@/config/booking-status'
-import { REPAIRER_STATUS } from '@/config/repairer-status'
+import { REPAIRER_STATUS, REPAIRER_AVAILABILITY_TYPE } from '@/config/repairer-status'
 import { APP_URL } from '@/config/urls'
 
 // POST /api/repairers/[id]/book - Book an appointment with a specific repairer
@@ -169,7 +169,7 @@ export const POST = withAuth<{ id: string }>(async (
         await tx
           .update(repairerAvailability)
           .set({
-            availabilityType: 'booked',
+            availabilityType: REPAIRER_AVAILABILITY_TYPE.BOOKED,
             bookingId: appointment.id,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
@@ -177,7 +177,7 @@ export const POST = withAuth<{ id: string }>(async (
             eq(repairerAvailability.repairerId, repairerId),
             eq(repairerAvailability.date, preferred_date),
             sql`${repairerAvailability.startTime} = ${preferred_time + ':00'}::time`,
-            eq(repairerAvailability.availabilityType, 'available')
+            eq(repairerAvailability.availabilityType, REPAIRER_AVAILABILITY_TYPE.AVAILABLE)
           ))
       }
 

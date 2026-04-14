@@ -14,6 +14,7 @@ import { db } from '@/db'
 import { listings, marketplaceOrders, reviews, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { ORDER_STATUS } from '@/config/marketplace'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { validateBody } from '@/lib/schemas'
 import { sendCustomEmail } from '@/lib/email'
@@ -86,7 +87,7 @@ export const POST = withAuth<{ id: string }>(async (
       .from(reviews)
       .where(and(
         eq(reviews.reviewerId, session.user.id),
-        eq(reviews.targetType, 'listing'),
+        eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING),
         eq(reviews.targetId, order.listingId),
         eq(reviews.bookingId, orderId),
       ))
@@ -105,7 +106,7 @@ export const POST = withAuth<{ id: string }>(async (
     // Insert review + update seller rating via shared service
     const { reviewId } = await createReview({
       reviewerId: session.user.id,
-      targetType: 'listing',
+      targetType: REVIEW_TARGET_TYPES.LISTING,
       targetId: order.listingId,
       bookingId: orderId,
       overallRating: rating,

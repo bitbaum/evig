@@ -16,6 +16,21 @@ export const PAYMENT_STATUS = {
 
 export type PaymentStatus = typeof PAYMENT_STATUS[keyof typeof PAYMENT_STATUS];
 
+/**
+ * Payment transaction types (payment_transactions.type column).
+ * CHECK (type IN ('payment', 'refund', 'chargeback', 'payout', 'fee', 'transfer'))
+ */
+export const PAYMENT_TRANSACTION_TYPE = {
+  PAYMENT: 'payment',
+  REFUND: 'refund',
+  CHARGEBACK: 'chargeback',
+  PAYOUT: 'payout',
+  FEE: 'fee',
+  TRANSFER: 'transfer',
+} as const;
+
+export type PaymentTransactionType = typeof PAYMENT_TRANSACTION_TYPE[keyof typeof PAYMENT_TRANSACTION_TYPE];
+
 export const ESCROW_STATUS = {
   ACTIVE: 'active',
   RELEASED: 'released',

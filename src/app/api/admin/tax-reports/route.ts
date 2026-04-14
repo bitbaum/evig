@@ -6,7 +6,7 @@ import { paymentTransactions, refunds, escrowAccounts, paymentDisputes } from '@
 import { users, userProfiles } from '@/db/schema/auth'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { generateTaxReport, TaxTransaction } from '@/lib/payments/tax-compliance'
-import { PAYMENT_STATUS } from '@/config/payment-status'
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 
 // Extended transaction type with joined data from query
@@ -66,7 +66,7 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
       WHERE pt.created_at >= ${startDate}
         AND pt.created_at <= ${endDate}
         AND pt.status = ${PAYMENT_STATUS.SUCCEEDED}
-        AND pt.type = 'payment'
+        AND pt.type = ${PAYMENT_TRANSACTION_TYPE.PAYMENT}
       ORDER BY pt.created_at DESC
     `)
 

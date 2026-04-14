@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import type { ITHilfeRequest, Offer } from './types'
 
 export function useITHilfeDetail(id: string) {
@@ -122,7 +123,7 @@ export function useITHilfeDetail(id: string) {
   useEffect(() => {
     if (!session?.user || !request || request.status !== REQUEST_STATUS.COMPLETED) return
 
-    apiFetch<{ reviews: Array<{ reviewerId: string }> }>(`/api/reviews?targetType=it_hilfe&targetId=${id}`)
+    apiFetch<{ reviews: Array<{ reviewerId: string }> }>(`/api/reviews?targetType=${REVIEW_TARGET_TYPES.IT_HILFE}&targetId=${id}`)
       .then(result => {
         if (result.success && result.data) {
           const userReview = result.data.reviews.find(

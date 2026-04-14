@@ -9,6 +9,7 @@ import { eq, and, sql, count, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_STATUS } from '@/config/review-status'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
@@ -73,14 +74,14 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .leftJoin(
         repairerProfiles,
         and(
-          sql`${reviews.targetType} = 'repairer'`,
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
           eq(reviews.targetId, repairerProfiles.id)
         )
       )
       .leftJoin(
         workshops,
         and(
-          sql`${reviews.targetType} = 'workshop'`,
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.WORKSHOP),
           eq(reviews.targetId, workshops.id)
         )
       )

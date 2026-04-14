@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Star, Loader2 } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { REVIEW_TARGET_TYPES } from '@/config/database'
 import Heading from '@/components/ui/Heading'
 
 interface ITHilfeReviewFormProps {
@@ -76,7 +77,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
       const { error: apiError } = await apiFetch('/api/reviews', {
         method: 'POST',
         body: {
-          targetType: 'it_hilfe',
+          targetType: REVIEW_TARGET_TYPES.IT_HILFE,
           targetId: requestId,
           overallRating,
           communicationRating: communicationRating || null,

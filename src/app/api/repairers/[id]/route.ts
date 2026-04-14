@@ -6,6 +6,7 @@ import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_AVAILABILITY_TYPE } from '@/config/repairer-status'
 
 // GET /api/repairers/[id] - Get detailed repairer profile
 export async function GET(
@@ -159,7 +160,7 @@ export async function GET(
         eq(repairerAvailability.repairerId, id),
         gte(repairerAvailability.date, sql`CURRENT_DATE`),
         lte(repairerAvailability.date, sql`CURRENT_DATE + INTERVAL '14 days'`),
-        eq(repairerAvailability.availabilityType, 'available')
+        eq(repairerAvailability.availabilityType, REPAIRER_AVAILABILITY_TYPE.AVAILABLE)
       ))
       .orderBy(repairerAvailability.date, repairerAvailability.startTime)
 

@@ -5,7 +5,7 @@ import { eq, and, gte, lte, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { REPAIRER_STATUS } from '@/config/repairer-status'
+import { REPAIRER_STATUS, REPAIRER_AVAILABILITY_TYPE } from '@/config/repairer-status'
 
 interface AvailabilityRow {
   id: string
@@ -72,7 +72,7 @@ export async function GET(
         eq(repairerAvailability.repairerId, id),
         gte(repairerAvailability.date, sql`${startDate}::date`),
         lte(repairerAvailability.date, sql`${endDate}::date`),
-        eq(repairerAvailability.availabilityType, 'available')
+        eq(repairerAvailability.availabilityType, REPAIRER_AVAILABILITY_TYPE.AVAILABLE)
       ))
       .orderBy(repairerAvailability.date, repairerAvailability.startTime)
 
@@ -88,7 +88,7 @@ export async function GET(
         eq(repairerAvailability.repairerId, id),
         gte(repairerAvailability.date, sql`${startDate}::date`),
         lte(repairerAvailability.date, sql`${endDate}::date`),
-        eq(repairerAvailability.availabilityType, 'booked')
+        eq(repairerAvailability.availabilityType, REPAIRER_AVAILABILITY_TYPE.BOOKED)
       ))
 
     // If no explicit slots defined, generate default slots from weekly schedule
@@ -200,7 +200,7 @@ function generateSlotsFromSchedule(
             start_time: startTime,
             end_time: endTime,
             duration_hours: String(slotDuration),
-            availability_type: 'available',
+            availability_type: REPAIRER_AVAILABILITY_TYPE.AVAILABLE,
             notes: null
           })
         }
