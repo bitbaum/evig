@@ -8,6 +8,7 @@ import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff
 import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { ORG } from '@/config/org'
 
 export function LoginForm() {
   const router = useRouter()
@@ -237,7 +238,7 @@ export function LoginForm() {
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-4 bg-white dark:bg-gray-800 text-gray-500">
-              Neu bei RevampIT?
+              Neu bei {ORG.name}?
             </span>
           </div>
         </div>

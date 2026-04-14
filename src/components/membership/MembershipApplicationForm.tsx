@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
-import { BANK, MEMBERSHIP } from '@/config/org'
+import { BANK, MEMBERSHIP, ORG } from '@/config/org'
 
 function CopyButton({ value, label }: { value: string; label: string }) {
   const [copied, setCopied] = useState(false)
@@ -85,7 +85,7 @@ export function MembershipApplicationForm() {
             Willkommen im Verein!
           </Heading>
           <p className="text-green-800">
-            Du bist jetzt Mitglied von Revamp-IT. Dein Stimmrecht bei Vereinsentscheiden ist ab sofort aktiv.
+            Du bist jetzt Mitglied von {ORG.name}. Dein Stimmrecht bei Vereinsentscheiden ist ab sofort aktiv.
           </p>
         </div>
 

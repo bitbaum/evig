@@ -15,8 +15,8 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-const SITE_TITLE = 'Revamp-IT — Alte Hardware. Neues Leben.'
-const SITE_DESCRIPTION = 'Revamp-IT ist ein Schweizer Non-Profit-Verein für nachhaltige Technologie: Aufarbeitung, Reparatur, Open-Source-Lösungen und Workshops. Gemeinsam reduzieren wir Elektroschrott und machen IT für alle zugänglich.'
+const SITE_TITLE = `${ORG.name} — Alte Hardware. Neues Leben.`
+const SITE_DESCRIPTION = `${ORG.name} ist ein Schweizer Non-Profit-Verein für nachhaltige Technologie: Aufarbeitung, Reparatur, Open-Source-Lösungen und Workshops. Gemeinsam reduzieren wir Elektroschrott und machen IT für alle zugänglich.`
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.vercel.app'),

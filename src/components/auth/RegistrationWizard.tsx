@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { useRegistration } from '@/hooks/useRegistration'
 import Heading from '@/components/ui/Heading'
+import { ORG } from '@/config/org'
 
 interface RegistrationState {
   name: string
@@ -158,7 +159,7 @@ export function RegistrationWizard() {
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
             <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Willkommen bei RevampIT!
+              Willkommen bei {ORG.name}!
             </Heading>
             <p className="text-gray-600 dark:text-gray-400">
               {state.emailVerified

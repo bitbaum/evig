@@ -5,6 +5,7 @@ import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { siteConfig } from '@/config/site'
+import { ORG } from '@/config/org'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
 
@@ -144,7 +145,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="mt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} RevampIT. Alle Rechte vorbehalten.</p>
+          <p>&copy; {new Date().getFullYear()} {ORG.name}. Alle Rechte vorbehalten.</p>
         </div>
       </div>
     </footer>
