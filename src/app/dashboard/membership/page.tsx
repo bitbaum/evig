@@ -8,6 +8,7 @@ import { BadgeCheck, CheckCircle, AlertCircle, ArrowRight, CreditCard, Calendar 
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { MEMBERSHIP, ORG } from '@/config/org'
+import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
 import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 
@@ -23,11 +24,6 @@ interface MemberRow {
   member_paid_until: string | null
 }
 
-const MEMBER_TYPE_LABELS: Record<string, string> = {
-  regular: 'Ordentliches Mitglied',
-  reduced: 'Ermässigtes Mitglied',
-  honorary: 'Ehrenmitglied',
-}
 
 async function getMembership(userId: string): Promise<MemberRow | null> {
   try {
@@ -83,7 +79,7 @@ export default async function MembershipPage() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
                     {membership?.member_type
-                      ? (MEMBER_TYPE_LABELS[membership.member_type] ?? 'Mitglied')
+                      ? (MEMBERSHIP_TYPE_LABELS[membership.member_type as keyof typeof MEMBERSHIP_TYPE_LABELS] ?? 'Mitglied')
                       : 'Mitglied'}
                   </Heading>
                   {paid ? (
