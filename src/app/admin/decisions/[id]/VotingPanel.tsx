@@ -1,19 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import {
-  CONSENT_RESPONSE_CONFIG,
-  SIMPLE_MAJORITY_RESPONSE_CONFIG,
-  CONSENT_RESPONSES,
-  SIMPLE_MAJORITY_RESPONSES,
-  SCORE_RANGE,
-  type VotingMethod,
-  type ConsentResponse,
-  type SimpleMajorityResponse,
-} from '@/config/decisions';
-import { formatDateNumeric } from '@/lib/date-formats';
+import { useState } from 'react';
+import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions';
 import Heading from '@/components/ui/Heading';
+import { DeadlineCountdown } from './voting/DeadlineCountdown';
+import { ConsentVote } from './voting/ConsentVote';
+import { ApprovalVote } from './voting/ApprovalVote';
+import { DotVote } from './voting/DotVote';
+import { ScoreVote } from './voting/ScoreVote';
+import { RankedChoiceVote } from './voting/RankedChoiceVote';
+import { SimpleMajorityVote } from './voting/SimpleMajorityVote';
 
 interface Option {
   id: string;
@@ -33,110 +29,6 @@ interface Props {
   status?: string;
 }
 
-function DeadlineCountdown({ deadline }: { deadline: string }) {
-  const [now, setNow] = useState(() => Date.now());
-
-  useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 60_000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const deadlineMs = new Date(deadline).getTime();
-  const diffMs = deadlineMs - now;
-
-  if (diffMs <= 0) {
-    return (
-      <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
-        Abstimmungsfrist abgelaufen
-      </div>
-    );
-  }
-
-  const hours = Math.floor(diffMs / (1000 * 60 * 60));
-  const days = Math.floor(hours / 24);
-  const remainingHours = hours % 24;
-
-  let colorClass = 'text-gray-600';
-  if (hours < 24) {
-    colorClass = 'text-red-600 font-medium';
-  } else if (hours < 72) {
-    colorClass = 'text-amber-600 font-medium';
-  }
-
-  const dateStr = formatDateNumeric(deadline);
-
-  return (
-    <div className={`rounded-md bg-gray-50 px-3 py-2 text-sm ${colorClass}`}>
-      <span>
-        Abstimmung endet in{' '}
-        {days > 0 ? `${days} Tagen, ${remainingHours} Stunden` : `${remainingHours} Stunden`}
-      </span>
-      <span className="ml-2 text-xs text-gray-500">(Frist: {dateStr})</span>
-    </div>
-  );
-}
-
-// Gallery card for visual multi-option voting (approval / score / dot)
-function OptionCard({
-  opt,
-  selected,
-  onClick,
-  children,
-}: {
-  opt: Option;
-  selected: boolean;
-  onClick?: () => void;
-  children?: React.ReactNode;
-}) {
-  return (
-    <div
-      onClick={onClick}
-      className={`group relative flex flex-col rounded-xl border-2 transition-all ${
-        onClick ? 'cursor-pointer' : ''
-      } ${
-        selected
-          ? 'border-blue-500 bg-blue-50 shadow-md'
-          : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
-      }`}
-    >
-      {/* Image */}
-      {opt.imageUrl ? (
-        <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-gray-100">
-          <Image
-            src={opt.imageUrl}
-            alt={opt.label}
-            fill
-            className="object-contain p-2"
-            unoptimized
-          />
-          {selected && (
-            <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-blue-500 text-white shadow">
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'}`}>
-          {opt.label.charAt(0).toUpperCase()}
-        </div>
-      )}
-
-      {/* Label + controls */}
-      <div className="p-3">
-        <p className={`truncate text-sm font-medium ${selected ? 'text-blue-700' : 'text-gray-800'}`}>
-          {opt.label}
-        </p>
-        {opt.description && (
-          <p className="mt-0.5 truncate text-xs text-gray-500">{opt.description}</p>
-        )}
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export default function VotingPanel({
   decisionId,
   votingMethod,
@@ -151,30 +43,43 @@ export default function VotingPanel({
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  // Consent state
+  // Per-method state
   const [consentResponse, setConsentResponse] = useState<ConsentResponse>('agree');
   const [rationale, setRationale] = useState('');
-
-  // Approval state
   const [approvedOptions, setApprovedOptions] = useState<Set<string>>(new Set());
-
-  // Dot state
   const maxDots = dotCount || 5;
   const [allocations, setAllocations] = useState<Record<string, number>>(
     Object.fromEntries(options.map((o) => [o.id, 0]))
   );
   const usedDots = Object.values(allocations).reduce((a, b) => a + b, 0);
-
-  // Score state
   const [scores, setScores] = useState<Record<string, number>>(
     Object.fromEntries(options.map((o) => [o.id, 0]))
   );
-
-  // Simple majority state
   const [majorityResponse, setMajorityResponse] = useState<SimpleMajorityResponse>('yes');
-
-  // Ranked choice state — ordered list of option IDs
   const [ranking, setRanking] = useState<string[]>(() => options.map((o) => o.id));
+
+  // Gallery mode: use card grid when options have images or list is long
+  const hasImages = options.some((o) => o.imageUrl);
+  const isGalleryMode = hasImages || (
+    options.length > 5 && (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot')
+  );
+
+  function toggleApproval(optId: string) {
+    setApprovedOptions((prev) => {
+      const next = new Set(prev);
+      if (next.has(optId)) next.delete(optId);
+      else next.add(optId);
+      return next;
+    });
+  }
+
+  function setAllocation(optId: string, value: number) {
+    setAllocations((prev) => ({ ...prev, [optId]: value }));
+  }
+
+  function setScore(optId: string, score: number) {
+    setScores((prev) => ({ ...prev, [optId]: score }));
+  }
 
   function moveRankingUp(index: number) {
     if (index === 0) return;
@@ -194,35 +99,18 @@ export default function VotingPanel({
     });
   }
 
-  // Detect gallery mode: any option has an image, or there are many options
-  const hasImages = options.some((o) => o.imageUrl);
-  const isGalleryMode = hasImages || (options.length > 5 && (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot'));
-
   async function handleSubmit() {
     setError('');
     setSubmitting(true);
 
     let voteData: unknown;
-
     switch (votingMethod) {
-      case 'consent':
-        voteData = { response: consentResponse, rationale: rationale || undefined };
-        break;
-      case 'approval':
-        voteData = { approved_options: Array.from(approvedOptions) };
-        break;
-      case 'dot':
-        voteData = { allocations };
-        break;
-      case 'score':
-        voteData = { scores };
-        break;
-      case 'simple_majority':
-        voteData = { response: majorityResponse };
-        break;
-      case 'ranked_choice':
-        voteData = { ranking };
-        break;
+      case 'consent':        voteData = { response: consentResponse, rationale: rationale || undefined }; break;
+      case 'approval':       voteData = { approved_options: Array.from(approvedOptions) }; break;
+      case 'dot':            voteData = { allocations }; break;
+      case 'score':          voteData = { scores }; break;
+      case 'simple_majority':voteData = { response: majorityResponse }; break;
+      case 'ranked_choice':  voteData = { ranking }; break;
     }
 
     try {
@@ -232,13 +120,11 @@ export default function VotingPanel({
         body: JSON.stringify(voteData),
       });
       const json = await res.json();
-
       if (!json.success) {
         setError(json.error || 'Fehler beim Abstimmen');
         setSubmitting(false);
         return;
       }
-
       setSuccess(true);
       onVoted();
     } catch {
@@ -279,328 +165,50 @@ export default function VotingPanel({
         <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</div>
       )}
 
-      {/* Consent Voting */}
       {votingMethod === 'consent' && (
-        <div className="space-y-3">
-          <div className="flex flex-wrap gap-2">
-            {CONSENT_RESPONSES.map((r) => {
-              const conf = CONSENT_RESPONSE_CONFIG[r];
-              return (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => setConsentResponse(r)}
-                  className={`rounded-md border-2 px-4 py-2 text-sm font-medium transition ${
-                    consentResponse === r
-                      ? `border-current ${conf.color}`
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300'
-                  }`}
-                >
-                  {conf.label}
-                </button>
-              );
-            })}
-          </div>
-          <textarea
-            value={rationale}
-            onChange={(e) => setRationale(e.target.value)}
-            placeholder={
-              consentResponse === 'block'
-                ? 'Begründung (erforderlich bei Blockierung)'
-                : 'Begründung (optional)'
-            }
-            rows={3}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          />
-        </div>
+        <ConsentVote
+          response={consentResponse}
+          rationale={rationale}
+          onResponseChange={setConsentResponse}
+          onRationaleChange={setRationale}
+        />
       )}
-
-      {/* Approval Voting — Gallery or List */}
       {votingMethod === 'approval' && (
-        <div className="space-y-3">
-          {isGalleryMode ? (
-            <>
-              <p className="text-sm text-gray-500">
-                Wähle alle Optionen, die du unterstützt ({approvedOptions.size} ausgewählt):
-              </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                {options.map((opt) => (
-                  <OptionCard
-                    key={opt.id}
-                    opt={opt}
-                    selected={approvedOptions.has(opt.id)}
-                    onClick={() => {
-                      const next = new Set(approvedOptions);
-                      if (next.has(opt.id)) next.delete(opt.id);
-                      else next.add(opt.id);
-                      setApprovedOptions(next);
-                    }}
-                  />
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <p className="text-sm text-gray-500">Wähle alle Optionen, die du unterstützt:</p>
-              {options.map((opt) => (
-                <label
-                  key={opt.id}
-                  className="flex items-center gap-3 rounded-md border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={approvedOptions.has(opt.id)}
-                    onChange={(e) => {
-                      const next = new Set(approvedOptions);
-                      if (e.target.checked) next.add(opt.id);
-                      else next.delete(opt.id);
-                      setApprovedOptions(next);
-                    }}
-                    className="rounded"
-                  />
-                  <div>
-                    <span className="font-medium text-gray-800">{opt.label}</span>
-                    {opt.description && (
-                      <span className="ml-2 text-sm text-gray-500">{opt.description}</span>
-                    )}
-                  </div>
-                </label>
-              ))}
-            </>
-          )}
-        </div>
+        <ApprovalVote
+          options={options}
+          approvedOptions={approvedOptions}
+          isGalleryMode={isGalleryMode}
+          onToggle={toggleApproval}
+        />
       )}
-
-      {/* Dot Voting — Gallery or List */}
       {votingMethod === 'dot' && (
-        <div className="space-y-3">
-          <p className="text-sm text-gray-500">
-            Verteile {maxDots} Punkte auf die Optionen ({maxDots - usedDots} verbleibend):
-          </p>
-          {isGalleryMode ? (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {options.map((opt) => (
-                <OptionCard key={opt.id} opt={opt} selected={(allocations[opt.id] || 0) > 0}>
-                  <div className="mt-2 flex items-center justify-center gap-2">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setAllocations({ ...allocations, [opt.id]: Math.max(0, (allocations[opt.id] || 0) - 1) });
-                      }}
-                      disabled={(allocations[opt.id] || 0) <= 0}
-                      className="h-7 w-7 rounded-full border bg-white text-sm font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                    >
-                      -
-                    </button>
-                    <span className="w-5 text-center text-sm font-bold text-blue-600">
-                      {allocations[opt.id] || 0}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setAllocations({ ...allocations, [opt.id]: (allocations[opt.id] || 0) + 1 });
-                      }}
-                      disabled={usedDots >= maxDots}
-                      className="h-7 w-7 rounded-full border bg-white text-sm font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                    >
-                      +
-                    </button>
-                  </div>
-                </OptionCard>
-              ))}
-            </div>
-          ) : (
-            options.map((opt) => (
-              <div
-                key={opt.id}
-                className="flex items-center gap-3 rounded-md border border-gray-200 p-3"
-              >
-                <div className="flex-1">
-                  <span className="font-medium text-gray-800">{opt.label}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setAllocations({ ...allocations, [opt.id]: Math.max(0, (allocations[opt.id] || 0) - 1) })
-                    }
-                    disabled={(allocations[opt.id] || 0) <= 0}
-                    className="h-8 w-8 rounded-md border text-lg font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                  >
-                    -
-                  </button>
-                  <span className="w-8 text-center text-lg font-bold">
-                    {allocations[opt.id] || 0}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setAllocations({ ...allocations, [opt.id]: (allocations[opt.id] || 0) + 1 })
-                    }
-                    disabled={usedDots >= maxDots}
-                    className="h-8 w-8 rounded-md border text-lg font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+        <DotVote
+          options={options}
+          allocations={allocations}
+          maxDots={maxDots}
+          usedDots={usedDots}
+          isGalleryMode={isGalleryMode}
+          onSet={setAllocation}
+        />
       )}
-
-      {/* Score Voting — Gallery or List */}
       {votingMethod === 'score' && (
-        <div className="space-y-3">
-          {isGalleryMode ? (
-            <>
-              <p className="text-sm text-gray-500">
-                Bewerte jede Option von {SCORE_RANGE.min} bis {SCORE_RANGE.max} Sternen:
-              </p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-                {options.map((opt) => (
-                  <OptionCard key={opt.id} opt={opt} selected={(scores[opt.id] || 0) > 3}>
-                    <div className="mt-2 flex justify-center gap-0.5">
-                      {Array.from({ length: SCORE_RANGE.max }, (_, i) => i + 1).map((n) => (
-                        <button
-                          key={n}
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setScores({ ...scores, [opt.id]: n });
-                          }}
-                          className={`text-lg transition ${
-                            (scores[opt.id] || 0) >= n ? 'text-amber-400' : 'text-gray-300 hover:text-amber-300'
-                          }`}
-                        >
-                          ★
-                        </button>
-                      ))}
-                    </div>
-                    {(scores[opt.id] || 0) > 0 && (
-                      <p className="mt-0.5 text-center text-xs text-gray-500">
-                        {scores[opt.id]}/{SCORE_RANGE.max}
-                      </p>
-                    )}
-                  </OptionCard>
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <p className="text-sm text-gray-500">
-                Bewerte jede Option von {SCORE_RANGE.min} bis {SCORE_RANGE.max}:
-              </p>
-              {options.map((opt) => (
-                <div
-                  key={opt.id}
-                  className="flex items-center gap-3 rounded-md border border-gray-200 p-3"
-                >
-                  <div className="flex-1">
-                    <span className="font-medium text-gray-800">{opt.label}</span>
-                  </div>
-                  <div className="flex gap-1">
-                    {Array.from(
-                      { length: SCORE_RANGE.max - SCORE_RANGE.min + 1 },
-                      (_, i) => SCORE_RANGE.min + i
-                    ).map((n) => (
-                      <button
-                        key={n}
-                        type="button"
-                        onClick={() => setScores({ ...scores, [opt.id]: n })}
-                        className={`h-9 w-9 rounded-md text-sm font-bold transition ${
-                          (scores[opt.id] || 0) >= n
-                            ? 'bg-amber-400 text-white'
-                            : 'border border-gray-300 text-gray-500 hover:border-amber-300'
-                        }`}
-                      >
-                        {n}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+        <ScoreVote
+          options={options}
+          scores={scores}
+          isGalleryMode={isGalleryMode}
+          onSet={setScore}
+        />
       )}
-
-      {/* Ranked Choice Voting */}
       {votingMethod === 'ranked_choice' && (
-        <div className="space-y-3">
-          <p className="text-sm text-gray-500">
-            Bringe die Kandidatinnen in deine bevorzugte Reihenfolge (1 = höchste Priorität):
-          </p>
-          <div className="space-y-2">
-            {ranking.map((optId, index) => {
-              const opt = options.find((o) => o.id === optId);
-              if (!opt) return null;
-              return (
-                <div
-                  key={optId}
-                  className="flex items-center gap-3 rounded-md border border-gray-200 bg-white px-3 py-2.5"
-                >
-                  <span className="w-6 text-center text-sm font-bold text-blue-600">
-                    {index + 1}.
-                  </span>
-                  <span className="flex-1 text-sm font-medium text-gray-800">{opt.label}</span>
-                  {opt.description && (
-                    <span className="hidden text-xs text-gray-400 sm:block">{opt.description}</span>
-                  )}
-                  <div className="flex gap-1">
-                    <button
-                      type="button"
-                      onClick={() => moveRankingUp(index)}
-                      disabled={index === 0}
-                      className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30"
-                      title="Höher"
-                    >
-                      ↑
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => moveRankingDown(index)}
-                      disabled={index === ranking.length - 1}
-                      className="flex h-7 w-7 items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-100 disabled:opacity-30"
-                      title="Tiefer"
-                    >
-                      ↓
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <p className="text-xs text-gray-400">
-            Punkte werden nach Borda-Methode berechnet: 1. Platz erhält die meisten Punkte.
-          </p>
-        </div>
+        <RankedChoiceVote
+          options={options}
+          ranking={ranking}
+          onMoveUp={moveRankingUp}
+          onMoveDown={moveRankingDown}
+        />
       )}
-
-      {/* Simple Majority */}
       {votingMethod === 'simple_majority' && (
-        <div className="flex gap-3">
-          {SIMPLE_MAJORITY_RESPONSES.map((r) => (
-            <button
-              key={r}
-              type="button"
-              onClick={() => setMajorityResponse(r)}
-              className={`flex-1 rounded-md border-2 px-4 py-3 text-sm font-medium transition ${
-                majorityResponse === r
-                  ? r === 'yes'
-                    ? 'border-green-500 bg-green-50 text-green-700'
-                    : r === 'no'
-                      ? 'border-red-500 bg-red-50 text-red-700'
-                      : 'border-gray-500 bg-gray-50 text-gray-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              {SIMPLE_MAJORITY_RESPONSE_CONFIG[r].label}
-            </button>
-          ))}
-        </div>
+        <SimpleMajorityVote response={majorityResponse} onChange={setMajorityResponse} />
       )}
 
       <button

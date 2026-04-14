@@ -132,6 +132,7 @@ for entry in "${PATTERNS[@]}"; do
     | grep -v '_mm' \
     | grep -v 'new Set(' \
     | grep -v "'#" \
+    | grep -v 'statutenaenderung' \
     || true)
 
   if [ -n "$matches" ]; then

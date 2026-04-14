@@ -13,6 +13,7 @@ import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { validateBody, VerifyListingSchema } from '@/lib/schemas'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 type RouteContext = { params?: { id: string } }
 
@@ -38,7 +39,7 @@ export const POST = withAdmin<{ id: string }>('marketplace', async (
     const [existing] = await db
       .select({ id: listings.id, status: listings.status })
       .from(listings)
-      .where(and(eq(listings.id, id), ne(listings.status, 'removed')))
+      .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)))
 
     if (!existing) return apiNotFound('Inserat')
 

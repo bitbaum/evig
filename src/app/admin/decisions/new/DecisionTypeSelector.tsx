@@ -1,0 +1,49 @@
+'use client';
+
+import { DECISION_TYPES, DECISION_TYPE_CONFIG, type DecisionType } from '@/config/decisions';
+
+interface Props {
+  selected: DecisionType;
+  onChange: (type: DecisionType) => void;
+}
+
+export function DecisionTypeSelector({ selected, onChange }: Props) {
+  return (
+    <div>
+      <span className="mb-2 block text-sm font-medium text-gray-700">Entscheidungstyp</span>
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {DECISION_TYPES.map((type) => {
+          const conf = DECISION_TYPE_CONFIG[type];
+          const isSelected = selected === type;
+          return (
+            <button
+              key={type}
+              type="button"
+              onClick={() => onChange(type)}
+              className={`rounded-lg border-2 p-3 text-left transition-all ${
+                isSelected
+                  ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200'
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
+                  isSelected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'
+                }`}>
+                  {conf.icon}
+                </span>
+                <span className="font-medium text-gray-900">{conf.label}</span>
+              </div>
+              <p className="mt-1.5 text-xs text-gray-500">{conf.description}</p>
+              {isSelected && (
+                <p className="mt-1.5 rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">
+                  {conf.mechanic}
+                </p>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

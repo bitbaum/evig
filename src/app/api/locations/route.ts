@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { withAuth } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { locations, users } from '@/db/schema'
 import { eq, and, ilike, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiBadRequest, apiUnauthorized, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { validateBody, CreateLocationSchema } from '@/lib/schemas'
@@ -11,13 +11,8 @@ import { sendCustomEmail, locationSubmissionConfirmation } from '@/lib/email'
 import { logger } from '@/lib/logger'
 
 // GET /api/locations - List locations with filtering
-export async function GET(request: NextRequest) {
+export const GET = withAuth(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
     const city = searchParams.get('city')
@@ -70,16 +65,11 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})
 
 // POST /api/locations - Create new location
-export async function POST(request: NextRequest) {
+export const POST = withAuth(async (request: NextRequest, session) => {
   try {
-    const session = await auth()
-    if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-    }
-
     const body = await request.json()
     const validation = validateBody(CreateLocationSchema, body)
     if (!validation.success) return validation.error
@@ -164,4 +154,4 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-}
+})

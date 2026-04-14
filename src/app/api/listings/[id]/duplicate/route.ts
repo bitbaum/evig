@@ -12,6 +12,7 @@ import { listings, listingSpecs } from '@/db/schema';
 import { eq, and, ne } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 type RouteContext = { params?: { id: string } };
 
@@ -42,7 +43,7 @@ export const POST = withAuth<{ id: string }>(async (
         conditionChecks: listings.conditionChecks,
       })
       .from(listings)
-      .where(and(eq(listings.id, id), ne(listings.status, 'removed')));
+      .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)));
 
     if (!listing) return apiNotFound('Inserat');
 
