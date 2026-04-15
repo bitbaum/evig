@@ -204,7 +204,7 @@ export default function DecisionFormClient() {
         <button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.initialStatusRef.current = 'draft'; }}
+          onClick={() => { form.setInitialStatus('draft'); }}
           className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
         >
           Als Entwurf speichern
@@ -212,7 +212,7 @@ export default function DecisionFormClient() {
         <button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.initialStatusRef.current = 'discussion'; }}
+          onClick={() => { form.setInitialStatus('discussion'); }}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
           Zur Diskussion freigeben
@@ -220,7 +220,7 @@ export default function DecisionFormClient() {
         <button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.initialStatusRef.current = 'voting'; }}
+          onClick={() => { form.setInitialStatus('voting'); }}
           className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
         >
           Direkt zur Abstimmung

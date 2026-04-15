@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { X, ChevronDown, ExternalLink, ArrowRight } from 'lucide-react'
 import { createPortal } from 'react-dom'
+import { useTranslations } from 'next-intl'
 import { NavigationItem } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { useSession } from 'next-auth/react'
@@ -29,6 +30,8 @@ export function MobileMenu({
 }: MobileMenuProps) {
   const router = useRouter()
   const { data: session } = useSession()
+  const t = useTranslations('nav')
+  const tAccessibility = useTranslations('accessibility')
   const menuPanelRef = useRef<HTMLDivElement>(null)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
@@ -84,14 +87,14 @@ export function MobileMenu({
   const actionItems = navigationItems.filter(item => item.highlight)
 
   return createPortal(
-    <div 
-      className="fixed inset-0 z-[100] lg:hidden" 
-      role="dialog" 
-      aria-modal="true" 
+    <div
+      className="fixed inset-0 z-[100] lg:hidden"
+      role="dialog"
+      aria-modal="true"
       aria-label="Mobile Navigation"
     >
       {/* Backdrop */}
-      <div 
+      <div
         className={cn(
           "fixed inset-0 bg-black/40 backdrop-blur-sm",
           "transition-opacity duration-300",
@@ -100,9 +103,9 @@ export function MobileMenu({
         onClick={onClose}
         aria-hidden="true"
       />
-      
+
       {/* Menu Panel */}
-      <div 
+      <div
         ref={menuPanelRef}
         tabIndex={-1}
         className={cn(
@@ -127,7 +130,7 @@ export function MobileMenu({
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
             )}
             onClick={onClose}
-            aria-label="Menü schliessen"
+            aria-label={tAccessibility('closeMenu')}
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -138,15 +141,15 @@ export function MobileMenu({
           <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl text-sm text-amber-700">
             <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse flex-shrink-0" />
             <span>
-              Experimentelle Site – 
-              <a 
-                href="https://revampit.org" 
-                target="_blank" 
+              {t('experimentalBanner')} –
+              <a
+                href="https://revampit.org"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-amber-800 hover:text-amber-900 underline ml-1"
                 onClick={onClose}
               >
-                zur aktuellen Site
+                {t('experimentalBannerLink')}
               </a>
             </span>
           </div>
@@ -155,123 +158,106 @@ export function MobileMenu({
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-6 py-6">
           <ul className="space-y-1">
-            {primaryItems.map((item) => (
-              <li key={item.name}>
-                {item.subItems ? (
-                  // Expandable menu item
-                  <div>
-                    <button
-                      type="button"
+            {primaryItems.map((item) => {
+              const itemLabel = item.nameKey ? t(item.nameKey as never) : item.name
+              return (
+                <li key={item.name}>
+                  {item.subItems ? (
+                    // Expandable menu item
+                    <div>
+                      <button
+                        type="button"
+                        className={cn(
+                          "flex w-full items-center justify-between py-3 px-4 -mx-4",
+                          "text-base font-medium text-gray-900",
+                          "rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                        )}
+                        onClick={() => handleDropdownToggle(item.name)}
+                        aria-expanded={openDropdown === item.name}
+                      >
+                        {itemLabel}
+                        <ChevronDown
+                          className={cn(
+                            "h-4 w-4 text-gray-500 transition-transform duration-200",
+                            openDropdown === item.name && "rotate-180 text-emerald-600"
+                          )}
+                        />
+                      </button>
+
+                      {/* Sub-items */}
+                      <div
+                        className={cn(
+                          "overflow-hidden transition-all duration-300",
+                          openDropdown === item.name
+                            ? "max-h-[1000px] opacity-100"
+                            : "max-h-0 opacity-0"
+                        )}
+                      >
+                        <ul className="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
+                          {item.subItems.filter(sub => !sub.isSection).map((subItem) => {
+                            const subLabel = subItem.nameKey ? t(subItem.nameKey as never) : subItem.name
+                            return (
+                              <li key={subItem.name}>
+                                {subItem.external ? (
+                                  <a
+                                    href={subItem.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={cn(
+                                      "group flex items-center gap-2 py-2.5",
+                                      "text-sm text-gray-600 hover:text-gray-900",
+                                      "transition-colors duration-200"
+                                    )}
+                                    onClick={onClose}
+                                  >
+                                    <span>{subLabel}</span>
+                                    {subItem.badge && (
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-emerald-50 text-emerald-700 rounded">
+                                        {subItem.badge}
+                                      </span>
+                                    )}
+                                    <ExternalLink className="w-3 h-3 text-gray-500" />
+                                  </a>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    className={cn(
+                                      "group flex items-center gap-2 py-2.5 w-full text-left",
+                                      "text-sm text-gray-600 hover:text-gray-900",
+                                      "transition-colors duration-200"
+                                    )}
+                                    onClick={() => handleNavigation(subItem.href)}
+                                  >
+                                    <span>{subLabel}</span>
+                                    {subItem.badge && (
+                                      <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-emerald-50 text-emerald-700 rounded">
+                                        {subItem.badge}
+                                      </span>
+                                    )}
+                                  </button>
+                                )}
+                              </li>
+                            )
+                          })}
+                        </ul>
+                      </div>
+                    </div>
+                  ) : item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className={cn(
-                        "flex w-full items-center justify-between py-3 px-4 -mx-4",
+                        "flex items-center gap-2 py-3 px-4 -mx-4",
                         "text-base font-medium text-gray-900",
                         "rounded-xl hover:bg-gray-50 transition-colors duration-200"
                       )}
-                      onClick={() => handleDropdownToggle(item.name)}
-                      aria-expanded={openDropdown === item.name}
+                      onClick={onClose}
                     >
-                      {item.name}
-                      <ChevronDown 
-                        className={cn(
-                          "h-4 w-4 text-gray-500 transition-transform duration-200",
-                          openDropdown === item.name && "rotate-180 text-emerald-600"
-                        )} 
-                      />
-                    </button>
-                    
-                    {/* Sub-items */}
-                    <div
-                      className={cn(
-                        "overflow-hidden transition-all duration-300",
-                        openDropdown === item.name 
-                          ? "max-h-[1000px] opacity-100" 
-                          : "max-h-0 opacity-0"
-                      )}
-                    >
-                      <ul className="mt-1 ml-4 space-y-1 border-l-2 border-gray-100 pl-4">
-                        {item.subItems.filter(sub => !sub.isSection).map((subItem) => (
-                          <li key={subItem.name}>
-                            {subItem.external ? (
-                              <a
-                                href={subItem.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={cn(
-                                  "group flex items-center gap-2 py-2.5",
-                                  "text-sm text-gray-600 hover:text-gray-900",
-                                  "transition-colors duration-200"
-                                )}
-                                onClick={onClose}
-                              >
-                                <span>{subItem.name}</span>
-                                {subItem.badge && (
-                                  <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-emerald-50 text-emerald-700 rounded">
-                                    {subItem.badge}
-                                  </span>
-                                )}
-                                <ExternalLink className="w-3 h-3 text-gray-500" />
-                              </a>
-                            ) : (
-                              <button
-                                type="button"
-                                className={cn(
-                                  "group flex items-center gap-2 py-2.5 w-full text-left",
-                                  "text-sm text-gray-600 hover:text-gray-900",
-                                  "transition-colors duration-200"
-                                )}
-                                onClick={() => handleNavigation(subItem.href)}
-                              >
-                                <span>{subItem.name}</span>
-                                {subItem.badge && (
-                                  <span className="px-1.5 py-0.5 text-[10px] font-semibold uppercase bg-emerald-50 text-emerald-700 rounded">
-                                    {subItem.badge}
-                                  </span>
-                                )}
-                              </button>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                ) : item.external ? (
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      "flex items-center gap-2 py-3 px-4 -mx-4",
-                      "text-base font-medium text-gray-900",
-                      "rounded-xl hover:bg-gray-50 transition-colors duration-200"
-                    )}
-                    onClick={onClose}
-                  >
-                    {item.name}
-                    <ExternalLink className="w-4 h-4 text-gray-500" />
-                  </a>
-                ) : (
-                  <button
-                    type="button"
-                    className={cn(
-                      "block w-full text-left py-3 px-4 -mx-4",
-                      "text-base font-medium text-gray-900",
-                      "rounded-xl hover:bg-gray-50 transition-colors duration-200"
-                    )}
-                    onClick={() => handleNavigation(item.href)}
-                  >
-                    {item.name}
-                  </button>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          {/* Action Items (Contact) */}
-          {actionItems.length > 0 && (
-            <div className="mt-6 pt-6 border-t border-gray-100">
-              <ul className="space-y-1">
-                {actionItems.map((item) => (
-                  <li key={item.name}>
+                      {itemLabel}
+                      <ExternalLink className="w-4 h-4 text-gray-500" />
+                    </a>
+                  ) : (
                     <button
                       type="button"
                       className={cn(
@@ -281,10 +267,36 @@ export function MobileMenu({
                       )}
                       onClick={() => handleNavigation(item.href)}
                     >
-                      {item.name}
+                      {itemLabel}
                     </button>
-                  </li>
-                ))}
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+
+          {/* Action Items (Contact) */}
+          {actionItems.length > 0 && (
+            <div className="mt-6 pt-6 border-t border-gray-100">
+              <ul className="space-y-1">
+                {actionItems.map((item) => {
+                  const actionLabel = item.nameKey ? t(item.nameKey as never) : item.name
+                  return (
+                    <li key={item.name}>
+                      <button
+                        type="button"
+                        className={cn(
+                          "block w-full text-left py-3 px-4 -mx-4",
+                          "text-base font-medium text-gray-900",
+                          "rounded-xl hover:bg-gray-50 transition-colors duration-200"
+                        )}
+                        onClick={() => handleNavigation(item.href)}
+                      >
+                        {actionLabel}
+                      </button>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           )}
@@ -306,10 +318,10 @@ export function MobileMenu({
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-900 truncate">
-                    {session.user.name || 'Benutzer'}
+                    {session.user.name || t('defaultUser')}
                   </p>
                   <p className="text-xs text-green-600 font-medium">
-                    Angemeldet
+                    {t('loggedIn')}
                   </p>
                 </div>
               </div>
@@ -325,7 +337,7 @@ export function MobileMenu({
                   "transition-colors duration-200"
                 )}
               >
-                Zum Dashboard
+                {t('toDashboard')}
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -341,7 +353,7 @@ export function MobileMenu({
                   "hover:bg-gray-50 hover:text-gray-900 transition-colors duration-200"
                 )}
               >
-                Anmelden
+                {t('login')}
               </Link>
               <Link
                 href="/auth/register"
@@ -353,7 +365,7 @@ export function MobileMenu({
                   "hover:bg-green-700 transition-colors duration-200"
                 )}
               >
-                Registrieren
+                {t('register')}
               </Link>
             </div>
           )}

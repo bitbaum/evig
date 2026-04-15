@@ -1,0 +1,57 @@
+{
+  "membership": {
+    "meta": {
+      "title": "Mitglied werden",
+      "description": "Werde Mitglied. Stimmrecht bei Vereinsentscheiden, Teil der offiziellen Trägerschaft.",
+      "ogTitle": "Mitglied werden",
+      "ogDescription": "Werde Mitglied — Stimmrecht, Mitverantwortung."
+    },
+    "hero": {
+      "title": "Mitglied werden",
+      "description": "Trage den Verein mit — rechtlich, finanziell und demokratisch. Formular ausfüllen, Beitrag überweisen, fertig."
+    },
+    "benefits": {
+      "votingTitle": "Stimmrecht bei Vereinsentscheiden",
+      "votingDescription": "Du wirst automatisch zu Abstimmungen eingeladen und entscheidest mit über die Richtung des Vereins.",
+      "officialTitle": "Offizielle Mitgliederliste",
+      "officialDescription": "Du bist rechtlich Teil der Trägerschaft des Vereins nach Schweizer Vereinsrecht (ZGB Art. 60 ff).",
+      "financialTitle": "Finanzielle Unterstützung",
+      "financialDescription": "Dein Jahresbeitrag hilft uns, den Verein nachhaltig zu finanzieren — unabhängig von externen Geldgebern."
+    },
+    "form": {
+      "title": "Jetzt beitreten",
+      "subtitle": "Sofortige Mitgliedschaft — kein Warten"
+    },
+    "alreadyMember": {
+      "title": "Du bist Mitglied",
+      "description": "Vielen Dank für deine Unterstützung.",
+      "memberSince": "Dabei seit {date}",
+      "dashboardButton": "Zum Dashboard"
+    },
+    "faq": {
+      "title": "Häufige Fragen",
+      "items": [
+        {
+          "question": "Was ist der Unterschied zwischen einem Nutzerkonto und einer Mitgliedschaft?",
+          "answer": "Ein Nutzerkonto brauchst du für Marktplatz, IT-Hilfe und Workshops — das ist kostenlos. Eine Vereinsmitgliedschaft gibt dir Stimmrecht und macht dich offiziell Teil der Trägerschaft. Die meisten Nutzer:innen werden nie Mitglied — das ist völlig in Ordnung."
+        },
+        {
+          "question": "Was bekomme ich konkret als Mitglied?",
+          "answer": "Stimmrecht bei Vereinsentscheiden und einen Platz auf der offiziellen Mitgliederliste. Wir versprechen keine exklusiven Vorteile — unsere Angebote sind für alle da. Du wirst Mitglied, weil du den Verein mittragen willst."
+        },
+        {
+          "question": "Wie funktioniert die Aufnahme?",
+          "answer": "Formular ausfüllen, Jahresbeitrag überweisen — fertig. Du bist sofort Mitglied. Kein Warten, keine Genehmigung."
+        },
+        {
+          "question": "Wie zahle ich den Jahresbeitrag?",
+          "answer": "Nach dem Beitritt siehst du die Bankverbindung direkt auf der Bestätigungsseite. Überweisung oder TWINT."
+        },
+        {
+          "question": "Kann ich jederzeit austreten?",
+          "answer": "Ja. Eine formlose E-Mail an den Vorstand genügt. Bereits bezahlte Jahresbeiträge werden nicht zurückerstattet."
+        }
+      ]
+    }
+  }
+}

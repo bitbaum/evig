@@ -1,0 +1,57 @@
+{
+  "membership": {
+    "meta": {
+      "title": "Devenir membre",
+      "description": "Devenez membre. Droit de vote lors des décisions de l'association, faites partie de la structure officielle.",
+      "ogTitle": "Devenir membre",
+      "ogDescription": "Devenez membre — droit de vote, co-responsabilité."
+    },
+    "hero": {
+      "title": "Devenir membre",
+      "description": "Soutenez l'association — légalement, financièrement et démocratiquement. Remplissez le formulaire, virez la cotisation, c'est fait."
+    },
+    "benefits": {
+      "votingTitle": "Droit de vote lors des décisions de l'association",
+      "votingDescription": "Vous serez automatiquement invité(e) à voter et pourrez influencer la direction de l'association.",
+      "officialTitle": "Liste officielle des membres",
+      "officialDescription": "Vous faites légalement partie de la structure de l'association selon le droit suisse des associations (CC art. 60 ss).",
+      "financialTitle": "Soutien financier",
+      "financialDescription": "Votre cotisation annuelle nous aide à financer durablement l'association, indépendamment des bailleurs de fonds externes."
+    },
+    "form": {
+      "title": "Rejoindre maintenant",
+      "subtitle": "Adhésion immédiate — sans attente"
+    },
+    "alreadyMember": {
+      "title": "Vous êtes membre",
+      "description": "Merci pour votre soutien.",
+      "memberSince": "Membre depuis {date}",
+      "dashboardButton": "Vers le tableau de bord"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "items": [
+        {
+          "question": "Quelle est la différence entre un compte utilisateur et une adhésion?",
+          "answer": "Un compte utilisateur est nécessaire pour le marché, l'aide informatique et les ateliers — c'est gratuit. Une adhésion à l'association vous donne le droit de vote et vous fait officiellement partie de la structure. La plupart des utilisateurs ne deviennent jamais membres — c'est tout à fait normal."
+        },
+        {
+          "question": "Qu'est-ce que j'obtiens concrètement en tant que membre?",
+          "answer": "Le droit de vote lors des décisions de l'association et une place sur la liste officielle des membres. Nous ne promettons pas d'avantages exclusifs — nos offres sont accessibles à tous. Vous devenez membre parce que vous souhaitez soutenir l'association."
+        },
+        {
+          "question": "Comment fonctionne l'adhésion?",
+          "answer": "Remplissez le formulaire, virez la cotisation annuelle — c'est fait. Vous êtes immédiatement membre. Pas d'attente, pas d'approbation."
+        },
+        {
+          "question": "Comment payer la cotisation annuelle?",
+          "answer": "Après votre adhésion, vous verrez les coordonnées bancaires directement sur la page de confirmation. Virement ou TWINT."
+        },
+        {
+          "question": "Puis-je me retirer à tout moment?",
+          "answer": "Oui. Un simple e-mail informel au comité suffit. Les cotisations annuelles déjà payées ne sont pas remboursées."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,281 @@
+{
+  "services": {
+    "meta": {
+      "title": "Dienstleistungen | IT-Services in Zürich",
+      "description": "Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling in Zürich."
+    },
+    "page": {
+      "schemaName": "Computer Reparatur & IT Services",
+      "schemaDescription": "Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling.",
+      "schemaCity": "Zürich",
+      "title": "Experten-IT-Dienstleistungen",
+      "subtitle": "Nachhaltige Lösungen für deine Technologiebedürfnisse. Wir kombinieren technische Expertise mit Umweltverantwortung, um umfassende IT-Lösungen zu bieten, die dir Geld sparen und Elektroschrott reduzieren.",
+      "servicesTitle": "Unsere Dienstleistungen",
+      "servicesDescription": "Die Reparaturdauer variiert je nach Teileverfügbarkeit und dauert in der Regel einige Wochen.",
+      "noResults": "Keine Dienstleistungen gefunden, die den ausgewählten Filtern entsprechen.",
+      "ctaTitle": "Bereit, deine Technologie zu erneuern?",
+      "ctaSubtitle": "Kontaktiere uns heute für eine kostenlose Beratung und entdecke, wie wir dir helfen können, das Beste aus deinen Geräten herauszuholen.",
+      "ctaContact": "Kontaktiere uns",
+      "ctaInventory": "Inventar durchsuchen",
+      "pricingTbd": "Auf Anfrage",
+      "details": "Details",
+      "bookAppointment": "Termin buchen",
+      "learnMore": "Mehr erfahren",
+      "appointmentRequested": "Termin angefragt!",
+      "booking": "Wird gebucht...",
+      "bookingFailed": "Terminbuchung fehlgeschlagen",
+      "networkError": "Netzwerkfehler. Bitte versuche es erneut."
+    },
+    "servicePage": {
+      "comingSoonBanner": "Dieser Service kommt bald. Kontaktiere uns, um dein Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist."
+    },
+    "webDesign": {
+      "meta": {
+        "title": "Webdesign & Entwicklung",
+        "description": "Professionelle Webdesign- und Entwicklungsdienstleistungen mit Open-Source-Technologien. Moderne, responsive Websites, die auf Nachhaltigkeit und Leistung ausgelegt sind."
+      },
+      "hero": {
+        "title": "Webdesign & Entwicklung",
+        "subtitle": "100% Engagement für Freiheit durch Open Source, Dezentralisierung, Datenschutz, Dateneigentum, Code-Eigentum und maximale Automatisierung. Wir schaffen digitale Erlebnisse, bei denen Anstrengung zur Wahl und nicht zur Notwendigkeit wird.",
+        "ctaStart": "Projekt starten",
+        "ctaDiscover": "Dienstleistungen entdecken"
+      },
+      "values": {
+        "title": "Unsere Grundwerte",
+        "subtitle": "Jede von uns erstellte Website dient einem ultimativen Ziel: <strong>deiner Freiheit</strong>. Jedes Prinzip arbeitet zusammen, um Anstrengung von Notwendigkeit in Wahl zu verwandeln.",
+        "openSource": {
+          "title": "Open Source",
+          "description": "Transparenter, überprüfbarer Code, den du vollständig einsehen, ändern und besitzen kannst. Keine proprietären Black Boxes oder Anbieterbindungen."
+        },
+        "decentralization": {
+          "title": "Dezentralisierung",
+          "description": "Befreie dich von Big-Tech-Plattformen. Hoste deine Website überall, bewahre deine Unabhängigkeit und vermeide einzelne Ausfallpunkte."
+        },
+        "privacyFirst": {
+          "title": "Datenschutz zuerst",
+          "description": "Minimales Tracking, sichere Authentifizierung und transparente Datenverarbeitung. Die Privatsphäre deiner Benutzer wird durch Design geschützt, nicht als nachträglicher Gedanke."
+        },
+        "ownYourData": {
+          "title": "Besitze deine Daten",
+          "description": "Deine Daten gehören dir, nicht den Tech-Giganten. Volle Kontrolle darüber, wo sie gespeichert werden, wie sie verwendet werden und wer darauf zugreift."
+        },
+        "ownYourCode": {
+          "title": "Besitze deinen Code",
+          "description": "Vollständiges Eigentum am Quellcode deiner Website. Ändern, erweitern oder migriere jederzeit ohne Einschränkungen oder Lizenzgebühren."
+        },
+        "maxAutomation": {
+          "title": "Maximale Automatisierung",
+          "description": "Nahtlose automatisierte Arbeitsabläufe, die den manuellen Aufwand minimieren und gleichzeitig alle unsere Grundprinzipien beibehalten. 100% Automatisierung ist unser Ziel."
+        },
+        "userExperience": {
+          "title": "Benutzererfahrung",
+          "description": "Intuitive Benutzeroberflächen, die von den Benutzern nur minimalen Aufwand erfordern und gleichzeitig maximale Funktionalität und Produktivität bieten."
+        },
+        "developerExperience": {
+          "title": "Entwicklererfahrung",
+          "description": "Sauberer, wartbarer Code mit ausgezeichneten Tools und Dokumentationen, die die Entwicklung und Wartung zu einem Vergnügen machen."
+        }
+      },
+      "philosophy": {
+        "title": "Unsere Freiheits-First-Philosophie",
+        "intro": "Wir glauben an <strong>100% Engagement für Freiheit</strong> durch maximale Automatisierung.",
+        "automation": "Wenn Automatisierung unerwünschten Aufwand minimiert, verwandelt sie Anstrengung von Notwendigkeit in Wahl — und Wahl ist Freiheit.",
+        "effortTitle": "Anstrengung als Wahl, nicht als Notwendigkeit",
+        "freedomPrinciple": {
+          "label": "Das Freiheitsprinzip",
+          "text": "<strong>100% Engagement für Freiheit</strong> bedeutet, dass jeder Aspekt deiner digitalen Präsenz deiner Autonomie dienen und sie nicht einschränken sollte."
+        },
+        "automationLiberation": {
+          "label": "Automatisierung als Befreiung",
+          "text": "Maximale Automatisierung eliminiert sich wiederholende, unerwünschte Aufgaben und gibt dir die Freiheit, dich auf das zu konzentrieren, was dir und deiner Mission wirklich wichtig ist."
+        },
+        "choiceNotCoercion": {
+          "label": "Wahl statt Zwang",
+          "text": "Wenn Systeme nahtlos ohne dein ständiges Eingreifen funktionieren, wird jeder Moment, den du aufwendest, beabsichtigt — eine Wahl, keine Notwendigkeit."
+        },
+        "quote": "Wahre Freiheit ist nicht nur die Fähigkeit zu wählen — es sind Systeme, die dein Recht auf Wahl bewahren, indem sie erzwungenen Aufwand beseitigen.",
+        "ratingTitle": "Unser Freiheits-Bewertungssystem",
+        "ratingIntro": "Jede von uns erstellte Website und Web-App erhält eine umfassende Freiheitsbewertung, die darauf basiert, wie gut sie deine Autonomie unterstützt:",
+        "commitment": {
+          "label": "Unser Engagement",
+          "text": "Wir streben nach maximalen Punktzahlen in allen Freiheitsdimensionen. Jeder Kompromiss wird transparent besprochen, wobei Alternativen immer geprüft werden."
+        },
+        "ratings": {
+          "openSource": { "label": "Open-Source-Freiheit", "desc": "Vollständige Code-Transparenz & Eigentum" },
+          "decentralization": { "label": "Dezentralisierungsfreiheit", "desc": "Unabhängigkeit von Plattformkontrolle" },
+          "privacy": { "label": "Datenschutzfreiheit", "desc": "Datensouveränität & Schutz" },
+          "dataOwnership": { "label": "Dateneigentumsfreiheit", "desc": "Vollständige Kontrolle über deine Informationen" },
+          "codeOwnership": { "label": "Code-Eigentumsfreiheit", "desc": "Uneingeschränkte Änderungsrechte" },
+          "automation": { "label": "Automatisierungsfreiheit", "desc": "Anstrengung in Wahl verwandelt" },
+          "ux": { "label": "Benutzererfahrungsfreiheit", "desc": "Intuitive, mühelose Interaktion" },
+          "dx": { "label": "Entwicklerfreiheit", "desc": "Wartbare, erweiterbare Systeme" }
+        }
+      },
+      "servicesSection": {
+        "title": "Unsere Webentwicklungsdienste",
+        "subtitle": "Umfassende Weblösungen, die mit Open-Source-Technologien und nachhaltigen Praktiken erstellt werden.",
+        "pricing": "Professionelle Webentwicklung ab CHF 70/Stunde",
+        "consultationTitle": "Kostenlose Erstberatung",
+        "consultationText": "Wir beginnen jedes Projekt mit einer umfassenden Beratung, um deine Bedürfnisse, Ziele und technischen Anforderungen zu verstehen. Dies hilft uns, genaue Schätzungen zu liefern und sicherzustellen, dass wir die richtige Lösung für dein Projekt sind.",
+        "items": {
+          "customDev": {
+            "title": "Benutzerdefinierte Webentwicklung",
+            "description": "Massgeschneiderte Webanwendungen, die mit modernen Open-Source-Technologien erstellt werden, um deine spezifischen Geschäftsanforderungen zu erfüllen.",
+            "features": ["Benutzerdefinierte Webanwendungen", "E-Commerce-Lösungen", "API-Entwicklung", "Datenbankdesign", "Leistungsoptimierung"]
+          },
+          "responsiveDesign": {
+            "title": "Responsives Webdesign",
+            "description": "Schöne, benutzerfreundliche Designs, die auf allen Geräten und Bildschirmgrössen perfekt funktionieren.",
+            "features": ["Mobile-First-Design", "User Experience (UX) Design", "User Interface (UI) Design", "Integration der Markenidentität", "Barrierefreiheitskonformität"]
+          },
+          "cmsDev": {
+            "title": "CMS-Entwicklung",
+            "description": "Moderne Content-Management-Systeme, die dir die volle Kontrolle über deine Website-Inhalte mit entwicklerfreundlichen APIs geben.",
+            "features": ["Headless-CMS-Lösungen (Strapi, Payload, Tina)", "WordPress-Entwicklung (Legacy-Support)", "Benutzerdefinierte CMS-Lösungen", "Inhaltsmigration", "Schulung und Support"]
+          },
+          "maintenance": {
+            "title": "Website-Wartung",
+            "description": "Laufender Support und Wartung, um deine Website sicher, aktuell und optimal leistungsfähig zu halten.",
+            "features": ["Sicherheitsupdates", "Leistungsüberwachung", "Inhaltsaktualisierungen", "Backup-Management", "Technischer Support"]
+          }
+        }
+      },
+      "whyOpenSource": {
+        "title": "Warum diese Werte wichtig sind",
+        "subtitle": "In einer Ära zunehmender digitaler Überwachung und Plattformmonopole sind diese Prinzipien nicht nur «nice-to-haves» — sie sind für die digitale Freiheit und Unabhängigkeit unerlässlich.",
+        "items": {
+          "ownCode": {
+            "title": "Du besitzt deinen Code",
+            "description": "Das vollständige Eigentum am Quellcode deiner Website bedeutet keine Anbieterbindung, keine Lizenzbeschränkungen und völlige Freiheit, deine Website jederzeit zu ändern, zu erweitern oder zu migrieren."
+          },
+          "ownData": {
+            "title": "Du besitzt deine Daten",
+            "description": "Deine Daten gehören dir, nicht den Tech-Giganten. Wir entwickeln Lösungen, die deine Informationen unter deiner Kontrolle halten, mit Optionen für Self-Hosting und Datenportabilität."
+          },
+          "privacyByDesign": {
+            "title": "Datenschutz durch Design",
+            "description": "Wir priorisieren den Datenschutz von Grund auf und implementieren minimales Tracking, sichere Authentifizierung und transparente Datenverarbeitungspraktiken, die die Privatsphäre deiner Benutzer respektieren."
+          },
+          "decentralized": {
+            "title": "Dezentrale Architektur",
+            "description": "Löse dich von zentralisierten Plattformen, die deine Online-Präsenz kontrollieren. Wir entwickeln Lösungen, die überall gehostet werden können und dir Unabhängigkeit von Big Tech geben."
+          },
+          "openSourceBase": {
+            "title": "Open-Source-Grundlage",
+            "description": "Aufgebaut auf Open-Source-Technologien, die transparent, überprüfbar und von globalen Gemeinschaften unterstützt werden. Kein versteckter Code, keine proprietären Lock-ins."
+          },
+          "futureProof": {
+            "title": "Zukunftssicher & Nachhaltig",
+            "description": "Open-Source-Technologien entwickeln sich mit der Community weiter und verschwinden nicht, wenn ein Unternehmen scheitert. Deine Investition ist langfristig geschützt."
+          }
+        }
+      },
+      "technologies": {
+        "title": "Technologien, die wir verwenden",
+        "subtitle": "Wir arbeiten mit bewährten Open-Source-Technologien, die Zuverlässigkeit, Leistung und langfristige Nachhaltigkeit bieten.",
+        "filterLabel": "Nach Kategorie filtern:",
+        "allCategories": "Alle",
+        "visitWebsite": "Website besuchen",
+        "showing": "Zeige {count} von {total} Technologien",
+        "showingFiltered": "Zeige {count} von {total} Technologien in \"{category}\"",
+        "items": {
+          "nextjs": {
+            "description": "Modernes React-Framework zum Erstellen schneller, skalierbarer Webanwendungen mit hervorragender Entwicklererfahrung und integrierter Optimierung.",
+            "benefits": ["Serverseitiges Rendering", "Hervorragende Leistung", "Grossartiges SEO", "Aktive Community"]
+          },
+          "tailwind": {
+            "description": "Utility-First-CSS-Framework zum schnellen Erstellen moderner, responsiver Benutzeroberflächen mit konsistentem Design.",
+            "benefits": ["Schnelle Entwicklung", "Konsistentes Design", "Standardmässig responsiv", "Sehr anpassbar"]
+          },
+          "supabase": {
+            "description": "Open-Source-Firebase-Alternative, die sofortige APIs, Echtzeit-Abonnements, Authentifizierung und Edge-Funktionen bietet.",
+            "benefits": ["Sofortige APIs", "Echtzeit-Updates", "Integrierte Authentifizierung", "Edge-Funktionen"]
+          },
+          "strapi": {
+            "description": "Führendes Open-Source-Headless-CMS, das Entwicklern die Freiheit gibt, ihre bevorzugten Tools und Frameworks zu wählen.",
+            "benefits": ["API-First-Ansatz", "Flexible Inhaltstypen", "Entwicklerfreundlich", "Selbst gehostet"]
+          },
+          "payload": {
+            "description": "TypeScript-First-Headless-CMS und Anwendungsframework, das mit Node.js, React und MongoDB erstellt wurde.",
+            "benefits": ["TypeScript nativ", "Admin-UI enthalten", "Sehr erweiterbar", "Fokus auf Entwicklererfahrung"]
+          },
+          "tina": {
+            "description": "Git-basiertes Headless-CMS, das die Bearbeitung von Inhalten direkt auf deiner Website mit visueller Echtzeitbearbeitung ermöglicht.",
+            "benefits": ["Visuelle Bearbeitung", "Git-basierter Workflow", "Echtzeit-Vorschau", "Entwicklerfreundlich"]
+          },
+          "wordpress": {
+            "description": "Ausgereiftes Content-Management-System, das für bestimmte Anwendungsfälle immer noch beliebt ist. Wir können mit bestehenden WordPress-Websites arbeiten.",
+            "benefits": ["Grosses Ökosystem", "Einfache Inhaltsverwaltung", "Umfangreiche Plugins", "Vielen Benutzern vertraut"]
+          },
+          "joomla": {
+            "description": "Flexibles Content-Management-System mit robuster Benutzerverwaltung und mehrsprachigen Funktionen. Ideal für komplexe Websites.",
+            "benefits": ["Benutzerverwaltung", "Mehrsprachige Unterstützung", "Flexible Vorlagen", "Starke Community"]
+          },
+          "woocommerce": {
+            "description": "Weit verbreitete, quelloffene E-Commerce-Plattform auf WordPress-Basis. Flexible Erweiterungen und grosse Community.",
+            "benefits": ["Grosse Community", "Viele Erweiterungen", "Einfache Verwaltung", "WordPress-Integration"]
+          },
+          "shopware": {
+            "description": "Moderne, API-First-E-Commerce-Plattform mit leistungsstarken Anpassungsmöglichkeiten. Open-Source-Kern mit kommerziellen Erweiterungen.",
+            "benefits": ["API-First-Design", "Flexible Architektur", "Umfangreiche Admin-Oberfläche", "Deutsche Ingenieurskunst"]
+          },
+          "hosting": {
+            "name": "Bereitstellung & Hosting",
+            "description": "Flexible Hosting-Optionen von Open-Source-Lösungen auf Linux-Servern bis hin zu modernen Plattformen wie Vercel und Netlify.",
+            "benefits": ["Mehrere Hosting-Optionen", "Globales CDN", "Automatische Skalierung", "Git-basierter Workflow"]
+          }
+        }
+      },
+      "benefits": {
+        "title": "Warum unsere Webentwicklungsdienste wählen?",
+        "subtitle": "Wir kombinieren technisches Fachwissen mit nachhaltigen Praktiken, um Websites zu liefern, die hervorragend funktionieren und gleichzeitig deine Werte unterstützen.",
+        "items": {
+          "automationFirst": {
+            "title": "Automatisierungs-First-Design",
+            "description": "Wir priorisieren automatisierte Arbeitsabläufe, die den manuellen Verwaltungsaufwand minimieren und gleichzeitig alle unsere Grundprinzipien beibehalten. Maximale Effizienz ohne Kompromisse."
+          },
+          "openSourceBase": {
+            "title": "Open-Source-Grundlage",
+            "description": "Aufgebaut auf transparenten, überprüfbaren Technologien, die dir vollständige Kontrolle und Freiheit geben. Keine Anbieterbindung, keine proprietären Black Boxes."
+          },
+          "seamlessUX": {
+            "title": "Nahtlose Benutzererfahrung",
+            "description": "Intuitive Benutzeroberflächen, die von den Benutzern nur minimalen Aufwand erfordern und gleichzeitig maximale Funktionalität bieten. Jede Interaktion ist auf Einfachheit und Effektivität ausgelegt."
+          },
+          "devFriendly": {
+            "title": "Entwicklerfreundliche Architektur",
+            "description": "Sauberer, wartbarer Code mit ausgezeichneter Dokumentation und Tools. Gebaut für langfristige Nachhaltigkeit und einfache Wartung."
+          }
+        }
+      },
+      "process": {
+        "title": "Unser Entwicklungsprozess",
+        "subtitle": "Wir verfolgen einen kollaborativen, transparenten Prozess, der sicherstellt, dass dein Projekt deinen Bedürfnissen entspricht und deine Erwartungen übertrifft.",
+        "steps": {
+          "discovery": {
+            "title": "Entdeckung",
+            "description": "Wir beginnen mit einer umfassenden Beratung, um deine Ziele, Anforderungen und Zielgruppe zu verstehen."
+          },
+          "planning": {
+            "title": "Planung",
+            "description": "Wir erstellen einen detaillierten Projektplan, einschliesslich Zeitplan, Technologie-Stack und Designansatz."
+          },
+          "development": {
+            "title": "Entwicklung",
+            "description": "Wir erstellen deine Website nach agiler Methodik mit regelmässigen Updates und Feedback-Sitzungen."
+          },
+          "launch": {
+            "title": "Start & Support",
+            "description": "Wir starten deine Website und bieten laufenden Support, Wartung und Optimierung."
+          }
+        }
+      },
+      "cta": {
+        "title": "Bereit, deine Website zu erstellen?",
+        "subtitle": "Lass uns eine Website erstellen, die deine Werte widerspiegelt und deine Ziele erreicht. Kontaktiere uns noch heute für eine kostenlose Beratung.",
+        "startProject": "Projekt starten",
+        "allServices": "Alle Dienstleistungen entdecken"
+      }
+    }
+  }
+}

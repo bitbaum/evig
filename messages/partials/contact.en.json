@@ -1,0 +1,43 @@
+{
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Contact us for Linux support, workshops and open source solutions."
+    },
+    "hero": {
+      "title": "Contact",
+      "subtitle": "Do you have questions about our services, workshops or Linux solutions? We're happy to help!"
+    },
+    "info": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "openingHours": "Opening hours"
+    },
+    "map": {
+      "title": "Find us",
+      "openGoogleMaps": "Open in Google Maps",
+      "openOSM": "Open in OpenStreetMap",
+      "warehouseNote": "We also have a warehouse at {address} {note}",
+      "warehouseGoogleMaps": "Warehouse in Google Maps",
+      "warehouseOSM": "Warehouse in OpenStreetMap",
+      "mapChoiceTitle": "Why two map options?",
+      "mapChoiceDescription": "OpenStreetMap is community-driven and privacy-friendly. Google/Apple Maps often offer better navigation, live traffic and POIs. Choose what works best for you – transparency and freedom of choice matter to us."
+    },
+    "form": {
+      "title": "Send us a message",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is it about?",
+      "message": "Message",
+      "messagePlaceholder": "Your message...",
+      "submit": "Send message",
+      "submitting": "Sending…",
+      "successMessage": "Thank you! Your message has been sent.",
+      "errorFallback": "Error sending. Please try again later."
+    }
+  }
+}

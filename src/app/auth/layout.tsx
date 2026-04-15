@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import AppShell from '@/components/layout/AppShell'
 
 export const metadata: Metadata = {
   title: {
@@ -18,5 +19,5 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return <AppShell>{children}</AppShell>
 }

@@ -9,6 +9,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { getAccessibleSections, isSuperAdmin, type AdminSection } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
+import AppShell from '@/components/layout/AppShell'
 
 export default async function AdminLayout({
   children,
@@ -41,16 +42,18 @@ export default async function AdminLayout({
   }
 
   return (
-    <AdminLayoutClient
-      user={{
-        name: session.user.name ?? null,
-        email: session.user.email,
-        isStaff: session.user.isStaff,
-        staffPermissions: session.user.staffPermissions,
-      }}
-      accessibleSections={accessibleSections}
-    >
-      {children}
-    </AdminLayoutClient>
+    <AppShell>
+      <AdminLayoutClient
+        user={{
+          name: session.user.name ?? null,
+          email: session.user.email,
+          isStaff: session.user.isStaff,
+          staffPermissions: session.user.staffPermissions,
+        }}
+        accessibleSections={accessibleSections}
+      >
+        {children}
+      </AdminLayoutClient>
+    </AppShell>
   )
 }

@@ -1,0 +1,126 @@
+{
+  "shop": {
+    "meta": {
+      "title": "Boutique — Matériel reconditionné",
+      "description": "Ordinateurs reconditionnés et vérifiés à des prix équitables. Avec garantie."
+    },
+    "title": "Notre boutique",
+    "subtitle": "Matériel reconditionné vérifié",
+    "filters": {
+      "all": "Tous",
+      "laptops": "Ordinateurs portables",
+      "desktops": "Ordinateurs de bureau",
+      "accessories": "Accessoires"
+    },
+    "product": {
+      "addToCart": "Ajouter au panier",
+      "outOfStock": "Épuisé",
+      "condition": "État",
+      "warranty": "Garantie",
+      "months": "{count} mois"
+    },
+    "empty": "Aucun produit trouvé",
+    "verifiedBadge": "Vérifié",
+
+    "page": {
+      "heroTitle": "Comment souhaitez-vous acheter ?",
+      "heroSubtitle": "Choisissez le canal qui vous convient le mieux : notre boutique en ligne, le canal Shopware ou notre magasin à Zurich.",
+      "metaDescription": "Choisissez comment faire vos achats chez {orgName} – boutique en ligne, canal Shopware ou magasin à Zurich.",
+
+      "store": {
+        "title": "Magasin (Zurich)",
+        "tagline": "Conseil, découverte des appareils, emporter directement",
+        "accessInfo": "Facilement accessible en transports publics. Places de parc à proximité.",
+        "openingHours": "Horaires d'ouverture",
+        "openingHoursMonday": "Lundi : {hours}",
+        "openingHoursTueFri": "Mardi – Vendredi : {hours}",
+        "openGoogleMaps": "Ouvrir dans Google Maps",
+        "openOsm": "Ouvrir dans OpenStreetMap",
+        "contact": "Contact",
+        "mapsInfoTitle": "Pourquoi deux options de carte ?",
+        "mapsInfoBody": "OpenStreetMap est communautaire et respectueux de la vie privée. Google/Apple Maps offrent souvent une meilleure navigation, le trafic en direct et des points d'intérêt. Choisissez ce qui vous convient le mieux – la transparence et la liberté de choix nous tiennent à cœur."
+      },
+
+      "online": {
+        "title": "Boutiques en ligne",
+        "tagline": "Choisissez entre notre boutique en ligne et le canal Shopware.",
+        "benefit1": "Qualité vérifiée et garantie sur tous les canaux",
+        "benefit2": "Prix équitables, choix durable",
+        "benefit3": "Paiement sécurisé",
+        "currentShop": "Boutique en ligne actuelle",
+        "shopwareShop": "Accéder à la boutique Shopware",
+        "onlineShop": "Boutique en ligne {orgName}",
+        "multiShopTitle": "Plusieurs canaux de vente ?",
+        "multiShopBody": "Notre boutique en ligne {orgName} vous offre le meilleur choix de matériel informatique reconditionné. Vous trouverez également notre catalogue sur Shopware et dans le système historique."
+      }
+    },
+
+    "search": {
+      "metaTitleWithQuery": "Recherche : \"{query}\" | Boutique {orgName}",
+      "metaDescWithQuery": "Résultats pour \"{query}\" – appareils informatiques reconditionnés chez {orgName}.",
+      "metaTitle": "Recherche | Boutique {orgName}",
+      "metaDesc": "Parcourez notre sélection d'appareils informatiques reconditionnés.",
+      "heroTitleWithQuery": "Résultats pour \"{query}\"",
+      "heroTitle": "Rechercher dans la boutique",
+      "placeholder": "Que recherchez-vous ? ex. laptop, écran, clavier...",
+      "submitButton": "Rechercher",
+      "breadcrumbHome": "Accueil",
+      "breadcrumbShop": "Boutique",
+      "breadcrumbSearchWithQuery": "Recherche : \"{query}\"",
+      "breadcrumbSearch": "Recherche",
+      "resultsTitle": "Recherche de \"{query}\"",
+      "resultsComingSoon": "La recherche de produits est en cours de configuration. Vous pourrez bientôt rechercher des appareils informatiques reconditionnés ici.",
+      "goToShop": "Accéder à la boutique en ligne",
+      "allShopOptions": "Toutes les options de boutique",
+      "popularSearches": "Recherches populaires",
+      "browseByCategory": "Parcourir par catégorie",
+      "productCount": "{count} produits",
+      "allCategories": "Afficher toutes les catégories →"
+    },
+
+    "category": {
+      "notFoundMeta": "Catégorie introuvable | Boutique {orgName}",
+      "metaTitle": "{categoryName} | Boutique {orgName}",
+      "metaTitleWithParent": "{categoryName} – {parentName} | Boutique {orgName}",
+      "metaDesc": "Découvrez notre sélection de {categoryNameLower} – appareils informatiques reconditionnés chez {orgName}.",
+      "heroSubtitle": "Découvrez notre sélection de {categoryNameLower} reconditionnés – qualité vérifiée à des prix équitables.",
+      "productCount": "{count} produits dans cette catégorie",
+      "subcategories": "Sous-catégories",
+      "categoryProductCount": "{count} produits",
+      "productsLoading": "Chargement des produits",
+      "productsComingSoon": "Vous trouverez bientôt ici des appareils reconditionnés dans la catégorie {categoryName} sur notre marketplace.",
+      "goToShop": "Accéder à la boutique en ligne",
+      "allShopOptions": "Toutes les options de boutique",
+      "relatedIn": "Autres dans {parentName}",
+      "breadcrumbHome": "Accueil"
+    },
+
+    "loading": {
+      "text": "Chargement de la boutique..."
+    },
+
+    "error": {
+      "title": "Une erreur s'est produite",
+      "body": "Une erreur est survenue lors du chargement de la boutique.",
+      "retry": "Réessayer",
+      "backToShop": "Retour à la boutique"
+    },
+
+    "header": {
+      "skipToContent": "Aller au contenu principal",
+      "skipToFooter": "Aller au pied de page",
+      "skipLinks": "Liens de navigation rapide",
+      "openMenu": "Ouvrir le menu",
+      "categories": "Catégories",
+      "searchPlaceholder": "Que recherchez-vous ?",
+      "searchLabel": "Recherche",
+      "closeSearch": "Fermer la recherche",
+      "compareLabel": "Comparer ({count} articles)",
+      "wishlistLabel": "Liste de souhaits ({count} articles)",
+      "cartLabel": "Panier",
+      "backToShop": "Retour à la boutique",
+      "shopOverview": "Vue d'ensemble de la boutique",
+      "closeMenu": "Fermer le menu"
+    }
+  }
+}

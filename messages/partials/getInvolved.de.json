@@ -1,0 +1,218 @@
+{
+  "getInvolved": {
+    "meta": {
+      "title": "Mitmachen",
+      "description": "Schliess dich unserer Mission an, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen. Werde Freiwilliger, Praktikant oder Partner."
+    },
+    "page": {
+      "getStarted": "Loslegen",
+      "learnMore": "Mehr erfahren",
+      "waysTitle": "Wege zum Mitmachen",
+      "testimonialTitle": "Was unsere Gemeinschaft sagt",
+      "partnersTitle": "Unsere Partnerorganisationen",
+      "ctaTitle": "Bereit, einen Unterschied zu machen?",
+      "ctaDescription": "Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.",
+      "discoverWorkshops": "Workshops entdecken"
+    },
+    "coreValues": {
+      "sustainability": {
+        "title": "Nachhaltigkeit",
+        "description": "Wir glauben an die Schaffung einer nachhaltigen Zukunft durch verantwortungsvolles Technologieeinsatz und Abfallreduzierung."
+      },
+      "community": {
+        "title": "Gemeinschaft",
+        "description": "Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Kreative Lösungen finden, um Technologie zugänglich und umweltfreundlich zu machen."
+      },
+      "globalImpact": {
+        "title": "Globale Wirkung",
+        "description": "Einen Unterschied in lokalen und globalen Gemeinschaften durch Technologie machen."
+      }
+    },
+    "volunteer": {
+      "meta": {
+        "title": "Freiwilligenarbeit",
+        "description": "Schliess dich unserem Team engagierter Freiwilliger an und bewirke etwas in deiner Gemeinschaft durch Technologie und Nachhaltigkeit."
+      },
+      "title": "Freiwilliger werden",
+      "description": "Schliess dich unserem Team engagierter Freiwilliger an und hilf, Technologie nachhaltig und für alle zugänglich zu machen.",
+      "ctaText": "Interesse bekunden",
+      "benefitsTitle": "Vorteile der Freiwilligenarbeit",
+      "flexibilityNote": "Wir verstehen, dass jeder unterschiedliche Zeitpläne hat. Wir bieten flexible Freiwilligentätigkeiten, die sich an deine anderen Verpflichtungen anpassen lassen. Ob du ein paar Stunden pro Woche oder mehr erübrigen kannst — dein Beitrag wird einen Unterschied machen.",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "steps": [
+        "Kontaktiere uns, um dein Interesse zu bekunden",
+        "Triff dich mit unserem Team, um deine Fähigkeiten und Interessen zu besprechen",
+        "Nimm an einer kurzen Einführungssitzung teil",
+        "Beginne, einen Unterschied zu machen!"
+      ]
+    },
+    "donate": {
+      "meta": {
+        "title": "Spenden",
+        "description": "Direkt helfen. Jede Spende rettet Geräte vor dem Elektroschrott und macht Technologie für alle zugänglich."
+      },
+      "heroTitle": "Direkt helfen.",
+      "heroDescription": "Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
+      "transferNow": "Jetzt überweisen",
+      "transparencyLabel": "Transparenz",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Jahresbudget (gemeinnütziger Verein)",
+      "devicesSavedLabel": "Geräte jährlich gerettet",
+      "co2SavedLabel": "eingespart pro Jahr",
+      "impactTitle": "Was deine Spende bewirkt",
+      "recommended": "Empfohlen",
+      "chooseAmount": "Betrag wählen und überweisen",
+      "bankTransferTitle": "Banküberweisung",
+      "bankTransferDescription": "Überweise auf folgendes Konto:",
+      "recipient": "Empfänger",
+      "iban": "IBAN",
+      "bank": "Bank",
+      "purpose": "Verwendungszweck",
+      "copy": "Kopieren",
+      "copyIban": "IBAN kopieren",
+      "donateDevicesTitle": "Geräte spenden",
+      "donateDevicesDescription": "Hardware, die du nicht mehr brauchst, kann einem anderen Menschen eine echte Chance geben. Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter.",
+      "weAccept": "Was wir annehmen:",
+      "weAcceptList": "Laptops, Desktop-PCs, Monitore, Tastaturen, Mäuse, Drucker — funktionierend oder reparierbar.",
+      "weDoNotAccept": "Was wir nicht annehmen:",
+      "weDoNotAcceptList": "Geräte mit physischen Schäden, defekte Bildschirme ohne Rahmen, CRT-Monitore.",
+      "preparation": "Vorbereitung:",
+      "preparationText": "Bitte lösche deine persönlichen Daten vor der Abgabe (wir helfen dir dabei falls nötig).",
+      "dropOffAddress": "Abgabe-Adresse",
+      "questions": "Fragen? Schreib uns →",
+      "newsletterTitle": "Wir informieren dich, wie deine Spende wirkt.",
+      "newsletterDescription": "Keine Werbung. Nur echte Updates zu Geräten gerettet, CO₂ eingespart und Menschen unterstützt.",
+      "purposeTemplate": "Spende {org} {month} {year}",
+      "months": ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+      "impact": {
+        "tier1Title": "1 Gerät gerettet",
+        "tier1Description": "1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden.",
+        "tier2Title": "2 Geräte + Workshop-Platz",
+        "tier2Description": "2 Geräte aufbereitet + ein Platz in unserem Linux-Workshop für jemanden, der es sich nicht leisten könnte.",
+        "tier3Title": "Firmenspende — 10 Geräte",
+        "tier3Description": "10 Geräte für Bildungseinrichtungen, Sozialprojekte oder einkommensschwache Haushalte."
+      },
+      "devices": {
+        "laptop": "Laptops",
+        "desktop": "Desktop-PCs",
+        "monitor": "Monitore",
+        "peripherals": "Peripherie"
+      }
+    },
+    "partnerships": {
+      "meta": {
+        "title": "Partnerschaften",
+        "description": "Arbeite mit uns zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen."
+      },
+      "title": "Partnerschaftsmöglichkeiten",
+      "ctaText": "Interesse bekunden",
+      "benefitsTitle": "Partnerschaftsvorteile",
+      "processTitle": "Wie wir zusammenarbeiten",
+      "processSteps": [
+        "Erste Beratung zum Verständnis von Zielen und Möglichkeiten",
+        "Entwicklung von Partnerschaftsrahmen und -zielen",
+        "Umsetzung von kooperativen Initiativen",
+        "Regelmässige Fortschrittsüberprüfungen und Wirkungsbewertung",
+        "Kontinuierliche Verbesserung und Erweiterung der Partnerschaft"
+      ],
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Kontaktiere uns, um Partnerschaftsmöglichkeiten zu besprechen",
+        "Teile die Ziele und Interessen deiner Organisation mit",
+        "Erkunde potenzielle Zusammenarbeitsbereiche",
+        "Entwickle eine Partnerschaftsvereinbarung",
+        "Beginne deine Partnerschaftsreise"
+      ]
+    },
+    "internships": {
+      "meta": {
+        "title": "Praktika",
+        "description": "Sammle praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm."
+      },
+      "title": "Praktikumsmöglichkeiten",
+      "description": "Sammle wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirke echte Veränderungen.",
+      "ctaText": "Interesse bekunden",
+      "benefitsTitle": "Programmvorteile",
+      "howToApplyTitle": "Wie du dich bewerben kannst",
+      "howToApplySteps": [
+        "Sende uns deinen Lebenslauf und ein Anschreiben",
+        "Gib deinen Interessensbereich und deine Verfügbarkeit an",
+        "Führe ein kurzes Gespräch",
+        "Beginne deine Praktikumsreise!"
+      ]
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "Technische Experten",
+        "description": "Teile deine technische Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln."
+      },
+      "title": "Technische Experten",
+      "description": "Teile deine Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln.",
+      "ctaText": "Interesse bekunden",
+      "opportunitiesTitle": "Möglichkeiten für technische Experten",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Kontaktiere uns mit deinem Fachbereich und deinen Interessen",
+        "Besprich mögliche Projekte und Beiträge",
+        "Überprüfe unsere Entwicklungsrichtlinien und -prozesse",
+        "Beginne, zu unseren Projekten beizutragen"
+      ]
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT-Hilfe Techniker",
+        "description": "Teile dein IT-Wissen und hilf Menschen in deiner Gemeinschaft — flexibel, ohne Vorkenntnisse und mit echter Wirkung."
+      },
+      "title": "IT-Hilfe Techniker werden",
+      "description": "Dein IT-Wissen kann anderen das Leben leichtern. Hilf Menschen in der Gemeinschaft mit ihren Computern — flexibel, unkompliziert, wirkungsvoll.",
+      "ctaText": "Als Techniker registrieren",
+      "benefitsTitle": "Was du davon hast",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Erstelle dein Techniker-Profil mit deinen Fähigkeiten und Verfügbarkeit",
+        "Warte auf Anfragen — du entscheidest, welche du annimmst",
+        "Vereinbare einen Termin direkt mit der anfragenden Person",
+        "Hilf, lerne, mach einen Unterschied"
+      ]
+    },
+    "workReintegration": {
+      "meta": {
+        "title": "Arbeitsreintegration",
+        "description": "Nimm an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei deine Karriere wieder aufzubauen."
+      },
+      "title": "Arbeitsreintegrationsprogramm",
+      "description": "Schliess dich unserem unterstützenden Programm an, um deine Karriere in Technologie und Nachhaltigkeit wieder aufzubauen.",
+      "ctaText": "Interesse bekunden",
+      "benefitsTitle": "Programmvorteile",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Kontaktiere uns, um deine Situation zu besprechen",
+        "Triff dich mit unserem Team für eine Bewertung",
+        "Entwickle deinen personalisierten Plan",
+        "Beginne deine Arbeitsreintegrationsreise"
+      ]
+    },
+    "kontakt": {
+      "meta": {
+        "title": "Interesse bekunden",
+        "description": "Schreib uns kurz, was dich interessiert — wir melden uns bei dir."
+      },
+      "backToInvolvement": "Alle Mitmach-Möglichkeiten",
+      "title": "Interesse an {topic}",
+      "description": "Schreib uns kurz, wer du bist und was dich interessiert. Wir melden uns persönlich bei dir.",
+      "topics": {
+        "freiwilligenarbeit": "Freiwilligenarbeit",
+        "praktikum": "Praktikum",
+        "wiedereinstieg": "Wiedereinstieg",
+        "technische-experten": "Technische Experten",
+        "partnerschaft": "Partnerschaft",
+        "it-hilfe-techniker": "IT-Hilfe Techniker",
+        "default": "Mitmachen"
+      }
+    }
+  }
+}

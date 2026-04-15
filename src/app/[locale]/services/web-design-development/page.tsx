@@ -1,0 +1,68 @@
+import { Metadata } from 'next'
+import Link from 'next/link'
+import { Code } from 'lucide-react'
+import { ORG } from '@/config/org'
+import { PageHero } from '@/components/layout/PageHero'
+import { ValuesSection } from './sections/ValuesSection'
+import { PhilosophySection } from './sections/PhilosophySection'
+import { ServicesSection } from './sections/ServicesSection'
+import { WhyOpenSourceSection } from './sections/WhyOpenSourceSection'
+import { TechnologiesSection } from './sections/TechnologiesSection'
+import { BenefitsSection } from './sections/BenefitsSection'
+import { ProcessSection } from './sections/ProcessSection'
+import { CTASection } from './sections/CTASection'
+import { getTranslations } from 'next-intl/server'
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'services.webDesign.meta' })
+  return {
+    title: `${t('title')} | ${ORG.name}`,
+    description: t('description'),
+    openGraph: {
+      title: `${t('title')} | ${ORG.name}`,
+      description: t('description'),
+      type: 'website',
+      url: 'https://revampit.org/services/web-design-development',
+    },
+  }
+}
+
+export default async function WebDesignDevelopmentPage() {
+  const t = await getTranslations('services.webDesign.hero')
+
+  return (
+    <main>
+      <PageHero
+        theme="services"
+        icon={Code}
+        title={t('title')}
+        subtitle={t('subtitle')}
+      >
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+          <Link
+            href="/contact"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          >
+            {t('ctaStart')}
+          </Link>
+          <Link
+            href="#services"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 transition-colors"
+          >
+            {t('ctaDiscover')}
+          </Link>
+        </div>
+      </PageHero>
+
+      <ValuesSection />
+      <PhilosophySection />
+      <ServicesSection />
+      <WhyOpenSourceSection />
+      <TechnologiesSection />
+      <BenefitsSection />
+      <ProcessSection />
+      <CTASection />
+    </main>
+  )
+}

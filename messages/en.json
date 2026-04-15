@@ -1,0 +1,2533 @@
+{
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "marketplace": "Marketplace",
+    "services": "Services",
+    "workshops": "Workshops",
+    "blog": "Blog",
+    "about": "About",
+    "getInvolved": "Get Involved",
+    "itHelp": "IT Help",
+    "contact": "Contact",
+    "login": "Sign In",
+    "logout": "Sign Out",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "register": "Register",
+    "membership": "Become a Member",
+    "languageSwitcher": "Language"
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "yes": "Yes",
+    "no": "No",
+    "confirm": "Confirm",
+    "error": "Error",
+    "success": "Success",
+    "noResults": "No results found",
+    "learnMore": "Learn more",
+    "viewAll": "View all",
+    "readMore": "Read more",
+    "backToHome": "Back to home",
+    "required": "Required field",
+    "optional": "Optional",
+    "free": "Free",
+    "perHour": "per hour",
+    "contact": "Get in touch",
+    "share": "Share",
+    "copy": "Copy",
+    "copied": "Copied",
+    "print": "Print",
+    "download": "Download",
+    "upload": "Upload",
+    "preview": "Preview",
+    "send": "Send",
+    "apply": "Apply",
+    "register": "Register",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signOut": "Sign out",
+    "or": "or",
+    "and": "and",
+    "from": "from",
+    "to": "to",
+    "at": "at",
+    "in": "in",
+    "of": "of",
+    "new": "New",
+    "updated": "Updated",
+    "soon": "Coming soon",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "sold": "Sold",
+    "reserved": "Reserved",
+    "currency": "CHF",
+    "skipToContent": "Skip to content"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Page not found",
+    "unauthorized": "Unauthorised",
+    "forbidden": "Access denied",
+    "serverError": "Server error",
+    "networkError": "Network error. Please check your connection.",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters long"
+  },
+  "footer": {
+    "tagline": "Old hardware. New life.",
+    "mission": "We are a Swiss non-profit association dedicated to sustainable technology.",
+    "navigation": "Navigation",
+    "services": "Services",
+    "community": "Community",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "impressum": "Impressum",
+    "newsletter": "Newsletter",
+    "newsletterTagline": "News from the community",
+    "allRightsReserved": "All rights reserved",
+    "madeWith": "Made with",
+    "inSwitzerland": "in Switzerland"
+  },
+  "home": {
+    "meta": {
+      "title": "Old Hardware. New Life. | Computer Repair & Linux in Switzerland",
+      "description": "Buy & sell used IT. Community-driven computer repair. Workshops on Linux, hardware and programming."
+    },
+    "hero": {
+      "title": "Old Hardware. New Life.",
+      "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
+      "ctaDiscover": "Explore now",
+      "ctaAbout": "About us"
+    },
+    "actions": {
+      "heading": "What would you like to do?",
+      "sell": {
+        "title": "Got an old device?",
+        "subtitle": "Sell or give it away in 2 minutes — free with no fees.",
+        "primaryLabel": "Browse marketplace",
+        "secondaryLabel": "Sell now"
+      },
+      "repair": {
+        "title": "Computer broken?",
+        "subtitle": "Technicians near you can help — or offer repairs yourself.",
+        "primaryLabel": "Get help",
+        "secondaryLabel": "Become a technician"
+      },
+      "learn": {
+        "title": "Want to learn something new?",
+        "subtitle": "Hands-on workshops on Linux, hardware repair, programming and AI.",
+        "primaryLabel": "View workshops",
+        "secondaryLabel": "Browse resources"
+      }
+    },
+    "proServices": {
+      "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
+      "linkLabel": "IT services"
+    },
+    "impact": {
+      "title": "Our Impact",
+      "subtitle": "What we've achieved together",
+      "moreLink": "More about our impact"
+    },
+    "community": {
+      "heading": "Join the Community",
+      "subtitle": "Use it, contribute, or support — every bit counts.",
+      "use": {
+        "title": "Use",
+        "desc": "Buy, sell, repair — for free"
+      },
+      "volunteer": {
+        "title": "Volunteer",
+        "desc": "Share your knowledge as a volunteer technician"
+      },
+      "donate": {
+        "title": "Support",
+        "desc": "Donate devices or money to the association"
+      },
+      "membership": {
+        "title": "Become a member",
+        "desc": "Vote and actively shape the association"
+      }
+    },
+    "newsletter": {
+      "title": "Stay up to date",
+      "subtitle": "Learn how we make technology sustainable. No spam — only content that matters.",
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "Email address",
+      "submit": "Subscribe",
+      "submitting": "Subscribing...",
+      "successMessage": "Thank you! Please confirm your email to activate the newsletter.",
+      "networkError": "Network error. Please try again later."
+    },
+    "stats": {
+      "users": "Users",
+      "listings": "Listings",
+      "repairs": "Repairs",
+      "workshops": "Workshops"
+    }
+  },
+  "shop": {
+    "meta": {
+      "title": "Shop — Refurbished Hardware",
+      "description": "Tested, refurbished computers at fair prices. With warranty."
+    },
+    "title": "Our shop",
+    "subtitle": "Tested refurbished hardware",
+    "filters": {
+      "all": "All",
+      "laptops": "Laptops",
+      "desktops": "Desktops",
+      "accessories": "Accessories"
+    },
+    "product": {
+      "addToCart": "Add to basket",
+      "outOfStock": "Out of stock",
+      "condition": "Condition",
+      "warranty": "Warranty",
+      "months": "{count} months"
+    },
+    "empty": "No products found",
+    "verifiedBadge": "Verified",
+    "page": {
+      "heroTitle": "How would you like to shop?",
+      "heroSubtitle": "Choose the channel that suits you best: our online shop, the Shopware channel, or our physical store in Zurich.",
+      "metaDescription": "Choose how to shop at {orgName} – online shop, Shopware channel, or our store in Zurich.",
+      "store": {
+        "title": "Physical store (Zurich)",
+        "tagline": "Advice, browse devices, take home immediately",
+        "accessInfo": "Easily accessible by public transport. Parking available nearby.",
+        "openingHours": "Opening hours",
+        "openingHoursMonday": "Monday: {hours}",
+        "openingHoursTueFri": "Tuesday – Friday: {hours}",
+        "openGoogleMaps": "Open in Google Maps",
+        "openOsm": "Open in OpenStreetMap",
+        "contact": "Contact",
+        "mapsInfoTitle": "Why two map options?",
+        "mapsInfoBody": "OpenStreetMap is community-driven and privacy-friendly. Google/Apple Maps often offer better navigation, live traffic, and points of interest. Choose what works best for you – transparency and freedom of choice matter to us."
+      },
+      "online": {
+        "title": "Online shops",
+        "tagline": "Choose between our online shop and the Shopware channel.",
+        "benefit1": "Verified quality and warranty across all channels",
+        "benefit2": "Fair prices, sustainable selection",
+        "benefit3": "Secure payment",
+        "currentShop": "Current online shop",
+        "shopwareShop": "Go to Shopware shop",
+        "onlineShop": "{orgName} online shop",
+        "multiShopTitle": "Multiple shop channels?",
+        "multiShopBody": "Our {orgName} online shop offers you the best selection of refurbished IT hardware. You can also find our range in the Shopware shop and the legacy system."
+      }
+    },
+    "search": {
+      "metaTitleWithQuery": "Search: \"{query}\" | {orgName} Shop",
+      "metaDescWithQuery": "Results for \"{query}\" – sustainably refurbished IT devices at {orgName}.",
+      "metaTitle": "Search | {orgName} Shop",
+      "metaDesc": "Browse our range of sustainably refurbished IT devices.",
+      "heroTitleWithQuery": "Results for \"{query}\"",
+      "heroTitle": "Search the shop",
+      "placeholder": "What are you looking for? e.g. laptop, monitor, keyboard...",
+      "submitButton": "Search",
+      "breadcrumbHome": "Home",
+      "breadcrumbShop": "Shop",
+      "breadcrumbSearchWithQuery": "Search: \"{query}\"",
+      "breadcrumbSearch": "Search",
+      "resultsTitle": "Searching for \"{query}\"",
+      "resultsComingSoon": "Product search is currently being set up. Soon you will be able to search for refurbished IT devices here.",
+      "goToShop": "Go to online shop",
+      "allShopOptions": "All shop options",
+      "popularSearches": "Popular searches",
+      "browseByCategory": "Browse by category",
+      "productCount": "{count} products",
+      "allCategories": "View all categories →"
+    },
+    "category": {
+      "notFoundMeta": "Category not found | {orgName} Shop",
+      "metaTitle": "{categoryName} | {orgName} Shop",
+      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName} Shop",
+      "metaDesc": "Discover our range of {categoryNameLower} – sustainably refurbished IT devices at {orgName}.",
+      "heroSubtitle": "Discover our range of sustainably refurbished {categoryNameLower} – verified quality at fair prices.",
+      "productCount": "{count} products in this category",
+      "subcategories": "Subcategories",
+      "categoryProductCount": "{count} products",
+      "productsLoading": "Loading products",
+      "productsComingSoon": "Refurbished IT devices in the {categoryName} category will be available here on our marketplace soon.",
+      "goToShop": "Go to online shop",
+      "allShopOptions": "All shop options",
+      "relatedIn": "More in {parentName}",
+      "breadcrumbHome": "Home"
+    },
+    "loading": {
+      "text": "Loading shop..."
+    },
+    "error": {
+      "title": "Something went wrong",
+      "body": "An error occurred while loading the shop.",
+      "retry": "Try again",
+      "backToShop": "Back to shop"
+    },
+    "header": {
+      "skipToContent": "Skip to main content",
+      "skipToFooter": "Skip to footer",
+      "skipLinks": "Quick navigation links",
+      "openMenu": "Open menu",
+      "categories": "Categories",
+      "searchPlaceholder": "What are you looking for?",
+      "searchLabel": "Search",
+      "closeSearch": "Close search",
+      "compareLabel": "Compare ({count} items)",
+      "wishlistLabel": "Wishlist ({count} items)",
+      "cartLabel": "Basket",
+      "backToShop": "Back to shop",
+      "shopOverview": "Shop overview",
+      "closeMenu": "Close menu"
+    }
+  },
+  "marketplace": {
+    "meta": {
+      "title": "Marketplace — Buy & sell used IT equipment",
+      "description": "Community marketplace for used IT equipment. Buy and sell directly."
+    },
+    "title": "Marketplace",
+    "subtitle": "Buy & sell used IT equipment",
+    "sell": {
+      "label": "Post a listing",
+      "loginRequired": "Login required",
+      "loginRequiredDesc": "Sign in to create listings.",
+      "login": "Sign in",
+      "backToMarketplace": "Back to Marketplace",
+      "editTitle": "Edit listing",
+      "createTitle": "Create listing",
+      "editSubtitle": "Save changes to your listing.",
+      "createSubtitle": "Describe your product or take a photo — AI fills in the rest.",
+      "cameraButton": "Take a photo — AI recognises the product",
+      "cancelButton": "Cancel",
+      "previewPublish": "Preview & publish",
+      "previewSave": "Preview & save",
+      "maxImagesError": "Maximum {max} images allowed",
+      "uploadError": "Upload error",
+      "uploadImagesError": "Error uploading images",
+      "loadListingError": "Could not load listing",
+      "ownListingError": "You can only edit your own listings",
+      "loadError": "Error loading listing",
+      "saveSuccess": "Changes saved successfully!",
+      "createSuccess": "Listing created successfully!",
+      "saveError": "Error saving",
+      "createError": "Error creating listing",
+      "unexpectedError": "An unexpected error occurred"
+    },
+    "filters": {
+      "all": "All",
+      "computers": "Computers",
+      "laptops": "Laptops",
+      "parts": "Parts",
+      "accessories": "Accessories",
+      "label": "Filters",
+      "clearFilters": "Clear filters",
+      "sort": "Sort",
+      "condition": "Condition",
+      "allConditions": "All conditions",
+      "delivery": "Delivery",
+      "allDelivery": "All options",
+      "payment": "Payment",
+      "allPayment": "All",
+      "priceRange": "Price range (CHF)",
+      "priceMin": "Min",
+      "priceMax": "Max",
+      "priceMinAriaLabel": "Minimum price in CHF",
+      "priceMaxAriaLabel": "Maximum price in CHF",
+      "activeFilters": "Active filters",
+      "gratisOnly": "Free only",
+      "verifiedOnly": "Verified devices only",
+      "technicalFilters": "Technical filters",
+      "sellerTypeAriaLabel": "Seller type",
+      "categoryAriaLabel": "Category filter"
+    },
+    "listing": {
+      "contact": "Contact seller",
+      "report": "Report",
+      "share": "Share",
+      "condition": "Condition",
+      "postedAt": "Listed on",
+      "views": "Views",
+      "views_count": "{count} views",
+      "brand": "Brand",
+      "model": "Model",
+      "delivery": "Delivery",
+      "shippingCost": "Shipping cost",
+      "payment": "Payment",
+      "location": "Location",
+      "description": "Description",
+      "technicalData": "Technical specifications",
+      "verifiedOn": "Verified on {date}",
+      "seller": "Seller",
+      "sold": "{count} sold",
+      "similarListings": "Similar listings",
+      "loading": "Loading listing...",
+      "notFound": "Listing not found",
+      "backToMarketplace": "Back to Marketplace"
+    },
+    "empty": "No listings found",
+    "conditions": {
+      "new": "New",
+      "likeNew": "Like new",
+      "good": "Good",
+      "fair": "Fair",
+      "forParts": "For parts"
+    },
+    "listingsAvailable": "{count, plural, one {# listing} other {# listings}} available",
+    "searchPlaceholder": "Laptop, monitor, smartphone...",
+    "searchAriaLabel": "Search the marketplace",
+    "searchButton": "Search",
+    "sellerTypes": {
+      "all": "All",
+      "revampit": "{orgName} devices",
+      "community": "Community listings"
+    },
+    "categories": {
+      "all": "All"
+    },
+    "listing_actions": {
+      "payment_info": "Direct payment between buyer and seller",
+      "payment_methods": "TWINT · Bank transfer · Cash on collection",
+      "messageSent": "Message sent!",
+      "goToMessages": "Go to your messages",
+      "messagePlaceholder": "Hi {sellerName}, I'm interested in this listing...",
+      "sendMessage": "Send",
+      "cancel": "Cancel",
+      "contactSeller": "Send message",
+      "save": "Save",
+      "share": "Share",
+      "copied": "Copied!",
+      "edit": "Edit",
+      "report": "Report"
+    },
+    "conditionExplainer": "What does \"{condition}\" mean for {category}?",
+    "pagination": {
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "pageOf": "Page {current} of {total}",
+      "navigation": "Page navigation"
+    },
+    "signInCta": {
+      "title": "Sign in to buy or sell",
+      "description": "Create an account to post listings or contact sellers.",
+      "login": "Sign in",
+      "register": "Register",
+      "firstListing": "Create first listing"
+    },
+    "empty_states": {
+      "noListings": "No listings found",
+      "noListingsEmpty": "No listings yet. Be the first to create one!",
+      "noListingsFiltered": "Try different filters or clear them."
+    },
+    "error_states": {
+      "loadFailed": "Failed to load listings",
+      "tryAgain": "Try again"
+    },
+    "report_modal": {
+      "title": "Report listing",
+      "sent": "Report sent",
+      "sentThanks": "Thank you for your help.",
+      "detailsPlaceholder": "Additional details (optional)",
+      "submit": "Report"
+    },
+    "checkout": {
+      "title": "Secure payment",
+      "backToListing": "Back to listing",
+      "backToMarketplace": "Back to Marketplace",
+      "loading": "Loading...",
+      "ownListing": "Your own listing",
+      "ownListingDesc": "You cannot buy your own listing.",
+      "backToListingLink": "Back to listing",
+      "chooseDelivery": "Choose delivery method",
+      "pickup": "Collection",
+      "shipping": "Delivery",
+      "shippingNationwide": "Nationwide",
+      "free": "Free",
+      "shippingAddress": "Delivery address",
+      "name": "Name",
+      "street": "Street",
+      "postalCode": "Postcode",
+      "postalCodeInvalid": "Postcode must be 4 digits",
+      "city": "City",
+      "redirecting": "Redirecting to payment...",
+      "proceed": "Proceed to payment",
+      "orderSummary": "Order summary",
+      "seller": "Seller",
+      "itemPrice": "Item price",
+      "shippingCost": "Shipping",
+      "pickupFree": "Collection",
+      "serviceFee": "Service fee ({rate}%)",
+      "serviceFeeIncluded": "incl. {amount}",
+      "total": "Total",
+      "buyerProtection": "Buyer protection — Payment is released only after you confirm receipt",
+      "networkError": "Network error creating the order",
+      "orderError": "Could not create order"
+    },
+    "checkout_success": {
+      "title": "Order successful!",
+      "description": "Your payment has been authorised. The amount will be released once you confirm receipt.",
+      "itemImageAlt": "Item image",
+      "status": "Status",
+      "viewOrder": "View order",
+      "continueShopping": "Continue shopping"
+    }
+  },
+  "services": {
+    "meta": {
+      "title": "Services | IT Services in Zurich",
+      "description": "Professional computer repair, web development, data recovery, Linux support and hardware recycling in Zurich."
+    },
+    "title": "Services",
+    "subtitle": "What we can do for you",
+    "bookAppointment": "Book an appointment",
+    "requestQuote": "Request a quote",
+    "priceFrom": "From CHF",
+    "page": {
+      "schemaName": "Computer Repair & IT Services",
+      "schemaDescription": "Professional computer repair, web development, data recovery, Linux support and hardware recycling.",
+      "schemaCity": "Zurich",
+      "title": "Expert IT Services",
+      "subtitle": "Sustainable solutions for your technology needs. We combine technical expertise with environmental responsibility to deliver comprehensive IT solutions that save you money and reduce e-waste.",
+      "servicesTitle": "Our Services",
+      "servicesDescription": "Repair time varies depending on parts availability and typically takes a few weeks.",
+      "noResults": "No services found matching the selected filters.",
+      "ctaTitle": "Ready to renew your technology?",
+      "ctaSubtitle": "Contact us today for a free consultation and discover how we can help you get the most out of your devices.",
+      "ctaContact": "Contact us",
+      "ctaInventory": "Browse inventory",
+      "pricingTbd": "On request",
+      "details": "Details",
+      "bookAppointment": "Book appointment",
+      "learnMore": "Learn more",
+      "appointmentRequested": "Appointment requested!",
+      "booking": "Booking...",
+      "bookingFailed": "Booking failed",
+      "networkError": "Network error. Please try again."
+    },
+    "servicePage": {
+      "comingSoonBanner": "This service is coming soon. Contact us to express your interest and be notified when it becomes available."
+    },
+    "webDesign": {
+      "meta": {
+        "title": "Web Design & Development",
+        "description": "Professional web design and development services using open-source technologies. Modern, responsive websites built for sustainability and performance."
+      },
+      "hero": {
+        "title": "Web Design & Development",
+        "subtitle": "100% commitment to freedom through open source, decentralization, privacy, data ownership, code ownership, and maximum automation. We create digital experiences where effort becomes a choice, not a necessity.",
+        "ctaStart": "Start your project",
+        "ctaDiscover": "Explore services"
+      },
+      "values": {
+        "title": "Our Core Values",
+        "subtitle": "Every website we build serves one ultimate goal: <strong>your freedom</strong>. Every principle works together to transform effort from necessity into choice.",
+        "openSource": {
+          "title": "Open Source",
+          "description": "Transparent, auditable code that you can fully inspect, modify, and own. No proprietary black boxes or vendor lock-ins."
+        },
+        "decentralization": {
+          "title": "Decentralization",
+          "description": "Break free from Big Tech platforms. Host your website anywhere, preserve your independence, and avoid single points of failure."
+        },
+        "privacyFirst": {
+          "title": "Privacy First",
+          "description": "Minimal tracking, secure authentication, and transparent data handling. Your users' privacy is protected by design, not as an afterthought."
+        },
+        "ownYourData": {
+          "title": "Own Your Data",
+          "description": "Your data belongs to you, not the tech giants. Full control over where it is stored, how it is used, and who accesses it."
+        },
+        "ownYourCode": {
+          "title": "Own Your Code",
+          "description": "Complete ownership of your website's source code. Modify, extend, or migrate at any time without restrictions or licensing fees."
+        },
+        "maxAutomation": {
+          "title": "Maximum Automation",
+          "description": "Seamless automated workflows that minimize manual effort while upholding all our core principles. 100% automation is our goal."
+        },
+        "userExperience": {
+          "title": "User Experience",
+          "description": "Intuitive interfaces that demand minimal effort from users while delivering maximum functionality and productivity."
+        },
+        "developerExperience": {
+          "title": "Developer Experience",
+          "description": "Clean, maintainable code with excellent tooling and documentation, making development and maintenance a pleasure."
+        }
+      },
+      "philosophy": {
+        "title": "Our Freedom-First Philosophy",
+        "intro": "We believe in <strong>100% commitment to freedom</strong> through maximum automation.",
+        "automation": "When automation minimizes unwanted effort, it transforms effort from necessity into choice — and choice is freedom.",
+        "effortTitle": "Effort as Choice, Not Necessity",
+        "freedomPrinciple": {
+          "label": "The Freedom Principle",
+          "text": "<strong>100% commitment to freedom</strong> means every aspect of your digital presence should serve your autonomy, not restrict it."
+        },
+        "automationLiberation": {
+          "label": "Automation as Liberation",
+          "text": "Maximum automation eliminates repetitive, unwanted tasks, giving you the freedom to focus on what truly matters to you and your mission."
+        },
+        "choiceNotCoercion": {
+          "label": "Choice Over Coercion",
+          "text": "When systems work seamlessly without your constant intervention, every moment you invest becomes intentional — a choice, not a necessity."
+        },
+        "quote": "True freedom is not just the ability to choose — it's systems that preserve your right to choose by eliminating forced effort.",
+        "ratingTitle": "Our Freedom Rating System",
+        "ratingIntro": "Every website and web app we build receives a comprehensive freedom rating based on how well it supports your autonomy:",
+        "commitment": {
+          "label": "Our Commitment",
+          "text": "We aim for maximum scores across all freedom dimensions. Every trade-off is discussed transparently, with alternatives always explored."
+        },
+        "ratings": {
+          "openSource": {
+            "label": "Open Source Freedom",
+            "desc": "Full code transparency & ownership"
+          },
+          "decentralization": {
+            "label": "Decentralization Freedom",
+            "desc": "Independence from platform control"
+          },
+          "privacy": {
+            "label": "Privacy Freedom",
+            "desc": "Data sovereignty & protection"
+          },
+          "dataOwnership": {
+            "label": "Data Ownership Freedom",
+            "desc": "Full control over your information"
+          },
+          "codeOwnership": {
+            "label": "Code Ownership Freedom",
+            "desc": "Unrestricted modification rights"
+          },
+          "automation": {
+            "label": "Automation Freedom",
+            "desc": "Effort transformed into choice"
+          },
+          "ux": {
+            "label": "User Experience Freedom",
+            "desc": "Intuitive, effortless interaction"
+          },
+          "dx": {
+            "label": "Developer Freedom",
+            "desc": "Maintainable, extensible systems"
+          }
+        }
+      },
+      "servicesSection": {
+        "title": "Our Web Development Services",
+        "subtitle": "Comprehensive web solutions built with open-source technologies and sustainable practices.",
+        "pricing": "Professional web development from CHF 70/hour",
+        "consultationTitle": "Free Initial Consultation",
+        "consultationText": "We begin every project with a thorough consultation to understand your needs, goals, and technical requirements. This helps us deliver accurate estimates and ensure we are the right fit for your project.",
+        "items": {
+          "customDev": {
+            "title": "Custom Web Development",
+            "description": "Tailor-made web applications built with modern open-source technologies to meet your specific business requirements.",
+            "features": [
+              "Custom web applications",
+              "E-commerce solutions",
+              "API development",
+              "Database design",
+              "Performance optimization"
+            ]
+          },
+          "responsiveDesign": {
+            "title": "Responsive Web Design",
+            "description": "Beautiful, user-friendly designs that work flawlessly across all devices and screen sizes.",
+            "features": [
+              "Mobile-first design",
+              "User experience (UX) design",
+              "User interface (UI) design",
+              "Brand identity integration",
+              "Accessibility compliance"
+            ]
+          },
+          "cmsDev": {
+            "title": "CMS Development",
+            "description": "Modern content management systems that give you full control over your website content with developer-friendly APIs.",
+            "features": [
+              "Headless CMS solutions (Strapi, Payload, Tina)",
+              "WordPress development (legacy support)",
+              "Custom CMS solutions",
+              "Content migration",
+              "Training and support"
+            ]
+          },
+          "maintenance": {
+            "title": "Website Maintenance",
+            "description": "Ongoing support and maintenance to keep your website secure, up-to-date, and performing at its best.",
+            "features": [
+              "Security updates",
+              "Performance monitoring",
+              "Content updates",
+              "Backup management",
+              "Technical support"
+            ]
+          }
+        }
+      },
+      "whyOpenSource": {
+        "title": "Why These Values Matter",
+        "subtitle": "In an era of increasing digital surveillance and platform monopolies, these principles are not just nice-to-haves — they are essential for digital freedom and independence.",
+        "items": {
+          "ownCode": {
+            "title": "You Own Your Code",
+            "description": "Full ownership of your website's source code means no vendor lock-in, no licensing restrictions, and complete freedom to modify, extend, or migrate your site at any time."
+          },
+          "ownData": {
+            "title": "You Own Your Data",
+            "description": "Your data belongs to you, not the tech giants. We develop solutions that keep your information under your control, with options for self-hosting and data portability."
+          },
+          "privacyByDesign": {
+            "title": "Privacy by Design",
+            "description": "We prioritize privacy from the ground up, implementing minimal tracking, secure authentication, and transparent data handling practices that respect your users' privacy."
+          },
+          "decentralized": {
+            "title": "Decentralized Architecture",
+            "description": "Break free from centralized platforms that control your online presence. We develop solutions that can be hosted anywhere, giving you independence from Big Tech."
+          },
+          "openSourceBase": {
+            "title": "Open-Source Foundation",
+            "description": "Built on open-source technologies that are transparent, auditable, and backed by global communities. No hidden code, no proprietary lock-ins."
+          },
+          "futureProof": {
+            "title": "Future-Proof & Sustainable",
+            "description": "Open-source technologies evolve with the community and don't disappear when a company fails. Your investment is protected for the long term."
+          }
+        }
+      },
+      "technologies": {
+        "title": "Technologies We Use",
+        "subtitle": "We work with proven open-source technologies that deliver reliability, performance, and long-term sustainability.",
+        "filterLabel": "Filter by category:",
+        "allCategories": "All",
+        "visitWebsite": "Visit website",
+        "showing": "Showing {count} of {total} technologies",
+        "showingFiltered": "Showing {count} of {total} technologies in \"{category}\"",
+        "items": {
+          "nextjs": {
+            "description": "Modern React framework for building fast, scalable web applications with excellent developer experience and built-in optimization.",
+            "benefits": [
+              "Server-side rendering",
+              "Excellent performance",
+              "Great SEO",
+              "Active community"
+            ]
+          },
+          "tailwind": {
+            "description": "Utility-first CSS framework for rapidly building modern, responsive UIs with consistent design.",
+            "benefits": [
+              "Rapid development",
+              "Consistent design",
+              "Responsive by default",
+              "Highly customizable"
+            ]
+          },
+          "supabase": {
+            "description": "Open-source Firebase alternative providing instant APIs, real-time subscriptions, authentication, and edge functions.",
+            "benefits": [
+              "Instant APIs",
+              "Real-time updates",
+              "Built-in authentication",
+              "Edge functions"
+            ]
+          },
+          "strapi": {
+            "description": "Leading open-source headless CMS giving developers the freedom to choose their preferred tools and frameworks.",
+            "benefits": [
+              "API-first approach",
+              "Flexible content types",
+              "Developer-friendly",
+              "Self-hosted"
+            ]
+          },
+          "payload": {
+            "description": "TypeScript-first headless CMS and application framework built with Node.js, React, and MongoDB.",
+            "benefits": [
+              "TypeScript native",
+              "Admin UI included",
+              "Highly extensible",
+              "Developer experience focus"
+            ]
+          },
+          "tina": {
+            "description": "Git-based headless CMS that enables content editing directly on your website with real-time visual editing.",
+            "benefits": [
+              "Visual editing",
+              "Git-based workflow",
+              "Real-time preview",
+              "Developer-friendly"
+            ]
+          },
+          "wordpress": {
+            "description": "Mature content management system still popular for certain use cases. We can work with existing WordPress sites.",
+            "benefits": [
+              "Large ecosystem",
+              "Easy content management",
+              "Extensive plugins",
+              "Familiar to many users"
+            ]
+          },
+          "joomla": {
+            "description": "Flexible content management system with robust user management and multilingual features. Ideal for complex websites.",
+            "benefits": [
+              "User management",
+              "Multilingual support",
+              "Flexible templates",
+              "Strong community"
+            ]
+          },
+          "woocommerce": {
+            "description": "Widely used open-source e-commerce platform built on WordPress. Flexible extensions and large community.",
+            "benefits": [
+              "Large community",
+              "Many extensions",
+              "Easy management",
+              "WordPress integration"
+            ]
+          },
+          "shopware": {
+            "description": "Modern API-first e-commerce platform with powerful customization capabilities. Open-source core with commercial extensions.",
+            "benefits": [
+              "API-first design",
+              "Flexible architecture",
+              "Comprehensive admin UI",
+              "German engineering"
+            ]
+          },
+          "hosting": {
+            "name": "Deployment & Hosting",
+            "description": "Flexible hosting options from open-source solutions on Linux servers to modern platforms like Vercel and Netlify.",
+            "benefits": [
+              "Multiple hosting options",
+              "Global CDN",
+              "Automatic scaling",
+              "Git-based workflow"
+            ]
+          }
+        }
+      },
+      "benefits": {
+        "title": "Why Choose Our Web Development Services?",
+        "subtitle": "We combine technical expertise with sustainable practices to deliver websites that perform excellently while supporting your values.",
+        "items": {
+          "automationFirst": {
+            "title": "Automation-First Design",
+            "description": "We prioritize automated workflows that minimize manual administrative effort while upholding all our core principles. Maximum efficiency without compromise."
+          },
+          "openSourceBase": {
+            "title": "Open-Source Foundation",
+            "description": "Built on transparent, auditable technologies that give you complete control and freedom. No vendor lock-in, no proprietary black boxes."
+          },
+          "seamlessUX": {
+            "title": "Seamless User Experience",
+            "description": "Intuitive interfaces that demand minimal effort from users while delivering maximum functionality. Every interaction is designed for simplicity and effectiveness."
+          },
+          "devFriendly": {
+            "title": "Developer-Friendly Architecture",
+            "description": "Clean, maintainable code with excellent documentation and tooling. Built for long-term sustainability and easy maintenance."
+          }
+        }
+      },
+      "process": {
+        "title": "Our Development Process",
+        "subtitle": "We follow a collaborative, transparent process that ensures your project meets your needs and exceeds your expectations.",
+        "steps": {
+          "discovery": {
+            "title": "Discovery",
+            "description": "We start with a thorough consultation to understand your goals, requirements, and target audience."
+          },
+          "planning": {
+            "title": "Planning",
+            "description": "We create a detailed project plan including timeline, technology stack, and design approach."
+          },
+          "development": {
+            "title": "Development",
+            "description": "We build your website following agile methodology with regular updates and feedback sessions."
+          },
+          "launch": {
+            "title": "Launch & Support",
+            "description": "We launch your website and provide ongoing support, maintenance, and optimization."
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to build your website?",
+        "subtitle": "Let's create a website that reflects your values and achieves your goals. Contact us today for a free consultation.",
+        "startProject": "Start your project",
+        "allServices": "Explore all services"
+      }
+    }
+  },
+  "workshops": {
+    "meta": {
+      "title": "Workshops & Courses",
+      "description": "Discover our workshops on sustainable technology, Linux, repair, programming, and more. Hands-on learning in Zurich."
+    },
+    "title": "Workshops",
+    "subtitle": "Learn from the community",
+    "register": "Sign up",
+    "upcoming": "Upcoming dates",
+    "past": "Past workshops",
+    "free": "Free",
+    "spots": "{count} spots available",
+    "full": "Fully booked",
+    "duration": "Duration",
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "browse": {
+      "title": "Workshops & Courses",
+      "subtitle": "{count} {count, plural, one {Workshop} other {Workshops}} · Hands-on learning at {orgName}",
+      "proposeButton": "Propose a workshop",
+      "filterCategory": "Category",
+      "allCategories": "All categories",
+      "filterLevel": "Difficulty",
+      "allLevels": "All levels",
+      "clearFilters": "Reset filters",
+      "resultCount": "{count} {count, plural, one {workshop} other {workshops}}",
+      "allLevelsLabel": "All levels",
+      "maxParticipants": "Max {count}",
+      "nextDate": "Next: {date}",
+      "dateSoon": "Date coming soon",
+      "spotsLeft": "{count} {count, plural, one {spot left} other {spots left}}",
+      "soldOut": "Sold out",
+      "free": "Free",
+      "registered": "Registered",
+      "viewDetails": "View details",
+      "manage": "Manage",
+      "registerNow": "Register now",
+      "noDate": "No date",
+      "emptyFiltered": {
+        "title": "No workshops found",
+        "subtitle": "Try different filters or check back later.",
+        "clearFilters": "Reset filters"
+      },
+      "emptyAll": {
+        "title": "No workshops scheduled at the moment",
+        "subtitle": "Check back soon!"
+      },
+      "cta": {
+        "title": "Want to propose a workshop?",
+        "subtitle": "Have an idea for a workshop? We welcome your suggestions for new topics and content.",
+        "button": "Propose a workshop"
+      }
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "About us",
+      "description": "Learn about our mission to extend the lifespan of IT devices and promote sustainable computing."
+    },
+    "title": "About",
+    "mission": {
+      "badge": "Our mission",
+      "title": "Sustainability meets technology",
+      "yearsExperience": "years of experience",
+      "quote": "10 years is the minimum for a bicycle – and for a laptop too!",
+      "paragraph1": "As a non-profit association, we have been changing the way technology is used since 2003. Our mission is clear: <strong>extend the lifespan of IT devices</strong> and reduce e-waste through repair, refurbishment and sustainable practices.",
+      "paragraph2": "In our premises – a former bank – we have created a meeting place where technology and sustainability come together. Our approach combines hardware recycling with open source software to create sustainable IT solutions for people and the environment.",
+      "imageAlt": "Storefront with computers and devices"
+    },
+    "team": "The team",
+    "history": "History",
+    "values": "Our values",
+    "join": "Get involved",
+    "hero": {
+      "title": "Giving technology a second life",
+      "subtitle": "For over 20 years we have been fighting against the premature decommissioning of computers and promoting sustainable IT practices."
+    },
+    "impactAreas": {
+      "title": "Our impact areas",
+      "subtitle": "Three pillars, one goal: making technology more sustainable and accessible.",
+      "hardware": {
+        "title": "Hardware recycling",
+        "description": "We repair and refurbish IT devices of any age and give them a second life. From old MacBooks to vintage computers – every device deserves a second chance."
+      },
+      "openSource": {
+        "title": "Open source software",
+        "description": "We rely on Linux and other open source solutions. These technologies keep older devices running efficiently and provide security through control over one's own system."
+      },
+      "community": {
+        "title": "Community & social",
+        "description": "We create meaningful jobs for people who struggle in the regular job market. With our exchange system, services can be traded for technology."
+      }
+    },
+    "cta": {
+      "title": "Join our mission",
+      "description": "Whether you want to have a device repaired, learn more about sustainable IT or support our cause – you are welcome here. Together we make technology more sustainable and accessible for everyone.",
+      "button": "Get involved"
+    },
+    "impact": {
+      "meta": {
+        "title": "Our impact",
+        "description": "Discover the measurable impact on the environment and society. Support our mission for sustainable IT."
+      },
+      "hero": {
+        "title": "Our measurable impact",
+        "description": "Discover how we have sustainably transformed the Swiss IT landscape since 2003 – transparently, measurably and effectively."
+      },
+      "transparency": {
+        "title": "Why transparency matters",
+        "description": "As a non-profit association, we place the greatest value on transparency. Each of our figures is documented in a comprehensible way, so you as a donor can understand exactly how your support works."
+      },
+      "verified": "Verified",
+      "methodology": "Methodology & calculation",
+      "lastUpdated": "Last updated",
+      "impactInNumbers": "Understanding impact in numbers",
+      "tabs": {
+        "environmental": "Environmental",
+        "social": "Social",
+        "economic": "Economic"
+      },
+      "environmental": {
+        "title": "Environmental impact in detail",
+        "co2PerDevice": "Each rescued device saves an average of {value}kg of CO₂ emissions",
+        "ewasteAvoided": "We prevent {value} tonnes of e-waste per year",
+        "reuseRate": "{value}% of our devices are reused rather than recycled",
+        "comparison": "Comparison with new devices",
+        "newLaptop": "Manufacturing a new laptop:",
+        "refurbishment": "Refurbishing a device:",
+        "savings": "CO₂ savings per device:"
+      },
+      "social": {
+        "title": "Social impact in detail",
+        "internshipSuccess": "~{value}% of our interns find IT jobs or further training",
+        "careerReentries": "~{value} professional re-entries per year through our programme",
+        "peopleHelped": "{value} people guided in sustainable IT since 2003",
+        "successStories": "Success stories",
+        "testimonial": "Thanks to RevampIT I found my footing in the IT industry again after 3 years of unemployment.",
+        "testimonialAuthor": "Sarah M., former intern"
+      },
+      "economic": {
+        "title": "Economic impact",
+        "customerSavings": "Customers save on average CHF {value} per repaired device",
+        "smeOpenSource": "SMEs benefit from affordable open source solutions",
+        "jobs": "{value} meaningful jobs in Switzerland",
+        "economicImpact": "Economic impact",
+        "avgRepairCost": "Average repair costs:",
+        "newDevicePrice": "New device price (comparable):",
+        "savingsPerCustomer": "Savings per customer:"
+      },
+      "donation": {
+        "title": "How you can support us",
+        "subtitle": "Every contribution counts and directly supports our mission. Choose the type of support that suits you.",
+        "popular": "Popular",
+        "impactCalculator": "Calculate your donation impact",
+        "impactCalculatorDesc": "See immediately what impact your donation can have",
+        "laptopRepair": "Repair of a laptop for a family",
+        "internshipMonth": "One month internship position for a career re-entrant",
+        "dataRecovery": "Complete data recovery for an SME customer",
+        "methods": {
+          "monthly": {
+            "name": "Monthly donation",
+            "description": "Regular support for sustainable impact",
+            "amount": "From CHF 20/month",
+            "benefits": [
+              "Continuous funding of our programmes",
+              "Plannable resources for long-term projects",
+              "Exclusive updates on our impact",
+              "Invitations to special events"
+            ],
+            "cta": "Donate monthly"
+          },
+          "oneTime": {
+            "name": "One-time donation",
+            "description": "Direct support for specific projects",
+            "amount": "Freely chosen",
+            "benefits": [
+              "Immediate impact for ongoing projects",
+              "Flexibility in donation amount",
+              "Donation receipt for tax purposes",
+              "Option to link to a project"
+            ],
+            "cta": "Donate now"
+          },
+          "corporate": {
+            "name": "Corporate partnership",
+            "description": "Strategic partnership for sustainable IT",
+            "amount": "From CHF 5000/year",
+            "benefits": [
+              "Sustainability report for your company",
+              "Employee workshops on sustainable IT",
+              "Logo placement on our website",
+              "Annual impact report"
+            ],
+            "cta": "Become a partner"
+          },
+          "equipment": {
+            "name": "Equipment donation",
+            "description": "Donate functional IT devices",
+            "benefits": [
+              "Tax deductibility of devices",
+              "Professional data erasure guaranteed",
+              "Sustainability certificate for your company",
+              "Visible impact through device tracking"
+            ],
+            "cta": "Donate devices"
+          }
+        }
+      },
+      "reports": {
+        "title": "Transparency & reporting",
+        "subtitle": "We regularly report on our activities and impact. All documents are publicly accessible.",
+        "annual": {
+          "title": "Annual Report 2023",
+          "description": "Complete activity report with all key figures and activities of the year 2023.",
+          "download": "Download PDF"
+        },
+        "impact": {
+          "title": "Impact Report",
+          "description": "Detailed analysis of our social and ecological impact with methodology explanations.",
+          "view": "View report"
+        },
+        "register": {
+          "title": "Transparency Register",
+          "description": "Public register of all donations and how they were used.",
+          "open": "Open register"
+        }
+      },
+      "ctaDonate": {
+        "title": "Achieving more together",
+        "description": "Your support makes the difference. Every contribution, large or small, helps us make the Swiss IT landscape more sustainable and give people new opportunities.",
+        "donate": "Donate now",
+        "contact": "Get in touch"
+      }
+    },
+    "press": {
+      "meta": {
+        "title": "Press & media",
+        "description": "Press coverage and media articles. Discover what SRF, Beobachter and others have written about us."
+      },
+      "hero": {
+        "title": "Press & media",
+        "description": "What SRF, Beobachter and others report about us. For over 20 years we have been committed to sustainable IT."
+      },
+      "stats": {
+        "mediaMentions": "Media mentions",
+        "uniqueSources": "Different sources",
+        "partnerships": "Partnerships"
+      },
+      "tierLabels": {
+        "1": "National media",
+        "2": "City of Zurich",
+        "3": "Organisations",
+        "4": "Community"
+      },
+      "nationalMedia": "National media",
+      "featuredArticles": "Featured articles",
+      "otherMentions": "Further mentions & partnerships",
+      "readArticle": "Read article",
+      "pressContact": {
+        "title": "Press inquiries",
+        "description": "Do you want to write about us? We welcome your interest and are happy to be available for interviews and background conversations.",
+        "contactForm": "Contact form"
+      }
+    },
+    "finances": {
+      "meta": {
+        "title": "Finances & transparency",
+        "description": "Public financial data. Learn how we use our funds and what our self-financing rate is."
+      },
+      "hero": {
+        "title": "Finances & transparency",
+        "subtitle": "As a non-profit association, we make our financial data public. Here you can see where our revenues come from and how high our self-financing rate is."
+      },
+      "loading": "Loading...",
+      "errorMessage": "Financial data could not be loaded.",
+      "noData": "No financial data available.",
+      "metrics": {
+        "totalRevenue": "Total revenue {year}",
+        "selfFinancing": "Self-financing",
+        "selfFinancingEarned": "self-generated",
+        "donationsFunding": "Donations & funding",
+        "donationsPct": "of revenues"
+      },
+      "table": {
+        "title": "Revenue by source",
+        "subtitle": "All amounts in CHF, based on accounting data (Kivitendo)",
+        "source": "Source",
+        "rows": {
+          "warenverkauf": "Product sales",
+          "dienstleistungen": "Services",
+          "integration": "Integration / Projects",
+          "spenden": "Donations",
+          "aufstockung": "Guideline price supplement",
+          "total": "Total",
+          "eigenfinanzierungsquote": "Self-financing rate"
+        }
+      },
+      "methodology": {
+        "title": "On methodology",
+        "point1": "Self-financing rate is calculated as: (Product sales + Services + Integration) / Total × 100",
+        "point2": "All data comes from Kivitendo accounting and is accurate to the franc.",
+        "point3": "For 2015–2021, annual aggregates are available, from 2022 monthly data."
+      }
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Contact us for Linux support, workshops and open source solutions."
+    },
+    "title": "Contact",
+    "subtitle": "We'd love to hear from you",
+    "name": "Name",
+    "email": "Email address",
+    "message": "Message",
+    "send": "Send message",
+    "success": "Your message has been sent. We'll be in touch soon!",
+    "phone": "Phone",
+    "address": "Address",
+    "openingHours": "Opening hours",
+    "hero": {
+      "title": "Contact",
+      "subtitle": "Do you have questions about our services, workshops or Linux solutions? We're happy to help!"
+    },
+    "info": {
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address",
+      "openingHours": "Opening hours"
+    },
+    "map": {
+      "title": "Find us",
+      "openGoogleMaps": "Open in Google Maps",
+      "openOSM": "Open in OpenStreetMap",
+      "warehouseNote": "We also have a warehouse at {address} {note}",
+      "warehouseGoogleMaps": "Warehouse in Google Maps",
+      "warehouseOSM": "Warehouse in OpenStreetMap",
+      "mapChoiceTitle": "Why two map options?",
+      "mapChoiceDescription": "OpenStreetMap is community-driven and privacy-friendly. Google/Apple Maps often offer better navigation, live traffic and POIs. Choose what works best for you – transparency and freedom of choice matter to us."
+    },
+    "form": {
+      "title": "Send us a message",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "your@email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What is it about?",
+      "message": "Message",
+      "messagePlaceholder": "Your message...",
+      "submit": "Send message",
+      "submitting": "Sending…",
+      "successMessage": "Thank you! Your message has been sent.",
+      "errorFallback": "Error sending. Please try again later."
+    }
+  },
+  "membership": {
+    "meta": {
+      "title": "Become a member",
+      "description": "Become a member. Voting rights on association decisions, part of the official membership.",
+      "ogTitle": "Become a member",
+      "ogDescription": "Become a member — voting rights, shared responsibility."
+    },
+    "title": "Become a member",
+    "subtitle": "Support our mission",
+    "benefits": {
+      "votingTitle": "Voting rights on association decisions",
+      "votingDescription": "You'll be automatically invited to votes and help shape the direction of the association.",
+      "officialTitle": "Official membership list",
+      "officialDescription": "You're legally part of the association's membership structure under Swiss association law (CC Art. 60 ff).",
+      "financialTitle": "Financial support",
+      "financialDescription": "Your annual membership fee helps us finance the association sustainably — independently of external funding."
+    },
+    "fee": "Membership fee",
+    "join": "Become a member now",
+    "hero": {
+      "title": "Become a member",
+      "description": "Support the association — legally, financially, and democratically. Fill in the form, transfer your membership fee, done."
+    },
+    "form": {
+      "title": "Join now",
+      "subtitle": "Immediate membership — no waiting"
+    },
+    "alreadyMember": {
+      "title": "You're a member",
+      "description": "Thank you for your support.",
+      "memberSince": "Member since {date}",
+      "dashboardButton": "Go to dashboard"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "question": "What's the difference between a user account and a membership?",
+          "answer": "A user account is all you need for the marketplace, IT help, and workshops — it's free. An association membership gives you voting rights and makes you officially part of the membership structure. Most users never become members — that's completely fine."
+        },
+        {
+          "question": "What do I actually get as a member?",
+          "answer": "Voting rights on association decisions and a place on the official membership list. We don't promise exclusive perks — our services are open to everyone. You become a member because you want to support the association."
+        },
+        {
+          "question": "How does joining work?",
+          "answer": "Fill in the form, transfer the annual fee — done. You're a member immediately. No waiting, no approval process."
+        },
+        {
+          "question": "How do I pay the annual membership fee?",
+          "answer": "After joining, you'll see the bank details directly on the confirmation page. Bank transfer or TWINT."
+        },
+        {
+          "question": "Can I leave at any time?",
+          "answer": "Yes. A simple informal email to the committee is all it takes. Annual fees already paid are not refunded."
+        }
+      ]
+    }
+  },
+  "itHelp": {
+    "meta": {
+      "title": "IT Help — Free Community Repair",
+      "description": "Free IT support for individuals and non-profit organisations. Community technicians help with computers, laptops, Wi-Fi, and more."
+    },
+    "title": "IT Help",
+    "subtitle": "Free support from the community",
+    "request": "Request help",
+    "volunteer": "Register as a volunteer",
+    "page": {
+      "title": "IT Help",
+      "requestCount": "{count, plural, one {# request} other {# requests}}",
+      "tagline": "Community-based tech repair",
+      "getHelp": "Get help",
+      "findTechnician": "Find a technician",
+      "becomeTechnician": "Become a technician",
+      "myRequests": "My requests",
+      "myOffers": "My offers",
+      "searchPlaceholder": "Broken laptop, Wi-Fi issue, printer...",
+      "searchAriaLabel": "Search IT help requests",
+      "searchButton": "Search",
+      "sortLabel": "Sort",
+      "filterButton": "Filters",
+      "resetFilters": "Reset filters",
+      "activeFiltersIndicator": "Active filters",
+      "filterCategory": "Device category",
+      "filterCategoryAll": "All categories",
+      "filterCanton": "Canton",
+      "filterCantonAll": "All cantons",
+      "filterUrgency": "Urgency",
+      "filterUrgencyAll": "All",
+      "filterBudget": "Budget",
+      "filterBudgetAll": "All",
+      "filterBudgetFree": "Free / Community",
+      "filterBudgetPaid": "With budget",
+      "pagination": "Page navigation",
+      "prevPage": "Previous page",
+      "nextPage": "Next page",
+      "pageOf": "Page {current} of {total}",
+      "ctaTitle": "Can you repair devices?",
+      "ctaDescription": "Register as a technician and help people nearby. For free or for payment — your choice.",
+      "ctaCreateProfile": "Create technician profile",
+      "ctaMoreInfo": "More about IT Help →",
+      "retryButton": "Try again"
+    },
+    "detail": {
+      "backToList": "Back to list",
+      "error": "Error",
+      "requestNotFound": "Request not found",
+      "expiredBanner": "This request expired on {date} and is no longer accepting new offers.",
+      "completedAt": "Completed on {date}",
+      "reviewSubmittedTitle": "Review submitted!",
+      "reviewSubmittedMessage": "Thank you for your feedback."
+    },
+    "create": {
+      "backToList": "Back to list",
+      "title": "Create a repair request",
+      "description": "Choose a device and describe your problem. The community will help.",
+      "createdTitle": "Request created!",
+      "createdRedirect": "You'll be redirected shortly...",
+      "sectionDevice": "What would you like to repair?",
+      "sectionBudget": "Budget",
+      "budgetDescription": "What's the maximum you're willing to pay? Leave empty for free community help.",
+      "budgetFree": "Community help (free)",
+      "budgetUpTo": "up to CHF {amount}",
+      "budgetPlaceholder": "0 = free",
+      "sectionOptions": "Options",
+      "serviceTypeLabel": "How should the repair be done?",
+      "urgencyLabel": "How urgent is it?",
+      "cancelButton": "Cancel",
+      "submitButton": "Create request",
+      "submittingButton": "Creating...",
+      "aiPlaceholder": "e.g. My MacBook Pro 2019 won't start, screen stays black after pressing the power button..."
+    },
+    "myRequests": {
+      "title": "My repair requests",
+      "description": "Manage your requests and view received offers",
+      "myOffersButton": "My offers",
+      "newRequest": "New request",
+      "filterAll": "All ({total})",
+      "fetchError": "Could not load requests. Please reload the page.",
+      "emptyNoFilter": "No requests yet",
+      "emptyFiltered": "No requests with this status",
+      "emptyNoFilterMessage": "Create your first repair request and get help from the community.",
+      "emptyFilteredMessage": "Try a different filter.",
+      "createRequest": "Create request",
+      "offerCount": "{count, plural, one {# offer} other {# offers}}"
+    },
+    "myOffers": {
+      "title": "My offers",
+      "description": "Offers you've submitted for repair requests",
+      "myRequestsButton": "My requests",
+      "browseRequests": "Browse requests",
+      "filterAll": "All ({total})",
+      "errorMessage": "Could not load offers",
+      "errorRetry": "Could not load offers. Please reload the page.",
+      "emptyNoFilter": "No offers submitted yet",
+      "emptyFiltered": "No offers with this status",
+      "emptyNoFilterMessage": "Browse repair requests and help other community members.",
+      "emptyFilteredMessage": "Try a different filter.",
+      "offerLabel": "Offer:",
+      "requestLabel": "Request:",
+      "yourOffer": "Your offer:",
+      "requestedBy": "Requested by {name}",
+      "withdrawConfirm": "Are you sure you want to withdraw this offer?",
+      "withdrawButton": "Withdraw offer",
+      "withdrawingButton": "Withdrawing...",
+      "withdrawError": "Error withdrawing offer"
+    },
+    "loading": "Loading IT Help...",
+    "error": {
+      "title": "Something went wrong",
+      "message": "An error occurred while loading IT Help.",
+      "retry": "Try again",
+      "backToList": "Back to list"
+    }
+  },
+  "blog": {
+    "meta": {
+      "title": "Blog",
+      "description": "Tips, stories and background information on sustainable technology."
+    },
+    "title": "Blog",
+    "subtitle": "Knowledge from the community",
+    "readMore": "Read more",
+    "by": "by",
+    "categories": "Categories",
+    "hero": {
+      "title": "Blog",
+      "subtitle": "Tips, stories and best practices around sustainable technology."
+    },
+    "empty": {
+      "title": "No articles found yet",
+      "description": "Try adjusting your filters or submit a post!",
+      "submitButton": "Submit a post"
+    },
+    "sections": {
+      "featured": "Featured posts",
+      "latest": "Latest posts"
+    },
+    "footerCta": {
+      "title": "Share your knowledge",
+      "description": "Do you have a story about sustainable technology? Submit a post.",
+      "button": "Submit a post"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account yet?",
+      "register": "Register"
+    },
+    "register": {
+      "title": "Register",
+      "name": "Name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "Create account",
+      "hasAccount": "Already registered?",
+      "login": "Sign in",
+      "termsAccept": "I accept the Terms of Service and Privacy Policy"
+    },
+    "logout": {
+      "title": "Signing out...",
+      "wait": "Please wait a moment.",
+      "failed": "Sign-out failed",
+      "retry": "Try signing out again",
+      "backToDashboard": "Back to dashboard"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "description": "Enter your email address and we'll send you a reset link.",
+      "email": "Email address",
+      "submit": "Send link",
+      "backToLogin": "Back to sign in"
+    }
+  },
+  "cookies": {
+    "title": "We use cookies",
+    "description": "We use essential cookies to keep the site running.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "learnMore": "Learn more"
+  },
+  "accessibility": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "backToTop": "Back to top"
+  },
+  "faq": {
+    "meta": {
+      "title": "FAQ – Frequently Asked Questions",
+      "description": "Answers to common questions about Linux & Open Source, repair, sustainability and e-waste."
+    },
+    "hero": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Our answers on Linux & Open Source, repair, sustainability and responsible use of resources – in the spirit of our mission against e-waste."
+    },
+    "notListed": "Can't find your question? We're happy to help in person.",
+    "contactTeam": "Contact our team",
+    "groups": [
+      {
+        "category": "Philosophy & Open Source",
+        "items": [
+          {
+            "q": "Do you only work with open-source software?",
+            "a": "No. Open source is our preferred route – for its transparency, security and longevity. Where it makes sense, we also use or integrate proprietary software, always with a focus on usefulness and sustainability."
+          },
+          {
+            "q": "Why is open source important to you?",
+            "a": "Open source strengthens self-determination and repairability. It reduces dependencies and makes it possible to use devices for longer – key levers against e-waste."
+          },
+          {
+            "q": "What does 'Right to Repair' mean to you?",
+            "a": "We advocate for repairable hardware, documented processes and available spare parts. This extends the lifespan of devices and preserves resources."
+          }
+        ]
+      },
+      {
+        "category": "Operating Systems & Software",
+        "items": [
+          {
+            "q": "Do you only work with Linux, or also Windows and macOS?",
+            "a": "We work exclusively with Linux and open-source software. We don't install proprietary operating systems (Windows/macOS). Very rarely we make exceptions when a goal demonstrably can't be achieved with open-source tools."
+          },
+          {
+            "q": "Do you recommend Linux for everyone?",
+            "a": "Linux is our standard because it's resource-friendly, secure and sustainable. If proprietary tools are absolutely required, we evaluate alternatives – and discuss rare exceptions openly."
+          },
+          {
+            "q": "Do you support migration to Linux or open-source alternatives?",
+            "a": "Yes. From pilot projects to full roll-out, we guide individuals, nonprofits and businesses – including training and ongoing support.",
+            "link": {
+              "href": "/services/linux-open-source",
+              "label": "Linux & Open Source"
+            }
+          }
+        ]
+      },
+      {
+        "category": "Repair & Services",
+        "items": [
+          {
+            "q": "Do you repair devices that weren't bought from you?",
+            "a": "Yes. We repair laptops, PCs and peripherals from a wide range of manufacturers – regardless of where they were purchased."
+          },
+          {
+            "q": "Do you repair Apple devices?",
+            "a": "Hardware, yes – provided spare parts are available and a repair makes sense. OS installations are Linux-only; we don't install macOS or Windows."
+          },
+          {
+            "q": "How long do repairs take, and what do they cost?",
+            "a": "That depends on the fault and the parts needed. We'll provide a quote on request and keep you fully informed of your options."
+          },
+          {
+            "q": "Do you offer data recovery and secure data erasure?",
+            "a": "Yes. We recover data to the best of our ability and securely erase storage media on request using recognised standards (e.g. open-source tools).",
+            "link": {
+              "href": "/services/data-recovery-transfer",
+              "label": "Data Recovery & Transfer"
+            }
+          },
+          {
+            "q": "Can I just drop in without an appointment?",
+            "a": "Absolutely. For complex cases or business appointments, a quick message in advance is helpful.",
+            "link": {
+              "href": "/contact",
+              "label": "Contact & Opening Hours"
+            }
+          }
+        ]
+      },
+      {
+        "category": "Sustainability & E-Waste",
+        "items": [
+          {
+            "q": "How do you concretely reduce e-waste?",
+            "a": "Through repairs, component reuse, refurbishing and responsible recycling. We also advise on long-lasting setups and resource-efficient software."
+          },
+          {
+            "q": "Do you accept old devices?",
+            "a": "Yes, provided reuse or responsible recycling is possible. We inspect devices on the spot and decide transparently whether they'll be reused or dismantled."
+          },
+          {
+            "q": "Do you use second-hand spare parts?",
+            "a": "Where technically sensible, we use tested second-life parts. That saves resources and can cut costs – with no compromise on function."
+          },
+          {
+            "q": "Why refurbished instead of new?",
+            "a": "Refurbished devices extend useful life, save CO₂ and raw materials. With the right upgrades, they're often more than good enough – at fair prices."
+          }
+        ]
+      },
+      {
+        "category": "Products & Warranty",
+        "items": [
+          {
+            "q": "Do you stock refurbished devices?",
+            "a": "Yes. We offer carefully checked and refurbished devices with warranty – transparently documented.",
+            "link": {
+              "href": "/shop",
+              "label": "Go to the Shop"
+            }
+          },
+          {
+            "q": "What is the REVAMPED certification?",
+            "a": "REVAMPED marks sustainable, repairable builds with documented provenance, clear upgrade paths and quality assurance.",
+            "link": {
+              "href": "/revamped",
+              "label": "More about REVAMPED"
+            }
+          },
+          {
+            "q": "Is there a warranty on your devices?",
+            "a": "Yes. Refurbished devices come with a warranty. We state the details transparently for each product."
+          }
+        ]
+      },
+      {
+        "category": "Data & Privacy",
+        "items": [
+          {
+            "q": "How do you handle my data during repairs?",
+            "a": "Confidentially and minimally. We only access data when needed for diagnosis, and protect storage media technically and organisationally."
+          },
+          {
+            "q": "Do you offer certified data erasure?",
+            "a": "We offer secure erasure procedures with a record. Just let us know what level of security you need."
+          }
+        ]
+      },
+      {
+        "category": "Workshops & Involvement",
+        "items": [
+          {
+            "q": "Do you offer workshops or training?",
+            "a": "Yes. Topics include: Linux introduction, repair basics, sustainable IT, open-source tools – for beginners through to advanced users.",
+            "link": {
+              "href": "/workshops",
+              "label": "Upcoming Workshops"
+            }
+          },
+          {
+            "q": "How can I get involved or support you?",
+            "a": "As a volunteer, partner or donor. Sharing your knowledge is also very welcome – together we create real impact.",
+            "link": {
+              "href": "/get-involved",
+              "label": "Get Involved"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "getInvolved": {
+    "meta": {
+      "title": "Get involved",
+      "description": "Join our mission to reduce e-waste and make technology accessible to everyone. Become a volunteer, intern, or partner."
+    },
+    "page": {
+      "getStarted": "Get started",
+      "learnMore": "Learn more",
+      "waysTitle": "Ways to get involved",
+      "testimonialTitle": "What our community says",
+      "partnersTitle": "Our partner organisations",
+      "ctaTitle": "Ready to make a difference?",
+      "ctaDescription": "Join our community of changemakers and help us create a more sustainable future through technology.",
+      "discoverWorkshops": "Discover workshops"
+    },
+    "coreValues": {
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "We believe in creating a sustainable future through responsible technology use and waste reduction."
+      },
+      "community": {
+        "title": "Community",
+        "description": "Building strong communities through technology education and inclusive participation."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Finding creative solutions to make technology accessible and environmentally friendly."
+      },
+      "globalImpact": {
+        "title": "Global impact",
+        "description": "Making a difference in local and global communities through technology."
+      }
+    },
+    "volunteer": {
+      "meta": {
+        "title": "Volunteering",
+        "description": "Join our team of dedicated volunteers and make a difference in your community through technology and sustainability."
+      },
+      "title": "Become a volunteer",
+      "description": "Join our team of dedicated volunteers and help make technology sustainable and accessible to everyone.",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Benefits of volunteering",
+      "flexibilityNote": "We understand that everyone has different schedules. We offer flexible volunteer activities that fit around your other commitments. Whether you can spare a few hours a week or more — your contribution will make a difference.",
+      "howToStartTitle": "How to get started",
+      "steps": [
+        "Contact us to express your interest",
+        "Meet with our team to discuss your skills and interests",
+        "Attend a brief introductory session",
+        "Start making a difference!"
+      ]
+    },
+    "donate": {
+      "meta": {
+        "title": "Donate",
+        "description": "Help directly. Every donation saves devices from e-waste and makes technology accessible to everyone."
+      },
+      "heroTitle": "Help directly.",
+      "heroDescription": "Every donation saves devices from e-waste, extends lifecycles, and enables technology access for people who couldn't otherwise afford it.",
+      "transferNow": "Transfer now",
+      "transparencyLabel": "Transparency",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Annual budget (non-profit association)",
+      "devicesSavedLabel": "devices saved annually",
+      "co2SavedLabel": "saved per year",
+      "impactTitle": "What your donation achieves",
+      "recommended": "Recommended",
+      "chooseAmount": "Choose amount and transfer",
+      "bankTransferTitle": "Bank transfer",
+      "bankTransferDescription": "Transfer to the following account:",
+      "recipient": "Recipient",
+      "iban": "IBAN",
+      "bank": "Bank",
+      "purpose": "Payment reference",
+      "copy": "Copy",
+      "copyIban": "Copy IBAN",
+      "donateDevicesTitle": "Donate devices",
+      "donateDevicesDescription": "Hardware you no longer need can give someone else a real opportunity. We accept working or repairable devices, refurbish them, and pass them on.",
+      "weAccept": "What we accept:",
+      "weAcceptList": "Laptops, desktop PCs, monitors, keyboards, mice, printers — working or repairable.",
+      "weDoNotAccept": "What we don't accept:",
+      "weDoNotAcceptList": "Physically damaged devices, broken screens without frames, CRT monitors.",
+      "preparation": "Preparation:",
+      "preparationText": "Please erase your personal data before dropping off (we can help if needed).",
+      "dropOffAddress": "Drop-off address",
+      "questions": "Questions? Write to us →",
+      "newsletterTitle": "We'll keep you informed of how your donation makes an impact.",
+      "newsletterDescription": "No adverts. Only real updates on devices saved, CO₂ reduced, and people supported.",
+      "purposeTemplate": "Donation {org} {month} {year}",
+      "months": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      "impact": {
+        "tier1Title": "1 device saved",
+        "tier1Description": "1 laptop rescued from e-waste + 285 kg CO₂ avoided.",
+        "tier2Title": "2 devices + workshop place",
+        "tier2Description": "2 devices refurbished + a place in our Linux workshop for someone who couldn't otherwise afford it.",
+        "tier3Title": "Corporate donation — 10 devices",
+        "tier3Description": "10 devices for educational institutions, social projects, or low-income households."
+      },
+      "devices": {
+        "laptop": "Laptops",
+        "desktop": "Desktop PCs",
+        "monitor": "Monitors",
+        "peripherals": "Peripherals"
+      }
+    },
+    "partnerships": {
+      "meta": {
+        "title": "Partnerships",
+        "description": "Work with us to create sustainable technology solutions and achieve lasting impact."
+      },
+      "title": "Partnership opportunities",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Partnership benefits",
+      "processTitle": "How we work together",
+      "processSteps": [
+        "Initial consultation to understand goals and opportunities",
+        "Development of partnership framework and objectives",
+        "Implementation of cooperative initiatives",
+        "Regular progress reviews and impact assessment",
+        "Continuous improvement and partnership expansion"
+      ],
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Contact us to discuss partnership opportunities",
+        "Share your organisation's goals and interests",
+        "Explore potential areas of collaboration",
+        "Develop a partnership agreement",
+        "Begin your partnership journey"
+      ]
+    },
+    "internships": {
+      "meta": {
+        "title": "Internships",
+        "description": "Gain hands-on experience in technology and sustainability through our internship programme."
+      },
+      "title": "Internship opportunities",
+      "description": "Gain valuable experience in technology and sustainability while making a real difference.",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Programme benefits",
+      "howToApplyTitle": "How to apply",
+      "howToApplySteps": [
+        "Send us your CV and a cover letter",
+        "State your area of interest and availability",
+        "Have a brief conversation with us",
+        "Start your internship journey!"
+      ]
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "Technical experts",
+        "description": "Share your technical expertise and help us develop innovative solutions for sustainable technology."
+      },
+      "title": "Technical experts",
+      "description": "Share your expertise and help us develop innovative solutions for sustainable technology.",
+      "ctaText": "Express interest",
+      "opportunitiesTitle": "Opportunities for technical experts",
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Contact us with your area of expertise and interests",
+        "Discuss possible projects and contributions",
+        "Review our development guidelines and processes",
+        "Start contributing to our projects"
+      ]
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT Help technician",
+        "description": "Share your IT knowledge and help people in your community — flexible, no prior experience needed, real impact."
+      },
+      "title": "Become an IT Help technician",
+      "description": "Your IT knowledge can make life easier for others. Help community members with their computers — flexibly, straightforwardly, and with real impact.",
+      "ctaText": "Register as technician",
+      "benefitsTitle": "What you gain",
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Create your technician profile with your skills and availability",
+        "Wait for requests — you decide which ones you take on",
+        "Arrange an appointment directly with the person requesting help",
+        "Help, learn, make a difference"
+      ]
+    },
+    "workReintegration": {
+      "meta": {
+        "title": "Work reintegration",
+        "description": "Join our work reintegration programme to gain valuable skills and experience in technology while rebuilding your career."
+      },
+      "title": "Work reintegration programme",
+      "description": "Join our supportive programme to rebuild your career in technology and sustainability.",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Programme benefits",
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Contact us to discuss your situation",
+        "Meet with our team for an assessment",
+        "Develop your personalised plan",
+        "Begin your work reintegration journey"
+      ]
+    },
+    "kontakt": {
+      "meta": {
+        "title": "Express interest",
+        "description": "Write to us briefly about what interests you — we'll get back to you personally."
+      },
+      "backToInvolvement": "All ways to get involved",
+      "title": "Interest in {topic}",
+      "description": "Tell us briefly who you are and what you're interested in. We'll get back to you personally.",
+      "topics": {
+        "freiwilligenarbeit": "Volunteering",
+        "praktikum": "Internship",
+        "wiedereinstieg": "Work reintegration",
+        "technische-experten": "Technical experts",
+        "partnerschaft": "Partnership",
+        "it-hilfe-techniker": "IT Help technician",
+        "default": "Getting involved"
+      }
+    }
+  },
+  "knowhow": {
+    "meta": {
+      "title": "Knowhow - Guides, Blog, Workshops | revamp-it",
+      "description": "Learn about vintage hardware, Linux and open source. Guides, workshops, blog and curated resources."
+    },
+    "hero": {
+      "title": "Sharing knowhow about vintage hardware, Linux and open source",
+      "subtitle": "We share our 16+ years of knowhow so you can better understand and use technology. Whether you are just starting out or already an expert – here you will find resources for your learning journey."
+    },
+    "sections": {
+      "guides": {
+        "title": "Guides",
+        "description": "Step-by-step instructions for Linux, vintage hardware and open source",
+        "cta": "View guides"
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "Tips, stories and best practices from our experts",
+        "cta": "Go to blog"
+      },
+      "workshops": {
+        "title": "Workshops",
+        "description": "Live courses and trainings to book - for beginners to experts",
+        "cta": "View workshops"
+      },
+      "resources": {
+        "title": "Resources",
+        "description": "Curated external links and open source alternatives",
+        "cta": "Browse resources"
+      }
+    },
+    "curatedResources": "Curated resources",
+    "openSourceSoftware": "Open source software alternatives",
+    "linuxDistros": "Linux distributions",
+    "externalDocs": "External documentation & portals",
+    "cta": {
+      "title": "Ready to learn?",
+      "description": "Start with our blog, attend a workshop or check out a guide.",
+      "button": "Questions? Contact us"
+    }
+  },
+  "techniker": {
+    "meta": {
+      "title": "Find a technician",
+      "description": "Find community and professional technicians near you. Free help, KulturLegi rates, and paid IT services — all in one place."
+    },
+    "list": {
+      "title": "Technicians",
+      "available": "{count, plural, one {# technician} other {# technicians}} available",
+      "becomeTechnician": "Become a technician",
+      "searchPlaceholder": "Name, city, description...",
+      "searchAriaLabel": "Search technicians",
+      "searchButton": "Search",
+      "tierAll": "All",
+      "tierCommunity": "Community",
+      "tierProfessional": "Professional",
+      "tierFilterLabel": "Technician type",
+      "skillsFilterAll": "All skills",
+      "skillsFilterLabel": "Filter by skill",
+      "resetFilters": "Reset filters",
+      "pagination": "Page navigation",
+      "prevPage": "Previous page",
+      "nextPage": "Next page",
+      "pageOf": "Page {current} of {total}",
+      "emptyTitle": "No technicians found",
+      "emptyMessageFiltered": "No technicians match your filter criteria.",
+      "emptyMessageEmpty": "No active technician profiles yet.",
+      "emptyActionFiltered": "Reset filters",
+      "emptyActionEmpty": "Create technician profile",
+      "ctaTitle": "Can you repair devices?",
+      "ctaDescription": "Register as a technician and help people nearby. For free or for payment — your choice.",
+      "ctaCreateProfile": "Create technician profile",
+      "ctaToITHelp": "Go to IT Help →",
+      "retryButton": "Try again",
+      "verified": "Verified",
+      "jobs": "{count} jobs",
+      "professional": "Professional",
+      "community": "Community",
+      "gratis": "Free",
+      "kulturlegi": "KulturLegi",
+      "loadingError": "Error loading technicians. Please try again."
+    },
+    "detail": {
+      "backToList": "All technicians",
+      "verified": "Verified",
+      "professional": "Professional",
+      "community": "Community",
+      "jobsCompleted": "{count} completed jobs",
+      "reviews": "({count} reviews)",
+      "travelRange": "· up to {km} km travel",
+      "responseTime": "Responds in approx. {hours}h",
+      "submitRequest": "Submit request",
+      "contact": "Contact",
+      "gratisHelp": "Free help available",
+      "kulturlegiRate": "KulturLegi rate",
+      "aboutMe": "About me",
+      "skills": "Skills",
+      "offeredServices": "Services offered",
+      "requestBooking": "Request booking",
+      "estimatedDuration": "Estimated duration: {hours}",
+      "priceFrom": "from CHF {price}",
+      "hourlyRate": "CHF {rate}/h",
+      "deliveryTypes": "Type of help",
+      "deliveryRemote": "Remote / Online",
+      "deliveryOnsite": "On-site"
+    },
+    "seller": {
+      "backToMarketplace": "Back to Marketplace",
+      "memberSince": "Member since {date}",
+      "listings": "Listings",
+      "sold": "Sold",
+      "noRatings": "No reviews",
+      "ratingsCount": "{count} reviews",
+      "activeListings": "Active listings ({count})",
+      "noListingsTitle": "No active listings",
+      "noListingsDescription": "This seller currently has no active listings.",
+      "loadingProfile": "Loading profile...",
+      "sellerNotFound": "Seller not found"
+    }
+  },
+  "agb": {
+    "meta": {
+      "title": "Terms and Conditions",
+      "description": "Terms and Conditions of revamp-it"
+    },
+    "title": "Terms and Conditions",
+    "section1": {
+      "title": "1. Scope",
+      "body": "These Terms and Conditions (T&Cs) apply to all services and offers of {legalName}, {address}."
+    },
+    "section2": {
+      "title": "2. Services",
+      "intro": "{orgName} is a non-profit association committed to the sustainable refurbishment and reuse of IT equipment. Our services include:",
+      "items": [
+        "Refurbishment and sale of second-hand IT equipment",
+        "IT repair services",
+        "Workshops and training",
+        "P2P marketplace for second-hand devices",
+        "IT help and support"
+      ]
+    },
+    "section3": {
+      "title": "3. Prices and Payment",
+      "body": "All prices are in Swiss Francs (CHF) including VAT, unless stated otherwise. Payment terms are specified for each offer."
+    },
+    "section4": {
+      "title": "4. Conclusion of Contract",
+      "body": "A contract is concluded by placing an order via the platform, in the shop or by e-mail, followed by confirmation from {orgName}. Representations on the website constitute a non-binding invitation to submit an offer."
+    },
+    "section5": {
+      "title": "5. Right of Withdrawal",
+      "body": "For in-store purchases there is no statutory right of withdrawal, as Swiss law does not provide for this in physical shops. For online purchases, we grant a voluntary right of return of 14 days from receipt, provided the goods are returned unused and in their original packaging.",
+      "contactLabel": "Contact:"
+    },
+    "section6": {
+      "title": "6. Warranty",
+      "body": "{orgName} provides a warranty on refurbished devices in accordance with the applicable legal provisions. Exact warranty terms are communicated at the point of purchase. For devices sold via the P2P marketplace by third parties, {orgName} assumes no warranty."
+    },
+    "section7": {
+      "title": "7. Liability",
+      "body": "{orgName} is liable within the scope of the applicable legal provisions. Liability for minor negligence is excluded to the extent permitted by law."
+    },
+    "section8": {
+      "title": "8. Data Protection",
+      "body": "Personal data is processed in accordance with our privacy policy. Registered users can export their data at any time.",
+      "privacyLinkLabel": "privacy policy"
+    },
+    "section9": {
+      "title": "9. Final Provisions",
+      "body": "Should individual provisions of these T&Cs prove invalid, the validity of the remaining provisions is not affected. Swiss law applies. The place of jurisdiction is Zurich, Switzerland."
+    },
+    "section10": {
+      "title": "10. Changes",
+      "body": "{orgName} reserves the right to change these T&Cs at any time. The current version is available on this page. Legal information about the provider can be found in the legal notice.",
+      "impressumLinkLabel": "legal notice"
+    },
+    "asOf": "As of: April 2026"
+  },
+  "datenschutz": {
+    "meta": {
+      "title": "Privacy Policy",
+      "description": "Privacy Policy of revamp-it"
+    },
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "1. Data Controller"
+    },
+    "section2": {
+      "title": "2. Collection and Processing of Personal Data",
+      "intro": "We collect personal data when you register on our platform, use our services or get in touch with us. This includes:",
+      "items": [
+        "Name and e-mail address (upon registration)",
+        "Contact details (for enquiries and bookings)",
+        "Usage data (when using the platform)"
+      ]
+    },
+    "section3": {
+      "title": "3. Purpose of Data Processing",
+      "intro": "Your data is used for:",
+      "items": [
+        "Providing and managing your user account",
+        "Carrying out repairs and services",
+        "Managing workshop registrations",
+        "Operating the P2P marketplace",
+        "Communication regarding our offers (with consent only)"
+      ]
+    },
+    "section4": {
+      "title": "4. Data Disclosure",
+      "body": "Your data is not sold to third parties. Disclosure only occurs where necessary to provide our services (e.g. to repair providers for booked repairs) or where we are legally required to do so."
+    },
+    "section5": {
+      "title": "5. Data Security",
+      "body": "We implement technical and organisational measures to protect your data against unauthorised access, loss or misuse. Passwords are stored exclusively in hashed form."
+    },
+    "section6": {
+      "title": "6. Cookies",
+      "body": "Our platform uses functional cookies for session management and authentication. Analytical cookies are only set with your consent."
+    },
+    "section7": {
+      "title": "7. Your Rights",
+      "intro": "You have the right to:",
+      "items": [
+        "Access your stored data",
+        "Correct inaccurate data",
+        "Delete your data",
+        "Restrict processing",
+        "Data portability (data export)",
+        "Revoke granted consents"
+      ],
+      "exportText": "Registered users can download a full copy of their data at any time under",
+      "exportLink": "Settings → Privacy",
+      "contactText": "For all other enquiries, please contact:"
+    },
+    "section8": {
+      "title": "8. Retention Period",
+      "body": "We store your personal data only as long as necessary for the stated purposes or as required by statutory retention obligations. Account and profile data is removed after account deletion, unless legal obligations (e.g. fiscal retention of invoices) prevent this."
+    },
+    "section9": {
+      "title": "9. Legal Basis",
+      "body": "Processing is based on the Swiss Federal Act on Data Protection (FADP) and, where applicable, on Art. 6(1) GDPR (contract performance, legitimate interests, consent)."
+    },
+    "section10": {
+      "title": "10. Applicable Law",
+      "body": "This privacy policy is subject to the Swiss Federal Act on Data Protection (FADP) and, where applicable, the General Data Protection Regulation (GDPR).",
+      "impressumLinkLabel": "legal notice"
+    },
+    "asOf": "As of: March 2026"
+  },
+  "impressum": {
+    "meta": {
+      "title": "Legal Notice",
+      "description": "Legal notice and legal information"
+    },
+    "title": "Legal Notice",
+    "legalInfo": "Information pursuant to Swiss law",
+    "organisation": "Organisation",
+    "contact": "Contact",
+    "emailLabel": "E-mail:",
+    "phoneLabel": "Phone:",
+    "authorised": "Authorised Representative",
+    "authorisedValue": "The Board",
+    "legalForm": "Legal Form",
+    "legalFormValue": "Association under Art. 60 et seq. ZGB (Swiss Civil Code)",
+    "purpose": "Purpose",
+    "purposeText": "{description} {orgName} is a non-profit association committed to the free exchange of technology, the promotion of open-source hardware and software, and the sustainable refurbishment and reuse of IT equipment.",
+    "disclaimer": "Disclaimer",
+    "disclaimerP1": "The author accepts no liability whatsoever regarding the accuracy, correctness, currency, reliability and completeness of the information on this website.",
+    "disclaimerP2": "Liability claims against the author for material or immaterial damage arising from access to or use or non-use of published information, from misuse of the connection or from technical malfunctions are excluded.",
+    "disclaimerP3": "All offers are non-binding. The author expressly reserves the right to change, supplement or delete parts of the pages or the entire offering without prior notice, or to cease publication temporarily or permanently.",
+    "linksDisclaimer": "Disclaimer for Links and References",
+    "linksDisclaimerText": "References and links to third-party websites are outside our area of responsibility. All liability for such websites is disclaimed. Access to and use of such websites is at the sole risk of the user concerned.",
+    "copyright": "Copyright",
+    "copyrightText": "The copyright and all other rights to content, images, photos or other files on this website belong exclusively to {legalName} or the specifically named rights holders. The prior written consent of the copyright holders must be obtained for the reproduction of any elements.",
+    "furtherLegal": "Further Legal Information",
+    "furtherLegalText": "See also our privacy policy and our terms and conditions.",
+    "privacyLinkLabel": "privacy policy",
+    "agbLinkLabel": "terms and conditions",
+    "asOf": "As of: April 2026"
+  },
+  "transparenz": {
+    "meta": {
+      "title": "Transparency",
+      "description": "What we do and how we do it. An insight into our mission, figures and working methods."
+    },
+    "hero": {
+      "title": "Transparency",
+      "subtitle": "What we do and how we do it"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
+    },
+    "stats": {
+      "title": "Facts & Figures",
+      "detailLink": "View detailed impact figures"
+    },
+    "howWeWork": {
+      "title": "How We Work",
+      "subtitle": "Our three community platforms connect people with technology.",
+      "toPlatform": "Go to Platform",
+      "platforms": [
+        {
+          "title": "Marketplace",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "IT Help",
+          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "Workshops",
+          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
+          "href": "/workshops"
+        }
+      ]
+    },
+    "finances": {
+      "title": "Finances",
+      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members.",
+      "memberLink": "Become a member and gain access"
+    },
+    "board": {
+      "title": "Board",
+      "text": "{orgName} is run by a voluntary board. Contact:",
+      "joinCta": "Become a Member",
+      "donateCta": "Donate"
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go to Homepage",
+    "reportProblem": "Report a Problem"
+  },
+  "error": {
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Try reloading the page — if the problem persists, please contact us.",
+    "retry": "Try Again",
+    "goHome": "Go to Homepage"
+  },
+  "projects": {
+    "meta": {
+      "title": "Our Projects",
+      "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
+    },
+    "hero": {
+      "title": "Our Projects",
+      "subtitle": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
+    },
+    "section": {
+      "title": "Our Projects",
+      "subtitle": "From open-source software to community initiatives – explore our varied projects."
+    },
+    "filter": {
+      "label": "Filter by category:",
+      "all": "All"
+    },
+    "status": {
+      "active": "Active",
+      "ongoing": "Ongoing"
+    },
+    "since": "Since {year}",
+    "learnMore": "Learn More",
+    "results": "{count} of {total} projects",
+    "resultsFiltered": "{count} of {total} projects in \"{category}\"",
+    "categories": {
+      "software": "Software Projects",
+      "hardware": "Hardware Projects",
+      "community": "Community Projects"
+    }
+  },
+  "revamped": {
+    "meta": {
+      "title": "REVAMPED Certification | Sustainable Computer Builds",
+      "description": "Learn about our exclusive REVAMPED certification – guaranteeing sustainability, quality and performance in every computer we build."
+    },
+    "hero": {
+      "title": "The REVAMPED Certification",
+      "subtitle": "Every computer we build receives our exclusive REVAMPED label – a guarantee of sustainability, quality and performance that sets a new standard in the industry.",
+      "badge": {
+        "sustainability": "Sustainability Focus",
+        "quality": "Quality Guarantee",
+        "ai": "AI-Optimised Builds"
+      }
+    },
+    "inAction": {
+      "title": "Real REVAMPED Computers in Action",
+      "subtitle": "Sustainable technology that people love to use. Our REVAMPED certification isn't just a promise – it's a visible commitment to quality and environmental responsibility.",
+      "points": [
+        "Primarily used and refurbished components",
+        "Significant reduction in environmental impact",
+        "Quality guarantee on every build",
+        "Physical certification sticker included"
+      ],
+      "ctaBuild": "Build Your Computer",
+      "ctaLearn": "Learn More About Certification"
+    },
+    "meaning": {
+      "title": "What \"REVAMPED\" Means",
+      "subtitle": "Our certification is more than a label – it's a comprehensive standard ensuring every computer meets our strict criteria for sustainability, quality and performance.",
+      "pillars": [
+        {
+          "title": "Sustainability First",
+          "description": "We prioritise used and refurbished components wherever possible, drastically reducing environmental impact while maintaining peak performance. We apply circular economy principles to every build."
+        },
+        {
+          "title": "Quality Guaranteed",
+          "description": "Every component is thoroughly tested, cleaned and verified to meet our strict performance and reliability standards. Quality is never compromised for sustainability."
+        },
+        {
+          "title": "AI-Optimised",
+          "description": "Our AI ensures perfect component compatibility and optimal performance tuning for your specific use case. Every build is intelligently designed around your needs."
+        }
+      ]
+    },
+    "certificate": {
+      "title": "Certificate of Authenticity",
+      "subtitle": "Every REVAMPED computer comes with a detailed certificate providing full transparency about your sustainable build.",
+      "items": [
+        "Component sustainability ratings",
+        "CO₂ emissions saved versus new build",
+        "Component provenance and condition",
+        "Performance benchmarks",
+        "Warranty coverage details"
+      ],
+      "digitalPhysical": "Digital & Physical",
+      "digitalDesc": "Your certificate includes both a physical sticker and a digital QR code for instant verification and detailed component information."
+    },
+    "stickers": {
+      "title": "The REVAMPED Label Collection",
+      "subtitle": "Each design represents our commitment to sustainable computing and quality assurance.",
+      "original": {
+        "title": "Original Design",
+        "description": "Clean, professional certification mark emphasising our laptop-focused sustainability approach."
+      },
+      "eco": {
+        "title": "Eco Variant",
+        "description": "Extended design highlighting our environmental focus and circular economy principles."
+      },
+      "digital": {
+        "title": "Digital Certificate",
+        "description": "QR-code-linked verification system with blockchain-backed authenticity records."
+      }
+    },
+    "cta": {
+      "title": "Join the REVAMPED Revolution",
+      "subtitle": "When you choose a REVAMPED computer, you're not just getting a great machine – you're making a statement about the future of technology. Sustainable, powerful, and built with purpose.",
+      "startBuild": "Start Your REVAMPED Build",
+      "learnMore": "Learn More About Certification"
+    }
+  },
+  "space": {
+    "meta": {
+      "title": "Our Locations",
+      "description": "From the Toni Dairy to today – the story of our spaces and our vision for a new community hub in Zurich."
+    },
+    "hero": {
+      "title": "From Dairy to Community Space",
+      "subtitle": "Since 2003, we've been moving around Zurich. Now we're searching for a new home – a place where sustainability, technology and community come together.",
+      "ctaVision": "Our Vision",
+      "ctaDonate": "Support the Location Fund"
+    },
+    "history": {
+      "title": "Our Journey Through Zurich",
+      "subtitle": "Over 20 years, multiple locations, one mission: using technology sustainably.",
+      "locations": [
+        {
+          "period": "2003 – 2008",
+          "name": "Toni Dairy",
+          "description": "Our birthplace in the old cheese cellar. This is where the legendary Debian 10th anniversary party happened on the roof.",
+          "highlight": "Founding Location"
+        },
+        {
+          "period": "2008 – 2012",
+          "name": "Reformed Church Wipkingen",
+          "description": "On the 6th/7th floor of the church tower and in the cellars. This is where our first social projects started.",
+          "highlight": "Social Projects"
+        },
+        {
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "A large space with many workstations. Expansion of our workshop.",
+          "highlight": "Expansion"
+        }
+      ],
+      "currentHighlight": "Current"
+    },
+    "current": {
+      "label": "Current Shop",
+      "hours": "Opening Hours",
+      "hoursValue": "Mon: 9–12 | Tue–Fri: 13–17",
+      "moreInfo": "More About the Shop"
+    },
+    "future": {
+      "badge": "Moving by end of 2026",
+      "title": "Our Dream Location",
+      "subtitle": "We need to leave our current premises by the end of 2026. This is our chance to create something bigger.",
+      "visionLabel": "Vision: Community Space",
+      "visionDescription": "An open space where technology, sustainability and community come together. Shop, workshop, coworking, events – all under one roof.",
+      "conceptCaption": "Concept visualisation of our ideal community space",
+      "features": [
+        {
+          "name": "Shop Area",
+          "description": "Exhibition space for refurbished devices with expert advice"
+        },
+        {
+          "name": "Repair Workshop",
+          "description": "Workstations for technicians and community repairs"
+        },
+        {
+          "name": "Coworking",
+          "description": "Flexible workstations for our community"
+        },
+        {
+          "name": "Event Space",
+          "description": "Room for workshops, meetups and small events (15–20 people)"
+        },
+        {
+          "name": "Mini Library",
+          "description": "A few shelves of tech books, magazines and resources"
+        },
+        {
+          "name": "Coffee Corner",
+          "description": "Meeting point for informal exchange and networking"
+        },
+        {
+          "name": "Kitchen",
+          "description": "Fully equipped kitchen for zero food waste initiatives"
+        },
+        {
+          "name": "Zero Food Waste",
+          "description": "Rescued food for community lunches"
+        }
+      ],
+      "params": {
+        "title": "What We're Looking For",
+        "subtitle": "The parameters for our ideal location",
+        "area": "Usable Area",
+        "budget": "Monthly Budget",
+        "city": "Location",
+        "idealLabel": "Ideally:",
+        "idealText": "Ground floor or easily accessible, wheelchair-accessible, loading bay or delivery access, in a vibrant neighbourhood with good public transport links.",
+        "tipText": "Know a suitable space? We'd love to hear from you!",
+        "contactCta": "Contact Us"
+      }
+    },
+    "impact": {
+      "title": "Why a Bigger Space Means More Impact",
+      "subtitle": "With more space, we can multiply our KPIs – save more devices, train more people, achieve more impact.",
+      "today": "Today",
+      "potential": "Potential",
+      "items": [
+        {
+          "metric": "Devices per Year",
+          "current": "~500",
+          "potential": "2,000+",
+          "reason": "More workshop stations = more capacity"
+        },
+        {
+          "metric": "Workshop Participants",
+          "current": "~100",
+          "potential": "500+",
+          "reason": "Dedicated event space for regular courses"
+        },
+        {
+          "metric": "Community Members",
+          "current": "~50",
+          "potential": "200+",
+          "reason": "Coworking attracts more volunteers"
+        },
+        {
+          "metric": "Social Integration",
+          "current": "~10",
+          "potential": "30+",
+          "reason": "More internship places with larger premises"
+        }
+      ],
+      "donateCta": {
+        "title": "Support Our Location Fund",
+        "description": "With a bigger budget, we can find a better location – and multiply our impact on the environment and society. Every contribution helps us realise our dream of a community space.",
+        "donateCta": "Donate Now",
+        "impactCta": "See Our Impact"
+      }
+    },
+    "shopLinks": {
+      "title": "All Shopping Options",
+      "subtitle": "In-person and online – choose what suits you best.",
+      "currentStore": "Current Shop",
+      "shopOverview": "Shop Overview",
+      "onlineShop": "Online Shop"
+    }
+  },
+  "support": {
+    "meta": {
+      "title": "Support RevampIT",
+      "description": "Support high-quality, ad-free content about sustainable technology."
+    },
+    "hero": {
+      "title": "Support RevampIT",
+      "subtitle": "Help us create high-quality, ad-free content about sustainable technology, open source, and the future of computing."
+    },
+    "pillars": {
+      "noAds": {
+        "title": "No Ads",
+        "description": "We will never run advertising or sell your data."
+      },
+      "communityDriven": {
+        "title": "Community-Driven",
+        "description": "By the community, for the community – with no commercial interests."
+      },
+      "qualityFirst": {
+        "title": "Quality First",
+        "description": "Focused on truthful, well-researched content."
+      }
+    },
+    "promise": {
+      "title": "Our Promise",
+      "intro": "RevampIT is not a company – it's a movement. We believe that high-quality information about sustainable technology should be accessible to everyone, without paywalls or intrusive advertising.",
+      "enables": "Your support enables us to:",
+      "items": [
+        "Conduct in-depth research and analysis",
+        "Run our servers and infrastructure",
+        "Develop open-source tools and resources",
+        "Organise community events and workshops",
+        "Stay 100% ad-free and independent"
+      ]
+    },
+    "oneTime": {
+      "title": "One-Time Donation",
+      "description": "Buy us a coffee or support us with any amount you like.",
+      "cta": "Donate Now"
+    },
+    "monthly": {
+      "title": "Monthly Support",
+      "description": "Become a supporter and help us grow sustainably.",
+      "cta": "Become a Sponsor"
+    },
+    "otherWays": {
+      "title": "Other Ways to Help",
+      "submitPost": "Submit a Post",
+      "contributeCode": "Contribute Code",
+      "shareArticle": "Share an Article"
+    },
+    "thanks": "Thank you so much for supporting our mission for sustainable, high-quality tech content."
+  }
+}

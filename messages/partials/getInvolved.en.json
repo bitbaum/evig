@@ -1,0 +1,218 @@
+{
+  "getInvolved": {
+    "meta": {
+      "title": "Get involved",
+      "description": "Join our mission to reduce e-waste and make technology accessible to everyone. Become a volunteer, intern, or partner."
+    },
+    "page": {
+      "getStarted": "Get started",
+      "learnMore": "Learn more",
+      "waysTitle": "Ways to get involved",
+      "testimonialTitle": "What our community says",
+      "partnersTitle": "Our partner organisations",
+      "ctaTitle": "Ready to make a difference?",
+      "ctaDescription": "Join our community of changemakers and help us create a more sustainable future through technology.",
+      "discoverWorkshops": "Discover workshops"
+    },
+    "coreValues": {
+      "sustainability": {
+        "title": "Sustainability",
+        "description": "We believe in creating a sustainable future through responsible technology use and waste reduction."
+      },
+      "community": {
+        "title": "Community",
+        "description": "Building strong communities through technology education and inclusive participation."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Finding creative solutions to make technology accessible and environmentally friendly."
+      },
+      "globalImpact": {
+        "title": "Global impact",
+        "description": "Making a difference in local and global communities through technology."
+      }
+    },
+    "volunteer": {
+      "meta": {
+        "title": "Volunteering",
+        "description": "Join our team of dedicated volunteers and make a difference in your community through technology and sustainability."
+      },
+      "title": "Become a volunteer",
+      "description": "Join our team of dedicated volunteers and help make technology sustainable and accessible to everyone.",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Benefits of volunteering",
+      "flexibilityNote": "We understand that everyone has different schedules. We offer flexible volunteer activities that fit around your other commitments. Whether you can spare a few hours a week or more — your contribution will make a difference.",
+      "howToStartTitle": "How to get started",
+      "steps": [
+        "Contact us to express your interest",
+        "Meet with our team to discuss your skills and interests",
+        "Attend a brief introductory session",
+        "Start making a difference!"
+      ]
+    },
+    "donate": {
+      "meta": {
+        "title": "Donate",
+        "description": "Help directly. Every donation saves devices from e-waste and makes technology accessible to everyone."
+      },
+      "heroTitle": "Help directly.",
+      "heroDescription": "Every donation saves devices from e-waste, extends lifecycles, and enables technology access for people who couldn't otherwise afford it.",
+      "transferNow": "Transfer now",
+      "transparencyLabel": "Transparency",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Annual budget (non-profit association)",
+      "devicesSavedLabel": "devices saved annually",
+      "co2SavedLabel": "saved per year",
+      "impactTitle": "What your donation achieves",
+      "recommended": "Recommended",
+      "chooseAmount": "Choose amount and transfer",
+      "bankTransferTitle": "Bank transfer",
+      "bankTransferDescription": "Transfer to the following account:",
+      "recipient": "Recipient",
+      "iban": "IBAN",
+      "bank": "Bank",
+      "purpose": "Payment reference",
+      "copy": "Copy",
+      "copyIban": "Copy IBAN",
+      "donateDevicesTitle": "Donate devices",
+      "donateDevicesDescription": "Hardware you no longer need can give someone else a real opportunity. We accept working or repairable devices, refurbish them, and pass them on.",
+      "weAccept": "What we accept:",
+      "weAcceptList": "Laptops, desktop PCs, monitors, keyboards, mice, printers — working or repairable.",
+      "weDoNotAccept": "What we don't accept:",
+      "weDoNotAcceptList": "Physically damaged devices, broken screens without frames, CRT monitors.",
+      "preparation": "Preparation:",
+      "preparationText": "Please erase your personal data before dropping off (we can help if needed).",
+      "dropOffAddress": "Drop-off address",
+      "questions": "Questions? Write to us →",
+      "newsletterTitle": "We'll keep you informed of how your donation makes an impact.",
+      "newsletterDescription": "No adverts. Only real updates on devices saved, CO₂ reduced, and people supported.",
+      "purposeTemplate": "Donation {org} {month} {year}",
+      "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      "impact": {
+        "tier1Title": "1 device saved",
+        "tier1Description": "1 laptop rescued from e-waste + 285 kg CO₂ avoided.",
+        "tier2Title": "2 devices + workshop place",
+        "tier2Description": "2 devices refurbished + a place in our Linux workshop for someone who couldn't otherwise afford it.",
+        "tier3Title": "Corporate donation — 10 devices",
+        "tier3Description": "10 devices for educational institutions, social projects, or low-income households."
+      },
+      "devices": {
+        "laptop": "Laptops",
+        "desktop": "Desktop PCs",
+        "monitor": "Monitors",
+        "peripherals": "Peripherals"
+      }
+    },
+    "partnerships": {
+      "meta": {
+        "title": "Partnerships",
+        "description": "Work with us to create sustainable technology solutions and achieve lasting impact."
+      },
+      "title": "Partnership opportunities",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Partnership benefits",
+      "processTitle": "How we work together",
+      "processSteps": [
+        "Initial consultation to understand goals and opportunities",
+        "Development of partnership framework and objectives",
+        "Implementation of cooperative initiatives",
+        "Regular progress reviews and impact assessment",
+        "Continuous improvement and partnership expansion"
+      ],
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Contact us to discuss partnership opportunities",
+        "Share your organisation's goals and interests",
+        "Explore potential areas of collaboration",
+        "Develop a partnership agreement",
+        "Begin your partnership journey"
+      ]
+    },
+    "internships": {
+      "meta": {
+        "title": "Internships",
+        "description": "Gain hands-on experience in technology and sustainability through our internship programme."
+      },
+      "title": "Internship opportunities",
+      "description": "Gain valuable experience in technology and sustainability while making a real difference.",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Programme benefits",
+      "howToApplyTitle": "How to apply",
+      "howToApplySteps": [
+        "Send us your CV and a cover letter",
+        "State your area of interest and availability",
+        "Have a brief conversation with us",
+        "Start your internship journey!"
+      ]
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "Technical experts",
+        "description": "Share your technical expertise and help us develop innovative solutions for sustainable technology."
+      },
+      "title": "Technical experts",
+      "description": "Share your expertise and help us develop innovative solutions for sustainable technology.",
+      "ctaText": "Express interest",
+      "opportunitiesTitle": "Opportunities for technical experts",
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Contact us with your area of expertise and interests",
+        "Discuss possible projects and contributions",
+        "Review our development guidelines and processes",
+        "Start contributing to our projects"
+      ]
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT Help technician",
+        "description": "Share your IT knowledge and help people in your community — flexible, no prior experience needed, real impact."
+      },
+      "title": "Become an IT Help technician",
+      "description": "Your IT knowledge can make life easier for others. Help community members with their computers — flexibly, straightforwardly, and with real impact.",
+      "ctaText": "Register as technician",
+      "benefitsTitle": "What you gain",
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Create your technician profile with your skills and availability",
+        "Wait for requests — you decide which ones you take on",
+        "Arrange an appointment directly with the person requesting help",
+        "Help, learn, make a difference"
+      ]
+    },
+    "workReintegration": {
+      "meta": {
+        "title": "Work reintegration",
+        "description": "Join our work reintegration programme to gain valuable skills and experience in technology while rebuilding your career."
+      },
+      "title": "Work reintegration programme",
+      "description": "Join our supportive programme to rebuild your career in technology and sustainability.",
+      "ctaText": "Express interest",
+      "benefitsTitle": "Programme benefits",
+      "howToStartTitle": "How to get started",
+      "howToStartSteps": [
+        "Contact us to discuss your situation",
+        "Meet with our team for an assessment",
+        "Develop your personalised plan",
+        "Begin your work reintegration journey"
+      ]
+    },
+    "kontakt": {
+      "meta": {
+        "title": "Express interest",
+        "description": "Write to us briefly about what interests you — we'll get back to you personally."
+      },
+      "backToInvolvement": "All ways to get involved",
+      "title": "Interest in {topic}",
+      "description": "Tell us briefly who you are and what you're interested in. We'll get back to you personally.",
+      "topics": {
+        "freiwilligenarbeit": "Volunteering",
+        "praktikum": "Internship",
+        "wiedereinstieg": "Work reintegration",
+        "technische-experten": "Technical experts",
+        "partnerschaft": "Partnership",
+        "it-hilfe-techniker": "IT Help technician",
+        "default": "Getting involved"
+      }
+    }
+  }
+}

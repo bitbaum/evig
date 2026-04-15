@@ -1,0 +1,33 @@
+{
+  "projects": {
+    "meta": {
+      "title": "Our Projects",
+      "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
+    },
+    "hero": {
+      "title": "Our Projects",
+      "subtitle": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
+    },
+    "section": {
+      "title": "Our Projects",
+      "subtitle": "From open-source software to community initiatives – explore our varied projects."
+    },
+    "filter": {
+      "label": "Filter by category:",
+      "all": "All"
+    },
+    "status": {
+      "active": "Active",
+      "ongoing": "Ongoing"
+    },
+    "since": "Since {year}",
+    "learnMore": "Learn More",
+    "results": "{count} of {total} projects",
+    "resultsFiltered": "{count} of {total} projects in \"{category}\"",
+    "categories": {
+      "software": "Software Projects",
+      "hardware": "Hardware Projects",
+      "community": "Community Projects"
+    }
+  }
+}

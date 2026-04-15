@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 
 interface CommunityStatsProps {
@@ -19,14 +20,10 @@ function formatCount(n: number): string {
   return `${n}`
 }
 
-const STAT_LABELS: { key: keyof StatsData; label: string }[] = [
-  { key: 'users', label: 'Nutzer:innen' },
-  { key: 'listings', label: 'Inserate' },
-  { key: 'repairs', label: 'Reparaturen' },
-  { key: 'workshops', label: 'Workshops' },
-]
+const STAT_KEYS: (keyof StatsData)[] = ['users', 'listings', 'repairs', 'workshops']
 
 export function CommunityStats({ className = '' }: CommunityStatsProps) {
+  const t = useTranslations('home.stats')
   const [stats, setStats] = useState<StatsData | null>(null)
 
   useEffect(() => {
@@ -41,10 +38,10 @@ export function CommunityStats({ className = '' }: CommunityStatsProps) {
 
   return (
     <div className={`flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-gray-600 ${className}`}>
-      {STAT_LABELS.map(({ key, label }) => (
+      {STAT_KEYS.map((key) => (
         <span key={key} className="flex items-center gap-1.5">
           <span className="font-semibold text-gray-900">{formatCount(stats[key])}</span>
-          {label}
+          {t(key)}
         </span>
       ))}
     </div>

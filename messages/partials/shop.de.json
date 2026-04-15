@@ -1,0 +1,126 @@
+{
+  "shop": {
+    "meta": {
+      "title": "Shop — Refurbished Hardware",
+      "description": "Geprüfte, aufgearbeitete Computer zu fairen Preisen. Mit Garantie."
+    },
+    "title": "Unser Shop",
+    "subtitle": "Geprüfte Refurbished-Hardware",
+    "filters": {
+      "all": "Alle",
+      "laptops": "Laptops",
+      "desktops": "Desktops",
+      "accessories": "Zubehör"
+    },
+    "product": {
+      "addToCart": "In den Warenkorb",
+      "outOfStock": "Ausverkauft",
+      "condition": "Zustand",
+      "warranty": "Garantie",
+      "months": "{count} Monate"
+    },
+    "empty": "Keine Produkte gefunden",
+    "verifiedBadge": "Geprüft",
+
+    "page": {
+      "heroTitle": "Wie möchtest du einkaufen?",
+      "heroSubtitle": "Wähle den Kanal, der am besten zu dir passt: unseren Online-Shop, den Shopware-Shop oder unser Ladenlokal in Zürich.",
+      "metaDescription": "Wähle, wie du bei {orgName} einkaufen möchtest – Online-Shop, Shopware-Kanal oder Ladenlokal in Zürich.",
+
+      "store": {
+        "title": "Ladenlokal (Zürich)",
+        "tagline": "Beratung, Geräte ansehen, direkt mitnehmen",
+        "accessInfo": "Gut mit ÖV erreichbar. Parkmöglichkeiten in der Nähe.",
+        "openingHours": "Öffnungszeiten",
+        "openingHoursMonday": "Montag: {hours}",
+        "openingHoursTueFri": "Dienstag – Freitag: {hours}",
+        "openGoogleMaps": "In Google Maps öffnen",
+        "openOsm": "In OpenStreetMap öffnen",
+        "contact": "Kontakt",
+        "mapsInfoTitle": "Warum zwei Kartenoptionen?",
+        "mapsInfoBody": "OpenStreetMap ist community-getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live-Verkehr und POIs. Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig."
+      },
+
+      "online": {
+        "title": "Online-Shops",
+        "tagline": "Wähle zwischen unserem Online-Shop und dem Shopware-Kanal.",
+        "benefit1": "Geprüfte Qualität und Garantie in allen Kanälen",
+        "benefit2": "Faire Preise, nachhaltige Auswahl",
+        "benefit3": "Sichere Zahlung",
+        "currentShop": "Aktueller Online-Shop",
+        "shopwareShop": "Zum Shopware-Shop",
+        "onlineShop": "{orgName} Online-Shop",
+        "multiShopTitle": "Mehrere Shop-Kanäle?",
+        "multiShopBody": "Unser {orgName} Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System."
+      }
+    },
+
+    "search": {
+      "metaTitleWithQuery": "Suche: \"{query}\" | {orgName} Shop",
+      "metaDescWithQuery": "Suchergebnisse für \"{query}\" – nachhaltig aufbereitete IT-Geräte bei {orgName}.",
+      "metaTitle": "Suche | {orgName} Shop",
+      "metaDesc": "Durchsuche unser Sortiment an nachhaltig aufbereiteten IT-Geräten.",
+      "heroTitleWithQuery": "Ergebnisse für \"{query}\"",
+      "heroTitle": "Shop durchsuchen",
+      "placeholder": "Was suchst du? z.B. Laptop, Monitor, Tastatur...",
+      "submitButton": "Suchen",
+      "breadcrumbHome": "Start",
+      "breadcrumbShop": "Shop",
+      "breadcrumbSearchWithQuery": "Suche: \"{query}\"",
+      "breadcrumbSearch": "Suche",
+      "resultsTitle": "Suche nach \"{query}\"",
+      "resultsComingSoon": "Die Produktsuche wird derzeit eingerichtet. Bald kannst du hier nach aufbereiteten IT-Geräten suchen.",
+      "goToShop": "Zum Online-Shop",
+      "allShopOptions": "Alle Shop-Optionen",
+      "popularSearches": "Beliebte Suchen",
+      "browseByCategory": "Nach Kategorie stöbern",
+      "productCount": "{count} Produkte",
+      "allCategories": "Alle Kategorien anzeigen →"
+    },
+
+    "category": {
+      "notFoundMeta": "Kategorie nicht gefunden | {orgName} Shop",
+      "metaTitle": "{categoryName} | {orgName} Shop",
+      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName} Shop",
+      "metaDesc": "Entdecke unsere Auswahl an {categoryNameLower} – nachhaltig aufbereitete IT-Geräte bei {orgName}.",
+      "heroSubtitle": "Entdecke unsere Auswahl an nachhaltig aufbereiteten {categoryNameLower} – geprüfte Qualität zu fairen Preisen.",
+      "productCount": "{count} Produkte in dieser Kategorie",
+      "subcategories": "Unterkategorien",
+      "categoryProductCount": "{count} Produkte",
+      "productsLoading": "Produkte werden geladen",
+      "productsComingSoon": "Bald findest du hier aufbereitete IT-Geräte in der Kategorie {categoryName} auf unserem Marketplace.",
+      "goToShop": "Zum Online-Shop",
+      "allShopOptions": "Alle Shop-Optionen",
+      "relatedIn": "Weitere in {parentName}",
+      "breadcrumbHome": "Start"
+    },
+
+    "loading": {
+      "text": "Shop laden..."
+    },
+
+    "error": {
+      "title": "Etwas ist schiefgelaufen",
+      "body": "Beim Laden des Shops ist ein Fehler aufgetreten.",
+      "retry": "Erneut versuchen",
+      "backToShop": "Zurück zum Shop"
+    },
+
+    "header": {
+      "skipToContent": "Zum Hauptinhalt springen",
+      "skipToFooter": "Zur Fusszeile springen",
+      "skipLinks": "Sprunglinks",
+      "openMenu": "Menü öffnen",
+      "categories": "Kategorien",
+      "searchPlaceholder": "Wonach suchst du?",
+      "searchLabel": "Suche",
+      "closeSearch": "Suche schliessen",
+      "compareLabel": "Vergleichsliste ({count} Artikel)",
+      "wishlistLabel": "Merkliste ({count} Artikel)",
+      "cartLabel": "Warenkorb",
+      "backToShop": "Zurück zum Shop",
+      "shopOverview": "Zur Shop-Übersicht",
+      "closeMenu": "Menü schliessen"
+    }
+  }
+}

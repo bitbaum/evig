@@ -59,6 +59,9 @@ export function useDecisionForm() {
   const [discussionDeadline, setDiscussionDeadline] = useState('');
   const [votingDeadline, setVotingDeadline] = useState('');
   const initialStatusRef = useRef<'draft' | 'discussion' | 'voting'>('draft');
+  const setInitialStatus = (status: 'draft' | 'discussion' | 'voting') => {
+    initialStatusRef.current = status;
+  };
 
   // Participant state
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -224,7 +227,7 @@ export function useDecisionForm() {
     // Submit state
     submitting, error,
     handleSubmit,
-    initialStatusRef,
+    setInitialStatus,
     // AI
     aiRecommendationReason,
     setAiRecommendationReason,

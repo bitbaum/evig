@@ -1,0 +1,80 @@
+{
+  "home": {
+    "meta": {
+      "title": "Old Hardware. New Life. | Computer Repair & Linux in Switzerland",
+      "description": "Buy & sell used IT. Community-driven computer repair. Workshops on Linux, hardware and programming."
+    },
+    "hero": {
+      "title": "Old Hardware. New Life.",
+      "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
+      "ctaDiscover": "Explore now",
+      "ctaAbout": "About us"
+    },
+    "actions": {
+      "heading": "What would you like to do?",
+      "sell": {
+        "title": "Got an old device?",
+        "subtitle": "Sell or give it away in 2 minutes — free with no fees.",
+        "primaryLabel": "Browse marketplace",
+        "secondaryLabel": "Sell now"
+      },
+      "repair": {
+        "title": "Computer broken?",
+        "subtitle": "Technicians near you can help — or offer repairs yourself.",
+        "primaryLabel": "Get help",
+        "secondaryLabel": "Become a technician"
+      },
+      "learn": {
+        "title": "Want to learn something new?",
+        "subtitle": "Hands-on workshops on Linux, hardware repair, programming and AI.",
+        "primaryLabel": "View workshops",
+        "secondaryLabel": "Browse resources"
+      }
+    },
+    "proServices": {
+      "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
+      "linkLabel": "IT services"
+    },
+    "impact": {
+      "title": "Our Impact",
+      "subtitle": "What we've achieved together",
+      "moreLink": "More about our impact"
+    },
+    "community": {
+      "heading": "Join the Community",
+      "subtitle": "Use it, contribute, or support — every bit counts.",
+      "use": {
+        "title": "Use",
+        "desc": "Buy, sell, repair — for free"
+      },
+      "volunteer": {
+        "title": "Volunteer",
+        "desc": "Share your knowledge as a volunteer technician"
+      },
+      "donate": {
+        "title": "Support",
+        "desc": "Donate devices or money to the association"
+      },
+      "membership": {
+        "title": "Become a member",
+        "desc": "Vote and actively shape the association"
+      }
+    },
+    "newsletter": {
+      "title": "Stay up to date",
+      "subtitle": "Learn how we make technology sustainable. No spam — only content that matters.",
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "Email address",
+      "submit": "Subscribe",
+      "submitting": "Subscribing...",
+      "successMessage": "Thank you! Please confirm your email to activate the newsletter.",
+      "networkError": "Network error. Please try again later."
+    },
+    "stats": {
+      "users": "Users",
+      "listings": "Listings",
+      "repairs": "Repairs",
+      "workshops": "Workshops"
+    }
+  }
+}

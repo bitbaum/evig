@@ -13,14 +13,18 @@
 import { useState, useRef, useEffect } from 'react'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Logo } from '@/components/ui/Logo'
 import { MobileMenu } from '../MobileMenu'
 import { UserMenu } from '@/components/auth/UserMenu'
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { cn } from '@/lib/utils'
 import { mainNavigation } from '@/config/navigation'
 import { NavItem } from './NavItem'
 
 export function Header() {
+  const tNav = useTranslations('nav')
+  const tAccessibility = useTranslations('accessibility')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [anyDropdownOpen, setAnyDropdownOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -96,9 +100,12 @@ export function Header() {
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
                   )}
                 >
-                  {contactItem.name}
+                  {contactItem.nameKey ? tNav(contactItem.nameKey as never) : contactItem.name}
                 </Link>
               )}
+
+              {/* Locale Switcher */}
+              <LocaleSwitcher />
 
               {/* Divider */}
               <div className="w-px h-5 bg-gray-200" />
@@ -122,7 +129,7 @@ export function Header() {
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 )}
                 onClick={() => setMobileMenuOpen(true)}
-                aria-label="Menü öffnen"
+                aria-label={tAccessibility('openMenu')}
                 aria-expanded={mobileMenuOpen}
               >
                 <Menu className="h-5 w-5" />

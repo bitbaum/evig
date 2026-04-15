@@ -1,0 +1,99 @@
+{
+  "space": {
+    "meta": {
+      "title": "Nos emplacements",
+      "description": "De la laiterie Toni à aujourd'hui – l'histoire de nos emplacements et notre vision d'un nouvel espace communautaire à Zurich."
+    },
+    "hero": {
+      "title": "De la laiterie à l'espace communautaire",
+      "subtitle": "Depuis 2003, nous nous déplaçons à travers Zurich. Nous cherchons maintenant un nouveau foyer – un lieu où durabilité, technologie et communauté se rejoignent.",
+      "ctaVision": "Notre vision",
+      "ctaDonate": "Soutenir le budget de localisation"
+    },
+    "history": {
+      "title": "Notre voyage à travers Zurich",
+      "subtitle": "Plus de 20 ans, plusieurs emplacements, une mission : utiliser la technologie de manière durable.",
+      "locations": [
+        {
+          "period": "2003 – 2008",
+          "name": "Toni Molkerei",
+          "description": "Notre lieu de naissance dans l'ancienne cave à fromages. C'est ici qu'a eu lieu le légendaire anniversaire des 10 ans de Debian sur le toit.",
+          "highlight": "Lieu de fondation"
+        },
+        {
+          "period": "2008 – 2012",
+          "name": "Église réformée Wipkingen",
+          "description": "Au 6e/7e étage du clocher et dans les caves. C'est ici qu'ont démarré nos premiers projets sociaux.",
+          "highlight": "Projets sociaux"
+        },
+        {
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "Grand espace avec de nombreux postes de travail. Expansion de notre atelier.",
+          "highlight": "Expansion"
+        }
+      ],
+      "currentHighlight": "Actuel"
+    },
+    "current": {
+      "label": "Boutique actuelle",
+      "hours": "Horaires d'ouverture",
+      "hoursValue": "Lun : 9h–12h | Mar–Ven : 13h–17h",
+      "moreInfo": "En savoir plus sur la boutique"
+    },
+    "future": {
+      "badge": "Déménagement d'ici fin 2026",
+      "title": "Notre local de rêve",
+      "subtitle": "Nous devons quitter notre local actuel d'ici fin 2026. C'est notre chance de créer quelque chose de plus grand.",
+      "visionLabel": "Vision : Espace communautaire",
+      "visionDescription": "Un espace ouvert où technologie, durabilité et communauté se rejoignent. Boutique, atelier, coworking, événements – tout sous un même toit.",
+      "conceptCaption": "Visualisation conceptuelle de notre espace communautaire idéal",
+      "features": [
+        { "name": "Espace boutique", "description": "Surface d'exposition pour appareils reconditionnés avec conseil" },
+        { "name": "Atelier de réparation", "description": "Postes de travail pour les techniciens et les réparations communautaires" },
+        { "name": "Coworking", "description": "Postes de travail flexibles pour notre communauté" },
+        { "name": "Salle événementielle", "description": "Espace pour ateliers, réunions et petits événements (15–20 personnes)" },
+        { "name": "Mini-bibliothèque", "description": "Quelques étagères de livres tech, revues et ressources" },
+        { "name": "Coin café", "description": "Point de rencontre pour échanges informels et réseautage" },
+        { "name": "Cuisine", "description": "Cuisine entièrement équipée pour les initiatives zéro gaspillage alimentaire" },
+        { "name": "Zéro gaspillage alimentaire", "description": "Aliments sauvés pour les déjeuners communautaires" }
+      ],
+      "params": {
+        "title": "Ce que nous cherchons",
+        "subtitle": "Les paramètres de notre emplacement idéal",
+        "area": "Surface utile",
+        "budget": "Budget mensuel",
+        "city": "Emplacement",
+        "idealLabel": "L'idéal serait :",
+        "idealText": "Rez-de-chaussée ou facilement accessible, accès PMR, quai de chargement ou possibilité de livraison, dans un quartier animé bien desservi par les transports.",
+        "tipText": "Vous connaissez un espace approprié ? Nous accueillons volontiers toute suggestion !",
+        "contactCta": "Contactez-nous"
+      }
+    },
+    "impact": {
+      "title": "Pourquoi un plus grand espace signifie plus d'impact",
+      "subtitle": "Avec plus d'espace, nous pouvons multiplier nos indicateurs – sauver plus d'appareils, former plus de personnes, créer plus d'impact.",
+      "today": "Aujourd'hui",
+      "potential": "Potentiel",
+      "items": [
+        { "metric": "Appareils par an", "current": "~500", "potential": "2 000+", "reason": "Plus de postes d'atelier = plus de capacité" },
+        { "metric": "Participants aux ateliers", "current": "~100", "potential": "500+", "reason": "Propre salle pour des cours réguliers" },
+        { "metric": "Membres de la communauté", "current": "~50", "potential": "200+", "reason": "Le coworking attire plus de bénévoles" },
+        { "metric": "Intégration sociale", "current": "~10", "potential": "30+", "reason": "Plus de places de stage grâce aux grands espaces" }
+      ],
+      "donateCta": {
+        "title": "Soutenez notre budget de localisation",
+        "description": "Avec un budget plus important, nous pouvons trouver un meilleur emplacement – et ainsi multiplier notre impact sur l'environnement et la société. Chaque contribution nous aide à réaliser notre rêve d'espace communautaire.",
+        "donateCta": "Faire un don",
+        "impactCta": "Voir notre impact"
+      }
+    },
+    "shopLinks": {
+      "title": "Toutes les options d'achat",
+      "subtitle": "Physique et en ligne – choisissez ce qui vous convient le mieux.",
+      "currentStore": "Boutique actuelle",
+      "shopOverview": "Aperçu de la boutique",
+      "onlineShop": "Boutique en ligne"
+    }
+  }
+}

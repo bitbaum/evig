@@ -1,0 +1,33 @@
+{
+  "projects": {
+    "meta": {
+      "title": "Nos projets",
+      "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel."
+    },
+    "hero": {
+      "title": "Nos projets",
+      "subtitle": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel."
+    },
+    "section": {
+      "title": "Nos projets",
+      "subtitle": "Des logiciels open source aux initiatives communautaires – découvrez nos projets variés."
+    },
+    "filter": {
+      "label": "Filtrer par catégorie :",
+      "all": "Tous"
+    },
+    "status": {
+      "active": "Actif",
+      "ongoing": "En cours"
+    },
+    "since": "Depuis {year}",
+    "learnMore": "En savoir plus",
+    "results": "{count} sur {total} projets",
+    "resultsFiltered": "{count} sur {total} projets dans \"{category}\"",
+    "categories": {
+      "software": "Projets logiciels",
+      "hardware": "Projets matériels",
+      "community": "Projets communautaires"
+    }
+  }
+}

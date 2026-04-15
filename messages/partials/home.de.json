@@ -1,0 +1,80 @@
+{
+  "home": {
+    "meta": {
+      "title": "Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz",
+      "description": "Gebrauchte IT kaufen & verkaufen. Computer-Reparatur durch die Community. Workshops zu Linux, Hardware und Programmierung."
+    },
+    "hero": {
+      "title": "Alte Hardware. Neues Leben.",
+      "subtitle": "Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt.",
+      "ctaDiscover": "Jetzt entdecken",
+      "ctaAbout": "Über uns"
+    },
+    "actions": {
+      "heading": "Was möchtest du tun?",
+      "sell": {
+        "title": "Altes Gerät übrig?",
+        "subtitle": "Verkaufe oder verschenke es in 2 Minuten — kostenlos und ohne Gebühren.",
+        "primaryLabel": "Marktplatz entdecken",
+        "secondaryLabel": "Jetzt verkaufen"
+      },
+      "repair": {
+        "title": "Computer kaputt?",
+        "subtitle": "Techniker in deiner Nähe helfen — oder biete selbst Reparaturen an.",
+        "primaryLabel": "Hilfe finden",
+        "secondaryLabel": "Techniker werden"
+      },
+      "learn": {
+        "title": "Etwas Neues lernen?",
+        "subtitle": "Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.",
+        "primaryLabel": "Workshops ansehen",
+        "secondaryLabel": "Knowhow entdecken"
+      }
+    },
+    "proServices": {
+      "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
+      "linkLabel": "IT-Dienstleistungen"
+    },
+    "impact": {
+      "title": "Unsere Wirkung",
+      "subtitle": "Was wir gemeinsam erreicht haben",
+      "moreLink": "Mehr über unsere Wirkung"
+    },
+    "community": {
+      "heading": "Werde Teil der Community",
+      "subtitle": "Ob nutzen, mithelfen oder unterstützen — jeder Beitrag zählt.",
+      "use": {
+        "title": "Nutzen",
+        "desc": "Kaufen, verkaufen, reparieren — kostenlos"
+      },
+      "volunteer": {
+        "title": "Mithelfen",
+        "desc": "Teile dein Wissen als freiwilliger Techniker"
+      },
+      "donate": {
+        "title": "Unterstützen",
+        "desc": "Spende Geräte oder Geld für den Verein"
+      },
+      "membership": {
+        "title": "Mitglied werden",
+        "desc": "Stimme mit und gestalte den Verein aktiv"
+      }
+    },
+    "newsletter": {
+      "title": "Bleib auf dem Laufenden",
+      "subtitle": "Erfahre, wie wir Technologie nachhaltig machen. Kein Spam, nur Inhalte die zählen.",
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "E-Mail-Adresse",
+      "submit": "Anmelden",
+      "submitting": "Wird angemeldet...",
+      "successMessage": "Danke! Bestätige deine E-Mail, um den Newsletter zu aktivieren.",
+      "networkError": "Netzwerkfehler. Bitte versuche es später."
+    },
+    "stats": {
+      "users": "Nutzer:innen",
+      "listings": "Inserate",
+      "repairs": "Reparaturen",
+      "workshops": "Workshops"
+    }
+  }
+}

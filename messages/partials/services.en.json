@@ -1,0 +1,281 @@
+{
+  "services": {
+    "meta": {
+      "title": "Services | IT Services in Zurich",
+      "description": "Professional computer repair, web development, data recovery, Linux support and hardware recycling in Zurich."
+    },
+    "page": {
+      "schemaName": "Computer Repair & IT Services",
+      "schemaDescription": "Professional computer repair, web development, data recovery, Linux support and hardware recycling.",
+      "schemaCity": "Zurich",
+      "title": "Expert IT Services",
+      "subtitle": "Sustainable solutions for your technology needs. We combine technical expertise with environmental responsibility to deliver comprehensive IT solutions that save you money and reduce e-waste.",
+      "servicesTitle": "Our Services",
+      "servicesDescription": "Repair time varies depending on parts availability and typically takes a few weeks.",
+      "noResults": "No services found matching the selected filters.",
+      "ctaTitle": "Ready to renew your technology?",
+      "ctaSubtitle": "Contact us today for a free consultation and discover how we can help you get the most out of your devices.",
+      "ctaContact": "Contact us",
+      "ctaInventory": "Browse inventory",
+      "pricingTbd": "On request",
+      "details": "Details",
+      "bookAppointment": "Book appointment",
+      "learnMore": "Learn more",
+      "appointmentRequested": "Appointment requested!",
+      "booking": "Booking...",
+      "bookingFailed": "Booking failed",
+      "networkError": "Network error. Please try again."
+    },
+    "servicePage": {
+      "comingSoonBanner": "This service is coming soon. Contact us to express your interest and be notified when it becomes available."
+    },
+    "webDesign": {
+      "meta": {
+        "title": "Web Design & Development",
+        "description": "Professional web design and development services using open-source technologies. Modern, responsive websites built for sustainability and performance."
+      },
+      "hero": {
+        "title": "Web Design & Development",
+        "subtitle": "100% commitment to freedom through open source, decentralization, privacy, data ownership, code ownership, and maximum automation. We create digital experiences where effort becomes a choice, not a necessity.",
+        "ctaStart": "Start your project",
+        "ctaDiscover": "Explore services"
+      },
+      "values": {
+        "title": "Our Core Values",
+        "subtitle": "Every website we build serves one ultimate goal: <strong>your freedom</strong>. Every principle works together to transform effort from necessity into choice.",
+        "openSource": {
+          "title": "Open Source",
+          "description": "Transparent, auditable code that you can fully inspect, modify, and own. No proprietary black boxes or vendor lock-ins."
+        },
+        "decentralization": {
+          "title": "Decentralization",
+          "description": "Break free from Big Tech platforms. Host your website anywhere, preserve your independence, and avoid single points of failure."
+        },
+        "privacyFirst": {
+          "title": "Privacy First",
+          "description": "Minimal tracking, secure authentication, and transparent data handling. Your users' privacy is protected by design, not as an afterthought."
+        },
+        "ownYourData": {
+          "title": "Own Your Data",
+          "description": "Your data belongs to you, not the tech giants. Full control over where it is stored, how it is used, and who accesses it."
+        },
+        "ownYourCode": {
+          "title": "Own Your Code",
+          "description": "Complete ownership of your website's source code. Modify, extend, or migrate at any time without restrictions or licensing fees."
+        },
+        "maxAutomation": {
+          "title": "Maximum Automation",
+          "description": "Seamless automated workflows that minimize manual effort while upholding all our core principles. 100% automation is our goal."
+        },
+        "userExperience": {
+          "title": "User Experience",
+          "description": "Intuitive interfaces that demand minimal effort from users while delivering maximum functionality and productivity."
+        },
+        "developerExperience": {
+          "title": "Developer Experience",
+          "description": "Clean, maintainable code with excellent tooling and documentation, making development and maintenance a pleasure."
+        }
+      },
+      "philosophy": {
+        "title": "Our Freedom-First Philosophy",
+        "intro": "We believe in <strong>100% commitment to freedom</strong> through maximum automation.",
+        "automation": "When automation minimizes unwanted effort, it transforms effort from necessity into choice — and choice is freedom.",
+        "effortTitle": "Effort as Choice, Not Necessity",
+        "freedomPrinciple": {
+          "label": "The Freedom Principle",
+          "text": "<strong>100% commitment to freedom</strong> means every aspect of your digital presence should serve your autonomy, not restrict it."
+        },
+        "automationLiberation": {
+          "label": "Automation as Liberation",
+          "text": "Maximum automation eliminates repetitive, unwanted tasks, giving you the freedom to focus on what truly matters to you and your mission."
+        },
+        "choiceNotCoercion": {
+          "label": "Choice Over Coercion",
+          "text": "When systems work seamlessly without your constant intervention, every moment you invest becomes intentional — a choice, not a necessity."
+        },
+        "quote": "True freedom is not just the ability to choose — it's systems that preserve your right to choose by eliminating forced effort.",
+        "ratingTitle": "Our Freedom Rating System",
+        "ratingIntro": "Every website and web app we build receives a comprehensive freedom rating based on how well it supports your autonomy:",
+        "commitment": {
+          "label": "Our Commitment",
+          "text": "We aim for maximum scores across all freedom dimensions. Every trade-off is discussed transparently, with alternatives always explored."
+        },
+        "ratings": {
+          "openSource": { "label": "Open Source Freedom", "desc": "Full code transparency & ownership" },
+          "decentralization": { "label": "Decentralization Freedom", "desc": "Independence from platform control" },
+          "privacy": { "label": "Privacy Freedom", "desc": "Data sovereignty & protection" },
+          "dataOwnership": { "label": "Data Ownership Freedom", "desc": "Full control over your information" },
+          "codeOwnership": { "label": "Code Ownership Freedom", "desc": "Unrestricted modification rights" },
+          "automation": { "label": "Automation Freedom", "desc": "Effort transformed into choice" },
+          "ux": { "label": "User Experience Freedom", "desc": "Intuitive, effortless interaction" },
+          "dx": { "label": "Developer Freedom", "desc": "Maintainable, extensible systems" }
+        }
+      },
+      "servicesSection": {
+        "title": "Our Web Development Services",
+        "subtitle": "Comprehensive web solutions built with open-source technologies and sustainable practices.",
+        "pricing": "Professional web development from CHF 70/hour",
+        "consultationTitle": "Free Initial Consultation",
+        "consultationText": "We begin every project with a thorough consultation to understand your needs, goals, and technical requirements. This helps us deliver accurate estimates and ensure we are the right fit for your project.",
+        "items": {
+          "customDev": {
+            "title": "Custom Web Development",
+            "description": "Tailor-made web applications built with modern open-source technologies to meet your specific business requirements.",
+            "features": ["Custom web applications", "E-commerce solutions", "API development", "Database design", "Performance optimization"]
+          },
+          "responsiveDesign": {
+            "title": "Responsive Web Design",
+            "description": "Beautiful, user-friendly designs that work flawlessly across all devices and screen sizes.",
+            "features": ["Mobile-first design", "User experience (UX) design", "User interface (UI) design", "Brand identity integration", "Accessibility compliance"]
+          },
+          "cmsDev": {
+            "title": "CMS Development",
+            "description": "Modern content management systems that give you full control over your website content with developer-friendly APIs.",
+            "features": ["Headless CMS solutions (Strapi, Payload, Tina)", "WordPress development (legacy support)", "Custom CMS solutions", "Content migration", "Training and support"]
+          },
+          "maintenance": {
+            "title": "Website Maintenance",
+            "description": "Ongoing support and maintenance to keep your website secure, up-to-date, and performing at its best.",
+            "features": ["Security updates", "Performance monitoring", "Content updates", "Backup management", "Technical support"]
+          }
+        }
+      },
+      "whyOpenSource": {
+        "title": "Why These Values Matter",
+        "subtitle": "In an era of increasing digital surveillance and platform monopolies, these principles are not just nice-to-haves — they are essential for digital freedom and independence.",
+        "items": {
+          "ownCode": {
+            "title": "You Own Your Code",
+            "description": "Full ownership of your website's source code means no vendor lock-in, no licensing restrictions, and complete freedom to modify, extend, or migrate your site at any time."
+          },
+          "ownData": {
+            "title": "You Own Your Data",
+            "description": "Your data belongs to you, not the tech giants. We develop solutions that keep your information under your control, with options for self-hosting and data portability."
+          },
+          "privacyByDesign": {
+            "title": "Privacy by Design",
+            "description": "We prioritize privacy from the ground up, implementing minimal tracking, secure authentication, and transparent data handling practices that respect your users' privacy."
+          },
+          "decentralized": {
+            "title": "Decentralized Architecture",
+            "description": "Break free from centralized platforms that control your online presence. We develop solutions that can be hosted anywhere, giving you independence from Big Tech."
+          },
+          "openSourceBase": {
+            "title": "Open-Source Foundation",
+            "description": "Built on open-source technologies that are transparent, auditable, and backed by global communities. No hidden code, no proprietary lock-ins."
+          },
+          "futureProof": {
+            "title": "Future-Proof & Sustainable",
+            "description": "Open-source technologies evolve with the community and don't disappear when a company fails. Your investment is protected for the long term."
+          }
+        }
+      },
+      "technologies": {
+        "title": "Technologies We Use",
+        "subtitle": "We work with proven open-source technologies that deliver reliability, performance, and long-term sustainability.",
+        "filterLabel": "Filter by category:",
+        "allCategories": "All",
+        "visitWebsite": "Visit website",
+        "showing": "Showing {count} of {total} technologies",
+        "showingFiltered": "Showing {count} of {total} technologies in \"{category}\"",
+        "items": {
+          "nextjs": {
+            "description": "Modern React framework for building fast, scalable web applications with excellent developer experience and built-in optimization.",
+            "benefits": ["Server-side rendering", "Excellent performance", "Great SEO", "Active community"]
+          },
+          "tailwind": {
+            "description": "Utility-first CSS framework for rapidly building modern, responsive UIs with consistent design.",
+            "benefits": ["Rapid development", "Consistent design", "Responsive by default", "Highly customizable"]
+          },
+          "supabase": {
+            "description": "Open-source Firebase alternative providing instant APIs, real-time subscriptions, authentication, and edge functions.",
+            "benefits": ["Instant APIs", "Real-time updates", "Built-in authentication", "Edge functions"]
+          },
+          "strapi": {
+            "description": "Leading open-source headless CMS giving developers the freedom to choose their preferred tools and frameworks.",
+            "benefits": ["API-first approach", "Flexible content types", "Developer-friendly", "Self-hosted"]
+          },
+          "payload": {
+            "description": "TypeScript-first headless CMS and application framework built with Node.js, React, and MongoDB.",
+            "benefits": ["TypeScript native", "Admin UI included", "Highly extensible", "Developer experience focus"]
+          },
+          "tina": {
+            "description": "Git-based headless CMS that enables content editing directly on your website with real-time visual editing.",
+            "benefits": ["Visual editing", "Git-based workflow", "Real-time preview", "Developer-friendly"]
+          },
+          "wordpress": {
+            "description": "Mature content management system still popular for certain use cases. We can work with existing WordPress sites.",
+            "benefits": ["Large ecosystem", "Easy content management", "Extensive plugins", "Familiar to many users"]
+          },
+          "joomla": {
+            "description": "Flexible content management system with robust user management and multilingual features. Ideal for complex websites.",
+            "benefits": ["User management", "Multilingual support", "Flexible templates", "Strong community"]
+          },
+          "woocommerce": {
+            "description": "Widely used open-source e-commerce platform built on WordPress. Flexible extensions and large community.",
+            "benefits": ["Large community", "Many extensions", "Easy management", "WordPress integration"]
+          },
+          "shopware": {
+            "description": "Modern API-first e-commerce platform with powerful customization capabilities. Open-source core with commercial extensions.",
+            "benefits": ["API-first design", "Flexible architecture", "Comprehensive admin UI", "German engineering"]
+          },
+          "hosting": {
+            "name": "Deployment & Hosting",
+            "description": "Flexible hosting options from open-source solutions on Linux servers to modern platforms like Vercel and Netlify.",
+            "benefits": ["Multiple hosting options", "Global CDN", "Automatic scaling", "Git-based workflow"]
+          }
+        }
+      },
+      "benefits": {
+        "title": "Why Choose Our Web Development Services?",
+        "subtitle": "We combine technical expertise with sustainable practices to deliver websites that perform excellently while supporting your values.",
+        "items": {
+          "automationFirst": {
+            "title": "Automation-First Design",
+            "description": "We prioritize automated workflows that minimize manual administrative effort while upholding all our core principles. Maximum efficiency without compromise."
+          },
+          "openSourceBase": {
+            "title": "Open-Source Foundation",
+            "description": "Built on transparent, auditable technologies that give you complete control and freedom. No vendor lock-in, no proprietary black boxes."
+          },
+          "seamlessUX": {
+            "title": "Seamless User Experience",
+            "description": "Intuitive interfaces that demand minimal effort from users while delivering maximum functionality. Every interaction is designed for simplicity and effectiveness."
+          },
+          "devFriendly": {
+            "title": "Developer-Friendly Architecture",
+            "description": "Clean, maintainable code with excellent documentation and tooling. Built for long-term sustainability and easy maintenance."
+          }
+        }
+      },
+      "process": {
+        "title": "Our Development Process",
+        "subtitle": "We follow a collaborative, transparent process that ensures your project meets your needs and exceeds your expectations.",
+        "steps": {
+          "discovery": {
+            "title": "Discovery",
+            "description": "We start with a thorough consultation to understand your goals, requirements, and target audience."
+          },
+          "planning": {
+            "title": "Planning",
+            "description": "We create a detailed project plan including timeline, technology stack, and design approach."
+          },
+          "development": {
+            "title": "Development",
+            "description": "We build your website following agile methodology with regular updates and feedback sessions."
+          },
+          "launch": {
+            "title": "Launch & Support",
+            "description": "We launch your website and provide ongoing support, maintenance, and optimization."
+          }
+        }
+      },
+      "cta": {
+        "title": "Ready to build your website?",
+        "subtitle": "Let's create a website that reflects your values and achieves your goals. Contact us today for a free consultation.",
+        "startProject": "Start your project",
+        "allServices": "Explore all services"
+      }
+    }
+  }
+}

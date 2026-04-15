@@ -1,0 +1,26 @@
+{
+  "blog": {
+    "meta": {
+      "title": "Blog",
+      "description": "Tips, stories and background information on sustainable technology."
+    },
+    "hero": {
+      "title": "Blog",
+      "subtitle": "Tips, stories and best practices around sustainable technology."
+    },
+    "empty": {
+      "title": "No articles found yet",
+      "description": "Try adjusting your filters or submit a post!",
+      "submitButton": "Submit a post"
+    },
+    "sections": {
+      "featured": "Featured posts",
+      "latest": "Latest posts"
+    },
+    "footerCta": {
+      "title": "Share your knowledge",
+      "description": "Do you have a story about sustainable technology? Submit a post.",
+      "button": "Submit a post"
+    }
+  }
+}

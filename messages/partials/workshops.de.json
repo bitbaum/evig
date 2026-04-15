@@ -1,0 +1,45 @@
+{
+  "workshops": {
+    "meta": {
+      "title": "Workshops & Kurse",
+      "description": "Entdecke unsere Workshops zu nachhaltiger Technologie, Linux, Reparatur, Programmierung und mehr. Praxisnah lernen in Zürich."
+    },
+    "browse": {
+      "title": "Workshops & Kurse",
+      "subtitle": "{count} {count, plural, one {Workshop} other {Workshops}} · Praxisnah lernen bei {orgName}",
+      "proposeButton": "Workshop vorschlagen",
+      "filterCategory": "Kategorie",
+      "allCategories": "Alle Kategorien",
+      "filterLevel": "Schwierigkeitsgrad",
+      "allLevels": "Alle Stufen",
+      "clearFilters": "Filter zurücksetzen",
+      "resultCount": "{count} {count, plural, one {Workshop} other {Workshops}}",
+      "allLevelsLabel": "Alle Stufen",
+      "maxParticipants": "Max {count}",
+      "nextDate": "Nächster Termin: {date}",
+      "dateSoon": "Termin folgt in Kürze",
+      "spotsLeft": "{count} {count, plural, one {Platz frei} other {Plätze frei}}",
+      "soldOut": "Ausgebucht",
+      "free": "Kostenlos",
+      "registered": "Angemeldet",
+      "viewDetails": "Details ansehen",
+      "manage": "Verwalten",
+      "registerNow": "Jetzt anmelden",
+      "noDate": "Kein Termin",
+      "emptyFiltered": {
+        "title": "Keine Workshops gefunden",
+        "subtitle": "Versuche andere Filter oder schau später wieder vorbei.",
+        "clearFilters": "Filter zurücksetzen"
+      },
+      "emptyAll": {
+        "title": "Aktuell sind keine Workshops geplant",
+        "subtitle": "Schau bald wieder vorbei!"
+      },
+      "cta": {
+        "title": "Workshop vorschlagen?",
+        "subtitle": "Hast du eine Idee für einen Workshop? Wir freuen uns über deine Vorschläge für neue Themen und Inhalte.",
+        "button": "Workshop vorschlagen"
+      }
+    }
+  }
+}

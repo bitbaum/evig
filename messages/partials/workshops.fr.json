@@ -1,0 +1,45 @@
+{
+  "workshops": {
+    "meta": {
+      "title": "Ateliers & Cours",
+      "description": "Découvrez nos ateliers sur la technologie durable, Linux, réparation, programmation et plus. Apprentissage pratique à Zurich."
+    },
+    "browse": {
+      "title": "Ateliers & Cours",
+      "subtitle": "{count} {count, plural, one {Atelier} other {Ateliers}} · Apprentissage pratique chez {orgName}",
+      "proposeButton": "Proposer un atelier",
+      "filterCategory": "Catégorie",
+      "allCategories": "Toutes les catégories",
+      "filterLevel": "Niveau",
+      "allLevels": "Tous les niveaux",
+      "clearFilters": "Réinitialiser les filtres",
+      "resultCount": "{count} {count, plural, one {atelier} other {ateliers}}",
+      "allLevelsLabel": "Tous niveaux",
+      "maxParticipants": "Max {count}",
+      "nextDate": "Prochain: {date}",
+      "dateSoon": "Date à venir",
+      "spotsLeft": "{count} {count, plural, one {place disponible} other {places disponibles}}",
+      "soldOut": "Complet",
+      "free": "Gratuit",
+      "registered": "Inscrit",
+      "viewDetails": "Voir les détails",
+      "manage": "Gérer",
+      "registerNow": "S'inscrire",
+      "noDate": "Pas de date",
+      "emptyFiltered": {
+        "title": "Aucun atelier trouvé",
+        "subtitle": "Essayez d'autres filtres ou revenez plus tard.",
+        "clearFilters": "Réinitialiser les filtres"
+      },
+      "emptyAll": {
+        "title": "Aucun atelier planifié actuellement",
+        "subtitle": "Revenez bientôt!"
+      },
+      "cta": {
+        "title": "Proposer un atelier?",
+        "subtitle": "Vous avez une idée d'atelier? Nous sommes ravis de recevoir vos suggestions de nouveaux thèmes et contenus.",
+        "button": "Proposer un atelier"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "blog": {
+    "meta": {
+      "title": "Blog",
+      "description": "Tipps, Geschichten und Hintergründe rund um nachhaltige Technologie."
+    },
+    "hero": {
+      "title": "Blog",
+      "subtitle": "Tipps, Geschichten und Best Practices rund um nachhaltige Technologie."
+    },
+    "empty": {
+      "title": "Noch keine Artikel gefunden",
+      "description": "Versuche, deine Filter anzupassen oder reiche einen Beitrag ein!",
+      "submitButton": "Beitrag einreichen"
+    },
+    "sections": {
+      "featured": "Empfohlene Beiträge",
+      "latest": "Neueste Beiträge"
+    },
+    "footerCta": {
+      "title": "Teile dein Wissen",
+      "description": "Hast du eine Geschichte über nachhaltige Technologie? Reiche einen Beitrag ein.",
+      "button": "Beitrag einreichen"
+    }
+  }
+}

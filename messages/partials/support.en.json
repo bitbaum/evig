@@ -1,0 +1,55 @@
+{
+  "support": {
+    "meta": {
+      "title": "Support RevampIT",
+      "description": "Support high-quality, ad-free content about sustainable technology."
+    },
+    "hero": {
+      "title": "Support RevampIT",
+      "subtitle": "Help us create high-quality, ad-free content about sustainable technology, open source, and the future of computing."
+    },
+    "pillars": {
+      "noAds": {
+        "title": "No Ads",
+        "description": "We will never run advertising or sell your data."
+      },
+      "communityDriven": {
+        "title": "Community-Driven",
+        "description": "By the community, for the community – with no commercial interests."
+      },
+      "qualityFirst": {
+        "title": "Quality First",
+        "description": "Focused on truthful, well-researched content."
+      }
+    },
+    "promise": {
+      "title": "Our Promise",
+      "intro": "RevampIT is not a company – it's a movement. We believe that high-quality information about sustainable technology should be accessible to everyone, without paywalls or intrusive advertising.",
+      "enables": "Your support enables us to:",
+      "items": [
+        "Conduct in-depth research and analysis",
+        "Run our servers and infrastructure",
+        "Develop open-source tools and resources",
+        "Organise community events and workshops",
+        "Stay 100% ad-free and independent"
+      ]
+    },
+    "oneTime": {
+      "title": "One-Time Donation",
+      "description": "Buy us a coffee or support us with any amount you like.",
+      "cta": "Donate Now"
+    },
+    "monthly": {
+      "title": "Monthly Support",
+      "description": "Become a supporter and help us grow sustainably.",
+      "cta": "Become a Sponsor"
+    },
+    "otherWays": {
+      "title": "Other Ways to Help",
+      "submitPost": "Submit a Post",
+      "contributeCode": "Contribute Code",
+      "shareArticle": "Share an Article"
+    },
+    "thanks": "Thank you so much for supporting our mission for sustainable, high-quality tech content."
+  }
+}

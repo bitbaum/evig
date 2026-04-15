@@ -14,6 +14,7 @@ import { EXTERNAL_LINKS } from '@/config/org'
 
 export interface NavigationItem {
   name: string
+  nameKey?: string
   href: string
   description?: string
   external?: boolean

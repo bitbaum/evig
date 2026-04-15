@@ -1,0 +1,82 @@
+{
+  "revamped": {
+    "meta": {
+      "title": "REVAMPED Certification | Sustainable Computer Builds",
+      "description": "Learn about our exclusive REVAMPED certification – guaranteeing sustainability, quality and performance in every computer we build."
+    },
+    "hero": {
+      "title": "The REVAMPED Certification",
+      "subtitle": "Every computer we build receives our exclusive REVAMPED label – a guarantee of sustainability, quality and performance that sets a new standard in the industry.",
+      "badge": {
+        "sustainability": "Sustainability Focus",
+        "quality": "Quality Guarantee",
+        "ai": "AI-Optimised Builds"
+      }
+    },
+    "inAction": {
+      "title": "Real REVAMPED Computers in Action",
+      "subtitle": "Sustainable technology that people love to use. Our REVAMPED certification isn't just a promise – it's a visible commitment to quality and environmental responsibility.",
+      "points": [
+        "Primarily used and refurbished components",
+        "Significant reduction in environmental impact",
+        "Quality guarantee on every build",
+        "Physical certification sticker included"
+      ],
+      "ctaBuild": "Build Your Computer",
+      "ctaLearn": "Learn More About Certification"
+    },
+    "meaning": {
+      "title": "What \"REVAMPED\" Means",
+      "subtitle": "Our certification is more than a label – it's a comprehensive standard ensuring every computer meets our strict criteria for sustainability, quality and performance.",
+      "pillars": [
+        {
+          "title": "Sustainability First",
+          "description": "We prioritise used and refurbished components wherever possible, drastically reducing environmental impact while maintaining peak performance. We apply circular economy principles to every build."
+        },
+        {
+          "title": "Quality Guaranteed",
+          "description": "Every component is thoroughly tested, cleaned and verified to meet our strict performance and reliability standards. Quality is never compromised for sustainability."
+        },
+        {
+          "title": "AI-Optimised",
+          "description": "Our AI ensures perfect component compatibility and optimal performance tuning for your specific use case. Every build is intelligently designed around your needs."
+        }
+      ]
+    },
+    "certificate": {
+      "title": "Certificate of Authenticity",
+      "subtitle": "Every REVAMPED computer comes with a detailed certificate providing full transparency about your sustainable build.",
+      "items": [
+        "Component sustainability ratings",
+        "CO₂ emissions saved versus new build",
+        "Component provenance and condition",
+        "Performance benchmarks",
+        "Warranty coverage details"
+      ],
+      "digitalPhysical": "Digital & Physical",
+      "digitalDesc": "Your certificate includes both a physical sticker and a digital QR code for instant verification and detailed component information."
+    },
+    "stickers": {
+      "title": "The REVAMPED Label Collection",
+      "subtitle": "Each design represents our commitment to sustainable computing and quality assurance.",
+      "original": {
+        "title": "Original Design",
+        "description": "Clean, professional certification mark emphasising our laptop-focused sustainability approach."
+      },
+      "eco": {
+        "title": "Eco Variant",
+        "description": "Extended design highlighting our environmental focus and circular economy principles."
+      },
+      "digital": {
+        "title": "Digital Certificate",
+        "description": "QR-code-linked verification system with blockchain-backed authenticity records."
+      }
+    },
+    "cta": {
+      "title": "Join the REVAMPED Revolution",
+      "subtitle": "When you choose a REVAMPED computer, you're not just getting a great machine – you're making a statement about the future of technology. Sustainable, powerful, and built with purpose.",
+      "startBuild": "Start Your REVAMPED Build",
+      "learnMore": "Learn More About Certification"
+    }
+  }
+}

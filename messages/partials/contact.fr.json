@@ -1,0 +1,43 @@
+{
+  "contact": {
+    "meta": {
+      "title": "Contact",
+      "description": "Contacte-nous pour le support Linux, les ateliers et les solutions open source."
+    },
+    "hero": {
+      "title": "Contact",
+      "subtitle": "Tu as des questions sur nos services, nos ateliers ou nos solutions Linux ? Nous sommes là pour t'aider !"
+    },
+    "info": {
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "openingHours": "Heures d'ouverture"
+    },
+    "map": {
+      "title": "Trouve-nous",
+      "openGoogleMaps": "Ouvrir dans Google Maps",
+      "openOSM": "Ouvrir dans OpenStreetMap",
+      "warehouseNote": "Nous avons aussi un entrepôt à {address} {note}",
+      "warehouseGoogleMaps": "Entrepôt dans Google Maps",
+      "warehouseOSM": "Entrepôt dans OpenStreetMap",
+      "mapChoiceTitle": "Pourquoi deux options de carte ?",
+      "mapChoiceDescription": "OpenStreetMap est communautaire et respectueux des données. Google/Apple Maps offrent souvent une meilleure navigation, le trafic en direct et les POIs. Choisis ce qui te convient le mieux – la transparence et la liberté de choix nous importent."
+    },
+    "form": {
+      "title": "Envoie-nous un message",
+      "name": "Nom",
+      "namePlaceholder": "Ton nom",
+      "email": "E-mail",
+      "emailPlaceholder": "ton@email.com",
+      "subject": "Sujet",
+      "subjectPlaceholder": "De quoi s'agit-il ?",
+      "message": "Message",
+      "messagePlaceholder": "Ton message...",
+      "submit": "Envoyer le message",
+      "submitting": "Envoi en cours…",
+      "successMessage": "Merci ! Ton message a été envoyé.",
+      "errorFallback": "Erreur lors de l'envoi. Veuillez réessayer plus tard."
+    }
+  }
+}

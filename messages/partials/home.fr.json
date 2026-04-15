@@ -1,0 +1,80 @@
+{
+  "home": {
+    "meta": {
+      "title": "Vieux matériel. Nouvelle vie. | Réparation informatique & Linux en Suisse",
+      "description": "Acheter & vendre du matériel informatique d'occasion. Réparation par la communauté. Ateliers Linux, hardware et programmation."
+    },
+    "hero": {
+      "title": "Vieux matériel. Nouvelle vie.",
+      "subtitle": "Chaque année, 62 millions de tonnes d'appareils électroniques finissent à la poubelle. Nous changeons cela — avec une communauté qui répare, partage et apprend ensemble.",
+      "ctaDiscover": "Découvrir maintenant",
+      "ctaAbout": "Qui sommes-nous"
+    },
+    "actions": {
+      "heading": "Que souhaitez-vous faire?",
+      "sell": {
+        "title": "Un vieux appareil à donner?",
+        "subtitle": "Vendez-le ou donnez-le en 2 minutes — gratuitement et sans frais.",
+        "primaryLabel": "Découvrir la marketplace",
+        "secondaryLabel": "Vendre maintenant"
+      },
+      "repair": {
+        "title": "Ordinateur en panne?",
+        "subtitle": "Des techniciens près de chez vous aident — ou proposez vous-même des réparations.",
+        "primaryLabel": "Trouver de l'aide",
+        "secondaryLabel": "Devenir technicien"
+      },
+      "learn": {
+        "title": "Envie d'apprendre?",
+        "subtitle": "Ateliers pratiques sur Linux, réparation hardware, programmation et IA.",
+        "primaryLabel": "Voir les ateliers",
+        "secondaryLabel": "Explorer les ressources"
+      }
+    },
+    "proServices": {
+      "text": "Nous proposons également des {link} professionnels: réparation informatique, récupération de données, installation Linux et développement web.",
+      "linkLabel": "services IT"
+    },
+    "impact": {
+      "title": "Notre impact",
+      "subtitle": "Ce que nous avons accompli ensemble",
+      "moreLink": "En savoir plus sur notre impact"
+    },
+    "community": {
+      "heading": "Rejoignez la communauté",
+      "subtitle": "Utiliser, contribuer ou soutenir — chaque geste compte.",
+      "use": {
+        "title": "Utiliser",
+        "desc": "Acheter, vendre, réparer — gratuitement"
+      },
+      "volunteer": {
+        "title": "Contribuer",
+        "desc": "Partagez vos connaissances en tant que technicien bénévole"
+      },
+      "donate": {
+        "title": "Soutenir",
+        "desc": "Donnez du matériel ou faites un don à l'association"
+      },
+      "membership": {
+        "title": "Devenir membre",
+        "desc": "Votez et façonnez activement l'association"
+      }
+    },
+    "newsletter": {
+      "title": "Restez informé",
+      "subtitle": "Découvrez comment nous rendons la technologie durable. Pas de spam, seulement l'essentiel.",
+      "namePlaceholder": "Nom (optionnel)",
+      "emailPlaceholder": "Adresse e-mail",
+      "submit": "S'inscrire",
+      "submitting": "Inscription en cours...",
+      "successMessage": "Merci! Confirmez votre e-mail pour activer la newsletter.",
+      "networkError": "Erreur réseau. Veuillez réessayer plus tard."
+    },
+    "stats": {
+      "users": "Utilisateurs",
+      "listings": "Annonces",
+      "repairs": "Réparations",
+      "workshops": "Ateliers"
+    }
+  }
+}

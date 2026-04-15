@@ -1,0 +1,126 @@
+{
+  "shop": {
+    "meta": {
+      "title": "Shop — Refurbished Hardware",
+      "description": "Tested, refurbished computers at fair prices. With warranty."
+    },
+    "title": "Our shop",
+    "subtitle": "Tested refurbished hardware",
+    "filters": {
+      "all": "All",
+      "laptops": "Laptops",
+      "desktops": "Desktops",
+      "accessories": "Accessories"
+    },
+    "product": {
+      "addToCart": "Add to basket",
+      "outOfStock": "Out of stock",
+      "condition": "Condition",
+      "warranty": "Warranty",
+      "months": "{count} months"
+    },
+    "empty": "No products found",
+    "verifiedBadge": "Verified",
+
+    "page": {
+      "heroTitle": "How would you like to shop?",
+      "heroSubtitle": "Choose the channel that suits you best: our online shop, the Shopware channel, or our physical store in Zurich.",
+      "metaDescription": "Choose how to shop at {orgName} – online shop, Shopware channel, or our store in Zurich.",
+
+      "store": {
+        "title": "Physical store (Zurich)",
+        "tagline": "Advice, browse devices, take home immediately",
+        "accessInfo": "Easily accessible by public transport. Parking available nearby.",
+        "openingHours": "Opening hours",
+        "openingHoursMonday": "Monday: {hours}",
+        "openingHoursTueFri": "Tuesday – Friday: {hours}",
+        "openGoogleMaps": "Open in Google Maps",
+        "openOsm": "Open in OpenStreetMap",
+        "contact": "Contact",
+        "mapsInfoTitle": "Why two map options?",
+        "mapsInfoBody": "OpenStreetMap is community-driven and privacy-friendly. Google/Apple Maps often offer better navigation, live traffic, and points of interest. Choose what works best for you – transparency and freedom of choice matter to us."
+      },
+
+      "online": {
+        "title": "Online shops",
+        "tagline": "Choose between our online shop and the Shopware channel.",
+        "benefit1": "Verified quality and warranty across all channels",
+        "benefit2": "Fair prices, sustainable selection",
+        "benefit3": "Secure payment",
+        "currentShop": "Current online shop",
+        "shopwareShop": "Go to Shopware shop",
+        "onlineShop": "{orgName} online shop",
+        "multiShopTitle": "Multiple shop channels?",
+        "multiShopBody": "Our {orgName} online shop offers you the best selection of refurbished IT hardware. You can also find our range in the Shopware shop and the legacy system."
+      }
+    },
+
+    "search": {
+      "metaTitleWithQuery": "Search: \"{query}\" | {orgName} Shop",
+      "metaDescWithQuery": "Results for \"{query}\" – sustainably refurbished IT devices at {orgName}.",
+      "metaTitle": "Search | {orgName} Shop",
+      "metaDesc": "Browse our range of sustainably refurbished IT devices.",
+      "heroTitleWithQuery": "Results for \"{query}\"",
+      "heroTitle": "Search the shop",
+      "placeholder": "What are you looking for? e.g. laptop, monitor, keyboard...",
+      "submitButton": "Search",
+      "breadcrumbHome": "Home",
+      "breadcrumbShop": "Shop",
+      "breadcrumbSearchWithQuery": "Search: \"{query}\"",
+      "breadcrumbSearch": "Search",
+      "resultsTitle": "Searching for \"{query}\"",
+      "resultsComingSoon": "Product search is currently being set up. Soon you will be able to search for refurbished IT devices here.",
+      "goToShop": "Go to online shop",
+      "allShopOptions": "All shop options",
+      "popularSearches": "Popular searches",
+      "browseByCategory": "Browse by category",
+      "productCount": "{count} products",
+      "allCategories": "View all categories →"
+    },
+
+    "category": {
+      "notFoundMeta": "Category not found | {orgName} Shop",
+      "metaTitle": "{categoryName} | {orgName} Shop",
+      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName} Shop",
+      "metaDesc": "Discover our range of {categoryNameLower} – sustainably refurbished IT devices at {orgName}.",
+      "heroSubtitle": "Discover our range of sustainably refurbished {categoryNameLower} – verified quality at fair prices.",
+      "productCount": "{count} products in this category",
+      "subcategories": "Subcategories",
+      "categoryProductCount": "{count} products",
+      "productsLoading": "Loading products",
+      "productsComingSoon": "Refurbished IT devices in the {categoryName} category will be available here on our marketplace soon.",
+      "goToShop": "Go to online shop",
+      "allShopOptions": "All shop options",
+      "relatedIn": "More in {parentName}",
+      "breadcrumbHome": "Home"
+    },
+
+    "loading": {
+      "text": "Loading shop..."
+    },
+
+    "error": {
+      "title": "Something went wrong",
+      "body": "An error occurred while loading the shop.",
+      "retry": "Try again",
+      "backToShop": "Back to shop"
+    },
+
+    "header": {
+      "skipToContent": "Skip to main content",
+      "skipToFooter": "Skip to footer",
+      "skipLinks": "Quick navigation links",
+      "openMenu": "Open menu",
+      "categories": "Categories",
+      "searchPlaceholder": "What are you looking for?",
+      "searchLabel": "Search",
+      "closeSearch": "Close search",
+      "compareLabel": "Compare ({count} items)",
+      "wishlistLabel": "Wishlist ({count} items)",
+      "cartLabel": "Basket",
+      "backToShop": "Back to shop",
+      "shopOverview": "Shop overview",
+      "closeMenu": "Close menu"
+    }
+  }
+}

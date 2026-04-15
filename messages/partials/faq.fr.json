@@ -1,0 +1,146 @@
+{
+  "faq": {
+    "meta": {
+      "title": "FAQ – Questions fréquentes",
+      "description": "Réponses aux questions fréquentes sur Linux & Open Source, réparation, durabilité et déchets électroniques."
+    },
+    "hero": {
+      "title": "Questions fréquentes (FAQ)",
+      "subtitle": "Nos réponses sur Linux & Open Source, la réparation, la durabilité et l'utilisation responsable des ressources – dans l'esprit de notre mission contre les déchets électroniques."
+    },
+    "notListed": "Votre question n'est pas listée ? Nous vous aiderons volontiers en personne.",
+    "contactTeam": "Contactez notre équipe",
+    "groups": [
+      {
+        "category": "Philosophie & Open Source",
+        "items": [
+          {
+            "q": "Ne travaillez-vous qu'avec des logiciels open source ?",
+            "a": "Non. L'open source est notre approche privilégiée – pour sa transparence, sa sécurité et sa longévité. Là où c'est utile, nous utilisons ou intégrons également des logiciels propriétaires, toujours en nous concentrant sur la valeur et la durabilité."
+          },
+          {
+            "q": "Pourquoi l'open source est-il important pour vous ?",
+            "a": "L'open source renforce l'autonomie et la réparabilité. Il réduit les dépendances et permet d'utiliser les appareils plus longtemps – des leviers essentiels contre les déchets électroniques."
+          },
+          {
+            "q": "Que signifie le « droit à la réparation » pour vous ?",
+            "a": "Nous mistons sur du matériel réparable, des processus documentés et des pièces de rechange disponibles. Nous prolongeons ainsi la durée de vie des appareils et préservons les ressources."
+          }
+        ]
+      },
+      {
+        "category": "Systèmes d'exploitation & logiciels",
+        "items": [
+          {
+            "q": "Travaillez-vous uniquement avec Linux ou aussi avec Windows et macOS ?",
+            "a": "Nous travaillons exclusivement avec Linux et les logiciels open source. Nous n'installons pas de systèmes d'exploitation propriétaires (Windows/macOS). Très rarement, nous faisons des exceptions si un objectif ne peut manifestement pas être atteint avec des solutions open source."
+          },
+          {
+            "q": "Recommandez-vous Linux à tout le monde ?",
+            "a": "Notre standard est Linux, car il est économe en ressources, sécurisé et durable. Si des outils propriétaires sont absolument nécessaires, nous évaluons des alternatives – et discutons ouvertement des rares exceptions."
+          },
+          {
+            "q": "Accompagnez-vous la migration vers Linux ou des alternatives open source ?",
+            "a": "Oui. Des projets pilotes jusqu'au déploiement, nous accompagnons les particuliers, associations et entreprises – y compris la formation et le support.",
+            "link": { "href": "/services/linux-open-source", "label": "Linux & Open Source" }
+          }
+        ]
+      },
+      {
+        "category": "Réparation & services",
+        "items": [
+          {
+            "q": "Réparez-vous des appareils qui n'ont pas été achetés chez vous ?",
+            "a": "Oui. Nous réparons des ordinateurs portables, des PC et des périphériques de nombreux fabricants différents – indépendamment du lieu d'achat."
+          },
+          {
+            "q": "Réparez-vous les appareils Apple ?",
+            "a": "Le matériel, oui – dans la mesure où les pièces de rechange sont disponibles et où la réparation est judicieuse. Les installations de systèmes d'exploitation sont Linux uniquement ; nous n'installons pas macOS ni Windows."
+          },
+          {
+            "q": "Combien de temps durent les réparations et quel en est le coût ?",
+            "a": "Cela dépend du problème et des pièces de rechange. Nous établissons un devis sur demande et informons de manière transparente des options disponibles."
+          },
+          {
+            "q": "Proposez-vous la récupération de données et l'effacement sécurisé ?",
+            "a": "Oui. Nous récupérons les données au mieux de nos capacités et effaçons les supports selon les normes, sur demande (par exemple avec des outils open source).",
+            "link": { "href": "/services/data-recovery-transfer", "label": "Récupération & transfert de données" }
+          },
+          {
+            "q": "Puis-je venir sans rendez-vous ?",
+            "a": "Oui, avec plaisir. Pour les cas complexes ou les rendez-vous professionnels, nous recommandons un bref contact préalable.",
+            "link": { "href": "/contact", "label": "Contact & horaires d'ouverture" }
+          }
+        ]
+      },
+      {
+        "category": "Durabilité & déchets électroniques",
+        "items": [
+          {
+            "q": "Comment réduisez-vous concrètement les déchets électroniques ?",
+            "a": "Par la réparation, la réutilisation des composants, le reconditionnement et le recyclage responsable. Nous conseillons également sur les configurations durables et les logiciels économes en ressources."
+          },
+          {
+            "q": "Acceptez-vous les anciens appareils ?",
+            "a": "Oui, dans la mesure où la réutilisation ou le recyclage responsable est possible. Nous inspectons les appareils sur place et décidons de manière transparente de leur réutilisation ou démontage."
+          },
+          {
+            "q": "Utilisez-vous des pièces de rechange d'occasion ?",
+            "a": "Là où c'est techniquement judicieux, nous utilisons des pièces reconditionnées et vérifiées. Cela économise des ressources et peut réduire les coûts – pour un résultat identique."
+          },
+          {
+            "q": "Pourquoi du reconditionné plutôt que du neuf ?",
+            "a": "Les appareils reconditionnés prolongent la durée d'utilisation, économisent du CO₂ et des matières premières. Avec les bonnes mises à niveau, ils sont souvent plus que suffisants – à des prix équitables."
+          }
+        ]
+      },
+      {
+        "category": "Produits & garantie",
+        "items": [
+          {
+            "q": "Proposez-vous des appareils reconditionnés ?",
+            "a": "Oui. Nous proposons des appareils soigneusement contrôlés et reconditionnés avec garantie – documentés de manière transparente.",
+            "link": { "href": "/shop", "label": "Vers la boutique" }
+          },
+          {
+            "q": "Qu'est-ce que la certification REVAMPED ?",
+            "a": "REVAMPED désigne des configurations durables et réparables avec une origine documentée, des voies de mise à niveau claires et un contrôle qualité.",
+            "link": { "href": "/revamped", "label": "En savoir plus sur REVAMPED" }
+          },
+          {
+            "q": "Y a-t-il une garantie sur vos appareils ?",
+            "a": "Oui. Les appareils reconditionnés sont livrés avec une garantie. Nous indiquons les détails de manière transparente pour chaque produit."
+          }
+        ]
+      },
+      {
+        "category": "Données & vie privée",
+        "items": [
+          {
+            "q": "Comment gérez-vous mes données lors des réparations ?",
+            "a": "De manière confidentielle et minimale. Nous n'y accédons que si c'est nécessaire pour le diagnostic, et protégeons les supports de données sur les plans technique et organisationnel."
+          },
+          {
+            "q": "Proposez-vous un effacement certifié des données ?",
+            "a": "Nous proposons des procédures d'effacement sécurisé avec protocole. Indiquez-nous le niveau de sécurité dont vous avez besoin."
+          }
+        ]
+      },
+      {
+        "category": "Ateliers & engagement",
+        "items": [
+          {
+            "q": "Proposez-vous des ateliers ou des formations ?",
+            "a": "Oui. Thèmes : introduction à Linux, bases de la réparation, IT durable, outils open source – pour débutants jusqu'aux utilisateurs avancés.",
+            "link": { "href": "/workshops", "label": "Ateliers à venir" }
+          },
+          {
+            "q": "Comment puis-je participer ou soutenir ?",
+            "a": "En tant que bénévole, partenaire ou donateur. Partager vos connaissances est également le bienvenu – ensemble, nous créons un impact.",
+            "link": { "href": "/get-involved", "label": "Impliquez-vous" }
+          }
+        ]
+      }
+    ]
+  }
+}

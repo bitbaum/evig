@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 
 interface NewsletterSignupProps {
@@ -12,15 +13,19 @@ interface NewsletterSignupProps {
 }
 
 export function NewsletterSignup({
-  title = 'Auf dem Laufenden bleiben',
-  description = 'Wir informieren dich, wie deine Spende wirkt.',
+  title,
+  description,
   source = 'website',
   variant = 'light',
 }: NewsletterSignupProps) {
+  const t = useTranslations('home.newsletter')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+
+  const resolvedTitle = title ?? t('title')
+  const resolvedDescription = description ?? t('subtitle')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -42,7 +47,7 @@ export function NewsletterSignup({
         setStatus('error')
       }
     } catch {
-      setErrorMsg('Netzwerkfehler. Bitte versuche es später.')
+      setErrorMsg(t('networkError'))
       setStatus('error')
     }
   }
@@ -52,23 +57,23 @@ export function NewsletterSignup({
   if (status === 'success') {
     return (
       <div className={`rounded-lg p-4 text-sm ${isDark ? 'bg-green-900/40 text-green-300' : 'bg-green-50 text-green-700'}`}>
-        Danke! Bestätige deine E-Mail, um den Newsletter zu aktivieren.
+        {t('successMessage')}
       </div>
     )
   }
 
   return (
     <div>
-      {(title || description) && (
+      {(resolvedTitle || resolvedDescription) && (
         <div className="mb-3">
-          {title && (
+          {resolvedTitle && (
             <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              {title}
+              {resolvedTitle}
             </p>
           )}
-          {description && (
+          {resolvedDescription && (
             <p className={`text-sm mt-0.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-              {description}
+              {resolvedDescription}
             </p>
           )}
         </div>
@@ -79,7 +84,7 @@ export function NewsletterSignup({
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
-          placeholder="Name (optional)"
+          placeholder={t('namePlaceholder')}
           className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
             isDark
               ? 'border-gray-600 bg-gray-800 text-white'
@@ -90,7 +95,7 @@ export function NewsletterSignup({
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="E-Mail-Adresse"
+          placeholder={t('emailPlaceholder')}
           required
           className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
             isDark
@@ -103,7 +108,7 @@ export function NewsletterSignup({
           disabled={status === 'loading'}
           className="h-10 rounded-md bg-green-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:opacity-60 whitespace-nowrap"
         >
-          {status === 'loading' ? 'Wird angemeldet...' : 'Anmelden'}
+          {status === 'loading' ? t('submitting') : t('submit')}
         </button>
       </form>
 
