@@ -5,11 +5,15 @@ import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { siteConfig } from '@/config/site'
-import { ORG } from '@/config/org'
+import { ORG, OPENING_HOURS } from '@/config/org'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 export default function Footer() {
+  const tFooter = useTranslations('footer')
+  const tNav = useTranslations('nav')
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -18,31 +22,33 @@ export default function Footer() {
           <div>
             <Logo className="mb-4" showText={true} />
             <p className="text-sm text-gray-300">
-              Die Zukunft der IT durch nachhaltige Aufarbeitung und Recycling gestalten.
+              {tFooter('mission')}
             </p>
           </div>
 
           {/* Navigation Section */}
-          <nav aria-label="Footer-Navigation">
-            <Heading level={3} className="text-xl font-bold mb-4">Navigation</Heading>
+          <nav aria-label={tFooter('navigation')}>
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+              {tFooter('navigation')}
+            </Heading>
             <ul className="space-y-2">
               {mainNavigation.map((item) => (
                 <li key={item.name}>
                   {item.external ? (
                     <a
                       href={item.href}
-                      className="text-gray-300 hover:text-white transition-colors"
+                      className="text-sm text-gray-300 hover:text-white transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {item.name}
+                      {item.nameKey ? tNav(item.nameKey as never) : item.name}
                     </a>
                   ) : (
                     <Link
                       href={item.href}
-                      className="text-gray-300 hover:text-white transition-colors"
+                      className="text-sm text-gray-300 hover:text-white transition-colors"
                     >
-                      {item.name}
+                      {item.nameKey ? tNav(item.nameKey as never) : item.name}
                     </Link>
                   )}
                 </li>
@@ -52,44 +58,48 @@ export default function Footer() {
 
           {/* Contact Section */}
           <div>
-            <Heading level={3} className="text-xl font-bold mb-4">Kontakt</Heading>
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+              {tNav('contact')}
+            </Heading>
             <address className="space-y-4 not-italic">
               {siteConfig.contact.locations.map((location) => (
                 <div className="flex items-start" key={location.name}>
-                  <MapPin className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
+                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-500" />
                   <div>
-                    <p className="font-medium">{location.name}</p>
+                    <p className="text-sm font-medium text-gray-200">{location.name}</p>
                     {location.addressLines.map((line) => (
-                      <p className="text-gray-300" key={line}>{line}</p>
+                      <p className="text-sm text-gray-400" key={line}>{line}</p>
                     ))}
-                    {'extra' in location && location.extra && <p className="text-gray-300 text-sm">{location.extra}</p>}
+                    {'extra' in location && location.extra && (
+                      <p className="text-xs text-gray-500 mt-0.5">{location.extra}</p>
+                    )}
                   </div>
                 </div>
               ))}
-              <div className="flex items-center">
-                <Phone className="w-5 h-5 mr-3" />
-                <a href={`tel:${siteConfig.contact.phone}`} className="text-gray-300 hover:text-white transition-colors">
+              <div className="flex items-center gap-3">
+                <Phone className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                <a href={`tel:${siteConfig.contact.phone}`} className="text-sm text-gray-400 hover:text-white transition-colors">
                   {siteConfig.contact.phone}
                 </a>
               </div>
-              <div className="flex items-center">
-                <Mail className="w-5 h-5 mr-3" />
-                <a href={`mailto:${siteConfig.contact.email}`} className="text-gray-300 hover:text-white transition-colors">
+              <div className="flex items-center gap-3">
+                <Mail className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                <a href={`mailto:${siteConfig.contact.email}`} className="text-sm text-gray-400 hover:text-white transition-colors">
                   {siteConfig.contact.email}
                 </a>
               </div>
             </address>
           </div>
 
-          {/* Opening Hours Section */}
+          {/* Opening Hours */}
           <div>
-            <Heading level={3} className="text-xl font-bold mb-4">Öffnungszeiten</Heading>
-            <div className="flex items-start">
-              <Clock className="w-5 h-5 mt-1 mr-3 flex-shrink-0" />
-              <div className="space-y-2">
-                <p className="text-gray-300">Montag: {siteConfig.openingHours.monday}</p>
-                <p className="text-gray-300">Dienstag - Freitag: {siteConfig.openingHours.tuesdayToFriday}</p>
-              </div>
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+              <Clock className="inline w-4 h-4 mr-1.5 mb-0.5" />
+              Öffnungszeiten
+            </Heading>
+            <div className="space-y-1 text-sm text-gray-400">
+              <p>Mo: {OPENING_HOURS.monday}</p>
+              <p>Di–Fr: {OPENING_HOURS.tuesdayToFriday}</p>
             </div>
           </div>
         </div>
@@ -97,57 +107,53 @@ export default function Footer() {
         {/* Newsletter */}
         <div className="mt-10 pt-8 border-t border-gray-800">
           <NewsletterSignup
-            title="Newsletter"
-            description="Updates zu unserer Arbeit — keine Werbung."
             source="footer"
             variant="dark"
           />
         </div>
 
         {/* Social Links */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className="flex justify-center space-x-6">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <span className="sr-only">{social.name}</span>
-                <social.icon className="h-6 w-6" />
-              </a>
-            ))}
-          </div>
+        <div className="mt-8 pt-6 border-t border-gray-800 flex justify-center gap-4">
+          {socialLinks.map((social) => (
+            <a
+              key={social.name}
+              href={social.href}
+              className="p-2 text-gray-500 hover:text-white transition-colors rounded-md hover:bg-gray-800"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="sr-only">{social.name}</span>
+              <social.icon className="h-5 w-5" />
+            </a>
+          ))}
         </div>
 
         {/* Legal Links */}
-        <div className="mt-8 pt-8 border-t border-gray-800">
-          <nav aria-label="Rechtliche Hinweise" className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-            <Link href="/impressum" className="text-gray-400 hover:text-white transition-colors">
-              Impressum
+        <div className="mt-6 pt-6 border-t border-gray-800">
+          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+            <Link href="/impressum" className="hover:text-gray-300 transition-colors">
+              {tFooter('impressum')}
             </Link>
-            <Link href="/datenschutz" className="text-gray-400 hover:text-white transition-colors">
-              Datenschutz
+            <Link href="/datenschutz" className="hover:text-gray-300 transition-colors">
+              {tFooter('privacyPolicy')}
             </Link>
-            <Link href="/agb" className="text-gray-400 hover:text-white transition-colors">
-              AGB
+            <Link href="/agb" className="hover:text-gray-300 transition-colors">
+              {tFooter('termsOfService')}
             </Link>
-            <Link href="/transparenz" className="text-gray-400 hover:text-white transition-colors">
+            <Link href="/transparenz" className="hover:text-gray-300 transition-colors">
               Transparenz
             </Link>
-            <Link href="/mitglied-werden" className="text-gray-400 hover:text-white transition-colors">
-              Mitglied werden
+            <Link href="/mitglied-werden" className="hover:text-gray-300 transition-colors">
+              {tNav('membership')}
             </Link>
           </nav>
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 text-center text-gray-400">
-          <p>&copy; {new Date().getFullYear()} {ORG.name}. Alle Rechte vorbehalten.</p>
+        <div className="mt-6 text-center text-xs text-gray-600">
+          &copy; {new Date().getFullYear()} {ORG.name}. {tFooter('allRightsReserved')}
         </div>
       </div>
     </footer>
   )
-} 
+}
