@@ -1,4 +1,4 @@
-import { siteConfig } from '@/config/site'
+import { CONTACT } from '@/config/org'
 import { cn } from '@/lib/utils'
 
 interface ContactLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -30,7 +30,7 @@ export function ContactLink({
 
   return (
     <a
-      href={`mailto:${siteConfig.contact.email}`}
+      href={`mailto:${CONTACT.email}`}
       className={cn(
         baseStyles,
         variants[variant],

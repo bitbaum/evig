@@ -4,8 +4,19 @@ import Link from 'next/link'
 import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
-import { siteConfig } from '@/config/site'
-import { ORG, OPENING_HOURS } from '@/config/org'
+import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
+
+const footerLocations = [
+  {
+    name: LOCATIONS.store.name,
+    addressLines: [LOCATIONS.store.street, `${LOCATIONS.store.postalCode} ${LOCATIONS.store.city}`, LOCATIONS.store.country],
+  },
+  {
+    name: LOCATIONS.warehouse.name,
+    addressLines: [LOCATIONS.warehouse.street, `${LOCATIONS.warehouse.postalCode} ${LOCATIONS.warehouse.city}`],
+    extra: LOCATIONS.warehouse.note,
+  },
+]
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
@@ -62,7 +73,7 @@ export default function Footer() {
               {tNav('contact')}
             </Heading>
             <address className="space-y-4 not-italic">
-              {siteConfig.contact.locations.map((location) => (
+              {footerLocations.map((location) => (
                 <div className="flex items-start" key={location.name}>
                   <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-500" />
                   <div>
@@ -78,14 +89,14 @@ export default function Footer() {
               ))}
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <a href={`tel:${siteConfig.contact.phone}`} className="text-sm text-gray-400 hover:text-white transition-colors">
-                  {siteConfig.contact.phone}
+                <a href={`tel:${CONTACT.phone}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  {CONTACT.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <a href={`mailto:${siteConfig.contact.email}`} className="text-sm text-gray-400 hover:text-white transition-colors">
-                  {siteConfig.contact.email}
+                <a href={`mailto:${CONTACT.email}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  {CONTACT.email}
                 </a>
               </div>
             </address>
