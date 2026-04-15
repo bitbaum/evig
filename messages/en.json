@@ -79,7 +79,7 @@
   "errors": {
     "generic": "Something went wrong. Please try again.",
     "notFound": "Page not found",
-    "unauthorized": "Unauthorised",
+    "unauthorized": "Unauthorized",
     "forbidden": "Access denied",
     "serverError": "Server error",
     "networkError": "Network error. Please check your connection.",
