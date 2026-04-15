@@ -1,0 +1,43 @@
+{
+  "knowhow": {
+    "meta": {
+      "title": "Knowhow - Guías, Blog, Talleres | revamp-it",
+      "description": "Aprende sobre hardware vintage, Linux y Open Source. Guías, talleres, blog y recursos curados."
+    },
+    "hero": {
+      "title": "Compartir knowhow sobre hardware vintage, Linux y Open Source",
+      "subtitle": "Compartimos más de 16 años de knowhow para que puedas entender y aprovechar mejor la tecnología. Tanto si estás empezando como si ya eres experto/a — aquí encontrarás recursos para tu camino de aprendizaje."
+    },
+    "sections": {
+      "guides": {
+        "title": "Guías",
+        "description": "Instrucciones paso a paso para Linux, hardware vintage y Open Source",
+        "cta": "Ver guías"
+      },
+      "blog": {
+        "title": "Blog",
+        "description": "Consejos, historias y buenas prácticas de nuestros expertos",
+        "cta": "Ir al blog"
+      },
+      "workshops": {
+        "title": "Talleres",
+        "description": "Cursos y formaciones en directo para reservar — de principiante a experto",
+        "cta": "Ver talleres"
+      },
+      "resources": {
+        "title": "Recursos",
+        "description": "Enlances externos curados y alternativas Open Source",
+        "cta": "Explorar recursos"
+      }
+    },
+    "curatedResources": "Recursos curados",
+    "openSourceSoftware": "Alternativas de software Open Source",
+    "linuxDistros": "Distribuciones de Linux",
+    "externalDocs": "Documentación y portales externos",
+    "cta": {
+      "title": "¿Listo/a para aprender?",
+      "description": "Empieza con nuestro blog, asiste a un taller o consulta una guía.",
+      "button": "¿Preguntas? Contáctanos"
+    }
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "home": {
+    "meta": {
+      "title": "Hardware vecchio. Nuova vita. | Riparazione computer e Linux in Svizzera",
+      "description": "Compra e vendi IT usato. Riparazione computer dalla community. Workshop su Linux, hardware e programmazione."
+    },
+    "hero": {
+      "title": "Hardware vecchio. Nuova vita.",
+      "subtitle": "Ogni anno 62 milioni di tonnellate di dispositivi elettronici finiscono in discarica. Noi lo cambiamo — con una community che ripara, condivide e impara insieme.",
+      "ctaDiscover": "Scopri ora",
+      "ctaAbout": "Chi siamo"
+    },
+    "actions": {
+      "heading": "Cosa vuoi fare?",
+      "sell": {
+        "title": "Hai un vecchio dispositivo?",
+        "subtitle": "Vendilo o regalalo in 2 minuti — gratis e senza commissioni.",
+        "primaryLabel": "Scopri il mercato",
+        "secondaryLabel": "Vendi ora"
+      },
+      "repair": {
+        "title": "Computer guasto?",
+        "subtitle": "I tecnici vicino a te sono pronti ad aiutare — o offri tu stesso riparazioni.",
+        "primaryLabel": "Trova aiuto",
+        "secondaryLabel": "Diventa tecnico"
+      },
+      "learn": {
+        "title": "Vuoi imparare qualcosa di nuovo?",
+        "subtitle": "Workshop pratici su Linux, riparazione hardware, programmazione e IA.",
+        "primaryLabel": "Vedi i workshop",
+        "secondaryLabel": "Scopri il knowhow"
+      }
+    },
+    "proServices": {
+      "text": "Offriamo anche {link} professionali: riparazione computer, recupero dati, installazione Linux e sviluppo web.",
+      "linkLabel": "servizi IT"
+    },
+    "impact": {
+      "title": "Il nostro impatto",
+      "subtitle": "Cosa abbiamo raggiunto insieme",
+      "moreLink": "Scopri di più sul nostro impatto"
+    },
+    "community": {
+      "heading": "Entra a far parte della community",
+      "subtitle": "Che tu voglia usare, contribuire o sostenere — ogni apporto conta.",
+      "use": {
+        "title": "Usa",
+        "desc": "Compra, vendi, ripara — gratis"
+      },
+      "volunteer": {
+        "title": "Contribuisci",
+        "desc": "Condividi le tue competenze come tecnico volontario"
+      },
+      "donate": {
+        "title": "Sostieni",
+        "desc": "Dona dispositivi o denaro all'associazione"
+      },
+      "membership": {
+        "title": "Diventa membro",
+        "desc": "Vota e partecipa attivamente all'associazione"
+      }
+    },
+    "newsletter": {
+      "title": "Rimani aggiornato",
+      "subtitle": "Scopri come rendiamo la tecnologia sostenibile. Niente spam, solo contenuti che contano.",
+      "namePlaceholder": "Nome (facoltativo)",
+      "emailPlaceholder": "Indirizzo email",
+      "submit": "Iscriviti",
+      "submitting": "Iscrizione in corso...",
+      "successMessage": "Grazie! Conferma la tua email per attivare la newsletter.",
+      "networkError": "Errore di rete. Riprova più tardi."
+    },
+    "stats": {
+      "users": "Utenti",
+      "listings": "Annunci",
+      "repairs": "Riparazioni",
+      "workshops": "Workshop"
+    }
+  }
+}

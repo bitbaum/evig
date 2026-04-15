@@ -1,0 +1,80 @@
+{
+  "home": {
+    "meta": {
+      "title": "古いハードウェア。新しい命。| パソコン修理とLinux — スイス",
+      "description": "中古ITを購入・販売。コミュニティによるパソコン修理。Linux、ハードウェア、プログラミングのワークショップ。"
+    },
+    "hero": {
+      "title": "古いハードウェア。新しい命。",
+      "subtitle": "毎年6200万トンの電子機器がゴミになります。私たちはそれを変えます — 修理し、受け渡し、互いに学ぶコミュニティとともに。",
+      "ctaDiscover": "今すぐ見る",
+      "ctaAbout": "私たちについて"
+    },
+    "actions": {
+      "heading": "何をしたいですか？",
+      "sell": {
+        "title": "古いデバイスはありますか？",
+        "subtitle": "2分で無料出品 — 手数料なし。",
+        "primaryLabel": "マーケットを見る",
+        "secondaryLabel": "今すぐ出品"
+      },
+      "repair": {
+        "title": "パソコンが壊れましたか？",
+        "subtitle": "近くの技術者が手伝います — または自分で修理を提供する。",
+        "primaryLabel": "サポートを探す",
+        "secondaryLabel": "技術者になる"
+      },
+      "learn": {
+        "title": "新しいことを学びたいですか？",
+        "subtitle": "Linux、ハードウェア修理、プログラミング、AIの実践ワークショップ。",
+        "primaryLabel": "ワークショップを見る",
+        "secondaryLabel": "ノウハウを探る"
+      }
+    },
+    "proServices": {
+      "text": "私たちはプロフェッショナルな{link}も提供しています：パソコン修理、データ復旧、Linuxインストール、ウェブ開発。",
+      "linkLabel": "ITサービス"
+    },
+    "impact": {
+      "title": "私たちの活動成果",
+      "subtitle": "一緒に達成したこと",
+      "moreLink": "活動成果について詳しく"
+    },
+    "community": {
+      "heading": "コミュニティの一員になる",
+      "subtitle": "利用する、協力する、支援する — すべての貢献が大切です。",
+      "use": {
+        "title": "利用する",
+        "desc": "購入、販売、修理 — 無料"
+      },
+      "volunteer": {
+        "title": "協力する",
+        "desc": "ボランティア技術者として知識を共有する"
+      },
+      "donate": {
+        "title": "支援する",
+        "desc": "団体のためにデバイスやお金を寄付する"
+      },
+      "membership": {
+        "title": "会員になる",
+        "desc": "投票して団体を積極的に形成する"
+      }
+    },
+    "newsletter": {
+      "title": "最新情報をお届け",
+      "subtitle": "テクノロジーを持続可能にする方法をお伝えします。スパムなし、大切な内容のみ。",
+      "namePlaceholder": "名前（任意）",
+      "emailPlaceholder": "メールアドレス",
+      "submit": "登録",
+      "submitting": "登録中...",
+      "successMessage": "ありがとうございます！メールを確認してニュースレターを有効にしてください。",
+      "networkError": "ネットワークエラーが発生しました。後でもう一度お試しください。"
+    },
+    "stats": {
+      "users": "ユーザー",
+      "listings": "出品",
+      "repairs": "修理件数",
+      "workshops": "ワークショップ"
+    }
+  }
+}

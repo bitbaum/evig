@@ -1,0 +1,57 @@
+{
+  "membership": {
+    "meta": {
+      "title": "Diventa membro",
+      "description": "Diventa membro. Diritto di voto nelle decisioni dell'associazione, parte della struttura ufficiale.",
+      "ogTitle": "Diventa membro",
+      "ogDescription": "Diventa membro — diritto di voto, corresponsabilità."
+    },
+    "hero": {
+      "title": "Diventa membro",
+      "description": "Sostieni l'associazione — legalmente, finanziariamente e democraticamente. Compila il modulo, versa la quota, fatto."
+    },
+    "benefits": {
+      "votingTitle": "Diritto di voto nelle decisioni dell'associazione",
+      "votingDescription": "Sarai automaticamente invitato alle votazioni e parteciperai alle decisioni sull'indirizzo dell'associazione.",
+      "officialTitle": "Elenco ufficiale dei soci",
+      "officialDescription": "Sei legalmente parte della struttura dell'associazione ai sensi del diritto associativo svizzero (CC art. 60 ss).",
+      "financialTitle": "Sostegno finanziario",
+      "financialDescription": "La tua quota annuale ci aiuta a finanziare l'associazione in modo sostenibile — indipendentemente da finanziatori esterni."
+    },
+    "form": {
+      "title": "Iscriviti ora",
+      "subtitle": "Iscrizione immediata — nessuna attesa"
+    },
+    "alreadyMember": {
+      "title": "Sei già membro",
+      "description": "Grazie per il tuo sostegno.",
+      "memberSince": "Membro dal {date}",
+      "dashboardButton": "Vai alla dashboard"
+    },
+    "faq": {
+      "title": "Domande frequenti",
+      "items": [
+        {
+          "question": "Qual è la differenza tra un account utente e una membership?",
+          "answer": "Un account utente ti serve per il mercato, l'assistenza IT e i workshop — è gratuito. La membership associativa ti dà diritto di voto e ti rende ufficialmente parte della struttura. La maggior parte degli utenti non diventa mai membro — ed è del tutto normale."
+        },
+        {
+          "question": "Cosa ottengo concretamente come membro?",
+          "answer": "Il diritto di voto nelle decisioni dell'associazione e un posto nell'elenco ufficiale dei soci. Non promettiamo vantaggi esclusivi — le nostre offerte sono per tutti. Diventi membro perché vuoi sostenere l'associazione."
+        },
+        {
+          "question": "Come funziona l'adesione?",
+          "answer": "Compila il modulo, versa la quota annuale — fatto. Sei subito membro. Nessuna attesa, nessuna approvazione."
+        },
+        {
+          "question": "Come pago la quota annuale?",
+          "answer": "Dopo l'adesione, vedrai le coordinate bancarie direttamente sulla pagina di conferma. Bonifico bancario o TWINT."
+        },
+        {
+          "question": "Posso recedere in qualsiasi momento?",
+          "answer": "Sì. È sufficiente un'email informale al consiglio direttivo. Le quote annuali già versate non vengono rimborsate."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "projects": {
+    "meta": {
+      "title": "私たちのプロジェクト",
+      "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。"
+    },
+    "hero": {
+      "title": "私たちのプロジェクト",
+      "subtitle": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。"
+    },
+    "section": {
+      "title": "私たちのプロジェクト",
+      "subtitle": "Open Sourceソフトウェアからコミュニティイニシアチブまで — 私たちの多様なプロジェクトを発見してください。"
+    },
+    "filter": {
+      "label": "カテゴリーで絞り込み：",
+      "all": "すべて"
+    },
+    "status": {
+      "active": "アクティブ",
+      "ongoing": "進行中"
+    },
+    "since": "{year}年から",
+    "learnMore": "詳しく知る",
+    "results": "{total}件中{count}件のプロジェクト",
+    "resultsFiltered": "「{category}」の{total}件中{count}件のプロジェクト",
+    "categories": {
+      "software": "ソフトウェアプロジェクト",
+      "hardware": "ハードウェアプロジェクト",
+      "community": "コミュニティプロジェクト"
+    },
+    "items": [
+      {
+        "title": "Kivitendo Modus CH",
+        "description": "2015年7月以来、revamp-itはKivitendoプロジェクトのプレミアムパートナーです。2005年から、当初は自社目的のために、やがて顧客のニーズを満たすために、会計、リソース、顧客管理のためのソフトウェアソリューションを探し始めました。",
+        "readMoreLink": "/projects/kivitendo",
+        "category": "ソフトウェアプロジェクト",
+        "status": "アクティブ",
+        "year": "2015",
+        "features": [
+          "2015年からのプレミアムパートナーシップ",
+          "会計とリソース管理",
+          "顧客管理",
+          "Open Source ERPシステム"
+        ]
+      },
+      {
+        "title": "Linuxola団体",
+        "description": "Linuxola団体は2005年12月2日にスイスの様々な地域からの8人によって設立されました。組織の目的は、アフリカのパートナーに情報技術へのアクセスとグローバルなデジタルコモンズへの接続を提供することです。",
+        "readMoreLink": "/projects/linuxola",
+        "category": "コミュニティプロジェクト",
+        "status": "アクティブ",
+        "year": "2005",
+        "features": [
+          "8名によるスイス設立",
+          "アフリカパートナーシップに注力",
+          "情報技術へのアクセス",
+          "デジタルコモンズへの接続"
+        ]
+      },
+      {
+        "title": "FreieComputer.ch",
+        "description": "事前インストール済みのフリーソフトウェアと保証されたサポートを持つコンピューターのスイスラベル！revamp-itは積極的なOpen Sourceコミュニティとともにこのラベルの誕生に貢献しました。",
+        "readMoreLink": "/projects/freiecomputer",
+        "category": "コミュニティプロジェクト",
+        "status": "アクティブ",
+        "year": "2010",
+        "features": [
+          "フリーソフトウェアのスイスラベル",
+          "事前インストール済みOpen Sourceソフトウェア",
+          "保証されたサポート",
+          "コミュニティサポート"
+        ]
+      },
+      {
+        "title": "Compirat",
+        "description": "Compiratはカリタスチューリッヒとrevamp-itの協力プロジェクトです。Compiratの支援により、チューリッヒ州の限られた資力を持つ人々が自宅近くでコンピューターの使い方を学ぶ機会を得られます。",
+        "readMoreLink": "/projects/compirat",
+        "category": "コミュニティプロジェクト",
+        "status": "アクティブ",
+        "year": "2018",
+        "features": [
+          "カリタスチューリッヒとのパートナーシップ",
+          "限られた資力を持つ人々への支援",
+          "チューリッヒ州でのコンピュータートレーニング",
+          "自宅近くでの学習機会"
+        ]
+      },
+      {
+        "title": "ハードウェア開発",
+        "description": "revamp-itのハードウェア開発作業は、廃棄されたコンピューターハードウェアの新たな可能性を発見し、エネルギーとリソースの消費を最適化し、Open Sourceハードウェアの組み立てガイドを作成することに焦点を当てています。",
+        "readMoreLink": "/projects/hardware",
+        "category": "ハードウェアプロジェクト",
+        "status": "進行中",
+        "year": "2020",
+        "features": [
+          "廃棄ハードウェアのアップサイクル",
+          "エネルギーとリソースの最適化",
+          "Open Sourceハードウェアガイド",
+          "持続可能な開発"
+        ]
+      },
+      {
+        "title": "LTSP — Linux Terminal Server Project",
+        "description": "Linux Terminal Server Projectは、ネットワークを通じて古くて遅いコンピューターに接続された高速で強力なサーバーの性能を活用することに焦点を当てています。これにより、同じサーバーに接続したクライアントで複数のユーザーが同時に作業できます。",
+        "readMoreLink": "/projects/ltsp",
+        "category": "ソフトウェアプロジェクト",
+        "status": "アクティブ",
+        "year": "2016",
+        "features": [
+          "ネットワークベースのサーバーソリューション",
+          "古いハードウェアの効率的な利用",
+          "マルチユーザーコンピューティング",
+          "リソース最適化"
+        ]
+      }
+    ]
+  }
+}

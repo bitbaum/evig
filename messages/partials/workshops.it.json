@@ -1,0 +1,45 @@
+{
+  "workshops": {
+    "meta": {
+      "title": "Workshop e corsi",
+      "description": "Scopri i nostri workshop sulla tecnologia sostenibile, Linux, riparazione, programmazione e altro. Apprendimento pratico a Zurigo."
+    },
+    "browse": {
+      "title": "Workshop e corsi",
+      "subtitle": "{count} {count, plural, one {workshop} other {workshop}} · Apprendimento pratico con {orgName}",
+      "proposeButton": "Proponi un workshop",
+      "filterCategory": "Categoria",
+      "allCategories": "Tutte le categorie",
+      "filterLevel": "Livello di difficoltà",
+      "allLevels": "Tutti i livelli",
+      "clearFilters": "Reimposta filtri",
+      "resultCount": "{count} {count, plural, one {workshop} other {workshop}}",
+      "allLevelsLabel": "Tutti i livelli",
+      "maxParticipants": "Max {count}",
+      "nextDate": "Prossima data: {date}",
+      "dateSoon": "Data da confermare",
+      "spotsLeft": "{count} {count, plural, one {posto disponibile} other {posti disponibili}}",
+      "soldOut": "Esaurito",
+      "free": "Gratuito",
+      "registered": "Iscritto",
+      "viewDetails": "Vedi dettagli",
+      "manage": "Gestisci",
+      "registerNow": "Iscriviti ora",
+      "noDate": "Nessuna data",
+      "emptyFiltered": {
+        "title": "Nessun workshop trovato",
+        "subtitle": "Prova altri filtri o torna a controllare più tardi.",
+        "clearFilters": "Reimposta filtri"
+      },
+      "emptyAll": {
+        "title": "Al momento non ci sono workshop in programma",
+        "subtitle": "Torna presto!"
+      },
+      "cta": {
+        "title": "Vuoi proporre un workshop?",
+        "subtitle": "Hai un'idea per un workshop? Siamo felici di ricevere i tuoi suggerimenti su nuovi temi e contenuti.",
+        "button": "Proponi un workshop"
+      }
+    }
+  }
+}

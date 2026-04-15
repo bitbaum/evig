@@ -1,0 +1,26 @@
+{
+  "blog": {
+    "meta": {
+      "title": "블로그",
+      "description": "지속 가능한 기술에 관한 팁, 이야기, 배경 정보."
+    },
+    "hero": {
+      "title": "블로그",
+      "subtitle": "지속 가능한 기술에 관한 팁, 이야기, 모범 사례."
+    },
+    "empty": {
+      "title": "아직 글이 없습니다",
+      "description": "필터를 조정하거나 글을 제출해 보세요!",
+      "submitButton": "글 제출하기"
+    },
+    "sections": {
+      "featured": "추천 글",
+      "latest": "최신 글"
+    },
+    "footerCta": {
+      "title": "지식을 나눠주세요",
+      "description": "지속 가능한 기술에 관한 이야기가 있으신가요? 글을 제출해 주세요.",
+      "button": "글 제출하기"
+    }
+  }
+}

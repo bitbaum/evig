@@ -1,0 +1,118 @@
+{
+  "shop": {
+    "meta": {
+      "title": "Shop — Hardware ricondizionato",
+      "description": "Computer verificati e ricondizionati a prezzi equi. Con garanzia."
+    },
+    "title": "Il nostro shop",
+    "subtitle": "Hardware ricondizionato verificato",
+    "filters": {
+      "all": "Tutti",
+      "laptops": "Laptop",
+      "desktops": "Desktop",
+      "accessories": "Accessori"
+    },
+    "product": {
+      "addToCart": "Aggiungi al carrello",
+      "outOfStock": "Esaurito",
+      "condition": "Condizione",
+      "warranty": "Garanzia",
+      "months": "{count} mesi"
+    },
+    "empty": "Nessun prodotto trovato",
+    "verifiedBadge": "Verificato",
+    "page": {
+      "heroTitle": "Come vuoi fare acquisti?",
+      "heroSubtitle": "Scegli il canale più adatto a te: il nostro shop online, lo shop Shopware o il nostro negozio a Zurigo.",
+      "metaDescription": "Scegli come fare acquisti da {orgName} — shop online, canale Shopware o negozio a Zurigo.",
+      "store": {
+        "title": "Negozio (Zurigo)",
+        "tagline": "Consulenza, vedere i dispositivi, portarli a casa subito",
+        "accessInfo": "Ben raggiungibile con i mezzi pubblici. Parcheggi nelle vicinanze.",
+        "openingHours": "Orari di apertura",
+        "openingHoursMonday": "Lunedì: {hours}",
+        "openingHoursTueFri": "Martedì – venerdì: {hours}",
+        "openGoogleMaps": "Apri in Google Maps",
+        "openOsm": "Apri in OpenStreetMap",
+        "contact": "Contatto",
+        "mapsInfoTitle": "Perché due opzioni di mappa?",
+        "mapsInfoBody": "OpenStreetMap è gestita dalla community ed è rispettosa dei dati. Google/Apple Maps offrono spesso una migliore navigazione, traffico in tempo reale e POI. Scegli quella che preferisci — la trasparenza e la libertà di scelta sono importanti per noi."
+      },
+      "online": {
+        "title": "Shop online",
+        "tagline": "Scegli tra il nostro shop online e il canale Shopware.",
+        "benefit1": "Qualità verificata e garanzia in tutti i canali",
+        "benefit2": "Prezzi equi, selezione sostenibile",
+        "benefit3": "Pagamento sicuro",
+        "currentShop": "Shop online attuale",
+        "shopwareShop": "Vai allo shop Shopware",
+        "onlineShop": "Shop online {orgName}",
+        "multiShopTitle": "Più canali shop?",
+        "multiShopBody": "Il nostro shop online {orgName} ti offre la migliore selezione di hardware IT ricondizionato. In alternativa trovi il nostro assortimento anche nello shop Shopware e nel sistema legacy."
+      }
+    },
+    "search": {
+      "metaTitleWithQuery": "Ricerca: \"{query}\" | Shop {orgName}",
+      "metaDescWithQuery": "Risultati di ricerca per \"{query}\" – dispositivi IT ricondizionati in modo sostenibile da {orgName}.",
+      "metaTitle": "Ricerca | Shop {orgName}",
+      "metaDesc": "Sfoglia il nostro assortimento di dispositivi IT ricondizionati in modo sostenibile.",
+      "heroTitleWithQuery": "Risultati per \"{query}\"",
+      "heroTitle": "Cerca nello shop",
+      "placeholder": "Cosa cerchi? es. laptop, monitor, tastiera...",
+      "submitButton": "Cerca",
+      "breadcrumbHome": "Home",
+      "breadcrumbShop": "Shop",
+      "breadcrumbSearchWithQuery": "Ricerca: \"{query}\"",
+      "breadcrumbSearch": "Ricerca",
+      "resultsTitle": "Ricerca per \"{query}\"",
+      "resultsComingSoon": "La ricerca prodotti è attualmente in fase di configurazione. Presto potrai cercare dispositivi IT ricondizionati qui.",
+      "goToShop": "Vai allo shop online",
+      "allShopOptions": "Tutte le opzioni shop",
+      "popularSearches": "Ricerche popolari",
+      "browseByCategory": "Sfoglia per categoria",
+      "productCount": "{count} prodotti",
+      "allCategories": "Mostra tutte le categorie →"
+    },
+    "category": {
+      "notFoundMeta": "Categoria non trovata | Shop {orgName}",
+      "metaTitle": "{categoryName} | Shop {orgName}",
+      "metaTitleWithParent": "{categoryName} – {parentName} | Shop {orgName}",
+      "metaDesc": "Scopri la nostra selezione di {categoryNameLower} – dispositivi IT ricondizionati in modo sostenibile da {orgName}.",
+      "heroSubtitle": "Scopri la nostra selezione di {categoryNameLower} ricondizionati in modo sostenibile – qualità verificata a prezzi equi.",
+      "productCount": "{count} prodotti in questa categoria",
+      "subcategories": "Sottocategorie",
+      "categoryProductCount": "{count} prodotti",
+      "productsLoading": "Caricamento prodotti",
+      "productsComingSoon": "Presto troverai qui dispositivi IT ricondizionati nella categoria {categoryName} sul nostro marketplace.",
+      "goToShop": "Vai allo shop online",
+      "allShopOptions": "Tutte le opzioni shop",
+      "relatedIn": "Altri in {parentName}",
+      "breadcrumbHome": "Home"
+    },
+    "loading": {
+      "text": "Caricamento shop..."
+    },
+    "error": {
+      "title": "Qualcosa è andato storto",
+      "body": "Si è verificato un errore durante il caricamento dello shop.",
+      "retry": "Riprova",
+      "backToShop": "Torna allo shop"
+    },
+    "header": {
+      "skipToContent": "Vai al contenuto principale",
+      "skipToFooter": "Vai al footer",
+      "skipLinks": "Link di accesso rapido",
+      "openMenu": "Apri menu",
+      "categories": "Categorie",
+      "searchPlaceholder": "Cosa cerchi?",
+      "searchLabel": "Cerca",
+      "closeSearch": "Chiudi ricerca",
+      "compareLabel": "Lista comparazione ({count} articoli)",
+      "wishlistLabel": "Lista desideri ({count} articoli)",
+      "cartLabel": "Carrello",
+      "backToShop": "Torna allo shop",
+      "shopOverview": "Panoramica shop",
+      "closeMenu": "Chiudi menu"
+    }
+  }
+}

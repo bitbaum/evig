@@ -1,0 +1,55 @@
+{
+  "support": {
+    "meta": {
+      "title": "Apoyar a RevampIT",
+      "description": "Apoya contenidos de alta calidad y libres de publicidad sobre tecnología sostenible."
+    },
+    "hero": {
+      "title": "Apoya a RevampIT",
+      "subtitle": "Ayúdanos a crear contenidos de alta calidad y sin publicidad sobre tecnología sostenible, Open Source y el futuro de la informática."
+    },
+    "pillars": {
+      "noAds": {
+        "title": "Sin publicidad",
+        "description": "Nunca mostraremos anuncios ni venderemos tus datos."
+      },
+      "communityDriven": {
+        "title": "Impulsado por la comunidad",
+        "description": "De la comunidad, para la comunidad — sin intereses comerciales."
+      },
+      "qualityFirst": {
+        "title": "Calidad ante todo",
+        "description": "Nos centramos en contenidos veraces y bien documentados."
+      }
+    },
+    "promise": {
+      "title": "Nuestra promesa",
+      "intro": "RevampIT no es una empresa — es un movimiento. Creemos que la información de calidad sobre tecnología sostenible debe ser accesible para todos, sin muros de pago ni publicidad intrusiva.",
+      "enables": "Tu apoyo nos permite:",
+      "items": [
+        "Realizar investigaciones y análisis en profundidad",
+        "Mantener nuestros servidores e infraestructura",
+        "Desarrollar herramientas y recursos Open Source",
+        "Organizar eventos comunitarios y talleres",
+        "Mantenernos 100% libres de publicidad e independientes"
+      ]
+    },
+    "oneTime": {
+      "title": "Donación única",
+      "description": "Invítanos a un café o apóyanos con la cantidad que quieras.",
+      "cta": "Donar ahora"
+    },
+    "monthly": {
+      "title": "Apoyo mensual",
+      "description": "Conviértete en colaborador/a y ayúdanos a crecer de forma sostenible.",
+      "cta": "Ser patrocinador/a"
+    },
+    "otherWays": {
+      "title": "Otras formas de ayudar",
+      "submitPost": "Enviar artículo",
+      "contributeCode": "Contribuir código",
+      "shareArticle": "Compartir artículo"
+    },
+    "thanks": "Muchas gracias por apoyar nuestra misión de crear contenidos tecnológicos sostenibles y de alta calidad."
+  }
+}

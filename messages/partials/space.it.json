@@ -1,0 +1,143 @@
+{
+  "space": {
+    "meta": {
+      "title": "Le nostre sedi",
+      "description": "Dalla Toni Molkerei ad oggi — la storia delle nostre sedi e la nostra visione per un nuovo community space a Zurigo."
+    },
+    "hero": {
+      "title": "Dal caseificio al community space",
+      "subtitle": "Dal 2003 ci muoviamo attraverso Zurigo. Ora cerchiamo una nuova casa — un luogo dove sostenibilità, tecnologia e comunità si incontrano.",
+      "ctaVision": "La nostra visione",
+      "ctaDonate": "Sostieni il budget per la sede"
+    },
+    "history": {
+      "title": "Il nostro viaggio attraverso Zurigo",
+      "subtitle": "Oltre 20 anni, diverse sedi, una missione: usare la tecnologia in modo sostenibile.",
+      "locations": [
+        {
+          "period": "2003 – 2008",
+          "name": "Toni Molkerei",
+          "description": "Il nostro luogo di nascita nell'antica cantina del formaggio. Qui si tenne il leggendario anniversario dei 10 anni di Debian sul tetto.",
+          "highlight": "Luogo di fondazione"
+        },
+        {
+          "period": "2008 – 2012",
+          "name": "Chiesa riformata di Wipkingen",
+          "description": "Al 6°/7° piano del campanile e nelle cantine. Qui sono iniziati i nostri primi progetti sociali.",
+          "highlight": "Progetti sociali"
+        },
+        {
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "Ampio spazio con molte postazioni di lavoro. Espansione del nostro laboratorio.",
+          "highlight": "Espansione"
+        }
+      ],
+      "currentHighlight": "Attuale"
+    },
+    "current": {
+      "label": "Negozio attuale",
+      "hours": "Orari di apertura",
+      "hoursValue": "Lun: 9–12 | Mar–Ven: 13–17",
+      "moreInfo": "Maggiori info sul negozio"
+    },
+    "future": {
+      "badge": "Trasloco entro fine 2026",
+      "title": "Il nostro spazio ideale",
+      "subtitle": "Dobbiamo lasciare il nostro attuale locale entro fine 2026. Questa è la nostra occasione per creare qualcosa di più grande.",
+      "visionLabel": "Visione: Community Space",
+      "visionDescription": "Uno spazio aperto dove tecnologia, sostenibilità e comunità si incontrano. Shop, laboratorio, coworking, eventi — tutto sotto lo stesso tetto.",
+      "conceptCaption": "Visualizzazione concettuale del nostro community space ideale",
+      "features": [
+        {
+          "name": "Area shop",
+          "description": "Spazio espositivo per dispositivi ricondizionati con consulenza"
+        },
+        {
+          "name": "Laboratorio di riparazione",
+          "description": "Postazioni per tecnici e riparazioni della community"
+        },
+        {
+          "name": "Coworking",
+          "description": "Postazioni di lavoro flessibili per la nostra community"
+        },
+        {
+          "name": "Sala eventi",
+          "description": "Spazio per workshop, meetup e piccoli eventi (15–20 persone)"
+        },
+        {
+          "name": "Mini-biblioteca",
+          "description": "Qualche scaffale con libri tech, riviste e risorse"
+        },
+        {
+          "name": "Angolo caffè",
+          "description": "Punto di incontro per scambi informali e networking"
+        },
+        {
+          "name": "Cucina",
+          "description": "Cucina completamente attrezzata per iniziative Zero Food Waste"
+        },
+        {
+          "name": "Zero Food Waste",
+          "description": "Alimenti recuperati per pranzi comunitari"
+        }
+      ],
+      "params": {
+        "title": "Cosa cerchiamo",
+        "subtitle": "I parametri per la nostra sede ideale",
+        "area": "Superficie utile",
+        "budget": "Budget al mese",
+        "city": "Posizione",
+        "idealLabel": "L'ideale sarebbe:",
+        "idealText": "Piano terra o facilmente accessibile, accessibile in sedia a rotelle, rampa di carico o possibilità di consegna, in un quartiere vivace con buon collegamento ai mezzi pubblici.",
+        "tipText": "Conosci uno spazio adatto? Siamo felici di ricevere ogni segnalazione!",
+        "contactCta": "Contattaci"
+      }
+    },
+    "impact": {
+      "title": "Perché uno spazio più grande significa più impatto",
+      "subtitle": "Con più spazio possiamo moltiplicare i nostri KPI — salvare più dispositivi, formare più persone, ottenere più impatto.",
+      "today": "Oggi",
+      "potential": "Potenziale",
+      "items": [
+        {
+          "metric": "Dispositivi all'anno",
+          "current": "~500",
+          "potential": "2'000+",
+          "reason": "Più postazioni = più capacità"
+        },
+        {
+          "metric": "Partecipanti workshop",
+          "current": "~100",
+          "potential": "500+",
+          "reason": "Sala eventi dedicata per corsi regolari"
+        },
+        {
+          "metric": "Membri community",
+          "current": "~50",
+          "potential": "200+",
+          "reason": "Il coworking attrae più volontari"
+        },
+        {
+          "metric": "Integrazione sociale",
+          "current": "~10",
+          "potential": "30+",
+          "reason": "Più posti stage grazie agli spazi più grandi"
+        }
+      ],
+      "donateCta": {
+        "title": "Sostieni il nostro budget per la sede",
+        "description": "Con un budget maggiore possiamo trovare una sede migliore — e moltiplicare così il nostro impatto per l'ambiente e la società. Ogni contributo ci aiuta a realizzare il sogno del community space.",
+        "donateCta": "Dona ora",
+        "impactCta": "Vedi il nostro impatto"
+      }
+    },
+    "shopLinks": {
+      "title": "Tutte le opzioni di acquisto",
+      "subtitle": "Fisico e online — scegli quello che ti conviene di più.",
+      "currentStore": "Negozio attuale",
+      "shopOverview": "Panoramica shop",
+      "onlineShop": "Shop online"
+    }
+  }
+}

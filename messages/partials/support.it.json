@@ -1,0 +1,55 @@
+{
+  "support": {
+    "meta": {
+      "title": "Sostieni RevampIT",
+      "description": "Sostieni contenuti di alta qualità e senza pubblicità sulla tecnologia sostenibile."
+    },
+    "hero": {
+      "title": "Sostieni RevampIT",
+      "subtitle": "Aiutaci a creare contenuti di alta qualità e senza pubblicità sulla tecnologia sostenibile, l'Open Source e il futuro del computing."
+    },
+    "pillars": {
+      "noAds": {
+        "title": "Nessuna pubblicità",
+        "description": "Non inseriremo mai pubblicità né venderemo i tuoi dati."
+      },
+      "communityDriven": {
+        "title": "Guidato dalla community",
+        "description": "Dalla community, per la community — senza interessi commerciali."
+      },
+      "qualityFirst": {
+        "title": "Qualità prima di tutto",
+        "description": "Focus su contenuti veritieri e ben documentati."
+      }
+    },
+    "promise": {
+      "title": "La nostra promessa",
+      "intro": "RevampIT non è un'azienda — è un movimento. Crediamo che le informazioni di alta qualità sulla tecnologia sostenibile debbano essere accessibili a tutti, senza paywall o pubblicità invasiva.",
+      "enables": "Il tuo sostegno ci permette di:",
+      "items": [
+        "Condurre ricerche e analisi approfondite",
+        "Gestire i nostri server e l'infrastruttura",
+        "Sviluppare strumenti e risorse Open Source",
+        "Organizzare eventi e workshop community",
+        "Rimanere al 100% senza pubblicità e indipendenti"
+      ]
+    },
+    "oneTime": {
+      "title": "Donazione una tantum",
+      "description": "Offrici un caffè o sostienici con qualsiasi importo.",
+      "cta": "Dona ora"
+    },
+    "monthly": {
+      "title": "Supporto mensile",
+      "description": "Diventa sostenitore e aiutaci a crescere in modo sostenibile.",
+      "cta": "Diventa sponsor"
+    },
+    "otherWays": {
+      "title": "Altri modi per aiutare",
+      "submitPost": "Invia un articolo",
+      "contributeCode": "Contribuisci con codice",
+      "shareArticle": "Condividi un articolo"
+    },
+    "thanks": "Grazie per aver sostenuto la nostra missione per una tecnologia sostenibile e di alta qualità."
+  }
+}

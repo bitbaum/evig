@@ -1,0 +1,43 @@
+{
+  "contact": {
+    "meta": {
+      "title": "문의",
+      "description": "Linux 지원, 워크숍, 오픈 소스 솔루션에 관해 문의해 주세요."
+    },
+    "hero": {
+      "title": "문의",
+      "subtitle": "서비스, 워크숍 또는 Linux 솔루션에 관한 질문이 있으신가요? 기꺼이 도와드리겠습니다!"
+    },
+    "info": {
+      "email": "이메일",
+      "phone": "전화",
+      "address": "주소",
+      "openingHours": "영업 시간"
+    },
+    "map": {
+      "title": "찾아오시는 길",
+      "openGoogleMaps": "Google Maps에서 열기",
+      "openOSM": "OpenStreetMap에서 열기",
+      "warehouseNote": "저희는 {address} {note}에 창고도 있습니다",
+      "warehouseGoogleMaps": "Google Maps에서 창고 보기",
+      "warehouseOSM": "OpenStreetMap에서 창고 보기",
+      "mapChoiceTitle": "왜 두 가지 지도 옵션인가요?",
+      "mapChoiceDescription": "OpenStreetMap은 커뮤니티 기반이고 데이터를 최소화합니다. Google/Apple Maps는 더 나은 내비게이션, 실시간 교통 정보 및 POI를 제공합니다. 귀하에게 가장 적합한 것을 선택하세요 — 투명성과 선택의 자유가 중요합니다."
+    },
+    "form": {
+      "title": "메시지 보내기",
+      "name": "이름",
+      "namePlaceholder": "귀하의 이름",
+      "email": "이메일",
+      "emailPlaceholder": "your@email.com",
+      "subject": "제목",
+      "subjectPlaceholder": "무엇에 관한 것인가요?",
+      "message": "메시지",
+      "messagePlaceholder": "귀하의 메시지...",
+      "submit": "메시지 보내기",
+      "submitting": "전송 중…",
+      "successMessage": "감사합니다! 메시지가 전송되었습니다.",
+      "errorFallback": "전송 오류. 나중에 다시 시도해 주세요."
+    }
+  }
+}

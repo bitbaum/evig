@@ -1,0 +1,118 @@
+{
+  "shop": {
+    "meta": {
+      "title": "ショップ — リファービッシュ・ハードウェア",
+      "description": "検査済みの再生パソコンを公正な価格で。保証付き。"
+    },
+    "title": "私たちのショップ",
+    "subtitle": "検査済みリファービッシュ・ハードウェア",
+    "filters": {
+      "all": "すべて",
+      "laptops": "ラップトップ",
+      "desktops": "デスクトップ",
+      "accessories": "アクセサリー"
+    },
+    "product": {
+      "addToCart": "カートに追加",
+      "outOfStock": "在庫切れ",
+      "condition": "状態",
+      "warranty": "保証",
+      "months": "{count}ヶ月"
+    },
+    "empty": "商品が見つかりませんでした",
+    "verifiedBadge": "検査済み",
+    "page": {
+      "heroTitle": "どのようにお買い物しますか？",
+      "heroSubtitle": "あなたに最適なチャンネルを選んでください：オンラインショップ、Shopwareショップ、またはチューリッヒの店舗。",
+      "metaDescription": "{orgName}でお買い物する方法を選んでください — オンラインショップ、Shopwareチャンネル、またはチューリッヒの店舗。",
+      "store": {
+        "title": "店舗（チューリッヒ）",
+        "tagline": "相談、デバイスの確認、その場で持ち帰り",
+        "accessInfo": "公共交通機関でアクセスしやすい。近くに駐車場あり。",
+        "openingHours": "営業時間",
+        "openingHoursMonday": "月曜日：{hours}",
+        "openingHoursTueFri": "火曜日 – 金曜日：{hours}",
+        "openGoogleMaps": "Google Mapsで開く",
+        "openOsm": "OpenStreetMapで開く",
+        "contact": "お問い合わせ",
+        "mapsInfoTitle": "なぜ2つの地図オプションがあるのですか？",
+        "mapsInfoBody": "OpenStreetMapはコミュニティ主導でプライバシーに配慮しています。Google/Apple Mapsはナビゲーション、リアルタイム交通情報、スポット情報が充実しています。あなたに合ったものを選んでください — 透明性と選択の自由を大切にしています。"
+      },
+      "online": {
+        "title": "オンラインショップ",
+        "tagline": "オンラインショップとShopwareチャンネルのどちらかを選んでください。",
+        "benefit1": "すべてのチャンネルで検査済みの品質と保証",
+        "benefit2": "公正な価格、持続可能な選択",
+        "benefit3": "安全な支払い",
+        "currentShop": "現在のオンラインショップ",
+        "shopwareShop": "Shopwareショップへ",
+        "onlineShop": "{orgName}オンラインショップ",
+        "multiShopTitle": "複数のショップチャンネル？",
+        "multiShopBody": "{orgName}オンラインショップは最高の品揃えのリファービッシュITハードウェアを提供します。Shopwareショップとレガシーシステムでも商品をご覧いただけます。"
+      }
+    },
+    "search": {
+      "metaTitleWithQuery": "検索：「{query}」| {orgName}ショップ",
+      "metaDescWithQuery": "「{query}」の検索結果 — {orgName}の持続可能なリファービッシュITデバイス。",
+      "metaTitle": "検索 | {orgName}ショップ",
+      "metaDesc": "持続可能なリファービッシュITデバイスの品揃えを検索。",
+      "heroTitleWithQuery": "「{query}」の結果",
+      "heroTitle": "ショップを検索",
+      "placeholder": "何をお探しですか？例：ラップトップ、モニター、キーボード...",
+      "submitButton": "検索",
+      "breadcrumbHome": "ホーム",
+      "breadcrumbShop": "ショップ",
+      "breadcrumbSearchWithQuery": "検索：「{query}」",
+      "breadcrumbSearch": "検索",
+      "resultsTitle": "「{query}」の検索",
+      "resultsComingSoon": "商品検索を現在設定中です。まもなくリファービッシュITデバイスを検索できるようになります。",
+      "goToShop": "オンラインショップへ",
+      "allShopOptions": "すべてのショップオプション",
+      "popularSearches": "人気の検索",
+      "browseByCategory": "カテゴリーで探す",
+      "productCount": "{count}件の商品",
+      "allCategories": "すべてのカテゴリーを表示 →"
+    },
+    "category": {
+      "notFoundMeta": "カテゴリーが見つかりません | {orgName}ショップ",
+      "metaTitle": "{categoryName} | {orgName}ショップ",
+      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName}ショップ",
+      "metaDesc": "{orgName}の{categoryNameLower}の品揃えをご覧ください — 持続可能なリファービッシュITデバイス。",
+      "heroSubtitle": "持続可能なリファービッシュ{categoryNameLower}の品揃えをご覧ください — 公正な価格で検査済みの品質。",
+      "productCount": "このカテゴリーに{count}件の商品",
+      "subcategories": "サブカテゴリー",
+      "categoryProductCount": "{count}件の商品",
+      "productsLoading": "商品を読み込み中",
+      "productsComingSoon": "まもなくマーケットプレイスの{categoryName}カテゴリーでリファービッシュITデバイスをご覧いただけます。",
+      "goToShop": "オンラインショップへ",
+      "allShopOptions": "すべてのショップオプション",
+      "relatedIn": "{parentName}の関連商品",
+      "breadcrumbHome": "ホーム"
+    },
+    "loading": {
+      "text": "ショップを読み込み中..."
+    },
+    "error": {
+      "title": "問題が発生しました",
+      "body": "ショップの読み込み中にエラーが発生しました。",
+      "retry": "再試行",
+      "backToShop": "ショップに戻る"
+    },
+    "header": {
+      "skipToContent": "メインコンテンツへスキップ",
+      "skipToFooter": "フッターへスキップ",
+      "skipLinks": "スキップリンク",
+      "openMenu": "メニューを開く",
+      "categories": "カテゴリー",
+      "searchPlaceholder": "何をお探しですか？",
+      "searchLabel": "検索",
+      "closeSearch": "検索を閉じる",
+      "compareLabel": "比較リスト（{count}件）",
+      "wishlistLabel": "ウィッシュリスト（{count}件）",
+      "cartLabel": "カート",
+      "backToShop": "ショップに戻る",
+      "shopOverview": "ショップ概要へ",
+      "closeMenu": "メニューを閉じる"
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "shop": {
+    "meta": {
+      "title": "Tienda — Hardware reacondicionado",
+      "description": "Ordenadores verificados y reacondicionados a precios justos. Con garantía."
+    },
+    "title": "Nuestra tienda",
+    "subtitle": "Hardware reacondicionado verificado",
+    "filters": {
+      "all": "Todos",
+      "laptops": "Portátiles",
+      "desktops": "Sobremesa",
+      "accessories": "Accesorios"
+    },
+    "product": {
+      "addToCart": "Añadir al carrito",
+      "outOfStock": "Agotado",
+      "condition": "Estado",
+      "warranty": "Garantía",
+      "months": "{count} {count, plural, one {mes} other {meses}}"
+    },
+    "empty": "No se encontraron productos",
+    "verifiedBadge": "Verificado",
+    "page": {
+      "heroTitle": "¿Cómo quieres comprar?",
+      "heroSubtitle": "Elige el canal que mejor se adapte a ti: nuestra tienda en línea, la tienda Shopware o nuestra tienda física en Zúrich.",
+      "metaDescription": "Elige cómo quieres comprar en {orgName} — tienda en línea, canal Shopware o tienda física en Zúrich.",
+      "store": {
+        "title": "Tienda física (Zúrich)",
+        "tagline": "Asesoría, ver dispositivos, llevártelos al momento",
+        "accessInfo": "Bien comunicado en transporte público. Aparcamiento cercano.",
+        "openingHours": "Horario de atención",
+        "openingHoursMonday": "Lunes: {hours}",
+        "openingHoursTueFri": "Martes – Viernes: {hours}",
+        "openGoogleMaps": "Abrir en Google Maps",
+        "openOsm": "Abrir en OpenStreetMap",
+        "contact": "Contacto",
+        "mapsInfoTitle": "¿Por qué dos opciones de mapa?",
+        "mapsInfoBody": "OpenStreetMap es de gestión comunitaria y minimiza el uso de datos. Google/Apple Maps suelen ofrecer mejor navegación, tráfico en tiempo real y puntos de interés. Elige lo que mejor te convenga — la transparencia y la libertad de elección son importantes para nosotros."
+      },
+      "online": {
+        "title": "Tiendas en línea",
+        "tagline": "Elige entre nuestra tienda en línea y el canal Shopware.",
+        "benefit1": "Calidad verificada y garantía en todos los canales",
+        "benefit2": "Precios justos, selección sostenible",
+        "benefit3": "Pago seguro",
+        "currentShop": "Tienda en línea actual",
+        "shopwareShop": "Ir a la tienda Shopware",
+        "onlineShop": "Tienda en línea {orgName}",
+        "multiShopTitle": "¿Varios canales de tienda?",
+        "multiShopBody": "Nuestra tienda en línea {orgName} te ofrece la mejor selección de hardware TI reacondicionado. También puedes encontrar nuestro catálogo en la tienda Shopware y en el sistema legacy."
+      }
+    },
+    "search": {
+      "metaTitleWithQuery": "Búsqueda: «{query}» | Tienda {orgName}",
+      "metaDescWithQuery": "Resultados de búsqueda para «{query}» — equipos TI reacondicionados de forma sostenible en {orgName}.",
+      "metaTitle": "Búsqueda | Tienda {orgName}",
+      "metaDesc": "Explora nuestro catálogo de equipos TI reacondicionados de forma sostenible.",
+      "heroTitleWithQuery": "Resultados para «{query}»",
+      "heroTitle": "Buscar en la tienda",
+      "placeholder": "¿Qué buscas? p. ej. portátil, monitor, teclado...",
+      "submitButton": "Buscar",
+      "breadcrumbHome": "Inicio",
+      "breadcrumbShop": "Tienda",
+      "breadcrumbSearchWithQuery": "Búsqueda: «{query}»",
+      "breadcrumbSearch": "Búsqueda",
+      "resultsTitle": "Búsqueda de «{query}»",
+      "resultsComingSoon": "La búsqueda de productos está en configuración. Pronto podrás buscar equipos TI reacondicionados aquí.",
+      "goToShop": "Ir a la tienda en línea",
+      "allShopOptions": "Todas las opciones de tienda",
+      "popularSearches": "Búsquedas populares",
+      "browseByCategory": "Explorar por categoría",
+      "productCount": "{count} productos",
+      "allCategories": "Ver todas las categorías →"
+    },
+    "category": {
+      "notFoundMeta": "Categoría no encontrada | Tienda {orgName}",
+      "metaTitle": "{categoryName} | Tienda {orgName}",
+      "metaTitleWithParent": "{categoryName} – {parentName} | Tienda {orgName}",
+      "metaDesc": "Descubre nuestra selección de {categoryNameLower} — equipos TI reacondicionados de forma sostenible en {orgName}.",
+      "heroSubtitle": "Descubre nuestra selección de {categoryNameLower} reacondicionados de forma sostenible — calidad verificada a precios justos.",
+      "productCount": "{count} productos en esta categoría",
+      "subcategories": "Subcategorías",
+      "categoryProductCount": "{count} productos",
+      "productsLoading": "Cargando productos",
+      "productsComingSoon": "Próximamente encontrarás aquí equipos TI reacondicionados en la categoría {categoryName} en nuestro mercado.",
+      "goToShop": "Ir a la tienda en línea",
+      "allShopOptions": "Todas las opciones de tienda",
+      "relatedIn": "Más en {parentName}",
+      "breadcrumbHome": "Inicio"
+    },
+    "loading": {
+      "text": "Cargando tienda..."
+    },
+    "error": {
+      "title": "Algo ha salido mal",
+      "body": "Se produjo un error al cargar la tienda.",
+      "retry": "Volver a intentar",
+      "backToShop": "Volver a la tienda"
+    },
+    "header": {
+      "skipToContent": "Ir al contenido principal",
+      "skipToFooter": "Ir al pie de página",
+      "skipLinks": "Enlaces de acceso rápido",
+      "openMenu": "Abrir menú",
+      "categories": "Categorías",
+      "searchPlaceholder": "¿Qué buscas?",
+      "searchLabel": "Buscar",
+      "closeSearch": "Cerrar búsqueda",
+      "compareLabel": "Lista de comparación ({count} artículos)",
+      "wishlistLabel": "Lista de deseos ({count} artículos)",
+      "cartLabel": "Carrito",
+      "backToShop": "Volver a la tienda",
+      "shopOverview": "Ir al resumen de la tienda",
+      "closeMenu": "Cerrar menú"
+    }
+  }
+}

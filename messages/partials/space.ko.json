@@ -1,0 +1,99 @@
+{
+  "space": {
+    "meta": {
+      "title": "저희 위치",
+      "description": "Toni 유제품 공장부터 오늘날까지 — 저희 위치의 역사와 취리히에 새로운 커뮤니티 공간을 위한 비전."
+    },
+    "hero": {
+      "title": "유제품 공장에서 커뮤니티 공간으로",
+      "subtitle": "2003년부터 저희는 취리히를 누비고 있습니다. 이제 새로운 보금자리를 찾고 있습니다 — 지속 가능성, 기술, 커뮤니티가 만나는 곳.",
+      "ctaVision": "우리의 비전",
+      "ctaDonate": "위치 예산 지원"
+    },
+    "history": {
+      "title": "취리히에서의 우리 여정",
+      "subtitle": "20년 이상, 여러 위치, 하나의 미션: 기술을 지속 가능하게 사용.",
+      "locations": [
+        {
+          "period": "2003 – 2008",
+          "name": "Toni 유제품 공장",
+          "description": "옛 치즈 저장고에 있는 우리 출발지. 여기서 전설적인 Debian 10주년 기념행사가 지붕 위에서 열렸습니다.",
+          "highlight": "창립지"
+        },
+        {
+          "period": "2008 – 2012",
+          "name": "Wipkingen 개혁 교회",
+          "description": "교회탑 6/7층과 지하실. 여기서 첫 번째 사회 프로젝트가 시작되었습니다.",
+          "highlight": "사회 프로젝트"
+        },
+        {
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "많은 작업 공간이 있는 큰 공간. 작업장 확장.",
+          "highlight": "확장"
+        }
+      ],
+      "currentHighlight": "현재"
+    },
+    "current": {
+      "label": "현재 매장",
+      "hours": "영업 시간",
+      "hoursValue": "월: 9–12 | 화–금: 13–17",
+      "moreInfo": "매장에 대해 더 알아보기"
+    },
+    "future": {
+      "badge": "2026년 말까지 이전",
+      "title": "우리의 꿈의 공간",
+      "subtitle": "저희는 2026년 말까지 현재 공간을 떠나야 합니다. 이것이 더 큰 것을 만들 기회입니다.",
+      "visionLabel": "비전: 커뮤니티 공간",
+      "visionDescription": "기술, 지속 가능성, 커뮤니티가 만나는 열린 공간. 쇼핑몰, 작업장, 코워킹, 이벤트 — 모두 한 지붕 아래.",
+      "conceptCaption": "이상적인 커뮤니티 공간의 개념 시각화",
+      "features": [
+        { "name": "쇼핑 영역", "description": "상담과 함께 재정비된 기기 전시 공간" },
+        { "name": "수리 작업장", "description": "기술자와 커뮤니티 수리를 위한 작업 공간" },
+        { "name": "코워킹", "description": "커뮤니티를 위한 유연한 작업 공간" },
+        { "name": "이벤트 공간", "description": "워크숍, 밋업, 소규모 행사 공간 (15–20명)" },
+        { "name": "미니 도서관", "description": "기술 책, 잡지, 리소스가 있는 선반" },
+        { "name": "커피 코너", "description": "비공식적인 교류와 네트워킹을 위한 만남의 장소" },
+        { "name": "주방", "description": "Zero Food Waste 이니셔티브를 위한 완전히 갖춰진 주방" },
+        { "name": "Zero Food Waste", "description": "커뮤니티 점심을 위한 구조된 음식" }
+      ],
+      "params": {
+        "title": "우리가 찾는 것",
+        "subtitle": "이상적인 위치를 위한 조건",
+        "area": "유용 면적",
+        "budget": "월 예산",
+        "city": "위치",
+        "idealLabel": "이상적인 조건:",
+        "idealText": "1층 또는 쉽게 접근 가능, 휠체어 접근 가능, 하역 경사로 또는 배달 가능, 대중교통이 좋은 활기찬 지역.",
+        "tipText": "적합한 공간을 알고 계신가요? 어떤 제보도 환영합니다!",
+        "contactCta": "문의하기"
+      }
+    },
+    "impact": {
+      "title": "왜 더 큰 공간이 더 많은 영향을 의미하는가",
+      "subtitle": "더 많은 공간으로 KPI를 배가할 수 있습니다 — 더 많은 기기 구조, 더 많은 사람 교육, 더 많은 영향력.",
+      "today": "오늘",
+      "potential": "잠재력",
+      "items": [
+        { "metric": "연간 기기", "current": "~500", "potential": "2,000+", "reason": "더 많은 작업 공간 = 더 많은 용량" },
+        { "metric": "워크숍 참가자", "current": "~100", "potential": "500+", "reason": "정기 강좌를 위한 전용 이벤트 공간" },
+        { "metric": "커뮤니티 회원", "current": "~50", "potential": "200+", "reason": "코워킹이 더 많은 자원봉사자를 유치" },
+        { "metric": "사회 통합", "current": "~10", "potential": "30+", "reason": "더 큰 공간으로 더 많은 인턴십 자리" }
+      ],
+      "donateCta": {
+        "title": "위치 예산 지원하기",
+        "description": "더 큰 예산으로 더 좋은 위치를 찾을 수 있습니다 — 환경과 사회에 대한 영향력을 배가할 수 있습니다. 모든 기여가 커뮤니티 공간에 대한 꿈을 실현하는 데 도움이 됩니다.",
+        "donateCta": "지금 기부하기",
+        "impactCta": "영향력 보기"
+      }
+    },
+    "shopLinks": {
+      "title": "모든 쇼핑 옵션",
+      "subtitle": "오프라인과 온라인 — 귀하에게 가장 적합한 것을 선택하세요.",
+      "currentStore": "현재 매장",
+      "shopOverview": "쇼핑몰 개요",
+      "onlineShop": "온라인 쇼핑몰"
+    }
+  }
+}

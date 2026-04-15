@@ -1,0 +1,225 @@
+{
+  "agb": {
+    "meta": {
+      "title": "Términos y condiciones",
+      "description": "Términos y condiciones de revamp-it"
+    },
+    "title": "Términos y condiciones",
+    "section1": {
+      "title": "1. Ámbito de aplicación",
+      "body": "Los presentes términos y condiciones (T&C) se aplican a todos los servicios y ofertas de {legalName}, {address}."
+    },
+    "section2": {
+      "title": "2. Servicios",
+      "intro": "{orgName} es una asociación sin ánimo de lucro dedicada al reacondicionamiento sostenible y la reutilización de equipos TI. Nuestros servicios incluyen:",
+      "items": [
+        "Reacondicionamiento y venta de equipos TI de segunda mano",
+        "Servicios de reparación TI",
+        "Talleres y formaciones",
+        "Mercado P2P de dispositivos usados",
+        "Ayuda y soporte TI"
+      ]
+    },
+    "section3": {
+      "title": "3. Precios y pago",
+      "body": "Todos los precios se expresan en francos suizos (CHF) e incluyen el IVA, salvo indicación contraria. Las condiciones de pago se especifican en cada oferta."
+    },
+    "section4": {
+      "title": "4. Celebración del contrato",
+      "body": "El contrato se perfecciona mediante un pedido realizado a través de la plataforma, en la tienda física o por correo electrónico, y la confirmación posterior por parte de {orgName}. Las representaciones en el sitio web tienen carácter de invitación no vinculante a realizar una oferta."
+    },
+    "section5": {
+      "title": "5. Derecho de desistimiento",
+      "body": "Las compras en la tienda física no otorgan derecho legal de desistimiento, ya que el derecho suizo no lo prevé para comercios minoristas. En las compras en línea concedemos un derecho de devolución voluntario de 14 días a partir de la recepción, siempre que el producto se devuelva sin usar y en su embalaje original.",
+      "contactLabel": "Contacto:"
+    },
+    "section6": {
+      "title": "6. Garantía",
+      "body": "{orgName} ofrece garantía sobre los dispositivos reacondicionados conforme a la normativa legal vigente. Las condiciones exactas de garantía se comunican en el momento de la compra. Para dispositivos vendidos por terceros a través del mercado P2P, {orgName} no asume ninguna garantía."
+    },
+    "section7": {
+      "title": "7. Responsabilidad",
+      "body": "{orgName} responde en el marco de la normativa legal aplicable. La responsabilidad por negligencia leve queda excluida en la medida en que lo permita la ley."
+    },
+    "section8": {
+      "title": "8. Protección de datos",
+      "body": "El tratamiento de datos personales se realiza conforme a nuestra política de privacidad. Los usuarios registrados pueden exportar sus datos en cualquier momento.",
+      "privacyLinkLabel": "Política de privacidad"
+    },
+    "section9": {
+      "title": "9. Disposiciones finales",
+      "body": "Si alguna disposición de estos T&C resultara inválida, la validez de las demás disposiciones no se verá afectada. Se aplica el derecho suizo. El fuero competente es Zúrich, Suiza."
+    },
+    "section10": {
+      "title": "10. Modificaciones",
+      "body": "{orgName} se reserva el derecho de modificar estos T&C en cualquier momento. La versión vigente está disponible en esta página. Los datos legales del proveedor se encuentran en el aviso legal.",
+      "impressumLinkLabel": "Aviso legal"
+    },
+    "asOf": "Vigente desde: abril de 2026"
+  },
+  "datenschutz": {
+    "meta": {
+      "title": "Política de privacidad",
+      "description": "Política de privacidad de revamp-it"
+    },
+    "title": "Política de privacidad",
+    "section1": {
+      "title": "1. Responsable del tratamiento"
+    },
+    "section2": {
+      "title": "2. Recogida y tratamiento de datos personales",
+      "intro": "Recogemos datos personales cuando te registras en nuestra plataforma, utilizas nuestros servicios o te pones en contacto con nosotros. Esto incluye:",
+      "items": [
+        "Nombre y dirección de correo electrónico (al registrarse)",
+        "Datos de contacto (en consultas y reservas)",
+        "Datos de uso (al utilizar la plataforma)"
+      ]
+    },
+    "section3": {
+      "title": "3. Finalidad del tratamiento de datos",
+      "intro": "Tus datos se utilizan para:",
+      "items": [
+        "Creación y gestión de tu cuenta de usuario",
+        "Tramitación de reparaciones y servicios",
+        "Gestión de inscripciones a talleres",
+        "Funcionamiento del mercado P2P",
+        "Comunicaciones sobre nuestras ofertas (solo con tu consentimiento)"
+      ]
+    },
+    "section4": {
+      "title": "4. Transferencia de datos",
+      "body": "Tus datos no se venden a terceros. Solo se transmiten cuando es necesario para la prestación de nuestros servicios (p. ej., a proveedores de reparación en reparaciones reservadas) o cuando estamos obligados legalmente a ello."
+    },
+    "section5": {
+      "title": "5. Seguridad de los datos",
+      "body": "Aplicamos medidas técnicas y organizativas para proteger tus datos contra accesos no autorizados, pérdidas o usos indebidos. Las contraseñas se almacenan exclusivamente de forma cifrada (hash)."
+    },
+    "section6": {
+      "title": "6. Cookies",
+      "body": "Nuestra plataforma utiliza cookies funcionales para la gestión de sesiones y la autenticación. Las cookies analíticas solo se instalan con tu consentimiento."
+    },
+    "section7": {
+      "title": "7. Tus derechos",
+      "intro": "Tienes derecho a:",
+      "items": [
+        "Acceder a los datos almacenados sobre ti",
+        "Rectificar datos inexactos",
+        "Suprimir tus datos",
+        "Limitar el tratamiento",
+        "Portabilidad de datos (exportación)",
+        "Revocar los consentimientos otorgados"
+      ],
+      "exportText": "Los usuarios registrados pueden descargar en cualquier momento una copia completa de sus datos en",
+      "exportLink": "Ajustes → Privacidad",
+      "contactText": "Para cualquier otra consulta, por favor contacta con:"
+    },
+    "section8": {
+      "title": "8. Periodo de conservación",
+      "body": "Conservamos tus datos personales solo durante el tiempo necesario para los fines indicados o mientras lo exijan las obligaciones legales de conservación. Los datos de cuenta y perfil se eliminan tras la supresión de la cuenta, salvo que obligaciones legales (p. ej., conservación fiscal de facturas) lo impidan."
+    },
+    "section9": {
+      "title": "9. Base jurídica",
+      "body": "El tratamiento se realiza con fundamento en la Ley federal suiza de protección de datos (LPD) y, en la medida en que sea aplicable, en el art. 6 apdo. 1 del RGPD (ejecución de contrato, intereses legítimos, consentimiento)."
+    },
+    "section10": {
+      "title": "10. Derecho aplicable",
+      "body": "Esta política de privacidad se rige por la Ley federal suiza de protección de datos (LPD) y, en la medida en que sea aplicable, por el Reglamento General de Protección de Datos europeo (RGPD).",
+      "impressumLinkLabel": "Aviso legal"
+    },
+    "asOf": "Vigente desde: marzo de 2026"
+  },
+  "impressum": {
+    "meta": {
+      "title": "Aviso legal",
+      "description": "Aviso legal e información jurídica"
+    },
+    "title": "Aviso legal",
+    "legalInfo": "Datos conforme al derecho suizo",
+    "organisation": "Organización",
+    "contact": "Contacto",
+    "emailLabel": "Correo electrónico:",
+    "phoneLabel": "Teléfono:",
+    "authorised": "Representantes autorizados",
+    "authorisedValue": "La junta directiva",
+    "legalForm": "Forma jurídica",
+    "legalFormValue": "Asociación según los arts. 60 ss. ZGB (Código Civil suizo)",
+    "purpose": "Objeto social",
+    "purposeText": "{description} {orgName} es una asociación sin ánimo de lucro que promueve el intercambio libre de tecnología, el hardware y software de código abierto, y el reacondicionamiento sostenible y la reutilización de equipos TI.",
+    "disclaimer": "Exención de responsabilidad",
+    "disclaimerP1": "El autor no asume ninguna garantía respecto a la exactitud, precisión, actualidad, fiabilidad y exhaustividad de la información publicada en este sitio web.",
+    "disclaimerP2": "Quedan excluidas las reclamaciones de responsabilidad contra el autor por daños materiales o inmateriales derivados del acceso o el uso, o de la no utilización de la información publicada, del uso indebido de la conexión o de fallos técnicos.",
+    "disclaimerP3": "Todas las ofertas son no vinculantes. El autor se reserva expresamente el derecho de modificar, ampliar, eliminar partes del sitio o interrumpir su publicación de forma temporal o definitiva sin previo aviso.",
+    "linksDisclaimer": "Exención de responsabilidad por enlaces y vínculos",
+    "linksDisclaimerText": "Los enlaces y vínculos a sitios web de terceros quedan fuera de nuestro ámbito de responsabilidad. Se declina toda responsabilidad sobre dichos sitios. El acceso y uso de los mismos se realiza bajo la exclusiva responsabilidad del usuario.",
+    "copyright": "Derechos de autor",
+    "copyrightText": "Los derechos de autor y todos los demás derechos sobre los contenidos, imágenes, fotografías u otros archivos de este sitio web pertenecen exclusivamente a {legalName} o a los titulares de derechos expresamente mencionados. Para la reproducción de cualquier elemento es necesario obtener previamente el consentimiento escrito de los titulares de los derechos de autor.",
+    "furtherLegal": "Información legal adicional",
+    "furtherLegalText": "Consulta también nuestra política de privacidad y nuestros términos y condiciones.",
+    "privacyLinkLabel": "Política de privacidad",
+    "agbLinkLabel": "Términos y condiciones",
+    "asOf": "Vigente desde: abril de 2026"
+  },
+  "transparenz": {
+    "meta": {
+      "title": "Transparencia",
+      "description": "Qué hacemos y cómo lo hacemos. Una visión de nuestra misión, cifras y forma de trabajar."
+    },
+    "hero": {
+      "title": "Transparencia",
+      "subtitle": "Qué hacemos y cómo lo hacemos"
+    },
+    "mission": {
+      "title": "Nuestra misión",
+      "text": "{description} Como {legalForm} (fundada en {foundingYear}), nos dedicamos a dar una segunda vida al hardware usado, a poner el software libre al alcance de todos y a que las personas puedan aprender a manejar la tecnología de forma autónoma."
+    },
+    "stats": {
+      "title": "Datos y cifras",
+      "detailLink": "Ver cifras de impacto detalladas"
+    },
+    "howWeWork": {
+      "title": "Cómo trabajamos",
+      "subtitle": "Nuestras tres plataformas comunitarias conectan a personas con la tecnología.",
+      "toPlatform": "Ir a la plataforma",
+      "platforms": [
+        {
+          "title": "Mercado",
+          "description": "Plataforma comunitaria de equipos TI de segunda mano. Los usuarios pueden crear anuncios, comprar y vender — sin comisiones.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "Ayuda TI",
+          "description": "Ponemos en contacto a voluntarios técnicos con personas que necesitan reparar su ordenador. Ayuda de persona a persona, local y sin complicaciones.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "Talleres",
+          "description": "Cursos de Linux, hardware, programación e IA. Compartir conocimiento y aprender juntos — en Zúrich.",
+          "href": "/workshops"
+        }
+      ]
+    },
+    "finances": {
+      "title": "Finanzas",
+      "text": "Como asociación sin ánimo de lucro, hacemos públicas nuestras finanzas. El informe anual se presenta en la asamblea general y está disponible para los socios.",
+      "memberLink": "Hazte socio/a y accede a la información"
+    },
+    "board": {
+      "title": "Junta directiva",
+      "text": "{orgName} está dirigida por una junta directiva voluntaria. Contacto:",
+      "joinCta": "Hazte socio/a",
+      "donateCta": "Donar"
+    }
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "La página que buscas no existe o ha sido trasladada.",
+    "goHome": "Ir al inicio",
+    "reportProblem": "Informar de un problema"
+  },
+  "error": {
+    "title": "Algo ha salido mal",
+    "description": "Se ha producido un error inesperado. Intenta recargar la página. Si el problema persiste, contáctanos.",
+    "retry": "Volver a intentar",
+    "goHome": "Ir al inicio"
+  }
+}

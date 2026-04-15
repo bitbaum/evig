@@ -1,0 +1,281 @@
+{
+  "services": {
+    "meta": {
+      "title": "Servizi | Servizi IT a Zurigo",
+      "description": "Riparazione professionale di computer, sviluppo web, recupero dati, supporto Linux e riciclo hardware a Zurigo."
+    },
+    "page": {
+      "schemaName": "Riparazione computer e servizi IT",
+      "schemaDescription": "Riparazione professionale di computer, sviluppo web, recupero dati, supporto Linux e riciclo hardware.",
+      "schemaCity": "Zurigo",
+      "title": "Servizi IT professionali",
+      "subtitle": "Soluzioni sostenibili per le tue esigenze tecnologiche. Combiniamo competenza tecnica con responsabilità ambientale per offrire soluzioni IT complete che ti fanno risparmiare denaro e riducono i rifiuti elettronici.",
+      "servicesTitle": "I nostri servizi",
+      "servicesDescription": "I tempi di riparazione variano in base alla disponibilità dei ricambi e richiedono generalmente alcune settimane.",
+      "noResults": "Nessun servizio trovato corrispondente ai filtri selezionati.",
+      "ctaTitle": "Pronto a rinnovare la tua tecnologia?",
+      "ctaSubtitle": "Contattaci oggi per una consulenza gratuita e scopri come possiamo aiutarti a ottenere il massimo dai tuoi dispositivi.",
+      "ctaContact": "Contattaci",
+      "ctaInventory": "Sfoglia l'inventario",
+      "pricingTbd": "Su richiesta",
+      "details": "Dettagli",
+      "bookAppointment": "Prenota appuntamento",
+      "learnMore": "Scopri di più",
+      "appointmentRequested": "Appuntamento richiesto!",
+      "booking": "Prenotazione in corso...",
+      "bookingFailed": "Prenotazione non riuscita",
+      "networkError": "Errore di rete. Riprova."
+    },
+    "servicePage": {
+      "comingSoonBanner": "Questo servizio è in arrivo. Contattaci per esprimere il tuo interesse e ricevere una notifica quando sarà disponibile."
+    },
+    "webDesign": {
+      "meta": {
+        "title": "Web design e sviluppo",
+        "description": "Servizi professionali di web design e sviluppo con tecnologie Open Source. Siti web moderni e responsive progettati per sostenibilità e prestazioni."
+      },
+      "hero": {
+        "title": "Web design e sviluppo",
+        "subtitle": "100% impegno per la libertà attraverso Open Source, decentralizzazione, privacy, proprietà dei dati, proprietà del codice e massima automazione. Creiamo esperienze digitali in cui lo sforzo diventa una scelta, non una necessità.",
+        "ctaStart": "Avvia progetto",
+        "ctaDiscover": "Scopri i servizi"
+      },
+      "values": {
+        "title": "I nostri valori fondamentali",
+        "subtitle": "Ogni sito web che creiamo serve un obiettivo ultimo: <strong>la tua libertà</strong>. Ogni principio lavora insieme per trasformare lo sforzo da necessità in scelta.",
+        "openSource": {
+          "title": "Open Source",
+          "description": "Codice trasparente e verificabile che puoi vedere, modificare e possedere completamente. Nessuna black box proprietaria o dipendenza da fornitori."
+        },
+        "decentralization": {
+          "title": "Decentralizzazione",
+          "description": "Liberati dalle piattaforme Big Tech. Ospita il tuo sito ovunque, preserva la tua indipendenza ed evita i punti di fallimento singoli."
+        },
+        "privacyFirst": {
+          "title": "Privacy prima di tutto",
+          "description": "Tracking minimo, autenticazione sicura e gestione trasparente dei dati. La privacy dei tuoi utenti è protetta per design, non come ripensamento."
+        },
+        "ownYourData": {
+          "title": "Possiedi i tuoi dati",
+          "description": "I tuoi dati appartengono a te, non ai giganti tech. Controllo completo su dove vengono archiviati, come vengono utilizzati e chi vi ha accesso."
+        },
+        "ownYourCode": {
+          "title": "Possiedi il tuo codice",
+          "description": "Piena proprietà del codice sorgente del tuo sito. Modifica, estendi o migra in qualsiasi momento senza restrizioni o canoni di licenza."
+        },
+        "maxAutomation": {
+          "title": "Massima automazione",
+          "description": "Flussi di lavoro automatizzati che minimizzano lo sforzo manuale mantenendo tutti i nostri principi fondamentali. Il 100% di automazione è il nostro obiettivo."
+        },
+        "userExperience": {
+          "title": "Esperienza utente",
+          "description": "Interfacce intuitive che richiedono il minimo sforzo agli utenti offrendo al contempo la massima funzionalità e produttività."
+        },
+        "developerExperience": {
+          "title": "Esperienza sviluppatore",
+          "description": "Codice pulito e manutenibile con ottimi strumenti e documentazione che rendono lo sviluppo e la manutenzione un piacere."
+        }
+      },
+      "philosophy": {
+        "title": "La nostra filosofia Freedom-First",
+        "intro": "Crediamo nel <strong>100% di impegno per la libertà</strong> attraverso la massima automazione.",
+        "automation": "Quando l'automazione minimizza lo sforzo indesiderato, trasforma il lavoro da necessità in scelta — e la scelta è libertà.",
+        "effortTitle": "Lo sforzo come scelta, non come necessità",
+        "freedomPrinciple": {
+          "label": "Il principio della libertà",
+          "text": "<strong>100% di impegno per la libertà</strong> significa che ogni aspetto della tua presenza digitale dovrebbe servire la tua autonomia, non limitarla."
+        },
+        "automationLiberation": {
+          "label": "Automazione come liberazione",
+          "text": "La massima automazione elimina compiti ripetitivi e indesiderati, dandoti la libertà di concentrarti su ciò che è veramente importante per te e per la tua missione."
+        },
+        "choiceNotCoercion": {
+          "label": "Scelta, non coercizione",
+          "text": "Quando i sistemi funzionano perfettamente senza il tuo intervento costante, ogni momento che dedichi diventa intenzionale — una scelta, non una necessità."
+        },
+        "quote": "La vera libertà non è solo la capacità di scegliere — sono i sistemi che preservano il tuo diritto di scelta eliminando lo sforzo forzato.",
+        "ratingTitle": "Il nostro sistema di valutazione della libertà",
+        "ratingIntro": "Ogni sito web e app web che creiamo riceve una valutazione completa della libertà basata su quanto bene supporta la tua autonomia:",
+        "commitment": {
+          "label": "Il nostro impegno",
+          "text": "Puntiamo ai punteggi massimi in tutte le dimensioni della libertà. Ogni compromesso viene discusso in modo trasparente, con le alternative sempre valutate."
+        },
+        "ratings": {
+          "openSource": { "label": "Libertà Open Source", "desc": "Piena trasparenza del codice e proprietà" },
+          "decentralization": { "label": "Libertà di decentralizzazione", "desc": "Indipendenza dal controllo delle piattaforme" },
+          "privacy": { "label": "Libertà di privacy", "desc": "Sovranità dei dati e protezione" },
+          "dataOwnership": { "label": "Libertà di proprietà dei dati", "desc": "Controllo completo sulle tue informazioni" },
+          "codeOwnership": { "label": "Libertà di proprietà del codice", "desc": "Diritti di modifica illimitati" },
+          "automation": { "label": "Libertà di automazione", "desc": "Sforzo trasformato in scelta" },
+          "ux": { "label": "Libertà di esperienza utente", "desc": "Interazione intuitiva e senza sforzo" },
+          "dx": { "label": "Libertà dello sviluppatore", "desc": "Sistemi manutenibili ed estendibili" }
+        }
+      },
+      "servicesSection": {
+        "title": "I nostri servizi di sviluppo web",
+        "subtitle": "Soluzioni web complete realizzate con tecnologie Open Source e pratiche sostenibili.",
+        "pricing": "Sviluppo web professionale da CHF 70/ora",
+        "consultationTitle": "Consulenza iniziale gratuita",
+        "consultationText": "Iniziamo ogni progetto con una consulenza completa per capire le tue esigenze, i tuoi obiettivi e i requisiti tecnici. Questo ci aiuta a fornire stime accurate e a garantire che siamo la soluzione giusta per il tuo progetto.",
+        "items": {
+          "customDev": {
+            "title": "Sviluppo web personalizzato",
+            "description": "Applicazioni web su misura realizzate con tecnologie Open Source moderne per soddisfare le tue specifiche esigenze aziendali.",
+            "features": ["Applicazioni web personalizzate", "Soluzioni e-commerce", "Sviluppo API", "Design del database", "Ottimizzazione delle prestazioni"]
+          },
+          "responsiveDesign": {
+            "title": "Web design responsive",
+            "description": "Design belli e facili da usare che funzionano perfettamente su tutti i dispositivi e le dimensioni dello schermo.",
+            "features": ["Design Mobile-First", "User Experience (UX) Design", "User Interface (UI) Design", "Integrazione dell'identità del brand", "Conformità all'accessibilità"]
+          },
+          "cmsDev": {
+            "title": "Sviluppo CMS",
+            "description": "Sistemi di gestione dei contenuti moderni che ti danno il pieno controllo sui contenuti del tuo sito con API developer-friendly.",
+            "features": ["Soluzioni Headless CMS (Strapi, Payload, Tina)", "Sviluppo WordPress (supporto legacy)", "Soluzioni CMS personalizzate", "Migrazione contenuti", "Formazione e supporto"]
+          },
+          "maintenance": {
+            "title": "Manutenzione del sito web",
+            "description": "Supporto e manutenzione continui per mantenere il tuo sito sicuro, aggiornato e con prestazioni ottimali.",
+            "features": ["Aggiornamenti di sicurezza", "Monitoraggio delle prestazioni", "Aggiornamenti dei contenuti", "Gestione dei backup", "Supporto tecnico"]
+          }
+        }
+      },
+      "whyOpenSource": {
+        "title": "Perché questi valori sono importanti",
+        "subtitle": "In un'era di crescente sorveglianza digitale e monopoli delle piattaforme, questi principi non sono solo «nice-to-have» — sono essenziali per la libertà e l'indipendenza digitale.",
+        "items": {
+          "ownCode": {
+            "title": "Possiedi il tuo codice",
+            "description": "La piena proprietà del codice sorgente del tuo sito significa nessuna dipendenza da fornitori, nessuna restrizione di licenza e totale libertà di modificare, estendere o migrare il tuo sito in qualsiasi momento."
+          },
+          "ownData": {
+            "title": "Possiedi i tuoi dati",
+            "description": "I tuoi dati appartengono a te, non ai giganti tech. Sviluppiamo soluzioni che mantengono le tue informazioni sotto il tuo controllo, con opzioni per self-hosting e portabilità dei dati."
+          },
+          "privacyByDesign": {
+            "title": "Privacy per design",
+            "description": "Diamo priorità alla privacy fin dall'inizio, implementando tracking minimo, autenticazione sicura e pratiche di gestione dei dati trasparenti che rispettano la privacy dei tuoi utenti."
+          },
+          "decentralized": {
+            "title": "Architettura decentralizzata",
+            "description": "Liberati dalle piattaforme centralizzate che controllano la tua presenza online. Sviluppiamo soluzioni che possono essere ospitate ovunque, dandoti indipendenza da Big Tech."
+          },
+          "openSourceBase": {
+            "title": "Base Open Source",
+            "description": "Costruito su tecnologie Open Source trasparenti, verificabili e supportate da comunità globali. Nessun codice nascosto, nessun lock-in proprietario."
+          },
+          "futureProof": {
+            "title": "A prova di futuro e sostenibile",
+            "description": "Le tecnologie Open Source evolvono con la community e non scompaiono quando un'azienda fallisce. Il tuo investimento è protetto a lungo termine."
+          }
+        }
+      },
+      "technologies": {
+        "title": "Tecnologie che utilizziamo",
+        "subtitle": "Lavoriamo con tecnologie Open Source comprovate che offrono affidabilità, prestazioni e sostenibilità a lungo termine.",
+        "filterLabel": "Filtra per categoria:",
+        "allCategories": "Tutte",
+        "visitWebsite": "Visita il sito",
+        "showing": "Mostrando {count} di {total} tecnologie",
+        "showingFiltered": "Mostrando {count} di {total} tecnologie in \"{category}\"",
+        "items": {
+          "nextjs": {
+            "description": "Framework React moderno per creare applicazioni web veloci e scalabili con un'ottima esperienza per gli sviluppatori e ottimizzazione integrata.",
+            "benefits": ["Rendering lato server", "Prestazioni eccellenti", "SEO ottimale", "Community attiva"]
+          },
+          "tailwind": {
+            "description": "Framework CSS utility-first per creare rapidamente interfacce moderne e responsive con un design coerente.",
+            "benefits": ["Sviluppo rapido", "Design coerente", "Responsive per default", "Altamente personalizzabile"]
+          },
+          "supabase": {
+            "description": "Alternativa Open Source a Firebase che offre API immediate, sottoscrizioni in tempo reale, autenticazione e funzioni edge.",
+            "benefits": ["API immediate", "Aggiornamenti in tempo reale", "Autenticazione integrata", "Funzioni edge"]
+          },
+          "strapi": {
+            "description": "CMS headless Open Source leader che dà agli sviluppatori la libertà di scegliere i loro strumenti e framework preferiti.",
+            "benefits": ["Approccio API-First", "Tipi di contenuto flessibili", "Developer-friendly", "Self-hosted"]
+          },
+          "payload": {
+            "description": "CMS headless e framework applicativo TypeScript-First costruito con Node.js, React e MongoDB.",
+            "benefits": ["TypeScript nativo", "Admin UI inclusa", "Altamente estendibile", "Focus sull'esperienza sviluppatore"]
+          },
+          "tina": {
+            "description": "CMS headless basato su Git che consente la modifica dei contenuti direttamente sul tuo sito con editing visivo in tempo reale.",
+            "benefits": ["Editing visivo", "Flusso di lavoro Git", "Anteprima in tempo reale", "Developer-friendly"]
+          },
+          "wordpress": {
+            "description": "Sistema di gestione dei contenuti maturo ancora popolare per certi casi d'uso. Possiamo lavorare con siti WordPress esistenti.",
+            "benefits": ["Grande ecosistema", "Gestione contenuti semplice", "Plugin abbondanti", "Familiare a molti utenti"]
+          },
+          "joomla": {
+            "description": "Sistema di gestione dei contenuti flessibile con robusta gestione utenti e funzionalità multilingua. Ideale per siti complessi.",
+            "benefits": ["Gestione utenti", "Supporto multilingua", "Template flessibili", "Community forte"]
+          },
+          "woocommerce": {
+            "description": "Piattaforma e-commerce open source ampiamente diffusa basata su WordPress. Estensioni flessibili e grande community.",
+            "benefits": ["Grande community", "Molte estensioni", "Gestione semplice", "Integrazione WordPress"]
+          },
+          "shopware": {
+            "description": "Piattaforma e-commerce moderna API-First con potenti opzioni di personalizzazione. Core open source con estensioni commerciali.",
+            "benefits": ["Design API-First", "Architettura flessibile", "Interfaccia admin completa", "Ingegneria tedesca"]
+          },
+          "hosting": {
+            "name": "Deployment e hosting",
+            "description": "Opzioni di hosting flessibili dalle soluzioni Open Source su server Linux alle piattaforme moderne come Vercel e Netlify.",
+            "benefits": ["Molteplici opzioni di hosting", "CDN globale", "Scalabilità automatica", "Flusso di lavoro Git"]
+          }
+        }
+      },
+      "benefits": {
+        "title": "Perché scegliere i nostri servizi di sviluppo web?",
+        "subtitle": "Combiniamo competenza tecnica con pratiche sostenibili per fornire siti web che funzionano brillantemente e supportano i tuoi valori.",
+        "items": {
+          "automationFirst": {
+            "title": "Design Automation-First",
+            "description": "Diamo priorità a flussi di lavoro automatizzati che minimizzano l'onere di gestione manuale mantenendo tutti i nostri principi fondamentali. Massima efficienza senza compromessi."
+          },
+          "openSourceBase": {
+            "title": "Base Open Source",
+            "description": "Costruito su tecnologie trasparenti e verificabili che ti danno pieno controllo e libertà. Nessuna dipendenza da fornitori, nessuna black box proprietaria."
+          },
+          "seamlessUX": {
+            "title": "Esperienza utente fluida",
+            "description": "Interfacce intuitive che richiedono il minimo sforzo agli utenti offrendo al contempo la massima funzionalità. Ogni interazione è progettata per semplicità ed efficacia."
+          },
+          "devFriendly": {
+            "title": "Architettura developer-friendly",
+            "description": "Codice pulito e manutenibile con ottima documentazione e strumenti. Costruito per la sostenibilità a lungo termine e la facile manutenzione."
+          }
+        }
+      },
+      "process": {
+        "title": "Il nostro processo di sviluppo",
+        "subtitle": "Seguiamo un processo collaborativo e trasparente che garantisce che il tuo progetto soddisfi le tue esigenze e superi le tue aspettative.",
+        "steps": {
+          "discovery": {
+            "title": "Scoperta",
+            "description": "Iniziamo con una consulenza completa per capire i tuoi obiettivi, requisiti e pubblico di riferimento."
+          },
+          "planning": {
+            "title": "Pianificazione",
+            "description": "Creiamo un piano di progetto dettagliato, inclusi tempistiche, stack tecnologico e approccio al design."
+          },
+          "development": {
+            "title": "Sviluppo",
+            "description": "Costruiamo il tuo sito con metodologia agile, con aggiornamenti regolari e sessioni di feedback."
+          },
+          "launch": {
+            "title": "Lancio e supporto",
+            "description": "Lanciamo il tuo sito e offriamo supporto, manutenzione e ottimizzazione continui."
+          }
+        }
+      },
+      "cta": {
+        "title": "Pronto a costruire il tuo sito web?",
+        "subtitle": "Costruiamo un sito web che riflette i tuoi valori e raggiunge i tuoi obiettivi. Contattaci oggi per una consulenza gratuita.",
+        "startProject": "Avvia progetto",
+        "allServices": "Scopri tutti i servizi"
+      }
+    }
+  }
+}

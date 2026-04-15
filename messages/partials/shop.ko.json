@@ -1,0 +1,118 @@
+{
+  "shop": {
+    "meta": {
+      "title": "쇼핑몰 — 리퍼비시 하드웨어",
+      "description": "검증된 재정비 컴퓨터를 합리적인 가격에. 보증 포함."
+    },
+    "title": "저희 쇼핑몰",
+    "subtitle": "검증된 리퍼비시 하드웨어",
+    "filters": {
+      "all": "전체",
+      "laptops": "노트북",
+      "desktops": "데스크탑",
+      "accessories": "액세서리"
+    },
+    "product": {
+      "addToCart": "장바구니에 추가",
+      "outOfStock": "품절",
+      "condition": "상태",
+      "warranty": "보증",
+      "months": "{count}개월"
+    },
+    "empty": "제품을 찾을 수 없습니다",
+    "verifiedBadge": "검증됨",
+    "page": {
+      "heroTitle": "어떻게 쇼핑하시겠어요?",
+      "heroSubtitle": "귀하에게 가장 잘 맞는 채널을 선택하세요: 온라인 쇼핑몰, Shopware 쇼핑몰 또는 취리히 매장.",
+      "metaDescription": "{orgName}에서 어떻게 쇼핑할지 선택하세요 — 온라인 쇼핑몰, Shopware 채널 또는 취리히 매장.",
+      "store": {
+        "title": "매장 (취리히)",
+        "tagline": "상담, 기기 직접 확인, 즉시 수령",
+        "accessInfo": "대중교통으로 접근 용이. 근처에 주차 가능.",
+        "openingHours": "영업 시간",
+        "openingHoursMonday": "월요일: {hours}",
+        "openingHoursTueFri": "화요일 – 금요일: {hours}",
+        "openGoogleMaps": "Google Maps에서 열기",
+        "openOsm": "OpenStreetMap에서 열기",
+        "contact": "문의",
+        "mapsInfoTitle": "왜 두 가지 지도 옵션인가요?",
+        "mapsInfoBody": "OpenStreetMap은 커뮤니티 기반이고 데이터를 최소화합니다. Google/Apple Maps는 더 나은 내비게이션, 실시간 교통 정보, POI를 제공합니다. 귀하에게 가장 적합한 것을 선택하세요 — 투명성과 선택의 자유가 중요합니다."
+      },
+      "online": {
+        "title": "온라인 쇼핑몰",
+        "tagline": "온라인 쇼핑몰과 Shopware 채널 중 선택하세요.",
+        "benefit1": "모든 채널에서 검증된 품질과 보증",
+        "benefit2": "합리적인 가격, 지속 가능한 선택",
+        "benefit3": "안전한 결제",
+        "currentShop": "현재 온라인 쇼핑몰",
+        "shopwareShop": "Shopware 쇼핑몰로 이동",
+        "onlineShop": "{orgName} 온라인 쇼핑몰",
+        "multiShopTitle": "여러 쇼핑몰 채널?",
+        "multiShopBody": "저희 {orgName} 온라인 쇼핑몰에서 재정비된 IT 하드웨어의 최고 선택을 제공합니다. 또는 Shopware 쇼핑몰과 레거시 시스템에서도 저희 상품을 찾을 수 있습니다."
+      }
+    },
+    "search": {
+      "metaTitleWithQuery": "검색: \"{query}\" | {orgName} 쇼핑몰",
+      "metaDescWithQuery": "\"{query}\" 검색 결과 — {orgName}의 지속 가능하게 재정비된 IT 기기.",
+      "metaTitle": "검색 | {orgName} 쇼핑몰",
+      "metaDesc": "지속 가능하게 재정비된 IT 기기 상품을 검색하세요.",
+      "heroTitleWithQuery": "\"{query}\" 결과",
+      "heroTitle": "쇼핑몰 검색",
+      "placeholder": "무엇을 찾으세요? 예: 노트북, 모니터, 키보드...",
+      "submitButton": "검색",
+      "breadcrumbHome": "홈",
+      "breadcrumbShop": "쇼핑몰",
+      "breadcrumbSearchWithQuery": "검색: \"{query}\"",
+      "breadcrumbSearch": "검색",
+      "resultsTitle": "\"{query}\" 검색 결과",
+      "resultsComingSoon": "제품 검색이 현재 설정 중입니다. 곧 여기서 재정비된 IT 기기를 검색할 수 있습니다.",
+      "goToShop": "온라인 쇼핑몰로 이동",
+      "allShopOptions": "모든 쇼핑몰 옵션",
+      "popularSearches": "인기 검색어",
+      "browseByCategory": "카테고리별 탐색",
+      "productCount": "{count}개 제품",
+      "allCategories": "모든 카테고리 보기 →"
+    },
+    "category": {
+      "notFoundMeta": "카테고리를 찾을 수 없습니다 | {orgName} 쇼핑몰",
+      "metaTitle": "{categoryName} | {orgName} 쇼핑몰",
+      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName} 쇼핑몰",
+      "metaDesc": "{orgName}에서 {categoryNameLower} 선택을 탐색하세요 — 지속 가능하게 재정비된 IT 기기.",
+      "heroSubtitle": "{orgName}에서 지속 가능하게 재정비된 {categoryNameLower} 선택을 탐색하세요 — 합리적인 가격의 검증된 품질.",
+      "productCount": "이 카테고리에 {count}개 제품",
+      "subcategories": "하위 카테고리",
+      "categoryProductCount": "{count}개 제품",
+      "productsLoading": "제품 로딩 중",
+      "productsComingSoon": "곧 저희 마켓플레이스에서 {categoryName} 카테고리의 재정비된 IT 기기를 찾을 수 있습니다.",
+      "goToShop": "온라인 쇼핑몰로 이동",
+      "allShopOptions": "모든 쇼핑몰 옵션",
+      "relatedIn": "{parentName}의 더 많은 제품",
+      "breadcrumbHome": "홈"
+    },
+    "loading": {
+      "text": "쇼핑몰 로딩 중..."
+    },
+    "error": {
+      "title": "문제가 발생했습니다",
+      "body": "쇼핑몰을 로딩하는 중 오류가 발생했습니다.",
+      "retry": "다시 시도",
+      "backToShop": "쇼핑몰로 돌아가기"
+    },
+    "header": {
+      "skipToContent": "주요 콘텐츠로 건너뛰기",
+      "skipToFooter": "하단으로 건너뛰기",
+      "skipLinks": "빠른 이동 링크",
+      "openMenu": "메뉴 열기",
+      "categories": "카테고리",
+      "searchPlaceholder": "무엇을 찾으세요?",
+      "searchLabel": "검색",
+      "closeSearch": "검색 닫기",
+      "compareLabel": "비교 목록 ({count}개)",
+      "wishlistLabel": "위시리스트 ({count}개)",
+      "cartLabel": "장바구니",
+      "backToShop": "쇼핑몰로 돌아가기",
+      "shopOverview": "쇼핑몰 개요로 이동",
+      "closeMenu": "메뉴 닫기"
+    }
+  }
+}

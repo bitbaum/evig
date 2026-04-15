@@ -1,0 +1,218 @@
+{
+  "getInvolved": {
+    "meta": {
+      "title": "Participa",
+      "description": "Únete a nuestra misión de reducir los residuos electrónicos y hacer la tecnología accesible para todos. Hazte voluntario/a, haz prácticas o conviértete en socio."
+    },
+    "page": {
+      "getStarted": "Empezar",
+      "learnMore": "Más información",
+      "waysTitle": "Formas de participar",
+      "testimonialTitle": "Lo que dice nuestra comunidad",
+      "partnersTitle": "Nuestras organizaciones colaboradoras",
+      "ctaTitle": "¿Listo/a para marcar la diferencia?",
+      "ctaDescription": "Únete a nuestra comunidad de personas que cambian las cosas y ayúdanos a crear un futuro más sostenible a través de la tecnología.",
+      "discoverWorkshops": "Descubrir talleres"
+    },
+    "coreValues": {
+      "sustainability": {
+        "title": "Sostenibilidad",
+        "description": "Creemos en crear un futuro sostenible mediante el uso responsable de la tecnología y la reducción de residuos."
+      },
+      "community": {
+        "title": "Comunidad",
+        "description": "Construir comunidades sólidas a través de la educación tecnológica y la participación inclusiva."
+      },
+      "innovation": {
+        "title": "Innovación",
+        "description": "Encontrar soluciones creativas para hacer la tecnología accesible y respetuosa con el medio ambiente."
+      },
+      "globalImpact": {
+        "title": "Impacto global",
+        "description": "Marcar la diferencia en comunidades locales y globales a través de la tecnología."
+      }
+    },
+    "volunteer": {
+      "meta": {
+        "title": "Voluntariado",
+        "description": "Únete a nuestro equipo de voluntarios/as comprometidos/as y genera un impacto en tu comunidad a través de la tecnología y la sostenibilidad."
+      },
+      "title": "Ser voluntario/a",
+      "description": "Únete a nuestro equipo de voluntarios/as comprometidos/as y ayuda a hacer la tecnología sostenible y accesible para todos.",
+      "ctaText": "Expresar interés",
+      "benefitsTitle": "Beneficios del voluntariado",
+      "flexibilityNote": "Entendemos que cada persona tiene horarios distintos. Ofrecemos actividades de voluntariado flexibles que se adaptan a tus otros compromisos. Tanto si puedes dedicar unas pocas horas a la semana como más — tu aportación marcará la diferencia.",
+      "howToStartTitle": "Cómo empezar",
+      "steps": [
+        "Contáctanos para expresar tu interés",
+        "Reúnete con nuestro equipo para hablar sobre tus habilidades e intereses",
+        "Participa en una breve sesión introductoria",
+        "¡Empieza a marcar la diferencia!"
+      ]
+    },
+    "donate": {
+      "meta": {
+        "title": "Donar",
+        "description": "Ayuda directamente. Cada donación rescata dispositivos de los residuos electrónicos y hace la tecnología accesible para todos."
+      },
+      "heroTitle": "Ayuda directamente.",
+      "heroDescription": "Cada donación rescata dispositivos de los residuos electrónicos, prolonga su ciclo de vida y hace posible la tecnología para personas que de otra manera no podrían permitírsela.",
+      "transferNow": "Transferir ahora",
+      "transparencyLabel": "Transparencia",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Presupuesto anual (asociación sin ánimo de lucro)",
+      "devicesSavedLabel": "Dispositivos rescatados al año",
+      "co2SavedLabel": "ahorrado al año",
+      "impactTitle": "Qué logra tu donación",
+      "recommended": "Recomendado",
+      "chooseAmount": "Elegir importe y transferir",
+      "bankTransferTitle": "Transferencia bancaria",
+      "bankTransferDescription": "Transfiere a la siguiente cuenta:",
+      "recipient": "Destinatario",
+      "iban": "IBAN",
+      "bank": "Banco",
+      "purpose": "Concepto",
+      "copy": "Copiar",
+      "copyIban": "Copiar IBAN",
+      "donateDevicesTitle": "Donar dispositivos",
+      "donateDevicesDescription": "El hardware que ya no usas puede dar a otra persona una verdadera oportunidad. Aceptamos dispositivos en funcionamiento o reparables, los reacondicionamos y los redistribuimos.",
+      "weAccept": "Lo que aceptamos:",
+      "weAcceptList": "Portátiles, ordenadores de sobremesa, monitores, teclados, ratones, impresoras — en funcionamiento o reparables.",
+      "weDoNotAccept": "Lo que no aceptamos:",
+      "weDoNotAcceptList": "Dispositivos con daños físicos, pantallas defectuosas sin marco, monitores CRT.",
+      "preparation": "Preparación:",
+      "preparationText": "Por favor, borra tus datos personales antes de entregarlo (te ayudamos si es necesario).",
+      "dropOffAddress": "Dirección de entrega",
+      "questions": "¿Preguntas? Escríbenos →",
+      "newsletterTitle": "Te informamos del impacto de tu donación.",
+      "newsletterDescription": "Sin publicidad. Solo actualizaciones reales sobre dispositivos rescatados, CO₂ ahorrado y personas apoyadas.",
+      "purposeTemplate": "Donación {org} {month} {year}",
+      "months": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      "impact": {
+        "tier1Title": "1 dispositivo rescatado",
+        "tier1Description": "1 portátil rescatado de los residuos electrónicos + 285 kg de CO₂ evitados.",
+        "tier2Title": "2 dispositivos + plaza en taller",
+        "tier2Description": "2 dispositivos reacondicionados + una plaza en nuestro taller de Linux para alguien que no podría permitírselo.",
+        "tier3Title": "Donación empresarial — 10 dispositivos",
+        "tier3Description": "10 dispositivos para centros educativos, proyectos sociales o hogares con bajos ingresos."
+      },
+      "devices": {
+        "laptop": "Portátiles",
+        "desktop": "Ordenadores de sobremesa",
+        "monitor": "Monitores",
+        "peripherals": "Periféricos"
+      }
+    },
+    "partnerships": {
+      "meta": {
+        "title": "Alianzas",
+        "description": "Colabora con nosotros para crear soluciones tecnológicas sostenibles y generar un impacto duradero."
+      },
+      "title": "Oportunidades de colaboración",
+      "ctaText": "Expresar interés",
+      "benefitsTitle": "Beneficios de la colaboración",
+      "processTitle": "Cómo trabajamos juntos",
+      "processSteps": [
+        "Consulta inicial para entender objetivos y posibilidades",
+        "Desarrollo del marco y los objetivos de la colaboración",
+        "Puesta en marcha de iniciativas conjuntas",
+        "Revisiones periódicas de progreso y evaluación de impacto",
+        "Mejora continua y ampliación de la colaboración"
+      ],
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Contáctanos para hablar sobre oportunidades de colaboración",
+        "Comparte los objetivos e intereses de tu organización",
+        "Explora posibles áreas de trabajo conjunto",
+        "Desarrolla un acuerdo de colaboración",
+        "Inicia tu camino de alianza"
+      ]
+    },
+    "internships": {
+      "meta": {
+        "title": "Prácticas",
+        "description": "Adquiere experiencia práctica en tecnología y sostenibilidad a través de nuestro programa de prácticas."
+      },
+      "title": "Oportunidades de prácticas",
+      "description": "Adquiere experiencia valiosa en tecnología y sostenibilidad y genera un cambio real.",
+      "ctaText": "Expresar interés",
+      "benefitsTitle": "Beneficios del programa",
+      "howToApplyTitle": "Cómo solicitar una plaza",
+      "howToApplySteps": [
+        "Envíanos tu CV y una carta de motivación",
+        "Indica tu área de interés y disponibilidad",
+        "Mantén una breve entrevista",
+        "¡Empieza tu camino de prácticas!"
+      ]
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "Expertos técnicos",
+        "description": "Comparte tu experiencia técnica y ayúdanos a desarrollar soluciones innovadoras para la tecnología sostenible."
+      },
+      "title": "Expertos técnicos",
+      "description": "Comparte tu experiencia y ayúdanos a desarrollar soluciones innovadoras para la tecnología sostenible.",
+      "ctaText": "Expresar interés",
+      "opportunitiesTitle": "Oportunidades para expertos técnicos",
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Contáctanos con tu área de especialización e intereses",
+        "Habla sobre posibles proyectos y contribuciones",
+        "Revisa nuestras directrices y procesos de desarrollo",
+        "Empieza a contribuir a nuestros proyectos"
+      ]
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "Técnico de ayuda TI",
+        "description": "Comparte tus conocimientos TI y ayuda a personas en tu comunidad — de forma flexible, sin requisitos previos y con impacto real."
+      },
+      "title": "Ser técnico de ayuda TI",
+      "description": "Tus conocimientos TI pueden facilitar la vida de otras personas. Ayuda a miembros de la comunidad con sus ordenadores — de forma flexible, sin complicaciones y con impacto.",
+      "ctaText": "Registrarse como técnico",
+      "benefitsTitle": "Qué obtienes",
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Crea tu perfil de técnico con tus habilidades y disponibilidad",
+        "Espera solicitudes — tú decides cuáles aceptas",
+        "Acuerda una cita directamente con quien solicita",
+        "Ayuda, aprende y marca la diferencia"
+      ]
+    },
+    "workReintegration": {
+      "meta": {
+        "title": "Reinserción laboral",
+        "description": "Participa en nuestro programa de reinserción laboral para adquirir habilidades y experiencia en tecnología mientras reconstruyes tu carrera."
+      },
+      "title": "Programa de reinserción laboral",
+      "description": "Únete a nuestro programa de apoyo para reconstruir tu carrera en tecnología y sostenibilidad.",
+      "ctaText": "Expresar interés",
+      "benefitsTitle": "Beneficios del programa",
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Contáctanos para hablar sobre tu situación",
+        "Reúnete con nuestro equipo para una evaluación",
+        "Desarrolla tu plan personalizado",
+        "Inicia tu camino de reinserción laboral"
+      ]
+    },
+    "kontakt": {
+      "meta": {
+        "title": "Expresar interés",
+        "description": "Cuéntanos brevemente qué te interesa — nos pondremos en contacto contigo."
+      },
+      "backToInvolvement": "Todas las formas de participar",
+      "title": "Interés en {topic}",
+      "description": "Cuéntanos brevemente quién eres y qué te interesa. Nos pondremos en contacto contigo personalmente.",
+      "topics": {
+        "freiwilligenarbeit": "Voluntariado",
+        "praktikum": "Prácticas",
+        "wiedereinstieg": "Reinserción laboral",
+        "technische-experten": "Expertos técnicos",
+        "partnerschaft": "Alianza",
+        "it-hilfe-techniker": "Técnico de ayuda TI",
+        "default": "Participar"
+      }
+    }
+  }
+}

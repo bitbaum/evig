@@ -1,0 +1,43 @@
+{
+  "knowhow": {
+    "meta": {
+      "title": "ノウハウ — ガイド、ブログ、ワークショップ | revamp-it",
+      "description": "ヴィンテージハードウェア、Linux、Open Sourceについて学ぶ。ガイド、ワークショップ、ブログ、厳選リソース。"
+    },
+    "hero": {
+      "title": "ヴィンテージハードウェア、Linux、Open Sourceのノウハウを共有",
+      "subtitle": "テクノロジーをより深く理解し活用できるよう、16年以上のノウハウを共有します。初心者でも専門家でも — ここで学習の旅に役立つリソースを見つけてください。"
+    },
+    "sections": {
+      "guides": {
+        "title": "ガイド",
+        "description": "Linux、ヴィンテージハードウェア、Open Sourceのステップバイステップの手順",
+        "cta": "ガイドを見る"
+      },
+      "blog": {
+        "title": "ブログ",
+        "description": "専門家によるヒント、ストーリー、ベストプラクティス",
+        "cta": "ブログへ"
+      },
+      "workshops": {
+        "title": "ワークショップ",
+        "description": "予約できるライブコースとトレーニング — 初心者から専門家まで",
+        "cta": "ワークショップを見る"
+      },
+      "resources": {
+        "title": "リソース",
+        "description": "厳選された外部リンクとOpen Sourceの代替ソフト",
+        "cta": "リソースを探る"
+      }
+    },
+    "curatedResources": "厳選リソース",
+    "openSourceSoftware": "Open Sourceソフトウェアの代替",
+    "linuxDistros": "Linuxディストリビューション",
+    "externalDocs": "外部ドキュメント・ポータル",
+    "cta": {
+      "title": "学ぶ準備はできていますか？",
+      "description": "ブログから始めるか、ワークショップに参加するか、ガイドをご覧ください。",
+      "button": "ご質問は？お問い合わせください"
+    }
+  }
+}

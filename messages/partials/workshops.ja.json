@@ -1,0 +1,45 @@
+{
+  "workshops": {
+    "meta": {
+      "title": "ワークショップ・コース",
+      "description": "持続可能なテクノロジー、Linux、修理、プログラミングなどのワークショップを発見してください。チューリッヒで実践的に学ぶ。"
+    },
+    "browse": {
+      "title": "ワークショップ・コース",
+      "subtitle": "{count, plural, other {{count}つのワークショップ}} · {orgName}で実践的に学ぶ",
+      "proposeButton": "ワークショップを提案",
+      "filterCategory": "カテゴリー",
+      "allCategories": "すべてのカテゴリー",
+      "filterLevel": "難易度",
+      "allLevels": "すべてのレベル",
+      "clearFilters": "フィルターをリセット",
+      "resultCount": "{count, plural, other {{count}つのワークショップ}}",
+      "allLevelsLabel": "すべてのレベル",
+      "maxParticipants": "最大{count}名",
+      "nextDate": "次回日程：{date}",
+      "dateSoon": "日程は近日公開",
+      "spotsLeft": "{count, plural, other {残り{count}席}}",
+      "soldOut": "満席",
+      "free": "無料",
+      "registered": "登録済み",
+      "viewDetails": "詳細を見る",
+      "manage": "管理する",
+      "registerNow": "今すぐ登録",
+      "noDate": "日程なし",
+      "emptyFiltered": {
+        "title": "ワークショップが見つかりませんでした",
+        "subtitle": "他のフィルターを試すか、後でもう一度ご確認ください。",
+        "clearFilters": "フィルターをリセット"
+      },
+      "emptyAll": {
+        "title": "現在予定されているワークショップはありません",
+        "subtitle": "またご確認ください！"
+      },
+      "cta": {
+        "title": "ワークショップを提案しませんか？",
+        "subtitle": "ワークショップのアイデアがありますか？新しいテーマや内容のご提案をお待ちしています。",
+        "button": "ワークショップを提案"
+      }
+    }
+  }
+}

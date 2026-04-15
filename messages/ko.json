@@ -16,7 +16,97 @@
     "admin": "관리자",
     "register": "회원가입",
     "membership": "회원 가입",
-    "languageSwitcher": "언어"
+    "languageSwitcher": "언어",
+    "languageSelection": "언어 선택",
+    "experimentalBanner": "실험적 사이트",
+    "experimentalBannerLink": "현재 사이트로 이동",
+    "loggedIn": "로그인됨",
+    "toDashboard": "대시보드로 이동",
+    "defaultUser": "사용자",
+    "items": {
+      "about": "소개",
+      "aboutDesc": "미션, 영향력 및 프로젝트",
+      "missionHistory": "미션 & 역사",
+      "missionHistoryDesc": "우리가 누구이며 무엇이 우리를 이끄는지",
+      "impact": "우리의 영향력",
+      "impactDesc": "측정 가능한 성과와 투명성",
+      "projects": "프로젝트",
+      "projectsDesc": "우리의 이니셔티브",
+      "locations": "위치",
+      "locationsDesc": "취리히의 우리 공간",
+      "faq": "FAQ",
+      "faqDesc": "자주 묻는 질문",
+      "services": "서비스",
+      "servicesDesc": "전문 IT 서비스",
+      "hardware": "하드웨어",
+      "repairUpgrades": "수리 & 업그레이드",
+      "repairUpgradesDesc": "컴퓨터를 다시 정상으로",
+      "dataRecovery": "데이터 복구",
+      "dataRecoveryDesc": "데이터 저장 및 전송",
+      "hardwareRecycling": "하드웨어 재활용",
+      "hardwareRecyclingDesc": "책임감 있는 처리",
+      "software": "소프트웨어",
+      "linuxOpenSource": "Linux & 오픈 소스",
+      "linuxOpenSourceDesc": "설치 및 지원",
+      "webDev": "웹 개발",
+      "webDevDesc": "오픈 소스 기반 웹사이트",
+      "openSourceSolutions": "오픈 소스 솔루션",
+      "openSourceSolutionsDesc": "컨설팅 및 구현",
+      "marketplace": "마켓플레이스",
+      "marketplaceDesc": "구매, 판매 및 IT 지원",
+      "buyDevices": "기기 구매",
+      "communityListings": "커뮤니티 판매 목록",
+      "communityListingsDesc": "개인 간 중고 IT — 수수료 0%",
+      "orgShop": "Revamp-IT 쇼핑몰",
+      "orgShopDesc": "검증된 리퍼비시 기기",
+      "store": "취리히 매장",
+      "storeDesc": "직접 방문하여 둘러보고 상담받기",
+      "sell": "판매하기",
+      "createListing": "판매 등록하기",
+      "createListingDesc": "내 기기 판매하기 — 무료",
+      "myListings": "내 판매 목록",
+      "myListingsDesc": "판매 목록 및 거래 관리",
+      "itHelp": "IT 지원",
+      "findHelp": "도움 찾기",
+      "findHelpDesc": "가까운 커뮤니티 기술자 찾기",
+      "findTechnician": "기술자 찾기",
+      "findTechnicianDesc": "커뮤니티 및 전문 기술자",
+      "becomeTechnician": "기술자 되기",
+      "becomeTechnicianDesc": "IT 지식을 나누고 도움 주기",
+      "learn": "배우기",
+      "learnDesc": "워크숍, 가이드 및 리소스",
+      "workshops": "워크숍",
+      "workshopsDesc": "현장 강좌 예약",
+      "guides": "가이드",
+      "guidesDesc": "단계별 안내",
+      "blog": "블로그",
+      "blogDesc": "팁과 이야기",
+      "wiki": "위키",
+      "wikiDesc": "공동 지식 포털",
+      "getInvolved": "참여하기",
+      "getInvolvedDesc": "운동의 일원이 되기",
+      "engagement": "참여",
+      "volunteer": "자원봉사",
+      "volunteerDesc": "시간과 능력 기부",
+      "internship": "인턴십",
+      "internshipDesc": "경험 쌓기",
+      "reintegration": "직업 복귀",
+      "reintegrationDesc": "직장으로 돌아가기",
+      "itHelpTechnician": "IT 지원 기술자",
+      "itHelpTechnicianDesc": "IT 지식을 나누고 도움 주기",
+      "support": "후원하기",
+      "donate": "기부",
+      "donateDesc": "우리의 미션 지원",
+      "donateDevices": "기기 기부",
+      "donateDevicesDesc": "하드웨어에 두 번째 삶을",
+      "partnership": "파트너십",
+      "partnershipDesc": "기업으로서 협력하기",
+      "membership": "회원",
+      "becomeMember": "회원 가입",
+      "becomeMemberDesc": "단체의 일원이 되어 의사 결정에 참여",
+      "contact": "문의",
+      "contactDesc": "언제든지 연락해 주세요"
+    }
   },
   "common": {
     "loading": "로딩 중...",
@@ -44,8 +134,100 @@
     "required": "필수 항목",
     "optional": "선택 사항",
     "free": "무료",
+    "perHour": "시간당",
+    "contact": "문의하기",
+    "share": "공유",
+    "copy": "복사",
+    "copied": "복사됨",
+    "print": "인쇄",
+    "download": "다운로드",
+    "upload": "업로드",
+    "preview": "미리보기",
+    "send": "보내기",
+    "apply": "지원하기",
+    "register": "등록",
+    "signIn": "로그인",
+    "signUp": "회원가입",
+    "signOut": "로그아웃",
+    "or": "또는",
+    "and": "그리고",
+    "from": "에서",
+    "to": "까지",
+    "at": "에서",
+    "in": "안에",
+    "of": "의",
+    "new": "신규",
+    "updated": "업데이트됨",
+    "soon": "곧",
+    "available": "이용 가능",
+    "unavailable": "이용 불가",
+    "sold": "판매됨",
+    "reserved": "예약됨",
     "currency": "CHF",
     "skipToContent": "콘텐츠로 건너뛰기"
+  },
+  "errors": {
+    "generic": "오류가 발생했습니다. 다시 시도해 주세요.",
+    "notFound": "페이지를 찾을 수 없습니다",
+    "unauthorized": "인증되지 않음",
+    "forbidden": "접근이 거부되었습니다",
+    "serverError": "서버 오류",
+    "networkError": "네트워크 오류입니다. 연결 상태를 확인해 주세요.",
+    "required": "이 항목은 필수입니다",
+    "invalidEmail": "유효한 이메일 주소를 입력해 주세요",
+    "passwordTooShort": "비밀번호는 최소 8자 이상이어야 합니다"
+  },
+  "footer": {
+    "tagline": "오래된 하드웨어. 새로운 삶.",
+    "mission": "저희는 지속 가능한 기술을 위한 스위스 비영리 단체입니다.",
+    "navigation": "내비게이션",
+    "services": "서비스",
+    "community": "커뮤니티",
+    "legal": "법적 사항",
+    "privacyPolicy": "개인정보 보호정책",
+    "termsOfService": "이용약관",
+    "impressum": "임프레섬",
+    "newsletter": "뉴스레터",
+    "newsletterTagline": "커뮤니티 소식",
+    "allRightsReserved": "모든 권리 보유",
+    "madeWith": "제작",
+    "inSwitzerland": "스위스에서"
+  },
+  "auth": {
+    "login": {
+      "title": "로그인",
+      "email": "이메일 주소",
+      "password": "비밀번호",
+      "submit": "로그인",
+      "forgotPassword": "비밀번호를 잊으셨나요?",
+      "noAccount": "계정이 없으신가요?",
+      "register": "회원가입"
+    },
+    "register": {
+      "title": "회원가입",
+      "name": "이름",
+      "email": "이메일 주소",
+      "password": "비밀번호",
+      "confirmPassword": "비밀번호 확인",
+      "submit": "계정 만들기",
+      "hasAccount": "이미 계정이 있으신가요?",
+      "login": "로그인",
+      "termsAccept": "이용약관 및 개인정보 보호정책에 동의합니다"
+    },
+    "logout": {
+      "title": "로그아웃 중...",
+      "wait": "잠시만 기다려 주세요.",
+      "failed": "로그아웃 실패",
+      "retry": "다시 로그아웃",
+      "backToDashboard": "대시보드로 돌아가기"
+    },
+    "forgotPassword": {
+      "title": "비밀번호 재설정",
+      "description": "이메일 주소를 입력하시면 재설정 링크를 보내드립니다.",
+      "email": "이메일 주소",
+      "submit": "링크 보내기",
+      "backToLogin": "로그인으로 돌아가기"
+    }
   },
   "cookies": {
     "title": "쿠키 사용 안내",
@@ -53,5 +235,2427 @@
     "accept": "동의",
     "decline": "거부",
     "learnMore": "자세히 보기"
+  },
+  "accessibility": {
+    "skipToContent": "콘텐츠로 건너뛰기",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "backToTop": "맨 위로"
+  },
+  "agb": {
+    "meta": {
+      "title": "이용약관",
+      "description": "revamp-it 이용약관"
+    },
+    "title": "이용약관",
+    "section1": {
+      "title": "1. 적용 범위",
+      "body": "이 이용약관(AGB)은 {legalName}, {address}의 모든 서비스 및 제공에 적용됩니다."
+    },
+    "section2": {
+      "title": "2. 서비스",
+      "intro": "{orgName}은 IT 기기의 지속 가능한 재정비 및 재사용을 위해 헌신하는 비영리 단체입니다. 저희 서비스에는 다음이 포함됩니다:",
+      "items": [
+        "중고 IT 기기의 재정비 및 판매",
+        "IT 수리 서비스",
+        "워크숍 및 교육",
+        "중고 기기 P2P 마켓플레이스",
+        "IT 지원 및 도움"
+      ]
+    },
+    "section3": {
+      "title": "3. 가격 및 결제",
+      "body": "달리 명시되지 않는 한 모든 가격은 부가가치세 포함 스위스 프랑(CHF)으로 표시됩니다. 결제 조건은 각 제안에 명시됩니다."
+    },
+    "section4": {
+      "title": "4. 계약 체결",
+      "body": "계약은 플랫폼, 매장 또는 이메일을 통한 주문과 {orgName}의 이후 확인을 통해 성립됩니다. 웹사이트의 표시는 구속력 없는 청약 초대로 간주됩니다."
+    },
+    "section5": {
+      "title": "5. 철회 권리",
+      "body": "매장 내 구매 시 스위스 법에는 오프라인 매장에 대한 법적 철회 권리가 없습니다. 온라인 구매의 경우 미사용 및 원래 포장 상태로 반환되는 경우 상품 수령 후 14일 이내에 자발적 반품 권리를 제공합니다.",
+      "contactLabel": "문의:"
+    },
+    "section6": {
+      "title": "6. 보증",
+      "body": "재정비된 기기에 대해 {orgName}은 법적 규정에 따른 보증을 제공합니다. 정확한 보증 조건은 구매 시 알려드립니다. P2P 마켓플레이스에서 제3자가 판매하는 기기에 대해 {orgName}은 보증 책임을 지지 않습니다."
+    },
+    "section7": {
+      "title": "7. 책임",
+      "body": "{orgName}은 법적 규정의 범위 내에서 책임을 집니다. 법적으로 허용되는 한 경과실에 대한 책임은 제외됩니다."
+    },
+    "section8": {
+      "title": "8. 개인정보 보호",
+      "body": "개인 데이터의 처리는 저희 개인정보 보호정책에 따라 이루어집니다. 등록된 사용자는 언제든지 자신의 데이터를 직접 내보낼 수 있습니다.",
+      "privacyLinkLabel": "개인정보 보호정책"
+    },
+    "section9": {
+      "title": "9. 최종 조항",
+      "body": "이 이용약관의 개별 조항이 무효인 경우에도 나머지 조항의 유효성은 영향을 받지 않습니다. 스위스 법이 적용됩니다. 관할 법원은 취리히, 스위스입니다."
+    },
+    "section10": {
+      "title": "10. 변경",
+      "body": "{orgName}은 언제든지 이 이용약관을 변경할 권리를 보유합니다. 현재 버전은 이 페이지에서 확인할 수 있습니다. 공급자에 관한 법적 정보는 임프레섬에 있습니다.",
+      "impressumLinkLabel": "임프레섬"
+    },
+    "asOf": "기준일: 2026년 4월"
+  },
+  "datenschutz": {
+    "meta": {
+      "title": "개인정보 보호정책",
+      "description": "revamp-it 개인정보 보호정책"
+    },
+    "title": "개인정보 보호정책",
+    "section1": {
+      "title": "1. 책임자"
+    },
+    "section2": {
+      "title": "2. 개인 데이터의 수집 및 처리",
+      "intro": "저희는 귀하가 당사 플랫폼에 등록하거나, 서비스를 이용하거나, 당사에 연락할 때 개인 데이터를 수집합니다. 여기에는 다음이 포함됩니다:",
+      "items": [
+        "이름 및 이메일 주소(등록 시)",
+        "연락처 정보(문의 및 예약 시)",
+        "사용 데이터(플랫폼 사용 시)"
+      ]
+    },
+    "section3": {
+      "title": "3. 데이터 처리 목적",
+      "intro": "귀하의 데이터는 다음 목적으로 사용됩니다:",
+      "items": [
+        "사용자 계정 제공 및 관리",
+        "수리 주문 및 서비스 수행",
+        "워크숍 등록 관리",
+        "P2P 마켓플레이스 운영",
+        "제공 사항에 관한 커뮤니케이션(동의 하에만)"
+      ]
+    },
+    "section4": {
+      "title": "4. 데이터 공유",
+      "body": "귀하의 데이터는 제3자에게 판매되지 않습니다. 데이터 공유는 서비스 제공에 필요한 경우(예: 예약된 수리 시 수리 서비스 제공자에게)나 법적으로 의무화된 경우에만 이루어집니다."
+    },
+    "section5": {
+      "title": "5. 데이터 보안",
+      "body": "저희는 무단 접근, 분실 또는 오용으로부터 귀하의 데이터를 보호하기 위한 기술적 및 조직적 조치를 적용합니다. 비밀번호는 해시 처리되어 저장됩니다."
+    },
+    "section6": {
+      "title": "6. 쿠키",
+      "body": "당사 플랫폼은 세션 관리 및 인증을 위한 기능적 쿠키를 사용합니다. 분석 쿠키는 귀하의 동의 하에만 설정됩니다."
+    },
+    "section7": {
+      "title": "7. 귀하의 권리",
+      "intro": "귀하는 다음에 대한 권리를 가집니다:",
+      "items": [
+        "저장된 데이터에 대한 정보",
+        "부정확한 데이터 수정",
+        "데이터 삭제",
+        "처리 제한",
+        "데이터 이동성(데이터 내보내기)",
+        "부여된 동의 철회"
+      ],
+      "exportText": "등록된 사용자는 언제든지 다음에서 자신의 데이터 전체 사본을 직접 다운로드할 수 있습니다:",
+      "exportLink": "설정 → 개인정보 보호",
+      "contactText": "기타 문의사항은 다음으로 연락해 주세요:"
+    },
+    "section8": {
+      "title": "8. 보관 기간",
+      "body": "저희는 명시된 목적에 필요한 기간 또는 법적 보관 기간이 요구하는 기간 동안만 개인 데이터를 저장합니다. 계정 및 프로필 데이터는 법적 의무(예: 청구서의 세금 보관)가 없는 한 계정 삭제 후 제거됩니다."
+    },
+    "section9": {
+      "title": "9. 법적 근거",
+      "body": "처리는 스위스 데이터 보호법(DSG) 및 해당하는 경우 GDPR 제6조 제1항(계약 이행, 정당한 이익, 동의)에 근거합니다."
+    },
+    "section10": {
+      "title": "10. 적용 법률",
+      "body": "이 개인정보 보호정책은 스위스 데이터 보호법(DSG) 및 해당하는 경우 유럽 일반 데이터 보호 규정(GDPR)의 적용을 받습니다.",
+      "impressumLinkLabel": "임프레섬"
+    },
+    "asOf": "기준일: 2026년 3월"
+  },
+  "impressum": {
+    "meta": {
+      "title": "임프레섬",
+      "description": "임프레섬 및 법적 정보"
+    },
+    "title": "임프레섬",
+    "legalInfo": "스위스 법에 따른 정보",
+    "organisation": "조직",
+    "contact": "연락처",
+    "emailLabel": "이메일:",
+    "phoneLabel": "전화:",
+    "authorised": "대표권자",
+    "authorisedValue": "이사회",
+    "legalForm": "법적 형태",
+    "legalFormValue": "스위스 민법(ZGB) 제60조 이하에 따른 단체",
+    "purpose": "목적",
+    "purposeText": "{description} {orgName}은 기술의 자유로운 교환, 오픈 소스 하드웨어 및 소프트웨어 촉진, IT 기기의 지속 가능한 재정비 및 재사용을 위해 헌신하는 비영리 단체입니다.",
+    "disclaimer": "면책 조항",
+    "disclaimerP1": "저자는 이 웹사이트의 정보에 대한 내용의 정확성, 정밀성, 최신성, 신뢰성 및 완전성에 대해 어떠한 보증도 하지 않습니다.",
+    "disclaimerP2": "게시된 정보에 대한 접근 또는 사용, 오용 또는 기술적 장애로 인해 발생하는 물질적 또는 비물질적 손해에 대해 저자에게 제기되는 책임 청구는 제외됩니다.",
+    "disclaimerP3": "모든 제안은 구속력이 없습니다. 저자는 별도의 통지 없이 페이지의 일부나 전체 제공을 변경, 보완, 삭제하거나 일시적 또는 영구적으로 게시를 중단할 권리를 명시적으로 보유합니다.",
+    "linksDisclaimer": "참조 및 링크에 대한 면책 조항",
+    "linksDisclaimerText": "제3자 웹사이트에 대한 참조 및 링크는 저희의 책임 범위 밖입니다. 저희는 그러한 웹사이트에 대한 어떠한 책임도 거부합니다. 그러한 웹사이트에 대한 접근 및 사용은 각 사용자의 책임 하에 이루어집니다.",
+    "copyright": "저작권",
+    "copyrightText": "이 웹사이트의 콘텐츠, 이미지, 사진 또는 기타 파일에 대한 저작권 및 기타 모든 권리는 {legalName} 또는 특별히 명시된 권리 보유자에게만 귀속됩니다. 어떠한 요소도 복제하려면 저작권 보유자로부터 서면 동의를 미리 받아야 합니다.",
+    "furtherLegal": "추가 법적 고지",
+    "furtherLegalText": "개인정보 보호정책 및 이용약관도 참조하세요.",
+    "privacyLinkLabel": "개인정보 보호정책",
+    "agbLinkLabel": "이용약관",
+    "asOf": "기준일: 2026년 4월"
+  },
+  "transparenz": {
+    "meta": {
+      "title": "투명성",
+      "description": "저희가 하는 일과 그 방법. 미션, 수치 및 운영 방식에 대한 통찰."
+    },
+    "hero": {
+      "title": "투명성",
+      "subtitle": "저희가 하는 일과 그 방법"
+    },
+    "mission": {
+      "title": "우리의 미션",
+      "text": "{description} {legalForm}으로서({foundingYear}년 설립) 저희는 중고 하드웨어에 두 번째 삶을, 오픈 소프트웨어를 모두에게, 그리고 사람들이 기술을 스스로 익힐 수 있도록 헌신합니다."
+    },
+    "stats": {
+      "title": "수치 및 사실",
+      "detailLink": "상세한 영향력 수치 보기"
+    },
+    "howWeWork": {
+      "title": "우리의 운영 방식",
+      "subtitle": "세 가지 커뮤니티 플랫폼이 사람과 기술을 연결합니다.",
+      "toPlatform": "플랫폼으로 이동",
+      "platforms": [
+        {
+          "title": "마켓플레이스",
+          "description": "중고 IT 기기를 위한 커뮤니티 플랫폼. 사용자는 수수료 없이 판매 목록을 만들고 구매 및 판매할 수 있습니다.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "IT 지원",
+          "description": "컴퓨터 수리를 위한 자원봉사 기술자 연결. 사람 간 도움, 지역적이고 간단하게.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "워크숍",
+          "description": "Linux, 하드웨어, 프로그래밍 및 AI 강좌. 지식을 공유하고 함께 배우기 — 취리히 현장에서.",
+          "href": "/workshops"
+        }
+      ]
+    },
+    "finances": {
+      "title": "재정",
+      "text": "비영리 단체로서 저희는 재정을 공개합니다. 연간 보고서는 총회에서 발표되며 회원이 열람할 수 있습니다.",
+      "memberLink": "회원 가입하여 확인하기"
+    },
+    "board": {
+      "title": "이사회",
+      "text": "{orgName}은 명예직 이사회가 운영합니다. 연락처:",
+      "joinCta": "회원 가입",
+      "donateCta": "기부하기"
+    }
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "찾으시는 페이지가 존재하지 않거나 이동되었습니다.",
+    "goHome": "홈으로 이동",
+    "reportProblem": "문제 신고"
+  },
+  "error": {
+    "title": "문제가 발생했습니다",
+    "description": "예기치 않은 오류가 발생했습니다. 페이지를 새로고침해 보세요 — 문제가 지속되면 문의해 주세요.",
+    "retry": "다시 시도",
+    "goHome": "홈으로 이동"
+  },
+  "about": {
+    "meta": {
+      "title": "소개",
+      "description": "IT 기기의 수명을 연장하고 지속 가능한 컴퓨팅을 촉진하는 저희의 미션에 대해 알아보세요."
+    },
+    "hero": {
+      "title": "기술에 두 번째 삶을",
+      "subtitle": "20년 이상 저희는 컴퓨터의 성급한 폐기에 맞서고 지속 가능한 IT 관행을 촉진하고 있습니다."
+    },
+    "mission": {
+      "badge": "우리의 미션",
+      "title": "지속 가능성과 기술의 만남",
+      "yearsExperience": "년의 경험",
+      "quote": "자전거의 최소 수명은 10년 — 노트북도 마찬가지입니다!",
+      "paragraph1": "비영리 단체로서 저희는 2003년부터 기술에 대한 인식을 바꾸고 있습니다. 저희의 미션은 명확합니다: <strong>IT 기기의 수명을 연장</strong>하고 수리, 재정비, 지속 가능한 관행을 통해 전자 폐기물을 줄이는 것입니다.",
+      "paragraph2": "저희의 공간 — 옛 은행 건물 — 에서 기술과 지속 가능성이 만나는 만남의 장소를 만들었습니다. 저희의 접근 방식은 하드웨어 재활용과 오픈 소스 소프트웨어를 결합하여 사람과 환경을 위한 지속 가능한 IT 솔루션을 만듭니다.",
+      "imageAlt": "컴퓨터와 기기들이 있는 쇼윈도"
+    },
+    "impactAreas": {
+      "title": "우리의 영향 영역",
+      "subtitle": "세 가지 기둥, 하나의 목표: 기술을 더 지속 가능하고 접근 가능하게.",
+      "hardware": {
+        "title": "하드웨어 재활용",
+        "description": "저희는 모든 연령의 IT 기기를 수리하고 재정비하여 두 번째 삶을 선사합니다. 오래된 MacBook부터 빈티지 컴퓨터까지 — 모든 기기는 두 번째 기회를 받을 자격이 있습니다."
+      },
+      "openSource": {
+        "title": "오픈 소스 소프트웨어",
+        "description": "저희는 Linux와 기타 오픈 소스 솔루션을 사용합니다. 이 기술들은 오래된 기기를 효율적으로 유지하고 자체 시스템 제어를 통한 보안을 제공합니다."
+      },
+      "community": {
+        "title": "커뮤니티 & 사회",
+        "description": "저희는 일반 노동 시장에서 어려움을 겪는 사람들을 위한 의미 있는 일자리를 만듭니다. 저희의 교환 시스템으로 서비스를 기술과 교환할 수 있습니다."
+      }
+    },
+    "cta": {
+      "title": "우리의 미션에 참여하세요",
+      "description": "기기 수리, 지속 가능한 IT에 대해 더 알고 싶거나, 저희의 활동을 지원하고 싶으신가요 — 저희와 함께하세요. 함께 기술을 모두를 위해 더 지속 가능하고 접근 가능하게 만들겠습니다.",
+      "button": "참여하기"
+    },
+    "impact": {
+      "meta": {
+        "title": "우리의 영향력",
+        "description": "환경 및 사회에 대한 측정 가능한 영향력을 확인하세요. 지속 가능한 IT를 위한 저희 미션을 지원해 주세요."
+      },
+      "hero": {
+        "title": "우리의 측정 가능한 영향력",
+        "description": "2003년부터 스위스 IT 환경을 지속 가능하게 변화시킨 방법을 알아보세요 — 투명하게, 측정 가능하게, 효과적으로."
+      },
+      "transparency": {
+        "title": "투명성이 중요한 이유",
+        "description": "비영리 단체로서 저희는 투명성을 가장 중요하게 생각합니다. 저희의 모든 수치는 문서화되어 있어 후원자로서 귀하의 지원이 어떻게 효과를 내는지 정확히 이해할 수 있습니다."
+      },
+      "verified": "검증됨",
+      "methodology": "방법론 & 계산",
+      "lastUpdated": "마지막 업데이트",
+      "impactInNumbers": "숫자로 보는 영향력",
+      "tabs": {
+        "environmental": "환경",
+        "social": "사회",
+        "economic": "경제"
+      },
+      "environmental": {
+        "title": "환경 영향력 세부 내용",
+        "co2PerDevice": "구조된 기기 한 대당 평균 {value}kg CO₂ 배출량 절감",
+        "ewasteAvoided": "연간 {value}톤의 전자 폐기물 방지",
+        "reuseRate": "저희 기기의 {value}%가 재활용 대신 재사용됩니다",
+        "comparison": "신품과의 비교",
+        "newLaptop": "새 노트북 제조:",
+        "refurbishment": "기기 리퍼비시:",
+        "savings": "기기당 CO₂ 절감:"
+      },
+      "social": {
+        "title": "사회적 영향력 세부 내용",
+        "internshipSuccess": "인턴의 ~{value}%가 IT 직업 또는 추가 교육을 찾습니다",
+        "careerReentries": "프로그램을 통해 연간 ~{value}건의 직업 복귀",
+        "peopleHelped": "2003년 이후 지속 가능한 IT로 {value}명 지원",
+        "successStories": "성공 사례",
+        "testimonial": "RevampIT 덕분에 3년간의 실직 후 IT 업계로 다시 돌아올 수 있었습니다.",
+        "testimonialAuthor": "Sarah M., 전 인턴"
+      },
+      "economic": {
+        "title": "경제적 영향력",
+        "customerSavings": "고객이 수리된 기기당 평균 CHF {value} 절약",
+        "smeOpenSource": "중소기업이 저렴한 오픈 소스 솔루션의 혜택을 받습니다",
+        "jobs": "스위스에서 {value}개의 의미 있는 일자리",
+        "economicImpact": "경제적 영향",
+        "avgRepairCost": "평균 수리 비용:",
+        "newDevicePrice": "신품 가격(비교 가능):",
+        "savingsPerCustomer": "고객당 절감액:"
+      },
+      "donation": {
+        "title": "저희를 어떻게 지원할 수 있나요",
+        "subtitle": "모든 지원이 중요하며 저희 미션에 직접 기여합니다. 귀하에게 적합한 지원 방식을 선택해 주세요.",
+        "popular": "인기",
+        "impactCalculator": "기부 영향력 계산하기",
+        "impactCalculatorDesc": "기부가 어떤 영향을 미칠 수 있는지 즉시 확인하세요",
+        "laptopRepair": "가족을 위한 노트북 수리",
+        "internshipMonth": "재취업자를 위한 한 달 인턴십 자리",
+        "dataRecovery": "중소기업 고객을 위한 완전한 데이터 복구",
+        "methods": {
+          "monthly": {
+            "name": "월정 기부",
+            "description": "지속 가능한 영향을 위한 정기적 지원",
+            "amount": "월 CHF 20부터",
+            "benefits": [
+              "프로그램의 지속적인 재정 지원",
+              "장기 프로젝트를 위한 계획 가능한 자원",
+              "저희 영향력에 대한 독점 업데이트",
+              "특별 행사 초대"
+            ],
+            "cta": "월정 기부하기"
+          },
+          "oneTime": {
+            "name": "일회성 기부",
+            "description": "특정 프로젝트에 대한 직접적 지원",
+            "amount": "자유롭게 선택",
+            "benefits": [
+              "진행 중인 프로젝트에 즉각적인 영향",
+              "기부 금액의 유연성",
+              "세금 목적의 기부 확인서",
+              "프로젝트 연계 가능성"
+            ],
+            "cta": "지금 기부하기"
+          },
+          "corporate": {
+            "name": "기업 파트너십",
+            "description": "지속 가능한 IT를 위한 전략적 파트너십",
+            "amount": "연간 CHF 5,000부터",
+            "benefits": [
+              "귀사를 위한 지속 가능성 보고서",
+              "지속 가능한 IT에 관한 직원 워크숍",
+              "웹사이트에 로고 게재",
+              "연간 영향력 보고서"
+            ],
+            "cta": "파트너 되기"
+          },
+          "equipment": {
+            "name": "기기 기부",
+            "description": "사용 가능한 IT 기기 기부",
+            "benefits": [
+              "기기의 세금 공제 가능",
+              "전문적인 데이터 삭제 보장",
+              "귀사를 위한 지속 가능성 인증서",
+              "기기 추적을 통한 가시적 영향"
+            ],
+            "cta": "기기 기부하기"
+          }
+        }
+      },
+      "reports": {
+        "title": "투명성 & 보고",
+        "subtitle": "저희는 활동과 영향력에 대해 정기적으로 보고합니다. 모든 문서는 공개적으로 이용 가능합니다.",
+        "annual": {
+          "title": "2023 연간 보고서",
+          "description": "2023년의 모든 주요 수치와 활동이 담긴 완전한 활동 보고서.",
+          "download": "PDF 다운로드"
+        },
+        "impact": {
+          "title": "영향력 보고서",
+          "description": "방법론 설명과 함께 사회적 및 생태적 영향에 대한 상세 분석.",
+          "view": "보고서 보기"
+        },
+        "register": {
+          "title": "투명성 레지스터",
+          "description": "모든 기부와 사용 내역의 공개 레지스터.",
+          "open": "레지스터 열기"
+        }
+      },
+      "ctaDonate": {
+        "title": "함께 더 많은 것을 이루세요",
+        "description": "귀하의 지원이 차이를 만듭니다. 크든 작든 모든 기여가 스위스 IT 환경을 더 지속 가능하게 만들고 사람들에게 새로운 기회를 주는 데 도움이 됩니다.",
+        "donate": "지금 기부하기",
+        "contact": "문의하기"
+      }
+    },
+    "press": {
+      "meta": {
+        "title": "언론 & 미디어",
+        "description": "미디어 보도 및 언론 기사. SRF, Beobachter 등이 저희에 대해 쓴 내용을 확인해 보세요."
+      },
+      "hero": {
+        "title": "언론 & 미디어",
+        "description": "SRF, Beobachter 등이 저희에 대해 보도한 내용. 20년 이상 지속 가능한 IT를 위해 헌신하고 있습니다."
+      },
+      "stats": {
+        "mediaMentions": "미디어 언급",
+        "uniqueSources": "다양한 출처",
+        "partnerships": "파트너십"
+      },
+      "tierLabels": {
+        "1": "국내 미디어",
+        "2": "취리히 시",
+        "3": "조직",
+        "4": "커뮤니티"
+      },
+      "nationalMedia": "국내 미디어",
+      "featuredArticles": "주요 기사",
+      "otherMentions": "기타 언급 & 파트너십",
+      "readArticle": "기사 읽기",
+      "pressContact": {
+        "title": "언론 문의",
+        "description": "저희에 대해 보도하고 싶으신가요? 귀하의 관심에 감사드리며 인터뷰와 배경 취재를 기꺼이 진행합니다.",
+        "contactForm": "문의 양식"
+      }
+    },
+    "finances": {
+      "meta": {
+        "title": "재정 & 투명성",
+        "description": "공개 재정 데이터. 저희가 어떻게 자금을 사용하고 자체 자금 조달 비율이 얼마인지 알아보세요."
+      },
+      "hero": {
+        "title": "재정 & 투명성",
+        "subtitle": "비영리 단체로서 저희는 재정 데이터를 공개합니다. 수입의 출처와 자체 자금 조달 비율을 확인하세요."
+      },
+      "loading": "로딩 중...",
+      "errorMessage": "재정 데이터를 불러올 수 없습니다.",
+      "noData": "재정 데이터를 이용할 수 없습니다.",
+      "metrics": {
+        "totalRevenue": "{year}년 총 수입",
+        "selfFinancing": "자체 자금 조달",
+        "selfFinancingEarned": "자체 창출",
+        "donationsFunding": "기부 & 지원금",
+        "donationsPct": "수입의"
+      },
+      "table": {
+        "title": "출처별 수입",
+        "subtitle": "모든 금액은 CHF로, 회계 데이터(Kivitendo) 기반",
+        "source": "출처",
+        "rows": {
+          "warenverkauf": "상품 판매",
+          "dienstleistungen": "서비스",
+          "integration": "통합 / 프로젝트",
+          "spenden": "기부",
+          "aufstockung": "가이드 가격 보충",
+          "total": "합계",
+          "eigenfinanzierungsquote": "자체 자금 조달 비율"
+        }
+      },
+      "methodology": {
+        "title": "방법론에 대해",
+        "point1": "자체 자금 조달 비율 계산: (상품 판매 + 서비스 + 통합) / 합계 × 100",
+        "point2": "모든 데이터는 Kivitendo 회계에서 나온 것으로 프랑 단위로 정확합니다.",
+        "point3": "2015–2021년에는 연간 집계가 있으며, 2022년부터 월간 데이터입니다."
+      }
+    }
+  },
+  "blog": {
+    "meta": {
+      "title": "블로그",
+      "description": "지속 가능한 기술에 관한 팁, 이야기, 배경 정보."
+    },
+    "hero": {
+      "title": "블로그",
+      "subtitle": "지속 가능한 기술에 관한 팁, 이야기, 모범 사례."
+    },
+    "empty": {
+      "title": "아직 글이 없습니다",
+      "description": "필터를 조정하거나 글을 제출해 보세요!",
+      "submitButton": "글 제출하기"
+    },
+    "sections": {
+      "featured": "추천 글",
+      "latest": "최신 글"
+    },
+    "footerCta": {
+      "title": "지식을 나눠주세요",
+      "description": "지속 가능한 기술에 관한 이야기가 있으신가요? 글을 제출해 주세요.",
+      "button": "글 제출하기"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "문의",
+      "description": "Linux 지원, 워크숍, 오픈 소스 솔루션에 관해 문의해 주세요."
+    },
+    "hero": {
+      "title": "문의",
+      "subtitle": "서비스, 워크숍 또는 Linux 솔루션에 관한 질문이 있으신가요? 기꺼이 도와드리겠습니다!"
+    },
+    "info": {
+      "email": "이메일",
+      "phone": "전화",
+      "address": "주소",
+      "openingHours": "영업 시간"
+    },
+    "map": {
+      "title": "찾아오시는 길",
+      "openGoogleMaps": "Google Maps에서 열기",
+      "openOSM": "OpenStreetMap에서 열기",
+      "warehouseNote": "저희는 {address} {note}에 창고도 있습니다",
+      "warehouseGoogleMaps": "Google Maps에서 창고 보기",
+      "warehouseOSM": "OpenStreetMap에서 창고 보기",
+      "mapChoiceTitle": "왜 두 가지 지도 옵션인가요?",
+      "mapChoiceDescription": "OpenStreetMap은 커뮤니티 기반이고 데이터를 최소화합니다. Google/Apple Maps는 더 나은 내비게이션, 실시간 교통 정보 및 POI를 제공합니다. 귀하에게 가장 적합한 것을 선택하세요 — 투명성과 선택의 자유가 중요합니다."
+    },
+    "form": {
+      "title": "메시지 보내기",
+      "name": "이름",
+      "namePlaceholder": "귀하의 이름",
+      "email": "이메일",
+      "emailPlaceholder": "your@email.com",
+      "subject": "제목",
+      "subjectPlaceholder": "무엇에 관한 것인가요?",
+      "message": "메시지",
+      "messagePlaceholder": "귀하의 메시지...",
+      "submit": "메시지 보내기",
+      "submitting": "전송 중…",
+      "successMessage": "감사합니다! 메시지가 전송되었습니다.",
+      "errorFallback": "전송 오류. 나중에 다시 시도해 주세요."
+    }
+  },
+  "faq": {
+    "meta": {
+      "title": "FAQ — 자주 묻는 질문",
+      "description": "Linux & 오픈 소스, 수리, 지속 가능성, 전자 폐기물에 관한 자주 묻는 질문 답변."
+    },
+    "hero": {
+      "title": "자주 묻는 질문 (FAQ)",
+      "subtitle": "Linux & 오픈 소스, 수리, 지속 가능성, 자원의 공정한 사용에 관한 저희의 답변 — 전자 폐기물에 맞서는 미션의 정신으로."
+    },
+    "notListed": "질문이 없으신가요? 개인적으로 도와드리겠습니다.",
+    "contactTeam": "팀에 문의하기",
+    "groups": [
+      {
+        "category": "철학 & 오픈 소스",
+        "items": [
+          {
+            "q": "오픈 소스 소프트웨어만 사용하나요?",
+            "a": "아닙니다. 오픈 소스는 저희가 선호하는 방식입니다 — 투명성, 보안, 장수성 때문에. 그러나 의미가 있는 경우에는 독점 소프트웨어도 사용하거나 통합합니다. 항상 실용성과 지속 가능성에 초점을 맞춥니다."
+          },
+          {
+            "q": "오픈 소스가 왜 중요한가요?",
+            "a": "오픈 소스는 자기 결정력과 수리 가능성을 강화합니다. 의존성을 줄이고 기기를 더 오래 사용할 수 있게 합니다 — 전자 폐기물에 맞서는 핵심 수단입니다."
+          },
+          {
+            "q": "여러분에게 '수리할 권리'는 무엇을 의미하나요?",
+            "a": "저희는 수리 가능한 하드웨어, 문서화된 프로세스, 이용 가능한 부품을 지지합니다. 이렇게 기기의 수명을 연장하고 자원을 절약합니다."
+          }
+        ]
+      },
+      {
+        "category": "운영 체제 & 소프트웨어",
+        "items": [
+          {
+            "q": "Linux만 사용하나요, 아니면 Windows와 macOS도 사용하나요?",
+            "a": "저희는 Linux와 오픈 소스 소프트웨어만 사용합니다. 독점 운영 체제(Windows/macOS)는 설치하지 않습니다. 오픈 소스 수단으로는 달성할 수 없는 목표가 있을 경우에 한해 드물게 예외를 만듭니다."
+          },
+          {
+            "q": "모든 사람에게 Linux를 권장하나요?",
+            "a": "저희의 기준은 Linux입니다. 자원 효율적이고 안전하며 지속 가능하기 때문입니다. 독점 도구가 반드시 필요한 경우 대안을 평가하고 드문 예외를 투명하게 논의합니다."
+          },
+          {
+            "q": "Linux 또는 오픈 소스 대안으로의 마이그레이션을 지원하나요?",
+            "a": "네. 파일럿 프로젝트부터 롤아웃까지 개인, 단체, 기업을 지원합니다 — 교육 및 지원 포함.",
+            "link": {
+              "href": "/services/linux-open-source",
+              "label": "Linux & 오픈 소스"
+            }
+          }
+        ]
+      },
+      {
+        "category": "수리 & 서비스",
+        "items": [
+          {
+            "q": "저희에게서 구매하지 않은 기기도 수리하나요?",
+            "a": "네. 다양한 제조사의 노트북, PC, 주변기기를 수리합니다 — 구매처와 상관없이."
+          },
+          {
+            "q": "Apple 기기도 수리하나요?",
+            "a": "하드웨어는 가능합니다 — 부품을 구할 수 있고 수리가 의미 있는 경우에 한해. 운영 체제 설치는 Linux만 가능합니다. macOS나 Windows는 설치하지 않습니다."
+          },
+          {
+            "q": "수리 기간은 얼마나 걸리고 비용은 얼마인가요?",
+            "a": "오류 상태와 부품에 따라 다릅니다. 요청 시 견적을 제공하고 옵션에 대해 투명하게 안내합니다."
+          },
+          {
+            "q": "데이터 복구 및 안전한 데이터 삭제 서비스를 제공하나요?",
+            "a": "네. 최선을 다해 데이터를 복구하고 요청 시 표준(예: 오픈 소스 도구 사용)에 따라 저장 장치를 안전하게 삭제합니다.",
+            "link": {
+              "href": "/services/data-recovery-transfer",
+              "label": "데이터 복구 & 전송"
+            }
+          },
+          {
+            "q": "예약 없이 방문할 수 있나요?",
+            "a": "물론입니다. 복잡한 경우나 비즈니스 약속의 경우 사전에 간단히 연락해 주시면 좋습니다.",
+            "link": {
+              "href": "/contact",
+              "label": "연락처 & 영업 시간"
+            }
+          }
+        ]
+      },
+      {
+        "category": "지속 가능성 & 전자 폐기물",
+        "items": [
+          {
+            "q": "전자 폐기물을 어떻게 구체적으로 줄이나요?",
+            "a": "수리, 부품 재사용, 리퍼비시, 전문적인 재활용을 통해. 또한 장수 설정과 자원 절약 소프트웨어에 대해 컨설팅합니다."
+          },
+          {
+            "q": "오래된 기기를 받나요?",
+            "a": "네, 재사용이나 전문적인 재활용이 가능한 경우에. 현장에서 기기를 검사하고 재사용 또는 해체에 대해 투명하게 결정합니다."
+          },
+          {
+            "q": "중고 부품을 사용하나요?",
+            "a": "기술적으로 의미가 있는 경우 검증된 세컨드 라이프 부품을 사용합니다. 자원을 절약하고 비용을 줄일 수 있습니다 — 동일한 기능으로."
+          },
+          {
+            "q": "신품 대신 리퍼비시를 사용하는 이유는?",
+            "a": "리퍼비시 기기는 사용 기간을 연장하고 CO₂와 원자재를 절약합니다. 적절한 업그레이드로 대부분의 경우 충분한 성능을 발휘합니다 — 합리적인 가격으로."
+          }
+        ]
+      },
+      {
+        "category": "제품 & 보증",
+        "items": [
+          {
+            "q": "리퍼비시 기기를 보유하고 있나요?",
+            "a": "네. 보증과 함께 신중하게 검사하고 재정비된 기기를 제공합니다 — 투명하게 문서화됩니다.",
+            "link": {
+              "href": "/shop",
+              "label": "쇼핑몰로 이동"
+            }
+          },
+          {
+            "q": "REVAMPED 인증이란 무엇인가요?",
+            "a": "REVAMPED는 문서화된 출처, 명확한 업그레이드 경로, 품질 보증이 있는 지속 가능하고 수리 가능한 빌드를 표시합니다.",
+            "link": {
+              "href": "/revamped",
+              "label": "REVAMPED에 대해 더 알아보기"
+            }
+          },
+          {
+            "q": "기기에 보증이 있나요?",
+            "a": "네. 재정비된 기기에는 보증이 제공됩니다. 세부 사항은 제품별로 투명하게 안내합니다."
+          }
+        ]
+      },
+      {
+        "category": "데이터 & 개인정보",
+        "items": [
+          {
+            "q": "수리 시 내 데이터를 어떻게 처리하나요?",
+            "a": "기밀로 최소한으로. 진단에 필요한 경우에만 접근하며 저장 장치를 기술적으로나 조직적으로 보호합니다."
+          },
+          {
+            "q": "인증된 데이터 삭제 서비스를 제공하나요?",
+            "a": "기록이 있는 안전한 삭제 절차를 제공합니다. 필요한 보안 수준에 대해 문의해 주세요."
+          }
+        ]
+      },
+      {
+        "category": "워크숍 & 참여",
+        "items": [
+          {
+            "q": "워크숍이나 교육을 제공하나요?",
+            "a": "네. 주제: Linux 입문, 수리 기초, 지속 가능한 IT, 오픈 소스 도구 — 입문자부터 고급자까지.",
+            "link": {
+              "href": "/workshops",
+              "label": "현재 워크숍"
+            }
+          },
+          {
+            "q": "어떻게 참여하거나 지원할 수 있나요?",
+            "a": "자원봉사자, 파트너, 후원자로. 지식을 나누는 것도 환영합니다 — 함께 영향력을 만들어 갑니다.",
+            "link": {
+              "href": "/get-involved",
+              "label": "참여하기"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "getInvolved": {
+    "meta": {
+      "title": "참여하기",
+      "description": "전자 폐기물을 줄이고 기술을 모두에게 접근 가능하게 만드는 저희 미션에 동참하세요. 자원봉사자, 인턴 또는 파트너가 되세요."
+    },
+    "page": {
+      "getStarted": "시작하기",
+      "learnMore": "더 알아보기",
+      "waysTitle": "참여 방법",
+      "testimonialTitle": "커뮤니티가 말하는 것",
+      "partnersTitle": "파트너 단체",
+      "ctaTitle": "변화를 만들 준비가 되셨나요?",
+      "ctaDescription": "변화를 만드는 커뮤니티에 동참하여 기술을 통해 더 지속 가능한 미래를 만드는 데 도움을 주세요.",
+      "discoverWorkshops": "워크숍 탐색"
+    },
+    "coreValues": {
+      "sustainability": {
+        "title": "지속 가능성",
+        "description": "책임감 있는 기술 사용과 폐기물 감소를 통해 지속 가능한 미래를 만드는 것을 믿습니다."
+      },
+      "community": {
+        "title": "커뮤니티",
+        "description": "기술 교육과 포용적 참여를 통해 강한 커뮤니티를 구축합니다."
+      },
+      "innovation": {
+        "title": "혁신",
+        "description": "기술을 접근 가능하고 환경 친화적으로 만들기 위한 창의적인 솔루션을 찾습니다."
+      },
+      "globalImpact": {
+        "title": "글로벌 영향",
+        "description": "기술을 통해 지역 및 글로벌 커뮤니티에서 차이를 만듭니다."
+      }
+    },
+    "volunteer": {
+      "meta": {
+        "title": "자원봉사",
+        "description": "열정적인 자원봉사자 팀에 합류하여 기술과 지속 가능성을 통해 커뮤니티에서 변화를 만드세요."
+      },
+      "title": "자원봉사자 되기",
+      "description": "열정적인 자원봉사자 팀에 합류하여 기술을 지속 가능하고 모두에게 접근 가능하게 만드는 데 도움을 주세요.",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "자원봉사의 이점",
+      "flexibilityNote": "저희는 모든 사람이 다른 일정을 가지고 있다는 것을 이해합니다. 다른 약속에 맞게 조정할 수 있는 유연한 자원봉사 기회를 제공합니다. 일주일에 몇 시간이든 더 많이든 — 귀하의 기여는 차이를 만들 것입니다.",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "steps": [
+        "저희에게 연락하여 관심을 표명하세요",
+        "저희 팀과 만나 기술과 관심사를 논의하세요",
+        "짧은 오리엔테이션 세션에 참여하세요",
+        "차이를 만들기 시작하세요!"
+      ]
+    },
+    "donate": {
+      "meta": {
+        "title": "기부",
+        "description": "직접 도와주세요. 모든 기부가 기기를 전자 폐기물에서 구하고 기술을 모두에게 접근 가능하게 만듭니다."
+      },
+      "heroTitle": "직접 도와주세요.",
+      "heroDescription": "모든 기부가 기기를 전자 폐기물에서 구하고 수명 주기를 연장하며 스스로 감당할 수 없는 사람들에게 기술을 가능하게 합니다.",
+      "transferNow": "지금 이체하기",
+      "transparencyLabel": "투명성",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "연간 예산 (비영리 단체)",
+      "devicesSavedLabel": "연간 구조된 기기",
+      "co2SavedLabel": "연간 절감",
+      "impactTitle": "귀하의 기부가 하는 일",
+      "recommended": "추천",
+      "chooseAmount": "금액을 선택하고 이체하기",
+      "bankTransferTitle": "계좌 이체",
+      "bankTransferDescription": "다음 계좌로 이체해 주세요:",
+      "recipient": "수취인",
+      "iban": "IBAN",
+      "bank": "은행",
+      "purpose": "이체 목적",
+      "copy": "복사",
+      "copyIban": "IBAN 복사",
+      "donateDevicesTitle": "기기 기부하기",
+      "donateDevicesDescription": "더 이상 필요 없는 하드웨어가 다른 사람에게 진정한 기회를 줄 수 있습니다. 저희는 작동하거나 수리 가능한 기기를 받아 재정비하고 전달합니다.",
+      "weAccept": "받는 것:",
+      "weAcceptList": "노트북, 데스크탑 PC, 모니터, 키보드, 마우스, 프린터 — 작동 중이거나 수리 가능한 것.",
+      "weDoNotAccept": "받지 않는 것:",
+      "weDoNotAcceptList": "물리적 손상이 있는 기기, 프레임 없이 파손된 화면, CRT 모니터.",
+      "preparation": "준비:",
+      "preparationText": "반납 전 개인 데이터를 삭제해 주세요 (필요한 경우 도와드립니다).",
+      "dropOffAddress": "반납 주소",
+      "questions": "질문이 있으신가요? 저희에게 연락해 주세요 →",
+      "newsletterTitle": "기부가 어떤 효과를 내는지 알려드립니다.",
+      "newsletterDescription": "광고 없음. 구조된 기기, 절감된 CO₂, 지원받은 사람들에 대한 진짜 업데이트만.",
+      "purposeTemplate": "기부 {org} {month} {year}",
+      "months": [
+        "1월",
+        "2월",
+        "3월",
+        "4월",
+        "5월",
+        "6월",
+        "7월",
+        "8월",
+        "9월",
+        "10월",
+        "11월",
+        "12월"
+      ],
+      "impact": {
+        "tier1Title": "기기 1대 구조",
+        "tier1Description": "전자 폐기물에서 노트북 1대 구조 + CO₂ 285kg 방지.",
+        "tier2Title": "기기 2대 + 워크숍 자리",
+        "tier2Description": "기기 2대 재정비 + 감당할 수 없는 사람을 위한 Linux 워크숍 자리 한 개.",
+        "tier3Title": "기업 기부 — 기기 10대",
+        "tier3Description": "교육 기관, 사회 프로젝트 또는 저소득 가정을 위한 기기 10대."
+      },
+      "devices": {
+        "laptop": "노트북",
+        "desktop": "데스크탑 PC",
+        "monitor": "모니터",
+        "peripherals": "주변기기"
+      }
+    },
+    "partnerships": {
+      "meta": {
+        "title": "파트너십",
+        "description": "지속 가능한 기술 솔루션을 만들고 지속적인 영향을 미치기 위해 협력해 주세요."
+      },
+      "title": "파트너십 기회",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "파트너십의 이점",
+      "processTitle": "협력 방식",
+      "processSteps": [
+        "목표와 기회 이해를 위한 첫 상담",
+        "파트너십 프레임워크 및 목표 개발",
+        "협력 이니셔티브 실행",
+        "정기적인 진행 검토 및 영향력 평가",
+        "지속적인 개선 및 파트너십 확장"
+      ],
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "파트너십 기회를 논의하기 위해 저희에게 연락하세요",
+        "귀 단체의 목표와 관심사를 공유하세요",
+        "잠재적 협력 분야를 탐색하세요",
+        "파트너십 계약을 개발하세요",
+        "파트너십 여정을 시작하세요"
+      ]
+    },
+    "internships": {
+      "meta": {
+        "title": "인턴십",
+        "description": "저희 인턴십 프로그램을 통해 기술과 지속 가능성 분야에서 실무 경험을 쌓으세요."
+      },
+      "title": "인턴십 기회",
+      "description": "기술과 지속 가능성 분야에서 귀중한 경험을 쌓고 진정한 변화를 만드세요.",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "프로그램 혜택",
+      "howToApplyTitle": "어떻게 지원할 수 있나요",
+      "howToApplySteps": [
+        "이력서와 자기소개서를 보내주세요",
+        "관심 분야와 가능 시간을 알려주세요",
+        "짧은 면담을 진행하세요",
+        "인턴십 여정을 시작하세요!"
+      ]
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "기술 전문가",
+        "description": "기술 전문 지식을 공유하고 지속 가능한 기술을 위한 혁신적인 솔루션을 개발하는 데 도움을 주세요."
+      },
+      "title": "기술 전문가",
+      "description": "전문 지식을 공유하고 지속 가능한 기술을 위한 혁신적인 솔루션을 개발하는 데 도움을 주세요.",
+      "ctaText": "관심 표명하기",
+      "opportunitiesTitle": "기술 전문가를 위한 기회",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "전문 분야와 관심사를 저희에게 알려주세요",
+        "가능한 프로젝트와 기여를 논의하세요",
+        "저희의 개발 지침과 프로세스를 검토하세요",
+        "저희 프로젝트에 기여를 시작하세요"
+      ]
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT 지원 기술자",
+        "description": "IT 지식을 공유하고 커뮤니티의 사람들을 도와주세요 — 유연하게, 사전 지식 없이, 진정한 영향력으로."
+      },
+      "title": "IT 지원 기술자 되기",
+      "description": "귀하의 IT 지식이 다른 사람들의 삶을 더 쉽게 만들 수 있습니다. 커뮤니티 사람들의 컴퓨터를 도와주세요 — 유연하게, 간단하게, 영향력 있게.",
+      "ctaText": "기술자로 등록하기",
+      "benefitsTitle": "무엇을 얻을 수 있나요",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "기술과 가능 시간을 포함한 기술자 프로필을 만드세요",
+        "요청을 기다리세요 — 어떤 것을 수락할지 귀하가 결정합니다",
+        "요청자와 직접 약속을 잡으세요",
+        "돕고, 배우고, 차이를 만드세요"
+      ]
+    },
+    "workReintegration": {
+      "meta": {
+        "title": "직업 복귀",
+        "description": "직업 복귀 프로그램에 참여하여 기술 분야에서 귀중한 기술과 경험을 쌓으면서 커리어를 다시 구축하세요."
+      },
+      "title": "직업 복귀 프로그램",
+      "description": "지원 프로그램에 참여하여 기술 및 지속 가능성 분야에서 커리어를 다시 구축하세요.",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "프로그램 혜택",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "상황을 논의하기 위해 저희에게 연락하세요",
+        "저희 팀과 만나 평가를 받으세요",
+        "개인화된 계획을 개발하세요",
+        "직업 복귀 여정을 시작하세요"
+      ]
+    },
+    "kontakt": {
+      "meta": {
+        "title": "관심 표명하기",
+        "description": "관심 있는 내용을 간단히 알려주세요 — 저희가 연락드리겠습니다."
+      },
+      "backToInvolvement": "모든 참여 방법",
+      "title": "{topic}에 관한 관심",
+      "description": "귀하가 누구인지, 무엇에 관심이 있는지 간단히 알려주세요. 저희가 개인적으로 연락드리겠습니다.",
+      "topics": {
+        "freiwilligenarbeit": "자원봉사",
+        "praktikum": "인턴십",
+        "wiedereinstieg": "직업 복귀",
+        "technische-experten": "기술 전문가",
+        "partnerschaft": "파트너십",
+        "it-hilfe-techniker": "IT 지원 기술자",
+        "default": "참여하기"
+      }
+    }
+  },
+  "home": {
+    "meta": {
+      "title": "오래된 하드웨어. 새로운 삶. | 스위스 컴퓨터 수리 & Linux",
+      "description": "중고 IT 구매 & 판매. 커뮤니티 컴퓨터 수리. Linux, 하드웨어, 프로그래밍 워크숍."
+    },
+    "hero": {
+      "title": "오래된 하드웨어. 새로운 삶.",
+      "subtitle": "매년 6,200만 톤의 전자 폐기물이 버려집니다. 저희는 수리하고, 나누고, 서로에게서 배우는 커뮤니티와 함께 이를 바꾸고 있습니다.",
+      "ctaDiscover": "지금 둘러보기",
+      "ctaAbout": "소개"
+    },
+    "actions": {
+      "heading": "무엇을 하시겠어요?",
+      "sell": {
+        "title": "오래된 기기가 있으신가요?",
+        "subtitle": "2분 안에 판매하거나 나눠드리세요 — 무료, 수수료 없음.",
+        "primaryLabel": "마켓플레이스 둘러보기",
+        "secondaryLabel": "지금 판매하기"
+      },
+      "repair": {
+        "title": "컴퓨터가 고장났나요?",
+        "subtitle": "가까운 기술자가 도움을 드립니다 — 또는 직접 수리를 제공해 보세요.",
+        "primaryLabel": "도움 찾기",
+        "secondaryLabel": "기술자 되기"
+      },
+      "learn": {
+        "title": "새로운 것을 배우고 싶으신가요?",
+        "subtitle": "Linux, 하드웨어 수리, 프로그래밍, AI에 관한 실습 워크숍.",
+        "primaryLabel": "워크숍 보기",
+        "secondaryLabel": "노하우 탐색"
+      }
+    },
+    "proServices": {
+      "text": "저희는 전문 {link}도 제공합니다: 컴퓨터 수리, 데이터 복구, Linux 설치, 웹 개발.",
+      "linkLabel": "IT 서비스"
+    },
+    "impact": {
+      "title": "우리의 영향력",
+      "subtitle": "함께 달성한 것들",
+      "moreLink": "영향력에 대해 더 알아보기"
+    },
+    "community": {
+      "heading": "커뮤니티의 일원이 되세요",
+      "subtitle": "이용하든, 돕든, 지원하든 — 모든 기여가 중요합니다.",
+      "use": {
+        "title": "이용하기",
+        "desc": "구매, 판매, 수리 — 무료"
+      },
+      "volunteer": {
+        "title": "자원봉사",
+        "desc": "자원봉사 기술자로 지식을 나눠주세요"
+      },
+      "donate": {
+        "title": "지원하기",
+        "desc": "단체를 위해 기기나 자금을 기부하세요"
+      },
+      "membership": {
+        "title": "회원 가입",
+        "desc": "투표하고 단체 운영에 적극 참여하세요"
+      }
+    },
+    "newsletter": {
+      "title": "최신 소식 받기",
+      "subtitle": "기술을 지속 가능하게 만드는 방법을 알아보세요. 스팸 없이, 중요한 내용만.",
+      "namePlaceholder": "이름 (선택)",
+      "emailPlaceholder": "이메일 주소",
+      "submit": "구독",
+      "submitting": "구독 중...",
+      "successMessage": "감사합니다! 뉴스레터를 활성화하려면 이메일을 확인해 주세요.",
+      "networkError": "네트워크 오류입니다. 나중에 다시 시도해 주세요."
+    },
+    "stats": {
+      "users": "사용자",
+      "listings": "판매 목록",
+      "repairs": "수리",
+      "workshops": "워크숍"
+    }
+  },
+  "itHelp": {
+    "meta": {
+      "title": "IT 지원 — 무료 커뮤니티 수리",
+      "description": "개인 및 비영리 단체를 위한 무료 IT 지원. 커뮤니티 기술자가 컴퓨터, 노트북, Wi-Fi 등을 도와드립니다."
+    },
+    "page": {
+      "title": "IT 지원",
+      "requestCount": "{count, plural, other {# 건의}} 요청",
+      "tagline": "커뮤니티 기반 기술 수리",
+      "getHelp": "도움 받기",
+      "findTechnician": "기술자 찾기",
+      "becomeTechnician": "기술자 되기",
+      "myRequests": "내 요청",
+      "myOffers": "내 제안",
+      "searchPlaceholder": "노트북 고장, Wi-Fi 문제, 프린터...",
+      "searchAriaLabel": "IT 지원 요청 검색",
+      "searchButton": "검색",
+      "sortLabel": "정렬",
+      "filterButton": "필터",
+      "resetFilters": "필터 초기화",
+      "activeFiltersIndicator": "활성 필터",
+      "filterCategory": "기기 카테고리",
+      "filterCategoryAll": "모든 카테고리",
+      "filterCanton": "주(칸톤)",
+      "filterCantonAll": "모든 주",
+      "filterUrgency": "긴급도",
+      "filterUrgencyAll": "전체",
+      "filterBudget": "예산",
+      "filterBudgetAll": "전체",
+      "filterBudgetFree": "무료 / 커뮤니티",
+      "filterBudgetPaid": "예산 있음",
+      "pagination": "페이지 내비게이션",
+      "prevPage": "이전 페이지",
+      "nextPage": "다음 페이지",
+      "pageOf": "{current} / {total} 페이지",
+      "ctaTitle": "기기를 수리할 수 있나요?",
+      "ctaDescription": "기술자로 등록하고 가까운 사람들을 도와주세요. 무료 또는 유료 — 귀하가 결정합니다.",
+      "ctaCreateProfile": "기술자 프로필 만들기",
+      "ctaMoreInfo": "IT 지원에 대해 더 알아보기 →",
+      "retryButton": "다시 시도"
+    },
+    "detail": {
+      "backToList": "목록으로 돌아가기",
+      "error": "오류",
+      "requestNotFound": "요청을 찾을 수 없습니다",
+      "expiredBanner": "이 요청은 {date}에 만료되어 더 이상 새 제안을 받지 않습니다.",
+      "completedAt": "{date}에 완료됨",
+      "reviewSubmittedTitle": "리뷰가 제출되었습니다!",
+      "reviewSubmittedMessage": "피드백 감사합니다."
+    },
+    "create": {
+      "backToList": "목록으로 돌아가기",
+      "title": "수리 요청 만들기",
+      "description": "기기를 선택하고 문제를 설명하세요. 커뮤니티가 도와드립니다.",
+      "createdTitle": "요청이 생성되었습니다!",
+      "createdRedirect": "잠시 후 이동합니다...",
+      "sectionDevice": "무엇을 수리하고 싶으신가요?",
+      "sectionBudget": "예산",
+      "budgetDescription": "최대 얼마를 지불할 의향이 있으신가요? 무료 커뮤니티 도움을 원하시면 비워 두세요.",
+      "budgetFree": "커뮤니티 도움 (무료)",
+      "budgetUpTo": "CHF {amount}까지",
+      "budgetPlaceholder": "0 = 무료",
+      "sectionOptions": "옵션",
+      "serviceTypeLabel": "수리를 어떻게 받으시겠어요?",
+      "urgencyLabel": "얼마나 긴급한가요?",
+      "cancelButton": "취소",
+      "submitButton": "요청 만들기",
+      "submittingButton": "생성 중...",
+      "aiPlaceholder": "예: 2019년형 MacBook Pro가 시작되지 않아요, 켜면 화면이 검게 유지됩니다..."
+    },
+    "myRequests": {
+      "title": "내 수리 요청",
+      "description": "요청을 관리하고 받은 제안 보기",
+      "myOffersButton": "내 제안",
+      "newRequest": "새 요청",
+      "filterAll": "전체 ({total})",
+      "fetchError": "요청을 불러올 수 없습니다. 페이지를 새로고침해 주세요.",
+      "emptyNoFilter": "아직 요청이 없습니다",
+      "emptyFiltered": "이 상태의 요청이 없습니다",
+      "emptyNoFilterMessage": "첫 수리 요청을 만들고 커뮤니티의 도움을 받으세요.",
+      "emptyFilteredMessage": "다른 필터를 사용해 보세요.",
+      "createRequest": "요청 만들기",
+      "offerCount": "{count, plural, other {# 건의}} 제안"
+    },
+    "myOffers": {
+      "title": "내 제안",
+      "description": "수리 요청에 제출한 제안",
+      "myRequestsButton": "내 요청",
+      "browseRequests": "요청 찾아보기",
+      "filterAll": "전체 ({total})",
+      "errorMessage": "제안을 불러올 수 없습니다",
+      "errorRetry": "제안을 불러올 수 없습니다. 페이지를 새로고침해 주세요.",
+      "emptyNoFilter": "아직 제안이 없습니다",
+      "emptyFiltered": "이 상태의 제안이 없습니다",
+      "emptyNoFilterMessage": "수리 요청을 찾아보고 다른 커뮤니티 멤버를 도와주세요.",
+      "emptyFilteredMessage": "다른 필터를 사용해 보세요.",
+      "offerLabel": "제안:",
+      "requestLabel": "요청:",
+      "yourOffer": "귀하의 제안:",
+      "requestedBy": "{name}님이 요청",
+      "withdrawConfirm": "정말로 제안을 철회하시겠어요?",
+      "withdrawButton": "제안 철회",
+      "withdrawingButton": "철회 중...",
+      "withdrawError": "철회 중 오류 발생"
+    },
+    "loading": "IT 지원 로딩 중...",
+    "error": {
+      "title": "문제가 발생했습니다",
+      "message": "IT 지원을 불러오는 중 오류가 발생했습니다.",
+      "retry": "다시 시도",
+      "backToList": "목록으로 돌아가기"
+    }
+  },
+  "knowhow": {
+    "meta": {
+      "title": "노하우 - 가이드, 블로그, 워크숍 | revamp-it",
+      "description": "빈티지 하드웨어, Linux, 오픈 소스에 대해 배우세요. 가이드, 워크숍, 블로그 및 큐레이션된 리소스."
+    },
+    "hero": {
+      "title": "빈티지 하드웨어, Linux, 오픈 소스에 관한 노하우 나누기",
+      "subtitle": "저희의 16년 이상의 노하우를 공유하여 귀하가 기술을 더 잘 이해하고 활용할 수 있도록 합니다. 막 시작하든 이미 전문가이든 — 여기서 학습 여정을 위한 리소스를 찾을 수 있습니다."
+    },
+    "sections": {
+      "guides": {
+        "title": "가이드",
+        "description": "Linux, 빈티지 하드웨어, 오픈 소스를 위한 단계별 안내",
+        "cta": "가이드 보기"
+      },
+      "blog": {
+        "title": "블로그",
+        "description": "전문가가 제공하는 팁, 이야기, 모범 사례",
+        "cta": "블로그 보기"
+      },
+      "workshops": {
+        "title": "워크숍",
+        "description": "초보자부터 전문가까지 예약 가능한 실시간 강좌 및 교육",
+        "cta": "워크숍 보기"
+      },
+      "resources": {
+        "title": "리소스",
+        "description": "큐레이션된 외부 링크 및 오픈 소스 대안",
+        "cta": "리소스 탐색"
+      }
+    },
+    "curatedResources": "큐레이션된 리소스",
+    "openSourceSoftware": "오픈 소스 소프트웨어 대안",
+    "linuxDistros": "Linux 배포판",
+    "externalDocs": "외부 문서 & 포털",
+    "cta": {
+      "title": "배울 준비가 되셨나요?",
+      "description": "블로그로 시작하거나, 워크숍에 참가하거나, 가이드를 확인해 보세요.",
+      "button": "질문이 있으신가요? 문의해 주세요"
+    }
+  },
+  "marketplace": {
+    "meta": {
+      "title": "마켓플레이스 — 중고 IT 구매 & 판매",
+      "description": "중고 IT를 위한 커뮤니티 마켓플레이스. 직접 구매하고 판매하세요."
+    },
+    "title": "마켓플레이스",
+    "subtitle": "중고 IT 구매 & 판매",
+    "sell": {
+      "loginRequired": "로그인 필요",
+      "loginRequiredDesc": "판매 목록을 만들려면 로그인하세요.",
+      "login": "로그인",
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "editTitle": "판매 목록 편집",
+      "createTitle": "판매 목록 만들기",
+      "editSubtitle": "판매 목록의 변경사항을 저장하세요.",
+      "createSubtitle": "제품을 설명하거나 사진을 찍으세요 — AI가 나머지를 채워드립니다.",
+      "cameraButton": "사진 찍기 — AI가 제품을 인식합니다",
+      "cancelButton": "취소",
+      "previewPublish": "미리보기 & 게시",
+      "previewSave": "미리보기 & 저장",
+      "maxImagesError": "최대 {max}장의 이미지 허용",
+      "uploadError": "업로드 오류",
+      "uploadImagesError": "이미지 업로드 오류",
+      "loadListingError": "판매 목록을 불러올 수 없습니다",
+      "ownListingError": "자신의 판매 목록만 편집할 수 있습니다",
+      "loadError": "판매 목록 로딩 오류",
+      "saveSuccess": "변경사항이 성공적으로 저장되었습니다!",
+      "createSuccess": "판매 목록이 성공적으로 만들어졌습니다!",
+      "saveError": "저장 오류",
+      "createError": "생성 오류",
+      "unexpectedError": "예기치 않은 오류가 발생했습니다"
+    },
+    "listingsAvailable": "{count, plural, other {# 개의}} 판매 목록 이용 가능",
+    "searchPlaceholder": "노트북, 모니터, 스마트폰...",
+    "searchAriaLabel": "마켓플레이스 검색",
+    "searchButton": "검색",
+    "sellerTypes": {
+      "all": "전체",
+      "revampit": "{orgName} 기기",
+      "community": "커뮤니티 판매 목록"
+    },
+    "categories": {
+      "all": "전체"
+    },
+    "filters": {
+      "label": "필터",
+      "all": "전체",
+      "computers": "컴퓨터",
+      "laptops": "노트북",
+      "parts": "부품",
+      "accessories": "액세서리",
+      "clearFilters": "필터 초기화",
+      "sort": "정렬",
+      "condition": "상태",
+      "allConditions": "모든 상태",
+      "delivery": "배송",
+      "allDelivery": "모든 옵션",
+      "payment": "결제",
+      "allPayment": "전체",
+      "priceRange": "가격 범위 (CHF)",
+      "priceMin": "최소",
+      "priceMax": "최대",
+      "priceMinAriaLabel": "CHF 최소 가격",
+      "priceMaxAriaLabel": "CHF 최대 가격",
+      "activeFilters": "활성 필터",
+      "gratisOnly": "무료만",
+      "verifiedOnly": "검증된 기기만",
+      "technicalFilters": "기술 필터",
+      "sellerTypeAriaLabel": "판매자 유형",
+      "categoryAriaLabel": "카테고리 필터"
+    },
+    "listing": {
+      "contact": "판매자 연락하기",
+      "report": "신고",
+      "share": "공유",
+      "condition": "상태",
+      "postedAt": "등록일",
+      "views": "조회수",
+      "views_count": "{count}회 조회",
+      "brand": "브랜드",
+      "model": "모델",
+      "delivery": "배송",
+      "shippingCost": "배송비",
+      "payment": "결제",
+      "location": "위치",
+      "description": "설명",
+      "technicalData": "기술 사양",
+      "verifiedOn": "{date}에 검증됨",
+      "seller": "판매자",
+      "sold": "{count}개 판매됨",
+      "similarListings": "유사한 판매 목록",
+      "loading": "판매 목록 로딩 중...",
+      "notFound": "판매 목록을 찾을 수 없습니다",
+      "backToMarketplace": "마켓플레이스로 돌아가기"
+    },
+    "listing_actions": {
+      "payment_info": "구매자와 판매자 간 직접 결제",
+      "payment_methods": "TWINT · 계좌 이체 · 현장 수령 현금",
+      "messageSent": "메시지가 전송되었습니다!",
+      "goToMessages": "메시지로 이동",
+      "messagePlaceholder": "안녕하세요 {sellerName}, 이 판매 목록에 관심이 있습니다...",
+      "sendMessage": "보내기",
+      "cancel": "취소",
+      "contactSeller": "메시지 보내기",
+      "save": "저장",
+      "share": "공유",
+      "copied": "복사됨!",
+      "edit": "편집",
+      "report": "신고"
+    },
+    "empty": "판매 목록을 찾을 수 없습니다",
+    "conditions": {
+      "new": "새 것",
+      "likeNew": "거의 새 것",
+      "good": "양호",
+      "fair": "보통",
+      "forParts": "부품용"
+    },
+    "conditionExplainer": "{category}에서 \"{condition}\"이 의미하는 것은?",
+    "pagination": {
+      "previousPage": "이전 페이지",
+      "nextPage": "다음 페이지",
+      "pageOf": "{current} / {total} 페이지",
+      "navigation": "페이지 내비게이션"
+    },
+    "signInCta": {
+      "title": "구매 또는 판매하려면 로그인하세요",
+      "description": "판매 목록을 등록하거나 판매자에게 연락하려면 계정을 만드세요.",
+      "login": "로그인",
+      "register": "회원가입",
+      "firstListing": "첫 판매 목록 만들기"
+    },
+    "empty_states": {
+      "noListings": "판매 목록을 찾을 수 없습니다",
+      "noListingsEmpty": "아직 판매 목록이 없습니다. 첫 번째를 만드세요!",
+      "noListingsFiltered": "다른 필터를 사용하거나 초기화해 보세요."
+    },
+    "error_states": {
+      "loadFailed": "판매 목록을 불러오지 못했습니다",
+      "tryAgain": "다시 시도"
+    },
+    "report_modal": {
+      "title": "판매 목록 신고",
+      "sent": "신고가 전송되었습니다",
+      "sentThanks": "도움 주셔서 감사합니다.",
+      "detailsPlaceholder": "추가 세부 정보 (선택)",
+      "submit": "신고하기"
+    },
+    "checkout": {
+      "title": "안전한 결제",
+      "backToListing": "판매 목록으로 돌아가기",
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "loading": "로딩 중...",
+      "ownListing": "내 판매 목록",
+      "ownListingDesc": "자신의 판매 목록은 구매할 수 없습니다.",
+      "backToListingLink": "판매 목록으로 돌아가기",
+      "chooseDelivery": "배송 방법 선택",
+      "pickup": "직접 수령",
+      "shipping": "배송",
+      "shippingNationwide": "스위스 전역",
+      "free": "무료",
+      "shippingAddress": "배송 주소",
+      "name": "이름",
+      "street": "거리",
+      "postalCode": "우편번호",
+      "postalCodeInvalid": "우편번호는 4자리여야 합니다",
+      "city": "도시",
+      "redirecting": "결제로 이동 중...",
+      "proceed": "결제로 진행",
+      "orderSummary": "주문 요약",
+      "seller": "판매자",
+      "itemPrice": "상품 가격",
+      "shippingCost": "배송비",
+      "pickupFree": "직접 수령",
+      "serviceFee": "서비스 수수료 ({rate}%)",
+      "serviceFeeIncluded": "{amount} 포함",
+      "total": "합계",
+      "buyerProtection": "구매자 보호 — 수령 확인 후에만 결제 금액이 해제됩니다",
+      "networkError": "주문 생성 중 네트워크 오류",
+      "orderError": "주문을 생성할 수 없습니다"
+    },
+    "checkout_success": {
+      "title": "주문 완료!",
+      "description": "결제가 승인되었습니다. 수령을 확인할 때까지 금액이 해제되지 않습니다.",
+      "itemImageAlt": "상품 이미지",
+      "status": "상태",
+      "viewOrder": "주문 보기",
+      "continueShopping": "계속 쇼핑하기"
+    }
+  },
+  "membership": {
+    "meta": {
+      "title": "회원 가입",
+      "description": "회원이 되세요. 단체 결정에 투표권, 공식 구성원이 됩니다.",
+      "ogTitle": "회원 가입",
+      "ogDescription": "회원이 되세요 — 투표권, 공동 책임."
+    },
+    "hero": {
+      "title": "회원 가입",
+      "description": "법적으로, 재정적으로, 민주적으로 단체를 지지하세요. 양식을 작성하고, 회비를 납부하면 됩니다."
+    },
+    "benefits": {
+      "votingTitle": "단체 결정에 투표권",
+      "votingDescription": "자동으로 투표에 초대되어 단체의 방향을 결정하는 데 참여할 수 있습니다.",
+      "officialTitle": "공식 회원 명단",
+      "officialDescription": "스위스 단체법(ZGB 제60조 이하)에 따라 법적으로 단체의 구성원이 됩니다.",
+      "financialTitle": "재정 지원",
+      "financialDescription": "연간 회비는 외부 자금 제공자에 독립적으로 단체를 지속 가능하게 운영하는 데 도움이 됩니다."
+    },
+    "form": {
+      "title": "지금 가입하기",
+      "subtitle": "즉시 회원 가입 — 기다림 없이"
+    },
+    "alreadyMember": {
+      "title": "이미 회원이십니다",
+      "description": "지원해 주셔서 감사합니다.",
+      "memberSince": "{date}부터 회원",
+      "dashboardButton": "대시보드로 이동"
+    },
+    "faq": {
+      "title": "자주 묻는 질문",
+      "items": [
+        {
+          "question": "사용자 계정과 회원권의 차이는 무엇인가요?",
+          "answer": "마켓플레이스, IT 지원, 워크숍을 이용하려면 사용자 계정이 필요합니다 — 이것은 무료입니다. 단체 회원권은 투표권을 부여하고 공식적으로 단체의 구성원이 됩니다. 대부분의 사용자는 회원이 되지 않습니다 — 그것은 완전히 괜찮습니다."
+        },
+        {
+          "question": "회원으로서 구체적으로 무엇을 얻나요?",
+          "answer": "단체 결정에 대한 투표권과 공식 회원 명단에 등재됩니다. 저희는 독점적 혜택을 약속하지 않습니다 — 저희의 서비스는 모두를 위한 것입니다. 단체를 지지하고 싶어서 회원이 됩니다."
+        },
+        {
+          "question": "가입 절차는 어떻게 되나요?",
+          "answer": "양식을 작성하고 연간 회비를 납부하면 됩니다. 즉시 회원이 됩니다. 기다림도, 승인도 없습니다."
+        },
+        {
+          "question": "연간 회비는 어떻게 납부하나요?",
+          "answer": "가입 후 확인 페이지에서 바로 계좌 정보를 확인할 수 있습니다. 계좌 이체 또는 TWINT로 납부 가능합니다."
+        },
+        {
+          "question": "언제든지 탈퇴할 수 있나요?",
+          "answer": "네. 이사회에 비공식 이메일을 보내면 됩니다. 이미 납부된 연간 회비는 환불되지 않습니다."
+        }
+      ]
+    }
+  },
+  "projects": {
+    "meta": {
+      "title": "우리의 프로젝트",
+      "description": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요."
+    },
+    "hero": {
+      "title": "우리의 프로젝트",
+      "subtitle": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요."
+    },
+    "section": {
+      "title": "우리의 프로젝트",
+      "subtitle": "오픈 소스 소프트웨어부터 커뮤니티 이니셔티브까지 — 저희의 다양한 프로젝트를 탐색하세요."
+    },
+    "filter": {
+      "label": "카테고리로 필터:",
+      "all": "전체"
+    },
+    "status": {
+      "active": "활성",
+      "ongoing": "진행 중"
+    },
+    "since": "{year}년부터",
+    "learnMore": "더 알아보기",
+    "results": "{total}개 중 {count}개 프로젝트",
+    "resultsFiltered": "\"{category}\"에서 {total}개 중 {count}개 프로젝트",
+    "categories": {
+      "software": "소프트웨어 프로젝트",
+      "hardware": "하드웨어 프로젝트",
+      "community": "커뮤니티 프로젝트"
+    },
+    "items": [
+      {
+        "title": "Kivitendo Modus CH",
+        "description": "2015년 7월부터 revamp-it은 Kivitendo 프로젝트의 프리미엄 파트너입니다. 2005년부터 처음에는 자체적인 목적으로, 곧 고객의 필요를 충족하기 위해 회계, 자원 및 고객 관리를 위한 소프트웨어 솔루션을 찾기 시작했습니다.",
+        "readMoreLink": "/projects/kivitendo",
+        "category": "소프트웨어 프로젝트",
+        "status": "활성",
+        "year": "2015",
+        "features": [
+          "2015년부터 프리미엄 파트너십",
+          "회계 및 자원 관리",
+          "고객 관리",
+          "오픈 소스 ERP 시스템"
+        ]
+      },
+      {
+        "title": "Linuxola 단체",
+        "description": "Linuxola 단체는 2005년 12월 2일 스위스 각 지역에서 온 8명에 의해 설립되었습니다. 단체의 목적은 아프리카 파트너들에게 정보 기술 접근권과 글로벌 디지털 공유재에 대한 연결을 제공하는 것입니다.",
+        "readMoreLink": "/projects/linuxola",
+        "category": "커뮤니티 프로젝트",
+        "status": "활성",
+        "year": "2005",
+        "features": [
+          "8명으로 스위스 창립",
+          "아프리카 파트너십 중심",
+          "정보 기술 접근권",
+          "디지털 공유재와의 연결"
+        ]
+      },
+      {
+        "title": "FreieComputer.ch",
+        "description": "자유 소프트웨어가 사전 설치되고 보장된 지원이 있는 컴퓨터를 위한 스위스 라벨! revamp-it은 열정적인 오픈 소스 커뮤니티와 함께 이 라벨의 탄생에 기여했습니다.",
+        "readMoreLink": "/projects/freiecomputer",
+        "category": "커뮤니티 프로젝트",
+        "status": "활성",
+        "year": "2010",
+        "features": [
+          "자유 소프트웨어를 위한 스위스 라벨",
+          "오픈 소스 소프트웨어 사전 설치",
+          "보장된 지원",
+          "커뮤니티 지원"
+        ]
+      },
+      {
+        "title": "Compirat",
+        "description": "Compirat은 Caritas 취리히와 revamp-it 간의 협력입니다. Compirat의 지원 덕분에 취리히 주의 제한된 자원을 가진 사람들이 거주지 근처에서 컴퓨터 사용을 배울 기회를 얻습니다.",
+        "readMoreLink": "/projects/compirat",
+        "category": "커뮤니티 프로젝트",
+        "status": "활성",
+        "year": "2018",
+        "features": [
+          "Caritas 취리히와의 파트너십",
+          "제한된 자원을 가진 사람들 지원",
+          "취리히 주 컴퓨터 교육",
+          "거주지 근처 학습 기회"
+        ]
+      },
+      {
+        "title": "하드웨어 개발",
+        "description": "revamp-it의 하드웨어 개발 작업은 폐기된 컴퓨터 하드웨어의 새로운 가능성을 발견하고 에너지 및 자원 소비를 최적화하며 오픈 소스 하드웨어 조립 가이드를 작성하는 데 초점을 맞추고 있습니다.",
+        "readMoreLink": "/projects/hardware",
+        "category": "하드웨어 프로젝트",
+        "status": "진행 중",
+        "year": "2020",
+        "features": [
+          "폐기된 하드웨어 업사이클링",
+          "에너지 및 자원 최적화",
+          "오픈 소스 하드웨어 가이드",
+          "지속 가능한 개발"
+        ]
+      },
+      {
+        "title": "LTSP – Linux 터미널 서버 프로젝트",
+        "description": "Linux 터미널 서버 프로젝트는 네트워크를 통해 구형이고 느린 컴퓨터와 연결된 빠르고 강력한 서버의 성능을 활용하는 데 초점을 맞추고 있습니다. 이를 통해 여러 사용자가 동일한 서버에 연결된 클라이언트에서 동시에 작업할 수 있습니다.",
+        "readMoreLink": "/projects/ltsp",
+        "category": "소프트웨어 프로젝트",
+        "status": "활성",
+        "year": "2016",
+        "features": [
+          "네트워크 기반 서버 솔루션",
+          "구형 하드웨어 효율적 사용",
+          "멀티 유저 컴퓨팅",
+          "자원 최적화"
+        ]
+      }
+    ]
+  },
+  "revamped": {
+    "meta": {
+      "title": "REVAMPED 인증 | 지속 가능한 컴퓨터 빌드",
+      "description": "저희의 독점적인 REVAMPED 인증에 대해 알아보세요 — 저희가 만드는 모든 컴퓨터의 지속 가능성, 품질, 성능을 보장합니다."
+    },
+    "hero": {
+      "title": "REVAMPED 인증",
+      "subtitle": "저희가 만드는 모든 컴퓨터는 독점적인 REVAMPED 라벨을 받습니다 — 업계의 새로운 기준을 세우는 지속 가능성, 품질, 성능에 대한 보증.",
+      "badge": {
+        "sustainability": "지속 가능성 중심",
+        "quality": "품질 보증",
+        "ai": "AI 최적화 빌드"
+      }
+    },
+    "inAction": {
+      "title": "실제 REVAMPED 컴퓨터 활용 중",
+      "subtitle": "사람들이 즐겨 사용하는 지속 가능한 기술. 저희의 REVAMPED 인증은 단순한 약속이 아닙니다 — 품질과 환경 책임에 대한 가시적인 헌신입니다.",
+      "points": [
+        "주로 중고 및 재정비된 부품 사용",
+        "환경 영향 대폭 감소",
+        "모든 빌드에 품질 보증",
+        "실물 인증 스티커 포함"
+      ],
+      "ctaBuild": "컴퓨터 빌드하기",
+      "ctaLearn": "인증에 대해 더 알아보기"
+    },
+    "meaning": {
+      "title": "\"REVAMPED\"가 의미하는 것",
+      "subtitle": "저희 인증은 단순한 라벨이 아닙니다 — 모든 컴퓨터가 지속 가능성, 품질, 성능에 대한 엄격한 기준을 충족함을 보장하는 포괄적인 표준입니다.",
+      "pillars": [
+        {
+          "title": "지속 가능성 우선",
+          "description": "가능한 한 중고 및 재정비된 부품을 우선시하여 최고의 성능을 유지하면서 환경 영향을 대폭 줄입니다. 모든 빌드에서 순환 경제 원칙을 따릅니다."
+        },
+        {
+          "title": "품질 보증",
+          "description": "모든 부품은 엄격한 성능 및 신뢰성 기준을 충족하는지 철저히 테스트, 세정, 검증됩니다. 지속 가능성을 위해 품질을 절대 타협하지 않습니다."
+        },
+        {
+          "title": "AI 최적화",
+          "description": "저희 AI는 특정 사용 사례에 맞는 완벽한 부품 호환성과 최적의 성능 조율을 보장합니다. 모든 빌드는 귀하의 필요에 맞게 지능적으로 설계됩니다."
+        }
+      ]
+    },
+    "certificate": {
+      "title": "진품 인증서",
+      "subtitle": "모든 REVAMPED 컴퓨터에는 지속 가능한 빌드에 대한 완전한 투명성을 제공하는 상세 인증서가 함께 제공됩니다.",
+      "items": [
+        "부품 지속 가능성 평가",
+        "신품 대비 절감된 CO₂ 배출량",
+        "부품 출처 및 상태",
+        "성능 벤치마크",
+        "보증 범위 세부 정보"
+      ],
+      "digitalPhysical": "디지털 & 실물",
+      "digitalDesc": "인증서에는 즉각적인 검증과 상세한 부품 정보를 위한 실물 스티커와 디지털 QR 코드가 모두 포함됩니다."
+    },
+    "stickers": {
+      "title": "REVAMPED 라벨 컬렉션",
+      "subtitle": "각 디자인은 지속 가능한 컴퓨팅과 품질 보증에 대한 저희의 헌신을 나타냅니다.",
+      "original": {
+        "title": "오리지널 디자인",
+        "description": "노트북 중심의 지속 가능성 접근 방식을 강조하는 깔끔하고 전문적인 인증 마크."
+      },
+      "eco": {
+        "title": "에코 변형",
+        "description": "환경 중심 및 순환 경제 원칙을 강조하는 확장된 디자인."
+      },
+      "digital": {
+        "title": "디지털 인증서",
+        "description": "블록체인 기반 진본 확인 기록이 있는 QR 코드 연결 검증 시스템."
+      }
+    },
+    "cta": {
+      "title": "REVAMPED 혁명에 동참하세요",
+      "subtitle": "REVAMPED 컴퓨터를 선택하면 훌륭한 기계를 얻는 것뿐 아니라 기술의 미래에 대한 선언을 하는 것입니다. 지속 가능하고, 강력하며, 목적을 가지고 만들어진.",
+      "startBuild": "REVAMPED 빌드 시작하기",
+      "learnMore": "인증에 대해 더 알아보기"
+    }
+  },
+  "services": {
+    "meta": {
+      "title": "서비스 | 취리히 IT 서비스",
+      "description": "취리히에서 전문적인 컴퓨터 수리, 웹 개발, 데이터 복구, Linux 지원, 하드웨어 재활용."
+    },
+    "page": {
+      "schemaName": "컴퓨터 수리 & IT 서비스",
+      "schemaDescription": "전문적인 컴퓨터 수리, 웹 개발, 데이터 복구, Linux 지원, 하드웨어 재활용.",
+      "schemaCity": "취리히",
+      "title": "전문 IT 서비스",
+      "subtitle": "기술 필요에 맞는 지속 가능한 솔루션. 저희는 기술 전문 지식과 환경 책임을 결합하여 비용을 절약하고 전자 폐기물을 줄이는 포괄적인 IT 솔루션을 제공합니다.",
+      "servicesTitle": "저희 서비스",
+      "servicesDescription": "수리 기간은 부품 가용성에 따라 다르며 일반적으로 몇 주가 소요됩니다.",
+      "noResults": "선택한 필터에 맞는 서비스를 찾을 수 없습니다.",
+      "ctaTitle": "기술을 새롭게 할 준비가 되셨나요?",
+      "ctaSubtitle": "무료 상담을 위해 오늘 연락하시고 기기를 최대한 활용하는 방법을 알아보세요.",
+      "ctaContact": "문의하기",
+      "ctaInventory": "재고 검색",
+      "pricingTbd": "문의 시",
+      "details": "자세히",
+      "bookAppointment": "예약하기",
+      "learnMore": "더 알아보기",
+      "appointmentRequested": "예약이 요청되었습니다!",
+      "booking": "예약 중...",
+      "bookingFailed": "예약 실패",
+      "networkError": "네트워크 오류. 다시 시도해 주세요."
+    },
+    "servicePage": {
+      "comingSoonBanner": "이 서비스는 곧 제공됩니다. 관심을 알리고 이용 가능할 때 알림을 받으려면 저희에게 연락해 주세요."
+    },
+    "webDesign": {
+      "meta": {
+        "title": "웹디자인 & 개발",
+        "description": "오픈 소스 기술로 전문적인 웹디자인 및 개발 서비스. 지속 가능성과 성능에 초점을 맞춘 현대적인 반응형 웹사이트."
+      },
+      "hero": {
+        "title": "웹디자인 & 개발",
+        "subtitle": "오픈 소스, 분산화, 개인정보 보호, 데이터 소유권, 코드 소유권, 최대 자동화를 통한 자유에 대한 100% 헌신. 저희는 노력이 필요가 아닌 선택이 되는 디지털 경험을 만듭니다.",
+        "ctaStart": "프로젝트 시작",
+        "ctaDiscover": "서비스 탐색"
+      },
+      "values": {
+        "title": "우리의 핵심 가치",
+        "subtitle": "저희가 만드는 모든 웹사이트는 궁극적인 목표를 위해 존재합니다: <strong>귀하의 자유</strong>. 모든 원칙이 함께 작동하여 노력을 필요에서 선택으로 변환합니다.",
+        "openSource": {
+          "title": "오픈 소스",
+          "description": "완전히 보고, 변경하고, 소유할 수 있는 투명하고 검증 가능한 코드. 독점적인 블랙박스나 벤더 종속성 없음."
+        },
+        "decentralization": {
+          "title": "분산화",
+          "description": "빅테크 플랫폼으로부터 자유로워지세요. 어디서나 웹사이트를 호스팅하고 독립성을 보존하며 단일 장애 지점을 피하세요."
+        },
+        "privacyFirst": {
+          "title": "개인정보 보호 우선",
+          "description": "최소한의 추적, 안전한 인증, 투명한 데이터 처리. 사용자의 개인정보는 사후 생각이 아닌 설계를 통해 보호됩니다."
+        },
+        "ownYourData": {
+          "title": "데이터 소유",
+          "description": "귀하의 데이터는 기술 대기업이 아닌 귀하의 것입니다. 저장 위치, 사용 방법, 접근 권한에 대한 완전한 제어."
+        },
+        "ownYourCode": {
+          "title": "코드 소유",
+          "description": "웹사이트 소스 코드에 대한 완전한 소유권. 제한이나 라이선스 비용 없이 언제든지 변경, 확장 또는 마이그레이션."
+        },
+        "maxAutomation": {
+          "title": "최대 자동화",
+          "description": "모든 핵심 원칙을 유지하면서 수동 작업을 최소화하는 원활한 자동화 워크플로우. 100% 자동화가 목표입니다."
+        },
+        "userExperience": {
+          "title": "사용자 경험",
+          "description": "최소한의 노력으로 최대한의 기능과 생산성을 제공하는 직관적인 사용자 인터페이스."
+        },
+        "developerExperience": {
+          "title": "개발자 경험",
+          "description": "개발과 유지보수를 즐겁게 만드는 훌륭한 도구와 문서가 있는 깔끔하고 유지보수 가능한 코드."
+        }
+      },
+      "philosophy": {
+        "title": "우리의 자유 우선 철학",
+        "intro": "저희는 최대 자동화를 통해 <strong>자유에 대한 100% 헌신</strong>을 믿습니다.",
+        "automation": "자동화가 원하지 않는 노력을 최소화할 때 노력을 필요에서 선택으로 변환합니다 — 그리고 선택은 자유입니다.",
+        "effortTitle": "필요가 아닌 선택으로서의 노력",
+        "freedomPrinciple": {
+          "label": "자유 원칙",
+          "text": "<strong>자유에 대한 100% 헌신</strong>은 디지털 존재의 모든 측면이 귀하의 자율성을 제한하는 것이 아니라 제공해야 한다는 것을 의미합니다."
+        },
+        "automationLiberation": {
+          "label": "해방으로서의 자동화",
+          "text": "최대 자동화는 반복적이고 원하지 않는 작업을 제거하여 귀하와 귀하의 미션에 진정으로 중요한 것에 집중할 자유를 줍니다."
+        },
+        "choiceNotCoercion": {
+          "label": "강제가 아닌 선택",
+          "text": "시스템이 귀하의 지속적인 개입 없이 원활하게 작동할 때 귀하가 투자하는 모든 순간은 의도적입니다 — 필요가 아닌 선택."
+        },
+        "quote": "진정한 자유는 단순히 선택할 수 있는 능력이 아닙니다 — 강제된 노력을 제거함으로써 귀하의 선택권을 보존하는 시스템입니다.",
+        "ratingTitle": "우리의 자유 평가 시스템",
+        "ratingIntro": "저희가 만드는 모든 웹사이트와 웹 앱은 귀하의 자율성을 얼마나 잘 지원하는지에 따른 포괄적인 자유 평가를 받습니다:",
+        "commitment": {
+          "label": "우리의 헌신",
+          "text": "저희는 모든 자유 차원에서 최대 점수를 추구합니다. 모든 타협은 투명하게 논의되며 대안은 항상 검토됩니다."
+        },
+        "ratings": {
+          "openSource": {
+            "label": "오픈 소스 자유",
+            "desc": "완전한 코드 투명성 & 소유권"
+          },
+          "decentralization": {
+            "label": "분산화 자유",
+            "desc": "플랫폼 제어로부터의 독립성"
+          },
+          "privacy": {
+            "label": "개인정보 자유",
+            "desc": "데이터 주권 & 보호"
+          },
+          "dataOwnership": {
+            "label": "데이터 소유 자유",
+            "desc": "정보에 대한 완전한 제어"
+          },
+          "codeOwnership": {
+            "label": "코드 소유 자유",
+            "desc": "무제한 수정 권리"
+          },
+          "automation": {
+            "label": "자동화 자유",
+            "desc": "노력이 선택으로 변환됨"
+          },
+          "ux": {
+            "label": "사용자 경험 자유",
+            "desc": "직관적이고 간편한 상호작용"
+          },
+          "dx": {
+            "label": "개발자 자유",
+            "desc": "유지보수 가능하고 확장 가능한 시스템"
+          }
+        }
+      },
+      "servicesSection": {
+        "title": "웹 개발 서비스",
+        "subtitle": "오픈 소스 기술과 지속 가능한 관행으로 구축된 포괄적인 웹 솔루션.",
+        "pricing": "전문 웹 개발 CHF 70/시간부터",
+        "consultationTitle": "무료 초기 상담",
+        "consultationText": "저희는 모든 프로젝트를 귀하의 필요, 목표, 기술 요구 사항을 이해하기 위한 포괄적인 상담으로 시작합니다. 이를 통해 정확한 예상을 제공하고 프로젝트에 맞는 솔루션인지 확인할 수 있습니다.",
+        "items": {
+          "customDev": {
+            "title": "맞춤형 웹 개발",
+            "description": "귀하의 특정 비즈니스 요구사항을 충족하기 위해 현대적인 오픈 소스 기술로 구축된 맞춤형 웹 애플리케이션.",
+            "features": [
+              "맞춤형 웹 애플리케이션",
+              "이커머스 솔루션",
+              "API 개발",
+              "데이터베이스 설계",
+              "성능 최적화"
+            ]
+          },
+          "responsiveDesign": {
+            "title": "반응형 웹디자인",
+            "description": "모든 기기와 화면 크기에서 완벽하게 작동하는 아름답고 사용자 친화적인 디자인.",
+            "features": [
+              "모바일 우선 디자인",
+              "사용자 경험(UX) 디자인",
+              "사용자 인터페이스(UI) 디자인",
+              "브랜드 아이덴티티 통합",
+              "접근성 준수"
+            ]
+          },
+          "cmsDev": {
+            "title": "CMS 개발",
+            "description": "개발자 친화적 API로 웹사이트 콘텐츠를 완전히 제어할 수 있는 현대적인 콘텐츠 관리 시스템.",
+            "features": [
+              "헤드리스 CMS 솔루션 (Strapi, Payload, Tina)",
+              "WordPress 개발 (레거시 지원)",
+              "맞춤형 CMS 솔루션",
+              "콘텐츠 마이그레이션",
+              "교육 및 지원"
+            ]
+          },
+          "maintenance": {
+            "title": "웹사이트 유지보수",
+            "description": "웹사이트를 안전하고 최신 상태로 최적의 성능을 유지하기 위한 지속적인 지원 및 유지보수.",
+            "features": [
+              "보안 업데이트",
+              "성능 모니터링",
+              "콘텐츠 업데이트",
+              "백업 관리",
+              "기술 지원"
+            ]
+          }
+        }
+      },
+      "whyOpenSource": {
+        "title": "왜 이러한 가치가 중요한가",
+        "subtitle": "디지털 감시와 플랫폼 독점이 증가하는 시대에 이러한 원칙은 단순히 '있으면 좋은 것'이 아닙니다 — 디지털 자유와 독립성에 필수적입니다.",
+        "items": {
+          "ownCode": {
+            "title": "코드를 소유하세요",
+            "description": "웹사이트 소스 코드에 대한 완전한 소유권은 벤더 종속성 없음, 라이선스 제한 없음, 언제든지 웹사이트를 변경, 확장 또는 마이그레이션할 완전한 자유를 의미합니다."
+          },
+          "ownData": {
+            "title": "데이터를 소유하세요",
+            "description": "귀하의 데이터는 기술 대기업이 아닌 귀하의 것입니다. 저희는 셀프 호스팅 및 데이터 이동성 옵션과 함께 정보를 귀하의 통제 하에 유지하는 솔루션을 개발합니다."
+          },
+          "privacyByDesign": {
+            "title": "설계에 의한 개인정보 보호",
+            "description": "저희는 처음부터 개인정보 보호를 우선시하며 사용자의 개인정보를 존중하는 최소한의 추적, 안전한 인증, 투명한 데이터 처리 관행을 구현합니다."
+          },
+          "decentralized": {
+            "title": "분산 아키텍처",
+            "description": "온라인 존재를 제어하는 중앙 집중식 플랫폼으로부터 자유로워지세요. 저희는 어디서나 호스팅하고 빅테크로부터 독립성을 줄 수 있는 솔루션을 개발합니다."
+          },
+          "openSourceBase": {
+            "title": "오픈 소스 기반",
+            "description": "투명하고 검증 가능하며 글로벌 커뮤니티가 지원하는 오픈 소스 기술 기반. 숨겨진 코드 없음, 독점적 잠금 없음."
+          },
+          "futureProof": {
+            "title": "미래 지향적 & 지속 가능",
+            "description": "오픈 소스 기술은 커뮤니티와 함께 발전하며 회사가 실패해도 사라지지 않습니다. 귀하의 투자는 장기적으로 보호됩니다."
+          }
+        }
+      },
+      "technologies": {
+        "title": "사용하는 기술",
+        "subtitle": "신뢰성, 성능, 장기적 지속 가능성을 제공하는 검증된 오픈 소스 기술로 작업합니다.",
+        "filterLabel": "카테고리로 필터:",
+        "allCategories": "전체",
+        "visitWebsite": "웹사이트 방문",
+        "showing": "{total}개 중 {count}개 기술 표시",
+        "showingFiltered": "\"{category}\"에서 {total}개 중 {count}개 기술 표시",
+        "items": {
+          "nextjs": {
+            "description": "뛰어난 개발자 경험과 내장 최적화가 있는 빠르고 확장 가능한 웹 애플리케이션 구축을 위한 현대적인 React 프레임워크.",
+            "benefits": [
+              "서버 사이드 렌더링",
+              "뛰어난 성능",
+              "훌륭한 SEO",
+              "활발한 커뮤니티"
+            ]
+          },
+          "tailwind": {
+            "description": "일관된 디자인으로 현대적인 반응형 사용자 인터페이스를 빠르게 구축하기 위한 유틸리티 우선 CSS 프레임워크.",
+            "benefits": [
+              "빠른 개발",
+              "일관된 디자인",
+              "기본 반응형",
+              "고도로 맞춤화 가능"
+            ]
+          },
+          "supabase": {
+            "description": "즉각적인 API, 실시간 구독, 인증 및 엣지 기능을 제공하는 오픈 소스 Firebase 대안.",
+            "benefits": [
+              "즉각적인 API",
+              "실시간 업데이트",
+              "내장 인증",
+              "엣지 기능"
+            ]
+          },
+          "strapi": {
+            "description": "개발자에게 선호하는 도구와 프레임워크를 선택할 자유를 주는 선도적인 오픈 소스 헤드리스 CMS.",
+            "benefits": [
+              "API 우선 접근 방식",
+              "유연한 콘텐츠 유형",
+              "개발자 친화적",
+              "셀프 호스팅"
+            ]
+          },
+          "payload": {
+            "description": "Node.js, React, MongoDB로 구축된 TypeScript 우선 헤드리스 CMS 및 애플리케이션 프레임워크.",
+            "benefits": [
+              "TypeScript 네이티브",
+              "관리자 UI 포함",
+              "고도로 확장 가능",
+              "개발자 경험 중심"
+            ]
+          },
+          "tina": {
+            "description": "실시간 시각적 편집으로 웹사이트에서 직접 콘텐츠를 편집할 수 있는 Git 기반 헤드리스 CMS.",
+            "benefits": [
+              "시각적 편집",
+              "Git 기반 워크플로우",
+              "실시간 미리보기",
+              "개발자 친화적"
+            ]
+          },
+          "wordpress": {
+            "description": "특정 사용 사례에서 여전히 인기 있는 성숙한 콘텐츠 관리 시스템. 기존 WordPress 웹사이트와 작업할 수 있습니다.",
+            "benefits": [
+              "큰 생태계",
+              "간단한 콘텐츠 관리",
+              "광범위한 플러그인",
+              "많은 사용자에게 친숙함"
+            ]
+          },
+          "joomla": {
+            "description": "강력한 사용자 관리 및 다국어 기능이 있는 유연한 콘텐츠 관리 시스템. 복잡한 웹사이트에 이상적.",
+            "benefits": [
+              "사용자 관리",
+              "다국어 지원",
+              "유연한 템플릿",
+              "강력한 커뮤니티"
+            ]
+          },
+          "woocommerce": {
+            "description": "WordPress 기반의 널리 사용되는 오픈 소스 이커머스 플랫폼. 유연한 확장 기능과 큰 커뮤니티.",
+            "benefits": [
+              "큰 커뮤니티",
+              "다양한 확장 기능",
+              "간단한 관리",
+              "WordPress 통합"
+            ]
+          },
+          "shopware": {
+            "description": "강력한 맞춤화 기능이 있는 현대적인 API 우선 이커머스 플랫폼. 상업적 확장이 있는 오픈 소스 코어.",
+            "benefits": [
+              "API 우선 설계",
+              "유연한 아키텍처",
+              "광범위한 관리자 인터페이스",
+              "독일 엔지니어링"
+            ]
+          },
+          "hosting": {
+            "name": "배포 & 호스팅",
+            "description": "Linux 서버의 오픈 소스 솔루션부터 Vercel 및 Netlify 같은 현대적인 플랫폼까지 유연한 호스팅 옵션.",
+            "benefits": [
+              "다양한 호스팅 옵션",
+              "글로벌 CDN",
+              "자동 확장",
+              "Git 기반 워크플로우"
+            ]
+          }
+        }
+      },
+      "benefits": {
+        "title": "왜 저희 웹 개발 서비스를 선택하나요?",
+        "subtitle": "저희는 귀하의 가치를 지원하면서 뛰어나게 작동하는 웹사이트를 제공하기 위해 기술 전문 지식과 지속 가능한 관행을 결합합니다.",
+        "items": {
+          "automationFirst": {
+            "title": "자동화 우선 설계",
+            "description": "저희는 모든 핵심 원칙을 유지하면서 수동 관리 오버헤드를 최소화하는 자동화 워크플로우를 우선시합니다. 타협 없이 최대 효율."
+          },
+          "openSourceBase": {
+            "title": "오픈 소스 기반",
+            "description": "완전한 제어와 자유를 주는 투명하고 검증 가능한 기술 기반. 벤더 종속성 없음, 독점적 블랙박스 없음."
+          },
+          "seamlessUX": {
+            "title": "원활한 사용자 경험",
+            "description": "최소한의 노력으로 최대한의 기능을 제공하는 직관적인 사용자 인터페이스. 모든 상호작용은 단순성과 효과성을 위해 설계됩니다."
+          },
+          "devFriendly": {
+            "title": "개발자 친화적 아키텍처",
+            "description": "훌륭한 문서와 도구가 있는 깔끔하고 유지보수 가능한 코드. 장기적 지속 가능성과 쉬운 유지보수를 위해 구축."
+          }
+        }
+      },
+      "process": {
+        "title": "개발 프로세스",
+        "subtitle": "저희는 프로젝트가 귀하의 필요에 맞고 기대를 초과하도록 보장하는 협력적이고 투명한 프로세스를 따릅니다.",
+        "steps": {
+          "discovery": {
+            "title": "발견",
+            "description": "귀하의 목표, 요구사항, 타겟 그룹을 이해하기 위한 포괄적인 상담으로 시작합니다."
+          },
+          "planning": {
+            "title": "계획",
+            "description": "일정, 기술 스택, 디자인 접근 방식을 포함한 상세한 프로젝트 계획을 만듭니다."
+          },
+          "development": {
+            "title": "개발",
+            "description": "정기적인 업데이트와 피드백 세션으로 애자일 방법론에 따라 웹사이트를 구축합니다."
+          },
+          "launch": {
+            "title": "출시 & 지원",
+            "description": "웹사이트를 출시하고 지속적인 지원, 유지보수, 최적화를 제공합니다."
+          }
+        }
+      },
+      "cta": {
+        "title": "웹사이트를 만들 준비가 되셨나요?",
+        "subtitle": "귀하의 가치를 반영하고 목표를 달성하는 웹사이트를 만들어 드리겠습니다. 무료 상담을 위해 오늘 연락해 주세요.",
+        "startProject": "프로젝트 시작",
+        "allServices": "모든 서비스 탐색"
+      }
+    }
+  },
+  "shop": {
+    "meta": {
+      "title": "쇼핑몰 — 리퍼비시 하드웨어",
+      "description": "검증된 재정비 컴퓨터를 합리적인 가격에. 보증 포함."
+    },
+    "title": "저희 쇼핑몰",
+    "subtitle": "검증된 리퍼비시 하드웨어",
+    "filters": {
+      "all": "전체",
+      "laptops": "노트북",
+      "desktops": "데스크탑",
+      "accessories": "액세서리"
+    },
+    "product": {
+      "addToCart": "장바구니에 추가",
+      "outOfStock": "품절",
+      "condition": "상태",
+      "warranty": "보증",
+      "months": "{count}개월"
+    },
+    "empty": "제품을 찾을 수 없습니다",
+    "verifiedBadge": "검증됨",
+    "page": {
+      "heroTitle": "어떻게 쇼핑하시겠어요?",
+      "heroSubtitle": "귀하에게 가장 잘 맞는 채널을 선택하세요: 온라인 쇼핑몰, Shopware 쇼핑몰 또는 취리히 매장.",
+      "metaDescription": "{orgName}에서 어떻게 쇼핑할지 선택하세요 — 온라인 쇼핑몰, Shopware 채널 또는 취리히 매장.",
+      "store": {
+        "title": "매장 (취리히)",
+        "tagline": "상담, 기기 직접 확인, 즉시 수령",
+        "accessInfo": "대중교통으로 접근 용이. 근처에 주차 가능.",
+        "openingHours": "영업 시간",
+        "openingHoursMonday": "월요일: {hours}",
+        "openingHoursTueFri": "화요일 – 금요일: {hours}",
+        "openGoogleMaps": "Google Maps에서 열기",
+        "openOsm": "OpenStreetMap에서 열기",
+        "contact": "문의",
+        "mapsInfoTitle": "왜 두 가지 지도 옵션인가요?",
+        "mapsInfoBody": "OpenStreetMap은 커뮤니티 기반이고 데이터를 최소화합니다. Google/Apple Maps는 더 나은 내비게이션, 실시간 교통 정보, POI를 제공합니다. 귀하에게 가장 적합한 것을 선택하세요 — 투명성과 선택의 자유가 중요합니다."
+      },
+      "online": {
+        "title": "온라인 쇼핑몰",
+        "tagline": "온라인 쇼핑몰과 Shopware 채널 중 선택하세요.",
+        "benefit1": "모든 채널에서 검증된 품질과 보증",
+        "benefit2": "합리적인 가격, 지속 가능한 선택",
+        "benefit3": "안전한 결제",
+        "currentShop": "현재 온라인 쇼핑몰",
+        "shopwareShop": "Shopware 쇼핑몰로 이동",
+        "onlineShop": "{orgName} 온라인 쇼핑몰",
+        "multiShopTitle": "여러 쇼핑몰 채널?",
+        "multiShopBody": "저희 {orgName} 온라인 쇼핑몰에서 재정비된 IT 하드웨어의 최고 선택을 제공합니다. 또는 Shopware 쇼핑몰과 레거시 시스템에서도 저희 상품을 찾을 수 있습니다."
+      }
+    },
+    "search": {
+      "metaTitleWithQuery": "검색: \"{query}\" | {orgName} 쇼핑몰",
+      "metaDescWithQuery": "\"{query}\" 검색 결과 — {orgName}의 지속 가능하게 재정비된 IT 기기.",
+      "metaTitle": "검색 | {orgName} 쇼핑몰",
+      "metaDesc": "지속 가능하게 재정비된 IT 기기 상품을 검색하세요.",
+      "heroTitleWithQuery": "\"{query}\" 결과",
+      "heroTitle": "쇼핑몰 검색",
+      "placeholder": "무엇을 찾으세요? 예: 노트북, 모니터, 키보드...",
+      "submitButton": "검색",
+      "breadcrumbHome": "홈",
+      "breadcrumbShop": "쇼핑몰",
+      "breadcrumbSearchWithQuery": "검색: \"{query}\"",
+      "breadcrumbSearch": "검색",
+      "resultsTitle": "\"{query}\" 검색 결과",
+      "resultsComingSoon": "제품 검색이 현재 설정 중입니다. 곧 여기서 재정비된 IT 기기를 검색할 수 있습니다.",
+      "goToShop": "온라인 쇼핑몰로 이동",
+      "allShopOptions": "모든 쇼핑몰 옵션",
+      "popularSearches": "인기 검색어",
+      "browseByCategory": "카테고리별 탐색",
+      "productCount": "{count}개 제품",
+      "allCategories": "모든 카테고리 보기 →"
+    },
+    "category": {
+      "notFoundMeta": "카테고리를 찾을 수 없습니다 | {orgName} 쇼핑몰",
+      "metaTitle": "{categoryName} | {orgName} 쇼핑몰",
+      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName} 쇼핑몰",
+      "metaDesc": "{orgName}에서 {categoryNameLower} 선택을 탐색하세요 — 지속 가능하게 재정비된 IT 기기.",
+      "heroSubtitle": "{orgName}에서 지속 가능하게 재정비된 {categoryNameLower} 선택을 탐색하세요 — 합리적인 가격의 검증된 품질.",
+      "productCount": "이 카테고리에 {count}개 제품",
+      "subcategories": "하위 카테고리",
+      "categoryProductCount": "{count}개 제품",
+      "productsLoading": "제품 로딩 중",
+      "productsComingSoon": "곧 저희 마켓플레이스에서 {categoryName} 카테고리의 재정비된 IT 기기를 찾을 수 있습니다.",
+      "goToShop": "온라인 쇼핑몰로 이동",
+      "allShopOptions": "모든 쇼핑몰 옵션",
+      "relatedIn": "{parentName}의 더 많은 제품",
+      "breadcrumbHome": "홈"
+    },
+    "loading": {
+      "text": "쇼핑몰 로딩 중..."
+    },
+    "error": {
+      "title": "문제가 발생했습니다",
+      "body": "쇼핑몰을 로딩하는 중 오류가 발생했습니다.",
+      "retry": "다시 시도",
+      "backToShop": "쇼핑몰로 돌아가기"
+    },
+    "header": {
+      "skipToContent": "주요 콘텐츠로 건너뛰기",
+      "skipToFooter": "하단으로 건너뛰기",
+      "skipLinks": "빠른 이동 링크",
+      "openMenu": "메뉴 열기",
+      "categories": "카테고리",
+      "searchPlaceholder": "무엇을 찾으세요?",
+      "searchLabel": "검색",
+      "closeSearch": "검색 닫기",
+      "compareLabel": "비교 목록 ({count}개)",
+      "wishlistLabel": "위시리스트 ({count}개)",
+      "cartLabel": "장바구니",
+      "backToShop": "쇼핑몰로 돌아가기",
+      "shopOverview": "쇼핑몰 개요로 이동",
+      "closeMenu": "메뉴 닫기"
+    }
+  },
+  "space": {
+    "meta": {
+      "title": "저희 위치",
+      "description": "Toni 유제품 공장부터 오늘날까지 — 저희 위치의 역사와 취리히에 새로운 커뮤니티 공간을 위한 비전."
+    },
+    "hero": {
+      "title": "유제품 공장에서 커뮤니티 공간으로",
+      "subtitle": "2003년부터 저희는 취리히를 누비고 있습니다. 이제 새로운 보금자리를 찾고 있습니다 — 지속 가능성, 기술, 커뮤니티가 만나는 곳.",
+      "ctaVision": "우리의 비전",
+      "ctaDonate": "위치 예산 지원"
+    },
+    "history": {
+      "title": "취리히에서의 우리 여정",
+      "subtitle": "20년 이상, 여러 위치, 하나의 미션: 기술을 지속 가능하게 사용.",
+      "locations": [
+        {
+          "period": "2003 – 2008",
+          "name": "Toni 유제품 공장",
+          "description": "옛 치즈 저장고에 있는 우리 출발지. 여기서 전설적인 Debian 10주년 기념행사가 지붕 위에서 열렸습니다.",
+          "highlight": "창립지"
+        },
+        {
+          "period": "2008 – 2012",
+          "name": "Wipkingen 개혁 교회",
+          "description": "교회탑 6/7층과 지하실. 여기서 첫 번째 사회 프로젝트가 시작되었습니다.",
+          "highlight": "사회 프로젝트"
+        },
+        {
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "많은 작업 공간이 있는 큰 공간. 작업장 확장.",
+          "highlight": "확장"
+        }
+      ],
+      "currentHighlight": "현재"
+    },
+    "current": {
+      "label": "현재 매장",
+      "hours": "영업 시간",
+      "hoursValue": "월: 9–12 | 화–금: 13–17",
+      "moreInfo": "매장에 대해 더 알아보기"
+    },
+    "future": {
+      "badge": "2026년 말까지 이전",
+      "title": "우리의 꿈의 공간",
+      "subtitle": "저희는 2026년 말까지 현재 공간을 떠나야 합니다. 이것이 더 큰 것을 만들 기회입니다.",
+      "visionLabel": "비전: 커뮤니티 공간",
+      "visionDescription": "기술, 지속 가능성, 커뮤니티가 만나는 열린 공간. 쇼핑몰, 작업장, 코워킹, 이벤트 — 모두 한 지붕 아래.",
+      "conceptCaption": "이상적인 커뮤니티 공간의 개념 시각화",
+      "features": [
+        {
+          "name": "쇼핑 영역",
+          "description": "상담과 함께 재정비된 기기 전시 공간"
+        },
+        {
+          "name": "수리 작업장",
+          "description": "기술자와 커뮤니티 수리를 위한 작업 공간"
+        },
+        {
+          "name": "코워킹",
+          "description": "커뮤니티를 위한 유연한 작업 공간"
+        },
+        {
+          "name": "이벤트 공간",
+          "description": "워크숍, 밋업, 소규모 행사 공간 (15–20명)"
+        },
+        {
+          "name": "미니 도서관",
+          "description": "기술 책, 잡지, 리소스가 있는 선반"
+        },
+        {
+          "name": "커피 코너",
+          "description": "비공식적인 교류와 네트워킹을 위한 만남의 장소"
+        },
+        {
+          "name": "주방",
+          "description": "Zero Food Waste 이니셔티브를 위한 완전히 갖춰진 주방"
+        },
+        {
+          "name": "Zero Food Waste",
+          "description": "커뮤니티 점심을 위한 구조된 음식"
+        }
+      ],
+      "params": {
+        "title": "우리가 찾는 것",
+        "subtitle": "이상적인 위치를 위한 조건",
+        "area": "유용 면적",
+        "budget": "월 예산",
+        "city": "위치",
+        "idealLabel": "이상적인 조건:",
+        "idealText": "1층 또는 쉽게 접근 가능, 휠체어 접근 가능, 하역 경사로 또는 배달 가능, 대중교통이 좋은 활기찬 지역.",
+        "tipText": "적합한 공간을 알고 계신가요? 어떤 제보도 환영합니다!",
+        "contactCta": "문의하기"
+      }
+    },
+    "impact": {
+      "title": "왜 더 큰 공간이 더 많은 영향을 의미하는가",
+      "subtitle": "더 많은 공간으로 KPI를 배가할 수 있습니다 — 더 많은 기기 구조, 더 많은 사람 교육, 더 많은 영향력.",
+      "today": "오늘",
+      "potential": "잠재력",
+      "items": [
+        {
+          "metric": "연간 기기",
+          "current": "~500",
+          "potential": "2,000+",
+          "reason": "더 많은 작업 공간 = 더 많은 용량"
+        },
+        {
+          "metric": "워크숍 참가자",
+          "current": "~100",
+          "potential": "500+",
+          "reason": "정기 강좌를 위한 전용 이벤트 공간"
+        },
+        {
+          "metric": "커뮤니티 회원",
+          "current": "~50",
+          "potential": "200+",
+          "reason": "코워킹이 더 많은 자원봉사자를 유치"
+        },
+        {
+          "metric": "사회 통합",
+          "current": "~10",
+          "potential": "30+",
+          "reason": "더 큰 공간으로 더 많은 인턴십 자리"
+        }
+      ],
+      "donateCta": {
+        "title": "위치 예산 지원하기",
+        "description": "더 큰 예산으로 더 좋은 위치를 찾을 수 있습니다 — 환경과 사회에 대한 영향력을 배가할 수 있습니다. 모든 기여가 커뮤니티 공간에 대한 꿈을 실현하는 데 도움이 됩니다.",
+        "donateCta": "지금 기부하기",
+        "impactCta": "영향력 보기"
+      }
+    },
+    "shopLinks": {
+      "title": "모든 쇼핑 옵션",
+      "subtitle": "오프라인과 온라인 — 귀하에게 가장 적합한 것을 선택하세요.",
+      "currentStore": "현재 매장",
+      "shopOverview": "쇼핑몰 개요",
+      "onlineShop": "온라인 쇼핑몰"
+    }
+  },
+  "support": {
+    "meta": {
+      "title": "RevampIT 후원하기",
+      "description": "지속 가능한 기술에 관한 고품질, 광고 없는 콘텐츠를 지원해 주세요."
+    },
+    "hero": {
+      "title": "RevampIT를 후원해 주세요",
+      "subtitle": "지속 가능한 기술, 오픈 소스, 컴퓨팅의 미래에 관한 고품질 광고 없는 콘텐츠 제작을 도와주세요."
+    },
+    "pillars": {
+      "noAds": {
+        "title": "광고 없음",
+        "description": "저희는 절대 광고를 게재하거나 귀하의 데이터를 판매하지 않습니다."
+      },
+      "communityDriven": {
+        "title": "커뮤니티 주도",
+        "description": "커뮤니티에 의해, 커뮤니티를 위해 — 상업적 이익 없이."
+      },
+      "qualityFirst": {
+        "title": "품질 우선",
+        "description": "진실하고 잘 조사된 콘텐츠에 집중합니다."
+      }
+    },
+    "promise": {
+      "title": "우리의 약속",
+      "intro": "RevampIT는 기업이 아닙니다 — 운동입니다. 저희는 지속 가능한 기술에 관한 고품질 정보가 유료 장벽이나 방해가 되는 광고 없이 모든 사람이 이용할 수 있어야 한다고 믿습니다.",
+      "enables": "귀하의 후원으로 저희가 할 수 있는 것:",
+      "items": [
+        "심층 연구 및 분석 수행",
+        "서버 및 인프라 운영",
+        "오픈 소스 도구 및 리소스 개발",
+        "커뮤니티 이벤트 및 워크숍 개최",
+        "100% 광고 없이 독립적으로 운영"
+      ]
+    },
+    "oneTime": {
+      "title": "일회성 기부",
+      "description": "커피 한 잔을 사주거나 원하는 금액으로 후원해 주세요.",
+      "cta": "지금 기부하기"
+    },
+    "monthly": {
+      "title": "월정 후원",
+      "description": "후원자가 되어 지속 가능한 성장을 도와주세요.",
+      "cta": "후원자 되기"
+    },
+    "otherWays": {
+      "title": "다른 방법으로 돕기",
+      "submitPost": "글 제출하기",
+      "contributeCode": "코드 기여",
+      "shareArticle": "글 공유하기"
+    },
+    "thanks": "지속 가능한 고품질 기술 콘텐츠를 위한 저희 미션을 지원해 주셔서 감사합니다."
+  },
+  "techniker": {
+    "meta": {
+      "title": "기술자 찾기",
+      "description": "가까운 커뮤니티 및 전문 기술자를 찾으세요. 무료 도움, KulturLegi 요금, 유료 IT 서비스 모두 한 플랫폼에서."
+    },
+    "list": {
+      "title": "기술자",
+      "available": "{count, plural, other {# 명의}} 기술자 이용 가능",
+      "becomeTechnician": "기술자 되기",
+      "searchPlaceholder": "이름, 도시, 설명...",
+      "searchAriaLabel": "기술자 검색",
+      "searchButton": "검색",
+      "tierAll": "전체",
+      "tierCommunity": "커뮤니티",
+      "tierProfessional": "전문",
+      "tierFilterLabel": "기술자 유형",
+      "skillsFilterAll": "모든 기술",
+      "skillsFilterLabel": "기술로 필터",
+      "resetFilters": "필터 초기화",
+      "pagination": "페이지 내비게이션",
+      "prevPage": "이전 페이지",
+      "nextPage": "다음 페이지",
+      "pageOf": "{current} / {total} 페이지",
+      "emptyTitle": "기술자를 찾을 수 없습니다",
+      "emptyMessageFiltered": "필터 기준에 맞는 기술자가 없습니다.",
+      "emptyMessageEmpty": "아직 활성 기술자 프로필이 없습니다.",
+      "emptyActionFiltered": "필터 초기화",
+      "emptyActionEmpty": "기술자 프로필 만들기",
+      "ctaTitle": "기기를 수리할 수 있나요?",
+      "ctaDescription": "기술자로 등록하고 가까운 사람들을 도와주세요. 무료 또는 유료 — 귀하가 결정합니다.",
+      "ctaCreateProfile": "기술자 프로필 만들기",
+      "ctaToITHelp": "IT 지원으로 이동 →",
+      "retryButton": "다시 시도",
+      "verified": "인증됨",
+      "jobs": "{count}건 완료",
+      "professional": "전문",
+      "community": "커뮤니티",
+      "gratis": "무료",
+      "kulturlegi": "KulturLegi",
+      "loadingError": "기술자를 불러오는 중 오류가 발생했습니다. 다시 시도해 주세요."
+    },
+    "detail": {
+      "backToList": "기술자 목록으로",
+      "verified": "인증됨",
+      "professional": "전문",
+      "community": "커뮤니티",
+      "jobsCompleted": "{count}건 완료",
+      "reviews": "({count}개 리뷰)",
+      "travelRange": "· 최대 {km}km 이동 가능",
+      "responseTime": "약 {hours}시간 내 응답",
+      "submitRequest": "요청하기",
+      "contact": "연락하기",
+      "gratisHelp": "무료 도움 가능",
+      "kulturlegiRate": "KulturLegi 요금",
+      "aboutMe": "자기소개",
+      "skills": "기술",
+      "offeredServices": "제공 서비스",
+      "requestBooking": "예약 요청",
+      "estimatedDuration": "예상 소요 시간: {hours}",
+      "priceFrom": "CHF {price}부터",
+      "hourlyRate": "CHF {rate}/시간",
+      "deliveryTypes": "도움 방식",
+      "deliveryRemote": "원격 / 온라인",
+      "deliveryOnsite": "현장 방문"
+    },
+    "seller": {
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "memberSince": "{date}부터 회원",
+      "listings": "판매 목록",
+      "sold": "판매됨",
+      "noRatings": "리뷰 없음",
+      "ratingsCount": "{count}개 리뷰",
+      "activeListings": "활성 판매 목록 ({count})",
+      "noListingsTitle": "활성 판매 목록 없음",
+      "noListingsDescription": "이 판매자는 현재 활성 판매 목록이 없습니다.",
+      "loadingProfile": "프로필 로딩 중...",
+      "sellerNotFound": "판매자를 찾을 수 없습니다"
+    }
+  },
+  "workshops": {
+    "meta": {
+      "title": "워크숍 & 강좌",
+      "description": "지속 가능한 기술, Linux, 수리, 프로그래밍 등에 관한 워크숍을 찾아보세요. 취리히에서 실습 학습."
+    },
+    "browse": {
+      "title": "워크숍 & 강좌",
+      "subtitle": "{count, plural, other {# 개}} 워크숍 · {orgName}에서 실습 학습",
+      "proposeButton": "워크숍 제안하기",
+      "filterCategory": "카테고리",
+      "allCategories": "모든 카테고리",
+      "filterLevel": "난이도",
+      "allLevels": "모든 수준",
+      "clearFilters": "필터 초기화",
+      "resultCount": "{count, plural, other {# 개}} 워크숍",
+      "allLevelsLabel": "모든 수준",
+      "maxParticipants": "최대 {count}명",
+      "nextDate": "다음 일정: {date}",
+      "dateSoon": "일정이 곧 공개됩니다",
+      "spotsLeft": "{count, plural, other {# 자리}} 남음",
+      "soldOut": "마감",
+      "free": "무료",
+      "registered": "등록됨",
+      "viewDetails": "자세히 보기",
+      "manage": "관리",
+      "registerNow": "지금 등록하기",
+      "noDate": "일정 없음",
+      "emptyFiltered": {
+        "title": "워크숍을 찾을 수 없습니다",
+        "subtitle": "다른 필터를 사용하거나 나중에 다시 확인해 주세요.",
+        "clearFilters": "필터 초기화"
+      },
+      "emptyAll": {
+        "title": "현재 예정된 워크숍이 없습니다",
+        "subtitle": "곧 다시 확인해 주세요!"
+      },
+      "cta": {
+        "title": "워크숍을 제안하시겠어요?",
+        "subtitle": "워크숍 아이디어가 있으신가요? 새로운 주제와 내용에 대한 제안을 환영합니다.",
+        "button": "워크숍 제안하기"
+      }
+    }
   }
 }

@@ -1,0 +1,146 @@
+{
+  "faq": {
+    "meta": {
+      "title": "FAQ — Preguntas frecuentes",
+      "description": "Respuestas a las preguntas más comunes sobre Linux y Open Source, reparación, sostenibilidad y residuos electrónicos."
+    },
+    "hero": {
+      "title": "Preguntas frecuentes (FAQ)",
+      "subtitle": "Nuestras respuestas sobre Linux y Open Source, reparación, sostenibilidad y uso responsable de los recursos — en línea con nuestra misión contra los residuos electrónicos."
+    },
+    "notListed": "¿Tu pregunta no está aquí? Con gusto te ayudamos personalmente.",
+    "contactTeam": "Contacta con nuestro equipo",
+    "groups": [
+      {
+        "category": "Filosofía y Open Source",
+        "items": [
+          {
+            "q": "¿Trabajáis solo con software Open Source?",
+            "a": "No. El Open Source es nuestro camino preferido — por su transparencia, seguridad y durabilidad. Cuando tiene sentido, también usamos o integramos software propietario, siempre con el foco en la utilidad y la sostenibilidad."
+          },
+          {
+            "q": "¿Por qué es importante el Open Source para vosotros?",
+            "a": "El Open Source fortalece la autonomía y la reparabilidad. Reduce dependencias y permite usar los dispositivos por más tiempo — palancas clave contra los residuos electrónicos."
+          },
+          {
+            "q": "¿Qué significa el «derecho a reparar» para vosotros?",
+            "a": "Apostamos por hardware reparable, procesos documentados y piezas de repuesto disponibles. Así prolongamos la vida útil de los dispositivos y cuidamos los recursos."
+          }
+        ]
+      },
+      {
+        "category": "Sistemas operativos y software",
+        "items": [
+          {
+            "q": "¿Trabajáis solo con Linux o también con Windows y macOS?",
+            "a": "Trabajamos exclusivamente con Linux y software Open Source. No instalamos sistemas operativos propietarios (Windows/macOS). En casos muy excepcionales hacemos excepciones, cuando está demostrado que el objetivo no es alcanzable con medios Open Source."
+          },
+          {
+            "q": "¿Recomendáis Linux para todo el mundo?",
+            "a": "Nuestro estándar es Linux, porque es eficiente en recursos, seguro y sostenible. Si son imprescindibles herramientas propietarias, evaluamos alternativas — y discutimos las excepciones raras de forma transparente."
+          },
+          {
+            "q": "¿Ayudáis con la migración a Linux o a alternativas Open Source?",
+            "a": "Sí. Desde proyectos piloto hasta implantaciones completas, acompañamos a particulares, asociaciones y empresas — incluyendo formación y soporte.",
+            "link": { "href": "/services/linux-open-source", "label": "Linux y Open Source" }
+          }
+        ]
+      },
+      {
+        "category": "Reparación y servicios",
+        "items": [
+          {
+            "q": "¿Reparáis dispositivos que no hayáis vendido vosotros?",
+            "a": "Sí. Reparamos portátiles, PCs y periféricos de distintas marcas, independientemente del lugar de compra."
+          },
+          {
+            "q": "¿Reparáis dispositivos Apple?",
+            "a": "El hardware sí — siempre que haya piezas disponibles y la reparación sea viable. Las instalaciones de sistema operativo son solo Linux; no instalamos macOS ni Windows."
+          },
+          {
+            "q": "¿Cuánto tiempo tardan las reparaciones y cuánto cuestan?",
+            "a": "Depende del problema y de las piezas de repuesto. Si lo solicitas, elaboramos un presupuesto y te informamos de forma transparente sobre las opciones."
+          },
+          {
+            "q": "¿Ofrecéis recuperación de datos y borrado seguro?",
+            "a": "Sí. Recuperamos datos en la medida de lo posible y borramos soportes de almacenamiento de forma segura según el estándar (p. ej., con herramientas Open Source).",
+            "link": { "href": "/services/data-recovery-transfer", "label": "Recuperación y transferencia de datos" }
+          },
+          {
+            "q": "¿Puedo ir sin cita previa?",
+            "a": "Con mucho gusto. Para casos complejos o citas empresariales, recomendamos contactarnos brevemente antes.",
+            "link": { "href": "/contact", "label": "Contacto y horarios" }
+          }
+        ]
+      },
+      {
+        "category": "Sostenibilidad y residuos electrónicos",
+        "items": [
+          {
+            "q": "¿Cómo reducís los residuos electrónicos concretamente?",
+            "a": "Mediante reparaciones, reutilización de componentes, refurbishing y reciclaje adecuado. Además, asesoramos sobre configuraciones duraderas y software eficiente en recursos."
+          },
+          {
+            "q": "¿Aceptáis dispositivos viejos?",
+            "a": "Sí, siempre que sea posible la reutilización o el reciclaje adecuado. Evaluamos los dispositivos in situ y decidimos de forma transparente sobre su reutilización o desmontaje."
+          },
+          {
+            "q": "¿Utilizáis piezas de repuesto usadas?",
+            "a": "Cuando tiene sentido técnico, usamos piezas de segunda vida verificadas. Esto ahorra recursos y puede reducir costes, con la misma funcionalidad."
+          },
+          {
+            "q": "¿Por qué reacondicionado en lugar de nuevo?",
+            "a": "Los dispositivos reacondicionados prolongan el período de uso, ahorran CO₂ y materias primas. Con las mejoras adecuadas, suelen ser más que suficientes — a precios justos."
+          }
+        ]
+      },
+      {
+        "category": "Productos y garantía",
+        "items": [
+          {
+            "q": "¿Tenéis dispositivos reacondicionados en oferta?",
+            "a": "Sí. Ofrecemos dispositivos cuidadosamente revisados y reacondicionados con garantía — documentados de forma transparente.",
+            "link": { "href": "/shop", "label": "Ir a la tienda" }
+          },
+          {
+            "q": "¿Qué es la certificación REVAMPED?",
+            "a": "REVAMPED identifica builds sostenibles y reparables con procedencia documentada, rutas de actualización claras y aseguramiento de la calidad.",
+            "link": { "href": "/revamped", "label": "Más sobre REVAMPED" }
+          },
+          {
+            "q": "¿Hay garantía en vuestros dispositivos?",
+            "a": "Sí. Los dispositivos reacondicionados vienen con garantía. Los detalles se especifican de forma transparente por producto."
+          }
+        ]
+      },
+      {
+        "category": "Datos y privacidad",
+        "items": [
+          {
+            "q": "¿Cómo tratáis mis datos durante las reparaciones?",
+            "a": "Con confidencialidad y de forma mínima. Solo accedemos si es necesario para el diagnóstico, y protegemos los soportes técnica y organizativamente."
+          },
+          {
+            "q": "¿Ofrecéis borrado de datos certificado?",
+            "a": "Ofrecemos procedimientos de borrado seguro con registro. Consúltanos sobre el nivel de seguridad que necesitas."
+          }
+        ]
+      },
+      {
+        "category": "Talleres y participación",
+        "items": [
+          {
+            "q": "¿Ofrecéis talleres o formaciones?",
+            "a": "Sí. Temas: introducción a Linux, reparación básica, TI sostenible, herramientas Open Source — para principiantes y avanzados.",
+            "link": { "href": "/workshops", "label": "Talleres actuales" }
+          },
+          {
+            "q": "¿Cómo puedo participar o colaborar?",
+            "a": "Como voluntario/a, socio/a o donante. También es bienvenido compartir conocimiento — juntos logramos un mayor impacto.",
+            "link": { "href": "/get-involved", "label": "Participa" }
+          }
+        ]
+      }
+    ]
+  }
+}

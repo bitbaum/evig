@@ -1,0 +1,248 @@
+{
+  "about": {
+    "meta": {
+      "title": "私たちについて",
+      "description": "ITデバイスの寿命を延ばし、持続可能なコンピューティングを促進するミッションについて詳しく知る。"
+    },
+    "hero": {
+      "title": "テクノロジーに第二の命を",
+      "subtitle": "20年以上にわたり、コンピューターの早すぎる廃棄に反対し、持続可能なITの実践を推進してきました。"
+    },
+    "mission": {
+      "badge": "私たちのミッション",
+      "title": "持続可能性とテクノロジーの出会い",
+      "yearsExperience": "年の経験",
+      "quote": "自転車は10年使うのが当然 — ラップトップだって同じです！",
+      "paragraph1": "2003年以来、非営利団体として技術との向き合い方を変えてきました。ミッションは明確です：<strong>ITデバイスの寿命を延ばし</strong>、修理、リファービッシュ、持続可能な実践を通じて電子廃棄物を削減すること。",
+      "paragraph2": "元銀行だった施設では、テクノロジーと持続可能性が出会う場を作りました。ハードウェアリサイクルとOpen Sourceソフトウェアを組み合わせたアプローチで、人と環境のための持続可能なITソリューションを生み出しています。",
+      "imageAlt": "コンピューターとデバイスのショーウィンドウ"
+    },
+    "impactAreas": {
+      "title": "私たちの活動領域",
+      "subtitle": "三つの柱、一つの目標：テクノロジーをより持続可能でアクセスしやすくする。",
+      "hardware": {
+        "title": "ハードウェアリサイクル",
+        "description": "あらゆる年代のITデバイスを修理・オーバーホールして第二の命を与えます。古いMacBookからヴィンテージコンピューターまで — すべてのデバイスは第二のチャンスに値します。"
+      },
+      "openSource": {
+        "title": "Open Sourceソフトウェア",
+        "description": "LinuxとOpen Sourceソリューションを活用しています。これらのテクノロジーは古いデバイスを効率的に動作させ続け、自分のシステムを制御できるセキュリティを提供します。"
+      },
+      "community": {
+        "title": "コミュニティとソーシャル",
+        "description": "通常の労働市場で困難を抱える人々のために有意義な雇用を創出しています。交換システムにより、サービスをテクノロジーと交換することができます。"
+      }
+    },
+    "cta": {
+      "title": "私たちのミッションの一員に",
+      "description": "デバイスの修理、持続可能なITについて学ぶ、私たちの活動を支援する — どのような形でも歓迎します。一緒にテクノロジーをより持続可能ですべての人にアクセスしやすくしましょう。",
+      "button": "参加する"
+    },
+    "impact": {
+      "meta": {
+        "title": "私たちの活動成果",
+        "description": "環境と社会への測定可能な影響を発見してください。持続可能なITのためのミッションを支援する。"
+      },
+      "hero": {
+        "title": "私たちの測定可能な成果",
+        "description": "2003年以来、スイスのIT状況をどのように持続的に変えてきたかをご覧ください — 透明で、測定可能で、効果的に。"
+      },
+      "transparency": {
+        "title": "なぜ透明性が重要なのか",
+        "description": "非営利団体として、私たちは透明性を最重要視しています。すべての数字は追跡可能にドキュメント化されており、寄付者として自分の支援がどのように機能するかを正確に理解できます。"
+      },
+      "verified": "検証済み",
+      "methodology": "方法論と計算",
+      "lastUpdated": "最終更新",
+      "impactInNumbers": "数字で見る活動成果",
+      "tabs": {
+        "environmental": "環境",
+        "social": "社会",
+        "economic": "経済"
+      },
+      "environmental": {
+        "title": "環境への影響の詳細",
+        "co2PerDevice": "救出されたデバイス1台あたり平均{value}kgのCO₂排出量を節約",
+        "ewasteAvoided": "年間{value}トンの電子廃棄物を削減",
+        "reuseRate": "デバイスの{value}%がリサイクルではなく再利用されている",
+        "comparison": "新品との比較",
+        "newLaptop": "新しいラップトップの製造：",
+        "refurbishment": "デバイスのリファービッシュ：",
+        "savings": "デバイス1台あたりのCO₂節約："
+      },
+      "social": {
+        "title": "社会への影響の詳細",
+        "internshipSuccess": "インターン生の約{value}%がIT職や継続教育を見つける",
+        "careerReentries": "プログラムを通じて年間約{value}件の職場復帰",
+        "peopleHelped": "2003年以来、持続可能なITで{value}人をサポート",
+        "successStories": "成功事例",
+        "testimonial": "RevampITのおかげで、3年間の失業後にIT業界に再び足を踏み入れることができました。",
+        "testimonialAuthor": "Sarah M.、元インターン生"
+      },
+      "economic": {
+        "title": "経済的影響",
+        "customerSavings": "顧客は修理1台あたり平均CHF {value}を節約",
+        "smeOpenSource": "中小企業はOpen Sourceソリューションで費用を節約",
+        "jobs": "スイスで{value}件の有意義な雇用",
+        "economicImpact": "経済的インパクト",
+        "avgRepairCost": "平均修理費用：",
+        "newDevicePrice": "新品デバイス価格（同等）：",
+        "savingsPerCustomer": "顧客1人あたりの節約："
+      },
+      "donation": {
+        "title": "支援方法",
+        "subtitle": "すべての支援が重要で、私たちのミッションに直接貢献します。あなたに合った支援方法を選んでください。",
+        "popular": "人気",
+        "impactCalculator": "あなたの寄付の効果を計算",
+        "impactCalculatorDesc": "あなたの寄付がどのような効果をもたらすかをすぐに確認",
+        "laptopRepair": "家族のためのラップトップ修理",
+        "internshipMonth": "職場復帰者のための1ヶ月インターンシップ",
+        "dataRecovery": "中小企業顧客向けの完全データ復旧",
+        "methods": {
+          "monthly": {
+            "name": "月次寄付",
+            "description": "持続的な効果のための定期的な支援",
+            "amount": "月CHF 20から",
+            "benefits": [
+              "プログラムの継続的な資金提供",
+              "長期プロジェクトの計画可能なリソース",
+              "活動成果に関する独自アップデート",
+              "特別イベントへの招待"
+            ],
+            "cta": "月次寄付をする"
+          },
+          "oneTime": {
+            "name": "一回限りの寄付",
+            "description": "特定のプロジェクトへの直接支援",
+            "amount": "自由な金額",
+            "benefits": [
+              "進行中のプロジェクトへの即時効果",
+              "寄付額の柔軟性",
+              "税務目的の寄付証明書",
+              "プロジェクトへの紐付けの可能性"
+            ],
+            "cta": "今すぐ寄付する"
+          },
+          "corporate": {
+            "name": "企業パートナーシップ",
+            "description": "持続可能なITのための戦略的パートナーシップ",
+            "amount": "年CHF 5000から",
+            "benefits": [
+              "企業向けサステナビリティレポート",
+              "持続可能なITに関する社員ワークショップ",
+              "ウェブサイトへのロゴ掲載",
+              "年次インパクトレポート"
+            ],
+            "cta": "パートナーになる"
+          },
+          "equipment": {
+            "name": "デバイス寄付",
+            "description": "動作するITデバイスを寄付",
+            "benefits": [
+              "デバイスの税控除",
+              "プロフェッショナルなデータ消去を保証",
+              "企業向けサステナビリティ証明書",
+              "デバイス追跡による可視的な効果"
+            ],
+            "cta": "デバイスを寄付する"
+          }
+        }
+      },
+      "reports": {
+        "title": "透明性とレポート",
+        "subtitle": "活動と成果について定期的に報告しています。すべてのドキュメントは公開されています。",
+        "annual": {
+          "title": "2023年次報告書",
+          "description": "2023年のすべての指標と活動の完全な活動報告書。",
+          "download": "PDFをダウンロード"
+        },
+        "impact": {
+          "title": "インパクトレポート",
+          "description": "方法論の説明を含む社会的・環境的影響の詳細分析。",
+          "view": "レポートを見る"
+        },
+        "register": {
+          "title": "透明性レジスター",
+          "description": "すべての寄付とその使途の公開レジスター。",
+          "open": "レジスターを開く"
+        }
+      },
+      "ctaDonate": {
+        "title": "一緒にもっと達成しよう",
+        "description": "あなたの支援が違いを生みます。大きな貢献でも小さな貢献でも、スイスのIT状況をより持続可能にし、人々に新しいチャンスを与えるために役立ちます。",
+        "donate": "今すぐ寄付する",
+        "contact": "お問い合わせ"
+      }
+    },
+    "press": {
+      "meta": {
+        "title": "プレス・メディア",
+        "description": "メディア報道とプレス記事。SRF、Beobachterなどが私たちについて書いたことをご覧ください。"
+      },
+      "hero": {
+        "title": "プレス・メディア",
+        "description": "SRF、Beobachterなどが私たちについて報道しています。20年以上にわたって持続可能なITに取り組んできました。"
+      },
+      "stats": {
+        "mediaMentions": "メディア掲載",
+        "uniqueSources": "異なる情報源",
+        "partnerships": "パートナーシップ"
+      },
+      "tierLabels": {
+        "1": "全国メディア",
+        "2": "チューリッヒ市",
+        "3": "団体",
+        "4": "コミュニティ"
+      },
+      "nationalMedia": "全国メディア",
+      "featuredArticles": "注目の記事",
+      "otherMentions": "その他の掲載・パートナーシップ",
+      "readArticle": "記事を読む",
+      "pressContact": {
+        "title": "プレスお問い合わせ",
+        "description": "私たちについて報道したいですか？ご関心をありがとうございます。インタビューやバックグラウンドトークに喜んで応じます。",
+        "contactForm": "お問い合わせフォーム"
+      }
+    },
+    "finances": {
+      "meta": {
+        "title": "財務と透明性",
+        "description": "公開財務データ。資金の活用方法と自己資金調達率をご確認ください。"
+      },
+      "hero": {
+        "title": "財務と透明性",
+        "subtitle": "非営利団体として、財務データを公開しています。収入の来源と自己資金調達率をご覧ください。"
+      },
+      "loading": "読み込み中...",
+      "errorMessage": "財務データを読み込めませんでした。",
+      "noData": "財務データがありません。",
+      "metrics": {
+        "totalRevenue": "{year}年総収入",
+        "selfFinancing": "自己資金調達",
+        "selfFinancingEarned": "自己調達",
+        "donationsFunding": "寄付・助成金",
+        "donationsPct": "収入に占める割合"
+      },
+      "table": {
+        "title": "来源別収入",
+        "subtitle": "すべての金額はCHF、会計データ（Kivitendo）に基づく",
+        "source": "来源",
+        "rows": {
+          "warenverkauf": "商品販売",
+          "dienstleistungen": "サービス",
+          "integration": "統合・プロジェクト",
+          "spenden": "寄付",
+          "aufstockung": "補助金",
+          "total": "合計",
+          "eigenfinanzierungsquote": "自己資金調達率"
+        }
+      },
+      "methodology": {
+        "title": "方法論について",
+        "point1": "自己資金調達率の計算：（商品販売 + サービス + 統合）/ 合計 × 100",
+        "point2": "すべてのデータはKivitendo会計システムから取得し、フラン単位で正確です。",
+        "point3": "2015〜2021年は年次集計、2022年以降は月次データが利用可能です。"
+      }
+    }
+  }
+}

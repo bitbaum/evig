@@ -1,0 +1,248 @@
+{
+  "about": {
+    "meta": {
+      "title": "Sobre nosotros",
+      "description": "Descubre más sobre nuestra misión de prolongar la vida útil de los equipos TI y promover la informática sostenible."
+    },
+    "hero": {
+      "title": "Dar una segunda vida a la tecnología",
+      "subtitle": "Llevamos más de 20 años luchando contra la obsolescencia prematura de los ordenadores y promoviendo prácticas de TI sostenibles."
+    },
+    "mission": {
+      "badge": "Nuestra misión",
+      "title": "Sostenibilidad y tecnología de la mano",
+      "yearsExperience": "años de experiencia",
+      "quote": "¡10 años es el mínimo para una bici — y para un portátil también!",
+      "paragraph1": "Como asociación sin ánimo de lucro, transformamos la relación con la tecnología desde 2003. Nuestra misión es clara: <strong>prolongar la vida útil de los equipos TI</strong> y reducir los residuos electrónicos mediante la reparación, el reacondicionamiento y las prácticas sostenibles.",
+      "paragraph2": "En nuestras instalaciones — una antigua sucursal bancaria — hemos creado un punto de encuentro donde la tecnología y la sostenibilidad convergen. Nuestro enfoque combina el reciclaje de hardware con el software de código abierto para crear soluciones TI sostenibles para las personas y el medio ambiente.",
+      "imageAlt": "Escaparate con ordenadores y dispositivos"
+    },
+    "impactAreas": {
+      "title": "Nuestras áreas de impacto",
+      "subtitle": "Tres pilares, un objetivo: hacer la tecnología más sostenible y accesible.",
+      "hardware": {
+        "title": "Reciclaje de hardware",
+        "description": "Reparamos y reacondicionamos equipos TI de todas las edades y les damos una segunda vida. Desde viejos MacBooks hasta ordenadores vintage — cada dispositivo merece una segunda oportunidad."
+      },
+      "openSource": {
+        "title": "Software Open Source",
+        "description": "Apostamos por Linux y otras soluciones Open Source. Estas tecnologías mantienen funcionando eficientemente los dispositivos más antiguos y ofrecen seguridad gracias al control sobre el propio sistema."
+      },
+      "community": {
+        "title": "Comunidad y acción social",
+        "description": "Creamos empleos con sentido para personas que lo tienen difícil en el mercado laboral ordinario. Con nuestro sistema de intercambio, es posible canjear servicios por tecnología."
+      }
+    },
+    "cta": {
+      "title": "Únete a nuestra misión",
+      "description": "Ya sea que quieras reparar un dispositivo, aprender más sobre TI sostenible o apoyar nuestra causa — eres bienvenido/a. Juntos hacemos la tecnología más sostenible y accesible para todos.",
+      "button": "Participar"
+    },
+    "impact": {
+      "meta": {
+        "title": "Nuestro impacto",
+        "description": "Descubre el impacto medible en el medio ambiente y la sociedad. Apoya nuestra misión de TI sostenible."
+      },
+      "hero": {
+        "title": "Nuestro impacto medible",
+        "description": "Descubre cómo hemos transformado de forma sostenible el panorama TI suizo desde 2003 — de manera transparente, medible y efectiva."
+      },
+      "transparency": {
+        "title": "Por qué importa la transparencia",
+        "description": "Como asociación sin ánimo de lucro, damos la máxima importancia a la transparencia. Cada cifra está documentada de forma verificable para que, como donante, entiendas exactamente cómo actúa tu apoyo."
+      },
+      "verified": "Verificado",
+      "methodology": "Metodología y cálculo",
+      "lastUpdated": "Última actualización",
+      "impactInNumbers": "Comprender el impacto en cifras",
+      "tabs": {
+        "environmental": "Medioambiental",
+        "social": "Social",
+        "economic": "Económico"
+      },
+      "environmental": {
+        "title": "Impacto medioambiental en detalle",
+        "co2PerDevice": "Cada dispositivo rescatado ahorra en promedio {value} kg de emisiones de CO₂",
+        "ewasteAvoided": "Evitamos {value} toneladas de residuos electrónicos al año",
+        "reuseRate": "El {value}% de nuestros dispositivos se reutiliza en lugar de reciclarse",
+        "comparison": "Comparación con dispositivos nuevos",
+        "newLaptop": "Fabricación de un portátil nuevo:",
+        "refurbishment": "Reacondicionamiento de un dispositivo:",
+        "savings": "Ahorro de CO₂ por dispositivo:"
+      },
+      "social": {
+        "title": "Impacto social en detalle",
+        "internshipSuccess": "~{value}% de nuestros/as estudiantes en prácticas encuentran empleos TI o formación",
+        "careerReentries": "~{value} reinserciones laborales al año gracias a nuestro programa",
+        "peopleHelped": "{value} personas acompañadas en TI sostenible desde 2003",
+        "successStories": "Historias de éxito",
+        "testimonial": "Gracias a RevampIT, después de 3 años de desempleo volví a encontrar mi lugar en el sector TI.",
+        "testimonialAuthor": "Sarah M., ex estudiante en prácticas"
+      },
+      "economic": {
+        "title": "Impacto económico",
+        "customerSavings": "Los clientes ahorran en promedio CHF {value} por dispositivo reparado",
+        "smeOpenSource": "Las pymes se benefician de soluciones Open Source asequibles",
+        "jobs": "{value} empleos con sentido en Suiza",
+        "economicImpact": "Impacto económico",
+        "avgRepairCost": "Coste medio de reparación:",
+        "newDevicePrice": "Precio de dispositivo nuevo (comparable):",
+        "savingsPerCustomer": "Ahorro por cliente:"
+      },
+      "donation": {
+        "title": "Cómo puedes apoyarnos",
+        "subtitle": "Cada aportación cuenta y contribuye directamente a nuestra misión. Elige la forma de apoyo que mejor se adapte a ti.",
+        "popular": "Popular",
+        "impactCalculator": "Calcula el impacto de tu donación",
+        "impactCalculatorDesc": "Ve al instante el impacto que puede tener tu donación",
+        "laptopRepair": "Reparación de un portátil para una familia",
+        "internshipMonth": "Un mes de prácticas para alguien en reinserción laboral",
+        "dataRecovery": "Recuperación de datos completa para un cliente pyme",
+        "methods": {
+          "monthly": {
+            "name": "Donación mensual",
+            "description": "Apoyo regular para un impacto sostenible",
+            "amount": "Desde CHF 20/mes",
+            "benefits": [
+              "Financiación continua de nuestros programas",
+              "Recursos planificables para proyectos a largo plazo",
+              "Actualizaciones exclusivas sobre nuestro impacto",
+              "Invitaciones a eventos especiales"
+            ],
+            "cta": "Donar mensualmente"
+          },
+          "oneTime": {
+            "name": "Donación única",
+            "description": "Apoyo directo a proyectos específicos",
+            "amount": "A tu elección",
+            "benefits": [
+              "Impacto inmediato en proyectos en curso",
+              "Flexibilidad en el importe de la donación",
+              "Certificado de donación a efectos fiscales",
+              "Posibilidad de vinculación a un proyecto"
+            ],
+            "cta": "Donar ahora"
+          },
+          "corporate": {
+            "name": "Alianza empresarial",
+            "description": "Colaboración estratégica para TI sostenible",
+            "amount": "Desde CHF 5.000/año",
+            "benefits": [
+              "Informe de sostenibilidad para tu empresa",
+              "Talleres de TI sostenible para empleados",
+              "Logotipo en nuestro sitio web",
+              "Informe de impacto anual"
+            ],
+            "cta": "Ser socio empresarial"
+          },
+          "equipment": {
+            "name": "Donación de dispositivos",
+            "description": "Dona equipos TI en funcionamiento",
+            "benefits": [
+              "Deducibilidad fiscal de los dispositivos",
+              "Borrado de datos profesional garantizado",
+              "Certificado de sostenibilidad para tu empresa",
+              "Impacto visible mediante seguimiento de dispositivos"
+            ],
+            "cta": "Donar dispositivos"
+          }
+        }
+      },
+      "reports": {
+        "title": "Transparencia e informes",
+        "subtitle": "Publicamos informes periódicos sobre nuestras actividades e impacto. Todos los documentos son de acceso público.",
+        "annual": {
+          "title": "Informe anual 2023",
+          "description": "Informe completo de actividades con todos los indicadores y actividades del año 2023.",
+          "download": "Descargar PDF"
+        },
+        "impact": {
+          "title": "Informe de impacto",
+          "description": "Análisis detallado de nuestro impacto social y medioambiental con explicaciones metodológicas.",
+          "view": "Ver informe"
+        },
+        "register": {
+          "title": "Registro de transparencia",
+          "description": "Registro público de todas las donaciones y cómo se han utilizado.",
+          "open": "Abrir registro"
+        }
+      },
+      "ctaDonate": {
+        "title": "Juntos logramos más",
+        "description": "Tu apoyo marca la diferencia. Cada aportación, grande o pequeña, nos ayuda a hacer el panorama TI suizo más sostenible y a dar nuevas oportunidades a las personas.",
+        "donate": "Donar ahora",
+        "contact": "Contactar"
+      }
+    },
+    "press": {
+      "meta": {
+        "title": "Prensa y medios",
+        "description": "Reportajes y artículos de prensa. Descubre lo que SRF, Beobachter y otros han escrito sobre nosotros."
+      },
+      "hero": {
+        "title": "Prensa y medios",
+        "description": "Lo que SRF, Beobachter y otros informan sobre nosotros. Llevamos más de 20 años apostando por la TI sostenible."
+      },
+      "stats": {
+        "mediaMentions": "Menciones en medios",
+        "uniqueSources": "Fuentes distintas",
+        "partnerships": "Alianzas"
+      },
+      "tierLabels": {
+        "1": "Medios nacionales",
+        "2": "Ciudad de Zúrich",
+        "3": "Organizaciones",
+        "4": "Comunidad"
+      },
+      "nationalMedia": "Medios nacionales",
+      "featuredArticles": "Artículos destacados",
+      "otherMentions": "Otras menciones y alianzas",
+      "readArticle": "Leer artículo",
+      "pressContact": {
+        "title": "Consultas de prensa",
+        "description": "¿Quieres informar sobre nosotros? Nos alegra tu interés y estamos disponibles para entrevistas y conversaciones de fondo.",
+        "contactForm": "Formulario de contacto"
+      }
+    },
+    "finances": {
+      "meta": {
+        "title": "Finanzas y transparencia",
+        "description": "Datos financieros públicos. Descubre cómo utilizamos nuestros recursos y cuál es nuestra tasa de autofinanciación."
+      },
+      "hero": {
+        "title": "Finanzas y transparencia",
+        "subtitle": "Como asociación sin ánimo de lucro, hacemos públicos nuestros datos financieros. Aquí puedes ver de dónde provienen nuestros ingresos y cuál es nuestra tasa de autofinanciación."
+      },
+      "loading": "Cargando...",
+      "errorMessage": "No se pudieron cargar los datos financieros.",
+      "noData": "No hay datos financieros disponibles.",
+      "metrics": {
+        "totalRevenue": "Ingresos totales {year}",
+        "selfFinancing": "Autofinanciación",
+        "selfFinancingEarned": "generado por nosotros mismos",
+        "donationsFunding": "Donaciones y subvenciones",
+        "donationsPct": "de los ingresos"
+      },
+      "table": {
+        "title": "Ingresos por fuente",
+        "subtitle": "Todos los importes en CHF, basados en datos contables (Kivitendo)",
+        "source": "Fuente",
+        "rows": {
+          "warenverkauf": "Venta de productos",
+          "dienstleistungen": "Servicios",
+          "integration": "Integración / Proyectos",
+          "spenden": "Donaciones",
+          "aufstockung": "Complemento precio de referencia",
+          "total": "Total",
+          "eigenfinanzierungsquote": "Tasa de autofinanciación"
+        }
+      },
+      "methodology": {
+        "title": "Sobre la metodología",
+        "point1": "La tasa de autofinanciación se calcula como: (Venta de productos + Servicios + Integración) / Total × 100",
+        "point2": "Todos los datos provienen de la contabilidad Kivitendo y son exactos al franco.",
+        "point3": "Para 2015–2021 se dispone de agregados anuales; a partir de 2022, datos mensuales."
+      }
+    }
+  }
+}

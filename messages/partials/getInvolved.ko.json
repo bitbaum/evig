@@ -1,0 +1,218 @@
+{
+  "getInvolved": {
+    "meta": {
+      "title": "참여하기",
+      "description": "전자 폐기물을 줄이고 기술을 모두에게 접근 가능하게 만드는 저희 미션에 동참하세요. 자원봉사자, 인턴 또는 파트너가 되세요."
+    },
+    "page": {
+      "getStarted": "시작하기",
+      "learnMore": "더 알아보기",
+      "waysTitle": "참여 방법",
+      "testimonialTitle": "커뮤니티가 말하는 것",
+      "partnersTitle": "파트너 단체",
+      "ctaTitle": "변화를 만들 준비가 되셨나요?",
+      "ctaDescription": "변화를 만드는 커뮤니티에 동참하여 기술을 통해 더 지속 가능한 미래를 만드는 데 도움을 주세요.",
+      "discoverWorkshops": "워크숍 탐색"
+    },
+    "coreValues": {
+      "sustainability": {
+        "title": "지속 가능성",
+        "description": "책임감 있는 기술 사용과 폐기물 감소를 통해 지속 가능한 미래를 만드는 것을 믿습니다."
+      },
+      "community": {
+        "title": "커뮤니티",
+        "description": "기술 교육과 포용적 참여를 통해 강한 커뮤니티를 구축합니다."
+      },
+      "innovation": {
+        "title": "혁신",
+        "description": "기술을 접근 가능하고 환경 친화적으로 만들기 위한 창의적인 솔루션을 찾습니다."
+      },
+      "globalImpact": {
+        "title": "글로벌 영향",
+        "description": "기술을 통해 지역 및 글로벌 커뮤니티에서 차이를 만듭니다."
+      }
+    },
+    "volunteer": {
+      "meta": {
+        "title": "자원봉사",
+        "description": "열정적인 자원봉사자 팀에 합류하여 기술과 지속 가능성을 통해 커뮤니티에서 변화를 만드세요."
+      },
+      "title": "자원봉사자 되기",
+      "description": "열정적인 자원봉사자 팀에 합류하여 기술을 지속 가능하고 모두에게 접근 가능하게 만드는 데 도움을 주세요.",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "자원봉사의 이점",
+      "flexibilityNote": "저희는 모든 사람이 다른 일정을 가지고 있다는 것을 이해합니다. 다른 약속에 맞게 조정할 수 있는 유연한 자원봉사 기회를 제공합니다. 일주일에 몇 시간이든 더 많이든 — 귀하의 기여는 차이를 만들 것입니다.",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "steps": [
+        "저희에게 연락하여 관심을 표명하세요",
+        "저희 팀과 만나 기술과 관심사를 논의하세요",
+        "짧은 오리엔테이션 세션에 참여하세요",
+        "차이를 만들기 시작하세요!"
+      ]
+    },
+    "donate": {
+      "meta": {
+        "title": "기부",
+        "description": "직접 도와주세요. 모든 기부가 기기를 전자 폐기물에서 구하고 기술을 모두에게 접근 가능하게 만듭니다."
+      },
+      "heroTitle": "직접 도와주세요.",
+      "heroDescription": "모든 기부가 기기를 전자 폐기물에서 구하고 수명 주기를 연장하며 스스로 감당할 수 없는 사람들에게 기술을 가능하게 합니다.",
+      "transferNow": "지금 이체하기",
+      "transparencyLabel": "투명성",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "연간 예산 (비영리 단체)",
+      "devicesSavedLabel": "연간 구조된 기기",
+      "co2SavedLabel": "연간 절감",
+      "impactTitle": "귀하의 기부가 하는 일",
+      "recommended": "추천",
+      "chooseAmount": "금액을 선택하고 이체하기",
+      "bankTransferTitle": "계좌 이체",
+      "bankTransferDescription": "다음 계좌로 이체해 주세요:",
+      "recipient": "수취인",
+      "iban": "IBAN",
+      "bank": "은행",
+      "purpose": "이체 목적",
+      "copy": "복사",
+      "copyIban": "IBAN 복사",
+      "donateDevicesTitle": "기기 기부하기",
+      "donateDevicesDescription": "더 이상 필요 없는 하드웨어가 다른 사람에게 진정한 기회를 줄 수 있습니다. 저희는 작동하거나 수리 가능한 기기를 받아 재정비하고 전달합니다.",
+      "weAccept": "받는 것:",
+      "weAcceptList": "노트북, 데스크탑 PC, 모니터, 키보드, 마우스, 프린터 — 작동 중이거나 수리 가능한 것.",
+      "weDoNotAccept": "받지 않는 것:",
+      "weDoNotAcceptList": "물리적 손상이 있는 기기, 프레임 없이 파손된 화면, CRT 모니터.",
+      "preparation": "준비:",
+      "preparationText": "반납 전 개인 데이터를 삭제해 주세요 (필요한 경우 도와드립니다).",
+      "dropOffAddress": "반납 주소",
+      "questions": "질문이 있으신가요? 저희에게 연락해 주세요 →",
+      "newsletterTitle": "기부가 어떤 효과를 내는지 알려드립니다.",
+      "newsletterDescription": "광고 없음. 구조된 기기, 절감된 CO₂, 지원받은 사람들에 대한 진짜 업데이트만.",
+      "purposeTemplate": "기부 {org} {month} {year}",
+      "months": ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+      "impact": {
+        "tier1Title": "기기 1대 구조",
+        "tier1Description": "전자 폐기물에서 노트북 1대 구조 + CO₂ 285kg 방지.",
+        "tier2Title": "기기 2대 + 워크숍 자리",
+        "tier2Description": "기기 2대 재정비 + 감당할 수 없는 사람을 위한 Linux 워크숍 자리 한 개.",
+        "tier3Title": "기업 기부 — 기기 10대",
+        "tier3Description": "교육 기관, 사회 프로젝트 또는 저소득 가정을 위한 기기 10대."
+      },
+      "devices": {
+        "laptop": "노트북",
+        "desktop": "데스크탑 PC",
+        "monitor": "모니터",
+        "peripherals": "주변기기"
+      }
+    },
+    "partnerships": {
+      "meta": {
+        "title": "파트너십",
+        "description": "지속 가능한 기술 솔루션을 만들고 지속적인 영향을 미치기 위해 협력해 주세요."
+      },
+      "title": "파트너십 기회",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "파트너십의 이점",
+      "processTitle": "협력 방식",
+      "processSteps": [
+        "목표와 기회 이해를 위한 첫 상담",
+        "파트너십 프레임워크 및 목표 개발",
+        "협력 이니셔티브 실행",
+        "정기적인 진행 검토 및 영향력 평가",
+        "지속적인 개선 및 파트너십 확장"
+      ],
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "파트너십 기회를 논의하기 위해 저희에게 연락하세요",
+        "귀 단체의 목표와 관심사를 공유하세요",
+        "잠재적 협력 분야를 탐색하세요",
+        "파트너십 계약을 개발하세요",
+        "파트너십 여정을 시작하세요"
+      ]
+    },
+    "internships": {
+      "meta": {
+        "title": "인턴십",
+        "description": "저희 인턴십 프로그램을 통해 기술과 지속 가능성 분야에서 실무 경험을 쌓으세요."
+      },
+      "title": "인턴십 기회",
+      "description": "기술과 지속 가능성 분야에서 귀중한 경험을 쌓고 진정한 변화를 만드세요.",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "프로그램 혜택",
+      "howToApplyTitle": "어떻게 지원할 수 있나요",
+      "howToApplySteps": [
+        "이력서와 자기소개서를 보내주세요",
+        "관심 분야와 가능 시간을 알려주세요",
+        "짧은 면담을 진행하세요",
+        "인턴십 여정을 시작하세요!"
+      ]
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "기술 전문가",
+        "description": "기술 전문 지식을 공유하고 지속 가능한 기술을 위한 혁신적인 솔루션을 개발하는 데 도움을 주세요."
+      },
+      "title": "기술 전문가",
+      "description": "전문 지식을 공유하고 지속 가능한 기술을 위한 혁신적인 솔루션을 개발하는 데 도움을 주세요.",
+      "ctaText": "관심 표명하기",
+      "opportunitiesTitle": "기술 전문가를 위한 기회",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "전문 분야와 관심사를 저희에게 알려주세요",
+        "가능한 프로젝트와 기여를 논의하세요",
+        "저희의 개발 지침과 프로세스를 검토하세요",
+        "저희 프로젝트에 기여를 시작하세요"
+      ]
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT 지원 기술자",
+        "description": "IT 지식을 공유하고 커뮤니티의 사람들을 도와주세요 — 유연하게, 사전 지식 없이, 진정한 영향력으로."
+      },
+      "title": "IT 지원 기술자 되기",
+      "description": "귀하의 IT 지식이 다른 사람들의 삶을 더 쉽게 만들 수 있습니다. 커뮤니티 사람들의 컴퓨터를 도와주세요 — 유연하게, 간단하게, 영향력 있게.",
+      "ctaText": "기술자로 등록하기",
+      "benefitsTitle": "무엇을 얻을 수 있나요",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "기술과 가능 시간을 포함한 기술자 프로필을 만드세요",
+        "요청을 기다리세요 — 어떤 것을 수락할지 귀하가 결정합니다",
+        "요청자와 직접 약속을 잡으세요",
+        "돕고, 배우고, 차이를 만드세요"
+      ]
+    },
+    "workReintegration": {
+      "meta": {
+        "title": "직업 복귀",
+        "description": "직업 복귀 프로그램에 참여하여 기술 분야에서 귀중한 기술과 경험을 쌓으면서 커리어를 다시 구축하세요."
+      },
+      "title": "직업 복귀 프로그램",
+      "description": "지원 프로그램에 참여하여 기술 및 지속 가능성 분야에서 커리어를 다시 구축하세요.",
+      "ctaText": "관심 표명하기",
+      "benefitsTitle": "프로그램 혜택",
+      "howToStartTitle": "어떻게 시작할 수 있나요",
+      "howToStartSteps": [
+        "상황을 논의하기 위해 저희에게 연락하세요",
+        "저희 팀과 만나 평가를 받으세요",
+        "개인화된 계획을 개발하세요",
+        "직업 복귀 여정을 시작하세요"
+      ]
+    },
+    "kontakt": {
+      "meta": {
+        "title": "관심 표명하기",
+        "description": "관심 있는 내용을 간단히 알려주세요 — 저희가 연락드리겠습니다."
+      },
+      "backToInvolvement": "모든 참여 방법",
+      "title": "{topic}에 관한 관심",
+      "description": "귀하가 누구인지, 무엇에 관심이 있는지 간단히 알려주세요. 저희가 개인적으로 연락드리겠습니다.",
+      "topics": {
+        "freiwilligenarbeit": "자원봉사",
+        "praktikum": "인턴십",
+        "wiedereinstieg": "직업 복귀",
+        "technische-experten": "기술 전문가",
+        "partnerschaft": "파트너십",
+        "it-hilfe-techniker": "IT 지원 기술자",
+        "default": "참여하기"
+      }
+    }
+  }
+}

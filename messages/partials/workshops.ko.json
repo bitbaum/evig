@@ -1,0 +1,45 @@
+{
+  "workshops": {
+    "meta": {
+      "title": "워크숍 & 강좌",
+      "description": "지속 가능한 기술, Linux, 수리, 프로그래밍 등에 관한 워크숍을 찾아보세요. 취리히에서 실습 학습."
+    },
+    "browse": {
+      "title": "워크숍 & 강좌",
+      "subtitle": "{count, plural, other {# 개}} 워크숍 · {orgName}에서 실습 학습",
+      "proposeButton": "워크숍 제안하기",
+      "filterCategory": "카테고리",
+      "allCategories": "모든 카테고리",
+      "filterLevel": "난이도",
+      "allLevels": "모든 수준",
+      "clearFilters": "필터 초기화",
+      "resultCount": "{count, plural, other {# 개}} 워크숍",
+      "allLevelsLabel": "모든 수준",
+      "maxParticipants": "최대 {count}명",
+      "nextDate": "다음 일정: {date}",
+      "dateSoon": "일정이 곧 공개됩니다",
+      "spotsLeft": "{count, plural, other {# 자리}} 남음",
+      "soldOut": "마감",
+      "free": "무료",
+      "registered": "등록됨",
+      "viewDetails": "자세히 보기",
+      "manage": "관리",
+      "registerNow": "지금 등록하기",
+      "noDate": "일정 없음",
+      "emptyFiltered": {
+        "title": "워크숍을 찾을 수 없습니다",
+        "subtitle": "다른 필터를 사용하거나 나중에 다시 확인해 주세요.",
+        "clearFilters": "필터 초기화"
+      },
+      "emptyAll": {
+        "title": "현재 예정된 워크숍이 없습니다",
+        "subtitle": "곧 다시 확인해 주세요!"
+      },
+      "cta": {
+        "title": "워크숍을 제안하시겠어요?",
+        "subtitle": "워크숍 아이디어가 있으신가요? 새로운 주제와 내용에 대한 제안을 환영합니다.",
+        "button": "워크숍 제안하기"
+      }
+    }
+  }
+}
