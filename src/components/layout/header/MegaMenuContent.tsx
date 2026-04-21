@@ -6,6 +6,7 @@
 
 import Link from 'next/link'
 import { ExternalLink, ArrowRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import type { NavigationItem } from '@/config/navigation'
@@ -24,6 +25,8 @@ export function MegaMenuContent({
   hasMultipleGroups,
   onClose,
 }: MegaMenuContentProps) {
+  const t = useTranslations('nav')
+
   return (
     <div
       className={cn(
@@ -35,20 +38,28 @@ export function MegaMenuContent({
       )}
     >
       {hasMultipleGroups ? (
-        <MultiColumnLayout groups={groups} onClose={onClose} />
+        <MultiColumnLayout groups={groups} onClose={onClose} t={t} />
       ) : (
-        <SingleColumnLayout items={subItems} onClose={onClose} />
+        <SingleColumnLayout items={subItems} onClose={onClose} t={t} />
       )}
     </div>
   )
 }
 
+type TFn = ReturnType<typeof useTranslations<'nav'>>
+
+function getLabel(item: NavigationItem, t: TFn): string {
+  return item.nameKey ? t(item.nameKey as never) : item.name
+}
+
 function MultiColumnLayout({
   groups,
   onClose,
+  t,
 }: {
   groups: NavigationGroup[]
   onClose: () => void
+  t: TFn
 }) {
   // Dynamic grid columns based on number of sections
   const gridCols = groups.length === 2 ? 'grid-cols-2' : 'grid-cols-3'
@@ -59,13 +70,13 @@ function MultiColumnLayout({
         <div key={idx} className="p-6">
           {group.section && (
             <Heading level={3} className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-4">
-              {group.section.name}
+              {getLabel(group.section, t)}
             </Heading>
           )}
           <ul className="space-y-1">
             {group.items.map((subItem) => (
               <li key={subItem.name}>
-                <MenuLink item={subItem} onClose={onClose} />
+                <MenuLink item={subItem} onClose={onClose} t={t} />
               </li>
             ))}
           </ul>
@@ -78,9 +89,11 @@ function MultiColumnLayout({
 function SingleColumnLayout({
   items,
   onClose,
+  t,
 }: {
   items: NavigationItem[]
   onClose: () => void
+  t: TFn
 }) {
   return (
     <div className="py-2">
@@ -99,7 +112,7 @@ function SingleColumnLayout({
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <span className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
-                {subItem.name}
+                {getLabel(subItem, t)}
               </span>
               <ItemBadge badge={subItem.badge} />
               {subItem.external && <ExternalLink className="w-3 h-3 text-gray-600" />}
@@ -120,9 +133,11 @@ function SingleColumnLayout({
 function MenuLink({
   item,
   onClose,
+  t,
 }: {
   item: NavigationItem
   onClose: () => void
+  t: TFn
 }) {
   return (
     <Link
@@ -138,7 +153,7 @@ function MenuLink({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
-            {item.name}
+            {getLabel(item, t)}
           </span>
           <ItemBadge badge={item.badge} />
           {item.external && <ExternalLink className="w-3 h-3 text-gray-600" />}

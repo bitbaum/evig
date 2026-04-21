@@ -51,21 +51,25 @@ export const mainNavigation: NavigationItem[] = [
     subItems: [
       {
         name: 'Mission & Geschichte',
+        nameKey: 'missionHistory',
         href: '/about',
         description: 'Wer wir sind und was uns antreibt',
       },
       {
         name: 'Unsere Wirkung',
+        nameKey: 'ourImpact',
         href: '/about/impact',
         description: 'Messbare Erfolge und Transparenz',
       },
       {
         name: 'Projekte',
+        nameKey: 'projects',
         href: '/projects',
         description: 'Unsere Initiativen',
       },
       {
         name: 'Standorte',
+        nameKey: 'locations',
         href: '/space',
         description: 'Unsere Räumlichkeiten in Zürich',
       },
@@ -86,42 +90,50 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Hardware
       {
         name: 'Hardware',
+        nameKey: 'sectionHardware',
         href: '/services',
         isSection: true,
       },
       {
         name: 'Reparatur & Upgrades',
+        nameKey: 'repairUpgrades',
         href: '/services/computer-repair-upgrades',
         description: 'Computer wieder fit machen',
       },
       {
         name: 'Datenrettung',
+        nameKey: 'dataRecovery',
         href: '/services/data-recovery-transfer',
         description: 'Daten sichern und übertragen',
       },
       {
         name: 'Hardware-Recycling',
+        nameKey: 'hardwareRecycling',
         href: '/services/hardware-recycling',
         description: 'Verantwortungsvolle Entsorgung',
       },
       // Section: Software
       {
         name: 'Software',
+        nameKey: 'sectionSoftware',
         href: '/services',
         isSection: true,
       },
       {
         name: 'Linux & Open Source',
+        nameKey: 'linuxOpenSource',
         href: '/services/linux-open-source',
         description: 'Installation und Support',
       },
       {
         name: 'Webentwicklung',
+        nameKey: 'webDevelopment',
         href: '/services/web-design-development',
         description: 'Websites mit Open Source',
       },
       {
         name: 'Open Source-Lösungen',
+        nameKey: 'openSourceSolutions',
         href: '/services/open-source-solutions',
         description: 'Beratung und Implementierung',
       },
@@ -138,58 +150,69 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Geräte kaufen
       {
         name: 'Geräte kaufen',
+        nameKey: 'sectionBuyDevices',
         href: '/marketplace',
         isSection: true,
       },
       {
         name: 'Community-Inserate',
+        nameKey: 'communityListings',
         href: '/marketplace',
         description: 'Gebrauchte IT von Privat — 0% Gebühren',
       },
       {
         name: 'RevampIT Shop',
+        nameKey: 'shopRevampIT',
         href: '/shop',
         description: 'Geprüfte, aufbereitete Geräte',
       },
       {
         name: 'Ladenlokal Zürich',
+        nameKey: 'storeZurich',
         href: '/shop#ladenlokal',
         description: 'Vor Ort stöbern und beraten lassen',
       },
       // Section: Verkaufen
       {
         name: 'Verkaufen',
+        nameKey: 'sectionSell',
         href: '/marketplace/sell',
         isSection: true,
       },
       {
         name: 'Inserat erstellen',
+        nameKey: 'createListing',
         href: '/marketplace/sell',
         description: 'Eigene Geräte verkaufen — kostenlos',
       },
       {
         name: 'Meine Inserate',
+        nameKey: 'myListings',
         href: '/dashboard/listings',
         description: 'Inserate und Verkäufe verwalten',
       },
       // Section: IT-Hilfe
       {
         name: 'IT-Hilfe',
+        nameKey: 'itHelp',
         href: '/it-hilfe',
         isSection: true,
       },
       {
         name: 'Hilfe suchen',
+        nameKey: 'findHelp',
         href: '/it-hilfe',
         description: 'Community-Techniker in deiner Nähe',
       },
       {
         name: 'Techniker finden',
+        nameKey: 'findTechnicians',
         href: '/techniker',
         description: 'Community- und professionelle Techniker',
       },
       {
         name: 'Techniker werden',
+        nameKey: 'becomeTechnician',
         href: '/profil/techniker',
         description: 'IT-Wissen teilen und helfen',
       },
@@ -203,21 +226,25 @@ export const mainNavigation: NavigationItem[] = [
     subItems: [
       {
         name: 'Workshops',
+        nameKey: 'workshops',
         href: '/workshops',
         description: 'Kurse vor Ort buchen',
       },
       {
         name: 'Guides',
+        nameKey: 'guides',
         href: '/knowhow#guides',
         description: 'Schritt-für-Schritt Anleitungen',
       },
       {
         name: 'Blog',
+        nameKey: 'blog',
         href: '/blog',
         description: 'Tipps und Geschichten',
       },
       {
         name: 'Wiki',
+        nameKey: 'wiki',
         href: EXTERNAL_LINKS.wiki,
         description: 'Gemeinsames Wissensportal',
         external: true,
@@ -235,26 +262,31 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Engagement
       {
         name: 'Engagement',
+        nameKey: 'sectionEngagement',
         href: '/get-involved',
         isSection: true,
       },
       {
         name: 'Freiwilligenarbeit',
+        nameKey: 'volunteering',
         href: '/get-involved/volunteer',
         description: 'Zeit und Können einbringen',
       },
       {
         name: 'Praktikum',
+        nameKey: 'internship',
         href: '/get-involved/internships',
         description: 'Erfahrung sammeln',
       },
       {
         name: 'Wiedereinstieg',
+        nameKey: 'workReintegration',
         href: '/get-involved/work-reintegration',
         description: 'Zurück ins Berufsleben',
       },
       {
         name: 'IT-Hilfe Techniker',
+        nameKey: 'itHelpTechnician',
         href: '/get-involved/it-hilfe-techniker',
         description: 'IT-Wissen teilen und helfen',
         badge: 'Neu',
@@ -262,32 +294,38 @@ export const mainNavigation: NavigationItem[] = [
       // Section: Unterstützen
       {
         name: 'Unterstützen',
+        nameKey: 'sectionSupport',
         href: '/get-involved',
         isSection: true,
       },
       {
         name: 'Spenden',
+        nameKey: 'donate',
         href: '/get-involved/donate',
         description: 'Unsere Mission fördern',
       },
       {
         name: 'Geräte spenden',
+        nameKey: 'donateDevices',
         href: '/get-involved/donate#geraete',
         description: 'Hardware ein zweites Leben geben',
       },
       {
         name: 'Partnerschaft',
+        nameKey: 'partnership',
         href: '/get-involved/partnerships',
         description: 'Als Unternehmen kooperieren',
       },
       // Section: Mitgliedschaft
       {
         name: 'Mitgliedschaft',
+        nameKey: 'sectionMembership',
         href: '/mitglied-werden',
         isSection: true,
       },
       {
         name: 'Mitglied werden',
+        nameKey: 'becomeMember',
         href: '/mitglied-werden',
         description: 'Teil des Vereins werden und mitbestimmen',
         badge: 'Neu',
