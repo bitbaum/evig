@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { ORG, CONTACT, LOCATIONS } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
@@ -77,9 +78,9 @@ export default function DatenschutzPage() {
         <p>
           Angemeldete Nutzer können eine vollständige Kopie ihrer Daten jederzeit
           selbst herunterladen unter{' '}
-          <a href="/dashboard/settings" className="text-green-700 underline">
+          <Link href="/dashboard/settings" className="text-green-700 underline">
             Einstellungen → Datenschutz
-          </a>
+          </Link>
           . Für alle weiteren Anliegen wende dich bitte an:{' '}
           <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
         </p>
@@ -104,7 +105,7 @@ export default function DatenschutzPage() {
         <p>
           Diese Datenschutzerklärung unterliegt dem Schweizer Datenschutzgesetz (DSG)
           sowie, soweit anwendbar, der Europäischen Datenschutz-Grundverordnung (DSGVO).
-          Siehe auch unser <a href="/impressum" className="text-green-700 underline">Impressum</a>.
+          Siehe auch unser <Link href="/impressum" className="text-green-700 underline">Impressum</Link>.
         </p>
 
         <p className="mt-12 text-sm text-neutral-500">Stand: März 2026</p>

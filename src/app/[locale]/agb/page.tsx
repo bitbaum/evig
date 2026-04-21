@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { ORG, LOCATIONS, CONTACT } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
@@ -73,7 +74,7 @@ export default function AGBPage() {
         <Heading level={2}>8. Datenschutz</Heading>
         <p>
           Die Bearbeitung personenbezogener Daten erfolgt gemäss unserer{' '}
-          <a href="/datenschutz" className="text-green-700 underline">Datenschutzerklärung</a>.
+          <Link href="/datenschutz" className="text-green-700 underline">Datenschutzerklärung</Link>.
           Angemeldete Nutzer können ihre Daten jederzeit selbst exportieren.
         </p>
 
@@ -88,7 +89,7 @@ export default function AGBPage() {
         <p>
           {ORG.name} behält sich vor, diese AGB jederzeit zu ändern. Die jeweils aktuelle
           Fassung ist auf dieser Seite abrufbar. Rechtliche Angaben zum Anbieter finden
-          findest du im <a href="/impressum" className="text-green-700 underline">Impressum</a>.
+          findest du im <Link href="/impressum" className="text-green-700 underline">Impressum</Link>.
         </p>
 
         <p className="mt-12 text-sm text-neutral-500">Stand: April 2026</p>

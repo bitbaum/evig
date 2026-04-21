@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 import { ORG, CONTACT, LOCATIONS } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 
@@ -81,9 +82,9 @@ export default function ImpressumPage() {
         <Heading level={2}>Weitere rechtliche Hinweise</Heading>
         <p>
           Siehe auch unsere{' '}
-          <a href="/datenschutz" className="text-green-700 underline">Datenschutzerklärung</a>
+          <Link href="/datenschutz" className="text-green-700 underline">Datenschutzerklärung</Link>
           {' '}und unsere{' '}
-          <a href="/agb" className="text-green-700 underline">Allgemeinen Geschäftsbedingungen</a>.
+          <Link href="/agb" className="text-green-700 underline">Allgemeinen Geschäftsbedingungen</Link>.
         </p>
 
         <p className="mt-12 text-sm text-neutral-500">Stand: April 2026</p>

@@ -114,7 +114,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   {notesOpen[item.id] && (
                     <div className="mt-2 space-y-1.5">
                       <textarea
-                        // eslint-disable-next-line jsx-a11y/no-autofocus
+                         
                         autoFocus
                         value={notesText[item.id] ?? ''}
                         onChange={(e) => setNotesText(t => ({ ...t, [item.id]: e.target.value }))}
