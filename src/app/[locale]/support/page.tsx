@@ -3,128 +3,135 @@ import Link from 'next/link'
 import { Heart, Coffee, Users, Shield } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { ORG } from '@/config/org'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'RevampIt unterstützen | Community-gestützte Inhalte',
-  description: 'Unterstütze qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie'
+interface SupportPageProps {
+  params: Promise<{ locale: string }>
 }
 
-export default function SupportPage() {
+export async function generateMetadata({ params }: SupportPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'support' })
+  return {
+    title: `${t('meta.title')} | ${ORG.name}`,
+    description: t('meta.description'),
+  }
+}
+
+export default async function SupportPage({ params }: SupportPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'support' })
+
+  const promiseItems = t.raw('promise.items') as string[]
+
   return (
     <main className="min-h-screen bg-white">
       <PageHero
         theme="getInvolved"
         icon={Heart}
-        title="Unterstütze RevampIt"
-        subtitle="Hilf uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie, Open Source und die Zukunft des Computing zu erstellen."
+        title={t('hero.title')}
+        subtitle={t('hero.subtitle')}
       />
 
-      {/* Why Support */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        {/* Three pillars */}
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-3 sm:mb-4">
               <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
             </div>
-            <Heading level={3} className="text-base sm:text-lg text-gray-900 mb-2">Keine Werbung</Heading>
-            <p className="text-gray-600">
-              Wir werden niemals Werbung schalten oder deine Daten verkaufen
-            </p>
+            <Heading level={3} className="text-base sm:text-lg text-gray-900 mb-2">
+              {t('pillars.noAds.title')}
+            </Heading>
+            <p className="text-gray-600">{t('pillars.noAds.description')}</p>
           </div>
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <Users className="w-8 h-8 text-green-600" />
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-3 sm:mb-4">
+              <Users className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
             </div>
-            <Heading level={3} className="text-lg text-gray-900 mb-2">Community-getrieben</Heading>
-            <p className="text-gray-600">
-              Von der Community, für die Community – ohne kommerzielle Interessen
-            </p>
+            <Heading level={3} className="text-base sm:text-lg text-gray-900 mb-2">
+              {t('pillars.communityDriven.title')}
+            </Heading>
+            <p className="text-gray-600">{t('pillars.communityDriven.description')}</p>
           </div>
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-              <Heart className="w-8 h-8 text-green-600" />
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-full mb-3 sm:mb-4">
+              <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
             </div>
-            <Heading level={3} className="text-lg text-gray-900 mb-2">Qualität zuerst</Heading>
-            <p className="text-gray-600">
-              Fokus auf wahrheitsgetreue, gut recherchierte Inhalte
-            </p>
+            <Heading level={3} className="text-base sm:text-lg text-gray-900 mb-2">
+              {t('pillars.qualityFirst.title')}
+            </Heading>
+            <p className="text-gray-600">{t('pillars.qualityFirst.description')}</p>
           </div>
         </div>
 
         {/* Our Promise */}
         <div className="bg-gray-50 rounded-lg p-6 sm:p-8 mb-8 sm:mb-12">
-          <Heading level={2} className="text-xl sm:text-2xl text-gray-900 mb-3 sm:mb-4">Unser Versprechen</Heading>
+          <Heading level={2} className="text-xl sm:text-2xl text-gray-900 mb-3 sm:mb-4">
+            {t('promise.title')}
+          </Heading>
           <div className="prose prose-lg text-gray-700">
-            <p>
-              RevampIt ist kein Unternehmen – es ist eine Bewegung. Wir glauben daran, dass
-              qualitativ hochwertige Informationen über nachhaltige Technologie für alle
-              zugänglich sein sollten, ohne Bezahlschranken oder aufdringliche Werbung.
-            </p>
-            <p>
-              deine Unterstützung ermöglicht es uns:
-            </p>
+            <p>{t('promise.intro')}</p>
+            <p>{t('promise.enables')}</p>
             <ul className="space-y-2">
-              <li>✅ Tiefgreifende Recherchen und Analysen durchzuführen</li>
-              <li>✅ Unsere Server und Infrastruktur zu betreiben</li>
-              <li>✅ Open-Source-Tools und -Ressourcen zu entwickeln</li>
-              <li>✅ Community-Events und Workshops zu veranstalten</li>
-              <li>✅ 100% werbefrei und unabhängig zu bleiben</li>
+              {promiseItems.map((item, i) => (
+                <li key={i}>✅ {item}</li>
+              ))}
             </ul>
           </div>
         </div>
 
         {/* Support Options */}
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12">
-          {/* One-time */}
           <div className="border-2 border-gray-200 rounded-lg p-6 sm:p-8 hover:border-green-500 transition-colors">
             <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <Coffee className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
-              <Heading level={3} className="text-xl sm:text-2xl text-gray-900">Einmalige Spende</Heading>
+              <Heading level={3} className="text-xl sm:text-2xl text-gray-900">
+                {t('oneTime.title')}
+              </Heading>
             </div>
-            <p className="text-gray-600 mb-6">
-              Kaufe uns einen Kaffee oder unterstütze uns mit einem beliebigen Betrag
-            </p>
+            <p className="text-gray-600 mb-6">{t('oneTime.description')}</p>
             <a
               href="https://ko-fi.com/revampit"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full px-6 py-3 bg-green-600 text-white text-center rounded-lg hover:bg-green-700 transition-colors font-semibold"
             >
-              Jetzt spenden
+              {t('oneTime.cta')}
             </a>
           </div>
 
-          {/* Monthly */}
           <div className="border-2 border-green-500 rounded-lg p-6 sm:p-8 bg-green-50">
             <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-green-600" />
-              <Heading level={3} className="text-xl sm:text-2xl text-gray-900">Monatlicher Support</Heading>
+              <Heading level={3} className="text-xl sm:text-2xl text-gray-900">
+                {t('monthly.title')}
+              </Heading>
             </div>
-            <p className="text-gray-600 mb-6">
-              Werde Unterstützer und hilf uns nachhaltig zu wachsen
-            </p>
+            <p className="text-gray-600 mb-6">{t('monthly.description')}</p>
             <a
               href="https://github.com/sponsors/revampit"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full px-6 py-3 bg-green-600 text-white text-center rounded-lg hover:bg-green-700 transition-colors font-semibold"
             >
-              Sponsor werden
+              {t('monthly.cta')}
             </a>
           </div>
         </div>
 
-        {/* Alternative Ways */}
+        {/* Other Ways */}
         <div className="text-center py-8 border-t border-gray-200">
           <Heading level={3} className="text-xl text-gray-900 mb-4">
-            Andere Wege zu helfen
+            {t('otherWays.title')}
           </Heading>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/blog/submit"
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Beitrag einreichen
+              {t('otherWays.submitPost')}
             </Link>
             <a
               href="https://github.com/revampit"
@@ -132,13 +139,13 @@ export default function SupportPage() {
               rel="noopener noreferrer"
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Code beitragen
+              {t('otherWays.contributeCode')}
             </a>
             <Link
               href="/blog"
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Artikel teilen
+              {t('otherWays.shareArticle')}
             </Link>
           </div>
         </div>
@@ -146,8 +153,7 @@ export default function SupportPage() {
         {/* Thank You */}
         <div className="text-center py-8">
           <p className="text-lg text-gray-600">
-            <strong>Vielen Dank</strong> für deine Unterstützung unserer Mission für
-            nachhaltige, qualitativ hochwertige Technologie-Inhalte.
+            <strong>{t('thanks')}</strong>
           </p>
         </div>
       </div>
