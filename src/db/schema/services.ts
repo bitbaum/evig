@@ -156,6 +156,7 @@ export const repairerProfiles = pgTable('repairer_profiles', {
   address: text('address').notNull(),
   city: text('city').notNull(),
   postalCode: text('postal_code').notNull(),
+  canton: text('canton'),
   latitude: decimal('latitude', { precision: 10, scale: 8 }),
   longitude: decimal('longitude', { precision: 11, scale: 8 }),
 
@@ -214,6 +215,7 @@ export const repairerProfiles = pgTable('repairer_profiles', {
   index('idx_repairer_profiles_active').on(table.isActive),
   index('idx_repairer_profiles_rating').on(table.averageRating),
   index('idx_repairer_profiles_location').on(table.city, table.postalCode),
+  index('idx_repairer_profiles_canton').on(table.canton),
   index('idx_repairer_profiles_services').using('gin', table.servicesOffered),
   index('idx_repairer_profiles_specializations').using('gin', table.specializations),
 ])

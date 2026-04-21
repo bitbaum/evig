@@ -78,17 +78,9 @@ export async function GET(request: NextRequest) {
       )`)
     }
 
-    // canton: repairer_profiles has no location_canton column yet; skip for now
-    // (the migration view helper_profiles_v also omits it from repairer_profiles)
-    // TODO: add canton column to repairer_profiles in a follow-up migration
-
+    if (canton) conditions.push(eq(repairerProfiles.canton, canton))
     if (acceptsGratis) conditions.push(eq(repairerProfiles.acceptsGratis, true))
     if (acceptsKulturlegi) conditions.push(eq(repairerProfiles.acceptsKulturlegi, true))
-
-    // canton filter — no canton column on repairer_profiles yet; log and ignore
-    if (canton) {
-      logger.warn('canton filter requested but repairer_profiles has no canton column yet', { canton })
-    }
 
     const whereCondition = and(...conditions)
 
@@ -105,6 +97,7 @@ export async function GET(request: NextRequest) {
         profileTier: repairerProfiles.profileTier,
         city: repairerProfiles.city,
         postalCode: repairerProfiles.postalCode,
+        canton: repairerProfiles.canton,
         acceptsGratis: repairerProfiles.acceptsGratis,
         acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
         isVerified: repairerProfiles.isVerified,
@@ -126,6 +119,7 @@ export async function GET(request: NextRequest) {
         repairerProfiles.profileTier,
         repairerProfiles.city,
         repairerProfiles.postalCode,
+        repairerProfiles.canton,
         repairerProfiles.acceptsGratis,
         repairerProfiles.acceptsKulturlegi,
         repairerProfiles.isVerified,
