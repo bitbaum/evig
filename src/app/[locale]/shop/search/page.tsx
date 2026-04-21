@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense } from "react";
-import { Search, Package, ChevronRight, Home, ArrowLeft } from "lucide-react";
+import { Search, Package, ChevronRight, Home, ArrowLeft, Tag } from "lucide-react";
 import Heading from "@/components/ui/Heading";
 import {
   SHOP_CATEGORIES,
@@ -11,6 +12,7 @@ import {
 } from "@/config/shop";
 import { ORG } from "@/config/org";
 import { getTranslations } from "next-intl/server";
+import { getInventoryProducts, type InventoryProduct } from "@/lib/services/inventory-service";
 
 interface SearchPageProps {
   params: Promise<{ locale: string }>;
@@ -119,50 +121,108 @@ function Breadcrumbs({
 }
 
 /**
- * Search results component (placeholder)
+ * Single product card for search results
+ */
+function ProductCard({ product }: { product: InventoryProduct }) {
+  return (
+    <Link
+      href={`/shop/product/${product.item_uuid}`}
+      className="group bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+    >
+      <div className="relative aspect-[4/3] bg-gray-50">
+        {product.image_url ? (
+          <Image
+            src={product.image_url}
+            alt={product.title}
+            fill
+            className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <Package className="w-12 h-12 text-gray-200" />
+          </div>
+        )}
+      </div>
+      <div className="p-4 flex flex-col gap-2 flex-1">
+        <div>
+          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{product.brand}</p>
+          <h3 className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug">
+            {product.title}
+          </h3>
+        </div>
+        <div className="mt-auto flex items-center justify-between pt-2">
+          <div className="flex items-center gap-1.5">
+            <Tag className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="font-bold text-emerald-700">CHF {product.price.toFixed(2)}</span>
+          </div>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full capitalize">
+            {product.condition}
+          </span>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+/**
+ * Search results — real inventory products
  */
 function SearchResults({
+  products,
+  total,
   query,
-  resultsTitle,
-  comingSoon,
   goToShopLabel,
   allShopOptionsLabel,
 }: {
+  products: InventoryProduct[];
+  total: number;
   query: string;
-  resultsTitle: string;
-  comingSoon: string;
   goToShopLabel: string;
   allShopOptionsLabel: string;
 }) {
-  return (
-    <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-      <div className="max-w-md mx-auto">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
-          <Search className="w-8 h-8" />
-        </div>
-        <Heading level={2} className="text-xl font-semibold text-gray-900 mb-2">
-          {resultsTitle}
-        </Heading>
-        <p className="text-gray-600 mb-6">{comingSoon}</p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/marketplace"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
-          >
-            <Package className="w-5 h-5" />
-            {goToShopLabel}
-          </Link>
-          <Link
-            href="/shop"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            {allShopOptionsLabel}
-          </Link>
+  if (products.length === 0) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+        <div className="max-w-md mx-auto">
+          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+            <Search className="w-8 h-8" />
+          </div>
+          <Heading level={2} className="text-xl font-semibold text-gray-900 mb-2">
+            Keine Produkte gefunden für &ldquo;{query}&rdquo;
+          </Heading>
+          <p className="text-gray-600 mb-6">Versuche einen anderen Suchbegriff oder stöbere in den Kategorien.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/marketplace"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+            >
+              <Package className="w-5 h-5" />
+              {goToShopLabel}
+            </Link>
+            <Link
+              href="/shop"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              {allShopOptionsLabel}
+            </Link>
+          </div>
         </div>
       </div>
+    )
+  }
+
+  return (
+    <div>
+      <p className="text-sm text-gray-500 mb-4">{total} Produkt{total !== 1 ? 'e' : ''} gefunden</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
     </div>
-  );
+  )
 }
 
 /**
@@ -247,6 +307,13 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
   const { q: query } = await searchParams;
   const t = await getTranslations({ locale, namespace: "shop" });
 
+  // Fetch results when query is present
+  const searchResult = query
+    ? await getInventoryProducts({ limit: 48, offset: 0, search: query }).catch(
+        () => ({ products: [], total: 0, limit: 48, offset: 0 })
+      )
+    : null;
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -274,11 +341,11 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {query ? (
+        {query && searchResult ? (
           <SearchResults
+            products={searchResult.products}
+            total={searchResult.total}
             query={query}
-            resultsTitle={t("search.resultsTitle", { query })}
-            comingSoon={t("search.resultsComingSoon")}
             goToShopLabel={t("search.goToShop")}
             allShopOptionsLabel={t("search.allShopOptions")}
           />
