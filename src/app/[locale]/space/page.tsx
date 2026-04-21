@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
-import { ORG, LOCATIONS } from '@/config/org'
+import { ORG, LOCATIONS, OPENING_HOURS } from '@/config/org'
 
 export const metadata: Metadata = {
   title: `Unsere Standorte | ${ORG.name}`,
@@ -256,7 +256,7 @@ export default function SpacePage() {
               </div>
               <div>
                 <p className="font-semibold text-gray-900">Öffnungszeiten</p>
-                <p className="text-gray-600">Mo: 9-12 | Di-Fr: 13-17</p>
+                <p className="text-gray-600">Mo: {OPENING_HOURS.monday} | Di–Fr: {OPENING_HOURS.tuesdayToFriday}</p>
               </div>
             </div>
             <Link href="/shop#ladenlokal">

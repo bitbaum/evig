@@ -8,6 +8,7 @@ import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { NavigationItem } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
@@ -302,8 +303,12 @@ export function MobileMenu({
           )}
         </nav>
 
-        {/* Footer - Auth Actions */}
-        <div className="border-t border-gray-100 px-6 py-4">
+        {/* Footer - Locale Switcher + Auth Actions */}
+        <div className="border-t border-gray-100 px-6 pt-3 pb-1 flex items-center justify-between">
+          <span className="text-xs text-gray-400">{t('language')}</span>
+          <LocaleSwitcher />
+        </div>
+        <div className="px-6 pb-4">
           {session?.user ? (
             <div className="space-y-3">
               {/* User Info */}

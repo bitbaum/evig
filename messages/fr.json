@@ -16,7 +16,8 @@
     "admin": "Admin",
     "register": "S'inscrire",
     "membership": "Devenir membre",
-    "languageSwitcher": "Langue"
+    "languageSwitcher": "Langue",
+    "language": "Langue"
   },
   "common": {
     "loading": "Chargement...",
@@ -101,7 +102,11 @@
     "newsletterTagline": "Actualités de la communauté",
     "allRightsReserved": "Tous droits réservés",
     "madeWith": "Fait avec",
-    "inSwitzerland": "en Suisse"
+    "inSwitzerland": "en Suisse",
+    "openingHours": "Heures d'ouverture",
+    "openingHoursMonday": "Lun : {hours}",
+    "openingHoursTueFri": "Mar–Ven : {hours}",
+    "transparency": "Transparence"
   },
   "home": {
     "meta": {

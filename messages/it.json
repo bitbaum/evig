@@ -106,7 +106,8 @@
       "becomeMemberDesc": "Entra nell'associazione e partecipa alle decisioni",
       "contact": "Contatto",
       "contactDesc": "Siamo felici di sentirti"
-    }
+    },
+    "language": "Lingua"
   },
   "common": {
     "loading": "Caricamento...",
@@ -191,7 +192,11 @@
     "newsletterTagline": "Notizie dalla community",
     "allRightsReserved": "Tutti i diritti riservati",
     "madeWith": "Fatto con",
-    "inSwitzerland": "in Svizzera"
+    "inSwitzerland": "in Svizzera",
+    "openingHours": "Orario di apertura",
+    "openingHoursMonday": "Lun: {hours}",
+    "openingHoursTueFri": "Mar–Ven: {hours}",
+    "transparency": "Trasparenza"
   },
   "auth": {
     "login": {

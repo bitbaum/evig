@@ -106,7 +106,8 @@
       "becomeMemberDesc": "단체의 일원이 되어 의사 결정에 참여",
       "contact": "문의",
       "contactDesc": "언제든지 연락해 주세요"
-    }
+    },
+    "language": "언어"
   },
   "common": {
     "loading": "로딩 중...",
@@ -191,7 +192,11 @@
     "newsletterTagline": "커뮤니티 소식",
     "allRightsReserved": "모든 권리 보유",
     "madeWith": "제작",
-    "inSwitzerland": "스위스에서"
+    "inSwitzerland": "스위스에서",
+    "openingHours": "영업 시간",
+    "openingHoursMonday": "월: {hours}",
+    "openingHoursTueFri": "화–금: {hours}",
+    "transparency": "투명성"
   },
   "auth": {
     "login": {

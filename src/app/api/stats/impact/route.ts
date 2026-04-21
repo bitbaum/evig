@@ -1,0 +1,81 @@
+import { query } from '@/lib/auth/db'
+import { TABLE_NAMES } from '@/config/database'
+import { CATEGORY_WEIGHT_KG, CO2_PER_KG } from '@/config/co2-impact'
+import { logger } from '@/lib/logger'
+import { apiSuccess, apiError } from '@/lib/api/helpers'
+
+export const revalidate = 3600 // Cache for 1 hour
+
+/**
+ * GET /api/stats/impact
+ * Returns live impact metrics computed from DB data.
+ * No auth required — public transparency data.
+ */
+export async function GET() {
+  try {
+    const [listingRows, repairRows, userRows, shopRows] = await Promise.all([
+      // P2P listings: count by category + status for CO2 computation
+      query<{ category: string; status: string; count: string }>(
+        `SELECT category, status, COUNT(*) as count
+         FROM ${TABLE_NAMES.LISTINGS}
+         WHERE status != 'removed'
+         GROUP BY category, status`
+      ),
+      // IT-Hilfe repairs
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}`
+      ),
+      // Registered users
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
+      ),
+      // RevampIT shop items sold
+      query<{ count: string }>(
+        `SELECT COUNT(*) as count
+         FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
+         WHERE status = 'sold'`
+      ),
+    ])
+
+    // Compute totals from listing rows
+    let totalDevices = 0
+    let soldDevices = 0
+    let co2SavedKg = 0
+
+    for (const row of listingRows.rows) {
+      const count = Number(row.count)
+      totalDevices += count
+
+      if (row.status === 'sold') {
+        soldDevices += count
+        // Fallback to avg laptop weight (2 kg) for unknown categories
+        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? 2.0
+        co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
+      }
+    }
+
+    // Add RevampIT direct shop sales; use avg 2.5 kg (no category breakdown available)
+    const shopSold = Number(shopRows.rows[0]?.count || 0)
+    soldDevices += shopSold
+    co2SavedKg += Math.round(shopSold * 2.5 * CO2_PER_KG)
+
+    const co2SavedTons = Math.round((co2SavedKg / 1000) * 10) / 10
+
+    return apiSuccess({
+      devices: {
+        total: totalDevices,
+        sold: soldDevices,
+      },
+      co2: {
+        savedKg: co2SavedKg,
+        savedTons: co2SavedTons,
+      },
+      repairs: Number(repairRows.rows[0]?.count || 0),
+      users: Number(userRows.rows[0]?.count || 0),
+      meta: { source: 'database', computedAt: new Date().toISOString() },
+    })
+  } catch (error) {
+    logger.error('Failed to compute impact stats', { error })
+    return apiError(error, 'Impact-Statistiken konnten nicht geladen werden')
+  }
+}

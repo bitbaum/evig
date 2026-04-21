@@ -106,11 +106,11 @@ export default function Footer() {
           <div>
             <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
               <Clock className="inline w-4 h-4 mr-1.5 mb-0.5" />
-              Öffnungszeiten
+              {tFooter('openingHours')}
             </Heading>
             <div className="space-y-1 text-sm text-gray-400">
-              <p>Mo: {OPENING_HOURS.monday}</p>
-              <p>Di–Fr: {OPENING_HOURS.tuesdayToFriday}</p>
+              <p>{tFooter('openingHoursMonday', { hours: OPENING_HOURS.monday })}</p>
+              <p>{tFooter('openingHoursTueFri', { hours: OPENING_HOURS.tuesdayToFriday })}</p>
             </div>
           </div>
         </div>
@@ -152,7 +152,7 @@ export default function Footer() {
               {tFooter('termsOfService')}
             </Link>
             <Link href="/transparenz" className="hover:text-gray-300 transition-colors">
-              Transparenz
+              {tFooter('transparency')}
             </Link>
             <Link href="/mitglied-werden" className="hover:text-gray-300 transition-colors">
               {tNav('membership')}

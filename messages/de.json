@@ -106,7 +106,8 @@
       "becomeMemberDesc": "Teil des Vereins werden und mitbestimmen",
       "contact": "Kontakt",
       "contactDesc": "Wir freuen uns auf dich"
-    }
+    },
+    "language": "Sprache"
   },
   "common": {
     "loading": "Laden...",
@@ -191,7 +192,11 @@
     "newsletterTagline": "Neuigkeiten aus der Community",
     "allRightsReserved": "Alle Rechte vorbehalten",
     "madeWith": "Gemacht mit",
-    "inSwitzerland": "in der Schweiz"
+    "inSwitzerland": "in der Schweiz",
+    "openingHours": "Öffnungszeiten",
+    "openingHoursMonday": "Mo: {hours}",
+    "openingHoursTueFri": "Di–Fr: {hours}",
+    "transparency": "Transparenz"
   },
   "home": {
     "meta": {

@@ -106,7 +106,8 @@
       "becomeMemberDesc": "団体の一員として意思決定に参加する",
       "contact": "お問い合わせ",
       "contactDesc": "お待ちしています"
-    }
+    },
+    "language": "言語"
   },
   "common": {
     "loading": "読み込み中...",
@@ -191,7 +192,11 @@
     "newsletterTagline": "コミュニティからのお知らせ",
     "allRightsReserved": "全著作権所有",
     "madeWith": "作成",
-    "inSwitzerland": "スイスにて"
+    "inSwitzerland": "スイスにて",
+    "openingHours": "営業時間",
+    "openingHoursMonday": "月: {hours}",
+    "openingHoursTueFri": "火–金: {hours}",
+    "transparency": "透明性"
   },
   "auth": {
     "login": {
