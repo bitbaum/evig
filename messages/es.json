@@ -107,7 +107,8 @@
       "contact": "Contacto",
       "contactDesc": "Estamos deseando conocerte"
     },
-    "language": "Idioma"
+    "language": "Idioma",
+    "learn": "Aprender"
   },
   "common": {
     "loading": "Cargando...",
@@ -1208,8 +1209,7 @@
       }
     },
     "proServices": {
-      "text": "También ofrecemos {link} profesionales: reparación de ordenadores, recuperación de datos, instalación de Linux y desarrollo web.",
-      "linkLabel": "servicios TI"
+      "text": "También ofrecemos <link>servicios TI</link> profesionales: reparación de ordenadores, recuperación de datos, instalación de Linux y desarrollo web."
     },
     "impact": {
       "title": "Nuestro impacto",

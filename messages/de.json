@@ -107,7 +107,8 @@
       "contact": "Kontakt",
       "contactDesc": "Wir freuen uns auf dich"
     },
-    "language": "Sprache"
+    "language": "Sprache",
+    "learn": "Lernen"
   },
   "common": {
     "loading": "Laden...",
@@ -231,8 +232,7 @@
       }
     },
     "proServices": {
-      "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
-      "linkLabel": "IT-Dienstleistungen"
+      "text": "Wir bieten auch professionelle <link>IT-Dienstleistungen</link> an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung."
     },
     "impact": {
       "title": "Unsere Wirkung",

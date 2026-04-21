@@ -17,7 +17,8 @@
     "register": "Register",
     "membership": "Become a Member",
     "languageSwitcher": "Language",
-    "language": "Language"
+    "language": "Language",
+    "learn": "Learn"
   },
   "common": {
     "loading": "Loading...",
@@ -141,8 +142,7 @@
       }
     },
     "proServices": {
-      "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
-      "linkLabel": "IT services"
+      "text": "We also offer professional <link>IT services</link>: computer repair, data recovery, Linux installation and web development."
     },
     "impact": {
       "title": "Our Impact",

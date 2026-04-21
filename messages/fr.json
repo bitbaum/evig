@@ -17,7 +17,8 @@
     "register": "S'inscrire",
     "membership": "Devenir membre",
     "languageSwitcher": "Langue",
-    "language": "Langue"
+    "language": "Langue",
+    "learn": "Apprendre"
   },
   "common": {
     "loading": "Chargement...",
@@ -141,8 +142,7 @@
       }
     },
     "proServices": {
-      "text": "Nous proposons également des {link} professionnels: réparation informatique, récupération de données, installation Linux et développement web.",
-      "linkLabel": "services IT"
+      "text": "Nous proposons également des <link>services IT</link> professionnels: réparation informatique, récupération de données, installation Linux et développement web."
     },
     "impact": {
       "title": "Notre impact",

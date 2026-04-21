@@ -107,7 +107,8 @@
       "contact": "お問い合わせ",
       "contactDesc": "お待ちしています"
     },
-    "language": "言語"
+    "language": "言語",
+    "learn": "学ぶ"
   },
   "common": {
     "loading": "読み込み中...",
@@ -1208,8 +1209,7 @@
       }
     },
     "proServices": {
-      "text": "私たちはプロフェッショナルな{link}も提供しています：パソコン修理、データ復旧、Linuxインストール、ウェブ開発。",
-      "linkLabel": "ITサービス"
+      "text": "私たちはプロフェッショナルな<link>ITサービス</link>も提供しています：パソコン修理、データ復旧、Linuxインストール、ウェブ開発。"
     },
     "impact": {
       "title": "私たちの活動成果",

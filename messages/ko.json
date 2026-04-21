@@ -107,7 +107,8 @@
       "contact": "문의",
       "contactDesc": "언제든지 연락해 주세요"
     },
-    "language": "언어"
+    "language": "언어",
+    "learn": "배우기"
   },
   "common": {
     "loading": "로딩 중...",
@@ -1208,8 +1209,7 @@
       }
     },
     "proServices": {
-      "text": "저희는 전문 {link}도 제공합니다: 컴퓨터 수리, 데이터 복구, Linux 설치, 웹 개발.",
-      "linkLabel": "IT 서비스"
+      "text": "저희는 전문 <link>IT 서비스</link>도 제공합니다: 컴퓨터 수리, 데이터 복구, Linux 설치, 웹 개발."
     },
     "impact": {
       "title": "우리의 영향력",

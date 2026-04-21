@@ -45,6 +45,7 @@ export interface NavigationItem {
 export const mainNavigation: NavigationItem[] = [
   {
     name: 'Über uns',
+    nameKey: 'about',
     href: '/about',
     description: 'Mission, Wirkung und Projekte',
     subItems: [
@@ -77,6 +78,7 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     name: 'Dienstleistungen',
+    nameKey: 'services',
     href: '/services',
     description: 'Professionelle IT-Services',
     isMultiColumn: true,
@@ -127,6 +129,7 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     name: 'Marktplatz',
+    nameKey: 'marketplace',
     href: '/marketplace',
     description: 'Kaufen, verkaufen und IT-Hilfe',
     badge: 'Neu',
@@ -194,6 +197,7 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     name: 'Lernen',
+    nameKey: 'learn',
     href: '/knowhow',
     description: 'Workshops, Guides und Ressourcen',
     subItems: [
@@ -222,6 +226,7 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     name: 'Mitmachen',
+    nameKey: 'getInvolved',
     href: '/get-involved',
     description: 'Teil der Bewegung werden',
     isMultiColumn: true,
@@ -291,6 +296,7 @@ export const mainNavigation: NavigationItem[] = [
   },
   {
     name: 'Kontakt',
+    nameKey: 'contact',
     href: '/contact',
     description: 'Wir freuen uns auf dich',
     highlight: true,
