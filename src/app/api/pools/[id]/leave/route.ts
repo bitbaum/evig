@@ -47,6 +47,6 @@ export const POST = withAuth(async (
     return apiSuccess({ message: 'Pool verlassen' })
   } catch (error) {
     logger.error('POST /api/pools/[id]/leave failed', { error })
-    return apiError('Fehler beim Verlassen des Pools')
+    return apiError(error, 'Fehler beim Verlassen des Pools')
   }
 })

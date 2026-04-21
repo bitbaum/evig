@@ -52,7 +52,7 @@ export async function GET() {
     return apiSuccess(pools)
   } catch (error) {
     logger.error('GET /api/pools failed', { error })
-    return apiError('Fehler beim Laden der Abo-Pools')
+    return apiError(error, 'Fehler beim Laden der Abo-Pools')
   }
 }
 
@@ -105,6 +105,6 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     return apiSuccess(pool, 201)
   } catch (error) {
     logger.error('POST /api/pools failed', { error })
-    return apiError('Fehler beim Erstellen des Pools')
+    return apiError(error, 'Fehler beim Erstellen des Pools')
   }
 })

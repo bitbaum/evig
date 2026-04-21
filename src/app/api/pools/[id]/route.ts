@@ -53,7 +53,7 @@ export async function GET(
     return apiSuccess(pool)
   } catch (error) {
     logger.error('GET /api/pools/[id] failed', { error })
-    return apiError('Fehler beim Laden des Pools')
+    return apiError(error, 'Fehler beim Laden des Pools')
   }
 }
 
@@ -90,7 +90,7 @@ export const DELETE = withAuth(async (
     return apiSuccess({ message: 'Pool geschlossen' })
   } catch (error) {
     logger.error('DELETE /api/pools/[id] failed', { error })
-    return apiError('Fehler beim Löschen des Pools')
+    return apiError(error, 'Fehler beim Löschen des Pools')
   }
 })
 

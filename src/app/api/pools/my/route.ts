@@ -24,6 +24,6 @@ export const GET = withAuth(async (_request, session) => {
     return apiSuccess(memberships)
   } catch (error) {
     logger.error('GET /api/pools/my failed', { error })
-    return apiError('Fehler beim Laden der Mitgliedschaften')
+    return apiError(error, 'Fehler beim Laden der Mitgliedschaften')
   }
 })

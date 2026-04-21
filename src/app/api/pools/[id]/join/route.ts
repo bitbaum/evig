@@ -82,6 +82,6 @@ export const POST = withAuth(async (
     return apiSuccess(membership, 201)
   } catch (error) {
     logger.error('POST /api/pools/[id]/join failed', { error })
-    return apiError('Fehler beim Beitreten des Pools')
+    return apiError(error, 'Fehler beim Beitreten des Pools')
   }
 })
