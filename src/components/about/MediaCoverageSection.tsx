@@ -7,6 +7,7 @@
 
 'use client'
 
+import Link from 'next/link'
 import { ExternalLink, Quote, Newspaper, Award, Star } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import {
@@ -221,12 +222,12 @@ export default function MediaCoverageSection() {
           <p className="text-gray-600 mb-4">
             Möchtest du über uns berichten?
           </p>
-          <a
+          <Link
             href="/contact"
             className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
           >
             Presseanfragen
-          </a>
+          </Link>
         </div>
       </div>
     </section>

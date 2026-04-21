@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
 import { AboutSubNav, GeschichteSection, ImpactStatsSection } from '@/components/about'
 import { ORG } from '@/config/org'
@@ -141,12 +142,12 @@ export default async function HardcodedAboutPage() {
           <p className="text-xl mb-8">
             {t('cta.description')}
           </p>
-          <a
+          <Link
             href="/get-involved"
             className="inline-block bg-white text-green-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
           >
             {t('cta.button')}
-          </a>
+          </Link>
         </div>
       </section>
     </main>

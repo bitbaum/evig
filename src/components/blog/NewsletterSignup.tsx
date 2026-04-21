@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Mail, Heart, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
@@ -135,13 +136,13 @@ export default function NewsletterSignup() {
             Wir glauben an qualitativ hochwertige, wahrheitsgetreue Inhalte ohne Werbung.
             Wenn du unsere Arbeit schätzen, kannst du uns gerne unterstützen.
           </p>
-          <a
+          <Link
             href="/support"
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <Heart className="w-4 h-4" />
             RevampIt unterstützen
-          </a>
+          </Link>
         </div>
       </div>
     </div>
