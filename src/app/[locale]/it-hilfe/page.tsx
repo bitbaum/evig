@@ -91,7 +91,7 @@ export default function ITHilfePage() {
     } finally {
       setLoading(false)
     }
-  }, [category, canton, urgency, budgetType, search, sort, limit, offset])
+  }, [category, canton, urgency, budgetType, search, sort, limit, offset, t])
 
   useEffect(() => {
     fetchRequests()

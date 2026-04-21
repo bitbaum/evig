@@ -216,6 +216,20 @@ export const mainNavigation: NavigationItem[] = [
         href: '/profil/techniker',
         description: 'IT-Wissen teilen und helfen',
       },
+      // Section: Abo-Tauschbörse
+      {
+        name: 'Abo-Tauschbörse',
+        nameKey: 'sectionAbos',
+        href: '/abos',
+        isSection: true,
+      },
+      {
+        name: 'Abo-Pools',
+        nameKey: 'aboPools',
+        href: '/abos',
+        description: 'Digitale Abos teilen und Kosten aufteilen',
+        badge: 'Neu',
+      },
     ],
   },
   {

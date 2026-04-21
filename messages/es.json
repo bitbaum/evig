@@ -143,7 +143,9 @@
     "sectionEngagement": "Participar",
     "sectionSupport": "Apoyar",
     "sectionMembership": "Membresía",
-    "learn": "Aprender"
+    "learn": "Aprender",
+    "sectionAbos": "Bolsa de suscripciones",
+    "aboPools": "Grupos de suscripción"
   },
   "common": {
     "loading": "Cargando...",

@@ -143,7 +143,9 @@
     "sectionEngagement": "참여",
     "sectionSupport": "지원",
     "sectionMembership": "회원",
-    "learn": "배우기"
+    "learn": "배우기",
+    "sectionAbos": "구독 교환소",
+    "aboPools": "구독 풀"
   },
   "common": {
     "loading": "로딩 중...",

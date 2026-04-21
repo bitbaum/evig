@@ -143,7 +143,9 @@
     "sectionEngagement": "Partecipa",
     "sectionSupport": "Supporta",
     "sectionMembership": "Iscrizione",
-    "learn": "Imparare"
+    "learn": "Imparare",
+    "sectionAbos": "Borsa abbonamenti",
+    "aboPools": "Pool abbonamenti"
   },
   "common": {
     "loading": "Caricamento...",

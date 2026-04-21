@@ -53,7 +53,9 @@
     "sectionEngagement": "Get Involved",
     "sectionSupport": "Support",
     "sectionMembership": "Membership",
-    "learn": "Learn"
+    "learn": "Learn",
+    "sectionAbos": "Subscription Exchange",
+    "aboPools": "Subscription Pools"
   },
   "common": {
     "loading": "Loading...",

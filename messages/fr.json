@@ -53,7 +53,9 @@
     "sectionEngagement": "S'impliquer",
     "sectionSupport": "Soutenir",
     "sectionMembership": "Adhésion",
-    "learn": "Apprendre"
+    "learn": "Apprendre",
+    "sectionAbos": "Bourse aux abonnements",
+    "aboPools": "Pools d'abonnements"
   },
   "common": {
     "loading": "Chargement...",
