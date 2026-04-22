@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import {
   MapPin,
@@ -15,19 +18,6 @@ import { formatDate } from '@/lib/date-formats'
 import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from './types'
 
-function formatTimeRemaining(expiresAt: string): string | null {
-  const now = Date.now()
-  const expires = new Date(expiresAt).getTime()
-  const msLeft = expires - now
-  if (msLeft <= 0) return 'Abgelaufen'
-  const days = Math.floor(msLeft / (1000 * 60 * 60 * 24))
-  const hours = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-  if (days > 7) return null // don't show for far-off dates
-  if (days > 0) return `Noch ${days} ${days === 1 ? 'Tag' : 'Tage'}`
-  if (hours > 0) return `Noch ${hours} ${hours === 1 ? 'Stunde' : 'Stunden'}`
-  return 'Weniger als 1 Stunde'
-}
-
 interface RequestSidebarProps {
   request: ITHilfeRequest
   conversationId: string | null
@@ -43,15 +33,31 @@ export function RequestSidebar({
   onShowMessages,
   onStatusChange,
 }: RequestSidebarProps) {
+  const t = useTranslations('itHelp.detail')
   const serviceConfig = getServiceTypeById(request.serviceType)
-  const timeRemaining = formatTimeRemaining(request.expiresAt)
+
+  // Compute time remaining as structured data, then format via t()
+  function getTimeRemaining(): string | null {
+    const now = Date.now()
+    const expires = new Date(request.expiresAt).getTime()
+    const msLeft = expires - now
+    if (msLeft <= 0) return t('expiredStatus')
+    const days = Math.floor(msLeft / (1000 * 60 * 60 * 24))
+    const hours = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    if (days > 7) return null
+    if (days > 0) return t('timeLeftDays', { count: days })
+    if (hours > 0) return t('timeLeftHours', { count: hours })
+    return t('timeLeftLessThanHour')
+  }
+
+  const timeRemaining = getTimeRemaining()
 
   return (
     <div className="space-y-6">
       {/* Request Info */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
-          Details
+          {t('sidebarDetails')}
         </Heading>
 
         <div className="space-y-4">
@@ -59,7 +65,7 @@ export function RequestSidebar({
           <div className="flex items-start gap-3">
             <MapPin className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">Standort</p>
+              <p className="text-sm text-gray-500">{t('locationLabel')}</p>
               <p className="font-medium text-gray-900">
                 {request.postalCode} {request.city}
               </p>
@@ -71,7 +77,7 @@ export function RequestSidebar({
           <div className="flex items-start gap-3">
             <Wrench className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">Budget</p>
+              <p className="text-sm text-gray-500">{t('budgetLabel')}</p>
               <p className="font-medium text-emerald-600">
                 {formatBudget(request.budgetAmountCents)}
               </p>
@@ -82,7 +88,7 @@ export function RequestSidebar({
           <div className="flex items-start gap-3">
             <User className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">Service-Typ</p>
+              <p className="text-sm text-gray-500">{t('serviceTypeLabel')}</p>
               <p className="font-medium text-gray-900">
                 {serviceConfig?.name || request.serviceType}
               </p>
@@ -93,9 +99,9 @@ export function RequestSidebar({
           <div className="flex items-start gap-3">
             <Users className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">Angebote</p>
+              <p className="text-sm text-gray-500">{t('offersLabel')}</p>
               <p className="font-medium text-gray-900">
-                {request.offerCount} {request.offerCount === 1 ? 'Angebot' : 'Angebote'}
+                {t('offersCount', { count: request.offerCount })}
               </p>
             </div>
           </div>
@@ -104,7 +110,7 @@ export function RequestSidebar({
           <div className="flex items-start gap-3">
             <Calendar className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">Erstellt am</p>
+              <p className="text-sm text-gray-500">{t('createdLabel')}</p>
               <p className="font-medium text-gray-900">
                 {formatDate(request.createdAt)}
               </p>
@@ -115,12 +121,12 @@ export function RequestSidebar({
           <div className="flex items-start gap-3">
             <Clock className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">Läuft ab</p>
+              <p className="text-sm text-gray-500">{t('expiresLabel')}</p>
               <p className="font-medium text-gray-900">
                 {formatDate(request.expiresAt)}
               </p>
               {timeRemaining && (
-                <p className={`text-xs mt-0.5 ${timeRemaining === 'Abgelaufen' ? 'text-red-600 font-medium' : 'text-amber-600'}`}>
+                <p className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-red-600 font-medium' : 'text-amber-600'}`}>
                   {timeRemaining}
                 </p>
               )}
@@ -132,7 +138,7 @@ export function RequestSidebar({
       {/* Requester Info */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
-          Anfragender
+          {t('requesterSection')}
         </Heading>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
@@ -155,7 +161,7 @@ export function RequestSidebar({
             className="w-full py-3 px-4 min-h-[44px] bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             <MessageSquare className="w-4 h-4" aria-hidden="true" />
-            Nachricht senden
+            {t('sendMessage')}
           </button>
         </div>
       )}
@@ -164,7 +170,7 @@ export function RequestSidebar({
       {request.isOwner && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
-            Aktionen
+            {t('actionsSection')}
           </Heading>
           <div className="space-y-2">
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
@@ -173,7 +179,7 @@ export function RequestSidebar({
                 className="block w-full py-3 px-4 min-h-[44px] bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 <Pencil className="w-4 h-4 inline-block mr-2" />
-                Anfrage bearbeiten
+                {t('editRequest')}
               </Link>
             )}
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION || request.status === REQUEST_STATUS.MATCHED) && (
@@ -182,14 +188,14 @@ export function RequestSidebar({
                 className="block w-full py-3 px-4 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-center font-medium hover:bg-red-100 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
               >
                 <XCircle className="w-4 h-4 inline-block mr-2" />
-                Anfrage abbrechen
+                {t('cancelRequest')}
               </button>
             )}
             <Link
               href="/it-hilfe/my"
               className="block w-full py-3 px-4 min-h-[44px] bg-gray-100 text-gray-700 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              Alle meine Anfragen
+              {t('allMyRequests')}
             </Link>
           </div>
         </div>

@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import { Wrench } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import {
   getCategoryById,
@@ -14,6 +17,7 @@ interface RequestHeaderProps {
 }
 
 export function RequestHeader({ request }: RequestHeaderProps) {
+  const t = useTranslations('itHelp.detail')
   const categoryConfig = getCategoryById(request.categoryId)
   const urgencyConfig = getUrgencyById(request.urgency)
   const statusConfig = getRequestStatusById(request.status)
@@ -41,7 +45,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
       {/* Device info */}
       {(request.deviceBrand || request.deviceModel) && (
         <p className="text-gray-600 mb-4">
-          <span className="font-medium">Gerät:</span>{' '}
+          <span className="font-medium">{t('deviceLabel')}</span>{' '}
           {[categoryConfig?.name, request.deviceBrand, request.deviceModel].filter(Boolean).join(' - ')}
         </p>
       )}
@@ -65,7 +69,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
               >
                 <Image
                   src={url}
-                  alt={`Bild ${index + 1}`}
+                  alt={t('imageAlt', { index: index + 1 })}
                   width={400}
                   height={128}
                   className="w-full h-32 object-cover rounded-lg hover:opacity-90 transition-opacity"
@@ -80,7 +84,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
       {/* Skills needed */}
       {request.skillsNeeded.length > 0 && (
         <div className="mt-6 pt-6 border-t border-gray-100">
-          <Heading level={3} className="text-sm font-medium text-gray-700 mb-2">Benötigte Skills</Heading>
+          <Heading level={3} className="text-sm font-medium text-gray-700 mb-2">{t('requiredSkills')}</Heading>
           <div className="flex flex-wrap gap-2">
             {request.skillsNeeded.map((skillId) => {
               const skill = getSkillById(skillId)

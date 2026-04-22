@@ -9,6 +9,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import {
   Sparkles,
@@ -54,6 +55,7 @@ interface TechnicianMapListProps {
 // =============================================================================
 
 export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapListProps) {
+  const t = useTranslations('itHelp.detail')
   const [matches, setMatches] = useState<MatchedHelper[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -74,7 +76,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
         setMatches(data?.matches || [])
       } catch (err) {
         logger.error('Error fetching matched helpers', { error: err, requestId })
-        setError(err instanceof Error ? err.message : 'Fehler beim Laden')
+        setError(err instanceof Error ? err.message : t('error'))
       } finally {
         setLoading(false)
       }
@@ -127,7 +129,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-blue-600" />
-          <Heading level={3} className="text-lg font-semibold text-gray-900">Techniker werden gesucht...</Heading>
+          <Heading level={3} className="text-lg font-semibold text-gray-900">{t('searchingTechnicians')}</Heading>
         </div>
         <div className="animate-pulse bg-gray-100 rounded-lg min-h-[300px]" />
       </div>
@@ -148,7 +150,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       <div className="flex items-center gap-2">
         <Sparkles className="w-5 h-5 text-blue-600" />
         <Heading level={3} className="text-lg font-semibold text-gray-900">
-          Techniker & Werkstatt
+          {t('technicianSection')}
         </Heading>
       </div>
 
@@ -175,7 +177,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
             >
-              Route planen
+              {t('planRoute')}
               <ExternalLink className="w-3 h-3" />
             </a>
           </div>
@@ -186,7 +188,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-blue-600" />
                 <p className="text-sm font-medium text-gray-700">
-                  {topMatches.length} passende Techniker
+                  {t('matchCount', { count: topMatches.length })}
                 </p>
               </div>
 
@@ -218,13 +220,13 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     {index === 0 && (
                       <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
                         <Award className="w-3 h-3" />
-                        Top Match
+                        {t('topMatch')}
                       </div>
                     )}
 
                     <div className="mb-2">
                       <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                        <span className="font-medium">{matchPercentage}% Match</span>
+                        <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
                         <div
@@ -262,7 +264,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     href="/techniker"
                     className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm"
                   >
-                    Alle {matches.length} Techniker anzeigen
+                    {t('showAllTechnicians', { count: matches.length })}
                     <TrendingUp className="w-4 h-4" />
                   </Link>
                 </div>
@@ -271,7 +273,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
           ) : (
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
               <p className="text-sm text-gray-600">
-                Noch keine Techniker gefunden. Deine Anfrage ist öffentlich sichtbar.
+                {t('noMatchesYet')}
               </p>
             </div>
           )}

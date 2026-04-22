@@ -2,12 +2,13 @@
 
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
 
-function CopyButton({ value, label }: { value: string; label: string }) {
+function CopyButton({ value, label, copiedLabel }: { value: string; label: string; copiedLabel: string }) {
   const [copied, setCopied] = useState(false)
   return (
     <button
@@ -20,13 +21,14 @@ function CopyButton({ value, label }: { value: string; label: string }) {
       className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-700 font-medium"
     >
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-      {copied ? 'Kopiert!' : label}
+      {copied ? copiedLabel : label}
     </button>
   )
 }
 
 export function MembershipApplicationForm() {
   const { data: session } = useSession()
+  const t = useTranslations('membership.form')
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [memberType, setMemberType] = useState<'regular' | 'reduced'>('regular')
@@ -82,57 +84,57 @@ export function MembershipApplicationForm() {
             <CheckCircle className="w-7 h-7 text-green-600" />
           </div>
           <Heading level={3} className="text-xl text-green-900 mb-2">
-            Willkommen im Verein!
+            {t('welcome')}
           </Heading>
           <p className="text-green-800">
-            Du bist jetzt Mitglied von {ORG.name}. Dein Stimmrecht bei Vereinsentscheiden ist ab sofort aktiv.
+            {t('welcomeDesc', { orgName: ORG.name })}
           </p>
         </div>
 
         {/* Payment instructions */}
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <Heading level={3} className="text-lg text-gray-900 mb-4">
-            Jahresbeitrag überweisen
+            {t('paymentHeading')}
           </Heading>
           <p className="text-sm text-gray-600 mb-4">
-            Bitte überweise den Jahresbeitrag von <strong>{MEMBERSHIP.currency} {fee}</strong> an folgendes Konto:
+            {t('paymentDesc', { currency: MEMBERSHIP.currency, fee })}
           </p>
           <div className="bg-gray-50 rounded-lg p-4 space-y-3 text-sm">
             <div className="flex justify-between items-center">
               <div>
-                <span className="text-gray-500">Empfänger</span>
+                <span className="text-gray-500">{t('recipientLabel')}</span>
                 <p className="font-medium text-gray-900">{BANK.accountHolder}</p>
               </div>
             </div>
             <div className="flex justify-between items-center">
               <div>
-                <span className="text-gray-500">IBAN</span>
+                <span className="text-gray-500">{t('ibanLabel')}</span>
                 <p className="font-mono font-medium text-gray-900">{BANK.iban}</p>
               </div>
-              <CopyButton value={BANK.iban} label="Kopieren" />
+              <CopyButton value={BANK.iban} label={t('copy')} copiedLabel={t('copied')} />
             </div>
             <div className="flex justify-between items-center">
               <div>
-                <span className="text-gray-500">Bank</span>
+                <span className="text-gray-500">{t('bankLabel')}</span>
                 <p className="text-gray-900">{BANK.name}</p>
               </div>
             </div>
             <div className="flex justify-between items-center">
               <div>
-                <span className="text-gray-500">Verwendungszweck</span>
+                <span className="text-gray-500">{t('purposeLabel')}</span>
                 <p className="font-medium text-gray-900">{paymentRef}</p>
               </div>
-              <CopyButton value={paymentRef} label="Kopieren" />
+              <CopyButton value={paymentRef} label={t('copy')} copiedLabel={t('copied')} />
             </div>
             <div className="flex justify-between items-center">
               <div>
-                <span className="text-gray-500">Betrag</span>
+                <span className="text-gray-500">{t('amountLabel')}</span>
                 <p className="font-bold text-green-600">{MEMBERSHIP.currency} {fee}</p>
               </div>
             </div>
           </div>
           <p className="text-xs text-gray-500 mt-3">
-            Du kannst auch per TWINT an die Vereinsnummer überweisen. Bei Fragen: {session?.user?.email ? 'wir melden uns per E-Mail.' : 'kontaktiere uns.'}
+            {t('twintNote', { suffix: session?.user?.email ? t('twintNoteEmail') : t('twintNoteNoEmail') })}
           </p>
         </div>
       </div>
@@ -157,7 +159,7 @@ export function MembershipApplicationForm() {
             memberType === 'regular' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-gray-300'
           }`}
         >
-          <div className="font-semibold text-gray-900">Regulär</div>
+          <div className="font-semibold text-gray-900">{t('regularLabel')}</div>
           <div className="text-sm text-gray-600">CHF {MEMBERSHIP.fees.regular} / Jahr</div>
         </button>
         <button
@@ -167,16 +169,16 @@ export function MembershipApplicationForm() {
             memberType === 'reduced' ? 'border-green-600 bg-green-50' : 'border-gray-200 hover:border-gray-300'
           }`}
         >
-          <div className="font-semibold text-gray-900">Ermässigt</div>
+          <div className="font-semibold text-gray-900">{t('reducedLabel')}</div>
           <div className="text-sm text-gray-600">CHF {MEMBERSHIP.fees.reduced} / Jahr</div>
-          <div className="text-xs text-gray-500 mt-0.5">Studierende, Lernende</div>
+          <div className="text-xs text-gray-500 mt-0.5">{t('reducedSubLabel')}</div>
         </button>
       </div>
 
       {/* Name + Email */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">{t('nameLabel')} *</label>
           <input
             id="name"
             type="text"
@@ -187,7 +189,7 @@ export function MembershipApplicationForm() {
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-Mail *</label>
+          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">{t('emailLabel')} *</label>
           <input
             id="email"
             type="email"
@@ -199,9 +201,9 @@ export function MembershipApplicationForm() {
         </div>
       </div>
 
-      {/* Address (legally required for Mitgliederliste) */}
+      {/* Address */}
       <div>
-        <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">Strasse *</label>
+        <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-1">{t('streetLabel')} *</label>
         <input
           id="street"
           type="text"
@@ -214,7 +216,7 @@ export function MembershipApplicationForm() {
 
       <div className="grid grid-cols-3 gap-4">
         <div>
-          <label htmlFor="plz" className="block text-sm font-medium text-gray-700 mb-1">PLZ *</label>
+          <label htmlFor="plz" className="block text-sm font-medium text-gray-700 mb-1">{t('plzLabel')} *</label>
           <input
             id="plz"
             type="text"
@@ -227,7 +229,7 @@ export function MembershipApplicationForm() {
           />
         </div>
         <div className="col-span-2">
-          <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">Ort *</label>
+          <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">{t('cityLabel')} *</label>
           <input
             id="city"
             type="text"
@@ -248,14 +250,14 @@ export function MembershipApplicationForm() {
         {submitting ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            Wird verarbeitet...
+            {t('submitting')}
           </>
         ) : (
-          `Mitglied werden — CHF ${fee}/Jahr`
+          t('submitButton', { currency: MEMBERSHIP.currency, fee })
         )}
       </button>
       <p className="text-xs text-gray-500">
-        Adresse wird für die offizielle Mitgliederliste benötigt (Schweizer Vereinsrecht).
+        {t('legalNote')}
       </p>
     </form>
   )

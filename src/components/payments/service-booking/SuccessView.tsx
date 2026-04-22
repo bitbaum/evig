@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CheckCircle, Shield, Clock } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import type { ServiceInfo, PaymentData } from './types'
 import Heading from '@/components/ui/Heading'
 
@@ -18,27 +19,29 @@ interface SuccessViewProps {
 }
 
 export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProps) {
+  const t = useTranslations('services.payment')
+
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
         <CheckCircle className="w-16 h-16 text-green-600 mx-auto mb-4" />
-        <CardTitle className="text-green-800">Buchung erfolgreich!</CardTitle>
+        <CardTitle className="text-green-800">{t('successTitle')}</CardTitle>
         <CardDescription>
-          Deine Service-Buchung wurde erfolgreich erstellt und bezahlt.
+          {t('successDesc')}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="bg-green-50 p-4 rounded-lg">
-          <Heading level={3} className="font-semibold text-green-800 mb-2">Buchungsdetails</Heading>
+          <Heading level={3} className="font-semibold text-green-800 mb-2">{t('bookingDetails')}</Heading>
           <div className="space-y-2 text-sm text-green-700">
-            <p><strong>Service:</strong> {service.name}</p>
-            <p><strong>Termin-ID:</strong> {paymentData?.appointmentId}</p>
-            <p><strong>Rechnung:</strong> {paymentData?.invoiceNumber}</p>
-            <p><strong>Betrag:</strong> CHF {paymentData?.amount.toFixed(2)}</p>
+            <p><strong>{t('detailService')}</strong> {service.name}</p>
+            <p><strong>{t('detailAppointmentId')}</strong> {paymentData?.appointmentId}</p>
+            <p><strong>{t('detailInvoice')}</strong> {paymentData?.invoiceNumber}</p>
+            <p><strong>{t('detailAmount')}</strong> CHF {paymentData?.amount.toFixed(2)}</p>
             {service.requires_approval && (
               <p className="flex items-center">
                 <Clock className="w-4 h-4 mr-2" />
-                Wartet auf Genehmigung durch unsere Techniker
+                {t('waitingApproval')}
               </p>
             )}
           </div>
@@ -48,8 +51,7 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
           <Alert>
             <Shield className="h-4 w-4" />
             <AlertDescription>
-              Deine Zahlung ist durch Escrow geschützt. Die Mittel werden freigegeben,
-              sobald der Service abgeschlossen ist.
+              {t('escrowProtected')}
             </AlertDescription>
           </Alert>
         )}
@@ -59,14 +61,14 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
             onClick={() => window.location.href = '/dashboard/appointments'}
             className="flex-1"
           >
-            Zu meinen Terminen
+            {t('myAppointments')}
           </Button>
           <Button
             variant="outline"
             onClick={() => window.location.href = `/invoices/${paymentData?.invoiceId}`}
             className="flex-1"
           >
-            Rechnung ansehen
+            {t('viewInvoice')}
           </Button>
         </div>
       </CardContent>
