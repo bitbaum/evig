@@ -2036,7 +2036,9 @@
       "similarListings": "Annunci simili",
       "loading": "Caricamento annuncio...",
       "notFound": "Annuncio non trovato",
-      "backToMarketplace": "Torna al marketplace"
+      "backToMarketplace": "Torna al marketplace",
+      "imageAriaLabel": "Mostra immagine {n}",
+      "conditionMeaningFor": "Cosa significa \"{condition}\" per {category}?"
     },
     "listing_actions": {
       "payment_info": "Pagamento diretto tra acquirente e venditore",

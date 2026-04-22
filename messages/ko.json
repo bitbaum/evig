@@ -2036,7 +2036,9 @@
       "similarListings": "유사한 판매 목록",
       "loading": "판매 목록 로딩 중...",
       "notFound": "판매 목록을 찾을 수 없습니다",
-      "backToMarketplace": "마켓플레이스로 돌아가기"
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "imageAriaLabel": "이미지 {n} 보기",
+      "conditionMeaningFor": "{category}에서 \"{condition}\"은(는) 무엇을 의미하나요?"
     },
     "listing_actions": {
       "payment_info": "구매자와 판매자 간 직접 결제",

@@ -465,7 +465,9 @@
       "similarListings": "Similar listings",
       "loading": "Loading listing...",
       "notFound": "Listing not found",
-      "backToMarketplace": "Back to Marketplace"
+      "backToMarketplace": "Back to Marketplace",
+      "imageAriaLabel": "Show image {n}",
+      "conditionMeaningFor": "What does \"{condition}\" mean for {category}?"
     },
     "empty": "No listings found",
     "conditions": {

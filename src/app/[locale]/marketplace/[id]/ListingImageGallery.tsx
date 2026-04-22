@@ -2,6 +2,7 @@
 
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import type { ListingImageData } from './types'
+import { useTranslations } from 'next-intl'
 
 interface ListingImageGalleryProps {
   images: ListingImageData[]
@@ -11,6 +12,7 @@ interface ListingImageGalleryProps {
 }
 
 export function ListingImageGallery({ images, title, selectedImage, onSelectImage }: ListingImageGalleryProps) {
+  const t = useTranslations('marketplace.listing')
   return (
     <div className="space-y-3">
       <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm">
@@ -31,7 +33,7 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
               className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
                 idx === selectedImage ? 'border-green-500' : 'border-transparent hover:border-gray-300'
               }`}
-              aria-label={`Bild ${idx + 1} anzeigen`}
+              aria-label={t('imageAriaLabel', { n: idx + 1 })}
             >
               <ListingImage src={img.url} alt="" fallbackIconSize="w-4 h-4" />
             </button>

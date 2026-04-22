@@ -6,17 +6,19 @@ import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import type { SimilarListing } from './types'
+import { useTranslations } from 'next-intl'
 
 interface SimilarListingsProps {
   listings: SimilarListing[]
 }
 
 export function SimilarListings({ listings }: SimilarListingsProps) {
+  const t = useTranslations('marketplace.listing')
   if (listings.length === 0) return null
 
   return (
     <div className="mt-6">
-      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">Ähnliche Inserate</Heading>
+      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">{t('similarListings')}</Heading>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {listings.map((sim) => {
           const simCondition = getConditionBadge(sim.condition)

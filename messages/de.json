@@ -567,7 +567,9 @@
       "similarListings": "Ähnliche Inserate",
       "loading": "Inserat wird geladen...",
       "notFound": "Inserat nicht gefunden",
-      "backToMarketplace": "Zurück zum Marketplace"
+      "backToMarketplace": "Zurück zum Marketplace",
+      "imageAriaLabel": "Bild {n} anzeigen",
+      "conditionMeaningFor": "Was bedeutet \"{condition}\" für {category}?"
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",

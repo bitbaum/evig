@@ -465,7 +465,9 @@
       "similarListings": "Annonces similaires",
       "loading": "Chargement de l'annonce...",
       "notFound": "Annonce introuvable",
-      "backToMarketplace": "Retour à la place de marché"
+      "backToMarketplace": "Retour à la place de marché",
+      "imageAriaLabel": "Afficher image {n}",
+      "conditionMeaningFor": "Que signifie \"{condition}\" pour {category}?"
     },
     "empty": "Aucune annonce trouvée",
     "conditions": {

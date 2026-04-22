@@ -12,6 +12,7 @@ import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRAT
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import type { ListingDetail } from './types'
 import { ORG } from '@/config/org'
+import { useTranslations } from 'next-intl'
 
 interface ListingInfoPanelProps {
   listing: ListingDetail
@@ -20,6 +21,7 @@ interface ListingInfoPanelProps {
 }
 
 export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoPanelProps) {
+  const t = useTranslations('marketplace.listing')
   const conditionBadge = getConditionBadge(listing.condition)
 
   return (
@@ -64,19 +66,19 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
       <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm space-y-3">
         {listing.brand && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Marke</span>
+            <span className="text-gray-500 dark:text-gray-400">{t('brand')}</span>
             <span className="font-medium text-gray-900 dark:text-white">{listing.brand}</span>
           </div>
         )}
         {listing.model && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Modell</span>
+            <span className="text-gray-500 dark:text-gray-400">{t('model')}</span>
             <span className="font-medium text-gray-900 dark:text-white">{listing.model}</span>
           </div>
         )}
         <div className="flex justify-between text-sm">
           <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
-            <Truck className="w-3.5 h-3.5" aria-hidden="true" /> Lieferung
+            <Truck className="w-3.5 h-3.5" aria-hidden="true" /> {t('delivery')}
           </span>
           <span className="font-medium text-gray-900 dark:text-white">
             {DELIVERY_LABELS[listing.delivery_options as DeliveryOption] || listing.delivery_options}
@@ -84,13 +86,13 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
         </div>
         {listing.shipping_cost_chf != null && listing.delivery_options !== 'pickup' && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">Versandkosten</span>
+            <span className="text-gray-500 dark:text-gray-400">{t('shippingCost')}</span>
             <span className="font-medium text-gray-900 dark:text-white">{formatCHF(Number(listing.shipping_cost_chf))}</span>
           </div>
         )}
         <div className="flex justify-between text-sm">
           <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
-            <CreditCard className="w-3.5 h-3.5" aria-hidden="true" /> Zahlung
+            <CreditCard className="w-3.5 h-3.5" aria-hidden="true" /> {t('payment')}
           </span>
           <span className="font-medium text-gray-900 dark:text-white">
             {PAYMENT_MODE_LABELS[listing.payment_mode as PaymentMode] || listing.payment_mode}
@@ -99,7 +101,7 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
         {listing.pickup_location && (
           <div className="flex justify-between text-sm">
             <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5" aria-hidden="true" /> Standort
+              <MapPin className="w-3.5 h-3.5" aria-hidden="true" /> {t('location')}
             </span>
             <span className="font-medium text-gray-900 dark:text-white">{listing.pickup_location}</span>
           </div>
