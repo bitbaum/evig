@@ -1940,6 +1940,28 @@
       "title": "배울 준비가 되셨나요?",
       "description": "블로그로 시작하거나, 워크숍에 참가하거나, 가이드를 확인해 보세요.",
       "button": "질문이 있으신가요? 문의해 주세요"
+    },
+    "resources": {
+      "openSource": {
+        "libreoffice": "Office 대안 (Writer, Calc, Impress)",
+        "firefox": "개인정보 친화적 브라우저",
+        "thunderbird": "이메일 클라이언트 및 캘린더",
+        "gimp": "이미지 편집",
+        "inkscape": "벡터 그래픽 편집기",
+        "blender": "3D 모델링 및 애니메이션"
+      },
+      "linux": {
+        "linuxMint": "초보자 친화적, Windows 유사 인터페이스",
+        "ubuntu": "인기 있고 지원이 풍부한 배포판",
+        "mxLinux": "구형 하드웨어에 가벼운 배포판",
+        "fedora": "최신 기술, 엔터프라이즈 준비",
+        "debian": "안정적이고 신뢰할 수 있는, 많은 배포판의 기반"
+      },
+      "documentation": {
+        "archWiki": "Linux 최고의 기술 문서",
+        "linuxFoundation": "공식 지식 포털",
+        "gnu": "자유 소프트웨어와 GPL에 관한 모든 것"
+      }
     }
   },
   "marketplace": {

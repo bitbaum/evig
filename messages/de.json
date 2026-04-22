@@ -3117,6 +3117,28 @@
       "title": "Bereit zu lernen?",
       "description": "Starte mit unserem Blog, besuche einen Workshop oder schau dir ein Guide an.",
       "button": "Fragen? Kontaktiere uns"
+    },
+    "resources": {
+      "openSource": {
+        "libreoffice": "Office-Alternativen (Writer, Calc, Impress)",
+        "firefox": "Datenschutz-freundlicher Browser",
+        "thunderbird": "E-Mail-Client und Kalender",
+        "gimp": "Bildbearbeitung",
+        "inkscape": "Vektor-Grafik-Editor",
+        "blender": "3D-Modellierung und Animation"
+      },
+      "linux": {
+        "linuxMint": "Anfängerfreundlich, Windows-ähnliche Oberfläche",
+        "ubuntu": "Beliebte und unterstützte Distribution",
+        "mxLinux": "Leichtgewichtig für ältere Hardware",
+        "fedora": "Modernste Technologien und Enterprise-ready",
+        "debian": "Stabil und zuverlässig, Basis vieler Distributionen"
+      },
+      "documentation": {
+        "archWiki": "Beste technische Dokumentation für Linux",
+        "linuxFoundation": "Offizielles Wissensportal",
+        "gnu": "Alles über freie Software und GPL"
+      }
     }
   },
   "agb": {

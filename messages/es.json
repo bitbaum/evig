@@ -1940,6 +1940,28 @@
       "title": "¿Listo/a para aprender?",
       "description": "Empieza con nuestro blog, asiste a un taller o consulta una guía.",
       "button": "¿Preguntas? Contáctanos"
+    },
+    "resources": {
+      "openSource": {
+        "libreoffice": "Alternativas de Office (Writer, Calc, Impress)",
+        "firefox": "Navegador respetuoso con la privacidad",
+        "thunderbird": "Cliente de correo y calendario",
+        "gimp": "Edición de imágenes",
+        "inkscape": "Editor de gráficos vectoriales",
+        "blender": "Modelado 3D y animación"
+      },
+      "linux": {
+        "linuxMint": "Amigable para principiantes, interfaz similar a Windows",
+        "ubuntu": "Distribución popular y bien soportada",
+        "mxLinux": "Ligero para hardware antiguo",
+        "fedora": "Tecnologías de vanguardia, listo para empresas",
+        "debian": "Estable y confiable, base de muchas distribuciones"
+      },
+      "documentation": {
+        "archWiki": "Mejor documentación técnica para Linux",
+        "linuxFoundation": "Portal oficial de conocimiento",
+        "gnu": "Todo sobre software libre y GPL"
+      }
     }
   },
   "marketplace": {

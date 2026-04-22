@@ -58,24 +58,24 @@ export default async function WissenPage() {
 
   const resources = {
     openSource: [
-      { name: 'LibreOffice', href: 'https://www.libreoffice.org', description: 'Office-Alternativen (Writer, Calc, Impress)' },
-      { name: 'Firefox', href: 'https://www.mozilla.org/de/firefox/', description: 'Datenschutz-freundlicher Browser' },
-      { name: 'Thunderbird', href: 'https://www.thunderbird.net/', description: 'E-Mail-Client und Kalender' },
-      { name: 'GIMP', href: 'https://www.gimp.org/', description: 'Bildbearbeitung' },
-      { name: 'Inkscape', href: 'https://inkscape.org/', description: 'Vektor-Grafik-Editor' },
-      { name: 'Blender', href: 'https://www.blender.org/', description: '3D-Modellierung und Animation' },
+      { name: 'LibreOffice', href: 'https://www.libreoffice.org', description: t('resources.openSource.libreoffice') },
+      { name: 'Firefox', href: 'https://www.mozilla.org/de/firefox/', description: t('resources.openSource.firefox') },
+      { name: 'Thunderbird', href: 'https://www.thunderbird.net/', description: t('resources.openSource.thunderbird') },
+      { name: 'GIMP', href: 'https://www.gimp.org/', description: t('resources.openSource.gimp') },
+      { name: 'Inkscape', href: 'https://inkscape.org/', description: t('resources.openSource.inkscape') },
+      { name: 'Blender', href: 'https://www.blender.org/', description: t('resources.openSource.blender') },
     ],
     linux: [
-      { name: 'Linux Mint', href: 'https://www.linuxmint.com/', description: 'Anfängerfreundlich, Windows-ähnliche Oberfläche' },
-      { name: 'Ubuntu', href: 'https://ubuntu.com/', description: 'Beliebte und unterstützte Distribution' },
-      { name: 'MX Linux', href: 'https://mxlinux.org/', description: 'Leichtgewichtig für ältere Hardware' },
-      { name: 'Fedora', href: 'https://fedoraproject.org/', description: 'Modernste Technologien und Enterprise-ready' },
-      { name: 'Debian', href: 'https://www.debian.org/', description: 'Stabil und zuverlässig, Basis vieler Distributionen' },
+      { name: 'Linux Mint', href: 'https://www.linuxmint.com/', description: t('resources.linux.linuxMint') },
+      { name: 'Ubuntu', href: 'https://ubuntu.com/', description: t('resources.linux.ubuntu') },
+      { name: 'MX Linux', href: 'https://mxlinux.org/', description: t('resources.linux.mxLinux') },
+      { name: 'Fedora', href: 'https://fedoraproject.org/', description: t('resources.linux.fedora') },
+      { name: 'Debian', href: 'https://www.debian.org/', description: t('resources.linux.debian') },
     ],
     documentation: [
-      { name: 'Arch Linux Wiki', href: 'https://wiki.archlinux.org/', description: 'Beste technische Dokumentation für Linux' },
-      { name: 'Linux Foundation', href: 'https://www.linuxfoundation.org/', description: 'Offizielles Wissensportal' },
-      { name: 'GNU.org', href: 'https://www.gnu.org/', description: 'Alles über freie Software und GPL' },
+      { name: 'Arch Linux Wiki', href: 'https://wiki.archlinux.org/', description: t('resources.documentation.archWiki') },
+      { name: 'Linux Foundation', href: 'https://www.linuxfoundation.org/', description: t('resources.documentation.linuxFoundation') },
+      { name: 'GNU.org', href: 'https://www.gnu.org/', description: t('resources.documentation.gnu') },
     ],
   }
 

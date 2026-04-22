@@ -1940,6 +1940,28 @@
       "title": "学ぶ準備はできていますか？",
       "description": "ブログから始めるか、ワークショップに参加するか、ガイドをご覧ください。",
       "button": "ご質問は？お問い合わせください"
+    },
+    "resources": {
+      "openSource": {
+        "libreoffice": "Officeの代替（Writer、Calc、Impress）",
+        "firefox": "プライバシー重視のブラウザ",
+        "thunderbird": "メールクライアントとカレンダー",
+        "gimp": "画像編集",
+        "inkscape": "ベクターグラフィックエディタ",
+        "blender": "3Dモデリングとアニメーション"
+      },
+      "linux": {
+        "linuxMint": "初心者向け、Windows風インターフェース",
+        "ubuntu": "人気で充実したサポートのディストリビューション",
+        "mxLinux": "古いハードウェア向けの軽量版",
+        "fedora": "最新技術とエンタープライズ対応",
+        "debian": "安定・信頼性が高く、多くのディストリの基盤"
+      },
+      "documentation": {
+        "archWiki": "Linuxの最良の技術ドキュメント",
+        "linuxFoundation": "公式の知識ポータル",
+        "gnu": "フリーソフトウェアとGPLのすべて"
+      }
     }
   },
   "marketplace": {
