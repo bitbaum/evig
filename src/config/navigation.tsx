@@ -17,6 +17,7 @@ export interface NavigationItem {
   nameKey?: string
   href: string
   description?: string
+  descriptionKey?: string
   external?: boolean
   subItems?: NavigationItem[]
   highlight?: boolean
@@ -47,36 +48,37 @@ export const mainNavigation: NavigationItem[] = [
     name: 'Über uns',
     nameKey: 'about',
     href: '/about',
-    description: 'Mission, Wirkung und Projekte',
+    descriptionKey: 'aboutDesc',
     subItems: [
       {
         name: 'Mission & Geschichte',
         nameKey: 'missionHistory',
         href: '/about',
-        description: 'Wer wir sind und was uns antreibt',
+        descriptionKey: 'missionHistoryDesc',
       },
       {
         name: 'Unsere Wirkung',
         nameKey: 'ourImpact',
         href: '/about/impact',
-        description: 'Messbare Erfolge und Transparenz',
+        descriptionKey: 'impactDesc',
       },
       {
         name: 'Projekte',
         nameKey: 'projects',
         href: '/projects',
-        description: 'Unsere Initiativen',
+        descriptionKey: 'projectsDesc',
       },
       {
         name: 'Standorte',
         nameKey: 'locations',
         href: '/space',
-        description: 'Unsere Räumlichkeiten in Zürich',
+        descriptionKey: 'locationsDesc',
       },
       {
         name: 'FAQ',
+        nameKey: 'faq',
         href: '/faq',
-        description: 'Häufig gestellte Fragen',
+        descriptionKey: 'faqDesc',
       },
     ],
   },
@@ -84,7 +86,7 @@ export const mainNavigation: NavigationItem[] = [
     name: 'Dienstleistungen',
     nameKey: 'services',
     href: '/services',
-    description: 'Professionelle IT-Services',
+    descriptionKey: 'servicesDesc',
     isMultiColumn: true,
     subItems: [
       // Section: Hardware
@@ -98,19 +100,19 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Reparatur & Upgrades',
         nameKey: 'repairUpgrades',
         href: '/services/computer-repair-upgrades',
-        description: 'Computer wieder fit machen',
+        descriptionKey: 'repairUpgradesDesc',
       },
       {
         name: 'Datenrettung',
         nameKey: 'dataRecovery',
         href: '/services/data-recovery-transfer',
-        description: 'Daten sichern und übertragen',
+        descriptionKey: 'dataRecoveryDesc',
       },
       {
         name: 'Hardware-Recycling',
         nameKey: 'hardwareRecycling',
         href: '/services/hardware-recycling',
-        description: 'Verantwortungsvolle Entsorgung',
+        descriptionKey: 'hardwareRecyclingDesc',
       },
       // Section: Software
       {
@@ -123,19 +125,19 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Linux & Open Source',
         nameKey: 'linuxOpenSource',
         href: '/services/linux-open-source',
-        description: 'Installation und Support',
+        descriptionKey: 'linuxOpenSourceDesc',
       },
       {
         name: 'Webentwicklung',
         nameKey: 'webDevelopment',
         href: '/services/web-design-development',
-        description: 'Websites mit Open Source',
+        descriptionKey: 'webDevDesc',
       },
       {
         name: 'Open Source-Lösungen',
         nameKey: 'openSourceSolutions',
         href: '/services/open-source-solutions',
-        description: 'Beratung und Implementierung',
+        descriptionKey: 'openSourceSolutionsDesc',
       },
     ],
   },
@@ -143,7 +145,7 @@ export const mainNavigation: NavigationItem[] = [
     name: 'Marktplatz',
     nameKey: 'marketplace',
     href: '/marketplace',
-    description: 'Kaufen, verkaufen und IT-Hilfe',
+    descriptionKey: 'marketplaceDesc',
     badge: 'Neu',
     isMultiColumn: true,
     subItems: [
@@ -158,19 +160,19 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Community-Inserate',
         nameKey: 'communityListings',
         href: '/marketplace',
-        description: 'Gebrauchte IT von Privat — 0% Gebühren',
+        descriptionKey: 'communityListingsDesc',
       },
       {
         name: 'RevampIT Shop',
         nameKey: 'shopRevampIT',
         href: '/shop',
-        description: 'Geprüfte, aufbereitete Geräte',
+        descriptionKey: 'orgShopDesc',
       },
       {
         name: 'Ladenlokal Zürich',
         nameKey: 'storeZurich',
         href: '/shop#ladenlokal',
-        description: 'Vor Ort stöbern und beraten lassen',
+        descriptionKey: 'storeDesc',
       },
       // Section: Verkaufen
       {
@@ -183,13 +185,13 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Inserat erstellen',
         nameKey: 'createListing',
         href: '/marketplace/sell',
-        description: 'Eigene Geräte verkaufen — kostenlos',
+        descriptionKey: 'createListingDesc',
       },
       {
         name: 'Meine Inserate',
         nameKey: 'myListings',
         href: '/dashboard/listings',
-        description: 'Inserate und Verkäufe verwalten',
+        descriptionKey: 'myListingsDesc',
       },
       // Section: IT-Hilfe
       {
@@ -202,19 +204,19 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Hilfe suchen',
         nameKey: 'findHelp',
         href: '/it-hilfe',
-        description: 'Community-Techniker in deiner Nähe',
+        descriptionKey: 'findHelpDesc',
       },
       {
         name: 'Techniker finden',
         nameKey: 'findTechnicians',
         href: '/techniker',
-        description: 'Community- und professionelle Techniker',
+        descriptionKey: 'findTechnicianDesc',
       },
       {
         name: 'Techniker werden',
         nameKey: 'becomeTechnician',
         href: '/profil/techniker',
-        description: 'IT-Wissen teilen und helfen',
+        descriptionKey: 'becomeTechnicianDesc',
       },
       // Section: Abo-Tauschbörse
       {
@@ -227,7 +229,7 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Abo-Pools',
         nameKey: 'aboPools',
         href: '/abos',
-        description: 'Digitale Abos teilen und Kosten aufteilen',
+        descriptionKey: 'aboPoolsDesc',
         badge: 'Neu',
       },
     ],
@@ -236,31 +238,31 @@ export const mainNavigation: NavigationItem[] = [
     name: 'Lernen',
     nameKey: 'learn',
     href: '/knowhow',
-    description: 'Workshops, Guides und Ressourcen',
+    descriptionKey: 'learnDesc',
     subItems: [
       {
         name: 'Workshops',
         nameKey: 'workshops',
         href: '/workshops',
-        description: 'Kurse vor Ort buchen',
+        descriptionKey: 'workshopsDesc',
       },
       {
         name: 'Guides',
         nameKey: 'guides',
         href: '/knowhow#guides',
-        description: 'Schritt-für-Schritt Anleitungen',
+        descriptionKey: 'guidesDesc',
       },
       {
         name: 'Blog',
         nameKey: 'blog',
         href: '/blog',
-        description: 'Tipps und Geschichten',
+        descriptionKey: 'blogDesc',
       },
       {
         name: 'Wiki',
         nameKey: 'wiki',
         href: EXTERNAL_LINKS.wiki,
-        description: 'Gemeinsames Wissensportal',
+        descriptionKey: 'wikiDesc',
         external: true,
       },
     ],
@@ -269,7 +271,7 @@ export const mainNavigation: NavigationItem[] = [
     name: 'Mitmachen',
     nameKey: 'getInvolved',
     href: '/get-involved',
-    description: 'Teil der Bewegung werden',
+    descriptionKey: 'getInvolvedDesc',
     isMultiColumn: true,
     dropdownAlignment: 'right',
     subItems: [
@@ -284,25 +286,25 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Freiwilligenarbeit',
         nameKey: 'volunteering',
         href: '/get-involved/volunteer',
-        description: 'Zeit und Können einbringen',
+        descriptionKey: 'volunteerDesc',
       },
       {
         name: 'Praktikum',
         nameKey: 'internship',
         href: '/get-involved/internships',
-        description: 'Erfahrung sammeln',
+        descriptionKey: 'internshipDesc',
       },
       {
         name: 'Wiedereinstieg',
         nameKey: 'workReintegration',
         href: '/get-involved/work-reintegration',
-        description: 'Zurück ins Berufsleben',
+        descriptionKey: 'reintegrationDesc',
       },
       {
         name: 'IT-Hilfe Techniker',
         nameKey: 'itHelpTechnician',
         href: '/get-involved/it-hilfe-techniker',
-        description: 'IT-Wissen teilen und helfen',
+        descriptionKey: 'itHelpTechnicianDesc',
         badge: 'Neu',
       },
       // Section: Unterstützen
@@ -316,19 +318,19 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Spenden',
         nameKey: 'donate',
         href: '/get-involved/donate',
-        description: 'Unsere Mission fördern',
+        descriptionKey: 'donateDesc',
       },
       {
         name: 'Geräte spenden',
         nameKey: 'donateDevices',
         href: '/get-involved/donate#geraete',
-        description: 'Hardware ein zweites Leben geben',
+        descriptionKey: 'donateDevicesDesc',
       },
       {
         name: 'Partnerschaft',
         nameKey: 'partnership',
         href: '/get-involved/partnerships',
-        description: 'Als Unternehmen kooperieren',
+        descriptionKey: 'partnershipDesc',
       },
       // Section: Mitgliedschaft
       {
@@ -341,7 +343,7 @@ export const mainNavigation: NavigationItem[] = [
         name: 'Mitglied werden',
         nameKey: 'becomeMember',
         href: '/mitglied-werden',
-        description: 'Teil des Vereins werden und mitbestimmen',
+        descriptionKey: 'becomeMemberDesc',
         badge: 'Neu',
       },
     ],
@@ -350,7 +352,7 @@ export const mainNavigation: NavigationItem[] = [
     name: 'Kontakt',
     nameKey: 'contact',
     href: '/contact',
-    description: 'Wir freuen uns auf dich',
+    descriptionKey: 'contactDesc',
     highlight: true,
   },
 ]

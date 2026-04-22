@@ -105,7 +105,8 @@
       "becomeMember": "Mitglied werden",
       "becomeMemberDesc": "Teil des Vereins werden und mitbestimmen",
       "contact": "Kontakt",
-      "contactDesc": "Wir freuen uns auf dich"
+      "contactDesc": "Wir freuen uns auf dich",
+      "aboPoolsDesc": "Digitale Abos teilen und Kosten aufteilen"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -1843,6 +1844,7 @@
       "datesAvailable": "{count} verfügbar",
       "reviews": "Bewertungen",
       "loginHeading": "Für Workshop anmelden",
+      "loginRequired": "Anmeldung erforderlich",
       "loginPrompt": "Bitte melde dich an, um dich für diesen Workshop anzumelden.",
       "successHeading": "Workshop-Anmeldung",
       "successTitle": "Erfolgreich angemeldet!",
