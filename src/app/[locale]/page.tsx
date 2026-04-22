@@ -140,7 +140,7 @@ export default async function Home() {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "name": ORG.name,
-            "description": "Computer-Reparatur, Linux-Installation und Datenrettung. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.",
+            "description": t('jsonld.description'),
             "url": ORG.website,
             "telephone": CONTACT.phone,
             "address": {
@@ -151,7 +151,7 @@ export default async function Home() {
               "addressRegion": "ZH",
               "addressCountry": "CH"
             },
-            "areaServed": ["Zürich", "Basel", "Luzern", "Schweiz"],
+            "areaServed": t('jsonld.areaServed').split(',').map((s: string) => s.trim()),
             "priceRange": "$$",
             "openingHours": OPENING_HOURS.schemaOrg,
             "sameAs": [
@@ -166,24 +166,24 @@ export default async function Home() {
                   "@type": "Offer",
                   "itemOffered": {
                     "@type": "Service",
-                    "name": "Linux-Installation",
-                    "description": "Alte Laptops schneller gemacht durch Linux-Installation"
+                    "name": t('jsonld.service1Name'),
+                    "description": t('jsonld.service1Desc')
                   }
                 },
                 {
                   "@type": "Offer",
                   "itemOffered": {
                     "@type": "Service",
-                    "name": "Datenrettung",
-                    "description": "Wiederherstellung von Daten aus beschädigten Geräten"
+                    "name": t('jsonld.service2Name'),
+                    "description": t('jsonld.service2Desc')
                   }
                 },
                 {
                   "@type": "Offer",
                   "itemOffered": {
                     "@type": "Service",
-                    "name": "Computer-Reparatur",
-                    "description": "Reparatur und Aufbau von Vintage-Computern"
+                    "name": t('jsonld.service3Name'),
+                    "description": t('jsonld.service3Desc')
                   }
                 }
               ]

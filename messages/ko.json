@@ -1830,6 +1830,16 @@
     "asSeenIn": {
       "heading": "언론 보도",
       "allCoverage": "모든 미디어 보도 보기"
+    },
+    "jsonld": {
+      "description": "컴퓨터 수리, Linux 설치 및 데이터 복구. 개인, 단체 및 중소기업을 위한 지속 가능한 IT 솔루션.",
+      "areaServed": "취리히, 바젤, 루체른, 스위스",
+      "service1Name": "Linux 설치",
+      "service1Desc": "오래된 노트북을 Linux 설치로 더 빠르게",
+      "service2Name": "데이터 복구",
+      "service2Desc": "손상된 기기에서 데이터 복구",
+      "service3Name": "컴퓨터 수리",
+      "service3Desc": "빈티지 컴퓨터 수리 및 복원"
     }
   },
   "itHelp": {

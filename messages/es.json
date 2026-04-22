@@ -1830,6 +1830,16 @@
     "asSeenIn": {
       "heading": "Aparecido en",
       "allCoverage": "Ver toda la cobertura de medios"
+    },
+    "jsonld": {
+      "description": "Reparación de ordenadores, instalación de Linux y recuperación de datos. Soluciones IT sostenibles para particulares, asociaciones y pymes.",
+      "areaServed": "Zúrich, Basilea, Lucerna, Suiza",
+      "service1Name": "Instalación Linux",
+      "service1Desc": "Portátiles antiguos mejorados con instalación Linux",
+      "service2Name": "Recuperación de datos",
+      "service2Desc": "Recuperación de datos de dispositivos dañados",
+      "service3Name": "Reparación de ordenadores",
+      "service3Desc": "Reparación y restauración de ordenadores vintage"
     }
   },
   "itHelp": {

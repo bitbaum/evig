@@ -341,6 +341,16 @@
     "asSeenIn": {
       "heading": "Bekannt aus",
       "allCoverage": "Alle Medienberichte ansehen"
+    },
+    "jsonld": {
+      "description": "Computer-Reparatur, Linux-Installation und Datenrettung. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.",
+      "areaServed": "Zürich, Basel, Luzern, Schweiz",
+      "service1Name": "Linux-Installation",
+      "service1Desc": "Alte Laptops schneller gemacht durch Linux-Installation",
+      "service2Name": "Datenrettung",
+      "service2Desc": "Wiederherstellung von Daten aus beschädigten Geräten",
+      "service3Name": "Computer-Reparatur",
+      "service3Desc": "Reparatur und Aufbau von Vintage-Computern"
     }
   },
   "shop": {

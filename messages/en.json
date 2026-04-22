@@ -290,6 +290,16 @@
     "asSeenIn": {
       "heading": "As seen in",
       "allCoverage": "View all media coverage"
+    },
+    "jsonld": {
+      "description": "Computer repair, Linux installation and data recovery. Sustainable IT solutions for individuals, associations and SMEs.",
+      "areaServed": "Zurich, Basel, Lucerne, Switzerland",
+      "service1Name": "Linux Installation",
+      "service1Desc": "Old laptops made faster with Linux installation",
+      "service2Name": "Data Recovery",
+      "service2Desc": "Recovery of data from damaged devices",
+      "service3Name": "Computer Repair",
+      "service3Desc": "Repair and restoration of vintage computers"
     }
   },
   "shop": {

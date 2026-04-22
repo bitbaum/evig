@@ -1830,6 +1830,16 @@
     "asSeenIn": {
       "heading": "メディア掲載",
       "allCoverage": "すべてのメディア報道を見る"
+    },
+    "jsonld": {
+      "description": "コンピュータ修理、Linuxインストール、データ復旧。個人、団体、中小企業向けの持続可能なITソリューション。",
+      "areaServed": "チューリッヒ、バーゼル、ルツェルン、スイス",
+      "service1Name": "Linuxインストール",
+      "service1Desc": "古いノートパソコンをLinuxインストールで高速化",
+      "service2Name": "データ復旧",
+      "service2Desc": "破損したデバイスからのデータ復旧",
+      "service3Name": "コンピュータ修理",
+      "service3Desc": "ヴィンテージコンピュータの修理と復元"
     }
   },
   "itHelp": {

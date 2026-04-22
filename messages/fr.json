@@ -250,6 +250,16 @@
     "asSeenIn": {
       "heading": "Vu dans",
       "allCoverage": "Voir toute la couverture médiatique"
+    },
+    "jsonld": {
+      "description": "Réparation d'ordinateurs, installation Linux et récupération de données. Solutions IT durables pour particuliers, associations et PME.",
+      "areaServed": "Zurich, Bâle, Lucerne, Suisse",
+      "service1Name": "Installation Linux",
+      "service1Desc": "Anciens ordinateurs portables accélérés par l'installation Linux",
+      "service2Name": "Récupération de données",
+      "service2Desc": "Récupération de données depuis des appareils endommagés",
+      "service3Name": "Réparation d'ordinateurs",
+      "service3Desc": "Réparation et restauration d'ordinateurs vintage"
     }
   },
   "shop": {

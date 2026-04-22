@@ -1830,6 +1830,16 @@
     "asSeenIn": {
       "heading": "Come visto in",
       "allCoverage": "Vedi tutta la copertura mediatica"
+    },
+    "jsonld": {
+      "description": "Riparazione computer, installazione Linux e recupero dati. Soluzioni IT sostenibili per privati, associazioni e PMI.",
+      "areaServed": "Zurigo, Basilea, Lucerna, Svizzera",
+      "service1Name": "Installazione Linux",
+      "service1Desc": "Vecchi laptop resi più veloci con l'installazione Linux",
+      "service2Name": "Recupero dati",
+      "service2Desc": "Recupero di dati da dispositivi danneggiati",
+      "service3Name": "Riparazione computer",
+      "service3Desc": "Riparazione e restauro di computer vintage"
     }
   },
   "itHelp": {
