@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Stepper } from '@/components/ui/Stepper'
 import { AccountStep, VerifyStep } from './steps'
 import {
@@ -25,17 +26,18 @@ interface RegistrationState {
   emailVerified: boolean
 }
 
-const STEPS = [
-  { label: 'Konto', description: 'Erstelle dein Konto' },
-  { label: 'Verifizierung', description: 'Bestätige deine E-Mail' },
-]
-
 const STORAGE_KEY = 'revampit_registration_state'
 
 export function RegistrationWizard() {
+  const t = useTranslations('auth.register')
   const { isLoading, errors, verifyError, register, verifyCode, resendCode } = useRegistration()
   const [isComplete, setIsComplete] = useState(false)
   const [emailSendFailed, setEmailSendFailed] = useState(false)
+
+  const steps = [
+    { label: t('stepAccountLabel'), description: t('stepAccountDesc') },
+    { label: t('stepVerifyLabel'), description: t('stepVerifyDesc') },
+  ]
 
   // Restore saved state from localStorage (lazy initializer avoids effect)
   const savedData = useState(() => {
@@ -159,19 +161,19 @@ export function RegistrationWizard() {
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
             <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-              Willkommen bei {ORG.name}!
+              {t('welcomeHeading', { orgName: ORG.name })}
             </Heading>
             <p className="text-gray-600 dark:text-gray-400">
               {state.emailVerified
-                ? 'dein Konto ist vollständig eingerichtet.'
-                : 'dein Konto wurde erstellt. Vergiss nicht, deine E-Mail zu verifizieren.'}
+                ? t('accountReady')
+                : t('accountCreatedVerifyPending')}
             </p>
           </div>
 
           {/* What do you want to do? */}
           <div className="space-y-3">
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-              Was möchtest du als Nächstes tun?
+              {t('nextStepsTitle')}
             </p>
 
             <Link
@@ -183,10 +185,10 @@ export function RegistrationWizard() {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-gray-900 dark:text-white">
-                  IT-Hilfe suchen
+                  {t('findHelp')}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  Hilfe bei IT-Problemen finden
+                  {t('findHelpDesc')}
                 </div>
               </div>
               <ArrowRight className="w-5 h-5 text-gray-500" />
@@ -201,10 +203,10 @@ export function RegistrationWizard() {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-gray-900 dark:text-white">
-                  IT-Hilfe anbieten
+                  {t('offerHelp')}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  Deine Skills erfassen und anderen helfen
+                  {t('offerHelpDesc')}
                 </div>
               </div>
               <ArrowRight className="w-5 h-5 text-gray-500" />
@@ -219,10 +221,10 @@ export function RegistrationWizard() {
               </div>
               <div className="flex-1">
                 <div className="font-medium text-gray-900 dark:text-white">
-                  Shop durchstöbern
+                  {t('browseShop')}
                 </div>
                 <div className="text-sm text-gray-500 dark:text-gray-400">
-                  Refurbished IT-Geräte entdecken
+                  {t('browseShopDesc')}
                 </div>
               </div>
               <ArrowRight className="w-5 h-5 text-gray-500" />
@@ -234,7 +236,7 @@ export function RegistrationWizard() {
               href="/auth/login"
               className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
             >
-              Jetzt anmelden
+              {t('signInNow')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -249,7 +251,7 @@ export function RegistrationWizard() {
         {/* Stepper */}
         <div className="mb-8">
           <Stepper
-            steps={STEPS}
+            steps={steps}
             currentStep={currentStep}
             onStepClick={handleStepClick}
           />
@@ -294,12 +296,12 @@ export function RegistrationWizard() {
         {/* Login Link */}
         <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 text-center">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Bereits registriert?{' '}
+            {t('alreadyRegistered')}{' '}
             <Link
               href="/auth/login"
               className="text-green-600 hover:underline font-medium"
             >
-              Anmelden
+              {t('login')}
             </Link>
           </p>
         </div>

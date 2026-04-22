@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
@@ -11,6 +12,7 @@ import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 
 export function LoginForm() {
+  const t = useTranslations('auth.login')
   const router = useRouter()
   const searchParams = useSearchParams()
   const rawCallbackUrl = searchParams.get('callbackUrl') || '/dashboard'
@@ -47,7 +49,7 @@ export function LoginForm() {
         router.refresh()
       }
     } catch (error) {
-      setFormError('Ein unerwarteter Fehler ist aufgetreten')
+      setFormError(t('errorUnexpected'))
     } finally {
       setIsLoading(false)
     }
@@ -58,21 +60,21 @@ export function LoginForm() {
     switch (error) {
       case 'CredentialsSignin':
       case 'Configuration':
-        return 'Ungültige E-Mail-Adresse oder Passwort'
+        return t('errorCredentials')
       case 'AccessDenied':
-        return 'Zugriff verweigert. Bitte kontaktiere den Administrator.'
+        return t('errorAccessDenied')
       case 'OAuthAccountNotLinked':
-        return 'Diese E-Mail ist bereits mit einem anderen Konto verknüpft'
+        return t('errorOAuthLinked')
       case 'invalid_token':
-        return 'Ungültiger Verifizierungslink'
+        return t('errorInvalidToken')
       case 'verification_failed':
-        return 'E-Mail-Verifizierung fehlgeschlagen. Der Link könnte abgelaufen sein.'
+        return t('errorVerificationFailed')
       case 'verification_error':
-        return 'Ein Fehler ist bei der E-Mail-Verifizierung aufgetreten'
+        return t('errorVerificationError')
       default:
         // Show database/connection errors in a user-friendly way
         if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
-          return 'Verbindungsproblem. Bitte versuche es in einer Minute erneut.'
+          return t('errorConnection')
         }
         return error
     }
@@ -84,10 +86,10 @@ export function LoginForm() {
         {/* Header */}
         <div className="text-center mb-8">
           <Heading level={1} className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
-            Willkommen zurück
+            {t('heading')}
           </Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'), 'dark:text-neutral-400')}>
-            Melde dich in deinem Konto an
+            {t('subtitle')}
           </p>
         </div>
 
@@ -96,7 +98,7 @@ export function LoginForm() {
           <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
             <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
             <p className={cn('text-sm', getStatusColors('success').text)}>
-              E-Mail-Adresse erfolgreich bestätigt! du kannst sich jetzt anmelden.
+              {t('emailVerifiedSuccess')}
             </p>
           </div>
         )}
@@ -105,7 +107,7 @@ export function LoginForm() {
           <div className={cn('mb-6 p-4 rounded-lg flex items-start gap-3 border-2', getStatusColors('success').bg, getStatusColors('success').border)}>
             <CheckCircle2 className={cn('w-5 h-5 flex-shrink-0 mt-0.5', getStatusColors('success').icon)} />
             <p className={cn('text-sm', getStatusColors('success').text)}>
-              dein Passwort wurde erfolgreich geändert! du kannst sich jetzt mit deinem neuen Passwort anmelden.
+              {t('passwordResetSuccess')}
             </p>
           </div>
         )}
@@ -130,7 +132,7 @@ export function LoginForm() {
           {/* Email */}
           <div>
             <label htmlFor="email" className={cn('block text-sm font-medium mb-1.5', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
-              E-Mail-Adresse
+              {t('email')}
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
@@ -142,7 +144,7 @@ export function LoginForm() {
                 required
                 aria-required="true"
                 autoComplete="email"
-                placeholder="name@beispiel.ch"
+                placeholder={t('emailPlaceholder')}
                 aria-invalid={!!(formError || error)}
                 aria-describedby={(formError || error) ? 'login-error' : undefined}
                 className={cn(
@@ -162,13 +164,13 @@ export function LoginForm() {
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label htmlFor="password" className={cn('block text-sm font-medium', getTextColor('white', 'secondary'), 'dark:text-neutral-300')}>
-                Passwort
+                {t('password')}
               </label>
               <Link
                 href="/auth/forgot-password"
                 className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
               >
-                Passwort vergessen?
+                {t('forgotPassword')}
               </Link>
             </div>
             <div className="relative">
@@ -198,7 +200,7 @@ export function LoginForm() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
-                aria-label={showPassword ? 'Passwort verbergen' : 'Passwort anzeigen'}
+                aria-label={showPassword ? t('hidePassword') : t('showPassword')}
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
@@ -220,11 +222,11 @@ export function LoginForm() {
             {isLoading ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Wird angemeldet...</span>
+                <span>{t('signingIn')}</span>
               </>
             ) : (
               <>
-                <span>Anmelden</span>
+                <span>{t('submit')}</span>
                 <ArrowRight className="w-5 h-5" />
               </>
             )}
@@ -238,7 +240,7 @@ export function LoginForm() {
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-4 bg-white dark:bg-gray-800 text-gray-500">
-              Neu bei {ORG.name}?
+              {t('newHere', { orgName: ORG.name })}
             </span>
           </div>
         </div>
@@ -248,23 +250,22 @@ export function LoginForm() {
           href="/auth/register"
           className="w-full flex items-center justify-center gap-2 border-2 border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 font-semibold py-3 px-4 rounded-lg transition-colors"
         >
-          Konto erstellen
+          {t('createAccount')}
         </Link>
       </div>
 
       {/* Benefits */}
       <div className="mt-8 text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-          Mit einem Konto kannst du:
+          {t('benefits')}
         </p>
         <ul className="text-sm text-gray-600 dark:text-gray-500 space-y-1">
-          <li>✓ Sich für Workshops anmelden</li>
-          <li>✓ Termine für Dienstleistungen buchen</li>
-          <li>✓ deine Bestellungen im Shop verfolgen</li>
-          <li>✓ deine Spenden und Aktivitäten verwalten</li>
+          <li>✓ {t('benefit1')}</li>
+          <li>✓ {t('benefit2')}</li>
+          <li>✓ {t('benefit3')}</li>
+          <li>✓ {t('benefit4')}</li>
         </ul>
       </div>
     </div>
   )
 }
-

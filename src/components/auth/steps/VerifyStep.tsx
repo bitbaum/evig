@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Mail, ArrowRight, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getButtonVariant } from '@/lib/design-system'
@@ -25,6 +26,7 @@ export function VerifyStep({
   error,
   emailSendFailed = false,
 }: VerifyStepProps) {
+  const t = useTranslations('auth.verify')
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [resendCooldown, setResendCooldown] = useState(0)
   const [isResending, setIsResending] = useState(false)
@@ -112,10 +114,10 @@ export function VerifyStep({
           <CheckCircle2 className="w-8 h-8 text-green-600" />
         </div>
         <Heading level={2} className="text-xl font-bold text-gray-900 mb-2">
-          E-Mail verifiziert!
+          {t('successHeading')}
         </Heading>
         <p className="text-gray-600 mb-6">
-          dein Konto ist jetzt vollständig aktiviert.
+          {t('successDesc')}
         </p>
       </div>
     )
@@ -128,12 +130,10 @@ export function VerifyStep({
           <Mail className="w-8 h-8 text-primary-600" />
         </div>
         <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-          Bestätige deine E-Mail
+          {t('heading')}
         </Heading>
         <p className="text-gray-600 dark:text-gray-400">
-          Wir haben einen 6-stelligen Code an{' '}
-          <span className="font-medium text-gray-900 dark:text-white">{email}</span>{' '}
-          gesendet
+          {t('description', { email })}
         </p>
       </div>
 
@@ -141,10 +141,10 @@ export function VerifyStep({
       {emailSendFailed && (
         <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
           <p className="text-sm text-amber-800 font-medium">
-            Der Bestätigungscode konnte nicht gesendet werden.
+            {t('emailSendFailed')}
           </p>
           <p className="text-sm text-amber-700 mt-1">
-            Bitte klicke unten auf «Code erneut senden».
+            {t('emailSendFailedAction')}
           </p>
         </div>
       )}
@@ -196,11 +196,11 @@ export function VerifyStep({
         {isVerifying ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
-            <span>Wird überprüft...</span>
+            <span>{t('verifying')}</span>
           </>
         ) : (
           <>
-            <span>Verifizieren</span>
+            <span>{t('verify')}</span>
             <ArrowRight className="w-5 h-5" />
           </>
         )}
@@ -209,7 +209,7 @@ export function VerifyStep({
       {/* Resend */}
       <div className="text-center">
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-          Keinen Code erhalten?
+          {t('noCode')}
         </p>
         <button
           type="button"
@@ -223,9 +223,9 @@ export function VerifyStep({
             <RefreshCw className="w-4 h-4" />
           )}
           {resendCooldown > 0 ? (
-            <span>Erneut senden in {resendCooldown}s</span>
+            <span>{t('resendCooldown', { seconds: resendCooldown })}</span>
           ) : (
-            <span>Code erneut senden</span>
+            <span>{t('resend')}</span>
           )}
         </button>
       </div>
@@ -237,10 +237,10 @@ export function VerifyStep({
           onClick={onSkip}
           className="w-full text-center text-sm text-gray-500 hover:text-gray-700"
         >
-          Später verifizieren
+          {t('skipVerify')}
         </button>
         <p className="text-xs text-gray-500 text-center mt-2">
-          du kannst sich anmelden, aber einige Funktionen sind eingeschränkt
+          {t('skipDescription')}
         </p>
       </div>
     </div>
