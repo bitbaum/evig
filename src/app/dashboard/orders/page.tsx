@@ -15,6 +15,7 @@ import {
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 
@@ -31,18 +32,18 @@ interface OrderItem {
   created_at: string
 }
 
-const TABS = [
-  { key: '', label: 'Alle' },
-  { key: ORDER_STATUS.PENDING_PAYMENT, label: 'Ausstehend' },
-  { key: ORDER_STATUS.PAID, label: 'Bezahlt' },
-  { key: ORDER_STATUS.SHIPPED, label: 'Versendet' },
-  { key: ORDER_STATUS.COMPLETED, label: 'Abgeschlossen' },
-] as const
-
 export default function DashboardOrdersPage() {
+  const t = useTranslations('dashboard.orders')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const [orders, setOrders] = useState<OrderItem[]>([])
+  const TABS = [
+    { key: '', label: t('tabAll') },
+    { key: ORDER_STATUS.PENDING_PAYMENT, label: t('tabPending') },
+    { key: ORDER_STATUS.PAID, label: t('tabPaid') },
+    { key: ORDER_STATUS.SHIPPED, label: t('tabShipped') },
+    { key: ORDER_STATUS.COMPLETED, label: t('tabCompleted') },
+  ]
   const [total, setTotal] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('')
@@ -91,7 +92,7 @@ export default function DashboardOrdersPage() {
       <div className="flex items-center justify-between mb-6">
         <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <ShoppingBag className="w-6 h-6" />
-          Meine Bestellungen
+          {t('pageTitle')}
         </Heading>
 
         {/* Role toggle */}
@@ -104,7 +105,7 @@ export default function DashboardOrdersPage() {
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
             }`}
           >
-            Käufe
+            {t('roleBuyer')}
           </button>
           <button
             onClick={() => setRole('seller')}
@@ -114,7 +115,7 @@ export default function DashboardOrdersPage() {
                 : 'text-gray-500 dark:text-gray-400 hover:text-gray-700'
             }`}
           >
-            Verkäufe
+            {t('roleSeller')}
           </button>
         </div>
       </div>
@@ -146,19 +147,15 @@ export default function DashboardOrdersPage() {
           icon={ShoppingBag}
           iconBg="bg-green-50 dark:bg-green-900/20"
           iconColor="text-green-600 dark:text-green-400"
-          title="Noch keine Bestellungen"
-          description={
-            role === 'buyer'
-              ? 'Stöbere im Marketplace und finde tolle Angebote.'
-              : 'Sobald jemand eines deiner Inserate kauft, erscheint die Bestellung hier.'
-          }
+          title={t('emptyTitle')}
+          description={role === 'buyer' ? t('emptyBuyerDesc') : t('emptySellerDesc')}
           action={
             role === 'buyer' ? (
               <Link
                 href="/marketplace"
                 className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-green-700 transition-colors"
               >
-                Zum Marketplace
+                {t('goToMarketplace')}
               </Link>
             ) : undefined
           }
@@ -175,7 +172,7 @@ export default function DashboardOrdersPage() {
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
                   {order.thumbnail ? (
-                    <Image src={order.thumbnail} alt={order.listing_title || 'Artikelbild'} width={56} height={56} className="w-full h-full object-cover" />
+                    <Image src={order.thumbnail} alt={order.listing_title || t('itemImage')} width={56} height={56} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-6 h-6 text-gray-400" />
@@ -186,7 +183,7 @@ export default function DashboardOrdersPage() {
                 <div className="flex-1 min-w-0">
                   <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">{order.listing_title}</Heading>
                   <div className="flex items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    <span>{role === 'buyer' ? 'Verkäufer' : 'Käufer'}: {order.counterparty_name}</span>
+                    <span>{role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}: {order.counterparty_name}</span>
                     <span>{formatDateShort(order.created_at)}</span>
                   </div>
                 </div>

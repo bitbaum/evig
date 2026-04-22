@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
 import type { OrderStatus, DeliveryOption } from '@/config/marketplace'
+import { useTranslations } from 'next-intl'
 import { formatDateShort } from '@/lib/date-formats'
 import { OrderStatusTimeline } from '@/components/marketplace/OrderStatusTimeline'
 import { OrderReviewForm } from '@/components/marketplace/OrderReviewForm'
@@ -61,6 +62,7 @@ interface OrderDetail {
 }
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations('dashboard.orders')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const [order, setOrder] = useState<OrderDetail | null>(null)
@@ -84,10 +86,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         if (data.success && data.data) {
           setOrder(data.data)
         } else {
-          setError(data.error || 'Bestellung nicht gefunden')
+          setError(data.error || t('errorNotFound'))
         }
       } catch {
-        setError('Fehler beim Laden der Bestellung')
+        setError(t('errorLoading'))
       } finally {
         setIsLoading(false)
       }
@@ -114,10 +116,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           delivered_at: prev.delivered_at ?? new Date().toISOString(),
         } : null)
       } else {
-        setError(data.error || 'Empfang konnte nicht bestätigt werden')
+        setError(data.error || t('errorConfirmReceipt'))
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(t('networkError'))
     } finally {
       setUpdatingStatus(false)
     }
@@ -146,10 +148,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       if (data.success) {
         setOrder(prev => prev ? { ...prev, status: newStatus } : null)
       } else {
-        setError(data.error || 'Status konnte nicht aktualisiert werden')
+        setError(data.error || t('errorUpdateStatus'))
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(t('networkError'))
     } finally {
       setUpdatingStatus(false)
     }
@@ -169,7 +171,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
         <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">{error}</Heading>
         <Link href="/dashboard/orders" className="text-green-600 hover:text-green-700 font-medium">
-          Zurück zu meinen Bestellungen
+          {t('backToOrders')}
         </Link>
       </div>
     )
@@ -189,15 +191,15 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Zurück zu meinen Bestellungen
+        {t('backToOrders')}
       </Link>
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Bestelldetails</Heading>
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">{t('orderDetails')}</Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Bestellt am {formatDateShort(order.created_at)}
+            {t('orderedOn', { date: formatDateShort(order.created_at) })}
           </p>
         </div>
         {statusConfig && (
@@ -220,12 +222,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           <Clock className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
             <Heading level={3} className="font-medium text-yellow-800 dark:text-yellow-200">
-              Zahlung ausstehend
+              {t('pendingPaymentTitle')}
             </Heading>
             <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-              {order.role === 'buyer'
-                ? 'Deine Zahlung wird noch verarbeitet. Bitte schliesse den Zahlungsvorgang ab, um die Bestellung zu bestätigen.'
-                : 'Der Käufer hat die Zahlung noch nicht abgeschlossen. Du wirst benachrichtigt, sobald die Zahlung eingegangen ist.'}
+              {order.role === 'buyer' ? t('pendingPaymentBuyer') : t('pendingPaymentSeller')}
             </p>
             {order.role === 'buyer' && (
               <Link
@@ -233,7 +233,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors"
               >
                 <Shield className="w-4 h-4" />
-                Zahlung wiederholen
+                {t('retryPayment')}
               </Link>
             )}
           </div>
@@ -243,7 +243,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       {/* Status timeline */}
       {!isCancelled && (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm mb-6">
-          <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Bestellverlauf</Heading>
+          <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">{t('orderTimeline')}</Heading>
           <OrderStatusTimeline
             status={order.status}
             hasReview={hasReview}
@@ -260,14 +260,14 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Listing info */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-          <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Artikel</Heading>
+          <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">{t('articleSection')}</Heading>
           <Link
             href={`/marketplace/${order.listing_id}`}
             className="flex gap-3 hover:opacity-80 transition-opacity"
           >
             <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
               {order.thumbnail ? (
-                <Image src={order.thumbnail} alt={order.listing_title || 'Artikelbild'} width={64} height={64} className="w-full h-full object-cover" />
+                <Image src={order.thumbnail} alt={order.listing_title || t('itemImage')} width={64} height={64} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Package className="w-6 h-6 text-gray-400" />
@@ -287,7 +287,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           {order.shipping_address?.tracking_number && (
             <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
-                Sendungsnummer: {order.shipping_address.tracking_number}
+                {t('trackingNumber', { number: order.shipping_address.tracking_number })}
               </p>
               {order.shipping_address.tracking_url && (
                 <a
@@ -296,7 +296,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   rel="noopener noreferrer"
                   className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mt-1"
                 >
-                  Sendung verfolgen <ExternalLink className="w-3 h-3" />
+                  {t('trackShipment')} <ExternalLink className="w-3 h-3" />
                 </a>
               )}
             </div>
@@ -305,39 +305,39 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
         {/* Price breakdown */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-          <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Preisübersicht</Heading>
+          <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">{t('priceSection')}</Heading>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Betrag</span>
+              <span className="text-gray-500 dark:text-gray-400">{t('amountLabel')}</span>
               <span className="text-gray-900 dark:text-white">{formatCHF(Number(order.amount_chf))}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500 dark:text-gray-400">Servicegebühr (5%)</span>
+              <span className="text-gray-500 dark:text-gray-400">{t('serviceFee')}</span>
               <span className="text-gray-900 dark:text-white">{formatCHF(Number(order.commission_chf))}</span>
             </div>
             {order.role === 'seller' && (
               <div className="flex justify-between font-medium pt-2 border-t border-gray-200 dark:border-gray-700">
-                <span className="text-gray-700 dark:text-gray-300">Ihre Auszahlung</span>
+                <span className="text-gray-700 dark:text-gray-300">{t('yourPayout')}</span>
                 <span className="text-green-600">{formatCHF(Number(order.seller_payout_chf))}</span>
               </div>
             )}
             {order.role === 'buyer' && (
               <div className="flex justify-between font-bold pt-2 border-t border-gray-200 dark:border-gray-700">
-                <span className="text-gray-900 dark:text-white">Total bezahlt</span>
+                <span className="text-gray-900 dark:text-white">{t('totalPaid')}</span>
                 <span className="text-gray-900 dark:text-white">{formatCHF(Number(order.amount_chf))}</span>
               </div>
             )}
           </div>
           <div className="mt-4 flex items-center gap-1.5 text-xs text-gray-400">
             <Shield className="w-3.5 h-3.5 text-green-600" />
-            Käuferschutz aktiv
+            {t('buyerProtection')}
           </div>
         </div>
 
         {/* Counterparty info */}
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
           <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
-            {order.role === 'buyer' ? 'Verkäufer' : 'Käufer'}
+            {order.role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}
           </Heading>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
@@ -350,7 +350,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   href={`/sellers/${order.seller_id}`}
                   className="text-sm text-green-600 hover:text-green-700"
                 >
-                  Profil ansehen
+                  {t('viewProfile')}
                 </Link>
               )}
             </div>
@@ -360,7 +360,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         {/* Shipping address */}
         {order.delivery_method === 'shipping' && order.shipping_address && (
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-            <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Lieferadresse</Heading>
+            <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">{t('shippingAddress')}</Heading>
             <div className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
               {order.shipping_address.name && <p className="font-medium">{order.shipping_address.name}</p>}
               {order.shipping_address.street && <p>{order.shipping_address.street}</p>}
@@ -374,7 +374,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Action buttons */}
       <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-        <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">Aktionen</Heading>
+        <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">{t('actionsSection')}</Heading>
 
         <div className="space-y-3">
           {/* Seller: paid → shipped */}
@@ -382,7 +382,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <div className="space-y-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Sendungsnummer (optional)
+                  {t('trackingOptional')}
                 </label>
                 <input
                   type="text"
@@ -398,7 +398,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 className="w-full flex items-center justify-center gap-2 bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 disabled:opacity-50 transition-colors"
               >
                 {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
-                Als versendet markieren
+                {t('markShipped')}
               </button>
             </div>
           )}
@@ -411,7 +411,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Package className="w-4 h-4" />}
-              Als geliefert markieren
+              {t('markDelivered')}
             </button>
           )}
 
@@ -423,7 +423,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 transition-colors"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
-              Empfang bestätigen
+              {t('confirmReceipt')}
             </button>
           )}
 
@@ -431,7 +431,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           {order.role === 'buyer' && (order.status === ORDER_STATUS.PENDING_PAYMENT || order.status === ORDER_STATUS.PAID) && (
             <button
               onClick={() => {
-                if (window.confirm('Bestellung wirklich stornieren?')) {
+                if (window.confirm(t('confirmCancel'))) {
                   updateStatus(ORDER_STATUS.CANCELLED)
                 }
               }}
@@ -439,21 +439,21 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               className="w-full flex items-center justify-center gap-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 py-3 px-6 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 transition-colors"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
-              Stornieren
+              {t('cancelButton')}
             </button>
           )}
 
           {/* No actions available */}
           {isCancelled && (
             <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
-              Diese Bestellung wurde {order.status === ORDER_STATUS.CANCELLED ? 'storniert' : 'erstattet'}.
+              {order.status === ORDER_STATUS.CANCELLED ? t('cancelledNote') : t('refundedNote')}
             </p>
           )}
 
           {order.status === ORDER_STATUS.COMPLETED && (
             <p className="text-sm text-green-600 text-center py-2 flex items-center justify-center gap-1.5">
               <CheckCircle className="w-4 h-4" />
-              Bestellung abgeschlossen
+              {t('completedNote')}
             </p>
           )}
         </div>
@@ -463,12 +463,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       {order.role === 'buyer' && order.status === ORDER_STATUS.COMPLETED && (
         <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
           <Heading level={2} className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
-            {hasReview ? 'deine Bewertung' : 'Bewertung abgeben'}
+            {hasReview ? t('reviewSectionHasReview') : t('reviewSectionNoReview')}
           </Heading>
           {hasReview ? (
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
               <CheckCircle className="w-4 h-4 text-green-600" />
-              Du hast diese Bestellung am {order.reviewed_at ? formatDateShort(order.reviewed_at) : ''} bewertet. Vielen Dank!
+              {t('reviewedNote', { date: order.reviewed_at ? formatDateShort(order.reviewed_at) : '' })}
             </div>
           ) : (
             <OrderReviewForm

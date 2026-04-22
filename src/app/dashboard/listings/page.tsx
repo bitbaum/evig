@@ -19,6 +19,7 @@ import {
   ChevronRight,
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
@@ -40,16 +41,17 @@ interface MyListing {
   thumbnail: string | null
 }
 
-const STATUS_TABS: { value: string; label: string }[] = [
-  { value: '', label: 'Alle' },
-  { value: LISTING_STATUS.ACTIVE, label: 'Aktiv' },
-  { value: LISTING_STATUS.SOLD, label: 'Verkauft' },
-  { value: LISTING_STATUS.DRAFT, label: 'Entwurf' },
-  { value: LISTING_STATUS.RESERVED, label: 'Reserviert' },
-]
-
 export default function MyListingsPage() {
+  const t = useTranslations('dashboard.listings')
   const { data: session, status: sessionStatus } = useSession()
+
+  const STATUS_TABS: { value: string; label: string }[] = [
+    { value: '', label: t('tabAll') },
+    { value: LISTING_STATUS.ACTIVE, label: t('tabActive') },
+    { value: LISTING_STATUS.SOLD, label: t('tabSold') },
+    { value: LISTING_STATUS.DRAFT, label: t('tabDraft') },
+    { value: LISTING_STATUS.RESERVED, label: t('tabReserved') },
+  ]
   const router = useRouter()
   const [listings, setListings] = useState<MyListing[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -77,10 +79,10 @@ export default function MyListingsPage() {
       setTotalPages(result.data.totalPages)
       setTotal(result.data.total)
     } else {
-      setError(result.error || 'Fehler beim Laden')
+      setError(result.error || t('loadError'))
     }
     setIsLoading(false)
-  }, [statusFilter])
+  }, [statusFilter, t])
 
   useEffect(() => {
     if (sessionStatus === 'loading') return
@@ -103,7 +105,7 @@ export default function MyListingsPage() {
         setTotalPages(result.data.totalPages)
         setTotal(result.data.total)
       } else {
-        setError(result.error || 'Fehler beim Laden')
+        setError(result.error || t('loadError'))
       }
       setIsLoading(false)
     }
@@ -117,7 +119,7 @@ export default function MyListingsPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Möchtest du dieses Inserat wirklich löschen?')) return
+    if (!confirm(t('confirmDelete'))) return
     setDeletingId(id)
     const result = await apiFetch<void>(`/api/listings/${id}`, { method: 'DELETE' })
     if (result.success) {
@@ -149,9 +151,9 @@ export default function MyListingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Meine Inserate</Heading>
+          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">{t('pageTitle')}</Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Verwalte deine Inserate im Marketplace
+            {t('pageSubtitle')}
           </p>
         </div>
         <Link
@@ -159,7 +161,7 @@ export default function MyListingsPage() {
           className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-9 px-3 bg-green-600 text-white hover:bg-green-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Neues Inserat
+          {t('newListing')}
         </Link>
       </div>
 
@@ -184,7 +186,7 @@ export default function MyListingsPage() {
       {isLoading && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600 dark:text-gray-400">Inserate werden geladen...</span>
+          <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
         </div>
       )}
 
@@ -195,7 +197,7 @@ export default function MyListingsPage() {
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <Button onClick={() => fetchListings(page)} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
-            Erneut versuchen
+            {t('retry')}
           </Button>
         </div>
       )}
@@ -206,15 +208,15 @@ export default function MyListingsPage() {
           icon={Package}
           iconBg="bg-violet-50 dark:bg-violet-900/20"
           iconColor="text-violet-500 dark:text-violet-400"
-          title={statusFilter ? 'Keine Inserate in dieser Kategorie' : 'Noch keine Inserate'}
-          description="Erstelle dein erstes Inserat und verkaufe direkt an die Community."
+          title={statusFilter ? t('emptyFilteredTitle') : t('emptyTitle')}
+          description={t('emptyDesc')}
           action={
             <Link
               href="/marketplace/sell"
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Erstes Inserat erstellen
+              {t('createFirst')}
             </Link>
           }
         />
@@ -274,7 +276,7 @@ export default function MyListingsPage() {
                   <Link
                     href={`/marketplace/sell?edit=${listing.id}`}
                     className="p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                    title="Bearbeiten"
+                    title={t('actionEdit')}
                   >
                     <Pencil className="w-4 h-4" />
                   </Link>
@@ -282,7 +284,7 @@ export default function MyListingsPage() {
                     onClick={() => handleDuplicate(listing.id)}
                     disabled={duplicatingId === listing.id}
                     className="p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
-                    title="Duplizieren"
+                    title={t('actionDuplicate')}
                   >
                     {duplicatingId === listing.id ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -294,7 +296,7 @@ export default function MyListingsPage() {
                     onClick={() => handleDelete(listing.id)}
                     disabled={deletingId === listing.id}
                     className="p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
-                    title="Löschen"
+                    title={t('actionDelete')}
                   >
                     {deletingId === listing.id ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -313,7 +315,7 @@ export default function MyListingsPage() {
       {!isLoading && !error && totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {total} Inserat{total !== 1 ? 'e' : ''} insgesamt
+            {t('totalCount', { count: total })}
           </p>
           <div className="flex items-center gap-2">
             <button
@@ -322,17 +324,17 @@ export default function MyListingsPage() {
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              Zurück
+              {t('prevPage')}
             </button>
             <span className="text-sm text-gray-600 dark:text-gray-400">
-              Seite {page} von {totalPages}
+              {t('paginationPage', { page, total: totalPages })}
             </span>
             <button
               onClick={() => fetchListings(page + 1)}
               disabled={page >= totalPages}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              Weiter
+              {t('nextPage')}
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

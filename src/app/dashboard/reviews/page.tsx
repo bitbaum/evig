@@ -26,13 +26,6 @@ const STATUS_STYLES: Record<string, string> = {
   deleted: 'bg-gray-100 text-gray-800'
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  published: 'Veröffentlicht',
-  pending_moderation: 'Wartet auf Moderation',
-  hidden: 'Ausgeblendet',
-  deleted: 'Gelöscht'
-}
-
 const STATUS_ICONS: Record<string, React.ReactNode> = {
   published: <CheckCircle className="w-3 h-3" />,
   pending_moderation: <Clock className="w-3 h-3" />,
@@ -41,10 +34,16 @@ const STATUS_ICONS: Record<string, React.ReactNode> = {
 }
 
 function StatusBadge({ status }: { status: string }) {
+  const t = useTranslations('dashboard.reviews')
+  const label = status === 'published' ? t('statusPublished')
+    : status === 'pending_moderation' ? t('statusPendingModeration')
+    : status === 'hidden' ? t('statusHidden')
+    : status === 'deleted' ? t('statusDeleted')
+    : t('statusUnknown')
   return (
     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1 ${STATUS_STYLES[status] || STATUS_STYLES.published}`}>
       {STATUS_ICONS[status] || <Eye className="w-3 h-3" />}
-      {STATUS_LABELS[status] || 'Unbekannt'}
+      {label}
     </span>
   )
 }
