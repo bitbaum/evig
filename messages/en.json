@@ -3356,6 +3356,21 @@
         "technische-experten": "Technical experts",
         "partnerschaft": "Partnership",
         "it-hilfe-techniker": "IT Help Technician"
+      },
+      "form": {
+        "nameLabel": "Your name",
+        "namePlaceholder": "First Last",
+        "emailLabel": "Email address",
+        "emailPlaceholder": "your@email.ch",
+        "messageLabel": "Your message",
+        "messagePlaceholder": "Tell us briefly who you are and what interests you…",
+        "charCount": "{count}/2000 characters (min. 20)",
+        "submit": "Send inquiry",
+        "submitting": "Sending…",
+        "responseNote": "We usually respond within a few business days.",
+        "successHeading": "Thank you, {name}!",
+        "successText": "We received your inquiry about {topic} and will get back to you shortly.",
+        "successBackLink": "Explore more ways to get involved"
       }
     }
   },

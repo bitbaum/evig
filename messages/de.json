@@ -3242,6 +3242,21 @@
         "technische-experten": "Technische Experten",
         "partnerschaft": "Partnerschaft",
         "it-hilfe-techniker": "IT-Hilfe Techniker"
+      },
+      "form": {
+        "nameLabel": "Dein Name",
+        "namePlaceholder": "Vorname Nachname",
+        "emailLabel": "E-Mail-Adresse",
+        "emailPlaceholder": "deine@email.ch",
+        "messageLabel": "Deine Nachricht",
+        "messagePlaceholder": "Erzähl uns kurz, wer du bist und was dich interessiert…",
+        "charCount": "{count}/2000 Zeichen (min. 20)",
+        "submit": "Anfrage senden",
+        "submitting": "Wird gesendet…",
+        "responseNote": "Wir antworten in der Regel innerhalb weniger Werktage.",
+        "successHeading": "Danke, {name}!",
+        "successText": "Wir haben deine Anfrage zu {topic} erhalten und melden uns in Kürze bei dir.",
+        "successBackLink": "Weitere Mitmach-Möglichkeiten entdecken"
       }
     }
   },
