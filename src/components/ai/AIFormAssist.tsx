@@ -13,8 +13,9 @@
  * 2. Drop <AIFormAssist formType="xxx" /> in the component
  */
 
-import { useState, useRef, type KeyboardEvent } from 'react'
+import { useState, type KeyboardEvent } from 'react'
 import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 
@@ -37,6 +38,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
   variant = 'bar',
   className = '',
 }: AIFormAssistProps<T>) {
+  const t = useTranslations('ai.formAssist')
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
   const [inputText, setInputText] = useState('')
   const [filledCount, setFilledCount] = useState(0)
@@ -107,7 +109,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
       >
         <span className="text-sm font-semibold text-purple-900 dark:text-purple-100 flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-          KI-Assistent
+          {t('heading')}
         </span>
         <svg className={`w-4 h-4 text-purple-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -130,8 +132,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span>
                 {filledCount > 0
-                  ? `${filledCount} ${filledCount === 1 ? 'Feld' : 'Felder'} ausgefüllt — überprüfe die Daten unten.`
-                  : 'Felder ausgefüllt!'}
+                  ? t('successCount', { count: filledCount })
+                  : t('successGeneric')}
               </span>
             </div>
           )}
@@ -143,8 +145,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={hasContent
-                ? 'Was möchtest du ändern? z.B. "Beschreibung ausführlicher" oder "Preis auf 300 CHF"'
-                : (placeholder || 'Beschreibe in 1-2 Sätzen, die KI füllt das Formular aus...')
+                ? t('placeholderRefine')
+                : (placeholder || t('placeholderEmpty'))
               }
               rows={2}
               disabled={isExtracting}
@@ -155,7 +157,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
               onClick={handleSubmit}
               disabled={isExtracting || !inputText.trim()}
               className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors touch-manipulation self-end"
-              aria-label={isExtracting ? 'KI verarbeitet...' : 'KI ausführen'}
+              aria-label={isExtracting ? t('ariaProcessing') : t('ariaRun')}
             >
               {isExtracting
                 ? <Loader2 className="w-5 h-5 animate-spin" />
@@ -185,7 +187,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
                       type="button"
                       onClick={() => handleQuickAction(action.key)}
                       disabled={isExtracting || !hasContent}
-                      title={!hasContent ? 'Fülle zuerst das Formular aus' : undefined}
+                      title={!hasContent ? t('quickActionDisabled') : undefined}
                       className="px-2.5 py-1 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-md text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
                     >
                       {action.label}

@@ -4811,5 +4811,17 @@
       "news": "Notizie",
       "other": "Altro"
     }
+  },
+  "ai": {
+    "formAssist": {
+      "heading": "Assistente IA",
+      "placeholderEmpty": "Descrivi in 1-2 frasi, l'IA compilerà il modulo...",
+      "placeholderRefine": "Cosa vorresti cambiare? es. \"Descrizione più dettagliata\" o \"Prezzo a 300 CHF\"",
+      "ariaRun": "Esegui IA",
+      "ariaProcessing": "IA in elaborazione...",
+      "successCount": "{count, plural, one {# campo compilato — controlla i dati qui sotto.} other {# campi compilati — controlla i dati qui sotto.}}",
+      "successGeneric": "Campi compilati!",
+      "quickActionDisabled": "Compila prima il modulo"
+    }
   }
 }

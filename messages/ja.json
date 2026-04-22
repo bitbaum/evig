@@ -4811,5 +4811,17 @@
       "news": "ニュース",
       "other": "その他"
     }
+  },
+  "ai": {
+    "formAssist": {
+      "heading": "AIアシスタント",
+      "placeholderEmpty": "1-2文で説明してください。AIがフォームを入力します...",
+      "placeholderRefine": "何を変更しますか？例：「説明をより詳しく」または「価格を300 CHFに」",
+      "ariaRun": "AIを実行",
+      "ariaProcessing": "AI処理中...",
+      "successCount": "{count, plural, other {# 個のフィールドが入力されました — 下のデータを確認してください。}}",
+      "successGeneric": "フィールドが入力されました！",
+      "quickActionDisabled": "まずフォームに入力してください"
+    }
   }
 }

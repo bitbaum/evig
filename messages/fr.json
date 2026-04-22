@@ -4769,5 +4769,17 @@
       "news": "Actualités",
       "other": "Autre"
     }
+  },
+  "ai": {
+    "formAssist": {
+      "heading": "Assistant IA",
+      "placeholderEmpty": "Décrivez en 1-2 phrases, l'IA remplira le formulaire...",
+      "placeholderRefine": "Que souhaitez-vous modifier? ex. \"Description plus détaillée\" ou \"Prix à 300 CHF\"",
+      "ariaRun": "Exécuter l'IA",
+      "ariaProcessing": "IA en cours...",
+      "successCount": "{count, plural, one {# champ rempli — vérifiez les données ci-dessous.} other {# champs remplis — vérifiez les données ci-dessous.}}",
+      "successGeneric": "Champs remplis !",
+      "quickActionDisabled": "Remplissez d'abord le formulaire"
+    }
   }
 }

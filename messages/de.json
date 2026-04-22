@@ -5063,5 +5063,17 @@
       "news": "News",
       "other": "Sonstiges"
     }
+  },
+  "ai": {
+    "formAssist": {
+      "heading": "KI-Assistent",
+      "placeholderEmpty": "Beschreibe in 1-2 Sätzen, die KI füllt das Formular aus...",
+      "placeholderRefine": "Was möchtest du ändern? z.B. \"Beschreibung ausführlicher\" oder \"Preis auf 300 CHF\"",
+      "ariaRun": "KI ausführen",
+      "ariaProcessing": "KI verarbeitet...",
+      "successCount": "{count, plural, one {# Feld ausgefüllt — überprüfe die Daten unten.} other {# Felder ausgefüllt — überprüfe die Daten unten.}}",
+      "successGeneric": "Felder ausgefüllt!",
+      "quickActionDisabled": "Fülle zuerst das Formular aus"
+    }
   }
 }

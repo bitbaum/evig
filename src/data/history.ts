@@ -5,7 +5,7 @@
  * Used for the Geschichte (history) section and about pages.
  */
 
-import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+import { getDefaultNumeric, getDefaultValue } from '@/lib/org-numbers.defaults'
 import { ORG, LOCATIONS } from '@/config/org'
 
 export interface Milestone {
@@ -29,6 +29,7 @@ export interface HistoryConfig {
     teamSize: number
     location: string
     yearsActive: number
+    devicesPerYear: string
   }
 }
 
@@ -127,6 +128,7 @@ export const HISTORY_CONFIG: HistoryConfig = {
     teamSize: getDefaultNumeric('team_size_community'),
     location: LOCATIONS.store.full,
     yearsActive: new Date().getFullYear() - getDefaultNumeric('founding_year'),
+    devicesPerYear: getDefaultValue('devices_processed_per_year'),
   },
 }
 

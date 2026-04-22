@@ -171,7 +171,7 @@ export default function GeschichteSection() {
               <p className="text-green-100">Teammitglieder</p>
             </div>
             <div>
-              <p className="text-4xl font-bold mb-2">1000+</p>
+              <p className="text-4xl font-bold mb-2">{currentState.devicesPerYear}</p>
               <p className="text-green-100">Geräte pro Jahr gerettet</p>
             </div>
           </div>

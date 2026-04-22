@@ -5012,5 +5012,17 @@
       "news": "News",
       "other": "Other"
     }
+  },
+  "ai": {
+    "formAssist": {
+      "heading": "AI Assistant",
+      "placeholderEmpty": "Describe in 1-2 sentences, the AI will fill out the form...",
+      "placeholderRefine": "What would you like to change? e.g. \"Make description more detailed\" or \"Price to 300 CHF\"",
+      "ariaRun": "Run AI",
+      "ariaProcessing": "AI processing...",
+      "successCount": "{count, plural, one {# field filled — check the data below.} other {# fields filled — check the data below.}}",
+      "successGeneric": "Fields filled!",
+      "quickActionDisabled": "Fill out the form first"
+    }
   }
 }
