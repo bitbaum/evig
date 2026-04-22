@@ -1,5 +1,5 @@
 import { formatDateShort } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { RepairerApplication, Certification, ActionDialogState } from './types'
 
 interface Props {

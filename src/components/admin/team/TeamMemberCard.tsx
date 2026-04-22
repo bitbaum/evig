@@ -9,7 +9,7 @@
 
 import Link from 'next/link'
 import { Mail, Calendar, Eye, Edit2 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   getEmploymentTypeLabel,
   getEmploymentTypeColor,

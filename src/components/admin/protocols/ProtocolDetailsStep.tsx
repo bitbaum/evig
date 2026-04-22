@@ -1,5 +1,5 @@
 import { PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { ProtocolVisibility } from '@/config/protocols'
 import { formatDateShort } from '@/lib/date-formats'
 

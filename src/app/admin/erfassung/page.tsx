@@ -16,7 +16,7 @@ import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 function ErfassungContent() {
   const form = useErfassungForm()

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { QuickAction, FulfillAction } from './types'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface QuickActionsSectionProps {
   quickActions: QuickAction[]

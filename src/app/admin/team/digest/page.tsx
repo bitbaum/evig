@@ -15,7 +15,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { BarChart3, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { DigestPageClient } from './DigestPageClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Wochenübersicht | RevampIT Admin',

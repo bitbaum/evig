@@ -22,7 +22,7 @@ import { TeamListClient } from './TeamListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
 import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Team & HR | RevampIT Admin',

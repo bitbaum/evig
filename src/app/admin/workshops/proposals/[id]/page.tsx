@@ -22,7 +22,7 @@ import { formatDateTime, formatDateShort } from '@/lib/date-formats';
 import { logger } from '@/lib/logger';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 
 export default function WorkshopProposalDetailPage() {
   const params = useParams();

@@ -6,7 +6,7 @@ import {
   MEETING_TYPE_TEMPLATES,
 } from '@/config/protocols'
 import type { MeetingType } from '@/config/protocols'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
   selectedType: MeetingType | ''

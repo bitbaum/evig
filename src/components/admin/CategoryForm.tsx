@@ -8,7 +8,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useBlogCategories } from '@/hooks/useBlogCategories'

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import {
   Package,

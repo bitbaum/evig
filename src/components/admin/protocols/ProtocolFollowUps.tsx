@@ -1,5 +1,5 @@
 import { getFollowUpStatusColor } from '@/config/protocols'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface Props {

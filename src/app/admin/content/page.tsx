@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { FileText } from 'lucide-react'
 import Link from 'next/link'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Inhalte | RevampIT Admin',

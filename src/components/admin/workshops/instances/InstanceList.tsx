@@ -11,7 +11,7 @@ import {
   Users,
   MapPin,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { WorkshopInstanceWithDetails } from './types'
 import { formatDateTime } from '@/lib/date-formats'
 

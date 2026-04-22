@@ -2,7 +2,7 @@
 
 import { Sparkles, Loader2, Mic, Camera } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
   query: string

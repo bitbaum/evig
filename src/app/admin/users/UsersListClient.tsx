@@ -15,7 +15,7 @@ import {
   Pagination,
   type UserRow,
 } from '@/components/admin/users'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface UsersListClientProps {
   currentUserIsSuperAdmin: boolean

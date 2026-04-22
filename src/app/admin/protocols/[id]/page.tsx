@@ -25,7 +25,7 @@ import {
   INPUT_METHOD_ICON_COMPONENTS,
 } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   ArrowLeft,
   FileText,

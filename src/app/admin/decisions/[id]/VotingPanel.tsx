@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 import { DeadlineCountdown } from './voting/DeadlineCountdown';
 import { ConsentVote } from './voting/ConsentVote';
 import { ApprovalVote } from './voting/ApprovalVote';

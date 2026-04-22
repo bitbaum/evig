@@ -8,7 +8,7 @@
  */
 
 import Link from 'next/link'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   ArrowLeft,
   Save,

@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface TaskActionsClientProps {
   taskId: string

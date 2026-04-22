@@ -5,7 +5,7 @@ import {
   ListChecks,
   ExternalLink,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   ACTION_ITEM_TYPE_LABELS,
   ACTION_ITEM_TYPE_COLORS,

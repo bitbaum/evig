@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { ORG } from "@/config/org";
+import { ORG, ORG_IMAGES } from "@/config/org";
 
 interface ShopLogoProps {
   href?: string;
@@ -25,7 +25,7 @@ export function ShopLogo({ href = "/shop", className }: ShopLogoProps) {
     >
       {/* Mobile: Icon only */}
       <Image
-        src="/images/logo/revampit-favicon.png"
+        src={ORG_IMAGES.favicon}
         alt={ORG.name}
         width={40}
         height={40}
@@ -35,7 +35,7 @@ export function ShopLogo({ href = "/shop", className }: ShopLogoProps) {
       
       {/* Desktop: Full logo */}
       <Image
-        src="/images/logo/revampit-logo.png"
+        src={ORG_IMAGES.logo}
         alt={ORG.name}
         width={200}
         height={48}

@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { generateSlug } from '@/lib/utils/slug'
 import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface PageData {
   id: string

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Zap, Check, ArrowRight } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { InlineActionButton } from './InlineActionButton'
 import type { UnifiedQueueItem } from './types'
 

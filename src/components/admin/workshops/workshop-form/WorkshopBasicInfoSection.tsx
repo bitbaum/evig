@@ -2,7 +2,7 @@
 
 import { FileText } from 'lucide-react'
 import { WORKSHOP_CATEGORIES } from '@/config/workshops'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { WorkshopFormData } from './types'
 import { WORKSHOP_LEVEL_OPTIONS } from './types'
 

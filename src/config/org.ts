@@ -12,6 +12,14 @@
 // IDENTITY
 // ============================================================================
 
+/** Canonical logo asset paths — import from here, never hardcode */
+export const ORG_IMAGES = {
+  /** Full horizontal logo (200×48px) */
+  logo: '/images/logo/revampit-logo.png',
+  /** Square favicon/icon (40×40px) */
+  favicon: '/images/logo/revampit-favicon.png',
+} as const
+
 export const ORG = {
   /** Official organization name — use this everywhere */
   name: 'Revamp-IT',

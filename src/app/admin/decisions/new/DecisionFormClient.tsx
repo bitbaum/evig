@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { DECISION_CATEGORIES, DECISION_CATEGORY_LABELS, type DecisionCategory } from '@/config/decisions';
 import { AIFormAssist } from '@/components/ai/AIFormAssist';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 import DecisionTemplateSelector from '@/components/decisions/DecisionTemplateSelector';
 import { useDecisionForm } from './useDecisionForm';
 import { DecisionTypeSelector } from './DecisionTypeSelector';

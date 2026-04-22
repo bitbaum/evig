@@ -9,7 +9,7 @@
 
 import { useState } from 'react';
 import { X, Save } from 'lucide-react';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 import {
   WORKSHOP_PROPOSAL_EDITABLE_FIELDS,
   type WorkshopProposalEditableField,

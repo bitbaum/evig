@@ -9,7 +9,7 @@
 import { useState, useMemo } from 'react'
 import { Target, Loader2, Check, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { useCurrentFocus } from './useActivityStream'
 
 interface CurrentFocusInputProps {

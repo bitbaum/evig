@@ -11,7 +11,7 @@
 
 import Link from 'next/link'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from './IconPicker'
 import { SERVICE_CATEGORIES } from '@/config/database'

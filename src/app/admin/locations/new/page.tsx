@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import {
   useLocationForm,

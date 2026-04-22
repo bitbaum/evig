@@ -25,7 +25,7 @@ import {
   User,
   ExternalLink,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface PageProps {
   params: Promise<{ id: string }>

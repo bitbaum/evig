@@ -7,7 +7,7 @@
  */
 
 import { CheckCircle, Flag, FileText, Megaphone, HelpCircle, Clock } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   getActivityUpdateTypeColor,
   getActivityCategoryLabel,

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { CATEGORY_LABELS } from '@/config/service-categories'
 import { formatPriceCents } from '@/config/marketplace'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface ServiceType {
   id: string

@@ -1,7 +1,7 @@
 'use client'
 
 import { Shield, Send, X, Check } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { useFormHandler } from '@/hooks/useFormHandler'
 import { Button } from '@/components/ui/button'
 

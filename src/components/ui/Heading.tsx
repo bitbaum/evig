@@ -30,9 +30,9 @@ const tagMap = {
   4: 'h4',
 } as const
 
-type HeadingProps = {
+export type HeadingProps = {
   level: 1 | 2 | 3 | 4
-  /** "admin" = compact scale (default). "site" = public marketing scale. */
+  /** "site" = public marketing scale (default). "admin" = compact scale for dashboards. */
   variant?: 'admin' | 'site'
   children: React.ReactNode
   className?: string
@@ -40,7 +40,7 @@ type HeadingProps = {
 
 export default function Heading({
   level,
-  variant = 'admin',
+  variant = 'site',
   children,
   className,
   ...props

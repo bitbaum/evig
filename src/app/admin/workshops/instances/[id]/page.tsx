@@ -23,7 +23,7 @@ import {
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
 // Admin-specific registration view with user details

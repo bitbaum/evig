@@ -17,7 +17,7 @@ import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import { HelpCircle, ArrowLeft, Users, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Hilfsanfragen | RevampIT Admin',

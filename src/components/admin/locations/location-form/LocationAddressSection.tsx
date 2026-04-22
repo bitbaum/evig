@@ -1,7 +1,7 @@
 'use client'
 
 import { Home } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { LocationFormData } from './types'
 import { SWISS_CANTONS } from './types'
 

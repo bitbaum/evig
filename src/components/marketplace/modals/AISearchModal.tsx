@@ -174,7 +174,7 @@ export function AISearchModal({
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <Heading level={4} className={cn('font-medium', getTextColor('white', 'primary'))}>
+                                <Heading level={4} className={cn('text-sm font-medium', getTextColor('white', 'primary'))}>
                                   {result.name}
                                 </Heading>
                                 <span className={cn(

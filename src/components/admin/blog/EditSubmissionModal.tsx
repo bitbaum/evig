@@ -9,7 +9,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Save } from 'lucide-react';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 import { BLOG_SUBMISSION_EDITABLE_FIELDS } from '@/config/editable-fields';
 import { logger } from '@/lib/logger';
 import { apiFetch } from '@/lib/api/client';

@@ -12,7 +12,7 @@ import {
   Trash2,
   Calendar,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface BlogPost {
   id: string

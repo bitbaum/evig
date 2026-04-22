@@ -15,7 +15,7 @@ import type { IntakeEventType } from '@/lib/intake/timeline-types'
 import { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from '@/lib/intake/timeline-types'
 import { ChecklistGroup } from './ChecklistGroup'
 import type { DetailData } from './types'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface IntakeDetailViewProps {
   detail: DetailData | null

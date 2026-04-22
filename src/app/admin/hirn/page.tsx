@@ -13,7 +13,7 @@ import { Brain } from 'lucide-react'
 import { HirnChat } from '@/components/admin/HirnChat'
 import { HirnSidebar } from '@/components/admin/HirnSidebar'
 import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 function generateSessionId(): string {
   return crypto.randomUUID()

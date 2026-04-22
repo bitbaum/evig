@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { canAccessSection } from '@/lib/permissions'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Einstellungen | RevampIT Admin',

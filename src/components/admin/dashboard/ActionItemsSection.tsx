@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Zap, ArrowRight, Check } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { ActionItem } from './types'
 
 interface ActionItemsSectionProps {

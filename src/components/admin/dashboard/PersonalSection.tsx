@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { CheckSquare, FileText, Calendar, AlertCircle, ArrowRight } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'

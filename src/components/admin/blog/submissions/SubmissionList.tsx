@@ -1,7 +1,7 @@
 'use client'
 
 import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { formatDateTime } from '@/lib/date-formats'
 import {
   Lightbulb,

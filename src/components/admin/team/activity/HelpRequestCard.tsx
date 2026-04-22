@@ -7,7 +7,7 @@
  */
 
 import { Users, User, CheckCircle, Clock, AlertTriangle, Loader2 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   getHelpRequestUrgencyLabel,
   getHelpRequestUrgencyColor,

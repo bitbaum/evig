@@ -9,7 +9,7 @@ import { KATEGORIEN } from '@/config/erfassung/categories'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ImageCapture } from '@/components/erfassung/ImageCapture'
 import type { CreateFormData } from './types'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface IntakeCreateFormProps {
   formData: CreateFormData

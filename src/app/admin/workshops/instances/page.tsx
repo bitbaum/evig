@@ -9,7 +9,7 @@ import {
   InstanceList,
   InstanceFormModal,
 } from '@/components/admin/workshops/instances'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export default function AdminWorkshopInstancesPage() {
   const router = useRouter()

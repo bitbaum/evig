@@ -1,7 +1,7 @@
 'use client';
 
 import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, type ParticipantScope } from '@/config/decisions';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 import { type TeamMember } from './useDecisionForm';
 
 interface Props {

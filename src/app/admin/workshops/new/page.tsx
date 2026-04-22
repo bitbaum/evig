@@ -14,7 +14,7 @@ import {
   WorkshopImageUpload,
   WorkshopTagsSection,
 } from '@/components/admin/workshops/workshop-form'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import type { WorkshopFormData } from '@/components/admin/workshops/workshop-form/types'

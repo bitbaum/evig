@@ -2,7 +2,7 @@
 
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import Link from 'next/link'
 import {
   Eye,

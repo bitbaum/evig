@@ -23,7 +23,7 @@ import {
   ClipboardList,
   DollarSign,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Analytics | RevampIT Admin',

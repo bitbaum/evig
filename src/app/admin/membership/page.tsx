@@ -13,7 +13,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { Users, CheckCircle, AlertCircle } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
 import { MEMBERSHIP } from '@/config/org'
 

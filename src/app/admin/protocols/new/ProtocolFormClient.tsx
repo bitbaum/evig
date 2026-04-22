@@ -20,7 +20,7 @@ import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
 import { formatDateShort } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 

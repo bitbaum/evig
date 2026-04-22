@@ -14,7 +14,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import type { TaskEditItem } from '@/lib/schemas/tasks'
 import TaskEditFormClient from './TaskEditFormClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Aufgabe bearbeiten | RevampIT Admin',

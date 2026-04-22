@@ -13,7 +13,7 @@ import type { StatusConfig } from '@/components/admin/AdminStatusBadge'
 import { Pagination } from '@/components/ui/Pagination'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   MapPin,
   Plus,

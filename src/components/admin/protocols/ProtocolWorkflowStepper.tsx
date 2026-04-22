@@ -1,5 +1,5 @@
 import { PROTOCOL_WORKFLOW_STEPS, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
   currentStepIndex: number

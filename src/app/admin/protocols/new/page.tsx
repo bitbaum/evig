@@ -8,7 +8,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, FileText } from 'lucide-react'
 import { getTeamMembers } from '@/lib/services/protocols'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import ProtocolFormClient from './ProtocolFormClient'
 
 export const metadata: Metadata = {

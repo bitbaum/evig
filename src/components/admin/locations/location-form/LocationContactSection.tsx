@@ -1,7 +1,7 @@
 'use client'
 
 import { Phone } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { LocationFormData } from './types'
 
 interface Props {

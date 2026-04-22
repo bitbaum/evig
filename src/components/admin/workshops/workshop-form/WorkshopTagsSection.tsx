@@ -1,7 +1,7 @@
 'use client'
 
 import { X } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
   tags: string[]

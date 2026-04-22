@@ -27,7 +27,7 @@ import { TeamAvailabilitySection } from './TeamAvailabilitySection'
 import { TeamEmergencySection } from './TeamEmergencySection'
 import { TeamHRNotesSection } from './TeamHRNotesSection'
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface FormSection {
   id: string

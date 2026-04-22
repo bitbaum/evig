@@ -18,7 +18,7 @@ import {
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { ServiceListClient } from './ServiceListClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Dienstleistungen verwalten | RevampIT Admin',

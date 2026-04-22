@@ -39,7 +39,7 @@ import {
 } from '@/components/admin/dashboard'
 import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
 import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { DashboardStats } from '@/components/admin/dashboard'
 
 type DashboardMode = 'coordinator' | 'lead' | 'volunteer'

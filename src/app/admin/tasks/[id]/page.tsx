@@ -39,7 +39,7 @@ import {
   Edit,
 } from 'lucide-react'
 import TaskActionsClient from './TaskActionsClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Aufgabe Details | RevampIT Admin',

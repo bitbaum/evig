@@ -18,7 +18,7 @@ import {
   Flag,
   Calendar,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { useDigest } from '@/components/admin/team/activity'
 import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks'
 import { formatRelativeTime } from '@/lib/utils'

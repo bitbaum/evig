@@ -28,7 +28,7 @@ import {
   type ProposalStatus,
 } from '@/config/workshops'
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Pagination } from '@/components/ui/Pagination'

@@ -12,7 +12,7 @@ import {
   CertificationVerificationSection,
 } from '@/components/admin/repairer-applications'
 import { APPROVAL_STATUS } from '@/config/approval-status'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export default function RepairerApplicationsAdmin() {
   const router = useRouter()

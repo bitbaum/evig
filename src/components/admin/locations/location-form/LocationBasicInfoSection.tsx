@@ -1,7 +1,7 @@
 'use client'
 
 import { MapPin } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { LocationFormData, SubmitResult } from './types'
 import { LOCATION_TYPES } from './types'
 

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { ORG } from '@/config/org'
+import { ORG, ORG_IMAGES } from '@/config/org'
 
 interface LogoProps {
   className?: string
@@ -13,7 +13,7 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
   return (
     <Link href={href} className={cn('group', className)}>
       <Image
-        src="/images/logo/revampit-logo.png"
+        src={ORG_IMAGES.logo}
         alt={ORG.name}
         width={200}
         height={48}

@@ -1,5 +1,5 @@
 import { APPROVAL_STATUS } from '@/config/approval-status'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { RepairerApplication, VerificationDocument, DocumentType, ActionDialogState } from './types'
 
 interface Props {

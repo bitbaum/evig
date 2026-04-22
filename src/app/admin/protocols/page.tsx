@@ -39,7 +39,7 @@ import {
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
 import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { formatDateShort } from '@/lib/date-formats'
 import ProtocolListClient from './ProtocolListClient'
 import { Pagination } from '@/components/ui/Pagination'

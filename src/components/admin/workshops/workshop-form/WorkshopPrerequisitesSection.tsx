@@ -2,7 +2,7 @@
 
 import { FileText } from 'lucide-react'
 import type { WorkshopFormData } from './types'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
   formData: WorkshopFormData

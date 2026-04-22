@@ -7,7 +7,7 @@
  */
 
 import { Users, RefreshCw } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   TeamFilters,
   TeamMemberCard,

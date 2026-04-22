@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { BlogListClient } from './BlogListClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Blog-Artikel | RevampIT Admin',

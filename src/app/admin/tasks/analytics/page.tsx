@@ -23,7 +23,7 @@ import {
   Clock,
   AlertCircle,
 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {

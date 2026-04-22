@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Vote, Clock, ArrowRight } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { decisions, decisionVotes, users } from '@/db/schema'

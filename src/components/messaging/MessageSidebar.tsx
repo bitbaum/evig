@@ -219,7 +219,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                   ←
                 </button>
                 <div className="flex-1 text-center">
-                  <Heading level={3} className="font-medium">
+                  <Heading level={3} className="text-sm font-medium">
                     {conversations.find(c => c.id === selectedConversation)?.other_participant.name}
                   </Heading>
                 </div>

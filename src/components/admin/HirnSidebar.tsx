@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { formatRelativeTime } from '@/lib/utils'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'

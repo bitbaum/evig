@@ -18,7 +18,7 @@ import { ApprovalActions } from './ApprovalActions'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Link from 'next/link'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {

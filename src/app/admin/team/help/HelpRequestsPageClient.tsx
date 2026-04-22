@@ -24,7 +24,7 @@ import {
   HelpRequestCard,
   CreateHelpRequestModal,
 } from '@/components/admin/team/activity'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface TeamMemberOption {
   id: string

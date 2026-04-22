@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 import { apiFetch } from '@/lib/api/client';
 import {
   COMMENT_POSITIONS,

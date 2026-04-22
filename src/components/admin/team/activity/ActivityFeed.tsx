@@ -9,7 +9,7 @@
 import { useState } from 'react'
 import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import {
   ACTIVITY_SOURCE_LABELS,
   ACTIVITY_CATEGORY_OPTIONS,

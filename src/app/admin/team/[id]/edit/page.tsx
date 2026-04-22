@@ -12,7 +12,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { TeamProfileForm } from '@/components/admin/team'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface PageProps {
   params: Promise<{ id: string }>

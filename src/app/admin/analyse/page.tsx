@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button'
 import { AnalyseTabs } from '@/components/analyse'
 import { formatCHF } from '@/lib/hirn/format'
 import { formatDateShort } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export default async function AnalysePage() {
   const session = await auth()

@@ -16,7 +16,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, RevenueAreaChart, RevenuePieChart, TrendBarChart } from '@/components/analyse'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 const CATEGORY_LABELS = {
   warenverkauf: 'Warenverkauf',

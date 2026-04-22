@@ -5,7 +5,7 @@ import {
   INPUT_METHOD_ICON_COMPONENTS,
 } from '@/config/protocols'
 import type { InputMethod } from '@/config/protocols'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 interface Props {
   selectedMethod: InputMethod | ''

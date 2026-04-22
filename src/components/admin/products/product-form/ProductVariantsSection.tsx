@@ -2,7 +2,7 @@
 
 import { Plus, Minus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { ProductVariant } from './types'
 
 interface Props {

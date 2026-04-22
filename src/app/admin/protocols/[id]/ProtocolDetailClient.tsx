@@ -24,7 +24,7 @@ import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/utils/error'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()

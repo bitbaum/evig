@@ -8,7 +8,7 @@ import {
   type ConsentResponse,
   type SimpleMajorityResponse,
 } from '@/config/decisions';
-import Heading from '@/components/ui/Heading';
+import Heading from '@/components/admin/AdminHeading';
 
 interface RankedOption {
   id: string;

@@ -19,7 +19,7 @@ import { ArrowLeft, Target, Leaf, Users, Recycle, AlertCircle } from 'lucide-rea
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, MissingDataBanner } from '@/components/analyse'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 function ImpactCard({ metric }: { metric: MetricDefinition }) {
   const needsData = metric.status === 'needs_data'

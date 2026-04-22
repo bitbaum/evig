@@ -34,7 +34,7 @@ import {
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
 import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import TaskFiltersClient from './TaskFiltersClient'
 import { Pagination } from '@/components/ui/Pagination'
 import { ADMIN_CONTENT } from '@/config/admin-content'

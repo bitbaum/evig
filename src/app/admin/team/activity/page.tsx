@@ -14,7 +14,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { Activity, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { ActivityPageClient } from './ActivityPageClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Aktivitäten | RevampIT Admin',

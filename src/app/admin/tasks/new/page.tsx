@@ -9,7 +9,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, ClipboardList } from 'lucide-react'
 import TaskFormClient from './TaskFormClient'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
   title: 'Neue Aufgabe | RevampIT Admin',

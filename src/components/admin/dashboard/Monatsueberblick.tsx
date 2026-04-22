@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { TrendingUp, ChevronDown } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { MissionMetrics } from './MissionMetrics'
 import { WeeklyActivitySection } from './WeeklyActivitySection'
 import type { DashboardStats } from './types'

@@ -1,5 +1,5 @@
 import type { ActionDialogState } from './types'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 const DIALOG_TITLES: Record<ActionDialogState['type'], string> = {
   approve_app: 'Bewerbung genehmigen',

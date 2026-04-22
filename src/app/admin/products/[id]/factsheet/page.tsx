@@ -28,7 +28,7 @@ import {
 import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
 import { ORG, LOCATIONS } from '@/config/org'
 import { CONDITION_COLORS } from '@/config/ui-colors'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 
 // Profile icons mapped by slug
 const PROFILE_ICONS: Record<string, React.ReactNode> = {

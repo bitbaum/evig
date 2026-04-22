@@ -1,5 +1,5 @@
 import { Image as ImageIcon, Tag } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import type { BlogPostData, Category } from './types'
 
 interface Props {

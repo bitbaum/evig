@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { getSection } from '@/config/sections'

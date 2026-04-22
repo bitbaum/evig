@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Loader2, Save, Wand2, Upload } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
+import Heading from '@/components/admin/AdminHeading'
 import { MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
 import { AUDIO_UPLOAD_LIMITS } from '@/lib/protocols/audio-validation'
