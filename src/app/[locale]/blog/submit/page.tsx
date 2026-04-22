@@ -8,6 +8,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 type SubmissionType = 'idea' | 'draft'
 
@@ -21,6 +22,7 @@ interface Category {
 
 export default function SubmitPostPage() {
   const { data: session } = useSession()
+  const t = useTranslations('blog.submit')
   const [submissionType, setSubmissionType] = useState<SubmissionType>('idea')
   const [categories, setCategories] = useState<Category[]>([])
   const [formData, setFormData] = useState({
@@ -85,7 +87,7 @@ export default function SubmitPostPage() {
         body: JSON.stringify({
           ...formData,
           submissionType,
-          tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
+          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
           submittedAt: new Date().toISOString(),
         }),
       })
@@ -130,8 +132,8 @@ export default function SubmitPostPage() {
           <PageHero
             theme="about"
             icon={Edit}
-            title="Beitrag einreichen"
-            subtitle="Teile deine Ideen und Erfahrungen mit unserer Community!"
+            title={t('pageTitle')}
+            subtitle={t('pageSubtitle')}
           />
           <div className="absolute top-4 left-4 sm:left-8">
             <Link
@@ -139,7 +141,7 @@ export default function SubmitPostPage() {
               className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Zurück zum Blog
+              {t('backToBlog')}
             </Link>
           </div>
         </div>
@@ -147,25 +149,25 @@ export default function SubmitPostPage() {
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="bg-white rounded-lg shadow-sm p-12">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
-            <Heading level={2} className="text-2xl text-gray-900 mb-3">Vielen Dank!</Heading>
+            <Heading level={2} className="text-2xl text-gray-900 mb-3">{t('successTitle')}</Heading>
             <p className="text-gray-700 text-lg mb-2">
-              Dein Beitrag wurde eingereicht und wird von uns geprüft.
+              {t('successMessage')}
             </p>
             <p className="text-gray-500 text-sm mb-8">
-              Wir melden uns per E-Mail, sobald dein Beitrag veröffentlicht wird.
+              {t('successEmailNote')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleReset}
                 className="inline-flex items-center justify-center px-6 py-3 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium"
               >
-                Weiteren Beitrag einreichen
+                {t('submitAnotherButton')}
               </button>
               <Link
                 href="/blog"
                 className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Zum Blog
+                {t('toBlogButton')}
               </Link>
             </div>
           </div>
@@ -180,8 +182,8 @@ export default function SubmitPostPage() {
         <PageHero
           theme="about"
           icon={Edit}
-          title="Beitrag einreichen"
-          subtitle="Teile deine Ideen und Erfahrungen mit unserer Community!"
+          title={t('pageTitle')}
+          subtitle={t('pageSubtitle')}
         />
         <div className="absolute top-4 left-4 sm:left-8">
           <Link
@@ -189,7 +191,7 @@ export default function SubmitPostPage() {
             className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Blog
+            {t('backToBlog')}
           </Link>
         </div>
       </div>
@@ -198,7 +200,7 @@ export default function SubmitPostPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <Heading level={2} className="text-2xl text-gray-900 mb-6">Was möchtest du einreichen?</Heading>
+          <Heading level={2} className="text-2xl text-gray-900 mb-6">{t('whatToSubmit')}</Heading>
           <div className="grid md:grid-cols-2 gap-4">
             <button
               type="button"
@@ -210,9 +212,9 @@ export default function SubmitPostPage() {
               }`}
             >
               <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === 'idea' ? 'text-green-600' : 'text-gray-400'}`} />
-              <Heading level={3} className="text-lg text-gray-900 mb-2">Post-Idee</Heading>
+              <Heading level={3} className="text-lg text-gray-900 mb-2">{t('typeIdea')}</Heading>
               <p className="text-sm text-gray-600">
-                Schlage ein Thema vor, über das wir schreiben sollten
+                {t('typeIdeaDesc')}
               </p>
             </button>
 
@@ -226,9 +228,9 @@ export default function SubmitPostPage() {
               }`}
             >
               <FileText className={`w-8 h-8 mb-3 ${submissionType === 'draft' ? 'text-green-600' : 'text-gray-400'}`} />
-              <Heading level={3} className="text-lg text-gray-900 mb-2">Vollständiger Entwurf</Heading>
+              <Heading level={3} className="text-lg text-gray-900 mb-2">{t('typeDraft')}</Heading>
               <p className="text-sm text-gray-600">
-                Reiche einen vollständigen Artikel zur Überprüfung ein
+                {t('typeDraftDesc')}
               </p>
             </button>
           </div>
@@ -237,7 +239,7 @@ export default function SubmitPostPage() {
         {/* Submission Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8">
           <Heading level={2} className="text-2xl text-gray-900 mb-6">
-            {submissionType === 'idea' ? 'deine Idee' : 'dein Entwurf'}
+            {submissionType === 'idea' ? t('formHeadingIdea') : t('formHeadingDraft')}
           </Heading>
 
           {/* AI Assistant */}
@@ -245,7 +247,7 @@ export default function SubmitPostPage() {
             formType="blog-submit"
             variant="section"
             defaultExpanded={true}
-            placeholder={submissionType === 'idea' ? 'Beschreibe deine Artikelidee...' : 'Beschreibe worum es in deinem Artikel geht...'}
+            placeholder={submissionType === 'idea' ? t('aiPlaceholderIdea') : t('aiPlaceholderDraft')}
             onFieldsFilled={handleAIFieldsFilled}
             currentData={formData}
             className="mb-6"
@@ -255,7 +257,7 @@ export default function SubmitPostPage() {
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                dein Name *
+                {t('labelName')}
               </label>
               <input
                 type="text"
@@ -273,7 +275,7 @@ export default function SubmitPostPage() {
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                deine E-Mail *
+                {t('labelEmail')}
               </label>
               <input
                 type="email"
@@ -293,7 +295,7 @@ export default function SubmitPostPage() {
           {/* Post Info */}
           <div className="mb-6">
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-              {submissionType === 'idea' ? 'Titel der Idee *' : 'Artikel-Titel *'}
+              {submissionType === 'idea' ? t('labelTitleIdea') : t('labelTitleDraft')}
             </label>
             <input
               type="text"
@@ -304,14 +306,14 @@ export default function SubmitPostPage() {
               required
               aria-required="true"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder={submissionType === 'idea' ? 'Wie man alte Laptops wiederverwendet' : 'Linux auf alten ThinkPads: Ein vollständiger Leitfaden'}
+              placeholder={submissionType === 'idea' ? t('placeholderTitleIdea') : t('placeholderTitleDraft')}
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
               <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-                Kategorie
+                {t('labelCategory')}
               </label>
               <select
                 id="category"
@@ -320,7 +322,7 @@ export default function SubmitPostPage() {
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
-                <option value="">Kategorie wählen</option>
+                <option value="">{t('categoryPlaceholder')}</option>
                 {categories.map((cat) => (
                   <option key={cat.id} value={cat.name}>
                     {cat.name}
@@ -331,7 +333,7 @@ export default function SubmitPostPage() {
 
             <div>
               <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
-                Tags (kommagetrennt)
+                {t('labelTags')}
               </label>
               <input
                 type="text"
@@ -347,7 +349,7 @@ export default function SubmitPostPage() {
 
           <div className="mb-6">
             <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
-              {submissionType === 'idea' ? 'Beschreibung der Idee *' : 'Artikel-Inhalt * (Markdown unterstützt)'}
+              {submissionType === 'idea' ? t('labelContentIdea') : t('labelContentDraft')}
             </label>
             <textarea
               id="content"
@@ -358,35 +360,31 @@ export default function SubmitPostPage() {
               aria-required="true"
               rows={submissionType === 'idea' ? 6 : 16}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
-              placeholder={
-                submissionType === 'idea'
-                  ? 'Beschreibe deine Idee für einen Blogbeitrag...'
-                  : '## Einleitung\n\nDein Artikel in Markdown...\n\n### Abschnitt 1\n\nInhalt hier...'
-              }
+              placeholder={submissionType === 'idea' ? t('placeholderContentIdea') : t('placeholderContentDraft')}
             />
             {submissionType === 'draft' && (
               <p className="mt-2 text-sm text-gray-500">
-                du kannst Markdown-Formatierung verwenden: **fett**, *kursiv*, [Links](url), usw.
+                {t('markdownHint')}
               </p>
             )}
           </div>
 
           {/* Guidelines */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <Heading level={3} className="text-sm font-semibold text-blue-900 mb-2">📋 Richtlinien für Einreichungen</Heading>
+            <Heading level={3} className="text-sm font-semibold text-blue-900 mb-2">📋 {t('guidelinesTitle')}</Heading>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Stell direr, dass dein Inhalt original ist</li>
-              <li>• Verwende eine klare, respektvolle Sprache</li>
-              <li>• Füge praktische Beispiele und Tipps hinzu</li>
-              <li>• Wir überprüfen alle Einreichungen vor der Veröffentlichung</li>
-              <li>• du erhältst eine E-Mail über den Status deiner Einreichung</li>
+              <li>• {t('guidelineOriginal')}</li>
+              <li>• {t('guidelineLanguage')}</li>
+              <li>• {t('guidelineExamples')}</li>
+              <li>• {t('guidelineReview')}</li>
+              <li>• {t('guidelineEmail')}</li>
             </ul>
           </div>
 
           {/* Submit Button */}
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500">
-              * Pflichtfelder
+              {t('requiredFields')}
             </div>
             <button
               type="submit"
@@ -399,12 +397,12 @@ export default function SubmitPostPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Wird gesendet...
+                  {t('submittingButton')}
                 </>
               ) : (
                 <>
                   <Send className="w-5 h-5 mr-2" />
-                  Einreichen
+                  {t('submitButton')}
                 </>
               )}
             </button>
@@ -413,9 +411,9 @@ export default function SubmitPostPage() {
           {/* Error Message */}
           {submitStatus === 'error' && (
             <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800 font-medium">Fehler beim Senden</p>
+              <p className="text-red-800 font-medium">{t('errorTitle')}</p>
               <p className="text-red-700 text-sm mt-1">
-                Bitte versuche es später erneut oder kontaktiere uns direkt.
+                {t('errorMessage')}
               </p>
             </div>
           )}
