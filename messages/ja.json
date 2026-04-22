@@ -1782,17 +1782,17 @@
     },
     "myRequests": {
       "title": "マイ修理リクエスト",
-      "description": "リクエストを管理し、受信したオファーを確認",
+      "description": "リクエストを管理し、受け取ったオファーを確認する",
       "myOffersButton": "マイオファー",
-      "newRequest": "新規リクエスト",
-      "filterAll": "すべて（{total}件）",
+      "newRequestButton": "新しいリクエスト",
+      "filterAll": "すべて ({total})",
       "fetchError": "リクエストを読み込めませんでした。ページを再読み込みしてください。",
-      "emptyNoFilter": "リクエストはまだありません",
       "emptyFiltered": "このステータスのリクエストはありません",
-      "emptyNoFilterMessage": "最初の修理リクエストを作成してコミュニティからサポートを受けましょう。",
+      "emptyNoFilter": "まだリクエストがありません",
       "emptyFilteredMessage": "別のフィルターをお試しください。",
-      "createRequest": "リクエストを作成",
-      "offerCount": "{count, plural, other {{count}件のオファー}}"
+      "emptyNoFilterMessage": "最初の修理リクエストを作成して、コミュニティのサポートを受けましょう。",
+      "createButton": "リクエストを作成",
+      "offerCount": "{count}件のオファー"
     },
     "myOffers": {
       "title": "マイオファー",

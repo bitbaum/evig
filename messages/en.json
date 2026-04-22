@@ -2132,17 +2132,17 @@
       "aiPlaceholder": "e.g. My MacBook Pro 2019 won't start, screen stays black after pressing the power button..."
     },
     "myRequests": {
-      "title": "My repair requests",
-      "description": "Manage your requests and view received offers",
-      "myOffersButton": "My offers",
-      "newRequest": "New request",
+      "title": "My Repair Requests",
+      "description": "Manage your requests and see received offers",
+      "myOffersButton": "My Offers",
+      "newRequestButton": "New Request",
       "filterAll": "All ({total})",
       "fetchError": "Could not load requests. Please reload the page.",
-      "emptyNoFilter": "No requests yet",
       "emptyFiltered": "No requests with this status",
-      "emptyNoFilterMessage": "Create your first repair request and get help from the community.",
+      "emptyNoFilter": "No requests yet",
       "emptyFilteredMessage": "Try a different filter.",
-      "createRequest": "Create request",
+      "emptyNoFilterMessage": "Create your first repair request and get help from the community.",
+      "createButton": "Create Request",
       "offerCount": "{count, plural, one {# offer} other {# offers}}"
     },
     "myOffers": {

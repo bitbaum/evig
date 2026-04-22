@@ -2135,14 +2135,14 @@
       "title": "Mes demandes de réparation",
       "description": "Gérez vos demandes et consultez les offres reçues",
       "myOffersButton": "Mes offres",
-      "newRequest": "Nouvelle demande",
+      "newRequestButton": "Nouvelle demande",
       "filterAll": "Toutes ({total})",
       "fetchError": "Impossible de charger les demandes. Veuillez recharger la page.",
-      "emptyNoFilter": "Aucune demande pour l'instant",
       "emptyFiltered": "Aucune demande avec ce statut",
-      "emptyNoFilterMessage": "Créez votre première demande de réparation et recevez l'aide de la communauté.",
+      "emptyNoFilter": "Aucune demande pour l'instant",
       "emptyFilteredMessage": "Essayez un autre filtre.",
-      "createRequest": "Créer une demande",
+      "emptyNoFilterMessage": "Créez votre première demande de réparation et obtenez de l'aide de la communauté.",
+      "createButton": "Créer une demande",
       "offerCount": "{count, plural, one {# offre} other {# offres}}"
     },
     "myOffers": {

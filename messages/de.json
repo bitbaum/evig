@@ -2225,14 +2225,14 @@
       "title": "Meine Reparaturanfragen",
       "description": "Verwalte deine Anfragen und sieh eingegangene Angebote",
       "myOffersButton": "Meine Angebote",
-      "newRequest": "Neue Anfrage",
+      "newRequestButton": "Neue Anfrage",
       "filterAll": "Alle ({total})",
       "fetchError": "Anfragen konnten nicht geladen werden. Bitte lade die Seite neu.",
-      "emptyNoFilter": "Noch keine Anfragen",
       "emptyFiltered": "Keine Anfragen mit diesem Status",
-      "emptyNoFilterMessage": "Erstelle deine erste Reparaturanfrage und erhalte Hilfe von der Community.",
+      "emptyNoFilter": "Noch keine Anfragen",
       "emptyFilteredMessage": "Versuche einen anderen Filter.",
-      "createRequest": "Anfrage erstellen",
+      "emptyNoFilterMessage": "Erstelle deine erste Reparaturanfrage und erhalte Hilfe von der Community.",
+      "createButton": "Anfrage erstellen",
       "offerCount": "{count, plural, one {# Angebot} other {# Angebote}}"
     },
     "myOffers": {

@@ -1782,16 +1782,16 @@
     },
     "myRequests": {
       "title": "Mis solicitudes de reparación",
-      "description": "Gestiona tus solicitudes y consulta las ofertas recibidas",
+      "description": "Gestiona tus solicitudes y ve las ofertas recibidas",
       "myOffersButton": "Mis ofertas",
-      "newRequest": "Nueva solicitud",
+      "newRequestButton": "Nueva solicitud",
       "filterAll": "Todas ({total})",
-      "fetchError": "No se pudieron cargar las solicitudes. Recarga la página.",
-      "emptyNoFilter": "Aún no hay solicitudes",
+      "fetchError": "No se pudieron cargar las solicitudes. Por favor, recarga la página.",
       "emptyFiltered": "No hay solicitudes con este estado",
-      "emptyNoFilterMessage": "Crea tu primera solicitud de reparación y recibe ayuda de la comunidad.",
+      "emptyNoFilter": "Aún no hay solicitudes",
       "emptyFilteredMessage": "Prueba con otro filtro.",
-      "createRequest": "Crear solicitud",
+      "emptyNoFilterMessage": "Crea tu primera solicitud de reparación y obtén ayuda de la comunidad.",
+      "createButton": "Crear solicitud",
       "offerCount": "{count, plural, one {# oferta} other {# ofertas}}"
     },
     "myOffers": {

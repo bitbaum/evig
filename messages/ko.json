@@ -1782,17 +1782,17 @@
     },
     "myRequests": {
       "title": "내 수리 요청",
-      "description": "요청을 관리하고 받은 제안 보기",
+      "description": "요청을 관리하고 받은 제안을 확인하세요",
       "myOffersButton": "내 제안",
-      "newRequest": "새 요청",
+      "newRequestButton": "새 요청",
       "filterAll": "전체 ({total})",
-      "fetchError": "요청을 불러올 수 없습니다. 페이지를 새로고침해 주세요.",
-      "emptyNoFilter": "아직 요청이 없습니다",
+      "fetchError": "요청을 불러올 수 없습니다. 페이지를 새로 고침하세요.",
       "emptyFiltered": "이 상태의 요청이 없습니다",
-      "emptyNoFilterMessage": "첫 수리 요청을 만들고 커뮤니티의 도움을 받으세요.",
-      "emptyFilteredMessage": "다른 필터를 사용해 보세요.",
-      "createRequest": "요청 만들기",
-      "offerCount": "{count, plural, other {# 건의}} 제안"
+      "emptyNoFilter": "아직 요청이 없습니다",
+      "emptyFilteredMessage": "다른 필터를 시도해 보세요.",
+      "emptyNoFilterMessage": "첫 번째 수리 요청을 만들고 커뮤니티의 도움을 받으세요.",
+      "createButton": "요청 만들기",
+      "offerCount": "제안 {count}개"
     },
     "myOffers": {
       "title": "내 제안",

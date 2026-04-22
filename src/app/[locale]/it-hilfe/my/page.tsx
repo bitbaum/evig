@@ -25,10 +25,12 @@ import {
 } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 export default function MyRequestsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('itHelp.myRequests')
 
   const [requests, setRequests] = useState<ITHilfeRequest[]>([])
   const [loading, setLoading] = useState(true)
@@ -87,9 +89,9 @@ export default function MyRequestsPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl text-gray-900">Meine Reparaturanfragen</Heading>
+            <Heading level={1} className="text-2xl text-gray-900">{t('title')}</Heading>
             <p className="text-gray-600 mt-1">
-              Verwalte deine Anfragen und sieh eingegangene Angebote
+              {t('description')}
             </p>
           </div>
           <div className="flex gap-3">
@@ -98,14 +100,14 @@ export default function MyRequestsPage() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
             >
               <Heart className="w-4 h-4" />
-              Meine Angebote
+              {t('myOffersButton')}
             </Link>
             <Link
               href="/it-hilfe/create"
               className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
-              Neue Anfrage
+              {t('newRequestButton')}
             </Link>
           </div>
         </div>
@@ -121,7 +123,7 @@ export default function MyRequestsPage() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Alle ({total})
+              {t('filterAll', { total })}
             </button>
             {REQUEST_STATUSES.map((s) => (
               <button
@@ -142,7 +144,7 @@ export default function MyRequestsPage() {
         {/* Fetch Error */}
         {fetchError && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-red-800">Anfragen konnten nicht geladen werden. Bitte lade die Seite neu.</p>
+            <p className="text-sm text-red-800">{t('fetchError')}</p>
           </div>
         )}
 
@@ -151,12 +153,10 @@ export default function MyRequestsPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <Heading level={3} className="text-xl text-gray-900 mb-2">
-              {statusFilter ? 'Keine Anfragen mit diesem Status' : 'Noch keine Anfragen'}
+              {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
             </Heading>
             <p className="text-gray-600 mb-6">
-              {statusFilter
-                ? 'Versuche einen anderen Filter.'
-                : 'Erstelle deine erste Reparaturanfrage und erhalte Hilfe von der Community.'}
+              {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
             </p>
             {!statusFilter && (
               <Link
@@ -164,7 +164,7 @@ export default function MyRequestsPage() {
                 className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
                 <Plus className="w-5 h-5" />
-                Anfrage erstellen
+                {t('createButton')}
               </Link>
             )}
           </div>
@@ -213,7 +213,7 @@ export default function MyRequestsPage() {
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
                           <span className={req.offerCount > 0 ? 'text-emerald-600 font-medium' : ''}>
-                            {req.offerCount} {req.offerCount === 1 ? 'Angebot' : 'Angebote'}
+                            {t('offerCount', { count: req.offerCount })}
                           </span>
                         </div>
                         <div className="flex items-center gap-1">

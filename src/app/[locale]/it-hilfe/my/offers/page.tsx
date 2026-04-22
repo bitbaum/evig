@@ -108,7 +108,7 @@ export default function MyOffersPage() {
       }
       fetchOffers()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('withdrawError')
       setError(message)
       logger.error('Error withdrawing offer', { error: err })
     } finally {
@@ -205,7 +205,7 @@ export default function MyOffersPage() {
                 className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
               >
                 <Heart className="w-5 h-5" />
-                Anfragen durchsuchen
+                {t('browseRequests')}
               </Link>
             )}
           </div>

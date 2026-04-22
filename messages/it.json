@@ -1784,14 +1784,14 @@
       "title": "Le mie richieste di riparazione",
       "description": "Gestisci le tue richieste e visualizza le offerte ricevute",
       "myOffersButton": "Le mie offerte",
-      "newRequest": "Nuova richiesta",
+      "newRequestButton": "Nuova richiesta",
       "filterAll": "Tutte ({total})",
       "fetchError": "Impossibile caricare le richieste. Ricarica la pagina.",
-      "emptyNoFilter": "Nessuna richiesta ancora",
       "emptyFiltered": "Nessuna richiesta con questo stato",
-      "emptyNoFilterMessage": "Crea la tua prima richiesta di riparazione e ricevi aiuto dalla community.",
+      "emptyNoFilter": "Ancora nessuna richiesta",
       "emptyFilteredMessage": "Prova un altro filtro.",
-      "createRequest": "Crea richiesta",
+      "emptyNoFilterMessage": "Crea la tua prima richiesta di riparazione e ricevi aiuto dalla comunità.",
+      "createButton": "Crea richiesta",
       "offerCount": "{count, plural, one {# offerta} other {# offerte}}"
     },
     "myOffers": {
