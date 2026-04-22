@@ -7,6 +7,7 @@ import { apiFetch } from '@/lib/api/client'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { formatDateTime } from '@/lib/date-formats'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
@@ -29,6 +30,7 @@ interface ServiceAppointment {
 }
 
 export default function AppointmentsDashboard() {
+  const t = useTranslations('dashboard.appointments')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
@@ -52,7 +54,7 @@ export default function AppointmentsDashboard() {
       if (result.success && result.data) {
         setAppointments(result.data.appointments || [])
       } else {
-        setError(result.error || 'Fehler beim Laden der Termine')
+        setError(result.error || t('loadError'))
       }
       setLoading(false)
     }
@@ -65,7 +67,7 @@ export default function AppointmentsDashboard() {
     if (result.success && result.data) {
       setAppointments(result.data.appointments || [])
     } else {
-      setError(result.error || 'Fehler beim Laden der Termine')
+      setError(result.error || t('loadError'))
     }
     setLoading(false)
   }
@@ -95,7 +97,7 @@ export default function AppointmentsDashboard() {
       setEditingId(null)
       fetchAppointments()
     } else {
-      setError(result.error || 'Speichern nicht möglich (nur im Status "Angefragt")')
+      setError(result.error || t('saveError'))
     }
     setSaving(false)
   }
@@ -118,15 +120,15 @@ export default function AppointmentsDashboard() {
   const getStatusText = (status: string) => {
     switch (status) {
       case APPOINTMENT_STATUS.REQUESTED:
-        return 'Angefragt'
+        return t('statusRequested')
       case APPOINTMENT_STATUS.CONFIRMED:
-        return 'Bestätigt'
+        return t('statusConfirmed')
       case BOOKING_STATUS.IN_PROGRESS:
-        return 'In Bearbeitung'
+        return t('statusInProgress')
       case APPOINTMENT_STATUS.COMPLETED:
-        return 'Abgeschlossen'
+        return t('statusCompleted')
       case APPOINTMENT_STATUS.CANCELLED:
-        return 'Storniert'
+        return t('statusCancelled')
       default:
         return status
     }
@@ -176,11 +178,11 @@ export default function AppointmentsDashboard() {
             className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">Meine Termine</Heading>
+          <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">{t('pageTitle')}</Heading>
           <p className="text-neutral-600">
-            Übersicht deiner Service-Termin-Anfragen und gebuchten Dienstleistungen
+            {t('pageSubtitle')}
           </p>
         </div>
 
@@ -212,11 +214,11 @@ export default function AppointmentsDashboard() {
                         </div>
                         <div className="flex items-center">
                           <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
-                          <span className="hidden sm:inline">Beantragt am </span>
+                          <span className="hidden sm:inline">{t('requestedOn')} </span>
                           <span>{formatDateTime(appointment.created_at)}</span>
                         </div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(appointment.urgency)}`}>
-                          {appointment.urgency === 'urgent' ? 'Dringend' : appointment.urgency === 'high' ? 'Hoch' : appointment.urgency === 'normal' ? 'Normal' : 'Niedrig'}
+                          {appointment.urgency === 'urgent' ? t('urgencyUrgent') : appointment.urgency === 'high' ? t('urgencyHigh') : appointment.urgency === 'normal' ? t('urgencyNormal') : t('urgencyLow')}
                         </span>
                       </div>
                       {appointment.description && (
@@ -231,10 +233,10 @@ export default function AppointmentsDashboard() {
                   <div className="bg-warning-50 border-2 border-warning-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-warning-800">
                       <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">Terminanfrage ausstehend</span>
+                      <span className="font-medium text-sm sm:text-base">{t('requestedTitle')}</span>
                     </div>
                     <p className="text-warning-700 text-xs sm:text-sm mt-1 ml-7">
-                      deine Anfrage wird von unserem Team geprüft. Du erhältst in Kürze eine Bestätigung per E-Mail.
+                      {t('requestedDesc')}
                     </p>
                   </div>
                 )}
@@ -243,10 +245,10 @@ export default function AppointmentsDashboard() {
                   <div className="bg-success-50 border-2 border-success-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-success-800">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">Termin bestätigt!</span>
+                      <span className="font-medium text-sm sm:text-base">{t('confirmedTitle')}</span>
                     </div>
                     <p className="text-success-700 text-xs sm:text-sm mt-1 ml-7">
-                      Dein Termin wurde bestätigt. Du erhältst weitere Details per E-Mail.
+                      {t('confirmedDesc')}
                     </p>
                   </div>
                 )}
@@ -255,7 +257,7 @@ export default function AppointmentsDashboard() {
                   <div className="bg-info-50 border-2 border-info-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-info-800">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">Dienstleistung abgeschlossen</span>
+                      <span className="font-medium text-sm sm:text-base">{t('completedTitle')}</span>
                     </div>
                     {appointment.outcome_notes && (
                       <p className="text-info-700 text-xs sm:text-sm mt-1 ml-7">{appointment.outcome_notes}</p>
@@ -267,7 +269,7 @@ export default function AppointmentsDashboard() {
                   <div className="bg-error-50 border-2 border-error-200 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-error-800">
                       <XCircle className="w-5 h-5 mr-2 flex-shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">Termin storniert</span>
+                      <span className="font-medium text-sm sm:text-base">{t('cancelledTitle')}</span>
                     </div>
                   </div>
                 )}
@@ -277,7 +279,7 @@ export default function AppointmentsDashboard() {
                   <div className="mt-4 flex gap-3">
                     <button
                       onClick={async () => {
-                        if (!confirm('Möchtest du diesen Termin wirklich stornieren?')) return
+                        if (!confirm(t('confirmCancel'))) return
                         const result = await apiFetch<void>(`/api/appointments/${appointment.id}`, {
                           method: 'PATCH',
                           body: { action: 'cancel' }
@@ -285,19 +287,19 @@ export default function AppointmentsDashboard() {
                         if (result.success) {
                           fetchAppointments()
                         } else {
-                          setError(result.error || 'Stornierung fehlgeschlagen')
+                          setError(result.error || t('cancelFailed'))
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
-                      Termin stornieren
+                      {t('cancelButton')}
                     </button>
                     {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
                       <button
                         onClick={() => openEdit(appointment)}
                         className="px-4 py-2 rounded-lg border border-primary-300 text-primary-700 hover:bg-primary-50"
                       >
-                        Angaben bearbeiten
+                        {t('editButton')}
                       </button>
                     )}
                   </div>
@@ -310,33 +312,33 @@ export default function AppointmentsDashboard() {
             icon={Calendar}
             iconBg="bg-teal-50 dark:bg-teal-900/20"
             iconColor="text-teal-500 dark:text-teal-400"
-            title="Noch keine Termine"
-            description="Du hast noch keine Service-Termine gebucht."
+            title={t('emptyTitle')}
+            description={t('emptyDesc')}
             action={
               <Link
                 href="/services"
                 className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Dienstleistungen entdecken
+                {t('discoverServices')}
               </Link>
             }
           />
         )}
       </div>
-      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title="Termindetails bearbeiten">
+      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title={t('modalTitle')}>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Beschreibung</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('descriptionLabel')}</label>
             <textarea
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               rows={4}
               className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
-              placeholder="Problem oder Wunsch genauer beschreiben"
+              placeholder={t('descriptionPlaceholder')}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">Bevorzugtes Datum/Zeit</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('dateLabel')}</label>
             <input
               type="datetime-local"
               value={editPreferredDate}
@@ -346,9 +348,9 @@ export default function AppointmentsDashboard() {
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">Abbrechen</button>
+          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">{t('cancel')}</button>
           <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-primary-600 text-white disabled:opacity-50">
-            {saving ? 'Speichern…' : 'Speichern'}
+            {saving ? t('saving') : t('save')}
           </button>
         </div>
       </Modal>

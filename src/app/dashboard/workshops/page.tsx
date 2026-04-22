@@ -31,7 +31,8 @@ interface WorkshopRegistration {
 }
 
 export default function WorkshopsDashboard() {
-  const t = useTranslations('dashboard.dates')
+  const tDates = useTranslations('dashboard.dates')
+  const t = useTranslations('dashboard.workshops')
   const { data: session, status } = useSession()
   const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
   const [loading, setLoading] = useState(true)
@@ -50,7 +51,7 @@ export default function WorkshopsDashboard() {
       if (result.success && result.data) {
         setRegistrations(result.data.registrations || [])
       } else {
-        setError(result.error || 'Fehler beim Laden der Workshop-Anmeldungen')
+        setError(result.error || t('loadError'))
       }
       setLoading(false)
     }
@@ -63,7 +64,7 @@ export default function WorkshopsDashboard() {
     if (result.success && result.data) {
       setRegistrations(result.data.registrations || [])
     } else {
-      setError(result.error || 'Fehler beim Laden der Workshop-Anmeldungen')
+      setError(result.error || t('loadError'))
     }
     setLoading(false)
   }
@@ -85,7 +86,7 @@ export default function WorkshopsDashboard() {
       setEditingId(null)
       fetchRegistrations()
     } else {
-      setError(result.error || 'Speichern fehlgeschlagen')
+      setError(result.error || t('saveFailed'))
     }
     setSaving(false)
   }
@@ -106,11 +107,11 @@ export default function WorkshopsDashboard() {
   const getStatusText = (status: string) => {
     switch (status) {
       case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-        return 'Bestätigt'
+        return t('statusConfirmed')
       case WORKSHOP_REGISTRATION_STATUS.PENDING:
-        return 'Ausstehend'
+        return t('statusPending')
       case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-        return 'Storniert'
+        return t('statusCancelled')
       default:
         return status
     }
@@ -142,14 +143,14 @@ export default function WorkshopsDashboard() {
         <div className="max-w-4xl mx-auto px-4">
           <EmptyState
             icon={LogIn}
-            title="Anmeldung erforderlich"
-            description="Bitte melde dich an, um deine Workshop-Anmeldungen zu sehen."
+            title={t('loginRequired')}
+            description={t('loginDesc')}
             action={
               <Link
                 href="/auth/login"
                 className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Anmelden
+                {t('login')}
               </Link>
             }
           />
@@ -168,11 +169,11 @@ export default function WorkshopsDashboard() {
             className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
-          <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</Heading>
+          <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>{t('pageTitle')}</Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            Übersicht deiner Workshop-Anmeldungen und Teilnahmen
+            {t('pageSubtitle')}
           </p>
         </div>
 
@@ -200,7 +201,7 @@ export default function WorkshopsDashboard() {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>{t('registeredOn', { date: formatDate(registration.created_at) })}</span>
+                        <span>{tDates('registeredOn', { date: formatDate(registration.created_at) })}</span>
                       </div>
                     </div>
                   </div>
@@ -211,10 +212,10 @@ export default function WorkshopsDashboard() {
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center text-green-800">
                       <CheckCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Deine Anmeldung wurde bestätigt!</span>
+                      <span className="font-medium">{t('confirmedTitle')}</span>
                     </div>
                     <p className="text-green-700 text-sm mt-1">
-                      Du erhältst in Kürze weitere Informationen zu Datum und Ort.
+                      {t('confirmedDesc')}
                     </p>
                   </div>
                 )}
@@ -223,10 +224,10 @@ export default function WorkshopsDashboard() {
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <div className="flex items-center text-yellow-800">
                       <AlertCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Anmeldung ausstehend</span>
+                      <span className="font-medium">{t('pendingTitle')}</span>
                     </div>
                     <p className="text-yellow-700 text-sm mt-1">
-                      Deine Anmeldung wird von unserem Team geprüft. Du erhältst eine Bestätigung per E-Mail.
+                      {t('pendingDesc')}
                     </p>
                   </div>
                 )}
@@ -235,11 +236,11 @@ export default function WorkshopsDashboard() {
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex items-center text-red-800">
                       <XCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Anmeldung storniert</span>
+                      <span className="font-medium">{t('cancelledTitle')}</span>
                     </div>
                     {registration.cancelled_at && (
                       <p className="text-red-700 text-sm mt-1">
-                        Storniert am {formatDate(registration.cancelled_at)}
+                        {t('cancelledOn', { date: formatDate(registration.cancelled_at) })}
                       </p>
                     )}
                   </div>
@@ -250,7 +251,7 @@ export default function WorkshopsDashboard() {
                   <div className="mt-4 flex gap-3">
                     <button
                       onClick={async () => {
-                        if (!confirm('Möchtest du diese Anmeldung wirklich stornieren?')) return
+                        if (!confirm(t('confirmCancel'))) return
                         const result = await apiFetch<void>(`/api/workshops/registrations/${registration.id}`, {
                           method: 'PATCH',
                           body: { action: 'cancel' }
@@ -258,18 +259,18 @@ export default function WorkshopsDashboard() {
                         if (result.success) {
                           fetchRegistrations()
                         } else {
-                          setError(result.error || 'Stornierung fehlgeschlagen')
+                          setError(result.error || t('cancelFailed'))
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
                     >
-                      Anmeldung stornieren
+                      {t('cancelButton')}
                     </button>
                     <button
                       onClick={() => openEdit(registration)}
                       className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50"
                     >
-                      {registration.feedback || registration.rating ? 'Feedback bearbeiten' : 'Feedback hinzufügen'}
+                      {registration.feedback || registration.rating ? t('feedbackEdit') : t('feedbackAdd')}
                     </button>
                   </div>
                 )}
@@ -281,24 +282,24 @@ export default function WorkshopsDashboard() {
             icon={Calendar}
             iconBg="bg-green-50 dark:bg-green-900/20"
             iconColor="text-green-600 dark:text-green-400"
-            title="Noch keine Workshop-Anmeldungen"
-            description="Du hast dich noch für keine Workshops angemeldet."
+            title={t('emptyTitle')}
+            description={t('emptyDesc')}
             action={
               <Link
                 href="/workshops"
                 className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Workshops entdecken
+                {t('discoverWorkshops')}
               </Link>
             }
           />
         )}
       </div>
 
-      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title="Feedback bearbeiten">
+      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title={t('modalTitle')}>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Bewertung (1-5)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('ratingLabel')}</label>
             <input
               type="number"
               min={1}
@@ -309,20 +310,20 @@ export default function WorkshopsDashboard() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('feedbackLabel')}</label>
             <textarea
               value={editFeedback}
               onChange={(e) => setEditFeedback(e.target.value)}
               rows={4}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-              placeholder="Wie war deine Erfahrung?"
+              placeholder={t('feedbackPlaceholder')}
             />
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
+          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">{t('cancel')}</button>
           <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
-            {saving ? 'Speichern…' : 'Speichern'}
+            {saving ? t('saving') : t('save')}
           </button>
         </div>
       </Modal>
