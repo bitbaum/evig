@@ -11,7 +11,6 @@
 // Form sections
 export { BasicInfoSection } from './sections/BasicInfoSection'
 export { ConditionSection } from './sections/ConditionSection'
-export { ImageUploadSection } from './sections/ImageUploadSection'
 export { ContactInfoSection } from './sections/ContactInfoSection'
 
 // Modals
