@@ -1,5 +1,7 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
+import { getTranslations } from 'next-intl/server'
 
-export default function MarketplaceLoading() {
-  return <LoadingSpinner text="Marktplatz laden..." />
+export default async function MarketplaceLoading() {
+  const t = await getTranslations('marketplace')
+  return <LoadingSpinner text={t('loading')} />
 }

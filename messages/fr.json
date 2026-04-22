@@ -338,7 +338,8 @@
       "allCategories": "Afficher toutes les catégories →",
       "noResultsForQuery": "Aucun produit trouvé pour \"{query}\"",
       "noResultsHint": "Essayez un autre terme de recherche ou parcourez les catégories.",
-      "foundCount": "{count, plural, one {# produit} other {# produits}} trouvé(s)"
+      "foundCount": "{count, plural, one {# produit} other {# produits}} trouvé(s)",
+      "loadingText": "Recherche en cours..."
     },
     "category": {
       "notFoundMeta": "Catégorie introuvable | Boutique {orgName}",
@@ -597,7 +598,8 @@
       "status": "Statut",
       "viewOrder": "Voir la commande",
       "continueShopping": "Continuer les achats"
-    }
+    },
+    "loading": "Chargement du marché..."
   },
   "services": {
     "meta": {

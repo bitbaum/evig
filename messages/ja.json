@@ -2178,7 +2178,8 @@
       "status": "ステータス",
       "viewOrder": "注文を確認",
       "continueShopping": "買い物を続ける"
-    }
+    },
+    "loading": "マーケットを読み込み中..."
   },
   "membership": {
     "meta": {
@@ -3440,7 +3441,8 @@
       "allCategories": "すべてのカテゴリーを表示 →",
       "noResultsForQuery": "\"{query}\" に一致する製品はありません",
       "noResultsHint": "別の検索ワードを試すか、カテゴリーを参照してください。",
-      "foundCount": "{count}件の製品が見つかりました"
+      "foundCount": "{count}件の製品が見つかりました",
+      "loadingText": "検索中..."
     },
     "category": {
       "notFoundMeta": "カテゴリーが見つかりません | {orgName}ショップ",

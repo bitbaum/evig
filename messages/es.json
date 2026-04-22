@@ -2178,7 +2178,8 @@
       "status": "Estado",
       "viewOrder": "Ver pedido",
       "continueShopping": "Seguir comprando"
-    }
+    },
+    "loading": "Cargando mercado..."
   },
   "membership": {
     "meta": {
@@ -3440,7 +3441,8 @@
       "allCategories": "Ver todas las categorías →",
       "noResultsForQuery": "No se encontraron productos para \"{query}\"",
       "noResultsHint": "Prueba con otro término de búsqueda o explora las categorías.",
-      "foundCount": "{count, plural, one {# producto} other {# productos}} encontrado(s)"
+      "foundCount": "{count, plural, one {# producto} other {# productos}} encontrado(s)",
+      "loadingText": "Buscando..."
     },
     "category": {
       "notFoundMeta": "Categoría no encontrada | Tienda {orgName}",

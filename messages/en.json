@@ -338,7 +338,8 @@
       "allCategories": "View all categories →",
       "noResultsForQuery": "No products found for \"{query}\"",
       "noResultsHint": "Try a different search term or browse the categories.",
-      "foundCount": "{count, plural, one {# product} other {# products}} found"
+      "foundCount": "{count, plural, one {# product} other {# products}} found",
+      "loadingText": "Searching..."
     },
     "category": {
       "notFoundMeta": "Category not found | {orgName} Shop",
@@ -597,7 +598,8 @@
       "status": "Status",
       "viewOrder": "View order",
       "continueShopping": "Continue shopping"
-    }
+    },
+    "loading": "Loading marketplace..."
   },
   "services": {
     "meta": {
