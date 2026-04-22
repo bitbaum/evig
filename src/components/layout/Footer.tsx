@@ -39,7 +39,7 @@ export default function Footer() {
 
           {/* Navigation Section */}
           <nav aria-label={tFooter('navigation')}>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-300 mb-4">
               {tFooter('navigation')}
             </Heading>
             <ul className="space-y-2">
@@ -69,33 +69,33 @@ export default function Footer() {
 
           {/* Contact Section */}
           <div>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-300 mb-4">
               {tNav('contact')}
             </Heading>
             <address className="space-y-4 not-italic">
               {footerLocations.map((location) => (
                 <div className="flex items-start" key={location.name}>
-                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-500" />
+                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-400" />
                   <div>
                     <p className="text-sm font-medium text-gray-200">{location.name}</p>
                     {location.addressLines.map((line) => (
-                      <p className="text-sm text-gray-400" key={line}>{line}</p>
+                      <p className="text-sm text-gray-300" key={line}>{line}</p>
                     ))}
                     {'extra' in location && location.extra && (
-                      <p className="text-xs text-gray-500 mt-0.5">{location.extra}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{location.extra}</p>
                     )}
                   </div>
                 </div>
               ))}
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <a href={`tel:${CONTACT.phone}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <a href={`tel:${CONTACT.phone}`} className="text-sm text-gray-300 hover:text-white transition-colors">
                   {CONTACT.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                <a href={`mailto:${CONTACT.email}`} className="text-sm text-gray-400 hover:text-white transition-colors">
+                <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <a href={`mailto:${CONTACT.email}`} className="text-sm text-gray-300 hover:text-white transition-colors">
                   {CONTACT.email}
                 </a>
               </div>
@@ -104,11 +104,11 @@ export default function Footer() {
 
           {/* Opening Hours */}
           <div>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-300 mb-4">
               <Clock className="inline w-4 h-4 mr-1.5 mb-0.5" />
               {tFooter('openingHours')}
             </Heading>
-            <div className="space-y-1 text-sm text-gray-400">
+            <div className="space-y-1 text-sm text-gray-300">
               <p>{tFooter('openingHoursMonday', { hours: OPENING_HOURS.monday })}</p>
               <p>{tFooter('openingHoursTueFri', { hours: OPENING_HOURS.tuesdayToFriday })}</p>
             </div>
@@ -129,7 +129,7 @@ export default function Footer() {
             <a
               key={social.name}
               href={social.href}
-              className="p-2 text-gray-500 hover:text-white transition-colors rounded-md hover:bg-gray-800"
+              className="p-2 text-gray-400 hover:text-white transition-colors rounded-md hover:bg-gray-800"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -141,7 +141,7 @@ export default function Footer() {
 
         {/* Legal Links */}
         <div className="mt-6 pt-6 border-t border-gray-800">
-          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-500">
+          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-400">
             <Link href="/impressum" className="hover:text-gray-300 transition-colors">
               {tFooter('impressum')}
             </Link>
@@ -161,7 +161,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-6 text-center text-xs text-gray-600">
+        <div className="mt-6 text-center text-xs text-gray-500">
           &copy; {new Date().getFullYear()} {ORG.name}. {tFooter('allRightsReserved')}
         </div>
       </div>

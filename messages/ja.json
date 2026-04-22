@@ -1288,6 +1288,10 @@
       "listings": "出品",
       "repairs": "修理件数",
       "workshops": "ワークショップ"
+    },
+    "asSeenIn": {
+      "heading": "メディア掲載",
+      "allCoverage": "すべてのメディア報道を見る"
     }
   },
   "itHelp": {

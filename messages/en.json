@@ -221,6 +221,10 @@
       "listings": "Listings",
       "repairs": "Repairs",
       "workshops": "Workshops"
+    },
+    "asSeenIn": {
+      "heading": "As seen in",
+      "allCoverage": "View all media coverage"
     }
   },
   "shop": {

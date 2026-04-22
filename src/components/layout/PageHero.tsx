@@ -46,7 +46,7 @@ export function PageHero({
           </div>
 
           {/* Title */}
-          <Heading level={1} className="tracking-tight text-gray-900">
+          <Heading level={1} variant="site" className="tracking-tight text-gray-900">
             {title}
           </Heading>
 

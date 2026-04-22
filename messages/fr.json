@@ -221,6 +221,10 @@
       "listings": "Annonces",
       "repairs": "Réparations",
       "workshops": "Ateliers"
+    },
+    "asSeenIn": {
+      "heading": "Vu dans",
+      "allCoverage": "Voir toute la couverture médiatique"
     }
   },
   "shop": {

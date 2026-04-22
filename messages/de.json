@@ -311,6 +311,10 @@
       "listings": "Inserate",
       "repairs": "Reparaturen",
       "workshops": "Workshops"
+    },
+    "asSeenIn": {
+      "heading": "Bekannt aus",
+      "allCoverage": "Alle Medienberichte ansehen"
     }
   },
   "shop": {

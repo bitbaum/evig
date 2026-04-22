@@ -8,6 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CommunityStats } from '@/components/community/CommunityStats'
+import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 
 const OG_LOCALE_MAP: Record<string, string> = {
@@ -47,6 +48,83 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function Home() {
   const t = await getTranslations('home')
   const compactMetrics = getCompactMetrics()
+
+  // Action cards — colors sourced from DESIGN_TOKENS (SSOT)
+  const actionCards = [
+    {
+      icon: Store,
+      theme: 'marketplace' as const,
+      focusColor: 'focus-visible:outline-orange-600',
+      title: t('actions.sell.title'),
+      subtitle: t('actions.sell.subtitle'),
+      primaryLabel: t('actions.sell.primaryLabel'),
+      primaryHref: '/marketplace',
+      secondaryLabel: t('actions.sell.secondaryLabel'),
+      secondaryHref: '/marketplace/sell',
+    },
+    {
+      icon: Wrench,
+      theme: 'itHilfe' as const,
+      focusColor: 'focus-visible:outline-emerald-600',
+      title: t('actions.repair.title'),
+      subtitle: t('actions.repair.subtitle'),
+      primaryLabel: t('actions.repair.primaryLabel'),
+      primaryHref: '/it-hilfe',
+      secondaryLabel: t('actions.repair.secondaryLabel'),
+      secondaryHref: '/profil/techniker',
+    },
+    {
+      icon: BookOpen,
+      theme: 'workshops' as const,
+      focusColor: 'focus-visible:outline-blue-600',
+      title: t('actions.learn.title'),
+      subtitle: t('actions.learn.subtitle'),
+      primaryLabel: t('actions.learn.primaryLabel'),
+      primaryHref: '/workshops',
+      secondaryLabel: t('actions.learn.secondaryLabel'),
+      secondaryHref: '/knowhow',
+    },
+  ]
+
+  // Community cards — icon colors from DESIGN_TOKENS
+  const communityCards = [
+    {
+      icon: Users,
+      badge: DESIGN_TOKENS.iconBadges.about,
+      hoverColor: 'group-hover:text-green-600',
+      title: t('community.use.title'),
+      desc: t('community.use.desc'),
+      href: '/auth/register',
+      border: 'border-gray-200',
+    },
+    {
+      icon: Heart,
+      badge: DESIGN_TOKENS.iconBadges.services,
+      hoverColor: 'group-hover:text-blue-600',
+      title: t('community.volunteer.title'),
+      desc: t('community.volunteer.desc'),
+      href: '/get-involved/volunteer',
+      border: 'border-gray-200',
+    },
+    {
+      icon: Gift,
+      badge: DESIGN_TOKENS.iconBadges.marketplace,
+      hoverColor: 'group-hover:text-orange-600',
+      title: t('community.donate.title'),
+      desc: t('community.donate.desc'),
+      href: '/get-involved/donate',
+      border: 'border-gray-200',
+    },
+    {
+      icon: Award,
+      badge: DESIGN_TOKENS.iconBadges.getInvolved,
+      hoverColor: 'group-hover:text-purple-600',
+      title: t('community.membership.title'),
+      desc: t('community.membership.desc'),
+      href: '/mitglied-werden',
+      border: 'border-purple-300 ring-1 ring-purple-200',
+    },
+  ]
 
   return (
     <div className="bg-white">
@@ -134,77 +212,42 @@ export default async function Home() {
       <div id="actions" className="bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} className="tracking-tight text-gray-900">
+            <Heading level={2} variant="site" className="tracking-tight text-gray-900">
               {t('actions.heading')}
             </Heading>
           </div>
 
           <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
-            {[
-              {
-                icon: Store,
-                iconBg: 'bg-orange-100',
-                iconColor: 'text-orange-600',
-                title: t('actions.sell.title'),
-                subtitle: t('actions.sell.subtitle'),
-                primaryLabel: t('actions.sell.primaryLabel'),
-                primaryHref: '/marketplace',
-                primaryColor: 'bg-orange-600 hover:bg-orange-500 focus-visible:outline-orange-600',
-                secondaryLabel: t('actions.sell.secondaryLabel'),
-                secondaryHref: '/marketplace/sell',
-                secondaryColor: 'text-orange-600 border-orange-600 hover:bg-orange-50 focus-visible:outline-orange-600',
-              },
-              {
-                icon: Wrench,
-                iconBg: 'bg-emerald-100',
-                iconColor: 'text-emerald-600',
-                title: t('actions.repair.title'),
-                subtitle: t('actions.repair.subtitle'),
-                primaryLabel: t('actions.repair.primaryLabel'),
-                primaryHref: '/it-hilfe',
-                primaryColor: 'bg-emerald-600 hover:bg-emerald-500 focus-visible:outline-emerald-600',
-                secondaryLabel: t('actions.repair.secondaryLabel'),
-                secondaryHref: '/profil/techniker',
-                secondaryColor: 'text-emerald-600 border-emerald-600 hover:bg-emerald-50 focus-visible:outline-emerald-600',
-              },
-              {
-                icon: BookOpen,
-                iconBg: 'bg-blue-100',
-                iconColor: 'text-blue-600',
-                title: t('actions.learn.title'),
-                subtitle: t('actions.learn.subtitle'),
-                primaryLabel: t('actions.learn.primaryLabel'),
-                primaryHref: '/workshops',
-                primaryColor: 'bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600',
-                secondaryLabel: t('actions.learn.secondaryLabel'),
-                secondaryHref: '/knowhow',
-                secondaryColor: 'text-blue-600 border-blue-600 hover:bg-blue-50 focus-visible:outline-blue-600',
-              },
-            ].map((card) => (
-              <div key={card.title} className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${card.iconBg} mb-4`} aria-hidden="true">
-                  <card.icon className={`h-6 w-6 ${card.iconColor}`} />
+            {actionCards.map((card) => {
+              const badge = DESIGN_TOKENS.iconBadges[card.theme]
+              const primaryBtn = DESIGN_TOKENS.buttons.primary[card.theme]
+              const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
+              return (
+                <div key={card.title} className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
+                    <card.icon className={`h-6 w-6 ${badge.text}`} />
+                  </div>
+                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-gray-900">{card.title}</Heading>
+                  <p className="mt-2 text-base text-gray-600 flex-1">
+                    {card.subtitle}
+                  </p>
+                  <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href={card.primaryHref}
+                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${card.focusColor}`}
+                    >
+                      {card.primaryLabel}
+                    </Link>
+                    <Link
+                      href={card.secondaryHref}
+                      className={`flex-1 rounded-md bg-white px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${card.focusColor}`}
+                    >
+                      {card.secondaryLabel}
+                    </Link>
+                  </div>
                 </div>
-                <Heading level={3} className="text-xl sm:text-2xl font-bold text-gray-900">{card.title}</Heading>
-                <p className="mt-2 text-base text-gray-600 flex-1">
-                  {card.subtitle}
-                </p>
-                <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                  <Link
-                    href={card.primaryHref}
-                    className={`flex-1 rounded-md ${card.primaryColor} px-4 py-3 text-base font-semibold text-white text-center shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
-                  >
-                    {card.primaryLabel}
-                  </Link>
-                  <Link
-                    href={card.secondaryHref}
-                    className={`flex-1 rounded-md bg-white px-4 py-3 text-base font-semibold ${card.secondaryColor} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2`}
-                  >
-                    {card.secondaryLabel}
-                  </Link>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </div>
@@ -246,7 +289,7 @@ export default async function Home() {
             <div className="mt-6 text-center">
               <Link
                 href="/about/impact"
-                className="text-sm font-semibold text-green-600 hover:text-green-700"
+                className="text-sm font-semibold text-green-600 hover:text-green-700 underline underline-offset-2"
               >
                 {t('impact.moreLink')} <span aria-hidden="true">→</span>
               </Link>
@@ -259,7 +302,7 @@ export default async function Home() {
       <div className="bg-green-50 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} className="tracking-tight text-gray-900">
+            <Heading level={2} variant="site" className="tracking-tight text-gray-900">
               {t('community.heading')}
             </Heading>
             <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
@@ -268,19 +311,14 @@ export default async function Home() {
           </div>
 
           <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { icon: Users, iconBg: 'bg-green-100', iconColor: 'text-green-600', hoverColor: 'group-hover:text-green-600', title: t('community.use.title'), desc: t('community.use.desc'), href: '/auth/register', border: 'border-gray-200' },
-              { icon: Heart, iconBg: 'bg-blue-100', iconColor: 'text-blue-600', hoverColor: 'group-hover:text-blue-600', title: t('community.volunteer.title'), desc: t('community.volunteer.desc'), href: '/get-involved/volunteer', border: 'border-gray-200' },
-              { icon: Gift, iconBg: 'bg-orange-100', iconColor: 'text-orange-600', hoverColor: 'group-hover:text-orange-600', title: t('community.donate.title'), desc: t('community.donate.desc'), href: '/get-involved/donate', border: 'border-gray-200' },
-              { icon: Award, iconBg: 'bg-purple-100', iconColor: 'text-purple-600', hoverColor: 'group-hover:text-purple-600', title: t('community.membership.title'), desc: t('community.membership.desc'), href: '/mitglied-werden', border: 'border-purple-300 ring-1 ring-purple-200' },
-            ].map((item) => (
+            {communityCards.map((item) => (
               <Link
                 key={item.title}
                 href={item.href}
                 className={`bg-white rounded-xl p-6 border ${item.border} hover:shadow-md transition-shadow group`}
               >
-                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.iconBg} mb-4`} aria-hidden="true">
-                  <item.icon className={`h-5 w-5 ${item.iconColor}`} />
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
+                  <item.icon className={`h-5 w-5 ${item.badge.text}`} />
                 </div>
                 <Heading level={3} className={`text-lg font-bold text-gray-900 ${item.hoverColor} transition-colors`}>{item.title}</Heading>
                 <p className="mt-2 text-sm text-gray-600">{item.desc}</p>

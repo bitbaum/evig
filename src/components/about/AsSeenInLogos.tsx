@@ -9,7 +9,7 @@
 'use client'
 
 import Link from 'next/link'
-import { getTier1Sources } from '@/data/media-coverage'
+import { useTranslations } from 'next-intl'
 
 /**
  * Stylized media logos using text + brand colors
@@ -54,12 +54,14 @@ const MEDIA_LOGOS = [
 ]
 
 export default function AsSeenInLogos() {
+  const t = useTranslations('home.asSeenIn')
+
   return (
     <section className="py-12 sm:py-16 bg-white border-y border-gray-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <p className="text-center text-sm font-medium text-gray-500 mb-8">
-          Bekannt aus
+          {t('heading')}
         </p>
 
         {/* Logo Grid */}
@@ -99,7 +101,7 @@ export default function AsSeenInLogos() {
             href="/about/press"
             className="text-sm text-gray-500 hover:text-green-600 transition-colors"
           >
-            Alle Medienberichte ansehen →
+            {t('allCoverage')} →
           </Link>
         </div>
       </div>
@@ -112,11 +114,13 @@ export default function AsSeenInLogos() {
  * Use when you want just the logo strip
  */
 export function AsSeenInLogosMinimal() {
+  const t = useTranslations('home.asSeenIn')
+
   return (
     <div className="py-8 bg-gray-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">
-          Bekannt aus
+          {t('heading')}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
           {MEDIA_LOGOS.slice(0, 4).map((logo) => (

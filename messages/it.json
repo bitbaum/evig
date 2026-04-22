@@ -1288,6 +1288,10 @@
       "listings": "Annunci",
       "repairs": "Riparazioni",
       "workshops": "Workshop"
+    },
+    "asSeenIn": {
+      "heading": "Come visto in",
+      "allCoverage": "Vedi tutta la copertura mediatica"
     }
   },
   "itHelp": {

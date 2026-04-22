@@ -80,7 +80,9 @@ export function NewsletterSignup({
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row sm:items-start">
+        <label htmlFor="newsletter-name" className="sr-only">{t('namePlaceholder')}</label>
         <input
+          id="newsletter-name"
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
@@ -91,7 +93,9 @@ export function NewsletterSignup({
               : 'border-gray-300 bg-white text-gray-900'
           } sm:max-w-[140px]`}
         />
+        <label htmlFor="newsletter-email" className="sr-only">{t('emailPlaceholder')}</label>
         <input
+          id="newsletter-email"
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}

@@ -1288,6 +1288,10 @@
       "listings": "판매 목록",
       "repairs": "수리",
       "workshops": "워크숍"
+    },
+    "asSeenIn": {
+      "heading": "언론 보도",
+      "allCoverage": "모든 미디어 보도 보기"
     }
   },
   "itHelp": {
