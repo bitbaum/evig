@@ -174,12 +174,18 @@ function SearchResults({
   query,
   goToShopLabel,
   allShopOptionsLabel,
+  noResultsLabel,
+  noResultsHintLabel,
+  foundCountLabel,
 }: {
   products: InventoryProduct[];
   total: number;
   query: string;
   goToShopLabel: string;
   allShopOptionsLabel: string;
+  noResultsLabel: string;
+  noResultsHintLabel: string;
+  foundCountLabel: string;
 }) {
   if (products.length === 0) {
     return (
@@ -189,9 +195,9 @@ function SearchResults({
             <Search className="w-8 h-8" />
           </div>
           <Heading level={2} className="text-xl font-semibold text-gray-900 mb-2">
-            Keine Produkte gefunden für &ldquo;{query}&rdquo;
+            {noResultsLabel}
           </Heading>
-          <p className="text-gray-600 mb-6">Versuche einen anderen Suchbegriff oder stöbere in den Kategorien.</p>
+          <p className="text-gray-600 mb-6">{noResultsHintLabel}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/marketplace"
@@ -215,7 +221,7 @@ function SearchResults({
 
   return (
     <div>
-      <p className="text-sm text-gray-500 mb-4">{total} Produkt{total !== 1 ? 'e' : ''} gefunden</p>
+      <p className="text-sm text-gray-500 mb-4">{foundCountLabel}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -348,6 +354,9 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
             query={query}
             goToShopLabel={t("search.goToShop")}
             allShopOptionsLabel={t("search.allShopOptions")}
+            noResultsLabel={t("search.noResultsForQuery", { query })}
+            noResultsHintLabel={t("search.noResultsHint")}
+            foundCountLabel={t("search.foundCount", { count: searchResult.total })}
           />
         ) : (
           <NoQueryState

@@ -8,6 +8,7 @@ import {
 import { REPORT_REASONS } from '@/config/marketplace'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl'
 
 interface ReportModalProps {
   reportReason: string
@@ -30,13 +31,14 @@ export function ReportModal({
   onReport,
   onClose,
 }: ReportModalProps) {
+  const t = useTranslations('marketplace.report_modal')
   return (
-    <Modal isOpen={true} onClose={onClose} title="Inserat melden" size="sm">
+    <Modal isOpen={true} onClose={onClose} title={t('title')} size="sm">
       {reportSent ? (
         <div className="text-center py-4">
           <Check className="w-12 h-12 text-green-500 mx-auto mb-3" aria-hidden="true" />
-          <p className="text-green-700 dark:text-green-400 font-medium">Meldung wurde gesendet</p>
-          <p className="text-sm text-gray-500 mt-1">Vielen Dank für Ihre Mithilfe.</p>
+          <p className="text-green-700 dark:text-green-400 font-medium">{t('sent')}</p>
+          <p className="text-sm text-gray-500 mt-1">{t('sentThanks')}</p>
         </div>
       ) : (
         <>
@@ -65,7 +67,7 @@ export function ReportModal({
           <textarea
             value={reportDetails}
             onChange={e => onReportDetailsChange(e.target.value)}
-            placeholder="Zusätzliche Details (optional)"
+            placeholder={t('detailsPlaceholder')}
             rows={3}
             className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none mb-4"
           />
@@ -80,7 +82,7 @@ export function ReportModal({
             ) : (
               <Flag className="w-4 h-4" aria-hidden="true" />
             )}
-            Melden
+            {t('submit')}
           </Button>
         </>
       )}

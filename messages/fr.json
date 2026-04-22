@@ -335,7 +335,10 @@
       "popularSearches": "Recherches populaires",
       "browseByCategory": "Parcourir par catégorie",
       "productCount": "{count} produits",
-      "allCategories": "Afficher toutes les catégories →"
+      "allCategories": "Afficher toutes les catégories →",
+      "noResultsForQuery": "Aucun produit trouvé pour \"{query}\"",
+      "noResultsHint": "Essayez un autre terme de recherche ou parcourez les catégories.",
+      "foundCount": "{count, plural, one {# produit} other {# produits}} trouvé(s)"
     },
     "category": {
       "notFoundMeta": "Catégorie introuvable | Boutique {orgName}",

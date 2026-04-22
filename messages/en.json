@@ -335,7 +335,10 @@
       "popularSearches": "Popular searches",
       "browseByCategory": "Browse by category",
       "productCount": "{count} products",
-      "allCategories": "View all categories →"
+      "allCategories": "View all categories →",
+      "noResultsForQuery": "No products found for \"{query}\"",
+      "noResultsHint": "Try a different search term or browse the categories.",
+      "foundCount": "{count, plural, one {# product} other {# products}} found"
     },
     "category": {
       "notFoundMeta": "Category not found | {orgName} Shop",

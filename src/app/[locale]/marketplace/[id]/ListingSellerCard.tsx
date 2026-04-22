@@ -9,6 +9,7 @@ import {
   Shield,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import type { ListingDetail } from './types'
 
 interface ListingSellerCardProps {
@@ -17,16 +18,17 @@ interface ListingSellerCardProps {
 }
 
 export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProps) {
+  const t = useTranslations('marketplace.listing')
   return (
     <Link
       href={`/sellers/${listing.seller_id}`}
       className="block bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md hover:ring-1 hover:ring-green-200 dark:hover:ring-green-800 transition-all focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
     >
-      <Heading level={3} className="text-sm text-gray-900 dark:text-white mb-3">Verkäufer</Heading>
+      <Heading level={3} className="text-sm text-gray-900 dark:text-white mb-3">{t('seller')}</Heading>
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
           {listing.seller_avatar_url ? (
-            <Image src={listing.seller_avatar_url} alt="Verkäufer" width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
+            <Image src={listing.seller_avatar_url} alt={t('seller')} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
           ) : (
             <User className="w-5 h-5 text-green-600" aria-hidden="true" />
           )}
@@ -45,7 +47,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
               </span>
             )}
             {listing.seller_total_sold != null && Number(listing.seller_total_sold) > 0 && (
-              <span>{listing.seller_total_sold} verkauft</span>
+              <span>{t('sold', { count: listing.seller_total_sold })}</span>
             )}
             {listing.seller_city && (
               <span className="flex items-center gap-0.5">

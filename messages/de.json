@@ -425,7 +425,10 @@
       "popularSearches": "Beliebte Suchen",
       "browseByCategory": "Nach Kategorie stöbern",
       "productCount": "{count} Produkte",
-      "allCategories": "Alle Kategorien anzeigen →"
+      "allCategories": "Alle Kategorien anzeigen →",
+      "noResultsForQuery": "Keine Produkte gefunden für \"{query}\"",
+      "noResultsHint": "Versuche einen anderen Suchbegriff oder stöbere in den Kategorien.",
+      "foundCount": "{count, plural, one {# Produkt} other {# Produkte}} gefunden"
     },
     "category": {
       "notFoundMeta": "Kategorie nicht gefunden | {orgName} Shop",
