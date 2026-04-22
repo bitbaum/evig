@@ -140,7 +140,8 @@
     "workshops": {
       "description": "Une erreur est survenue lors du chargement des ateliers.",
       "back": "Retour aux ateliers"
-    }
+    },
+    "irreversible": "Cette action ne peut pas être annulée."
   },
   "footer": {
     "tagline": "Ancien matériel. Nouvelle vie.",
@@ -417,7 +418,25 @@
       "saveError": "Erreur lors de l'enregistrement",
       "createError": "Erreur lors de la création",
       "unexpectedError": "Une erreur inattendue s'est produite",
-      "aiPlaceholder": "ex. \"ThinkPad T480, 16 Go RAM, bon état, prix CHF 400\""
+      "aiPlaceholder": "ex. \"ThinkPad T480, 16 Go RAM, bon état, prix CHF 400\"",
+      "imagesLabel": "Images",
+      "mainImage": "Image principale",
+      "preview": {
+        "backToEdit": "Retour à la modification",
+        "title": "Aperçu",
+        "subtitle": "Voici comment votre annonce apparaîtra dans la marketplace.",
+        "imageAlt": "Image {n}",
+        "brand": "Marque",
+        "model": "Modèle",
+        "delivery": "Livraison",
+        "payment": "Paiement",
+        "location": "Lieu",
+        "description": "Description",
+        "saving": "Enregistrement...",
+        "publishing": "Publication...",
+        "saveChanges": "Enregistrer les modifications",
+        "publish": "Publier l'annonce"
+      }
     },
     "filters": {
       "all": "Tous",
@@ -1732,7 +1751,16 @@
       "level": "Niveau",
       "dates": "Dates",
       "datesAvailable": "{count} disponible(s)",
-      "reviews": "Avis"
+      "reviews": "Avis",
+      "loginHeading": "S'inscrire à l'atelier",
+      "loginPrompt": "Veuillez vous connecter pour vous inscrire à cet atelier.",
+      "successHeading": "Inscription à l'atelier",
+      "successTitle": "Inscription réussie !",
+      "successPayment": "Votre paiement a été traité avec succès.",
+      "successRegistered": "Vous êtes inscrit à cet atelier.",
+      "successDashboard": "Consultez les détails dans votre tableau de bord.",
+      "invoiceNumber": "Numéro de facture : {number}",
+      "dashboardLink": "Aller au tableau de bord"
     },
     "propose": {
       "meta": {

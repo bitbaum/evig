@@ -9,6 +9,7 @@
 
 import { useEffect, useCallback, type ReactNode } from 'react'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 
 const SIZE_CLASSES = {
@@ -35,6 +36,7 @@ export function Modal({
   className = '',
   size = 'md',
 }: ModalProps) {
+  const t = useTranslations('common')
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -74,7 +76,7 @@ export function Modal({
             <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-              aria-label="Schliessen"
+              aria-label={t('close')}
             >
               <X className="w-5 h-5" />
             </button>

@@ -8,6 +8,7 @@
  */
 
 import { Loader2, AlertTriangle, CheckCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Modal } from '@/components/ui/Modal'
 
@@ -53,14 +54,18 @@ export function ConfirmDialog({
   title,
   message,
   itemName,
-  confirmLabel = 'Bestätigen',
-  cancelLabel = 'Abbrechen',
+  confirmLabel,
+  cancelLabel,
   isLoading = false,
   error = null,
   variant = 'danger',
   onConfirm,
   onClose,
 }: ConfirmDialogProps) {
+  const tCommon = useTranslations('common')
+  const tErrors = useTranslations('errors')
+  const effectiveConfirmLabel = confirmLabel ?? tCommon('confirm')
+  const effectiveCancelLabel = cancelLabel ?? tCommon('cancel')
   const styles = VARIANT_STYLES[variant]
 
   return (
@@ -98,7 +103,7 @@ export function ConfirmDialog({
         )}
         {variant === 'danger' && (
           <p className="mt-3 text-sm text-red-600 dark:text-red-400">
-            Diese Aktion kann nicht rückgängig gemacht werden.
+            {tErrors('irreversible')}
           </p>
         )}
       </div>
@@ -106,7 +111,7 @@ export function ConfirmDialog({
       {/* Actions */}
       <div className="flex justify-end gap-3">
         <Button onClick={onClose} disabled={isLoading} variant="ghost" size="sm">
-          {cancelLabel}
+          {effectiveCancelLabel}
         </Button>
         <Button
           onClick={onConfirm}
@@ -115,7 +120,7 @@ export function ConfirmDialog({
           className={`${styles.button} gap-2`}
         >
           {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-          {confirmLabel}
+          {effectiveConfirmLabel}
         </Button>
       </div>
     </Modal>

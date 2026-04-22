@@ -230,7 +230,8 @@
     "workshops": {
       "description": "Se produjo un error al cargar los talleres.",
       "back": "Volver a los talleres"
-    }
+    },
+    "irreversible": "Esta acción no se puede deshacer."
   },
   "footer": {
     "tagline": "Hardware antiguo. Nueva vida.",
@@ -1997,7 +1998,25 @@
       "saveError": "Error al guardar",
       "createError": "Error al crear",
       "unexpectedError": "Se ha producido un error inesperado",
-      "aiPlaceholder": "p.ej. \"ThinkPad T480, 16GB RAM, buen estado, precio CHF 400\""
+      "aiPlaceholder": "p.ej. \"ThinkPad T480, 16GB RAM, buen estado, precio CHF 400\"",
+      "imagesLabel": "Imágenes",
+      "mainImage": "Imagen principal",
+      "preview": {
+        "backToEdit": "Volver a editar",
+        "title": "Vista previa",
+        "subtitle": "Así se verá tu anuncio en el marketplace.",
+        "imageAlt": "Imagen {n}",
+        "brand": "Marca",
+        "model": "Modelo",
+        "delivery": "Entrega",
+        "payment": "Pago",
+        "location": "Ubicación",
+        "description": "Descripción",
+        "saving": "Guardando...",
+        "publishing": "Publicando...",
+        "saveChanges": "Guardar cambios",
+        "publish": "Publicar anuncio"
+      }
     },
     "listingsAvailable": "{count, plural, one {# anuncio} other {# anuncios}} disponible{count, plural, one {} other {s}}",
     "searchPlaceholder": "Portátil, monitor, smartphone...",
@@ -4506,7 +4525,16 @@
       "level": "Nivel",
       "dates": "Fechas",
       "datesAvailable": "{count} disponibles",
-      "reviews": "Reseñas"
+      "reviews": "Reseñas",
+      "loginHeading": "Registrarse al taller",
+      "loginPrompt": "Por favor, inicia sesión para registrarte en este taller.",
+      "successHeading": "Inscripción al taller",
+      "successTitle": "¡Registrado con éxito!",
+      "successPayment": "Tu pago ha sido procesado con éxito.",
+      "successRegistered": "Estás registrado en este taller.",
+      "successDashboard": "Encuentra los detalles en tu panel.",
+      "invoiceNumber": "Número de factura: {number}",
+      "dashboardLink": "Ir al panel"
     },
     "propose": {
       "meta": {

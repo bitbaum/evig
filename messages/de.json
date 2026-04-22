@@ -230,7 +230,8 @@
     "workshops": {
       "description": "Beim Laden der Workshops ist ein Fehler aufgetreten.",
       "back": "Zurück zu Workshops"
-    }
+    },
+    "irreversible": "Diese Aktion kann nicht rückgängig gemacht werden."
   },
   "footer": {
     "tagline": "Alte Hardware. Neues Leben.",
@@ -507,7 +508,25 @@
       "saveError": "Fehler beim Speichern",
       "createError": "Fehler beim Erstellen",
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
-      "aiPlaceholder": "z.B. \"ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF\""
+      "aiPlaceholder": "z.B. \"ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF\"",
+      "imagesLabel": "Bilder",
+      "mainImage": "Hauptbild",
+      "preview": {
+        "backToEdit": "Zurück zur Bearbeitung",
+        "title": "Vorschau",
+        "subtitle": "So wird dein Inserat im Marketplace angezeigt.",
+        "imageAlt": "Bild {n}",
+        "brand": "Marke",
+        "model": "Modell",
+        "delivery": "Lieferung",
+        "payment": "Zahlung",
+        "location": "Standort",
+        "description": "Beschreibung",
+        "saving": "Wird gespeichert...",
+        "publishing": "Wird veröffentlicht...",
+        "saveChanges": "Änderungen speichern",
+        "publish": "Inserat veröffentlichen"
+      }
     },
     "listingsAvailable": "{count, plural, one {# Inserat} other {# Inserate}} verfügbar",
     "searchPlaceholder": "Laptop, Monitor, Smartphone...",
@@ -1822,7 +1841,16 @@
       "level": "Level",
       "dates": "Termine",
       "datesAvailable": "{count} verfügbar",
-      "reviews": "Bewertungen"
+      "reviews": "Bewertungen",
+      "loginHeading": "Für Workshop anmelden",
+      "loginPrompt": "Bitte melde dich an, um dich für diesen Workshop anzumelden.",
+      "successHeading": "Workshop-Anmeldung",
+      "successTitle": "Erfolgreich angemeldet!",
+      "successPayment": "Deine Zahlung wurde erfolgreich verarbeitet.",
+      "successRegistered": "Du bist für diesen Workshop angemeldet.",
+      "successDashboard": "Details findest du in deinem Dashboard.",
+      "invoiceNumber": "Rechnungsnummer: {number}",
+      "dashboardLink": "Zum Dashboard"
     },
     "propose": {
       "meta": {

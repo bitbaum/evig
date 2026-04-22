@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import { ArrowLeft, Eye, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { formatCHF, DELIVERY_LABELS, PAYMENT_MODE_LABELS } from '@/config/marketplace'
@@ -18,6 +21,8 @@ interface Props {
 }
 
 export function ListingPreview({ formData, editId, isSubmitting, success, error, onEdit, onSubmit }: Props) {
+  const t = useTranslations('marketplace.sell.preview')
+  const tCommon = useTranslations('common')
   const conditionLabel = ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label || formData.condition
 
   return (
@@ -27,17 +32,17 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
-        Zurück zur Bearbeitung
+        {t('backToEdit')}
       </button>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
           <Heading level={1} className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <Eye className="w-5 h-5" />
-            Vorschau
+            {t('title')}
           </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            So wird dein Inserat im Marketplace angezeigt.
+            {t('subtitle')}
           </p>
         </div>
 
@@ -45,7 +50,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
           {formData.images.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {formData.images.map((url, idx) => (
-                <Image key={idx} src={url} alt={`Bild ${idx + 1}`} width={200} height={200} className="w-full aspect-square object-cover rounded-lg" />
+                <Image key={idx} src={url} alt={t('imageAlt', { n: idx + 1 })} width={200} height={200} className="w-full aspect-square object-cover rounded-lg" />
               ))}
             </div>
           )}
@@ -60,16 +65,16 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
               </div>
             </div>
             <div className="space-y-2 text-sm">
-              {formData.brand && <div className="flex justify-between"><span className="text-gray-500">Marke</span><span>{formData.brand}</span></div>}
-              {formData.model && <div className="flex justify-between"><span className="text-gray-500">Modell</span><span>{formData.model}</span></div>}
-              <div className="flex justify-between"><span className="text-gray-500">Lieferung</span><span>{DELIVERY_LABELS[formData.deliveryOptions as DeliveryOption]}</span></div>
-              <div className="flex justify-between"><span className="text-gray-500">Zahlung</span><span>{PAYMENT_MODE_LABELS[formData.paymentMode as PaymentMode]}</span></div>
-              {formData.pickupLocation && <div className="flex justify-between"><span className="text-gray-500">Standort</span><span>{formData.pickupLocation}</span></div>}
+              {formData.brand && <div className="flex justify-between"><span className="text-gray-500">{t('brand')}</span><span>{formData.brand}</span></div>}
+              {formData.model && <div className="flex justify-between"><span className="text-gray-500">{t('model')}</span><span>{formData.model}</span></div>}
+              <div className="flex justify-between"><span className="text-gray-500">{t('delivery')}</span><span>{DELIVERY_LABELS[formData.deliveryOptions as DeliveryOption]}</span></div>
+              <div className="flex justify-between"><span className="text-gray-500">{t('payment')}</span><span>{PAYMENT_MODE_LABELS[formData.paymentMode as PaymentMode]}</span></div>
+              {formData.pickupLocation && <div className="flex justify-between"><span className="text-gray-500">{t('location')}</span><span>{formData.pickupLocation}</span></div>}
             </div>
           </div>
 
           <div>
-            <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">Beschreibung</Heading>
+            <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2">{t('description')}</Heading>
             <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line text-sm">{formData.description}</p>
           </div>
         </div>
@@ -79,7 +84,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
             onClick={onEdit}
             className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
-            Bearbeiten
+            {tCommon('edit')}
           </button>
           <Button
             onClick={onSubmit}
@@ -89,10 +94,10 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
             {isSubmitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                {editId ? 'Wird gespeichert...' : 'Wird veröffentlicht...'}
+                {editId ? t('saving') : t('publishing')}
               </>
             ) : (
-              editId ? 'Änderungen speichern' : 'Inserat veröffentlichen'
+              editId ? t('saveChanges') : t('publish')
             )}
           </Button>
         </div>

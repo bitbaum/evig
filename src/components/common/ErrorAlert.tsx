@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * ErrorAlert Component
  *
@@ -6,6 +8,7 @@
  */
 
 import { AlertCircle, RefreshCw } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { TYPOGRAPHY, SPACING } from '@/config/ui'
 import Heading from '@/components/ui/Heading'
 
@@ -19,13 +22,16 @@ interface ErrorAlertProps {
 }
 
 export function ErrorAlert({
-  title = 'Ein Fehler ist aufgetreten',
+  title,
   message,
   onRetry,
-  retryLabel = 'Erneut versuchen',
+  retryLabel,
   variant = 'card',
   className = '',
 }: ErrorAlertProps) {
+  const t = useTranslations('errors')
+  const effectiveTitle = title ?? t('genericTitle')
+  const effectiveRetryLabel = retryLabel ?? t('retry')
   if (variant === 'inline') {
     return (
       <div className={`flex items-start gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg ${className}`}>
@@ -38,7 +44,7 @@ export function ErrorAlert({
             onClick={onRetry}
             className={`${TYPOGRAPHY.buttonSmall} text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 underline`}
           >
-            {retryLabel}
+            {effectiveRetryLabel}
           </button>
         )}
       </div>
@@ -51,7 +57,7 @@ export function ErrorAlert({
         <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
       </div>
       <Heading level={3} className={`${TYPOGRAPHY.sectionTitleSmall} text-gray-900 dark:text-gray-100 mb-2`}>
-        {title}
+        {effectiveTitle}
       </Heading>
       <p className={`${TYPOGRAPHY.body} text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto`}>
         {message}
@@ -62,7 +68,7 @@ export function ErrorAlert({
           className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${TYPOGRAPHY.button} bg-red-600 text-white hover:bg-red-700 transition-colors`}
         >
           <RefreshCw className="w-4 h-4" />
-          {retryLabel}
+          {effectiveRetryLabel}
         </button>
       )}
     </div>

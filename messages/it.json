@@ -230,7 +230,8 @@
     "workshops": {
       "description": "Si è verificato un errore durante il caricamento dei workshop.",
       "back": "Torna ai workshop"
-    }
+    },
+    "irreversible": "Questa azione non può essere annullata."
   },
   "footer": {
     "tagline": "Hardware vecchio. Nuova vita.",
@@ -1997,7 +1998,25 @@
       "saveError": "Errore nel salvataggio",
       "createError": "Errore nella creazione",
       "unexpectedError": "Si è verificato un errore imprevisto",
-      "aiPlaceholder": "es. \"ThinkPad T480, 16GB RAM, buone condizioni, prezzo CHF 400\""
+      "aiPlaceholder": "es. \"ThinkPad T480, 16GB RAM, buone condizioni, prezzo CHF 400\"",
+      "imagesLabel": "Immagini",
+      "mainImage": "Immagine principale",
+      "preview": {
+        "backToEdit": "Torna alla modifica",
+        "title": "Anteprima",
+        "subtitle": "Ecco come apparirà il tuo annuncio nel marketplace.",
+        "imageAlt": "Immagine {n}",
+        "brand": "Marca",
+        "model": "Modello",
+        "delivery": "Consegna",
+        "payment": "Pagamento",
+        "location": "Posizione",
+        "description": "Descrizione",
+        "saving": "Salvataggio...",
+        "publishing": "Pubblicazione...",
+        "saveChanges": "Salva modifiche",
+        "publish": "Pubblica annuncio"
+      }
     },
     "listingsAvailable": "{count, plural, one {# annuncio} other {# annunci}} disponibili",
     "searchPlaceholder": "Laptop, monitor, smartphone...",
@@ -4506,7 +4525,16 @@
       "level": "Livello",
       "dates": "Date",
       "datesAvailable": "{count} disponibili",
-      "reviews": "Recensioni"
+      "reviews": "Recensioni",
+      "loginHeading": "Iscriversi al workshop",
+      "loginPrompt": "Accedi per iscriverti a questo workshop.",
+      "successHeading": "Iscrizione al workshop",
+      "successTitle": "Iscrizione riuscita!",
+      "successPayment": "Il tuo pagamento è stato elaborato con successo.",
+      "successRegistered": "Sei iscritto a questo workshop.",
+      "successDashboard": "Trovi i dettagli nella tua dashboard.",
+      "invoiceNumber": "Numero fattura: {number}",
+      "dashboardLink": "Vai alla dashboard"
     },
     "propose": {
       "meta": {

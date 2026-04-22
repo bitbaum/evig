@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { X, Loader2, ImagePlus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 
 interface Props {
@@ -11,11 +12,13 @@ interface Props {
 
 export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations('marketplace.sell')
+  const tCommon = useTranslations('common')
 
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        Bilder <span className="text-xs text-gray-500 ml-1">(optional, {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
+        {t('imagesLabel')} <span className="text-xs text-gray-500 ml-1">({tCommon('optional')}, {images.length}/{MARKETPLACE_LIMITS.MAX_IMAGES})</span>
       </label>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
@@ -29,7 +32,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
             </button>
             {idx === 0 && (
               <span className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/50 text-white text-xs rounded">
-                Hauptbild
+                {t('mainImage')}
               </span>
             )}
           </div>
@@ -45,7 +48,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
             ) : (
               <>
                 <ImagePlus className="w-6 h-6" />
-                <span className="text-xs">Hochladen</span>
+                <span className="text-xs">{tCommon('upload')}</span>
               </>
             )}
           </button>
