@@ -3694,6 +3694,12 @@
         "noResultsTitle": "No se encontraron alternativas",
         "noResultsMessage": "Sin resultados para «{query}». Prueba otro término de búsqueda o elimina el filtro de categoría.",
         "clearSearch": "Limpiar búsqueda"
+      },
+      "cta": {
+        "title": "Te ayudamos con la transición",
+        "itHilfeLink": "Solicitar ayuda TI",
+        "workshopAvailable": "Taller disponible",
+        "workshopLink": "Ver taller"
       }
     },
     "repair": {

@@ -2,19 +2,21 @@ import Link from 'next/link'
 import { Wrench, GraduationCap } from 'lucide-react'
 import { type OSSAlternative } from '@/config/open-source-registry'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 interface RevampITServicesCTAProps {
   alternative: OSSAlternative
 }
 
 export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
+  const t = useTranslations('services.openSourceSolutions.cta')
   const services = alternative.revampitServices
   if (!services) return null
 
   return (
     <div className="rounded-xl border-2 border-blue-200 bg-blue-50 p-5">
       <Heading level={3} className="text-base font-bold text-blue-900 mb-3">
-        Wir helfen beim Umstieg
+        {t('title')}
       </Heading>
 
       {services.itHilfeNote && (
@@ -26,7 +28,7 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
               href="/services/it-hilfe"
               className="text-sm font-medium text-blue-700 hover:text-blue-900 underline"
             >
-              IT-Hilfe anfragen
+              {t('itHilfeLink')}
             </Link>
           </div>
         </div>
@@ -36,12 +38,12 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
         <div className="flex items-start gap-3">
           <GraduationCap className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-blue-800">Passender Workshop verfügbar</p>
+            <p className="text-sm text-blue-800">{t('workshopAvailable')}</p>
             <Link
               href={`/workshops/${services.workshopSlug}`}
               className="text-sm font-medium text-blue-700 hover:text-blue-900 underline"
             >
-              Workshop ansehen
+              {t('workshopLink')}
             </Link>
           </div>
         </div>

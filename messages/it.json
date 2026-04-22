@@ -3694,6 +3694,12 @@
         "noResultsTitle": "Nessuna alternativa trovata",
         "noResultsMessage": "Nessun risultato per «{query}». Prova un altro termine di ricerca o rimuovi il filtro categoria.",
         "clearSearch": "Cancella ricerca"
+      },
+      "cta": {
+        "title": "Ti aiutiamo con la transizione",
+        "itHilfeLink": "Richiedi assistenza IT",
+        "workshopAvailable": "Workshop disponibile",
+        "workshopLink": "Vedi workshop"
       }
     },
     "repair": {

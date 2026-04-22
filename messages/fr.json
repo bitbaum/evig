@@ -1313,6 +1313,12 @@
         "noResultsTitle": "Aucune alternative trouvée",
         "noResultsMessage": "Aucun résultat pour «{query}». Essayez un autre terme de recherche ou supprimez le filtre de catégorie.",
         "clearSearch": "Effacer la recherche"
+      },
+      "cta": {
+        "title": "Nous aidons avec la transition",
+        "itHilfeLink": "Demander de l'aide TI",
+        "workshopAvailable": "Atelier disponible",
+        "workshopLink": "Voir l'atelier"
       }
     },
     "repair": {

@@ -3694,6 +3694,12 @@
         "noResultsTitle": "대안을 찾을 수 없습니다",
         "noResultsMessage": "«{query}»에 대한 결과가 없습니다. 다른 검색어를 시도하거나 카테고리 필터를 제거하세요.",
         "clearSearch": "검색 초기화"
+      },
+      "cta": {
+        "title": "전환을 도와드립니다",
+        "itHilfeLink": "IT 도움 요청",
+        "workshopAvailable": "관련 워크숍 이용 가능",
+        "workshopLink": "워크숍 보기"
       }
     },
     "repair": {

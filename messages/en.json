@@ -1313,6 +1313,12 @@
         "noResultsTitle": "No alternatives found",
         "noResultsMessage": "No results for «{query}». Try a different search term or remove the category filter.",
         "clearSearch": "Clear search"
+      },
+      "cta": {
+        "title": "We help with the transition",
+        "itHilfeLink": "Request IT help",
+        "workshopAvailable": "Matching workshop available",
+        "workshopLink": "View workshop"
       }
     },
     "repair": {

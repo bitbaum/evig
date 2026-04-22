@@ -1403,6 +1403,12 @@
         "noResultsTitle": "Keine Alternativen gefunden",
         "noResultsMessage": "Keine Ergebnisse für «{query}». Versuche einen anderen Suchbegriff oder entferne den Kategoriefilter.",
         "clearSearch": "Suche zurücksetzen"
+      },
+      "cta": {
+        "title": "Wir helfen beim Umstieg",
+        "itHilfeLink": "IT-Hilfe anfragen",
+        "workshopAvailable": "Passender Workshop verfügbar",
+        "workshopLink": "Workshop ansehen"
       }
     },
     "repair": {

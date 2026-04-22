@@ -3694,6 +3694,12 @@
         "noResultsTitle": "代替が見つかりません",
         "noResultsMessage": "「{query}」の結果がありません。別の検索語を試すか、カテゴリフィルターを削除してください。",
         "clearSearch": "検索をクリア"
+      },
+      "cta": {
+        "title": "移行をサポートします",
+        "itHilfeLink": "ITサポートを依頼する",
+        "workshopAvailable": "関連ワークショップあり",
+        "workshopLink": "ワークショップを見る"
       }
     },
     "repair": {
