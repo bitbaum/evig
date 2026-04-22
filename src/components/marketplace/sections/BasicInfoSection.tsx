@@ -1,14 +1,7 @@
-/**
- * BasicInfoSection Component
- * 
- * Form section for basic product information
- * 
- * Created: 2025-12-17
- * Last Modified: 2025-12-17
- * Last Modified Summary: Extracted from ProductListingForm
- */
+'use client'
 
 import { DollarSign } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { ProductFormData, ProductListingErrors } from '../types'
 import { PRODUCT_CATEGORIES } from '../constants'
 import { cn } from '@/lib/utils'
@@ -22,16 +15,18 @@ interface BasicInfoSectionProps {
 }
 
 export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoSectionProps) {
+  const t = useTranslations('marketplace.sell.basicInfo')
+
   return (
     <div className="space-y-6">
       <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
-        Grundinformationen
+        {t('heading')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
-            Produkt-Titel *
+            {t('titleLabel')} *
           </label>
           <input
             type="text"
@@ -44,7 +39,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
               "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
               errors.title ? "border-error-300" : "border-neutral-300"
             )}
-            placeholder="z.B. Dell Latitude E7470 Laptop"
+            placeholder={t('titlePlaceholder')}
           />
           {errors.title && (
             <p id="title-error" className="text-error-600 text-sm mt-1">{errors.title}</p>
@@ -53,7 +48,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
 
         <div>
           <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
-            Preis (CHF) *
+            {t('priceLabel')} *
           </label>
           <div className="relative">
             <DollarSign className="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -81,7 +76,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
 
       <div>
         <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
-          Beschreibung *
+          {t('descriptionLabel')} *
         </label>
         <textarea
           value={formData.description}
@@ -94,7 +89,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
             "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
             errors.description ? "border-error-300" : "border-neutral-300"
           )}
-          placeholder="Beschreibe den Zustand, Ausstattung, eventuelle Mängel und alle wichtigen Details..."
+          placeholder={t('descriptionPlaceholder')}
         />
         {errors.description && (
           <p id="description-error" className="text-error-600 text-sm mt-1">{errors.description}</p>
@@ -104,7 +99,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
-            Kategorie *
+            {t('categoryLabel')} *
           </label>
           <select
             value={formData.category}
@@ -117,7 +112,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
               errors.category ? "border-error-300" : "border-neutral-300"
             )}
           >
-            <option value="">Kategorie wählen</option>
+            <option value="">{t('categoryDefault')}</option>
             {PRODUCT_CATEGORIES.map(category => (
               <option key={category.value} value={category.value}>{category.label}</option>
             ))}
@@ -129,20 +124,20 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
 
         <div>
           <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
-            Marke
+            {t('brandLabel')}
           </label>
           <input
             type="text"
             value={formData.brand}
             onChange={(e) => onFieldChange('brand', e.target.value)}
             className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-            placeholder="z.B. Dell, Apple, Lenovo"
+            placeholder={t('brandPlaceholder')}
           />
         </div>
 
         <div>
           <label className={cn('block text-sm font-medium mb-2', getTextColor('white', 'secondary'))}>
-            Standort *
+            {t('locationLabel')} *
           </label>
           <input
             type="text"
@@ -155,7 +150,7 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
               "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500",
               errors.location ? "border-error-300" : "border-neutral-300"
             )}
-            placeholder="z.B. Zürich, Bern, Basel"
+            placeholder={t('locationPlaceholder')}
           />
           {errors.location && (
             <p id="location-error" className="text-error-600 text-sm mt-1">{errors.location}</p>
@@ -165,6 +160,3 @@ export function BasicInfoSection({ formData, errors, onFieldChange }: BasicInfoS
     </div>
   )
 }
-
-
-

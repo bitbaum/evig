@@ -560,6 +560,20 @@
         "shippingCost": "Versandkosten (CHF)",
         "pickupLocation": "Abholstandort",
         "locationPlaceholder": "z.B. Zürich, 8005"
+      },
+      "basicInfo": {
+        "heading": "Grundinformationen",
+        "titleLabel": "Produkt-Titel",
+        "titlePlaceholder": "z.B. Dell Latitude E7470 Laptop",
+        "priceLabel": "Preis (CHF)",
+        "descriptionLabel": "Beschreibung",
+        "descriptionPlaceholder": "Beschreibe den Zustand, Ausstattung, eventuelle Mängel und alle wichtigen Details...",
+        "categoryLabel": "Kategorie",
+        "categoryDefault": "Kategorie wählen",
+        "brandLabel": "Marke",
+        "brandPlaceholder": "z.B. Dell, Apple, Lenovo",
+        "locationLabel": "Standort",
+        "locationPlaceholder": "z.B. Zürich, Bern, Basel"
       }
     },
     "listingsAvailable": "{count, plural, one {# Inserat} other {# Inserate}} verfügbar",
@@ -764,7 +778,21 @@
       "errorNoRating": "Bitte wähle eine Bewertung",
       "errorTooShort": "Bewertung muss mindestens 10 Zeichen lang sein",
       "errorSubmit": "Fehler beim Senden der Bewertung",
-      "errorGeneric": "Ein unerwarteter Fehler ist aufgetreten"
+      "errorGeneric": "Ein unerwarteter Fehler ist aufgetreten",
+      "yourRatingLabel": "Deine Bewertung",
+      "starAriaLabel": "{stars} Sterne",
+      "ratingDisplay": "{rating} von 5",
+      "yourCommentLabel": "Dein Kommentar",
+      "orderContentPlaceholder": "Wie war deine Erfahrung? Entsprach der Artikel der Beschreibung? Wie war die Kommunikation mit dem Verkäufer?",
+      "contentHint": "Mindestens 10 Zeichen, wenn du einen Kommentar schreibst.",
+      "recommendLabel": "Würdest du diesen Verkäufer empfehlen?",
+      "recommendYes": "Ja, empfehlen",
+      "recommendNo": "Eher nicht",
+      "successHeading": "Vielen Dank für deine Bewertung!",
+      "successDesc": "Deine Rückmeldung hilft der Community.",
+      "errorNoRatingOrder": "Bitte wähle eine Sternebewertung.",
+      "errorCommentTooShort": "Dein Kommentar muss mindestens 10 Zeichen enthalten oder leer bleiben.",
+      "errorSaveFailed": "Bewertung konnte nicht gespeichert werden."
     }
   },
   "services": {

@@ -446,6 +446,42 @@
         "publishing": "Publication...",
         "saveChanges": "Enregistrer les modifications",
         "publish": "Publier l'annonce"
+      },
+      "form": {
+        "title": "Titre",
+        "titlePlaceholder": "Ex. ThinkPad T480 i5 16Go 256Go SSD",
+        "description": "Description",
+        "descriptionPlaceholder": "Décrivez l'état, les spécifications et ce qui est inclus...",
+        "price": "Prix (CHF)",
+        "pricePlaceholder": "0 = Gratuit",
+        "freeNotice": "Cette annonce sera affichée comme «Gratuit»",
+        "category": "Catégorie",
+        "condition": "État",
+        "selectPlaceholder": "Choisir...",
+        "conditionHeader": "Que signifie «{condition}» pour cette catégorie ?",
+        "brand": "Marque",
+        "brandPlaceholder": "Ex. Lenovo, Dell, Apple",
+        "model": "Modèle",
+        "modelPlaceholder": "Ex. ThinkPad T480",
+        "delivery": "Livraison",
+        "payment": "Mode de paiement",
+        "shippingCost": "Frais de port (CHF)",
+        "pickupLocation": "Lieu de retrait",
+        "locationPlaceholder": "Ex. Genève, 1200"
+      },
+      "basicInfo": {
+        "heading": "Informations de base",
+        "titleLabel": "Titre du produit",
+        "titlePlaceholder": "Ex. Dell Latitude E7470 Laptop",
+        "priceLabel": "Prix (CHF)",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Décrivez l'état, les équipements, les éventuels défauts et tous les détails importants...",
+        "categoryLabel": "Catégorie",
+        "categoryDefault": "Choisir une catégorie",
+        "brandLabel": "Marque",
+        "brandPlaceholder": "Ex. Dell, Apple, Lenovo",
+        "locationLabel": "Lieu",
+        "locationPlaceholder": "Ex. Genève, Berne, Bâle"
       }
     },
     "filters": {
@@ -630,7 +666,36 @@
       "viewOrder": "Voir la commande",
       "continueShopping": "Continuer les achats"
     },
-    "loading": "Chargement du marché..."
+    "loading": "Chargement du marché...",
+    "review": {
+      "heading": "Écrire un avis",
+      "ratingLabel": "Évaluation",
+      "titleLabel": "Titre",
+      "titleOptional": "(optionnel)",
+      "titlePlaceholder": "Bref résumé",
+      "contentLabel": "Avis",
+      "contentPlaceholder": "Décrivez votre expérience...",
+      "cancelButton": "Annuler",
+      "submitButton": "Envoyer l'avis",
+      "errorNoRating": "Veuillez sélectionner une évaluation",
+      "errorTooShort": "L'avis doit comporter au moins 10 caractères",
+      "errorSubmit": "Erreur lors de l'envoi de l'avis",
+      "errorGeneric": "Une erreur inattendue s'est produite",
+      "yourRatingLabel": "Votre évaluation",
+      "starAriaLabel": "{stars} étoiles",
+      "ratingDisplay": "{rating} sur 5",
+      "yourCommentLabel": "Votre commentaire",
+      "orderContentPlaceholder": "Comment était votre expérience ? L'article correspondait-il à la description ? Comment était la communication avec le vendeur ?",
+      "contentHint": "Au moins 10 caractères si vous écrivez un commentaire.",
+      "recommendLabel": "Recommanderiez-vous ce vendeur ?",
+      "recommendYes": "Oui, je recommande",
+      "recommendNo": "Plutôt non",
+      "successHeading": "Merci pour votre avis !",
+      "successDesc": "Votre retour aide la communauté.",
+      "errorNoRatingOrder": "Veuillez choisir une note en étoiles.",
+      "errorCommentTooShort": "Votre commentaire doit contenir au moins 10 caractères ou rester vide.",
+      "errorSaveFailed": "Impossible d'enregistrer l'avis."
+    }
   },
   "services": {
     "meta": {

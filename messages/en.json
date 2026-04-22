@@ -509,6 +509,20 @@
         "shippingCost": "Shipping cost (CHF)",
         "pickupLocation": "Pickup location",
         "locationPlaceholder": "e.g. Zurich, 8005"
+      },
+      "basicInfo": {
+        "heading": "Basic Information",
+        "titleLabel": "Product title",
+        "titlePlaceholder": "e.g. Dell Latitude E7470 Laptop",
+        "priceLabel": "Price (CHF)",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Describe the condition, equipment, any defects and all important details...",
+        "categoryLabel": "Category",
+        "categoryDefault": "Choose category",
+        "brandLabel": "Brand",
+        "brandPlaceholder": "e.g. Dell, Apple, Lenovo",
+        "locationLabel": "Location",
+        "locationPlaceholder": "e.g. Zurich, Bern, Basel"
       }
     },
     "filters": {
@@ -713,7 +727,21 @@
       "errorNoRating": "Please select a rating",
       "errorTooShort": "Review must be at least 10 characters long",
       "errorSubmit": "Error submitting the review",
-      "errorGeneric": "An unexpected error occurred"
+      "errorGeneric": "An unexpected error occurred",
+      "yourRatingLabel": "Your rating",
+      "starAriaLabel": "{stars} stars",
+      "ratingDisplay": "{rating} of 5",
+      "yourCommentLabel": "Your comment",
+      "orderContentPlaceholder": "How was your experience? Did the item match the description? How was communication with the seller?",
+      "contentHint": "At least 10 characters if you write a comment.",
+      "recommendLabel": "Would you recommend this seller?",
+      "recommendYes": "Yes, recommend",
+      "recommendNo": "Not really",
+      "successHeading": "Thank you for your review!",
+      "successDesc": "Your feedback helps the community.",
+      "errorNoRatingOrder": "Please choose a star rating.",
+      "errorCommentTooShort": "Your comment must contain at least 10 characters or be left empty.",
+      "errorSaveFailed": "Review could not be saved."
     }
   },
   "services": {
