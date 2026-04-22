@@ -25,11 +25,13 @@ import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
 import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
 
 export default function EditRequestPage() {
   const { id } = useParams<{ id: string }>()
+  const t = useTranslations('itHelp.edit')
   const { data: session, status: authStatus } = useSession()
   const router = useRouter()
 
@@ -47,7 +49,7 @@ export default function EditRequestPage() {
       .then(res => res.json())
       .then(data => {
         if (!data.success) {
-          setError(data.error || 'Anfrage nicht gefunden')
+          setError(data.error || t('errorNotFound'))
           setLoading(false)
           return
         }
@@ -56,14 +58,14 @@ export default function EditRequestPage() {
 
         // Only owner can edit
         if (!r.isOwner) {
-          setError('du kannst nur deine eigenen Anfragen bearbeiten')
+          setError(t('errorNotOwner'))
           setLoading(false)
           return
         }
 
         // Only open/in_discussion requests can be edited
         if (r.status !== REQUEST_STATUS.OPEN && r.status !== REQUEST_STATUS.IN_DISCUSSION) {
-          setError('Diese Anfrage kann nicht mehr bearbeitet werden')
+          setError(t('errorNotEditable'))
           setLoading(false)
           return
         }
@@ -88,7 +90,7 @@ export default function EditRequestPage() {
       })
       .catch(err => {
         logger.error('Error fetching request for edit', { error: err })
-        setError('Fehler beim Laden der Anfrage')
+        setError(t('errorLoadFailed'))
         setLoading(false)
       })
   }, [id, authStatus])
@@ -161,13 +163,13 @@ export default function EditRequestPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Speichern')
+        throw new Error(data.error || t('errorSaveFailed'))
       }
 
       setSuccess(true)
       setTimeout(() => router.push(`/it-hilfe/${id}`), 1500)
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('errorGeneric')
       setError(message)
       logger.error('Error updating request', { error: err })
     } finally {
@@ -188,7 +190,7 @@ export default function EditRequestPage() {
       <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4">
         <p className="text-red-600">{error}</p>
         <Link href={`/it-hilfe/${id}`} className="text-blue-600 hover:underline">
-          Zurück zur Anfrage
+          {t('backToRequest')}
         </Link>
       </div>
     )
@@ -199,8 +201,8 @@ export default function EditRequestPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-          <Heading level={2} className="text-2xl text-gray-900 mb-2">Änderungen gespeichert!</Heading>
-          <p className="text-gray-600">Du wirst gleich weitergeleitet...</p>
+          <Heading level={2} className="text-2xl text-gray-900 mb-2">{t('savedTitle')}</Heading>
+          <p className="text-gray-600">{t('savedRedirect')}</p>
         </div>
       </div>
     )
@@ -216,7 +218,7 @@ export default function EditRequestPage() {
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Zurück zur Anfrage
+          {t('backToRequest')}
         </Link>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
@@ -224,10 +226,10 @@ export default function EditRequestPage() {
             <div className="p-2 bg-emerald-100 rounded-lg">
               <Wrench className="w-6 h-6 text-emerald-600" />
             </div>
-            <Heading level={1} className="text-2xl text-gray-900">Anfrage bearbeiten</Heading>
+            <Heading level={1} className="text-2xl text-gray-900">{t('title')}</Heading>
           </div>
           <p className="text-gray-600">
-            Ändere die Details deiner IT-Hilfe Anfrage.
+            {t('description')}
           </p>
         </div>
 
@@ -238,7 +240,7 @@ export default function EditRequestPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Device Category */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <Heading level={2} className="text-lg text-gray-900 mb-4">Gerätekategorie</Heading>
+            <Heading level={2} className="text-lg text-gray-900 mb-4">{t('sectionCategory')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
@@ -293,9 +295,9 @@ export default function EditRequestPage() {
 
               {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <Heading level={2} className="text-lg text-gray-900 mb-2">Budget</Heading>
+                <Heading level={2} className="text-lg text-gray-900 mb-2">{t('sectionBudget')}</Heading>
                 <p className="text-sm text-gray-600 mb-4">
-                  Was bist du maximal bereit zu zahlen? Leer lassen für kostenlose Community-Hilfe.
+                  {t('budgetDescription')}
                 </p>
                 <div className="flex items-center gap-3">
                   <span className="text-gray-500">CHF</span>
@@ -303,24 +305,24 @@ export default function EditRequestPage() {
                     type="number"
                     value={formData.maxBudget}
                     onChange={(e) => updateField('maxBudget', e.target.value)}
-                    placeholder="0 = gratis"
+                    {...{placeholder: t('budgetPlaceholder')}}
                     min="0"
                     step="5"
                     className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   />
                   <span className="text-sm text-gray-500">
-                    {!formData.maxBudget ? 'Community-Hilfe (gratis)' : `bis CHF ${formData.maxBudget}`}
+                    {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
                   </span>
                 </div>
               </div>
 
               {/* Service Type & Urgency */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <Heading level={2} className="text-lg text-gray-900 mb-4">Optionen</Heading>
+                <Heading level={2} className="text-lg text-gray-900 mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Wie soll die Reparatur erfolgen?
+                      {t('serviceTypeLabel')}
                     </label>
                     <select
                       value={formData.serviceType}
@@ -334,7 +336,7 @@ export default function EditRequestPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Wie dringend?
+                      {t('urgencyLabel')}
                     </label>
                     <select
                       value={formData.urgency}
@@ -360,7 +362,7 @@ export default function EditRequestPage() {
                   href={`/it-hilfe/${id}`}
                   className="px-6 py-3 text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                 >
-                  Abbrechen
+                  {t('cancelButton')}
                 </Link>
                 <button
                   type="submit"
@@ -368,7 +370,7 @@ export default function EditRequestPage() {
                   className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-                  {saving ? 'Wird gespeichert...' : 'Änderungen speichern'}
+                  {saving ? t('submittingButton') : t('submitButton')}
                 </button>
               </div>
             </>

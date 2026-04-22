@@ -14,6 +14,7 @@ import {
   Wrench,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import {
   getCategoryById,
   getOfferStatusById,
@@ -47,6 +48,7 @@ interface OfferWithRequest {
 export default function MyOffersPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('itHelp.myOffers')
 
   const [offers, setOffers] = useState<OfferWithRequest[]>([])
   const [loading, setLoading] = useState(true)
@@ -75,12 +77,12 @@ export default function MyOffersPage() {
         setOffers(data.data.offers)
         setTotal(data.data.total)
       } else {
-        setError(data.error || 'Angebote konnten nicht geladen werden')
+        setError(data.error || t('errorMessage'))
         logger.error('Error fetching my offers', { error: data.error })
       }
     } catch (err) {
       logger.error('Error fetching my offers', { error: err })
-      setError('Angebote konnten nicht geladen werden. Bitte lade die Seite neu.')
+      setError(t('errorRetry'))
     } finally {
       setLoading(false)
     }
@@ -93,7 +95,7 @@ export default function MyOffersPage() {
   }, [session?.user, fetchOffers])
 
   const handleWithdraw = async (offer: OfferWithRequest) => {
-    if (!confirm('Angebot wirklich zurückziehen?')) return
+    if (!confirm(t('withdrawConfirm'))) return
 
     setWithdrawingId(offer.id)
     try {
@@ -102,7 +104,7 @@ export default function MyOffersPage() {
       })
       const data = await response.json()
       if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Zurückziehen')
+        throw new Error(data.error || t('withdrawError'))
       }
       fetchOffers()
     } catch (err) {
@@ -128,9 +130,9 @@ export default function MyOffersPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl text-gray-900">Meine Angebote</Heading>
+            <Heading level={1} className="text-2xl text-gray-900">{t('title')}</Heading>
             <p className="text-gray-600 mt-1">
-              Angebote, die du für Reparaturanfragen abgegeben hast
+              {t('description')}
             </p>
           </div>
           <div className="flex gap-3">
@@ -139,14 +141,14 @@ export default function MyOffersPage() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
             >
               <FileText className="w-4 h-4" />
-              Meine Anfragen
+              {t('myRequestsButton')}
             </Link>
             <Link
               href="/it-hilfe"
               className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
             >
               <Heart className="w-4 h-4" />
-              Anfragen durchsuchen
+              {t('browseRequests')}
             </Link>
           </div>
         </div>
@@ -162,7 +164,7 @@ export default function MyOffersPage() {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Alle ({total})
+              {t('filterAll', { total })}
             </button>
             {OFFER_STATUSES.map((s) => (
               <button
@@ -192,12 +194,10 @@ export default function MyOffersPage() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
             <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <Heading level={3} className="text-xl text-gray-900 mb-2">
-              {statusFilter ? 'Keine Angebote mit diesem Status' : 'Noch keine Angebote abgegeben'}
+              {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
             </Heading>
             <p className="text-gray-600 mb-6">
-              {statusFilter
-                ? 'Versuche einen anderen Filter.'
-                : 'Durchsuche Reparaturanfragen und hilf anderen Mitgliedern der Community.'}
+              {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
             </p>
             {!statusFilter && (
               <Link
@@ -234,10 +234,10 @@ export default function MyOffersPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
-                            Angebot: {offerStatusConfig?.name || offer.status}
+                            {t('offerLabel')} {offerStatusConfig?.name || offer.status}
                           </span>
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
-                            Anfrage: {requestStatusConfig?.name || offer.request.status}
+                            {t('requestLabel')} {requestStatusConfig?.name || offer.request.status}
                           </span>
                         </div>
 
@@ -246,7 +246,7 @@ export default function MyOffersPage() {
                         </Heading>
 
                         <p className="text-sm text-gray-600 mb-3">
-                          <span className="font-medium">Dein Angebot:</span> {offer.message.slice(0, 150)}
+                          <span className="font-medium">{t('yourOffer')}</span> {offer.message.slice(0, 150)}
                           {offer.message.length > 150 && '...'}
                         </p>
 
@@ -267,7 +267,7 @@ export default function MyOffersPage() {
                             </span>
                           )}
                           <span className="text-gray-400">
-                            Angefragt von {offer.request.requesterName}
+                            {t('requestedBy', { name: offer.request.requesterName })}
                           </span>
                         </div>
                       </div>
@@ -282,7 +282,7 @@ export default function MyOffersPage() {
                         disabled={withdrawingId === offer.id}
                         className="px-4 py-2 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
                       >
-                        {withdrawingId === offer.id ? 'Wird zurückgezogen...' : 'Angebot zurückziehen'}
+                        {withdrawingId === offer.id ? t('withdrawingButton') : t('withdrawButton')}
                       </button>
                     </div>
                   )}
