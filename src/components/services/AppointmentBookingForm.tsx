@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
 import Heading from '@/components/ui/Heading'
@@ -16,6 +17,7 @@ interface AppointmentBookingFormProps {
 }
 
 export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pricing }: AppointmentBookingFormProps) {
+  const t = useTranslations('services.appointment')
   const { data: session } = useSession()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
@@ -57,7 +59,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
       if (!apiError) {
         setSubmitResult({
           success: true,
-          message: result?.message || 'Termin erfolgreich gebucht!'
+          message: result?.message || t('successFallback')
         })
         // Reset form
         setFormData({
@@ -82,7 +84,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
     } catch (error) {
       setSubmitResult({
         success: false,
-        message: 'Netzwerkfehler. Bitte versuche es erneut.'
+        message: t('networkError')
       })
     } finally {
       setIsSubmitting(false)
@@ -96,18 +98,18 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
         className="inline-block bg-primary-600 text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-300 text-base sm:text-lg mr-4 min-h-[touch] touch-target"
       >
         <Calendar className="w-5 h-5 inline mr-2" />
-        Termin buchen
+        {t('bookButton')}
       </button>
     )
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={`Termin für ${serviceTitle} buchen`}>
+    <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title={t('modalTitle', { serviceTitle })}>
           {pricing && (
             <div className="bg-info-50 border border-info-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center text-info-800">
                 <Wrench className="w-5 h-5 mr-2 flex-shrink-0" />
-                <span className="font-medium text-sm sm:text-base">Preis: {pricing}</span>
+                <span className="font-medium text-sm sm:text-base">{t('priceInfo', { pricing })}</span>
               </div>
             </div>
           )}
@@ -133,23 +135,23 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
             <div className="text-center py-6 sm:py-8">
               <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-warning-500 mx-auto mb-4" />
               <Heading level={4} className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">
-                Anmeldung erforderlich
+                {t('loginRequired')}
               </Heading>
               <p className="text-neutral-600 mb-6 text-sm sm:text-base">
-                Bitte melde sich an, um einen Termin zu buchen.
+                {t('loginDescription')}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
                   href="/auth/login"
                   className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target text-center font-medium"
                 >
-                  Anmelden
+                  {t('loginSignIn')}
                 </Link>
                 <Link
                   href="/auth/register"
                   className="border-2 border-neutral-300 text-neutral-700 px-6 py-3 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target text-center font-medium"
                 >
-                  Registrieren
+                  {t('loginRegister')}
                 </Link>
               </div>
             </div>
@@ -157,14 +159,14 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Problembeschreibung *
+                  {t('problemLabel')}
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                   rows={4}
                   className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
-                  placeholder="Beschreibe dein Problem oder deinen Bedarf so genau wie möglich..."
+                  placeholder={t('problemPlaceholder')}
                   required
                   aria-required="true"
                   aria-invalid={!!(submitResult && !submitResult.success)}
@@ -174,23 +176,23 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
 
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  Dringlichkeit
+                  {t('urgencyLabel')}
                 </label>
                 <select
                   value={formData.urgency}
                   onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value as 'normal' | 'high' | 'urgent' }))}
                   className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                 >
-                  <option value="normal">Normal - Innerhalb 1-2 Wochen</option>
-                  <option value="high">Hoch - Innerhalb weniger Tage</option>
-                  <option value="urgent">Dringend - So schnell wie möglich</option>
+                  <option value="normal">{t('urgencyNormal')}</option>
+                  <option value="high">{t('urgencyHigh')}</option>
+                  <option value="urgent">{t('urgencyUrgent')}</option>
                 </select>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Bevorzugtes Datum
+                    {t('preferredDateLabel')}
                   </label>
                   <input
                     type="date"
@@ -202,7 +204,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    Bevorzugte Zeit
+                    {t('preferredTimeLabel')}
                   </label>
                   <input
                     type="time"
@@ -217,11 +219,11 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 <div className="flex items-start">
                   <Clock className="w-5 h-5 text-neutral-500 mt-0.5 mr-3 flex-shrink-0" />
                   <div className="text-sm text-neutral-700">
-                    <p className="font-medium mb-1">Was passiert als nächstes?</p>
+                    <p className="font-medium mb-1">{t('nextStepsTitle')}</p>
                     <ul className="space-y-1 list-disc list-inside">
-                      <li>deine Anfrage wird von unserem Team geprüft</li>
-                      <li>du erhältst eine Terminbestätigung per E-Mail</li>
-                      <li>Bei Fragen kontaktieren wir dich für weitere Details</li>
+                      <li>{t('nextStep1')}</li>
+                      <li>{t('nextStep2')}</li>
+                      <li>{t('nextStep3')}</li>
                     </ul>
                   </div>
                 </div>
@@ -233,7 +235,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   onClick={() => setIsOpen(false)}
                   className="flex-1 px-4 py-3 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target font-medium"
                 >
-                  Abbrechen
+                  {t('cancelButton')}
                 </button>
                 <button
                   type="submit"
@@ -243,12 +245,12 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Wird gebucht...
+                      {t('submittingButton')}
                     </>
                   ) : (
                     <>
                       <Calendar className="w-4 h-4 mr-2" />
-                      Termin buchen
+                      {t('submitButton')}
                     </>
                   )}
                 </button>
