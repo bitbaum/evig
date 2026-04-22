@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 
 interface Props {
@@ -17,13 +20,15 @@ export function LocationSection({
   onCityChange,
   onCantonChange,
 }: Props) {
+  const t = useTranslations('itHelp.create')
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Wo bist du?</Heading>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">{t('locationHeading')}</Heading>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            PLZ
+            {t('postalCode')}
           </label>
           <input
             type="text"
@@ -35,25 +40,25 @@ export function LocationSection({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Stadt
+            {t('city')}
           </label>
           <input
             type="text"
             value={city}
             onChange={(e) => onCityChange(e.target.value)}
-            placeholder="Stadt"
+            placeholder={t('city')}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Kanton
+            {t('canton')}
           </label>
           <input
             type="text"
             value={canton}
             onChange={(e) => onCantonChange(e.target.value)}
-            placeholder="Kanton"
+            placeholder={t('canton')}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           />
         </div>

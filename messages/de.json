@@ -2416,7 +2416,20 @@
       "submittingButton": "Wird erstellt...",
       "aiPlaceholder": "z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten...",
       "errorCreateFailed": "Fehler beim Erstellen der Anfrage",
-      "errorGeneric": "Ein Fehler ist aufgetreten"
+      "errorGeneric": "Ein Fehler ist aufgetreten",
+      "problemHeading": "Beschreibe das Problem",
+      "deviceBrand": "Marke",
+      "deviceBrandPlaceholder": "z.B. Apple, Samsung, Lenovo",
+      "deviceModel": "Modell",
+      "deviceModelPlaceholder": "z.B. MacBook Pro 2020",
+      "problemTitle": "Titel",
+      "problemTitlePlaceholder": "Kurze Beschreibung",
+      "problemDescription": "Beschreibung",
+      "problemDescriptionPlaceholder": "Was ist das Problem?",
+      "locationHeading": "Wo bist du?",
+      "postalCode": "PLZ",
+      "city": "Stadt",
+      "canton": "Kanton"
     },
     "myRequests": {
       "title": "Meine Reparaturanfragen",

@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { AIFieldBadge } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
@@ -25,14 +28,16 @@ export function ProblemDetailsSection({
   onDescriptionChange,
   aiFieldMeta,
 }: Props) {
+  const t = useTranslations('itHelp.create')
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Beschreibe das Problem</Heading>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">{t('problemHeading')}</Heading>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-            Marke
+            {t('deviceBrand')}
             {aiFieldMeta.deviceBrand && (
               <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceBrand.confidence, model: aiFieldMeta.deviceBrand.model, timestamp: aiFieldMeta.deviceBrand.timestamp, inputText: '', sources: [] }} />
             )}
@@ -41,13 +46,13 @@ export function ProblemDetailsSection({
             type="text"
             value={deviceBrand}
             onChange={(e) => onDeviceBrandChange(e.target.value)}
-            placeholder="z.B. Apple, Samsung, Lenovo"
+            placeholder={t('deviceBrandPlaceholder')}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-            Modell
+            {t('deviceModel')}
             {aiFieldMeta.deviceModel && (
               <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.deviceModel.confidence, model: aiFieldMeta.deviceModel.model, timestamp: aiFieldMeta.deviceModel.timestamp, inputText: '', sources: [] }} />
             )}
@@ -56,7 +61,7 @@ export function ProblemDetailsSection({
             type="text"
             value={deviceModel}
             onChange={(e) => onDeviceModelChange(e.target.value)}
-            placeholder="z.B. MacBook Pro 2020"
+            placeholder={t('deviceModelPlaceholder')}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           />
         </div>
@@ -64,7 +69,7 @@ export function ProblemDetailsSection({
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-          Titel *
+          {t('problemTitle')} *
           {aiFieldMeta.title && (
             <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.title.confidence, model: aiFieldMeta.title.model, timestamp: aiFieldMeta.title.timestamp, inputText: '', sources: [] }} />
           )}
@@ -73,7 +78,7 @@ export function ProblemDetailsSection({
           type="text"
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
-          placeholder="Kurze Beschreibung"
+          placeholder={t('problemTitlePlaceholder')}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
         />
         <span className="text-xs text-gray-400">{title.length}/200</span>
@@ -81,7 +86,7 @@ export function ProblemDetailsSection({
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-          Beschreibung
+          {t('problemDescription')}
           {aiFieldMeta.description && (
             <AIFieldBadge source={{ type: 'text', confidence: aiFieldMeta.description.confidence, model: aiFieldMeta.description.model, timestamp: aiFieldMeta.description.timestamp, inputText: '', sources: [] }} />
           )}
@@ -89,7 +94,7 @@ export function ProblemDetailsSection({
         <textarea
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
-          placeholder="Was ist das Problem?"
+          placeholder={t('problemDescriptionPlaceholder')}
           rows={5}
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
         />

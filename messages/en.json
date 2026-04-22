@@ -2365,7 +2365,20 @@
       "submittingButton": "Creating...",
       "aiPlaceholder": "e.g. My MacBook Pro 2019 won't start, screen stays black after pressing the power button...",
       "errorCreateFailed": "Error creating the request",
-      "errorGeneric": "An error occurred"
+      "errorGeneric": "An error occurred",
+      "problemHeading": "Describe the problem",
+      "deviceBrand": "Brand",
+      "deviceBrandPlaceholder": "e.g. Apple, Samsung, Lenovo",
+      "deviceModel": "Model",
+      "deviceModelPlaceholder": "e.g. MacBook Pro 2020",
+      "problemTitle": "Title",
+      "problemTitlePlaceholder": "Brief description",
+      "problemDescription": "Description",
+      "problemDescriptionPlaceholder": "What is the problem?",
+      "locationHeading": "Where are you?",
+      "postalCode": "Postal code",
+      "city": "City",
+      "canton": "Canton"
     },
     "myRequests": {
       "title": "My Repair Requests",
