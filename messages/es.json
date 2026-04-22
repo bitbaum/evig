@@ -1659,7 +1659,15 @@
     "impact": {
       "title": "Nuestro impacto",
       "subtitle": "Lo que hemos logrado juntos",
-      "moreLink": "Más sobre nuestro impacto"
+      "moreLink": "Más sobre nuestro impacto",
+      "compactMetrics": {
+        "devicesRescued": "Dispositivos rescatados al año",
+        "peopleTrained": "Personas formadas",
+        "reuseRate": "Tasa de reutilización",
+        "lifespanExtension": "Años de vida útil extendida",
+        "internshipSuccess": "Prácticas exitosas",
+        "careerReentries": "Reinserción laboral"
+      }
     },
     "community": {
       "heading": "Únete a la comunidad",

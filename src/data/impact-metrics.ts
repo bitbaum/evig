@@ -145,14 +145,23 @@ export const IMPACT_METRICS: ImpactMetric[] = [
 // Helper functions
 // ============================================================================
 
-export function getCompactMetrics() {
+export interface CompactMetricLabels {
+  devicesRescued: string
+  peopleTrained: string
+  reuseRate: string
+  lifespanExtension: string
+  internshipSuccess: string
+  careerReentries: string
+}
+
+export function getCompactMetrics(labels: CompactMetricLabels) {
   return [
-    { value: IMPACT_METRICS.find(m => m.id === 'devices-recycled')?.value || '150+', label: 'Geräte jährlich gerettet' },
-    { value: IMPACT_METRICS.find(m => m.id === 'people-trained')?.value || '20+', label: 'Personen geschult' },
-    { value: IMPACT_METRICS.find(m => m.id === 'reuse-rate')?.value || '75%', label: 'Wiederverwendungsrate' },
-    { value: IMPACT_METRICS.find(m => m.id === 'device-lifespan')?.value || '5+', label: 'Jahre Lebensverlängerung' },
-    { value: IMPACT_METRICS.find(m => m.id === 'internship-success')?.value || '~40%', label: 'Erfolgreiche Praktika' },
-    { value: IMPACT_METRICS.find(m => m.id === 'career-reentries')?.value || '~4', label: 'Berufliche Wiedereinstiege' }
+    { value: IMPACT_METRICS.find(m => m.id === 'devices-recycled')?.value || '150+', label: labels.devicesRescued },
+    { value: IMPACT_METRICS.find(m => m.id === 'people-trained')?.value || '20+', label: labels.peopleTrained },
+    { value: IMPACT_METRICS.find(m => m.id === 'reuse-rate')?.value || '75%', label: labels.reuseRate },
+    { value: IMPACT_METRICS.find(m => m.id === 'device-lifespan')?.value || '5+', label: labels.lifespanExtension },
+    { value: IMPACT_METRICS.find(m => m.id === 'internship-success')?.value || '~40%', label: labels.internshipSuccess },
+    { value: IMPACT_METRICS.find(m => m.id === 'career-reentries')?.value || '~4', label: labels.careerReentries }
   ]
 }
 

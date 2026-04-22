@@ -198,7 +198,15 @@
     "impact": {
       "title": "Notre impact",
       "subtitle": "Ce que nous avons accompli ensemble",
-      "moreLink": "En savoir plus sur notre impact"
+      "moreLink": "En savoir plus sur notre impact",
+      "compactMetrics": {
+        "devicesRescued": "Appareils sauvés annuellement",
+        "peopleTrained": "Personnes formées",
+        "reuseRate": "Taux de réutilisation",
+        "lifespanExtension": "Années de prolongation de vie",
+        "internshipSuccess": "Stages réussis",
+        "careerReentries": "Réinsertions professionnelles"
+      }
     },
     "community": {
       "heading": "Rejoignez la communauté",

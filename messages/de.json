@@ -288,7 +288,15 @@
     "impact": {
       "title": "Unsere Wirkung",
       "subtitle": "Was wir gemeinsam erreicht haben",
-      "moreLink": "Mehr über unsere Wirkung"
+      "moreLink": "Mehr über unsere Wirkung",
+      "compactMetrics": {
+        "devicesRescued": "Geräte jährlich gerettet",
+        "peopleTrained": "Personen geschult",
+        "reuseRate": "Wiederverwendungsrate",
+        "lifespanExtension": "Jahre Lebensverlängerung",
+        "internshipSuccess": "Erfolgreiche Praktika",
+        "careerReentries": "Berufliche Wiedereinstiege"
+      }
     },
     "community": {
       "heading": "Werde Teil der Community",

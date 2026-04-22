@@ -47,7 +47,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Home() {
   const t = await getTranslations('home')
-  const compactMetrics = getCompactMetrics()
+  const compactMetrics = getCompactMetrics({
+    devicesRescued: t('impact.compactMetrics.devicesRescued'),
+    peopleTrained: t('impact.compactMetrics.peopleTrained'),
+    reuseRate: t('impact.compactMetrics.reuseRate'),
+    lifespanExtension: t('impact.compactMetrics.lifespanExtension'),
+    internshipSuccess: t('impact.compactMetrics.internshipSuccess'),
+    careerReentries: t('impact.compactMetrics.careerReentries'),
+  })
 
   // Action cards — colors sourced from DESIGN_TOKENS (SSOT)
   const actionCards = [

@@ -198,7 +198,15 @@
     "impact": {
       "title": "Our Impact",
       "subtitle": "What we've achieved together",
-      "moreLink": "More about our impact"
+      "moreLink": "More about our impact",
+      "compactMetrics": {
+        "devicesRescued": "Devices rescued annually",
+        "peopleTrained": "People trained",
+        "reuseRate": "Reuse rate",
+        "lifespanExtension": "Years of lifespan extension",
+        "internshipSuccess": "Successful internships",
+        "careerReentries": "Career re-entries"
+      }
     },
     "community": {
       "heading": "Join the Community",

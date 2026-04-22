@@ -1659,7 +1659,15 @@
     "impact": {
       "title": "私たちの活動成果",
       "subtitle": "一緒に達成したこと",
-      "moreLink": "活動成果について詳しく"
+      "moreLink": "活動成果について詳しく",
+      "compactMetrics": {
+        "devicesRescued": "年間救済デバイス数",
+        "peopleTrained": "研修受講者数",
+        "reuseRate": "再利用率",
+        "lifespanExtension": "寿命延長年数",
+        "internshipSuccess": "インターンシップ成功率",
+        "careerReentries": "職業復帰件数"
+      }
     },
     "community": {
       "heading": "コミュニティの一員になる",

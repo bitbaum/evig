@@ -1659,7 +1659,15 @@
     "impact": {
       "title": "우리의 영향력",
       "subtitle": "함께 달성한 것들",
-      "moreLink": "영향력에 대해 더 알아보기"
+      "moreLink": "영향력에 대해 더 알아보기",
+      "compactMetrics": {
+        "devicesRescued": "연간 구제된 기기 수",
+        "peopleTrained": "교육받은 사람 수",
+        "reuseRate": "재사용률",
+        "lifespanExtension": "수명 연장 연수",
+        "internshipSuccess": "인턴십 성공률",
+        "careerReentries": "직업 복귀 건수"
+      }
     },
     "community": {
       "heading": "커뮤니티의 일원이 되세요",
