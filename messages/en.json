@@ -476,6 +476,28 @@
         "publishing": "Publishing...",
         "saveChanges": "Save changes",
         "publish": "Publish listing"
+      },
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "e.g. ThinkPad T480 i5 16GB 256GB SSD",
+        "description": "Description",
+        "descriptionPlaceholder": "Describe the condition, specs and what's included...",
+        "price": "Price (CHF)",
+        "pricePlaceholder": "0 = Free",
+        "freeNotice": "This listing will be shown as «Free»",
+        "category": "Category",
+        "condition": "Condition",
+        "selectPlaceholder": "Select...",
+        "conditionHeader": "What does «{condition}» mean for this category?",
+        "brand": "Brand",
+        "brandPlaceholder": "e.g. Lenovo, Dell, Apple",
+        "model": "Model",
+        "modelPlaceholder": "e.g. ThinkPad T480",
+        "delivery": "Delivery",
+        "payment": "Payment method",
+        "shippingCost": "Shipping cost (CHF)",
+        "pickupLocation": "Pickup location",
+        "locationPlaceholder": "e.g. Zurich, 8005"
       }
     },
     "filters": {
@@ -2526,10 +2548,9 @@
     }
   },
   "cookies": {
-    "title": "We use cookies",
-    "description": "We use essential cookies to keep the site running.",
-    "accept": "Accept",
-    "decline": "Decline",
+    "title": "Cookie notice",
+    "description": "We use essential cookies for sessions and security only. No tracking cookies.",
+    "accept": "Got it",
     "learnMore": "Learn more"
   },
   "accessibility": {

@@ -527,6 +527,28 @@
         "publishing": "Wird veröffentlicht...",
         "saveChanges": "Änderungen speichern",
         "publish": "Inserat veröffentlichen"
+      },
+      "form": {
+        "title": "Titel",
+        "titlePlaceholder": "z.B. ThinkPad T480 i5 16GB 256GB SSD",
+        "description": "Beschreibung",
+        "descriptionPlaceholder": "Beschreibe den Zustand, Spezifikationen und was enthalten ist...",
+        "price": "Preis (CHF)",
+        "pricePlaceholder": "0 = Gratis",
+        "freeNotice": "Dieses Inserat wird als «Gratis» angezeigt",
+        "category": "Kategorie",
+        "condition": "Zustand",
+        "selectPlaceholder": "Wählen...",
+        "conditionHeader": "Was bedeutet «{condition}» für diese Kategorie?",
+        "brand": "Marke",
+        "brandPlaceholder": "z.B. Lenovo, Dell, Apple",
+        "model": "Modell",
+        "modelPlaceholder": "z.B. ThinkPad T480",
+        "delivery": "Lieferung",
+        "payment": "Zahlungsart",
+        "shippingCost": "Versandkosten (CHF)",
+        "pickupLocation": "Abholstandort",
+        "locationPlaceholder": "z.B. Zürich, 8005"
       }
     },
     "listingsAvailable": "{count, plural, one {# Inserat} other {# Inserate}} verfügbar",
@@ -2577,10 +2599,9 @@
     }
   },
   "cookies": {
-    "title": "Wir verwenden Cookies",
-    "description": "Wir verwenden notwendige Cookies für den Betrieb der Website.",
-    "accept": "Akzeptieren",
-    "decline": "Ablehnen",
+    "title": "Cookie-Hinweis",
+    "description": "Wir verwenden nur essenzielle Cookies für Sitzungen und Sicherheit. Keine Tracking-Cookies.",
+    "accept": "Verstanden",
     "learnMore": "Mehr erfahren"
   },
   "accessibility": {

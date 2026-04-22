@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import {
   MARKETPLACE_LIMITS,
   DELIVERY_OPTIONS,
@@ -19,6 +22,9 @@ interface Props {
 }
 
 export function ListingFormFields({ formData, setFormData }: Props) {
+  const t = useTranslations('marketplace.sell.form')
+  const tCommon = useTranslations('common')
+
   const update = <K extends keyof ListingFormData>(key: K, value: ListingFormData[K]) =>
     setFormData(prev => ({ ...prev, [key]: value }))
 
@@ -55,7 +61,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div>
         <div className="flex items-center justify-between mb-1">
           <label htmlFor="listing-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Titel <span className="text-red-500">*</span>
+            {t('title')} <span className="text-red-500">*</span>
           </label>
           <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-red-500' : 'text-gray-400'}`}>
             {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
@@ -67,7 +73,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           value={formData.title}
           onChange={(e) => update('title', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
-          placeholder="z.B. ThinkPad T480 i5 16GB 256GB SSD"
+          placeholder={t('titlePlaceholder')}
           className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
         />
       </div>
@@ -76,7 +82,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div>
         <div className="flex items-center justify-between mb-1">
           <label htmlFor="listing-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Beschreibung <span className="text-red-500">*</span>
+            {t('description')} <span className="text-red-500">*</span>
           </label>
           <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-gray-400'}`}>
             {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
@@ -88,7 +94,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           onChange={(e) => update('description', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           rows={5}
-          placeholder="Beschreibe den Zustand, Spezifikationen und was enthalten ist..."
+          placeholder={t('descriptionPlaceholder')}
           className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
         />
       </div>
@@ -97,7 +103,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label htmlFor="listing-price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Preis (CHF)
+            {t('price')}
           </label>
           <input
             id="listing-price"
@@ -106,16 +112,16 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             min="0"
             value={formData.price}
             onChange={(e) => update('price', e.target.value)}
-            placeholder="0 = Gratis"
+            placeholder={t('pricePlaceholder')}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
           {formData.price === '0' && (
-            <p className="text-xs text-teal-600 mt-1">Dieses Inserat wird als &quot;Gratis&quot; angezeigt</p>
+            <p className="text-xs text-teal-600 mt-1">{t('freeNotice')}</p>
           )}
         </div>
         <div>
           <label htmlFor="listing-category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Kategorie <span className="text-red-500">*</span>
+            {t('category')} <span className="text-red-500">*</span>
           </label>
           <select
             id="listing-category"
@@ -123,7 +129,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             onChange={(e) => handleCategoryChange(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
-            <option value="">Wählen...</option>
+            <option value="">{t('selectPlaceholder')}</option>
             {MARKETPLACE_CATEGORY_VALUES.map(val => (
               <option key={val} value={val}>
                 {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{CATEGORY_LABELS[val] || val}
@@ -133,7 +139,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         </div>
         <div>
           <label htmlFor="listing-condition" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Zustand
+            {t('condition')}
           </label>
           <select
             id="listing-condition"
@@ -141,7 +147,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             onChange={(e) => handleConditionChange(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           >
-            <option value="">Wählen...</option>
+            <option value="">{t('selectPlaceholder')}</option>
             {ZUSTAND_OPTIONS.map(opt => (
               <option key={opt.value} value={opt.value}>{opt.label} — {opt.description}</option>
             ))}
@@ -153,7 +159,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {formData.conditionChecks.length > 0 && (
         <div className="rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 p-4">
           <p className="text-sm font-medium text-blue-800 dark:text-blue-300 mb-3">
-            Was bedeutet &quot;{ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label}&quot; für diese Kategorie?
+            {t('conditionHeader', { condition: ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label ?? '' })}
           </p>
           <div className="space-y-2">
             {formData.conditionChecks.map(check => (
@@ -175,25 +181,25 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Marke <span className="text-xs text-gray-500">(optional)</span>
+            {t('brand')} <span className="text-xs text-gray-500">({tCommon('optional')})</span>
           </label>
           <input
             type="text"
             value={formData.brand}
             onChange={(e) => update('brand', e.target.value)}
-            placeholder="z.B. Lenovo, Dell, Apple"
+            placeholder={t('brandPlaceholder')}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Modell <span className="text-xs text-gray-500">(optional)</span>
+            {t('model')} <span className="text-xs text-gray-500">({tCommon('optional')})</span>
           </label>
           <input
             type="text"
             value={formData.model}
             onChange={(e) => update('model', e.target.value)}
-            placeholder="z.B. ThinkPad T480"
+            placeholder={t('modelPlaceholder')}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
           />
         </div>
@@ -212,7 +218,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Lieferung
+            {t('delivery')}
           </label>
           <select
             value={formData.deliveryOptions}
@@ -226,7 +232,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Zahlungsart
+            {t('payment')}
           </label>
           <select
             value={formData.paymentMode}
@@ -244,7 +250,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {formData.deliveryOptions !== 'pickup' && (
         <div className="max-w-xs">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Versandkosten (CHF)
+            {t('shippingCost')}
           </label>
           <input
             type="number"
@@ -261,13 +267,13 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Pickup location */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Abholstandort <span className="text-xs text-gray-500">(optional)</span>
+          {t('pickupLocation')} <span className="text-xs text-gray-500">({tCommon('optional')})</span>
         </label>
         <input
           type="text"
           value={formData.pickupLocation}
           onChange={(e) => update('pickupLocation', e.target.value)}
-          placeholder="z.B. Zürich, 8005"
+          placeholder={t('locationPlaceholder')}
           className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
         />
       </div>
