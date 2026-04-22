@@ -71,7 +71,51 @@ export const DESIGN_TOKENS = {
       knowhow: 'border-cyan-300 text-cyan-700 hover:bg-cyan-50',
       home: 'border-emerald-300 text-emerald-700 hover:bg-emerald-50',
     }
-  }
+  },
+
+  // Focus ring for keyboard navigation — matches the theme's primary color
+  focusOutline: {
+    marketplace: 'focus-visible:outline-orange-600',
+    itHilfe: 'focus-visible:outline-emerald-600',
+    services: 'focus-visible:outline-blue-600',
+    about: 'focus-visible:outline-green-600',
+    contact: 'focus-visible:outline-gray-600',
+    getInvolved: 'focus-visible:outline-purple-600',
+    workshops: 'focus-visible:outline-yellow-600',
+    blog: 'focus-visible:outline-rose-600',
+    faq: 'focus-visible:outline-sky-600',
+    space: 'focus-visible:outline-teal-600',
+    projects: 'focus-visible:outline-indigo-600',
+    repairers: 'focus-visible:outline-amber-600',
+    knowhow: 'focus-visible:outline-cyan-600',
+    home: 'focus-visible:outline-emerald-600',
+  },
+
+  // Card-level tokens
+  cards: {
+    // Title color on hover — matches the theme's icon/badge text color
+    hoverText: {
+      marketplace: 'group-hover:text-orange-600',
+      itHilfe: 'group-hover:text-emerald-600',
+      services: 'group-hover:text-blue-600',
+      about: 'group-hover:text-green-600',
+      contact: 'group-hover:text-gray-600',
+      getInvolved: 'group-hover:text-purple-600',
+      workshops: 'group-hover:text-yellow-600',
+      blog: 'group-hover:text-rose-600',
+      faq: 'group-hover:text-sky-600',
+      space: 'group-hover:text-teal-600',
+      projects: 'group-hover:text-indigo-600',
+      repairers: 'group-hover:text-amber-600',
+      knowhow: 'group-hover:text-cyan-600',
+      home: 'group-hover:text-emerald-600',
+    },
+    // Border variants for community/feature cards
+    border: {
+      default: 'border-gray-200',
+      featured: 'border-purple-300 ring-1 ring-purple-200',
+    },
+  },
 } as const;
 
 export type ThemeKey = keyof typeof DESIGN_TOKENS.gradients;

@@ -61,7 +61,6 @@ export default async function Home() {
     {
       icon: Store,
       theme: 'marketplace' as const,
-      focusColor: 'focus-visible:outline-orange-600',
       title: t('actions.sell.title'),
       subtitle: t('actions.sell.subtitle'),
       primaryLabel: t('actions.sell.primaryLabel'),
@@ -72,7 +71,6 @@ export default async function Home() {
     {
       icon: Wrench,
       theme: 'itHilfe' as const,
-      focusColor: 'focus-visible:outline-emerald-600',
       title: t('actions.repair.title'),
       subtitle: t('actions.repair.subtitle'),
       primaryLabel: t('actions.repair.primaryLabel'),
@@ -83,7 +81,6 @@ export default async function Home() {
     {
       icon: BookOpen,
       theme: 'workshops' as const,
-      focusColor: 'focus-visible:outline-blue-600',
       title: t('actions.learn.title'),
       subtitle: t('actions.learn.subtitle'),
       primaryLabel: t('actions.learn.primaryLabel'),
@@ -93,43 +90,43 @@ export default async function Home() {
     },
   ]
 
-  // Community cards — icon colors from DESIGN_TOKENS
+  // Community cards — all colors sourced from DESIGN_TOKENS (SSOT)
   const communityCards = [
     {
       icon: Users,
       badge: DESIGN_TOKENS.iconBadges.about,
-      hoverColor: 'group-hover:text-green-600',
+      hoverColor: DESIGN_TOKENS.cards.hoverText.about,
       title: t('community.use.title'),
       desc: t('community.use.desc'),
       href: '/auth/register',
-      border: 'border-gray-200',
+      border: DESIGN_TOKENS.cards.border.default,
     },
     {
       icon: Heart,
       badge: DESIGN_TOKENS.iconBadges.services,
-      hoverColor: 'group-hover:text-blue-600',
+      hoverColor: DESIGN_TOKENS.cards.hoverText.services,
       title: t('community.volunteer.title'),
       desc: t('community.volunteer.desc'),
       href: '/get-involved/volunteer',
-      border: 'border-gray-200',
+      border: DESIGN_TOKENS.cards.border.default,
     },
     {
       icon: Gift,
       badge: DESIGN_TOKENS.iconBadges.marketplace,
-      hoverColor: 'group-hover:text-orange-600',
+      hoverColor: DESIGN_TOKENS.cards.hoverText.marketplace,
       title: t('community.donate.title'),
       desc: t('community.donate.desc'),
       href: '/get-involved/donate',
-      border: 'border-gray-200',
+      border: DESIGN_TOKENS.cards.border.default,
     },
     {
       icon: Award,
       badge: DESIGN_TOKENS.iconBadges.getInvolved,
-      hoverColor: 'group-hover:text-purple-600',
+      hoverColor: DESIGN_TOKENS.cards.hoverText.getInvolved,
       title: t('community.membership.title'),
       desc: t('community.membership.desc'),
       href: '/mitglied-werden',
-      border: 'border-purple-300 ring-1 ring-purple-200',
+      border: DESIGN_TOKENS.cards.border.featured,
     },
   ]
 
@@ -229,6 +226,7 @@ export default async function Home() {
               const badge = DESIGN_TOKENS.iconBadges[card.theme]
               const primaryBtn = DESIGN_TOKENS.buttons.primary[card.theme]
               const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
+              const focusOutline = DESIGN_TOKENS.focusOutline[card.theme]
               return (
                 <div key={card.title} className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
@@ -241,13 +239,13 @@ export default async function Home() {
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <Link
                       href={card.primaryHref}
-                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${card.focusColor}`}
+                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
                     >
                       {card.primaryLabel}
                     </Link>
                     <Link
                       href={card.secondaryHref}
-                      className={`flex-1 rounded-md bg-white px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${card.focusColor}`}
+                      className={`flex-1 rounded-md bg-white px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
                     >
                       {card.secondaryLabel}
                     </Link>
