@@ -203,7 +203,9 @@
     "sold": "Verkauft",
     "reserved": "Reserviert",
     "currency": "CHF",
-    "skipToContent": "Zum Inhalt springen"
+    "skipToContent": "Zum Inhalt springen",
+    "resetFilters": "Filter zurücksetzen",
+    "resultsCount": "{filtered} von {total} Ergebnissen"
   },
   "errors": {
     "genericTitle": "Etwas ist schiefgelaufen",
@@ -721,7 +723,13 @@
       "appointmentRequested": "Termin angefragt!",
       "booking": "Wird gebucht...",
       "bookingFailed": "Terminbuchung fehlgeschlagen",
-      "networkError": "Netzwerkfehler. Bitte versuche es erneut."
+      "networkError": "Netzwerkfehler. Bitte versuche es erneut.",
+      "categoryLabels": {
+        "hardware": "Hardware-Dienstleistungen",
+        "software": "Software-Lösungen",
+        "soon": "Bald verfügbar"
+      },
+      "filterByCategory": "Nach Kategorie filtern"
     },
     "servicePage": {
       "comingSoonBanner": "Dieser Service kommt bald. Kontaktiere uns, um dein Interesse zu bekunden und benachrichtigt zu werden, wenn er verfügbar ist."
@@ -1632,6 +1640,93 @@
         "500-800": "CHF 500-800",
         "800-1200": "CHF 800-1200",
         "1200+": "CHF 1200+"
+      }
+    },
+    "catalog": {
+      "computerRepair": {
+        "title": "Computerreparatur & Aufrüstungen",
+        "description": "Expertenreparaturen für alle Arten von Computern und Komponenten. Wir spezialisieren uns darauf zu reparieren, was andere nicht können, einschliesslich Motherboard-Reparaturen und Bauteil-Level-Fixes.",
+        "features": [
+          "Bauteil-Level-Reparaturen",
+          "Hardware-Aufrüstungen",
+          "Diagnosedienste",
+          "Professionelle Bewertung"
+        ],
+        "highlight": "Professionelle Bewertung erforderlich",
+        "pricing": "CHF 70/h"
+      },
+      "dataRecovery": {
+        "title": "Datenrettung & Transfer",
+        "description": "Sichere und zuverlässige Datentransferdienste für alle Arten von Speichermedien. Wir können Daten von beschädigten Geräten wiederherstellen und auf moderne Speicherlösungen übertragen.",
+        "features": [
+          "Sicherer Datentransfer",
+          "Datenwiederherstellung von beschädigten Geräten",
+          "Unterstützung für Legacy-Medien (Disketten, ZIP-Laufwerke, MO-Laufwerke, SCSI/IDE-Laufwerke)",
+          "Komplette Datensicherheit"
+        ],
+        "highlight": "Auswertung vor der Wiederherstellung erforderlich",
+        "pricing": "CHF 70/h"
+      },
+      "hardwareRecycling": {
+        "title": "Hardware-Recycling",
+        "description": "Verantwortungsvolles Recycling und Aufbereitung von IT-Geräten. Wir geben deinen alten Geräten ein neues Leben und sorgen für sichere Datenlöschung.",
+        "features": [
+          "Sichere Datenlöschung",
+          "Geräteaufbereitung",
+          "Komponenten-Recycling",
+          "Kostenloser Abholservice"
+        ],
+        "highlight": "Kostenloser Abholservice verfügbar",
+        "pricing": "Kostenlos für die meisten Geräte"
+      },
+      "webDesign": {
+        "title": "Webdesign & Entwicklung",
+        "description": "Professionelle Webdesign- und Entwicklungsdienstleistungen mit modernen Open-Source-Technologien. Schnelle, responsive Websites mit Next.js, Headless CMS und nachhaltigen Praktiken.",
+        "features": [
+          "Moderne Frameworks (Next.js, React)",
+          "Headless CMS (Strapi, Payload, Tina)",
+          "Responsive Design & Tailwind CSS",
+          "E-Commerce-Lösungen (WooCommerce, Shopware 6)",
+          "SEO-Optimierung & Performance"
+        ],
+        "highlight": "Kostenlose Erstberatung",
+        "pricing": "CHF 70/h"
+      },
+      "linuxOpenSource": {
+        "title": "Linux & Open Source",
+        "description": "Professionelle Linux-Installation, -Konfiguration und -Support-Dienstleistungen. Wir helfen dir, das Beste aus deinem Linux-System mit fachkundiger Anleitung und Wartung herauszuholen.",
+        "features": [
+          "Linux-Installation & Konfiguration",
+          "Systemoptimierung & Wartung",
+          "Sicherheitshärtung",
+          "Performance-Tuning"
+        ],
+        "highlight": "Professionelle Bewertung erforderlich",
+        "pricing": "CHF 70/h"
+      },
+      "openSourceSolutions": {
+        "title": "Open-Source-Lösungen",
+        "description": "Fachkundige Implementierung und Support für Open-Source-Software. Wir helfen dir beim Übergang zu und der Wartung von Open-Source-Lösungen für deine Geschäftsanforderungen.",
+        "features": [
+          "Open-Source-Beratung",
+          "Massgeschneiderte Entwicklung",
+          "Community-Integration",
+          "Sicherheit & Compliance"
+        ],
+        "highlight": "Kostenlose Erstberatung",
+        "pricing": "CHF 70/h"
+      },
+      "buildYourComputer": {
+        "title": "Computer zusammenstellen",
+        "description": "Erhalte einen massgeschneiderten Computer für deine spezifischen Bedürfnisse, unterstützt durch KI-Analyse unseres umfangreichen Inventars. Wir beziehen Teile global und bieten professionelle Montage.",
+        "features": [
+          "KI-gestützte Build-Empfehlungen",
+          "Globales Teile-Beschaffungsnetzwerk",
+          "Professionelle Montage und Tests",
+          "Qualitätsgarantie und Gewährleistung"
+        ],
+        "highlight": "Bald verfügbar",
+        "pricing": ""
       }
     }
   },

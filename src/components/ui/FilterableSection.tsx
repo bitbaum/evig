@@ -1,4 +1,7 @@
+'use client'
+
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { FilterBar } from './FilterBar'
 import { FilterableGrid } from './FilterableGrid'
 import { useFiltering, FilterConfig, FilterableItem } from '@/hooks/useFiltering'
@@ -13,6 +16,7 @@ interface FilterableSectionProps<T extends FilterableItem> {
   keyExtractor: (item: T, index: number) => string
   noResultsMessage?: string
   showResultsCount?: boolean
+  /** Override the "All" label for the filter buttons. Defaults to common.all translation. */
   allLabel?: string
   className?: string
   gridColumns?: {
@@ -30,12 +34,17 @@ export function FilterableSection<T extends FilterableItem>({
   filters,
   renderItem,
   keyExtractor,
-  noResultsMessage = 'Keine Ergebnisse gefunden, die den ausgewählten Filtern entsprechen.',
+  noResultsMessage,
   showResultsCount = true,
-  allLabel = 'Alle',
+  allLabel,
   className = '',
   gridColumns = { sm: 1, md: 2, lg: 3 }
 }: FilterableSectionProps<T>) {
+  const t = useTranslations('common')
+
+  const resolvedAllLabel = allLabel ?? t('all')
+  const resolvedNoResults = noResultsMessage ?? t('noResults')
+
   const {
     filterState,
     filteredItems,
@@ -48,7 +57,7 @@ export function FilterableSection<T extends FilterableItem>({
   } = useFiltering({
     items,
     filters,
-    allLabel
+    allLabel: resolvedAllLabel
   })
 
   return (
@@ -59,7 +68,7 @@ export function FilterableSection<T extends FilterableItem>({
           {description && (
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">{description}</p>
           )}
-          
+
           <FilterBar
             filters={filterOptions}
             filterState={filterState}
@@ -79,13 +88,13 @@ export function FilterableSection<T extends FilterableItem>({
           />
         ) : (
           <div className="text-center py-16">
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">{noResultsMessage}</p>
+            <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">{resolvedNoResults}</p>
             {hasActiveFilters && (
               <button
                 onClick={resetFilters}
                 className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
               >
-                Filter zurücksetzen
+                {t('resetFilters')}
               </button>
             )}
           </div>
@@ -95,7 +104,7 @@ export function FilterableSection<T extends FilterableItem>({
         {showResultsCount && (
           <div className="text-center mt-8">
             <p className="text-gray-500 dark:text-gray-400 text-sm">
-              {filteredItems.length} von {items.length} Ergebnissen
+              {t('resultsCount', { filtered: filteredItems.length, total: items.length })}
               {getFilterSummary() && ` (${getFilterSummary()})`}
             </p>
           </div>

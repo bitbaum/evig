@@ -17,7 +17,13 @@ import { useRouter } from 'next/navigation'
 import { FilterableSection } from '@/components/ui/FilterableSection'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
-import { services, serviceFilters, type Service } from './data'
+import {
+  SERVICE_CONFIGS,
+  SERVICE_CATEGORY_KEYS,
+  buildServiceFilters,
+  type Service,
+  type ServiceCategoryKey,
+} from './data'
 import { useTranslations } from 'next-intl'
 
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
@@ -185,6 +191,33 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
 
 export default function ServicesPage() {
   const t = useTranslations('services.page')
+  const tCatalog = useTranslations('services.catalog')
+
+  // Category labels live in services.page (t) to avoid dynamic-key type issues
+  const categoryLabels: Record<ServiceCategoryKey, string> = {
+    hardware: t('categoryLabels.hardware'),
+    software: t('categoryLabels.software'),
+    soon: t('categoryLabels.soon'),
+  }
+
+  // Use .raw() with `as never` to access dynamic service entry keys
+  // (next-intl's typed t() only accepts statically-known keys)
+  type CatalogEntry = { title: string; description: string; features: string[]; highlight: string; pricing: string }
+  const services: Service[] = SERVICE_CONFIGS.map(config => {
+    const entry = tCatalog.raw(config.key as never) as CatalogEntry
+    return {
+      ...config,
+      title: entry.title,
+      description: entry.description,
+      features: entry.features,
+      category: categoryLabels[config.categoryKey],
+      highlight: entry.highlight,
+      // Empty string means "no pricing" → shows pricingTbd in ServiceCard
+      pricing: entry.pricing || undefined,
+    }
+  })
+
+  const serviceFilters = buildServiceFilters(t('filterByCategory'), categoryLabels)
 
   return (
     <>
@@ -202,15 +235,7 @@ export default function ServicesPage() {
               'url': ORG.website,
               'logo': `${ORG.website}/logo.png`
             },
-            'serviceType': [
-              'Computer Reparatur',
-              'Webdesign & Entwicklung',
-              'Datenrettung',
-              'Linux Support',
-              'Hardware Recycling',
-              'Open Source Lösungen',
-              'KI-Lösungen'
-            ],
+            'serviceType': services.filter(s => s.available).map(s => s.title),
             'areaServed': {
               '@type': 'City',
               'name': t('schemaCity')
@@ -232,7 +257,7 @@ export default function ServicesPage() {
           items={services}
           filters={serviceFilters}
           renderItem={(service) => <ServiceCard service={service as Service} />}
-          keyExtractor={(service) => (service as Service).title}
+          keyExtractor={(service) => (service as Service).key}
           noResultsMessage={t('noResults')}
           showResultsCount={true}
         />

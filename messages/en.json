@@ -113,7 +113,9 @@
     "sold": "Sold",
     "reserved": "Reserved",
     "currency": "CHF",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "resetFilters": "Reset filters",
+    "resultsCount": "{filtered} of {total} results"
   },
   "errors": {
     "genericTitle": "Something went wrong",
@@ -631,7 +633,13 @@
       "appointmentRequested": "Appointment requested!",
       "booking": "Booking...",
       "bookingFailed": "Booking failed",
-      "networkError": "Network error. Please try again."
+      "networkError": "Network error. Please try again.",
+      "categoryLabels": {
+        "hardware": "Hardware Services",
+        "software": "Software Solutions",
+        "soon": "Coming Soon"
+      },
+      "filterByCategory": "Filter by category"
     },
     "servicePage": {
       "comingSoonBanner": "This service is coming soon. Contact us to express your interest and be notified when it becomes available."
@@ -1542,6 +1550,93 @@
         "500-800": "CHF 500-800",
         "800-1200": "CHF 800-1200",
         "1200+": "CHF 1200+"
+      }
+    },
+    "catalog": {
+      "computerRepair": {
+        "title": "Computer Repair & Upgrades",
+        "description": "Expert repairs for all types of computers and components. We specialize in fixing what others cannot, including motherboard repairs and component-level fixes.",
+        "features": [
+          "Component-level repairs",
+          "Hardware upgrades",
+          "Diagnostic services",
+          "Professional assessment"
+        ],
+        "highlight": "Professional assessment required",
+        "pricing": "CHF 70/h"
+      },
+      "dataRecovery": {
+        "title": "Data Recovery & Transfer",
+        "description": "Safe and reliable data transfer services for all types of storage media. We can recover data from damaged devices and transfer it to modern storage solutions.",
+        "features": [
+          "Secure data transfer",
+          "Data recovery from damaged devices",
+          "Support for legacy media (floppy disks, ZIP drives, MO drives, SCSI/IDE drives)",
+          "Complete data security"
+        ],
+        "highlight": "Evaluation required before recovery",
+        "pricing": "CHF 70/h"
+      },
+      "hardwareRecycling": {
+        "title": "Hardware Recycling",
+        "description": "Responsible recycling and refurbishment of IT devices. We give your old devices a new life and ensure secure data erasure.",
+        "features": [
+          "Secure data erasure",
+          "Device refurbishment",
+          "Component recycling",
+          "Free pickup service"
+        ],
+        "highlight": "Free pickup service available",
+        "pricing": "Free for most items"
+      },
+      "webDesign": {
+        "title": "Web Design & Development",
+        "description": "Professional web design and development services using modern open-source technologies. Fast, responsive websites with Next.js, headless CMS and sustainable practices.",
+        "features": [
+          "Modern frameworks (Next.js, React)",
+          "Headless CMS (Strapi, Payload, Tina)",
+          "Responsive design & Tailwind CSS",
+          "E-commerce solutions (WooCommerce, Shopware 6)",
+          "SEO optimization & performance"
+        ],
+        "highlight": "Free initial consultation",
+        "pricing": "CHF 70/h"
+      },
+      "linuxOpenSource": {
+        "title": "Linux & Open Source",
+        "description": "Professional Linux installation, configuration and support services. We help you get the most out of your Linux system with expert guidance and maintenance.",
+        "features": [
+          "Linux installation & configuration",
+          "System optimization & maintenance",
+          "Security hardening",
+          "Performance tuning"
+        ],
+        "highlight": "Professional assessment required",
+        "pricing": "CHF 70/h"
+      },
+      "openSourceSolutions": {
+        "title": "Open Source Solutions",
+        "description": "Expert implementation and support for open-source software. We help you transition to and maintain open-source solutions for your business needs.",
+        "features": [
+          "Open-source consulting",
+          "Custom development",
+          "Community integration",
+          "Security & compliance"
+        ],
+        "highlight": "Free initial consultation",
+        "pricing": "CHF 70/h"
+      },
+      "buildYourComputer": {
+        "title": "Build Your Computer",
+        "description": "Get a custom-built computer for your specific needs, supported by AI analysis of our extensive inventory. We source parts globally and offer professional assembly.",
+        "features": [
+          "AI-powered build recommendations",
+          "Global parts sourcing network",
+          "Professional assembly and testing",
+          "Quality guarantee and warranty"
+        ],
+        "highlight": "Coming soon",
+        "pricing": ""
       }
     }
   },

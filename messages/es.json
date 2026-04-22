@@ -203,7 +203,9 @@
     "sold": "Vendido",
     "reserved": "Reservado",
     "currency": "CHF",
-    "skipToContent": "Ir al contenido"
+    "skipToContent": "Ir al contenido",
+    "resetFilters": "Restablecer filtros",
+    "resultsCount": "{filtered} de {total} resultados"
   },
   "errors": {
     "genericTitle": "Algo salió mal",
@@ -2438,7 +2440,13 @@
       "appointmentRequested": "¡Cita solicitada!",
       "booking": "Reservando...",
       "bookingFailed": "Error al reservar la cita",
-      "networkError": "Error de red. Por favor, inténtalo de nuevo."
+      "networkError": "Error de red. Por favor, inténtalo de nuevo.",
+      "categoryLabels": {
+        "hardware": "Servicios de Hardware",
+        "software": "Soluciones de Software",
+        "soon": "Próximamente"
+      },
+      "filterByCategory": "Filtrar por categoría"
     },
     "servicePage": {
       "comingSoonBanner": "Este servicio estará disponible próximamente. Contáctanos para expresar tu interés y recibir una notificación cuando esté disponible."
@@ -3349,6 +3357,93 @@
         "500-800": "CHF 500-800",
         "800-1200": "CHF 800-1200",
         "1200+": "CHF 1200+"
+      }
+    },
+    "catalog": {
+      "computerRepair": {
+        "title": "Reparación y Mejoras de Ordenadores",
+        "description": "Reparaciones expertas para todo tipo de ordenadores y componentes. Nos especializamos en reparar lo que otros no pueden, incluyendo reparaciones de placas base y arreglos a nivel de componentes.",
+        "features": [
+          "Reparaciones a nivel de componentes",
+          "Mejoras de hardware",
+          "Servicios de diagnóstico",
+          "Evaluación profesional"
+        ],
+        "highlight": "Evaluación profesional requerida",
+        "pricing": "CHF 70/h"
+      },
+      "dataRecovery": {
+        "title": "Recuperación y Transferencia de Datos",
+        "description": "Servicios de transferencia de datos seguros y confiables para todo tipo de medios de almacenamiento. Podemos recuperar datos de dispositivos dañados y transferirlos a soluciones modernas.",
+        "features": [
+          "Transferencia segura de datos",
+          "Recuperación de datos de dispositivos dañados",
+          "Soporte para medios heredados (disquetes, unidades ZIP, MO, SCSI/IDE)",
+          "Seguridad completa de datos"
+        ],
+        "highlight": "Evaluación requerida antes de la recuperación",
+        "pricing": "CHF 70/h"
+      },
+      "hardwareRecycling": {
+        "title": "Reciclaje de Hardware",
+        "description": "Reciclaje y restauración responsable de dispositivos de TI. Damos nueva vida a tus dispositivos antiguos y garantizamos el borrado seguro de datos.",
+        "features": [
+          "Borrado seguro de datos",
+          "Restauración de dispositivos",
+          "Reciclaje de componentes",
+          "Servicio de recogida gratuito"
+        ],
+        "highlight": "Servicio de recogida gratuito disponible",
+        "pricing": "Gratuito para la mayoría de artículos"
+      },
+      "webDesign": {
+        "title": "Diseño y Desarrollo Web",
+        "description": "Servicios profesionales de diseño y desarrollo web con tecnologías modernas de código abierto. Sitios web rápidos y responsivos con Next.js, CMS sin cabeza y prácticas sostenibles.",
+        "features": [
+          "Frameworks modernos (Next.js, React)",
+          "CMS sin cabeza (Strapi, Payload, Tina)",
+          "Diseño responsivo & Tailwind CSS",
+          "Soluciones e-commerce (WooCommerce, Shopware 6)",
+          "Optimización SEO & rendimiento"
+        ],
+        "highlight": "Consulta inicial gratuita",
+        "pricing": "CHF 70/h"
+      },
+      "linuxOpenSource": {
+        "title": "Linux & Código Abierto",
+        "description": "Servicios profesionales de instalación, configuración y soporte de Linux. Te ayudamos a sacar el máximo partido de tu sistema Linux con orientación experta y mantenimiento.",
+        "features": [
+          "Instalación y configuración de Linux",
+          "Optimización y mantenimiento del sistema",
+          "Fortalecimiento de seguridad",
+          "Ajuste de rendimiento"
+        ],
+        "highlight": "Evaluación profesional requerida",
+        "pricing": "CHF 70/h"
+      },
+      "openSourceSolutions": {
+        "title": "Soluciones de Código Abierto",
+        "description": "Implementación experta y soporte para software de código abierto. Te ayudamos a hacer la transición y mantener soluciones de código abierto para tus necesidades empresariales.",
+        "features": [
+          "Consultoría de código abierto",
+          "Desarrollo personalizado",
+          "Integración comunitaria",
+          "Seguridad y cumplimiento"
+        ],
+        "highlight": "Consulta inicial gratuita",
+        "pricing": "CHF 70/h"
+      },
+      "buildYourComputer": {
+        "title": "Construye tu Ordenador",
+        "description": "Obtén un ordenador personalizado para tus necesidades específicas, con el apoyo del análisis de IA de nuestro extenso inventario. Obtenemos piezas globalmente y ofrecemos ensamblaje profesional.",
+        "features": [
+          "Recomendaciones de construcción con IA",
+          "Red global de obtención de piezas",
+          "Ensamblaje y pruebas profesionales",
+          "Garantía de calidad"
+        ],
+        "highlight": "Próximamente",
+        "pricing": ""
       }
     }
   },

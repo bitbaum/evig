@@ -203,7 +203,9 @@
     "sold": "Venduto",
     "reserved": "Riservato",
     "currency": "CHF",
-    "skipToContent": "Vai al contenuto"
+    "skipToContent": "Vai al contenuto",
+    "resetFilters": "Reimposta filtri",
+    "resultsCount": "{filtered} di {total} risultati"
   },
   "errors": {
     "genericTitle": "Qualcosa è andato storto",
@@ -2438,7 +2440,13 @@
       "appointmentRequested": "Appuntamento richiesto!",
       "booking": "Prenotazione in corso...",
       "bookingFailed": "Prenotazione non riuscita",
-      "networkError": "Errore di rete. Riprova."
+      "networkError": "Errore di rete. Riprova.",
+      "categoryLabels": {
+        "hardware": "Servizi Hardware",
+        "software": "Soluzioni Software",
+        "soon": "Prossimamente"
+      },
+      "filterByCategory": "Filtra per categoria"
     },
     "servicePage": {
       "comingSoonBanner": "Questo servizio è in arrivo. Contattaci per esprimere il tuo interesse e ricevere una notifica quando sarà disponibile."
@@ -3349,6 +3357,93 @@
         "500-800": "CHF 500-800",
         "800-1200": "CHF 800-1200",
         "1200+": "CHF 1200+"
+      }
+    },
+    "catalog": {
+      "computerRepair": {
+        "title": "Riparazione & Aggiornamento Computer",
+        "description": "Riparazioni esperte per tutti i tipi di computer e componenti. Siamo specializzati nella riparazione di ciò che altri non possono, incluse riparazioni di schede madri e correzioni a livello di componenti.",
+        "features": [
+          "Riparazioni a livello di componenti",
+          "Aggiornamenti hardware",
+          "Servizi diagnostici",
+          "Valutazione professionale"
+        ],
+        "highlight": "Valutazione professionale richiesta",
+        "pricing": "CHF 70/h"
+      },
+      "dataRecovery": {
+        "title": "Recupero & Trasferimento Dati",
+        "description": "Servizi di trasferimento dati sicuri e affidabili per tutti i tipi di supporti di archiviazione. Possiamo recuperare dati da dispositivi danneggiati e trasferirli su soluzioni moderne.",
+        "features": [
+          "Trasferimento sicuro dei dati",
+          "Recupero dati da dispositivi danneggiati",
+          "Supporto per supporti legacy (floppy, ZIP, MO, SCSI/IDE)",
+          "Completa sicurezza dei dati"
+        ],
+        "highlight": "Valutazione richiesta prima del recupero",
+        "pricing": "CHF 70/h"
+      },
+      "hardwareRecycling": {
+        "title": "Riciclaggio Hardware",
+        "description": "Riciclaggio e ricondizionamento responsabile di dispositivi IT. Diamo nuova vita ai tuoi vecchi dispositivi e garantiamo la cancellazione sicura dei dati.",
+        "features": [
+          "Cancellazione sicura dei dati",
+          "Ricondizionamento dispositivi",
+          "Riciclaggio componenti",
+          "Servizio di ritiro gratuito"
+        ],
+        "highlight": "Servizio di ritiro gratuito disponibile",
+        "pricing": "Gratuito per la maggior parte degli articoli"
+      },
+      "webDesign": {
+        "title": "Web Design & Sviluppo",
+        "description": "Servizi professionali di web design e sviluppo con tecnologie open-source moderne. Siti web veloci e responsivi con Next.js, CMS headless e pratiche sostenibili.",
+        "features": [
+          "Framework moderni (Next.js, React)",
+          "CMS headless (Strapi, Payload, Tina)",
+          "Design responsivo & Tailwind CSS",
+          "Soluzioni e-commerce (WooCommerce, Shopware 6)",
+          "Ottimizzazione SEO & performance"
+        ],
+        "highlight": "Consulenza iniziale gratuita",
+        "pricing": "CHF 70/h"
+      },
+      "linuxOpenSource": {
+        "title": "Linux & Open Source",
+        "description": "Servizi professionali di installazione, configurazione e supporto Linux. Ti aiutiamo a ottenere il massimo dal tuo sistema Linux con guida esperta e manutenzione.",
+        "features": [
+          "Installazione & configurazione Linux",
+          "Ottimizzazione & manutenzione del sistema",
+          "Hardening della sicurezza",
+          "Performance tuning"
+        ],
+        "highlight": "Valutazione professionale richiesta",
+        "pricing": "CHF 70/h"
+      },
+      "openSourceSolutions": {
+        "title": "Soluzioni Open Source",
+        "description": "Implementazione esperta e supporto per software open-source. Ti aiutiamo a passare alle soluzioni open-source e mantenerle per le tue esigenze aziendali.",
+        "features": [
+          "Consulenza open-source",
+          "Sviluppo personalizzato",
+          "Integrazione comunitaria",
+          "Sicurezza & conformità"
+        ],
+        "highlight": "Consulenza iniziale gratuita",
+        "pricing": "CHF 70/h"
+      },
+      "buildYourComputer": {
+        "title": "Costruisci il tuo Computer",
+        "description": "Ottieni un computer su misura per le tue esigenze specifiche, supportato dall'analisi AI del nostro vasto inventario. Acquistiamo componenti in tutto il mondo e offriamo assemblaggio professionale.",
+        "features": [
+          "Consigli di configurazione con IA",
+          "Rete globale di approvvigionamento",
+          "Assemblaggio e test professionali",
+          "Garanzia di qualità"
+        ],
+        "highlight": "Prossimamente",
+        "pricing": ""
       }
     }
   },

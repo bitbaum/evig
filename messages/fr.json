@@ -113,7 +113,9 @@
     "sold": "Vendu",
     "reserved": "Réservé",
     "currency": "CHF",
-    "skipToContent": "Aller au contenu"
+    "skipToContent": "Aller au contenu",
+    "resetFilters": "Réinitialiser les filtres",
+    "resultsCount": "{filtered} sur {total} résultats"
   },
   "errors": {
     "genericTitle": "Une erreur est survenue",
@@ -631,7 +633,13 @@
       "appointmentRequested": "Rendez-vous demandé!",
       "booking": "Réservation en cours...",
       "bookingFailed": "Échec de la réservation",
-      "networkError": "Erreur réseau. Veuillez réessayer."
+      "networkError": "Erreur réseau. Veuillez réessayer.",
+      "categoryLabels": {
+        "hardware": "Services Matériels",
+        "software": "Solutions Logicielles",
+        "soon": "Bientôt Disponible"
+      },
+      "filterByCategory": "Filtrer par catégorie"
     },
     "servicePage": {
       "comingSoonBanner": "Ce service arrive bientôt. Contactez-nous pour exprimer votre intérêt et être notifié lorsqu'il sera disponible."
@@ -1542,6 +1550,93 @@
         "500-800": "CHF 500-800",
         "800-1200": "CHF 800-1200",
         "1200+": "CHF 1200+"
+      }
+    },
+    "catalog": {
+      "computerRepair": {
+        "title": "Réparation & Mises à Niveau d'Ordinateurs",
+        "description": "Réparations expertes pour tous types d'ordinateurs et composants. Nous nous spécialisons dans la réparation de ce que d'autres ne peuvent pas, y compris les réparations de carte mère et les corrections au niveau des composants.",
+        "features": [
+          "Réparations au niveau des composants",
+          "Mises à niveau matérielles",
+          "Services de diagnostic",
+          "Évaluation professionnelle"
+        ],
+        "highlight": "Évaluation professionnelle requise",
+        "pricing": "CHF 70/h"
+      },
+      "dataRecovery": {
+        "title": "Récupération & Transfert de Données",
+        "description": "Services de transfert de données sûrs et fiables pour tous types de supports de stockage. Nous pouvons récupérer des données d'appareils endommagés et les transférer vers des solutions modernes.",
+        "features": [
+          "Transfert sécurisé de données",
+          "Récupération de données depuis des appareils endommagés",
+          "Prise en charge des supports anciens (disquettes, lecteurs ZIP, MO, SCSI/IDE)",
+          "Sécurité complète des données"
+        ],
+        "highlight": "Évaluation requise avant la récupération",
+        "pricing": "CHF 70/h"
+      },
+      "hardwareRecycling": {
+        "title": "Recyclage de Matériel",
+        "description": "Recyclage et remise à neuf responsables des appareils informatiques. Nous donnons une nouvelle vie à vos anciens appareils et assurons l'effacement sécurisé des données.",
+        "features": [
+          "Effacement sécurisé des données",
+          "Remise à neuf des appareils",
+          "Recyclage des composants",
+          "Service de collecte gratuit"
+        ],
+        "highlight": "Service de collecte gratuit disponible",
+        "pricing": "Gratuit pour la plupart des articles"
+      },
+      "webDesign": {
+        "title": "Design & Développement Web",
+        "description": "Services professionnels de design et développement web avec des technologies modernes open-source. Sites web rapides et responsifs avec Next.js, CMS headless et pratiques durables.",
+        "features": [
+          "Frameworks modernes (Next.js, React)",
+          "CMS headless (Strapi, Payload, Tina)",
+          "Design responsif & Tailwind CSS",
+          "Solutions e-commerce (WooCommerce, Shopware 6)",
+          "Optimisation SEO & performance"
+        ],
+        "highlight": "Consultation initiale gratuite",
+        "pricing": "CHF 70/h"
+      },
+      "linuxOpenSource": {
+        "title": "Linux & Open Source",
+        "description": "Services professionnels d'installation, de configuration et de support Linux. Nous vous aidons à tirer le meilleur parti de votre système Linux avec des conseils experts et une maintenance régulière.",
+        "features": [
+          "Installation & configuration Linux",
+          "Optimisation & maintenance du système",
+          "Durcissement de la sécurité",
+          "Optimisation des performances"
+        ],
+        "highlight": "Évaluation professionnelle requise",
+        "pricing": "CHF 70/h"
+      },
+      "openSourceSolutions": {
+        "title": "Solutions Open Source",
+        "description": "Mise en œuvre experte et support pour les logiciels open-source. Nous vous aidons à passer aux solutions open-source et à les maintenir pour vos besoins professionnels.",
+        "features": [
+          "Conseil open-source",
+          "Développement sur mesure",
+          "Intégration communautaire",
+          "Sécurité & conformité"
+        ],
+        "highlight": "Consultation initiale gratuite",
+        "pricing": "CHF 70/h"
+      },
+      "buildYourComputer": {
+        "title": "Construire votre Ordinateur",
+        "description": "Obtenez un ordinateur sur mesure pour vos besoins spécifiques, soutenu par l'analyse IA de notre vaste inventaire. Nous sourçons des pièces dans le monde entier et proposons un assemblage professionnel.",
+        "features": [
+          "Recommandations de configuration avec IA",
+          "Réseau mondial d'approvisionnement",
+          "Assemblage et tests professionnels",
+          "Garantie de qualité"
+        ],
+        "highlight": "Bientôt disponible",
+        "pricing": ""
       }
     }
   },
