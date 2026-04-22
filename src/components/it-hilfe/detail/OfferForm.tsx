@@ -1,4 +1,7 @@
+'use client'
+
 import { Send } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { getAllSkills } from '@/config/it-hilfe'
 import Heading from '@/components/ui/Heading'
 
@@ -35,6 +38,8 @@ export function OfferForm({
   onSubmit,
   onCancel,
 }: OfferFormProps) {
+  const t = useTranslations('itHelp.offer')
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       {!showForm ? (
@@ -43,11 +48,11 @@ export function OfferForm({
           className="w-full py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
         >
           <Send className="w-5 h-5" aria-hidden="true" />
-          Angebot abgeben
+          {t('offerButton')}
         </button>
       ) : (
         <form onSubmit={onSubmit}>
-          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Dein Angebot</Heading>
+          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('heading')}</Heading>
 
           {error && (
             <div id="offer-error" className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">
@@ -58,13 +63,13 @@ export function OfferForm({
           <div className="space-y-4">
             <div>
               <label htmlFor="offer-message" className="block text-sm font-medium text-gray-700 mb-1">
-                Nachricht an den Anfragenden <span className="text-red-500">*</span>
+                {t('messageLabel')} <span className="text-red-500">*</span>
               </label>
               <textarea
                 id="offer-message"
                 value={offerMessage}
                 onChange={(e) => onMessageChange(e.target.value)}
-                placeholder="Beschreibe, wie du helfen kannst und warum du geeignet bist..."
+                placeholder={t('messagePlaceholder')}
                 required
                 aria-required="true"
                 aria-invalid={!!error}
@@ -79,27 +84,27 @@ export function OfferForm({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-gray-700 mb-1">
-                  Geschätzte Dauer (optional)
+                  {t('estimatedTimeLabel')}
                 </label>
                 <input
                   id="offer-estimated-time"
                   type="text"
                   value={offerEstimatedTime}
                   onChange={(e) => onEstimatedTimeChange(e.target.value)}
-                  placeholder="z.B. 1-2 Stunden"
+                  placeholder={t('estimatedTimePlaceholder')}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 />
               </div>
               <div>
                 <label htmlFor="offer-compensation" className="block text-sm font-medium text-gray-700 mb-1">
-                  Vergütungsvorschlag (optional)
+                  {t('compensationLabel')}
                 </label>
                 <input
                   id="offer-compensation"
                   type="text"
                   value={offerCompensation}
                   onChange={(e) => onCompensationChange(e.target.value)}
-                  placeholder="z.B. Kostenlos, CHF 30"
+                  placeholder={t('compensationPlaceholder')}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 />
               </div>
@@ -107,7 +112,7 @@ export function OfferForm({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Deine relevanten Skills (optional)
+                {t('skillsLabel')}
               </label>
               <div className="flex flex-wrap gap-2">
                 {getAllSkills().map((skill) => (
@@ -134,14 +139,14 @@ export function OfferForm({
               onClick={onCancel}
               className="px-4 py-3 min-h-[44px] text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              Abbrechen
+              {t('cancelButton')}
             </button>
             <button
               type="submit"
               disabled={submitting || offerMessage.length < 20}
               className="px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
-              {submitting ? 'Wird gesendet...' : 'Angebot senden'}
+              {submitting ? t('submittingButton') : t('sendButton')}
             </button>
           </div>
         </form>

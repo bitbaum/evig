@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Star, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -52,6 +53,7 @@ function StarRating({
 }
 
 export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilfeReviewFormProps) {
+  const t = useTranslations('itHelp.review')
   const [overallRating, setOverallRating] = useState(0)
   const [communicationRating, setCommunicationRating] = useState(0)
   const [qualityRating, setQualityRating] = useState(0)
@@ -62,11 +64,11 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (overallRating === 0) {
-      setError('Bitte gib eine Gesamtbewertung ab')
+      setError(t('errorNoRating'))
       return
     }
     if (content.length < 10) {
-      setError('Der Bewertungstext muss mindestens 10 Zeichen lang sein')
+      setError(t('errorTextTooShort'))
       return
     }
 
@@ -92,7 +94,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
 
       onSuccess()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('errorGeneric')
       setError(message)
       logger.error('Error submitting review', { error: err, requestId })
     } finally {
@@ -102,9 +104,9 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">Bewertung abgeben</Heading>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">{t('heading')}</Heading>
       <p className="text-sm text-gray-600 mb-4">
-        Wie war deine Erfahrung mit &quot;{requestTitle}&quot;?
+        {t('experienceWith', { title: requestTitle })}
       </p>
 
       {error && (
@@ -117,31 +119,31 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
         <StarRating
           value={overallRating}
           onChange={setOverallRating}
-          label="Gesamtbewertung *"
+          label={t('overallRating')}
         />
 
         <div className="grid grid-cols-2 gap-4">
           <StarRating
             value={communicationRating}
             onChange={setCommunicationRating}
-            label="Kommunikation"
+            label={t('communication')}
           />
           <StarRating
             value={qualityRating}
             onChange={setQualityRating}
-            label="Qualität"
+            label={t('quality')}
           />
         </div>
 
         <div>
           <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 mb-1">
-            Dein Erfahrungsbericht *
+            {t('reviewTextLabel')}
           </label>
           <textarea
             id="review-comment"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Beschreibe deine Erfahrung (min. 10 Zeichen)..."
+            placeholder={t('reviewTextPlaceholder')}
             rows={4}
             minLength={10}
             maxLength={5000}
@@ -158,10 +160,10 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
           {submitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Wird gesendet...
+              {t('submittingButton')}
             </>
           ) : (
-            'Bewertung abgeben'
+            t('submitButton')
           )}
         </button>
       </form>

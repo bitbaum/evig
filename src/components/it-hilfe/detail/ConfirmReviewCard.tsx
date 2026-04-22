@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Star, Loader2, CheckCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 
 interface ConfirmReviewCardProps {
@@ -20,6 +21,7 @@ export function ConfirmReviewCard({
   submitting,
   onSubmit,
 }: ConfirmReviewCardProps) {
+  const t = useTranslations('itHelp.review')
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(0)
   const [reviewText, setReviewText] = useState('')
@@ -31,15 +33,15 @@ export function ConfirmReviewCard({
     setError('')
 
     if (rating < 1) {
-      setError('Bitte wähle eine Sternebewertung aus')
+      setError(t('errorNoStars'))
       return
     }
     if (recommended === null) {
-      setError('Bitte gib an, ob du den Techniker weiterempfehlen würdest')
+      setError(t('errorNoRecommend'))
       return
     }
     if (reviewText && reviewText.trim().length > 0 && reviewText.trim().length < 10) {
-      setError('Der Bewertungstext muss mindestens 10 Zeichen lang sein')
+      setError(t('errorTextTooShort'))
       return
     }
 
@@ -52,11 +54,10 @@ export function ConfirmReviewCard({
         <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div>
           <Heading level={3} className="text-lg font-semibold text-gray-900">
-            Hilfe abgeschlossen - bitte bewerten
+            {t('confirmHeading')}
           </Heading>
           <p className="text-sm text-gray-700 mt-1">
-            Der Techniker hat &quot;{requestTitle}&quot; als abgeschlossen markiert.
-            Bestätige die Hilfe und hinterlasse eine kurze Bewertung.
+            {t('confirmDescription', { requestTitle })}
           </p>
         </div>
       </div>
@@ -71,7 +72,7 @@ export function ConfirmReviewCard({
         {/* Star rating */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Gesamtbewertung *
+            {t('overallRating')}
           </label>
           <div className="flex gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -82,7 +83,7 @@ export function ConfirmReviewCard({
                 onMouseEnter={() => setHover(star)}
                 onMouseLeave={() => setHover(0)}
                 className="p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded"
-                aria-label={`${star} Sterne`}
+                aria-label={t('starAriaLabel', { count: star })}
               >
                 <Star
                   className={`w-8 h-8 transition-colors ${
@@ -99,13 +100,13 @@ export function ConfirmReviewCard({
         {/* Review text */}
         <div>
           <label htmlFor="confirm-review-text" className="block text-sm font-medium text-gray-700 mb-1">
-            Dein Erfahrungsbericht (optional)
+            {t('reviewTextOptionalLabel')}
           </label>
           <textarea
             id="confirm-review-text"
             value={reviewText}
             onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Wie war deine Erfahrung? (optional, min. 10 Zeichen)"
+            placeholder={t('reviewTextOptionalPlaceholder')}
             rows={4}
             maxLength={5000}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
@@ -116,7 +117,7 @@ export function ConfirmReviewCard({
         {/* Recommend */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Würdest du diesen Techniker weiterempfehlen? *
+            {t('recommendLabel')}
           </label>
           <div className="flex gap-3">
             <button
@@ -128,7 +129,7 @@ export function ConfirmReviewCard({
                   : 'bg-white text-gray-700 border-gray-300 hover:border-emerald-400'
               }`}
             >
-              Ja, gerne
+              {t('recommendYes')}
             </button>
             <button
               type="button"
@@ -139,7 +140,7 @@ export function ConfirmReviewCard({
                   : 'bg-white text-gray-700 border-gray-300 hover:border-red-400'
               }`}
             >
-              Nein
+              {t('recommendNo')}
             </button>
           </div>
         </div>
@@ -152,10 +153,10 @@ export function ConfirmReviewCard({
           {submitting ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Wird gesendet...
+              {t('submittingButton')}
             </>
           ) : (
-            'Bewertung abgeben'
+            t('submitButton')
           )}
         </button>
       </form>
