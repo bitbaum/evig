@@ -1,139 +1,70 @@
-import { Metadata } from 'next'
-import { ProjectPage, generateProjectMetadata, ProjectCallToAction } from '@/components/projects'
-import { ProjectPageConfig } from '@/components/projects/types'
-import { ORG } from '@/config/org'
+import { getTranslations } from 'next-intl/server'
+import { ProjectPage, ProjectCallToAction } from '@/components/projects'
+import type { ProjectPageConfig } from '@/components/projects/types'
 
-const hardwareConfig: ProjectPageConfig = {
-  hero: {
-    title: 'Hardware-Entwicklung',
-    description: 'Innovative Lösungen für nachhaltiges Computing',
-    ctas: [
-      {
-        text: 'An unseren Projekten teilnehmen',
-        href: '/get-involved/volunteer',
-        variant: 'primary'
-      },
-      {
-        text: 'Kontakt',
-        href: '/contact',
-        variant: 'outline'
-      }
-    ]
-  },
-  sections: [
-    {
-      title: 'Über unsere Hardware-Arbeit',
-      description: 'Bei revamp-it konzentrieren wir uns darauf, neue Anwendungen für ausgemusterte Computer-Hardware zu finden, die noch voll funktionsfähig ist, aber aufgrund des technologischen Fortschritts nicht mehr für ihren ursprünglichen Zweck geeignet ist.',
-      backgroundColor: 'white',
-      layout: 'grid-3',
-      cards: [
-        {
-          title: 'Hardware-Wiederverwendung',
-          description: 'Neue Funktionalitäten für gebrauchte elektronische Komponenten finden und deren Lebenszyklus verlängern'
-        },
-        {
-          title: 'Energieoptimierung',
-          description: 'Entwicklung von energie- und ressourceneffizienten Computerlösungen'
-        },
-        {
-          title: 'Open-Source-Anleitungen',
-          description: 'Erstellung umfassender Anleitungen für die Montage von Open-Source-Hardware'
-        }
-      ]
-    },
-    {
-      title: 'Aktuelle Projekte',
-      backgroundColor: 'gray',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: '12V-Stromversorgung für rezyklierte Computer',
-          description: 'Entwicklung von Lösungen zum Ersatz von 220V-Netzteilen durch 12V-Alternativen für den Einsatz mit erneuerbaren Energiequellen (Solar-, Wind- oder Pedalkraft).',
-          features: [
-            'Erstellung von Selbstbauanleitungen für 12V-Netzteile',
-            'Maximierung der Nutzung von rezyklierten Komponenten',
-            'Ermöglichung der Computernutzung in Gebieten mit begrenzter Strominfrastruktur'
-          ]
-        },
-        {
-          title: 'EPROM-Wiederverwendung',
-          description: 'Sammeln und Umprogrammieren von BIOS-Chips von alten Motherboards, Erweiterungskarten und Druckern.',
-          features: [
-            'Verwendung eines EPROM-Programmiergeräts zur Chip-Umprogrammierung',
-            'Implementierung in Netzwerkkarten mit leeren Sockeln',
-            'Ermöglichung des Netzwerk-Boots für LTSP-Clients'
-          ]
-        },
-        {
-          title: 'Netzteil-Reparatur',
-          description: 'Entwicklung von Fachwissen in der Reparatur von Computer-Netzteilen und dem Austausch von Komponenten.',
-          features: [
-            'Fokus auf grosse, leicht austauschbare Komponenten',
-            'Verlängerung der Lebensdauer von teilweise beschädigten Netzteilen',
-            'Erstellung von Reparaturanleitungen und Dokumentationen'
-          ]
-        },
-        {
-          title: 'LCD-Monitor-Reparatur',
-          description: 'Erweiterung unserer Expertise in der Reparatur von Flachbildschirmen mit kleineren Defekten.',
-          features: [
-            'Diagnose und Behebung gängiger LCD-Probleme',
-            'Reparaturtechniken auf Komponentenebene',
-            'Dokumentation erfolgreicher Reparaturmethoden'
-          ]
-        }
-      ]
-    },
-    {
-      title: 'SCSI-Kabel-Wiederverwendung',
-      backgroundColor: 'white',
-      layout: 'single',
-      cards: [
-        {
-          title: 'SCSI-Kabel-Wiederverwendung',
-          description: 'Erforschung neuer Anwendungen für SCSI-Kabel und -Schnittstellen, die einst der Standard für zuverlässige Datenübertragung in Serverumgebungen waren.',
-          features: [
-            'Finden neuer Verwendungszwecke für robuste SCSI-Kabel',
-            'Entwicklung alternativer Anwendungen für SCSI-Schnittstellen',
-            'Erstellung von Dokumentationen für Wiederverwendungsmethoden'
-          ]
-        }
-      ]
-    }
-  ],
-  metadata: {
-    title: 'Hardware-Entwicklung',
-    description: `Die Hardware-Entwicklungsarbeit von ${ORG.name} konzentriert sich auf die Entdeckung neuer Möglichkeiten für ausgemusterte Computer-Hardware, die Optimierung des Energieverbrauchs und die Erstellung von Anleitungen für die Montage von Open-Source-Hardware.`
-  }
+type RawCard = { title: string; description?: string; features?: string[] }
+type RawAction = { title: string; description: string; cta: string }
+type PageMessages = {
+  meta: { title: string; description: string }
+  hero: { title: string; description: string; cta1: string; cta2: string }
+  overview: { title: string; description: string; cards: RawCard[] }
+  projects: { title: string; cards: RawCard[] }
+  scsi: { title: string; cards: RawCard[] }
+  cta: { title: string; actions: RawAction[] }
 }
 
-export const metadata: Metadata = generateProjectMetadata(hardwareConfig)
+export async function generateMetadata() {
+  const t = await getTranslations('projects')
+  const p = t.raw('hardware') as PageMessages
+  return { title: p.meta.title, description: p.meta.description }
+}
 
-export default function HardwarePage() {
+export default async function HardwarePage() {
+  const t = await getTranslations('projects')
+  const p = t.raw('hardware') as PageMessages
+
+  const config: ProjectPageConfig = {
+    hero: {
+      title: p.hero.title,
+      description: p.hero.description,
+      ctas: [
+        { text: p.hero.cta1, href: '/get-involved/volunteer', variant: 'primary' },
+        { text: p.hero.cta2, href: '/contact', variant: 'outline' },
+      ],
+    },
+    sections: [
+      {
+        title: p.overview.title,
+        description: p.overview.description,
+        backgroundColor: 'white',
+        layout: 'grid-3',
+        cards: p.overview.cards.map(c => ({ title: c.title, description: c.description ?? '' })),
+      },
+      {
+        title: p.projects.title,
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.projects.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+      {
+        title: p.scsi.title,
+        backgroundColor: 'white',
+        layout: 'single',
+        cards: p.scsi.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+    ],
+    metadata: { title: p.meta.title, description: p.meta.description },
+  }
+
   return (
     <>
-      <ProjectPage config={hardwareConfig} />
+      <ProjectPage config={config} />
       <ProjectCallToAction
-        title="Mache mit"
+        title={p.cta.title}
         actions={[
-          {
-            title: 'Wissen teilen',
-            description: 'Bring dein Fachwissen in der Hardware-Reparatur und -Optimierung ein',
-            href: '/get-involved/volunteer',
-            ctaText: 'Engagiere sich'
-          },
-          {
-            title: 'Hardware spenden',
-            description: 'Spende alte Hardware für unsere Wiederverwendungsprojekte',
-            href: '/get-involved/donate',
-            ctaText: 'Spenden'
-          },
-          {
-            title: 'Zusammenarbeiten',
-            description: 'Arbeite mit uns an Hardware-Entwicklungsprojekten',
-            href: '/contact',
-            ctaText: 'Kontaktiere uns'
-          }
+          { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: '/get-involved/volunteer', ctaText: p.cta.actions[0].cta },
+          { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: '/get-involved/donate', ctaText: p.cta.actions[1].cta },
+          { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact', ctaText: p.cta.actions[2].cta },
         ]}
       />
     </>

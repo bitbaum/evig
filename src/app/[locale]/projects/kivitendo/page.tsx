@@ -1,127 +1,69 @@
-import { Metadata } from 'next'
-import { ProjectPage, generateProjectMetadata, ProjectCallToAction } from '@/components/projects'
-import { ProjectPageConfig } from '@/components/projects/types'
-import { ORG } from '@/config/org'
+import { getTranslations } from 'next-intl/server'
+import { ProjectPage, ProjectCallToAction } from '@/components/projects'
+import type { ProjectPageConfig } from '@/components/projects/types'
 
-const kivitendoConfig: ProjectPageConfig = {
-  hero: {
-    title: 'Kivitendo',
-    description: 'Das einzigartige Open Source CRM & ERP, das durch ständige personalisierte Weiterentwicklung höchste Qualitätsstandards erfüllt',
-    backgroundColor: 'bg-gradient-to-r from-blue-600 to-blue-800'
-  },
-  sections: [
-    {
-      title: 'Warum Kivitendo wählen?',
-      description: 'Eine umfassende Lösung für Auftragsabwicklung, Warenwirtschaft und Finanzbuchhaltung',
-      backgroundColor: 'white',
-      layout: 'grid-3',
-      cards: [
-        {
-          title: 'Open-Source-Vorteile',
-          description: '',
-          features: [
-            'Hohe Anpassungsfähigkeit an deine Bedürfnisse',
-            'Vollständiger Zugriff auf Code und Entwicklungen',
-            'Keine fixen Lizenzkosten'
-          ]
-        },
-        {
-          title: 'Auftragsabwicklung',
-          description: '',
-          features: [
-            'Kompletter Workflow von Angebot bis Rechnung',
-            'Anpassbare Dokumentvorlagen',
-            'Direkte E-Mail-Integration'
-          ]
-        },
-        {
-          title: 'Finanzbuchhaltung',
-          description: '',
-          features: [
-            'Komplette oder modulare Buchhaltung',
-            'Anpassbarer Kontenplan',
-            'Import von Kontoauszügen'
-          ]
-        }
-      ]
-    },
-    {
-      title: 'Hauptmerkmale',
-      description: 'Umfassende Funktionen für deine Geschäftsanforderungen',
-      backgroundColor: 'gray',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: 'Geschäftskonfiguration',
-          description: 'Konfiguriere das System für deine spezifischen Geschäftsanforderungen',
-          features: [
-            'Mehrere Währungen & Sprachen',
-            'Mandantenfähigkeit',
-            'Benutzerdefinierte Benutzergruppen'
-          ]
-        },
-        {
-          title: 'Integration & Anpassung',
-          description: 'Erweitere die Funktionalität nach deinen Bedürfnissen',
-          features: [
-            'Webshop-Integration',
-            'Benutzerdefinierte Variablen',
-            'Prozessautomatisierung'
-          ]
-        }
-      ]
-    },
-    {
-      title: 'Premium-Partnerschaft',
-      description: 'Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Wir bieten konfiguration und support für dieses Open-Source ERP-System.',
-      backgroundColor: 'white',
-      layout: 'single',
-      cards: [
-        {
-          title: 'Unsere Dienstleistungen',
-          description: 'Wir unterstützen dich bei der Nutzung von Kivitendo',
-          features: [
-            'Konfiguration & Customization',
-            'Support & Wartung',
-            'Schulungen und Beratung'
-          ]
-        }
-      ]
-    }
-  ],
-  metadata: {
-    title: `Kivitendo - Open Source CRM & ERP | ${ORG.name}`,
-    description: `Das einzigartige Open Source CRM & ERP von ${ORG.name}, das durch ständige personalisierte Weiterentwicklung höchste Qualitätsstandards erfüllt.`
-  }
+type RawCard = { title: string; description?: string; features?: string[] }
+type RawAction = { title: string; description: string; cta: string }
+type PageMessages = {
+  meta: { title: string; description: string }
+  hero: { title: string; description: string }
+  why: { title: string; description: string; cards: RawCard[] }
+  features: { title: string; description: string; cards: RawCard[] }
+  partnership: { title: string; description: string; cards: RawCard[] }
+  cta: { title: string; actions: RawAction[] }
 }
 
-export const metadata: Metadata = generateProjectMetadata(kivitendoConfig)
+export async function generateMetadata() {
+  const t = await getTranslations('projects')
+  const p = t.raw('kivitendo') as PageMessages
+  return { title: p.meta.title, description: p.meta.description }
+}
 
-export default function KivitendoPage() {
+export default async function KivitendoPage() {
+  const t = await getTranslations('projects')
+  const p = t.raw('kivitendo') as PageMessages
+
+  const config: ProjectPageConfig = {
+    hero: {
+      title: p.hero.title,
+      description: p.hero.description,
+      backgroundColor: 'bg-gradient-to-r from-blue-600 to-blue-800',
+    },
+    sections: [
+      {
+        title: p.why.title,
+        description: p.why.description,
+        backgroundColor: 'white',
+        layout: 'grid-3',
+        cards: p.why.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+      {
+        title: p.features.title,
+        description: p.features.description,
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.features.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+      {
+        title: p.partnership.title,
+        description: p.partnership.description,
+        backgroundColor: 'white',
+        layout: 'single',
+        cards: p.partnership.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+    ],
+    metadata: { title: p.meta.title, description: p.meta.description },
+  }
+
   return (
     <>
-      <ProjectPage config={kivitendoConfig} />
+      <ProjectPage config={config} />
       <ProjectCallToAction
-        title="Mehr erfahren"
+        title={p.cta.title}
         actions={[
-          {
-            title: 'Kivitendo Schweiz',
-            description: 'Besuche die offizielle Schweizer Kivitendo-Website',
-            href: 'https://www.kivitendo.ch',
-            ctaText: 'Website besuchen'
-          },
-          {
-            title: 'Community-Forum',
-            description: 'Hol dir Hilfe und teile Wissen mit anderen Benutzern',
-            href: 'https://forum.kivitendo.de/',
-            ctaText: 'Forum besuchen'
-          },
-          {
-            title: 'Kontakt',
-            description: 'Kontaktiere uns für mehr Informationen',
-            href: '/contact',
-            ctaText: 'Kontakt aufnehmen'
-          }
+          { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: 'https://www.kivitendo.ch', ctaText: p.cta.actions[0].cta },
+          { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: 'https://forum.kivitendo.de/', ctaText: p.cta.actions[1].cta },
+          { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact', ctaText: p.cta.actions[2].cta },
         ]}
       />
     </>

@@ -1,124 +1,63 @@
-import { Metadata } from 'next'
-import { ProjectPage, generateProjectMetadata, ProjectCallToAction } from '@/components/projects'
-import { ProjectPageConfig } from '@/components/projects/types'
-import { ORG } from '@/config/org'
+import { getTranslations } from 'next-intl/server'
+import { ProjectPage, ProjectCallToAction } from '@/components/projects'
+import type { ProjectPageConfig } from '@/components/projects/types'
 
-// Project configuration
-const compiratConfig: ProjectPageConfig = {
-  hero: {
-    title: 'Compirat',
-    description: 'Computerkenntnisse und Linux-Bildung für alle',
-    ctas: [
-      {
-        text: 'Freiwilliger werden',
-        href: '/get-involved/volunteer',
-        variant: 'primary'
-      },
-      {
-        text: 'Kontakt aufnehmen',
-        href: '/contact',
-        variant: 'outline'
-      }
-    ]
-  },
-  sections: [
-    {
-      title: 'Über Compirat',
-      description: 'Ein gemeinsames Projekt von Caritas Zürich und revamp-it, das zugängliche Computerkurse und Internetzugangspunkte für Menschen mit geringem Einkommen im Kanton Zürich anbietet.',
-      backgroundColor: 'white',
-      layout: 'grid-3',
-      cards: [
-        {
-          title: 'Lokale Kurse',
-          description: 'Computer-Einstiegskurse in der Nachbarschaft der Teilnehmer oder in nahegelegenen Standorten'
-        },
-        {
-          title: 'Linux-Fokus',
-          description: 'Einführung in Linux als Betriebssystem und Bereitstellung einer kostenlosen und offenen Alternative'
-        },
-        {
-          title: 'Internetzugang',
-          description: 'Kostenlose Internetzugangspunkte mit professioneller Betreuung zum Üben und Lernen'
-        }
-      ]
-    },
-    {
-      title: 'Unser Programm',
-      backgroundColor: 'gray',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: 'Einstiegskurse',
-          description: 'Umfassende Computerkurse für Anfänger, die sich auf grundlegende Fähigkeiten und Linux-Grundlagen konzentrieren.',
-          features: [
-            'Grundlegende Computerbedienung',
-            'Einführung in Linux',
-            'Internet- und E-Mail-Grundlagen'
-          ]
-        },
-        {
-          title: 'Internetzugangspunkte',
-          description: 'Betreute Übungsräume, in denen Teilnehmer ihre Fähigkeiten anwenden und das Internet nutzen können.',
-          features: [
-            'Professionelle Betreuung',
-            'Kostenloser Internetzugang',
-            'Übung und Unterstützung'
-          ]
-        },
-        {
-          title: 'Fortgeschrittenenkurse',
-          description: 'Spezialisierte Kurse für Teilnehmer, die ihr Wissen und ihre Fähigkeiten vertiefen möchten.',
-          features: [
-            'Fortgeschrittene Linux-Nutzung',
-            'Produktivitätstools',
-            'Digitale Kommunikation'
-          ]
-        },
-        {
-          title: 'Online-Ressourcen',
-          description: 'Umfassende Online-Plattform mit Lernmaterialien und Unterstützungsressourcen.',
-          features: [
-            'Kursmaterialien',
-            'Linux-Tutorials',
-            'Übungsaufgaben'
-          ]
-        }
-      ]
-    }
-  ],
-  metadata: {
-    title: `Compirat - Computerkenntnisse mit Linux | ${ORG.name}`,
-    description: 'Ein gemeinsames Projekt von Caritas Zürich und revamp-it, das Computerkurse und Internetzugangspunkte für Menschen mit geringem Einkommen im Kanton Zürich anbietet.'
-  }
+type RawCard = { title: string; description?: string; features?: string[] }
+type RawAction = { title: string; description: string; cta: string }
+type PageMessages = {
+  meta: { title: string; description: string }
+  hero: { title: string; description: string; cta1: string; cta2: string }
+  about: { title: string; description: string; cards: RawCard[] }
+  program: { title: string; cards: RawCard[] }
+  cta: { title: string; actions: RawAction[] }
 }
 
-export const metadata: Metadata = generateProjectMetadata(compiratConfig)
+export async function generateMetadata() {
+  const t = await getTranslations('projects')
+  const p = t.raw('compirat') as PageMessages
+  return { title: p.meta.title, description: p.meta.description }
+}
 
-export default function CompiratPage() {
+export default async function CompiratPage() {
+  const t = await getTranslations('projects')
+  const p = t.raw('compirat') as PageMessages
+
+  const config: ProjectPageConfig = {
+    hero: {
+      title: p.hero.title,
+      description: p.hero.description,
+      ctas: [
+        { text: p.hero.cta1, href: '/get-involved/volunteer', variant: 'primary' },
+        { text: p.hero.cta2, href: '/contact', variant: 'outline' },
+      ],
+    },
+    sections: [
+      {
+        title: p.about.title,
+        description: p.about.description,
+        backgroundColor: 'white',
+        layout: 'grid-3',
+        cards: p.about.cards.map(c => ({ title: c.title, description: c.description ?? '' })),
+      },
+      {
+        title: p.program.title,
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.program.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+    ],
+    metadata: { title: p.meta.title, description: p.meta.description },
+  }
+
   return (
     <>
-      <ProjectPage config={compiratConfig} />
+      <ProjectPage config={config} />
       <ProjectCallToAction
-        title="Mitmachen"
+        title={p.cta.title}
         actions={[
-          {
-            title: 'Freiwilliger werden',
-            description: 'Unterstütze Kurse und Internetzugangspunkte als Freiwilliger',
-            href: '/get-involved/volunteer',
-            ctaText: 'Mitmachen'
-          },
-          {
-            title: 'Mehr erfahren',
-            description: 'Besuche unsere Website für detaillierte Informationen und Ressourcen',
-            href: 'https://www.compirat.ch',
-            ctaText: 'Compirat.ch besuchen'
-          },
-          {
-            title: 'Kontakt',
-            description: 'Kontaktiere uns für weitere Informationen über unsere Programme',
-            href: '/contact',
-            ctaText: 'Kontakt aufnehmen'
-          }
+          { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: '/get-involved/volunteer', ctaText: p.cta.actions[0].cta },
+          { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: 'https://www.compirat.ch', ctaText: p.cta.actions[1].cta },
+          { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact', ctaText: p.cta.actions[2].cta },
         ]}
       />
     </>

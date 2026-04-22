@@ -1,129 +1,69 @@
-import { Metadata } from 'next'
-import { ProjectPage, generateProjectMetadata, ProjectCallToAction } from '@/components/projects'
-import { ProjectPageConfig } from '@/components/projects/types'
+import { getTranslations } from 'next-intl/server'
+import { ProjectPage, ProjectCallToAction } from '@/components/projects'
+import type { ProjectPageConfig } from '@/components/projects/types'
 
-const linuxolaConfig: ProjectPageConfig = {
-  hero: {
-    title: 'Verein Linuxola',
-    description: 'Die digitale Kluft zwischen der Schweiz und Afrika überbrücken',
-    ctas: [
-      {
-        text: 'Ausrüstung spenden',
-        href: '/get-involved/donate',
-        variant: 'primary'
-      },
-      {
-        text: 'Freiwillig engagieren',
-        href: '/get-involved/volunteer',
-        variant: 'outline'
-      }
-    ]
-  },
-  sections: [
-    {
-      title: 'Über Linuxola',
-      description: 'Der Verein Linuxola wurde am 2. Dezember 2005 von acht Personen aus verschiedenen Regionen der Schweiz gegründet. Zweck des Vereins ist es, unseren Partnern in Afrika den Zugang zur Informationstechnologie und eine Anbindung an die globalen digitalen Gemeingüter zu ermöglichen.',
-      backgroundColor: 'white',
-      layout: 'single'
-    },
-    {
-      title: '',
-      backgroundColor: 'gray',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: 'Unsere Mission',
-          description: '',
-          features: [
-            'Bereitstellung von Zugang zu Technologie und Schulungen',
-            'Unterstützung nachhaltiger IT-Infrastruktur',
-            'Förderung von Open-Source-Lösungen',
-            'Aufbau langfristiger Partnerschaften'
-          ]
-        },
-        {
-          title: 'Unsere Wirkung',
-          description: '',
-          features: [
-            'Einrichtung von Computerräumen in Schulen und Gemeinden',
-            'Ausbildung lokaler IT-Fachkräfte',
-            'Implementierung nachhaltiger Technologielösungen',
-            'Schaffung dauerhafter Partnerschaften mit afrikanischen Organisationen'
-          ]
-        }
-      ]
-    },
-    {
-      title: 'Benötigte Ausrüstung',
-      backgroundColor: 'white',
-      layout: 'grid-3',
-      cards: [
-        {
-          title: 'Computer & Laptops',
-          description: '',
-          features: [
-            'Laptops (3-5 Jahre alt)',
-            'Desktop-PCs',
-            'Monitore',
-            'Tastaturen & Mäuse'
-          ]
-        },
-        {
-          title: 'Netzwerk',
-          description: '',
-          features: [
-            'Netzwerk-Switches',
-            'WLAN-Router',
-            'Netzwerkkabel',
-            'USV-Systeme'
-          ]
-        },
-        {
-          title: 'Zubehör',
-          description: '',
-          features: [
-            'USB-Sticks',
-            'Externe Festplatten',
-            'Netzteile',
-            'RAM-Module'
-          ]
-        }
-      ]
-    }
-  ],
-  metadata: {
-    title: 'Verein Linuxola',
-    description: 'Linuxola ist eine Schweizer Organisation, die sich dem Zugang zu Informationstechnologie und der Anbindung afrikanischer Partner an die globalen digitalen Gemeingüter widmet.'
-  }
+type RawCard = { title: string; description?: string; features?: string[] }
+type RawAction = { title: string; description: string; cta: string }
+type PageMessages = {
+  meta: { title: string; description: string }
+  hero: { title: string; description: string; cta1: string; cta2: string }
+  about: { title: string; description: string }
+  impact: { cards: RawCard[] }
+  equipment: { title: string; cards: RawCard[] }
+  cta: { title: string; actions: RawAction[] }
 }
 
-export const metadata: Metadata = generateProjectMetadata(linuxolaConfig)
+export async function generateMetadata() {
+  const t = await getTranslations('projects')
+  const p = t.raw('linuxola') as PageMessages
+  return { title: p.meta.title, description: p.meta.description }
+}
 
-export default function LinuxolaPage() {
+export default async function LinuxolaPage() {
+  const t = await getTranslations('projects')
+  const p = t.raw('linuxola') as PageMessages
+
+  const config: ProjectPageConfig = {
+    hero: {
+      title: p.hero.title,
+      description: p.hero.description,
+      ctas: [
+        { text: p.hero.cta1, href: '/get-involved/donate', variant: 'primary' },
+        { text: p.hero.cta2, href: '/get-involved/volunteer', variant: 'outline' },
+      ],
+    },
+    sections: [
+      {
+        title: p.about.title,
+        description: p.about.description,
+        backgroundColor: 'white',
+        layout: 'single',
+      },
+      {
+        title: '',
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.impact.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+      {
+        title: p.equipment.title,
+        backgroundColor: 'white',
+        layout: 'grid-3',
+        cards: p.equipment.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+    ],
+    metadata: { title: p.meta.title, description: p.meta.description },
+  }
+
   return (
     <>
-      <ProjectPage config={linuxolaConfig} />
+      <ProjectPage config={config} />
       <ProjectCallToAction
-        title="Mache mit"
+        title={p.cta.title}
         actions={[
-          {
-            title: 'Ausrüstung spenden',
-            description: 'deine gebrauchte IT-Ausrüstung kann in afrikanischen Gemeinden einen echten Unterschied machen',
-            href: '/get-involved/donate',
-            ctaText: 'Jetzt spenden'
-          },
-          {
-            title: 'Freiwillig engagieren',
-            description: 'Teile dein technisches Fachwissen und hilf beim Aufbau von Computerräumen',
-            href: '/get-involved/volunteer',
-            ctaText: 'Engagiere sich'
-          },
-          {
-            title: 'Kontakt',
-            description: 'Kontaktiere uns für weitere Informationen',
-            href: '/contact',
-            ctaText: 'Kontakt aufnehmen'
-          }
+          { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: '/get-involved/donate', ctaText: p.cta.actions[0].cta },
+          { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: '/get-involved/volunteer', ctaText: p.cta.actions[1].cta },
+          { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact', ctaText: p.cta.actions[2].cta },
         ]}
       />
     </>

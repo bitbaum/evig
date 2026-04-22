@@ -1,108 +1,54 @@
-import { Metadata } from 'next'
-import { ProjectPage, generateProjectMetadata } from '@/components/projects'
-import { ProjectPageConfig } from '@/components/projects/types'
-import { Server, Users, Settings, CheckCircle, Rocket, Phone } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
+import { ProjectPage } from '@/components/projects'
+import type { ProjectPageConfig } from '@/components/projects/types'
 
-const ltspConfig: ProjectPageConfig = {
-  hero: {
-    title: 'LTSP - Linux Terminal Server Project',
-    description: 'Verlängerung der Lebensdauer älterer Computer durch serverbasiertes Computing',
-    backgroundColor: 'bg-gradient-to-r from-green-600 to-blue-700'
-  },
-  sections: [
-    {
-      title: '',
-      backgroundColor: 'gray',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: 'Über LTSP',
-          description: 'Das Linux Terminal Server Project (LTSP) ermöglicht es mehreren Benutzern, gleichzeitig an älteren Computern zu arbeiten, indem sie mit einem leistungsstarken Server verbunden werden. Dies optimiert die Ressourcennutzung und verlängert die Lebensdauer der Hardware.'
-        },
-        {
-          title: 'Wie es funktioniert',
-          description: '',
-          features: [
-            'Anwendungen laufen auf einem zentralen Server',
-            'Thin Clients oder alte PCs fungieren als Terminals',
-            'Effizientes Ressourcenmanagement',
-            'Konsistente Benutzererfahrung',
-            'Minimale Anforderungen an die Client-Rechner'
-          ]
-        }
-      ]
-    },
-    {
-      title: '',
-      backgroundColor: 'gray',
-      layout: 'grid-3',
-      cards: [
-        {
-          title: 'Vorteile',
-          description: '',
-          features: [
-            'Verlängerung der Hardware-Lebensdauer',
-            'Reduzierung der Wartungskosten',
-            'Zentralisierte Verwaltung & Updates',
-            'Verbesserte Sicherheit',
-            'Geringerer Energieverbrauch'
-          ]
-        },
-        {
-          title: 'Implementierung',
-          description: '',
-          features: [
-            'Server-Einrichtung & Konfiguration',
-            'Client-Vorbereitung',
-            'Netzwerkoptimierung',
-            'Benutzerverwaltung & Sicherheit',
-            'Laufender Support'
-          ]
-        },
-        {
-          title: 'Anwendungsfälle',
-          description: '',
-          features: [
-            'Schulen & Bildung',
-            'Öffentliche Computerräume',
-            'Unternehmen',
-            'Gemeindezentren',
-            'Gemeinnützige Organisationen'
-          ]
-        }
-      ]
-    },
-    {
-      title: '',
-      backgroundColor: 'gray',
-      layout: 'grid-2',
-      cards: [
-        {
-          title: 'Erste Schritte',
-          description: '',
-          features: [
-            'Bewertung deiner Infrastruktur',
-            'Planung deiner Implementierung',
-            'Einrichtung von Server & Clients',
-            'Schulung der Mitarbeiter',
-            'Laufender Support'
-          ]
-        },
-        {
-          title: 'Kontaktiere uns',
-          description: 'Möchtest du mehr darüber erfahren, wie LTSP deiner Organisation zugute kommen kann? Kontaktiere uns, um deine Bedürfnisse zu besprechen und wie wir dir bei der Implementierung dieser leistungsstarken Lösung helfen können.'
-        }
-      ]
-    }
-  ],
-  metadata: {
-    title: 'LTSP - Linux Terminal Server Project',
-    description: 'Das Linux Terminal Server Project ermöglicht es mehreren Benutzern, gleichzeitig an älteren Computern zu arbeiten, indem sie mit einem leistungsstarken Server verbunden werden, was die Ressourcennutzung optimiert und die Lebensdauer der Hardware verlängert.'
-  }
+type RawCard = { title: string; description?: string; features?: string[] }
+type PageMessages = {
+  meta: { title: string; description: string }
+  hero: { title: string; description: string }
+  intro: { cards: RawCard[] }
+  details: { cards: RawCard[] }
+  start: { cards: RawCard[] }
 }
 
-export const metadata: Metadata = generateProjectMetadata(ltspConfig)
+export async function generateMetadata() {
+  const t = await getTranslations('projects')
+  const p = t.raw('ltsp') as PageMessages
+  return { title: p.meta.title, description: p.meta.description }
+}
 
-export default function LTSPPage() {
-  return <ProjectPage config={ltspConfig} />
+export default async function LTSPPage() {
+  const t = await getTranslations('projects')
+  const p = t.raw('ltsp') as PageMessages
+
+  const config: ProjectPageConfig = {
+    hero: {
+      title: p.hero.title,
+      description: p.hero.description,
+      backgroundColor: 'bg-gradient-to-r from-green-600 to-blue-700',
+    },
+    sections: [
+      {
+        title: '',
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.intro.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+      {
+        title: '',
+        backgroundColor: 'gray',
+        layout: 'grid-3',
+        cards: p.details.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+      {
+        title: '',
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.start.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
+      },
+    ],
+    metadata: { title: p.meta.title, description: p.meta.description },
+  }
+
+  return <ProjectPage config={config} />
 }
