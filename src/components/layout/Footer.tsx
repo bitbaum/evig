@@ -75,26 +75,26 @@ export default function Footer() {
             <address className="space-y-4 not-italic">
               {footerLocations.map((location) => (
                 <div className="flex items-start" key={location.name}>
-                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-400" />
+                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-300" />
                   <div>
                     <p className="text-sm font-medium text-gray-200">{location.name}</p>
                     {location.addressLines.map((line) => (
                       <p className="text-sm text-gray-300" key={line}>{line}</p>
                     ))}
                     {'extra' in location && location.extra && (
-                      <p className="text-xs text-gray-400 mt-0.5">{location.extra}</p>
+                      <p className="text-xs text-gray-300 mt-0.5">{location.extra}</p>
                     )}
                   </div>
                 </div>
               ))}
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <Phone className="w-4 h-4 text-gray-300 flex-shrink-0" />
                 <a href={`tel:${CONTACT.phone}`} className="text-sm text-gray-300 hover:text-white transition-colors">
                   {CONTACT.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                <Mail className="w-4 h-4 text-gray-300 flex-shrink-0" />
                 <a href={`mailto:${CONTACT.email}`} className="text-sm text-gray-300 hover:text-white transition-colors">
                   {CONTACT.email}
                 </a>
@@ -129,7 +129,7 @@ export default function Footer() {
             <a
               key={social.name}
               href={social.href}
-              className="p-2 text-gray-400 hover:text-white transition-colors rounded-md hover:bg-gray-800"
+              className="p-2 text-gray-300 hover:text-white transition-colors rounded-md hover:bg-gray-800"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -141,27 +141,27 @@ export default function Footer() {
 
         {/* Legal Links */}
         <div className="mt-6 pt-6 border-t border-gray-800">
-          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-400">
-            <Link href="/impressum" className="hover:text-gray-300 transition-colors">
+          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-300">
+            <Link href="/impressum" className="hover:text-white transition-colors">
               {tFooter('impressum')}
             </Link>
-            <Link href="/datenschutz" className="hover:text-gray-300 transition-colors">
+            <Link href="/datenschutz" className="hover:text-white transition-colors">
               {tFooter('privacyPolicy')}
             </Link>
-            <Link href="/agb" className="hover:text-gray-300 transition-colors">
+            <Link href="/agb" className="hover:text-white transition-colors">
               {tFooter('termsOfService')}
             </Link>
-            <Link href="/transparenz" className="hover:text-gray-300 transition-colors">
+            <Link href="/transparenz" className="hover:text-white transition-colors">
               {tFooter('transparency')}
             </Link>
-            <Link href="/mitglied-werden" className="hover:text-gray-300 transition-colors">
+            <Link href="/mitglied-werden" className="hover:text-white transition-colors">
               {tNav('membership')}
             </Link>
           </nav>
         </div>
 
         {/* Copyright */}
-        <div className="mt-6 text-center text-xs text-gray-500">
+        <div className="mt-6 text-center text-xs text-gray-300">
           &copy; {new Date().getFullYear()} {ORG.name}. {tFooter('allRightsReserved')}
         </div>
       </div>

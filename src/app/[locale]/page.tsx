@@ -270,6 +270,12 @@ export default async function Home() {
       {/* Section 3: Social Proof */}
       <div className="bg-gray-50 py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <Heading level={2} variant="site" className="tracking-tight text-gray-900">
+              {t('impact.title')}
+            </Heading>
+            <p className="mt-2 text-base text-gray-600">{t('impact.subtitle')}</p>
+          </div>
           {/* Media Logos */}
           <AsSeenInLogos />
 
