@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Star, MessageSquare, User } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateMonth } from '@/lib/date-formats'
@@ -25,6 +26,7 @@ interface WorkshopReviewsProps {
 }
 
 export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) {
+  const t = useTranslations('workshops.reviews')
   const [reviews, setReviews] = useState<Review[]>([])
   const [stats, setStats] = useState<ReviewStats>({ averageRating: 0, reviewCount: 0 })
   const [loading, setLoading] = useState(true)
@@ -38,18 +40,18 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
           setReviews(result.data.reviews)
           setStats(result.data.stats)
         } else {
-          setError(result.error || 'Fehler beim Laden der Bewertungen')
+          setError(result.error || t('error'))
         }
       } catch (err) {
         logger.error('Error fetching workshop reviews', { error: err })
-        setError('Netzwerkfehler')
+        setError(t('networkError'))
       } finally {
         setLoading(false)
       }
     }
 
     fetchReviews()
-  }, [workshopSlug])
+  }, [workshopSlug, t])
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
@@ -86,9 +88,9 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
     return (
       <div className="text-center py-8">
         <Star className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-        <p className="text-gray-500">Noch keine Bewertungen</p>
+        <p className="text-gray-500">{t('emptyTitle')}</p>
         <p className="text-gray-500 text-sm mt-1">
-          Bewertungen erscheinen hier, sobald Teilnehmer Feedback geben.
+          {t('emptyMessage')}
         </p>
       </div>
     )
@@ -107,7 +109,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
           </div>
         </div>
         <div className="text-gray-600 text-sm">
-          {stats.reviewCount} {stats.reviewCount === 1 ? 'Bewertung' : 'Bewertungen'}
+          {t('count', { count: stats.reviewCount })}
         </div>
       </div>
 
@@ -141,7 +143,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
       {reviews.length > 5 && (
         <div className="mt-4 text-center">
           <button className="text-green-600 hover:text-green-700 text-sm font-medium">
-            Alle {reviews.length} Bewertungen anzeigen
+            {t('showAll', { count: reviews.length })}
           </button>
         </div>
       )}

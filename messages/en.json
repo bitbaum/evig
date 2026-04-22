@@ -682,7 +682,22 @@
       "viewOrder": "View order",
       "continueShopping": "Continue shopping"
     },
-    "loading": "Loading marketplace..."
+    "loading": "Loading marketplace...",
+    "review": {
+      "heading": "Write a review",
+      "ratingLabel": "Rating",
+      "titleLabel": "Title",
+      "titleOptional": "(optional)",
+      "titlePlaceholder": "Brief summary",
+      "contentLabel": "Review",
+      "contentPlaceholder": "Describe your experience...",
+      "cancelButton": "Cancel",
+      "submitButton": "Submit review",
+      "errorNoRating": "Please select a rating",
+      "errorTooShort": "Review must be at least 10 characters long",
+      "errorSubmit": "Error submitting the review",
+      "errorGeneric": "An unexpected error occurred"
+    }
   },
   "services": {
     "meta": {
@@ -1974,6 +1989,39 @@
           "privacyLink": "Privacy Policy"
         }
       }
+    },
+    "registration": {
+      "loading": "Loading registration status...",
+      "registrationFailed": "Registration failed",
+      "networkError": "Network error. Please try again.",
+      "processingError": "Error creating registration",
+      "loadError": "Error loading registration status",
+      "fullHeading": "Workshop fully booked",
+      "fullNoSpots": "No spots available",
+      "fullMessage": "This workshop is fully booked. Check back regularly for new dates.",
+      "fullButton": "Sold out",
+      "errorHeading": "Error",
+      "errorTitle": "An error occurred",
+      "retryButton": "Try again",
+      "paymentHeading": "Complete payment",
+      "paymentWorkshopLabel": "Workshop",
+      "paymentAmountLabel": "Amount",
+      "cancelButton": "Cancel",
+      "preparingPayment": "Preparing payment...",
+      "registering": "Registering...",
+      "registerHeading": "Register for workshop",
+      "registerFree": "Register for workshop",
+      "registerPaid": "Register & pay",
+      "paymentNote": "Secure payment via our payment provider.",
+      "confirmationNote": "You will receive a confirmation email with all details."
+    },
+    "reviews": {
+      "error": "Error loading reviews",
+      "networkError": "Network error",
+      "emptyTitle": "No reviews yet",
+      "emptyMessage": "Reviews will appear here once participants give feedback.",
+      "count": "{count, plural, one {# review} other {# reviews}}",
+      "showAll": "Show all {count} reviews"
     }
   },
   "about": {

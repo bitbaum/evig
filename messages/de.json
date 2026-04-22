@@ -733,7 +733,22 @@
       "viewOrder": "Bestellung ansehen",
       "continueShopping": "Weiter einkaufen"
     },
-    "loading": "Marktplatz laden..."
+    "loading": "Marktplatz laden...",
+    "review": {
+      "heading": "Bewertung schreiben",
+      "ratingLabel": "Bewertung",
+      "titleLabel": "Titel",
+      "titleOptional": "(optional)",
+      "titlePlaceholder": "Kurze Zusammenfassung",
+      "contentLabel": "Bewertung",
+      "contentPlaceholder": "Beschreibe deine Erfahrung...",
+      "cancelButton": "Abbrechen",
+      "submitButton": "Bewertung senden",
+      "errorNoRating": "Bitte wähle eine Bewertung",
+      "errorTooShort": "Bewertung muss mindestens 10 Zeichen lang sein",
+      "errorSubmit": "Fehler beim Senden der Bewertung",
+      "errorGeneric": "Ein unerwarteter Fehler ist aufgetreten"
+    }
   },
   "services": {
     "meta": {
@@ -2025,6 +2040,39 @@
           "privacyLink": "Datenschutzerklärung"
         }
       }
+    },
+    "registration": {
+      "loading": "Lade Anmeldestatus...",
+      "registrationFailed": "Anmeldung fehlgeschlagen",
+      "networkError": "Netzwerkfehler. Bitte versuche es erneut.",
+      "processingError": "Fehler beim Erstellen der Registrierung",
+      "loadError": "Fehler beim Laden des Anmeldestatus",
+      "fullHeading": "Workshop ausgebucht",
+      "fullNoSpots": "Keine Plätze mehr verfügbar",
+      "fullMessage": "Dieser Workshop ist bereits ausgebucht. Schau regelmässig vorbei für neue Termine.",
+      "fullButton": "Ausgebucht",
+      "errorHeading": "Fehler",
+      "errorTitle": "Ein Fehler ist aufgetreten",
+      "retryButton": "Erneut versuchen",
+      "paymentHeading": "Zahlung abschliessen",
+      "paymentWorkshopLabel": "Workshop",
+      "paymentAmountLabel": "Betrag",
+      "cancelButton": "Abbrechen",
+      "preparingPayment": "Zahlung wird vorbereitet...",
+      "registering": "Wird angemeldet...",
+      "registerHeading": "Für Workshop anmelden",
+      "registerFree": "Für Workshop anmelden",
+      "registerPaid": "Anmelden & bezahlen",
+      "paymentNote": "Sichere Zahlung über unseren Zahlungsanbieter.",
+      "confirmationNote": "Du erhältst eine Bestätigungs-E-Mail mit allen Details."
+    },
+    "reviews": {
+      "error": "Fehler beim Laden der Bewertungen",
+      "networkError": "Netzwerkfehler",
+      "emptyTitle": "Noch keine Bewertungen",
+      "emptyMessage": "Bewertungen erscheinen hier, sobald Teilnehmer Feedback geben.",
+      "count": "{count, plural, one {# Bewertung} other {# Bewertungen}}",
+      "showAll": "Alle {count} Bewertungen anzeigen"
     }
   },
   "about": {

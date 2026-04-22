@@ -21,6 +21,7 @@ import {
   Loader2,
   CreditCard,
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
@@ -42,6 +43,7 @@ interface WorkshopRegistrationFormProps {
 }
 
 export default function WorkshopRegistrationForm({ workshop, instance }: WorkshopRegistrationFormProps) {
+  const t = useTranslations('workshops.registration')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [registrationStatus, setRegistrationUIStatus] = useState<RegistrationUIStatus>('checking')
@@ -68,7 +70,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       } catch (err) {
         logger.error('Error checking registration', { error: err })
         setRegistrationUIStatus('error')
-        setError('Fehler beim Laden des Anmeldestatus')
+        setError(t('loadError'))
       }
     }
 
@@ -117,11 +119,11 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         }, 2000)
       } else {
         setRegistrationUIStatus('error')
-        setError(result.error || 'Anmeldung fehlgeschlagen')
+        setError(result.error || t('registrationFailed'))
       }
     } catch {
       setRegistrationUIStatus('error')
-      setError('Netzwerkfehler. Bitte versuche es erneut.')
+      setError(t('networkError'))
     }
   }
 
@@ -153,11 +155,11 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         setRegistrationUIStatus('payment')
       } else {
         setRegistrationUIStatus('error')
-        setError(result.error || 'Fehler beim Erstellen der Registrierung')
+        setError(result.error || t('processingError'))
       }
     } catch {
       setRegistrationUIStatus('error')
-      setError('Netzwerkfehler. Bitte versuche es erneut.')
+      setError(t('networkError'))
     }
   }
 
@@ -166,7 +168,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
     return (
       <div className="text-center py-8">
         <Loader2 className="w-8 h-8 animate-spin text-green-600 mx-auto mb-3" />
-        <p className="text-gray-600">Lade Anmeldestatus...</p>
+        <p className="text-gray-600">{t('loading')}</p>
       </div>
     )
   }
@@ -191,15 +193,15 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (isFull) {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Workshop ausgebucht</Heading>
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('fullHeading')}</Heading>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div className="flex items-center text-red-800 mb-2">
             <AlertCircle className="w-5 h-5 mr-2" />
-            <span className="font-medium">Keine Plätze mehr verfügbar</span>
+            <span className="font-medium">{t('fullNoSpots')}</span>
           </div>
           <p className="text-red-700 text-sm">
-            Dieser Workshop ist bereits ausgebucht. Schau regelmässig vorbei für neue Termine.
+            {t('fullMessage')}
           </p>
         </div>
 
@@ -207,7 +209,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           disabled
           className="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed"
         >
-          Ausgebucht
+          {t('fullButton')}
         </button>
       </div>
     )
@@ -217,12 +219,12 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'error') {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Fehler</Heading>
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('errorHeading')}</Heading>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div className="flex items-center text-red-800 mb-2">
             <AlertCircle className="w-5 h-5 mr-2" />
-            <span className="font-medium">Ein Fehler ist aufgetreten</span>
+            <span className="font-medium">{t('errorTitle')}</span>
           </div>
           <p className="text-red-700 text-sm">{error}</p>
         </div>
@@ -231,7 +233,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           onClick={() => setRegistrationUIStatus('not-registered')}
           className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
         >
-          Erneut versuchen
+          {t('retryButton')}
         </button>
       </div>
     )
@@ -241,17 +243,17 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'payment' && paymentData) {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Zahlung abschliessen</Heading>
+        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('paymentHeading')}</Heading>
 
         {/* Payment Summary */}
         <div className="bg-gray-50 rounded-lg p-4 mb-4">
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Workshop</span>
+              <span className="text-gray-600">{t('paymentWorkshopLabel')}</span>
               <span className="font-medium">{workshop.title}</span>
             </div>
             <div className="flex justify-between border-t pt-2">
-              <span className="font-semibold">Betrag</span>
+              <span className="font-semibold">{t('paymentAmountLabel')}</span>
               <span className="font-semibold text-green-600">CHF {paymentData.amount}</span>
             </div>
           </div>
@@ -267,7 +269,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
           onClick={() => setRegistrationUIStatus('not-registered')}
           className="w-full mt-3 px-4 py-2 text-gray-600 text-sm hover:text-gray-800 transition-colors"
         >
-          Abbrechen
+          {t('cancelButton')}
         </button>
       </div>
     )
@@ -280,8 +282,8 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         <Loader2 className="w-8 h-8 animate-spin text-green-600 mx-auto mb-3" />
         <p className="text-gray-600">
           {registrationStatus === 'processing'
-            ? 'Zahlung wird vorbereitet...'
-            : 'Wird angemeldet...'
+            ? t('preparingPayment')
+            : t('registering')
           }
         </p>
       </div>
@@ -291,7 +293,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   // Default: Registration form
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">Für Workshop anmelden</Heading>
+      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('registerHeading')}</Heading>
 
       <WorkshopInstanceCard
         instance={instance}
@@ -307,18 +309,18 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         {requiresPayment ? (
           <>
             <CreditCard className="w-4 h-4 mr-2" />
-            Anmelden & bezahlen
+            {t('registerPaid')}
           </>
         ) : (
-          'Für Workshop anmelden'
+          t('registerFree')
         )}
       </button>
 
       {/* Info */}
       <p className="text-xs text-gray-500 mt-3 text-center">
         {requiresPayment
-          ? 'Sichere Zahlung über unseren Zahlungsanbieter.'
-          : 'du erhältst eine Bestätigungs-E-Mail mit allen Details.'
+          ? t('paymentNote')
+          : t('confirmationNote')
         }
       </p>
     </div>
