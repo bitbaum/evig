@@ -515,37 +515,57 @@
       "submit": "Signaler"
     },
     "checkout": {
-      "title": "Paiement sécurisé",
-      "backToListing": "Retour à l'annonce",
-      "backToMarketplace": "Retour à la place de marché",
       "loading": "Chargement...",
-      "ownListing": "Votre propre annonce",
-      "ownListingDesc": "Vous ne pouvez pas acheter votre propre annonce.",
-      "backToListingLink": "Retour à l'annonce",
-      "chooseDelivery": "Choisir le mode de livraison",
-      "pickup": "Retrait",
-      "shipping": "Livraison",
-      "shippingNationwide": "Dans toute la Suisse",
-      "free": "Gratuit",
-      "shippingAddress": "Adresse de livraison",
-      "name": "Nom",
-      "street": "Rue",
-      "postalCode": "NPA",
-      "postalCodeInvalid": "Le NPA doit avoir 4 chiffres",
-      "city": "Ville",
-      "redirecting": "Redirection vers le paiement...",
-      "proceed": "Procéder au paiement",
-      "orderSummary": "Résumé de la commande",
-      "seller": "Vendeur",
-      "itemPrice": "Prix de l'article",
-      "shippingCost": "Frais de port",
-      "pickupFree": "Retrait",
-      "serviceFee": "Frais de service ({rate}%)",
-      "serviceFeeIncluded": "incl. {amount}",
-      "total": "Total",
-      "buyerProtection": "Protection acheteur — Le montant n'est libéré qu'après confirmation de réception",
+      "backToMarketplace": "Retour au marché",
+      "backToListing": "Retour à l'annonce",
+      "notFound": "Annonce introuvable",
+      "loadError": "Erreur lors du chargement de l'annonce",
+      "orderError": "Impossible de créer la commande",
       "networkError": "Erreur réseau lors de la création de la commande",
-      "orderError": "Impossible de créer la commande"
+      "ownListing": {
+        "title": "Votre propre annonce",
+        "message": "Vous ne pouvez pas acheter votre propre annonce."
+      },
+      "title": "Paiement sécurisé",
+      "delivery": {
+        "title": "Choisir le mode de livraison",
+        "pickup": "Retrait",
+        "free": "Gratuit",
+        "shipping": "Livraison",
+        "shippingNationwide": "Toute la Suisse"
+      },
+      "address": {
+        "title": "Adresse de livraison",
+        "name": "Nom",
+        "street": "Rue",
+        "postalCode": "Code postal",
+        "postalCodeError": "Le code postal doit avoir 4 chiffres",
+        "city": "Ville"
+      },
+      "payment": {
+        "redirect": "Redirection vers le paiement...",
+        "proceed": "Procéder au paiement"
+      },
+      "summary": {
+        "title": "Récapitulatif de commande",
+        "seller": "Vendeur: {name}",
+        "itemPrice": "Prix de l'article",
+        "shippingCost": "Frais de livraison",
+        "pickup": "Retrait",
+        "serviceFee": "Frais de service ({rate}%)",
+        "serviceIncl": "incl. {amount}",
+        "total": "Total",
+        "shipping": "Livraison"
+      },
+      "buyerProtection": "Protection acheteur — le paiement n'est libéré qu'après confirmation de réception",
+      "success": {
+        "heading": "Commande réussie!",
+        "description": "Votre paiement a été autorisé. Le montant ne sera libéré qu'après confirmation de réception.",
+        "imageAlt": "Image de l'article",
+        "statusLabel": "Statut:",
+        "viewOrder": "Voir la commande",
+        "continueShopping": "Continuer les achats"
+      }
     },
     "checkout_success": {
       "title": "Commande réussie !",

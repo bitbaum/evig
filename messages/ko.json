@@ -2038,37 +2038,57 @@
       "submit": "신고하기"
     },
     "checkout": {
-      "title": "안전한 결제",
-      "backToListing": "판매 목록으로 돌아가기",
-      "backToMarketplace": "마켓플레이스로 돌아가기",
       "loading": "로딩 중...",
-      "ownListing": "내 판매 목록",
-      "ownListingDesc": "자신의 판매 목록은 구매할 수 없습니다.",
-      "backToListingLink": "판매 목록으로 돌아가기",
-      "chooseDelivery": "배송 방법 선택",
-      "pickup": "직접 수령",
-      "shipping": "배송",
-      "shippingNationwide": "스위스 전역",
-      "free": "무료",
-      "shippingAddress": "배송 주소",
-      "name": "이름",
-      "street": "거리",
-      "postalCode": "우편번호",
-      "postalCodeInvalid": "우편번호는 4자리여야 합니다",
-      "city": "도시",
-      "redirecting": "결제로 이동 중...",
-      "proceed": "결제로 진행",
-      "orderSummary": "주문 요약",
-      "seller": "판매자",
-      "itemPrice": "상품 가격",
-      "shippingCost": "배송비",
-      "pickupFree": "직접 수령",
-      "serviceFee": "서비스 수수료 ({rate}%)",
-      "serviceFeeIncluded": "{amount} 포함",
-      "total": "합계",
-      "buyerProtection": "구매자 보호 — 수령 확인 후에만 결제 금액이 해제됩니다",
-      "networkError": "주문 생성 중 네트워크 오류",
-      "orderError": "주문을 생성할 수 없습니다"
+      "backToMarketplace": "마켓플레이스로 돌아가기",
+      "backToListing": "매물로 돌아가기",
+      "notFound": "매물을 찾을 수 없습니다",
+      "loadError": "매물 로딩 중 오류가 발생했습니다",
+      "orderError": "주문을 생성할 수 없습니다",
+      "networkError": "주문 생성 중 네트워크 오류가 발생했습니다",
+      "ownListing": {
+        "title": "내 매물",
+        "message": "내 매물을 구매할 수 없습니다."
+      },
+      "title": "안전한 결제",
+      "delivery": {
+        "title": "배송 방법 선택",
+        "pickup": "픽업",
+        "free": "무료",
+        "shipping": "배송",
+        "shippingNationwide": "스위스 전국"
+      },
+      "address": {
+        "title": "배송 주소",
+        "name": "이름",
+        "street": "도로명 주소",
+        "postalCode": "우편번호",
+        "postalCodeError": "우편번호는 4자리여야 합니다",
+        "city": "도시"
+      },
+      "payment": {
+        "redirect": "결제 페이지로 이동 중...",
+        "proceed": "결제로 진행"
+      },
+      "summary": {
+        "title": "주문 요약",
+        "seller": "판매자: {name}",
+        "itemPrice": "상품 가격",
+        "shippingCost": "배송비",
+        "pickup": "픽업",
+        "serviceFee": "서비스 수수료 ({rate}%)",
+        "serviceIncl": "포함 {amount}",
+        "total": "합계",
+        "shipping": "배송"
+      },
+      "buyerProtection": "구매자 보호 — 수령 확인 후 결제가 해제됩니다",
+      "success": {
+        "heading": "주문이 성공적으로 완료되었습니다!",
+        "description": "결제가 승인되었습니다. 수령 확인 후 금액이 해제됩니다.",
+        "imageAlt": "상품 이미지",
+        "statusLabel": "상태:",
+        "viewOrder": "주문 보기",
+        "continueShopping": "쇼핑 계속하기"
+      }
     },
     "checkout_success": {
       "title": "주문 완료!",

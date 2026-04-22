@@ -605,37 +605,57 @@
       "submit": "Melden"
     },
     "checkout": {
-      "title": "Sichere Zahlung",
-      "backToListing": "Zurück zum Inserat",
-      "backToMarketplace": "Zurück zum Marketplace",
       "loading": "Wird geladen...",
-      "ownListing": "Eigenes Inserat",
-      "ownListingDesc": "du kannst Ihr eigenes Inserat nicht kaufen.",
-      "backToListingLink": "Zurück zum Inserat",
-      "chooseDelivery": "Lieferart wählen",
-      "pickup": "Abholung",
-      "shipping": "Versand",
-      "shippingNationwide": "Schweizweit",
-      "free": "Kostenlos",
-      "shippingAddress": "Lieferadresse",
-      "name": "Name",
-      "street": "Strasse",
-      "postalCode": "PLZ",
-      "postalCodeInvalid": "PLZ muss 4 Ziffern haben",
-      "city": "Ort",
-      "redirecting": "Weiterleitung zur Zahlung...",
-      "proceed": "Weiter zur Zahlung",
-      "orderSummary": "Bestellübersicht",
-      "seller": "Verkäufer",
-      "itemPrice": "Artikelpreis",
-      "shippingCost": "Versandkosten",
-      "pickupFree": "Abholung",
-      "serviceFee": "Servicegebühr ({rate}%)",
-      "serviceFeeIncluded": "inkl. {amount}",
-      "total": "Total",
-      "buyerProtection": "Käuferschutz — Zahlung wird erst nach Empfangsbestätigung freigegeben",
+      "backToMarketplace": "Zurück zum Marketplace",
+      "backToListing": "Zurück zum Inserat",
+      "notFound": "Inserat nicht gefunden",
+      "loadError": "Fehler beim Laden des Inserats",
+      "orderError": "Bestellung konnte nicht erstellt werden",
       "networkError": "Netzwerkfehler beim Erstellen der Bestellung",
-      "orderError": "Bestellung konnte nicht erstellt werden"
+      "ownListing": {
+        "title": "Eigenes Inserat",
+        "message": "Du kannst dein eigenes Inserat nicht kaufen."
+      },
+      "title": "Sichere Zahlung",
+      "delivery": {
+        "title": "Lieferart wählen",
+        "pickup": "Abholung",
+        "free": "Kostenlos",
+        "shipping": "Versand",
+        "shippingNationwide": "Schweizweit"
+      },
+      "address": {
+        "title": "Lieferadresse",
+        "name": "Name",
+        "street": "Strasse",
+        "postalCode": "PLZ",
+        "postalCodeError": "PLZ muss 4 Ziffern haben",
+        "city": "Ort"
+      },
+      "payment": {
+        "redirect": "Weiterleitung zur Zahlung...",
+        "proceed": "Weiter zur Zahlung"
+      },
+      "summary": {
+        "title": "Bestellübersicht",
+        "seller": "Verkäufer: {name}",
+        "itemPrice": "Artikelpreis",
+        "shippingCost": "Versandkosten",
+        "pickup": "Abholung",
+        "serviceFee": "Servicegebühr ({rate}%)",
+        "serviceIncl": "inkl. {amount}",
+        "total": "Total",
+        "shipping": "Versand"
+      },
+      "buyerProtection": "Käuferschutz — Zahlung wird erst nach Empfangsbestätigung freigegeben",
+      "success": {
+        "heading": "Bestellung erfolgreich!",
+        "description": "Deine Zahlung wurde autorisiert. Der Betrag wird erst freigegeben, wenn du den Empfang bestätigst.",
+        "imageAlt": "Artikelbild",
+        "statusLabel": "Status:",
+        "viewOrder": "Bestellung ansehen",
+        "continueShopping": "Weiter einkaufen"
+      }
     },
     "checkout_success": {
       "title": "Bestellung erfolgreich!",

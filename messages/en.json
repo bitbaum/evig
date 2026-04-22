@@ -515,37 +515,57 @@
       "submit": "Report"
     },
     "checkout": {
-      "title": "Secure payment",
-      "backToListing": "Back to listing",
-      "backToMarketplace": "Back to Marketplace",
       "loading": "Loading...",
-      "ownListing": "Your own listing",
-      "ownListingDesc": "You cannot buy your own listing.",
-      "backToListingLink": "Back to listing",
-      "chooseDelivery": "Choose delivery method",
-      "pickup": "Collection",
-      "shipping": "Delivery",
-      "shippingNationwide": "Nationwide",
-      "free": "Free",
-      "shippingAddress": "Delivery address",
-      "name": "Name",
-      "street": "Street",
-      "postalCode": "Postcode",
-      "postalCodeInvalid": "Postcode must be 4 digits",
-      "city": "City",
-      "redirecting": "Redirecting to payment...",
-      "proceed": "Proceed to payment",
-      "orderSummary": "Order summary",
-      "seller": "Seller",
-      "itemPrice": "Item price",
-      "shippingCost": "Shipping",
-      "pickupFree": "Collection",
-      "serviceFee": "Service fee ({rate}%)",
-      "serviceFeeIncluded": "incl. {amount}",
-      "total": "Total",
-      "buyerProtection": "Buyer protection — Payment is released only after you confirm receipt",
-      "networkError": "Network error creating the order",
-      "orderError": "Could not create order"
+      "backToMarketplace": "Back to marketplace",
+      "backToListing": "Back to listing",
+      "notFound": "Listing not found",
+      "loadError": "Error loading listing",
+      "orderError": "Could not create order",
+      "networkError": "Network error creating order",
+      "ownListing": {
+        "title": "Your own listing",
+        "message": "You cannot purchase your own listing."
+      },
+      "title": "Secure payment",
+      "delivery": {
+        "title": "Choose delivery method",
+        "pickup": "Pick-up",
+        "free": "Free",
+        "shipping": "Shipping",
+        "shippingNationwide": "Switzerland-wide"
+      },
+      "address": {
+        "title": "Delivery address",
+        "name": "Name",
+        "street": "Street",
+        "postalCode": "Postal code",
+        "postalCodeError": "Postal code must be 4 digits",
+        "city": "City"
+      },
+      "payment": {
+        "redirect": "Redirecting to payment...",
+        "proceed": "Proceed to payment"
+      },
+      "summary": {
+        "title": "Order summary",
+        "seller": "Seller: {name}",
+        "itemPrice": "Item price",
+        "shippingCost": "Shipping cost",
+        "pickup": "Pick-up",
+        "serviceFee": "Service fee ({rate}%)",
+        "serviceIncl": "incl. {amount}",
+        "total": "Total",
+        "shipping": "Shipping"
+      },
+      "buyerProtection": "Buyer protection — payment is only released after you confirm receipt",
+      "success": {
+        "heading": "Order successful!",
+        "description": "Your payment has been authorised. The amount will only be released once you confirm receipt.",
+        "imageAlt": "Item image",
+        "statusLabel": "Status:",
+        "viewOrder": "View order",
+        "continueShopping": "Continue shopping"
+      }
     },
     "checkout_success": {
       "title": "Order successful!",

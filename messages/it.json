@@ -2038,37 +2038,57 @@
       "submit": "Segnala"
     },
     "checkout": {
-      "title": "Pagamento sicuro",
-      "backToListing": "Torna all'annuncio",
-      "backToMarketplace": "Torna al marketplace",
       "loading": "Caricamento...",
-      "ownListing": "Annuncio personale",
-      "ownListingDesc": "non puoi acquistare il tuo stesso annuncio.",
-      "backToListingLink": "Torna all'annuncio",
-      "chooseDelivery": "Scegli la modalità di consegna",
-      "pickup": "Ritiro",
-      "shipping": "Spedizione",
-      "shippingNationwide": "In tutta la Svizzera",
-      "free": "Gratuito",
-      "shippingAddress": "Indirizzo di consegna",
-      "name": "Nome",
-      "street": "Via",
-      "postalCode": "CAP",
-      "postalCodeInvalid": "Il CAP deve avere 4 cifre",
-      "city": "Città",
-      "redirecting": "Reindirizzamento al pagamento...",
-      "proceed": "Vai al pagamento",
-      "orderSummary": "Riepilogo ordine",
-      "seller": "Venditore",
-      "itemPrice": "Prezzo articolo",
-      "shippingCost": "Spese di spedizione",
-      "pickupFree": "Ritiro",
-      "serviceFee": "Commissione di servizio ({rate}%)",
-      "serviceFeeIncluded": "incl. {amount}",
-      "total": "Totale",
-      "buyerProtection": "Protezione acquirente — il pagamento viene sbloccato solo dopo la conferma di ricezione",
-      "networkError": "Errore di rete nella creazione dell'ordine",
-      "orderError": "Impossibile creare l'ordine"
+      "backToMarketplace": "Torna al mercato",
+      "backToListing": "Torna all'annuncio",
+      "notFound": "Annuncio non trovato",
+      "loadError": "Errore durante il caricamento dell'annuncio",
+      "orderError": "Impossibile creare l'ordine",
+      "networkError": "Errore di rete durante la creazione dell'ordine",
+      "ownListing": {
+        "title": "Il tuo annuncio",
+        "message": "Non puoi acquistare il tuo stesso annuncio."
+      },
+      "title": "Pagamento sicuro",
+      "delivery": {
+        "title": "Scegli il metodo di consegna",
+        "pickup": "Ritiro",
+        "free": "Gratuito",
+        "shipping": "Spedizione",
+        "shippingNationwide": "In tutta la Svizzera"
+      },
+      "address": {
+        "title": "Indirizzo di consegna",
+        "name": "Nome",
+        "street": "Via",
+        "postalCode": "CAP",
+        "postalCodeError": "Il CAP deve avere 4 cifre",
+        "city": "Città"
+      },
+      "payment": {
+        "redirect": "Reindirizzamento al pagamento...",
+        "proceed": "Procedi al pagamento"
+      },
+      "summary": {
+        "title": "Riepilogo ordine",
+        "seller": "Venditore: {name}",
+        "itemPrice": "Prezzo articolo",
+        "shippingCost": "Costi di spedizione",
+        "pickup": "Ritiro",
+        "serviceFee": "Commissione ({rate}%)",
+        "serviceIncl": "incl. {amount}",
+        "total": "Totale",
+        "shipping": "Spedizione"
+      },
+      "buyerProtection": "Protezione acquirente — il pagamento viene rilasciato solo dopo la conferma di ricezione",
+      "success": {
+        "heading": "Ordine riuscito!",
+        "description": "Il tuo pagamento è stato autorizzato. L'importo verrà rilasciato solo dopo la conferma di ricezione.",
+        "imageAlt": "Immagine articolo",
+        "statusLabel": "Stato:",
+        "viewOrder": "Visualizza ordine",
+        "continueShopping": "Continua a fare acquisti"
+      }
     },
     "checkout_success": {
       "title": "Ordine completato!",

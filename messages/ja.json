@@ -2038,37 +2038,57 @@
       "submit": "報告する"
     },
     "checkout": {
-      "title": "安全な支払い",
-      "backToListing": "出品に戻る",
-      "backToMarketplace": "マーケットプレイスに戻る",
       "loading": "読み込み中...",
-      "ownListing": "自分の出品",
-      "ownListingDesc": "自分の出品は購入できません。",
-      "backToListingLink": "出品に戻る",
-      "chooseDelivery": "配送方法を選択",
-      "pickup": "直接引き取り",
-      "shipping": "配送",
-      "shippingNationwide": "スイス国内",
-      "free": "無料",
-      "shippingAddress": "配送先住所",
-      "name": "名前",
-      "street": "番地",
-      "postalCode": "郵便番号",
-      "postalCodeInvalid": "郵便番号は4桁で入力してください",
-      "city": "市区町村",
-      "redirecting": "支払いページへリダイレクト中...",
-      "proceed": "支払いへ進む",
-      "orderSummary": "注文概要",
-      "seller": "販売者",
-      "itemPrice": "商品価格",
-      "shippingCost": "送料",
-      "pickupFree": "直接引き取り",
-      "serviceFee": "サービス手数料（{rate}%）",
-      "serviceFeeIncluded": "{amount}含む",
-      "total": "合計",
-      "buyerProtection": "購入者保護 — 受取確認後に支払いが解放されます",
+      "backToMarketplace": "マーケットプレイスに戻る",
+      "backToListing": "出品ページに戻る",
+      "notFound": "出品が見つかりません",
+      "loadError": "出品の読み込みに失敗しました",
+      "orderError": "注文を作成できませんでした",
       "networkError": "注文作成中にネットワークエラーが発生しました",
-      "orderError": "注文を作成できませんでした"
+      "ownListing": {
+        "title": "自分の出品",
+        "message": "自分の出品を購入することはできません。"
+      },
+      "title": "安全な支払い",
+      "delivery": {
+        "title": "配送方法を選択",
+        "pickup": "受け取り",
+        "free": "無料",
+        "shipping": "配送",
+        "shippingNationwide": "スイス全国"
+      },
+      "address": {
+        "title": "配送先住所",
+        "name": "氏名",
+        "street": "住所",
+        "postalCode": "郵便番号",
+        "postalCodeError": "郵便番号は4桁である必要があります",
+        "city": "市区町村"
+      },
+      "payment": {
+        "redirect": "支払いページに移動中...",
+        "proceed": "支払いに進む"
+      },
+      "summary": {
+        "title": "注文概要",
+        "seller": "出品者: {name}",
+        "itemPrice": "商品価格",
+        "shippingCost": "送料",
+        "pickup": "受け取り",
+        "serviceFee": "サービス手数料 ({rate}%)",
+        "serviceIncl": "含む {amount}",
+        "total": "合計",
+        "shipping": "配送"
+      },
+      "buyerProtection": "購入者保護 — 受取確認後に支払いが解放されます",
+      "success": {
+        "heading": "注文が完了しました！",
+        "description": "お支払いが承認されました。受取確認後に金額が解放されます。",
+        "imageAlt": "商品画像",
+        "statusLabel": "ステータス:",
+        "viewOrder": "注文を確認する",
+        "continueShopping": "ショッピングを続ける"
+      }
     },
     "checkout_success": {
       "title": "注文成功！",

@@ -2038,37 +2038,57 @@
       "submit": "Denunciar"
     },
     "checkout": {
-      "title": "Pago seguro",
-      "backToListing": "Volver al anuncio",
-      "backToMarketplace": "Volver al mercado",
       "loading": "Cargando...",
-      "ownListing": "Tu propio anuncio",
-      "ownListingDesc": "No puedes comprar tu propio anuncio.",
-      "backToListingLink": "Volver al anuncio",
-      "chooseDelivery": "Elegir método de entrega",
-      "pickup": "Recogida",
-      "shipping": "Envío",
-      "shippingNationwide": "En toda Suiza",
-      "free": "Gratis",
-      "shippingAddress": "Dirección de envío",
-      "name": "Nombre",
-      "street": "Calle",
-      "postalCode": "Código postal",
-      "postalCodeInvalid": "El código postal debe tener 4 dígitos",
-      "city": "Ciudad",
-      "redirecting": "Redirigiendo al pago...",
-      "proceed": "Continuar al pago",
-      "orderSummary": "Resumen del pedido",
-      "seller": "Vendedor",
-      "itemPrice": "Precio del artículo",
-      "shippingCost": "Gastos de envío",
-      "pickupFree": "Recogida",
-      "serviceFee": "Tarifa de servicio ({rate}%)",
-      "serviceFeeIncluded": "incl. {amount}",
-      "total": "Total",
-      "buyerProtection": "Protección al comprador — el pago se libera solo tras confirmar la recepción",
+      "backToMarketplace": "Volver al mercado",
+      "backToListing": "Volver al anuncio",
+      "notFound": "Anuncio no encontrado",
+      "loadError": "Error al cargar el anuncio",
+      "orderError": "No se pudo crear el pedido",
       "networkError": "Error de red al crear el pedido",
-      "orderError": "No se pudo crear el pedido"
+      "ownListing": {
+        "title": "Tu propio anuncio",
+        "message": "No puedes comprar tu propio anuncio."
+      },
+      "title": "Pago seguro",
+      "delivery": {
+        "title": "Elegir método de entrega",
+        "pickup": "Recogida",
+        "free": "Gratis",
+        "shipping": "Envío",
+        "shippingNationwide": "En toda Suiza"
+      },
+      "address": {
+        "title": "Dirección de entrega",
+        "name": "Nombre",
+        "street": "Calle",
+        "postalCode": "Código postal",
+        "postalCodeError": "El código postal debe tener 4 dígitos",
+        "city": "Ciudad"
+      },
+      "payment": {
+        "redirect": "Redirigiendo al pago...",
+        "proceed": "Proceder al pago"
+      },
+      "summary": {
+        "title": "Resumen del pedido",
+        "seller": "Vendedor: {name}",
+        "itemPrice": "Precio del artículo",
+        "shippingCost": "Gastos de envío",
+        "pickup": "Recogida",
+        "serviceFee": "Tarifa de servicio ({rate}%)",
+        "serviceIncl": "incl. {amount}",
+        "total": "Total",
+        "shipping": "Envío"
+      },
+      "buyerProtection": "Protección al comprador — el pago solo se libera tras confirmar la recepción",
+      "success": {
+        "heading": "¡Pedido realizado con éxito!",
+        "description": "Tu pago ha sido autorizado. El importe solo se liberará cuando confirmes la recepción.",
+        "imageAlt": "Imagen del artículo",
+        "statusLabel": "Estado:",
+        "viewOrder": "Ver pedido",
+        "continueShopping": "Seguir comprando"
+      }
     },
     "checkout_success": {
       "title": "¡Pedido realizado con éxito!",
