@@ -1663,6 +1663,59 @@
         "highlight": "Bientôt disponible",
         "pricing": ""
       }
+    },
+    "payment": {
+      "title": "Réserver un service",
+      "description": "Payez en toute sécurité via Payrexx. Votre paiement est protégé.",
+      "detailsHeading": "Détails de la réservation",
+      "detailService": "Service",
+      "detailPrice": "Prix",
+      "detailVat": "TVA incluse",
+      "detailFees": "Frais de traitement ({percent}%)",
+      "detailTotal": "Total",
+      "requiresApproval": "Ce service nécessite une confirmation préalable.",
+      "descriptionLabel": "Description du problème",
+      "descriptionPlaceholder": "Décrivez votre problème...",
+      "urgencyLabel": "Urgence",
+      "urgencyLow": "Faible",
+      "urgencyNormal": "Normal",
+      "urgencyHigh": "Élevée",
+      "urgencyUrgent": "Urgent",
+      "deviceInfoLabel": "Informations sur l'appareil",
+      "deviceInfoPlaceholder": "Marque, modèle, numéro de série...",
+      "escrowCheckLabel": "Paiement séquestre",
+      "escrowCheckDescription": "Le paiement est libéré uniquement après réparation réussie.",
+      "escrowAlert": "Protection supplémentaire: paiement bloqué jusqu'à la fin du service.",
+      "submitButton": "Payer {currency} {amount}",
+      "errorTitle": "Erreur de réservation",
+      "errorDescription": "Une erreur est survenue. Veuillez réessayer.",
+      "retryButton": "Réessayer"
+    },
+    "appointment": {
+      "bookButton": "Prendre rendez-vous",
+      "modalTitle": "Prendre rendez-vous — {serviceTitle}",
+      "priceInfo": "À partir de {price} CHF",
+      "problemLabel": "Description du problème",
+      "problemPlaceholder": "Décrivez votre problème en détail...",
+      "urgencyLabel": "Urgence",
+      "urgencyNormal": "Normal",
+      "urgencyHigh": "Élevée",
+      "urgencyUrgent": "Urgent",
+      "preferredDateLabel": "Date souhaitée (facultatif)",
+      "preferredTimeLabel": "Heure souhaitée (facultatif)",
+      "nextStepsTitle": "Prochaines étapes",
+      "nextStep1": "Nous vous contacterons dans les 24 heures.",
+      "nextStep2": "Apportez votre appareil à notre boutique.",
+      "nextStep3": "Nous diagnostiquons et réparons.",
+      "cancelButton": "Annuler",
+      "submittingButton": "Envoi...",
+      "submitButton": "Envoyer la demande",
+      "loginRequired": "Connexion requise",
+      "loginDescription": "Connectez-vous pour prendre rendez-vous.",
+      "loginSignIn": "Se connecter",
+      "loginRegister": "S'inscrire",
+      "networkError": "Erreur de connexion. Veuillez réessayer.",
+      "successFallback": "Demande envoyée avec succès."
     }
   },
   "workshops": {
@@ -2370,6 +2423,15 @@
       "errorLoadFailed": "Impossible de charger la demande",
       "errorSaveFailed": "Impossible d'enregistrer",
       "errorGeneric": "Une erreur s'est produite"
+    },
+    "imageUpload": {
+      "heading": "Photos (optionnel)",
+      "uploading": "Téléchargement...",
+      "selectPhotos": "Sélectionner des photos",
+      "errorImageOnly": "Seuls les fichiers image sont autorisés",
+      "errorTooLarge": "Fichier trop volumineux (max 10 Mo)",
+      "errorUploadFailed": "Échec du téléchargement. Veuillez réessayer.",
+      "imageAlt": "Image {index}"
     }
   },
   "blog": {

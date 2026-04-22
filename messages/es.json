@@ -1902,6 +1902,15 @@
       "errorLoadFailed": "No se pudo cargar la solicitud",
       "errorSaveFailed": "No se pudo guardar",
       "errorGeneric": "Ocurrió un error"
+    },
+    "imageUpload": {
+      "heading": "Fotos (opcional)",
+      "uploading": "Subiendo...",
+      "selectPhotos": "Seleccionar fotos",
+      "errorImageOnly": "Solo se permiten archivos de imagen",
+      "errorTooLarge": "Archivo demasiado grande (máx. 10 MB)",
+      "errorUploadFailed": "Error al subir la imagen. Por favor, inténtalo de nuevo.",
+      "imageAlt": "Imagen {index}"
     }
   },
   "knowhow": {
@@ -4044,6 +4053,59 @@
         "highlight": "Próximamente",
         "pricing": ""
       }
+    },
+    "payment": {
+      "title": "Reservar servicio",
+      "description": "Paga de forma segura a través de Payrexx. Tu pago está protegido.",
+      "detailsHeading": "Detalles de la reserva",
+      "detailService": "Servicio",
+      "detailPrice": "Precio",
+      "detailVat": "IVA incluido",
+      "detailFees": "Comisión de procesamiento ({percent}%)",
+      "detailTotal": "Total",
+      "requiresApproval": "Este servicio requiere confirmación previa.",
+      "descriptionLabel": "Descripción del problema",
+      "descriptionPlaceholder": "Describe tu problema...",
+      "urgencyLabel": "Urgencia",
+      "urgencyLow": "Baja",
+      "urgencyNormal": "Normal",
+      "urgencyHigh": "Alta",
+      "urgencyUrgent": "Urgente",
+      "deviceInfoLabel": "Información del dispositivo",
+      "deviceInfoPlaceholder": "Marca, modelo, número de serie...",
+      "escrowCheckLabel": "Pago en depósito",
+      "escrowCheckDescription": "El pago se libera solo tras la reparación exitosa.",
+      "escrowAlert": "Protección adicional: pago bloqueado hasta finalizar el servicio.",
+      "submitButton": "Pagar {currency} {amount}",
+      "errorTitle": "Error de reserva",
+      "errorDescription": "Se ha producido un error. Por favor, inténtalo de nuevo.",
+      "retryButton": "Intentar de nuevo"
+    },
+    "appointment": {
+      "bookButton": "Reservar cita",
+      "modalTitle": "Reservar cita — {serviceTitle}",
+      "priceInfo": "Desde {price} CHF",
+      "problemLabel": "Descripción del problema",
+      "problemPlaceholder": "Describe tu problema en detalle...",
+      "urgencyLabel": "Urgencia",
+      "urgencyNormal": "Normal",
+      "urgencyHigh": "Alta",
+      "urgencyUrgent": "Urgente",
+      "preferredDateLabel": "Fecha preferida (opcional)",
+      "preferredTimeLabel": "Hora preferida (opcional)",
+      "nextStepsTitle": "Próximos pasos",
+      "nextStep1": "Nos pondremos en contacto contigo en 24 horas.",
+      "nextStep2": "Trae tu dispositivo a nuestra tienda.",
+      "nextStep3": "Diagnosticamos y reparamos.",
+      "cancelButton": "Cancelar",
+      "submittingButton": "Enviando...",
+      "submitButton": "Enviar solicitud",
+      "loginRequired": "Inicio de sesión requerido",
+      "loginDescription": "Inicia sesión para reservar una cita.",
+      "loginSignIn": "Iniciar sesión",
+      "loginRegister": "Registrarse",
+      "networkError": "Error de conexión. Por favor, inténtalo de nuevo.",
+      "successFallback": "Solicitud enviada correctamente."
     }
   },
   "shop": {

@@ -820,7 +820,10 @@
       "escrowCheckLabel": "Escrow-Schutz aktivieren",
       "escrowCheckDescription": "Geld wird erst freigegeben, wenn Service abgeschlossen ist",
       "escrowAlert": "Mit Escrow-Schutz sind deine Zahlungsmittel sicher. Du wirst automatisch freigegeben, sobald der Service erfolgreich abgeschlossen wurde.",
-      "submitButton": "Buchung erstellen und bezahlen ({currency} {amount})"
+      "submitButton": "Buchung erstellen und bezahlen ({currency} {amount})",
+      "errorTitle": "Fehler bei der Buchung",
+      "errorDescription": "Es ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+      "retryButton": "Erneut versuchen"
     },
     "appointment": {
       "bookButton": "Termin buchen",
@@ -2650,6 +2653,15 @@
       "recommendNo": "Nein",
       "errorNoStars": "Bitte wähle eine Sternebewertung aus",
       "errorNoRecommend": "Bitte gib an, ob du den Techniker weiterempfehlen würdest"
+    },
+    "imageUpload": {
+      "heading": "Fotos (optional)",
+      "uploading": "Wird hochgeladen...",
+      "selectPhotos": "Fotos auswählen",
+      "errorImageOnly": "Nur Bilddateien sind erlaubt",
+      "errorTooLarge": "Datei zu gross (max 10MB)",
+      "errorUploadFailed": "Bild-Upload fehlgeschlagen. Bitte versuche es erneut.",
+      "imageAlt": "Bild {index}"
     }
   },
   "blog": {

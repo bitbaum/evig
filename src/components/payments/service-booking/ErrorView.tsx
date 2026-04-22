@@ -4,6 +4,7 @@
  * Error view for booking failures
  */
 
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -15,13 +16,14 @@ interface ErrorViewProps {
 }
 
 export function ErrorView({ error, onRetry }: ErrorViewProps) {
+  const t = useTranslations('services.payment')
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
         <AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <CardTitle className="text-red-800">Fehler bei der Buchung</CardTitle>
+        <CardTitle className="text-red-800">{t('errorTitle')}</CardTitle>
         <CardDescription>
-          Es ist ein Fehler aufgetreten. Bitte versuche es erneut.
+          {t('errorDescription')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -29,7 +31,7 @@ export function ErrorView({ error, onRetry }: ErrorViewProps) {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
         <Button onClick={onRetry} className="w-full">
-          Erneut versuchen
+          {t('retryButton')}
         </Button>
       </CardContent>
     </Card>

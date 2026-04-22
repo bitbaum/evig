@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Camera, X, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { FILE_SIZE_LIMITS } from '@/config/limits'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
@@ -20,6 +21,7 @@ export function ITHilfeImageUpload({
   maxImages = 5,
   onError,
 }: ITHilfeImageUploadProps) {
+  const t = useTranslations('itHelp.imageUpload')
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -39,11 +41,11 @@ export function ITHilfeImageUpload({
     const filesToUpload = Array.from(files).slice(0, remaining)
     for (const file of filesToUpload) {
       if (!file.type.startsWith('image/')) {
-        reportError('Nur Bilddateien sind erlaubt')
+        reportError(t('errorImageOnly'))
         return
       }
       if (file.size > FILE_SIZE_LIMITS.UPLOAD_MAX) {
-        reportError('Datei zu gross (max 10MB)')
+        reportError(t('errorTooLarge'))
         return
       }
     }
@@ -67,7 +69,7 @@ export function ITHilfeImageUpload({
       onImagesChange([...imageUrls, ...newUrls])
     } catch (err) {
       logger.error('Image upload failed', { error: err })
-      reportError('Bild-Upload fehlgeschlagen. Bitte versuche es erneut.')
+      reportError(t('errorUploadFailed'))
     } finally {
       setUploading(false)
       // Reset input so same file can be re-selected
@@ -81,7 +83,7 @@ export function ITHilfeImageUpload({
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Fotos (optional)</Heading>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">{t('heading')}</Heading>
 
       {error && (
         <p className="text-sm text-red-600 mb-3">{error}</p>
@@ -96,7 +98,7 @@ export function ITHilfeImageUpload({
           )}
           <label htmlFor="it-hilfe-image-upload" className="cursor-pointer">
             <span className="text-sm font-medium text-emerald-600 hover:text-emerald-500">
-              {uploading ? 'Wird hochgeladen...' : 'Fotos auswählen'}
+              {uploading ? t('uploading') : t('selectPhotos')}
             </span>
           </label>
           <input
@@ -120,7 +122,7 @@ export function ITHilfeImageUpload({
             <div key={url} className="relative group">
               <img
                 src={url}
-                alt={`Bild ${index + 1}`}
+                alt={t('imageAlt', { index: index + 1 })}
                 className="w-full h-24 object-cover rounded-lg"
               />
               <button

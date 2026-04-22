@@ -1902,6 +1902,15 @@
       "errorLoadFailed": "リクエストの読み込みに失敗しました",
       "errorSaveFailed": "保存に失敗しました",
       "errorGeneric": "エラーが発生しました"
+    },
+    "imageUpload": {
+      "heading": "写真（任意）",
+      "uploading": "アップロード中...",
+      "selectPhotos": "写真を選択",
+      "errorImageOnly": "画像ファイルのみ許可されています",
+      "errorTooLarge": "ファイルが大きすぎます（最大10MB）",
+      "errorUploadFailed": "画像のアップロードに失敗しました。もう一度お試しください。",
+      "imageAlt": "画像 {index}"
     }
   },
   "knowhow": {
@@ -4044,6 +4053,59 @@
         "highlight": "近日公開予定",
         "pricing": ""
       }
+    },
+    "payment": {
+      "title": "サービスを予約",
+      "description": "Payrexxで安全にお支払いください。お支払いは保護されています。",
+      "detailsHeading": "予約詳細",
+      "detailService": "サービス",
+      "detailPrice": "価格",
+      "detailVat": "VAT込み",
+      "detailFees": "処理手数料（{percent}%）",
+      "detailTotal": "合計",
+      "requiresApproval": "このサービスには事前確認が必要です。",
+      "descriptionLabel": "問題の説明",
+      "descriptionPlaceholder": "問題を説明してください...",
+      "urgencyLabel": "緊急度",
+      "urgencyLow": "低",
+      "urgencyNormal": "通常",
+      "urgencyHigh": "高",
+      "urgencyUrgent": "緊急",
+      "deviceInfoLabel": "デバイス情報",
+      "deviceInfoPlaceholder": "メーカー、モデル、シリアル番号...",
+      "escrowCheckLabel": "エスクロー払い",
+      "escrowCheckDescription": "修理が成功した後にのみ支払いが解放されます。",
+      "escrowAlert": "追加保護：サービス完了まで支払いはブロックされます。",
+      "submitButton": "{currency} {amount}を支払う",
+      "errorTitle": "予約エラー",
+      "errorDescription": "エラーが発生しました。もう一度お試しください。",
+      "retryButton": "再試行"
+    },
+    "appointment": {
+      "bookButton": "予約する",
+      "modalTitle": "予約 — {serviceTitle}",
+      "priceInfo": "{price} CHFから",
+      "problemLabel": "問題の説明",
+      "problemPlaceholder": "問題を詳しく説明してください...",
+      "urgencyLabel": "緊急度",
+      "urgencyNormal": "通常",
+      "urgencyHigh": "高",
+      "urgencyUrgent": "緊急",
+      "preferredDateLabel": "希望日（任意）",
+      "preferredTimeLabel": "希望時間（任意）",
+      "nextStepsTitle": "次のステップ",
+      "nextStep1": "24時間以内にご連絡します。",
+      "nextStep2": "デバイスを店舗にお持ちください。",
+      "nextStep3": "診断と修理を行います。",
+      "cancelButton": "キャンセル",
+      "submittingButton": "送信中...",
+      "submitButton": "リクエストを送信",
+      "loginRequired": "ログインが必要です",
+      "loginDescription": "ログインして予約してください。",
+      "loginSignIn": "ログイン",
+      "loginRegister": "登録",
+      "networkError": "接続エラーです。もう一度お試しください。",
+      "successFallback": "リクエストが正常に送信されました。"
     }
   },
   "shop": {

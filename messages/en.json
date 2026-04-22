@@ -769,7 +769,10 @@
       "escrowCheckLabel": "Enable escrow protection",
       "escrowCheckDescription": "Funds are only released when the service is completed",
       "escrowAlert": "Your funds are secure with escrow protection. They will be automatically released once the service is successfully completed.",
-      "submitButton": "Create booking and pay ({currency} {amount})"
+      "submitButton": "Create booking and pay ({currency} {amount})",
+      "errorTitle": "Booking Error",
+      "errorDescription": "An error occurred. Please try again.",
+      "retryButton": "Try Again"
     },
     "appointment": {
       "bookButton": "Book appointment",
@@ -2599,6 +2602,15 @@
       "recommendNo": "No",
       "errorNoStars": "Please select a star rating",
       "errorNoRecommend": "Please indicate whether you would recommend the technician"
+    },
+    "imageUpload": {
+      "heading": "Photos (optional)",
+      "uploading": "Uploading...",
+      "selectPhotos": "Select photos",
+      "errorImageOnly": "Only image files are allowed",
+      "errorTooLarge": "File too large (max 10MB)",
+      "errorUploadFailed": "Image upload failed. Please try again.",
+      "imageAlt": "Image {index}"
     }
   },
   "blog": {

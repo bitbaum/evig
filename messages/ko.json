@@ -1902,6 +1902,15 @@
       "errorLoadFailed": "요청을 불러오지 못했습니다",
       "errorSaveFailed": "저장하지 못했습니다",
       "errorGeneric": "오류가 발생했습니다"
+    },
+    "imageUpload": {
+      "heading": "사진 (선택사항)",
+      "uploading": "업로드 중...",
+      "selectPhotos": "사진 선택",
+      "errorImageOnly": "이미지 파일만 허용됩니다",
+      "errorTooLarge": "파일이 너무 큽니다 (최대 10MB)",
+      "errorUploadFailed": "이미지 업로드에 실패했습니다. 다시 시도해 주세요.",
+      "imageAlt": "이미지 {index}"
     }
   },
   "knowhow": {
@@ -4044,6 +4053,59 @@
         "highlight": "곧 출시 예정",
         "pricing": ""
       }
+    },
+    "payment": {
+      "title": "서비스 예약",
+      "description": "Payrexx를 통해 안전하게 결제하세요. 결제가 보호됩니다.",
+      "detailsHeading": "예약 세부 정보",
+      "detailService": "서비스",
+      "detailPrice": "가격",
+      "detailVat": "VAT 포함",
+      "detailFees": "처리 수수료 ({percent}%)",
+      "detailTotal": "합계",
+      "requiresApproval": "이 서비스는 사전 확인이 필요합니다.",
+      "descriptionLabel": "문제 설명",
+      "descriptionPlaceholder": "문제를 설명하세요...",
+      "urgencyLabel": "긴급도",
+      "urgencyLow": "낮음",
+      "urgencyNormal": "보통",
+      "urgencyHigh": "높음",
+      "urgencyUrgent": "긴급",
+      "deviceInfoLabel": "기기 정보",
+      "deviceInfoPlaceholder": "브랜드, 모델, 시리얼 번호...",
+      "escrowCheckLabel": "에스크로 결제",
+      "escrowCheckDescription": "수리 성공 후에만 결제가 해제됩니다.",
+      "escrowAlert": "추가 보호: 서비스 완료까지 결제가 차단됩니다.",
+      "submitButton": "{currency} {amount} 결제",
+      "errorTitle": "예약 오류",
+      "errorDescription": "오류가 발생했습니다. 다시 시도해 주세요.",
+      "retryButton": "다시 시도"
+    },
+    "appointment": {
+      "bookButton": "예약하기",
+      "modalTitle": "예약 — {serviceTitle}",
+      "priceInfo": "{price} CHF부터",
+      "problemLabel": "문제 설명",
+      "problemPlaceholder": "문제를 자세히 설명하세요...",
+      "urgencyLabel": "긴급도",
+      "urgencyNormal": "보통",
+      "urgencyHigh": "높음",
+      "urgencyUrgent": "긴급",
+      "preferredDateLabel": "선호 날짜 (선택사항)",
+      "preferredTimeLabel": "선호 시간 (선택사항)",
+      "nextStepsTitle": "다음 단계",
+      "nextStep1": "24시간 이내에 연락드리겠습니다.",
+      "nextStep2": "기기를 매장에 가져오세요.",
+      "nextStep3": "진단 및 수리를 진행합니다.",
+      "cancelButton": "취소",
+      "submittingButton": "전송 중...",
+      "submitButton": "요청 전송",
+      "loginRequired": "로그인 필요",
+      "loginDescription": "예약하려면 로그인하세요.",
+      "loginSignIn": "로그인",
+      "loginRegister": "회원가입",
+      "networkError": "연결 오류입니다. 다시 시도해 주세요.",
+      "successFallback": "요청이 성공적으로 전송되었습니다."
     }
   },
   "shop": {
