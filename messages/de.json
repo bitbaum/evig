@@ -357,7 +357,21 @@
       "outOfStock": "Ausverkauft",
       "condition": "Zustand",
       "warranty": "Garantie",
-      "months": "{count} Monate"
+      "months": "{count} Monate",
+      "stockMany": "{count} Stück verfügbar",
+      "stockOne": "Letztes Stück",
+      "suitableFor": "Geeignet für",
+      "verifiedTitle": "Geprüft & aufbereitet",
+      "verifiedDesc": "Alle Geräte werden von {orgName} sorgfältig geprüft, gereinigt und neu installiert.",
+      "buyOnline": "Im Webshop kaufen",
+      "buyInStore": "Vor Ort kaufen",
+      "similarProducts": "Ähnliche Produkte",
+      "conditionLabels": {
+        "wieNeu": "Wie neu",
+        "sehrGut": "Sehr gut",
+        "gut": "Gut",
+        "akzeptabel": "Akzeptabel"
+      }
     },
     "empty": "Keine Produkte gefunden",
     "verifiedBadge": "Geprüft",
@@ -2190,7 +2204,11 @@
       "ctaDescription": "Registriere dich als Techniker und hilf Menschen in deiner Nähe. Kostenlos oder gegen Vergütung — du entscheidest.",
       "ctaCreateProfile": "Techniker-Profil erstellen",
       "ctaMoreInfo": "Mehr über IT-Hilfe →",
-      "retryButton": "Erneut versuchen"
+      "retryButton": "Erneut versuchen",
+      "emptyTitle": "Keine Anfragen gefunden",
+      "emptyMessageFiltered": "Versuche andere Filter oder setze sie zurück.",
+      "emptyMessageEmpty": "Noch keine IT-Hilfe-Anfragen vorhanden.",
+      "createRequestButton": "Anfrage erstellen"
     },
     "detail": {
       "backToList": "Zurück zur Übersicht",

@@ -267,7 +267,21 @@
       "outOfStock": "Out of stock",
       "condition": "Condition",
       "warranty": "Warranty",
-      "months": "{count} months"
+      "months": "{count} months",
+      "stockMany": "{count} in stock",
+      "stockOne": "Last item",
+      "suitableFor": "Suitable for",
+      "verifiedTitle": "Tested & refurbished",
+      "verifiedDesc": "All devices are carefully tested, cleaned and freshly installed by {orgName}.",
+      "buyOnline": "Buy in webshop",
+      "buyInStore": "Buy in-store",
+      "similarProducts": "Similar products",
+      "conditionLabels": {
+        "wieNeu": "Like new",
+        "sehrGut": "Very good",
+        "gut": "Good",
+        "akzeptabel": "Acceptable"
+      }
     },
     "empty": "No products found",
     "verifiedBadge": "Verified",
@@ -2100,7 +2114,11 @@
       "ctaDescription": "Register as a technician and help people nearby. For free or for payment — your choice.",
       "ctaCreateProfile": "Create technician profile",
       "ctaMoreInfo": "More about IT Help →",
-      "retryButton": "Try again"
+      "retryButton": "Try again",
+      "emptyTitle": "No requests found",
+      "emptyMessageFiltered": "Try different filters or reset them.",
+      "emptyMessageEmpty": "No IT help requests yet.",
+      "createRequestButton": "Create Request"
     },
     "detail": {
       "backToList": "Back to list",

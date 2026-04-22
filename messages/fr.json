@@ -267,7 +267,21 @@
       "outOfStock": "Épuisé",
       "condition": "État",
       "warranty": "Garantie",
-      "months": "{count} mois"
+      "months": "{count} mois",
+      "stockMany": "{count} en stock",
+      "stockOne": "Dernier article",
+      "suitableFor": "Convient pour",
+      "verifiedTitle": "Testé & reconditionné",
+      "verifiedDesc": "Tous les appareils sont soigneusement testés, nettoyés et réinstallés par {orgName}.",
+      "buyOnline": "Acheter en boutique en ligne",
+      "buyInStore": "Acheter en magasin",
+      "similarProducts": "Produits similaires",
+      "conditionLabels": {
+        "wieNeu": "Comme neuf",
+        "sehrGut": "Très bon",
+        "gut": "Bon",
+        "akzeptabel": "Acceptable"
+      }
     },
     "empty": "Aucun produit trouvé",
     "verifiedBadge": "Vérifié",
@@ -2100,7 +2114,11 @@
       "ctaDescription": "Inscrivez-vous en tant que technicien et aidez des personnes près de chez vous. Gratuitement ou contre rémunération — vous décidez.",
       "ctaCreateProfile": "Créer un profil de technicien",
       "ctaMoreInfo": "En savoir plus sur l'aide informatique →",
-      "retryButton": "Réessayer"
+      "retryButton": "Réessayer",
+      "emptyTitle": "Aucune demande trouvée",
+      "emptyMessageFiltered": "Essayez d'autres filtres ou réinitialisez-les.",
+      "emptyMessageEmpty": "Aucune demande d'aide informatique pour l'instant.",
+      "createRequestButton": "Créer une demande"
     },
     "detail": {
       "backToList": "Retour à la liste",

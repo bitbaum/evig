@@ -1749,7 +1749,11 @@
       "ctaDescription": "Regístrate como técnico y ayuda a personas cercanas. Gratis o con remuneración — tú decides.",
       "ctaCreateProfile": "Crear perfil de técnico",
       "ctaMoreInfo": "Más sobre Ayuda TI →",
-      "retryButton": "Volver a intentar"
+      "retryButton": "Volver a intentar",
+      "emptyTitle": "No se encontraron solicitudes",
+      "emptyMessageFiltered": "Prueba otros filtros o restablécelos.",
+      "emptyMessageEmpty": "Aún no hay solicitudes de ayuda informática.",
+      "createRequestButton": "Crear solicitud"
     },
     "detail": {
       "backToList": "Volver al listado",
@@ -3277,7 +3281,21 @@
       "outOfStock": "Agotado",
       "condition": "Estado",
       "warranty": "Garantía",
-      "months": "{count} {count, plural, one {mes} other {meses}}"
+      "months": "{count} {count, plural, one {mes} other {meses}}",
+      "stockMany": "{count} unidades disponibles",
+      "stockOne": "Última unidad",
+      "suitableFor": "Adecuado para",
+      "verifiedTitle": "Comprobado y reacondicionado",
+      "verifiedDesc": "Todos los dispositivos son cuidadosamente revisados, limpiados y reinstalados por {orgName}.",
+      "buyOnline": "Comprar en la tienda online",
+      "buyInStore": "Comprar en tienda",
+      "similarProducts": "Productos similares",
+      "conditionLabels": {
+        "wieNeu": "Como nuevo",
+        "sehrGut": "Muy bueno",
+        "gut": "Bueno",
+        "akzeptabel": "Aceptable"
+      }
     },
     "empty": "No se encontraron productos",
     "verifiedBadge": "Verificado",

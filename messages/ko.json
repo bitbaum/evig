@@ -1749,7 +1749,11 @@
       "ctaDescription": "기술자로 등록하고 가까운 사람들을 도와주세요. 무료 또는 유료 — 귀하가 결정합니다.",
       "ctaCreateProfile": "기술자 프로필 만들기",
       "ctaMoreInfo": "IT 지원에 대해 더 알아보기 →",
-      "retryButton": "다시 시도"
+      "retryButton": "다시 시도",
+      "emptyTitle": "요청을 찾을 수 없습니다",
+      "emptyMessageFiltered": "다른 필터를 시도하거나 초기화하세요.",
+      "emptyMessageEmpty": "아직 IT 도움 요청이 없습니다.",
+      "createRequestButton": "요청 만들기"
     },
     "detail": {
       "backToList": "목록으로 돌아가기",
@@ -3277,7 +3281,21 @@
       "outOfStock": "품절",
       "condition": "상태",
       "warranty": "보증",
-      "months": "{count}개월"
+      "months": "{count}개월",
+      "stockMany": "{count}개 재고 있음",
+      "stockOne": "마지막 남은 제품",
+      "suitableFor": "추천 대상",
+      "verifiedTitle": "검증 및 재정비 완료",
+      "verifiedDesc": "모든 기기는 {orgName}에서 꼼꼼하게 검사, 세척 및 재설치됩니다.",
+      "buyOnline": "온라인 쇼핑몰에서 구매",
+      "buyInStore": "매장에서 구매",
+      "similarProducts": "유사 제품",
+      "conditionLabels": {
+        "wieNeu": "새 제품과 같음",
+        "sehrGut": "매우 좋음",
+        "gut": "좋음",
+        "akzeptabel": "양호"
+      }
     },
     "empty": "제품을 찾을 수 없습니다",
     "verifiedBadge": "검증됨",

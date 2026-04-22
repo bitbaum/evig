@@ -1749,7 +1749,11 @@
       "ctaDescription": "Registrati come tecnico e aiuta le persone vicino a te. Gratis o a pagamento — decidi tu.",
       "ctaCreateProfile": "Crea profilo tecnico",
       "ctaMoreInfo": "Maggiori informazioni sull'assistenza IT →",
-      "retryButton": "Riprova"
+      "retryButton": "Riprova",
+      "emptyTitle": "Nessuna richiesta trovata",
+      "emptyMessageFiltered": "Prova altri filtri o reimpostali.",
+      "emptyMessageEmpty": "Ancora nessuna richiesta di assistenza informatica.",
+      "createRequestButton": "Crea richiesta"
     },
     "detail": {
       "backToList": "Torna alla lista",
@@ -3277,7 +3281,21 @@
       "outOfStock": "Esaurito",
       "condition": "Condizione",
       "warranty": "Garanzia",
-      "months": "{count} mesi"
+      "months": "{count} mesi",
+      "stockMany": "{count} disponibili",
+      "stockOne": "Ultimo pezzo",
+      "suitableFor": "Adatto per",
+      "verifiedTitle": "Testato e ricondizionato",
+      "verifiedDesc": "Tutti i dispositivi vengono accuratamente testati, puliti e reinstallati da {orgName}.",
+      "buyOnline": "Acquista nel negozio online",
+      "buyInStore": "Acquista in negozio",
+      "similarProducts": "Prodotti simili",
+      "conditionLabels": {
+        "wieNeu": "Come nuovo",
+        "sehrGut": "Molto buono",
+        "gut": "Buono",
+        "akzeptabel": "Accettabile"
+      }
     },
     "empty": "Nessun prodotto trovato",
     "verifiedBadge": "Verificato",

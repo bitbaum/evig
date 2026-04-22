@@ -23,7 +23,6 @@ import {
   SWISS_CANTONS,
   SORT_OPTIONS,
 } from '@/config/it-hilfe'
-import { IT_HILFE_CONTENT } from '@/config/page-content'
 import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
@@ -225,7 +224,7 @@ export default function ITHilfePage() {
                 setOffset(0)
               }}
               className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-              aria-label="Sortierung"
+              aria-label={t('sortLabel')}
             >
               {SORT_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -360,16 +359,16 @@ export default function ITHilfePage() {
         {!loading && !error && requests.length === 0 && (
           <EmptyState
             icon={Wrench}
-            title={IT_HILFE_CONTENT.emptyStates.noRequests.title}
+            title={t('emptyTitle')}
             message={
               hasActiveFilters
-                ? IT_HILFE_CONTENT.emptyStates.noRequests.messageFiltered
-                : IT_HILFE_CONTENT.emptyStates.noRequests.messageEmpty
+                ? t('emptyMessageFiltered')
+                : t('emptyMessageEmpty')
             }
             action={
               session?.user
                 ? {
-                    label: IT_HILFE_CONTENT.actions.createRequest,
+                    label: t('createRequestButton'),
                     href: IT_HILFE.routes.create,
                   }
                 : undefined

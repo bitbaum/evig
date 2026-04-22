@@ -1749,7 +1749,11 @@
       "ctaDescription": "技術者として登録し、近くの人を助けましょう。無料でも有償でも — あなたが決めます。",
       "ctaCreateProfile": "技術者プロフィールを作成",
       "ctaMoreInfo": "ITヘルプについてもっと →",
-      "retryButton": "再試行"
+      "retryButton": "再試行",
+      "emptyTitle": "リクエストが見つかりません",
+      "emptyMessageFiltered": "別のフィルターを試すか、リセットしてください。",
+      "emptyMessageEmpty": "まだITサポートリクエストはありません。",
+      "createRequestButton": "リクエストを作成"
     },
     "detail": {
       "backToList": "一覧に戻る",
@@ -3277,7 +3281,21 @@
       "outOfStock": "在庫切れ",
       "condition": "状態",
       "warranty": "保証",
-      "months": "{count}ヶ月"
+      "months": "{count}ヶ月",
+      "stockMany": "{count}点在庫あり",
+      "stockOne": "残り1点",
+      "suitableFor": "対象ユーザー",
+      "verifiedTitle": "検査済み・整備済み",
+      "verifiedDesc": "すべての機器は{orgName}が丁寧に検査、クリーニング、再インストールしています。",
+      "buyOnline": "オンラインショップで購入",
+      "buyInStore": "店頭で購入",
+      "similarProducts": "類似製品",
+      "conditionLabels": {
+        "wieNeu": "新品同様",
+        "sehrGut": "非常に良い",
+        "gut": "良い",
+        "akzeptabel": "許容範囲"
+      }
     },
     "empty": "商品が見つかりませんでした",
     "verifiedBadge": "検査済み",

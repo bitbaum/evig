@@ -27,12 +27,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
 }
 
-// Condition badge
-const CONDITION_LABELS: Record<string, { label: string; color: string }> = {
-  'wie neu':     { label: 'Wie neu',       color: 'bg-emerald-100 text-emerald-800' },
-  'sehr gut':    { label: 'Sehr gut',      color: 'bg-green-100 text-green-800' },
-  'gut':         { label: 'Gut',           color: 'bg-blue-100 text-blue-800' },
-  'akzeptabel':  { label: 'Akzeptabel',    color: 'bg-yellow-100 text-yellow-800' },
+// Condition badge colors (labels come from translations)
+const CONDITION_COLORS: Record<string, string> = {
+  'wie neu':    'bg-emerald-100 text-emerald-800',
+  'sehr gut':   'bg-green-100 text-green-800',
+  'gut':        'bg-blue-100 text-blue-800',
+  'akzeptabel': 'bg-yellow-100 text-yellow-800',
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -50,10 +50,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }).catch(() => ({ products: [] as InventoryProduct[], total: 0, limit: 4, offset: 0 }))
   const relatedProducts = similar.products.filter(p => p.id !== product.id).slice(0, 3)
 
-  const conditionInfo = CONDITION_LABELS[product.condition.toLowerCase()] ?? {
-    label: product.condition,
-    color: 'bg-gray-100 text-gray-800',
+  const conditionKey = product.condition.toLowerCase()
+  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-gray-100 text-gray-800'
+  const CONDITION_LABEL_MAP: Record<string, string> = {
+    'wie neu': t('product.conditionLabels.wieNeu'),
+    'sehr gut': t('product.conditionLabels.sehrGut'),
+    'gut': t('product.conditionLabels.gut'),
+    'akzeptabel': t('product.conditionLabels.akzeptabel'),
   }
+  const conditionLabel = CONDITION_LABEL_MAP[conditionKey] ?? product.condition
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,8 +127,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   CHF {product.price.toFixed(2)}
                 </span>
               </div>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${conditionInfo.color}`}>
-                {conditionInfo.label}
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${conditionColor}`}>
+                {conditionLabel}
               </span>
             </div>
 
@@ -132,10 +137,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div className={`w-2 h-2 rounded-full ${product.quantity > 0 ? 'bg-emerald-500' : 'bg-red-400'}`} />
               <span className={product.quantity > 0 ? 'text-emerald-700 font-medium' : 'text-red-600'}>
                 {product.quantity > 1
-                  ? `${product.quantity} Stück verfügbar`
+                  ? t('product.stockMany', { count: product.quantity })
                   : product.quantity === 1
-                  ? 'Letztes Stück'
-                  : 'Ausverkauft'}
+                  ? t('product.stockOne')
+                  : t('product.outOfStock')}
               </span>
             </div>
 
@@ -144,7 +149,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div>
                 <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1.5">
                   <Layers className="w-4 h-4" />
-                  Geeignet für
+                  {t('product.suitableFor')}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {product.customer_profiles.map(profile => (
@@ -164,9 +169,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <div className="flex items-start gap-3 p-4 bg-emerald-50 rounded-xl">
               <Shield className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-emerald-900">Geprüft & aufbereitet</p>
+                <p className="font-semibold text-emerald-900">{t('product.verifiedTitle')}</p>
                 <p className="text-emerald-700 mt-0.5">
-                  Alle Geräte werden von {ORG.name} sorgfältig geprüft, gereinigt und neu installiert.
+                  {t('product.verifiedDesc', { orgName: ORG.name })}
                 </p>
               </div>
             </div>
@@ -180,13 +185,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
-                Im Webshop kaufen
+                {t('product.buyOnline')}
               </a>
               <Link
                 href="/shop#ladenlokal"
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
               >
-                Vor Ort kaufen
+                {t('product.buyInStore')}
               </Link>
             </div>
           </div>
@@ -196,7 +201,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {relatedProducts.length > 0 && (
           <div className="mt-16">
             <Heading level={2} className="text-xl font-semibold text-gray-900 mb-6">
-              Ähnliche Produkte
+              {t('product.similarProducts')}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {relatedProducts.map(p => (
