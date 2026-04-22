@@ -4462,7 +4462,10 @@
         "locationLabel": "Location",
         "ideal": "Ideal: ground floor or easily accessible, wheelchair accessible, loading ramp or delivery option, in a lively neighbourhood with good public transport.",
         "knowSpace": "Do you know a suitable space? We welcome any tip!",
-        "contactBtn": "Contact us"
+        "contactBtn": "Contact us",
+        "areaValue": "250+ m²",
+        "budgetValue": "CHF 6,000",
+        "locationValue": "Zürich"
       }
     },
     "impact": {
@@ -4473,19 +4476,27 @@
       "kpis": [
         {
           "metric": "Devices per year",
-          "reason": "More workshop stations = more capacity"
+          "reason": "More workshop stations = more capacity",
+          "current": "~500",
+          "potential": "2,000+"
         },
         {
           "metric": "Workshop participants",
-          "reason": "Dedicated event space for regular courses"
+          "reason": "Dedicated event space for regular courses",
+          "current": "~100",
+          "potential": "500+"
         },
         {
           "metric": "Community members",
-          "reason": "Coworking attracts more volunteers"
+          "reason": "Coworking attracts more volunteers",
+          "current": "~50",
+          "potential": "200+"
         },
         {
           "metric": "Social integration",
-          "reason": "More internship places thanks to larger spaces"
+          "reason": "More internship places with larger space",
+          "current": "~10",
+          "potential": "30+"
         }
       ],
       "donateCard": {

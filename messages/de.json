@@ -4307,7 +4307,10 @@
         "locationLabel": "Standort",
         "ideal": "Ideal wäre: Erdgeschoss oder gut erreichbar, rollstuhlgängig, Laderampe oder Anlieferungsmöglichkeit, in einem lebendigen Quartier mit guter ÖV-Anbindung.",
         "knowSpace": "Kennst du einen passenden Raum? Wir freuen uns über jeden Hinweis!",
-        "contactBtn": "Kontaktiere uns"
+        "contactBtn": "Kontaktiere uns",
+        "areaValue": "250+ m²",
+        "budgetValue": "CHF 6'000",
+        "locationValue": "Zürich"
       }
     },
     "impact": {
@@ -4318,19 +4321,27 @@
       "kpis": [
         {
           "metric": "Geräte pro Jahr",
-          "reason": "Mehr Werkstattplätze = mehr Kapazität"
+          "reason": "Mehr Werkstattplätze = mehr Kapazität",
+          "current": "~500",
+          "potential": "2'000+"
         },
         {
           "metric": "Workshop-Teilnehmer",
-          "reason": "Eigener Event-Raum für regelmässige Kurse"
+          "reason": "Eigener Event-Raum für regelmässige Kurse",
+          "current": "~100",
+          "potential": "500+"
         },
         {
           "metric": "Community-Mitglieder",
-          "reason": "Coworking zieht mehr Freiwillige an"
+          "reason": "Coworking zieht mehr Freiwillige an",
+          "current": "~50",
+          "potential": "200+"
         },
         {
           "metric": "Soziale Integration",
-          "reason": "Mehr Praktikumsplätze durch grössere Räume"
+          "reason": "Mehr Praktikumsplätze durch grössere Räume",
+          "current": "~10",
+          "potential": "30+"
         }
       ],
       "donateCard": {

@@ -4249,7 +4249,10 @@
         "locationLabel": "위치",
         "ideal": "이상적: 1층 또는 접근하기 쉬운 곳, 휠체어 접근 가능, 하역 램프 또는 배달 가능, 대중교통이 편리한 활기찬 지역.",
         "knowSpace": "적합한 공간을 아시나요? 어떤 정보든 환영합니다!",
-        "contactBtn": "문의하기"
+        "contactBtn": "문의하기",
+        "areaValue": "250m² 이상",
+        "budgetValue": "CHF 6,000",
+        "locationValue": "취리히"
       }
     },
     "impact": {
@@ -4259,20 +4262,28 @@
       "potentialLabel": "잠재력",
       "kpis": [
         {
-          "metric": "연간 기기 수",
-          "reason": "워크숍 공간 증가 = 용량 증가"
+          "metric": "Devices per year",
+          "reason": "More workshop stations = more capacity",
+          "current": "~500",
+          "potential": "2,000+"
         },
         {
-          "metric": "워크숍 참가자",
-          "reason": "정기 강좌를 위한 전용 이벤트 공간"
+          "metric": "Workshop participants",
+          "reason": "Dedicated event space for regular courses",
+          "current": "~100",
+          "potential": "500+"
         },
         {
-          "metric": "커뮤니티 회원",
-          "reason": "코워킹이 더 많은 자원봉사자를 유치"
+          "metric": "Community members",
+          "reason": "Coworking attracts more volunteers",
+          "current": "~50",
+          "potential": "200+"
         },
         {
-          "metric": "사회적 통합",
-          "reason": "더 큰 공간 덕분에 인턴십 자리 증가"
+          "metric": "Social integration",
+          "reason": "More internship places with larger space",
+          "current": "~10",
+          "potential": "30+"
         }
       ],
       "donateCard": {

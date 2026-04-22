@@ -4515,7 +4515,10 @@
         "locationLabel": "Emplacement",
         "ideal": "Idéal : rez-de-chaussée ou facilement accessible, accessible aux fauteuils roulants, quai de chargement ou livraison possible, dans un quartier animé avec bons transports en commun.",
         "knowSpace": "Vous connaissez un espace adapté ? Nous apprécions toute information !",
-        "contactBtn": "Contactez-nous"
+        "contactBtn": "Contactez-nous",
+        "areaValue": "250+ m²",
+        "budgetValue": "CHF 6'000",
+        "locationValue": "Zurich"
       }
     },
     "impact": {
@@ -4525,20 +4528,28 @@
       "potentialLabel": "Potentiel",
       "kpis": [
         {
-          "metric": "Appareils par an",
-          "reason": "Plus de postes d'atelier = plus de capacité"
+          "metric": "Devices per year",
+          "reason": "More workshop stations = more capacity",
+          "current": "~500",
+          "potential": "2,000+"
         },
         {
-          "metric": "Participants aux ateliers",
-          "reason": "Espace événementiel dédié pour des cours réguliers"
+          "metric": "Workshop participants",
+          "reason": "Dedicated event space for regular courses",
+          "current": "~100",
+          "potential": "500+"
         },
         {
-          "metric": "Membres de la communauté",
-          "reason": "Le coworking attire plus de bénévoles"
+          "metric": "Community members",
+          "reason": "Coworking attracts more volunteers",
+          "current": "~50",
+          "potential": "200+"
         },
         {
-          "metric": "Intégration sociale",
-          "reason": "Plus de places de stage grâce aux plus grands espaces"
+          "metric": "Social integration",
+          "reason": "More internship places with larger space",
+          "current": "~10",
+          "potential": "30+"
         }
       ],
       "donateCard": {

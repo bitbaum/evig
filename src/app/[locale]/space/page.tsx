@@ -60,21 +60,13 @@ const locationNames = [
 // Space feature icons (positional — parallel to translations array)
 const spaceFeatureIcons = [Store, Wrench, Users, Calendar, BookOpen, Coffee, UtensilsCrossed, Leaf]
 
-// KPI numeric values (not translatable)
-const kpiValues = [
-  { current: '~500', potential: "2'000+" },
-  { current: '~100', potential: '500+' },
-  { current: '~50', potential: '200+' },
-  { current: '~10', potential: '30+' },
-]
-
 export default async function SpacePage({ params }: SpacePageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'space' })
 
   const historyLocations = t.raw('history.locations') as Array<{ highlight: string; description: string }>
   const spaceFeatures = t.raw('future.features') as Array<{ name: string; description: string }>
-  const kpis = t.raw('impact.kpis') as Array<{ metric: string; reason: string }>
+  const kpis = t.raw('impact.kpis') as Array<{ metric: string; reason: string; current: string; potential: string }>
 
   return (
     <main>
@@ -279,15 +271,15 @@ export default async function SpacePage({ params }: SpacePageProps) {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <p className="text-3xl font-bold text-green-700 mb-1">250+ m²</p>
+                  <p className="text-3xl font-bold text-green-700 mb-1">{t('future.params.areaValue')}</p>
                   <p className="text-sm text-gray-600">{t('future.params.areaLabel')}</p>
                 </div>
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <p className="text-3xl font-bold text-green-700 mb-1">CHF 6&apos;000</p>
+                  <p className="text-3xl font-bold text-green-700 mb-1">{t('future.params.budgetValue')}</p>
                   <p className="text-sm text-gray-600">{t('future.params.budgetLabel')}</p>
                 </div>
                 <div className="text-center p-4 bg-gray-50 rounded-lg">
-                  <p className="text-3xl font-bold text-green-700 mb-1">Zürich</p>
+                  <p className="text-3xl font-bold text-green-700 mb-1">{t('future.params.locationValue')}</p>
                   <p className="text-sm text-gray-600">{t('future.params.locationLabel')}</p>
                 </div>
               </div>
@@ -339,12 +331,12 @@ export default async function SpacePage({ params }: SpacePageProps) {
                     <div className="flex items-end gap-4 mb-3">
                       <div>
                         <p className="text-sm text-gray-500">{t('impact.todayLabel')}</p>
-                        <p className="text-2xl font-bold text-gray-400">{kpiValues[index].current}</p>
+                        <p className="text-2xl font-bold text-gray-400">{item.current}</p>
                       </div>
                       <ChevronRight className="w-6 h-6 text-green-500 mb-2" />
                       <div>
                         <p className="text-sm text-green-600">{t('impact.potentialLabel')}</p>
-                        <p className="text-2xl font-bold text-green-700">{kpiValues[index].potential}</p>
+                        <p className="text-2xl font-bold text-green-700">{item.potential}</p>
                       </div>
                     </div>
                     <p className="text-sm text-gray-600">{item.reason}</p>

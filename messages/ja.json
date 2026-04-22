@@ -4249,7 +4249,10 @@
         "locationLabel": "場所",
         "ideal": "理想：1階またはアクセスしやすい場所、車椅子対応、荷物搬入可能、公共交通機関が充実した活気あるエリア。",
         "knowSpace": "適切なスペースをご存知ですか？情報をお待ちしています！",
-        "contactBtn": "お問い合わせ"
+        "contactBtn": "お問い合わせ",
+        "areaValue": "250㎡以上",
+        "budgetValue": "CHF 6,000",
+        "locationValue": "チューリッヒ"
       }
     },
     "impact": {
@@ -4259,20 +4262,28 @@
       "potentialLabel": "ポテンシャル",
       "kpis": [
         {
-          "metric": "年間デバイス数",
-          "reason": "ワークショップスペースが増える = 容量が増える"
+          "metric": "Devices per year",
+          "reason": "More workshop stations = more capacity",
+          "current": "~500",
+          "potential": "2,000+"
         },
         {
-          "metric": "ワークショップ参加者",
-          "reason": "定期的なコースのための専用イベントスペース"
+          "metric": "Workshop participants",
+          "reason": "Dedicated event space for regular courses",
+          "current": "~100",
+          "potential": "500+"
         },
         {
-          "metric": "コミュニティメンバー",
-          "reason": "コワーキングがより多くのボランティアを引き付ける"
+          "metric": "Community members",
+          "reason": "Coworking attracts more volunteers",
+          "current": "~50",
+          "potential": "200+"
         },
         {
-          "metric": "社会的統合",
-          "reason": "より大きなスペースによるインターンシップの場の増加"
+          "metric": "Social integration",
+          "reason": "More internship places with larger space",
+          "current": "~10",
+          "potential": "30+"
         }
       ],
       "donateCard": {
