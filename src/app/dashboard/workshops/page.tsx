@@ -9,6 +9,7 @@ import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-sta
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 import { formatDate } from '@/lib/date-formats'
 import { Modal } from '@/components/ui/Modal'
 import Heading from '@/components/ui/Heading'
@@ -30,6 +31,7 @@ interface WorkshopRegistration {
 }
 
 export default function WorkshopsDashboard() {
+  const t = useTranslations('dashboard.dates')
   const { data: session, status } = useSession()
   const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
   const [loading, setLoading] = useState(true)
@@ -198,7 +200,7 @@ export default function WorkshopsDashboard() {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>Angemeldet am {formatDate(registration.created_at)}</span>
+                        <span>{t('registeredOn', { date: formatDate(registration.created_at) })}</span>
                       </div>
                     </div>
                   </div>

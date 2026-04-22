@@ -5121,5 +5121,77 @@
       "successGeneric": "필드가 채워졌습니다!",
       "quickActionDisabled": "먼저 양식을 작성하세요"
     }
+  },
+  "dashboard": {
+    "profile": {
+      "preferences": {
+        "heading": "설정",
+        "subtitle": "언어 및 뉴스레터",
+        "languageLabel": "기본 언어",
+        "newsletterLabel": "뉴스레터 구독",
+        "newsletterDesc": "RevampIT의 워크샵, 할인 및 뉴스 업데이트를 받아보세요"
+      },
+      "address": {
+        "heading": "주소",
+        "subtitle": "배송 및 청구서용",
+        "streetLabel": "도로명 및 번지",
+        "streetPlaceholder": "샘플거리 123",
+        "line2Label": "주소 추가 정보",
+        "optional": "(선택사항)",
+        "line2Placeholder": "c/o 김씨, 3층",
+        "plzLabel": "우편번호",
+        "plzHint": "도시와 주는 자동으로 채워집니다",
+        "cityLabel": "도시",
+        "cityPlaceholder": "취리히",
+        "cantonLabel": "칸톤",
+        "cantonDefault": "칸톤 선택",
+        "countryLabel": "국가"
+      },
+      "password": {
+        "heading": "비밀번호 변경",
+        "subtitle": "계정을 안전하게 유지하세요",
+        "success": "비밀번호가 성공적으로 변경되었습니다!",
+        "currentLabel": "현재 비밀번호",
+        "currentPlaceholder": "현재 비밀번호",
+        "newLabel": "새 비밀번호",
+        "newPlaceholder": "최소 8자",
+        "confirmLabel": "비밀번호 확인",
+        "confirmPlaceholder": "비밀번호 반복 입력",
+        "requirementTitle": "비밀번호 요구사항:",
+        "requirementText": "최소 8자",
+        "changing": "변경 중...",
+        "submitButton": "비밀번호 변경"
+      },
+      "serviceProvider": {
+        "heading": "서비스 프로필",
+        "subtitle": "서비스 관련 정보",
+        "bioLabel": "소개",
+        "optional": "(선택사항)",
+        "bioPlaceholder": "자신과 서비스를 설명해 주세요...",
+        "websiteLabel": "웹사이트",
+        "websitePlaceholder": "https://내-사이트.ch",
+        "skillsLabel": "기술",
+        "skillsPlaceholder": "하드웨어 수리, 소프트웨어 설치, 데이터 복구",
+        "skillsHint": "기술을 쉼표로 구분하세요",
+        "expertiseLabel": "전문 분야",
+        "expertisePlaceholder": "노트북, 데스크탑, 스마트폰, Linux, Windows",
+        "expertiseHint": "분야를 쉼표로 구분하세요",
+        "radiusLabel": "서비스 범위(km)",
+        "radiusHint": "가정 방문 최대 범위"
+      }
+    },
+    "emailVerification": {
+      "heading": "이메일 주소가 확인되지 않음",
+      "description": "모든 기능을 사용하려면 이메일 주소 {email}을 확인해 주세요.",
+      "resend": "코드 재전송",
+      "sent": "새 확인 코드가 전송되었습니다!",
+      "close": "닫기",
+      "networkError": "네트워크 오류"
+    },
+    "dates": {
+      "registeredOn": "{date}에 등록",
+      "createdOn": "{date}에 생성",
+      "lastEdited": "{date}에 마지막 편집"
+    }
   }
 }

@@ -5079,5 +5079,77 @@
       "successGeneric": "Champs remplis !",
       "quickActionDisabled": "Remplissez d'abord le formulaire"
     }
+  },
+  "dashboard": {
+    "profile": {
+      "preferences": {
+        "heading": "Paramètres",
+        "subtitle": "Langue et newsletter",
+        "languageLabel": "Langue préférée",
+        "newsletterLabel": "S'abonner à la newsletter",
+        "newsletterDesc": "Recevez des mises à jour sur les ateliers, les offres et les actualités de RevampIT"
+      },
+      "address": {
+        "heading": "Adresse",
+        "subtitle": "Pour les livraisons et les factures",
+        "streetLabel": "Rue et numéro",
+        "streetPlaceholder": "Rue Exemple 123",
+        "line2Label": "Complément d'adresse",
+        "optional": "(optionnel)",
+        "line2Placeholder": "c/o Dupont, 3ème étage",
+        "plzLabel": "Code postal",
+        "plzHint": "La ville et le canton seront remplis automatiquement",
+        "cityLabel": "Ville",
+        "cityPlaceholder": "Zurich",
+        "cantonLabel": "Canton",
+        "cantonDefault": "Choisir un canton",
+        "countryLabel": "Pays"
+      },
+      "password": {
+        "heading": "Changer le mot de passe",
+        "subtitle": "Gardez votre compte sécurisé",
+        "success": "Mot de passe changé avec succès !",
+        "currentLabel": "Mot de passe actuel",
+        "currentPlaceholder": "Votre mot de passe actuel",
+        "newLabel": "Nouveau mot de passe",
+        "newPlaceholder": "Au moins 8 caractères",
+        "confirmLabel": "Confirmer le mot de passe",
+        "confirmPlaceholder": "Répéter le mot de passe",
+        "requirementTitle": "Exigence de mot de passe :",
+        "requirementText": "Au moins 8 caractères",
+        "changing": "Modification...",
+        "submitButton": "Changer le mot de passe"
+      },
+      "serviceProvider": {
+        "heading": "Profil de service",
+        "subtitle": "Informations pour vos services",
+        "bioLabel": "À propos de moi",
+        "optional": "(optionnel)",
+        "bioPlaceholder": "Décrivez-vous et vos services...",
+        "websiteLabel": "Site web",
+        "websitePlaceholder": "https://votre-site.ch",
+        "skillsLabel": "Compétences",
+        "skillsPlaceholder": "Réparation matériel, installation logiciel, récupération de données",
+        "skillsHint": "Séparez les compétences par des virgules",
+        "expertiseLabel": "Domaines d'expertise",
+        "expertisePlaceholder": "Ordinateurs portables, ordinateurs de bureau, smartphones, Linux, Windows",
+        "expertiseHint": "Séparez les domaines par des virgules",
+        "radiusLabel": "Rayon de service (km)",
+        "radiusHint": "Rayon maximum pour les visites à domicile"
+      }
+    },
+    "emailVerification": {
+      "heading": "Adresse e-mail non confirmée",
+      "description": "Veuillez confirmer votre adresse e-mail {email} pour utiliser toutes les fonctionnalités.",
+      "resend": "Renvoyer le code",
+      "sent": "Un nouveau code de confirmation a été envoyé !",
+      "close": "Fermer",
+      "networkError": "Erreur réseau"
+    },
+    "dates": {
+      "registeredOn": "Inscrit le {date}",
+      "createdOn": "Créé le {date}",
+      "lastEdited": "Dernière modification le {date}"
+    }
   }
 }

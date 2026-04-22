@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 import Heading from '@/components/ui/Heading'
@@ -147,6 +148,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   getUserVote: (id: string) => 'helpful' | 'unhelpful' | undefined
   canEdit: (createdAt: string) => boolean
 }) {
+  const t = useTranslations('dashboard.dates')
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="p-6 border-b border-gray-200">
@@ -225,9 +227,9 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-4 text-sm text-gray-500">
             <span>{review.helpfulVotes} hilfreiche Stimmen</span>
-            <span>Erstellt am {formatDateShort(review.createdAt)}</span>
+            <span>{t('createdOn', { date: formatDateShort(review.createdAt) })}</span>
             {review.updatedAt !== review.createdAt && (
-              <span>Zuletzt bearbeitet am {formatDateShort(review.updatedAt)}</span>
+              <span>{t('lastEdited', { date: formatDateShort(review.updatedAt) })}</span>
             )}
           </div>
 

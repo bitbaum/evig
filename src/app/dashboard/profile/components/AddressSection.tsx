@@ -2,6 +2,7 @@
 
 import { MapPin } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import { type PostalCodeData } from '@/lib/swiss-postal-codes'
 import { SWISS_CANTONS } from '@/config/swiss-cantons'
 import type { ProfileData } from '../hooks/useProfileData'
@@ -25,6 +26,7 @@ export function AddressSection({
   showSuggestions,
   selectPostalSuggestion,
 }: AddressSectionProps) {
+  const t = useTranslations('dashboard.profile.address')
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -33,40 +35,40 @@ export function AddressSection({
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-            Adresse
+            {t('heading')}
           </Heading>
-          <p className="text-sm text-gray-500">Für Lieferungen und Rechnungen</p>
+          <p className="text-sm text-gray-500">{t('subtitle')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Strasse und Hausnummer
+            {t('streetLabel')}
           </label>
           <input
             type="text"
             value={profile.address_line1}
             onChange={(e) => handleChange('address_line1', e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Musterstrasse 123"
+            placeholder={t('streetPlaceholder')}
           />
         </div>
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Adresszusatz <span className="text-gray-400">(optional)</span>
+            {t('line2Label')} <span className="text-gray-400">{t('optional')}</span>
           </label>
           <input
             type="text"
             value={profile.address_line2}
             onChange={(e) => handleChange('address_line2', e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="c/o Mustermann, 3. Stock"
+            placeholder={t('line2Placeholder')}
           />
         </div>
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            PLZ
+            {t('plzLabel')}
           </label>
           <input
             type="text"
@@ -76,18 +78,18 @@ export function AddressSection({
             placeholder="8000"
             maxLength={4}
           />
-          <p className="text-xs text-gray-500 mt-1">Stadt und Kanton werden automatisch ausgefüllt</p>
+          <p className="text-xs text-gray-500 mt-1">{t('plzHint')}</p>
         </div>
         <div className="relative">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Ort
+            {t('cityLabel')}
           </label>
           <input
             type="text"
             value={profile.city}
             onChange={(e) => handleCitySearch(e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Zürich"
+            placeholder={t('cityPlaceholder')}
           />
           {showSuggestions && postalCodeSuggestions.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
@@ -107,14 +109,14 @@ export function AddressSection({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Kanton
+            {t('cantonLabel')}
           </label>
           <select
             value={profile.canton}
             onChange={(e) => handleChange('canton', e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
           >
-            <option value="">Kanton wählen</option>
+            <option value="">{t('cantonDefault')}</option>
             {SWISS_CANTONS.map((canton) => (
               <option key={canton} value={canton}>{canton}</option>
             ))}
@@ -122,7 +124,7 @@ export function AddressSection({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Land
+            {t('countryLabel')}
           </label>
           <input
             type="text"

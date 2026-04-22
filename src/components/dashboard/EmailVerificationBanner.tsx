@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { AlertTriangle, Mail, X, CheckCircle2, Loader2 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { apiFetch } from '@/lib/api/client'
 
@@ -12,6 +13,7 @@ interface EmailVerificationBannerProps {
 }
 
 export function EmailVerificationBanner({ email, className }: EmailVerificationBannerProps) {
+  const t = useTranslations('dashboard.emailVerification')
   const [isVisible, setIsVisible] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [isSent, setIsSent] = useState(false)
@@ -34,7 +36,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
 
       setIsSent(true)
     } catch {
-      setError('Netzwerkfehler')
+      setError(t('networkError'))
     } finally {
       setIsLoading(false)
     }
@@ -53,18 +55,18 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
         </div>
         <div className="ml-3 flex-1">
           <Heading level={3} className="text-sm font-medium text-amber-800 dark:text-amber-200">
-            E-Mail-Adresse nicht bestätigt
+            {t('heading')}
           </Heading>
           <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
             <p>
-              Bitte bestätige deine E-Mail-Adresse <strong>{email}</strong>, um alle Funktionen nutzen zu können.
+              {t('description', { email })}
             </p>
           </div>
           <div className="mt-4">
             {isSent ? (
               <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>Ein neuer Bestätigungscode wurde gesendet!</span>
+                <span>{t('sent')}</span>
               </div>
             ) : (
               <div className="flex items-center gap-3">
@@ -86,7 +88,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
                   ) : (
                     <Mail className="h-4 w-4" />
                   )}
-                  Code erneut senden
+                  {t('resend')}
                 </button>
                 {error && (
                   <span className="text-sm text-red-600 dark:text-red-400">{error}</span>
@@ -101,7 +103,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
             onClick={() => setIsVisible(false)}
             className="inline-flex rounded-md text-amber-500 hover:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
           >
-            <span className="sr-only">Schliessen</span>
+            <span className="sr-only">{t('close')}</span>
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>

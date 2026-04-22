@@ -5121,5 +5121,77 @@
       "successGeneric": "¡Campos rellenados!",
       "quickActionDisabled": "Rellena primero el formulario"
     }
+  },
+  "dashboard": {
+    "profile": {
+      "preferences": {
+        "heading": "Configuración",
+        "subtitle": "Idioma y boletín",
+        "languageLabel": "Idioma preferido",
+        "newsletterLabel": "Suscribirse al boletín",
+        "newsletterDesc": "Recibe actualizaciones sobre talleres, ofertas y noticias de RevampIT"
+      },
+      "address": {
+        "heading": "Dirección",
+        "subtitle": "Para entregas y facturas",
+        "streetLabel": "Calle y número",
+        "streetPlaceholder": "Calle Ejemplo 123",
+        "line2Label": "Complemento de dirección",
+        "optional": "(opcional)",
+        "line2Placeholder": "c/o García, 3er piso",
+        "plzLabel": "Código postal",
+        "plzHint": "La ciudad y el cantón se rellenarán automáticamente",
+        "cityLabel": "Ciudad",
+        "cityPlaceholder": "Zúrich",
+        "cantonLabel": "Cantón",
+        "cantonDefault": "Elegir cantón",
+        "countryLabel": "País"
+      },
+      "password": {
+        "heading": "Cambiar contraseña",
+        "subtitle": "Mantén tu cuenta segura",
+        "success": "¡Contraseña cambiada con éxito!",
+        "currentLabel": "Contraseña actual",
+        "currentPlaceholder": "Tu contraseña actual",
+        "newLabel": "Nueva contraseña",
+        "newPlaceholder": "Al menos 8 caracteres",
+        "confirmLabel": "Confirmar contraseña",
+        "confirmPlaceholder": "Repetir contraseña",
+        "requirementTitle": "Requisito de contraseña:",
+        "requirementText": "Al menos 8 caracteres",
+        "changing": "Cambiando...",
+        "submitButton": "Cambiar contraseña"
+      },
+      "serviceProvider": {
+        "heading": "Perfil de servicio",
+        "subtitle": "Información para tus servicios",
+        "bioLabel": "Sobre mí",
+        "optional": "(opcional)",
+        "bioPlaceholder": "Descríbete a ti mismo y tus servicios...",
+        "websiteLabel": "Sitio web",
+        "websitePlaceholder": "https://tu-sitio.ch",
+        "skillsLabel": "Habilidades",
+        "skillsPlaceholder": "Reparación de hardware, instalación de software, recuperación de datos",
+        "skillsHint": "Separa las habilidades con comas",
+        "expertiseLabel": "Áreas de especialización",
+        "expertisePlaceholder": "Portátiles, escritorios, smartphones, Linux, Windows",
+        "expertiseHint": "Separa las áreas con comas",
+        "radiusLabel": "Radio de servicio (km)",
+        "radiusHint": "Radio máximo para visitas a domicilio"
+      }
+    },
+    "emailVerification": {
+      "heading": "Dirección de correo no confirmada",
+      "description": "Por favor confirma tu dirección de correo {email} para usar todas las funciones.",
+      "resend": "Reenviar código",
+      "sent": "¡Se ha enviado un nuevo código de confirmación!",
+      "close": "Cerrar",
+      "networkError": "Error de red"
+    },
+    "dates": {
+      "registeredOn": "Registrado el {date}",
+      "createdOn": "Creado el {date}",
+      "lastEdited": "Última edición el {date}"
+    }
   }
 }

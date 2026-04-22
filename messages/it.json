@@ -5121,5 +5121,77 @@
       "successGeneric": "Campi compilati!",
       "quickActionDisabled": "Compila prima il modulo"
     }
+  },
+  "dashboard": {
+    "profile": {
+      "preferences": {
+        "heading": "Impostazioni",
+        "subtitle": "Lingua e newsletter",
+        "languageLabel": "Lingua preferita",
+        "newsletterLabel": "Iscriviti alla newsletter",
+        "newsletterDesc": "Ricevi aggiornamenti su workshop, offerte e novità di RevampIT"
+      },
+      "address": {
+        "heading": "Indirizzo",
+        "subtitle": "Per consegne e fatture",
+        "streetLabel": "Via e numero civico",
+        "streetPlaceholder": "Via Esempio 123",
+        "line2Label": "Complemento indirizzo",
+        "optional": "(opzionale)",
+        "line2Placeholder": "c/o Rossi, 3° piano",
+        "plzLabel": "CAP",
+        "plzHint": "Città e cantone verranno compilati automaticamente",
+        "cityLabel": "Città",
+        "cityPlaceholder": "Zurigo",
+        "cantonLabel": "Cantone",
+        "cantonDefault": "Scegli cantone",
+        "countryLabel": "Paese"
+      },
+      "password": {
+        "heading": "Cambia password",
+        "subtitle": "Mantieni il tuo account sicuro",
+        "success": "Password cambiata con successo!",
+        "currentLabel": "Password attuale",
+        "currentPlaceholder": "La tua password attuale",
+        "newLabel": "Nuova password",
+        "newPlaceholder": "Almeno 8 caratteri",
+        "confirmLabel": "Conferma password",
+        "confirmPlaceholder": "Ripeti la password",
+        "requirementTitle": "Requisito password:",
+        "requirementText": "Almeno 8 caratteri",
+        "changing": "Modifica in corso...",
+        "submitButton": "Cambia password"
+      },
+      "serviceProvider": {
+        "heading": "Profilo servizio",
+        "subtitle": "Informazioni per i tuoi servizi",
+        "bioLabel": "Su di me",
+        "optional": "(opzionale)",
+        "bioPlaceholder": "Descrivi te stesso e i tuoi servizi...",
+        "websiteLabel": "Sito web",
+        "websitePlaceholder": "https://il-tuo-sito.ch",
+        "skillsLabel": "Competenze",
+        "skillsPlaceholder": "Riparazione hardware, installazione software, recupero dati",
+        "skillsHint": "Separa le competenze con virgole",
+        "expertiseLabel": "Aree di competenza",
+        "expertisePlaceholder": "Laptop, desktop, smartphone, Linux, Windows",
+        "expertiseHint": "Separa le aree con virgole",
+        "radiusLabel": "Raggio di servizio (km)",
+        "radiusHint": "Raggio massimo per visite a domicilio"
+      }
+    },
+    "emailVerification": {
+      "heading": "Indirizzo e-mail non confermato",
+      "description": "Conferma il tuo indirizzo e-mail {email} per utilizzare tutte le funzionalità.",
+      "resend": "Invia di nuovo il codice",
+      "sent": "Un nuovo codice di conferma è stato inviato!",
+      "close": "Chiudi",
+      "networkError": "Errore di rete"
+    },
+    "dates": {
+      "registeredOn": "Registrato il {date}",
+      "createdOn": "Creato il {date}",
+      "lastEdited": "Ultima modifica il {date}"
+    }
   }
 }

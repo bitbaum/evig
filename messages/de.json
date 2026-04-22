@@ -5272,5 +5272,77 @@
       "successGeneric": "Felder ausgefüllt!",
       "quickActionDisabled": "Fülle zuerst das Formular aus"
     }
+  },
+  "dashboard": {
+    "profile": {
+      "preferences": {
+        "heading": "Einstellungen",
+        "subtitle": "Sprache und Newsletter",
+        "languageLabel": "Bevorzugte Sprache",
+        "newsletterLabel": "Newsletter abonnieren",
+        "newsletterDesc": "Erhalte Updates zu Workshops, Angeboten und Neuigkeiten von RevampIT"
+      },
+      "address": {
+        "heading": "Adresse",
+        "subtitle": "Für Lieferungen und Rechnungen",
+        "streetLabel": "Strasse und Hausnummer",
+        "streetPlaceholder": "Musterstrasse 123",
+        "line2Label": "Adresszusatz",
+        "optional": "(optional)",
+        "line2Placeholder": "c/o Mustermann, 3. Stock",
+        "plzLabel": "PLZ",
+        "plzHint": "Stadt und Kanton werden automatisch ausgefüllt",
+        "cityLabel": "Ort",
+        "cityPlaceholder": "Zürich",
+        "cantonLabel": "Kanton",
+        "cantonDefault": "Kanton wählen",
+        "countryLabel": "Land"
+      },
+      "password": {
+        "heading": "Passwort ändern",
+        "subtitle": "Halte dein Konto sicher",
+        "success": "Passwort erfolgreich geändert!",
+        "currentLabel": "Aktuelles Passwort",
+        "currentPlaceholder": "Ihr aktuelles Passwort",
+        "newLabel": "Neues Passwort",
+        "newPlaceholder": "Mindestens 8 Zeichen",
+        "confirmLabel": "Passwort bestätigen",
+        "confirmPlaceholder": "Passwort wiederholen",
+        "requirementTitle": "Passwort-Anforderung:",
+        "requirementText": "Mindestens 8 Zeichen",
+        "changing": "Ändere...",
+        "submitButton": "Passwort ändern"
+      },
+      "serviceProvider": {
+        "heading": "Dienstleistungsprofil",
+        "subtitle": "Informationen für Ihre Dienstleistungen",
+        "bioLabel": "Über mich",
+        "optional": "(optional)",
+        "bioPlaceholder": "Beschreibe dich und Deine Dienstleistungen...",
+        "websiteLabel": "Website",
+        "websitePlaceholder": "https://ihre-website.ch",
+        "skillsLabel": "Fähigkeiten",
+        "skillsPlaceholder": "Hardware-Reparatur, Software-Installation, Datenrettung",
+        "skillsHint": "Trenne Fähigkeiten mit Kommas",
+        "expertiseLabel": "Fachgebiete",
+        "expertisePlaceholder": "Laptops, Desktops, Smartphones, Linux, Windows",
+        "expertiseHint": "Trenne Fachgebiete mit Kommas",
+        "radiusLabel": "Service-Radius (km)",
+        "radiusHint": "Maximaler Radius für Hausbesuche"
+      }
+    },
+    "emailVerification": {
+      "heading": "E-Mail-Adresse nicht bestätigt",
+      "description": "Bitte bestätige deine E-Mail-Adresse {email}, um alle Funktionen nutzen zu können.",
+      "resend": "Code erneut senden",
+      "sent": "Ein neuer Bestätigungscode wurde gesendet!",
+      "close": "Schliessen",
+      "networkError": "Netzwerkfehler"
+    },
+    "dates": {
+      "registeredOn": "Angemeldet am {date}",
+      "createdOn": "Erstellt am {date}",
+      "lastEdited": "Zuletzt bearbeitet am {date}"
+    }
   }
 }

@@ -2,6 +2,7 @@
 
 import { Bell, Globe } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface PreferencesSectionProps {
@@ -10,6 +11,7 @@ interface PreferencesSectionProps {
 }
 
 export function PreferencesSection({ profile, handleChange }: PreferencesSectionProps) {
+  const t = useTranslations('dashboard.profile.preferences')
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -18,16 +20,16 @@ export function PreferencesSection({ profile, handleChange }: PreferencesSection
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-            Einstellungen
+            {t('heading')}
           </Heading>
-          <p className="text-sm text-gray-500">Sprache und Newsletter</p>
+          <p className="text-sm text-gray-500">{t('subtitle')}</p>
         </div>
       </div>
 
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Bevorzugte Sprache
+            {t('languageLabel')}
           </label>
           <div className="relative">
             <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -52,9 +54,9 @@ export function PreferencesSection({ profile, handleChange }: PreferencesSection
             className="mt-1 w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
           />
           <label htmlFor="newsletter" className="text-sm text-gray-700 dark:text-gray-300">
-            <span className="font-medium">Newsletter abonnieren</span>
+            <span className="font-medium">{t('newsletterLabel')}</span>
             <p className="text-gray-500 dark:text-gray-400 mt-0.5">
-              Erhalte Updates zu Workshops, Angeboten und Neuigkeiten von RevampIT
+              {t('newsletterDesc')}
             </p>
           </label>
         </div>

@@ -5121,5 +5121,77 @@
       "successGeneric": "フィールドが入力されました！",
       "quickActionDisabled": "まずフォームに入力してください"
     }
+  },
+  "dashboard": {
+    "profile": {
+      "preferences": {
+        "heading": "設定",
+        "subtitle": "言語とニュースレター",
+        "languageLabel": "使用言語",
+        "newsletterLabel": "ニュースレターを購読",
+        "newsletterDesc": "RevampITのワークショップ、オファー、ニュースの更新を受け取る"
+      },
+      "address": {
+        "heading": "住所",
+        "subtitle": "配送と請求書用",
+        "streetLabel": "番地",
+        "streetPlaceholder": "サンプル通り123",
+        "line2Label": "住所補足",
+        "optional": "（任意）",
+        "line2Placeholder": "c/o 山田、3階",
+        "plzLabel": "郵便番号",
+        "plzHint": "市区町村とカントンは自動入力されます",
+        "cityLabel": "市区町村",
+        "cityPlaceholder": "チューリッヒ",
+        "cantonLabel": "カントン",
+        "cantonDefault": "カントンを選択",
+        "countryLabel": "国"
+      },
+      "password": {
+        "heading": "パスワード変更",
+        "subtitle": "アカウントを安全に保つ",
+        "success": "パスワードが正常に変更されました！",
+        "currentLabel": "現在のパスワード",
+        "currentPlaceholder": "現在のパスワード",
+        "newLabel": "新しいパスワード",
+        "newPlaceholder": "8文字以上",
+        "confirmLabel": "パスワードの確認",
+        "confirmPlaceholder": "パスワードを再入力",
+        "requirementTitle": "パスワード要件：",
+        "requirementText": "8文字以上",
+        "changing": "変更中...",
+        "submitButton": "パスワードを変更"
+      },
+      "serviceProvider": {
+        "heading": "サービスプロフィール",
+        "subtitle": "サービスの情報",
+        "bioLabel": "自己紹介",
+        "optional": "（任意）",
+        "bioPlaceholder": "自己紹介とサービス内容を説明してください...",
+        "websiteLabel": "ウェブサイト",
+        "websitePlaceholder": "https://あなたのサイト.ch",
+        "skillsLabel": "スキル",
+        "skillsPlaceholder": "ハードウェア修理、ソフトウェアインストール、データ復旧",
+        "skillsHint": "スキルをカンマで区切ってください",
+        "expertiseLabel": "専門分野",
+        "expertisePlaceholder": "ノートPC、デスクトップ、スマートフォン、Linux、Windows",
+        "expertiseHint": "分野をカンマで区切ってください",
+        "radiusLabel": "サービス範囲（km）",
+        "radiusHint": "自宅訪問の最大範囲"
+      }
+    },
+    "emailVerification": {
+      "heading": "メールアドレスが未確認",
+      "description": "すべての機能を使用するには、メールアドレス{email}を確認してください。",
+      "resend": "コードを再送信",
+      "sent": "新しい確認コードが送信されました！",
+      "close": "閉じる",
+      "networkError": "ネットワークエラー"
+    },
+    "dates": {
+      "registeredOn": "{date}に登録",
+      "createdOn": "{date}に作成",
+      "lastEdited": "{date}に最終編集"
+    }
   }
 }

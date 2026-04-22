@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import {
   Shield,
   Loader2,
@@ -32,6 +33,7 @@ export function PasswordChangeSection({
   handlePasswordChange,
   handlePasswordFieldChange,
 }: PasswordChangeSectionProps) {
+  const t = useTranslations('dashboard.profile.password')
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -40,9 +42,9 @@ export function PasswordChangeSection({
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-            Passwort ändern
+            {t('heading')}
           </Heading>
-          <p className="text-sm text-gray-500">Halte dein Konto sicher</p>
+          <p className="text-sm text-gray-500">{t('subtitle')}</p>
         </div>
       </div>
 
@@ -50,7 +52,7 @@ export function PasswordChangeSection({
       {passwordSuccess && (
         <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3">
           <CheckCircle2 className="w-5 h-5 text-green-600" />
-          <p className="text-green-700 dark:text-green-300">Passwort erfolgreich geändert!</p>
+          <p className="text-green-700 dark:text-green-300">{t('success')}</p>
         </div>
       )}
 
@@ -64,14 +66,14 @@ export function PasswordChangeSection({
       <form onSubmit={handlePasswordChange} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Aktuelles Passwort
+            {t('currentLabel')}
           </label>
           <input
             type="password"
             value={passwordData.currentPassword}
             onChange={(e) => handlePasswordFieldChange('currentPassword', e.target.value)}
             className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="Ihr aktuelles Passwort"
+            placeholder={t('currentPlaceholder')}
             required
             aria-required="true"
             aria-invalid={!!passwordError}
@@ -82,14 +84,14 @@ export function PasswordChangeSection({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Neues Passwort
+              {t('newLabel')}
             </label>
             <input
               type="password"
               value={passwordData.newPassword}
               onChange={(e) => handlePasswordFieldChange('newPassword', e.target.value)}
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="Mindestens 8 Zeichen"
+              placeholder={t('newPlaceholder')}
               required
               aria-required="true"
               aria-invalid={!!passwordError}
@@ -98,14 +100,14 @@ export function PasswordChangeSection({
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Passwort bestätigen
+              {t('confirmLabel')}
             </label>
             <input
               type="password"
               value={passwordData.confirmPassword}
               onChange={(e) => handlePasswordFieldChange('confirmPassword', e.target.value)}
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="Passwort wiederholen"
+              placeholder={t('confirmPlaceholder')}
               required
               aria-required="true"
               aria-invalid={!!passwordError}
@@ -117,8 +119,8 @@ export function PasswordChangeSection({
         <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
           <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
           <div className="text-sm text-yellow-700 dark:text-yellow-300">
-            <p className="font-medium">Passwort-Anforderung:</p>
-            <p className="mt-1">Mindestens 8 Zeichen</p>
+            <p className="font-medium">{t('requirementTitle')}</p>
+            <p className="mt-1">{t('requirementText')}</p>
           </div>
         </div>
 
@@ -132,12 +134,12 @@ export function PasswordChangeSection({
             {isChangingPassword ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Ändere...
+                {t('changing')}
               </>
             ) : (
               <>
                 <Shield className="w-4 h-4" />
-                Passwort ändern
+                {t('submitButton')}
               </>
             )}
           </Button>
