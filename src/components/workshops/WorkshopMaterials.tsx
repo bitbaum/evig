@@ -11,6 +11,7 @@ import {
   Lock,
   Unlock
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 
@@ -30,6 +31,7 @@ interface WorkshopMaterialsProps {
 }
 
 export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsProps) {
+  const t = useTranslations('workshops.materials')
   const [materials, setMaterials] = useState<Material[]>([])
   const [accessLevel, setAccessLevel] = useState<string>('public')
   const [loading, setLoading] = useState(true)
@@ -43,18 +45,18 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           setMaterials(result.data.materials)
           setAccessLevel(result.data.accessLevel)
         } else {
-          setError(result.error || 'Fehler beim Laden der Materialien')
+          setError(result.error || t('error'))
         }
       } catch (err) {
         logger.error('Error fetching workshop materials', { error: err })
-        setError('Netzwerkfehler')
+        setError(t('networkError'))
       } finally {
         setLoading(false)
       }
     }
 
     fetchMaterials()
-  }, [workshopSlug])
+  }, [workshopSlug, t])
 
   const getMaterialIcon = (type: string) => {
     switch (type) {
@@ -106,10 +108,10 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
     return (
       <div className="text-center py-6">
         <FileText className="w-10 h-10 text-gray-300 mx-auto mb-2" />
-        <p className="text-gray-500 text-sm">Keine Materialien verfügbar</p>
+        <p className="text-gray-500 text-sm">{t('emptyTitle')}</p>
         {accessLevel === 'public' && (
           <p className="text-gray-500 text-xs mt-1">
-            Melde dich an, um auf weitere Materialien zuzugreifen
+            {t('loginHint')}
           </p>
         )}
       </div>
@@ -123,8 +125,8 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           <Unlock className="w-3 h-3" />
           <span>
             {accessLevel === 'attended'
-              ? 'Vollständiger Zugang (Teilnehmer)'
-              : 'Erweiterter Zugang (Angemeldet)'}
+              ? t('accessAttended')
+              : t('accessRegistered')}
           </span>
         </div>
       )}
@@ -158,7 +160,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
                     ? 'bg-purple-100 text-purple-700'
                     : 'bg-blue-100 text-blue-700'
                 }`}>
-                  {material.access_type === 'attended' ? 'Teilnehmer' : 'Angemeldet'}
+                  {material.access_type === 'attended' ? t('badgeAttended') : t('badgeRegistered')}
                 </span>
               )}
             </div>

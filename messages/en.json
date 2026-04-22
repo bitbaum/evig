@@ -398,7 +398,8 @@
       "goToShop": "Go to online shop",
       "allShopOptions": "All shop options",
       "relatedIn": "More in {parentName}",
-      "breadcrumbHome": "Home"
+      "breadcrumbHome": "Home",
+      "showAllProducts": "Show all {count} products"
     },
     "loading": {
       "text": "Loading shop..."
@@ -586,7 +587,13 @@
       "share": "Share",
       "copied": "Copied!",
       "edit": "Edit",
-      "report": "Report"
+      "report": "Report",
+      "errorFavorite": "Error updating favourite",
+      "errorNetworkFavorite": "Network error updating favourite",
+      "errorMessage": "Error sending message",
+      "errorNetworkMessage": "Network error sending message",
+      "errorReport": "Error reporting listing",
+      "errorNetworkReport": "Network error reporting listing"
     },
     "conditionExplainer": "What does \"{condition}\" mean for {category}?",
     "pagination": {
@@ -2022,6 +2029,16 @@
       "emptyMessage": "Reviews will appear here once participants give feedback.",
       "count": "{count, plural, one {# review} other {# reviews}}",
       "showAll": "Show all {count} reviews"
+    },
+    "materials": {
+      "error": "Error loading materials",
+      "networkError": "Network error",
+      "emptyTitle": "No materials available",
+      "loginHint": "Sign in to access more materials",
+      "accessAttended": "Full access (participant)",
+      "accessRegistered": "Extended access (signed in)",
+      "badgeAttended": "Participant",
+      "badgeRegistered": "Signed in"
     }
   },
   "about": {

@@ -181,7 +181,9 @@ function SubcategoryCard({
 // Product card
 // ============================================================================
 
-function ProductCard({ product }: { product: InventoryProduct }) {
+type ShopTFn = Awaited<ReturnType<typeof getTranslations<'shop'>>>
+
+function ProductCard({ product, t }: { product: InventoryProduct; t: ShopTFn }) {
   const href = `/shop/product/${product.item_uuid}`
   return (
     <Link
@@ -204,7 +206,7 @@ function ProductCard({ product }: { product: InventoryProduct }) {
         )}
         {product.quantity <= 1 && (
           <span className="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 font-medium px-2 py-0.5 rounded-full">
-            Letztes Stück
+            {t('product.stockOne')}
           </span>
         )}
       </div>
@@ -313,7 +315,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {inventoryResult.products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product} t={t} />
               ))}
             </div>
             {inventoryResult.total > inventoryResult.products.length && (
@@ -323,7 +325,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
                 >
                   <ShoppingCart className="w-4 h-4" />
-                  Alle {inventoryResult.total} Produkte anzeigen
+                  {t('category.showAllProducts', { count: inventoryResult.total })}
                 </Link>
               </div>
             )}

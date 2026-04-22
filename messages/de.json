@@ -449,7 +449,8 @@
       "goToShop": "Zum Online-Shop",
       "allShopOptions": "Alle Shop-Optionen",
       "relatedIn": "Weitere in {parentName}",
-      "breadcrumbHome": "Start"
+      "breadcrumbHome": "Start",
+      "showAllProducts": "Alle {count} Produkte anzeigen"
     },
     "loading": {
       "text": "Shop laden..."
@@ -629,7 +630,13 @@
       "share": "Teilen",
       "copied": "Kopiert!",
       "edit": "Bearbeiten",
-      "report": "Melden"
+      "report": "Melden",
+      "errorFavorite": "Fehler beim Aktualisieren des Favoriten",
+      "errorNetworkFavorite": "Netzwerkfehler beim Aktualisieren des Favoriten",
+      "errorMessage": "Fehler beim Senden der Nachricht",
+      "errorNetworkMessage": "Netzwerkfehler beim Senden der Nachricht",
+      "errorReport": "Fehler beim Melden des Inserats",
+      "errorNetworkReport": "Netzwerkfehler beim Melden des Inserats"
     },
     "empty": "Keine Inserate gefunden",
     "conditions": {
@@ -2073,6 +2080,16 @@
       "emptyMessage": "Bewertungen erscheinen hier, sobald Teilnehmer Feedback geben.",
       "count": "{count, plural, one {# Bewertung} other {# Bewertungen}}",
       "showAll": "Alle {count} Bewertungen anzeigen"
+    },
+    "materials": {
+      "error": "Fehler beim Laden der Materialien",
+      "networkError": "Netzwerkfehler",
+      "emptyTitle": "Keine Materialien verfügbar",
+      "loginHint": "Melde dich an, um auf weitere Materialien zuzugreifen",
+      "accessAttended": "Vollständiger Zugang (Teilnehmer)",
+      "accessRegistered": "Erweiterter Zugang (Angemeldet)",
+      "badgeAttended": "Teilnehmer",
+      "badgeRegistered": "Angemeldet"
     }
   },
   "about": {

@@ -1,5 +1,8 @@
+'use client'
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import type { ListingDetail } from './types'
 
@@ -50,6 +53,7 @@ export function useListingActions({
   setIsFavorited,
   setFavoriteCount,
 }: UseListingActionsProps): UseListingActionsReturn {
+  const t = useTranslations('marketplace.listing_actions')
   const router = useRouter()
 
   // Favorite state
@@ -84,10 +88,10 @@ export function useListingActions({
         setIsFavorited(result.data!.favorited)
         setFavoriteCount(result.data!.favorite_count)
       } else {
-        setActionError(result.error || 'Fehler beim Aktualisieren des Favoriten')
+        setActionError(result.error || t('errorFavorite'))
       }
     } catch {
-      setActionError('Netzwerkfehler beim Aktualisieren des Favoriten')
+      setActionError(t('errorNetworkFavorite'))
     } finally {
       setTogglingFav(false)
     }
@@ -110,10 +114,10 @@ export function useListingActions({
         setMessageSent(true)
         setContactMessage('')
       } else {
-        setActionError(result.error || 'Fehler beim Senden der Nachricht')
+        setActionError(result.error || t('errorMessage'))
       }
     } catch {
-      setActionError('Netzwerkfehler beim Senden der Nachricht')
+      setActionError(t('errorNetworkMessage'))
     } finally {
       setSendingMessage(false)
     }
@@ -149,10 +153,10 @@ export function useListingActions({
       if (result.success) {
         setReportSent(true)
       } else {
-        setActionError(result.error || 'Fehler beim Melden des Inserats')
+        setActionError(result.error || t('errorReport'))
       }
     } catch {
-      setActionError('Netzwerkfehler beim Melden des Inserats')
+      setActionError(t('errorNetworkReport'))
     } finally {
       setReportSending(false)
     }
