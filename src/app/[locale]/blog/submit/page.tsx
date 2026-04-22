@@ -269,7 +269,7 @@ export default function SubmitPostPage() {
                 aria-required="true"
                 readOnly={isLoggedIn}
                 className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isLoggedIn ? 'bg-gray-50 text-gray-600 cursor-default' : ''}`}
-                placeholder="Max Mustermann"
+                placeholder={t('placeholderName')}
               />
             </div>
 
@@ -287,7 +287,7 @@ export default function SubmitPostPage() {
                 aria-required="true"
                 readOnly={isLoggedIn}
                 className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isLoggedIn ? 'bg-gray-50 text-gray-600 cursor-default' : ''}`}
-                placeholder="max@beispiel.de"
+                placeholder={t('placeholderEmail')}
               />
             </div>
           </div>
@@ -342,7 +342,7 @@ export default function SubmitPostPage() {
                 value={formData.tags}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="Linux, ThinkPad, Tutorial"
+                placeholder={t('placeholderTags')}
               />
             </div>
           </div>

@@ -1288,6 +1288,19 @@
         "contactUs": "Nous contacter",
         "relatedAlternatives": "Plus d'alternatives dans cette catégorie",
         "openSourceAlternative": "Alternative open source"
+      },
+      "search": {
+        "placeholder": "Quel programme voulez-vous remplacer ? ex. Photoshop, Word, Zoom...",
+        "ariaLabel": "Rechercher des alternatives open-source",
+        "clearAriaLabel": "Effacer la recherche",
+        "allCategories": "Tout",
+        "resultCount": "{count, plural, one {# alternative} other {# alternatives}}",
+        "resultCountFor": "{count, plural, one {# alternative} other {# alternatives}} pour «{query}»",
+        "resultCountIn": "{count, plural, one {# alternative} other {# alternatives}} dans {category}",
+        "resultCountForIn": "{count, plural, one {# alternative} other {# alternatives}} pour «{query}» dans {category}",
+        "noResultsTitle": "Aucune alternative trouvée",
+        "noResultsMessage": "Aucun résultat pour «{query}». Essayez un autre terme de recherche ou supprimez le filtre de catégorie.",
+        "clearSearch": "Effacer la recherche"
       }
     },
     "repair": {
@@ -2296,7 +2309,10 @@
       "successMessage": "Votre article a été soumis et sera examiné.",
       "successEmailNote": "Nous vous contacterons par e-mail une fois votre article publié.",
       "submitAnotherButton": "Soumettre un autre article",
-      "toBlogButton": "Vers le Blog"
+      "toBlogButton": "Vers le Blog",
+      "placeholderName": "Jean Dupont",
+      "placeholderEmail": "jean@exemple.com",
+      "placeholderTags": "Linux, ThinkPad, Tutoriel"
     }
   },
   "auth": {

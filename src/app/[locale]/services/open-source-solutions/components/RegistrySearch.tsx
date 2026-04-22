@@ -10,6 +10,7 @@ import {
 } from '@/config/open-source-registry'
 import { AlternativeCard } from './AlternativeCard'
 import { EmptyState } from '@/components/common/EmptyState'
+import { useTranslations } from 'next-intl'
 
 interface RegistrySearchProps {
   alternatives: OSSAlternative[]
@@ -19,6 +20,7 @@ interface RegistrySearchProps {
 export function RegistrySearch({ alternatives, categories }: RegistrySearchProps) {
   const [query, setQuery] = useState('')
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
+  const t = useTranslations('services.openSourceSolutions.search')
 
   const filtered = useMemo(() => {
     let results = query ? searchAlternatives(query) : alternatives
@@ -27,6 +29,15 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
     }
     return results
   }, [query, activeCategoryId, alternatives])
+
+  const activeCategory = categories.find(c => c.id === activeCategoryId)
+
+  const resultCountLabel = (() => {
+    if (query && activeCategory) return t('resultCountForIn', { count: filtered.length, query, category: activeCategory.label })
+    if (query) return t('resultCountFor', { count: filtered.length, query })
+    if (activeCategory) return t('resultCountIn', { count: filtered.length, category: activeCategory.label })
+    return t('resultCount', { count: filtered.length })
+  })()
 
   return (
     <div>
@@ -38,8 +49,8 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Welches Programm möchtest du ersetzen? z.B. Photoshop, Word, Zoom..."
-            aria-label="Open-Source-Alternativen durchsuchen"
+            placeholder={t('placeholder')}
+            aria-label={t('ariaLabel')}
             className={cn(
               'w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl border-2 border-gray-200',
               'bg-white text-gray-900 placeholder-gray-400',
@@ -51,7 +62,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             <button
               onClick={() => setQuery('')}
               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-              aria-label="Suche zurücksetzen"
+              aria-label={t('clearAriaLabel')}
             >
               <X className="w-5 h-5" />
             </button>
@@ -70,7 +81,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
           )}
         >
-          Alle
+          {t('allCategories')}
         </button>
         {categories.map(cat => (
           <button
@@ -89,11 +100,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-gray-500 mb-6">
-        {filtered.length} {filtered.length === 1 ? 'Alternative' : 'Alternativen'}
-        {query && ` für «${query}»`}
-        {activeCategoryId && ` in ${categories.find(c => c.id === activeCategoryId)?.label}`}
-      </p>
+      <p className="text-sm text-gray-500 mb-6">{resultCountLabel}</p>
 
       {/* Results grid or empty state */}
       {filtered.length > 0 ? (
@@ -105,10 +112,10 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       ) : (
         <EmptyState
           icon={Search}
-          title="Keine Alternativen gefunden"
-          message={`Keine Ergebnisse für «${query}». Versuche einen anderen Suchbegriff oder entferne den Kategoriefilter.`}
+          title={t('noResultsTitle')}
+          message={t('noResultsMessage', { query })}
           action={{
-            label: 'Suche zurücksetzen',
+            label: t('clearSearch'),
             onClick: () => { setQuery(''); setActiveCategoryId(null) },
           }}
         />

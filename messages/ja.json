@@ -834,7 +834,10 @@
       "successMessage": "投稿を受け付けました。内容を確認します。",
       "successEmailNote": "記事が公開されたらメールでご連絡します。",
       "submitAnotherButton": "別の記事を投稿する",
-      "toBlogButton": "ブログへ"
+      "toBlogButton": "ブログへ",
+      "placeholderName": "山田太郎",
+      "placeholderEmail": "yamada@example.com",
+      "placeholderTags": "Linux, ThinkPad, チュートリアル"
     }
   },
   "contact": {
@@ -3071,6 +3074,19 @@
         "contactUs": "お問い合わせ",
         "relatedAlternatives": "このカテゴリの他の代替ソフト",
         "openSourceAlternative": "オープンソース代替"
+      },
+      "search": {
+        "placeholder": "置き換えたいプログラムは？例：Photoshop、Word、Zoom...",
+        "ariaLabel": "オープンソースの代替を検索",
+        "clearAriaLabel": "検索をクリア",
+        "allCategories": "すべて",
+        "resultCount": "{count}件の代替",
+        "resultCountFor": "「{query}」の{count}件の代替",
+        "resultCountIn": "{category}の{count}件の代替",
+        "resultCountForIn": "「{query}」・{category}の{count}件の代替",
+        "noResultsTitle": "代替が見つかりません",
+        "noResultsMessage": "「{query}」の結果がありません。別の検索語を試すか、カテゴリフィルターを削除してください。",
+        "clearSearch": "検索をクリア"
       }
     },
     "repair": {

@@ -834,7 +834,10 @@
       "successMessage": "Il tuo articolo è stato inviato e sarà esaminato.",
       "successEmailNote": "Ti contatteremo via email una volta pubblicato il tuo articolo.",
       "submitAnotherButton": "Invia un altro articolo",
-      "toBlogButton": "Al Blog"
+      "toBlogButton": "Al Blog",
+      "placeholderName": "Mario Rossi",
+      "placeholderEmail": "mario@esempio.com",
+      "placeholderTags": "Linux, ThinkPad, Tutorial"
     }
   },
   "contact": {
@@ -3071,6 +3074,19 @@
         "contactUs": "Contattaci",
         "relatedAlternatives": "Altre alternative in questa categoria",
         "openSourceAlternative": "Alternativa open source"
+      },
+      "search": {
+        "placeholder": "Quale programma vuoi sostituire? es. Photoshop, Word, Zoom...",
+        "ariaLabel": "Cerca alternative open-source",
+        "clearAriaLabel": "Cancella ricerca",
+        "allCategories": "Tutti",
+        "resultCount": "{count, plural, one {# alternativa} other {# alternative}}",
+        "resultCountFor": "{count, plural, one {# alternativa} other {# alternative}} per «{query}»",
+        "resultCountIn": "{count, plural, one {# alternativa} other {# alternative}} in {category}",
+        "resultCountForIn": "{count, plural, one {# alternativa} other {# alternative}} per «{query}» in {category}",
+        "noResultsTitle": "Nessuna alternativa trovata",
+        "noResultsMessage": "Nessun risultato per «{query}». Prova un altro termine di ricerca o rimuovi il filtro categoria.",
+        "clearSearch": "Cancella ricerca"
       }
     },
     "repair": {

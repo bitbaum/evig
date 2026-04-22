@@ -1378,6 +1378,19 @@
         "contactUs": "Kontakt aufnehmen",
         "relatedAlternatives": "Weitere Alternativen in dieser Kategorie",
         "openSourceAlternative": "Open-Source-Alternative"
+      },
+      "search": {
+        "placeholder": "Welches Programm möchtest du ersetzen? z.B. Photoshop, Word, Zoom...",
+        "ariaLabel": "Open-Source-Alternativen durchsuchen",
+        "clearAriaLabel": "Suche zurücksetzen",
+        "allCategories": "Alle",
+        "resultCount": "{count, plural, one {# Alternative} other {# Alternativen}}",
+        "resultCountFor": "{count, plural, one {# Alternative} other {# Alternativen}} für «{query}»",
+        "resultCountIn": "{count, plural, one {# Alternative} other {# Alternativen}} in {category}",
+        "resultCountForIn": "{count, plural, one {# Alternative} other {# Alternativen}} für «{query}» in {category}",
+        "noResultsTitle": "Keine Alternativen gefunden",
+        "noResultsMessage": "Keine Ergebnisse für «{query}». Versuche einen anderen Suchbegriff oder entferne den Kategoriefilter.",
+        "clearSearch": "Suche zurücksetzen"
       }
     },
     "repair": {
@@ -2386,7 +2399,10 @@
       "successMessage": "Dein Beitrag wurde eingereicht und wird von uns geprüft.",
       "successEmailNote": "Wir melden uns per E-Mail, sobald dein Beitrag veröffentlicht wird.",
       "submitAnotherButton": "Weiteren Beitrag einreichen",
-      "toBlogButton": "Zum Blog"
+      "toBlogButton": "Zum Blog",
+      "placeholderName": "Max Mustermann",
+      "placeholderEmail": "max@beispiel.de",
+      "placeholderTags": "Linux, ThinkPad, Tutorial"
     }
   },
   "auth": {

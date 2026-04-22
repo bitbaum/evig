@@ -834,7 +834,10 @@
       "successMessage": "게시물이 제출되었으며 검토될 것입니다.",
       "successEmailNote": "게시물이 공개되면 이메일로 알려드립니다.",
       "submitAnotherButton": "다른 게시물 제출",
-      "toBlogButton": "블로그로"
+      "toBlogButton": "블로그로",
+      "placeholderName": "홍길동",
+      "placeholderEmail": "hong@example.com",
+      "placeholderTags": "Linux, ThinkPad, 튜토리얼"
     }
   },
   "contact": {
@@ -3071,6 +3074,19 @@
         "contactUs": "문의하기",
         "relatedAlternatives": "이 카테고리의 더 많은 대안",
         "openSourceAlternative": "오픈소스 대안"
+      },
+      "search": {
+        "placeholder": "어떤 프로그램을 대체하고 싶으신가요? 예: Photoshop, Word, Zoom...",
+        "ariaLabel": "오픈소스 대안 검색",
+        "clearAriaLabel": "검색 초기화",
+        "allCategories": "전체",
+        "resultCount": "{count}개 대안",
+        "resultCountFor": "«{query}» {count}개 대안",
+        "resultCountIn": "{category} {count}개 대안",
+        "resultCountForIn": "«{query}» · {category} {count}개 대안",
+        "noResultsTitle": "대안을 찾을 수 없습니다",
+        "noResultsMessage": "«{query}»에 대한 결과가 없습니다. 다른 검색어를 시도하거나 카테고리 필터를 제거하세요.",
+        "clearSearch": "검색 초기화"
       }
     },
     "repair": {
