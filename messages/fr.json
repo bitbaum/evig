@@ -3773,7 +3773,581 @@
           "Optimisation des ressources"
         ]
       }
-    ]
+    ],
+    "freiecomputer": {
+      "meta": {
+        "title": "FreieComputer.ch - Swiss Label for Free Software",
+        "description": "The Swiss label for computers with pre-installed free software and guaranteed support. Promoting freedom of choice in computing since 2010."
+      },
+      "hero": {
+        "title": "FreieComputer.ch",
+        "description": "The Swiss label for computers with pre-installed free software and guaranteed support",
+        "cta1": "Support our mission",
+        "cta2": "Contact"
+      },
+      "about": {
+        "title": "About FreieComputer.ch",
+        "description": "Together with committed people from the open-source community, revamp-it helped establish this label to promote freedom of choice in computing and support retailers selling computers with pre-installed free software.",
+        "cards": [
+          {
+            "title": "Free Software",
+            "description": "Computers with pre-installed Linux and other free software alternatives"
+          },
+          {
+            "title": "Guaranteed Support",
+            "description": "Transparent support services with clear cost information at purchase"
+          },
+          {
+            "title": "Community-run",
+            "description": "A non-profit association carried by the open-source community"
+          }
+        ]
+      },
+      "mission": {
+        "title": "Our Mission",
+        "cards": [
+          {
+            "title": "Breaking the monopoly",
+            "description": "Challenging the dominance of proprietary operating systems through accessible alternatives.",
+            "features": [
+              "Promoting Linux and free software",
+              "Supporting independent retailers",
+              "Creating awareness of alternatives"
+            ]
+          },
+          {
+            "title": "Consumer freedom of choice",
+            "description": "Making it easier for consumers to access computers with free software.",
+            "features": [
+              "Pre-installed free software",
+              "Transparent support options",
+              "Clear cost information"
+            ]
+          },
+          {
+            "title": "Support services",
+            "description": "Ensuring a smooth transition to free software with comprehensive support.",
+            "features": [
+              "Guaranteed support packages",
+              "Transparent pricing",
+              "Professional support"
+            ]
+          },
+          {
+            "title": "Community impact",
+            "description": "Building a community dedicated to promoting free software in Switzerland.",
+            "features": [
+              "Open-source collaboration",
+              "Knowledge sharing",
+              "Community support"
+            ]
+          }
+        ]
+      },
+      "history": {
+        "title": "Our History",
+        "cards": [
+          {
+            "title": "Our History",
+            "description": "Since the launch of FreieComputer.ch in 2010, revamp-it has been selling certified computers under the label. We continue to work with committed people from the open-source community to make the label better known and more accessible.",
+            "features": [
+              "Founded in 2010",
+              "Non-profit association structure",
+              "Ongoing development by the community"
+            ]
+          }
+        ]
+      },
+      "cta": {
+        "title": "Get involved",
+        "actions": [
+          {
+            "title": "Get involved",
+            "description": "Help make the label better known and more accessible",
+            "cta": "Volunteer"
+          },
+          {
+            "title": "Learn more",
+            "description": "Visit our website for detailed information about the label",
+            "cta": "Visit FreieComputer.ch"
+          },
+          {
+            "title": "Contact",
+            "description": "Contact us to learn more about our initiative",
+            "cta": "Contact us"
+          }
+        ]
+      }
+    },
+    "hardware": {
+      "meta": {
+        "title": "Hardware Development",
+        "description": "revamp-it's hardware development work focuses on finding new uses for retired computer hardware, optimising energy use and creating open-source hardware assembly guides."
+      },
+      "hero": {
+        "title": "Hardware Development",
+        "description": "Innovative solutions for sustainable computing",
+        "cta1": "Join our projects",
+        "cta2": "Contact"
+      },
+      "overview": {
+        "title": "About our hardware work",
+        "description": "At revamp-it we focus on finding new applications for retired computer hardware that is still fully functional but no longer suited to its original purpose due to technological advances.",
+        "cards": [
+          {
+            "title": "Hardware reuse",
+            "description": "Finding new functionalities for used electronic components and extending their lifecycle"
+          },
+          {
+            "title": "Energy optimisation",
+            "description": "Developing energy- and resource-efficient computing solutions"
+          },
+          {
+            "title": "Open-source guides",
+            "description": "Creating comprehensive guides for assembling open-source hardware"
+          }
+        ]
+      },
+      "projects": {
+        "title": "Current projects",
+        "cards": [
+          {
+            "title": "12V power supply for recycled computers",
+            "description": "Developing solutions to replace 220V power supplies with 12V alternatives for use with renewable energy sources (solar, wind or pedal power).",
+            "features": [
+              "Creating DIY guides for 12V power supplies",
+              "Maximising use of recycled components",
+              "Enabling computer use in areas with limited electricity infrastructure"
+            ]
+          },
+          {
+            "title": "EPROM reuse",
+            "description": "Collecting and reprogramming BIOS chips from old motherboards, expansion cards and printers.",
+            "features": [
+              "Using an EPROM programmer to reprogram chips",
+              "Implementing in network cards with empty sockets",
+              "Enabling network boot for LTSP clients"
+            ]
+          },
+          {
+            "title": "Power supply repair",
+            "description": "Developing expertise in repairing computer power supplies and replacing components.",
+            "features": [
+              "Focus on large, easily replaceable components",
+              "Extending the life of partially damaged power supplies",
+              "Creating repair guides and documentation"
+            ]
+          },
+          {
+            "title": "LCD monitor repair",
+            "description": "Expanding our expertise in repairing flat-panel screens with minor defects.",
+            "features": [
+              "Diagnosing and fixing common LCD problems",
+              "Component-level repair techniques",
+              "Documenting successful repair methods"
+            ]
+          }
+        ]
+      },
+      "scsi": {
+        "title": "SCSI cable reuse",
+        "cards": [
+          {
+            "title": "SCSI cable reuse",
+            "description": "Exploring new applications for SCSI cables and interfaces, once the standard for reliable data transfer in server environments.",
+            "features": [
+              "Finding new uses for robust SCSI cables",
+              "Developing alternative applications for SCSI interfaces",
+              "Creating documentation for reuse methods"
+            ]
+          }
+        ]
+      },
+      "cta": {
+        "title": "Get involved",
+        "actions": [
+          {
+            "title": "Share knowledge",
+            "description": "Bring your expertise in hardware repair and optimisation",
+            "cta": "Get involved"
+          },
+          {
+            "title": "Donate hardware",
+            "description": "Donate old hardware for our reuse projects",
+            "cta": "Donate"
+          },
+          {
+            "title": "Collaborate",
+            "description": "Work with us on hardware development projects",
+            "cta": "Contact us"
+          }
+        ]
+      }
+    },
+    "linuxola": {
+      "meta": {
+        "title": "Linuxola Association",
+        "description": "Linuxola is a Swiss organisation dedicated to providing access to information technology and connecting African partners to the global digital commons."
+      },
+      "hero": {
+        "title": "Linuxola Association",
+        "description": "Bridging the digital divide between Switzerland and Africa",
+        "cta1": "Donate equipment",
+        "cta2": "Volunteer"
+      },
+      "about": {
+        "title": "About Linuxola",
+        "description": "The Linuxola association was founded on 2 December 2005 by eight people from different regions of Switzerland. The purpose of the association is to enable our partners in Africa to access information technology and connect to the global digital commons."
+      },
+      "impact": {
+        "cards": [
+          {
+            "title": "Our mission",
+            "features": [
+              "Providing access to technology and training",
+              "Supporting sustainable IT infrastructure",
+              "Promoting open-source solutions",
+              "Building long-term partnerships"
+            ]
+          },
+          {
+            "title": "Our impact",
+            "features": [
+              "Setting up computer rooms in schools and communities",
+              "Training local IT professionals",
+              "Implementing sustainable technology solutions",
+              "Creating lasting partnerships with African organisations"
+            ]
+          }
+        ]
+      },
+      "equipment": {
+        "title": "Equipment needed",
+        "cards": [
+          {
+            "title": "Computers & laptops",
+            "features": [
+              "Laptops (3-5 years old)",
+              "Desktop PCs",
+              "Monitors",
+              "Keyboards & mice"
+            ]
+          },
+          {
+            "title": "Networking",
+            "features": [
+              "Network switches",
+              "Wi-Fi routers",
+              "Network cables",
+              "UPS systems"
+            ]
+          },
+          {
+            "title": "Accessories",
+            "features": [
+              "USB drives",
+              "External hard drives",
+              "Power adapters",
+              "RAM modules"
+            ]
+          }
+        ]
+      },
+      "cta": {
+        "title": "Get involved",
+        "actions": [
+          {
+            "title": "Donate equipment",
+            "description": "Your used IT equipment can make a real difference in African communities",
+            "cta": "Donate now"
+          },
+          {
+            "title": "Volunteer",
+            "description": "Share your technical expertise and help set up computer rooms",
+            "cta": "Get involved"
+          },
+          {
+            "title": "Contact",
+            "description": "Contact us for more information",
+            "cta": "Get in touch"
+          }
+        ]
+      }
+    },
+    "kivitendo": {
+      "meta": {
+        "title": "Kivitendo - Open Source CRM & ERP | revamp-it",
+        "description": "The unique open-source CRM & ERP by revamp-it, meeting the highest quality standards through continuous personalised development."
+      },
+      "hero": {
+        "title": "Kivitendo",
+        "description": "The unique open-source CRM & ERP that meets the highest quality standards through continuous personalised development",
+        "cta1": null,
+        "cta2": null
+      },
+      "why": {
+        "title": "Why choose Kivitendo?",
+        "description": "A comprehensive solution for order processing, inventory management and financial accounting",
+        "cards": [
+          {
+            "title": "Open-source advantages",
+            "features": [
+              "Highly adaptable to your needs",
+              "Full access to code and developments",
+              "No fixed licence costs"
+            ]
+          },
+          {
+            "title": "Order processing",
+            "features": [
+              "Complete workflow from quote to invoice",
+              "Customisable document templates",
+              "Direct email integration"
+            ]
+          },
+          {
+            "title": "Financial accounting",
+            "features": [
+              "Complete or modular accounting",
+              "Customisable chart of accounts",
+              "Bank statement import"
+            ]
+          }
+        ]
+      },
+      "features": {
+        "title": "Key features",
+        "description": "Comprehensive functionality for your business requirements",
+        "cards": [
+          {
+            "title": "Business configuration",
+            "description": "Configure the system for your specific business requirements",
+            "features": [
+              "Multiple currencies & languages",
+              "Multi-client capability",
+              "Custom user groups"
+            ]
+          },
+          {
+            "title": "Integration & customisation",
+            "description": "Extend functionality to suit your needs",
+            "features": [
+              "Web shop integration",
+              "Custom variables",
+              "Process automation"
+            ]
+          }
+        ]
+      },
+      "partnership": {
+        "title": "Premium partnership",
+        "description": "Since July 2015, revamp-it has been a premium partner of the Kivitendo project. We offer configuration and support for this open-source ERP system.",
+        "cards": [
+          {
+            "title": "Our services",
+            "description": "We support you in using Kivitendo",
+            "features": [
+              "Configuration & customisation",
+              "Support & maintenance",
+              "Training and consulting"
+            ]
+          }
+        ]
+      },
+      "cta": {
+        "title": "Learn more",
+        "actions": [
+          {
+            "title": "Kivitendo Switzerland",
+            "description": "Visit the official Swiss Kivitendo website",
+            "cta": "Visit website"
+          },
+          {
+            "title": "Community forum",
+            "description": "Get help and share knowledge with other users",
+            "cta": "Visit forum"
+          },
+          {
+            "title": "Contact",
+            "description": "Contact us for more information",
+            "cta": "Get in touch"
+          }
+        ]
+      }
+    },
+    "compirat": {
+      "meta": {
+        "title": "Compirat - Computer skills with Linux | revamp-it",
+        "description": "A joint project of Caritas Zurich and revamp-it offering accessible computer courses and internet access points for people on low incomes in the canton of Zurich."
+      },
+      "hero": {
+        "title": "Compirat",
+        "description": "Computer skills and Linux education for everyone",
+        "cta1": "Become a volunteer",
+        "cta2": "Get in touch"
+      },
+      "about": {
+        "title": "About Compirat",
+        "description": "A joint project of Caritas Zurich and revamp-it offering accessible computer courses and internet access points for people on low incomes in the canton of Zurich.",
+        "cards": [
+          {
+            "title": "Local courses",
+            "description": "Entry-level computer courses in participants' neighbourhoods or at nearby locations"
+          },
+          {
+            "title": "Linux focus",
+            "description": "Introduction to Linux as an operating system and providing a free and open alternative"
+          },
+          {
+            "title": "Internet access",
+            "description": "Free internet access points with professional supervision for practice and learning"
+          }
+        ]
+      },
+      "program": {
+        "title": "Our programme",
+        "cards": [
+          {
+            "title": "Beginner courses",
+            "description": "Comprehensive computer courses for beginners focusing on basic skills and Linux fundamentals.",
+            "features": [
+              "Basic computer operation",
+              "Introduction to Linux",
+              "Internet and email basics"
+            ]
+          },
+          {
+            "title": "Internet access points",
+            "description": "Supervised practice rooms where participants can apply their skills and use the internet.",
+            "features": [
+              "Professional supervision",
+              "Free internet access",
+              "Practice and support"
+            ]
+          },
+          {
+            "title": "Advanced courses",
+            "description": "Specialised courses for participants who want to deepen their knowledge and skills.",
+            "features": [
+              "Advanced Linux use",
+              "Productivity tools",
+              "Digital communication"
+            ]
+          },
+          {
+            "title": "Online resources",
+            "description": "Comprehensive online platform with learning materials and support resources.",
+            "features": [
+              "Course materials",
+              "Linux tutorials",
+              "Practice exercises"
+            ]
+          }
+        ]
+      },
+      "cta": {
+        "title": "Get involved",
+        "actions": [
+          {
+            "title": "Become a volunteer",
+            "description": "Support courses and internet access points as a volunteer",
+            "cta": "Get involved"
+          },
+          {
+            "title": "Learn more",
+            "description": "Visit our website for detailed information and resources",
+            "cta": "Visit Compirat.ch"
+          },
+          {
+            "title": "Contact",
+            "description": "Contact us for more information about our programmes",
+            "cta": "Get in touch"
+          }
+        ]
+      }
+    },
+    "ltsp": {
+      "meta": {
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "The Linux Terminal Server Project allows multiple users to work simultaneously on older computers by connecting them to a powerful server, optimising resource use and extending hardware life."
+      },
+      "hero": {
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "Extending the life of older computers through server-based computing",
+        "cta1": null,
+        "cta2": null
+      },
+      "intro": {
+        "cards": [
+          {
+            "title": "About LTSP",
+            "description": "The Linux Terminal Server Project (LTSP) allows multiple users to work simultaneously on older computers by connecting them to a powerful server. This optimises resource use and extends hardware life."
+          },
+          {
+            "title": "How it works",
+            "features": [
+              "Applications run on a central server",
+              "Thin clients or old PCs act as terminals",
+              "Efficient resource management",
+              "Consistent user experience",
+              "Minimal requirements for client computers"
+            ]
+          }
+        ]
+      },
+      "details": {
+        "cards": [
+          {
+            "title": "Benefits",
+            "features": [
+              "Extended hardware life",
+              "Reduced maintenance costs",
+              "Centralised management & updates",
+              "Improved security",
+              "Lower energy consumption"
+            ]
+          },
+          {
+            "title": "Implementation",
+            "features": [
+              "Server setup & configuration",
+              "Client preparation",
+              "Network optimisation",
+              "User management & security",
+              "Ongoing support"
+            ]
+          },
+          {
+            "title": "Use cases",
+            "features": [
+              "Schools & education",
+              "Public computer rooms",
+              "Businesses",
+              "Community centres",
+              "Non-profit organisations"
+            ]
+          }
+        ]
+      },
+      "start": {
+        "cards": [
+          {
+            "title": "Getting started",
+            "features": [
+              "Assessing your infrastructure",
+              "Planning your implementation",
+              "Setting up server & clients",
+              "Staff training",
+              "Ongoing support"
+            ]
+          },
+          {
+            "title": "Contact us",
+            "description": "Would you like to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
+          }
+        ]
+      }
+    }
   },
   "revamped": {
     "meta": {
