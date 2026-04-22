@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 
 interface TermsSectionProps {
@@ -9,20 +10,22 @@ interface TermsSectionProps {
 }
 
 export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
+  const t = useTranslations('workshops.propose')
+
   return (
     <div className="mb-8">
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
         <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">
-          Nutzungsbedingungen für Workshop-Veranstalter
+          {t('sections.terms.title')}
         </Heading>
 
         <div className="space-y-3 text-sm text-gray-700 mb-4">
-          <p>• Ich verpflichte mich, Workshops mit hoher Qualität und Engagement durchzuführen</p>
-          <p>• Ich werde alle Teilnehmer respektvoll und professionell behandeln</p>
-          <p>• Ich bin für die Sicherheit und den reibungslosen Ablauf des Workshops verantwortlich</p>
-          <p>• Ich werde angemessene Vorkenntnisse und klare Lernziele kommunizieren</p>
-          <p>• Ich akzeptiere das Bewertungssystem und die Plattformgebühren</p>
-          <p>• Meine Angaben sind wahrheitsgemäss und ich werde sie aktuell halten</p>
+          <p>• {t('sections.terms.term1')}</p>
+          <p>• {t('sections.terms.term2')}</p>
+          <p>• {t('sections.terms.term3')}</p>
+          <p>• {t('sections.terms.term4')}</p>
+          <p>• {t('sections.terms.term5')}</p>
+          <p>• {t('sections.terms.term6')}</p>
         </div>
 
         <div className="mt-4">
@@ -36,13 +39,13 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
               aria-required="true"
             />
             <span className="text-sm font-medium text-gray-700">
-              Ich akzeptiere die{' '}
+              {t('sections.terms.checkboxPrefix')}{' '}
               <Link href="/terms" className="text-green-600 hover:text-green-700 underline">
-                Nutzungsbedingungen
+                {t('sections.terms.termsLink')}
               </Link>{' '}
-              und die{' '}
+              {t('sections.terms.checkboxMiddle')}{' '}
               <Link href="/privacy" className="text-green-600 hover:text-green-700 underline">
-                Datenschutzerklärung
+                {t('sections.terms.privacyLink')}
               </Link>
             </span>
           </label>

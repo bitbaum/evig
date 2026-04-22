@@ -4,29 +4,30 @@ import { ArrowLeft } from 'lucide-react'
 import { InquiryForm } from '@/components/community/InquiryForm'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: `Interesse bekunden | ${ORG.name}`,
-  description: 'Schreib uns kurz, was dich interessiert — wir melden uns bei dir.',
-}
-
-const TOPIC_LABELS: Record<string, string> = {
-  freiwilligenarbeit: 'Freiwilligenarbeit',
-  praktikum: 'Praktikum',
-  wiedereinstieg: 'Wiedereinstieg',
-  'technische-experten': 'Technische Experten',
-  partnerschaft: 'Partnerschaft',
-  'it-hilfe-techniker': 'IT-Hilfe Techniker',
-}
-
-interface Props {
+interface KontaktPageProps {
+  params: Promise<{ locale: string }>
   searchParams: Promise<{ thema?: string }>
 }
 
-export default async function KontaktPage({ searchParams }: Props) {
-  const params = await searchParams
-  const thema = params.thema ?? ''
-  const topicLabel = TOPIC_LABELS[thema] ?? 'Mitmachen'
+export async function generateMetadata({ params }: KontaktPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved.kontakt' })
+  return {
+    title: `${t('meta.title')} | ${ORG.name}`,
+    description: t('meta.description'),
+  }
+}
+
+export default async function KontaktPage({ params, searchParams }: KontaktPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved.kontakt' })
+  const { thema = '' } = await searchParams
+
+  // @ts-expect-error — next-intl t.raw() doesn't type-check object values, but works at runtime
+  const topics = t.raw('topics') as Record<string, string>
+  const topicLabel = topics[thema] ?? t('defaultTopic')
 
   return (
     <div className="bg-white min-h-screen">
@@ -38,17 +39,16 @@ export default async function KontaktPage({ searchParams }: Props) {
           className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
-          Alle Mitmach-Möglichkeiten
+          {t('backLink')}
         </Link>
 
         {/* Header */}
         <div className="mb-8">
           <Heading level={1} className="text-gray-900 mb-2">
-            Interesse an {topicLabel}
+            {t('titlePrefix')} {topicLabel}
           </Heading>
           <p className="text-gray-600">
-            Schreib uns kurz, wer du bist und was dich interessiert.
-            Wir melden uns persönlich bei dir.
+            {t('body')}
           </p>
         </div>
 

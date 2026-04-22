@@ -3,41 +3,65 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
 import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
 import { PageSection } from '@/components/community/PageSection'
-import { VOLUNTEER_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
+import { Wrench, BookOpen, Heart, Users } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: `Freiwilligenarbeit | ${ORG.name}`,
-  description: 'Schliess dich unserem Team engagierter Freiwilliger an und bewirke etwas in deiner Gemeinschaft durch Technologie und Nachhaltigkeit.',
+interface VolunteerPageProps {
+  params: Promise<{ locale: string }>
 }
 
-export default function VolunteerPage() {
+// Benefit icons are positional — parallel to translations array
+const BENEFIT_ICONS = [Wrench, BookOpen, Heart, Users]
+
+export async function generateMetadata({ params }: VolunteerPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  return {
+    title: `${t('volunteer.meta.title')} | ${ORG.name}`,
+    description: t('volunteer.meta.description'),
+  }
+}
+
+export default async function VolunteerPage({ params }: VolunteerPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+
+  const benefits = t.raw('volunteer.benefits') as Array<{ title: string; description: string }>
+  const sections = t.raw('volunteer.sections') as Array<{
+    title: string
+    items: string[]
+    description?: string
+  }>
+  const callouts = t.raw('volunteer.callouts') as Array<{ title: string; content: string }>
+  const howToStartSteps = t.raw('volunteer.howToStart.steps') as string[]
+
   return (
     <InvolvementPageLayout
-      title="Freiwilliger werden"
-      description="Schliess dich unserem Team engagierter Freiwilliger an und hilf, Technologie nachhaltig und für alle zugänglich zu machen."
-      ctaText="Interesse bekunden"
+      title={t('volunteer.title')}
+      description={t('volunteer.description')}
+      ctaText={t('volunteer.ctaText')}
       ctaHref="/get-involved/kontakt?thema=freiwilligenarbeit"
     >
       <div className="space-y-16">
         {/* Overview Section */}
         <PageSection
-          title={VOLUNTEER_PAGE.overview.title}
-          content={VOLUNTEER_PAGE.overview.content}
+          title={t('volunteer.overview.title')}
+          content={t('volunteer.overview.content')}
         />
 
         {/* Benefits Section */}
         <section className="space-y-8">
           <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Vorteile der Freiwilligenarbeit
+            {t('volunteer.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>
-            {VOLUNTEER_PAGE.benefits?.map((benefit, index) => (
+            {benefits.map((benefit, index) => (
               <BenefitCard
                 key={index}
-                icon={benefit.icon}
+                icon={BENEFIT_ICONS[index]}
                 title={benefit.title}
                 description={benefit.description}
               />
@@ -45,18 +69,18 @@ export default function VolunteerPage() {
           </BenefitCardGrid>
         </section>
 
-        {/* Sections from config */}
-        {VOLUNTEER_PAGE.sections?.map((section, index) => (
+        {/* Sections */}
+        {sections.map((section, index) => (
           <InfoSection
             key={index}
             title={section.title}
-            items={section.items}
-            description={index === 1 ? 'Wir verstehen, dass jeder unterschiedliche Zeitpläne hat. Wir bieten flexible Freiwilligentätigkeiten, die sich an deine anderen Verpflichtungen anpassen lassen. Ob du ein paar Stunden pro Woche oder mehr erübrigen kannst - dein Beitrag wird einen Unterschied machen.' : undefined}
+            items={section.items.map((text) => ({ text }))}
+            description={section.description}
           />
         ))}
 
-        {/* Callouts from config */}
-        {VOLUNTEER_PAGE.callouts?.map((callout, index) => (
+        {/* Callouts */}
+        {callouts.map((callout, index) => (
           <Callout
             key={index}
             title={callout.title}
@@ -66,15 +90,10 @@ export default function VolunteerPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen kannst"
-          steps={[
-            { text: 'Kontaktiere uns, um dein Interesse zu bekunden' },
-            { text: 'Triff dich mit unserem Team, um deine Fähigkeiten und Interessen zu besprechen' },
-            { text: 'Nimm an einer kurzen Einführungssitzung teil' },
-            { text: 'Beginne, einen Unterschied zu machen!' }
-          ]}
+          title={t('volunteer.howToStart.title')}
+          steps={howToStartSteps.map((text) => ({ text }))}
         />
       </div>
     </InvolvementPageLayout>
   )
-} 
+}

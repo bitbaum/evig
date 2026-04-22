@@ -1,6 +1,7 @@
 'use client'
 
 import { Clock } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
 
@@ -23,6 +24,7 @@ export function PracticalDetailsSection({
   prerequisites,
   onChange
 }: PracticalDetailsSectionProps) {
+  const t = useTranslations('workshops.propose')
   const maxParticipantsOptions = [5, 8, 10, 12, 15, 20, 25, 30]
   const minParticipantsOptions = [2, 3, 4, 5, 6, 8, 10]
 
@@ -30,13 +32,13 @@ export function PracticalDetailsSection({
     <div className="mb-8">
       <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-gray-900 mb-4 flex items-center`}>
         <Clock className="w-5 h-5 mr-2" />
-        Praktische Details
+        {t('sections.practicalDetails.title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Dauer (Stunden) *
+            {t('sections.practicalDetails.duration')}
           </label>
           <input
             type="number"
@@ -52,7 +54,7 @@ export function PracticalDetailsSection({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Preis pro Person (CHF) *
+            {t('sections.practicalDetails.price')}
           </label>
           <input
             type="number"
@@ -61,7 +63,7 @@ export function PracticalDetailsSection({
             value={pricePerPerson}
             onChange={(e) => onChange('pricePerPerson', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="0.00 (kostenlos)"
+            placeholder={t('sections.practicalDetails.pricePlaceholder')}
             required
             aria-required="true"
           />
@@ -69,7 +71,7 @@ export function PracticalDetailsSection({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Maximale Teilnehmerzahl *
+            {t('sections.practicalDetails.maxParticipants')}
           </label>
           <select
             value={maxParticipants}
@@ -86,7 +88,7 @@ export function PracticalDetailsSection({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Mindestteilnehmerzahl *
+            {t('sections.practicalDetails.minParticipants')}
           </label>
           <select
             value={minParticipants}
@@ -103,27 +105,27 @@ export function PracticalDetailsSection({
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Zielgruppe
+            {t('sections.practicalDetails.targetAudience')}
           </label>
           <input
             type="text"
             value={targetAudience}
             onChange={(e) => onChange('targetAudience', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="z.B. Anfänger ohne Vorkenntnisse, Jugendliche 14-18 Jahre"
+            placeholder={t('sections.practicalDetails.targetAudiencePlaceholder')}
           />
         </div>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Voraussetzungen
+            {t('sections.practicalDetails.prerequisites')}
           </label>
           <textarea
             value={prerequisites}
             onChange={(e) => onChange('prerequisites', e.target.value)}
             rows={2}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="z.B. Eigener Laptop mit Linux installiert"
+            placeholder={t('sections.practicalDetails.prerequisitesPlaceholder')}
           />
         </div>
       </div>

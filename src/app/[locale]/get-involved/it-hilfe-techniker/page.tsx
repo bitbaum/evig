@@ -3,41 +3,65 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
 import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
 import { PageSection } from '@/components/community/PageSection'
-import { IT_HILFE_TECHNIKER_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
+import { Cpu, Calendar, Users, BookOpen } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: `IT-Hilfe Techniker | ${ORG.name}`,
-  description: 'Teile dein IT-Wissen und hilf Menschen in deiner Gemeinschaft — flexibel, ohne Vorkenntnisse und mit echter Wirkung.',
+interface ITHilfeTechnikerPageProps {
+  params: Promise<{ locale: string }>
 }
 
-export default function ITHilfeTechnikerPage() {
+// Benefit icons are positional — parallel to translations array
+const BENEFIT_ICONS = [Cpu, Calendar, Users, BookOpen]
+
+export async function generateMetadata({ params }: ITHilfeTechnikerPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  return {
+    title: `${t('itHilfeTechniker.meta.title')} | ${ORG.name}`,
+    description: t('itHilfeTechniker.meta.description'),
+  }
+}
+
+export default async function ITHilfeTechnikerPage({ params }: ITHilfeTechnikerPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+
+  const benefits = t.raw('itHilfeTechniker.benefits') as Array<{ title: string; description: string }>
+  const sections = t.raw('itHilfeTechniker.sections') as Array<{
+    title: string
+    items: string[]
+    description?: string
+  }>
+  const callouts = t.raw('itHilfeTechniker.callouts') as Array<{ title: string; content: string }>
+  const howToStartSteps = t.raw('itHilfeTechniker.howToStart.steps') as string[]
+
   return (
     <InvolvementPageLayout
-      title="IT-Hilfe Techniker werden"
-      description="Dein IT-Wissen kann anderen das Leben leichtern. Hilf Menschen in der Gemeinschaft mit ihren Computern — flexibel, unkompliziert, wirkungsvoll."
-      ctaText="Als Techniker registrieren"
+      title={t('itHilfeTechniker.title')}
+      description={t('itHilfeTechniker.description')}
+      ctaText={t('itHilfeTechniker.ctaText')}
       ctaHref="/profil/techniker"
     >
       <div className="space-y-16">
         {/* Overview */}
         <PageSection
-          title={IT_HILFE_TECHNIKER_PAGE.overview.title}
-          content={IT_HILFE_TECHNIKER_PAGE.overview.content}
+          title={t('itHilfeTechniker.overview.title')}
+          content={t('itHilfeTechniker.overview.content')}
         />
 
         {/* Benefits */}
         <section className="space-y-8">
           <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Was du davon hast
+            {t('itHilfeTechniker.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>
-            {IT_HILFE_TECHNIKER_PAGE.benefits?.map((benefit, index) => (
+            {benefits.map((benefit, index) => (
               <BenefitCard
                 key={index}
-                icon={benefit.icon}
+                icon={BENEFIT_ICONS[index]}
                 title={benefit.title}
                 description={benefit.description}
               />
@@ -45,17 +69,18 @@ export default function ITHilfeTechnikerPage() {
           </BenefitCardGrid>
         </section>
 
-        {/* Sections from config */}
-        {IT_HILFE_TECHNIKER_PAGE.sections?.map((section, index) => (
+        {/* Sections */}
+        {sections.map((section, index) => (
           <InfoSection
             key={index}
             title={section.title}
-            items={section.items}
+            items={section.items.map((text) => ({ text }))}
+            description={section.description}
           />
         ))}
 
         {/* Callouts */}
-        {IT_HILFE_TECHNIKER_PAGE.callouts?.map((callout, index) => (
+        {callouts.map((callout, index) => (
           <Callout
             key={index}
             title={callout.title}
@@ -65,13 +90,8 @@ export default function ITHilfeTechnikerPage() {
 
         {/* How to get started */}
         <NumberedSteps
-          title="Wie du anfangen kannst"
-          steps={[
-            { text: 'Erstelle dein Techniker-Profil mit deinen Fähigkeiten und Verfügbarkeit' },
-            { text: 'Warte auf Anfragen — du entscheidest, welche du annimmst' },
-            { text: 'Vereinbare einen Termin direkt mit der anfragenden Person' },
-            { text: 'Hilf, lerne, mach einen Unterschied' },
-          ]}
+          title={t('itHilfeTechniker.howToStart.title')}
+          steps={howToStartSteps.map((text) => ({ text }))}
         />
       </div>
     </InvolvementPageLayout>

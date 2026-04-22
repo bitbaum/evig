@@ -26,17 +26,17 @@ interface Pool {
 }
 
 // ============================================================================
-// Category config
+// Category config — emojis only; labels come from translations
 // ============================================================================
 
-const CATEGORIES: Record<string, { label: string; emoji: string }> = {
-  streaming:  { label: 'Streaming',  emoji: '📺' },
-  software:   { label: 'Software',   emoji: '💻' },
-  cloud:      { label: 'Cloud',      emoji: '☁️' },
-  gaming:     { label: 'Gaming',     emoji: '🎮' },
-  music:      { label: 'Musik',      emoji: '🎵' },
-  news:       { label: 'News',       emoji: '📰' },
-  other:      { label: 'Sonstiges',  emoji: '📦' },
+const CATEGORY_EMOJIS: Record<string, string> = {
+  streaming: '📺',
+  software:  '💻',
+  cloud:     '☁️',
+  gaming:    '🎮',
+  music:     '🎵',
+  news:      '📰',
+  other:     '📦',
 }
 
 // ============================================================================
@@ -56,10 +56,13 @@ function PoolCard({
   onLeave: (id: string) => Promise<void>
   myPoolIds: Set<string>
 }) {
+  const t = useTranslations('abos')
   const [loading, setLoading] = useState(false)
   const isMember = myPoolIds.has(pool.id)
   const isFull = pool.spotsLeft <= 0
-  const cat = CATEGORIES[pool.serviceCategory] ?? CATEGORIES.other
+  const emoji = CATEGORY_EMOJIS[pool.serviceCategory] ?? CATEGORY_EMOJIS.other
+  // @ts-expect-error — t() accepts string keys; categories keys are dynamic
+  const catLabel = t(`categories.${pool.serviceCategory}`) as string
 
   const handleAction = async () => {
     setLoading(true)
@@ -74,21 +77,25 @@ function PoolCard({
     }
   }
 
+  const spotsText = pool.spotsLeft === 1
+    ? t('spotsLeft', { count: pool.spotsLeft })
+    : t('spotsLeftPlural', { count: pool.spotsLeft })
+
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{cat.emoji}</span>
+          <span className="text-3xl">{emoji}</span>
           <div>
             <h3 className="font-semibold text-gray-900">{pool.serviceName}</h3>
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{cat.label}</span>
+            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{catLabel}</span>
           </div>
         </div>
         <div className="text-right">
           <div className="text-lg font-bold text-emerald-600">
             CHF {Number(pool.costPerMemberChf).toFixed(2)}
           </div>
-          <div className="text-xs text-gray-500">pro Monat/Person</div>
+          <div className="text-xs text-gray-500">{t('perMonthPerson')}</div>
         </div>
       </div>
 
@@ -99,7 +106,7 @@ function PoolCard({
       <div className="flex items-center gap-4 text-sm text-gray-500">
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4" />
-          <span>{pool.memberCount}/{pool.maxMembers} Mitglieder</span>
+          <span>{pool.memberCount}/{pool.maxMembers} {t('members')}</span>
         </div>
         <div className={`text-xs px-2 py-0.5 rounded-full font-medium ${
           isFull
@@ -108,12 +115,12 @@ function PoolCard({
             ? 'bg-amber-50 text-amber-700'
             : 'bg-emerald-50 text-emerald-700'
         }`}>
-          {isFull ? 'Voll' : `${pool.spotsLeft} Platz${pool.spotsLeft === 1 ? '' : 'e'} frei`}
+          {isFull ? t('full') : spotsText}
         </div>
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-gray-50">
-        <span className="text-xs text-gray-400">von {pool.ownerName ?? 'Anonym'}</span>
+        <span className="text-xs text-gray-400">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
         {userId ? (
           <button
             onClick={handleAction}
@@ -129,17 +136,17 @@ function PoolCard({
             ) : isMember ? (
               <>
                 <X className="w-3.5 h-3.5" />
-                Verlassen
+                {t('leave')}
               </>
             ) : (
               <>
                 <ChevronRight className="w-3.5 h-3.5" />
-                Beitreten
+                {t('join')}
               </>
             )}
           </button>
         ) : (
-          <span className="text-xs text-gray-400">Anmelden zum Beitreten</span>
+          <span className="text-xs text-gray-400">{t('loginToJoin')}</span>
         )}
       </div>
     </div>
@@ -154,6 +161,7 @@ function CreatePoolModal({ onClose, onCreate }: {
   onClose: () => void
   onCreate: (pool: Pool) => void
 }) {
+  const t = useTranslations('abos')
   const [form, setForm] = useState({
     serviceName: '',
     serviceCategory: 'streaming',
@@ -180,11 +188,11 @@ function CreatePoolModal({ onClose, onCreate }: {
         }),
       })
       const json = await res.json()
-      if (!res.ok || !json.success) throw new Error(json.error ?? 'Fehler')
+      if (!res.ok || !json.success) throw new Error(json.error ?? 'Error')
       onCreate(json.data)
       onClose()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
       setLoading(false)
     }
@@ -194,7 +202,7 @@ function CreatePoolModal({ onClose, onCreate }: {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold">Neuen Pool erstellen</h2>
+          <h2 className="text-lg font-semibold">{t('modal.title')}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
             <X className="w-4 h-4" />
           </button>
@@ -206,31 +214,32 @@ function CreatePoolModal({ onClose, onCreate }: {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Dienst-Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.serviceName')}</label>
             <input
               required
               value={form.serviceName}
               onChange={e => setForm(f => ({ ...f, serviceName: e.target.value }))}
-              placeholder="z.B. Netflix, Spotify, Adobe CC"
+              placeholder={t('modal.serviceNamePlaceholder')}
               className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kategorie *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.category')}</label>
               <select
                 value={form.serviceCategory}
                 onChange={e => setForm(f => ({ ...f, serviceCategory: e.target.value }))}
                 className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
-                {Object.entries(CATEGORIES).map(([val, { label, emoji }]) => (
-                  <option key={val} value={val}>{emoji} {label}</option>
+                {Object.keys(CATEGORY_EMOJIS).map(val => (
+                  // @ts-expect-error — dynamic category key
+                  <option key={val} value={val}>{CATEGORY_EMOJIS[val]} {t(`categories.${val}`)}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Max. Mitglieder *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.maxMembers')}</label>
               <input
                 required
                 type="number"
@@ -244,7 +253,7 @@ function CreatePoolModal({ onClose, onCreate }: {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Gesamtkosten/Monat (CHF) *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.monthlyCost')}</label>
             <input
               required
               type="number"
@@ -252,34 +261,34 @@ function CreatePoolModal({ onClose, onCreate }: {
               step={0.05}
               value={form.monthlyCostChf}
               onChange={e => setForm(f => ({ ...f, monthlyCostChf: e.target.value }))}
-              placeholder="z.B. 17.90"
+              placeholder={t('modal.monthlyCostPlaceholder')}
               className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             {form.monthlyCostChf && form.maxMembers > 0 && (
               <p className="text-xs text-emerald-600 mt-1">
-                = CHF {(Number(form.monthlyCostChf) / form.maxMembers).toFixed(2)} pro Person/Monat
+                {t('modal.perPersonCalc', { amount: (Number(form.monthlyCostChf) / form.maxMembers).toFixed(2) })}
               </p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Beschreibung</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.description')}</label>
             <textarea
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={2}
-              placeholder="Kurze Beschreibung des Angebots"
+              placeholder={t('modal.descriptionPlaceholder')}
               className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Regeln (optional)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.rules')}</label>
             <textarea
               value={form.rules}
               onChange={e => setForm(f => ({ ...f, rules: e.target.value }))}
               rows={2}
-              placeholder="z.B. Zahlung bis 1. des Monats per TWINT"
+              placeholder={t('modal.rulesPlaceholder')}
               className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
             />
           </div>
@@ -290,7 +299,7 @@ function CreatePoolModal({ onClose, onCreate }: {
               onClick={onClose}
               className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50"
             >
-              Abbrechen
+              {t('modal.cancel')}
             </button>
             <button
               type="submit"
@@ -298,7 +307,7 @@ function CreatePoolModal({ onClose, onCreate }: {
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 disabled:opacity-50"
             >
               {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-              Pool erstellen
+              {t('modal.submit')}
             </button>
           </div>
         </form>
@@ -312,6 +321,7 @@ function CreatePoolModal({ onClose, onCreate }: {
 // ============================================================================
 
 export default function AbosPage() {
+  const t = useTranslations('abos')
   const { data: session } = useSession()
   const [pools, setPools] = useState<Pool[]>([])
   const [myPoolIds, setMyPoolIds] = useState<Set<string>>(new Set())
@@ -384,12 +394,11 @@ export default function AbosPage() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Tag className="w-5 h-5 text-emerald-600" />
-                <span className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Abo-Tauschbörse</span>
+                <span className="text-sm font-medium text-emerald-600 uppercase tracking-wide">{t('tagline')}</span>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">Abo-Pools teilen</h1>
+              <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
               <p className="mt-2 text-gray-500 max-w-lg">
-                Teile digitale Abos mit der Revamp-IT-Community und spare Geld.
-                Jeder zahlt nur seinen Anteil.
+                {t('subtitle')}
               </p>
             </div>
             {session?.user && (
@@ -398,7 +407,7 @@ export default function AbosPage() {
                 className="flex items-center gap-2 px-5 py-3 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0"
               >
                 <Plus className="w-4 h-4" />
-                Pool erstellen
+                {t('createPool')}
               </button>
             )}
           </div>
@@ -415,10 +424,10 @@ export default function AbosPage() {
                 !activeCategory ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >
-              Alle
+              {t('filterAll')}
             </button>
             {categories.map(cat => {
-              const info = CATEGORIES[cat] ?? CATEGORIES.other
+              const emoji = CATEGORY_EMOJIS[cat] ?? CATEGORY_EMOJIS.other
               return (
                 <button
                   key={cat}
@@ -427,7 +436,8 @@ export default function AbosPage() {
                     activeCategory === cat ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                   }`}
                 >
-                  {info.emoji} {info.label}
+                  {/* @ts-expect-error — dynamic category key */}
+                  {emoji} {t(`categories.${cat}`)}
                 </button>
               )
             })}
@@ -449,12 +459,10 @@ export default function AbosPage() {
           <div className="text-center py-16">
             <Tag className="w-12 h-12 text-gray-200 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-600 mb-1">
-              {activeCategory ? 'Keine Pools in dieser Kategorie' : 'Noch keine Pools'}
+              {activeCategory ? t('emptyCategory') : t('emptyAll')}
             </h3>
             <p className="text-sm text-gray-400">
-              {session?.user
-                ? 'Sei der Erste und erstelle einen Pool!'
-                : 'Melde dich an, um einen Pool zu erstellen.'}
+              {session?.user ? t('emptyLoggedIn') : t('emptyGuest')}
             </p>
           </div>
         ) : (

@@ -16,6 +16,7 @@ import Heading from '@/components/ui/Heading'
 import { getSkillById } from '@/config/it-hilfe'
 import { BUDGET_TIERS } from '@/config/it-hilfe'
 import { ORG } from '@/config/org'
+import { getTranslations } from 'next-intl/server'
 
 interface Service {
   id: string
@@ -51,30 +52,33 @@ interface Technician {
 }
 
 interface Props {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string; locale: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params
+  const { id, locale } = await params
+  const t = await getTranslations({ locale, namespace: 'techniker' })
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ORG.website
 
   try {
     const res = await fetch(`${baseUrl}/api/technicians/${id}`, { cache: 'no-store' })
-    if (!res.ok) return { title: `Techniker | ${ORG.name}` }
+    if (!res.ok) return { title: `${t('meta.title')} | ${ORG.name}` }
     const data = await res.json()
-    const t: Technician = data.data?.technician
-    if (!t) return { title: `Techniker | ${ORG.name}` }
+    const tech: Technician = data.data?.technician
+    if (!tech) return { title: `${t('meta.title')} | ${ORG.name}` }
+    const tierLabel = tech.profileTier === 'professional' ? t('detail.professional') : t('detail.community')
     return {
-      title: `${t.name} – Techniker | ${ORG.name}`,
-      description: t.bio ?? `${t.name} ist ${t.profileTier === 'professional' ? 'professioneller' : 'Community-'} Techniker bei ${ORG.name}.`,
+      title: `${tech.name} – ${tierLabel} | ${ORG.name}`,
+      description: tech.bio ?? `${tech.name} · ${tierLabel} · ${ORG.name}`,
     }
   } catch {
-    return { title: `Techniker | ${ORG.name}` }
+    return { title: `${t('meta.title')} | ${ORG.name}` }
   }
 }
 
 export default async function TechnikerDetailPage({ params }: Props) {
-  const { id } = await params
+  const { id, locale } = await params
+  const t = await getTranslations({ locale, namespace: 'techniker' })
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ORG.website
 
   const res = await fetch(`${baseUrl}/api/technicians/${id}`, { cache: 'no-store' })
@@ -95,7 +99,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          Alle Techniker
+          {t('detail.backToList')}
         </Link>
 
         {/* Profile header */}
@@ -109,7 +113,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 {technician.isVerified && (
                   <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
                     <CheckCircle className="w-3.5 h-3.5" />
-                    Verifiziert
+                    {t('detail.verified')}
                   </span>
                 )}
                 <span
@@ -119,7 +123,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                       : 'bg-blue-100 text-blue-700'
                   }`}
                 >
-                  {isProfessional ? 'Professionell' : 'Community'}
+                  {isProfessional ? t('detail.professional') : t('detail.community')}
                 </span>
               </div>
 
@@ -131,12 +135,12 @@ export default async function TechnikerDetailPage({ params }: Props) {
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       <span className="font-medium">{technician.averageRating.toFixed(1)}</span>
                       {technician.totalReviews > 0 && (
-                        <span className="text-gray-400">({technician.totalReviews} Bewertungen)</span>
+                        <span className="text-gray-400">{t('detail.reviews', { count: technician.totalReviews })}</span>
                       )}
                     </span>
                   )}
                   {technician.totalJobsCompleted > 0 && (
-                    <span>{technician.totalJobsCompleted} abgeschlossene Jobs</span>
+                    <span>{t('detail.jobsCompleted', { count: technician.totalJobsCompleted })}</span>
                   )}
                 </div>
               )}
@@ -149,7 +153,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                     {[technician.postalCode, technician.city].filter(Boolean).join(' ')}
                   </span>
                   {technician.maxTravelKm && (
-                    <span className="text-gray-400">· bis {technician.maxTravelKm} km Anfahrt</span>
+                    <span className="text-gray-400">{t('detail.travelRange', { km: technician.maxTravelKm })}</span>
                   )}
                 </div>
               )}
@@ -158,7 +162,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               {technician.responseTimeHours && (
                 <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                   <Clock className="w-4 h-4" />
-                  <span>Antwortet in ca. {technician.responseTimeHours}h</span>
+                  <span>{t('detail.responseTime', { hours: technician.responseTimeHours })}</span>
                 </div>
               )}
             </div>
@@ -171,7 +175,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
                 >
                   <Wrench className="w-4 h-4" />
-                  Anfrage stellen
+                  {t('detail.submitRequest')}
                 </Link>
               ) : (
                 <Link
@@ -179,7 +183,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
                 >
                   <Users className="w-4 h-4" />
-                  Kontaktieren
+                  {t('detail.contact')}
                 </Link>
               )}
             </div>
@@ -190,19 +194,19 @@ export default async function TechnikerDetailPage({ params }: Props) {
             {technician.acceptsGratis && (
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${BUDGET_TIERS[0].badgeClass}`}>
                 <Users className="w-3.5 h-3.5" />
-                Gratis-Hilfe möglich
+                {t('detail.gratisHelp')}
               </span>
             )}
             {technician.acceptsKulturlegi && (
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${BUDGET_TIERS[1].badgeClass}`}>
                 <Sparkles className="w-3.5 h-3.5" />
-                KulturLegi-Tarif
+                {t('detail.kulturlegiRate')}
               </span>
             )}
             {technician.hourlyRateCents && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-green-50 text-green-700">
                 <Euro className="w-3.5 h-3.5" />
-                CHF {(technician.hourlyRateCents / 100).toFixed(0)}/h
+                {t('detail.hourlyRate', { rate: (technician.hourlyRateCents / 100).toFixed(0) })}
               </span>
             )}
           </div>
@@ -212,7 +216,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
         {technician.bio && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-gray-900 mb-3">
-              Über mich
+              {t('detail.aboutMe')}
             </Heading>
             <p className="text-gray-700 whitespace-pre-line">{technician.bio}</p>
           </div>
@@ -222,7 +226,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
         {technician.skills.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
-              Skills
+              {t('detail.skills')}
             </Heading>
             <div className="flex flex-wrap gap-2">
               {technician.skills.map((skillId) => {
@@ -246,7 +250,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
         {isProfessional && technician.services.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
-              Angebotene Dienstleistungen
+              {t('detail.offeredServices')}
             </Heading>
             <div className="space-y-4">
               {technician.services.map((service) => (
@@ -257,18 +261,18 @@ export default async function TechnikerDetailPage({ params }: Props) {
                       <p className="text-sm text-gray-600 mt-1">{service.description}</p>
                     )}
                     {service.estimatedHours && (
-                      <p className="text-xs text-gray-400 mt-1">Geschätzte Dauer: {service.estimatedHours}</p>
+                      <p className="text-xs text-gray-400 mt-1">{t('detail.estimatedDuration', { hours: service.estimatedHours })}</p>
                     )}
                   </div>
                   <div className="text-right flex-shrink-0">
                     {service.basePriceCents && (
                       <p className="font-semibold text-gray-900">
-                        ab CHF {(service.basePriceCents / 100).toFixed(0)}
+                        {t('detail.priceFrom', { price: (service.basePriceCents / 100).toFixed(0) })}
                       </p>
                     )}
                     {service.hourlyRateCents && (
                       <p className="text-sm text-gray-600">
-                        CHF {(service.hourlyRateCents / 100).toFixed(0)}/h
+                        {t('detail.hourlyRate', { rate: (service.hourlyRateCents / 100).toFixed(0) })}
                       </p>
                     )}
                   </div>
@@ -281,7 +285,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
               >
                 <Wrench className="w-4 h-4" />
-                Buchung anfragen
+                {t('detail.requestBooking')}
               </Link>
             </div>
           </div>
@@ -291,7 +295,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
         {technician.serviceDeliveryTypes && technician.serviceDeliveryTypes.length > 0 && (
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-gray-900 mb-3">
-              Art der Hilfe
+              {t('detail.deliveryTypes')}
             </Heading>
             <div className="flex flex-wrap gap-2">
               {technician.serviceDeliveryTypes.map((type) => (
@@ -299,7 +303,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   key={type}
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700"
                 >
-                  {type === 'remote' ? 'Remote / Online' : type === 'onsite' ? 'Vor Ort' : type}
+                  {type === 'remote' ? t('detail.deliveryRemote') : type === 'onsite' ? t('detail.deliveryOnsite') : type}
                 </span>
               ))}
             </div>

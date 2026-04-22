@@ -21,6 +21,7 @@ import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import type { ITSkill } from '@/config/it-hilfe'
+import { useTranslations } from 'next-intl'
 
 interface Technician {
   id: string
@@ -47,13 +48,8 @@ interface Pagination {
   hasMore: boolean
 }
 
-const TIER_TABS = [
-  { value: '', label: 'Alle' },
-  { value: 'community', label: 'Community' },
-  { value: 'professional', label: 'Professionell' },
-] as const
-
 function TechnicianCard({ technician }: { technician: Technician }) {
+  const t = useTranslations('techniker')
   const displayedSkills = technician.skills.slice(0, 4)
   const remaining = technician.skills.length - 4
 
@@ -74,7 +70,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
               : 'bg-blue-100 text-blue-700'
           }`}
         >
-          {technician.profileTier === 'professional' ? 'Professionell' : 'Community'}
+          {technician.profileTier === 'professional' ? t('list.professional') : t('list.community')}
         </span>
       </div>
 
@@ -93,10 +89,10 @@ function TechnicianCard({ technician }: { technician: Technician }) {
             </span>
           )}
           {technician.totalJobsCompleted > 0 && (
-            <span>{technician.totalJobsCompleted} Jobs</span>
+            <span>{t('list.jobs', { count: technician.totalJobsCompleted })}</span>
           )}
           {technician.isVerified && (
-            <span className="text-emerald-600 font-medium">✓ Verifiziert</span>
+            <span className="text-emerald-600 font-medium">✓ {t('list.verified')}</span>
           )}
         </div>
       )}
@@ -137,13 +133,13 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         {technician.acceptsGratis && (
           <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${BUDGET_TIERS[0].badgeClass}`}>
             <Users className="w-3 h-3" />
-            Gratis
+            {t('list.gratis')}
           </span>
         )}
         {technician.acceptsKulturlegi && (
           <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${BUDGET_TIERS[1].badgeClass}`}>
             <Sparkles className="w-3 h-3" />
-            KulturLegi
+            {t('list.kulturlegi')}
           </span>
         )}
         {technician.hourlyRateCents && (
@@ -158,6 +154,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
 }
 
 export default function TechnikerListClient() {
+  const t = useTranslations('techniker')
   const { data: session } = useSession()
   const [technicians, setTechnicians] = useState<Technician[]>([])
   const [pagination, setPagination] = useState<Pagination>({ total: 0, limit: 20, offset: 0, hasMore: false })
@@ -172,6 +169,12 @@ export default function TechnikerListClient() {
   const [offset, setOffset] = useState(0)
   const limit = 20
 
+  const tierTabs = [
+    { value: '', label: t('list.tierAll') },
+    { value: 'community', label: t('list.tierCommunity') },
+    { value: 'professional', label: t('list.tierProfessional') },
+  ]
+
   const fetchTechnicians = useCallback(async () => {
     try {
       setLoading(true)
@@ -185,23 +188,23 @@ export default function TechnikerListClient() {
       params.set('offset', String(offset))
 
       const response = await fetch(`/api/technicians?${params}`)
-      if (!response.ok) throw new Error('Fehler beim Laden der Techniker')
+      if (!response.ok) throw new Error(t('list.loadingError'))
 
       const data = await response.json()
       if (data.success) {
         setTechnicians(data.data.technicians)
         setPagination(data.data.pagination)
       } else {
-        setError(data.error || 'Fehler beim Laden der Techniker')
+        setError(data.error || t('list.loadingError'))
       }
     } catch (err) {
       logger.error('Error fetching technicians', { error: err })
-      setError('Fehler beim Laden der Techniker. Bitte versuche es erneut.')
+      setError(t('list.loadingError'))
       setTechnicians([])
     } finally {
       setLoading(false)
     }
-  }, [tier, search, selectedSkill, offset, limit])
+  }, [tier, search, selectedSkill, offset, limit, t])
 
   useEffect(() => {
     fetchTechnicians()
@@ -229,10 +232,10 @@ export default function TechnikerListClient() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
               <Heading level={1} className="text-2xl sm:text-3xl font-bold text-gray-900">
-                Techniker
+                {t('list.title')}
               </Heading>
               <p className="text-sm text-gray-600 mt-1">
-                {pagination.total} {pagination.total === 1 ? 'Techniker' : 'Techniker'} verfügbar
+                {t('list.available', { count: pagination.total })}
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -241,7 +244,7 @@ export default function TechnikerListClient() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
               >
                 <Wrench className="w-4 h-4" />
-                Techniker werden
+                {t('list.becomeTechnician')}
               </Link>
             </div>
           </div>
@@ -254,15 +257,15 @@ export default function TechnikerListClient() {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Name, Stadt, Beschreibung..."
-                aria-label="Techniker suchen"
+                placeholder={t('list.searchPlaceholder')}
+                aria-label={t('list.searchAriaLabel')}
                 className="w-full pl-12 pr-24 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
               />
               <button
                 type="submit"
                 className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
               >
-                Suchen
+                {t('list.searchButton')}
               </button>
             </div>
           </form>
@@ -272,8 +275,8 @@ export default function TechnikerListClient() {
       {/* Main content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Tier filter tabs */}
-        <div className="mb-5 flex gap-2" role="group" aria-label="Techniker-Typ">
-          {TIER_TABS.map((tab) => (
+        <div className="mb-5 flex gap-2" role="group" aria-label={t('list.tierFilterLabel')}>
+          {tierTabs.map((tab) => (
             <button
               key={tab.value}
               onClick={() => { setTier(tab.value); setOffset(0) }}
@@ -295,9 +298,9 @@ export default function TechnikerListClient() {
             value={selectedSkill}
             onChange={(e) => { setSelectedSkill(e.target.value); setOffset(0) }}
             className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            aria-label="Nach Skill filtern"
+            aria-label={t('list.skillsFilterLabel')}
           >
-            <option value="">Alle Skills</option>
+            <option value="">{t('list.skillsFilterAll')}</option>
             {SERVICE_CATEGORIES.map((cat) => (
               <optgroup key={cat.id} label={cat.name}>
                 {(IT_SKILLS[cat.id] || []).map((skill: ITSkill) => (
@@ -314,7 +317,7 @@ export default function TechnikerListClient() {
               onClick={() => { setSelectedSkill(''); setSearch(''); setSearchInput(''); setTier(''); setOffset(0) }}
               className="ml-3 text-sm text-blue-600 hover:text-blue-700 font-medium"
             >
-              Filter zurücksetzen
+              {t('list.resetFilters')}
             </button>
           )}
         </div>
@@ -328,7 +331,7 @@ export default function TechnikerListClient() {
             message={error}
             variant="card"
             onRetry={() => { setError(null); fetchTechnicians() }}
-            retryLabel="Erneut versuchen"
+            retryLabel={t('list.retryButton')}
           />
         )}
 
@@ -336,16 +339,16 @@ export default function TechnikerListClient() {
         {!loading && !error && technicians.length === 0 && (
           <EmptyState
             icon={Users}
-            title="Keine Techniker gefunden"
+            title={t('list.emptyTitle')}
             message={
               selectedSkill || search || tier
-                ? 'Keine Techniker entsprechen deinen Filterkriterien.'
-                : 'Noch keine aktiven Techniker-Profile vorhanden.'
+                ? t('list.emptyMessageFiltered')
+                : t('list.emptyMessageEmpty')
             }
             action={
               selectedSkill || search || tier
-                ? { label: 'Filter zurücksetzen', onClick: () => { setSelectedSkill(''); setSearch(''); setSearchInput(''); setTier(''); setOffset(0) } }
-                : { label: 'Techniker-Profil erstellen', href: '/profil/techniker' }
+                ? { label: t('list.emptyActionFiltered'), onClick: () => { setSelectedSkill(''); setSearch(''); setSearchInput(''); setTier(''); setOffset(0) } }
+                : { label: t('list.emptyActionEmpty'), href: '/profil/techniker' }
             }
           />
         )}
@@ -353,31 +356,31 @@ export default function TechnikerListClient() {
         {/* Grid */}
         {!loading && !error && technicians.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {technicians.map((t) => (
-              <TechnicianCard key={t.id} technician={t} />
+            {technicians.map((tech) => (
+              <TechnicianCard key={tech.id} technician={tech} />
             ))}
           </div>
         )}
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-2 pt-8" aria-label="Seitennavigation">
+          <nav className="flex items-center justify-center gap-2 pt-8" aria-label={t('list.pagination')}>
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
               className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              aria-label="Vorherige Seite"
+              aria-label={t('list.prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span className="text-sm text-gray-600 px-4" aria-current="page">
-              Seite {currentPage} von {totalPages}
+              {t('list.pageOf', { current: currentPage, total: totalPages })}
             </span>
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
               className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              aria-label="Nächste Seite"
+              aria-label={t('list.nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -393,23 +396,23 @@ export default function TechnikerListClient() {
               </div>
             </div>
             <Heading level={3} className="text-xl font-bold text-gray-900 mb-2">
-              Kannst du Geräte reparieren?
+              {t('list.ctaTitle')}
             </Heading>
             <p className="text-base text-gray-600 mb-6 max-w-md mx-auto">
-              Registriere dich als Techniker und hilf Menschen in deiner Nähe. Kostenlos oder gegen Vergütung – du entscheidest.
+              {t('list.ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/auth/login?callbackUrl=/profil/techniker"
                 className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-semibold shadow-sm transition-colors"
               >
-                Techniker-Profil erstellen
+                {t('list.ctaCreateProfile')}
               </Link>
               <Link
                 href="/it-hilfe"
                 className="px-6 py-2.5 bg-white hover:bg-blue-50 text-blue-600 border border-blue-600 rounded-lg font-semibold transition-colors"
               >
-                Zur IT-Hilfe →
+                {t('list.ctaToITHelp')}
               </Link>
             </div>
           </div>

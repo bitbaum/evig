@@ -116,15 +116,29 @@
     "skipToContent": "Aller au contenu"
   },
   "errors": {
-    "generic": "Une erreur est survenue. Veuillez réessayer.",
-    "notFound": "Page introuvable",
-    "unauthorized": "Non autorisé",
-    "forbidden": "Accès refusé",
-    "serverError": "Erreur serveur",
-    "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",
-    "required": "Ce champ est obligatoire",
-    "invalidEmail": "Veuillez saisir une adresse courriel valide",
-    "passwordTooShort": "Le mot de passe doit comporter au moins 8 caractères"
+    "genericTitle": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "blog": {
+      "description": "Une erreur est survenue lors du chargement du blog.",
+      "back": "Retour au blog"
+    },
+    "marketplace": {
+      "description": "Une erreur est survenue lors du chargement du marché.",
+      "back": "Retour au marché"
+    },
+    "listingDetail": {
+      "title": "Erreur de chargement de l'annonce",
+      "description": "L'annonce n'a pas pu être chargée.",
+      "back": "Retour au marché"
+    },
+    "services": {
+      "description": "Une erreur est survenue lors du chargement des services.",
+      "back": "Retour aux services"
+    },
+    "workshops": {
+      "description": "Une erreur est survenue lors du chargement des ateliers.",
+      "back": "Retour aux ateliers"
+    }
   },
   "footer": {
     "tagline": "Ancien matériel. Nouvelle vie.",
@@ -919,6 +933,550 @@
         "startProject": "Démarrer votre projet",
         "allServices": "Découvrir tous les services"
       }
+    },
+    "hardwareRecycling": {
+      "meta": {
+        "title": "Recyclage de matériel informatique",
+        "description": "Recyclage responsable et remise à neuf d'équipements informatiques. Effacement sécurisé des données, service de collecte gratuit et solutions IT durables.",
+        "ogTitle": "Recyclage de matériel informatique",
+        "ogDescription": "Solutions IT durables grâce au recyclage et à la remise à neuf responsables d'équipements informatiques."
+      },
+      "hero": {
+        "title": "Recyclage de matériel informatique",
+        "subtitle": "Services de recyclage et de remise à neuf responsables pour les équipements informatiques. Nous aidons à réduire les déchets électroniques tout en assurant un effacement sécurisé des données."
+      },
+      "features": [
+        {
+          "title": "Effacement sécurisé des données",
+          "description": "Effacement complet et sécurisé de toutes les données des appareils."
+        },
+        {
+          "title": "Remise à neuf des appareils",
+          "description": "Remise à neuf professionnelle des équipements informatiques."
+        },
+        {
+          "title": "Recyclage des composants",
+          "description": "Recyclage responsable des composants électroniques."
+        },
+        {
+          "title": "Service de collecte gratuit",
+          "description": "Service de collecte pratique pour votre ancien équipement."
+        }
+      ],
+      "pricing": {
+        "heading": "Tarifs",
+        "subtitle": "Durable et abordable",
+        "badge": "Meilleur choix",
+        "price": "Gratuit",
+        "forMostItems": "pour la plupart des articles",
+        "features": [
+          "Service de collecte gratuit",
+          "Effacement sécurisé des données",
+          "Responsable sur le plan environnemental",
+          "Certificat de destruction"
+        ],
+        "cta": "Prêt à commencer?"
+      },
+      "impact": {
+        "heading": "Responsabilité environnementale",
+        "subtitle": "Chaque appareil recyclé aide à protéger notre planète",
+        "dataSecurity": "Effacement sécurisé des données",
+        "sustainableProcesses": "Processus durables",
+        "reducedEwaste": "Réduction des déchets électroniques"
+      },
+      "contact": {
+        "heading": "Contactez-nous aujourd'hui",
+        "subtitle": "Pour en savoir plus sur nos services de recyclage de matériel informatique",
+        "locations": "Emplacements",
+        "store": "Vente",
+        "warehouse": "Entrepôt",
+        "contactInfo": "Contact",
+        "phone": "Téléphone",
+        "hours": "Heures d'ouverture",
+        "monday": "Lundi",
+        "weekdays": "Mardi - Vendredi"
+      },
+      "cta": {
+        "heading": "Prêt à commencer?",
+        "body": "Contactez-nous aujourd'hui pour en savoir plus sur nos services de recyclage de matériel informatique.",
+        "contact": "Contact",
+        "back": "Retour aux services"
+      }
+    },
+    "linuxOpenSource": {
+      "meta": {
+        "title": "Linux & Open Source",
+        "description": "Installation, support et formations Linux expert. Trouvez la distribution Linux parfaite pour vos besoins."
+      },
+      "hero": {
+        "title": "Linux & Open Source",
+        "subtitle": "Installation, support et services de formation Linux professionnels. Trouvez la distribution parfaite pour vos besoins.",
+        "intro": "Linux est un système d'exploitation puissant, sécurisé et flexible qui alimente tout, des ordinateurs personnels aux serveurs d'entreprise."
+      },
+      "servicesSection": {
+        "heading": "Nos services Linux",
+        "subtitle": "Accompagnement complet pour tous vos besoins Linux, de l'installation à la maintenance continue.",
+        "priceInfo": "Support Linux professionnel à partir de CHF 70/heure",
+        "items": [
+          {
+            "title": "Installation Linux",
+            "description": "Installation professionnelle de la distribution Linux choisie avec vérification complète de la compatibilité matérielle et optimisation."
+          },
+          {
+            "title": "Configuration système",
+            "description": "Configuration personnalisée de votre système Linux selon vos exigences spécifiques et vos besoins de flux de travail."
+          },
+          {
+            "title": "Formation & Support",
+            "description": "Programmes de formation complets et soutien continu pour tirer le meilleur parti de votre système Linux."
+          },
+          {
+            "title": "Configuration serveur",
+            "description": "Configuration et optimisation de serveurs Linux de qualité entreprise pour les entreprises et organisations."
+          }
+        ]
+      },
+      "advantages": {
+        "heading": "Votre avantage Linux",
+        "subtitle": "Bénéficiez d'une assistance experte et maximisez les avantages de Linux pour vos besoins.",
+        "items": [
+          {
+            "title": "Économisez",
+            "points": [
+              "Pas de licences ou d'abonnements coûteux",
+              "Prolongez la durée de vie de votre matériel existant",
+              "Réduisez les coûts de maintenance et de mise à niveau"
+            ]
+          },
+          {
+            "title": "Améliorez les performances",
+            "points": [
+              "Performances système plus rapides sur tout matériel",
+              "Optimisé pour vos besoins spécifiques",
+              "Fonctionnement fiable et stable"
+            ]
+          },
+          {
+            "title": "Support expert",
+            "points": [
+              "Installation et configuration professionnelles",
+              "Support technique continu",
+              "Formation et documentation"
+            ]
+          }
+        ]
+      },
+      "quickCta": {
+        "heading": "Prêt à commencer?",
+        "body": "Nous offrons un support et des solutions Linux professionnels pour les entreprises et les particuliers. Contactez-nous pour une consultation gratuite.",
+        "consult": "Prendre rendez-vous",
+        "call": "Appeler maintenant"
+      },
+      "benefitsSection": {
+        "heading": "Pourquoi choisir Linux?",
+        "subtitle": "Linux offre des performances, une sécurité et une flexibilité supérieures par rapport aux autres systèmes d'exploitation.",
+        "items": [
+          {
+            "title": "Sécurité & Stabilité",
+            "description": "Linux est réputé pour ses fonctionnalités de sécurité robustes et la stabilité du système, le rendant idéal pour une utilisation personnelle et professionnelle."
+          },
+          {
+            "title": "Performance",
+            "description": "Utilisation efficace des ressources et performances optimisées, même sur du matériel plus ancien, avec des exigences système minimales."
+          },
+          {
+            "title": "Personnalisation",
+            "description": "Contrôle total de votre système avec des options de personnalisation infinies pour correspondre à votre flux de travail et vos préférences."
+          },
+          {
+            "title": "Support communautaire",
+            "description": "Accès à une grande communauté mondiale d'utilisateurs et de développeurs pour le support, la documentation et l'amélioration continue."
+          }
+        ]
+      },
+      "distrosSection": {
+        "heading": "Distributions Linux populaires",
+        "subtitle": "Chaque distribution a ses propres forces et convient à différents cas d'utilisation.",
+        "visitWebsite": "Visiter le site",
+        "bestFor": "Idéal pour:",
+        "pros": "Avantages:",
+        "cons": "Considérations:",
+        "items": [
+          {
+            "description": "Distribution conviviale, parfaite pour les débutants et les professionnels. Offre un environnement de bureau soigné et un vaste référentiel de logiciels.",
+            "useCases": [
+              "Informatique de bureau",
+              "Développement",
+              "Déploiement serveur"
+            ],
+            "pros": [
+              "Facile à utiliser",
+              "Grande communauté",
+              "Mises à jour régulières",
+              "Documentation complète"
+            ],
+            "cons": [
+              "Quelques logiciels propriétaires",
+              "Plus lourd que certaines alternatives"
+            ]
+          },
+          {
+            "description": "Basé sur Ubuntu mais offre une expérience de bureau plus traditionnelle. Connu pour sa stabilité et sa facilité d'utilisation.",
+            "useCases": [
+              "Informatique de bureau",
+              "Travail de bureau",
+              "Multimédia"
+            ],
+            "pros": [
+              "Interface similaire à Windows",
+              "Excellent support matériel",
+              "Stable et fiable",
+              "Idéal pour les débutants"
+            ],
+            "cons": [
+              "Mises à jour moins fréquentes",
+              "Fonctionnalités entreprise limitées"
+            ]
+          },
+          {
+            "description": "Distribution de pointe présentant les dernières technologies open source. Soutenu par Red Hat.",
+            "useCases": [
+              "Développement",
+              "Entreprise",
+              "Innovation"
+            ],
+            "pros": [
+              "Derniers logiciels",
+              "Sécurité renforcée",
+              "Prêt pour l'entreprise",
+              "Excellents outils de développement"
+            ],
+            "cons": [
+              "Mises à jour fréquentes",
+              "Cycles de support plus courts"
+            ]
+          },
+          {
+            "description": "L'une des distributions les plus stables et fiables, servant de base à de nombreux autres systèmes Linux.",
+            "useCases": [
+              "Serveurs",
+              "Entreprise",
+              "Systèmes stables"
+            ],
+            "pros": [
+              "Extrêmement stable",
+              "Grand référentiel de paquets",
+              "Longs cycles de support",
+              "Sécurité renforcée"
+            ],
+            "cons": [
+              "Versions logicielles plus anciennes",
+              "Moins convivial"
+            ]
+          },
+          {
+            "description": "Distribution légère basée sur Debian, connue pour ses excellentes performances et son interface conviviale.",
+            "useCases": [
+              "Matériel ancien",
+              "Informatique de bureau",
+              "Efficacité des ressources"
+            ],
+            "pros": [
+              "Léger",
+              "Performances rapides",
+              "Convivial",
+              "Base stable"
+            ],
+            "cons": [
+              "Communauté plus petite",
+              "Fonctionnalités entreprise limitées"
+            ]
+          }
+        ]
+      },
+      "finalCta": {
+        "heading": "Prêt à passer à Linux?",
+        "body": "Laissez nos experts vous aider à trouver et configurer la distribution Linux parfaite pour vos besoins.",
+        "start": "Commencer",
+        "explore": "Explorer les services"
+      }
+    },
+    "openSourceSolutions": {
+      "meta": {
+        "title": "Alternatives open source",
+        "description": "Trouvez la meilleure alternative open source aux logiciels propriétaires. Évaluations honnêtes, conseils de migration et support de Revamp-IT.",
+        "keywords": [
+          "alternatives open source",
+          "logiciels open source",
+          "logiciels gratuits",
+          "alternative photoshop",
+          "alternative microsoft office",
+          "linux"
+        ]
+      },
+      "stats": {
+        "alternativesLabel": "Alternatives open source",
+        "proprietaryLabel": "Logiciels propriétaires",
+        "categoriesLabel": "Catégories"
+      },
+      "detail": {
+        "notFound": "Non trouvé",
+        "backToOverview": "Retour à la vue d'ensemble",
+        "description": "Description",
+        "replaces": "Ce qu'il remplace",
+        "migrationTips": "Conseils de migration",
+        "highlights": "Points forts",
+        "limitations": "Limitations",
+        "links": "Liens",
+        "visitWebsite": "Visiter le site web",
+        "viewSourceCode": "Voir le code source",
+        "details": "Détails",
+        "license": "Licence",
+        "platforms": "Plateformes",
+        "maturity": "Maturité",
+        "helpWithMigration": "Besoin d'aide pour migrer?",
+        "helpDescription": "Notre équipe peut vous aider à migrer vers des logiciels open source.",
+        "contactUs": "Nous contacter",
+        "relatedAlternatives": "Plus d'alternatives dans cette catégorie",
+        "openSourceAlternative": "Alternative open source"
+      }
+    },
+    "repair": {
+      "meta": {
+        "title": "Réparations & améliorations informatiques",
+        "description": "Réparations et améliorations informatiques professionnelles. Nous nous spécialisons dans ce que les autres ne peuvent pas réparer — y compris les réparations de cartes mères et les défauts au niveau des composants."
+      },
+      "hero": {
+        "title": "Réparations & améliorations informatiques",
+        "subtitle": "Des réparations sur lesquelles vous pouvez compter",
+        "description": "Nous combinons expertise technique et action durable pour prolonger la durée de vie de vos appareils. Nos services de réparation se concentrent sur ce que les autres abandonnent — économisant de l'argent et réduisant les déchets électroniques."
+      },
+      "features": [
+        {
+          "title": "Réparations au niveau des composants",
+          "description": "Nous ne remplaçons pas simplement les pièces — nous les réparons. Nos techniciens peuvent réparer les cartes mères, alimentations et autres composants au niveau des circuits."
+        },
+        {
+          "title": "Améliorations matérielles",
+          "description": "Prolongez la durée de vie de votre ordinateur avec des améliorations ciblées. Nous vous aidons à sélectionner et installer les bons composants."
+        },
+        {
+          "title": "Service de diagnostic",
+          "description": "Diagnostic complet pour identifier et résoudre rapidement les problèmes. Avec des outils professionnels et des années d'expérience, nous touchons juste."
+        },
+        {
+          "title": "Service express",
+          "description": "Urgent ? Pour de nombreux problèmes courants, nous proposons des réparations le jour même. Apportez simplement votre appareil pendant nos heures d'ouverture."
+        }
+      ],
+      "pricing": {
+        "heading": "Tarifs",
+        "base": "À partir de CHF 70/heure",
+        "details": [
+          "Diagnostic initial gratuit",
+          "Pas de réparation = pas de frais",
+          "Tarification transparente",
+          "Garantie sur les réparations"
+        ]
+      },
+      "processHeading": "Notre processus de réparation",
+      "process": [
+        {
+          "title": "Diagnostic",
+          "description": "Nous examinons votre appareil et fournissons une évaluation précise du problème."
+        },
+        {
+          "title": "Devis",
+          "description": "Vous recevez un devis transparent — sans frais cachés."
+        },
+        {
+          "title": "Réparation",
+          "description": "Nos techniciens réparent votre appareil avec des pièces de qualité et des méthodes éprouvées."
+        },
+        {
+          "title": "Test",
+          "description": "Toutes les réparations sont soigneusement testées pour s'assurer que votre appareil fonctionne parfaitement."
+        }
+      ],
+      "cta": {
+        "heading": "Faire réparer votre appareil ?",
+        "body": "Contactez-nous pour un diagnostic gratuit et un devis. Nous vous aidons à remettre votre appareil en marche rapidement et à moindre coût.",
+        "contact": "Prendre contact",
+        "allServices": "Tous les services"
+      }
+    },
+    "buildComputer": {
+      "meta": {
+        "title": "Assemblages d'ordinateurs durables pilotés par IA",
+        "description": "Notre système IA scanne les réseaux partenaires mondiaux pour assembler votre ordinateur idéal principalement à partir de composants d'occasion et reconditionnés."
+      },
+      "hero": {
+        "title": "Assemblages d'ordinateurs durables pilotés par IA",
+        "subtitle": "Notre système IA révolutionnaire scanne notre inventaire et les réseaux partenaires mondiaux pour assembler votre ordinateur idéal principalement à partir de composants d'occasion et reconditionnés.",
+        "strong": "100% Priorité pièces d'occasion • Réseau d'inventaire mondial • Correspondance IA intelligente",
+        "badge1": "Économie circulaire",
+        "badge2": "Réseau mondial",
+        "badge3": "Optimisé par IA"
+      },
+      "howItWorks": {
+        "heading": "Comment fonctionne notre système de build IA",
+        "steps": [
+          {
+            "title": "Analyse des besoins",
+            "description": "Dites-nous votre cas d'utilisation, vos exigences de performance et vos préférences de durabilité"
+          },
+          {
+            "title": "Scan d'inventaire mondial",
+            "description": "L'IA scanne notre inventaire + les réseaux partenaires à travers l'Europe et au-delà"
+          },
+          {
+            "title": "Optimisation intelligente",
+            "description": "L'algorithme priorise les pièces d'occasion, optimisant pour la performance et la durabilité"
+          },
+          {
+            "title": "Assemblage & Certification",
+            "description": "Assemblage professionnel avec notre certification de durabilité \"Revamped\""
+          }
+        ]
+      },
+      "buildTool": {
+        "heading": "Testez notre démo d'outil de build",
+        "subtitle": "Découvrez comment notre système IA recommanderait des composants pour vos besoins spécifiques",
+        "step1Heading": "À quoi allez-vous utiliser votre ordinateur ?",
+        "performanceHeading": "Exigences de performance",
+        "budgetLabel": "Plage budgétaire (CHF)",
+        "budgetPlaceholder": "Sélectionner une plage budgétaire",
+        "specificLabel": "Exigences spécifiques (optionnel)",
+        "specificPlaceholder": "Avez-vous des besoins particuliers ? (ex. plusieurs moniteurs, gaming VR, exigences logicielles spécifiques)",
+        "nextButton": "Continuer vers l'analyse",
+        "step2Heading": "Analyse d'inventaire IA",
+        "requirementsSummary": "Résumé de vos exigences :",
+        "useCaseLabel": "Cas d'utilisation",
+        "performanceLabel": "Performance",
+        "budgetSummaryLabel": "Budget",
+        "sustainabilityLabel": "Durabilité",
+        "sustainabilityValue": "Haute priorité",
+        "specialNotesLabel": "Notes spéciales",
+        "analyzeDescription": "Prêt à scanner notre réseau d'inventaire mondial et à générer votre recommandation de build personnalisée ?",
+        "backButton": "Retour à l'édition",
+        "analyzeButton": "Analyser l'inventaire mondial",
+        "scanningLabel": "🔍 Analyse des réseaux d'inventaire...",
+        "scanningLines": [
+          "Vérification de l'entrepôt de Zurich (847 composants)",
+          "Scan des partenaires européens (12 450+ composants)",
+          "IA optimisant pour durabilité + performance",
+          "Calcul des routes et coûts d'expédition"
+        ],
+        "step3Heading": "Votre build optimisé",
+        "sustainableLabel": "% Durable",
+        "performanceMatchLabel": "% Correspondance performance",
+        "usedPartsLabel": "% Pièces d'occasion",
+        "componentTypes": {
+          "cpu": "Processeur",
+          "gpu": "Carte graphique",
+          "ram": "Mémoire",
+          "storage": "Stockage"
+        },
+        "conditions": {
+          "used": "Occasion",
+          "refurbished": "Reconditionné",
+          "new": "Neuf"
+        },
+        "inStock": "en stock",
+        "deliveryTime": "env. 3-5 jours",
+        "totalCost": "Coût total du build :",
+        "extras": "+ Assemblage & Test : CHF 120 | + Expédition : CHF 45 | + Certification \"Revamped\" : Inclus",
+        "changeRequirements": "Modifier les exigences",
+        "orderBuild": "Commander ce build",
+        "environmentHeading": "Impact environnemental",
+        "co2Saved": "CO₂ économisé",
+        "co2Value": "~85kg par rapport à un build neuf",
+        "reusedLabel": "Composants réutilisés",
+        "reusedValue": "4 sur 4 parties principales",
+        "circularLabel": "Économie circulaire",
+        "circularValue": "Prolonge la durée de vie du matériel"
+      },
+      "features": {
+        "heading": "Pourquoi choisir notre système de build IA ?",
+        "items": [
+          {
+            "title": "Réseau d'inventaire mondial",
+            "description": "Accès à des milliers de composants d'occasion et reconditionnés à travers l'Europe et au-delà, avec suivi des stocks en temps réel."
+          },
+          {
+            "title": "Optimisation pilotée par IA",
+            "description": "Des algorithmes intelligents équilibrent performance, durabilité, coût et disponibilité pour trouver votre combinaison de build idéale."
+          },
+          {
+            "title": "Certification \"Revamped\"",
+            "description": "Chaque build reçoit notre certification de durabilité, garantissant la qualité tout en soutenant l'économie circulaire."
+          }
+        ]
+      },
+      "certification": {
+        "heading": "Obtenez votre certification Revamped",
+        "body": "Chaque ordinateur que nous construisons reçoit notre certification exclusive \"Revamped\" — votre garantie de durabilité, qualité et performance.",
+        "sustainabilityScore": "Score de durabilité",
+        "co2Saved": "CO₂ économisé",
+        "certifiedComputers": "Ordinateurs certifiés",
+        "learnMore": "En savoir plus sur la certification Revamped"
+      },
+      "cta": {
+        "heading": "Prêt à construire durablement ?",
+        "body": "Rejoignez la révolution dans la construction d'ordinateurs. Obtenez un build sur mesure et durable qui fonctionne excellemment tout en protégeant notre planète.",
+        "startBuild": "Démarrer votre build",
+        "explore": "Explorer tous les services"
+      },
+      "useCaseOptions": {
+        "office": {
+          "name": "Bureau & Business",
+          "description": "E-mail, documents, navigation web, appels vidéo"
+        },
+        "creative": {
+          "name": "Travail créatif",
+          "description": "Édition photo/vidéo, design, création de contenu"
+        },
+        "gaming": {
+          "name": "Gaming",
+          "description": "Jeux modernes, streaming, calcul haute performance"
+        },
+        "development": {
+          "name": "Développement logiciel",
+          "description": "Programmation, tests, plusieurs VMs, compilation"
+        },
+        "server": {
+          "name": "Serveur/NAS",
+          "description": "Serveur de fichiers, serveur multimédia, domotique"
+        },
+        "ai": {
+          "name": "IA/Apprentissage automatique",
+          "description": "Entraînement de modèles, traitement de données, workloads CUDA"
+        }
+      },
+      "performanceOptions": {
+        "basic": {
+          "name": "Basique",
+          "description": "Tâches légères, performance adéquate"
+        },
+        "moderate": {
+          "name": "Modéré",
+          "description": "Performance équilibrée pour la plupart des tâches"
+        },
+        "high": {
+          "name": "Élevé",
+          "description": "Haute performance pour les tâches exigeantes"
+        },
+        "extreme": {
+          "name": "Extrême",
+          "description": "Performance maximale, sans compromis"
+        }
+      },
+      "budgetOptions": {
+        "300-500": "CHF 300-500",
+        "500-800": "CHF 500-800",
+        "800-1200": "CHF 800-1200",
+        "1200+": "CHF 1200+"
+      }
     }
   },
   "workshops": {
@@ -975,6 +1533,138 @@
         "title": "Proposer un atelier?",
         "subtitle": "Vous avez une idée d'atelier? Nous sommes ravis de recevoir vos suggestions de nouveaux thèmes et contenus.",
         "button": "Proposer un atelier"
+      }
+    },
+    "detail": {
+      "notFound": "Atelier introuvable",
+      "backToWorkshops": "Retour aux ateliers",
+      "allLevels": "Tous niveaux",
+      "details": "Détails de l'atelier",
+      "duration": "Durée",
+      "variableDuration": "Variable",
+      "maxParticipants": "Max. participants",
+      "category": "Catégorie",
+      "generalCategory": "Général",
+      "price": "Prix",
+      "free": "Gratuit",
+      "priceChf": "CHF {amount}",
+      "targetAudience": "Public cible",
+      "prerequisites": "Prérequis",
+      "learningObjectives": "Ce que vous apprendrez :",
+      "materials": "Matériaux",
+      "materialsProvided": "Fourni :",
+      "materialsRequired": "À apporter :",
+      "upcomingDates": "Prochaines dates",
+      "soldOut": "Complet",
+      "registrationCount": "{current}/{max} inscrit(s)",
+      "locationTba": "À annoncer",
+      "instructor": "Animateur : {name}",
+      "registration": "Inscription",
+      "noDates": "Aucune date n'est prévue pour cet atelier. Revenez bientôt !",
+      "stats": "Statistiques de l'atelier",
+      "level": "Niveau",
+      "dates": "Dates",
+      "datesAvailable": "{count} disponible(s)",
+      "reviews": "Avis"
+    },
+    "propose": {
+      "meta": {
+        "title": "Proposer un atelier",
+        "description": "Proposez un atelier et partagez vos connaissances avec la communauté."
+      },
+      "loginRequired": "Connexion requise",
+      "loginPrompt": "Veuillez vous connecter pour proposer un atelier.",
+      "loginButton": "Se connecter",
+      "backToDashboard": "Retour au tableau de bord",
+      "title": "Proposer un atelier",
+      "subtitle": "Proposez un nouvel atelier et partagez vos connaissances avec la communauté",
+      "form": {
+        "termsError": "Veuillez accepter les conditions d'utilisation",
+        "genericError": "Une erreur s'est produite. Veuillez réessayer.",
+        "networkError": "Erreur réseau. Veuillez réessayer.",
+        "aiPlaceholder": "Décrivez votre idée d'atelier en 1-2 phrases...",
+        "successTitle": "Proposition soumise avec succès !",
+        "successSubmitted": "a été soumis.",
+        "successMessage": "Votre proposition a été soumise. Nous vous contacterons par e-mail.",
+        "backToWorkshops": "Retour aux ateliers",
+        "errorTitle": "Erreur",
+        "submitting": "Soumission en cours...",
+        "submit": "Soumettre la proposition d'atelier",
+        "reviewNote": "Après soumission, votre proposition sera examinée. Cela peut prendre 1-2 jours ouvrables."
+      },
+      "sections": {
+        "basicInfo": {
+          "title": "Informations de base",
+          "titleField": "Titre de l'atelier *",
+          "titlePlaceholder": "ex. Linux pour débutants",
+          "category": "Catégorie *",
+          "categoryPlaceholder": "Sélectionner une catégorie",
+          "level": "Niveau de difficulté *",
+          "shortDescription": "Description courte *",
+          "shortDescriptionPlaceholder": "Une description courte et percutante (apparaît dans l'aperçu)",
+          "detailedDescription": "Description détaillée *",
+          "detailedDescriptionPlaceholder": "Décrivez l'atelier en détail..."
+        },
+        "learningObjectives": {
+          "title": "Objectifs d'apprentissage",
+          "placeholder": "ex. Maîtriser les bases de la ligne de commande Linux",
+          "remove": "Supprimer",
+          "add": "+ Ajouter un objectif"
+        },
+        "practicalDetails": {
+          "title": "Détails pratiques",
+          "duration": "Durée (heures) *",
+          "price": "Prix par personne (CHF) *",
+          "pricePlaceholder": "0.00 (gratuit)",
+          "maxParticipants": "Nombre maximum de participants *",
+          "minParticipants": "Nombre minimum de participants *",
+          "targetAudience": "Public cible",
+          "targetAudiencePlaceholder": "ex. Débutants sans connaissances préalables, jeunes 14-18 ans",
+          "prerequisites": "Prérequis",
+          "prerequisitesPlaceholder": "ex. Ordinateur portable avec Linux installé"
+        },
+        "materials": {
+          "title": "Matériaux & Préparation",
+          "provided": "Matériaux fournis par l'organisateur",
+          "providedPlaceholder": "ex. Feuilles de travail, exemple de code, boissons",
+          "required": "À apporter par les participants",
+          "requiredPlaceholder": "ex. Ordinateur portable, papeterie"
+        },
+        "location": {
+          "title": "Lieu & Planning",
+          "typeLabel": "Type d'atelier *",
+          "typeVenue": "Dans un lieu (ex. centre communautaire)",
+          "typeOnline": "En ligne via vidéoconférence",
+          "typeHome": "Chez vous ou dans vos locaux",
+          "availableVenues": "Lieux disponibles",
+          "loading": "Chargement des lieux disponibles...",
+          "selectVenue": "Sélectionner un lieu...",
+          "personsCapacity": "personnes",
+          "noVenues": "Aucun lieu approuvé disponible.",
+          "noVenuesSuggestion": "Vous pouvez proposer un nouveau lieu ou soumettre un lieu existant pour approbation.",
+          "alternativeVenue": "Lieu alternatif (si aucun lieu adapté n'est disponible)",
+          "alternativeVenuePlaceholder": "ex. Mon domicile, ou un nouveau lieu",
+          "alternativeVenueHint": "Utilisez ce champ si vous souhaitez suggérer un nouveau lieu",
+          "proposedDate": "Date proposée",
+          "proposedTime": "Heure proposée",
+          "address": "Adresse",
+          "addressPlaceholder": "votre adresse complète",
+          "specialRequirements": "Exigences particulières",
+          "specialRequirementsPlaceholder": "ex. Projecteur, tableau blanc, accès internet, logiciel spécial"
+        },
+        "terms": {
+          "title": "Conditions d'utilisation pour les organisateurs d'ateliers",
+          "term1": "Je m'engage à animer des ateliers de haute qualité et avec engagement",
+          "term2": "Je traiterai tous les participants avec respect et professionnalisme",
+          "term3": "Je suis responsable de la sécurité et du bon déroulement de l'atelier",
+          "term4": "Je communiquerai les prérequis appropriés et des objectifs d'apprentissage clairs",
+          "term5": "J'accepte le système d'évaluation et les frais de plateforme",
+          "term6": "Mes informations sont véridiques et je les tiendrai à jour",
+          "checkboxPrefix": "J'accepte les",
+          "termsLink": "Conditions d'utilisation",
+          "checkboxMiddle": "et la",
+          "privacyLink": "Politique de confidentialité"
+        }
       }
     }
   },
@@ -1454,6 +2144,31 @@
       "message": "Une erreur est survenue lors du chargement de l'aide informatique.",
       "retry": "Réessayer",
       "backToList": "Retour à la liste"
+    },
+    "edit": {
+      "backToRequest": "Retour à la demande",
+      "title": "Modifier la demande",
+      "description": "Modifiez les détails de votre demande d'aide IT.",
+      "savedTitle": "Modifications enregistrées !",
+      "savedRedirect": "Vous allez être redirigé...",
+      "sectionCategory": "Catégorie d'appareil",
+      "sectionBudget": "Budget",
+      "budgetDescription": "Quel est le montant maximum que vous êtes prêt à payer ? Laissez vide pour l'aide communautaire gratuite.",
+      "budgetFree": "Aide communautaire (gratuit)",
+      "budgetUpTo": "jusqu'à CHF {amount}",
+      "budgetPlaceholder": "0 = gratuit",
+      "sectionOptions": "Options",
+      "serviceTypeLabel": "Comment la réparation doit-elle se faire ?",
+      "urgencyLabel": "Quelle urgence ?",
+      "cancelButton": "Annuler",
+      "submitButton": "Enregistrer les modifications",
+      "submittingButton": "Enregistrement...",
+      "errorNotFound": "Demande introuvable",
+      "errorNotOwner": "Vous ne pouvez modifier que vos propres demandes",
+      "errorNotEditable": "Cette demande ne peut plus être modifiée",
+      "errorLoadFailed": "Impossible de charger la demande",
+      "errorSaveFailed": "Impossible d'enregistrer",
+      "errorGeneric": "Une erreur s'est produite"
     }
   },
   "blog": {
@@ -1701,230 +2416,623 @@
   },
   "getInvolved": {
     "meta": {
-      "title": "Participer",
-      "description": "Rejoignez notre mission de réduction des déchets électroniques et rendez la technologie accessible à tous. Devenez bénévole, stagiaire ou partenaire."
+      "title": "S'impliquer",
+      "description": "Rejoignez notre mission pour réduire les déchets électroniques et rendre la technologie accessible à tous."
     },
-    "page": {
-      "getStarted": "Commencer",
-      "learnMore": "En savoir plus",
-      "waysTitle": "Comment participer",
-      "testimonialTitle": "Ce que dit notre communauté",
-      "partnersTitle": "Nos organisations partenaires",
-      "ctaTitle": "Prêt(e) à faire la différence?",
-      "ctaDescription": "Rejoignez notre communauté de changeurs et aidez-nous à créer un avenir plus durable grâce à la technologie.",
-      "discoverWorkshops": "Découvrir les ateliers"
+    "hero": {
+      "title": "Rejoignez notre mission",
+      "subtitle": "Faites partie d'une communauté qui rend la technologie durable et accessible à tous.",
+      "startBtn": "Commencer",
+      "learnBtn": "En savoir plus"
     },
     "coreValues": {
-      "sustainability": {
-        "title": "Durabilité",
-        "description": "Nous croyons en la création d'un avenir durable grâce à un usage responsable de la technologie et à la réduction des déchets."
-      },
-      "community": {
-        "title": "Communauté",
-        "description": "Construire des communautés solides grâce à l'éducation technologique et à une participation inclusive."
-      },
-      "innovation": {
-        "title": "Innovation",
-        "description": "Trouver des solutions créatives pour rendre la technologie accessible et respectueuse de l'environnement."
-      },
-      "globalImpact": {
-        "title": "Impact global",
-        "description": "Faire une différence dans les communautés locales et mondiales grâce à la technologie."
-      }
+      "heading": "Nos valeurs fondamentales",
+      "items": [
+        {
+          "title": "Durabilité",
+          "description": "Nous croyons en la création d'un avenir durable grâce à une utilisation responsable de la technologie."
+        },
+        {
+          "title": "Communauté",
+          "description": "Construire des communautés fortes grâce à l'éducation technologique et la participation inclusive."
+        },
+        {
+          "title": "Innovation",
+          "description": "Trouver des solutions créatives pour rendre la technologie accessible et respectueuse de l'environnement."
+        },
+        {
+          "title": "Impact mondial",
+          "description": "Faire une différence dans les communautés locales et mondiales grâce à la technologie."
+        }
+      ]
+    },
+    "options": {
+      "heading": "Comment s'impliquer",
+      "items": [
+        {
+          "title": "Bénévolat",
+          "description": "Rejoignez notre équipe de bénévoles dévoués. Aucune expérience préalable requise.",
+          "features": [
+            "Travailler avec du matériel et des logiciels",
+            "Apprendre de nouvelles compétences",
+            "Faire une différence dans votre communauté",
+            "Rencontrer des personnes partageant les mêmes idées"
+          ],
+          "cta": "Commencer le bénévolat"
+        },
+        {
+          "title": "Experts techniques",
+          "description": "Si vous avez de l'expérience avec les logiciels open-source, le matériel ou l'électronique, nous serions ravis de vous avoir.",
+          "features": [
+            "Travailler sur des projets significatifs",
+            "Partager votre expertise",
+            "Collaborer avec la communauté",
+            "Développer de nouvelles solutions"
+          ],
+          "cta": "Partager votre expertise"
+        },
+        {
+          "title": "Stages",
+          "description": "Nous offrons des opportunités de stage pour ceux qui veulent acquérir de l'expérience en technologie.",
+          "features": [
+            "Expérience pratique",
+            "Développement professionnel",
+            "Opportunités de mentorat",
+            "Arrangements flexibles"
+          ],
+          "cta": "Postuler pour un stage"
+        },
+        {
+          "title": "Réintégration professionnelle",
+          "description": "Nous travaillons avec des institutions pour offrir des opportunités de réintégration professionnelle.",
+          "features": [
+            "Développement des compétences",
+            "Intégration sociale",
+            "Soutien professionnel",
+            "Travail significatif"
+          ],
+          "cta": "En savoir plus"
+        },
+        {
+          "title": "Partenariats",
+          "description": "Nous collaborons avec des établissements d'enseignement et des organisations pour créer des programmes significatifs.",
+          "features": [
+            "Programmes éducatifs",
+            "Placements de stage",
+            "Initiatives communautaires",
+            "Solutions durables"
+          ],
+          "cta": "Devenir partenaire"
+        },
+        {
+          "title": "Faire un don",
+          "description": "Soutenez notre mission pour rendre la technologie durable et accessible à tous.",
+          "features": [
+            "Soutenir la technologie durable",
+            "Aider à réduire les déchets électroniques",
+            "Permettre des programmes communautaires",
+            "Rendre la technologie accessible"
+          ],
+          "cta": "Faire un don maintenant"
+        },
+        {
+          "title": "Adhésion associative",
+          "description": "Devenez membre officiel de l'association et prenez une responsabilité partagée.",
+          "features": [
+            "Droit de vote sur les décisions associatives",
+            "Partie de la liste officielle des membres",
+            "Cotisation annuelle CHF 50 (réduite CHF 20)",
+            "Soutien financier de la mission"
+          ],
+          "cta": "Devenir membre"
+        }
+      ]
+    },
+    "testimonials": {
+      "heading": "Ce que dit notre communauté",
+      "items": [
+        {
+          "quote": "En tant que réfugié, Revamp-IT m'a donné l'opportunité de participer ici. J'apprends beaucoup et j'ai la liberté de développer des compétences qui correspondent à mes objectifs. J'écris maintenant du code et je peux apprendre tout ce qui m'intéresse — car ici tout le monde partage ses connaissances. C'est une vraie communauté.",
+          "author": "G.",
+          "role": "Bénévole"
+        }
+      ]
+    },
+    "partners": {
+      "heading": "Nos organisations partenaires",
+      "names": [
+        "Verein für berufliche und soziale Integration Bezirk Uster",
+        "Arbeitsintegrationsstelle der Gemeinde Rüti",
+        "HEKS",
+        "AOZ (Asylorganisation Zürich)"
+      ]
+    },
+    "cta": {
+      "heading": "Prêt à faire une différence?",
+      "body": "Rejoignez notre communauté de changeurs et aidez-nous à créer un avenir plus durable grâce à la technologie.",
+      "contactBtn": "Nous contacter",
+      "workshopsBtn": "Découvrir les ateliers"
     },
     "volunteer": {
       "meta": {
         "title": "Bénévolat",
-        "description": "Rejoignez notre équipe de bénévoles engagés et faites une différence dans votre communauté grâce à la technologie et à la durabilité."
+        "description": "Rejoignez notre équipe de bénévoles dévoués et faites une différence dans votre communauté."
       },
       "title": "Devenir bénévole",
-      "description": "Rejoignez notre équipe de bénévoles engagés et aidez à rendre la technologie durable et accessible à tous.",
-      "ctaText": "Manifester son intérêt",
-      "benefitsTitle": "Avantages du bénévolat",
-      "flexibilityNote": "Nous comprenons que chacun a des horaires différents. Nous proposons des activités bénévoles flexibles qui s'adaptent à vos autres engagements. Que vous puissiez consacrer quelques heures par semaine ou davantage — votre contribution fera la différence.",
-      "howToStartTitle": "Comment commencer",
-      "steps": [
-        "Contactez-nous pour manifester votre intérêt",
-        "Rencontrez notre équipe pour discuter de vos compétences et de vos centres d'intérêt",
-        "Participez à une brève séance d'introduction",
-        "Commencez à faire la différence !"
-      ]
-    },
-    "donate": {
-      "meta": {
-        "title": "Faire un don",
-        "description": "Aider directement. Chaque don sauve des appareils des déchets électroniques et rend la technologie accessible à tous."
+      "description": "Rejoignez notre équipe et aidez à rendre la technologie durable et accessible.",
+      "ctaText": "Exprimer son intérêt",
+      "overview": {
+        "title": "Pourquoi faire du bénévolat chez Revamp-IT?",
+        "content": "Chez Revamp-IT, nous croyons que tout le monde devrait avoir accès à la technologie. En tant que bénévole, vous ferez partie d'une communauté qui concrétise cette vision."
       },
-      "heroTitle": "Aider directement.",
-      "heroDescription": "Chaque don sauve des appareils des déchets électroniques, prolonge leur cycle de vie et permet l'accès à la technologie pour ceux qui ne pourraient pas se l'offrir autrement.",
-      "transferNow": "Virer maintenant",
-      "transparencyLabel": "Transparence",
-      "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "Budget annuel (association à but non lucratif)",
-      "devicesSavedLabel": "appareils sauvés chaque année",
-      "co2SavedLabel": "économisés par an",
-      "impactTitle": "L'impact de votre don",
-      "recommended": "Recommandé",
-      "chooseAmount": "Choisir le montant et virer",
-      "bankTransferTitle": "Virement bancaire",
-      "bankTransferDescription": "Virez sur le compte suivant :",
-      "recipient": "Bénéficiaire",
-      "iban": "IBAN",
-      "bank": "Banque",
-      "purpose": "Motif du paiement",
-      "copy": "Copier",
-      "copyIban": "Copier l'IBAN",
-      "donateDevicesTitle": "Faire don d'appareils",
-      "donateDevicesDescription": "Le matériel dont vous n'avez plus besoin peut offrir une vraie chance à quelqu'un d'autre. Nous acceptons les appareils fonctionnels ou réparables, les remettons en état et les redistribuons.",
-      "weAccept": "Ce que nous acceptons :",
-      "weAcceptList": "Laptops, PC de bureau, moniteurs, claviers, souris, imprimantes — fonctionnels ou réparables.",
-      "weDoNotAccept": "Ce que nous n'acceptons pas :",
-      "weDoNotAcceptList": "Appareils physiquement endommagés, écrans défectueux sans cadre, moniteurs CRT.",
-      "preparation": "Préparation :",
-      "preparationText": "Veuillez effacer vos données personnelles avant de déposer l'appareil (nous pouvons vous aider si nécessaire).",
-      "dropOffAddress": "Adresse de dépôt",
-      "questions": "Questions? Écrivez-nous →",
-      "newsletterTitle": "Nous vous informerons de l'impact de votre don.",
-      "newsletterDescription": "Pas de publicité. Uniquement de vraies mises à jour sur les appareils sauvés, le CO₂ économisé et les personnes aidées.",
-      "purposeTemplate": "Don {org} {month} {year}",
-      "months": [
-        "Janvier",
-        "Février",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobre",
-        "Novembre",
-        "Décembre"
+      "benefitsHeading": "Avantages du bénévolat",
+      "benefits": [
+        {
+          "title": "Expérience pratique",
+          "description": "Travaillez directement avec du matériel et des logiciels et acquérez une expérience pratique."
+        },
+        {
+          "title": "Apprendre de nouvelles compétences",
+          "description": "Développez des compétences techniques et sociales grâce à nos programmes de formation."
+        },
+        {
+          "title": "Impact communautaire",
+          "description": "Faites une vraie différence dans votre communauté en aidant à rendre la technologie accessible."
+        },
+        {
+          "title": "Rejoindre notre équipe",
+          "description": "Faites partie d'une équipe diversifiée et passionnée travaillant vers un objectif commun."
+        }
       ],
-      "impact": {
-        "tier1Title": "1 appareil sauvé",
-        "tier1Description": "1 laptop sauvé des déchets électroniques + 285 kg de CO₂ évités.",
-        "tier2Title": "2 appareils + place en atelier",
-        "tier2Description": "2 appareils remis en état + une place dans notre atelier Linux pour quelqu'un qui ne pourrait pas se l'offrir.",
-        "tier3Title": "Don d'entreprise — 10 appareils",
-        "tier3Description": "10 appareils pour des établissements scolaires, des projets sociaux ou des ménages à faibles revenus."
+      "sections": [
+        {
+          "title": "Rôles de bénévoles",
+          "items": [
+            "Aider à la remise en état et à la réparation des ordinateurs",
+            "Assister dans nos ateliers et programmes de formation",
+            "Soutenir nos initiatives communautaires",
+            "Contribuer à la documentation",
+            "Aider aux tâches administratives"
+          ]
+        },
+        {
+          "title": "Engagement en temps",
+          "description": "Nous comprenons que tout le monde a des horaires différents. Nous offrons des options flexibles.",
+          "items": [
+            "Options d'horaires flexibles",
+            "Opportunités régulières et occasionnelles",
+            "Options à distance et sur site"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Aucune expérience requise",
+          "content": "Ne vous inquiétez pas si vous n'avez pas d'expérience technique. Nous fournissons toute la formation nécessaire."
+        },
+        {
+          "title": "Votre impact",
+          "content": "En tant que bénévole, vous ferez partie d'un mouvement qui rend la technologie plus durable et accessible."
+        }
+      ],
+      "howToStart": {
+        "title": "Comment commencer",
+        "steps": [
+          "Contactez-nous pour exprimer votre intérêt",
+          "Rencontrez notre équipe pour discuter de vos compétences",
+          "Participez à une brève séance d'orientation",
+          "Commencez à faire une différence!"
+        ]
+      }
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "Experts techniques",
+        "description": "Partagez votre expertise technique et aidez-nous à développer des solutions innovantes."
       },
-      "devices": {
-        "laptop": "Laptops",
-        "desktop": "PC de bureau",
-        "monitor": "Moniteurs",
-        "peripherals": "Périphériques"
+      "title": "Experts techniques",
+      "description": "Partagez votre expertise et aidez-nous à développer des solutions innovantes.",
+      "ctaText": "Exprimer son intérêt",
+      "benefitsHeading": "Opportunités pour les experts techniques",
+      "overview": {
+        "title": "Rejoignez notre équipe technique",
+        "content": "Nous recherchons toujours des experts techniques qui partagent notre passion pour la technologie durable."
+      },
+      "benefits": [
+        {
+          "title": "Développement open-source",
+          "description": "Contribuez à nos projets open-source."
+        },
+        {
+          "title": "Innovation matérielle",
+          "description": "Travaillez sur des projets hardware durables."
+        },
+        {
+          "title": "Partage de connaissances",
+          "description": "Partagez votre expertise via des ateliers et du mentorat."
+        },
+        {
+          "title": "Leadership de projet",
+          "description": "Dirigez des initiatives techniques."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Domaines techniques",
+          "items": [
+            "Développement logiciel (Python, JavaScript, Linux)",
+            "Développement et réparation hardware",
+            "Administration système",
+            "Ingénierie réseau",
+            "Gestion de bases de données",
+            "Sécurité et protection des données",
+            "Documentation technique"
+          ]
+        },
+        {
+          "title": "Projets actuels",
+          "items": [
+            "Développement de logiciels comptables open-source",
+            "Automatisation de la remise à neuf hardware",
+            "Développement de plateformes éducatives",
+            "Outils d'administration système",
+            "Documentation et base de connaissances"
+          ]
+        },
+        {
+          "title": "Avantages",
+          "items": [
+            "Travaillez sur des projets significatifs",
+            "Collaboration avec une équipe diverse",
+            "Accès à notre atelier",
+            "Opportunités de leadership",
+            "Contributions flexibles"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Focus open-source",
+          "content": "Nous croyons en la puissance des logiciels et matériels open-source."
+        }
+      ],
+      "howToStart": {
+        "title": "Comment commencer",
+        "steps": [
+          "Contactez-nous avec votre domaine d'expertise",
+          "Discutez des projets possibles",
+          "Examinez nos directives de développement",
+          "Commencez à contribuer"
+        ]
+      }
+    },
+    "internships": {
+      "meta": {
+        "title": "Stages",
+        "description": "Acquérez une expérience pratique en technologie et durabilité."
+      },
+      "title": "Opportunités de stage",
+      "description": "Acquérez une expérience précieuse en technologie et durabilité.",
+      "ctaText": "Exprimer son intérêt",
+      "benefitsHeading": "Avantages du programme",
+      "overview": {
+        "title": "Notre programme de stage",
+        "content": "Notre programme offre une opportunité unique d'acquérir une expérience pratique en technologie durable."
+      },
+      "benefits": [
+        {
+          "title": "Expérience pratique",
+          "description": "Travaillez sur de vrais projets."
+        },
+        {
+          "title": "Développement professionnel",
+          "description": "Apprenez de mentors expérimentés."
+        },
+        {
+          "title": "Collaboration en équipe",
+          "description": "Travaillez avec une équipe diverse."
+        },
+        {
+          "title": "Opportunités d'apprentissage",
+          "description": "Accès aux ressources de formation."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Postes disponibles",
+          "items": [
+            "Remise à neuf et réparation hardware",
+            "Développement logiciel",
+            "Administration système",
+            "Gestion de projet",
+            "Travail communautaire",
+            "Documentation technique"
+          ]
+        },
+        {
+          "title": "Ce que vous apprendrez",
+          "items": [
+            "Dépannage hardware et logiciel",
+            "Gestion de projet",
+            "Documentation technique",
+            "Engagement communautaire",
+            "Pratiques technologiques durables"
+          ]
+        },
+        {
+          "title": "Exigences",
+          "items": [
+            "Inscrit ou diplômé dans des études pertinentes",
+            "Passion pour la technologie et la durabilité",
+            "Capacité à s'engager pour la durée du programme",
+            "Compétences informatiques de base",
+            "Prêt à apprendre et à contribuer"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Arrangements flexibles",
+          "content": "Nous offrons des arrangements flexibles pour s'adapter à vos engagements."
+        }
+      ],
+      "howToStart": {
+        "title": "Comment postuler",
+        "steps": [
+          "Envoyez-nous votre CV et une lettre de motivation",
+          "Indiquez votre domaine d'intérêt et votre disponibilité",
+          "Participez à un bref entretien",
+          "Commencez votre aventure de stage!"
+        ]
       }
     },
     "partnerships": {
       "meta": {
         "title": "Partenariats",
-        "description": "Travaillez avec nous pour créer des solutions technologiques durables et avoir un impact durable."
+        "description": "Créez des solutions technologiques durables ensemble."
       },
       "title": "Opportunités de partenariat",
-      "ctaText": "Manifester son intérêt",
-      "benefitsTitle": "Avantages du partenariat",
-      "processTitle": "Comment nous collaborons",
-      "processSteps": [
-        "Première consultation pour comprendre les objectifs et les possibilités",
-        "Développement du cadre et des objectifs du partenariat",
-        "Mise en œuvre d'initiatives coopératives",
-        "Révisions régulières des progrès et évaluation de l'impact",
-        "Amélioration continue et développement du partenariat"
+      "description": "Joignez-vous à nous pour créer des solutions technologiques durables.",
+      "ctaText": "Exprimer son intérêt",
+      "benefitsHeading": "Avantages du partenariat",
+      "overview": {
+        "title": "Pourquoi collaborer avec nous?",
+        "content": "Chez Revamp-IT, nous croyons en la puissance de la collaboration."
+      },
+      "benefits": [
+        {
+          "title": "Impact partagé",
+          "description": "Amplifiez l'impact de votre organisation."
+        },
+        {
+          "title": "Réseau mondial",
+          "description": "Connectez-vous avec des organisations partageant les mêmes idées."
+        },
+        {
+          "title": "Partage des ressources",
+          "description": "Accédez aux ressources partagées."
+        },
+        {
+          "title": "Collaboration stratégique",
+          "description": "Développez des solutions innovantes."
+        }
       ],
-      "howToStartTitle": "Comment commencer",
-      "howToStartSteps": [
-        "Contactez-nous pour discuter des opportunités de partenariat",
-        "Partagez les objectifs et les intérêts de votre organisation",
-        "Explorez les domaines de collaboration potentiels",
-        "Élaborez un accord de partenariat",
-        "Commencez votre parcours de partenariat"
-      ]
-    },
-    "internships": {
-      "meta": {
-        "title": "Stages",
-        "description": "Acquérez une expérience pratique en technologie et en durabilité grâce à notre programme de stages."
+      "sections": [
+        {
+          "title": "Modèles de partenariat",
+          "items": [
+            "Partenariats d'entreprise",
+            "Collaboration avec des établissements d'enseignement",
+            "Alliances avec des organisations à but non lucratif",
+            "Partenariats avec des fournisseurs de technologie",
+            "Collaboration avec des organisations communautaires"
+          ]
+        },
+        {
+          "title": "Domaines de collaboration",
+          "items": [
+            "Programmes de remise à neuf technologique",
+            "Initiatives éducatives",
+            "Recherche et développement",
+            "Programmes de sensibilisation communautaire",
+            "Projets de durabilité"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Programmes de partenariat sur mesure",
+          "content": "Nos programmes sont adaptés aux objectifs de votre organisation."
+        }
+      ],
+      "partnershipProcess": {
+        "title": "Comment nous collaborons",
+        "steps": [
+          "Consultation initiale",
+          "Développement du cadre de partenariat",
+          "Mise en œuvre d'initiatives coopératives",
+          "Examens de progrès réguliers",
+          "Amélioration continue"
+        ]
       },
-      "title": "Opportunités de stage",
-      "description": "Acquérez une expérience précieuse en technologie et en durabilité tout en ayant un impact réel.",
-      "ctaText": "Manifester son intérêt",
-      "benefitsTitle": "Avantages du programme",
-      "howToApplyTitle": "Comment postuler",
-      "howToApplySteps": [
-        "Envoyez-nous votre CV et une lettre de motivation",
-        "Indiquez votre domaine d'intérêt et votre disponibilité",
-        "Participez à un court entretien",
-        "Commencez votre stage !"
-      ]
-    },
-    "technicalExperts": {
-      "meta": {
-        "title": "Experts techniques",
-        "description": "Partagez votre expertise technique et aidez-nous à développer des solutions innovantes pour une technologie durable."
-      },
-      "title": "Experts techniques",
-      "description": "Partagez votre expertise et aidez-nous à développer des solutions innovantes pour une technologie durable.",
-      "ctaText": "Manifester son intérêt",
-      "opportunitiesTitle": "Opportunités pour les experts techniques",
-      "howToStartTitle": "Comment commencer",
-      "howToStartSteps": [
-        "Contactez-nous avec votre domaine de spécialisation et vos intérêts",
-        "Discutez des projets et contributions possibles",
-        "Consultez nos directives et processus de développement",
-        "Commencez à contribuer à nos projets"
-      ]
-    },
-    "itHilfeTechniker": {
-      "meta": {
-        "title": "Technicien aide informatique",
-        "description": "Partagez vos connaissances en informatique et aidez des personnes dans votre communauté — avec flexibilité et un impact réel."
-      },
-      "title": "Devenir technicien aide informatique",
-      "description": "Vos connaissances en informatique peuvent faciliter la vie des autres. Aidez des personnes de la communauté avec leurs ordinateurs — de manière flexible, simple et efficace.",
-      "ctaText": "S'inscrire comme technicien",
-      "benefitsTitle": "Ce que vous y gagnez",
-      "howToStartTitle": "Comment commencer",
-      "howToStartSteps": [
-        "Créez votre profil de technicien avec vos compétences et disponibilités",
-        "Attendez les demandes — vous décidez lesquelles vous acceptez",
-        "Fixez un rendez-vous directement avec la personne qui demande de l'aide",
-        "Aidez, apprenez, faites la différence"
-      ]
+      "howToStart": {
+        "title": "Comment commencer",
+        "steps": [
+          "Contactez-nous pour discuter des opportunités",
+          "Partagez les objectifs de votre organisation",
+          "Explorez les domaines de collaboration potentiels",
+          "Développez un accord de partenariat",
+          "Commencez votre aventure de partenariat"
+        ]
+      }
     },
     "workReintegration": {
       "meta": {
-        "title": "Réinsertion professionnelle",
-        "description": "Participez à notre programme de réinsertion professionnelle pour acquérir des compétences et de l'expérience précieuses dans le domaine technologique tout en reconstruisant votre carrière."
+        "title": "Réintégration professionnelle",
+        "description": "Rejoignez notre programme pour acquérir des compétences précieuses et reconstruire votre carrière."
       },
-      "title": "Programme de réinsertion professionnelle",
-      "description": "Rejoignez notre programme de soutien pour reconstruire votre carrière dans la technologie et la durabilité.",
-      "ctaText": "Manifester son intérêt",
-      "benefitsTitle": "Avantages du programme",
-      "howToStartTitle": "Comment commencer",
-      "howToStartSteps": [
-        "Contactez-nous pour discuter de votre situation",
-        "Rencontrez notre équipe pour une évaluation",
-        "Développez votre plan personnalisé",
-        "Commencez votre parcours de réinsertion professionnelle"
-      ]
+      "title": "Programme de réintégration professionnelle",
+      "description": "Rejoignez notre programme de soutien pour reconstruire votre carrière.",
+      "ctaText": "Exprimer son intérêt",
+      "benefitsHeading": "Avantages du programme",
+      "overview": {
+        "title": "Notre programme",
+        "content": "Notre programme est conçu pour aider les personnes à reconstruire leur carrière dans un environnement de soutien."
+      },
+      "benefits": [
+        {
+          "title": "Développement des compétences",
+          "description": "Apprenez des compétences pratiques."
+        },
+        {
+          "title": "Croissance professionnelle",
+          "description": "Enrichissez votre CV avec une expérience réelle."
+        },
+        {
+          "title": "Environnement de soutien",
+          "description": "Travaillez dans une équipe compréhensive."
+        },
+        {
+          "title": "Travail significatif",
+          "description": "Contribuez à des projets qui font la différence."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Caractéristiques du programme",
+          "items": [
+            "Expérience de travail structurée",
+            "Formation et développement professionnel",
+            "Soutien et mentorat individuels",
+            "Options d'horaires flexibles",
+            "Augmentation progressive de la charge de travail"
+          ]
+        },
+        {
+          "title": "Ce que vous apprendrez",
+          "items": [
+            "Hardware et logiciel informatique",
+            "Dépannage technique",
+            "Service client",
+            "Collaboration en équipe",
+            "Gestion de projet"
+          ]
+        },
+        {
+          "title": "Services de soutien",
+          "items": [
+            "Bilans réguliers",
+            "Accès aux services de conseil",
+            "Aménagements du lieu de travail",
+            "Orientation et planification de carrière",
+            "Opportunités de networking"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Approche individualisée",
+          "content": "Notre programme est flexible et peut être adapté à vos besoins spécifiques."
+        },
+        {
+          "title": "Confidentialité",
+          "content": "Nous maintenons une stricte confidentialité tout au long du programme."
+        }
+      ],
+      "howToStart": {
+        "title": "Comment commencer",
+        "steps": [
+          "Contactez-nous pour discuter de votre situation",
+          "Rencontrez notre équipe pour une évaluation",
+          "Développez votre plan personnalisé",
+          "Commencez votre parcours de réintégration"
+        ]
+      }
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "Technicien IT Help",
+        "description": "Partagez vos connaissances IT et aidez les gens dans votre communauté."
+      },
+      "title": "Devenir technicien IT Help",
+      "description": "Vos connaissances IT peuvent faciliter la vie des autres.",
+      "ctaText": "S'inscrire comme technicien",
+      "benefitsHeading": "Ce que vous y gagnez",
+      "overview": {
+        "title": "Ce que signifie IT Help",
+        "content": "Beaucoup de gens — personnes âgées, réfugiés — ont du mal avec leur ordinateur quotidiennement. Vous avez les connaissances pour aider."
+      },
+      "benefits": [
+        {
+          "title": "Mettre vos connaissances à profit",
+          "description": "Vos connaissances IT sont nécessaires pour les gens de votre communauté."
+        },
+        {
+          "title": "Aider de manière flexible",
+          "description": "Vous décidez quand et combien. À partir de deux heures par mois."
+        },
+        {
+          "title": "Construire une communauté",
+          "description": "Vous faites partie d'un réseau de bénévoles."
+        },
+        {
+          "title": "Acquérir de l'expérience",
+          "description": "Expliquer et résoudre des problèmes en pratique affine vos compétences."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Ce que font les techniciens",
+          "items": [
+            "Diagnostiquer et résoudre des problèmes logiciels",
+            "Configurer des appareils",
+            "Effectuer des installations Linux",
+            "Donner des introductions courtes",
+            "Visites à domicile sur demande"
+          ]
+        },
+        {
+          "title": "Exigences",
+          "items": [
+            "Connaissances de base en IT",
+            "Plaisir à expliquer les choses simplement",
+            "Patience envers les personnes avec peu d'expérience",
+            "Disponibilité d'environ 2 heures par mois"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Pas de perfectionnistes recherchés",
+          "content": "Vous n'avez pas besoin de tout savoir. Nous cherchons des personnes qui aiment aider."
+        }
+      ],
+      "howToStart": {
+        "title": "Comment commencer",
+        "steps": [
+          "Créez votre profil de technicien",
+          "Attendez les demandes",
+          "Arrangez un rendez-vous",
+          "Aidez, apprenez, faites la différence"
+        ]
+      }
     },
     "kontakt": {
       "meta": {
-        "title": "Manifester son intérêt",
-        "description": "Écrivez-nous brièvement ce qui vous intéresse — nous vous répondrons personnellement."
+        "title": "Exprimer son intérêt",
+        "description": "Écrivez-nous brièvement ce qui vous intéresse."
       },
-      "backToInvolvement": "Toutes les façons de participer",
-      "title": "Intérêt pour {topic}",
-      "description": "Dites-nous brièvement qui vous êtes et ce qui vous intéresse. Nous vous répondrons personnellement.",
+      "backLink": "Toutes les façons de s'impliquer",
+      "titlePrefix": "Intérêt pour",
+      "body": "Dites-nous brièvement qui vous êtes et ce qui vous intéresse. Nous vous répondrons personnellement.",
+      "defaultTopic": "S'impliquer",
       "topics": {
         "freiwilligenarbeit": "Bénévolat",
         "praktikum": "Stage",
-        "wiedereinstieg": "Réinsertion professionnelle",
+        "wiedereinstieg": "Réintégration professionnelle",
         "technische-experten": "Experts techniques",
         "partnerschaft": "Partenariat",
-        "it-hilfe-techniker": "Technicien aide informatique",
-        "default": "Participer"
+        "it-hilfe-techniker": "Technicien IT Help"
       }
     }
   },
@@ -2045,7 +3153,8 @@
       "noListingsTitle": "Aucune annonce active",
       "noListingsDescription": "Ce vendeur n'a actuellement aucune annonce active.",
       "loadingProfile": "Chargement du profil...",
-      "sellerNotFound": "Vendeur introuvable"
+      "sellerNotFound": "Vendeur introuvable",
+      "errorLoading": "Erreur lors du chargement du profil"
     }
   },
   "support": {
@@ -2162,39 +3271,40 @@
   "datenschutz": {
     "meta": {
       "title": "Politique de confidentialité",
-      "description": "Politique de confidentialité de revamp-it"
+      "description": "Politique de confidentialité de {orgName}"
     },
     "title": "Politique de confidentialité",
     "section1": {
-      "title": "1. Responsable du traitement"
+      "title": "1. Responsable du traitement",
+      "emailLabel": "E-mail :"
     },
     "section2": {
       "title": "2. Collecte et traitement des données personnelles",
-      "intro": "Nous collectons des données personnelles lorsque vous vous inscrivez sur notre plateforme, utilisez nos services ou entrez en contact avec nous. Cela comprend :",
+      "intro": "Nous collectons des données personnelles lorsque vous vous inscrivez sur notre plateforme, utilisez nos services ou nous contactez. Cela comprend :",
       "items": [
         "Nom et adresse e-mail (lors de l'inscription)",
-        "Coordonnées (lors de demandes et de réservations)",
+        "Coordonnées (pour les demandes et réservations)",
         "Données d'utilisation (lors de l'utilisation de la plateforme)"
       ]
     },
     "section3": {
-      "title": "3. Finalité du traitement des données",
+      "title": "3. Finalité du traitement",
       "intro": "Vos données sont utilisées pour :",
       "items": [
-        "La mise à disposition et la gestion de votre compte utilisateur",
-        "L'exécution des réparations et des services",
-        "La gestion des inscriptions aux ateliers",
-        "L'exploitation de la place de marché P2P",
-        "La communication relative à nos offres (uniquement avec votre consentement)"
+        "Fournir et gérer votre compte utilisateur",
+        "Exécuter les ordres de réparation et les services",
+        "Gérer les inscriptions aux ateliers",
+        "Exploiter la marketplace P2P",
+        "Communiquer sur nos offres (uniquement avec votre consentement)"
       ]
     },
     "section4": {
-      "title": "4. Transmission des données",
-      "body": "Vos données ne sont pas vendues à des tiers. Une transmission n'a lieu que si elle est nécessaire à la fourniture de nos services (par ex. à des prestataires de réparation pour des réparations réservées) ou si nous y sommes légalement tenus."
+      "title": "4. Partage des données",
+      "body": "Vos données ne seront pas vendues à des tiers. Le partage n'a lieu que si cela est nécessaire pour fournir nos services (p. ex. aux prestataires de réparation pour les réparations réservées) ou si nous y sommes légalement obligés."
     },
     "section5": {
       "title": "5. Sécurité des données",
-      "body": "Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données contre tout accès non autorisé, perte ou utilisation abusive. Les mots de passe sont stockés exclusivement sous forme hachée."
+      "body": "Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données contre tout accès non autorisé, perte ou abus. Les mots de passe sont stockés exclusivement sous forme hachée."
     },
     "section6": {
       "title": "6. Cookies",
@@ -2202,31 +3312,31 @@
     },
     "section7": {
       "title": "7. Vos droits",
-      "intro": "Vous avez le droit :",
+      "intro": "Vous avez le droit à :",
       "items": [
-        "D'accéder à vos données stockées",
-        "De corriger les données inexactes",
-        "De supprimer vos données",
-        "De restreindre le traitement",
-        "À la portabilité des données (export)",
-        "De révoquer les consentements accordés"
+        "L'accès à vos données stockées",
+        "La rectification des données inexactes",
+        "La suppression de vos données",
+        "La limitation du traitement",
+        "La portabilité des données (export des données)",
+        "Le retrait des consentements accordés"
       ],
-      "exportText": "Les utilisateurs enregistrés peuvent télécharger à tout moment une copie complète de leurs données sous",
-      "exportLink": "Paramètres → Confidentialité",
+      "downloadText": "Les utilisateurs inscrits peuvent télécharger à tout moment une copie complète de leurs données sous",
+      "settingsLinkLabel": "Paramètres → Confidentialité",
       "contactText": "Pour toute autre demande, veuillez contacter :"
     },
     "section8": {
       "title": "8. Durée de conservation",
-      "body": "Nous conservons vos données personnelles uniquement aussi longtemps que nécessaire aux fins mentionnées ou que des obligations légales de conservation l'exigent. Les données de compte et de profil sont supprimées après la fermeture du compte, sauf obligations légales contraires (par ex. conservation fiscale des factures)."
+      "body": "Nous conservons vos données personnelles uniquement aussi longtemps que nécessaire aux fins mentionnées ou que les délais légaux de conservation l'exigent. Les données de compte et de profil seront supprimées après la suppression du compte, sauf si des obligations légales (p. ex. conservation fiscale des factures) s'y opposent."
     },
     "section9": {
       "title": "9. Base juridique",
-      "body": "Le traitement est fondé sur la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, sur l'art. 6 al. 1 du RGPD (exécution d'un contrat, intérêts légitimes, consentement)."
+      "body": "Le traitement est fondé sur la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, sur l'art. 6, al. 1 du RGPD (exécution du contrat, intérêts légitimes, consentement)."
     },
     "section10": {
       "title": "10. Droit applicable",
-      "body": "La présente politique de confidentialité est soumise à la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, au Règlement général sur la protection des données (RGPD).",
-      "impressumLinkLabel": "mentions légales"
+      "body": "Cette politique de confidentialité est régie par la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, par le Règlement général européen sur la protection des données (RGPD). Voir aussi notre",
+      "impressumLinkLabel": "Mentions légales"
     },
     "asOf": "En vigueur depuis : mars 2026"
   },
@@ -2264,7 +3374,7 @@
   "transparenz": {
     "meta": {
       "title": "Transparence",
-      "description": "Ce que nous faisons et comment nous le faisons. Aperçu de la mission, des chiffres et du mode de fonctionnement."
+      "description": "Ce que nous faisons et comment nous le faisons. Aperçu de la mission, des chiffres et des méthodes de travail de {orgName}."
     },
     "hero": {
       "title": "Transparence",
@@ -2272,44 +3382,44 @@
     },
     "mission": {
       "title": "Notre mission",
-      "text": "{description} En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons pour que le matériel d'occasion ait une seconde vie, que les logiciels libres soient accessibles à tous, et que les personnes puissent apprendre à utiliser la technologie de manière autonome."
+      "body": "En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons à donner une seconde vie au matériel usagé, à rendre les logiciels libres accessibles à tous et à permettre aux gens d'apprendre à utiliser la technologie de manière autonome."
     },
     "stats": {
       "title": "Chiffres & faits",
-      "detailLink": "Voir les chiffres d'impact détaillés"
+      "moreLink": "Voir les chiffres d'impact détaillés"
     },
     "howWeWork": {
       "title": "Comment nous travaillons",
-      "subtitle": "Nos trois plateformes communautaires relient les personnes à la technologie.",
-      "toPlatform": "Vers la plateforme",
-      "platforms": [
-        {
-          "title": "Place de marché",
-          "description": "Plateforme communautaire pour les équipements informatiques d'occasion. Les utilisateurs peuvent créer des annonces, acheter et vendre – sans frais.",
-          "href": "/marketplace"
-        },
-        {
-          "title": "Aide informatique",
-          "description": "Mise en relation avec des techniciens bénévoles pour les réparations informatiques. Une aide de personne à personne, locale et simple.",
-          "href": "/it-hilfe"
-        },
-        {
-          "title": "Ateliers",
-          "description": "Cours sur Linux, matériel, programmation et IA. Partager des connaissances et apprendre les uns des autres – en présentiel à Zurich.",
-          "href": "/workshops"
-        }
-      ]
+      "subtitle": "Nos trois plateformes communautaires connectent les personnes à la technologie.",
+      "platformCta": "Aller à la plateforme"
     },
+    "platforms": [
+      {
+        "title": "Marché",
+        "description": "Plateforme communautaire pour les appareils IT d'occasion. Les utilisateurs peuvent créer des annonces, acheter et vendre — sans frais.",
+        "href": "/marketplace"
+      },
+      {
+        "title": "Aide informatique",
+        "description": "Mise en relation de techniciens bénévoles pour les réparations informatiques. Aide de personne à personne, locale et simple.",
+        "href": "/it-hilfe"
+      },
+      {
+        "title": "Ateliers",
+        "description": "Cours sur Linux, le matériel, la programmation et l'IA. Partager les connaissances et apprendre les uns des autres — sur place à Zurich.",
+        "href": "/workshops"
+      }
+    ],
     "finances": {
       "title": "Finances",
-      "text": "En tant qu'association à but non lucratif, nous rendons nos finances publiques. Le rapport annuel est présenté à l'assemblée générale et consultable par les membres.",
-      "memberLink": "Devenir membre et obtenir un accès"
+      "body": "En tant qu'association à but non lucratif, nous divulguons nos finances. Le rapport annuel est présenté lors de l'assemblée générale et est accessible aux membres.",
+      "memberLink": "Devenir membre et avoir un aperçu"
     },
     "board": {
-      "title": "Comité directeur",
-      "text": "{orgName} est dirigé par un comité directeur bénévole. Contact :",
-      "joinCta": "Devenir membre",
-      "donateCta": "Faire un don"
+      "title": "Comité",
+      "body": "{orgName} est géré par un comité bénévole. Contact :",
+      "joinBtn": "Devenir membre",
+      "donateBtn": "Faire un don"
     }
   },
   "notFound": {
@@ -2353,86 +3463,152 @@
       "software": "Projets logiciels",
       "hardware": "Projets matériels",
       "community": "Projets communautaires"
-    }
+    },
+    "items": [
+      {
+        "title": "Kivitendo Mode CH",
+        "description": "Depuis juillet 2015, revamp-it est partenaire premium du projet Kivitendo. Dès 2005, nous avons cherché - d'abord pour nos propres besoins, puis pour satisfaire ceux de nos clients - une solution logicielle pour la comptabilité, la gestion des ressources et des clients.",
+        "category": "software",
+        "status": "active",
+        "features": [
+          "Partenariat premium depuis 2015",
+          "Comptabilité et gestion des ressources",
+          "Gestion des clients",
+          "Système ERP open source"
+        ]
+      },
+      {
+        "title": "Verein Linuxola",
+        "description": "Linuxola a été fondé le 2 décembre 2005 par huit personnes de différentes régions de Suisse. L'objectif de l'organisation est d'offrir à nos partenaires en Afrique l'accès aux technologies de l'information et une connexion aux biens communs numériques mondiaux.",
+        "category": "community",
+        "status": "active",
+        "features": [
+          "Fondation suisse avec 8 personnes",
+          "Focus sur les partenariats africains",
+          "Accès aux technologies de l'information",
+          "Connexion aux biens communs numériques"
+        ]
+      },
+      {
+        "title": "FreieComputer.ch",
+        "description": "Le label suisse pour les ordinateurs avec logiciels libres préinstallés et support garanti! revamp-it, avec le soutien de la communauté open source engagée, a contribué à la création de ce label.",
+        "category": "community",
+        "status": "active",
+        "features": [
+          "Label suisse pour logiciels libres",
+          "Logiciels open source préinstallés",
+          "Support garanti",
+          "Soutien de la communauté"
+        ]
+      },
+      {
+        "title": "Compirat",
+        "description": "Compirat est une collaboration entre Caritas Zurich et revamp-it. Grâce à Compirat, les personnes aux ressources limitées dans le canton de Zurich ont la possibilité d'apprendre à utiliser les ordinateurs près de chez elles.",
+        "category": "community",
+        "status": "active",
+        "features": [
+          "Partenariat avec Caritas Zurich",
+          "Soutien aux personnes aux ressources limitées",
+          "Cours d'informatique dans le canton de Zurich",
+          "Possibilités d'apprentissage locales"
+        ]
+      },
+      {
+        "title": "Développement matériel",
+        "description": "Le travail de développement matériel chez revamp-it se concentre sur la découverte de nouvelles possibilités pour le matériel informatique mis hors service, l'optimisation de la consommation d'énergie et de ressources, et la création de guides pour l'assemblage de matériel open source.",
+        "category": "hardware",
+        "status": "ongoing",
+        "features": [
+          "Recyclage du matériel mis hors service",
+          "Optimisation de l'énergie et des ressources",
+          "Guides matériel open source",
+          "Développement durable"
+        ]
+      },
+      {
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "Le Linux Terminal Server Project se concentre sur l'utilisation de la puissance d'un serveur rapide et performant connecté via un réseau à des ordinateurs plus anciens et plus lents. Cela permet à plusieurs utilisateurs de travailler simultanément sur leurs clients connectés au même serveur.",
+        "category": "software",
+        "status": "active",
+        "features": [
+          "Solution serveur basée sur le réseau",
+          "Utilisation efficace du matériel ancien",
+          "Informatique multi-utilisateurs",
+          "Optimisation des ressources"
+        ]
+      }
+    ]
   },
   "revamped": {
     "meta": {
-      "title": "Certification REVAMPED | Ordinateurs durables",
-      "description": "Découvrez notre certification exclusive REVAMPED – qui garantit durabilité, qualité et performance dans chaque ordinateur que nous construisons."
+      "title": "Certification REVAMPED | Builds d'ordinateurs durables",
+      "description": "Découvrez notre certification REVAMPED exclusive – garantissant durabilité, qualité et performance dans chaque ordinateur que nous construisons."
     },
     "hero": {
       "title": "La certification REVAMPED",
-      "subtitle": "Chaque ordinateur que nous construisons reçoit notre label exclusif REVAMPED – une garantie de durabilité, de qualité et de performance qui établit une nouvelle norme dans l'industrie.",
-      "badge": {
-        "sustainability": "Axé durabilité",
-        "quality": "Garantie de qualité",
-        "ai": "Optimisé par IA"
-      }
+      "subtitle": "Chaque ordinateur que nous construisons reçoit notre label REVAMPED exclusif – une garantie de durabilité, qualité et performance qui établit un nouveau standard dans le secteur.",
+      "badge1": "Focus durabilité",
+      "badge2": "Garantie qualité",
+      "badge3": "Builds optimisés par IA"
     },
-    "inAction": {
+    "heroSection": {
       "title": "De vrais ordinateurs REVAMPED en action",
-      "subtitle": "Une technologie durable que les gens aiment utiliser. Notre certification REVAMPED n'est pas seulement une promesse – c'est un engagement visible en faveur de la qualité et de la responsabilité environnementale.",
-      "points": [
-        "Principalement des composants d'occasion et reconditionnés",
-        "Réduction significative de l'impact environnemental",
-        "Garantie de qualité sur chaque configuration",
-        "Autocollant de certification physique inclus"
-      ],
-      "ctaBuild": "Construire votre ordinateur",
-      "ctaLearn": "En savoir plus sur la certification"
+      "body": "Technologie durable que les gens aiment utiliser. Notre certification REVAMPED n'est pas seulement une promesse – c'est un engagement visible envers la qualité et la responsabilité environnementale.",
+      "check1": "Principalement des composants usagés et reconditionnés",
+      "check2": "Réduction significative de l'impact environnemental",
+      "check3": "Garantie qualité sur chaque build",
+      "check4": "Autocollant de certification physique inclus",
+      "buildBtn": "Construire votre ordinateur",
+      "learnBtn": "En savoir plus sur la certification"
     },
-    "meaning": {
-      "title": "Ce que signifie \"REVAMPED\"",
-      "subtitle": "Notre certification n'est pas qu'un label – c'est une norme globale qui garantit que chaque ordinateur répond à nos critères stricts de durabilité, de qualité et de performance.",
-      "pillars": [
-        {
-          "title": "La durabilité en premier",
-          "description": "Nous priorisons les composants d'occasion et reconditionnés partout où c'est possible, réduisant ainsi drastiquement l'impact environnemental tout en maintenant des performances de pointe. Nous appliquons les principes de l'économie circulaire dans chaque configuration."
-        },
-        {
-          "title": "La qualité garantie",
-          "description": "Chaque composant est soigneusement testé, nettoyé et vérifié pour répondre à nos normes strictes de performance et de fiabilité. La qualité n'est jamais compromise au nom de la durabilité."
-        },
-        {
-          "title": "Optimisé par IA",
-          "description": "Notre IA assure une compatibilité parfaite des composants et un réglage optimal des performances pour votre cas d'utilisation spécifique. Chaque configuration est intelligemment conçue pour vos besoins."
-        }
-      ]
+    "whatIs": {
+      "title": "Ce que signifie «REVAMPED»",
+      "body": "Notre certification n'est pas qu'un label – c'est un standard complet garantissant que chaque ordinateur répond à nos critères stricts de durabilité, qualité et performance.",
+      "sustainability": {
+        "title": "Durabilité en premier",
+        "body": "Nous priorisons les composants usagés et reconditionnés partout où c'est possible, réduisant drastiquement l'impact environnemental tout en maintenant des performances optimales."
+      },
+      "quality": {
+        "title": "Qualité garantie",
+        "body": "Chaque composant est soigneusement testé, nettoyé et vérifié pour répondre à nos standards stricts de performance et fiabilité. La qualité n'est jamais sacrifiée pour la durabilité."
+      },
+      "ai": {
+        "title": "Optimisé par IA",
+        "body": "Notre IA assure une compatibilité parfaite des composants et un réglage optimal des performances pour votre cas d'usage spécifique."
+      }
     },
     "certificate": {
       "title": "Certificat d'authenticité",
-      "subtitle": "Chaque ordinateur REVAMPED est livré avec un certificat détaillé offrant une transparence totale sur votre configuration durable.",
-      "items": [
-        "Évaluations de durabilité des composants",
-        "Émissions de CO₂ économisées par rapport à un neuf",
-        "Provenance et état des composants",
-        "Benchmarks de performance",
-        "Détails de la couverture de garantie"
-      ],
-      "digitalPhysical": "Numérique & physique",
-      "digitalDesc": "Votre certificat comprend à la fois un autocollant physique et un QR-code numérique pour une vérification instantanée et des informations détaillées sur les composants."
+      "subtitle": "Chaque ordinateur REVAMPED est livré avec un certificat détaillé offrant une transparence totale sur votre build durable.",
+      "check1": "Évaluations de durabilité des composants",
+      "check2": "Émissions CO₂ économisées par rapport au neuf",
+      "check3": "Origine et état des composants",
+      "check4": "Benchmarks de performance",
+      "check5": "Détails de la couverture garantie",
+      "certTitle": "Numérique & physique",
+      "certBody": "Votre certificat comprend un autocollant physique et un QR code numérique pour une vérification instantanée et des informations détaillées sur les composants."
     },
     "stickers": {
       "title": "La collection de labels REVAMPED",
       "subtitle": "Chaque design représente notre engagement envers l'informatique durable et l'assurance qualité.",
-      "original": {
+      "sticker1": {
         "title": "Design original",
-        "description": "Marque de certification propre et professionnelle, soulignant notre approche axée sur la durabilité des ordinateurs portables."
+        "body": "Marque de certification propre et professionnelle soulignant notre approche de durabilité axée sur les laptops"
       },
-      "eco": {
+      "sticker2": {
         "title": "Variante éco",
-        "description": "Design enrichi qui souligne notre focus environnemental et les principes de l'économie circulaire."
+        "body": "Design étendu soulignant notre focus environnemental et les principes d'économie circulaire"
       },
-      "digital": {
+      "sticker3": {
         "title": "Certificat numérique",
-        "description": "Système de vérification lié à un QR-code avec des enregistrements d'authenticité appuyés par la blockchain."
+        "body": "Système de vérification lié par QR code avec des enregistrements d'authenticité basés sur la blockchain"
       }
     },
     "cta": {
       "title": "Rejoignez la révolution REVAMPED",
-      "subtitle": "En choisissant un ordinateur REVAMPED, vous n'obtenez pas seulement une excellente machine – vous faites une déclaration sur l'avenir de la technologie. Durable, performant et construit avec un objectif.",
-      "startBuild": "Démarrer votre configuration REVAMPED",
-      "learnMore": "En savoir plus sur la certification"
+      "body": "En choisissant un ordinateur REVAMPED, vous n'obtenez pas seulement une excellente machine – vous faites une déclaration sur l'avenir de la technologie. Durable, puissant et construit avec un but.",
+      "buildBtn": "Démarrer votre build REVAMPED",
+      "learnBtn": "En savoir plus sur la certification"
     }
   },
   "space": {
@@ -2442,56 +3618,53 @@
     },
     "hero": {
       "title": "De la laiterie à l'espace communautaire",
-      "subtitle": "Depuis 2003, nous nous déplaçons à travers Zurich. Nous cherchons maintenant un nouveau foyer – un lieu où durabilité, technologie et communauté se rejoignent.",
-      "ctaVision": "Notre vision",
-      "ctaDonate": "Soutenir le budget de localisation"
+      "subtitle": "Depuis 2003, nous nous déplaçons à travers Zurich. Nous cherchons maintenant un nouveau chez-nous – un lieu où durabilité, technologie et communauté se rejoignent.",
+      "visionBtn": "Notre vision",
+      "donateBtn": "Soutenir le budget de localisation"
     },
     "history": {
       "title": "Notre voyage à travers Zurich",
       "subtitle": "Plus de 20 ans, plusieurs emplacements, une mission : utiliser la technologie de manière durable.",
       "locations": [
         {
-          "period": "2003 – 2008",
-          "name": "Toni Molkerei",
-          "description": "Notre lieu de naissance dans l'ancienne cave à fromages. C'est ici qu'a eu lieu le légendaire anniversaire des 10 ans de Debian sur le toit.",
-          "highlight": "Lieu de fondation"
+          "highlight": "Lieu de fondation",
+          "description": "Notre lieu de naissance dans l'ancienne cave à fromage. Le légendaire anniversaire de Debian s'y est tenu sur le toit."
         },
         {
-          "period": "2008 – 2012",
-          "name": "Église réformée Wipkingen",
-          "description": "Au 6e/7e étage du clocher et dans les caves. C'est ici qu'ont démarré nos premiers projets sociaux.",
-          "highlight": "Projets sociaux"
+          "highlight": "Projets sociaux",
+          "description": "Aux 6e/7e étages du clocher et dans des caves. C'est ici qu'ont démarré nos premiers projets sociaux."
         },
         {
-          "period": "2012 – 2015",
-          "name": "Röschibachstrasse",
-          "description": "Grand espace avec de nombreux postes de travail. Expansion de notre atelier.",
-          "highlight": "Expansion"
+          "highlight": "Expansion",
+          "description": "Grand espace avec de nombreux postes de travail. Expansion de notre atelier."
+        },
+        {
+          "highlight": "Actuel",
+          "description": "Notre boutique actuelle avec atelier. Stockage supplémentaire à {warehouseStreet}."
         }
-      ],
-      "currentHighlight": "Actuel"
+      ]
     },
-    "current": {
+    "currentLocation": {
       "label": "Boutique actuelle",
-      "hours": "Horaires d'ouverture",
-      "hoursValue": "Lun : 9h–12h | Mar–Ven : 13h–17h",
-      "moreInfo": "En savoir plus sur la boutique"
+      "hoursLabel": "Heures d'ouverture",
+      "hoursText": "Lun : {monday} | Mar–Ven : {tueFri}",
+      "moreBtn": "En savoir plus sur la boutique"
     },
     "future": {
-      "badge": "Déménagement d'ici fin 2026",
+      "moveDeadline": "Déménagement avant fin 2026",
       "title": "Notre local de rêve",
-      "subtitle": "Nous devons quitter notre local actuel d'ici fin 2026. C'est notre chance de créer quelque chose de plus grand.",
-      "visionLabel": "Vision : Espace communautaire",
-      "visionDescription": "Un espace ouvert où technologie, durabilité et communauté se rejoignent. Boutique, atelier, coworking, événements – tout sous un même toit.",
-      "conceptCaption": "Visualisation conceptuelle de notre espace communautaire idéal",
+      "subtitle": "Nous devons quitter notre local actuel avant fin 2026. C'est notre chance de créer quelque chose de plus grand.",
+      "visionTagline": "Vision : {orgName} Community Space",
+      "visionDesc": "Un espace ouvert où technologie, durabilité et communauté se retrouvent. Boutique, atelier, coworking, événements – tout sous un même toit.",
+      "visionCaption": "Visualisation conceptuelle de notre espace communautaire idéal",
       "features": [
         {
           "name": "Espace boutique",
-          "description": "Surface d'exposition pour appareils reconditionnés avec conseil"
+          "description": "Surface d'exposition pour les appareils remis à neuf avec conseil"
         },
         {
           "name": "Atelier de réparation",
-          "description": "Postes de travail pour les techniciens et les réparations communautaires"
+          "description": "Postes de travail pour les techniciens et réparations communautaires"
         },
         {
           "name": "Coworking",
@@ -2499,73 +3672,64 @@
         },
         {
           "name": "Salle événementielle",
-          "description": "Espace pour ateliers, réunions et petits événements (15–20 personnes)"
+          "description": "Espace pour ateliers, meetups et petits événements (15–20 personnes)"
         },
         {
           "name": "Mini-bibliothèque",
-          "description": "Quelques étagères de livres tech, revues et ressources"
+          "description": "Quelques étagères avec livres tech, magazines et ressources"
         },
         {
           "name": "Coin café",
-          "description": "Point de rencontre pour échanges informels et réseautage"
+          "description": "Point de rencontre pour des échanges informels et du networking"
         },
         {
           "name": "Cuisine",
-          "description": "Cuisine entièrement équipée pour les initiatives zéro gaspillage alimentaire"
+          "description": "Cuisine entièrement équipée pour les initiatives Zéro Gaspillage"
         },
         {
-          "name": "Zéro gaspillage alimentaire",
-          "description": "Aliments sauvés pour les déjeuners communautaires"
+          "name": "Zéro gaspillage",
+          "description": "Aliments sauvés pour les repas communautaires"
         }
       ],
       "params": {
-        "title": "Ce que nous cherchons",
-        "subtitle": "Les paramètres de notre emplacement idéal",
-        "area": "Surface utile",
-        "budget": "Budget mensuel",
-        "city": "Emplacement",
-        "idealLabel": "L'idéal serait :",
-        "idealText": "Rez-de-chaussée ou facilement accessible, accès PMR, quai de chargement ou possibilité de livraison, dans un quartier animé bien desservi par les transports.",
-        "tipText": "Vous connaissez un espace approprié ? Nous accueillons volontiers toute suggestion !",
-        "contactCta": "Contactez-nous"
+        "title": "Ce que nous recherchons",
+        "subtitle": "Les paramètres pour notre emplacement idéal",
+        "areaLabel": "Surface utile",
+        "budgetLabel": "Budget par mois",
+        "locationLabel": "Emplacement",
+        "ideal": "Idéal : rez-de-chaussée ou facilement accessible, accessible aux fauteuils roulants, quai de chargement ou livraison possible, dans un quartier animé avec bons transports en commun.",
+        "knowSpace": "Vous connaissez un espace adapté ? Nous apprécions toute information !",
+        "contactBtn": "Contactez-nous"
       }
     },
     "impact": {
-      "title": "Pourquoi un plus grand espace signifie plus d'impact",
-      "subtitle": "Avec plus d'espace, nous pouvons multiplier nos indicateurs – sauver plus d'appareils, former plus de personnes, créer plus d'impact.",
-      "today": "Aujourd'hui",
-      "potential": "Potentiel",
-      "items": [
+      "title": "Pourquoi un espace plus grand signifie plus d'impact",
+      "subtitle": "Avec plus d'espace, nous pouvons multiplier nos KPIs – sauver plus d'appareils, former plus de personnes, obtenir plus d'impact.",
+      "todayLabel": "Aujourd'hui",
+      "potentialLabel": "Potentiel",
+      "kpis": [
         {
           "metric": "Appareils par an",
-          "current": "~500",
-          "potential": "2 000+",
           "reason": "Plus de postes d'atelier = plus de capacité"
         },
         {
           "metric": "Participants aux ateliers",
-          "current": "~100",
-          "potential": "500+",
-          "reason": "Propre salle pour des cours réguliers"
+          "reason": "Espace événementiel dédié pour des cours réguliers"
         },
         {
           "metric": "Membres de la communauté",
-          "current": "~50",
-          "potential": "200+",
           "reason": "Le coworking attire plus de bénévoles"
         },
         {
           "metric": "Intégration sociale",
-          "current": "~10",
-          "potential": "30+",
-          "reason": "Plus de places de stage grâce aux grands espaces"
+          "reason": "Plus de places de stage grâce aux plus grands espaces"
         }
       ],
-      "donateCta": {
+      "donateCard": {
         "title": "Soutenez notre budget de localisation",
-        "description": "Avec un budget plus important, nous pouvons trouver un meilleur emplacement – et ainsi multiplier notre impact sur l'environnement et la société. Chaque contribution nous aide à réaliser notre rêve d'espace communautaire.",
-        "donateCta": "Faire un don",
-        "impactCta": "Voir notre impact"
+        "body": "Avec un budget plus important, nous pouvons trouver un meilleur emplacement – et multiplier notre impact sur l'environnement et la société. Chaque contribution nous aide à réaliser notre rêve d'espace communautaire.",
+        "donateBtn": "Faire un don maintenant",
+        "impactBtn": "Voir notre impact"
       }
     },
     "shopLinks": {
@@ -2574,6 +3738,181 @@
       "currentStore": "Boutique actuelle",
       "shopOverview": "Aperçu de la boutique",
       "onlineShop": "Boutique en ligne"
+    }
+  },
+  "donate": {
+    "meta": {
+      "title": "Faire un don",
+      "description": "Aider directement. Chaque don sauve des appareils des déchets électroniques et rend la technologie accessible à tous."
+    },
+    "hero": {
+      "title": "Aider directement.",
+      "body": "Chaque don sauve des appareils des déchets électroniques, prolonge les cycles de vie et permet à des personnes qui ne pourraient autrement pas se le permettre d'accéder à la technologie.",
+      "cta": "Virer maintenant"
+    },
+    "transparency": {
+      "label": "Transparence",
+      "budgetValue": "CHF 60k",
+      "budgetLabel": "Budget annuel (association à but non lucratif)",
+      "devicesLabel": "Appareils sauvés annuellement",
+      "co2Label": "économisés par an"
+    },
+    "tiers": {
+      "heading": "Ce que votre don accomplit",
+      "recommended": "Recommandé",
+      "items": [
+        {
+          "title": "1 appareil sauvé",
+          "description": "1 laptop sauvé des déchets électroniques + 285 kg CO₂ évités."
+        },
+        {
+          "title": "2 appareils + place de workshop",
+          "description": "2 appareils reconditionnés + une place dans notre atelier Linux pour quelqu'un qui ne pourrait pas se le permettre."
+        },
+        {
+          "title": "Don d'entreprise — 10 appareils",
+          "description": "10 appareils pour des établissements d'enseignement, des projets sociaux ou des ménages à faibles revenus."
+        }
+      ]
+    },
+    "bridgeCta": "Choisir le montant et virer",
+    "transfer": {
+      "heading": "Virement bancaire",
+      "intro": "Virer sur le compte suivant:",
+      "recipientLabel": "Bénéficiaire",
+      "ibanLabel": "IBAN",
+      "bankLabel": "Banque",
+      "purposeLabel": "Motif de paiement",
+      "copyBtn": "Copier",
+      "copyIbanBtn": "Copier IBAN"
+    },
+    "devices": {
+      "heading": "Donner des appareils",
+      "intro": "Le matériel dont vous n'avez plus besoin peut donner une vraie chance à une autre personne.",
+      "items": [
+        "Laptops",
+        "PC de bureau",
+        "Moniteurs",
+        "Périphériques"
+      ],
+      "acceptLabel": "Ce que nous acceptons:",
+      "acceptText": "Laptops, PC de bureau, moniteurs, claviers, souris, imprimantes — fonctionnels ou réparables.",
+      "notAcceptLabel": "Ce que nous n'acceptons pas:",
+      "notAcceptText": "Appareils avec dommages physiques, écrans défectueux sans cadre, moniteurs CRT.",
+      "prepLabel": "Préparation:",
+      "prepText": "Veuillez supprimer vos données personnelles avant le dépôt (nous pouvons vous aider si nécessaire).",
+      "addressLabel": "Adresse de dépôt",
+      "questionsLink": "Questions ? Écrivez-nous →"
+    },
+    "newsletter": {
+      "title": "Nous vous tiendrons informé de l'impact de votre don.",
+      "description": "Pas de publicité. Seulement de vraies mises à jour."
+    },
+    "purposeTemplate": "Don {orgName} {month} {year}"
+  },
+  "mitgliedWerden": {
+    "meta": {
+      "title": "Devenir membre",
+      "description": "Devenez membre de {orgName}. Droit de vote sur les décisions associatives. CHF {fee}/an."
+    },
+    "hero": {
+      "title": "Devenir membre",
+      "body": "Soutenez l'association — légalement, financièrement et démocratiquement. Remplissez le formulaire, virez la cotisation, c'est fait."
+    },
+    "whatYouGet": [
+      {
+        "title": "Droit de vote sur les décisions associatives",
+        "description": "Vous êtes automatiquement invité aux votes et participez aux décisions sur la direction de l'association."
+      },
+      {
+        "title": "Liste officielle des membres",
+        "description": "Vous faites légalement partie des membres de l'association selon le droit associatif suisse (CC art. 60 ss)."
+      },
+      {
+        "title": "Soutien financier",
+        "description": "Votre cotisation annuelle nous aide à financer l'association durablement — indépendamment de financeurs externes."
+      }
+    ],
+    "form": {
+      "heading": "Rejoindre maintenant",
+      "subtitle": "Adhésion immédiate — sans attente"
+    },
+    "member": {
+      "title": "Vous êtes membre",
+      "thanks": "Merci pour votre soutien.",
+      "since": "Membre depuis {date}",
+      "dashboard": "Aller au tableau de bord"
+    },
+    "faq": {
+      "heading": "Questions fréquentes",
+      "items": [
+        {
+          "question": "Quelle est la différence entre un compte utilisateur et une adhésion?",
+          "answer": "Vous avez besoin d'un compte utilisateur pour le marché, l'aide IT et les ateliers — c'est gratuit. L'adhésion associative vous donne le droit de vote et fait de vous officiellement membre."
+        },
+        {
+          "question": "Que puis-je obtenir concrètement en tant que membre?",
+          "answer": "Droit de vote sur les décisions associatives et une place sur la liste officielle des membres. Nous ne promettons pas d'avantages exclusifs — nos offres sont pour tous."
+        },
+        {
+          "question": "Comment fonctionne l'adhésion?",
+          "answer": "Remplissez le formulaire, virez la cotisation annuelle — c'est fait. Vous êtes immédiatement membre."
+        },
+        {
+          "question": "Comment puis-je payer la cotisation annuelle?",
+          "answer": "Après l'adhésion, vous verrez les coordonnées bancaires directement sur la page de confirmation. Virement ou TWINT."
+        },
+        {
+          "question": "Puis-je partir à tout moment?",
+          "answer": "Oui. Un e-mail informel au comité suffit. Les cotisations annuelles déjà payées ne sont pas remboursées."
+        }
+      ]
+    }
+  },
+  "abos": {
+    "tagline": "Bourse d'abonnements",
+    "title": "Partager des pools d'abonnements",
+    "subtitle": "Partagez des abonnements numériques avec la communauté Revamp-IT et économisez de l'argent. Chacun ne paie que sa part.",
+    "createPool": "Créer un pool",
+    "filterAll": "Tous",
+    "perMonthPerson": "par mois/personne",
+    "members": "membres",
+    "full": "Complet",
+    "spotsLeft": "{count} place libre",
+    "spotsLeftPlural": "{count} places libres",
+    "by": "par",
+    "anonymous": "Anonyme",
+    "join": "Rejoindre",
+    "leave": "Quitter",
+    "loginToJoin": "Se connecter pour rejoindre",
+    "emptyCategory": "Aucun pool dans cette catégorie",
+    "emptyAll": "Aucun pool pour l'instant",
+    "emptyLoggedIn": "Soyez le premier à créer un pool !",
+    "emptyGuest": "Connectez-vous pour créer un pool.",
+    "modal": {
+      "title": "Créer un nouveau pool",
+      "serviceName": "Nom du service *",
+      "serviceNamePlaceholder": "ex. Netflix, Spotify, Adobe CC",
+      "category": "Catégorie *",
+      "maxMembers": "Membres max. *",
+      "monthlyCost": "Coût total/mois (CHF) *",
+      "monthlyCostPlaceholder": "ex. 17.90",
+      "perPersonCalc": "= CHF {amount} par personne/mois",
+      "description": "Description",
+      "descriptionPlaceholder": "Brève description de l'offre",
+      "rules": "Règles (facultatif)",
+      "rulesPlaceholder": "ex. Paiement avant le 1er du mois par TWINT",
+      "cancel": "Annuler",
+      "submit": "Créer le pool"
+    },
+    "categories": {
+      "streaming": "Streaming",
+      "software": "Logiciel",
+      "cloud": "Cloud",
+      "gaming": "Jeux",
+      "music": "Musique",
+      "news": "Actualités",
+      "other": "Autre"
     }
   }
 }

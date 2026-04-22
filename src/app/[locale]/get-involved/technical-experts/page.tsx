@@ -3,41 +3,65 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
 import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
 import { PageSection } from '@/components/community/PageSection'
-import { TECHNICAL_EXPERTS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
+import { Code, Cpu, Users, Lightbulb } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: `Technische Experten | ${ORG.name}`,
-  description: 'Teile deine technische Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln.',
+interface TechnicalExpertsPageProps {
+  params: Promise<{ locale: string }>
 }
 
-export default function TechnicalExpertsPage() {
+// Benefit icons are positional — parallel to translations array
+const BENEFIT_ICONS = [Code, Cpu, Users, Lightbulb]
+
+export async function generateMetadata({ params }: TechnicalExpertsPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  return {
+    title: `${t('technicalExperts.meta.title')} | ${ORG.name}`,
+    description: t('technicalExperts.meta.description'),
+  }
+}
+
+export default async function TechnicalExpertsPage({ params }: TechnicalExpertsPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+
+  const benefits = t.raw('technicalExperts.benefits') as Array<{ title: string; description: string }>
+  const sections = t.raw('technicalExperts.sections') as Array<{
+    title: string
+    items: string[]
+    description?: string
+  }>
+  const callouts = t.raw('technicalExperts.callouts') as Array<{ title: string; content: string }>
+  const howToStartSteps = t.raw('technicalExperts.howToStart.steps') as string[]
+
   return (
     <InvolvementPageLayout
-      title="Technische Experten"
-      description="Teile deine Expertise und hilf uns, innovative Lösungen für nachhaltige Technologie zu entwickeln."
-      ctaText="Interesse bekunden"
+      title={t('technicalExperts.title')}
+      description={t('technicalExperts.description')}
+      ctaText={t('technicalExperts.ctaText')}
       ctaHref="/get-involved/kontakt?thema=technische-experten"
     >
       <div className="space-y-16">
         {/* Overview Section */}
         <PageSection
-          title={TECHNICAL_EXPERTS_PAGE.overview.title}
-          content={TECHNICAL_EXPERTS_PAGE.overview.content}
+          title={t('technicalExperts.overview.title')}
+          content={t('technicalExperts.overview.content')}
         />
 
-        {/* Opportunities Section */}
+        {/* Benefits Section */}
         <section className="space-y-8">
           <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Möglichkeiten für technische Experten
+            {t('technicalExperts.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>
-            {TECHNICAL_EXPERTS_PAGE.benefits?.map((benefit, index) => (
+            {benefits.map((benefit, index) => (
               <BenefitCard
                 key={index}
-                icon={benefit.icon}
+                icon={BENEFIT_ICONS[index]}
                 title={benefit.title}
                 description={benefit.description}
               />
@@ -45,17 +69,18 @@ export default function TechnicalExpertsPage() {
           </BenefitCardGrid>
         </section>
 
-        {/* Sections from config */}
-        {TECHNICAL_EXPERTS_PAGE.sections?.map((section, index) => (
+        {/* Sections */}
+        {sections.map((section, index) => (
           <InfoSection
             key={index}
             title={section.title}
-            items={section.items}
+            items={section.items.map((text) => ({ text }))}
+            description={section.description}
           />
         ))}
 
-        {/* Callouts from config */}
-        {TECHNICAL_EXPERTS_PAGE.callouts?.map((callout, index) => (
+        {/* Callouts */}
+        {callouts.map((callout, index) => (
           <Callout
             key={index}
             title={callout.title}
@@ -65,13 +90,8 @@ export default function TechnicalExpertsPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen kannst"
-          steps={[
-            { text: 'Kontaktiere uns mit deinem Fachbereich und deinen Interessen' },
-            { text: 'Besprich mögliche Projekte und Beiträge' },
-            { text: 'Überprüfe unsere Entwicklungsrichtlinien und -prozesse' },
-            { text: 'Beginne, zu unseren Projekten beizutragen' }
-          ]}
+          title={t('technicalExperts.howToStart.title')}
+          steps={howToStartSteps.map((text) => ({ text }))}
         />
       </div>
     </InvolvementPageLayout>

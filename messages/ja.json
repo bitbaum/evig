@@ -206,15 +206,29 @@
     "skipToContent": "コンテンツへスキップ"
   },
   "errors": {
-    "generic": "エラーが発生しました。もう一度お試しください。",
-    "notFound": "ページが見つかりません",
-    "unauthorized": "認証されていません",
-    "forbidden": "アクセスが拒否されました",
-    "serverError": "サーバーエラー",
-    "networkError": "ネットワークエラーが発生しました。接続を確認してください。",
-    "required": "このフィールドは必須です",
-    "invalidEmail": "有効なメールアドレスを入力してください",
-    "passwordTooShort": "パスワードは8文字以上で入力してください"
+    "genericTitle": "エラーが発生しました",
+    "retry": "もう一度試す",
+    "blog": {
+      "description": "ブログの読み込み中にエラーが発生しました。",
+      "back": "ブログに戻る"
+    },
+    "marketplace": {
+      "description": "マーケットプレイスの読み込み中にエラーが発生しました。",
+      "back": "マーケットプレイスに戻る"
+    },
+    "listingDetail": {
+      "title": "出品の読み込みエラー",
+      "description": "出品を読み込めませんでした。",
+      "back": "マーケットプレイスに戻る"
+    },
+    "services": {
+      "description": "サービスの読み込み中にエラーが発生しました。",
+      "back": "サービスに戻る"
+    },
+    "workshops": {
+      "description": "ワークショップの読み込み中にエラーが発生しました。",
+      "back": "ワークショップに戻る"
+    }
   },
   "footer": {
     "tagline": "古いハードウェア。新しい命。",
@@ -346,18 +360,19 @@
   "datenschutz": {
     "meta": {
       "title": "プライバシーポリシー",
-      "description": "revamp-itのプライバシーポリシー"
+      "description": "{orgName}のプライバシーポリシー"
     },
     "title": "プライバシーポリシー",
     "section1": {
-      "title": "1. 管理責任者"
+      "title": "1. データ管理者",
+      "emailLabel": "メール："
     },
     "section2": {
       "title": "2. 個人データの収集と処理",
-      "intro": "当プラットフォームへの登録、サービスの利用、またはお問い合わせの際に個人データを収集します。収集する情報には以下が含まれます：",
+      "intro": "当プラットフォームへの登録、サービスの利用、またはお問い合わせの際に個人データを収集します。これには以下が含まれます：",
       "items": [
         "氏名とメールアドレス（登録時）",
-        "連絡先情報（お問い合わせ・予約時）",
+        "連絡先情報（お問い合わせと予約時）",
         "利用データ（プラットフォーム使用時）"
       ]
     },
@@ -369,48 +384,48 @@
         "修理注文とサービスの実施",
         "ワークショップ登録の管理",
         "P2Pマーケットプレイスの運営",
-        "サービスに関するご連絡（同意がある場合のみ）"
+        "当社のオファーに関する連絡（同意がある場合のみ）"
       ]
     },
     "section4": {
       "title": "4. データの共有",
-      "body": "お客様のデータを第三者に販売することはありません。データの共有は、サービス提供のために必要な場合（例：予約された修理のために修理業者へ）、または法的に義務付けられている場合にのみ行われます。"
+      "body": "お客様のデータは第三者に販売されません。データの共有は、サービスの提供に必要な場合（例：予約した修理のための修理業者への提供）または法的義務がある場合にのみ行われます。"
     },
     "section5": {
       "title": "5. データセキュリティ",
-      "body": "お客様のデータを不正アクセス、紛失、または悪用から保護するため、技術的および組織的措置を実施しています。パスワードはハッシュ化された形式でのみ保存されます。"
+      "body": "不正アクセス、損失、または不正使用からデータを保護するための技術的・組織的対策を実施しています。パスワードはハッシュ化された形式でのみ保存されます。"
     },
     "section6": {
-      "title": "6. Cookie",
-      "body": "当プラットフォームはセッション管理と認証のために機能的なCookieを使用します。分析Cookieはお客様の同意がある場合にのみ設定されます。"
+      "title": "6. クッキー",
+      "body": "当プラットフォームはセッション管理と認証のために機能的クッキーを使用しています。分析クッキーはお客様の同意がある場合にのみ設定されます。"
     },
     "section7": {
       "title": "7. お客様の権利",
       "intro": "お客様には以下の権利があります：",
       "items": [
-        "保存されているデータへのアクセス",
+        "保存されたデータへのアクセス",
         "不正確なデータの訂正",
         "データの削除",
         "処理の制限",
-        "データの移植性（データエクスポート）",
+        "データポータビリティ（データエクスポート）",
         "付与した同意の撤回"
       ],
-      "exportText": "登録ユーザーはいつでも設定からデータの完全なコピーをダウンロードできます：",
-      "exportLink": "設定 → プライバシー",
-      "contactText": "その他のご要望については、以下にお問い合わせください："
+      "downloadText": "登録済みユーザーはいつでも以下からデータの完全なコピーをダウンロードできます",
+      "settingsLinkLabel": "設定 → プライバシー",
+      "contactText": "その他のご要望については、こちらにお問い合わせください："
     },
     "section8": {
       "title": "8. 保存期間",
-      "body": "個人データは、記載された目的のために必要な期間、または法定の保存期間が要求する期間のみ保存されます。アカウントおよびプロフィールデータはアカウント削除後に削除されますが、法的義務（例：請求書の税務保存）がある場合はこの限りではありません。"
+      "body": "個人データは、記載された目的に必要な期間または法定保存期間が要求する期間のみ保存します。アカウントおよびプロフィールデータは、アカウント削除後に削除されます（法的義務（例：請求書の税務保存）がある場合を除く）。"
     },
     "section9": {
       "title": "9. 法的根拠",
-      "body": "処理はスイスのデータ保護法（DSG）、および適用される場合はGDPR第6条第1項（契約履行、正当な利益、同意）に基づいて行われます。"
+      "body": "処理はスイス連邦データ保護法（DSG）、および適用がある場合はGDPR第6条第1項（契約の履行、正当な利益、同意）に基づいています。"
     },
     "section10": {
       "title": "10. 適用法",
-      "body": "本プライバシーポリシーはスイスのデータ保護法（DSG）、および適用される場合はEUの一般データ保護規則（GDPR）に準拠します。",
-      "impressumLinkLabel": "運営情報"
+      "body": "このプライバシーポリシーはスイス連邦データ保護法（DSG）、および適用がある場合はEUの一般データ保護規則（GDPR）によって規定されています。こちらもご参照ください：",
+      "impressumLinkLabel": "法的情報"
     },
     "asOf": "最終更新：2026年3月"
   },
@@ -448,52 +463,52 @@
   "transparenz": {
     "meta": {
       "title": "透明性",
-      "description": "私たちの活動内容と方法。ミッション、数字、取り組み方について。"
+      "description": "{orgName}の活動内容と方法。ミッション、数字、活動方針の紹介。"
     },
     "hero": {
       "title": "透明性",
-      "subtitle": "私たちの活動内容と方法"
+      "subtitle": "私たちが何をしているか、どのように行っているか"
     },
     "mission": {
       "title": "私たちのミッション",
-      "text": "{description} {legalForm}として（{foundingYear}設立）、中古ハードウェアに第二の命を与え、オープンソフトウェアを誰もが使えるようにし、人々がテクノロジーを自律的に学べるよう取り組んでいます。"
+      "body": "{legalForm}（{foundingYear}年設立）として、中古ハードウェアに第二の命を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自律的にテクノロジーの使い方を学べるよう取り組んでいます。"
     },
     "stats": {
-      "title": "数字と実績",
-      "detailLink": "詳細な活動成果を見る"
+      "title": "数字と事実",
+      "moreLink": "詳細な影響データを見る"
     },
     "howWeWork": {
-      "title": "私たちの活動方法",
+      "title": "活動方法",
       "subtitle": "3つのコミュニティプラットフォームが人々とテクノロジーをつなぎます。",
-      "toPlatform": "プラットフォームへ",
-      "platforms": [
-        {
-          "title": "マーケットプレイス",
-          "description": "中古ITデバイスのコミュニティプラットフォーム。ユーザーは手数料なしで出品、購入、販売ができます。",
-          "href": "/marketplace"
-        },
-        {
-          "title": "ITヘルプ",
-          "description": "パソコン修理のためのボランティア技術者のマッチング。人から人へ、地域に密着した気軽なサポート。",
-          "href": "/it-hilfe"
-        },
-        {
-          "title": "ワークショップ",
-          "description": "Linux、ハードウェア、プログラミング、AIのコース。知識を共有し、互いに学ぶ — チューリッヒで直接開催。",
-          "href": "/workshops"
-        }
-      ]
+      "platformCta": "プラットフォームへ"
     },
+    "platforms": [
+      {
+        "title": "マーケットプレイス",
+        "description": "中古ITデバイスのコミュニティプラットフォーム。手数料なしで出品・売買ができます。",
+        "href": "/marketplace"
+      },
+      {
+        "title": "ITサポート",
+        "description": "コンピューター修理のためのボランティア技術者のマッチング。地域での人と人とのサポート。",
+        "href": "/it-hilfe"
+      },
+      {
+        "title": "ワークショップ",
+        "description": "Linux、ハードウェア、プログラミング、AIのコース。チューリッヒで知識を共有し学び合う。",
+        "href": "/workshops"
+      }
+    ],
     "finances": {
-      "title": "財務状況",
-      "text": "非営利団体として、私たちは財務状況を公開しています。年次報告書は総会で発表され、会員は閲覧できます。",
-      "memberLink": "会員になって情報にアクセスする"
+      "title": "財務",
+      "body": "非営利団体として、財務情報を公開しています。年次報告書は総会で発表され、会員が閲覧できます。",
+      "memberLink": "会員になって詳細を確認する"
     },
     "board": {
       "title": "理事会",
-      "text": "{orgName}はボランティアの理事会によって運営されています。お問い合わせ：",
-      "joinCta": "会員になる",
-      "donateCta": "寄付する"
+      "body": "{orgName}はボランティアの理事会によって運営されています。連絡先：",
+      "joinBtn": "会員になる",
+      "donateBtn": "寄付する"
     }
   },
   "notFound": {
@@ -987,229 +1002,622 @@
   "getInvolved": {
     "meta": {
       "title": "参加する",
-      "description": "電子廃棄物を削減し、テクノロジーをすべての人にアクセスしやすくするミッションに参加してください。ボランティア、インターン、パートナーになりましょう。"
+      "description": "電子廃棄物を削減し、すべての人に技術をアクセス可能にするミッションに参加してください。"
     },
-    "page": {
-      "getStarted": "始めましょう",
-      "learnMore": "詳しく知る",
-      "waysTitle": "参加の方法",
-      "testimonialTitle": "コミュニティの声",
-      "partnersTitle": "パートナー団体",
-      "ctaTitle": "違いを生み出す準備はできていますか？",
-      "ctaDescription": "変革者のコミュニティに参加して、テクノロジーを通じてより持続可能な未来を作るお手伝いをしてください。",
-      "discoverWorkshops": "ワークショップを探す"
+    "hero": {
+      "title": "私たちのミッションに参加してください",
+      "subtitle": "技術を持続可能かつすべての人にアクセス可能にするコミュニティの一員になりましょう。",
+      "startBtn": "始める",
+      "learnBtn": "詳しく知る"
     },
     "coreValues": {
-      "sustainability": {
-        "title": "持続可能性",
-        "description": "責任あるテクノロジーの活用と廃棄物の削減を通じて持続可能な未来を作ることを信じています。"
-      },
-      "community": {
-        "title": "コミュニティ",
-        "description": "テクノロジー教育とインクルーシブな参加を通じて強いコミュニティを構築する。"
-      },
-      "innovation": {
-        "title": "イノベーション",
-        "description": "テクノロジーをアクセスしやすく環境に優しくするためのクリエイティブなソリューションを見つける。"
-      },
-      "globalImpact": {
-        "title": "グローバルな影響",
-        "description": "テクノロジーを通じてローカルとグローバルなコミュニティに違いを生み出す。"
-      }
+      "heading": "私たちの基本的な価値観",
+      "items": [
+        {
+          "title": "持続可能性",
+          "description": "責任ある技術利用と廃棄物削減を通じた持続可能な未来の創造を信じています。"
+        },
+        {
+          "title": "コミュニティ",
+          "description": "技術教育と包括的参加を通じて強いコミュニティを構築する。"
+        },
+        {
+          "title": "イノベーション",
+          "description": "技術をアクセス可能で環境に優しいものにするための創造的解決策を見つける。"
+        },
+        {
+          "title": "グローバルインパクト",
+          "description": "技術を通じてローカルおよびグローバルコミュニティに変化をもたらす。"
+        }
+      ]
+    },
+    "options": {
+      "heading": "参加する方法",
+      "items": [
+        {
+          "title": "ボランティア",
+          "description": "献身的なボランティアチームに参加しましょう。事前経験は不要です。",
+          "features": [
+            "ハードウェアとソフトウェアで作業する",
+            "新しいスキルを習得する",
+            "地域社会に変化をもたらす",
+            "志を同じくする人々と出会う"
+          ],
+          "cta": "ボランティアを始める"
+        },
+        {
+          "title": "技術専門家",
+          "description": "オープンソースソフトウェア、ハードウェア、電子機器の経験がある場合、チームに加わってください。",
+          "features": [
+            "意義のあるプロジェクトで作業する",
+            "専門知識を共有する",
+            "コミュニティと協力する",
+            "新しいソリューションを開発する"
+          ],
+          "cta": "専門知識を共有する"
+        },
+        {
+          "title": "インターンシップ",
+          "description": "技術と持続可能性の経験を積みたい方にインターンシップの機会を提供しています。",
+          "features": [
+            "実践的な経験",
+            "専門的な成長",
+            "メンタリングの機会",
+            "柔軟な取り決め"
+          ],
+          "cta": "インターンシップに応募する"
+        },
+        {
+          "title": "就労再統合",
+          "description": "職場復帰を希望する人々のために就労再統合の機会を提供するために機関と協力しています。",
+          "features": [
+            "スキル開発",
+            "社会統合",
+            "専門的サポート",
+            "意義ある仕事"
+          ],
+          "cta": "詳しく知る"
+        },
+        {
+          "title": "パートナーシップ",
+          "description": "意義のあるプログラムと機会を作るために教育機関や組織と協力しています。",
+          "features": [
+            "教育プログラム",
+            "インターンシップの配置",
+            "地域社会のイニシアチブ",
+            "持続可能なソリューション"
+          ],
+          "cta": "パートナーになる"
+        },
+        {
+          "title": "寄付する",
+          "description": "技術を持続可能かつ誰もがアクセスできるようにするミッションを支援してください。",
+          "features": [
+            "持続可能な技術を支援する",
+            "電子廃棄物の削減を助ける",
+            "コミュニティプログラムを可能にする",
+            "技術をアクセス可能にする"
+          ],
+          "cta": "今すぐ寄付する"
+        },
+        {
+          "title": "協会会員",
+          "description": "協会の正式な会員になり、共同責任を負ってください。",
+          "features": [
+            "協会の決定への投票権",
+            "公式会員リストの一部",
+            "年会費CHF 50（割引CHF 20）",
+            "ミッションの財政的支援"
+          ],
+          "cta": "会員になる"
+        }
+      ]
+    },
+    "testimonials": {
+      "heading": "私たちのコミュニティが言うこと",
+      "items": [
+        {
+          "quote": "難民として、Revamp-ITは私にここで参加する機会を与えてくれました。私は多くを学び、自分の目標に合ったスキルを身につける自由があります。今はコードを書いており、興味のあることは何でも学ぶことができます — ここでは誰もが知識を共有しているからです。これは本物のコミュニティです。",
+          "author": "G.",
+          "role": "ボランティア"
+        }
+      ]
+    },
+    "partners": {
+      "heading": "私たちのパートナー組織",
+      "names": [
+        "Verein für berufliche und soziale Integration Bezirk Uster",
+        "Arbeitsintegrationsstelle der Gemeinde Rüti",
+        "HEKS",
+        "AOZ (Asylorganisation Zürich)"
+      ]
+    },
+    "cta": {
+      "heading": "違いを生み出す準備ができていますか？",
+      "body": "変革者のコミュニティに参加し、技術を通じてより持続可能な未来を作るのを助けてください。",
+      "contactBtn": "お問い合わせ",
+      "workshopsBtn": "ワークショップを発見する"
     },
     "volunteer": {
       "meta": {
-        "title": "ボランティア活動",
-        "description": "熱心なボランティアチームに参加して、テクノロジーと持続可能性を通じてコミュニティに貢献しましょう。"
+        "title": "ボランティア",
+        "description": "献身的なボランティアチームに参加し、地域社会に変化をもたらしましょう。"
       },
       "title": "ボランティアになる",
-      "description": "熱心なボランティアチームに参加して、テクノロジーを持続可能ですべての人にアクセスしやすくする手助けをしましょう。",
+      "description": "チームに参加し、技術を持続可能かつアクセス可能にするのを助けてください。",
       "ctaText": "関心を表明する",
-      "benefitsTitle": "ボランティア活動のメリット",
-      "flexibilityNote": "皆さんが異なるスケジュールを持っていることを理解しています。他の義務に合わせて調整できる柔軟なボランティア活動を提供しています。週数時間でも、それ以上でも — あなたの貢献は違いを生み出します。",
-      "howToStartTitle": "始め方",
-      "steps": [
-        "関心を表明するために連絡する",
-        "チームと会い、スキルと関心について話し合う",
-        "短い入門セッションに参加する",
-        "変化を生み出し始める！"
-      ]
-    },
-    "donate": {
-      "meta": {
-        "title": "寄付する",
-        "description": "直接助ける。すべての寄付がデバイスを電子廃棄物から救い、テクノロジーをすべての人にアクセスしやすくします。"
+      "overview": {
+        "title": "なぜRevamp-ITでボランティアをするのか？",
+        "content": "Revamp-ITでは、すべての人が技術へのアクセスとそれを使用するスキルを持つべきだと考えています。"
       },
-      "heroTitle": "直接助ける。",
-      "heroDescription": "すべての寄付がデバイスを電子廃棄物から救い、ライフサイクルを延ばし、そうでなければ手が届かない人々にテクノロジーを可能にします。",
-      "transferNow": "今すぐ振り込む",
-      "transparencyLabel": "透明性",
-      "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "年間予算（非営利団体）",
-      "devicesSavedLabel": "年間救出デバイス数",
-      "co2SavedLabel": "年間節約",
-      "impactTitle": "あなたの寄付の効果",
-      "recommended": "おすすめ",
-      "chooseAmount": "金額を選んで振り込む",
-      "bankTransferTitle": "銀行振込",
-      "bankTransferDescription": "以下の口座に振り込んでください：",
-      "recipient": "受取人",
-      "iban": "IBAN",
-      "bank": "銀行",
-      "purpose": "振込目的",
-      "copy": "コピー",
-      "copyIban": "IBANをコピー",
-      "donateDevicesTitle": "デバイスを寄付する",
-      "donateDevicesDescription": "もう必要のないハードウェアは他の人に本当のチャンスを与えられます。機能する、または修理可能なデバイスを受け取り、整備して次の人に渡します。",
-      "weAccept": "受け付けるもの：",
-      "weAcceptList": "ラップトップ、デスクトップPC、モニター、キーボード、マウス、プリンター — 機能するもの、または修理可能なもの。",
-      "weDoNotAccept": "受け付けないもの：",
-      "weDoNotAcceptList": "物理的損傷のあるデバイス、フレームのない壊れた画面、CRTモニター。",
-      "preparation": "準備：",
-      "preparationText": "お持ちいただく前に個人データを削除してください（必要な場合はお手伝いします）。",
-      "dropOffAddress": "持込先住所",
-      "questions": "ご質問は？お気軽にご連絡ください →",
-      "newsletterTitle": "あなたの寄付の効果をお伝えします。",
-      "newsletterDescription": "広告なし。救出されたデバイス、節約されたCO₂、支援された人々に関する本当のアップデートのみ。",
-      "purposeTemplate": "寄付 {org} {month} {year}",
-      "months": [
-        "1月",
-        "2月",
-        "3月",
-        "4月",
-        "5月",
-        "6月",
-        "7月",
-        "8月",
-        "9月",
-        "10月",
-        "11月",
-        "12月"
+      "benefitsHeading": "ボランティアの利点",
+      "benefits": [
+        {
+          "title": "実践的な経験",
+          "description": "ハードウェアとソフトウェアで直接作業し、技術と持続可能性の実践的な経験を積む。"
+        },
+        {
+          "title": "新しいスキルを習得する",
+          "description": "トレーニングプログラムとメンタリングを通じて技術的・社会的スキルを開発する。"
+        },
+        {
+          "title": "コミュニティへのインパクト",
+          "description": "技術をすべての人にアクセス可能にすることで地域社会に本当の変化をもたらす。"
+        },
+        {
+          "title": "チームに参加する",
+          "description": "共通の目標に向けて取り組む多様で情熱的なチームの一員になる。"
+        }
       ],
-      "impact": {
-        "tier1Title": "1台のデバイスを救出",
-        "tier1Description": "電子廃棄物から1台のラップトップを救出 + 285kgのCO₂を削減。",
-        "tier2Title": "2台のデバイス + ワークショップ席",
-        "tier2Description": "2台のデバイスを整備 + 費用を負担できない人のためのLinuxワークショップの席一つ。",
-        "tier3Title": "企業寄付 — 10台のデバイス",
-        "tier3Description": "教育機関、社会プロジェクト、または低所得世帯のための10台のデバイス。"
+      "sections": [
+        {
+          "title": "ボランティアの役割",
+          "items": [
+            "コンピューターの修復と修理を手伝う",
+            "ワークショップとトレーニングプログラムを支援する",
+            "コミュニティイニシアチブをサポートする",
+            "ドキュメントに貢献する",
+            "管理タスクとイベント企画を手伝う"
+          ]
+        },
+        {
+          "title": "時間のコミットメント",
+          "description": "誰もがスケジュールが異なることを理解しています。柔軟なオプションを提供します。",
+          "items": [
+            "柔軟なスケジューリングオプション",
+            "定期的および臨時の機会",
+            "リモートおよびオンサイトのオプション"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "経験は不要",
+          "content": "技術的な経験がなくても心配しないでください。必要なすべてのトレーニングを提供します。"
+        },
+        {
+          "title": "あなたのインパクト",
+          "content": "ボランティアとして、技術をより持続可能かつアクセス可能にする運動の一員になります。"
+        }
+      ],
+      "howToStart": {
+        "title": "始め方",
+        "steps": [
+          "関心を表明するためにお問い合わせください",
+          "スキルと興味について話し合うためにチームと会う",
+          "簡単なオリエンテーションセッションに参加する",
+          "違いを生み出し始める！"
+        ]
+      }
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "기술 전문가",
+        "description": "Share your technical expertise and help us develop innovative solutions for sustainable technology."
       },
-      "devices": {
-        "laptop": "ラップトップ",
-        "desktop": "デスクトップPC",
-        "monitor": "モニター",
-        "peripherals": "周辺機器"
+      "title": "Technical Experts",
+      "description": "Share your expertise and help us develop innovative solutions for sustainable technology.",
+      "ctaText": "Express interest",
+      "benefitsHeading": "Opportunities for technical experts",
+      "overview": {
+        "title": "Join our technical team",
+        "content": "We are always looking for technical experts who share our passion for sustainable technology and open-source solutions."
+      },
+      "benefits": [
+        {
+          "title": "Open-source development",
+          "description": "Contribute to our open-source projects and help improve our software solutions."
+        },
+        {
+          "title": "Hardware innovation",
+          "description": "Work on hardware projects that make technology more sustainable and accessible."
+        },
+        {
+          "title": "Knowledge sharing",
+          "description": "Share your expertise through workshops, documentation and mentoring."
+        },
+        {
+          "title": "Project leadership",
+          "description": "Lead technical initiatives and help shape the future of sustainable technology."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Technical areas",
+          "items": [
+            "Software development (Python, JavaScript, Linux)",
+            "Hardware development and repair",
+            "System administration",
+            "Network engineering",
+            "Database management",
+            "Security and privacy",
+            "Technical documentation"
+          ]
+        },
+        {
+          "title": "Current projects",
+          "items": [
+            "Development of open-source accounting software",
+            "Automation of hardware refurbishment",
+            "Educational platform development",
+            "System administration tools",
+            "Documentation and knowledge base"
+          ]
+        },
+        {
+          "title": "Membership benefits",
+          "items": [
+            "Work on meaningful projects with real impact",
+            "Collaboration with a diverse team of experts",
+            "Access to our workshop and testing facilities",
+            "Opportunities for leadership and mentoring others",
+            "Flexible contribution options"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Open-source focus",
+          "content": "We believe in the power of open-source software and hardware. As a technical expert you have the opportunity to contribute to open-source projects."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us with your area of expertise and interests",
+          "Discuss possible projects and contributions",
+          "Review our development guidelines and processes",
+          "Start contributing to our projects"
+        ]
+      }
+    },
+    "internships": {
+      "meta": {
+        "title": "인턴십",
+        "description": "Gain practical experience in technology and sustainability through our internship program."
+      },
+      "title": "Internship opportunities",
+      "description": "Gain valuable experience in technology and sustainability and make real change.",
+      "ctaText": "Express interest",
+      "benefitsHeading": "Program benefits",
+      "overview": {
+        "title": "About our internship program",
+        "content": "Our internship program offers a unique opportunity to gain hands-on experience in sustainable technology while contributing to meaningful projects."
+      },
+      "benefits": [
+        {
+          "title": "Hands-on experience",
+          "description": "Work on real projects that make a difference in the community."
+        },
+        {
+          "title": "Professional development",
+          "description": "Learn from experienced mentors and develop valuable skills."
+        },
+        {
+          "title": "Team collaboration",
+          "description": "Work with a diverse team of professionals and volunteers."
+        },
+        {
+          "title": "Learning opportunities",
+          "description": "Access to training resources and workshops."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Available positions",
+          "items": [
+            "Hardware refurbishment and repair",
+            "Software development",
+            "System administration",
+            "Project management",
+            "Community work",
+            "Technical documentation"
+          ]
+        },
+        {
+          "title": "What you will learn",
+          "items": [
+            "Hardware and software troubleshooting",
+            "Project management and collaboration",
+            "Technical documentation and communication",
+            "Community engagement and outreach",
+            "Sustainable technology practices"
+          ]
+        },
+        {
+          "title": "Requirements",
+          "items": [
+            "Enrolled in or completed relevant studies",
+            "Passion for technology and sustainability",
+            "Able to commit for the program duration",
+            "Basic computer skills",
+            "Willing to learn and contribute"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Flexible arrangements",
+          "content": "We understand that students and professionals have different schedules. We offer flexible arrangements to accommodate your commitments."
+        }
+      ],
+      "howToStart": {
+        "title": "How to apply",
+        "steps": [
+          "Send us your CV and a cover letter",
+          "State your area of interest and availability",
+          "Have a brief conversation",
+          "Start your internship journey!"
+        ]
       }
     },
     "partnerships": {
       "meta": {
-        "title": "パートナーシップ",
-        "description": "持続可能なテクノロジーソリューションを作り、継続的な影響を達成するために協力しましょう。"
+        "title": "파트너십",
+        "description": "Create sustainable technology solutions and lasting impact together with us."
       },
-      "title": "パートナーシップの機会",
-      "ctaText": "関心を表明する",
-      "benefitsTitle": "パートナーシップのメリット",
-      "processTitle": "協力の方法",
-      "processSteps": [
-        "目標と機会を理解するための初期相談",
-        "パートナーシップの枠組みと目標の策定",
-        "協力イニシアチブの実施",
-        "定期的な進捗レビューと影響評価",
-        "パートナーシップの継続的な改善と拡大"
+      "title": "Partnership opportunities",
+      "description": "Join with us to create sustainable technology solutions and achieve lasting impact.",
+      "ctaText": "Express interest",
+      "benefitsHeading": "Partnership benefits",
+      "overview": {
+        "title": "Why collaborate with us?",
+        "content": "At Revamp-IT we believe in the power of collaboration to create meaningful change. Our partnerships combine expertise, resources and shared values."
+      },
+      "benefits": [
+        {
+          "title": "Shared impact",
+          "description": "Amplify your organization's impact through joint initiatives."
+        },
+        {
+          "title": "Global network",
+          "description": "Connect with like-minded organizations and expand your reach."
+        },
+        {
+          "title": "Resource sharing",
+          "description": "Access shared resources and expertise for greater efficiency."
+        },
+        {
+          "title": "Strategic collaboration",
+          "description": "Develop innovative solutions through joint efforts."
+        }
       ],
-      "howToStartTitle": "始め方",
-      "howToStartSteps": [
-        "パートナーシップの機会について話し合うために連絡する",
-        "組織の目標と関心を共有する",
-        "潜在的な協力分野を探る",
-        "パートナーシップ合意を策定する",
-        "パートナーシップの旅を始める"
-      ]
-    },
-    "internships": {
-      "meta": {
-        "title": "インターンシップ",
-        "description": "インターンシッププログラムを通じてテクノロジーと持続可能性の実践的な経験を積む。"
+      "sections": [
+        {
+          "title": "Partnership models",
+          "items": [
+            "Corporate partnerships",
+            "Educational institution collaboration",
+            "Non-profit organization alliances",
+            "Technology provider partnerships",
+            "Community organization collaboration"
+          ]
+        },
+        {
+          "title": "Collaboration areas",
+          "items": [
+            "Technology refurbishment programs",
+            "Educational initiatives",
+            "Research and development",
+            "Community outreach programs",
+            "Sustainability projects"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Tailored partnership programs",
+          "content": "We understand that each organization has unique needs. Our programs are tailored to align with your organization's goals."
+        }
+      ],
+      "partnershipProcess": {
+        "title": "How we collaborate",
+        "steps": [
+          "Initial consultation to understand goals and opportunities",
+          "Development of partnership framework and objectives",
+          "Implementation of cooperative initiatives",
+          "Regular progress reviews and impact assessment",
+          "Continuous improvement and partnership expansion"
+        ]
       },
-      "title": "インターンシップの機会",
-      "description": "テクノロジーと持続可能性で価値ある経験を積み、本当の変化を生み出す。",
-      "ctaText": "関心を表明する",
-      "benefitsTitle": "プログラムのメリット",
-      "howToApplyTitle": "応募方法",
-      "howToApplySteps": [
-        "履歴書とカバーレターを送る",
-        "関心のある分野と利用可能な期間を伝える",
-        "短い面談を行う",
-        "インターンシップの旅を始めよう！"
-      ]
-    },
-    "technicalExperts": {
-      "meta": {
-        "title": "技術専門家",
-        "description": "技術的な専門知識を共有し、持続可能なテクノロジーのための革新的なソリューション開発を支援しましょう。"
-      },
-      "title": "技術専門家",
-      "description": "専門知識を共有し、持続可能なテクノロジーのための革新的なソリューション開発を支援する。",
-      "ctaText": "関心を表明する",
-      "opportunitiesTitle": "技術専門家のための機会",
-      "howToStartTitle": "始め方",
-      "howToStartSteps": [
-        "専門分野と関心について連絡する",
-        "可能なプロジェクトと貢献について話し合う",
-        "開発ガイドラインとプロセスを確認する",
-        "プロジェクトへの貢献を始める"
-      ]
-    },
-    "itHilfeTechniker": {
-      "meta": {
-        "title": "ITヘルプ技術者",
-        "description": "ITの知識を共有してコミュニティの人々を助けましょう — 柔軟に、前提知識なしで、本当の影響を持って。"
-      },
-      "title": "ITヘルプ技術者になる",
-      "description": "あなたのIT知識は他の人の生活を楽にできます。コミュニティの人々のコンピュータを手伝いましょう — 柔軟に、シンプルに、効果的に。",
-      "ctaText": "技術者として登録する",
-      "benefitsTitle": "あなたが得るもの",
-      "howToStartTitle": "始め方",
-      "howToStartSteps": [
-        "スキルと利用可能な時間で技術者プロフィールを作成する",
-        "リクエストを待つ — どれを受け入れるかはあなたが決める",
-        "リクエストした人と直接日程を調整する",
-        "助け、学び、違いを生み出す"
-      ]
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us to discuss partnership opportunities",
+          "Share your organization's goals and interests",
+          "Explore potential collaboration areas",
+          "Develop a partnership agreement",
+          "Begin your partnership journey"
+        ]
+      }
     },
     "workReintegration": {
       "meta": {
-        "title": "職場復帰",
-        "description": "キャリアを再建しながらテクノロジーの貴重なスキルと経験を積むための職場復帰プログラムに参加する。"
+        "title": "직업 재통합",
+        "description": "Join our work reintegration program to gain valuable skills and rebuild your career."
       },
-      "title": "職場復帰プログラム",
-      "description": "テクノロジーと持続可能性でキャリアを再建するための支援プログラムに参加する。",
-      "ctaText": "関心を表明する",
-      "benefitsTitle": "プログラムのメリット",
-      "howToStartTitle": "始め方",
-      "howToStartSteps": [
-        "状況について話し合うために連絡する",
-        "評価のためにチームと会う",
-        "個別プランを策定する",
-        "職場復帰の旅を始める"
-      ]
+      "title": "Work reintegration program",
+      "description": "Join our supportive program to rebuild your career in technology and sustainability.",
+      "ctaText": "Express interest",
+      "benefitsHeading": "Program benefits",
+      "overview": {
+        "title": "About our program",
+        "content": "Our work reintegration program is designed to help people rebuild their careers in a supportive and understanding environment."
+      },
+      "benefits": [
+        {
+          "title": "Skills development",
+          "description": "Learn practical skills in technology and sustainability."
+        },
+        {
+          "title": "Professional growth",
+          "description": "Build your CV with real experience."
+        },
+        {
+          "title": "Supportive environment",
+          "description": "Work in a supportive and understanding team."
+        },
+        {
+          "title": "Meaningful work",
+          "description": "Contribute to projects that make a difference."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Program features",
+          "items": [
+            "Structured work experience in technology",
+            "Professional development and training",
+            "Individual support and mentoring",
+            "Flexible scheduling options",
+            "Gradual workload increase"
+          ]
+        },
+        {
+          "title": "What you will learn",
+          "items": [
+            "Computer hardware and software",
+            "Technical troubleshooting",
+            "Customer service",
+            "Team collaboration",
+            "Project management"
+          ]
+        },
+        {
+          "title": "Support services",
+          "items": [
+            "Regular check-ins and progress reviews",
+            "Access to counseling services",
+            "Workplace accommodations",
+            "Career guidance and planning",
+            "Networking opportunities"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Individualized approach",
+          "content": "We understand that every journey is unique. Our program is flexible and can be tailored to your specific needs and goals."
+        },
+        {
+          "title": "Confidentiality",
+          "content": "We maintain strict confidentiality throughout the program. Your privacy and dignity are our top priorities."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us to discuss your situation",
+          "Meet with our team for an assessment",
+          "Develop your personalized plan",
+          "Begin your work reintegration journey"
+        ]
+      }
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT 도움 기술자",
+        "description": "Share your IT knowledge and help people in your community — flexibly, without prior credentials and with real impact."
+      },
+      "title": "Become an IT Help Technician",
+      "description": "Your IT knowledge can make other people's lives easier. Help people in the community with their computers — flexible, straightforward, impactful.",
+      "ctaText": "Register as technician",
+      "benefitsHeading": "What's in it for you",
+      "overview": {
+        "title": "What IT Help means",
+        "content": "Many people — elderly, refugees, those with little experience — struggle with their computer daily. You have the knowledge to help."
+      },
+      "benefits": [
+        {
+          "title": "Apply your knowledge",
+          "description": "Your IT knowledge is needed — not in an office, but for people in your community."
+        },
+        {
+          "title": "Help flexibly",
+          "description": "You decide when and how much. From two hours per month — everything is valuable."
+        },
+        {
+          "title": "Build community",
+          "description": "You become part of a network of volunteers who want to make technology accessible to everyone."
+        },
+        {
+          "title": "Gain experience",
+          "description": "Explain, document, solve problems in practice — this sharpens your skills more than any course."
+        }
+      ],
+      "sections": [
+        {
+          "title": "What technicians do",
+          "items": [
+            "Diagnose and solve software problems (Windows, Linux, macOS)",
+            "Set up and configure devices",
+            "Perform Linux installations on refurbished laptops",
+            "Give short introductions to computers, internet and data security",
+            "Home visits on request for mobility-impaired persons"
+          ]
+        },
+        {
+          "title": "Requirements",
+          "items": [
+            "Basic IT knowledge — no degree or certificate needed",
+            "Enjoyment of explaining things simply",
+            "Patience and openness towards people with little tech experience",
+            "Time availability from approximately 2 hours per month"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "No perfectionists needed",
+          "content": "You don't need to know everything. We're looking for people who enjoy helping and can explain things. If you know how to set up a laptop or help someone with their email account — you're exactly right."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Create your technician profile with your skills and availability",
+          "Wait for requests — you decide which ones to accept",
+          "Arrange an appointment directly with the requesting person",
+          "Help, learn, make a difference"
+        ]
+      }
     },
     "kontakt": {
       "meta": {
-        "title": "関心を表明する",
-        "description": "興味のあることを簡単にお書きください — こちらからご連絡します。"
+        "title": "관심 표명하기",
+        "description": "Write to us briefly about what interests you — we'll get back to you."
       },
-      "backToInvolvement": "すべての参加機会",
-      "title": "{topic}への関心",
-      "description": "あなたが誰で何に興味があるかを簡単にお書きください。個別にご連絡します。",
+      "backLink": "参加するすべての方法",
+      "titlePrefix": "関心：",
+      "body": "あなたが誰で、何に興味があるかを簡単にお書きください。個人的にご連絡します。",
+      "defaultTopic": "参加する",
       "topics": {
-        "freiwilligenarbeit": "ボランティア活動",
+        "freiwilligenarbeit": "ボランティア",
         "praktikum": "インターンシップ",
-        "wiedereinstieg": "職場復帰",
+        "wiedereinstieg": "就労再統合",
         "technische-experten": "技術専門家",
         "partnerschaft": "パートナーシップ",
-        "it-hilfe-techniker": "ITヘルプ技術者",
-        "default": "参加する"
+        "it-hilfe-techniker": "ITヘルプ技術者"
       }
     }
   },
@@ -1405,6 +1813,31 @@
       "message": "ITヘルプの読み込み中にエラーが発生しました。",
       "retry": "再試行",
       "backToList": "一覧に戻る"
+    },
+    "edit": {
+      "backToRequest": "リクエストに戻る",
+      "title": "リクエストを編集",
+      "description": "ITヘルプリクエストの詳細を変更します。",
+      "savedTitle": "変更を保存しました！",
+      "savedRedirect": "まもなくリダイレクトされます...",
+      "sectionCategory": "デバイスカテゴリ",
+      "sectionBudget": "予算",
+      "budgetDescription": "最大いくらまで支払いますか？無料のコミュニティヘルプの場合は空白のままにしてください。",
+      "budgetFree": "コミュニティヘルプ（無料）",
+      "budgetUpTo": "CHF {amount}まで",
+      "budgetPlaceholder": "0 = 無料",
+      "sectionOptions": "オプション",
+      "serviceTypeLabel": "修理はどのように行いますか？",
+      "urgencyLabel": "緊急度は？",
+      "cancelButton": "キャンセル",
+      "submitButton": "変更を保存",
+      "submittingButton": "保存中...",
+      "errorNotFound": "リクエストが見つかりません",
+      "errorNotOwner": "自分のリクエストのみ編集できます",
+      "errorNotEditable": "このリクエストはもう編集できません",
+      "errorLoadFailed": "リクエストの読み込みに失敗しました",
+      "errorSaveFailed": "保存に失敗しました",
+      "errorGeneric": "エラーが発生しました"
     }
   },
   "knowhow": {
@@ -1725,28 +2158,24 @@
     },
     "items": [
       {
-        "title": "Kivitendo Modus CH",
-        "description": "2015年7月以来、revamp-itはKivitendoプロジェクトのプレミアムパートナーです。2005年から、当初は自社目的のために、やがて顧客のニーズを満たすために、会計、リソース、顧客管理のためのソフトウェアソリューションを探し始めました。",
-        "readMoreLink": "/projects/kivitendo",
-        "category": "ソフトウェアプロジェクト",
-        "status": "アクティブ",
-        "year": "2015",
+        "title": "Kivitendo モード CH",
+        "description": "2015年7月以来、revamp-itはKivitendoプロジェクトのプレミアムパートナーです。2005年から、まず自社のニーズのために、後に顧客のニーズを満たすために、会計、リソース、顧客管理のためのソフトウェアソリューションを探しました。",
+        "category": "software",
+        "status": "active",
         "features": [
           "2015年からのプレミアムパートナーシップ",
           "会計とリソース管理",
           "顧客管理",
-          "Open Source ERPシステム"
+          "オープンソースERPシステム"
         ]
       },
       {
-        "title": "Linuxola団体",
-        "description": "Linuxola団体は2005年12月2日にスイスの様々な地域からの8人によって設立されました。組織の目的は、アフリカのパートナーに情報技術へのアクセスとグローバルなデジタルコモンズへの接続を提供することです。",
-        "readMoreLink": "/projects/linuxola",
-        "category": "コミュニティプロジェクト",
-        "status": "アクティブ",
-        "year": "2005",
+        "title": "Verein Linuxola",
+        "description": "Linuxolaは2005年12月2日にスイスの様々な地域の8人によって設立されました。組織の目的はアフリカのパートナーに情報技術へのアクセスとグローバルなデジタルコモンズへの接続を提供することです。",
+        "category": "community",
+        "status": "active",
         "features": [
-          "8名によるスイス設立",
+          "スイスで8人が創設",
           "アフリカパートナーシップに注力",
           "情報技術へのアクセス",
           "デジタルコモンズへの接続"
@@ -1754,56 +2183,48 @@
       },
       {
         "title": "FreieComputer.ch",
-        "description": "事前インストール済みのフリーソフトウェアと保証されたサポートを持つコンピューターのスイスラベル！revamp-itは積極的なOpen Sourceコミュニティとともにこのラベルの誕生に貢献しました。",
-        "readMoreLink": "/projects/freiecomputer",
-        "category": "コミュニティプロジェクト",
-        "status": "アクティブ",
-        "year": "2010",
+        "description": "フリーソフトウェアがプリインストールされ、サポートが保証されたコンピュータのスイスラベル！revamp-itは、熱心なオープンソースコミュニティの支援を受けて、このラベルの作成に貢献しました。",
+        "category": "community",
+        "status": "active",
         "features": [
           "フリーソフトウェアのスイスラベル",
-          "事前インストール済みOpen Sourceソフトウェア",
-          "保証されたサポート",
+          "オープンソースソフトウェアのプリインストール",
+          "サポート保証",
           "コミュニティサポート"
         ]
       },
       {
         "title": "Compirat",
-        "description": "Compiratはカリタスチューリッヒとrevamp-itの協力プロジェクトです。Compiratの支援により、チューリッヒ州の限られた資力を持つ人々が自宅近くでコンピューターの使い方を学ぶ機会を得られます。",
-        "readMoreLink": "/projects/compirat",
-        "category": "コミュニティプロジェクト",
-        "status": "アクティブ",
-        "year": "2018",
+        "description": "CompiratはCaritas Zurichとrevamp-itのコラボレーションです。Compiratのサポートのおかげで、チューリッヒ州の限られた資金の人々が自宅近くでコンピュータを学ぶ機会を得ています。",
+        "category": "community",
+        "status": "active",
         "features": [
-          "カリタスチューリッヒとのパートナーシップ",
-          "限られた資力を持つ人々への支援",
-          "チューリッヒ州でのコンピュータートレーニング",
-          "自宅近くでの学習機会"
+          "Caritas Zurichとのパートナーシップ",
+          "限られた資金の人々への支援",
+          "チューリッヒ州でのコンピュータ講座",
+          "地域での学習機会"
         ]
       },
       {
         "title": "ハードウェア開発",
-        "description": "revamp-itのハードウェア開発作業は、廃棄されたコンピューターハードウェアの新たな可能性を発見し、エネルギーとリソースの消費を最適化し、Open Sourceハードウェアの組み立てガイドを作成することに焦点を当てています。",
-        "readMoreLink": "/projects/hardware",
-        "category": "ハードウェアプロジェクト",
-        "status": "進行中",
-        "year": "2020",
+        "description": "revamp-itのハードウェア開発作業は、廃棄されたコンピュータハードウェアの新たな可能性を発見し、エネルギーとリソースの消費を最適化し、オープンソースハードウェアの組み立てガイドを作成することに焦点を当てています。",
+        "category": "hardware",
+        "status": "ongoing",
         "features": [
           "廃棄ハードウェアのアップサイクル",
           "エネルギーとリソースの最適化",
-          "Open Sourceハードウェアガイド",
+          "オープンソースハードウェアガイド",
           "持続可能な開発"
         ]
       },
       {
-        "title": "LTSP — Linux Terminal Server Project",
-        "description": "Linux Terminal Server Projectは、ネットワークを通じて古くて遅いコンピューターに接続された高速で強力なサーバーの性能を活用することに焦点を当てています。これにより、同じサーバーに接続したクライアントで複数のユーザーが同時に作業できます。",
-        "readMoreLink": "/projects/ltsp",
-        "category": "ソフトウェアプロジェクト",
-        "status": "アクティブ",
-        "year": "2016",
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "Linux Terminal Server Projectは、ネットワークを介して古い低速コンピュータに接続された高速で強力なサーバーの能力を活用することに焦点を当てています。これにより、同じサーバーに接続されたクライアントで複数のユーザーが同時に作業できます。",
+        "category": "software",
+        "status": "active",
         "features": [
           "ネットワークベースのサーバーソリューション",
-          "古いハードウェアの効率的な利用",
+          "古いハードウェアの効率的な使用",
           "マルチユーザーコンピューティング",
           "リソース最適化"
         ]
@@ -1812,82 +2233,74 @@
   },
   "revamped": {
     "meta": {
-      "title": "REVAMPED認証 | 持続可能なコンピュータービルド",
-      "description": "私たちの独自のREVAMPED認証について — 製造するすべてのコンピューターの持続可能性、品質、パフォーマンスを保証します。"
+      "title": "REVAMPED認定 | サステナブルなコンピュータービルド",
+      "description": "私たちの独自のREVAMPED認定についてご覧ください。私たちが作るすべてのコンピューターにおける持続可能性、品質、パフォーマンスを保証します。"
     },
     "hero": {
-      "title": "REVAMPED認証",
-      "subtitle": "私たちが製造するすべてのコンピューターには、独自のREVAMPEDラベルが付与されます — 持続可能性、品質、パフォーマンスの保証であり、業界の新しい基準を確立します。",
-      "badge": {
-        "sustainability": "サステナビリティ重視",
-        "quality": "品質保証",
-        "ai": "AI最適化ビルド"
+      "title": "REVAMPED認定",
+      "subtitle": "私たちが作るすべてのコンピューターは、独自のREVAMPEDラベルを受け取ります。業界に新しい基準を設ける持続可能性、品質、パフォーマンスの保証です。",
+      "badge1": "サステナビリティ重視",
+      "badge2": "品質保証",
+      "badge3": "AI最適化ビルド"
+    },
+    "heroSection": {
+      "title": "実際に稼働するREVAMPEDコンピューター",
+      "body": "人々が愛用する持続可能なテクノロジー。REVAMPED認定は単なる約束ではなく、品質と環境責任への目に見えるコミットメントです。",
+      "check1": "主に中古・再生部品を使用",
+      "check2": "環境負荷を大幅に削減",
+      "check3": "すべてのビルドに品質保証",
+      "check4": "物理的な認定ステッカー付属",
+      "buildBtn": "コンピューターを作る",
+      "learnBtn": "認定について詳しく"
+    },
+    "whatIs": {
+      "title": "「REVAMPED」の意味",
+      "body": "私たちの認定は単なるラベルではありません。すべてのコンピューターが持続可能性、品質、パフォーマンスの厳格な基準を満たしていることを保証する包括的な標準です。",
+      "sustainability": {
+        "title": "サステナビリティ最優先",
+        "body": "できる限り中古・再生部品を優先し、最高のパフォーマンスを維持しながら環境負荷を大幅に削減します。すべてのビルドで循環型経済の原則に従っています。"
+      },
+      "quality": {
+        "title": "品質保証",
+        "body": "すべての部品を徹底的にテスト、クリーニング、検証し、厳格なパフォーマンスと信頼性の基準を満たします。品質は持続可能性のために妥協しません。"
+      },
+      "ai": {
+        "title": "AI最適化",
+        "body": "私たちのAIは、特定の用途に最適な部品の互換性とパフォーマンスチューニングを保証します。すべてのビルドはあなたのニーズに合わせてインテリジェントに設計されています。"
       }
-    },
-    "inAction": {
-      "title": "実際に使われているREVAMPEDコンピューター",
-      "subtitle": "人々が喜んで使う持続可能なテクノロジー。REVAMPED認証は約束だけでなく — 品質と環境責任への可視的なコミットメントです。",
-      "points": [
-        "主に中古・再生済みコンポーネントを使用",
-        "環境負荷を大幅に削減",
-        "すべてのビルドに品質保証",
-        "物理的な認証ステッカーを含む"
-      ],
-      "ctaBuild": "コンピューターを構築する",
-      "ctaLearn": "認証についてもっと知る"
-    },
-    "meaning": {
-      "title": "「REVAMPED」とは何を意味するのか",
-      "subtitle": "私たちの認証は単なるラベルではありません — すべてのコンピューターが持続可能性、品質、パフォーマンスの厳格な基準を満たすことを確保する包括的な標準です。",
-      "pillars": [
-        {
-          "title": "サステナビリティ優先",
-          "description": "可能な限り中古・再生済みコンポーネントを優先し、最高のパフォーマンスを維持しながら環境負荷を大幅に削減します。すべてのビルドにサーキュラーエコノミーの原則を適用しています。"
-        },
-        {
-          "title": "品質保証",
-          "description": "すべてのコンポーネントは、厳格なパフォーマンスと信頼性の基準を満たすために徹底的にテスト、クリーニング、検証されます。持続可能性のために品質を妥協することはありません。"
-        },
-        {
-          "title": "AI最適化",
-          "description": "私たちのAIは、あなたの特定のユースケースに対してコンポーネントの互換性と最適なパフォーマンスチューニングを確保します。すべてのビルドはあなたのニーズに合わせてインテリジェントに設計されています。"
-        }
-      ]
     },
     "certificate": {
       "title": "真正性証明書",
-      "subtitle": "すべてのREVAMPEDコンピューターは、持続可能なビルドについての完全な透明性を提供する詳細な証明書とともに提供されます。",
-      "items": [
-        "コンポーネントのサステナビリティ評価",
-        "新規製造と比較したCO₂排出量の節約",
-        "コンポーネントの出所と状態",
-        "パフォーマンスベンチマーク",
-        "保証内容の詳細"
-      ],
-      "digitalPhysical": "デジタル＆物理的",
-      "digitalDesc": "証明書には物理的なステッカーと、即時確認と詳細なコンポーネント情報のためのデジタルQRコードの両方が含まれます。"
+      "subtitle": "すべてのREVAMPEDコンピューターには、持続可能なビルドに関する完全な透明性を提供する詳細な証明書が付属しています。",
+      "check1": "部品のサステナビリティ評価",
+      "check2": "新品と比べたCO₂削減量",
+      "check3": "部品の出所と状態",
+      "check4": "パフォーマンスベンチマーク",
+      "check5": "保証範囲の詳細",
+      "certTitle": "デジタル・物理の両方",
+      "certBody": "証明書には物理ステッカーとデジタルQRコードの両方が含まれ、即座の確認と詳細な部品情報を提供します。"
     },
     "stickers": {
       "title": "REVAMPEDラベルコレクション",
       "subtitle": "各デザインは、持続可能なコンピューティングと品質保証へのコミットメントを表しています。",
-      "original": {
+      "sticker1": {
         "title": "オリジナルデザイン",
-        "description": "ラップトップに焦点を当てた持続可能性アプローチを強調するクリーンでプロフェッショナルな認証マーク。"
+        "body": "ラップトップに焦点を当てたサステナビリティアプローチを強調するクリーンでプロフェッショナルな認定マーク"
       },
-      "eco": {
+      "sticker2": {
         "title": "エコバリアント",
-        "description": "環境へのフォーカスとサーキュラーエコノミーの原則を強調した拡張デザイン。"
+        "body": "環境への焦点と循環型経済の原則を強調した拡張デザイン"
       },
-      "digital": {
+      "sticker3": {
         "title": "デジタル証明書",
-        "description": "ブロックチェーンによる真正性記録と連携したQRコード検証システム。"
+        "body": "ブロックチェーンベースの真正性記録を持つQRコードリンクの検証システム"
       }
     },
     "cta": {
       "title": "REVAMPED革命に参加しよう",
-      "subtitle": "REVAMPEDコンピューターを選ぶことで、優れたマシンを手に入れるだけでなく — テクノロジーの未来についての声明を示します。持続可能で、高性能で、目的を持って作られています。",
-      "startBuild": "REVAMPEDビルドを始める",
-      "learnMore": "認証についてもっと知る"
+      "body": "REVAMPEDコンピューターを選ぶことで、優れたマシンを手に入れるだけでなく、テクノロジーの未来についての声明を出しています。持続可能で、強力で、目的を持って作られています。",
+      "buildBtn": "REVAMPEDビルドを始める",
+      "learnBtn": "認定について詳しく"
     }
   },
   "services": {
@@ -2270,6 +2683,550 @@
         "startProject": "プロジェクトを開始",
         "allServices": "すべてのサービスを探る"
       }
+    },
+    "hardwareRecycling": {
+      "meta": {
+        "title": "ハードウェアリサイクル",
+        "description": "IT機器の責任ある回収・リサイクル。安全なデータ消去、無料引き取りサービス、持続可能なITソリューション。",
+        "ogTitle": "ハードウェアリサイクル",
+        "ogDescription": "IT機器の責任ある回収・リサイクルによる持続可能なITソリューション。"
+      },
+      "hero": {
+        "title": "ハードウェアリサイクル",
+        "subtitle": "IT機器の責任ある回収・リサイクルサービス。電子廃棄物の削減と安全なデータ消去を実現します。"
+      },
+      "features": [
+        {
+          "title": "安全なデータ消去",
+          "description": "デバイスからすべてのデータを完全かつ安全に消去します。"
+        },
+        {
+          "title": "デバイスの再生利用",
+          "description": "IT機器のプロフェッショナルな再生利用。"
+        },
+        {
+          "title": "部品リサイクル",
+          "description": "電子部品の責任あるリサイクル。"
+        },
+        {
+          "title": "無料引き取りサービス",
+          "description": "古い機器の便利な引き取りサービス。"
+        }
+      ],
+      "pricing": {
+        "heading": "料金",
+        "subtitle": "持続可能でお手頃",
+        "badge": "おすすめ",
+        "price": "無料",
+        "forMostItems": "ほとんどの品目",
+        "features": [
+          "無料引き取りサービス",
+          "安全なデータ消去",
+          "環境への責任",
+          "廃棄証明書"
+        ],
+        "cta": "今すぐ始めますか？"
+      },
+      "impact": {
+        "heading": "環境への責任",
+        "subtitle": "リサイクルされたデバイスが地球を守ります",
+        "dataSecurity": "安全なデータ消去",
+        "sustainableProcesses": "持続可能なプロセス",
+        "reducedEwaste": "電子廃棄物の削減"
+      },
+      "contact": {
+        "heading": "今日お問い合わせください",
+        "subtitle": "ハードウェアリサイクルサービスの詳細について",
+        "locations": "所在地",
+        "store": "販売",
+        "warehouse": "倉庫",
+        "contactInfo": "お問い合わせ",
+        "phone": "電話",
+        "hours": "営業時間",
+        "monday": "月曜日",
+        "weekdays": "火曜日〜金曜日"
+      },
+      "cta": {
+        "heading": "今すぐ始めますか？",
+        "body": "ハードウェアリサイクルサービスの詳細については、今日お問い合わせください。",
+        "contact": "お問い合わせ",
+        "back": "サービスに戻る"
+      }
+    },
+    "linuxOpenSource": {
+      "meta": {
+        "title": "Linux & オープンソース",
+        "description": "専門家によるLinuxのインストール、サポート、トレーニングサービス。あなたのニーズに合ったLinuxディストリビューションを見つけましょう。"
+      },
+      "hero": {
+        "title": "Linux & オープンソース",
+        "subtitle": "プロフェッショナルなLinuxインストール、サポート、トレーニングサービス。あなたのニーズに合ったディストリビューションを見つけましょう。",
+        "intro": "Linuxは、パソコンからエンタープライズサーバーまであらゆるものを動かす、強力でセキュアかつ柔軟なオペレーティングシステムです。"
+      },
+      "servicesSection": {
+        "heading": "Linuxサービス",
+        "subtitle": "インストールから継続的なメンテナンスまで、すべてのLinuxニーズに包括的なサポートを提供します。",
+        "priceInfo": "プロフェッショナルLinuxサポート CHF 70/時間〜",
+        "items": [
+          {
+            "title": "Linuxインストール",
+            "description": "完全なハードウェア互換性チェックと最適化を含む、選択したLinuxディストリビューションのプロフェッショナルなインストール。"
+          },
+          {
+            "title": "システム設定",
+            "description": "特定の要件とワークフローのニーズに合わせたLinuxシステムのカスタム設定。"
+          },
+          {
+            "title": "トレーニング＆サポート",
+            "description": "Linuxシステムを最大限に活用するための包括的なトレーニングプログラムと継続的なサポート。"
+          },
+          {
+            "title": "サーバーセットアップ",
+            "description": "企業や組織向けのエンタープライズグレードのLinuxサーバー設定と最適化。"
+          }
+        ]
+      },
+      "advantages": {
+        "heading": "Linuxのメリット",
+        "subtitle": "専門家のサポートを受けて、Linuxのメリットを最大限に活用しましょう。",
+        "items": [
+          {
+            "title": "コスト削減",
+            "points": [
+              "高価なライセンスやサブスクリプション不要",
+              "既存ハードウェアの寿命を延長",
+              "メンテナンスとアップグレードのコストを削減"
+            ]
+          },
+          {
+            "title": "パフォーマンス向上",
+            "points": [
+              "あらゆるハードウェアで高速なシステムパフォーマンス",
+              "特定のニーズに最適化",
+              "信頼性が高く安定した動作"
+            ]
+          },
+          {
+            "title": "専門家サポート",
+            "points": [
+              "プロフェッショナルなインストールとセットアップ",
+              "継続的な技術サポート",
+              "トレーニングとドキュメント"
+            ]
+          }
+        ]
+      },
+      "quickCta": {
+        "heading": "始める準備はできていますか？",
+        "body": "企業や個人向けのプロフェッショナルなLinuxサポートとソリューションを提供しています。無料相談についてはお問い合わせください。",
+        "consult": "相談を予約",
+        "call": "今すぐ電話"
+      },
+      "benefitsSection": {
+        "heading": "なぜLinuxを選ぶのか？",
+        "subtitle": "Linuxは他のオペレーティングシステムと比較して、優れたパフォーマンス、セキュリティ、柔軟性を提供します。",
+        "items": [
+          {
+            "title": "セキュリティと安定性",
+            "description": "Linuxは堅牢なセキュリティ機能とシステムの安定性で知られており、個人用と業務用の両方に最適です。"
+          },
+          {
+            "title": "パフォーマンス",
+            "description": "最小限のシステム要件で、古いハードウェアでも効率的なリソース使用と最適化されたパフォーマンスを実現します。"
+          },
+          {
+            "title": "カスタマイズ",
+            "description": "ワークフローや好みに合わせて無限のカスタマイズオプションでシステムを完全にコントロールできます。"
+          },
+          {
+            "title": "コミュニティサポート",
+            "description": "サポート、ドキュメント、継続的な改善のためのユーザーと開発者の大規模なグローバルコミュニティへのアクセス。"
+          }
+        ]
+      },
+      "distrosSection": {
+        "heading": "人気のLinuxディストリビューション",
+        "subtitle": "各ディストリビューションには独自の強みがあり、さまざまなユースケースに適しています。",
+        "visitWebsite": "ウェブサイトを訪問",
+        "bestFor": "最適な用途:",
+        "pros": "メリット:",
+        "cons": "考慮事項:",
+        "items": [
+          {
+            "description": "初心者からプロまで最適なユーザーフレンドリーなディストリビューション。洗練されたデスクトップ環境と豊富なソフトウェアリポジトリを提供します。",
+            "useCases": [
+              "デスクトップコンピューティング",
+              "開発",
+              "サーバー展開"
+            ],
+            "pros": [
+              "使いやすい",
+              "大規模なコミュニティ",
+              "定期的なアップデート",
+              "豊富なドキュメント"
+            ],
+            "cons": [
+              "一部プロプライエタリソフトウェア",
+              "一部の代替品より重い"
+            ]
+          },
+          {
+            "description": "Ubuntuをベースにしていますが、より伝統的なデスクトップ体験を提供します。安定性と使いやすさで知られています。",
+            "useCases": [
+              "デスクトップコンピューティング",
+              "オフィス作業",
+              "マルチメディア"
+            ],
+            "pros": [
+              "Windowsに似たインターフェース",
+              "優れたハードウェアサポート",
+              "安定して信頼性が高い",
+              "初心者に最適"
+            ],
+            "cons": [
+              "アップデートが少ない",
+              "エンタープライズ機能が限定的"
+            ]
+          },
+          {
+            "description": "最新のオープンソース技術を紹介する最先端のディストリビューション。Red Hatが支援しています。",
+            "useCases": [
+              "開発",
+              "エンタープライズ",
+              "イノベーション"
+            ],
+            "pros": [
+              "最新のソフトウェア",
+              "強力なセキュリティ",
+              "エンタープライズ対応",
+              "優れた開発ツール"
+            ],
+            "cons": [
+              "頻繁なアップデート",
+              "サポートサイクルが短い"
+            ]
+          },
+          {
+            "description": "多くの他のLinuxシステムの基盤として機能する、最も安定して信頼性の高いディストリビューションの一つ。",
+            "useCases": [
+              "サーバー",
+              "エンタープライズ",
+              "安定したシステム"
+            ],
+            "pros": [
+              "非常に安定している",
+              "大規模なパッケージリポジトリ",
+              "長いサポートサイクル",
+              "強力なセキュリティ"
+            ],
+            "cons": [
+              "古いソフトウェアバージョン",
+              "ユーザーフレンドリーでない"
+            ]
+          },
+          {
+            "description": "Debianをベースにした軽量ディストリビューション。優れたパフォーマンスとユーザーフレンドリーなインターフェースで知られています。",
+            "useCases": [
+              "古いハードウェア",
+              "デスクトップコンピューティング",
+              "リソース効率"
+            ],
+            "pros": [
+              "軽量",
+              "高速なパフォーマンス",
+              "使いやすい",
+              "安定したベース"
+            ],
+            "cons": [
+              "小さなコミュニティ",
+              "エンタープライズ機能が限定的"
+            ]
+          }
+        ]
+      },
+      "finalCta": {
+        "heading": "Linuxに切り替える準備はできていますか？",
+        "body": "専門家があなたのニーズに合ったLinuxディストリビューションを見つけて設定するお手伝いをします。",
+        "start": "始める",
+        "explore": "サービスを探索"
+      }
+    },
+    "openSourceSolutions": {
+      "meta": {
+        "title": "オープンソースの代替ソフト",
+        "description": "独自ソフトウェアの最良のオープンソース代替を見つけましょう。正直なレビュー、移行のヒント、Revamp-ITのサポート。",
+        "keywords": [
+          "オープンソース代替",
+          "オープンソースソフトウェア",
+          "無料ソフトウェア",
+          "photoshop代替",
+          "microsoft office代替",
+          "linux"
+        ]
+      },
+      "stats": {
+        "alternativesLabel": "オープンソース代替ソフト",
+        "proprietaryLabel": "独自ソフトウェア",
+        "categoriesLabel": "カテゴリ"
+      },
+      "detail": {
+        "notFound": "見つかりません",
+        "backToOverview": "概要に戻る",
+        "description": "説明",
+        "replaces": "置き換えるもの",
+        "migrationTips": "移行のヒント",
+        "highlights": "強み",
+        "limitations": "制限事項",
+        "links": "リンク",
+        "visitWebsite": "ウェブサイトを訪問",
+        "viewSourceCode": "ソースコードを見る",
+        "details": "詳細",
+        "license": "ライセンス",
+        "platforms": "プラットフォーム",
+        "maturity": "成熟度",
+        "helpWithMigration": "移行のサポートが必要ですか？",
+        "helpDescription": "私たちのチームがオープンソースソフトウェアへの移行をお手伝いします。",
+        "contactUs": "お問い合わせ",
+        "relatedAlternatives": "このカテゴリの他の代替ソフト",
+        "openSourceAlternative": "オープンソース代替"
+      }
+    },
+    "repair": {
+      "meta": {
+        "title": "コンピュータ修理・アップグレード",
+        "description": "プロフェッショナルなコンピュータ修理・アップグレード。マザーボード修理や部品レベルの障害など、他社では修理できないものを専門としています。"
+      },
+      "hero": {
+        "title": "コンピュータ修理・アップグレード",
+        "subtitle": "信頼できる修理",
+        "description": "技術的な専門知識と持続可能な行動を組み合わせ、お客様のデバイスの寿命を延ばします。私たちの修理サービスは、他社が諦めるものに特化しています。"
+      },
+      "features": [
+        {
+          "title": "部品レベルの修理",
+          "description": "単に部品を交換するのではなく、修理します。技術者はマザーボード、電源ユニットなどを回路レベルで修理できます。"
+        },
+        {
+          "title": "ハードウェアアップグレード",
+          "description": "的を絞ったアップグレードでコンピュータの寿命を延ばします。適切な部品の選択と取り付けをお手伝いします。"
+        },
+        {
+          "title": "診断サービス",
+          "description": "問題を迅速に特定し修正するための包括的な診断。プロのツールと豊富な経験で的確に対応します。"
+        },
+        {
+          "title": "エクスプレスサービス",
+          "description": "急ぎですか？多くの一般的な問題については当日修理を提供しています。営業時間内にデバイスをお持ちください。"
+        }
+      ],
+      "pricing": {
+        "heading": "料金",
+        "base": "CHF 70/時間から",
+        "details": [
+          "初回診断無料",
+          "修理なし = 費用なし",
+          "透明な料金体系",
+          "修理保証"
+        ]
+      },
+      "processHeading": "修理プロセス",
+      "process": [
+        {
+          "title": "診断",
+          "description": "デバイスを調査し、問題の正確な評価を提供します。"
+        },
+        {
+          "title": "見積もり",
+          "description": "透明な見積もりを受け取れます — 隠れた費用はありません。"
+        },
+        {
+          "title": "修理",
+          "description": "技術者が高品質の部品と実績ある方法でデバイスを修理します。"
+        },
+        {
+          "title": "テスト",
+          "description": "すべての修理は、デバイスが完全に機能することを確認するために徹底的にテストされます。"
+        }
+      ],
+      "cta": {
+        "heading": "デバイスを修理しますか？",
+        "body": "無料診断と見積もりについてお問い合わせください。デバイスを迅速かつ手頃な価格で修理するお手伝いをします。",
+        "contact": "お問い合わせ",
+        "allServices": "全サービス"
+      }
+    },
+    "buildComputer": {
+      "meta": {
+        "title": "AIを活用したサステナブルなコンピュータービルド",
+        "description": "AIシステムがグローバルパートナーネットワークをスキャンし、主に中古・再生パーツからあなたに最適なコンピューターを組み立てます。"
+      },
+      "hero": {
+        "title": "AIを活用したサステナブルなコンピュータービルド",
+        "subtitle": "革新的なAIシステムが在庫とグローバルパートナーネットワークをスキャンし、主に中古・再生パーツからあなたに最適なコンピューターを組み立てます。",
+        "strong": "100%中古パーツ優先 • グローバル在庫ネットワーク • インテリジェントAIマッチング",
+        "badge1": "循環型経済",
+        "badge2": "グローバルネットワーク",
+        "badge3": "AI最適化"
+      },
+      "howItWorks": {
+        "heading": "AIビルドシステムの仕組み",
+        "steps": [
+          {
+            "title": "要件分析",
+            "description": "ユースケース、パフォーマンス要件、サステナビリティの好みをお知らせください"
+          },
+          {
+            "title": "グローバル在庫スキャン",
+            "description": "AIがヨーロッパ全土とそれ以外の在庫＋パートナーネットワークをスキャン"
+          },
+          {
+            "title": "インテリジェント最適化",
+            "description": "アルゴリズムが中古パーツを優先し、パフォーマンスとサステナビリティを最適化"
+          },
+          {
+            "title": "組み立て＆認定",
+            "description": "\"Revamped\"サステナビリティ認定でプロフェッショナルな組み立て"
+          }
+        ]
+      },
+      "buildTool": {
+        "heading": "ビルドツールデモを試す",
+        "subtitle": "AIシステムがあなたの特定のニーズにどのようなコンポーネントを推薦するかを体験してください",
+        "step1Heading": "コンピューターを何に使いますか？",
+        "performanceHeading": "パフォーマンス要件",
+        "budgetLabel": "予算範囲（CHF）",
+        "budgetPlaceholder": "予算範囲を選択",
+        "specificLabel": "具体的な要件（任意）",
+        "specificPlaceholder": "特別なニーズはありますか？（例：複数モニター、VRゲーミング、特定のソフトウェア要件）",
+        "nextButton": "分析へ進む",
+        "step2Heading": "AI在庫分析",
+        "requirementsSummary": "要件の概要：",
+        "useCaseLabel": "ユースケース",
+        "performanceLabel": "パフォーマンス",
+        "budgetSummaryLabel": "予算",
+        "sustainabilityLabel": "サステナビリティ",
+        "sustainabilityValue": "高優先度",
+        "specialNotesLabel": "特記事項",
+        "analyzeDescription": "グローバル在庫ネットワークをスキャンし、パーソナライズされたビルド推薦を生成する準備ができていますか？",
+        "backButton": "編集に戻る",
+        "analyzeButton": "グローバル在庫を分析",
+        "scanningLabel": "🔍 在庫ネットワークをスキャン中...",
+        "scanningLines": [
+          "チューリッヒ倉庫を確認中（847コンポーネント）",
+          "ヨーロッパパートナーをスキャン中（12,450+コンポーネント）",
+          "AIがサステナビリティ＋パフォーマンスを最適化中",
+          "配送ルートとコストを計算中"
+        ],
+        "step3Heading": "あなたの最適化されたビルド",
+        "sustainableLabel": "% サステナブル",
+        "performanceMatchLabel": "% パフォーマンス一致",
+        "usedPartsLabel": "% 中古パーツ",
+        "componentTypes": {
+          "cpu": "プロセッサー",
+          "gpu": "グラフィックカード",
+          "ram": "メモリ",
+          "storage": "ストレージ"
+        },
+        "conditions": {
+          "used": "中古",
+          "refurbished": "再生品",
+          "new": "新品"
+        },
+        "inStock": "在庫あり",
+        "deliveryTime": "約3〜5日",
+        "totalCost": "ビルド総費用：",
+        "extras": "+ 組み立て＆テスト：CHF 120 | + 配送：CHF 45 | + \"Revamped\"認定：含む",
+        "changeRequirements": "要件を変更",
+        "orderBuild": "このビルドを注文",
+        "environmentHeading": "環境への影響",
+        "co2Saved": "CO₂削減量",
+        "co2Value": "新品ビルドと比較して約85kg削減",
+        "reusedLabel": "再利用コンポーネント",
+        "reusedValue": "主要4パーツ中4つ",
+        "circularLabel": "循環型経済",
+        "circularValue": "ハードウェアの寿命を延ばす"
+      },
+      "features": {
+        "heading": "なぜ当社のAIビルドシステムを選ぶのか？",
+        "items": [
+          {
+            "title": "グローバル在庫ネットワーク",
+            "description": "リアルタイム在庫追跡により、ヨーロッパ全土とそれ以外の何千もの中古・再生コンポーネントにアクセス。"
+          },
+          {
+            "title": "AI最適化",
+            "description": "インテリジェントなアルゴリズムがパフォーマンス、サステナビリティ、コスト、可用性のバランスを取り、完璧なビルドの組み合わせを見つけます。"
+          },
+          {
+            "title": "\"Revamped\"認定",
+            "description": "各ビルドはサステナビリティ認定を受け、品質を保証しながら循環型経済を支援します。"
+          }
+        ]
+      },
+      "certification": {
+        "heading": "Revamped認定を取得する",
+        "body": "当社が組み立てるすべてのコンピューターは、独自の\"Revamped\"認定を受けます—サステナビリティ、品質、パフォーマンスの保証。",
+        "sustainabilityScore": "サステナビリティスコア",
+        "co2Saved": "CO₂削減量",
+        "certifiedComputers": "認定コンピューター数",
+        "learnMore": "Revamped認定についてもっと知る"
+      },
+      "cta": {
+        "heading": "サステナブルに構築する準備はできていますか？",
+        "body": "コンピュータービルドの革命に参加しましょう。地球を守りながら優れたパフォーマンスを発揮するカスタムのサステナブルビルドを手に入れましょう。",
+        "startBuild": "ビルドを開始",
+        "explore": "すべてのサービスを見る"
+      },
+      "useCaseOptions": {
+        "office": {
+          "name": "オフィス＆ビジネス",
+          "description": "メール、ドキュメント、ウェブブラウジング、ビデオ通話"
+        },
+        "creative": {
+          "name": "クリエイティブ作業",
+          "description": "写真/動画編集、デザイン、コンテンツ作成"
+        },
+        "gaming": {
+          "name": "ゲーミング",
+          "description": "最新ゲーム、ストリーミング、高性能コンピューティング"
+        },
+        "development": {
+          "name": "ソフトウェア開発",
+          "description": "プログラミング、テスト、複数のVM、コンパイル"
+        },
+        "server": {
+          "name": "サーバー/NAS",
+          "description": "ファイルサーバー、メディアサーバー、ホームオートメーション"
+        },
+        "ai": {
+          "name": "AI/機械学習",
+          "description": "モデルトレーニング、データ処理、CUDAワークロード"
+        }
+      },
+      "performanceOptions": {
+        "basic": {
+          "name": "基本",
+          "description": "軽いタスク、十分なパフォーマンス"
+        },
+        "moderate": {
+          "name": "中程度",
+          "description": "ほとんどのタスクに対してバランスの取れたパフォーマンス"
+        },
+        "high": {
+          "name": "高い",
+          "description": "要求の多いタスクのための高パフォーマンス"
+        },
+        "extreme": {
+          "name": "エクストリーム",
+          "description": "妥協なし、最高のパフォーマンス"
+        }
+      },
+      "budgetOptions": {
+        "300-500": "CHF 300-500",
+        "500-800": "CHF 500-800",
+        "800-1200": "CHF 800-1200",
+        "1200+": "CHF 1200+"
+      }
     }
   },
   "shop": {
@@ -2391,56 +3348,53 @@
   "space": {
     "meta": {
       "title": "私たちの拠点",
-      "description": "Toni Molkereiから現在まで — 拠点の歴史と、チューリッヒにおける新しいコミュニティスペースへのビジョン。"
+      "description": "トニ酪農場から現在まで – 拠点の歴史とチューリッヒでの新しいコミュニティスペースへのビジョン。"
     },
     "hero": {
-      "title": "乳製品工場からコミュニティスペースへ",
-      "subtitle": "2003年からチューリッヒを拠点にしています。今、私たちは新しい拠点を探しています — 持続可能性、テクノロジー、コミュニティが一堂に会する場所。",
-      "ctaVision": "私たちのビジョン",
-      "ctaDonate": "拠点予算を支援する"
+      "title": "酪農場からコミュニティスペースへ",
+      "subtitle": "2003年からチューリッヒで活動を続けています。今、サステナビリティ、テクノロジー、コミュニティが集まる新しい場所を探しています。",
+      "visionBtn": "私たちのビジョン",
+      "donateBtn": "拠点予算を支援する"
     },
     "history": {
-      "title": "チューリッヒの旅",
-      "subtitle": "20年以上、複数の拠点、一つのミッション：テクノロジーを持続的に活用する。",
+      "title": "チューリッヒでの旅",
+      "subtitle": "20年以上、複数の拠点、一つのミッション：テクノロジーを持続可能に活用する。",
       "locations": [
         {
-          "period": "2003年 – 2008年",
-          "name": "Toni Molkerei",
-          "description": "古いチーズ地下室での創業地。ここで伝説的なDebianの10周年記念が屋上で開催されました。",
-          "highlight": "創業地"
+          "highlight": "創設地",
+          "description": "旧チーズセラーにある発祥の地。屋上で伝説のDebian10周年記念イベントが開催された。"
         },
         {
-          "period": "2008年 – 2012年",
-          "name": "ヴィプキンゲン改革派教会",
-          "description": "教会塔の6・7階と地下室。ここで最初の社会プロジェクトが始まりました。",
-          "highlight": "社会プロジェクト"
+          "highlight": "社会プロジェクト",
+          "description": "教会塔の6・7階と地下室。ここで最初の社会プロジェクトが始まった。"
         },
         {
-          "period": "2012年 – 2015年",
-          "name": "Röschibachstrasse",
-          "description": "多くの作業スペースを持つ広い場所。ワークショップの拡大。",
-          "highlight": "拡大"
+          "highlight": "拡張",
+          "description": "多くの作業スペースを持つ大きなスペース。ワークショップの拡張。"
+        },
+        {
+          "highlight": "現在",
+          "description": "ワークショップを持つ現在の店舗。{warehouseStreet}に追加の倉庫。"
         }
-      ],
-      "currentHighlight": "現在"
+      ]
     },
-    "current": {
+    "currentLocation": {
       "label": "現在の店舗",
-      "hours": "営業時間",
-      "hoursValue": "月：9–12 | 火–金：13–17",
-      "moreInfo": "店舗について詳しく"
+      "hoursLabel": "営業時間",
+      "hoursText": "月：{monday} | 火〜金：{tueFri}",
+      "moreBtn": "店舗の詳細"
     },
     "future": {
-      "badge": "2026年末までに移転",
-      "title": "夢の拠点",
-      "subtitle": "2026年末までに現在の場所を離れなければなりません。これは私たちにとってより大きなものを作るチャンスです。",
-      "visionLabel": "ビジョン：コミュニティスペース",
-      "visionDescription": "テクノロジー、持続可能性、コミュニティが一堂に会するオープンスペース。ショップ、ワークショップ、コワーキング、イベント — すべて一つ屋根の下。",
-      "conceptCaption": "理想のコミュニティスペースのコンセプト可視化",
+      "moveDeadline": "2026年末までに移転",
+      "title": "夢の場所",
+      "subtitle": "2026年末までに現在の場所を離れなければなりません。これは、より大きなものを作る機会です。",
+      "visionTagline": "ビジョン：{orgName} コミュニティスペース",
+      "visionDesc": "テクノロジー、サステナビリティ、コミュニティが集まるオープンスペース。ショップ、ワークショップ、コワーキング、イベント – すべて一つ屋根の下。",
+      "visionCaption": "理想的なコミュニティスペースのコンセプトビジュアライゼーション",
       "features": [
         {
           "name": "ショップエリア",
-          "description": "相談付きの再生デバイス展示スペース"
+          "description": "整備済み機器の展示スペースとコンサルティング"
         },
         {
           "name": "修理ワークショップ",
@@ -2452,15 +3406,15 @@
         },
         {
           "name": "イベントスペース",
-          "description": "ワークショップ、ミートアップ、小規模イベント（15〜20名）のためのスペース"
+          "description": "ワークショップ、ミートアップ、小規模イベント用スペース（15〜20人）"
         },
         {
-          "name": "ミニ図書館",
-          "description": "テック本、雑誌、リソースの棚"
+          "name": "ミニライブラリー",
+          "description": "技術書、雑誌、リソースの本棚"
         },
         {
           "name": "コーヒーコーナー",
-          "description": "非公式な交流とネットワーキングのための集いの場"
+          "description": "非公式の交流とネットワーキングの場"
         },
         {
           "name": "キッチン",
@@ -2468,62 +3422,53 @@
         },
         {
           "name": "フードロスゼロ",
-          "description": "コミュニティランチのための救出食材"
+          "description": "コミュニティランチのための救済食品"
         }
       ],
       "params": {
-        "title": "私たちが探しているもの",
-        "subtitle": "理想の場所のパラメーター",
-        "area": "使用可能面積",
-        "budget": "月額予算",
-        "city": "場所",
-        "idealLabel": "理想としては：",
-        "idealText": "1階またはアクセスしやすい場所、バリアフリー、積み下ろしスペースまたは搬入口、公共交通機関が便利な活気あるエリア。",
-        "tipText": "適した場所をご存知ですか？情報をいただけると助かります！",
-        "contactCta": "お問い合わせ"
+        "title": "求めているもの",
+        "subtitle": "理想の拠点のパラメータ",
+        "areaLabel": "使用可能面積",
+        "budgetLabel": "月額予算",
+        "locationLabel": "場所",
+        "ideal": "理想：1階またはアクセスしやすい場所、車椅子対応、荷物搬入可能、公共交通機関が充実した活気あるエリア。",
+        "knowSpace": "適切なスペースをご存知ですか？情報をお待ちしています！",
+        "contactBtn": "お問い合わせ"
       }
     },
     "impact": {
-      "title": "なぜ広い場所がより大きな影響をもたらすのか",
-      "subtitle": "より多くのスペースがあれば、KPIを倍増させることができます — より多くのデバイスを救出し、より多くの人を育成し、より大きな影響を生み出すことができます。",
-      "today": "現在",
-      "potential": "ポテンシャル",
-      "items": [
+      "title": "より大きなスペースがより大きなインパクトを意味する理由",
+      "subtitle": "より多くのスペースでKPIを倍増させることができます – より多くのデバイスを救い、より多くの人を育成し、より大きなインパクトを達成する。",
+      "todayLabel": "現在",
+      "potentialLabel": "ポテンシャル",
+      "kpis": [
         {
           "metric": "年間デバイス数",
-          "current": "~500台",
-          "potential": "2,000台以上",
-          "reason": "より多くのワークショップスペース = より多くのキャパシティ"
+          "reason": "ワークショップスペースが増える = 容量が増える"
         },
         {
           "metric": "ワークショップ参加者",
-          "current": "~100名",
-          "potential": "500名以上",
-          "reason": "定期コースのための専用イベントスペース"
+          "reason": "定期的なコースのための専用イベントスペース"
         },
         {
           "metric": "コミュニティメンバー",
-          "current": "~50名",
-          "potential": "200名以上",
           "reason": "コワーキングがより多くのボランティアを引き付ける"
         },
         {
           "metric": "社会的統合",
-          "current": "~10名",
-          "potential": "30名以上",
-          "reason": "より広いスペースによりインターンシップの場を増やす"
+          "reason": "より大きなスペースによるインターンシップの場の増加"
         }
       ],
-      "donateCta": {
+      "donateCard": {
         "title": "拠点予算を支援する",
-        "description": "より大きな予算があれば、より良い場所を見つけることができ、環境と社会への影響を倍増させることができます。すべての貢献がコミュニティスペースの夢の実現に役立ちます。",
-        "donateCta": "今すぐ寄付する",
-        "impactCta": "私たちの活動成果を見る"
+        "body": "より大きな予算があれば、より良い場所を見つけ、環境と社会へのインパクトを倍増させることができます。すべての貢献がコミュニティスペースの夢の実現に役立ちます。",
+        "donateBtn": "今すぐ寄付",
+        "impactBtn": "インパクトを見る"
       }
     },
     "shopLinks": {
       "title": "すべての購入オプション",
-      "subtitle": "実店舗とオンライン — あなたに合ったものを選んでください。",
+      "subtitle": "実店舗とオンライン – 最適なものを選んでください。",
       "currentStore": "現在の店舗",
       "shopOverview": "ショップ概要",
       "onlineShop": "オンラインショップ"
@@ -2658,7 +3603,8 @@
       "noListingsTitle": "アクティブな出品なし",
       "noListingsDescription": "この販売者は現在アクティブな出品がありません。",
       "loadingProfile": "プロフィールを読み込み中...",
-      "sellerNotFound": "販売者が見つかりません"
+      "sellerNotFound": "販売者が見つかりません",
+      "errorLoading": "プロフィールの読み込みエラー"
     }
   },
   "workshops": {
@@ -2702,6 +3648,313 @@
         "subtitle": "ワークショップのアイデアがありますか？新しいテーマや内容のご提案をお待ちしています。",
         "button": "ワークショップを提案"
       }
+    },
+    "detail": {
+      "notFound": "ワークショップが見つかりません",
+      "backToWorkshops": "ワークショップ一覧に戻る",
+      "allLevels": "全レベル",
+      "details": "ワークショップ詳細",
+      "duration": "期間",
+      "variableDuration": "変動",
+      "maxParticipants": "最大参加者数",
+      "category": "カテゴリ",
+      "generalCategory": "一般",
+      "price": "料金",
+      "free": "無料",
+      "priceChf": "CHF {amount}",
+      "targetAudience": "対象者",
+      "prerequisites": "前提条件",
+      "learningObjectives": "学べること：",
+      "materials": "教材",
+      "materialsProvided": "提供されます：",
+      "materialsRequired": "持参してください：",
+      "upcomingDates": "今後の日程",
+      "soldOut": "満員",
+      "registrationCount": "{current}/{max}名登録済み",
+      "locationTba": "後日発表",
+      "instructor": "講師：{name}",
+      "registration": "登録",
+      "noDates": "このワークショップの日程は現在ありません。またご確認ください！",
+      "stats": "ワークショップ統計",
+      "level": "レベル",
+      "dates": "日程",
+      "datesAvailable": "{count}件利用可能",
+      "reviews": "レビュー"
+    },
+    "propose": {
+      "meta": {
+        "title": "ワークショップを提案する",
+        "description": "ワークショップを提案し、コミュニティと知識を共有しましょう。"
+      },
+      "loginRequired": "ログインが必要です",
+      "loginPrompt": "ワークショップを提案するにはログインしてください。",
+      "loginButton": "ログイン",
+      "backToDashboard": "ダッシュボードに戻る",
+      "title": "ワークショップを提案する",
+      "subtitle": "新しいワークショップを提案し、コミュニティと知識を共有しましょう",
+      "form": {
+        "termsError": "利用規約に同意してください",
+        "genericError": "エラーが発生しました。もう一度試してください。",
+        "networkError": "ネットワークエラー。もう一度試してください。",
+        "aiPlaceholder": "ワークショップのアイデアを1〜2文で説明してください...",
+        "successTitle": "提案が正常に送信されました！",
+        "successSubmitted": "が送信されました。",
+        "successMessage": "提案が送信されました。メールでご連絡します。",
+        "backToWorkshops": "ワークショップに戻る",
+        "errorTitle": "エラー",
+        "submitting": "提案を送信中...",
+        "submit": "ワークショップ提案を送信",
+        "reviewNote": "送信後、提案が審査されます。1〜2営業日かかる場合があります。"
+      },
+      "sections": {
+        "basicInfo": {
+          "title": "基本情報",
+          "titleField": "ワークショップタイトル *",
+          "titlePlaceholder": "例：初心者向けLinux",
+          "category": "カテゴリ *",
+          "categoryPlaceholder": "カテゴリを選択",
+          "level": "難易度 *",
+          "shortDescription": "短い説明 *",
+          "shortDescriptionPlaceholder": "短くキャッチーな説明（概要に表示されます）",
+          "detailedDescription": "詳細な説明 *",
+          "detailedDescriptionPlaceholder": "ワークショップを詳しく説明してください..."
+        },
+        "learningObjectives": {
+          "title": "学習目標",
+          "placeholder": "例：Linuxコマンドラインの基礎を習得する",
+          "remove": "削除",
+          "add": "+ 学習目標を追加"
+        },
+        "practicalDetails": {
+          "title": "実践的な詳細",
+          "duration": "所要時間（時間）*",
+          "price": "参加費（CHF）*",
+          "pricePlaceholder": "0.00（無料）",
+          "maxParticipants": "最大参加人数 *",
+          "minParticipants": "最少参加人数 *",
+          "targetAudience": "対象者",
+          "targetAudiencePlaceholder": "例：初心者、14〜18歳の若者",
+          "prerequisites": "前提条件",
+          "prerequisitesPlaceholder": "例：Linuxがインストールされた自分のノートPC"
+        },
+        "materials": {
+          "title": "資料 & 準備",
+          "provided": "主催者が提供する資料",
+          "providedPlaceholder": "例：ワークシート、サンプルコード、飲み物",
+          "required": "参加者が持参するもの",
+          "requiredPlaceholder": "例：自分のノートPC、筆記用具"
+        },
+        "location": {
+          "title": "場所 & スケジュール",
+          "typeLabel": "ワークショップの種類 *",
+          "typeVenue": "会場（例：コミュニティセンター）",
+          "typeOnline": "ビデオ会議でオンライン",
+          "typeHome": "自宅または自分の施設で",
+          "availableVenues": "利用可能な会場",
+          "loading": "会場を読み込み中...",
+          "selectVenue": "会場を選択...",
+          "personsCapacity": "名",
+          "noVenues": "承認済みの会場がありません。",
+          "noVenuesSuggestion": "新しい会場を提案するか、既存の会場を承認のために提出できます。",
+          "alternativeVenue": "代替会場（適切な会場がない場合）",
+          "alternativeVenuePlaceholder": "例：自宅、または新しい会場",
+          "alternativeVenueHint": "新しい会場を提案したい場合はこのフィールドを使用してください",
+          "proposedDate": "希望日",
+          "proposedTime": "希望時刻",
+          "address": "住所",
+          "addressPlaceholder": "完全な住所",
+          "specialRequirements": "特別な要件",
+          "specialRequirementsPlaceholder": "例：プロジェクター、ホワイトボード、インターネット接続、特別なソフトウェア"
+        },
+        "terms": {
+          "title": "ワークショップ主催者の利用規約",
+          "term1": "高品質で情熱的なワークショップを実施することを約束します",
+          "term2": "全参加者を敬意と専門性をもって接します",
+          "term3": "ワークショップの安全と円滑な運営に責任を持ちます",
+          "term4": "適切な前提知識と明確な学習目標を伝えます",
+          "term5": "評価システムとプラットフォーム手数料に同意します",
+          "term6": "提供する情報は真実であり、最新の状態に保ちます",
+          "checkboxPrefix": "",
+          "termsLink": "利用規約",
+          "checkboxMiddle": "および",
+          "privacyLink": "プライバシーポリシー"
+        }
+      }
+    }
+  },
+  "donate": {
+    "meta": {
+      "title": "寄付する",
+      "description": "直接助ける。すべての寄付が電子廃棄物からデバイスを救い、すべての人に技術をアクセス可能にします。"
+    },
+    "hero": {
+      "title": "直接助ける。",
+      "body": "すべての寄付が電子廃棄物からデバイスを救い、ライフサイクルを延ばし、そうでなければ支払えない人々に技術を可能にします。",
+      "cta": "今すぐ振り込む"
+    },
+    "transparency": {
+      "label": "透明性",
+      "budgetValue": "CHF 60k",
+      "budgetLabel": "年間予算（非営利団体）",
+      "devicesLabel": "年間救済デバイス数",
+      "co2Label": "年間節約"
+    },
+    "tiers": {
+      "heading": "あなたの寄付が達成すること",
+      "recommended": "おすすめ",
+      "items": [
+        {
+          "title": "デバイス1台救済",
+          "description": "電子廃棄物からラップトップ1台を救済 + 285 kg CO₂回避。"
+        },
+        {
+          "title": "デバイス2台 + ワークショップ席",
+          "description": "デバイス2台を修復 + 負担できない方のためのLinuxワークショップ席。"
+        },
+        {
+          "title": "法人寄付 — デバイス10台",
+          "description": "教育機関、社会プロジェクト、低収入世帯向けデバイス10台。"
+        }
+      ]
+    },
+    "bridgeCta": "金額を選択して振り込む",
+    "transfer": {
+      "heading": "銀行振込",
+      "intro": "以下の口座に振り込んでください：",
+      "recipientLabel": "受取人",
+      "ibanLabel": "IBAN",
+      "bankLabel": "銀行",
+      "purposeLabel": "支払い目的",
+      "copyBtn": "コピー",
+      "copyIbanBtn": "IBANコピー"
+    },
+    "devices": {
+      "heading": "デバイスを寄付する",
+      "intro": "不要なハードウェアが他の人に本当のチャンスを与えることができます。",
+      "items": [
+        "ノートパソコン",
+        "デスクトップPC",
+        "モニター",
+        "周辺機器"
+      ],
+      "acceptLabel": "受け付けるもの：",
+      "acceptText": "ノートパソコン、デスクトップPC、モニター、キーボード、マウス、プリンター — 動作するか修理可能なもの。",
+      "notAcceptLabel": "受け付けないもの：",
+      "notAcceptText": "物理的な損傷のあるデバイス、フレームのない壊れた画面、CRTモニター。",
+      "prepLabel": "準備：",
+      "prepText": "引き渡し前に個人データを削除してください（必要に応じてお手伝いします）。",
+      "addressLabel": "引き渡し住所",
+      "questionsLink": "ご質問は？お問い合わせ →"
+    },
+    "newsletter": {
+      "title": "寄付の影響についてお知らせします。",
+      "description": "広告なし。救済デバイス、節約CO₂、支援者に関する実際の更新情報のみ。"
+    },
+    "purposeTemplate": "{orgName} 寄付 {month} {year}"
+  },
+  "mitgliedWerden": {
+    "meta": {
+      "title": "会員になる",
+      "description": "{orgName}の会員になる。協会の決定への投票権。CHF {fee}/年。"
+    },
+    "hero": {
+      "title": "会員になる",
+      "body": "法的、財政的、民主的に協会を支援する。フォームに記入し、会費を振り込めば完了。"
+    },
+    "whatYouGet": [
+      {
+        "title": "協会の決定への投票権",
+        "description": "自動的に投票に招待され、協会の方向性の決定に参加します。"
+      },
+      {
+        "title": "公式会員リスト",
+        "description": "スイス協会法（民法第60条以下）に基づき、法的に協会の会員となります。"
+      },
+      {
+        "title": "財政的支援",
+        "description": "あなたの年会費が、外部の資金提供者に依存せずに協会を持続的に資金調達するのに役立ちます。"
+      }
+    ],
+    "form": {
+      "heading": "今すぐ参加",
+      "subtitle": "即時会員資格 — 待ち時間なし"
+    },
+    "member": {
+      "title": "会員です",
+      "thanks": "ご支援ありがとうございます。",
+      "since": "{date}から会員",
+      "dashboard": "ダッシュボードへ"
+    },
+    "faq": {
+      "heading": "よくある質問",
+      "items": [
+        {
+          "question": "ユーザーアカウントと会員資格の違いは何ですか？",
+          "answer": "マーケットプレイス、ITサポート、ワークショップにはユーザーアカウントが必要です — 無料です。協会会員資格は投票権を与え、正式に会員にします。"
+        },
+        {
+          "question": "会員として具体的に何が得られますか？",
+          "answer": "協会の決定への投票権と公式会員リストへの掲載。独占的な特典は約束しません — サービスはすべての人のためです。"
+        },
+        {
+          "question": "入会はどのように機能しますか？",
+          "answer": "フォームに記入し、年会費を振り込めば完了。すぐに会員になります。"
+        },
+        {
+          "question": "年会費はどのように支払いますか？",
+          "answer": "入会後、確認ページに銀行情報が表示されます。銀行振込またはTWINT。"
+        },
+        {
+          "question": "いつでも退会できますか？",
+          "answer": "はい。理事会への非公式のメールで十分です。すでに支払った年会費は返金されません。"
+        }
+      ]
+    }
+  },
+  "abos": {
+    "tagline": "サブスク交換",
+    "title": "サブスクリプションプールを共有",
+    "subtitle": "Revamp-ITコミュニティとデジタルサブスクリプションを共有して節約しましょう。各自が自分の分だけ支払います。",
+    "createPool": "プールを作成",
+    "filterAll": "すべて",
+    "perMonthPerson": "月額/人",
+    "members": "メンバー",
+    "full": "満員",
+    "spotsLeft": "残り{count}席",
+    "spotsLeftPlural": "残り{count}席",
+    "by": "作成者:",
+    "anonymous": "匿名",
+    "join": "参加",
+    "leave": "退出",
+    "loginToJoin": "ログインして参加",
+    "emptyCategory": "このカテゴリにプールはありません",
+    "emptyAll": "まだプールがありません",
+    "emptyLoggedIn": "最初にプールを作りましょう！",
+    "emptyGuest": "プールを作成するにはログインしてください。",
+    "modal": {
+      "title": "新しいプールを作成",
+      "serviceName": "サービス名 *",
+      "serviceNamePlaceholder": "例: Netflix、Spotify、Adobe CC",
+      "category": "カテゴリ *",
+      "maxMembers": "最大メンバー数 *",
+      "monthlyCost": "月額合計 (CHF) *",
+      "monthlyCostPlaceholder": "例: 17.90",
+      "perPersonCalc": "= CHF {amount} 人/月",
+      "description": "説明",
+      "descriptionPlaceholder": "サービスの簡単な説明",
+      "rules": "ルール（任意）",
+      "rulesPlaceholder": "例: 毎月1日までにTWINTで支払い",
+      "cancel": "キャンセル",
+      "submit": "プールを作成"
+    },
+    "categories": {
+      "streaming": "ストリーミング",
+      "software": "ソフトウェア",
+      "cloud": "クラウド",
+      "gaming": "ゲーム",
+      "music": "音楽",
+      "news": "ニュース",
+      "other": "その他"
     }
   }
 }

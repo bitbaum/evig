@@ -3,41 +3,65 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
 import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
 import { PageSection } from '@/components/community/PageSection'
-import { WORK_REINTEGRATION_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
+import { GraduationCap, Briefcase, Users, Heart } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: `Arbeitsreintegration | ${ORG.name}`,
-  description: 'Nimm an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei deine Karriere wieder aufzubauen.',
+interface WorkReintegrationPageProps {
+  params: Promise<{ locale: string }>
 }
 
-export default function WorkReintegrationPage() {
+// Benefit icons are positional — parallel to translations array
+const BENEFIT_ICONS = [GraduationCap, Briefcase, Users, Heart]
+
+export async function generateMetadata({ params }: WorkReintegrationPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  return {
+    title: `${t('workReintegration.meta.title')} | ${ORG.name}`,
+    description: t('workReintegration.meta.description'),
+  }
+}
+
+export default async function WorkReintegrationPage({ params }: WorkReintegrationPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+
+  const benefits = t.raw('workReintegration.benefits') as Array<{ title: string; description: string }>
+  const sections = t.raw('workReintegration.sections') as Array<{
+    title: string
+    items: string[]
+    description?: string
+  }>
+  const callouts = t.raw('workReintegration.callouts') as Array<{ title: string; content: string }>
+  const howToStartSteps = t.raw('workReintegration.howToStart.steps') as string[]
+
   return (
     <InvolvementPageLayout
-      title="Arbeitsreintegrationsprogramm"
-      description="Schliess dich unserem unterstützenden Programm an, um deine Karriere in Technologie und Nachhaltigkeit wieder aufzubauen."
-      ctaText="Interesse bekunden"
+      title={t('workReintegration.title')}
+      description={t('workReintegration.description')}
+      ctaText={t('workReintegration.ctaText')}
       ctaHref="/get-involved/kontakt?thema=wiedereinstieg"
     >
       <div className="space-y-16">
         {/* Overview Section */}
         <PageSection
-          title={WORK_REINTEGRATION_PAGE.overview.title}
-          content={WORK_REINTEGRATION_PAGE.overview.content}
+          title={t('workReintegration.overview.title')}
+          content={t('workReintegration.overview.content')}
         />
 
         {/* Benefits Section */}
         <section className="space-y-8">
           <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Programmvorteile
+            {t('workReintegration.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>
-            {WORK_REINTEGRATION_PAGE.benefits?.map((benefit, index) => (
+            {benefits.map((benefit, index) => (
               <BenefitCard
                 key={index}
-                icon={benefit.icon}
+                icon={BENEFIT_ICONS[index]}
                 title={benefit.title}
                 description={benefit.description}
               />
@@ -45,17 +69,18 @@ export default function WorkReintegrationPage() {
           </BenefitCardGrid>
         </section>
 
-        {/* Sections from config */}
-        {WORK_REINTEGRATION_PAGE.sections?.map((section, index) => (
+        {/* Sections */}
+        {sections.map((section, index) => (
           <InfoSection
             key={index}
             title={section.title}
-            items={section.items}
+            items={section.items.map((text) => ({ text }))}
+            description={section.description}
           />
         ))}
 
-        {/* Callouts from config */}
-        {WORK_REINTEGRATION_PAGE.callouts?.map((callout, index) => (
+        {/* Callouts */}
+        {callouts.map((callout, index) => (
           <Callout
             key={index}
             title={callout.title}
@@ -65,13 +90,8 @@ export default function WorkReintegrationPage() {
 
         {/* How to Get Started */}
         <NumberedSteps
-          title="Wie du anfangen kannst"
-          steps={[
-            { text: 'Kontaktiere uns, um deine Situation zu besprechen' },
-            { text: 'Triff dich mit unserem Team für eine Bewertung' },
-            { text: 'Entwickle deinen personalisierten Plan' },
-            { text: 'Beginne deine Arbeitsreintegrationsreise' }
-          ]}
+          title={t('workReintegration.howToStart.title')}
+          steps={howToStartSteps.map((text) => ({ text }))}
         />
       </div>
     </InvolvementPageLayout>

@@ -1,4 +1,3 @@
-import { Metadata } from 'next'
 import { Code2 } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'
@@ -8,21 +7,32 @@ import {
   getAllCategories,
   getAllProprietaryApps,
 } from '@/config/open-source-registry'
+import { getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: `Open-Source-Alternativen | ${ORG.name}`,
-  description: `Finde die beste Open-Source-Alternative zu proprietärer Software. Ehrliche Bewertungen, Migrations-Tipps und Unterstützung durch ${ORG.name}.`,
-  keywords: [
-    'open source alternativen',
-    'open source software',
-    'kostenlose software',
-    'photoshop alternative',
-    'microsoft office alternative',
-    'linux',
-  ],
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
+
+  return {
+    title: `${t('meta.title')} | ${ORG.name}`,
+    description: t('meta.description'),
+    keywords: t.raw('meta.keywords') as string[],
+  }
 }
 
-export default function OpenSourceSolutionsPage() {
+export default async function OpenSourceSolutionsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
+
   const alternatives = getAllAlternatives()
   const categories = getAllCategories()
   const proprietaryApps = getAllProprietaryApps()
@@ -32,8 +42,8 @@ export default function OpenSourceSolutionsPage() {
       <PageHero
         theme="services"
         icon={Code2}
-        title="Open-Source-Alternativen"
-        subtitle="Finde die beste freie Alternative zu proprietärer Software — mit ehrlichen Bewertungen und Migrations-Tipps."
+        title={t('meta.title')}
+        subtitle={t('meta.description')}
       />
 
       <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
@@ -42,15 +52,15 @@ export default function OpenSourceSolutionsPage() {
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-10 text-center">
             <div>
               <p className="text-3xl font-bold text-gray-900">{alternatives.length}</p>
-              <p className="text-sm text-gray-500">Open-Source-Alternativen</p>
+              <p className="text-sm text-gray-500">{t('stats.alternativesLabel')}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gray-900">{proprietaryApps.length}</p>
-              <p className="text-sm text-gray-500">Proprietäre Programme</p>
+              <p className="text-sm text-gray-500">{t('stats.proprietaryLabel')}</p>
             </div>
             <div>
               <p className="text-3xl font-bold text-gray-900">{categories.length}</p>
-              <p className="text-sm text-gray-500">Kategorien</p>
+              <p className="text-sm text-gray-500">{t('stats.categoriesLabel')}</p>
             </div>
           </div>
 

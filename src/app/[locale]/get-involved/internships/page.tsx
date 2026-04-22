@@ -3,41 +3,65 @@ import { InvolvementPageLayout } from '../involvement-page-layout'
 import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
 import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
 import { PageSection } from '@/components/community/PageSection'
-import { INTERNSHIPS_PAGE } from '@/config/community'
 import { responsiveTypography } from '@/lib/responsive'
 import { ORG } from '@/config/org'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
+import { Briefcase, GraduationCap, Users, BookOpen } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: `Praktika | ${ORG.name}`,
-  description: 'Sammle praktische Erfahrungen in Technologie und Nachhaltigkeit durch unser Praktikumsprogramm.',
+interface InternshipsPageProps {
+  params: Promise<{ locale: string }>
 }
 
-export default function InternshipsPage() {
+// Benefit icons are positional — parallel to translations array
+const BENEFIT_ICONS = [Briefcase, GraduationCap, Users, BookOpen]
+
+export async function generateMetadata({ params }: InternshipsPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  return {
+    title: `${t('internships.meta.title')} | ${ORG.name}`,
+    description: t('internships.meta.description'),
+  }
+}
+
+export default async function InternshipsPage({ params }: InternshipsPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+
+  const benefits = t.raw('internships.benefits') as Array<{ title: string; description: string }>
+  const sections = t.raw('internships.sections') as Array<{
+    title: string
+    items: string[]
+    description?: string
+  }>
+  const callouts = t.raw('internships.callouts') as Array<{ title: string; content: string }>
+  const howToStartSteps = t.raw('internships.howToStart.steps') as string[]
+
   return (
     <InvolvementPageLayout
-      title="Praktikumsmöglichkeiten"
-      description="Sammle wertvolle Erfahrungen in Technologie und Nachhaltigkeit und bewirke echte Veränderungen."
-      ctaText="Interesse bekunden"
+      title={t('internships.title')}
+      description={t('internships.description')}
+      ctaText={t('internships.ctaText')}
       ctaHref="/get-involved/kontakt?thema=praktikum"
     >
       <div className="space-y-16">
         {/* Overview Section */}
         <PageSection
-          title={INTERNSHIPS_PAGE.overview.title}
-          content={INTERNSHIPS_PAGE.overview.content}
+          title={t('internships.overview.title')}
+          content={t('internships.overview.content')}
         />
 
         {/* Benefits Section */}
         <section className="space-y-8">
           <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
-            Programmvorteile
+            {t('internships.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>
-            {INTERNSHIPS_PAGE.benefits?.map((benefit, index) => (
+            {benefits.map((benefit, index) => (
               <BenefitCard
                 key={index}
-                icon={benefit.icon}
+                icon={BENEFIT_ICONS[index]}
                 title={benefit.title}
                 description={benefit.description}
               />
@@ -45,17 +69,18 @@ export default function InternshipsPage() {
           </BenefitCardGrid>
         </section>
 
-        {/* Sections from config */}
-        {INTERNSHIPS_PAGE.sections?.map((section, index) => (
+        {/* Sections */}
+        {sections.map((section, index) => (
           <InfoSection
             key={index}
             title={section.title}
-            items={section.items}
+            items={section.items.map((text) => ({ text }))}
+            description={section.description}
           />
         ))}
 
-        {/* Callouts from config */}
-        {INTERNSHIPS_PAGE.callouts?.map((callout, index) => (
+        {/* Callouts */}
+        {callouts.map((callout, index) => (
           <Callout
             key={index}
             title={callout.title}
@@ -65,13 +90,8 @@ export default function InternshipsPage() {
 
         {/* How to Apply */}
         <NumberedSteps
-          title="Wie du dich bewerben kannst"
-          steps={[
-            { text: 'Sende uns deinen Lebenslauf und ein Anschreiben' },
-            { text: 'Gib deinen Interessensbereich und deine Verfügbarkeit an' },
-            { text: 'Führe ein kurzes Gespräch' },
-            { text: 'Beginne deine Praktikumsreise!' }
-          ]}
+          title={t('internships.howToStart.title')}
+          steps={howToStartSteps.map((text) => ({ text }))}
         />
       </div>
     </InvolvementPageLayout>

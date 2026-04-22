@@ -10,9 +10,11 @@ import {
 import { WorkshopProposalForm } from './components/WorkshopProposalForm'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 export default function WorkshopProposalPage() {
   const { data: session } = useSession()
+  const t = useTranslations('workshops.propose')
 
   if (!session?.user) {
     return (
@@ -21,16 +23,16 @@ export default function WorkshopProposalPage() {
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
             <Heading level={1} className={`${responsiveTypography.subsection} text-gray-900 mb-4`}>
-              Anmeldung erforderlich
+              {t('loginRequired')}
             </Heading>
             <p className="text-gray-600 mb-6">
-              Bitte melde sich an, um einen Workshop vorzuschlagen.
+              {t('loginPrompt')}
             </p>
             <Link
               href="/auth/login"
               className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Anmelden
+              {t('loginButton')}
             </Link>
           </div>
         </div>
@@ -48,7 +50,7 @@ export default function WorkshopProposalPage() {
             className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
 
           <div className="text-center">
@@ -56,10 +58,10 @@ export default function WorkshopProposalPage() {
               <GraduationCap className="w-8 h-8 text-green-600" />
             </div>
             <Heading level={1} className={`${responsiveTypography.section} text-gray-900 mb-2`}>
-              Workshop vorschlagen
+              {t('title')}
             </Heading>
             <p className="text-gray-600">
-              Schlage einen neuen Workshop vor und teile dein Wissen mit der Community
+              {t('subtitle')}
             </p>
           </div>
         </div>

@@ -8,57 +8,28 @@ import { db } from '@/db'
 import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { MembershipApplicationForm } from '@/components/membership/MembershipApplicationForm'
+import { getTranslations } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: `Mitglied werden | ${ORG.name}`,
-  description: `Werde Mitglied bei ${ORG.name}. Stimmrecht bei Vereinsentscheiden, Teil der offiziellen Trägerschaft. CHF ${MEMBERSHIP.fees.regular}/Jahr.`,
-  openGraph: {
-    title: `Mitglied werden | ${ORG.name}`,
-    description: `Werde Mitglied bei ${ORG.name} — Stimmrecht, Mitverantwortung, CHF ${MEMBERSHIP.fees.regular}/Jahr.`,
-    type: 'website',
-  },
+interface MitgliedWerdenPageProps {
+  params: Promise<{ locale: string }>
 }
 
-const WHAT_YOU_GET = [
-  {
-    icon: Vote,
-    title: 'Stimmrecht bei Vereinsentscheiden',
-    description: 'Du wirst automatisch zu Abstimmungen eingeladen und entscheidest mit über die Richtung des Vereins.',
-  },
-  {
-    icon: Users,
-    title: 'Offizielle Mitgliederliste',
-    description: 'Du bist rechtlich Teil der Trägerschaft des Vereins nach Schweizer Vereinsrecht (ZGB Art. 60 ff).',
-  },
-  {
-    icon: Heart,
-    title: 'Finanzielle Unterstützung',
-    description: 'Dein Jahresbeitrag hilft uns, den Verein nachhaltig zu finanzieren — unabhängig von externen Geldgebern.',
-  },
-]
+export async function generateMetadata({ params }: MitgliedWerdenPageProps): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'mitgliedWerden' })
+  return {
+    title: `${t('meta.title')} | ${ORG.name}`,
+    description: t('meta.description', { orgName: ORG.name, fee: MEMBERSHIP.fees.regular }),
+    openGraph: {
+      title: `${t('meta.title')} | ${ORG.name}`,
+      description: t('meta.description', { orgName: ORG.name, fee: MEMBERSHIP.fees.regular }),
+      type: 'website',
+    },
+  }
+}
 
-const FAQ = [
-  {
-    question: 'Was ist der Unterschied zwischen einem Nutzerkonto und einer Mitgliedschaft?',
-    answer: 'Ein Nutzerkonto brauchst du für Marktplatz, IT-Hilfe und Workshops — das ist kostenlos. Eine Vereinsmitgliedschaft gibt dir Stimmrecht und macht dich offiziell Teil der Trägerschaft. Die meisten Nutzer:innen werden nie Mitglied — das ist völlig in Ordnung.',
-  },
-  {
-    question: 'Was bekomme ich konkret als Mitglied?',
-    answer: 'Stimmrecht bei Vereinsentscheiden und einen Platz auf der offiziellen Mitgliederliste. Wir versprechen keine exklusiven Vorteile — unsere Angebote sind für alle da. Du wirst Mitglied, weil du den Verein mittragen willst.',
-  },
-  {
-    question: 'Wie funktioniert die Aufnahme?',
-    answer: 'Formular ausfüllen, Jahresbeitrag überweisen — fertig. Du bist sofort Mitglied. Kein Warten, keine Genehmigung.',
-  },
-  {
-    question: 'Wie zahle ich den Jahresbeitrag?',
-    answer: 'Nach dem Beitritt siehst du die Bankverbindung direkt auf der Bestätigungsseite. Überweisung oder TWINT.',
-  },
-  {
-    question: 'Kann ich jederzeit austreten?',
-    answer: 'Ja. Eine formlose E-Mail an den Vorstand genügt. Bereits bezahlte Jahresbeiträge werden nicht zurückerstattet.',
-  },
-]
+// Icons are positional — parallel to whatYouGet translation array
+const WHAT_YOU_GET_ICONS = [Vote, Users, Heart]
 
 async function getMemberStatus() {
   const session = await auth()
@@ -83,8 +54,13 @@ async function getMemberStatus() {
   }
 }
 
-export default async function MitgliedWerdenPage() {
+export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageProps) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'mitgliedWerden' })
   const status = await getMemberStatus()
+
+  const whatYouGet = t.raw('whatYouGet') as Array<{ title: string; description: string }>
+  const faqItems = t.raw('faq.items') as Array<{ question: string; answer: string }>
 
   return (
     <div className="bg-white">
@@ -93,25 +69,28 @@ export default async function MitgliedWerdenPage() {
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <Award className="w-10 h-10 text-green-600 mx-auto mb-4" />
           <Heading level={1} className="text-2xl sm:text-3xl text-gray-900 mb-3">
-            Mitglied werden
+            {t('hero.title')}
           </Heading>
           <p className="text-gray-600 max-w-xl mx-auto">
-            Trage den Verein mit — rechtlich, finanziell und demokratisch. Formular ausfüllen, Beitrag überweisen, fertig.
+            {t('hero.body')}
           </p>
         </div>
       </div>
 
-      {/* What you get — honest, 3 items */}
+      {/* What you get */}
       <div className="py-10 sm:py-14">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-6 sm:grid-cols-3">
-            {WHAT_YOU_GET.map((item) => (
-              <div key={item.title} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
-                <item.icon className="h-6 w-6 text-green-600 mb-3" aria-hidden="true" />
-                <Heading level={3} className="text-base text-gray-900">{item.title}</Heading>
-                <p className="mt-1.5 text-sm text-gray-600">{item.description}</p>
-              </div>
-            ))}
+            {whatYouGet.map((item, index) => {
+              const Icon = WHAT_YOU_GET_ICONS[index]
+              return (
+                <div key={index} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
+                  <Icon className="h-6 w-6 text-green-600 mb-3" aria-hidden="true" />
+                  <Heading level={3} className="text-base text-gray-900">{item.title}</Heading>
+                  <p className="mt-1.5 text-sm text-gray-600">{item.description}</p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
@@ -123,13 +102,13 @@ export default async function MitgliedWerdenPage() {
             {status.isMember ? (
               <div className="text-center">
                 <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-                <Heading level={2} className="text-xl text-gray-900 mb-2">Du bist Mitglied</Heading>
+                <Heading level={2} className="text-xl text-gray-900 mb-2">{t('member.title')}</Heading>
                 <p className="text-gray-600 mb-1">
-                  Vielen Dank für deine Unterstützung.
+                  {t('member.thanks')}
                 </p>
                 {status.memberSince && (
                   <p className="text-sm text-gray-500 mb-6">
-                    Dabei seit {new Date(status.memberSince).toLocaleDateString('de-CH')}
+                    {t('member.since', { date: new Date(status.memberSince).toLocaleDateString(locale) })}
                   </p>
                 )}
                 <Link
@@ -137,17 +116,17 @@ export default async function MitgliedWerdenPage() {
                   className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-500"
                 >
                   <UserIcon className="h-4 w-4" />
-                  Zum Dashboard
+                  {t('member.dashboard')}
                 </Link>
               </div>
             ) : (
               <>
                 <div className="text-center mb-6">
                   <Heading level={2} className="text-xl text-gray-900">
-                    Jetzt beitreten
+                    {t('form.heading')}
                   </Heading>
                   <p className="text-sm text-gray-500 mt-1">
-                    Sofortige Mitgliedschaft — kein Warten
+                    {t('form.subtitle')}
                   </p>
                 </div>
                 <MembershipApplicationForm />
@@ -161,11 +140,11 @@ export default async function MitgliedWerdenPage() {
       <div className="py-10 sm:py-14">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Heading level={2} className="text-xl text-gray-900 text-center mb-8">
-            Häufige Fragen
+            {t('faq.heading')}
           </Heading>
           <div className="space-y-4">
-            {FAQ.map((item) => (
-              <div key={item.question} className="bg-gray-50 rounded-lg p-5 border border-gray-100">
+            {faqItems.map((item, index) => (
+              <div key={index} className="bg-gray-50 rounded-lg p-5 border border-gray-100">
                 <Heading level={3} className="text-sm font-bold text-gray-900">{item.question}</Heading>
                 <p className="mt-1.5 text-sm text-gray-600">{item.answer}</p>
               </div>

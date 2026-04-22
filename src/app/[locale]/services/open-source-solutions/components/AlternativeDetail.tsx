@@ -13,12 +13,15 @@ import { MigrationDifficultyBadge } from './MigrationDifficultyBadge'
 import { PlatformIcons } from './PlatformIcons'
 import { RevampITServicesCTA } from './RevampITServicesCTA'
 import { RelatedAlternatives } from './RelatedAlternatives'
+import { getTranslations } from 'next-intl/server'
 
 interface AlternativeDetailProps {
   alternative: OSSAlternative
+  locale: string
 }
 
-export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
+export async function AlternativeDetail({ alternative, locale }: AlternativeDetailProps) {
+  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
   const category = getCategoryById(alternative.categoryId)
 
   return (
@@ -31,7 +34,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Zurück zur Übersicht
+            {t('detail.backToOverview')}
           </Link>
         </div>
       </div>
@@ -68,14 +71,14 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Description */}
             <section className="bg-white rounded-xl border border-gray-200 p-6">
-              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Beschreibung</Heading>
+              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">{t('detail.description')}</Heading>
               <p className="text-gray-700 leading-relaxed">{alternative.description}</p>
             </section>
 
             {/* What it replaces */}
             {alternative.replaces.length > 0 && (
               <section className="bg-white rounded-xl border border-gray-200 p-6">
-                <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Was es ersetzt</Heading>
+                <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">{t('detail.replaces')}</Heading>
                 <div className="space-y-4">
                   {alternative.replaces.map(r => {
                     const app = getProprietaryAppById(r.appId)
@@ -101,7 +104,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                         {r.migrationTips && r.migrationTips.length > 0 && (
                           <div className="mt-3">
                             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
-                              Tipps für den Umstieg
+                              {t('detail.migrationTips')}
                             </p>
                             <ul className="space-y-1">
                               {r.migrationTips.map((tip, i) => (
@@ -122,7 +125,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Highlights */}
             <section className="bg-white rounded-xl border border-gray-200 p-6">
-              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Stärken</Heading>
+              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">{t('detail.highlights')}</Heading>
               <ul className="space-y-2">
                 {alternative.highlights.map((h, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -135,7 +138,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Limitations */}
             <section className="bg-white rounded-xl border border-gray-200 p-6">
-              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">Einschränkungen</Heading>
+              <Heading level={2} className="text-xl font-bold text-gray-900 mb-4">{t('detail.limitations')}</Heading>
               <ul className="space-y-2">
                 {alternative.limitations.map((l, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -147,14 +150,14 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             </section>
 
             {/* Related */}
-            <RelatedAlternatives current={alternative} />
+            <RelatedAlternatives current={alternative} locale={locale} />
           </div>
 
           {/* Sidebar (1/3) */}
           <div className="space-y-6">
             {/* Quick links */}
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <Heading level={3} className="text-base font-bold text-gray-900 mb-4">Links</Heading>
+              <Heading level={3} className="text-base font-bold text-gray-900 mb-4">{t('detail.links')}</Heading>
               <div className="space-y-3">
                 <a
                   href={alternative.website}
@@ -167,7 +170,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   )}
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Website besuchen
+                  {t('detail.visitWebsite')}
                 </a>
                 {alternative.sourceCode && (
                   <a
@@ -181,7 +184,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                     )}
                   >
                     <Code2 className="w-4 h-4" />
-                    Quellcode ansehen
+                    {t('detail.viewSourceCode')}
                   </a>
                 )}
               </div>
@@ -189,14 +192,14 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Info */}
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <Heading level={3} className="text-base font-bold text-gray-900 mb-4">Details</Heading>
+              <Heading level={3} className="text-base font-bold text-gray-900 mb-4">{t('detail.details')}</Heading>
               <dl className="space-y-3 text-sm">
                 <div>
-                  <dt className="text-gray-500">Lizenz</dt>
+                  <dt className="text-gray-500">{t('detail.license')}</dt>
                   <dd className="font-medium text-gray-900">{alternative.license}</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500">Plattformen</dt>
+                  <dt className="text-gray-500">{t('detail.platforms')}</dt>
                   <dd className="font-medium text-gray-900">
                     {alternative.platforms.map(p => {
                       const labels: Record<string, string> = { windows: 'Windows', macos: 'macOS', linux: 'Linux', web: 'Web', android: 'Android', ios: 'iOS' }
@@ -205,7 +208,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-gray-500">Reife</dt>
+                  <dt className="text-gray-500">{t('detail.maturity')}</dt>
                   <dd><MaturityBadge maturity={alternative.maturity} /></dd>
                 </div>
               </dl>
@@ -217,10 +220,10 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             {/* General CTA */}
             <div className="rounded-xl border-2 border-green-200 bg-green-50 p-5">
               <Heading level={3} className="text-base font-bold text-green-900 mb-2">
-                Hilfe beim Umstieg?
+                {t('detail.helpWithMigration')}
               </Heading>
               <p className="text-sm text-green-800 mb-3">
-                Unser Team unterstützt dich bei der Migration auf Open-Source-Software.
+                {t('detail.helpDescription')}
               </p>
               <Link
                 href="/contact"
@@ -230,7 +233,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   'hover:bg-green-700 transition-colors'
                 )}
               >
-                Kontakt aufnehmen
+                {t('detail.contactUs')}
               </Link>
             </div>
           </div>

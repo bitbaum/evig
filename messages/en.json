@@ -116,15 +116,29 @@
     "skipToContent": "Skip to content"
   },
   "errors": {
-    "generic": "Something went wrong. Please try again.",
-    "notFound": "Page not found",
-    "unauthorized": "Unauthorized",
-    "forbidden": "Access denied",
-    "serverError": "Server error",
-    "networkError": "Network error. Please check your connection.",
-    "required": "This field is required",
-    "invalidEmail": "Please enter a valid email address",
-    "passwordTooShort": "Password must be at least 8 characters long"
+    "genericTitle": "Something went wrong",
+    "retry": "Try again",
+    "blog": {
+      "description": "An error occurred while loading the blog.",
+      "back": "Back to blog"
+    },
+    "marketplace": {
+      "description": "An error occurred while loading the marketplace.",
+      "back": "Back to marketplace"
+    },
+    "listingDetail": {
+      "title": "Error loading listing",
+      "description": "The listing could not be loaded.",
+      "back": "Back to marketplace"
+    },
+    "services": {
+      "description": "An error occurred while loading the services.",
+      "back": "Back to services"
+    },
+    "workshops": {
+      "description": "An error occurred while loading the workshops.",
+      "back": "Back to workshops"
+    }
   },
   "footer": {
     "tagline": "Old hardware. New life.",
@@ -919,6 +933,550 @@
         "startProject": "Start your project",
         "allServices": "Explore all services"
       }
+    },
+    "hardwareRecycling": {
+      "meta": {
+        "title": "Hardware Recycling",
+        "description": "Responsible recycling and refurbishment of IT equipment. Secure data erasure, free pickup service, and sustainable IT solutions.",
+        "ogTitle": "Hardware Recycling",
+        "ogDescription": "Sustainable IT solutions through responsible recycling and refurbishment of IT equipment."
+      },
+      "hero": {
+        "title": "Hardware Recycling",
+        "subtitle": "Responsible recycling and refurbishment services for IT equipment. We help reduce e-waste while ensuring secure data erasure."
+      },
+      "features": [
+        {
+          "title": "Secure Data Erasure",
+          "description": "Complete and secure erasure of all data from devices."
+        },
+        {
+          "title": "Device Refurbishment",
+          "description": "Professional refurbishment of IT equipment."
+        },
+        {
+          "title": "Component Recycling",
+          "description": "Responsible recycling of electronic components."
+        },
+        {
+          "title": "Free Pickup Service",
+          "description": "Convenient pickup service for your old equipment."
+        }
+      ],
+      "pricing": {
+        "heading": "Pricing",
+        "subtitle": "Sustainable and affordable",
+        "badge": "Best choice",
+        "price": "Free",
+        "forMostItems": "for most items",
+        "features": [
+          "Free pickup service",
+          "Secure data erasure",
+          "Environmentally responsible",
+          "Certificate of destruction"
+        ],
+        "cta": "Ready to get started?"
+      },
+      "impact": {
+        "heading": "Environmental Responsibility",
+        "subtitle": "Every recycled device helps protect our planet",
+        "dataSecurity": "Secure data erasure",
+        "sustainableProcesses": "Sustainable processes",
+        "reducedEwaste": "Reduced e-waste"
+      },
+      "contact": {
+        "heading": "Contact us today",
+        "subtitle": "To learn more about our hardware recycling services",
+        "locations": "Locations",
+        "store": "Sales",
+        "warehouse": "Warehouse",
+        "contactInfo": "Contact",
+        "phone": "Phone",
+        "hours": "Opening hours",
+        "monday": "Monday",
+        "weekdays": "Tuesday - Friday"
+      },
+      "cta": {
+        "heading": "Ready to get started?",
+        "body": "Contact us today to learn more about our hardware recycling services.",
+        "contact": "Contact",
+        "back": "Back to Services"
+      }
+    },
+    "linuxOpenSource": {
+      "meta": {
+        "title": "Linux & Open Source",
+        "description": "Expert Linux installation, support and training services. Find the perfect Linux distribution for your needs."
+      },
+      "hero": {
+        "title": "Linux & Open Source",
+        "subtitle": "Professional Linux installation, support and training services. Find the perfect distribution for your needs.",
+        "intro": "Linux is a powerful, secure and flexible operating system that powers everything from personal computers to enterprise servers."
+      },
+      "servicesSection": {
+        "heading": "Our Linux Services",
+        "subtitle": "Comprehensive support for all your Linux needs, from installation to ongoing maintenance.",
+        "priceInfo": "Professional Linux support from CHF 70/hour",
+        "items": [
+          {
+            "title": "Linux Installation",
+            "description": "Professional installation of your chosen Linux distribution with full hardware compatibility check and optimization."
+          },
+          {
+            "title": "System Configuration",
+            "description": "Custom configuration of your Linux system according to your specific requirements and workflow needs."
+          },
+          {
+            "title": "Training & Support",
+            "description": "Comprehensive training programs and ongoing support to get the most out of your Linux system."
+          },
+          {
+            "title": "Server Setup",
+            "description": "Enterprise-grade Linux server configuration and optimization for businesses and organizations."
+          }
+        ]
+      },
+      "advantages": {
+        "heading": "Your Linux advantage",
+        "subtitle": "Get expert support and maximize the benefits of Linux for your needs.",
+        "items": [
+          {
+            "title": "Save money",
+            "points": [
+              "No expensive licenses or subscriptions",
+              "Extend the life of your existing hardware",
+              "Reduce maintenance and upgrade costs"
+            ]
+          },
+          {
+            "title": "Boost performance",
+            "points": [
+              "Faster system performance on any hardware",
+              "Optimized for your specific needs",
+              "Reliable and stable operation"
+            ]
+          },
+          {
+            "title": "Expert support",
+            "points": [
+              "Professional installation and setup",
+              "Ongoing technical support",
+              "Training and documentation"
+            ]
+          }
+        ]
+      },
+      "quickCta": {
+        "heading": "Ready to get started?",
+        "body": "We offer professional Linux support and solutions for businesses and individuals. Contact us for a free consultation.",
+        "consult": "Book a consultation",
+        "call": "Call now"
+      },
+      "benefitsSection": {
+        "heading": "Why choose Linux?",
+        "subtitle": "Linux offers superior performance, security and flexibility compared to other operating systems.",
+        "items": [
+          {
+            "title": "Security & Stability",
+            "description": "Linux is renowned for its robust security features and system stability, making it ideal for personal and business use."
+          },
+          {
+            "title": "Performance",
+            "description": "Efficient resource usage and optimized performance, even on older hardware, with minimal system requirements."
+          },
+          {
+            "title": "Customization",
+            "description": "Full control over your system with endless customization options to match your workflow and preferences."
+          },
+          {
+            "title": "Community Support",
+            "description": "Access to a large global community of users and developers for support, documentation and continuous improvement."
+          }
+        ]
+      },
+      "distrosSection": {
+        "heading": "Popular Linux Distributions",
+        "subtitle": "Each distribution has its own strengths and is suited for different use cases.",
+        "visitWebsite": "Visit website",
+        "bestFor": "Best for:",
+        "pros": "Pros:",
+        "cons": "Considerations:",
+        "items": [
+          {
+            "description": "User-friendly distribution, perfect for beginners and professionals alike. Offers a polished desktop environment and extensive software repository.",
+            "useCases": [
+              "Desktop computing",
+              "Development",
+              "Server deployment"
+            ],
+            "pros": [
+              "Easy to use",
+              "Large community",
+              "Regular updates",
+              "Extensive documentation"
+            ],
+            "cons": [
+              "Some proprietary software",
+              "Heavier than some alternatives"
+            ]
+          },
+          {
+            "description": "Based on Ubuntu but offers a more traditional desktop experience. Known for its stability and ease of use.",
+            "useCases": [
+              "Desktop computing",
+              "Office work",
+              "Multimedia"
+            ],
+            "pros": [
+              "Windows-like interface",
+              "Excellent hardware support",
+              "Stable and reliable",
+              "Great for beginners"
+            ],
+            "cons": [
+              "Less frequent updates",
+              "Limited enterprise features"
+            ]
+          },
+          {
+            "description": "Cutting-edge distribution showcasing the latest open-source technologies. Backed by Red Hat.",
+            "useCases": [
+              "Development",
+              "Enterprise",
+              "Innovation"
+            ],
+            "pros": [
+              "Latest software",
+              "Strong security",
+              "Enterprise-ready",
+              "Excellent development tools"
+            ],
+            "cons": [
+              "Frequent updates",
+              "Shorter support cycles"
+            ]
+          },
+          {
+            "description": "One of the most stable and reliable distributions, serving as the foundation for many other Linux systems.",
+            "useCases": [
+              "Servers",
+              "Enterprise",
+              "Stable systems"
+            ],
+            "pros": [
+              "Extremely stable",
+              "Large package repository",
+              "Long support cycles",
+              "Strong security"
+            ],
+            "cons": [
+              "Older software versions",
+              "Less user-friendly"
+            ]
+          },
+          {
+            "description": "Lightweight distribution based on Debian, known for its excellent performance and user-friendly interface.",
+            "useCases": [
+              "Older hardware",
+              "Desktop computing",
+              "Resource efficiency"
+            ],
+            "pros": [
+              "Lightweight",
+              "Fast performance",
+              "User-friendly",
+              "Stable base"
+            ],
+            "cons": [
+              "Smaller community",
+              "Limited enterprise features"
+            ]
+          }
+        ]
+      },
+      "finalCta": {
+        "heading": "Ready to switch to Linux?",
+        "body": "Let our experts help you find and set up the perfect Linux distribution for your needs.",
+        "start": "Get started",
+        "explore": "Explore services"
+      }
+    },
+    "openSourceSolutions": {
+      "meta": {
+        "title": "Open-Source Alternatives",
+        "description": "Find the best open-source alternative to proprietary software. Honest reviews, migration tips, and support from Revamp-IT.",
+        "keywords": [
+          "open source alternatives",
+          "open source software",
+          "free software",
+          "photoshop alternative",
+          "microsoft office alternative",
+          "linux"
+        ]
+      },
+      "stats": {
+        "alternativesLabel": "Open-Source Alternatives",
+        "proprietaryLabel": "Proprietary Programs",
+        "categoriesLabel": "Categories"
+      },
+      "detail": {
+        "notFound": "Not found",
+        "backToOverview": "Back to overview",
+        "description": "Description",
+        "replaces": "What it replaces",
+        "migrationTips": "Migration tips",
+        "highlights": "Strengths",
+        "limitations": "Limitations",
+        "links": "Links",
+        "visitWebsite": "Visit website",
+        "viewSourceCode": "View source code",
+        "details": "Details",
+        "license": "License",
+        "platforms": "Platforms",
+        "maturity": "Maturity",
+        "helpWithMigration": "Need help migrating?",
+        "helpDescription": "Our team can help you migrate to open-source software.",
+        "contactUs": "Contact us",
+        "relatedAlternatives": "More alternatives in this category",
+        "openSourceAlternative": "Open-Source Alternative"
+      }
+    },
+    "repair": {
+      "meta": {
+        "title": "Computer Repairs & Upgrades",
+        "description": "Professional computer repairs and upgrades. We specialize in what others can't repair — including motherboard repairs and component-level faults."
+      },
+      "hero": {
+        "title": "Computer Repairs & Upgrades",
+        "subtitle": "Repairs you can rely on",
+        "description": "We combine technical expertise with sustainable action to extend the lifespan of your devices. Our repair services focus on what others give up on — saving money and reducing e-waste."
+      },
+      "features": [
+        {
+          "title": "Component-Level Repairs",
+          "description": "We don't just swap parts — we repair them. Our technicians can fix motherboards, power supplies, and other components at the circuit level."
+        },
+        {
+          "title": "Hardware Upgrades",
+          "description": "Extend your computer's lifespan with targeted upgrades. We help you select and install the right components."
+        },
+        {
+          "title": "Diagnostic Service",
+          "description": "Comprehensive diagnosis to quickly identify and fix problems. With professional tools and years of experience, we hit the mark."
+        },
+        {
+          "title": "Express Service",
+          "description": "Urgent? For many common problems we offer same-day repairs. Just bring your device in during our opening hours."
+        }
+      ],
+      "pricing": {
+        "heading": "Pricing",
+        "base": "From CHF 70/hour",
+        "details": [
+          "Free initial diagnosis",
+          "No repair = no charge",
+          "Transparent pricing",
+          "Guarantee on repairs"
+        ]
+      },
+      "processHeading": "Our Repair Process",
+      "process": [
+        {
+          "title": "Diagnosis",
+          "description": "We examine your device and provide an accurate assessment of the problem."
+        },
+        {
+          "title": "Quote",
+          "description": "You receive a transparent quote — no hidden fees."
+        },
+        {
+          "title": "Repair",
+          "description": "Our technicians repair your device with quality parts and proven methods."
+        },
+        {
+          "title": "Testing",
+          "description": "All repairs are thoroughly tested to ensure your device works perfectly."
+        }
+      ],
+      "cta": {
+        "heading": "Get your device repaired?",
+        "body": "Contact us for a free diagnosis and quote. We help you get your device running again quickly and affordably.",
+        "contact": "Get in touch",
+        "allServices": "All Services"
+      }
+    },
+    "buildComputer": {
+      "meta": {
+        "title": "AI-Powered Sustainable Computer Builds",
+        "description": "Our AI system scans global partner networks to assemble your perfect computer primarily from used and refurbished components."
+      },
+      "hero": {
+        "title": "AI-Powered Sustainable Computer Builds",
+        "subtitle": "Our revolutionary AI system scans our inventory and global partner networks to assemble your perfect computer primarily from used and refurbished components.",
+        "strong": "100% Used Parts Priority • Global Inventory Network • Intelligent AI Matching",
+        "badge1": "Circular Economy",
+        "badge2": "Global Network",
+        "badge3": "AI-Optimized"
+      },
+      "howItWorks": {
+        "heading": "How Our AI Build System Works",
+        "steps": [
+          {
+            "title": "Requirements Analysis",
+            "description": "Tell us your use case, performance requirements and sustainability preferences"
+          },
+          {
+            "title": "Global Inventory Scan",
+            "description": "The AI scans our inventory + partner networks across Europe and beyond"
+          },
+          {
+            "title": "Intelligent Optimization",
+            "description": "The algorithm prioritizes used parts, optimizing for performance and sustainability"
+          },
+          {
+            "title": "Assembly & Certification",
+            "description": "Professional assembly with our \"Revamped\" sustainability certification"
+          }
+        ]
+      },
+      "buildTool": {
+        "heading": "Try Our Build Tool Demo",
+        "subtitle": "Experience how our AI system would recommend components for your specific needs",
+        "step1Heading": "What will you use your computer for?",
+        "performanceHeading": "Performance Requirements",
+        "budgetLabel": "Budget Range (CHF)",
+        "budgetPlaceholder": "Select budget range",
+        "specificLabel": "Specific Requirements (optional)",
+        "specificPlaceholder": "Do you have special needs? (e.g. multiple monitors, VR gaming, specific software requirements)",
+        "nextButton": "Continue to Analysis",
+        "step2Heading": "AI Inventory Analysis",
+        "requirementsSummary": "Summary of your requirements:",
+        "useCaseLabel": "Use Case",
+        "performanceLabel": "Performance",
+        "budgetSummaryLabel": "Budget",
+        "sustainabilityLabel": "Sustainability",
+        "sustainabilityValue": "High Priority",
+        "specialNotesLabel": "Special Notes",
+        "analyzeDescription": "Ready to scan our global inventory network and generate your personalized build recommendation?",
+        "backButton": "Back to Edit",
+        "analyzeButton": "Analyze Global Inventory",
+        "scanningLabel": "🔍 Scanning inventory networks...",
+        "scanningLines": [
+          "Checking Zurich warehouse (847 components)",
+          "Scanning European partners (12,450+ components)",
+          "AI optimizing for sustainability + performance",
+          "Calculating shipping routes and costs"
+        ],
+        "step3Heading": "Your Optimized Build",
+        "sustainableLabel": "% Sustainable",
+        "performanceMatchLabel": "% Performance Match",
+        "usedPartsLabel": "% Used Parts",
+        "componentTypes": {
+          "cpu": "Processor",
+          "gpu": "Graphics Card",
+          "ram": "Memory",
+          "storage": "Storage"
+        },
+        "conditions": {
+          "used": "Used",
+          "refurbished": "Refurbished",
+          "new": "New"
+        },
+        "inStock": "in stock",
+        "deliveryTime": "approx. 3-5 days",
+        "totalCost": "Total Build Cost:",
+        "extras": "+ Assembly & Testing: CHF 120 | + Shipping: CHF 45 | + \"Revamped\" Certification: Included",
+        "changeRequirements": "Change Requirements",
+        "orderBuild": "Order This Build",
+        "environmentHeading": "Environmental Impact",
+        "co2Saved": "CO₂ Saved",
+        "co2Value": "~85kg compared to new build",
+        "reusedLabel": "Reused Components",
+        "reusedValue": "4 of 4 main parts",
+        "circularLabel": "Circular Economy",
+        "circularValue": "Extends hardware lifespan"
+      },
+      "features": {
+        "heading": "Why Choose Our AI Build System?",
+        "items": [
+          {
+            "title": "Global Inventory Network",
+            "description": "Access to thousands of used and refurbished components across Europe and beyond, with real-time stock tracking."
+          },
+          {
+            "title": "AI-Powered Optimization",
+            "description": "Smart algorithms balance performance, sustainability, cost and availability to find your perfect build combination."
+          },
+          {
+            "title": "\"Revamped\" Certification",
+            "description": "Every build receives our sustainability certification, guaranteeing quality while supporting the circular economy."
+          }
+        ]
+      },
+      "certification": {
+        "heading": "Get Your Revamped Certification",
+        "body": "Every computer we build receives our exclusive \"Revamped\" certification — your guarantee for sustainability, quality and performance.",
+        "sustainabilityScore": "Sustainability Score",
+        "co2Saved": "CO₂ Saved",
+        "certifiedComputers": "Certified Computers",
+        "learnMore": "Learn more about the Revamped Certification"
+      },
+      "cta": {
+        "heading": "Ready to Build Sustainably?",
+        "body": "Join the revolution in computer building. Get a custom-tailored, sustainable build that performs excellently while protecting our planet.",
+        "startBuild": "Start Your Build",
+        "explore": "Explore All Services"
+      },
+      "useCaseOptions": {
+        "office": {
+          "name": "Office & Business",
+          "description": "Email, documents, web browsing, video calls"
+        },
+        "creative": {
+          "name": "Creative Work",
+          "description": "Photo/video editing, design, content creation"
+        },
+        "gaming": {
+          "name": "Gaming",
+          "description": "Modern games, streaming, high-performance computing"
+        },
+        "development": {
+          "name": "Software Development",
+          "description": "Programming, testing, multiple VMs, compiling"
+        },
+        "server": {
+          "name": "Server/NAS",
+          "description": "File server, media server, home automation"
+        },
+        "ai": {
+          "name": "AI/Machine Learning",
+          "description": "Model training, data processing, CUDA workloads"
+        }
+      },
+      "performanceOptions": {
+        "basic": {
+          "name": "Basic",
+          "description": "Light tasks, adequate performance"
+        },
+        "moderate": {
+          "name": "Moderate",
+          "description": "Balanced performance for most tasks"
+        },
+        "high": {
+          "name": "High",
+          "description": "Strong performance for demanding tasks"
+        },
+        "extreme": {
+          "name": "Extreme",
+          "description": "Peak performance, no compromises"
+        }
+      },
+      "budgetOptions": {
+        "300-500": "CHF 300-500",
+        "500-800": "CHF 500-800",
+        "800-1200": "CHF 800-1200",
+        "1200+": "CHF 1200+"
+      }
     }
   },
   "workshops": {
@@ -975,6 +1533,138 @@
         "title": "Want to propose a workshop?",
         "subtitle": "Have an idea for a workshop? We welcome your suggestions for new topics and content.",
         "button": "Propose a workshop"
+      }
+    },
+    "detail": {
+      "notFound": "Workshop not found",
+      "backToWorkshops": "Back to Workshops",
+      "allLevels": "All Levels",
+      "details": "Workshop Details",
+      "duration": "Duration",
+      "variableDuration": "Variable",
+      "maxParticipants": "Max. Participants",
+      "category": "Category",
+      "generalCategory": "General",
+      "price": "Price",
+      "free": "Free",
+      "priceChf": "CHF {amount}",
+      "targetAudience": "Target Audience",
+      "prerequisites": "Prerequisites",
+      "learningObjectives": "What you will learn:",
+      "materials": "Materials",
+      "materialsProvided": "Provided:",
+      "materialsRequired": "Please bring:",
+      "upcomingDates": "Upcoming Dates",
+      "soldOut": "Sold Out",
+      "registrationCount": "{current}/{max} registered",
+      "locationTba": "To be announced",
+      "instructor": "Instructor: {name}",
+      "registration": "Registration",
+      "noDates": "There are currently no dates scheduled for this workshop. Check back soon!",
+      "stats": "Workshop Statistics",
+      "level": "Level",
+      "dates": "Dates",
+      "datesAvailable": "{count} available",
+      "reviews": "Reviews"
+    },
+    "propose": {
+      "meta": {
+        "title": "Propose a Workshop",
+        "description": "Propose a workshop and share your knowledge with the community."
+      },
+      "loginRequired": "Login required",
+      "loginPrompt": "Please log in to propose a workshop.",
+      "loginButton": "Log in",
+      "backToDashboard": "Back to Dashboard",
+      "title": "Propose a Workshop",
+      "subtitle": "Propose a new workshop and share your knowledge with the community",
+      "form": {
+        "termsError": "Please accept the terms of use",
+        "genericError": "An error occurred. Please try again.",
+        "networkError": "Network error. Please try again.",
+        "aiPlaceholder": "Describe your workshop idea in 1-2 sentences...",
+        "successTitle": "Proposal submitted successfully!",
+        "successSubmitted": "has been submitted.",
+        "successMessage": "Your proposal has been submitted. We will contact you by email.",
+        "backToWorkshops": "Back to Workshops",
+        "errorTitle": "Error",
+        "submitting": "Submitting proposal...",
+        "submit": "Submit Workshop Proposal",
+        "reviewNote": "After submission, your proposal will be reviewed. This may take 1-2 business days."
+      },
+      "sections": {
+        "basicInfo": {
+          "title": "Basic Information",
+          "titleField": "Workshop Title *",
+          "titlePlaceholder": "e.g. Linux for Beginners",
+          "category": "Category *",
+          "categoryPlaceholder": "Select category",
+          "level": "Difficulty Level *",
+          "shortDescription": "Short Description *",
+          "shortDescriptionPlaceholder": "A short, catchy description (appears in the overview)",
+          "detailedDescription": "Detailed Description *",
+          "detailedDescriptionPlaceholder": "Describe the workshop in detail..."
+        },
+        "learningObjectives": {
+          "title": "Learning Objectives",
+          "placeholder": "e.g. Master the basics of the Linux command line",
+          "remove": "Remove",
+          "add": "+ Add learning objective"
+        },
+        "practicalDetails": {
+          "title": "Practical Details",
+          "duration": "Duration (hours) *",
+          "price": "Price per person (CHF) *",
+          "pricePlaceholder": "0.00 (free)",
+          "maxParticipants": "Maximum participants *",
+          "minParticipants": "Minimum participants *",
+          "targetAudience": "Target audience",
+          "targetAudiencePlaceholder": "e.g. Beginners with no prior knowledge, youth 14-18 years",
+          "prerequisites": "Prerequisites",
+          "prerequisitesPlaceholder": "e.g. Own laptop with Linux installed"
+        },
+        "materials": {
+          "title": "Materials & Preparation",
+          "provided": "Materials provided by the organiser",
+          "providedPlaceholder": "e.g. Worksheets, sample code, drinks",
+          "required": "To be brought by participants",
+          "requiredPlaceholder": "e.g. Own laptop, stationery"
+        },
+        "location": {
+          "title": "Location & Schedule",
+          "typeLabel": "Workshop type *",
+          "typeVenue": "At a venue (e.g. community centre)",
+          "typeOnline": "Online via video conference",
+          "typeHome": "At your home or premises",
+          "availableVenues": "Available venues",
+          "loading": "Loading available venues...",
+          "selectVenue": "Select venue...",
+          "personsCapacity": "persons",
+          "noVenues": "No approved venues available.",
+          "noVenuesSuggestion": "You can propose a new venue or submit an existing one for approval.",
+          "alternativeVenue": "Alternative venue (if no suitable one is available)",
+          "alternativeVenuePlaceholder": "e.g. My home, or a new venue",
+          "alternativeVenueHint": "Use this field if you want to suggest a new venue",
+          "proposedDate": "Proposed date",
+          "proposedTime": "Proposed time",
+          "address": "Address",
+          "addressPlaceholder": "your full address",
+          "specialRequirements": "Special requirements",
+          "specialRequirementsPlaceholder": "e.g. Projector, whiteboard, internet access, special software"
+        },
+        "terms": {
+          "title": "Terms of Use for Workshop Organisers",
+          "term1": "I commit to conducting workshops with high quality and engagement",
+          "term2": "I will treat all participants respectfully and professionally",
+          "term3": "I am responsible for the safety and smooth running of the workshop",
+          "term4": "I will communicate appropriate prior knowledge and clear learning objectives",
+          "term5": "I accept the rating system and platform fees",
+          "term6": "My information is truthful and I will keep it up to date",
+          "checkboxPrefix": "I accept the",
+          "termsLink": "Terms of Use",
+          "checkboxMiddle": "and the",
+          "privacyLink": "Privacy Policy"
+        }
       }
     }
   },
@@ -1454,6 +2144,31 @@
       "message": "An error occurred while loading IT Help.",
       "retry": "Try again",
       "backToList": "Back to list"
+    },
+    "edit": {
+      "backToRequest": "Back to request",
+      "title": "Edit request",
+      "description": "Change the details of your IT help request.",
+      "savedTitle": "Changes saved!",
+      "savedRedirect": "You will be redirected shortly...",
+      "sectionCategory": "Device category",
+      "sectionBudget": "Budget",
+      "budgetDescription": "What is the maximum you are willing to pay? Leave empty for free community help.",
+      "budgetFree": "Community help (free)",
+      "budgetUpTo": "up to CHF {amount}",
+      "budgetPlaceholder": "0 = free",
+      "sectionOptions": "Options",
+      "serviceTypeLabel": "How should the repair be done?",
+      "urgencyLabel": "How urgent?",
+      "cancelButton": "Cancel",
+      "submitButton": "Save changes",
+      "submittingButton": "Saving...",
+      "errorNotFound": "Request not found",
+      "errorNotOwner": "You can only edit your own requests",
+      "errorNotEditable": "This request can no longer be edited",
+      "errorLoadFailed": "Failed to load request",
+      "errorSaveFailed": "Failed to save",
+      "errorGeneric": "An error occurred"
     }
   },
   "blog": {
@@ -1702,35 +2417,141 @@
   "getInvolved": {
     "meta": {
       "title": "Get involved",
-      "description": "Join our mission to reduce e-waste and make technology accessible to everyone. Become a volunteer, intern, or partner."
+      "description": "Join our mission to reduce e-waste and make technology accessible to everyone. Become a volunteer, intern or partner."
     },
-    "page": {
-      "getStarted": "Get started",
-      "learnMore": "Learn more",
-      "waysTitle": "Ways to get involved",
-      "testimonialTitle": "What our community says",
-      "partnersTitle": "Our partner organisations",
-      "ctaTitle": "Ready to make a difference?",
-      "ctaDescription": "Join our community of changemakers and help us create a more sustainable future through technology.",
-      "discoverWorkshops": "Discover workshops"
+    "hero": {
+      "title": "Join our mission",
+      "subtitle": "Become part of a community that makes technology sustainable and accessible to everyone.",
+      "startBtn": "Get started",
+      "learnBtn": "Learn more"
     },
     "coreValues": {
-      "sustainability": {
-        "title": "Sustainability",
-        "description": "We believe in creating a sustainable future through responsible technology use and waste reduction."
-      },
-      "community": {
-        "title": "Community",
-        "description": "Building strong communities through technology education and inclusive participation."
-      },
-      "innovation": {
-        "title": "Innovation",
-        "description": "Finding creative solutions to make technology accessible and environmentally friendly."
-      },
-      "globalImpact": {
-        "title": "Global impact",
-        "description": "Making a difference in local and global communities through technology."
-      }
+      "heading": "Our core values",
+      "items": [
+        {
+          "title": "Sustainability",
+          "description": "We believe in creating a sustainable future through responsible technology use and waste reduction."
+        },
+        {
+          "title": "Community",
+          "description": "Building strong communities through technology education and inclusive participation."
+        },
+        {
+          "title": "Innovation",
+          "description": "Finding creative solutions to make technology accessible and environmentally friendly."
+        },
+        {
+          "title": "Global impact",
+          "description": "Making a difference in local and global communities through technology."
+        }
+      ]
+    },
+    "options": {
+      "heading": "Ways to get involved",
+      "items": [
+        {
+          "title": "Volunteering",
+          "description": "Join our team of dedicated volunteers. No prior experience required — just bring your interest and enthusiasm for our mission.",
+          "features": [
+            "Work with hardware and software",
+            "Learn new skills",
+            "Make a difference in your community",
+            "Meet like-minded people"
+          ],
+          "cta": "Start volunteering"
+        },
+        {
+          "title": "Technical experts",
+          "description": "If you have experience with open-source software, hardware or electronics, we'd love to have you on our team.",
+          "features": [
+            "Work on meaningful projects",
+            "Share your expertise",
+            "Collaborate with the community",
+            "Develop new solutions"
+          ],
+          "cta": "Share your expertise"
+        },
+        {
+          "title": "Internships",
+          "description": "We offer internship opportunities for those who want to gain experience in technology and sustainability.",
+          "features": [
+            "Hands-on experience",
+            "Professional development",
+            "Mentoring opportunities",
+            "Flexible arrangements"
+          ],
+          "cta": "Apply for internship"
+        },
+        {
+          "title": "Work reintegration",
+          "description": "We work with institutions to provide work reintegration opportunities for people who want to re-enter the workforce.",
+          "features": [
+            "Skills development",
+            "Social integration",
+            "Professional support",
+            "Meaningful work"
+          ],
+          "cta": "Learn more"
+        },
+        {
+          "title": "Partnerships",
+          "description": "We collaborate with educational institutions and organizations to create meaningful programs and opportunities.",
+          "features": [
+            "Education programs",
+            "Internship placements",
+            "Community initiatives",
+            "Sustainable solutions"
+          ],
+          "cta": "Become a partner"
+        },
+        {
+          "title": "Donate",
+          "description": "Support our mission to make technology sustainable and accessible to everyone. Your contribution helps us continue our work.",
+          "features": [
+            "Support sustainable technology",
+            "Help reduce e-waste",
+            "Enable community programs",
+            "Make technology accessible"
+          ],
+          "cta": "Donate now"
+        },
+        {
+          "title": "Association membership",
+          "description": "Become an official member of the association and take on shared responsibility. Members vote on important decisions.",
+          "features": [
+            "Voting rights on association decisions",
+            "Part of the official membership list",
+            "Annual fee CHF 50 (reduced CHF 20)",
+            "Financial support of the mission"
+          ],
+          "cta": "Become a member"
+        }
+      ]
+    },
+    "testimonials": {
+      "heading": "What our community says",
+      "items": [
+        {
+          "quote": "As a refugee, Revamp-IT gave me the opportunity to participate here. I learn a lot and have the freedom to develop skills that fit my goals. I now write code and can learn anything that interests me — because here everyone shares their knowledge. This is a real community.",
+          "author": "G.",
+          "role": "Volunteer"
+        }
+      ]
+    },
+    "partners": {
+      "heading": "Our partner organizations",
+      "names": [
+        "Verein für berufliche und soziale Integration Bezirk Uster",
+        "Arbeitsintegrationsstelle der Gemeinde Rüti",
+        "HEKS",
+        "AOZ (Asylorganisation Zürich)"
+      ]
+    },
+    "cta": {
+      "heading": "Ready to make a difference?",
+      "body": "Join our community of changemakers and help us create a more sustainable future through technology.",
+      "contactBtn": "Contact us",
+      "workshopsBtn": "Discover workshops"
     },
     "volunteer": {
       "meta": {
@@ -1740,191 +2561,478 @@
       "title": "Become a volunteer",
       "description": "Join our team of dedicated volunteers and help make technology sustainable and accessible to everyone.",
       "ctaText": "Express interest",
-      "benefitsTitle": "Benefits of volunteering",
-      "flexibilityNote": "We understand that everyone has different schedules. We offer flexible volunteer activities that fit around your other commitments. Whether you can spare a few hours a week or more — your contribution will make a difference.",
-      "howToStartTitle": "How to get started",
-      "steps": [
-        "Contact us to express your interest",
-        "Meet with our team to discuss your skills and interests",
-        "Attend a brief introductory session",
-        "Start making a difference!"
-      ]
-    },
-    "donate": {
-      "meta": {
-        "title": "Donate",
-        "description": "Help directly. Every donation saves devices from e-waste and makes technology accessible to everyone."
+      "overview": {
+        "title": "Why volunteer at Revamp-IT?",
+        "content": "At Revamp-IT we believe everyone should have access to technology and the skills to use it. As a volunteer you'll be part of a community that makes this vision a reality. Whether you're passionate about technology, sustainability or community service — there's a place for you on our team."
       },
-      "heroTitle": "Help directly.",
-      "heroDescription": "Every donation saves devices from e-waste, extends lifecycles, and enables technology access for people who couldn't otherwise afford it.",
-      "transferNow": "Transfer now",
-      "transparencyLabel": "Transparency",
-      "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "Annual budget (non-profit association)",
-      "devicesSavedLabel": "devices saved annually",
-      "co2SavedLabel": "saved per year",
-      "impactTitle": "What your donation achieves",
-      "recommended": "Recommended",
-      "chooseAmount": "Choose amount and transfer",
-      "bankTransferTitle": "Bank transfer",
-      "bankTransferDescription": "Transfer to the following account:",
-      "recipient": "Recipient",
-      "iban": "IBAN",
-      "bank": "Bank",
-      "purpose": "Payment reference",
-      "copy": "Copy",
-      "copyIban": "Copy IBAN",
-      "donateDevicesTitle": "Donate devices",
-      "donateDevicesDescription": "Hardware you no longer need can give someone else a real opportunity. We accept working or repairable devices, refurbish them, and pass them on.",
-      "weAccept": "What we accept:",
-      "weAcceptList": "Laptops, desktop PCs, monitors, keyboards, mice, printers — working or repairable.",
-      "weDoNotAccept": "What we don't accept:",
-      "weDoNotAcceptList": "Physically damaged devices, broken screens without frames, CRT monitors.",
-      "preparation": "Preparation:",
-      "preparationText": "Please erase your personal data before dropping off (we can help if needed).",
-      "dropOffAddress": "Drop-off address",
-      "questions": "Questions? Write to us →",
-      "newsletterTitle": "We'll keep you informed of how your donation makes an impact.",
-      "newsletterDescription": "No adverts. Only real updates on devices saved, CO₂ reduced, and people supported.",
-      "purposeTemplate": "Donation {org} {month} {year}",
-      "months": [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
+      "benefitsHeading": "Benefits of volunteering",
+      "benefits": [
+        {
+          "title": "Hands-on experience",
+          "description": "Work directly with hardware and software and gain practical experience in technology and sustainability."
+        },
+        {
+          "title": "Learn new skills",
+          "description": "Develop technical and social skills through our training programs and mentoring opportunities."
+        },
+        {
+          "title": "Community impact",
+          "description": "Make a real difference in your community by helping to make technology accessible to everyone."
+        },
+        {
+          "title": "Join our team",
+          "description": "Become part of a diverse and passionate team working towards a shared goal."
+        }
       ],
-      "impact": {
-        "tier1Title": "1 device saved",
-        "tier1Description": "1 laptop rescued from e-waste + 285 kg CO₂ avoided.",
-        "tier2Title": "2 devices + workshop place",
-        "tier2Description": "2 devices refurbished + a place in our Linux workshop for someone who couldn't otherwise afford it.",
-        "tier3Title": "Corporate donation — 10 devices",
-        "tier3Description": "10 devices for educational institutions, social projects, or low-income households."
+      "sections": [
+        {
+          "title": "Volunteer roles",
+          "items": [
+            "Help with computer refurbishment and repair",
+            "Assist in our workshops and training programs",
+            "Support our community initiatives",
+            "Contribute to documentation and knowledge base",
+            "Help with administrative tasks and event organization"
+          ]
+        },
+        {
+          "title": "Time commitment",
+          "description": "We understand everyone has different schedules. We offer flexible volunteering that adapts to your other commitments.",
+          "items": [
+            "Flexible scheduling options",
+            "Regular and occasional opportunities",
+            "Remote and on-site options"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "No experience required",
+          "content": "Don't worry if you don't have technical experience. We provide all the training you need and there are many ways to contribute beyond technical work."
+        },
+        {
+          "title": "Your impact",
+          "content": "As a volunteer you'll be part of a movement making technology more sustainable and accessible. Your contribution helps us reduce e-waste and build a more inclusive digital future."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us to express your interest",
+          "Meet with our team to discuss your skills and interests",
+          "Attend a brief orientation session",
+          "Start making a difference!"
+        ]
+      }
+    },
+    "technicalExperts": {
+      "meta": {
+        "title": "기술 전문가",
+        "description": "Share your technical expertise and help us develop innovative solutions for sustainable technology."
       },
-      "devices": {
-        "laptop": "Laptops",
-        "desktop": "Desktop PCs",
-        "monitor": "Monitors",
-        "peripherals": "Peripherals"
+      "title": "Technical Experts",
+      "description": "Share your expertise and help us develop innovative solutions for sustainable technology.",
+      "ctaText": "Express interest",
+      "benefitsHeading": "Opportunities for technical experts",
+      "overview": {
+        "title": "Join our technical team",
+        "content": "We are always looking for technical experts who share our passion for sustainable technology and open-source solutions."
+      },
+      "benefits": [
+        {
+          "title": "Open-source development",
+          "description": "Contribute to our open-source projects and help improve our software solutions."
+        },
+        {
+          "title": "Hardware innovation",
+          "description": "Work on hardware projects that make technology more sustainable and accessible."
+        },
+        {
+          "title": "Knowledge sharing",
+          "description": "Share your expertise through workshops, documentation and mentoring."
+        },
+        {
+          "title": "Project leadership",
+          "description": "Lead technical initiatives and help shape the future of sustainable technology."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Technical areas",
+          "items": [
+            "Software development (Python, JavaScript, Linux)",
+            "Hardware development and repair",
+            "System administration",
+            "Network engineering",
+            "Database management",
+            "Security and privacy",
+            "Technical documentation"
+          ]
+        },
+        {
+          "title": "Current projects",
+          "items": [
+            "Development of open-source accounting software",
+            "Automation of hardware refurbishment",
+            "Educational platform development",
+            "System administration tools",
+            "Documentation and knowledge base"
+          ]
+        },
+        {
+          "title": "Membership benefits",
+          "items": [
+            "Work on meaningful projects with real impact",
+            "Collaboration with a diverse team of experts",
+            "Access to our workshop and testing facilities",
+            "Opportunities for leadership and mentoring others",
+            "Flexible contribution options"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Open-source focus",
+          "content": "We believe in the power of open-source software and hardware. As a technical expert you have the opportunity to contribute to open-source projects."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us with your area of expertise and interests",
+          "Discuss possible projects and contributions",
+          "Review our development guidelines and processes",
+          "Start contributing to our projects"
+        ]
+      }
+    },
+    "internships": {
+      "meta": {
+        "title": "인턴십",
+        "description": "Gain practical experience in technology and sustainability through our internship program."
+      },
+      "title": "Internship opportunities",
+      "description": "Gain valuable experience in technology and sustainability and make real change.",
+      "ctaText": "Express interest",
+      "benefitsHeading": "Program benefits",
+      "overview": {
+        "title": "About our internship program",
+        "content": "Our internship program offers a unique opportunity to gain hands-on experience in sustainable technology while contributing to meaningful projects."
+      },
+      "benefits": [
+        {
+          "title": "Hands-on experience",
+          "description": "Work on real projects that make a difference in the community."
+        },
+        {
+          "title": "Professional development",
+          "description": "Learn from experienced mentors and develop valuable skills."
+        },
+        {
+          "title": "Team collaboration",
+          "description": "Work with a diverse team of professionals and volunteers."
+        },
+        {
+          "title": "Learning opportunities",
+          "description": "Access to training resources and workshops."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Available positions",
+          "items": [
+            "Hardware refurbishment and repair",
+            "Software development",
+            "System administration",
+            "Project management",
+            "Community work",
+            "Technical documentation"
+          ]
+        },
+        {
+          "title": "What you will learn",
+          "items": [
+            "Hardware and software troubleshooting",
+            "Project management and collaboration",
+            "Technical documentation and communication",
+            "Community engagement and outreach",
+            "Sustainable technology practices"
+          ]
+        },
+        {
+          "title": "Requirements",
+          "items": [
+            "Enrolled in or completed relevant studies",
+            "Passion for technology and sustainability",
+            "Able to commit for the program duration",
+            "Basic computer skills",
+            "Willing to learn and contribute"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Flexible arrangements",
+          "content": "We understand that students and professionals have different schedules. We offer flexible arrangements to accommodate your commitments."
+        }
+      ],
+      "howToStart": {
+        "title": "How to apply",
+        "steps": [
+          "Send us your CV and a cover letter",
+          "State your area of interest and availability",
+          "Have a brief conversation",
+          "Start your internship journey!"
+        ]
       }
     },
     "partnerships": {
       "meta": {
-        "title": "Partnerships",
-        "description": "Work with us to create sustainable technology solutions and achieve lasting impact."
+        "title": "파트너십",
+        "description": "Create sustainable technology solutions and lasting impact together with us."
       },
       "title": "Partnership opportunities",
+      "description": "Join with us to create sustainable technology solutions and achieve lasting impact.",
       "ctaText": "Express interest",
-      "benefitsTitle": "Partnership benefits",
-      "processTitle": "How we work together",
-      "processSteps": [
-        "Initial consultation to understand goals and opportunities",
-        "Development of partnership framework and objectives",
-        "Implementation of cooperative initiatives",
-        "Regular progress reviews and impact assessment",
-        "Continuous improvement and partnership expansion"
+      "benefitsHeading": "Partnership benefits",
+      "overview": {
+        "title": "Why collaborate with us?",
+        "content": "At Revamp-IT we believe in the power of collaboration to create meaningful change. Our partnerships combine expertise, resources and shared values."
+      },
+      "benefits": [
+        {
+          "title": "Shared impact",
+          "description": "Amplify your organization's impact through joint initiatives."
+        },
+        {
+          "title": "Global network",
+          "description": "Connect with like-minded organizations and expand your reach."
+        },
+        {
+          "title": "Resource sharing",
+          "description": "Access shared resources and expertise for greater efficiency."
+        },
+        {
+          "title": "Strategic collaboration",
+          "description": "Develop innovative solutions through joint efforts."
+        }
       ],
-      "howToStartTitle": "How to get started",
-      "howToStartSteps": [
-        "Contact us to discuss partnership opportunities",
-        "Share your organisation's goals and interests",
-        "Explore potential areas of collaboration",
-        "Develop a partnership agreement",
-        "Begin your partnership journey"
-      ]
-    },
-    "internships": {
-      "meta": {
-        "title": "Internships",
-        "description": "Gain hands-on experience in technology and sustainability through our internship programme."
+      "sections": [
+        {
+          "title": "Partnership models",
+          "items": [
+            "Corporate partnerships",
+            "Educational institution collaboration",
+            "Non-profit organization alliances",
+            "Technology provider partnerships",
+            "Community organization collaboration"
+          ]
+        },
+        {
+          "title": "Collaboration areas",
+          "items": [
+            "Technology refurbishment programs",
+            "Educational initiatives",
+            "Research and development",
+            "Community outreach programs",
+            "Sustainability projects"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Tailored partnership programs",
+          "content": "We understand that each organization has unique needs. Our programs are tailored to align with your organization's goals."
+        }
+      ],
+      "partnershipProcess": {
+        "title": "How we collaborate",
+        "steps": [
+          "Initial consultation to understand goals and opportunities",
+          "Development of partnership framework and objectives",
+          "Implementation of cooperative initiatives",
+          "Regular progress reviews and impact assessment",
+          "Continuous improvement and partnership expansion"
+        ]
       },
-      "title": "Internship opportunities",
-      "description": "Gain valuable experience in technology and sustainability while making a real difference.",
-      "ctaText": "Express interest",
-      "benefitsTitle": "Programme benefits",
-      "howToApplyTitle": "How to apply",
-      "howToApplySteps": [
-        "Send us your CV and a cover letter",
-        "State your area of interest and availability",
-        "Have a brief conversation with us",
-        "Start your internship journey!"
-      ]
-    },
-    "technicalExperts": {
-      "meta": {
-        "title": "Technical experts",
-        "description": "Share your technical expertise and help us develop innovative solutions for sustainable technology."
-      },
-      "title": "Technical experts",
-      "description": "Share your expertise and help us develop innovative solutions for sustainable technology.",
-      "ctaText": "Express interest",
-      "opportunitiesTitle": "Opportunities for technical experts",
-      "howToStartTitle": "How to get started",
-      "howToStartSteps": [
-        "Contact us with your area of expertise and interests",
-        "Discuss possible projects and contributions",
-        "Review our development guidelines and processes",
-        "Start contributing to our projects"
-      ]
-    },
-    "itHilfeTechniker": {
-      "meta": {
-        "title": "IT Help technician",
-        "description": "Share your IT knowledge and help people in your community — flexible, no prior experience needed, real impact."
-      },
-      "title": "Become an IT Help technician",
-      "description": "Your IT knowledge can make life easier for others. Help community members with their computers — flexibly, straightforwardly, and with real impact.",
-      "ctaText": "Register as technician",
-      "benefitsTitle": "What you gain",
-      "howToStartTitle": "How to get started",
-      "howToStartSteps": [
-        "Create your technician profile with your skills and availability",
-        "Wait for requests — you decide which ones you take on",
-        "Arrange an appointment directly with the person requesting help",
-        "Help, learn, make a difference"
-      ]
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us to discuss partnership opportunities",
+          "Share your organization's goals and interests",
+          "Explore potential collaboration areas",
+          "Develop a partnership agreement",
+          "Begin your partnership journey"
+        ]
+      }
     },
     "workReintegration": {
       "meta": {
-        "title": "Work reintegration",
-        "description": "Join our work reintegration programme to gain valuable skills and experience in technology while rebuilding your career."
+        "title": "직업 재통합",
+        "description": "Join our work reintegration program to gain valuable skills and rebuild your career."
       },
-      "title": "Work reintegration programme",
-      "description": "Join our supportive programme to rebuild your career in technology and sustainability.",
+      "title": "Work reintegration program",
+      "description": "Join our supportive program to rebuild your career in technology and sustainability.",
       "ctaText": "Express interest",
-      "benefitsTitle": "Programme benefits",
-      "howToStartTitle": "How to get started",
-      "howToStartSteps": [
-        "Contact us to discuss your situation",
-        "Meet with our team for an assessment",
-        "Develop your personalised plan",
-        "Begin your work reintegration journey"
-      ]
+      "benefitsHeading": "Program benefits",
+      "overview": {
+        "title": "About our program",
+        "content": "Our work reintegration program is designed to help people rebuild their careers in a supportive and understanding environment."
+      },
+      "benefits": [
+        {
+          "title": "Skills development",
+          "description": "Learn practical skills in technology and sustainability."
+        },
+        {
+          "title": "Professional growth",
+          "description": "Build your CV with real experience."
+        },
+        {
+          "title": "Supportive environment",
+          "description": "Work in a supportive and understanding team."
+        },
+        {
+          "title": "Meaningful work",
+          "description": "Contribute to projects that make a difference."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Program features",
+          "items": [
+            "Structured work experience in technology",
+            "Professional development and training",
+            "Individual support and mentoring",
+            "Flexible scheduling options",
+            "Gradual workload increase"
+          ]
+        },
+        {
+          "title": "What you will learn",
+          "items": [
+            "Computer hardware and software",
+            "Technical troubleshooting",
+            "Customer service",
+            "Team collaboration",
+            "Project management"
+          ]
+        },
+        {
+          "title": "Support services",
+          "items": [
+            "Regular check-ins and progress reviews",
+            "Access to counseling services",
+            "Workplace accommodations",
+            "Career guidance and planning",
+            "Networking opportunities"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "Individualized approach",
+          "content": "We understand that every journey is unique. Our program is flexible and can be tailored to your specific needs and goals."
+        },
+        {
+          "title": "Confidentiality",
+          "content": "We maintain strict confidentiality throughout the program. Your privacy and dignity are our top priorities."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Contact us to discuss your situation",
+          "Meet with our team for an assessment",
+          "Develop your personalized plan",
+          "Begin your work reintegration journey"
+        ]
+      }
+    },
+    "itHilfeTechniker": {
+      "meta": {
+        "title": "IT 도움 기술자",
+        "description": "Share your IT knowledge and help people in your community — flexibly, without prior credentials and with real impact."
+      },
+      "title": "Become an IT Help Technician",
+      "description": "Your IT knowledge can make other people's lives easier. Help people in the community with their computers — flexible, straightforward, impactful.",
+      "ctaText": "Register as technician",
+      "benefitsHeading": "What's in it for you",
+      "overview": {
+        "title": "What IT Help means",
+        "content": "Many people — elderly, refugees, those with little experience — struggle with their computer daily. You have the knowledge to help."
+      },
+      "benefits": [
+        {
+          "title": "Apply your knowledge",
+          "description": "Your IT knowledge is needed — not in an office, but for people in your community."
+        },
+        {
+          "title": "Help flexibly",
+          "description": "You decide when and how much. From two hours per month — everything is valuable."
+        },
+        {
+          "title": "Build community",
+          "description": "You become part of a network of volunteers who want to make technology accessible to everyone."
+        },
+        {
+          "title": "Gain experience",
+          "description": "Explain, document, solve problems in practice — this sharpens your skills more than any course."
+        }
+      ],
+      "sections": [
+        {
+          "title": "What technicians do",
+          "items": [
+            "Diagnose and solve software problems (Windows, Linux, macOS)",
+            "Set up and configure devices",
+            "Perform Linux installations on refurbished laptops",
+            "Give short introductions to computers, internet and data security",
+            "Home visits on request for mobility-impaired persons"
+          ]
+        },
+        {
+          "title": "Requirements",
+          "items": [
+            "Basic IT knowledge — no degree or certificate needed",
+            "Enjoyment of explaining things simply",
+            "Patience and openness towards people with little tech experience",
+            "Time availability from approximately 2 hours per month"
+          ]
+        }
+      ],
+      "callouts": [
+        {
+          "title": "No perfectionists needed",
+          "content": "You don't need to know everything. We're looking for people who enjoy helping and can explain things. If you know how to set up a laptop or help someone with their email account — you're exactly right."
+        }
+      ],
+      "howToStart": {
+        "title": "How to get started",
+        "steps": [
+          "Create your technician profile with your skills and availability",
+          "Wait for requests — you decide which ones to accept",
+          "Arrange an appointment directly with the requesting person",
+          "Help, learn, make a difference"
+        ]
+      }
     },
     "kontakt": {
       "meta": {
-        "title": "Express interest",
-        "description": "Write to us briefly about what interests you — we'll get back to you personally."
+        "title": "관심 표명하기",
+        "description": "Write to us briefly about what interests you — we'll get back to you."
       },
-      "backToInvolvement": "All ways to get involved",
-      "title": "Interest in {topic}",
-      "description": "Tell us briefly who you are and what you're interested in. We'll get back to you personally.",
+      "backLink": "All ways to get involved",
+      "titlePrefix": "Interest in",
+      "body": "Tell us briefly who you are and what interests you. We'll get back to you personally.",
+      "defaultTopic": "Getting involved",
       "topics": {
         "freiwilligenarbeit": "Volunteering",
         "praktikum": "Internship",
         "wiedereinstieg": "Work reintegration",
         "technische-experten": "Technical experts",
         "partnerschaft": "Partnership",
-        "it-hilfe-techniker": "IT Help technician",
-        "default": "Getting involved"
+        "it-hilfe-techniker": "IT Help Technician"
       }
     }
   },
@@ -2045,7 +3153,8 @@
       "noListingsTitle": "No active listings",
       "noListingsDescription": "This seller currently has no active listings.",
       "loadingProfile": "Loading profile...",
-      "sellerNotFound": "Seller not found"
+      "sellerNotFound": "Seller not found",
+      "errorLoading": "Error loading profile"
     }
   },
   "agb": {
@@ -2109,18 +3218,19 @@
   "datenschutz": {
     "meta": {
       "title": "Privacy Policy",
-      "description": "Privacy Policy of revamp-it"
+      "description": "Privacy Policy of {orgName}"
     },
     "title": "Privacy Policy",
     "section1": {
-      "title": "1. Data Controller"
+      "title": "1. Data Controller",
+      "emailLabel": "Email:"
     },
     "section2": {
       "title": "2. Collection and Processing of Personal Data",
-      "intro": "We collect personal data when you register on our platform, use our services or get in touch with us. This includes:",
+      "intro": "We collect personal data when you register on our platform, use our services, or contact us. This includes:",
       "items": [
-        "Name and e-mail address (upon registration)",
-        "Contact details (for enquiries and bookings)",
+        "Name and email address (when registering)",
+        "Contact details (for enquiries and appointment bookings)",
         "Usage data (when using the platform)"
       ]
     },
@@ -2129,19 +3239,19 @@
       "intro": "Your data is used for:",
       "items": [
         "Providing and managing your user account",
-        "Carrying out repairs and services",
+        "Carrying out repair orders and services",
         "Managing workshop registrations",
         "Operating the P2P marketplace",
-        "Communication regarding our offers (with consent only)"
+        "Communication about our offers (only with your consent)"
       ]
     },
     "section4": {
-      "title": "4. Data Disclosure",
-      "body": "Your data is not sold to third parties. Disclosure only occurs where necessary to provide our services (e.g. to repair providers for booked repairs) or where we are legally required to do so."
+      "title": "4. Data Sharing",
+      "body": "Your data will not be sold to third parties. Data is only shared when necessary to provide our services (e.g. to repair service providers for booked repairs) or when we are legally required to do so."
     },
     "section5": {
       "title": "5. Data Security",
-      "body": "We implement technical and organisational measures to protect your data against unauthorised access, loss or misuse. Passwords are stored exclusively in hashed form."
+      "body": "We implement technical and organisational measures to protect your data from unauthorised access, loss or misuse. Passwords are stored exclusively in hashed form."
     },
     "section6": {
       "title": "6. Cookies",
@@ -2151,20 +3261,20 @@
       "title": "7. Your Rights",
       "intro": "You have the right to:",
       "items": [
-        "Access your stored data",
-        "Correct inaccurate data",
-        "Delete your data",
-        "Restrict processing",
+        "Access to your stored data",
+        "Correction of inaccurate data",
+        "Deletion of your data",
+        "Restriction of processing",
         "Data portability (data export)",
-        "Revoke granted consents"
+        "Withdrawal of granted consent"
       ],
-      "exportText": "Registered users can download a full copy of their data at any time under",
-      "exportLink": "Settings → Privacy",
-      "contactText": "For all other enquiries, please contact:"
+      "downloadText": "Registered users can download a complete copy of their data at any time under",
+      "settingsLinkLabel": "Settings → Privacy",
+      "contactText": "For all other concerns, please contact:"
     },
     "section8": {
       "title": "8. Retention Period",
-      "body": "We store your personal data only as long as necessary for the stated purposes or as required by statutory retention obligations. Account and profile data is removed after account deletion, unless legal obligations (e.g. fiscal retention of invoices) prevent this."
+      "body": "We store your personal data only for as long as necessary for the stated purposes or as required by legal retention periods. Account and profile data will be removed after account deletion, unless legal obligations (e.g. tax retention of invoices) prevent this."
     },
     "section9": {
       "title": "9. Legal Basis",
@@ -2172,8 +3282,8 @@
     },
     "section10": {
       "title": "10. Applicable Law",
-      "body": "This privacy policy is subject to the Swiss Federal Act on Data Protection (FADP) and, where applicable, the General Data Protection Regulation (GDPR).",
-      "impressumLinkLabel": "legal notice"
+      "body": "This privacy policy is governed by the Swiss Federal Act on Data Protection (FADP) and, where applicable, the European General Data Protection Regulation (GDPR). See also our",
+      "impressumLinkLabel": "Legal Notice"
     },
     "asOf": "As of: March 2026"
   },
@@ -2211,7 +3321,7 @@
   "transparenz": {
     "meta": {
       "title": "Transparency",
-      "description": "What we do and how we do it. An insight into our mission, figures and working methods."
+      "description": "What we do and how we do it. An insight into the mission, figures and working methods of {orgName}."
     },
     "hero": {
       "title": "Transparency",
@@ -2219,44 +3329,44 @@
     },
     "mission": {
       "title": "Our Mission",
-      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
+      "body": "As a {legalForm} (founded {foundingYear}), we are committed to giving used hardware a second life, making open software available to all, and enabling people to learn how to use technology independently."
     },
     "stats": {
       "title": "Facts & Figures",
-      "detailLink": "View detailed impact figures"
+      "moreLink": "View detailed impact figures"
     },
     "howWeWork": {
       "title": "How We Work",
       "subtitle": "Our three community platforms connect people with technology.",
-      "toPlatform": "Go to Platform",
-      "platforms": [
-        {
-          "title": "Marketplace",
-          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
-          "href": "/marketplace"
-        },
-        {
-          "title": "IT Help",
-          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
-          "href": "/it-hilfe"
-        },
-        {
-          "title": "Workshops",
-          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
-          "href": "/workshops"
-        }
-      ]
+      "platformCta": "Go to platform"
     },
+    "platforms": [
+      {
+        "title": "Marketplace",
+        "description": "Community platform for used IT devices. Users can create listings, buy and sell — without fees.",
+        "href": "/marketplace"
+      },
+      {
+        "title": "IT Help",
+        "description": "Connecting volunteer technicians for computer repairs. Help from person to person, local and straightforward.",
+        "href": "/it-hilfe"
+      },
+      {
+        "title": "Workshops",
+        "description": "Courses on Linux, hardware, programming and AI. Share knowledge and learn from each other — on-site in Zurich.",
+        "href": "/workshops"
+      }
+    ],
     "finances": {
       "title": "Finances",
-      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members.",
-      "memberLink": "Become a member and gain access"
+      "body": "As a non-profit association, we disclose our finances. The annual report is presented at the general assembly and is available to members.",
+      "memberLink": "Become a member and get insight"
     },
     "board": {
       "title": "Board",
-      "text": "{orgName} is run by a voluntary board. Contact:",
-      "joinCta": "Become a Member",
-      "donateCta": "Donate"
+      "body": "{orgName} is managed by a voluntary board. Contact:",
+      "joinBtn": "Become a member",
+      "donateBtn": "Donate"
     }
   },
   "notFound": {
@@ -2272,6 +3382,339 @@
     "goHome": "Go to Homepage"
   },
   "projects": {
+    "kivitendo": {
+      "meta": {
+        "title": "Kivitendo - Open Source CRM & ERP | revamp-it",
+        "description": "The unique open-source CRM & ERP from revamp-it, meeting the highest quality standards through continuous personalised development."
+      },
+      "hero": {
+        "title": "Kivitendo",
+        "description": "The unique open-source CRM & ERP meeting the highest quality standards through continuous personalised development",
+        "cta1Text": "Learn more",
+        "cta1Href": "https://www.kivitendo.ch",
+        "cta2Text": "Contact us",
+        "cta2Href": "/contact"
+      },
+      "sections": [
+        {
+          "title": "Why choose Kivitendo?",
+          "description": "A comprehensive solution for order processing, inventory management and financial accounting",
+          "backgroundColor": "white",
+          "layout": "grid-3",
+          "cards": [
+            {
+              "title": "Open-Source Benefits",
+              "description": "",
+              "features": [
+                "High adaptability to your needs",
+                "Full access to code and developments",
+                "No fixed licence costs"
+              ]
+            },
+            {
+              "title": "Order Processing",
+              "description": "",
+              "features": [
+                "Complete workflow from quote to invoice",
+                "Customisable document templates",
+                "Direct email integration"
+              ]
+            },
+            {
+              "title": "Financial Accounting",
+              "description": "",
+              "features": [
+                "Complete or modular accounting",
+                "Customisable chart of accounts",
+                "Bank statement import"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Key Features",
+          "description": "Comprehensive functionality for your business requirements",
+          "backgroundColor": "gray",
+          "layout": "grid-2",
+          "cards": [
+            {
+              "title": "Business Configuration",
+              "description": "Configure the system for your specific business requirements",
+              "features": [
+                "Multiple currencies & languages",
+                "Multi-client capability",
+                "Custom user groups"
+              ]
+            },
+            {
+              "title": "Integration & Customisation",
+              "description": "Extend functionality to suit your needs",
+              "features": [
+                "Webshop integration",
+                "Custom variables",
+                "Process automation"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Premium Partnership",
+          "description": "Since July 2015, revamp-it has been a premium partner of the Kivitendo project. We offer configuration and support for this open-source ERP system.",
+          "backgroundColor": "white",
+          "layout": "single",
+          "cards": [
+            {
+              "title": "Our Services",
+              "description": "We support you in using Kivitendo",
+              "features": [
+                "Configuration & Customisation",
+                "Support & Maintenance",
+                "Training and consulting"
+              ]
+            }
+          ]
+        }
+      ],
+      "cta": {
+        "title": "Learn more",
+        "actions": [
+          {
+            "title": "Kivitendo Switzerland",
+            "description": "Visit the official Swiss Kivitendo website",
+            "href": "https://www.kivitendo.ch",
+            "ctaText": "Visit website"
+          },
+          {
+            "title": "Community Forum",
+            "description": "Get help and share knowledge with other users",
+            "href": "https://forum.kivitendo.de/",
+            "ctaText": "Visit forum"
+          },
+          {
+            "title": "Contact",
+            "description": "Get in touch with us for more information",
+            "href": "/contact",
+            "ctaText": "Contact us"
+          }
+        ]
+      }
+    },
+    "linuxola": {
+      "meta": {
+        "title": "Linuxola Association",
+        "description": "Linuxola is a Swiss organisation dedicated to providing access to information technology and connecting African partners to the global digital commons."
+      },
+      "hero": {
+        "title": "Linuxola Association",
+        "description": "Bridging the digital divide between Switzerland and Africa",
+        "cta1Text": "Donate equipment",
+        "cta1Href": "/get-involved/donate",
+        "cta2Text": "Volunteer",
+        "cta2Href": "/get-involved/volunteer"
+      },
+      "sections": [
+        {
+          "title": "About Linuxola",
+          "description": "The Linuxola Association was founded on 2 December 2005 by eight people from different regions of Switzerland. The association's purpose is to enable our partners in Africa to access information technology and connect to the global digital commons.",
+          "backgroundColor": "white",
+          "layout": "single"
+        },
+        {
+          "title": "",
+          "backgroundColor": "gray",
+          "layout": "grid-2",
+          "cards": [
+            {
+              "title": "Our Mission",
+              "description": "",
+              "features": [
+                "Providing access to technology and training",
+                "Supporting sustainable IT infrastructure",
+                "Promoting open-source solutions",
+                "Building long-term partnerships"
+              ]
+            },
+            {
+              "title": "Our Impact",
+              "description": "",
+              "features": [
+                "Setting up computer labs in schools and communities",
+                "Training local IT professionals",
+                "Implementing sustainable technology solutions",
+                "Creating lasting partnerships with African organisations"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Equipment Needed",
+          "backgroundColor": "white",
+          "layout": "grid-3",
+          "cards": [
+            {
+              "title": "Computers & Laptops",
+              "description": "",
+              "features": [
+                "Laptops (3–5 years old)",
+                "Desktop PCs",
+                "Monitors",
+                "Keyboards & mice"
+              ]
+            },
+            {
+              "title": "Networking",
+              "description": "",
+              "features": [
+                "Network switches",
+                "Wi-Fi routers",
+                "Network cables",
+                "UPS systems"
+              ]
+            },
+            {
+              "title": "Accessories",
+              "description": "",
+              "features": [
+                "USB drives",
+                "External hard drives",
+                "Power supplies",
+                "RAM modules"
+              ]
+            }
+          ]
+        }
+      ],
+      "cta": {
+        "title": "Get involved",
+        "actions": [
+          {
+            "title": "Donate equipment",
+            "description": "Your used IT equipment can make a real difference in African communities",
+            "href": "/get-involved/donate",
+            "ctaText": "Donate now"
+          },
+          {
+            "title": "Volunteer",
+            "description": "Share your technical expertise and help set up computer labs",
+            "href": "/get-involved/volunteer",
+            "ctaText": "Get involved"
+          },
+          {
+            "title": "Contact",
+            "description": "Get in touch with us for more information",
+            "href": "/contact",
+            "ctaText": "Contact us"
+          }
+        ]
+      }
+    },
+    "ltsp": {
+      "meta": {
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "The Linux Terminal Server Project enables multiple users to work simultaneously on older computers by connecting them to a powerful server, optimising resource usage and extending hardware lifespan."
+      },
+      "hero": {
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "Extending the life of older computers through server-based computing"
+      },
+      "sections": [
+        {
+          "title": "",
+          "backgroundColor": "gray",
+          "layout": "grid-2",
+          "cards": [
+            {
+              "title": "About LTSP",
+              "description": "The Linux Terminal Server Project (LTSP) enables multiple users to work simultaneously on older computers by connecting them to a powerful server. This optimises resource usage and extends hardware lifespan."
+            },
+            {
+              "title": "How it works",
+              "description": "",
+              "features": [
+                "Applications run on a central server",
+                "Thin clients or old PCs act as terminals",
+                "Efficient resource management",
+                "Consistent user experience",
+                "Minimal requirements for client machines"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "",
+          "backgroundColor": "gray",
+          "layout": "grid-3",
+          "cards": [
+            {
+              "title": "Benefits",
+              "description": "",
+              "features": [
+                "Extended hardware lifespan",
+                "Reduced maintenance costs",
+                "Centralised management & updates",
+                "Improved security",
+                "Lower energy consumption"
+              ]
+            },
+            {
+              "title": "Implementation",
+              "description": "",
+              "features": [
+                "Server setup & configuration",
+                "Client preparation",
+                "Network optimisation",
+                "User management & security",
+                "Ongoing support"
+              ]
+            },
+            {
+              "title": "Use Cases",
+              "description": "",
+              "features": [
+                "Schools & education",
+                "Public computer labs",
+                "Businesses",
+                "Community centres",
+                "Non-profit organisations"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "",
+          "backgroundColor": "gray",
+          "layout": "grid-2",
+          "cards": [
+            {
+              "title": "Getting Started",
+              "description": "",
+              "features": [
+                "Assessing your infrastructure",
+                "Planning your implementation",
+                "Setting up server & clients",
+                "Staff training",
+                "Ongoing support"
+              ]
+            },
+            {
+              "title": "Contact us",
+              "description": "Want to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
+            }
+          ]
+        }
+      ],
+      "cta": {
+        "title": "Deploy LTSP",
+        "actions": [
+          {
+            "title": "Request consultation",
+            "description": "Let us discuss how LTSP can help your organisation",
+            "href": "/contact",
+            "ctaText": "Contact us"
+          }
+        ]
+      }
+    },
     "meta": {
       "title": "Our Projects",
       "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
@@ -2300,7 +3743,81 @@
       "software": "Software Projects",
       "hardware": "Hardware Projects",
       "community": "Community Projects"
-    }
+    },
+    "items": [
+      {
+        "title": "Kivitendo Mode CH",
+        "description": "Since July 2015, revamp-it has been a premium partner of the Kivitendo project. From 2005, we searched — first for our own needs, then to satisfy our customers — for a software solution for accounting, resource, and customer management.",
+        "category": "software",
+        "status": "active",
+        "features": [
+          "Premium partnership since 2015",
+          "Accounting and resource management",
+          "Customer management",
+          "Open-source ERP system"
+        ]
+      },
+      {
+        "title": "Verein Linuxola",
+        "description": "Linuxola was founded on December 2, 2005 by eight people from various regions of Switzerland. The organization's purpose is to provide our partners in Africa with access to information technology and a connection to global digital commons.",
+        "category": "community",
+        "status": "active",
+        "features": [
+          "Swiss founding with 8 people",
+          "Focus on Africa partnerships",
+          "Access to information technology",
+          "Connection to digital commons"
+        ]
+      },
+      {
+        "title": "FreieComputer.ch",
+        "description": "The Swiss label for computers with pre-installed free software and guaranteed support! revamp-it, together with the engaged open-source community, contributed to the creation of this label.",
+        "category": "community",
+        "status": "active",
+        "features": [
+          "Swiss label for free software",
+          "Pre-installed open-source software",
+          "Guaranteed support",
+          "Community support"
+        ]
+      },
+      {
+        "title": "Compirat",
+        "description": "Compirat is a collaboration between Caritas Zurich and revamp-it. Thanks to Compirat, people with limited means in the canton of Zurich have the opportunity to learn computing near their homes.",
+        "category": "community",
+        "status": "active",
+        "features": [
+          "Partnership with Caritas Zurich",
+          "Support for people with limited means",
+          "Computer courses in the canton of Zurich",
+          "Local learning opportunities"
+        ]
+      },
+      {
+        "title": "Hardware Development",
+        "description": "Hardware development work at revamp-it focuses on discovering new possibilities for decommissioned computer hardware, optimizing energy and resource consumption, and creating guides for assembling open-source hardware.",
+        "category": "hardware",
+        "status": "ongoing",
+        "features": [
+          "Upcycling decommissioned hardware",
+          "Energy and resource optimization",
+          "Open-source hardware guides",
+          "Sustainable development"
+        ]
+      },
+      {
+        "title": "LTSP - Linux Terminal Server Project",
+        "description": "The Linux Terminal Server Project focuses on harnessing the power of a fast, powerful server connected via a network to older, slower computers. This allows multiple users to work simultaneously on their clients connected to the same server.",
+        "category": "software",
+        "status": "active",
+        "features": [
+          "Network-based server solution",
+          "Efficient use of older hardware",
+          "Multi-user computing",
+          "Resource optimization"
+        ]
+      }
+    ]
   },
   "revamped": {
     "meta": {
@@ -2309,132 +3826,121 @@
     },
     "hero": {
       "title": "The REVAMPED Certification",
-      "subtitle": "Every computer we build receives our exclusive REVAMPED label – a guarantee of sustainability, quality and performance that sets a new standard in the industry.",
-      "badge": {
-        "sustainability": "Sustainability Focus",
-        "quality": "Quality Guarantee",
-        "ai": "AI-Optimised Builds"
-      }
+      "subtitle": "Every computer we build receives our exclusive REVAMPED label – a guarantee of sustainability, quality and performance that sets a new industry standard.",
+      "badge1": "Sustainability Focus",
+      "badge2": "Quality Guarantee",
+      "badge3": "AI-Optimized Builds"
     },
-    "inAction": {
+    "heroSection": {
       "title": "Real REVAMPED Computers in Action",
-      "subtitle": "Sustainable technology that people love to use. Our REVAMPED certification isn't just a promise – it's a visible commitment to quality and environmental responsibility.",
-      "points": [
-        "Primarily used and refurbished components",
-        "Significant reduction in environmental impact",
-        "Quality guarantee on every build",
-        "Physical certification sticker included"
-      ],
-      "ctaBuild": "Build Your Computer",
-      "ctaLearn": "Learn More About Certification"
+      "body": "Sustainable technology that people love to use. Our REVAMPED certification is not just a promise – it's a visible commitment to quality and environmental responsibility.",
+      "check1": "Primarily used and refurbished components",
+      "check2": "Significant reduction in environmental impact",
+      "check3": "Quality guarantee on every build",
+      "check4": "Physical certification sticker included",
+      "buildBtn": "Build your computer",
+      "learnBtn": "Learn more about certification"
     },
-    "meaning": {
+    "whatIs": {
       "title": "What \"REVAMPED\" Means",
-      "subtitle": "Our certification is more than a label – it's a comprehensive standard ensuring every computer meets our strict criteria for sustainability, quality and performance.",
-      "pillars": [
-        {
-          "title": "Sustainability First",
-          "description": "We prioritise used and refurbished components wherever possible, drastically reducing environmental impact while maintaining peak performance. We apply circular economy principles to every build."
-        },
-        {
-          "title": "Quality Guaranteed",
-          "description": "Every component is thoroughly tested, cleaned and verified to meet our strict performance and reliability standards. Quality is never compromised for sustainability."
-        },
-        {
-          "title": "AI-Optimised",
-          "description": "Our AI ensures perfect component compatibility and optimal performance tuning for your specific use case. Every build is intelligently designed around your needs."
-        }
-      ]
+      "body": "Our certification is not just a label – it's a comprehensive standard ensuring every computer meets our strict criteria for sustainability, quality and performance.",
+      "sustainability": {
+        "title": "Sustainability First",
+        "body": "We prioritize used and refurbished components wherever possible, drastically reducing environmental impact while maintaining peak performance. We follow circular economy principles in every build."
+      },
+      "quality": {
+        "title": "Quality Guaranteed",
+        "body": "Every component is thoroughly tested, cleaned and verified to meet our strict performance and reliability standards. Quality is never compromised for sustainability."
+      },
+      "ai": {
+        "title": "AI-Optimized",
+        "body": "Our AI ensures perfect component compatibility and optimal performance tuning for your specific use case. Every build is intelligently designed for your needs."
+      }
     },
     "certificate": {
       "title": "Certificate of Authenticity",
       "subtitle": "Every REVAMPED computer comes with a detailed certificate providing full transparency about your sustainable build.",
-      "items": [
-        "Component sustainability ratings",
-        "CO₂ emissions saved versus new build",
-        "Component provenance and condition",
-        "Performance benchmarks",
-        "Warranty coverage details"
-      ],
-      "digitalPhysical": "Digital & Physical",
-      "digitalDesc": "Your certificate includes both a physical sticker and a digital QR code for instant verification and detailed component information."
+      "check1": "Component sustainability ratings",
+      "check2": "CO₂ emissions saved vs. new build",
+      "check3": "Component origin and condition",
+      "check4": "Performance benchmarks",
+      "check5": "Warranty coverage details",
+      "certTitle": "Digital & Physical",
+      "certBody": "Your certificate includes both a physical sticker and a digital QR code for instant verification and detailed component information."
     },
     "stickers": {
       "title": "The REVAMPED Label Collection",
       "subtitle": "Each design represents our commitment to sustainable computing and quality assurance.",
-      "original": {
+      "sticker1": {
         "title": "Original Design",
-        "description": "Clean, professional certification mark emphasising our laptop-focused sustainability approach."
+        "body": "Clean, professional certification mark emphasizing our laptop-focused sustainability approach"
       },
-      "eco": {
+      "sticker2": {
         "title": "Eco Variant",
-        "description": "Extended design highlighting our environmental focus and circular economy principles."
+        "body": "Extended design emphasizing our environmental focus and circular economy principles"
       },
-      "digital": {
+      "sticker3": {
         "title": "Digital Certificate",
-        "description": "QR-code-linked verification system with blockchain-backed authenticity records."
+        "body": "QR-code linked verification system with blockchain-backed authenticity records"
       }
     },
     "cta": {
       "title": "Join the REVAMPED Revolution",
-      "subtitle": "When you choose a REVAMPED computer, you're not just getting a great machine – you're making a statement about the future of technology. Sustainable, powerful, and built with purpose.",
-      "startBuild": "Start Your REVAMPED Build",
-      "learnMore": "Learn More About Certification"
+      "body": "When you choose a REVAMPED computer, you're not just getting a great machine – you're making a statement about the future of technology. Sustainable, powerful and built with purpose.",
+      "buildBtn": "Start your REVAMPED build",
+      "learnBtn": "Learn more about certification"
     }
   },
   "space": {
     "meta": {
       "title": "Our Locations",
-      "description": "From the Toni Dairy to today – the story of our spaces and our vision for a new community hub in Zurich."
+      "description": "From the Toni Dairy to today – the history of our locations and our vision for a new community space in Zurich."
     },
     "hero": {
-      "title": "From Dairy to Community Space",
-      "subtitle": "Since 2003, we've been moving around Zurich. Now we're searching for a new home – a place where sustainability, technology and community come together.",
-      "ctaVision": "Our Vision",
-      "ctaDonate": "Support the Location Fund"
+      "title": "From the Dairy to Community Space",
+      "subtitle": "Since 2003 we have been moving through Zurich. Now we are looking for a new home – a place where sustainability, technology and community come together.",
+      "visionBtn": "Our Vision",
+      "donateBtn": "Support the Location Fund"
     },
     "history": {
       "title": "Our Journey Through Zurich",
-      "subtitle": "Over 20 years, multiple locations, one mission: using technology sustainably.",
+      "subtitle": "Over 20 years, several locations, one mission: use technology sustainably.",
       "locations": [
         {
-          "period": "2003 – 2008",
-          "name": "Toni Dairy",
-          "description": "Our birthplace in the old cheese cellar. This is where the legendary Debian 10th anniversary party happened on the roof.",
-          "highlight": "Founding Location"
+          "highlight": "Founding Place",
+          "description": "Our birthplace in the old cheese cellar. The legendary Debian 10th anniversary event took place on the roof here."
         },
         {
-          "period": "2008 – 2012",
-          "name": "Reformed Church Wipkingen",
-          "description": "On the 6th/7th floor of the church tower and in the cellars. This is where our first social projects started.",
-          "highlight": "Social Projects"
+          "highlight": "Social Projects",
+          "description": "On the 6th/7th floor of the church tower and cellar compartments. This is where our first social projects started."
         },
         {
-          "period": "2012 – 2015",
-          "name": "Röschibachstrasse",
-          "description": "A large space with many workstations. Expansion of our workshop.",
-          "highlight": "Expansion"
+          "highlight": "Expansion",
+          "description": "Large space with many workstations. Expansion of our workshop."
+        },
+        {
+          "highlight": "Current",
+          "description": "Our current shop with workshop. Additional storage at {warehouseStreet}."
         }
-      ],
-      "currentHighlight": "Current"
+      ]
     },
-    "current": {
+    "currentLocation": {
       "label": "Current Shop",
-      "hours": "Opening Hours",
-      "hoursValue": "Mon: 9–12 | Tue–Fri: 13–17",
-      "moreInfo": "More About the Shop"
+      "hoursLabel": "Opening Hours",
+      "hoursText": "Mon: {monday} | Tue–Fri: {tueFri}",
+      "moreBtn": "More about the shop"
     },
     "future": {
-      "badge": "Moving by end of 2026",
+      "moveDeadline": "Moving by end of 2026",
       "title": "Our Dream Location",
-      "subtitle": "We need to leave our current premises by the end of 2026. This is our chance to create something bigger.",
-      "visionLabel": "Vision: Community Space",
-      "visionDescription": "An open space where technology, sustainability and community come together. Shop, workshop, coworking, events – all under one roof.",
-      "conceptCaption": "Concept visualisation of our ideal community space",
+      "subtitle": "We need to leave our current location by end of 2026. This is our chance to build something bigger.",
+      "visionTagline": "Vision: {orgName} Community Space",
+      "visionDesc": "An open space where technology, sustainability and community come together. Shop, workshop, coworking, events – all under one roof.",
+      "visionCaption": "Concept visualisation of our ideal community space",
       "features": [
         {
           "name": "Shop Area",
-          "description": "Exhibition space for refurbished devices with expert advice"
+          "description": "Display space for refurbished devices with consultation"
         },
         {
           "name": "Repair Workshop",
@@ -2446,11 +3952,11 @@
         },
         {
           "name": "Event Space",
-          "description": "Room for workshops, meetups and small events (15–20 people)"
+          "description": "Space for workshops, meetups and small events (15–20 people)"
         },
         {
           "name": "Mini Library",
-          "description": "A few shelves of tech books, magazines and resources"
+          "description": "A few shelves with tech books, magazines and resources"
         },
         {
           "name": "Coffee Corner",
@@ -2458,7 +3964,7 @@
         },
         {
           "name": "Kitchen",
-          "description": "Fully equipped kitchen for zero food waste initiatives"
+          "description": "Fully equipped kitchen for Zero Food Waste initiatives"
         },
         {
           "name": "Zero Food Waste",
@@ -2466,61 +3972,52 @@
         }
       ],
       "params": {
-        "title": "What We're Looking For",
+        "title": "What We Are Looking For",
         "subtitle": "The parameters for our ideal location",
-        "area": "Usable Area",
-        "budget": "Monthly Budget",
-        "city": "Location",
-        "idealLabel": "Ideally:",
-        "idealText": "Ground floor or easily accessible, wheelchair-accessible, loading bay or delivery access, in a vibrant neighbourhood with good public transport links.",
-        "tipText": "Know a suitable space? We'd love to hear from you!",
-        "contactCta": "Contact Us"
+        "areaLabel": "Usable area",
+        "budgetLabel": "Budget per month",
+        "locationLabel": "Location",
+        "ideal": "Ideal: ground floor or easily accessible, wheelchair accessible, loading ramp or delivery option, in a lively neighbourhood with good public transport.",
+        "knowSpace": "Do you know a suitable space? We welcome any tip!",
+        "contactBtn": "Contact us"
       }
     },
     "impact": {
       "title": "Why a Bigger Space Means More Impact",
-      "subtitle": "With more space, we can multiply our KPIs – save more devices, train more people, achieve more impact.",
-      "today": "Today",
-      "potential": "Potential",
-      "items": [
+      "subtitle": "With more space we can multiply our KPIs – save more devices, train more people, achieve more impact.",
+      "todayLabel": "Today",
+      "potentialLabel": "Potential",
+      "kpis": [
         {
-          "metric": "Devices per Year",
-          "current": "~500",
-          "potential": "2,000+",
+          "metric": "Devices per year",
           "reason": "More workshop stations = more capacity"
         },
         {
-          "metric": "Workshop Participants",
-          "current": "~100",
-          "potential": "500+",
+          "metric": "Workshop participants",
           "reason": "Dedicated event space for regular courses"
         },
         {
-          "metric": "Community Members",
-          "current": "~50",
-          "potential": "200+",
+          "metric": "Community members",
           "reason": "Coworking attracts more volunteers"
         },
         {
-          "metric": "Social Integration",
-          "current": "~10",
-          "potential": "30+",
-          "reason": "More internship places with larger premises"
+          "metric": "Social integration",
+          "reason": "More internship places thanks to larger spaces"
         }
       ],
-      "donateCta": {
+      "donateCard": {
         "title": "Support Our Location Fund",
-        "description": "With a bigger budget, we can find a better location – and multiply our impact on the environment and society. Every contribution helps us realise our dream of a community space.",
-        "donateCta": "Donate Now",
-        "impactCta": "See Our Impact"
+        "body": "With a larger budget we can find a better location – and multiply our impact for the environment and society. Every contribution helps us realise our dream of a community space.",
+        "donateBtn": "Donate now",
+        "impactBtn": "View our impact"
       }
     },
     "shopLinks": {
       "title": "All Shopping Options",
-      "subtitle": "In-person and online – choose what suits you best.",
+      "subtitle": "Physical and online – choose what suits you best.",
       "currentStore": "Current Shop",
-      "shopOverview": "Shop Overview",
-      "onlineShop": "Online Shop"
+      "shopOverview": "Shop overview",
+      "onlineShop": "Online shop"
     }
   },
   "support": {
@@ -2575,5 +4072,180 @@
       "shareArticle": "Share an Article"
     },
     "thanks": "Thank you so much for supporting our mission for sustainable, high-quality tech content."
+  },
+  "donate": {
+    "meta": {
+      "title": "Donate",
+      "description": "Help directly. Every donation rescues devices from e-waste and makes technology accessible to everyone."
+    },
+    "hero": {
+      "title": "Help directly.",
+      "body": "Every donation rescues devices from e-waste, extends lifecycles and enables technology for people who couldn't otherwise afford it.",
+      "cta": "Transfer now"
+    },
+    "transparency": {
+      "label": "Transparency",
+      "budgetValue": "CHF 60k",
+      "budgetLabel": "Annual budget (non-profit association)",
+      "devicesLabel": "Devices rescued annually",
+      "co2Label": "saved per year"
+    },
+    "tiers": {
+      "heading": "What your donation achieves",
+      "recommended": "Recommended",
+      "items": [
+        {
+          "title": "1 device rescued",
+          "description": "1 laptop saved from e-waste + 285 kg CO₂ avoided."
+        },
+        {
+          "title": "2 devices + workshop place",
+          "description": "2 devices refurbished + a place in our Linux workshop for someone who couldn't afford it."
+        },
+        {
+          "title": "Corporate donation — 10 devices",
+          "description": "10 devices for educational institutions, social projects or low-income households."
+        }
+      ]
+    },
+    "bridgeCta": "Choose amount and transfer",
+    "transfer": {
+      "heading": "Bank transfer",
+      "intro": "Transfer to the following account:",
+      "recipientLabel": "Recipient",
+      "ibanLabel": "IBAN",
+      "bankLabel": "Bank",
+      "purposeLabel": "Payment reference",
+      "copyBtn": "Copy",
+      "copyIbanBtn": "Copy IBAN"
+    },
+    "devices": {
+      "heading": "Donate devices",
+      "intro": "Hardware you no longer need can give another person a real chance. We accept working or repairable devices, refurbish them and pass them on.",
+      "items": [
+        "Laptops",
+        "Desktop PCs",
+        "Monitors",
+        "Peripherals"
+      ],
+      "acceptLabel": "What we accept:",
+      "acceptText": "Laptops, desktop PCs, monitors, keyboards, mice, printers — working or repairable.",
+      "notAcceptLabel": "What we don't accept:",
+      "notAcceptText": "Devices with physical damage, broken screens without frames, CRT monitors.",
+      "prepLabel": "Preparation:",
+      "prepText": "Please delete your personal data before drop-off (we can help if needed).",
+      "addressLabel": "Drop-off address",
+      "questionsLink": "Questions? Write to us →"
+    },
+    "newsletter": {
+      "title": "We'll keep you informed about the impact of your donation.",
+      "description": "No ads. Just real updates on devices rescued, CO₂ saved and people supported."
+    },
+    "purposeTemplate": "Donation {orgName} {month} {year}"
+  },
+  "mitgliedWerden": {
+    "meta": {
+      "title": "Become a member",
+      "description": "Become a member of {orgName}. Voting rights on association decisions, part of the official membership. CHF {fee}/year."
+    },
+    "hero": {
+      "title": "Become a member",
+      "body": "Support the association — legally, financially and democratically. Fill out the form, transfer the fee, done."
+    },
+    "whatYouGet": [
+      {
+        "title": "Voting rights on association decisions",
+        "description": "You are automatically invited to votes and help decide the direction of the association."
+      },
+      {
+        "title": "Official membership list",
+        "description": "You are legally part of the association's membership under Swiss association law (ZGB Art. 60 ff)."
+      },
+      {
+        "title": "Financial support",
+        "description": "Your annual fee helps us finance the association sustainably — independent of external funders."
+      }
+    ],
+    "form": {
+      "heading": "Join now",
+      "subtitle": "Immediate membership — no waiting"
+    },
+    "member": {
+      "title": "You are a member",
+      "thanks": "Thank you for your support.",
+      "since": "Member since {date}",
+      "dashboard": "Go to dashboard"
+    },
+    "faq": {
+      "heading": "Frequently asked questions",
+      "items": [
+        {
+          "question": "What's the difference between a user account and membership?",
+          "answer": "You need a user account for marketplace, IT help and workshops — it's free. Association membership gives you voting rights and officially makes you part of the membership. Most users will never become members — that's completely fine."
+        },
+        {
+          "question": "What do I actually get as a member?",
+          "answer": "Voting rights on association decisions and a place on the official membership list. We don't promise exclusive benefits — our services are for everyone. You become a member because you want to support the association."
+        },
+        {
+          "question": "How does joining work?",
+          "answer": "Fill out the form, transfer the annual fee — done. You're a member immediately. No waiting, no approval needed."
+        },
+        {
+          "question": "How do I pay the annual fee?",
+          "answer": "After joining, you'll see the bank details directly on the confirmation page. Bank transfer or TWINT."
+        },
+        {
+          "question": "Can I leave at any time?",
+          "answer": "Yes. An informal email to the board is sufficient. Already paid annual fees are not refunded."
+        }
+      ]
+    }
+  },
+  "abos": {
+    "tagline": "Subscription Exchange",
+    "title": "Share Subscription Pools",
+    "subtitle": "Share digital subscriptions with the Revamp-IT community and save money. Everyone pays only their share.",
+    "createPool": "Create pool",
+    "filterAll": "All",
+    "perMonthPerson": "per month/person",
+    "members": "members",
+    "full": "Full",
+    "spotsLeft": "{count} spot left",
+    "spotsLeftPlural": "{count} spots left",
+    "by": "by",
+    "anonymous": "Anonymous",
+    "join": "Join",
+    "leave": "Leave",
+    "loginToJoin": "Log in to join",
+    "emptyCategory": "No pools in this category",
+    "emptyAll": "No pools yet",
+    "emptyLoggedIn": "Be the first and create a pool!",
+    "emptyGuest": "Log in to create a pool.",
+    "modal": {
+      "title": "Create New Pool",
+      "serviceName": "Service Name *",
+      "serviceNamePlaceholder": "e.g. Netflix, Spotify, Adobe CC",
+      "category": "Category *",
+      "maxMembers": "Max. Members *",
+      "monthlyCost": "Total cost/month (CHF) *",
+      "monthlyCostPlaceholder": "e.g. 17.90",
+      "perPersonCalc": "= CHF {amount} per person/month",
+      "description": "Description",
+      "descriptionPlaceholder": "Brief description of the offering",
+      "rules": "Rules (optional)",
+      "rulesPlaceholder": "e.g. Payment by 1st of month via TWINT",
+      "cancel": "Cancel",
+      "submit": "Create pool"
+    },
+    "categories": {
+      "streaming": "Streaming",
+      "software": "Software",
+      "cloud": "Cloud",
+      "gaming": "Gaming",
+      "music": "Music",
+      "news": "News",
+      "other": "Other"
+    }
   }
 }

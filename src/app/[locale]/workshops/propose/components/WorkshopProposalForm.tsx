@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { Loader2 } from 'lucide-react'
 import { responsiveButtons } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import { BasicInfoSection } from './BasicInfoSection'
 import { LearningObjectivesSection } from './LearningObjectivesSection'
 import { PracticalDetailsSection } from './PracticalDetailsSection'
@@ -56,6 +57,7 @@ interface SubmitResult {
 
 export function WorkshopProposalForm() {
   const router = useRouter()
+  const t = useTranslations('workshops.propose')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState<SubmitResult | null>(null)
 
@@ -162,7 +164,7 @@ export function WorkshopProposalForm() {
     if (!formData.termsAccepted) {
       setSubmitResult({
         success: false,
-        message: 'Bitte akzeptiere die Nutzungsbedingungen'
+        message: t('form.termsError')
       })
       return
     }
@@ -189,14 +191,14 @@ export function WorkshopProposalForm() {
       } else {
         setSubmitResult({
           success: false,
-          message: data.error || 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.'
+          message: data.error || t('form.genericError')
         })
       }
     } catch (error) {
       logger.error('Workshop proposal submission failed', { error })
       setSubmitResult({
         success: false,
-        message: 'Netzwerkfehler. Bitte versuche es erneut.'
+        message: t('form.networkError')
       })
     } finally {
       setIsSubmitting(false)
@@ -209,7 +211,7 @@ export function WorkshopProposalForm() {
         formType="workshop"
         variant="section"
         defaultExpanded={true}
-        placeholder="Beschreibe deine Workshop-Idee in 1-2 Sätzen..."
+        placeholder={t('form.aiPlaceholder')}
         onFieldsFilled={handleAIFieldsFilled}
         currentData={formData as unknown as Record<string, unknown>}
         className="mb-8"
@@ -277,22 +279,22 @@ export function WorkshopProposalForm() {
           {submitResult.success ? (
             <div>
               <Heading level={3} className="font-semibold mb-2">
-                Vorschlag erfolgreich eingereicht!
+                {t('form.successTitle')}
               </Heading>
               <p className="mb-1">
-                <span className="font-medium">&laquo;{submitResult.message}&raquo;</span> wurde eingereicht.
+                <span className="font-medium">&laquo;{submitResult.message}&raquo;</span> {t('form.successSubmitted')}
               </p>
-              <p className="mb-4">Dein Vorschlag wurde eingereicht. Wir melden uns per E-Mail.</p>
+              <p className="mb-4">{t('form.successMessage')}</p>
               <Link
                 href="/workshops"
                 className="inline-flex items-center text-green-700 underline hover:text-green-900 font-medium"
               >
-                Zurück zu Workshops
+                {t('form.backToWorkshops')}
               </Link>
             </div>
           ) : (
             <div>
-              <Heading level={3} className="font-semibold mb-1">Fehler</Heading>
+              <Heading level={3} className="font-semibold mb-1">{t('form.errorTitle')}</Heading>
               <p>{submitResult.message}</p>
             </div>
           )}
@@ -309,15 +311,15 @@ export function WorkshopProposalForm() {
           {isSubmitting ? (
             <>
               <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              Vorschlag wird eingereicht...
+              {t('form.submitting')}
             </>
           ) : (
-            'Workshop-Vorschlag einreichen'
+            t('form.submit')
           )}
         </button>
 
         <p className="text-sm text-gray-600 mt-4">
-          Nach Einreichung wird dein Vorschlag geprüft. Dies kann 1-2 Werktage dauern.
+          {t('form.reviewNote')}
         </p>
       </div>
       )}

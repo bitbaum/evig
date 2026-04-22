@@ -25,6 +25,7 @@ import WorkshopReviews from '@/components/workshops/WorkshopReviews'
 import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
 import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
 
 // Extended Workshop type to include fields from migration 038
 interface WorkshopDetail {
@@ -62,6 +63,10 @@ interface WorkshopInstanceRow {
   created_at: string
   updated_at: string
   current_participants: string  // COUNT returns string
+}
+
+interface Props {
+  params: Promise<{ slug: string; locale: string }>
 }
 
 async function getWorkshop(slug: string): Promise<WorkshopDetail | null> {
@@ -113,31 +118,33 @@ async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanc
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug, locale } = await params
+  const t = await getTranslations({ locale, namespace: 'workshops' })
   const workshop = await getWorkshop(slug)
 
   if (!workshop) {
     return {
-      title: `Workshop nicht gefunden | ${ORG.name}`
+      title: `${t('detail.notFound')} | ${ORG.name}`
     }
   }
 
   const description = workshop.short_description || workshop.description || undefined
 
   return {
-    title: `${workshop.title} | ${ORG.name} Workshops`,
+    title: `${workshop.title} | ${ORG.name} ${t('meta.title')}`,
     description,
     openGraph: {
-      title: `${workshop.title} | ${ORG.name} Workshops`,
+      title: `${workshop.title} | ${ORG.name} ${t('meta.title')}`,
       description,
       type: 'website'
     }
   }
 }
 
-export default async function WorkshopDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function WorkshopDetailPage({ params }: Props) {
+  const { slug, locale } = await params
+  const t = await getTranslations({ locale, namespace: 'workshops' })
   const workshop = await getWorkshop(slug)
 
   if (!workshop) {
@@ -177,7 +184,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
             className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zu Workshops
+            {t('detail.backToWorkshops')}
           </Link>
 
           <div className="flex items-start justify-between">
@@ -185,7 +192,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
               <div className="flex items-center gap-3 mb-2 flex-wrap">
                 <Heading level={1} className="text-3xl text-gray-900">{workshop.title}</Heading>
                 <span className={`px-3 py-1 rounded-full text-sm font-medium ${getLevelBadgeClass(workshop.level)}`}>
-                  {workshop.level || 'Alle Stufen'}
+                  {workshop.level || t('detail.allLevels')}
                 </span>
               </div>
               {workshop.short_description && (
@@ -211,32 +218,32 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
           <div className="lg:col-span-2 space-y-8">
             {/* Workshop Details */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <Heading level={2} className="text-xl text-gray-900 mb-4">Workshop Details</Heading>
+              <Heading level={2} className="text-xl text-gray-900 mb-4">{t('detail.details')}</Heading>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div className="text-center">
                   <Clock className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <div className="text-sm font-medium text-gray-900">Dauer</div>
-                  <div className="text-sm text-gray-600">{workshop.duration || 'Variabel'}</div>
+                  <div className="text-sm font-medium text-gray-900">{t('detail.duration')}</div>
+                  <div className="text-sm text-gray-600">{workshop.duration || t('detail.variableDuration')}</div>
                 </div>
 
                 <div className="text-center">
                   <Users className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                  <div className="text-sm font-medium text-gray-900">Max. Teilnehmer</div>
+                  <div className="text-sm font-medium text-gray-900">{t('detail.maxParticipants')}</div>
                   <div className="text-sm text-gray-600">{workshop.max_participants}</div>
                 </div>
 
                 <div className="text-center">
                   <BookOpen className="w-8 h-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-sm font-medium text-gray-900">Kategorie</div>
-                  <div className="text-sm text-gray-600">{categoryName || 'Allgemein'}</div>
+                  <div className="text-sm font-medium text-gray-900">{t('detail.category')}</div>
+                  <div className="text-sm text-gray-600">{categoryName || t('detail.generalCategory')}</div>
                 </div>
 
                 <div className="text-center">
                   <Award className="w-8 h-8 text-orange-600 mx-auto mb-2" />
-                  <div className="text-sm font-medium text-gray-900">Preis</div>
+                  <div className="text-sm font-medium text-gray-900">{t('detail.price')}</div>
                   <div className="text-sm text-gray-600">
-                    {workshop.price_cents === 0 ? 'Kostenlos' : `CHF ${(workshop.price_cents / 100).toFixed(0)}`}
+                    {workshop.price_cents === 0 ? t('detail.free') : t('detail.priceChf', { amount: (workshop.price_cents / 100).toFixed(0) })}
                   </div>
                 </div>
               </div>
@@ -246,7 +253,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
                     <Target className="w-5 h-5 text-gray-500" />
-                    <Heading level={3} className="text-lg text-gray-900">Zielgruppe</Heading>
+                    <Heading level={3} className="text-lg text-gray-900">{t('detail.targetAudience')}</Heading>
                   </div>
                   <p className="text-gray-700">{workshop.target_audience}</p>
                 </div>
@@ -257,7 +264,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-2">
                     <ClipboardList className="w-5 h-5 text-gray-500" />
-                    <Heading level={3} className="text-lg text-gray-900">Voraussetzungen</Heading>
+                    <Heading level={3} className="text-lg text-gray-900">{t('detail.prerequisites')}</Heading>
                   </div>
                   <p className="text-gray-700">{workshop.prerequisites}</p>
                 </div>
@@ -266,7 +273,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
               {/* Learning Objectives */}
               {workshop.learning_objectives && workshop.learning_objectives.length > 0 && (
                 <div className="mb-6">
-                  <Heading level={3} className="text-lg text-gray-900 mb-3">Was du lernst:</Heading>
+                  <Heading level={3} className="text-lg text-gray-900 mb-3">{t('detail.learningObjectives')}</Heading>
                   <ul className="space-y-2">
                     {workshop.learning_objectives.map((objective, index) => (
                       <li key={index} className="flex items-start">
@@ -283,17 +290,17 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Package className="w-5 h-5 text-gray-500" />
-                    <Heading level={3} className="text-lg text-gray-900">Materialien</Heading>
+                    <Heading level={3} className="text-lg text-gray-900">{t('detail.materials')}</Heading>
                   </div>
                   {workshop.materials_provided && (
                     <div className="mb-3">
-                      <p className="text-sm font-medium text-gray-700 mb-1">Wird bereitgestellt:</p>
+                      <p className="text-sm font-medium text-gray-700 mb-1">{t('detail.materialsProvided')}</p>
                       <p className="text-gray-600">{workshop.materials_provided}</p>
                     </div>
                   )}
                   {workshop.materials_required && (
                     <div>
-                      <p className="text-sm font-medium text-gray-700 mb-1">Bitte mitbringen:</p>
+                      <p className="text-sm font-medium text-gray-700 mb-1">{t('detail.materialsRequired')}</p>
                       <p className="text-gray-600">{workshop.materials_required}</p>
                     </div>
                   )}
@@ -304,7 +311,7 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
             {/* Upcoming Instances */}
             {upcomingInstances.length > 0 && (
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <Heading level={2} className="text-xl text-gray-900 mb-4">Kommende Termine</Heading>
+                <Heading level={2} className="text-xl text-gray-900 mb-4">{t('detail.upcomingDates')}</Heading>
 
                 <div className="space-y-4">
                   {upcomingInstances.map((instance) => {
@@ -333,12 +340,12 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                           <div className="text-right">
                             {isFull ? (
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                Ausgebucht
+                                {t('detail.soldOut')}
                               </span>
                             ) : (
                               <>
                                 <div className="text-sm text-gray-600 mb-1">
-                                  {instance.current_participants}/{maxParts} angemeldet
+                                  {t('detail.registrationCount', { current: instance.current_participants, max: maxParts })}
                                 </div>
                                 <div className="w-24 bg-gray-200 rounded-full h-2">
                                   <div
@@ -354,11 +361,11 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
                         <div className="flex items-center justify-between">
                           <div className="flex items-center text-gray-600">
                             <MapPin className="w-4 h-4 mr-2" />
-                            <span>{instance.location || 'Wird noch bekannt gegeben'}</span>
+                            <span>{instance.location || t('detail.locationTba')}</span>
                           </div>
                           {instance.instructor && (
                             <span className="text-sm text-gray-500">
-                              Leitung: {instance.instructor}
+                              {t('detail.instructor', { name: instance.instructor })}
                             </span>
                           )}
                         </div>
@@ -382,10 +389,10 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
               </div>
             ) : (
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <Heading level={3} className="text-lg text-gray-900 mb-4">Anmeldung</Heading>
+                <Heading level={3} className="text-lg text-gray-900 mb-4">{t('detail.registration')}</Heading>
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <p className="text-yellow-800 text-sm">
-                    Aktuell sind keine Termine für diesen Workshop geplant. Schau bald wieder vorbei!
+                    {t('detail.noDates')}
                   </p>
                 </div>
               </div>
@@ -393,33 +400,33 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
 
             {/* Workshop Stats */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <Heading level={3} className="text-lg text-gray-900 mb-4">Workshop Statistiken</Heading>
+              <Heading level={3} className="text-lg text-gray-900 mb-4">{t('detail.stats')}</Heading>
 
               <div className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Kategorie</span>
-                  <span className="font-medium">{categoryName || 'Allgemein'}</span>
+                  <span className="text-gray-600">{t('detail.category')}</span>
+                  <span className="font-medium">{categoryName || t('detail.generalCategory')}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Level</span>
-                  <span className="font-medium">{workshop.level || 'Alle Stufen'}</span>
+                  <span className="text-gray-600">{t('detail.level')}</span>
+                  <span className="font-medium">{workshop.level || t('detail.allLevels')}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Dauer</span>
-                  <span className="font-medium">{workshop.duration || 'Variabel'}</span>
+                  <span className="text-gray-600">{t('detail.duration')}</span>
+                  <span className="font-medium">{workshop.duration || t('detail.variableDuration')}</span>
                 </div>
 
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Max. Teilnehmer</span>
+                  <span className="text-gray-600">{t('detail.maxParticipants')}</span>
                   <span className="font-medium">{workshop.max_participants}</span>
                 </div>
 
                 {instances.length > 0 && (
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Termine</span>
-                    <span className="font-medium">{upcomingInstances.length} verfügbar</span>
+                    <span className="text-gray-600">{t('detail.dates')}</span>
+                    <span className="font-medium">{t('detail.datesAvailable', { count: upcomingInstances.length })}</span>
                   </div>
                 )}
               </div>
@@ -427,13 +434,13 @@ export default async function WorkshopDetailPage({ params }: { params: Promise<{
 
             {/* Workshop Materials */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <Heading level={3} className="text-lg text-gray-900 mb-4">Materialien</Heading>
+              <Heading level={3} className="text-lg text-gray-900 mb-4">{t('detail.materials')}</Heading>
               <WorkshopMaterials workshopSlug={workshop.slug} />
             </div>
 
             {/* Reviews/Feedback */}
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <Heading level={3} className="text-lg text-gray-900 mb-4">Bewertungen</Heading>
+              <Heading level={3} className="text-lg text-gray-900 mb-4">{t('detail.reviews')}</Heading>
               <WorkshopReviews workshopSlug={workshop.slug} />
             </div>
           </div>

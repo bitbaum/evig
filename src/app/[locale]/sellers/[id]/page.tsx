@@ -19,6 +19,7 @@ import { formatCHF } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { useTranslations } from 'next-intl'
 
 interface SellerProfile {
   id: string
@@ -52,6 +53,7 @@ interface SellerProfile {
 }
 
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const t = useTranslations('techniker')
   const [seller, setSeller] = useState<SellerProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -75,22 +77,22 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             },
           })
         } else {
-          setError(data.error || 'Verkäufer nicht gefunden')
+          setError(data.error || t('seller.sellerNotFound'))
         }
       } catch {
-        setError('Fehler beim Laden des Profils')
+        setError(t('seller.errorLoading'))
       } finally {
         setIsLoading(false)
       }
     }
     fetchSeller()
-  }, [params])
+  }, [params, t])
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <span className="ml-3 text-gray-600 dark:text-gray-400">Profil wird geladen...</span>
+        <span className="ml-3 text-gray-600 dark:text-gray-400">{t('seller.loadingProfile')}</span>
       </div>
     )
   }
@@ -100,10 +102,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       <div className="max-w-4xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
         <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
-          {error || 'Verkäufer nicht gefunden'}
+          {error || t('seller.sellerNotFound')}
         </Heading>
         <Link href="/marketplace" className="text-green-600 hover:text-green-700 font-medium">
-          Zurück zum Marketplace
+          {t('seller.backToMarketplace')}
         </Link>
       </div>
     )
@@ -120,7 +122,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        Zurück zum Marketplace
+        {t('seller.backToMarketplace')}
       </Link>
 
       {/* Seller Header */}
@@ -128,7 +130,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0">
             {seller.avatar_url ? (
-              <Image src={seller.avatar_url} alt={displayName || 'Verkäufer'} width={64} height={64} className="w-16 h-16 rounded-full object-cover" />
+              <Image src={seller.avatar_url} alt={displayName} width={64} height={64} className="w-16 h-16 rounded-full object-cover" />
             ) : (
               <User className="w-8 h-8 text-green-600" />
             )}
@@ -144,7 +146,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               )}
               <span className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                Mitglied seit {formatDateShort(seller.member_since)}
+                {t('seller.memberSince', { date: formatDateShort(seller.member_since) })}
               </span>
             </div>
             {seller.bio && (
@@ -159,13 +161,13 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {seller.total_listings}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Inserate</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{t('seller.listings')}</div>
           </div>
           <div className="text-center">
             <div className="text-2xl font-bold text-gray-900 dark:text-white">
               {seller.total_sold}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">Verkauft</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{t('seller.sold')}</div>
           </div>
           <div className="text-center">
             {rating && Number(rating) > 0 ? (
@@ -179,7 +181,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               <div className="text-2xl font-bold text-gray-400">—</div>
             )}
             <div className="text-xs text-gray-500 dark:text-gray-400">
-              {reviewCount > 0 ? `${reviewCount} Bewertungen` : 'Keine Bewertungen'}
+              {reviewCount > 0 ? t('seller.ratingsCount', { count: reviewCount }) : t('seller.noRatings')}
             </div>
           </div>
         </div>
@@ -189,14 +191,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       <div>
         <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <ShoppingBag className="w-5 h-5" />
-          Aktive Inserate ({seller.listings.length})
+          {t('seller.activeListings', { count: seller.listings.length })}
         </Heading>
 
         {seller.listings.length === 0 ? (
           <EmptyState
             icon={Package}
-            title="Keine aktiven Inserate"
-            description="Dieser Verkäufer hat momentan keine aktiven Inserate."
+            title={t('seller.noListingsTitle')}
+            description={t('seller.noListingsDescription')}
           />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
