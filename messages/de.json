@@ -438,7 +438,7 @@
       "heroSubtitle": "Entdecke unsere Auswahl an nachhaltig aufbereiteten {categoryNameLower} – geprüfte Qualität zu fairen Preisen.",
       "productCount": "{count} Produkte in dieser Kategorie",
       "subcategories": "Unterkategorien",
-      "categoryProductCount": "{count} Produkte",
+      "categoryProductCount": "{count, plural, one {# Produkt} other {# Produkte}}",
       "productsLoading": "Produkte werden geladen",
       "productsComingSoon": "Bald findest du hier aufbereitete IT-Geräte in der Kategorie {categoryName} auf unserem Marketplace.",
       "goToShop": "Zum Online-Shop",
@@ -503,7 +503,8 @@
       "createSuccess": "Inserat erfolgreich erstellt!",
       "saveError": "Fehler beim Speichern",
       "createError": "Fehler beim Erstellen",
-      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
+      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
+      "aiPlaceholder": "z.B. \"ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF\""
     },
     "listingsAvailable": "{count, plural, one {# Inserat} other {# Inserate}} verfügbar",
     "searchPlaceholder": "Laptop, Monitor, Smartphone...",
@@ -647,7 +648,10 @@
         "street": "Strasse",
         "postalCode": "PLZ",
         "postalCodeError": "PLZ muss 4 Ziffern haben",
-        "city": "Ort"
+        "city": "Ort",
+        "namePlaceholder": "Max Muster",
+        "streetPlaceholder": "Musterstrasse 1",
+        "cityPlaceholder": "Zürich"
       },
       "payment": {
         "redirect": "Weiterleitung zur Zahlung...",

@@ -256,7 +256,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value={shippingAddress.name}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
                     className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Max Muster"
+                    placeholder={t('address.namePlaceholder')}
                   />
                 </div>
                 <div>
@@ -266,7 +266,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value={shippingAddress.street}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
                     className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Musterstrasse 1"
+                    placeholder={t('address.streetPlaceholder')}
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
@@ -295,7 +295,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                       value={shippingAddress.city}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
                       className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                      placeholder="Zürich"
+                      placeholder={t('address.cityPlaceholder')}
                     />
                   </div>
                 </div>

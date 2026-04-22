@@ -1969,7 +1969,8 @@
       "createSuccess": "Annuncio creato con successo!",
       "saveError": "Errore nel salvataggio",
       "createError": "Errore nella creazione",
-      "unexpectedError": "Si è verificato un errore imprevisto"
+      "unexpectedError": "Si è verificato un errore imprevisto",
+      "aiPlaceholder": "es. \"ThinkPad T480, 16GB RAM, buone condizioni, prezzo CHF 400\""
     },
     "listingsAvailable": "{count, plural, one {# annuncio} other {# annunci}} disponibili",
     "searchPlaceholder": "Laptop, monitor, smartphone...",
@@ -2113,7 +2114,10 @@
         "street": "Via",
         "postalCode": "CAP",
         "postalCodeError": "Il CAP deve avere 4 cifre",
-        "city": "Città"
+        "city": "Città",
+        "namePlaceholder": "Mario Rossi",
+        "streetPlaceholder": "Via Esempio 1",
+        "cityPlaceholder": "Zurigo"
       },
       "payment": {
         "redirect": "Reindirizzamento al pagamento...",
@@ -3406,7 +3410,7 @@
       "heroSubtitle": "Scopri la nostra selezione di {categoryNameLower} ricondizionati in modo sostenibile – qualità verificata a prezzi equi.",
       "productCount": "{count} prodotti in questa categoria",
       "subcategories": "Sottocategorie",
-      "categoryProductCount": "{count} prodotti",
+      "categoryProductCount": "{count, plural, one {# prodotto} other {# prodotti}}",
       "productsLoading": "Caricamento prodotti",
       "productsComingSoon": "Presto troverai qui dispositivi IT ricondizionati nella categoria {categoryName} sul nostro marketplace.",
       "goToShop": "Vai allo shop online",

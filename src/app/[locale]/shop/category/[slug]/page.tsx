@@ -301,7 +301,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <div>
             <div className="flex items-center justify-between mb-6">
               <Heading level={2} className="text-xl font-semibold text-gray-900">
-                {inventoryResult.total} {inventoryResult.total === 1 ? 'Produkt' : 'Produkte'}
+                {t("category.categoryProductCount", { count: inventoryResult.total })}
               </Heading>
               <Link
                 href="/shop"

@@ -348,7 +348,7 @@
       "heroSubtitle": "Découvrez notre sélection de {categoryNameLower} reconditionnés – qualité vérifiée à des prix équitables.",
       "productCount": "{count} produits dans cette catégorie",
       "subcategories": "Sous-catégories",
-      "categoryProductCount": "{count} produits",
+      "categoryProductCount": "{count, plural, one {# produit} other {# produits}}",
       "productsLoading": "Chargement des produits",
       "productsComingSoon": "Vous trouverez bientôt ici des appareils reconditionnés dans la catégorie {categoryName} sur notre marketplace.",
       "goToShop": "Accéder à la boutique en ligne",
@@ -413,7 +413,8 @@
       "createSuccess": "Annonce créée avec succès !",
       "saveError": "Erreur lors de l'enregistrement",
       "createError": "Erreur lors de la création",
-      "unexpectedError": "Une erreur inattendue s'est produite"
+      "unexpectedError": "Une erreur inattendue s'est produite",
+      "aiPlaceholder": "ex. \"ThinkPad T480, 16 Go RAM, bon état, prix CHF 400\""
     },
     "filters": {
       "all": "Tous",
@@ -557,7 +558,10 @@
         "street": "Rue",
         "postalCode": "Code postal",
         "postalCodeError": "Le code postal doit avoir 4 chiffres",
-        "city": "Ville"
+        "city": "Ville",
+        "namePlaceholder": "Jean Dupont",
+        "streetPlaceholder": "Rue Exemple 1",
+        "cityPlaceholder": "Zurich"
       },
       "payment": {
         "redirect": "Redirection vers le paiement...",

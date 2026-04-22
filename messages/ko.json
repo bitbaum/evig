@@ -1969,7 +1969,8 @@
       "createSuccess": "판매 목록이 성공적으로 만들어졌습니다!",
       "saveError": "저장 오류",
       "createError": "생성 오류",
-      "unexpectedError": "예기치 않은 오류가 발생했습니다"
+      "unexpectedError": "예기치 않은 오류가 발생했습니다",
+      "aiPlaceholder": "예: \"ThinkPad T480, 16GB RAM, 좋은 상태, CHF 400 요청\""
     },
     "listingsAvailable": "{count, plural, other {# 개의}} 판매 목록 이용 가능",
     "searchPlaceholder": "노트북, 모니터, 스마트폰...",
@@ -2113,7 +2114,10 @@
         "street": "도로명 주소",
         "postalCode": "우편번호",
         "postalCodeError": "우편번호는 4자리여야 합니다",
-        "city": "도시"
+        "city": "도시",
+        "namePlaceholder": "홍 길동",
+        "streetPlaceholder": "예시길 1",
+        "cityPlaceholder": "취리히"
       },
       "payment": {
         "redirect": "결제 페이지로 이동 중...",
@@ -3406,7 +3410,7 @@
       "heroSubtitle": "{orgName}에서 지속 가능하게 재정비된 {categoryNameLower} 선택을 탐색하세요 — 합리적인 가격의 검증된 품질.",
       "productCount": "이 카테고리에 {count}개 제품",
       "subcategories": "하위 카테고리",
-      "categoryProductCount": "{count}개 제품",
+      "categoryProductCount": "{count}개",
       "productsLoading": "제품 로딩 중",
       "productsComingSoon": "곧 저희 마켓플레이스에서 {categoryName} 카테고리의 재정비된 IT 기기를 찾을 수 있습니다.",
       "goToShop": "온라인 쇼핑몰로 이동",

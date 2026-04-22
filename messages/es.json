@@ -1969,7 +1969,8 @@
       "createSuccess": "¡Anuncio creado con éxito!",
       "saveError": "Error al guardar",
       "createError": "Error al crear",
-      "unexpectedError": "Se ha producido un error inesperado"
+      "unexpectedError": "Se ha producido un error inesperado",
+      "aiPlaceholder": "p.ej. \"ThinkPad T480, 16GB RAM, buen estado, precio CHF 400\""
     },
     "listingsAvailable": "{count, plural, one {# anuncio} other {# anuncios}} disponible{count, plural, one {} other {s}}",
     "searchPlaceholder": "Portátil, monitor, smartphone...",
@@ -2113,7 +2114,10 @@
         "street": "Calle",
         "postalCode": "Código postal",
         "postalCodeError": "El código postal debe tener 4 dígitos",
-        "city": "Ciudad"
+        "city": "Ciudad",
+        "namePlaceholder": "Juan García",
+        "streetPlaceholder": "Calle Ejemplo 1",
+        "cityPlaceholder": "Zúrich"
       },
       "payment": {
         "redirect": "Redirigiendo al pago...",
@@ -3406,7 +3410,7 @@
       "heroSubtitle": "Descubre nuestra selección de {categoryNameLower} reacondicionados de forma sostenible — calidad verificada a precios justos.",
       "productCount": "{count} productos en esta categoría",
       "subcategories": "Subcategorías",
-      "categoryProductCount": "{count} productos",
+      "categoryProductCount": "{count, plural, one {# producto} other {# productos}}",
       "productsLoading": "Cargando productos",
       "productsComingSoon": "Próximamente encontrarás aquí equipos TI reacondicionados en la categoría {categoryName} en nuestro mercado.",
       "goToShop": "Ir a la tienda en línea",

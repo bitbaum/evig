@@ -348,7 +348,7 @@
       "heroSubtitle": "Discover our range of sustainably refurbished {categoryNameLower} – verified quality at fair prices.",
       "productCount": "{count} products in this category",
       "subcategories": "Subcategories",
-      "categoryProductCount": "{count} products",
+      "categoryProductCount": "{count, plural, one {# product} other {# products}}",
       "productsLoading": "Loading products",
       "productsComingSoon": "Refurbished IT devices in the {categoryName} category will be available here on our marketplace soon.",
       "goToShop": "Go to online shop",
@@ -413,7 +413,8 @@
       "createSuccess": "Listing created successfully!",
       "saveError": "Error saving",
       "createError": "Error creating listing",
-      "unexpectedError": "An unexpected error occurred"
+      "unexpectedError": "An unexpected error occurred",
+      "aiPlaceholder": "e.g. \"ThinkPad T480, 16GB RAM, good condition, asking CHF 400\""
     },
     "filters": {
       "all": "All",
@@ -557,7 +558,10 @@
         "street": "Street",
         "postalCode": "Postal code",
         "postalCodeError": "Postal code must be 4 digits",
-        "city": "City"
+        "city": "City",
+        "namePlaceholder": "John Smith",
+        "streetPlaceholder": "Example Street 1",
+        "cityPlaceholder": "Zurich"
       },
       "payment": {
         "redirect": "Redirecting to payment...",

@@ -301,7 +301,7 @@ function SellPageContent() {
                 formType="marketplace"
                 currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
                 onFieldsFilled={handleAIFieldsFilled}
-                placeholder='z.B. "ThinkPad T480, 16GB RAM, guter Zustand, möchte 400 CHF"'
+                placeholder={t('aiPlaceholder')}
                 defaultExpanded={true}
                 variant="section"
               />
