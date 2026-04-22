@@ -21,13 +21,15 @@ const customJestConfig = {
   ],
   moduleDirectories: ['node_modules', '<rootDir>/'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@auth|next-auth)/)',
+    '/node_modules/(?!(@auth|next-auth|next-intl|use-intl)/)',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^next-auth$': '<rootDir>/node_modules/next-auth',
     '^next-auth/react$': '<rootDir>/node_modules/next-auth/react',
     '^next-auth/(.*)$': '<rootDir>/node_modules/next-auth/$1',
+    '^next-intl$': '<rootDir>/__mocks__/next-intl.js',
+    '^next-intl/(.*)$': '<rootDir>/__mocks__/next-intl.js',
   },
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
