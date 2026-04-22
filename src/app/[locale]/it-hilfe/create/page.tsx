@@ -46,6 +46,7 @@ interface AIFormFields {
 export default function CreatePeerRepairPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('itHelp.create')
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -172,7 +173,7 @@ export default function CreatePeerRepairPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Fehler beim Erstellen der Anfrage')
+        throw new Error(data.error || t('errorCreateFailed'))
       }
 
       setSuccess(true)
@@ -180,7 +181,7 @@ export default function CreatePeerRepairPage() {
         router.push(`/it-hilfe/${data.data.requestId}`)
       }, 1500)
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('errorGeneric')
       setError(message)
       logger.error('Error creating peer repair request', { error: err })
     } finally {
@@ -201,8 +202,8 @@ export default function CreatePeerRepairPage() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-          <Heading level={2} className="text-2xl text-gray-900 mb-2">Anfrage erstellt!</Heading>
-          <p className="text-gray-600">Du wirst gleich weitergeleitet...</p>
+          <Heading level={2} className="text-2xl text-gray-900 mb-2">{t('createdTitle')}</Heading>
+          <p className="text-gray-600">{t('createdRedirect')}</p>
         </div>
       </div>
     )
@@ -216,7 +217,7 @@ export default function CreatePeerRepairPage() {
           className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
-          Zurück zur Übersicht
+          {t('backToList')}
         </Link>
 
         {/* Header */}
@@ -225,10 +226,10 @@ export default function CreatePeerRepairPage() {
             <div className="p-2 bg-emerald-100 rounded-lg">
               <Wrench className="w-6 h-6 text-emerald-600" />
             </div>
-            <Heading level={1} className="text-2xl text-gray-900">Reparaturanfrage erstellen</Heading>
+            <Heading level={1} className="text-2xl text-gray-900">{t('title')}</Heading>
           </div>
           <p className="text-gray-600">
-            Wähle ein Gerät und beschreibe dein Problem. Die Community hilft dir.
+            {t('description')}
           </p>
         </div>
 
@@ -240,7 +241,7 @@ export default function CreatePeerRepairPage() {
           {/* AI Assist — uses shared AIFormAssist component */}
           <AIFormAssist<AIFormFields>
             formType="it-hilfe"
-            placeholder="z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten..."
+            placeholder={t('aiPlaceholder')}
             onFieldsFilled={handleAIFieldsFilled}
             currentData={formData as unknown as Record<string, unknown>}
             variant="section"
@@ -257,7 +258,7 @@ export default function CreatePeerRepairPage() {
 
           {/* Device Category */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <Heading level={2} className="text-lg text-gray-900 mb-4">Was möchtest du reparieren?</Heading>
+            <Heading level={2} className="text-lg text-gray-900 mb-4">{t('sectionDevice')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
@@ -312,9 +313,9 @@ export default function CreatePeerRepairPage() {
 
               {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <Heading level={2} className="text-lg text-gray-900 mb-2">Budget</Heading>
+                <Heading level={2} className="text-lg text-gray-900 mb-2">{t('sectionBudget')}</Heading>
                 <p className="text-sm text-gray-600 mb-4">
-                  Was bist du maximal bereit zu zahlen? Leer lassen für kostenlose Community-Hilfe.
+                  {t('budgetDescription')}
                 </p>
                 <div className="flex items-center gap-3">
                   <span className="text-gray-500">CHF</span>
@@ -322,24 +323,24 @@ export default function CreatePeerRepairPage() {
                     type="number"
                     value={formData.maxBudget}
                     onChange={(e) => updateField('maxBudget', e.target.value)}
-                    placeholder="0 = gratis"
+                    placeholder={t('budgetPlaceholder')}
                     min="0"
                     step="5"
                     className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   />
                   <span className="text-sm text-gray-500">
-                    {!formData.maxBudget ? 'Community-Hilfe (gratis)' : `bis CHF ${formData.maxBudget}`}
+                    {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
                   </span>
                 </div>
               </div>
 
               {/* Service Type & Urgency */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <Heading level={2} className="text-lg text-gray-900 mb-4">Optionen</Heading>
+                <Heading level={2} className="text-lg text-gray-900 mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Wie soll die Reparatur erfolgen?
+                      {t('serviceTypeLabel')}
                     </label>
                     <select
                       value={formData.serviceType}
@@ -355,7 +356,7 @@ export default function CreatePeerRepairPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Wie dringend?
+                      {t('urgencyLabel')}
                     </label>
                     <select
                       value={formData.urgency}
@@ -383,14 +384,14 @@ export default function CreatePeerRepairPage() {
                   href="/it-hilfe"
                   className="px-6 py-3 text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors"
                 >
-                  Abbrechen
+                  {t('cancelButton')}
                 </Link>
                 <button
                   type="submit"
                   disabled={loading || !formData.title.trim()}
                   className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? 'Wird erstellt...' : 'Anfrage erstellen'}
+                  {loading ? t('submittingButton') : t('submitButton')}
                 </button>
               </div>
             </>

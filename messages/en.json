@@ -2129,7 +2129,9 @@
       "cancelButton": "Cancel",
       "submitButton": "Create request",
       "submittingButton": "Creating...",
-      "aiPlaceholder": "e.g. My MacBook Pro 2019 won't start, screen stays black after pressing the power button..."
+      "aiPlaceholder": "e.g. My MacBook Pro 2019 won't start, screen stays black after pressing the power button...",
+      "errorCreateFailed": "Error creating the request",
+      "errorGeneric": "An error occurred"
     },
     "myRequests": {
       "title": "My Repair Requests",

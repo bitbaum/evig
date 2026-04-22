@@ -1778,7 +1778,9 @@
       "cancelButton": "취소",
       "submitButton": "요청 만들기",
       "submittingButton": "생성 중...",
-      "aiPlaceholder": "예: 2019년형 MacBook Pro가 시작되지 않아요, 켜면 화면이 검게 유지됩니다..."
+      "aiPlaceholder": "예: 2019년형 MacBook Pro가 시작되지 않아요, 켜면 화면이 검게 유지됩니다...",
+      "errorCreateFailed": "요청 생성 중 오류가 발생했습니다",
+      "errorGeneric": "오류가 발생했습니다"
     },
     "myRequests": {
       "title": "내 수리 요청",

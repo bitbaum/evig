@@ -1778,7 +1778,9 @@
       "cancelButton": "Annulla",
       "submitButton": "Crea richiesta",
       "submittingButton": "Creazione in corso...",
-      "aiPlaceholder": "es. Il mio MacBook Pro 2019 non si avvia più, lo schermo rimane nero all'accensione..."
+      "aiPlaceholder": "es. Il mio MacBook Pro 2019 non si avvia più, lo schermo rimane nero all'accensione...",
+      "errorCreateFailed": "Errore durante la creazione della richiesta",
+      "errorGeneric": "Si è verificato un errore"
     },
     "myRequests": {
       "title": "Le mie richieste di riparazione",

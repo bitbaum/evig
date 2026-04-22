@@ -1778,7 +1778,9 @@
       "cancelButton": "Cancelar",
       "submitButton": "Crear solicitud",
       "submittingButton": "Creando...",
-      "aiPlaceholder": "p. ej. Mi MacBook Pro 2019 ya no enciende, la pantalla queda en negro al encenderlo..."
+      "aiPlaceholder": "p. ej. Mi MacBook Pro 2019 ya no enciende, la pantalla queda en negro al encenderlo...",
+      "errorCreateFailed": "Error al crear la solicitud",
+      "errorGeneric": "Ha ocurrido un error"
     },
     "myRequests": {
       "title": "Mis solicitudes de reparación",

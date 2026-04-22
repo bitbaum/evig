@@ -2219,7 +2219,9 @@
       "cancelButton": "Abbrechen",
       "submitButton": "Anfrage erstellen",
       "submittingButton": "Wird erstellt...",
-      "aiPlaceholder": "z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten..."
+      "aiPlaceholder": "z.B. Mein MacBook Pro 2019 startet nicht mehr, Bildschirm bleibt schwarz nach dem Einschalten...",
+      "errorCreateFailed": "Fehler beim Erstellen der Anfrage",
+      "errorGeneric": "Ein Fehler ist aufgetreten"
     },
     "myRequests": {
       "title": "Meine Reparaturanfragen",

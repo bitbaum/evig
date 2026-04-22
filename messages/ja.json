@@ -1778,7 +1778,9 @@
       "cancelButton": "キャンセル",
       "submitButton": "リクエストを作成",
       "submittingButton": "作成中...",
-      "aiPlaceholder": "例：MacBook Pro 2019が起動しなくなりました。電源を入れると画面が真っ暗です..."
+      "aiPlaceholder": "例：MacBook Pro 2019が起動しなくなりました。電源を入れると画面が真っ暗です...",
+      "errorCreateFailed": "リクエストの作成中にエラーが発生しました",
+      "errorGeneric": "エラーが発生しました"
     },
     "myRequests": {
       "title": "マイ修理リクエスト",

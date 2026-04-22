@@ -2129,7 +2129,9 @@
       "cancelButton": "Annuler",
       "submitButton": "Créer la demande",
       "submittingButton": "Création en cours...",
-      "aiPlaceholder": "p. ex. Mon MacBook Pro 2019 ne démarre plus, l'écran reste noir après l'allumage..."
+      "aiPlaceholder": "p. ex. Mon MacBook Pro 2019 ne démarre plus, l'écran reste noir après l'allumage...",
+      "errorCreateFailed": "Erreur lors de la création de la demande",
+      "errorGeneric": "Une erreur s'est produite"
     },
     "myRequests": {
       "title": "Mes demandes de réparation",
