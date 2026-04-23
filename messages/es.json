@@ -2343,7 +2343,9 @@
         "brandPlaceholder": "Ej. Dell, Apple, Lenovo",
         "locationLabel": "Ubicación",
         "locationPlaceholder": "Ej. Zúrich, Berna, Basilea"
-      }
+      },
+      "imageAlt": "Foto del producto {index}",
+      "removeImageLabel": "Eliminar foto {index}"
     },
     "listingsAvailable": "{count, plural, one {# anuncio} other {# anuncios}} disponible{count, plural, one {} other {s}}",
     "searchPlaceholder": "Portátil, monitor, smartphone...",
@@ -6142,7 +6144,8 @@
         "title": "Product image",
         "upload": "Upload image",
         "drag": "or drag here",
-        "hint": "JPG, PNG or WebP. Max 5 MB."
+        "hint": "JPG, PNG or WebP. Max 5 MB.",
+        "remove": "Eliminar imagen del producto"
       },
       "basicFields": {
         "title": "Basic information",

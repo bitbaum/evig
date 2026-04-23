@@ -2343,7 +2343,9 @@
         "brandPlaceholder": "例：Dell、Apple、Lenovo",
         "locationLabel": "場所",
         "locationPlaceholder": "例：チューリッヒ、ベルン、バーゼル"
-      }
+      },
+      "imageAlt": "商品写真 {index}",
+      "removeImageLabel": "写真 {index} を削除"
     },
     "listingsAvailable": "{count, plural, other {{count}件の出品}}が利用可能",
     "searchPlaceholder": "ラップトップ、モニター、スマートフォン...",
@@ -6142,7 +6144,8 @@
         "title": "Product image",
         "upload": "Upload image",
         "drag": "or drag here",
-        "hint": "JPG, PNG or WebP. Max 5 MB."
+        "hint": "JPG, PNG or WebP. Max 5 MB.",
+        "remove": "商品画像を削除"
       },
       "basicFields": {
         "title": "Basic information",

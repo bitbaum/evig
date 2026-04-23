@@ -8,7 +8,7 @@
  */
 
 import Image from 'next/image'
-import { Camera } from 'lucide-react'
+import { Camera, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 
@@ -39,9 +39,10 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
             <button
               type="button"
               onClick={() => onImageChange(null)}
+              aria-label={t('remove')}
               className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center"
             >
-              <span className="text-xs font-bold">X</span>
+              <X className="w-3 h-3" />
             </button>
           </div>
         ) : (

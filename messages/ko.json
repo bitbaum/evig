@@ -2343,7 +2343,9 @@
         "brandPlaceholder": "예: Dell, Apple, Lenovo",
         "locationLabel": "위치",
         "locationPlaceholder": "예: 취리히, 베른, 바젤"
-      }
+      },
+      "imageAlt": "제품 사진 {index}",
+      "removeImageLabel": "사진 {index} 삭제"
     },
     "listingsAvailable": "{count, plural, other {# 개의}} 판매 목록 이용 가능",
     "searchPlaceholder": "노트북, 모니터, 스마트폰...",
@@ -6142,7 +6144,8 @@
         "title": "Product image",
         "upload": "Upload image",
         "drag": "or drag here",
-        "hint": "JPG, PNG or WebP. Max 5 MB."
+        "hint": "JPG, PNG or WebP. Max 5 MB.",
+        "remove": "제품 이미지 삭제"
       },
       "basicFields": {
         "title": "Basic information",

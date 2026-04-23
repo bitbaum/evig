@@ -542,7 +542,9 @@
         "brandPlaceholder": "e.g. Dell, Apple, Lenovo",
         "locationLabel": "Location",
         "locationPlaceholder": "e.g. Zurich, Bern, Basel"
-      }
+      },
+      "imageAlt": "Product photo {index}",
+      "removeImageLabel": "Remove photo {index}"
     },
     "filters": {
       "all": "All",
@@ -6242,7 +6244,8 @@
         "title": "Product image",
         "upload": "Upload image",
         "drag": "or drag here",
-        "hint": "JPG, PNG or WebP. Max 5 MB."
+        "hint": "JPG, PNG or WebP. Max 5 MB.",
+        "remove": "Remove product image"
       },
       "basicFields": {
         "title": "Basic information",

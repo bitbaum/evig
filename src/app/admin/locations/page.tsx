@@ -43,10 +43,10 @@ interface Location {
 const PAGE_SIZE = 20
 
 const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = {
-  [LOCATION_STATUS.APPROVED]: { label: 'Genehmigt', color: 'bg-green-100 text-green-800' },
-  [LOCATION_STATUS.PENDING]: { label: 'Ausstehend', color: 'bg-yellow-100 text-yellow-800' },
-  [LOCATION_STATUS.REJECTED]: { label: 'Abgelehnt', color: 'bg-red-100 text-red-800' },
-  [LOCATION_STATUS.SUSPENDED]: { label: 'Suspendiert', color: 'bg-orange-100 text-orange-800' },
+  [LOCATION_STATUS.APPROVED]: { label: getLocationStatusLabel(LOCATION_STATUS.APPROVED), color: 'bg-green-100 text-green-800' },
+  [LOCATION_STATUS.PENDING]: { label: getLocationStatusLabel(LOCATION_STATUS.PENDING), color: 'bg-yellow-100 text-yellow-800' },
+  [LOCATION_STATUS.REJECTED]: { label: getLocationStatusLabel(LOCATION_STATUS.REJECTED), color: 'bg-red-100 text-red-800' },
+  [LOCATION_STATUS.SUSPENDED]: { label: getLocationStatusLabel(LOCATION_STATUS.SUSPENDED), color: 'bg-orange-100 text-orange-800' },
 }
 
 function getTypeIcon(type: string) {
@@ -183,10 +183,10 @@ export default function AdminLocationsPage() {
             value: filters.status,
             onChange: (value) => setFilters(prev => ({ ...prev, status: value })),
             options: [
-              { value: LOCATION_STATUS.PENDING, label: 'Ausstehend' },
-              { value: LOCATION_STATUS.APPROVED, label: 'Genehmigt' },
-              { value: LOCATION_STATUS.REJECTED, label: 'Abgelehnt' },
-              { value: LOCATION_STATUS.SUSPENDED, label: 'Suspendiert' },
+              { value: LOCATION_STATUS.PENDING, label: getLocationStatusLabel(LOCATION_STATUS.PENDING) },
+              { value: LOCATION_STATUS.APPROVED, label: getLocationStatusLabel(LOCATION_STATUS.APPROVED) },
+              { value: LOCATION_STATUS.REJECTED, label: getLocationStatusLabel(LOCATION_STATUS.REJECTED) },
+              { value: LOCATION_STATUS.SUSPENDED, label: getLocationStatusLabel(LOCATION_STATUS.SUSPENDED) },
             ],
           },
           {
@@ -245,9 +245,6 @@ export default function AdminLocationsPage() {
                       status={location.approvalStatus}
                       config={LOCATION_STATUS_CONFIG}
                     />
-                    <span className="text-sm text-gray-600 sr-only">
-                      {getLocationStatusLabel(location.approvalStatus)}
-                    </span>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">

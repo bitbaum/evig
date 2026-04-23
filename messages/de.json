@@ -593,7 +593,9 @@
         "brandPlaceholder": "z.B. Dell, Apple, Lenovo",
         "locationLabel": "Standort",
         "locationPlaceholder": "z.B. Zürich, Bern, Basel"
-      }
+      },
+      "imageAlt": "Produktfoto {index}",
+      "removeImageLabel": "Foto {index} entfernen"
     },
     "listingsAvailable": "{count, plural, one {# Inserat} other {# Inserate}} verfügbar",
     "searchPlaceholder": "Laptop, Monitor, Smartphone...",
@@ -6293,7 +6295,8 @@
         "title": "Produktbild",
         "upload": "Bild hochladen",
         "drag": "oder hierher ziehen",
-        "hint": "JPG, PNG oder WebP. Max 5 MB."
+        "hint": "JPG, PNG oder WebP. Max 5 MB.",
+        "remove": "Produktbild entfernen"
       },
       "basicFields": {
         "title": "Grundinformationen",

@@ -23,9 +23,10 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {images.map((url, idx) => (
           <div key={idx} className="relative aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
-            <img src={url} alt="" className="w-full h-full object-cover" />
+            <img src={url} alt={t('imageAlt', { index: idx + 1 })} className="w-full h-full object-cover" />
             <button
               onClick={() => onRemove(idx)}
+              aria-label={t('removeImageLabel', { index: idx + 1 })}
               className="absolute top-1 right-1 p-2 bg-red-500 text-white rounded-full hover:bg-red-600"
             >
               <X className="w-4 h-4" />
