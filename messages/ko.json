@@ -979,7 +979,11 @@
       "placeholderName": "홍길동",
       "placeholderEmail": "hong@example.com",
       "placeholderTags": "Linux, ThinkPad, 튜토리얼"
-    }
+    },
+    "relatedArticles": "관련 기사",
+    "all": "전체",
+    "navSubmitPost": "글 제출",
+    "filterCount": "{count} 필터"
   },
   "contact": {
     "meta": {
@@ -4424,7 +4428,10 @@
       "loginRegister": "회원가입",
       "networkError": "연결 오류입니다. 다시 시도해 주세요.",
       "successFallback": "요청이 성공적으로 전송되었습니다."
-    }
+    },
+    "pricingTitle": "가격",
+    "mediaCostsTitle": "미디어 비용",
+    "processTitle": "저희 프로세스"
   },
   "shop": {
     "meta": {

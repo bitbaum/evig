@@ -3,16 +3,19 @@ import Link from 'next/link'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
 
 interface RelatedPostsProps {
   posts: BlogPost[]
 }
 
-export default function RelatedPosts({ posts }: RelatedPostsProps) {
+export default async function RelatedPosts({ posts }: RelatedPostsProps) {
+  const t = await getTranslations('blog')
+
   return (
     <section className="bg-gray-50 py-16">
       <div className="max-w-[1200px] mx-auto px-6">
-        <Heading level={2} className="text-3xl font-bold text-gray-900 mb-8">Related Articles</Heading>
+        <Heading level={2} className="text-3xl font-bold text-gray-900 mb-8">{t('relatedArticles')}</Heading>
         <div className="grid md:grid-cols-3 gap-8">
           {posts.map((post) => (
             <Link

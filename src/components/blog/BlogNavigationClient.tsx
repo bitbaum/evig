@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import type { BlogCategory } from '@/lib/blog-db'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 interface BlogNavigationClientProps {
   categories: BlogCategory[]
@@ -26,6 +27,7 @@ export default function BlogNavigationClient({
   categories,
   selectedCategorySlugs,
 }: BlogNavigationClientProps) {
+  const t = useTranslations('blog')
   const router = useRouter()
   const searchParams = useSearchParams()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -77,7 +79,7 @@ export default function BlogNavigationClient({
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               )}
             >
-              Alle
+              {t('all')}
             </button>
             {categories.map((category, index) => {
               const color = getCategoryColor(category, index)
@@ -126,7 +128,7 @@ export default function BlogNavigationClient({
             >
               {selectedCategorySlugs.length > 0 ? (
                 <>
-                  {selectedCategorySlugs.length} Filter
+                  {t('filterCount', { count: selectedCategorySlugs.length })}
                   <X
                     className="w-4 h-4 ml-1"
                     onClick={(e) => {
@@ -137,7 +139,7 @@ export default function BlogNavigationClient({
                 </>
               ) : (
                 <>
-                  Kategorien
+                  {t('categories')}
                   <ChevronDown className={cn("w-4 h-4 transition-transform", mobileMenuOpen && "rotate-180")} />
                 </>
               )}
@@ -148,7 +150,7 @@ export default function BlogNavigationClient({
               href="/blog/submit"
               className="px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm font-semibold"
             >
-              Beitrag einreichen
+              {t('navSubmitPost')}
             </Link>
           </div>
         </div>
@@ -166,7 +168,7 @@ export default function BlogNavigationClient({
                     : "bg-gray-100 text-gray-700"
                 )}
               >
-                Alle
+                {t('all')}
               </button>
               {categories.map((category, index) => {
                 const color = getCategoryColor(category, index)

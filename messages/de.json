@@ -1908,7 +1908,10 @@
         "highlight": "Bald verfügbar",
         "pricing": ""
       }
-    }
+    },
+    "pricingTitle": "Preise",
+    "mediaCostsTitle": "Medienkosten",
+    "processTitle": "Unser Prozess"
   },
   "workshops": {
     "meta": {
@@ -2867,7 +2870,11 @@
       "placeholderName": "Max Mustermann",
       "placeholderEmail": "max@beispiel.de",
       "placeholderTags": "Linux, ThinkPad, Tutorial"
-    }
+    },
+    "relatedArticles": "Verwandte Artikel",
+    "all": "Alle",
+    "navSubmitPost": "Beitrag einreichen",
+    "filterCount": "{count} Filter"
   },
   "auth": {
     "login": {

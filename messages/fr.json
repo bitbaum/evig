@@ -1810,7 +1810,10 @@
       "loginRegister": "S'inscrire",
       "networkError": "Erreur de connexion. Veuillez réessayer.",
       "successFallback": "Demande envoyée avec succès."
-    }
+    },
+    "pricingTitle": "Tarifs",
+    "mediaCostsTitle": "Frais de Supports",
+    "processTitle": "Notre Processus"
   },
   "workshops": {
     "meta": {
@@ -2688,7 +2691,11 @@
       "placeholderName": "Jean Dupont",
       "placeholderEmail": "jean@exemple.com",
       "placeholderTags": "Linux, ThinkPad, Tutoriel"
-    }
+    },
+    "relatedArticles": "Articles Connexes",
+    "all": "Tous",
+    "navSubmitPost": "Soumettre un Article",
+    "filterCount": "{count} Filtres"
   },
   "auth": {
     "login": {

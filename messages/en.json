@@ -1857,7 +1857,10 @@
         "highlight": "Coming soon",
         "pricing": ""
       }
-    }
+    },
+    "pricingTitle": "Prices",
+    "mediaCostsTitle": "Media Costs",
+    "processTitle": "Our Process"
   },
   "workshops": {
     "meta": {
@@ -2816,7 +2819,11 @@
       "placeholderName": "Jane Smith",
       "placeholderEmail": "jane@example.com",
       "placeholderTags": "Linux, ThinkPad, Tutorial"
-    }
+    },
+    "relatedArticles": "Related Articles",
+    "all": "All",
+    "navSubmitPost": "Submit Article",
+    "filterCount": "{count} Filter"
   },
   "auth": {
     "login": {

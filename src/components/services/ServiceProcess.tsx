@@ -9,16 +9,19 @@ import type { ServiceProcess } from '@/lib/services'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
 
 interface ServiceProcessProps {
   process: ServiceProcess[]
 }
 
-export default function ServiceProcessSection({ process }: ServiceProcessProps) {
+export default async function ServiceProcessSection({ process }: ServiceProcessProps) {
+  const t = await getTranslations('services')
+
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
       <div className="container mx-auto px-4 sm:px-6">
-        <Heading level={2} className={cn('text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center', getTextColor('neutral', 'primary'))}>Unser Prozess</Heading>
+        <Heading level={2} className={cn('text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center', getTextColor('neutral', 'primary'))}>{t('processTitle')}</Heading>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {process.map((step, index) => (
             <div key={index} className="text-center">

@@ -979,7 +979,11 @@
       "placeholderName": "Juan García",
       "placeholderEmail": "juan@ejemplo.com",
       "placeholderTags": "Linux, ThinkPad, Tutorial"
-    }
+    },
+    "relatedArticles": "Artículos Relacionados",
+    "all": "Todos",
+    "navSubmitPost": "Enviar Artículo",
+    "filterCount": "{count} Filtros"
   },
   "contact": {
     "meta": {
@@ -4424,7 +4428,10 @@
       "loginRegister": "Registrarse",
       "networkError": "Error de conexión. Por favor, inténtalo de nuevo.",
       "successFallback": "Solicitud enviada correctamente."
-    }
+    },
+    "pricingTitle": "Precios",
+    "mediaCostsTitle": "Costes de Medios",
+    "processTitle": "Nuestro Proceso"
   },
   "shop": {
     "meta": {

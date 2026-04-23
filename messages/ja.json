@@ -979,7 +979,11 @@
       "placeholderName": "山田太郎",
       "placeholderEmail": "yamada@example.com",
       "placeholderTags": "Linux, ThinkPad, チュートリアル"
-    }
+    },
+    "relatedArticles": "関連記事",
+    "all": "すべて",
+    "navSubmitPost": "記事を投稿",
+    "filterCount": "{count} フィルター"
   },
   "contact": {
     "meta": {
@@ -4424,7 +4428,10 @@
       "loginRegister": "登録",
       "networkError": "接続エラーです。もう一度お試しください。",
       "successFallback": "リクエストが正常に送信されました。"
-    }
+    },
+    "pricingTitle": "料金",
+    "mediaCostsTitle": "メディアコスト",
+    "processTitle": "私たちのプロセス"
   },
   "shop": {
     "meta": {
