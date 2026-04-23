@@ -639,7 +639,8 @@
       "notFound": "Inserat nicht gefunden",
       "backToMarketplace": "Zurück zum Marketplace",
       "imageAriaLabel": "Bild {n} anzeigen",
-      "conditionMeaningFor": "Was bedeutet \"{condition}\" für {category}?"
+      "conditionMeaningFor": "Was bedeutet \"{condition}\" für {category}?",
+      "loadError": "Fehler beim Laden des Inserats"
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",
@@ -5757,6 +5758,43 @@
   "components": {
     "listingCard": {
       "views": "Aufrufe"
+    },
+    "messageThread": {
+      "back": "Zurück",
+      "empty": "Noch keine Nachrichten. Schreib die erste!",
+      "meSender": "Du",
+      "placeholder": "Nachricht schreiben...",
+      "send": "Senden"
+    },
+    "conversationList": {
+      "timeNow": "Jetzt",
+      "timeMin": "{count} Min.",
+      "timeHour": "{count} Std.",
+      "timeDay": "{count} T.",
+      "emptyTitle": "Keine Nachrichten",
+      "emptyDesc": "Kontaktiere Verkäufer über den Marketplace",
+      "unknownUser": "Unbekannt",
+      "noMessage": "Keine Nachricht"
+    },
+    "newsletterSignup": {
+      "title": "Hat dir dieser Artikel gefallen?",
+      "subtitle": "Erhalte wöchentlich qualitativ hochwertige Artikel über nachhaltige Technologie, Open Source und die Zukunft des Computing – direkt in deinen Posteingang.",
+      "free": "100% kostenlos",
+      "freeDesc": "Keine versteckten Kosten",
+      "noAds": "Keine Werbung",
+      "noAdsDesc": "Nur wertvoller Inhalt",
+      "unsubscribe": "Jederzeit abmelden",
+      "unsubscribeDesc": "Ein Klick genügt",
+      "confirmEmail": "Bitte bestätige deine E-Mail-Adresse, um den Newsletter zu aktivieren.",
+      "placeholder": "ihre.email@beispiel.de",
+      "sending": "Sende...",
+      "subscribe": "Abonnieren",
+      "privacy": "Wir respektieren deine Privatsphäre. Keine Spam-Mails, versprochen.",
+      "communityTitle": "Community-gestützt. Kein Werbemodell.",
+      "communityDesc": "Wir glauben an qualitativ hochwertige, wahrheitsgetreue Inhalte ohne Werbung. Wenn du unsere Arbeit schätzen, kannst du uns gerne unterstützen.",
+      "supportButton": "RevampIT unterstützen",
+      "successMessage": "Willkommen! Überprüfe deine E-Mail.",
+      "networkError": "Verbindungsfehler. Bitte versuche es später erneut."
     }
   }
 }

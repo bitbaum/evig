@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { ListingDetail, SimilarListing } from './types'
@@ -15,6 +16,7 @@ interface UseListingDetailReturn {
 }
 
 export function useListingDetail(params: Promise<{ id: string }>): UseListingDetailReturn {
+  const t = useTranslations('marketplace.listing')
   const [listing, setListing] = useState<ListingDetail | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -44,10 +46,10 @@ export function useListingDetail(params: Promise<{ id: string }>): UseListingDet
             })
             .catch(err => logger.warn('Failed to load similar listings', { error: err }))
         } else {
-          setError(result.error || 'Inserat nicht gefunden')
+          setError(result.error || t('notFound'))
         }
       } catch {
-        if (!cancelled) setError('Fehler beim Laden des Inserats')
+        if (!cancelled) setError(t('loadError'))
       } finally {
         if (!cancelled) setIsLoading(false)
       }

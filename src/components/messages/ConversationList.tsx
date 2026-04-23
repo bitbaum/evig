@@ -1,6 +1,7 @@
 'use client'
 
 import { MessageSquare, User } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { formatDateShort } from '@/lib/date-formats'
 
 export interface Conversation {
@@ -20,26 +21,28 @@ interface ConversationListProps {
   onSelect: (id: string) => void
 }
 
-function timeAgo(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'Jetzt'
-  if (mins < 60) return `${mins} Min.`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours} Std.`
-  const days = Math.floor(hours / 24)
-  if (days < 7) return `${days} T.`
-  return formatDateShort(dateStr)
-}
-
 export default function ConversationList({ conversations, selectedId, onSelect }: ConversationListProps) {
+  const t = useTranslations('components.conversationList')
+
+  function timeAgo(dateStr: string): string {
+    const diff = Date.now() - new Date(dateStr).getTime()
+    const mins = Math.floor(diff / 60000)
+    if (mins < 1) return t('timeNow')
+    if (mins < 60) return t('timeMin', { count: mins })
+    const hours = Math.floor(mins / 60)
+    if (hours < 24) return t('timeHour', { count: hours })
+    const days = Math.floor(hours / 24)
+    if (days < 7) return t('timeDay', { count: days })
+    return formatDateShort(dateStr)
+  }
+
   if (conversations.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
         <MessageSquare className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" aria-hidden="true" />
-        <p className="text-gray-500 dark:text-gray-400 font-medium">Keine Nachrichten</p>
+        <p className="text-gray-500 dark:text-gray-400 font-medium">{t('emptyTitle')}</p>
         <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
-          Kontaktiere Verkäufer über den Marketplace
+          {t('emptyDesc')}
         </p>
       </div>
     )
@@ -68,7 +71,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                     ? 'font-bold text-gray-900 dark:text-white'
                     : 'font-medium text-gray-700 dark:text-gray-300'
                 }`}>
-                  {conv.other_user_name || 'Unbekannt'}
+                  {conv.other_user_name || t('unknownUser')}
                 </span>
                 <span className="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0 ml-2">
                   {timeAgo(conv.last_message_at)}
@@ -80,7 +83,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                     ? 'text-gray-800 dark:text-gray-200'
                     : 'text-gray-500 dark:text-gray-400'
                 }`}>
-                  {conv.last_message_preview || 'Keine Nachricht'}
+                  {conv.last_message_preview || t('noMessage')}
                 </p>
                 {conv.unread_count > 0 && (
                   <span className="ml-2 flex-shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-green-500 rounded-full">

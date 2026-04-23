@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, ArrowLeft } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { formatTime as fmtTime, formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
@@ -51,6 +52,7 @@ export default function MessageThread({
   contextId,
   onBack,
 }: MessageThreadProps) {
+  const t = useTranslations('components.messageThread')
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [reply, setReply] = useState('')
@@ -98,7 +100,7 @@ export default function MessageThread({
         setMessages(prev => [...prev, {
           id: result.data!.message_id,
           sender_id: currentUserId,
-          sender_name: 'Du',
+          sender_name: t('meSender'),
           content: reply.trim(),
           is_read: false,
           created_at: result.data!.created_at || new Date().toISOString(),
@@ -128,7 +130,7 @@ export default function MessageThread({
           <button
             onClick={onBack}
             className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors lg:hidden"
-            aria-label="Zurück"
+            aria-label={t('back')}
           >
             <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
           </button>
@@ -148,7 +150,7 @@ export default function MessageThread({
           </div>
         ) : messages.length === 0 ? (
           <p className="text-center text-gray-400 dark:text-gray-500 text-sm py-8">
-            Noch keine Nachrichten. Schreib die erste!
+            {t('empty')}
           </p>
         ) : (
           messages.map(msg => {
@@ -192,7 +194,7 @@ export default function MessageThread({
             value={reply}
             onChange={e => setReply(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Nachricht schreiben..."
+            placeholder={t('placeholder')}
             rows={1}
             className="flex-1 resize-none rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent max-h-32"
             style={{ minHeight: '42px' }}
@@ -201,7 +203,7 @@ export default function MessageThread({
             onClick={handleSend}
             disabled={!reply.trim() || sending}
             className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-            aria-label="Senden"
+            aria-label={t('send')}
           >
             {sending ? (
               <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />

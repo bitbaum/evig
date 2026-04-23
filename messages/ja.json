@@ -2269,7 +2269,8 @@
       "notFound": "出品が見つかりません",
       "backToMarketplace": "マーケットプレイスに戻る",
       "imageAriaLabel": "画像{n}を表示",
-      "conditionMeaningFor": "{category}における「{condition}」とは？"
+      "conditionMeaningFor": "{category}における「{condition}」とは？",
+      "loadError": "リスト読み込みエラー"
     },
     "listing_actions": {
       "payment_info": "購入者と販売者の間の直接支払い",
@@ -5606,6 +5607,43 @@
   "components": {
     "listingCard": {
       "views": "回表示"
+    },
+    "messageThread": {
+      "back": "戻る",
+      "empty": "まだメッセージはありません。最初のメッセージを書きましょう！",
+      "meSender": "あなた",
+      "placeholder": "メッセージを書く...",
+      "send": "送信"
+    },
+    "conversationList": {
+      "timeNow": "今",
+      "timeMin": "{count} 分",
+      "timeHour": "{count} 時間",
+      "timeDay": "{count} 日",
+      "emptyTitle": "メッセージなし",
+      "emptyDesc": "マーケットプレイスから販売者に連絡する",
+      "unknownUser": "不明",
+      "noMessage": "メッセージなし"
+    },
+    "newsletterSignup": {
+      "title": "この記事はお役に立ちましたか？",
+      "subtitle": "持続可能なテクノロジー、オープンソース、コンピューティングの未来に関する高品質な記事を毎週メールでお届けします。",
+      "free": "完全無料",
+      "freeDesc": "隠れたコストなし",
+      "noAds": "広告なし",
+      "noAdsDesc": "価値あるコンテンツのみ",
+      "unsubscribe": "いつでも登録解除",
+      "unsubscribeDesc": "ワンクリックで十分",
+      "confirmEmail": "ニュースレターを有効にするにはメールアドレスを確認してください。",
+      "placeholder": "your.email@example.com",
+      "sending": "送信中...",
+      "subscribe": "購読する",
+      "privacy": "プライバシーを尊重します。スパムなし、約束します。",
+      "communityTitle": "コミュニティサポート。広告モデルなし。",
+      "communityDesc": "広告なしの高品質で誠実なコンテンツを信じています。私たちの仕事を評価していただける方は、ぜひサポートをお願いします。",
+      "supportButton": "RevampITを支援する",
+      "successMessage": "ようこそ！メールを確認してください。",
+      "networkError": "接続エラー。後でもう一度お試しください。"
     }
   }
 }

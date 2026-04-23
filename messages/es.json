@@ -2269,7 +2269,8 @@
       "notFound": "Anuncio no encontrado",
       "backToMarketplace": "Volver al mercado",
       "imageAriaLabel": "Mostrar imagen {n}",
-      "conditionMeaningFor": "¿Qué significa \"{condition}\" para {category}?"
+      "conditionMeaningFor": "¿Qué significa \"{condition}\" para {category}?",
+      "loadError": "Error al cargar el anuncio"
     },
     "listing_actions": {
       "payment_info": "Pago directo entre comprador y vendedor",
@@ -5606,6 +5607,43 @@
   "components": {
     "listingCard": {
       "views": "vistas"
+    },
+    "messageThread": {
+      "back": "Volver",
+      "empty": "Aún no hay mensajes. ¡Escribe el primero!",
+      "meSender": "Tú",
+      "placeholder": "Escribe un mensaje...",
+      "send": "Enviar"
+    },
+    "conversationList": {
+      "timeNow": "Ahora",
+      "timeMin": "{count} min",
+      "timeHour": "{count} h",
+      "timeDay": "{count} d",
+      "emptyTitle": "Sin mensajes",
+      "emptyDesc": "Contacta vendedores a través del Marketplace",
+      "unknownUser": "Desconocido",
+      "noMessage": "Sin mensaje"
+    },
+    "newsletterSignup": {
+      "title": "¿Te gustó este artículo?",
+      "subtitle": "Recibe semanalmente artículos de alta calidad sobre tecnología sostenible, código abierto y el futuro de la informática, directamente en tu bandeja de entrada.",
+      "free": "100% gratuito",
+      "freeDesc": "Sin costos ocultos",
+      "noAds": "Sin anuncios",
+      "noAdsDesc": "Solo contenido valioso",
+      "unsubscribe": "Cancelar en cualquier momento",
+      "unsubscribeDesc": "Un clic es suficiente",
+      "confirmEmail": "Por favor confirma tu dirección de correo para activar el boletín.",
+      "placeholder": "tu.email@ejemplo.com",
+      "sending": "Enviando...",
+      "subscribe": "Suscribirse",
+      "privacy": "Respetamos tu privacidad. Sin spam, prometido.",
+      "communityTitle": "Respaldado por la comunidad. Sin modelo de anuncios.",
+      "communityDesc": "Creemos en contenido de alta calidad y veraz sin publicidad. Si valoras nuestro trabajo, no dudes en apoyarnos.",
+      "supportButton": "Apoyar RevampIT",
+      "successMessage": "¡Bienvenido! Revisa tu correo electrónico.",
+      "networkError": "Error de conexión. Por favor inténtalo más tarde."
     }
   }
 }

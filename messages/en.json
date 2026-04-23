@@ -576,7 +576,8 @@
       "notFound": "Listing not found",
       "backToMarketplace": "Back to Marketplace",
       "imageAriaLabel": "Show image {n}",
-      "conditionMeaningFor": "What does \"{condition}\" mean for {category}?"
+      "conditionMeaningFor": "What does \"{condition}\" mean for {category}?",
+      "loadError": "Error loading listing"
     },
     "empty": "No listings found",
     "conditions": {
@@ -5706,6 +5707,43 @@
   "components": {
     "listingCard": {
       "views": "views"
+    },
+    "messageThread": {
+      "back": "Back",
+      "empty": "No messages yet. Write the first one!",
+      "meSender": "You",
+      "placeholder": "Write a message...",
+      "send": "Send"
+    },
+    "conversationList": {
+      "timeNow": "Now",
+      "timeMin": "{count} min",
+      "timeHour": "{count} hr",
+      "timeDay": "{count} d",
+      "emptyTitle": "No messages",
+      "emptyDesc": "Contact sellers via the Marketplace",
+      "unknownUser": "Unknown",
+      "noMessage": "No message"
+    },
+    "newsletterSignup": {
+      "title": "Did you enjoy this article?",
+      "subtitle": "Get weekly high-quality articles about sustainable technology, open source and the future of computing – delivered straight to your inbox.",
+      "free": "100% free",
+      "freeDesc": "No hidden costs",
+      "noAds": "No ads",
+      "noAdsDesc": "Only valuable content",
+      "unsubscribe": "Unsubscribe anytime",
+      "unsubscribeDesc": "One click is enough",
+      "confirmEmail": "Please confirm your email address to activate the newsletter.",
+      "placeholder": "your.email@example.com",
+      "sending": "Sending...",
+      "subscribe": "Subscribe",
+      "privacy": "We respect your privacy. No spam, promised.",
+      "communityTitle": "Community-supported. No ad model.",
+      "communityDesc": "We believe in high-quality, truthful content without advertising. If you value our work, feel free to support us.",
+      "supportButton": "Support RevampIT",
+      "successMessage": "Welcome! Check your email.",
+      "networkError": "Connection error. Please try again later."
     }
   }
 }
