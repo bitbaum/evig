@@ -5173,7 +5173,27 @@
       "accountOverviewDesc": "Status and security of your account",
       "emailVerified": "Email verified",
       "nameNotSet": "Name not set",
-      "memberSince": "Member since {year}"
+      "memberSince": "Member since {year}",
+      "pageTitle": "Profile",
+      "pageDescription": "Manage your public profile",
+      "saveSuccess": "Profile saved successfully",
+      "saving": "Saving...",
+      "save": "Save",
+      "avatarSectionTitle": "Profile picture",
+      "goToSettings": "Go to settings",
+      "publicProfile": {
+        "heading": "Public Profile",
+        "displayName": "Display name",
+        "displayNamePlaceholder": "What would you like to be called?",
+        "displayNameDescription": "This name is shown publicly",
+        "bio": "Bio",
+        "bioPlaceholder": "Tell us something about yourself...",
+        "bioDescription": "Short description about yourself (max. 500 characters)",
+        "visibility": "Profile visibility",
+        "visibilityPublic": "Public",
+        "visibilityPrivate": "Private",
+        "visibilityDescription": "Choose who can see your profile"
+      }
     },
     "emailVerification": {
       "heading": "Adresse e-mail non confirmée",
@@ -5595,6 +5615,9 @@
         "exportFailedRetry": "Export failed. Please try again later.",
         "exportLoading": "Creating export...",
         "downloadButton": "Download my data"
+      },
+      "personalInfo": {
+        "cantonDefault": "Select canton"
       }
     }
   },
@@ -6055,6 +6078,16 @@
       "noMessages": "No messages yet",
       "newConversation": "New conversation",
       "messagePlaceholder": "Write a message..."
+    },
+    "avatarUpload": {
+      "altText": "Profile picture",
+      "saving": "Saving...",
+      "change": "Change picture",
+      "upload": "Upload picture",
+      "remove": "Remove picture",
+      "errorFileType": "Only JPG, PNG and WebP images are allowed",
+      "errorFileSize": "Image must be at most 5MB",
+      "errorUpload": "Upload failed. Please try again."
     }
   },
   "profil": {

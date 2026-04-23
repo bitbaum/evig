@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { PROFILE_CONFIG } from '@/config/profile'
+import { useTranslations } from 'next-intl'
 
 interface AvatarUploadProps {
   currentAvatarUrl?: string | null
@@ -25,17 +26,17 @@ export function AvatarUpload({
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const config = PROFILE_CONFIG.avatar
-  const labels = PROFILE_CONFIG.labels
+  const t = useTranslations('components.avatarUpload')
 
   const validateFile = (file: File): string | null => {
     // Check file type
     if (!(config.allowedTypes as readonly string[]).includes(file.type)) {
-      return config.errorMessages.fileType
+      return t('errorFileType')
     }
 
     // Check file size
     if (file.size > config.maxSizeBytes) {
-      return config.errorMessages.fileSize
+      return t('errorFileSize')
     }
 
     return null
@@ -100,7 +101,7 @@ export function AvatarUpload({
       onUploadSuccess(avatarUrl)
       setError(null)
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : config.errorMessages.uploadFailed
+      const errorMessage = err instanceof Error ? err.message : t('errorUpload')
       setError(errorMessage)
       setPreviewUrl(currentAvatarUrl || null) // Reset to original on error
 
@@ -145,7 +146,7 @@ export function AvatarUpload({
           {previewUrl ? (
             <Image
               src={previewUrl}
-              alt={labels.avatar}
+              alt={t('altText')}
               fill
               className="object-cover"
               unoptimized={previewUrl.startsWith('data:')} // Don't optimize data URLs
@@ -187,10 +188,10 @@ export function AvatarUpload({
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
           >
             {isUploading
-              ? labels.saving
+              ? t('saving')
               : previewUrl
-              ? labels.changeAvatar
-              : labels.uploadAvatar}
+              ? t('change')
+              : t('upload')}
           </button>
 
           {previewUrl && (
@@ -200,7 +201,7 @@ export function AvatarUpload({
               disabled={isUploading}
               className="px-4 py-2 bg-white text-red-600 border border-red-600 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {labels.removeAvatar}
+              {t('remove')}
             </button>
           )}
         </div>

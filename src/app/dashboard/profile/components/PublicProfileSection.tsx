@@ -2,7 +2,7 @@
 
 import { Globe, Lock } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
-import { PROFILE_CONFIG } from '@/config/profile'
+import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface PublicProfileSectionProps {
@@ -11,62 +11,61 @@ interface PublicProfileSectionProps {
 }
 
 export function PublicProfileSection({ profile, handleChange }: PublicProfileSectionProps) {
-  const labels = PROFILE_CONFIG.labels
-  const validation = PROFILE_CONFIG.validation
+  const t = useTranslations('dashboard.profile.publicProfile')
 
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-6">
       <Heading level={2} className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-        {labels.publicProfile}
+        {t('heading')}
       </Heading>
 
       <div className="space-y-6">
         {/* Display Name */}
         <div>
           <label htmlFor="display_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {labels.displayName}
+            {t('displayName')}
           </label>
           <input
             type="text"
             id="display_name"
             value={profile.display_name || ''}
             onChange={(e) => handleChange('display_name', e.target.value)}
-            placeholder={labels.displayNamePlaceholder}
-            minLength={validation.displayName.minLength}
-            maxLength={validation.displayName.maxLength}
+            placeholder={t('displayNamePlaceholder')}
+            minLength={2}
+            maxLength={50}
             className="w-full px-4 py-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {labels.displayNameDescription}
+            {t('displayNameDescription')}
           </p>
         </div>
 
         {/* Bio */}
         <div>
           <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            {labels.bio}
+            {t('bio')}
           </label>
           <textarea
             id="bio"
             value={profile.bio || ''}
             onChange={(e) => handleChange('bio', e.target.value)}
-            placeholder={labels.bioPlaceholder}
-            maxLength={validation.bio.maxLength}
+            placeholder={t('bioPlaceholder')}
+            maxLength={500}
             rows={4}
             className="w-full px-4 py-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {labels.bioDescription}
+            {t('bioDescription')}
           </p>
           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-            {profile.bio?.length || 0} / {validation.bio.maxLength}
+            {profile.bio?.length || 0} / 500
           </p>
         </div>
 
         {/* Profile Visibility */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-            {labels.profileVisibility}
+            {t('visibility')}
           </label>
           <div className="flex gap-4">
             <button
@@ -79,7 +78,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               }`}
             >
               <Globe className="w-5 h-5" />
-              <span className="font-medium">{labels.profileVisibilityPublic}</span>
+              <span className="font-medium">{t('visibilityPublic')}</span>
             </button>
 
             <button
@@ -92,11 +91,11 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               }`}
             >
               <Lock className="w-5 h-5" />
-              <span className="font-medium">{labels.profileVisibilityPrivate}</span>
+              <span className="font-medium">{t('visibilityPrivate')}</span>
             </button>
           </div>
           <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            {labels.profileVisibilityDescription}
+            {t('visibilityDescription')}
           </p>
         </div>
       </div>

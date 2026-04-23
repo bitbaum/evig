@@ -3,6 +3,7 @@
 import { Building2, Phone, MapPin } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { SETTINGS_CONFIG, SWISS_CANTONS, CANTON_NAMES } from '@/config/profile'
+import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 import type { PostalCodeData } from '@/lib/swiss-postal-codes'
 
@@ -26,6 +27,7 @@ export function PersonalInfoSection({
   selectPostalSuggestion,
 }: PersonalInfoSectionProps) {
   const labels = SETTINGS_CONFIG.labels.personalInfo
+  const t = useTranslations('dashboard.settings.personalInfo')
 
   return (
     <div className="space-y-8">
@@ -192,7 +194,7 @@ export function PersonalInfoSection({
               onChange={(e) => handleChange('canton', e.target.value)}
               className="w-full px-4 py-2 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">Kanton wählen</option>
+              <option value="">{t('cantonDefault')}</option>
               {SWISS_CANTONS.map((canton) => (
                 <option key={canton} value={canton}>
                   {CANTON_NAMES[canton]}

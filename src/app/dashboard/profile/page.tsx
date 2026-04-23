@@ -5,7 +5,6 @@ import Heading from '@/components/ui/Heading'
 import { User, Save, Loader2, CheckCircle2, ArrowLeft, Shield, Settings as SettingsIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { PROFILE_CONFIG } from '@/config/profile'
 
 // Hooks
 import { useProfileData } from './hooks/useProfileData'
@@ -22,8 +21,6 @@ export default function ProfilePage() {
   const t = useTranslations('dashboard.profile')
   const { session, status, isLoading, profile, setProfile, isServiceProvider } = useProfileData()
   const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({ profile, setProfile })
-
-  const labels = PROFILE_CONFIG.labels
 
   const handleAvatarUpload = (url: string) => {
     handleChange('avatar_url', url)
@@ -48,10 +45,10 @@ export default function ProfilePage() {
           <div className="flex items-center justify-between">
             <div>
               <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
-                {labels.pageTitle}
+                {t('pageTitle')}
               </Heading>
               <p className="mt-1 text-sm sm:text-base text-gray-600 dark:text-neutral-400">
-                {labels.pageDescription}
+                {t('pageDescription')}
               </p>
             </div>
             <Link
@@ -59,7 +56,7 @@ export default function ProfilePage() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors"
             >
               <SettingsIcon className="w-4 h-4" />
-              <span className="hidden sm:inline">{labels.goToSettings}</span>
+              <span className="hidden sm:inline">{t('goToSettings')}</span>
             </Link>
           </div>
         </div>
@@ -125,7 +122,7 @@ export default function ProfilePage() {
             <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 flex items-center gap-3">
               <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
               <p className="text-green-700 dark:text-green-300">
-                {labels.saveSuccess}
+                {t('saveSuccess')}
               </p>
             </div>
           )}
@@ -140,7 +137,7 @@ export default function ProfilePage() {
           {/* Avatar Section */}
           <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border-2 border-neutral-200 dark:border-neutral-700 p-6">
             <Heading level={2} className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
-              {labels.avatar}
+              {t('avatarSectionTitle')}
             </Heading>
             <AvatarUpload
               currentAvatarUrl={profile.avatar_url}
@@ -165,12 +162,12 @@ export default function ProfilePage() {
               {isSaving ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  {labels.saving}
+                  {t('saving')}
                 </>
               ) : (
                 <>
                   <Save className="w-5 h-5" />
-                  {labels.save}
+                  {t('save')}
                 </>
               )}
             </Button>

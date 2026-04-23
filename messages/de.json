@@ -5366,7 +5366,27 @@
       "accountOverviewDesc": "Status und Sicherheit deines Kontos",
       "emailVerified": "E-Mail bestätigt",
       "nameNotSet": "Name nicht angegeben",
-      "memberSince": "Mitglied seit {year}"
+      "memberSince": "Mitglied seit {year}",
+      "pageTitle": "Profil",
+      "pageDescription": "Verwalte dein öffentliches Profil",
+      "saveSuccess": "Profil erfolgreich gespeichert",
+      "saving": "Speichert...",
+      "save": "Speichern",
+      "avatarSectionTitle": "Profilbild",
+      "goToSettings": "Zu den Einstellungen",
+      "publicProfile": {
+        "heading": "Öffentliches Profil",
+        "displayName": "Anzeigename",
+        "displayNamePlaceholder": "Wie möchtest du genannt werden?",
+        "displayNameDescription": "Dieser Name wird öffentlich angezeigt",
+        "bio": "Bio",
+        "bioPlaceholder": "Erzähl etwas über dich...",
+        "bioDescription": "Kurze Beschreibung über dich (max. 500 Zeichen)",
+        "visibility": "Profil-Sichtbarkeit",
+        "visibilityPublic": "Öffentlich",
+        "visibilityPrivate": "Privat",
+        "visibilityDescription": "Bestimme, wer dein Profil sehen kann"
+      }
     },
     "emailVerification": {
       "heading": "E-Mail-Adresse nicht bestätigt",
@@ -5788,6 +5808,9 @@
         "exportFailedRetry": "Export fehlgeschlagen. Bitte versuche es später erneut.",
         "exportLoading": "Export wird erstellt...",
         "downloadButton": "Meine Daten herunterladen"
+      },
+      "personalInfo": {
+        "cantonDefault": "Kanton wählen"
       }
     }
   },
@@ -6248,6 +6271,16 @@
       "noMessages": "Noch keine Nachrichten",
       "newConversation": "Neue Unterhaltung",
       "messagePlaceholder": "Nachricht schreiben..."
+    },
+    "avatarUpload": {
+      "altText": "Profilbild",
+      "saving": "Speichert...",
+      "change": "Bild ändern",
+      "upload": "Bild hochladen",
+      "remove": "Bild entfernen",
+      "errorFileType": "Nur JPG, PNG und WebP Bilder sind erlaubt",
+      "errorFileSize": "Bild darf maximal 5MB gross sein",
+      "errorUpload": "Upload fehlgeschlagen. Bitte versuche es erneut."
     }
   },
   "profil": {
