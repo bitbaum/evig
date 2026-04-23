@@ -15,6 +15,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { useTranslations } from 'next-intl'
 
 interface Appointment {
   id: string
@@ -41,6 +42,7 @@ interface Appointment {
 const STATUS_CONFIG = BOOKING_STATUS_BADGES
 
 export default function CustomerBookings() {
+  const t = useTranslations('dashboard.bookings')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const [appointments, setAppointments] = useState<Appointment[]>([])
@@ -59,10 +61,10 @@ export default function CustomerBookings() {
       if (result.success) {
         setAppointments(result.data!.appointments)
       } else {
-        setError(result.error || 'Fehler beim Laden')
+        setError(result.error || t('loadError'))
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(t('networkError'))
     } finally {
       setLoading(false)
     }
@@ -89,10 +91,10 @@ export default function CustomerBookings() {
         setRating(5)
         setReview('')
       } else {
-        setError(result.error || 'Aktion fehlgeschlagen')
+        setError(result.error || t('actionError'))
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(t('networkError'))
     } finally {
       setActionLoading(null)
     }
@@ -119,8 +121,8 @@ export default function CustomerBookings() {
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900">Meine Buchungen</Heading>
-            <p className="text-neutral-600">Deine Reparaturaufträge im Überblick</p>
+            <Heading level={1} className="text-2xl font-bold text-neutral-900">{t('pageTitle')}</Heading>
+            <p className="text-neutral-600">{t('pageSubtitle')}</p>
           </div>
           <div className="flex gap-2">
             <button
@@ -128,14 +130,14 @@ export default function CustomerBookings() {
               className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white border rounded-lg hover:bg-neutral-50 text-sm md:text-base"
             >
               <RefreshCw className="h-4 w-4" />
-              <span className="hidden sm:inline">Aktualisieren</span>
+              <span className="hidden sm:inline">{t('refresh')}</span>
             </button>
             <Link
               href="/techniker"
               className="flex items-center gap-2 px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base"
             >
               <Wrench className="h-4 w-4" />
-              Neuer Auftrag
+              {t('newOrder')}
             </Link>
           </div>
         </div>
@@ -151,7 +153,7 @@ export default function CustomerBookings() {
         {needsAction > 0 && (
           <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg flex items-center gap-2 text-purple-700">
             <Euro className="h-5 w-5" />
-            Du hast {needsAction} Angebot{needsAction > 1 ? 'e' : ''} zur Bestätigung
+            {t('pendingQuotes', { count: needsAction })}
           </div>
         )}
 
@@ -163,7 +165,7 @@ export default function CustomerBookings() {
               (activeTab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
           >
             <Clock className="h-4 w-4" />
-            Aktiv
+            {t('tabActive')}
             {activeCount > 0 && (
               <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
             )}
@@ -174,7 +176,7 @@ export default function CustomerBookings() {
               (activeTab === 'completed' ? 'bg-green-100 text-green-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
           >
             <CheckCircle className="h-4 w-4" />
-            Abgeschlossen
+            {t('tabCompleted')}
           </button>
         </div>
 
@@ -185,13 +187,13 @@ export default function CustomerBookings() {
               icon={Wrench}
               iconBg="bg-blue-50 dark:bg-blue-900/20"
               iconColor="text-blue-500 dark:text-blue-400"
-              title="Keine Buchungen in dieser Kategorie"
+              title={t('emptyTitle')}
               action={
                 <Link
                   href="/techniker"
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
                 >
-                  Techniker finden
+                  {t('findTechnician')}
                 </Link>
               }
             />
@@ -217,7 +219,7 @@ export default function CustomerBookings() {
                   </div>
                   <div>
                     <Heading level={3} className="font-semibold text-neutral-900">{apt.business_name || apt.repairer_name}</Heading>
-                    <p className="text-sm text-neutral-500">{apt.service_name || 'Reparatur'}</p>
+                    <p className="text-sm text-neutral-500">{apt.service_name || t('repairLabel')}</p>
                   </div>
                 </div>
 
@@ -227,7 +229,7 @@ export default function CustomerBookings() {
                   <div className="bg-purple-50 rounded-lg p-4 mb-4">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                       <div>
-                        <p className="text-sm text-purple-700 font-medium">Angebot</p>
+                        <p className="text-sm text-purple-700 font-medium">{t('quoteLabel')}</p>
                         <p className="text-2xl font-bold text-purple-900">CHF {apt.quoted_price_chf}</p>
                       </div>
                       {apt.diagnosis_notes && (
@@ -247,7 +249,7 @@ export default function CustomerBookings() {
                   {apt.is_home_visit && (
                     <div className="flex items-center gap-1">
                       <Home className="h-4 w-4" />
-                      Hausbesuch
+                      {t('homeVisit')}
                     </div>
                   )}
                 </div>
@@ -262,7 +264,7 @@ export default function CustomerBookings() {
                         className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
                       >
                         {actionLoading === apt.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-                        Angebot annehmen
+                        {t('acceptQuote')}
                       </button>
                       <button
                         onClick={() => handleAction(apt.id, 'reject_quote')}
@@ -270,7 +272,7 @@ export default function CustomerBookings() {
                         className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 flex items-center gap-2"
                       >
                         <XCircle className="h-4 w-4" />
-                        Ablehnen
+                        {t('declineQuote')}
                       </button>
                     </>
                   )}
@@ -281,7 +283,7 @@ export default function CustomerBookings() {
                       className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 flex items-center gap-2"
                     >
                       <Star className="h-4 w-4" />
-                      Bewertung abgeben
+                      {t('rateService')}
                     </button>
                   )}
 
@@ -292,7 +294,7 @@ export default function CustomerBookings() {
                       className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 flex items-center gap-2"
                     >
                       <XCircle className="h-4 w-4" />
-                      Stornieren
+                      {t('cancelAction')}
                     </button>
                   )}
 
@@ -300,7 +302,7 @@ export default function CustomerBookings() {
                     href={'/dashboard/bookings/' + apt.id}
                     className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 flex items-center gap-2 sm:ml-auto"
                   >
-                    Details
+                    {t('details')}
                     <ChevronRight className="h-4 w-4" />
                   </Link>
                 </div>
@@ -310,10 +312,10 @@ export default function CustomerBookings() {
         </div>
 
         {/* Rating Modal */}
-        <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title="Bewertung abgeben" size="sm">
+        <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title={t('ratingModalTitle')} size="sm">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">Bewertung</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">{t('ratingLabel')}</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
@@ -329,11 +331,11 @@ export default function CustomerBookings() {
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Kommentar (optional)</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('commentLabel')}</label>
               <textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
-                placeholder="Wie war deine Erfahrung?"
+                placeholder={t('commentPlaceholder')}
                 rows={3}
                 className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
               />
@@ -344,7 +346,7 @@ export default function CustomerBookings() {
               onClick={() => setRatingModal(null)}
               className="flex-1 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200"
             >
-              Abbrechen
+              {t('cancelButton')}
             </button>
             <button
               onClick={() => ratingModal && handleAction(ratingModal.appointmentId, 'rate', {
@@ -354,7 +356,7 @@ export default function CustomerBookings() {
               disabled={actionLoading !== null}
               className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50"
             >
-              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Bewertung senden'}
+              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : t('submitRating')}
             </button>
           </div>
         </Modal>

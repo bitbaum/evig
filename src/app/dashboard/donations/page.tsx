@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
@@ -41,6 +42,7 @@ interface Donation {
 }
 
 export default function DonationsDashboard() {
+  const t = useTranslations('dashboard.donations')
   const { data: session, status } = useSession()
   const [donations, setDonations] = useState<Donation[]>([])
   const [loading, setLoading] = useState(true)
@@ -59,10 +61,10 @@ export default function DonationsDashboard() {
         const data = await response.json()
         setDonations(data.data || [])
       } else {
-        setError('Fehler beim Laden der Spenden')
+        setError(t('loadError'))
       }
     } catch {
-      setError('Netzwerkfehler beim Laden der Daten')
+      setError(t('networkError'))
     } finally {
       setLoading(false)
     }
@@ -102,7 +104,7 @@ export default function DonationsDashboard() {
     if (donation.device_model) parts.push(donation.device_model)
     if (parts.length > 0) return parts.join(' ')
     if (donation.device_category) return getDeviceCategoryLabel(donation.device_category)
-    return 'Sachspende'
+    return t('deviceFallback')
   }
 
   if (status === 'loading' || loading) {
@@ -130,14 +132,14 @@ export default function DonationsDashboard() {
         <div className="max-w-4xl mx-auto px-4">
           <EmptyState
             icon={LogIn}
-            title="Anmeldung erforderlich"
-            description="Bitte melde dich an, um deine Spenden zu sehen."
+            title={t('loginTitle')}
+            description={t('loginDesc')}
             action={
               <Link
                 href="/auth/login"
                 className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Anmelden
+                {t('loginButton')}
               </Link>
             }
           />
@@ -156,13 +158,13 @@ export default function DonationsDashboard() {
             className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
           <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>
-            Meine Spenden
+            {t('pageTitle')}
           </Heading>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            Übersicht deiner Geld- und Sachspenden an RevampIT
+            {t('pageSubtitle')}
           </p>
         </div>
 
@@ -198,7 +200,7 @@ export default function DonationsDashboard() {
                       <div>
                         <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'))}>
                           {donation.donation_type === DONATION_TYPES.MONETARY
-                            ? 'Geldspende'
+                            ? t('monetaryDonation')
                             : getDeviceTitle(donation)
                           }
                         </Heading>
@@ -225,8 +227,8 @@ export default function DonationsDashboard() {
                       {getStatusIcon(donation)}
                       <span className={cn('text-sm', getTextColor('white', 'muted'))}>
                         {getDonationStatusLabel(donation.status)}
-                        {donation.receipt_requested && !donation.receipt_sent && ' • Quittung angefordert'}
-                        {donation.receipt_sent && ' • Quittung erhalten'}
+                        {donation.receipt_requested && !donation.receipt_sent && ` • ${t('receiptRequested')}`}
+                        {donation.receipt_sent && ` • ${t('receiptSent')}`}
                       </span>
                     </div>
                   </div>
@@ -239,14 +241,14 @@ export default function DonationsDashboard() {
             icon={Heart}
             iconBg="bg-rose-50 dark:bg-rose-900/20"
             iconColor="text-rose-500 dark:text-rose-400"
-            title="Noch keine Spenden erfasst"
-            description="Deine Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden."
+            title={t('emptyTitle')}
+            description={t('emptyDesc')}
             action={
               <Link
                 href="/get-involved/donate"
                 className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
               >
-                Jetzt spenden
+                {t('donateNow')}
               </Link>
             }
           />
@@ -255,11 +257,10 @@ export default function DonationsDashboard() {
         {/* Info Box */}
         <div className="mt-8 bg-info-50 border border-info-200 rounded-lg p-4">
           <Heading level={4} className="font-medium mb-2 text-info-800">
-            Hinweis zu Spendenquittungen
+            {t('receiptInfoTitle')}
           </Heading>
           <p className="text-sm text-info-700">
-            RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne
-            eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter{' '}
+            {t('receiptInfoText')}{' '}
             <a href={`mailto:${CONTACT.email}`} className="underline text-info-800 hover:text-info-900">{CONTACT.email}</a>.
           </p>
         </div>
