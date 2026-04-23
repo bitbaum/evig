@@ -6295,6 +6295,9 @@
       "errorFileType": "Only JPG, PNG and WebP images are allowed",
       "errorFileSize": "Image must be at most 5MB",
       "errorUpload": "Upload failed. Please try again."
+    },
+    "map": {
+      "loading": "Loading map..."
     }
   },
   "profil": {

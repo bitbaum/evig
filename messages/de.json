@@ -6346,6 +6346,9 @@
       "errorFileType": "Nur JPG, PNG und WebP Bilder sind erlaubt",
       "errorFileSize": "Bild darf maximal 5MB gross sein",
       "errorUpload": "Upload fehlgeschlagen. Bitte versuche es erneut."
+    },
+    "map": {
+      "loading": "Karte wird geladen..."
     }
   },
   "profil": {
