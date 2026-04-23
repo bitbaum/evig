@@ -1,5 +1,5 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 
-export default function UsersLoading() {
-  return <LoadingSpinner text="Benutzer laden..." />
+export default function Loading() {
+  return <LoadingSpinner />
 }

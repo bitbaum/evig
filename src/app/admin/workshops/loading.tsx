@@ -1,5 +1,5 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 
-export default function WorkshopsLoading() {
-  return <LoadingSpinner text="Workshops laden..." />
+export default function Loading() {
+  return <LoadingSpinner />
 }

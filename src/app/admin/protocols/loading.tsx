@@ -1,5 +1,5 @@
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
 
-export default function ProtocolsLoading() {
-  return <LoadingSpinner text="Protokolle laden..." />
+export default function Loading() {
+  return <LoadingSpinner />
 }
