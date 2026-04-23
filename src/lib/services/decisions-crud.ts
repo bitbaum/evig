@@ -315,7 +315,10 @@ export async function createDecision(
     JOIN ${sql.raw(uTable)} u ON u.id = i.created_by
   `);
 
-  const row = result.rows[0] as unknown as { id: string; title: string; status: string; created_at: string; creator_email: string; creator_name: string | null };
+  const row = result.rows[0] as unknown as { id: string; title: string; status: string; created_at: string; creator_email: string; creator_name: string | null } | undefined;
+  if (!row) {
+    throw new Error('Decision insert returned no rows — check DB schema and migrations');
+  }
   return {
     id: row.id,
     title: row.title,

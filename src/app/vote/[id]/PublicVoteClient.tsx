@@ -1,0 +1,249 @@
+'use client'
+
+import { useState } from 'react'
+import { CheckCircle, Vote } from 'lucide-react'
+import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions'
+import { ConsentVote } from '@/app/admin/decisions/[id]/voting/ConsentVote'
+import { ApprovalVote } from '@/app/admin/decisions/[id]/voting/ApprovalVote'
+import { DotVote } from '@/app/admin/decisions/[id]/voting/DotVote'
+import { ScoreVote } from '@/app/admin/decisions/[id]/voting/ScoreVote'
+import { RankedChoiceVote } from '@/app/admin/decisions/[id]/voting/RankedChoiceVote'
+import { SimpleMajorityVote } from '@/app/admin/decisions/[id]/voting/SimpleMajorityVote'
+import { DeadlineCountdown } from '@/app/admin/decisions/[id]/voting/DeadlineCountdown'
+
+interface Option {
+  id: string
+  label: string
+  description?: string
+  imageUrl?: string
+}
+
+interface Props {
+  decisionId: string
+  votingMethod: VotingMethod
+  options: Option[]
+  dotCount: number | null
+  votingDeadline: string | null
+  isVotingPhase: boolean
+}
+
+export default function PublicVoteClient({
+  decisionId,
+  votingMethod,
+  options,
+  dotCount,
+  votingDeadline,
+  isVotingPhase,
+}: Props) {
+  const [email, setEmail] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+
+  // Per-method vote state
+  const [consentResponse, setConsentResponse] = useState<ConsentResponse>('agree')
+  const [rationale, setRationale] = useState('')
+  const [approvedOptions, setApprovedOptions] = useState<Set<string>>(new Set())
+  const maxDots = dotCount || 5
+  const [allocations, setAllocations] = useState<Record<string, number>>(
+    Object.fromEntries(options.map((o) => [o.id, 0]))
+  )
+  const usedDots = Object.values(allocations).reduce((a, b) => a + b, 0)
+  const [scores, setScores] = useState<Record<string, number>>(
+    Object.fromEntries(options.map((o) => [o.id, 0]))
+  )
+  const [majorityResponse, setMajorityResponse] = useState<SimpleMajorityResponse>('yes')
+  const [ranking, setRanking] = useState<string[]>(() => options.map((o) => o.id))
+
+  function toggleApproval(optId: string) {
+    setApprovedOptions((prev) => {
+      const next = new Set(prev)
+      if (next.has(optId)) next.delete(optId)
+      else next.add(optId)
+      return next
+    })
+  }
+
+  function setAllocation(optId: string, value: number) {
+    setAllocations((prev) => ({ ...prev, [optId]: value }))
+  }
+
+  function setScore(optId: string, score: number) {
+    setScores((prev) => ({ ...prev, [optId]: score }))
+  }
+
+  function moveRankingUp(index: number) {
+    if (index === 0) return
+    setRanking((prev) => {
+      const next = [...prev]
+      ;[next[index - 1], next[index]] = [next[index], next[index - 1]]
+      return next
+    })
+  }
+
+  function moveRankingDown(index: number) {
+    if (index === ranking.length - 1) return
+    setRanking((prev) => {
+      const next = [...prev]
+      ;[next[index], next[index + 1]] = [next[index + 1], next[index]]
+      return next
+    })
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email.trim()) {
+      setError('Bitte gib deine E-Mail-Adresse ein')
+      return
+    }
+
+    setError('')
+    setSubmitting(true)
+
+    let voteData: unknown
+    switch (votingMethod) {
+      case 'consent':         voteData = { response: consentResponse, rationale: rationale || undefined }; break
+      case 'approval':        voteData = { approved_options: Array.from(approvedOptions) }; break
+      case 'dot':             voteData = { allocations }; break
+      case 'score':           voteData = { scores }; break
+      case 'simple_majority': voteData = { response: majorityResponse }; break
+      case 'ranked_choice':   voteData = { ranking }; break
+    }
+
+    try {
+      const res = await fetch(`/api/vote/${decisionId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), voteData }),
+      })
+      const json = await res.json()
+      if (!json.success) {
+        setError(json.error || 'Fehler beim Abstimmen')
+        setSubmitting(false)
+        return
+      }
+      setSuccess(true)
+    } catch {
+      setError('Netzwerkfehler — bitte versuche es erneut')
+    }
+    setSubmitting(false)
+  }
+
+  if (success) {
+    return (
+      <div className="rounded-xl bg-green-50 border border-green-200 p-8 text-center">
+        <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-3" />
+        <p className="text-lg font-semibold text-green-800">Stimme abgegeben</p>
+        <p className="mt-1 text-sm text-green-700">
+          Deine Stimme wurde erfolgreich gespeichert. Du kannst dieses Fenster schliessen.
+        </p>
+      </div>
+    )
+  }
+
+  if (!isVotingPhase) {
+    return (
+      <div className="rounded-xl bg-amber-50 border border-amber-200 p-6 text-center">
+        <p className="text-amber-800 font-medium">Diese Abstimmung läuft noch nicht</p>
+        <p className="mt-1 text-sm text-amber-700">
+          Der Link ist gültig, aber die Abstimmungsphase hat noch nicht begonnen.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {votingDeadline && (
+        <DeadlineCountdown deadline={votingDeadline} />
+      )}
+
+      {/* Email identification */}
+      <div className="rounded-xl bg-blue-50 border border-blue-200 p-5">
+        <label className="block text-sm font-semibold text-blue-900 mb-2">
+          Deine E-Mail-Adresse (zur Identifikation)
+        </label>
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="name@beispiel.ch"
+          className="w-full rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <p className="mt-1.5 text-xs text-blue-700">
+          Deine E-Mail-Adresse wird verwendet, um dich als Mitglied zu identifizieren. Nur eine Stimme pro Person.
+        </p>
+      </div>
+
+      {/* Ballot */}
+      <div className="rounded-xl bg-white border border-gray-200 p-5 shadow-sm">
+        <p className="text-sm font-semibold text-gray-700 mb-4">Deine Stimme</p>
+
+        {votingMethod === 'consent' && (
+          <ConsentVote
+            response={consentResponse}
+            rationale={rationale}
+            onResponseChange={setConsentResponse}
+            onRationaleChange={setRationale}
+          />
+        )}
+        {votingMethod === 'approval' && (
+          <ApprovalVote
+            options={options}
+            approvedOptions={approvedOptions}
+            isGalleryMode={false}
+            onToggle={toggleApproval}
+          />
+        )}
+        {votingMethod === 'dot' && (
+          <DotVote
+            options={options}
+            allocations={allocations}
+            maxDots={maxDots}
+            usedDots={usedDots}
+            isGalleryMode={false}
+            onSet={setAllocation}
+          />
+        )}
+        {votingMethod === 'score' && (
+          <ScoreVote
+            options={options}
+            scores={scores}
+            isGalleryMode={false}
+            onSet={setScore}
+          />
+        )}
+        {votingMethod === 'simple_majority' && (
+          <SimpleMajorityVote
+            response={majorityResponse}
+            onChange={setMajorityResponse}
+          />
+        )}
+        {votingMethod === 'ranked_choice' && (
+          <RankedChoiceVote
+            options={options}
+            ranking={ranking}
+            onMoveUp={moveRankingUp}
+            onMoveDown={moveRankingDown}
+          />
+        )}
+      </div>
+
+      {error && (
+        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 px-6 py-3 text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        <Vote className="h-4 w-4" />
+        {submitting ? 'Wird gespeichert...' : 'Stimme abgeben'}
+      </button>
+    </form>
+  )
+}

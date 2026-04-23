@@ -19,6 +19,7 @@ import {
   type DecisionCategory,
   type VotingMethod,
 } from '@/config/decisions';
+import { Link2, Check } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { adminSurface, adminType, adminForm } from '@/lib/admin-ui';
@@ -81,7 +82,16 @@ export default function DecisionDetailClient({
   const [cancelReason, setCancelReason] = useState('');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const router = useRouter();
+
+  function handleCopyLink() {
+    const url = `${window.location.origin}/vote/${decisionId}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2500);
+    });
+  }
 
   const fetchDecision = useCallback(async () => {
     const result = await apiFetch<DecisionDetail>(`/api/decisions/${decisionId}`);
@@ -189,6 +199,24 @@ export default function DecisionDetailClient({
               <AdminButton variant="secondary" href={`/admin/decisions/${decision.id}/edit`}>
                 Bearbeiten
               </AdminButton>
+            )}
+            {/* Share link — visible for discussion and voting phases */}
+            {([DECISION_STATUS.DISCUSSION, DECISION_STATUS.VOTING] as string[]).includes(decision.status) && (
+              <button
+                onClick={handleCopyLink}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                  linkCopied
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                )}
+              >
+                {linkCopied ? (
+                  <><Check className="h-3.5 w-3.5" /> Link kopiert</>
+                ) : (
+                  <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
+                )}
+              </button>
             )}
             {validTargets.includes('discussion') && (
               <AdminButton variant="action" onClick={() => handleTransition('discussion')}>
