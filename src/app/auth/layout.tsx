@@ -1,19 +1,20 @@
 import { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getLocale } from 'next-intl/server'
+import { getMessages, getLocale, getTranslations } from 'next-intl/server'
 import AppShell from '@/components/layout/AppShell'
+import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | RevampIT',
-    default: 'Konto | RevampIT',
-  },
-  description:
-    'Melde dich bei RevampIT an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen.',
-  robots: {
-    index: false,
-    follow: false,
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'auth' })
+  return {
+    title: {
+      template: `%s | ${ORG.name}`,
+      default: `${t('accountTitle')} | ${ORG.name}`,
+    },
+    description: t('accountDesc'),
+    robots: { index: false, follow: false },
+  }
 }
 
 export default async function AuthLayout({

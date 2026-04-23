@@ -1,7 +1,10 @@
 import { Metadata } from 'next'
+import { getTranslations, getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Registrieren',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'auth.register' })
+  return { title: t('title') }
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

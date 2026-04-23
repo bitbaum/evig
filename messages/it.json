@@ -398,7 +398,8 @@
       "errorRetry": "Try again",
       "noToken": "Invalid verification link. Token missing.",
       "networkError": "Network error. Please try again later.",
-      "genericError": "Verification failed"
+      "genericError": "Verification failed",
+      "title": "Verifica email"
     },
     "resetPassword": {
       "heading": "Set new password",
@@ -424,8 +425,11 @@
       "errorTooShort": "Password must be at least 8 characters",
       "errorMismatch": "Passwords do not match",
       "errorResetFailed": "Password reset failed",
-      "genericError": "An error occurred"
-    }
+      "genericError": "An error occurred",
+      "title": "Reimposta la password"
+    },
+    "accountTitle": "Account",
+    "accountDesc": "Accedi a RevampIT per inviare richieste di riparazione, fare trading sul marketplace e partecipare ai workshop."
   },
   "cookies": {
     "title": "Utilizziamo i cookie",
