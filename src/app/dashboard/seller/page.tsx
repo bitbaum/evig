@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
@@ -67,6 +67,23 @@ export default function SellerDashboard() {
     document.title = 'Seller Dashboard | RevampIT'
   }, [])
 
+  const fetchDashboardData = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const result = await apiFetch<DashboardData>('/api/seller/dashboard')
+      if (result.success && result.data) {
+        setData(result.data)
+      } else {
+        throw new Error(result.error || t('loadErrorGeneric'))
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t('unexpectedError'))
+    } finally {
+      setIsLoading(false)
+    }
+  }, [t])
+
   useEffect(() => {
     if (status === 'loading') return
 
@@ -89,26 +106,7 @@ export default function SellerDashboard() {
     }
 
     fetchDashboardData()
-  }, [session, status, router])
-
-  const fetchDashboardData = async () => {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const result = await apiFetch<DashboardData>('/api/seller/dashboard')
-
-      if (result.success && result.data) {
-        setData(result.data)
-      } else {
-        throw new Error(result.error || t('loadErrorGeneric'))
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('unexpectedError'))
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  }, [session, status, router, fetchDashboardData])
 
   const quickActions = [
     {

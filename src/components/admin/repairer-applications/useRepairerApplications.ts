@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import type {
   RepairerApplication,
   ApplicationStatus,
@@ -52,7 +53,7 @@ export function useRepairerApplications() {
 
   const showSuccess = (msg: string) => {
     setSuccessMessage(msg)
-    setTimeout(() => setSuccessMessage(null), 3000)
+    setTimeout(() => setSuccessMessage(null), UI_FEEDBACK_MS.SUCCESS)
   }
 
   const fetchApplicationDocuments = async (applicationId: string) => {

@@ -95,7 +95,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       }
     }
     fetchOrder()
-  }, [params, sessionStatus, router])
+  }, [params, sessionStatus, router, t])
 
   const confirmReceipt = async () => {
     if (!order || updatingStatus) return

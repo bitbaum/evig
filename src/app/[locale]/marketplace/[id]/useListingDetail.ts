@@ -56,7 +56,7 @@ export function useListingDetail(params: Promise<{ id: string }>): UseListingDet
     }
     load()
     return () => { cancelled = true }
-  }, [params])
+  }, [params, t])
 
   return {
     listing,

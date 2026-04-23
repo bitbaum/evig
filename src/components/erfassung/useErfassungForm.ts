@@ -47,7 +47,15 @@ export function useErfassungForm() {
       setIsLoadingProduct(true)
       setShowAdvanced(true)
 
-      apiFetch<{ product: any }>(`/api/admin/inventory/${editId}`)
+      apiFetch<{ product: {
+        brand?: string; product_name?: string; short_description?: string
+        specifications?: Record<string, unknown>
+        dimensions?: { laenge_mm?: number; breite_mm?: number; hoehe_mm?: number }
+        weight_grams?: number; estimated_price_chf?: number; condition?: string
+        location?: string; box_id?: string; quantity_available?: number
+        category?: string; subcategory?: string; customer_profiles?: string[]
+        image_url?: string | null
+      } }>(`/api/admin/inventory/${editId}`)
         .then(result => {
           if (result.success && result.data?.product) {
             const p = result.data.product

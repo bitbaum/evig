@@ -67,7 +67,7 @@ export function useITHilfeDetail(id: string) {
     } finally {
       setLoading(false)
     }
-  }, [id])
+  }, [id, t])
 
   const fetchOffers = useCallback(async () => {
     if (!request?.isOwner) return

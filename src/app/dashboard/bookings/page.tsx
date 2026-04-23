@@ -68,7 +68,7 @@ export default function CustomerBookings() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {

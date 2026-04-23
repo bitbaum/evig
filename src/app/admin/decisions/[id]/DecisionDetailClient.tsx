@@ -20,6 +20,7 @@ import {
   type VotingMethod,
 } from '@/config/decisions';
 import { Link2, Check } from 'lucide-react';
+import { UI_FEEDBACK_MS } from '@/config/limits';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { adminSurface, adminType, adminForm } from '@/lib/admin-ui';
@@ -89,7 +90,7 @@ export default function DecisionDetailClient({
     const url = `${window.location.origin}/vote/${decisionId}`;
     navigator.clipboard.writeText(url).then(() => {
       setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2500);
+      setTimeout(() => setLinkCopied(false), UI_FEEDBACK_MS.LINK_COPY);
     });
   }
 

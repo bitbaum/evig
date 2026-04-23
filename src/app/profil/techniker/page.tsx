@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { logger } from '@/lib/logger'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import {
   ArrowLeft,
   Save,
@@ -129,7 +130,7 @@ export default function TechnikerProfilPage() {
       }
 
       setSuccess(true)
-      setTimeout(() => setSuccess(false), 3000)
+      setTimeout(() => setSuccess(false), UI_FEEDBACK_MS.SUCCESS)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Speichern fehlgeschlagen'
       setError(message)

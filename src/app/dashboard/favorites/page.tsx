@@ -63,7 +63,7 @@ export default function FavoritesPage() {
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     if (sessionStatus === 'loading') return

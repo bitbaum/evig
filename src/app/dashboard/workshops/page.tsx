@@ -57,7 +57,7 @@ export default function WorkshopsDashboard() {
     }
     load()
     return () => { cancelled = true }
-  }, [session])
+  }, [session, t])
 
   const fetchRegistrations = async () => {
     const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')

@@ -111,7 +111,7 @@ export default function MyListingsPage() {
     }
     load()
     return () => { cancelled = true }
-  }, [session, sessionStatus, router, statusFilter])
+  }, [session, sessionStatus, router, statusFilter, t])
 
   const handleStatusFilterChange = (value: string) => {
     setStatusFilter(value)

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { MessageSquare, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { formatDateShort } from '@/lib/date-formats'
@@ -23,9 +24,11 @@ interface ConversationListProps {
 
 export default function ConversationList({ conversations, selectedId, onSelect }: ConversationListProps) {
   const t = useTranslations('components.conversationList')
+  // Stable snapshot of "now" — Date.now() must not be called directly in render (react-hooks/purity)
+  const [now] = useState(Date.now)
 
   function timeAgo(dateStr: string): string {
-    const diff = Date.now() - new Date(dateStr).getTime()
+    const diff = now - new Date(dateStr).getTime()
     const mins = Math.floor(diff / 60000)
     if (mins < 1) return t('timeNow')
     if (mins < 60) return t('timeMin', { count: mins })

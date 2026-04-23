@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 
 interface CopyButtonProps {
   value: string
@@ -13,7 +14,7 @@ export function CopyButton({ value, label = 'Kopieren' }: CopyButtonProps) {
   async function handleCopy() {
     await navigator.clipboard.writeText(value)
     setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    setTimeout(() => setCopied(false), UI_FEEDBACK_MS.COPY)
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import { apiFetch } from '@/lib/api/client'
 import type { ListingDetail } from './types'
 
@@ -134,7 +135,7 @@ export function useListingActions({
     } else {
       await navigator.clipboard.writeText(url)
       setShareConfirm(true)
-      setTimeout(() => setShareConfirm(false), 2000)
+      setTimeout(() => setShareConfirm(false), UI_FEEDBACK_MS.COPY)
     }
   }
 

@@ -99,7 +99,7 @@ export default function BlogSubmissionsClient() {
     }
     fetchSubmissions()
     return () => { cancelled = true }
-  }, [])
+  }, [t])
 
   const toggleFeedback = (id: string) => {
     setExpandedFeedback((prev) => {

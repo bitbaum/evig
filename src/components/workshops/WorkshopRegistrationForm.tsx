@@ -80,7 +80,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       const frame = requestAnimationFrame(() => setRegistrationUIStatus('not-registered'))
       return () => cancelAnimationFrame(frame)
     }
-  }, [session, status, instance.id])
+  }, [session, status, instance.id, t])
 
   const handleFreeRegistration = async () => {
     if (!session?.user) {

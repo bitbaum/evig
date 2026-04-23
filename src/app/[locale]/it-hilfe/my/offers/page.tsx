@@ -86,7 +86,7 @@ export default function MyOffersPage() {
     } finally {
       setLoading(false)
     }
-  }, [statusFilter])
+  }, [statusFilter, t])
 
   useEffect(() => {
     if (session?.user) {

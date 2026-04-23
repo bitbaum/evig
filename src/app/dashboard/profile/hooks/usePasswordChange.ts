@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { logger } from '@/lib/logger'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 
 export function usePasswordChange() {
   const [passwordData, setPasswordData] = useState({
@@ -46,7 +47,7 @@ export function usePasswordChange() {
         confirmPassword: '',
       })
 
-      setTimeout(() => setPasswordSuccess(false), 3000)
+      setTimeout(() => setPasswordSuccess(false), UI_FEEDBACK_MS.SUCCESS)
     } catch (error) {
       logger.error('Password change error', { error })
       setPasswordError(error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten')

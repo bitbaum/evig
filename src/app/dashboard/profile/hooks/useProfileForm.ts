@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import type { ProfileData } from './useProfileData'
 
 interface UseProfileFormParams {
@@ -40,7 +41,7 @@ export function useProfileForm({ profile, setProfile }: UseProfileFormParams) {
 
       logger.info('Profile saved successfully')
       setSaveSuccess(true)
-      setTimeout(() => setSaveSuccess(false), 3000)
+      setTimeout(() => setSaveSuccess(false), UI_FEEDBACK_MS.SUCCESS)
     } catch (error) {
       logger.error('Profile save error', { error })
       setError(error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten')

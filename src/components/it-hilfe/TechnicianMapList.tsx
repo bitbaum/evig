@@ -83,7 +83,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
     }
 
     fetchMatches()
-  }, [requestId])
+  }, [requestId, t])
 
   // Build map markers
   const markers: MapMarker[] = []

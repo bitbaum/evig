@@ -28,7 +28,14 @@ export function useSmartEntry(
     setState(prev => ({ ...prev, isLoading: true, error: null, success: null }))
 
     try {
-      const result = await apiFetch<{ product: any; metadata?: { processingTime?: number } }>('/api/admin/ai/smart-product-entry', {
+      const result = await apiFetch<{
+        product: {
+          handle?: string; title: string; description?: string
+          specs?: { key: string; value: string }[]
+          category?: string; tags?: string[]; sku?: string; price?: string
+        }
+        metadata?: { processingTime?: number }
+      }>('/api/admin/ai/smart-product-entry', {
         method: 'POST',
         body: { query: state.query.trim() },
       })

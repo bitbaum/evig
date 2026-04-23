@@ -49,26 +49,27 @@ export default function DonationsDashboard() {
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
-    if (session?.user) {
-      fetchDonations()
-    }
-  }, [session])
-
-  const fetchDonations = async () => {
-    try {
-      const response = await fetch('/api/user/donations')
-      if (response.ok) {
-        const data = await response.json()
-        setDonations(data.data || [])
-      } else {
-        setError(t('loadError'))
+    if (!session?.user) return
+    let cancelled = false
+    async function fetchDonations() {
+      try {
+        const response = await fetch('/api/user/donations')
+        if (cancelled) return
+        if (response.ok) {
+          const data = await response.json()
+          setDonations(data.data || [])
+        } else {
+          setError(t('loadError'))
+        }
+      } catch {
+        if (!cancelled) setError(t('networkError'))
+      } finally {
+        if (!cancelled) setLoading(false)
       }
-    } catch {
-      setError(t('networkError'))
-    } finally {
-      setLoading(false)
     }
-  }
+    fetchDonations()
+    return () => { cancelled = true }
+  }, [session, t])
 
 
   const getStatusIcon = (donation: Donation) => {

@@ -7,6 +7,7 @@ import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 
 function CopyButton({ value, label, copiedLabel }: { value: string; label: string; copiedLabel: string }) {
   const [copied, setCopied] = useState(false)
@@ -16,7 +17,7 @@ function CopyButton({ value, label, copiedLabel }: { value: string; label: strin
       onClick={() => {
         navigator.clipboard.writeText(value.replace(/\s/g, ''))
         setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
+        setTimeout(() => setCopied(false), UI_FEEDBACK_MS.COPY)
       }}
       className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-700 font-medium"
     >

@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -72,7 +73,7 @@ export default function SellerProfileEditPage() {
       }
     }
     fetchProfile()
-  }, [session, status, router])
+  }, [session, status, router, t])
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -94,7 +95,7 @@ export default function SellerProfileEditPage() {
       if (result.success) {
         setSuccess(t('savedSuccess'))
         setNoProfile(false)
-        setTimeout(() => setSuccess(null), 3000)
+        setTimeout(() => setSuccess(null), UI_FEEDBACK_MS.SUCCESS)
       } else {
         setError(result.error || t('saveError'))
       }

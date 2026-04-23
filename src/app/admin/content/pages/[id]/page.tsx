@@ -16,6 +16,7 @@ import {
 import { generateSlug } from '@/lib/utils/slug'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 
 interface PageData {
   id: string
@@ -92,7 +93,7 @@ export default function EditStaticPagePage() {
 
     if (result.success) {
       setSuccess('Seite erfolgreich gespeichert')
-      setTimeout(() => setSuccess(''), 3000)
+      setTimeout(() => setSuccess(''), UI_FEEDBACK_MS.SUCCESS)
     } else {
       setError(result.error || 'Fehler beim Speichern')
     }

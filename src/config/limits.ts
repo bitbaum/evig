@@ -12,3 +12,13 @@ export const TIME_DURATIONS = {
   ONE_DAY_S: 24 * 60 * 60,
   SEVEN_DAYS_MS: 7 * 24 * 60 * 60 * 1000,
 } as const
+
+/** UI feedback timeouts in milliseconds — how long transient states stay visible */
+export const UI_FEEDBACK_MS = {
+  /** "Saved" / "Success" confirmation banners */
+  SUCCESS: 3000,
+  /** "Copied to clipboard" confirmation */
+  COPY: 2000,
+  /** Link-copied indicator (slightly longer — gives time to paste) */
+  LINK_COPY: 2500,
+} as const

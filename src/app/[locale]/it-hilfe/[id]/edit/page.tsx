@@ -93,7 +93,7 @@ export default function EditRequestPage() {
         setError(t('errorLoadFailed'))
         setLoading(false)
       })
-  }, [id, authStatus])
+  }, [id, authStatus, t])
 
   // Redirect if not authenticated
   useEffect(() => {

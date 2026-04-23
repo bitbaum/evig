@@ -60,7 +60,7 @@ export default function AppointmentsDashboard() {
     }
     load()
     return () => { cancelled = true }
-  }, [session, status, router])
+  }, [session, status, router, t])
 
   const fetchAppointments = async () => {
     const result = await apiFetch<{ appointments: ServiceAppointment[] }>('/api/appointments')

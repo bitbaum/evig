@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
@@ -35,10 +36,11 @@ export function RequestSidebar({
 }: RequestSidebarProps) {
   const t = useTranslations('itHelp.detail')
   const serviceConfig = getServiceTypeById(request.serviceType)
+  // Stable snapshot of "now" — Date.now() must not be called directly in render (react-hooks/purity)
+  const [now] = useState(Date.now)
 
   // Compute time remaining as structured data, then format via t()
   function getTimeRemaining(): string | null {
-    const now = Date.now()
     const expires = new Date(request.expiresAt).getTime()
     const msLeft = expires - now
     if (msLeft <= 0) return t('expiredStatus')
