@@ -2015,7 +2015,18 @@
       "errorReview": "レビュー送信エラー",
       "errorSubmitOffer": "申し出の送信エラー",
       "errorLoading": "リクエストの読み込みエラー",
-      "unexpectedError": "エラーが発生しました"
+      "unexpectedError": "エラーが発生しました",
+      "incomingOffers": "届いた申し出 ({count})",
+      "verifiedTechnicianLabel": "認証済みテクニシャン",
+      "technicianProfileFallback": "技術者プロフィール",
+      "accepting": "承認中...",
+      "accept": "承認する",
+      "declining": "拒否中...",
+      "decline": "拒否する",
+      "markCompletedTitle": "サポート完了？",
+      "markCompletedDesc": "修理やサポートが完了したら、完了としてマークしてください。依頼者にレビューを投稿するよう促されます。",
+      "markCompletedSaving": "保存中...",
+      "markCompletedButton": "完了としてマーク"
     },
     "create": {
       "backToList": "一覧に戻る",
@@ -2131,6 +2142,12 @@
       "yourOfferBadge": "保留中",
       "withdrawButton": "オファーを撤回",
       "withdrawing": "撤回中..."
+    },
+    "card": {
+      "expired": "期限切れ",
+      "timeLeftLessThanHour": "1時間未満",
+      "timeLeftHours": "残り{count}時間",
+      "offersCount": "{count}件の申し出"
     }
   },
   "knowhow": {
@@ -2584,12 +2601,6 @@
     }
   },
   "projects": {
-    "meta": {
-      "title": "私たちのプロジェクト",
-      "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。",
-      "layoutTitle": "プロジェクト",
-      "templateSuffix": "プロジェクト"
-    },
     "hero": {
       "title": "私たちのプロジェクト",
       "subtitle": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。"
@@ -6248,6 +6259,9 @@
     },
     "map": {
       "loading": "地図を読み込んでいます..."
+    },
+    "messageButton": {
+      "title": "メッセージ"
     }
   },
   "profil": {
@@ -6329,5 +6343,11 @@
     "meta": {},
     "tagline": "古いハードウェア。新しい命。",
     "description": "{orgName}は持続可能な技術のためのスイスの非営利団体です：修復、修理、オープンソースソリューション、ワークショップ。"
+  },
+  "projectsMeta": {
+    "title": "私たちのプロジェクト",
+    "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。",
+    "layoutTitle": "プロジェクト",
+    "templateSuffix": "プロジェクト"
   }
 }

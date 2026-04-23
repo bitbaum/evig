@@ -2514,7 +2514,18 @@
       "errorReview": "Erreur lors de l'envoi de l'évaluation",
       "errorSubmitOffer": "Erreur lors de l'envoi de l'offre",
       "errorLoading": "Erreur lors du chargement de la demande",
-      "unexpectedError": "Une erreur s'est produite"
+      "unexpectedError": "Une erreur s'est produite",
+      "incomingOffers": "Offres reçues ({count})",
+      "verifiedTechnicianLabel": "Technicien vérifié",
+      "technicianProfileFallback": "Profil technicien",
+      "accepting": "Acceptation...",
+      "accept": "Accepter",
+      "declining": "Refus...",
+      "decline": "Refuser",
+      "markCompletedTitle": "Aide terminée?",
+      "markCompletedDesc": "Une fois la réparation ou l'aide terminée, marquez-la comme terminée. Le demandeur sera invité à vous laisser un avis.",
+      "markCompletedSaving": "Enregistrement...",
+      "markCompletedButton": "Marquer comme terminé"
     },
     "create": {
       "backToList": "Retour à la liste",
@@ -2630,6 +2641,12 @@
       "yourOfferBadge": "En attente",
       "withdrawButton": "Retirer l'offre",
       "withdrawing": "Retrait en cours..."
+    },
+    "card": {
+      "expired": "Expiré",
+      "timeLeftLessThanHour": "< 1 h",
+      "timeLeftHours": "{count} h restantes",
+      "offersCount": "{count, plural, one {# offre} other {# offres}}"
     }
   },
   "blog": {
@@ -4108,12 +4125,6 @@
     "goHome": "Aller à l'accueil"
   },
   "projects": {
-    "meta": {
-      "title": "Nos projets",
-      "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel.",
-      "layoutTitle": "Nos Projets",
-      "templateSuffix": "Projets"
-    },
     "hero": {
       "title": "Nos projets",
       "subtitle": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel."
@@ -6206,6 +6217,9 @@
     },
     "map": {
       "loading": "Chargement de la carte..."
+    },
+    "messageButton": {
+      "title": "Messages"
     }
   },
   "profil": {
@@ -6287,5 +6301,11 @@
     "meta": {},
     "tagline": "Vieux matériel. Nouvelle vie.",
     "description": "{orgName} est une association suisse à but non lucratif pour la technologie durable : remise à neuf, réparation, solutions open source et ateliers."
+  },
+  "projectsMeta": {
+    "title": "Nos projets",
+    "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel.",
+    "layoutTitle": "Nos Projets",
+    "templateSuffix": "Projets"
   }
 }

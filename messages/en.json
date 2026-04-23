@@ -2605,7 +2605,18 @@
       "errorReview": "Error submitting review",
       "errorSubmitOffer": "Error sending the offer",
       "errorLoading": "Error loading the request",
-      "unexpectedError": "An error occurred"
+      "unexpectedError": "An error occurred",
+      "incomingOffers": "Incoming offers ({count})",
+      "verifiedTechnicianLabel": "Verified technician",
+      "technicianProfileFallback": "Technician profile",
+      "accepting": "Accepting...",
+      "accept": "Accept",
+      "declining": "Declining...",
+      "decline": "Decline",
+      "markCompletedTitle": "Help completed?",
+      "markCompletedDesc": "Once you have finished the repair or help, mark it as completed. The requester will then be asked to leave you a review.",
+      "markCompletedSaving": "Saving...",
+      "markCompletedButton": "Mark as completed"
     },
     "create": {
       "backToList": "Back to list",
@@ -2758,6 +2769,12 @@
       "errorTooLarge": "File too large (max 10MB)",
       "errorUploadFailed": "Image upload failed. Please try again.",
       "imageAlt": "Image {index}"
+    },
+    "card": {
+      "expired": "Expired",
+      "timeLeftLessThanHour": "< 1 hr",
+      "timeLeftHours": "{count} hr left",
+      "offersCount": "{count, plural, one {# offer} other {# offers}}"
     }
   },
   "blog": {
@@ -4469,12 +4486,6 @@
           }
         ]
       }
-    },
-    "meta": {
-      "title": "Our Projects",
-      "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development.",
-      "layoutTitle": "Our Projects",
-      "templateSuffix": "Projects"
     },
     "hero": {
       "title": "Our Projects",
@@ -6348,6 +6359,9 @@
     },
     "map": {
       "loading": "Loading map..."
+    },
+    "messageButton": {
+      "title": "Messages"
     }
   },
   "profil": {
@@ -6429,5 +6443,11 @@
     "meta": {},
     "tagline": "Old Hardware. New Life.",
     "description": "{orgName} is a Swiss non-profit for sustainable technology: refurbishment, repair, open-source solutions and workshops."
+  },
+  "projectsMeta": {
+    "title": "Our Projects",
+    "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development.",
+    "layoutTitle": "Our Projects",
+    "templateSuffix": "Projects"
   }
 }

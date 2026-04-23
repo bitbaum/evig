@@ -1,6 +1,7 @@
 'use client'
 
 import { CheckCircle, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 
 interface MarkCompletedCardProps {
@@ -13,18 +14,17 @@ interface MarkCompletedCardProps {
  * inviting them to mark the repair as done.
  */
 export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompletedCardProps) {
+  const t = useTranslations('itHelp.detail')
   return (
     <div className="bg-white rounded-xl shadow-sm border border-emerald-200 p-6">
       <div className="flex items-start gap-3">
         <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">
           <Heading level={3} className="text-lg font-semibold text-gray-900 mb-1">
-            Hilfe abgeschlossen?
+            {t('markCompletedTitle')}
           </Heading>
           <p className="text-sm text-gray-600 mb-4">
-            Wenn du die Reparatur bzw. Hilfe beendet hast, markiere sie als
-            abgeschlossen. Der Anfragende wird dann gebeten, dir eine Bewertung
-            zu hinterlassen.
+            {t('markCompletedDesc')}
           </p>
           <button
             type="button"
@@ -35,12 +35,12 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
             {submitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Wird gespeichert...
+                {t('markCompletedSaving')}
               </>
             ) : (
               <>
                 <CheckCircle className="w-4 h-4" aria-hidden="true" />
-                Als abgeschlossen markieren
+                {t('markCompletedButton')}
               </>
             )}
           </button>

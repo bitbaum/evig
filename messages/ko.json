@@ -2015,7 +2015,18 @@
       "errorReview": "리뷰 제출 오류",
       "errorSubmitOffer": "제안 전송 오류",
       "errorLoading": "요청 불러오기 오류",
-      "unexpectedError": "오류가 발생했습니다"
+      "unexpectedError": "오류가 발생했습니다",
+      "incomingOffers": "받은 제안 ({count})",
+      "verifiedTechnicianLabel": "인증된 기술자",
+      "technicianProfileFallback": "기술자 프로필",
+      "accepting": "수락 중...",
+      "accept": "수락",
+      "declining": "거절 중...",
+      "decline": "거절",
+      "markCompletedTitle": "도움 완료?",
+      "markCompletedDesc": "수리나 도움이 완료되면 완료로 표시하세요. 요청자에게 리뷰를 남기도록 요청됩니다.",
+      "markCompletedSaving": "저장 중...",
+      "markCompletedButton": "완료로 표시"
     },
     "create": {
       "backToList": "목록으로 돌아가기",
@@ -2131,6 +2142,12 @@
       "yourOfferBadge": "대기 중",
       "withdrawButton": "제안 철회",
       "withdrawing": "철회 중..."
+    },
+    "card": {
+      "expired": "만료됨",
+      "timeLeftLessThanHour": "1시간 미만",
+      "timeLeftHours": "{count}시간 남음",
+      "offersCount": "{count}개 제안"
     }
   },
   "knowhow": {
@@ -2584,12 +2601,6 @@
     }
   },
   "projects": {
-    "meta": {
-      "title": "우리의 프로젝트",
-      "description": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요.",
-      "layoutTitle": "저희 프로젝트",
-      "templateSuffix": "프로젝트"
-    },
     "hero": {
       "title": "우리의 프로젝트",
       "subtitle": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요."
@@ -6248,6 +6259,9 @@
     },
     "map": {
       "loading": "지도 로딩 중..."
+    },
+    "messageButton": {
+      "title": "메시지"
     }
   },
   "profil": {
@@ -6329,5 +6343,11 @@
     "meta": {},
     "tagline": "오래된 하드웨어. 새 생명.",
     "description": "{orgName}은(는) 지속 가능한 기술을 위한 스위스 비영리 단체입니다: 재건, 수리, 오픈 소스 솔루션 및 워크숍."
+  },
+  "projectsMeta": {
+    "title": "우리의 프로젝트",
+    "description": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요.",
+    "layoutTitle": "저희 프로젝트",
+    "templateSuffix": "프로젝트"
   }
 }

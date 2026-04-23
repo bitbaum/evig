@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Clock, User, Wrench, CheckCircle, Star } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { getOfferStatusById, getSkillById, OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { Offer } from './types'
@@ -21,12 +24,13 @@ export function OffersList({
   onAcceptOffer,
   onDeclineOffer,
 }: OffersListProps) {
+  const t = useTranslations('itHelp.detail')
   if (offers.length === 0) return null
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
       <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">
-        Eingegangene Angebote ({offers.length})
+        {t('incomingOffers', { count: offers.length })}
       </Heading>
       <div className="space-y-4">
         {offers.map((offer) => {
@@ -53,7 +57,7 @@ export function OffersList({
                     <div className="flex items-center gap-2">
                       <p className="font-medium text-gray-900">{offer.helperName}</p>
                       {offer.repairerProfile?.isVerified && (
-                        <CheckCircle className="w-4 h-4 text-green-600" aria-label="Verifizierter Techniker" />
+                        <CheckCircle className="w-4 h-4 text-green-600" aria-label={t('verifiedTechnicianLabel')} />
                       )}
                     </div>
                     {offer.repairerProfile ? (
@@ -62,7 +66,7 @@ export function OffersList({
                           href={`/techniker/${offer.repairerProfile.id}`}
                           className="text-blue-600 hover:text-blue-700 font-medium"
                         >
-                          {offer.repairerProfile.businessName || 'Techniker-Profil'}
+                          {offer.repairerProfile.businessName || t('technicianProfileFallback')}
                         </Link>
                         {Number(offer.repairerProfile.averageRating) > 0 && (
                           <span className="flex items-center gap-0.5 text-gray-500">
@@ -121,14 +125,14 @@ export function OffersList({
                     disabled={acceptingOfferId === offer.id}
                     className="px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                   >
-                    {acceptingOfferId === offer.id ? 'Wird akzeptiert...' : 'Akzeptieren'}
+                    {acceptingOfferId === offer.id ? t('accepting') : t('accept')}
                   </button>
                   <button
                     onClick={() => onDeclineOffer(offer.id)}
                     disabled={decliningOfferId === offer.id}
                     className="px-4 py-3 min-h-[44px] border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
                   >
-                    {decliningOfferId === offer.id ? 'Wird abgelehnt...' : 'Ablehnen'}
+                    {decliningOfferId === offer.id ? t('declining') : t('decline')}
                   </button>
                 </div>
               )}

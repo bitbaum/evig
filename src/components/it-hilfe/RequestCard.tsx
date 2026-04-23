@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * RequestCard Component
  *
@@ -7,18 +9,24 @@
 
 import Link from 'next/link'
 import { Wrench, MapPin, Users, Clock } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { getCategoryById, getUrgencyById, formatBudget, IT_HILFE } from '@/config/it-hilfe'
 import { formatDateShort } from '@/lib/date-formats'
 
-function getExpiryInfo(expiresAt: string): { expiringSoon: boolean; label: string } | null {
+type ExpiryState =
+  | { expiringSoon: true; type: 'expired' }
+  | { expiringSoon: true; type: 'hours'; count: number }
+  | null
+
+function getExpiryState(expiresAt: string): ExpiryState {
   const now = Date.now()
   const expires = new Date(expiresAt).getTime()
   const hoursLeft = (expires - now) / (1000 * 60 * 60)
-  if (hoursLeft <= 0) return { expiringSoon: true, label: 'Abgelaufen' }
+  if (hoursLeft <= 0) return { expiringSoon: true, type: 'expired' }
   if (hoursLeft <= 48) {
     const h = Math.floor(hoursLeft)
-    return { expiringSoon: true, label: h <= 1 ? 'Weniger als 1 Std.' : `Noch ${h} Std.` }
+    return { expiringSoon: true, type: 'hours', count: h }
   }
   return null
 }
@@ -53,10 +61,19 @@ interface RequestCardProps {
 }
 
 export function RequestCard({ request, className = '' }: RequestCardProps) {
+  const t = useTranslations('itHelp.card')
   const categoryConfig = getCategoryById(request.categoryId)
   const urgencyConfig = getUrgencyById(request.urgency)
   const CategoryIcon = categoryConfig?.icon || Wrench
-  const expiryInfo = getExpiryInfo(request.expiresAt)
+  const expiryState = getExpiryState(request.expiresAt)
+
+  const expiryLabel = expiryState
+    ? expiryState.type === 'expired'
+      ? t('expired')
+      : expiryState.count <= 1
+        ? t('timeLeftLessThanHour')
+        : t('timeLeftHours', { count: expiryState.count })
+    : null
 
   return (
     <Link
@@ -70,10 +87,10 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
             <CategoryIcon className="w-5 h-5 text-white" />
           </div>
           <div className="flex items-center gap-2">
-            {expiryInfo && (
+            {expiryLabel && (
               <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
                 <Clock className="w-3 h-3" />
-                {expiryInfo.label}
+                {expiryLabel}
               </span>
             )}
             <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
@@ -105,7 +122,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
           </div>
           <div className="flex items-center gap-1">
             <Users className="w-4 h-4" />
-            <span>{request.offerCount} {request.offerCount === 1 ? 'Angebot' : 'Angebote'}</span>
+            <span>{t('offersCount', { count: request.offerCount })}</span>
           </div>
         </div>
       </div>

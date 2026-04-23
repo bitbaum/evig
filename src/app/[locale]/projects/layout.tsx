@@ -8,7 +8,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'projects.meta' })
+  const t = await getTranslations({ locale, namespace: 'projectsMeta' })
   return {
     title: {
       template: `%s | ${ORG.name} ${t('templateSuffix')}`,

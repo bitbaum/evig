@@ -2015,7 +2015,18 @@
       "errorReview": "Errore durante l'invio della recensione",
       "errorSubmitOffer": "Errore durante l'invio dell'offerta",
       "errorLoading": "Errore durante il caricamento della richiesta",
-      "unexpectedError": "Si è verificato un errore"
+      "unexpectedError": "Si è verificato un errore",
+      "incomingOffers": "Offerte ricevute ({count})",
+      "verifiedTechnicianLabel": "Tecnico verificato",
+      "technicianProfileFallback": "Profilo tecnico",
+      "accepting": "Accettazione...",
+      "accept": "Accetta",
+      "declining": "Rifiuto...",
+      "decline": "Rifiuta",
+      "markCompletedTitle": "Aiuto completato?",
+      "markCompletedDesc": "Una volta terminata la riparazione o l'aiuto, contrassegnalo come completato. Al richiedente verrà chiesto di lasciarti una recensione.",
+      "markCompletedSaving": "Salvataggio...",
+      "markCompletedButton": "Segna come completato"
     },
     "create": {
       "backToList": "Torna alla lista",
@@ -2131,6 +2142,12 @@
       "yourOfferBadge": "In attesa",
       "withdrawButton": "Ritira offerta",
       "withdrawing": "Ritiro in corso..."
+    },
+    "card": {
+      "expired": "Scaduto",
+      "timeLeftLessThanHour": "< 1 ora",
+      "timeLeftHours": "{count} ore rimanenti",
+      "offersCount": "{count, plural, one {# offerta} other {# offerte}}"
     }
   },
   "knowhow": {
@@ -2584,12 +2601,6 @@
     }
   },
   "projects": {
-    "meta": {
-      "title": "I nostri progetti",
-      "description": "Scopri il nostro variegato spettro di progetti, dai contributi Open Source alle iniziative comunitarie e allo sviluppo hardware.",
-      "layoutTitle": "I Nostri Progetti",
-      "templateSuffix": "Progetti"
-    },
     "hero": {
       "title": "I nostri progetti",
       "subtitle": "Scopri il nostro variegato spettro di progetti, dai contributi Open Source alle iniziative comunitarie e allo sviluppo hardware."
@@ -6248,6 +6259,9 @@
     },
     "map": {
       "loading": "Caricamento mappa..."
+    },
+    "messageButton": {
+      "title": "Messaggi"
     }
   },
   "profil": {
@@ -6329,5 +6343,11 @@
     "meta": {},
     "tagline": "Hardware vecchio. Nuova vita.",
     "description": "{orgName} è un'associazione svizzera senza scopo di lucro per la tecnologia sostenibile: ricondizionamento, riparazione, soluzioni open source e workshop."
+  },
+  "projectsMeta": {
+    "title": "I nostri progetti",
+    "description": "Scopri il nostro variegato spettro di progetti, dai contributi Open Source alle iniziative comunitarie e allo sviluppo hardware.",
+    "layoutTitle": "I Nostri Progetti",
+    "templateSuffix": "Progetti"
   }
 }

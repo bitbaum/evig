@@ -2015,7 +2015,18 @@
       "errorReview": "Error al enviar la reseña",
       "errorSubmitOffer": "Error al enviar la oferta",
       "errorLoading": "Error al cargar la solicitud",
-      "unexpectedError": "Ocurrió un error"
+      "unexpectedError": "Ocurrió un error",
+      "incomingOffers": "Ofertas recibidas ({count})",
+      "verifiedTechnicianLabel": "Técnico verificado",
+      "technicianProfileFallback": "Perfil de técnico",
+      "accepting": "Aceptando...",
+      "accept": "Aceptar",
+      "declining": "Rechazando...",
+      "decline": "Rechazar",
+      "markCompletedTitle": "¿Ayuda completada?",
+      "markCompletedDesc": "Una vez que hayas terminado la reparación o la ayuda, márcala como completada. El solicitante será invitado a dejarte una reseña.",
+      "markCompletedSaving": "Guardando...",
+      "markCompletedButton": "Marcar como completado"
     },
     "create": {
       "backToList": "Volver al listado",
@@ -2131,6 +2142,12 @@
       "yourOfferBadge": "Pendiente",
       "withdrawButton": "Retirar oferta",
       "withdrawing": "Retirando..."
+    },
+    "card": {
+      "expired": "Expirado",
+      "timeLeftLessThanHour": "< 1 h",
+      "timeLeftHours": "{count} h restantes",
+      "offersCount": "{count, plural, one {# oferta} other {# ofertas}}"
     }
   },
   "knowhow": {
@@ -2584,12 +2601,6 @@
     }
   },
   "projects": {
-    "meta": {
-      "title": "Nuestros proyectos",
-      "description": "Descubre nuestro diverso espectro de proyectos, desde contribuciones Open Source hasta iniciativas comunitarias y desarrollo de hardware.",
-      "layoutTitle": "Nuestros Proyectos",
-      "templateSuffix": "Proyectos"
-    },
     "hero": {
       "title": "Nuestros proyectos",
       "subtitle": "Descubre nuestro diverso espectro de proyectos, desde contribuciones Open Source hasta iniciativas comunitarias y desarrollo de hardware."
@@ -6248,6 +6259,9 @@
     },
     "map": {
       "loading": "Cargando mapa..."
+    },
+    "messageButton": {
+      "title": "Mensajes"
     }
   },
   "profil": {
@@ -6329,5 +6343,11 @@
     "meta": {},
     "tagline": "Hardware viejo. Vida nueva.",
     "description": "{orgName} es una asociación suiza sin ánimo de lucro para la tecnología sostenible: reacondicionamiento, reparación, soluciones de código abierto y talleres."
+  },
+  "projectsMeta": {
+    "title": "Nuestros proyectos",
+    "description": "Descubre nuestro diverso espectro de proyectos, desde contribuciones Open Source hasta iniciativas comunitarias y desarrollo de hardware.",
+    "layoutTitle": "Nuestros Proyectos",
+    "templateSuffix": "Proyectos"
   }
 }

@@ -2656,7 +2656,18 @@
       "errorReview": "Fehler beim Abgeben der Bewertung",
       "errorSubmitOffer": "Fehler beim Senden des Angebots",
       "errorLoading": "Fehler beim Laden der Anfrage",
-      "unexpectedError": "Ein Fehler ist aufgetreten"
+      "unexpectedError": "Ein Fehler ist aufgetreten",
+      "incomingOffers": "Eingegangene Angebote ({count})",
+      "verifiedTechnicianLabel": "Verifizierter Techniker",
+      "technicianProfileFallback": "Techniker-Profil",
+      "accepting": "Wird akzeptiert...",
+      "accept": "Akzeptieren",
+      "declining": "Wird abgelehnt...",
+      "decline": "Ablehnen",
+      "markCompletedTitle": "Hilfe abgeschlossen?",
+      "markCompletedDesc": "Wenn du die Reparatur bzw. Hilfe beendet hast, markiere sie als abgeschlossen. Der Anfragende wird dann gebeten, dir eine Bewertung zu hinterlassen.",
+      "markCompletedSaving": "Wird gespeichert...",
+      "markCompletedButton": "Als abgeschlossen markieren"
     },
     "create": {
       "backToList": "Zurück zur Übersicht",
@@ -2809,6 +2820,12 @@
       "errorTooLarge": "Datei zu gross (max 10MB)",
       "errorUploadFailed": "Bild-Upload fehlgeschlagen. Bitte versuche es erneut.",
       "imageAlt": "Bild {index}"
+    },
+    "card": {
+      "expired": "Abgelaufen",
+      "timeLeftLessThanHour": "< 1 Std.",
+      "timeLeftHours": "Noch {count} Std.",
+      "offersCount": "{count, plural, one {# Angebot} other {# Angebote}}"
     }
   },
   "blog": {
@@ -4275,12 +4292,6 @@
           }
         ]
       }
-    },
-    "meta": {
-      "title": "Unsere Projekte",
-      "description": "Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.",
-      "layoutTitle": "Unsere Projekte",
-      "templateSuffix": "Projekte"
     },
     "hero": {
       "title": "Unsere Projekte",
@@ -6399,6 +6410,9 @@
     },
     "map": {
       "loading": "Karte wird geladen..."
+    },
+    "messageButton": {
+      "title": "Nachrichten"
     }
   },
   "profil": {
@@ -6480,5 +6494,11 @@
     "meta": {},
     "tagline": "Alte Hardware. Neues Leben.",
     "description": "{orgName} ist ein Schweizer Non-Profit-Verein für nachhaltige Technologie: Aufarbeitung, Reparatur, Open-Source-Lösungen und Workshops."
+  },
+  "projectsMeta": {
+    "title": "Unsere Projekte",
+    "description": "Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.",
+    "layoutTitle": "Unsere Projekte",
+    "templateSuffix": "Projekte"
   }
 }
