@@ -6388,5 +6388,32 @@
       "saving": "Speichert...",
       "skillRequired": "Bitte wähle mindestens einen Skill aus."
     }
+  },
+  "vote": {
+    "notFound": "Abstimmung nicht gefunden",
+    "notFoundDesc": "Dieser Link ist ungültig oder die Abstimmung ist nicht mehr aktiv.",
+    "backHome": "Zurück zur Startseite",
+    "metaTitle": "Abstimmung: {title}",
+    "metaTitleFallback": "Abstimmung",
+    "metaDesc": "Nimm an der Abstimmung teil.",
+    "statusVoting": "Abstimmung läuft",
+    "statusDiscussion": "Diskussion",
+    "contextHeading": "Worum geht es?",
+    "optionsCount": "Optionen ({count})",
+    "backgroundTitle": "Begründung & Hintergrund",
+    "footer": "Diese Abstimmung wird von {org} durchgeführt.",
+    "emailLabel": "Deine E-Mail-Adresse (zur Identifikation)",
+    "emailPlaceholder": "name@beispiel.ch",
+    "emailHint": "Deine E-Mail-Adresse wird verwendet, um dich als Mitglied zu identifizieren. Nur eine Stimme pro Person.",
+    "yourVote": "Deine Stimme",
+    "emailRequired": "Bitte gib deine E-Mail-Adresse ein",
+    "submitError": "Fehler beim Abstimmen",
+    "networkError": "Netzwerkfehler — bitte versuche es erneut",
+    "successHeading": "Stimme abgegeben",
+    "successDesc": "Deine Stimme wurde erfolgreich gespeichert. Du kannst dieses Fenster schliessen.",
+    "notStartedHeading": "Diese Abstimmung läuft noch nicht",
+    "notStartedDesc": "Der Link ist gültig, aber die Abstimmungsphase hat noch nicht begonnen.",
+    "saving": "Wird gespeichert...",
+    "submit": "Stimme abgeben"
   }
 }

@@ -6237,5 +6237,32 @@
       "saving": "Saving...",
       "skillRequired": "Please select at least one skill."
     }
+  },
+  "vote": {
+    "notFound": "Vote not found",
+    "notFoundDesc": "This link is invalid or the vote is no longer active.",
+    "backHome": "Back to home",
+    "metaTitle": "Vote: {title}",
+    "metaTitleFallback": "Vote",
+    "metaDesc": "Participate in the vote.",
+    "statusVoting": "Voting in progress",
+    "statusDiscussion": "Discussion",
+    "contextHeading": "What is this about?",
+    "optionsCount": "Options ({count})",
+    "backgroundTitle": "Background & Rationale",
+    "footer": "This vote is conducted by {org}.",
+    "emailLabel": "Your email address (for identification)",
+    "emailPlaceholder": "name@example.com",
+    "emailHint": "Your email is used to identify you as a member. One vote per person.",
+    "yourVote": "Your vote",
+    "emailRequired": "Please enter your email address",
+    "submitError": "Error submitting vote",
+    "networkError": "Network error — please try again",
+    "successHeading": "Vote submitted",
+    "successDesc": "Your vote has been saved. You can close this window.",
+    "notStartedHeading": "This vote has not started yet",
+    "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
+    "saving": "Saving...",
+    "submit": "Submit vote"
   }
 }

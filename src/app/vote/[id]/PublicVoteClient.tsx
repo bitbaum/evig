@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { CheckCircle, Vote } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions'
 import { ConsentVote } from '@/app/admin/decisions/[id]/voting/ConsentVote'
 import { ApprovalVote } from '@/app/admin/decisions/[id]/voting/ApprovalVote'
@@ -35,6 +36,7 @@ export default function PublicVoteClient({
   votingDeadline,
   isVotingPhase,
 }: Props) {
+  const t = useTranslations('vote')
   const [email, setEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -93,7 +95,7 @@ export default function PublicVoteClient({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim()) {
-      setError('Bitte gib deine E-Mail-Adresse ein')
+      setError(t('emailRequired'))
       return
     }
 
@@ -118,13 +120,13 @@ export default function PublicVoteClient({
       })
       const json = await res.json()
       if (!json.success) {
-        setError(json.error || 'Fehler beim Abstimmen')
+        setError(json.error || t('submitError'))
         setSubmitting(false)
         return
       }
       setSuccess(true)
     } catch {
-      setError('Netzwerkfehler — bitte versuche es erneut')
+      setError(t('networkError'))
     }
     setSubmitting(false)
   }
@@ -133,9 +135,9 @@ export default function PublicVoteClient({
     return (
       <div className="rounded-xl bg-green-50 border border-green-200 p-8 text-center">
         <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-3" />
-        <p className="text-lg font-semibold text-green-800">Stimme abgegeben</p>
+        <p className="text-lg font-semibold text-green-800">{t('successHeading')}</p>
         <p className="mt-1 text-sm text-green-700">
-          Deine Stimme wurde erfolgreich gespeichert. Du kannst dieses Fenster schliessen.
+          {t('successDesc')}
         </p>
       </div>
     )
@@ -144,9 +146,9 @@ export default function PublicVoteClient({
   if (!isVotingPhase) {
     return (
       <div className="rounded-xl bg-amber-50 border border-amber-200 p-6 text-center">
-        <p className="text-amber-800 font-medium">Diese Abstimmung läuft noch nicht</p>
+        <p className="text-amber-800 font-medium">{t('notStartedHeading')}</p>
         <p className="mt-1 text-sm text-amber-700">
-          Der Link ist gültig, aber die Abstimmungsphase hat noch nicht begonnen.
+          {t('notStartedDesc')}
         </p>
       </div>
     )
@@ -161,24 +163,24 @@ export default function PublicVoteClient({
       {/* Email identification */}
       <div className="rounded-xl bg-blue-50 border border-blue-200 p-5">
         <label className="block text-sm font-semibold text-blue-900 mb-2">
-          Deine E-Mail-Adresse (zur Identifikation)
+          {t('emailLabel')}
         </label>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="name@beispiel.ch"
+          placeholder={t('emailPlaceholder')}
           className="w-full rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <p className="mt-1.5 text-xs text-blue-700">
-          Deine E-Mail-Adresse wird verwendet, um dich als Mitglied zu identifizieren. Nur eine Stimme pro Person.
+          {t('emailHint')}
         </p>
       </div>
 
       {/* Ballot */}
       <div className="rounded-xl bg-white border border-gray-200 p-5 shadow-sm">
-        <p className="text-sm font-semibold text-gray-700 mb-4">Deine Stimme</p>
+        <p className="text-sm font-semibold text-gray-700 mb-4">{t('yourVote')}</p>
 
         {votingMethod === 'consent' && (
           <ConsentVote
@@ -242,7 +244,7 @@ export default function PublicVoteClient({
         className="w-full flex items-center justify-center gap-2 rounded-xl bg-green-600 px-6 py-3 text-sm font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         <Vote className="h-4 w-4" />
-        {submitting ? 'Wird gespeichert...' : 'Stimme abgeben'}
+        {submitting ? t('saving') : t('submit')}
       </button>
     </form>
   )
