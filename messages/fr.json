@@ -5695,6 +5695,60 @@
       "gratis": "Gratuit",
       "priceOnRequest": "Prix sur demande",
       "viewProfile": "Voir le profil"
+    },
+    "aboutSubNav": {
+      "about": "À propos",
+      "aboutDesc": "Mission & Histoire",
+      "impact": "Impact",
+      "impactDesc": "Nos chiffres & faits",
+      "finances": "Finances",
+      "financesDesc": "Transparence & chiffres",
+      "press": "Presse",
+      "pressDesc": "Couverture médiatique"
+    },
+    "paymentForm": {
+      "sslNote": "Paiement sécurisé par SSL",
+      "redirecting": "Redirection vers le prestataire de paiement...",
+      "payNow": "Payer maintenant — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "Photographier le produit",
+      "subtitle": "Présentez votre produit à la caméra – notre IA détecte automatiquement la marque, le modèle et l'état",
+      "takePhoto": "Prendre une photo",
+      "cancel": "Annuler",
+      "openCamera": "Ouvrir la caméra",
+      "livePhoto": "Prendre une photo en direct",
+      "uploadFile": "Télécharger un fichier",
+      "useExisting": "Utiliser une photo existante"
+    },
+    "voiceStatusMessage": {
+      "idle": "Cliquez pour enregistrer",
+      "recording": "Parlez maintenant… ex. « Dell Latitude 7470, bon état, 280 francs »",
+      "paused": "Enregistrement en pause",
+      "stopped": "Écouter et envoyer ou réenregistrer",
+      "recognized": "Reconnu :"
+    },
+    "skillsSection": {
+      "title": "Compétences requises",
+      "hint": "Pré-sélectionné en fonction de votre appareil. Vous pouvez ajuster."
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "Vu dans",
+      "sectionTitle": "Les médias nous parlent",
+      "sectionDesc": "Depuis plus de 20 ans, nous nous engageons pour une informatique durable. Les médias en ont pris note.",
+      "statMentions": "Articles de presse",
+      "statSources": "Sources différentes",
+      "statPartnerships": "Partenariats",
+      "tier1Title": "Médias nationaux",
+      "featuredTitle": "Articles sélectionnés",
+      "moreTitle": "Autres mentions & partenariats",
+      "readArticle": "Lire l'article",
+      "ctaText": "Souhaitez-vous écrire sur nous ?",
+      "ctaButton": "Demandes de presse",
+      "tierNational": "Médias nationaux",
+      "tierCity": "Ville de Zurich",
+      "tierOrg": "Organisations",
+      "tierCommunity": "Communauté"
     }
   }
 }

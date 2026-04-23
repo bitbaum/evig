@@ -9,44 +9,19 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Info, BarChart3, Newspaper, Wallet } from 'lucide-react'
-
-interface NavItem {
-  href: string
-  label: string
-  icon: React.ReactNode
-  description: string
-}
-
-const navItems: NavItem[] = [
-  {
-    href: '/about',
-    label: 'Über uns',
-    icon: <Info className="h-4 w-4" />,
-    description: 'Mission & Geschichte'
-  },
-  {
-    href: '/about/impact',
-    label: 'Wirkung',
-    icon: <BarChart3 className="h-4 w-4" />,
-    description: 'Unsere Zahlen & Fakten'
-  },
-  {
-    href: '/about/finances',
-    label: 'Finanzen',
-    icon: <Wallet className="h-4 w-4" />,
-    description: 'Transparenz & Zahlen'
-  },
-  {
-    href: '/about/press',
-    label: 'Presse',
-    icon: <Newspaper className="h-4 w-4" />,
-    description: 'Medienberichte'
-  }
-]
 
 export default function AboutSubNav() {
   const pathname = usePathname()
+  const t = useTranslations('components.aboutSubNav')
+
+  const navItems = [
+    { href: '/about',          label: t('about'),    icon: <Info className="h-4 w-4" />,      description: t('aboutDesc') },
+    { href: '/about/impact',   label: t('impact'),   icon: <BarChart3 className="h-4 w-4" />, description: t('impactDesc') },
+    { href: '/about/finances', label: t('finances'), icon: <Wallet className="h-4 w-4" />,    description: t('financesDesc') },
+    { href: '/about/press',    label: t('press'),    icon: <Newspaper className="h-4 w-4" />, description: t('pressDesc') },
+  ]
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-16 z-40">

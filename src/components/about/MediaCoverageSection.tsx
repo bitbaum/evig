@@ -9,6 +9,7 @@
 
 import Link from 'next/link'
 import { ExternalLink, Quote, Newspaper, Award, Star } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import {
   MEDIA_COVERAGE,
@@ -26,14 +27,7 @@ const TIER_STYLES = {
   4: 'bg-gray-100 text-gray-800 border-gray-200'
 } as const
 
-const TIER_LABELS = {
-  1: 'Nationale Medien',
-  2: 'Stadt Zürich',
-  3: 'Organisationen',
-  4: 'Community'
-} as const
-
-function MediaCard({ mention }: { mention: MediaMention }) {
+function MediaCard({ mention, tierLabel, readArticleLabel }: { mention: MediaMention; tierLabel: string; readArticleLabel: string }) {
   return (
     <a
       href={mention.url}
@@ -45,7 +39,7 @@ function MediaCard({ mention }: { mention: MediaMention }) {
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex-1">
           <span className={`inline-block text-xs font-medium px-2 py-1 rounded-full border ${TIER_STYLES[mention.tier]} mb-2`}>
-            {TIER_LABELS[mention.tier]}
+            {tierLabel}
           </span>
           <Heading level={3} className="font-bold text-gray-900 group-hover:text-green-600 transition-colors line-clamp-2">
             {mention.title}
@@ -82,7 +76,7 @@ function MediaCard({ mention }: { mention: MediaMention }) {
       {/* Read more indicator */}
       <div className="mt-4 pt-3 border-t border-gray-100">
         <span className="text-sm text-green-600 font-medium group-hover:underline">
-          Artikel lesen &rarr;
+          {readArticleLabel} &rarr;
         </span>
       </div>
     </a>
@@ -112,12 +106,20 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
 }
 
 export default function MediaCoverageSection() {
+  const t = useTranslations('components.mediaCoverageSection')
   const tier1Sources = getTier1Sources()
   const featuredMedia = getFeaturedMedia()
   const stats = getMediaStats()
 
   // Get other media (tier 2-4) for the grid
   const otherMedia = MEDIA_COVERAGE.filter(m => m.tier > 1).slice(0, 6)
+
+  const TIER_LABELS: Record<number, string> = {
+    1: t('tierNational'),
+    2: t('tierCity'),
+    3: t('tierOrg'),
+    4: t('tierCommunity'),
+  }
 
   return (
     <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
@@ -126,14 +128,13 @@ export default function MediaCoverageSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Award className="h-4 w-4" />
-            Bekannt aus
+            {t('awardBadge')}
           </div>
           <Heading level={2} className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Medien über uns
+            {t('sectionTitle')}
           </Heading>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Seit über 20 Jahren setzen wir uns für nachhaltige IT ein.
-            Das hat auch die Medien auf uns aufmerksam gemacht.
+            {t('sectionDesc')}
           </p>
         </div>
 
@@ -141,17 +142,17 @@ export default function MediaCoverageSection() {
         <div className="flex flex-wrap justify-center gap-8 mb-16">
           <div className="text-center">
             <p className="text-3xl font-bold text-green-600">{stats.totalMentions}+</p>
-            <p className="text-sm text-gray-500">Medienbeiträge</p>
+            <p className="text-sm text-gray-500">{t('statMentions')}</p>
           </div>
           <div className="hidden sm:block w-px bg-gray-200" />
           <div className="text-center">
             <p className="text-3xl font-bold text-green-600">{stats.uniqueSources}</p>
-            <p className="text-sm text-gray-500">Verschiedene Quellen</p>
+            <p className="text-sm text-gray-500">{t('statSources')}</p>
           </div>
           <div className="hidden sm:block w-px bg-gray-200" />
           <div className="text-center">
             <p className="text-3xl font-bold text-green-600">{stats.partnerships}</p>
-            <p className="text-sm text-gray-500">Partnerschaften</p>
+            <p className="text-sm text-gray-500">{t('statPartnerships')}</p>
           </div>
         </div>
 
@@ -159,7 +160,7 @@ export default function MediaCoverageSection() {
         <div className="mb-16">
           <div className="flex items-center justify-center gap-2 mb-8">
             <Star className="h-5 w-5 text-amber-500" />
-            <Heading level={3} className="text-lg font-semibold text-gray-700">Nationale Medien</Heading>
+            <Heading level={3} className="text-lg font-semibold text-gray-700">{t('tier1Title')}</Heading>
             <Star className="h-5 w-5 text-amber-500" />
           </div>
 
@@ -173,12 +174,12 @@ export default function MediaCoverageSection() {
         {/* Featured Articles - Full Cards */}
         <div className="mb-16">
           <Heading level={3} className="text-xl font-semibold text-gray-900 mb-8 text-center">
-            Ausgewählte Artikel
+            {t('featuredTitle')}
           </Heading>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredMedia.slice(0, 3).map((mention) => (
-              <MediaCard key={mention.id} mention={mention} />
+              <MediaCard key={mention.id} mention={mention} tierLabel={TIER_LABELS[mention.tier]} readArticleLabel={t('readArticle')} />
             ))}
           </div>
         </div>
@@ -186,7 +187,7 @@ export default function MediaCoverageSection() {
         {/* Other Mentions - Compact Grid */}
         <div className="bg-white rounded-2xl border border-gray-200 p-8">
           <Heading level={3} className="text-lg font-semibold text-gray-900 mb-6 text-center">
-            Weitere Erwähnungen & Partnerschaften
+            {t('moreTitle')}
           </Heading>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -220,13 +221,13 @@ export default function MediaCoverageSection() {
         {/* CTA */}
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">
-            Möchtest du über uns berichten?
+            {t('ctaText')}
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
           >
-            Presseanfragen
+            {t('ctaButton')}
           </Link>
         </div>
       </div>

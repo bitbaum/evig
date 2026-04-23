@@ -5888,6 +5888,60 @@
       "gratis": "Gratis",
       "priceOnRequest": "Preis auf Anfrage",
       "viewProfile": "Profil ansehen"
+    },
+    "aboutSubNav": {
+      "about": "Über uns",
+      "aboutDesc": "Mission & Geschichte",
+      "impact": "Wirkung",
+      "impactDesc": "Unsere Zahlen & Fakten",
+      "finances": "Finanzen",
+      "financesDesc": "Transparenz & Zahlen",
+      "press": "Presse",
+      "pressDesc": "Medienberichte"
+    },
+    "paymentForm": {
+      "sslNote": "Sichere SSL-verschlüsselte Zahlung",
+      "redirecting": "Weiterleitung zum Zahlungsanbieter...",
+      "payNow": "Jetzt bezahlen — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "Produkt fotografieren",
+      "subtitle": "Halte dein Produkt in die Kamera – unsere KI erkennt automatisch Marke, Modell und Zustand",
+      "takePhoto": "Foto aufnehmen",
+      "cancel": "Abbrechen",
+      "openCamera": "Kamera öffnen",
+      "livePhoto": "Live-Foto aufnehmen",
+      "uploadFile": "Datei hochladen",
+      "useExisting": "Vorhandenes Foto verwenden"
+    },
+    "voiceStatusMessage": {
+      "idle": "Klicke zum Aufnehmen",
+      "recording": "Sprich jetzt… z. B. „Dell Latitude 7470, guter Zustand, 280 Franken\"",
+      "paused": "Aufnahme pausiert",
+      "stopped": "Anhören und absenden oder neu aufnehmen",
+      "recognized": "Erkannt:"
+    },
+    "skillsSection": {
+      "title": "Benötigte Skills",
+      "hint": "Bereits vorausgewählt basierend auf deinem Gerät. Du kannst anpassen."
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "Bekannt aus",
+      "sectionTitle": "Medien über uns",
+      "sectionDesc": "Seit über 20 Jahren setzen wir uns für nachhaltige IT ein. Das hat auch die Medien auf uns aufmerksam gemacht.",
+      "statMentions": "Medienbeiträge",
+      "statSources": "Verschiedene Quellen",
+      "statPartnerships": "Partnerschaften",
+      "tier1Title": "Nationale Medien",
+      "featuredTitle": "Ausgewählte Artikel",
+      "moreTitle": "Weitere Erwähnungen & Partnerschaften",
+      "readArticle": "Artikel lesen",
+      "ctaText": "Möchtest du über uns berichten?",
+      "ctaButton": "Presseanfragen",
+      "tierNational": "Nationale Medien",
+      "tierCity": "Stadt Zürich",
+      "tierOrg": "Organisationen",
+      "tierCommunity": "Community"
     }
   }
 }

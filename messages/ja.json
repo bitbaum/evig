@@ -5737,6 +5737,60 @@
       "gratis": "無料",
       "priceOnRequest": "要見積もり",
       "viewProfile": "プロフィールを見る"
+    },
+    "aboutSubNav": {
+      "about": "私たちについて",
+      "aboutDesc": "ミッション & 歴史",
+      "impact": "影響",
+      "impactDesc": "数字 & 実績",
+      "finances": "財務",
+      "financesDesc": "透明性 & 数字",
+      "press": "プレス",
+      "pressDesc": "メディア報道"
+    },
+    "paymentForm": {
+      "sslNote": "SSL暗号化によるセキュアな決済",
+      "redirecting": "決済プロバイダーへリダイレクト中...",
+      "payNow": "今すぐ支払う — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "製品を撮影",
+      "subtitle": "製品をカメラに向けてください – AIがブランド、モデル、状態を自動検出します",
+      "takePhoto": "写真を撮る",
+      "cancel": "キャンセル",
+      "openCamera": "カメラを開く",
+      "livePhoto": "ライブ撮影",
+      "uploadFile": "ファイルをアップロード",
+      "useExisting": "既存の写真を使用"
+    },
+    "voiceStatusMessage": {
+      "idle": "クリックして録音",
+      "recording": "今話してください… 例：「Dell Latitude 7470、良好な状態、280フラン」",
+      "paused": "録音一時停止中",
+      "stopped": "聞いて送信するか、録音し直す",
+      "recognized": "認識済み："
+    },
+    "skillsSection": {
+      "title": "必要なスキル",
+      "hint": "デバイスに基づいて事前選択されています。調整できます。"
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "メディア掲載",
+      "sectionTitle": "メディア紹介",
+      "sectionDesc": "20年以上にわたり持続可能なITに取り組んできました。メディアにも注目されています。",
+      "statMentions": "メディア掲載数",
+      "statSources": "ユニークソース数",
+      "statPartnerships": "パートナーシップ数",
+      "tier1Title": "全国メディア",
+      "featuredTitle": "注目記事",
+      "moreTitle": "その他の掲載 & パートナーシップ",
+      "readArticle": "記事を読む",
+      "ctaText": "取材・報道をご希望の方へ",
+      "ctaButton": "プレス問い合わせ",
+      "tierNational": "全国メディア",
+      "tierCity": "チューリッヒ市",
+      "tierOrg": "団体",
+      "tierCommunity": "コミュニティ"
     }
   }
 }

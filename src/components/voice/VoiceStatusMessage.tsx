@@ -6,6 +6,7 @@
  * Displays context-sensitive status hints and messages.
  */
 
+import { useTranslations } from 'next-intl'
 import type { RecorderState } from './types'
 
 interface VoiceStatusMessageProps {
@@ -19,27 +20,27 @@ export function VoiceStatusMessage({
   transcribedText,
   errorMessage,
 }: VoiceStatusMessageProps) {
+  const t = useTranslations('components.voiceStatusMessage')
   return (
     <>
       {/* Status hint */}
       <div className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
-        {state === 'idle' && 'Klicke zum Aufnehmen'}
+        {state === 'idle' && t('idle')}
         {state === 'recording' && (
           <span className="text-red-600">
-            Sprich jetzt... z.B. &quot;Dell Latitude 7470, guter Zustand, 280
-            Franken&quot;
+            {t('recording')}
           </span>
         )}
         {state === 'paused' && (
-          <span className="text-yellow-600">Aufnahme pausiert</span>
+          <span className="text-yellow-600">{t('paused')}</span>
         )}
-        {state === 'stopped' && 'Anhören und absenden oder neu aufnehmen'}
+        {state === 'stopped' && t('stopped')}
       </div>
 
       {/* Transcription result */}
       {transcribedText && state === 'success' && (
         <div className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 dark:text-green-300 px-4 py-3 rounded-lg mt-4">
-          <span className="font-medium">Erkannt:</span> {transcribedText}
+          <span className="font-medium">{t('recognized')}</span> {transcribedText}
         </div>
       )}
 

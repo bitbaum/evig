@@ -5737,6 +5737,60 @@
       "gratis": "무료",
       "priceOnRequest": "가격 문의",
       "viewProfile": "프로필 보기"
+    },
+    "aboutSubNav": {
+      "about": "소개",
+      "aboutDesc": "미션 & 역사",
+      "impact": "영향",
+      "impactDesc": "숫자 & 사실",
+      "finances": "재무",
+      "financesDesc": "투명성 & 수치",
+      "press": "언론",
+      "pressDesc": "미디어 보도"
+    },
+    "paymentForm": {
+      "sslNote": "SSL 암호화 보안 결제",
+      "redirecting": "결제 공급업체로 리디렉션 중...",
+      "payNow": "지금 결제 — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "제품 촬영",
+      "subtitle": "제품을 카메라에 비춰주세요 – AI가 자동으로 브랜드, 모델, 상태를 감지합니다",
+      "takePhoto": "사진 찍기",
+      "cancel": "취소",
+      "openCamera": "카메라 열기",
+      "livePhoto": "실시간 촬영",
+      "uploadFile": "파일 업로드",
+      "useExisting": "기존 사진 사용"
+    },
+    "voiceStatusMessage": {
+      "idle": "클릭하여 녹음",
+      "recording": "지금 말하세요… 예: \"Dell Latitude 7470, 양호한 상태, 280프랑\"",
+      "paused": "녹음 일시 정지",
+      "stopped": "듣고 제출하거나 다시 녹음",
+      "recognized": "인식됨:"
+    },
+    "skillsSection": {
+      "title": "필요한 기술",
+      "hint": "기기에 따라 미리 선택되었습니다. 조정할 수 있습니다."
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "언론 보도",
+      "sectionTitle": "미디어 소개",
+      "sectionDesc": "20년 이상 지속 가능한 IT를 위해 노력해왔습니다. 미디어도 주목하고 있습니다.",
+      "statMentions": "미디어 보도",
+      "statSources": "고유 출처",
+      "statPartnerships": "파트너십",
+      "tier1Title": "전국 미디어",
+      "featuredTitle": "주요 기사",
+      "moreTitle": "추가 언급 & 파트너십",
+      "readArticle": "기사 읽기",
+      "ctaText": "저희에 대해 보도하고 싶으신가요?",
+      "ctaButton": "언론 문의",
+      "tierNational": "전국 미디어",
+      "tierCity": "취리히시",
+      "tierOrg": "단체",
+      "tierCommunity": "커뮤니티"
     }
   }
 }

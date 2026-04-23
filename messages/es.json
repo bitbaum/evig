@@ -5737,6 +5737,60 @@
       "gratis": "Gratis",
       "priceOnRequest": "Precio a consultar",
       "viewProfile": "Ver perfil"
+    },
+    "aboutSubNav": {
+      "about": "Sobre nosotros",
+      "aboutDesc": "Misión & Historia",
+      "impact": "Impacto",
+      "impactDesc": "Nuestros números & datos",
+      "finances": "Finanzas",
+      "financesDesc": "Transparencia & cifras",
+      "press": "Prensa",
+      "pressDesc": "Cobertura de medios"
+    },
+    "paymentForm": {
+      "sslNote": "Pago seguro cifrado por SSL",
+      "redirecting": "Redirigiendo al proveedor de pago...",
+      "payNow": "Pagar ahora — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "Fotografiar producto",
+      "subtitle": "Sostén tu producto frente a la cámara – nuestra IA detecta automáticamente marca, modelo y estado",
+      "takePhoto": "Tomar foto",
+      "cancel": "Cancelar",
+      "openCamera": "Abrir cámara",
+      "livePhoto": "Tomar foto en vivo",
+      "uploadFile": "Subir archivo",
+      "useExisting": "Usar foto existente"
+    },
+    "voiceStatusMessage": {
+      "idle": "Haz clic para grabar",
+      "recording": "Habla ahora… ej. «Dell Latitude 7470, buen estado, 280 francos»",
+      "paused": "Grabación en pausa",
+      "stopped": "Escuchar y enviar o volver a grabar",
+      "recognized": "Reconocido:"
+    },
+    "skillsSection": {
+      "title": "Habilidades requeridas",
+      "hint": "Preseleccionado según tu dispositivo. Puedes ajustar."
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "Aparecido en",
+      "sectionTitle": "Los medios hablan de nosotros",
+      "sectionDesc": "Durante más de 20 años hemos apostado por la IT sostenible. Los medios también lo han notado.",
+      "statMentions": "Menciones en medios",
+      "statSources": "Fuentes únicas",
+      "statPartnerships": "Colaboraciones",
+      "tier1Title": "Medios nacionales",
+      "featuredTitle": "Artículos destacados",
+      "moreTitle": "Más menciones & colaboraciones",
+      "readArticle": "Leer artículo",
+      "ctaText": "¿Te gustaría escribir sobre nosotros?",
+      "ctaButton": "Consultas de prensa",
+      "tierNational": "Medios nacionales",
+      "tierCity": "Ciudad de Zúrich",
+      "tierOrg": "Organizaciones",
+      "tierCommunity": "Comunidad"
     }
   }
 }

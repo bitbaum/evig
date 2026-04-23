@@ -5737,6 +5737,60 @@
       "gratis": "Gratuito",
       "priceOnRequest": "Prezzo su richiesta",
       "viewProfile": "Vedi profilo"
+    },
+    "aboutSubNav": {
+      "about": "Chi siamo",
+      "aboutDesc": "Missione & Storia",
+      "impact": "Impatto",
+      "impactDesc": "I nostri numeri & fatti",
+      "finances": "Finanze",
+      "financesDesc": "Trasparenza & cifre",
+      "press": "Stampa",
+      "pressDesc": "Copertura mediatica"
+    },
+    "paymentForm": {
+      "sslNote": "Pagamento sicuro con crittografia SSL",
+      "redirecting": "Reindirizzamento al fornitore di pagamento...",
+      "payNow": "Paga ora — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "Fotografare il prodotto",
+      "subtitle": "Tieni il prodotto davanti alla fotocamera – la nostra IA rileva automaticamente marca, modello e condizione",
+      "takePhoto": "Scatta foto",
+      "cancel": "Annulla",
+      "openCamera": "Apri fotocamera",
+      "livePhoto": "Scatta foto dal vivo",
+      "uploadFile": "Carica file",
+      "useExisting": "Usa foto esistente"
+    },
+    "voiceStatusMessage": {
+      "idle": "Clicca per registrare",
+      "recording": "Parla ora… es. «Dell Latitude 7470, buone condizioni, 280 franchi»",
+      "paused": "Registrazione in pausa",
+      "stopped": "Ascolta e invia oppure registra di nuovo",
+      "recognized": "Riconosciuto:"
+    },
+    "skillsSection": {
+      "title": "Competenze richieste",
+      "hint": "Preselezionato in base al tuo dispositivo. Puoi modificare."
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "Come visto in",
+      "sectionTitle": "I media parlano di noi",
+      "sectionDesc": "Da oltre 20 anni ci impegniamo per un IT sostenibile. Questo ha attirato anche l'attenzione dei media.",
+      "statMentions": "Articoli stampa",
+      "statSources": "Fonti uniche",
+      "statPartnerships": "Partnership",
+      "tier1Title": "Media nazionali",
+      "featuredTitle": "Articoli selezionati",
+      "moreTitle": "Altre menzioni & partnership",
+      "readArticle": "Leggi articolo",
+      "ctaText": "Vorresti scrivere di noi?",
+      "ctaButton": "Richieste stampa",
+      "tierNational": "Media nazionali",
+      "tierCity": "Città di Zurigo",
+      "tierOrg": "Organizzazioni",
+      "tierCommunity": "Comunità"
     }
   }
 }

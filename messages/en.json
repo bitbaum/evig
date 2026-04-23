@@ -5837,6 +5837,60 @@
       "gratis": "Free",
       "priceOnRequest": "Price on request",
       "viewProfile": "View profile"
+    },
+    "aboutSubNav": {
+      "about": "About us",
+      "aboutDesc": "Mission & History",
+      "impact": "Impact",
+      "impactDesc": "Our numbers & facts",
+      "finances": "Finances",
+      "financesDesc": "Transparency & figures",
+      "press": "Press",
+      "pressDesc": "Media coverage"
+    },
+    "paymentForm": {
+      "sslNote": "Secure SSL-encrypted payment",
+      "redirecting": "Redirecting to payment provider...",
+      "payNow": "Pay now — {currency} {amount}"
+    },
+    "cameraCapture": {
+      "title": "Photograph product",
+      "subtitle": "Hold your product in front of the camera – our AI automatically detects brand, model and condition",
+      "takePhoto": "Take photo",
+      "cancel": "Cancel",
+      "openCamera": "Open camera",
+      "livePhoto": "Take live photo",
+      "uploadFile": "Upload file",
+      "useExisting": "Use existing photo"
+    },
+    "voiceStatusMessage": {
+      "idle": "Click to record",
+      "recording": "Speak now… e.g. \"Dell Latitude 7470, good condition, 280 francs\"",
+      "paused": "Recording paused",
+      "stopped": "Listen and submit or re-record",
+      "recognized": "Recognised:"
+    },
+    "skillsSection": {
+      "title": "Required skills",
+      "hint": "Pre-selected based on your device. You can adjust."
+    },
+    "mediaCoverageSection": {
+      "awardBadge": "As seen in",
+      "sectionTitle": "Media about us",
+      "sectionDesc": "For over 20 years we have been committed to sustainable IT. This has also attracted media attention.",
+      "statMentions": "Media mentions",
+      "statSources": "Unique sources",
+      "statPartnerships": "Partnerships",
+      "tier1Title": "National media",
+      "featuredTitle": "Featured articles",
+      "moreTitle": "More mentions & partnerships",
+      "readArticle": "Read article",
+      "ctaText": "Would you like to write about us?",
+      "ctaButton": "Press enquiries",
+      "tierNational": "National media",
+      "tierCity": "City of Zurich",
+      "tierOrg": "Organisations",
+      "tierCommunity": "Community"
     }
   }
 }

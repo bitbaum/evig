@@ -1,3 +1,6 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
 import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe'
 import Heading from '@/components/ui/Heading'
 
@@ -7,11 +10,12 @@ interface Props {
 }
 
 export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
+  const t = useTranslations('components.skillsSection')
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-2">Benötigte Skills</Heading>
+      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-2">{t('title')}</Heading>
       <p className="text-sm text-gray-600 mb-4">
-        Bereits vorausgewählt basierend auf deinem Gerät. Du kannst anpassen.
+        {t('hint')}
       </p>
 
       {SERVICE_CATEGORIES.map((serviceCategory) => {

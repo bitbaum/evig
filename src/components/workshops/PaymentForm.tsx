@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Loader2, CreditCard, Shield, ExternalLink } from 'lucide-react'
 
 interface PaymentFormProps {
@@ -14,6 +15,7 @@ export function PaymentForm({
   amount,
   currency = 'CHF'
 }: PaymentFormProps) {
+  const t = useTranslations('components.paymentForm')
   const [isRedirecting, setIsRedirecting] = useState(false)
 
   const handlePay = () => {
@@ -25,7 +27,7 @@ export function PaymentForm({
     <div className="space-y-4">
       <div className="flex items-center justify-center p-3 bg-blue-50 rounded-lg">
         <Shield className="w-4 h-4 text-blue-600 mr-2" />
-        <span className="text-sm text-blue-800">Sichere SSL-verschlüsselte Zahlung</span>
+        <span className="text-sm text-blue-800">{t('sslNote')}</span>
       </div>
 
       <button
@@ -36,12 +38,12 @@ export function PaymentForm({
         {isRedirecting ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Weiterleitung zum Zahlungsanbieter...
+            {t('redirecting')}
           </>
         ) : (
           <>
             <CreditCard className="w-4 h-4 mr-2" />
-            Jetzt bezahlen — {currency} {amount}
+            {t('payNow', { currency, amount })}
             <ExternalLink className="w-3 h-3 ml-2" />
           </>
         )}
