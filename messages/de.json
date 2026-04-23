@@ -5865,6 +5865,29 @@
       "create": "Erstellen",
       "home": "Home",
       "detail": "Detail"
+    },
+    "currencySelector": {
+      "selectCurrency": "Währung wählen",
+      "multilingual": "Mehrsprachig",
+      "basePrice": "Basispreis:",
+      "vat": "MwSt ({rate}%):",
+      "fees": "Gebühren (ca.):",
+      "total": "Gesamt:",
+      "eurNote": "EU-konforme Preise mit 19% MwSt für digitale Dienstleistungen",
+      "chfNote": "Schweizer Preise mit 7.7% MwSt"
+    },
+    "aiDiagnosisCard": {
+      "title": "KI-Ersteinschätzung",
+      "bringIn": "Du kannst dein Gerät auch direkt vorbeibringen:",
+      "mapsLink": "Auf Google Maps anzeigen",
+      "disclaimer": "Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose."
+    },
+    "technicianCard": {
+      "verified": "Verifiziert",
+      "jobsCompleted": "{count, plural, one {# Auftrag} other {# Aufträge}}",
+      "gratis": "Gratis",
+      "priceOnRequest": "Preis auf Anfrage",
+      "viewProfile": "Profil ansehen"
     }
   }
 }

@@ -5714,6 +5714,29 @@
       "create": "만들기",
       "home": "홈",
       "detail": "세부 정보"
+    },
+    "currencySelector": {
+      "selectCurrency": "통화 선택",
+      "multilingual": "다국어",
+      "basePrice": "기본 가격:",
+      "vat": "부가세 ({rate}%):",
+      "fees": "수수료 (약):",
+      "total": "합계:",
+      "eurNote": "디지털 서비스에 19% VAT를 적용한 EU 규격 가격",
+      "chfNote": "7.7% VAT가 적용된 스위스 가격"
+    },
+    "aiDiagnosisCard": {
+      "title": "AI 초기 진단",
+      "bringIn": "기기를 직접 가져오실 수도 있습니다:",
+      "mapsLink": "Google 지도에서 보기",
+      "disclaimer": "이것은 자동 초기 진단이며 전문적인 진단을 대체하지 않습니다."
+    },
+    "technicianCard": {
+      "verified": "인증됨",
+      "jobsCompleted": "{count, plural, other {# 건 완료}}",
+      "gratis": "무료",
+      "priceOnRequest": "가격 문의",
+      "viewProfile": "프로필 보기"
     }
   }
 }

@@ -5714,6 +5714,29 @@
       "create": "Crear",
       "home": "Inicio",
       "detail": "Detalle"
+    },
+    "currencySelector": {
+      "selectCurrency": "Seleccionar moneda",
+      "multilingual": "Multilingüe",
+      "basePrice": "Precio base:",
+      "vat": "IVA ({rate}%):",
+      "fees": "Tasas (aprox.):",
+      "total": "Total:",
+      "eurNote": "Precios conformes a la UE con 19% de IVA para servicios digitales",
+      "chfNote": "Precios suizos con 7,7% de IVA"
+    },
+    "aiDiagnosisCard": {
+      "title": "Evaluación inicial IA",
+      "bringIn": "También puedes traer tu dispositivo directamente:",
+      "mapsLink": "Ver en Google Maps",
+      "disclaimer": "Esta es una evaluación inicial automática y no reemplaza un diagnóstico profesional."
+    },
+    "technicianCard": {
+      "verified": "Verificado",
+      "jobsCompleted": "{count, plural, one {# trabajo} other {# trabajos}}",
+      "gratis": "Gratis",
+      "priceOnRequest": "Precio a consultar",
+      "viewProfile": "Ver perfil"
     }
   }
 }

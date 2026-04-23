@@ -5714,6 +5714,29 @@
       "create": "作成",
       "home": "ホーム",
       "detail": "詳細"
+    },
+    "currencySelector": {
+      "selectCurrency": "通貨を選択",
+      "multilingual": "多言語対応",
+      "basePrice": "基本料金:",
+      "vat": "消費税 ({rate}%):",
+      "fees": "手数料 (目安):",
+      "total": "合計:",
+      "eurNote": "デジタルサービスに19%VATを適用したEU準拠価格",
+      "chfNote": "スイスの7.7%VAT適用価格"
+    },
+    "aiDiagnosisCard": {
+      "title": "AI 初期診断",
+      "bringIn": "デバイスを直接お持ちいただくこともできます：",
+      "mapsLink": "Google マップで表示",
+      "disclaimer": "これは自動的な初期診断であり、専門家による診断の代わりにはなりません。"
+    },
+    "technicianCard": {
+      "verified": "認証済み",
+      "jobsCompleted": "{count, plural, other {# 件の実績}}",
+      "gratis": "無料",
+      "priceOnRequest": "要見積もり",
+      "viewProfile": "プロフィールを見る"
     }
   }
 }

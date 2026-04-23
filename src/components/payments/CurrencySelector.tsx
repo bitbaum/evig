@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -31,6 +32,7 @@ export default function CurrencySelector({
   businessType = 'service',
   className = ''
 }: CurrencySelectorProps) {
+  const t = useTranslations('components.currencySelector')
   const [isLoading, setIsLoading] = useState(false)
   const supportedCurrencies = getSupportedCurrencies()
 
@@ -52,9 +54,9 @@ export default function CurrencySelector({
     <Card className={className}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
-          <Heading level={3} className="text-sm font-semibold text-gray-700">Währung wählen</Heading>
+          <Heading level={3} className="text-sm font-semibold text-gray-700">{t('selectCurrency')}</Heading>
           <Badge variant="outline" className="text-xs">
-            Mehrsprachig
+            {t('multilingual')}
           </Badge>
         </div>
 
@@ -87,7 +89,7 @@ export default function CurrencySelector({
           {/* Pricing Breakdown */}
           <div className="bg-gray-50 rounded-lg p-3 space-y-2">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Basispreis:</span>
+              <span className="text-gray-600">{t('basePrice')}</span>
               <span className="font-medium">
                 {formatCurrency(pricing.convertedPrice, selectedCurrency)}
               </span>
@@ -95,7 +97,7 @@ export default function CurrencySelector({
 
             <div className="flex justify-between items-center text-sm">
               <span className="text-gray-600">
-                MwSt ({(getCurrencyConfig(selectedCurrency).taxRate * 100).toFixed(1)}%):
+                {t('vat', { rate: (getCurrencyConfig(selectedCurrency).taxRate * 100).toFixed(1) })}
               </span>
               <span className="font-medium">
                 {formatCurrency(pricing.vat, selectedCurrency)}
@@ -103,7 +105,7 @@ export default function CurrencySelector({
             </div>
 
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">Gebühren (ca.):</span>
+              <span className="text-gray-600">{t('fees')}</span>
               <span className="font-medium">
                 {formatCurrency(pricing.total * 0.029 + 0.30, selectedCurrency)}
               </span>
@@ -112,7 +114,7 @@ export default function CurrencySelector({
             <hr className="border-gray-300" />
 
             <div className="flex justify-between items-center font-semibold">
-              <span>Gesamt:</span>
+              <span>{t('total')}</span>
               <span className="text-lg">
                 {formatCurrency(pricing.total * 1.029 + 0.30, selectedCurrency)}
               </span>
@@ -124,13 +126,13 @@ export default function CurrencySelector({
             {selectedCurrency === 'EUR' && (
               <div className="flex items-start space-x-1">
                 <span className="text-blue-500">ℹ️</span>
-                <span>EU-konforme Preise mit 19% MwSt für digitale Dienstleistungen</span>
+                <span>{t('eurNote')}</span>
               </div>
             )}
             {selectedCurrency === 'CHF' && (
               <div className="flex items-start space-x-1">
                 <span className="text-green-500">🇨🇭</span>
-                <span>Schweizer Preise mit 7.7% MwSt</span>
+                <span>{t('chfNote')}</span>
               </div>
             )}
           </div>

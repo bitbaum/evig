@@ -5672,6 +5672,29 @@
       "create": "Créer",
       "home": "Accueil",
       "detail": "Détail"
+    },
+    "currencySelector": {
+      "selectCurrency": "Choisir la devise",
+      "multilingual": "Multilingue",
+      "basePrice": "Prix de base :",
+      "vat": "TVA ({rate}%) :",
+      "fees": "Frais (env.) :",
+      "total": "Total :",
+      "eurNote": "Prix conformes à l'UE avec 19% de TVA pour les services numériques",
+      "chfNote": "Prix suisses avec 7,7% de TVA"
+    },
+    "aiDiagnosisCard": {
+      "title": "Évaluation initiale IA",
+      "bringIn": "Vous pouvez également apporter votre appareil directement :",
+      "mapsLink": "Voir sur Google Maps",
+      "disclaimer": "Il s'agit d'une évaluation initiale automatique qui ne remplace pas un diagnostic professionnel."
+    },
+    "technicianCard": {
+      "verified": "Vérifié",
+      "jobsCompleted": "{count, plural, one {# mission} other {# missions}}",
+      "gratis": "Gratuit",
+      "priceOnRequest": "Prix sur demande",
+      "viewProfile": "Voir le profil"
     }
   }
 }

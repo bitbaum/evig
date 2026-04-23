@@ -5814,6 +5814,29 @@
       "create": "Create",
       "home": "Home",
       "detail": "Detail"
+    },
+    "currencySelector": {
+      "selectCurrency": "Select currency",
+      "multilingual": "Multilingual",
+      "basePrice": "Base price:",
+      "vat": "VAT ({rate}%):",
+      "fees": "Fees (approx.):",
+      "total": "Total:",
+      "eurNote": "EU-compliant prices with 19% VAT for digital services",
+      "chfNote": "Swiss prices with 7.7% VAT"
+    },
+    "aiDiagnosisCard": {
+      "title": "AI Initial Assessment",
+      "bringIn": "You can also bring your device in directly:",
+      "mapsLink": "View on Google Maps",
+      "disclaimer": "This is an automatic initial assessment and does not replace a professional diagnosis."
+    },
+    "technicianCard": {
+      "verified": "Verified",
+      "jobsCompleted": "{count, plural, one {# job} other {# jobs}}",
+      "gratis": "Free",
+      "priceOnRequest": "Price on request",
+      "viewProfile": "View profile"
     }
   }
 }

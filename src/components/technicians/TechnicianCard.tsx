@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { MapPin, Star, User, CheckCircle, Users, Sparkles, Euro } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { type TechnicianProfile } from './types'
 
@@ -23,6 +24,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export function TechnicianCard({ technician }: TechnicianCardProps) {
+  const t = useTranslations('components.technicianCard')
   const isProfessional = technician.profileTier === 'professional'
   const displayedSkills = technician.skills.slice(0, 5)
   const remainingSkillsCount = technician.skills.length - 5
@@ -53,7 +55,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
           {technician.isVerified && (
             <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 flex-shrink-0">
               <CheckCircle className="w-3 h-3" />
-              Verifiziert
+              {t('verified')}
             </span>
           )}
         </div>
@@ -67,7 +69,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             </span>
             {technician.totalJobsCompleted > 0 && (
               <span className="text-sm text-gray-500">
-                ({technician.totalJobsCompleted} {technician.totalJobsCompleted === 1 ? 'Auftrag' : 'Aufträge'})
+                ({t('jobsCompleted', { count: technician.totalJobsCompleted })})
               </span>
             )}
           </div>
@@ -134,7 +136,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
           {technician.acceptsGratis && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
               <Users className="w-3 h-3" />
-              Gratis
+              {t('gratis')}
             </span>
           )}
           {technician.acceptsKulturlegi && (
@@ -150,7 +152,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             </span>
           )}
           {!technician.hourlyRateCents && !technician.acceptsGratis && (
-            <span className="text-sm text-gray-500">Preis auf Anfrage</span>
+            <span className="text-sm text-gray-500">{t('priceOnRequest')}</span>
           )}
         </div>
 
@@ -159,7 +161,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
           href={`/techniker/${technician.id}`}
           className="block w-full bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition-colors text-center text-sm font-medium"
         >
-          Profil ansehen
+          {t('viewProfile')}
         </Link>
       </div>
     </div>
