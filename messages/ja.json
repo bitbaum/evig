@@ -5791,6 +5791,76 @@
       "tierCity": "チューリッヒ市",
       "tierOrg": "団体",
       "tierCommunity": "コミュニティ"
+    },
+    "userMenu": {
+      "login": "ログイン",
+      "register": "新規登録",
+      "admin": "管理エリア",
+      "dashboard": "ダッシュボード",
+      "myProfile": "マイプロフィール",
+      "messages": "メッセージ",
+      "membership": "会員資格",
+      "myListings": "マイ出品",
+      "myOrders": "マイ注文",
+      "myAppointments": "マイ予約（アポ）",
+      "myWorkshops": "マイワークショップ",
+      "myBookings": "マイ予約",
+      "settings": "設定",
+      "logout": "ログアウト",
+      "accountMenu": "アカウントメニュー",
+      "profilePicture": "プロフィール画像",
+      "user": "ユーザー"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count}席空き",
+      "free": "無料",
+      "vatIncluded": "税込"
+    },
+    "shareButtons": {
+      "title": "記事をシェア",
+      "shareMastodon": "Mastodonでシェア",
+      "shareX": "Xでシェア",
+      "shareLinkedin": "LinkedInでシェア",
+      "shareFacebook": "Facebookでシェア",
+      "mastodonHint": "Mastodonの場合：クリック後にインスタンスを選択してください"
+    },
+    "serviceCta": {
+      "heading": "始める準備はできましたか？",
+      "desc": "{serviceTitle}サービスのご予約はこちら。",
+      "contact": "お問い合わせ",
+      "backToServices": "サービス一覧へ戻る"
+    },
+    "helperCard": {
+      "helps": "{count}件のサポート",
+      "gratis": "無料",
+      "contacting": "連絡中...",
+      "contact": "連絡する",
+      "messageSent": "{name}さんにメッセージを送信しました！"
+    },
+    "co2Badge": {
+      "tooltip": "新品と比較した推定CO₂削減量（Fraunhofer IZM 2023）",
+      "saved": "約{amount}kg CO₂削減"
+    },
+    "geschichteSection": {
+      "badge": "私たちの歴史",
+      "milestoneTitle": "マイルストーン",
+      "milestoneDesc": "小さな工房からスイスのサステナブルITをリードする組織へ。",
+      "currentTitle": "現在",
+      "yearsActive": "年の活動",
+      "teamMembers": "チームメンバー",
+      "devicesPerYear": "年間救済デバイス数"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "数字と事実",
+      "environmentalTitle": "環境への影響",
+      "socialTitle": "社会的影響",
+      "devicesSaved": "廃棄を免れたITデバイス",
+      "co2Saved": "再利用で節約したCO₂",
+      "ewasteReduced": "削減した電子廃棄物",
+      "members": "コミュニティメンバー",
+      "repairsCompleted": "処理したITサポート依頼",
+      "trainedPeople": "ワークショップで育成した人数",
+      "learnMore": "私たちの影響についてもっと知る"
     }
   }
 }

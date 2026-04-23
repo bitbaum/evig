@@ -5791,6 +5791,76 @@
       "tierCity": "취리히시",
       "tierOrg": "단체",
       "tierCommunity": "커뮤니티"
+    },
+    "userMenu": {
+      "login": "로그인",
+      "register": "회원가입",
+      "admin": "관리자 영역",
+      "dashboard": "대시보드",
+      "myProfile": "내 프로필",
+      "messages": "메시지",
+      "membership": "회원권",
+      "myListings": "내 게시물",
+      "myOrders": "내 주문",
+      "myAppointments": "내 예약",
+      "myWorkshops": "내 워크숍",
+      "myBookings": "내 예약",
+      "settings": "설정",
+      "logout": "로그아웃",
+      "accountMenu": "계정 메뉴",
+      "profilePicture": "프로필 사진",
+      "user": "사용자"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count}자리 남음",
+      "free": "무료",
+      "vatIncluded": "부가세 포함"
+    },
+    "shareButtons": {
+      "title": "기사 공유",
+      "shareMastodon": "Mastodon에서 공유",
+      "shareX": "X에서 공유",
+      "shareLinkedin": "LinkedIn에서 공유",
+      "shareFacebook": "Facebook에서 공유",
+      "mastodonHint": "Mastodon: 클릭 후 인스턴스를 선택하세요"
+    },
+    "serviceCta": {
+      "heading": "시작할 준비가 되셨나요?",
+      "desc": "{serviceTitle} 서비스 예약을 지금 하세요.",
+      "contact": "문의",
+      "backToServices": "서비스 목록으로"
+    },
+    "helperCard": {
+      "helps": "{count}건의 도움",
+      "gratis": "무료",
+      "contacting": "연락 중...",
+      "contact": "연락하기",
+      "messageSent": "{name}님께 메시지를 보냈습니다!"
+    },
+    "co2Badge": {
+      "tooltip": "새 기기 대비 예상 CO₂ 절감량 (Fraunhofer IZM 2023)",
+      "saved": "약 {amount}kg CO₂ 절감"
+    },
+    "geschichteSection": {
+      "badge": "우리의 역사",
+      "milestoneTitle": "주요 이정표",
+      "milestoneDesc": "작은 공방에서 스위스 지속 가능한 IT 선도 기관으로.",
+      "currentTitle": "현재",
+      "yearsActive": "년간 활동",
+      "teamMembers": "팀원",
+      "devicesPerYear": "연간 구조 기기 수"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "수치와 사실",
+      "environmentalTitle": "환경적 영향",
+      "socialTitle": "사회적 영향",
+      "devicesSaved": "폐기 대신 구조된 IT 기기",
+      "co2Saved": "재사용을 통한 CO₂ 절감",
+      "ewasteReduced": "방지된 전자폐기물",
+      "members": "커뮤니티 회원",
+      "repairsCompleted": "처리된 IT 도움 요청",
+      "trainedPeople": "워크숍 교육 인원",
+      "learnMore": "우리의 영향력에 대해 더 알아보기"
     }
   }
 }

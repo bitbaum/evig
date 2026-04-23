@@ -5791,6 +5791,76 @@
       "tierCity": "Ciudad de Zúrich",
       "tierOrg": "Organizaciones",
       "tierCommunity": "Comunidad"
+    },
+    "userMenu": {
+      "login": "Iniciar sesión",
+      "register": "Registrarse",
+      "admin": "Área de administración",
+      "dashboard": "Panel",
+      "myProfile": "Mi perfil",
+      "messages": "Mensajes",
+      "membership": "Membresía",
+      "myListings": "Mis anuncios",
+      "myOrders": "Mis pedidos",
+      "myAppointments": "Mis citas",
+      "myWorkshops": "Mis talleres",
+      "myBookings": "Mis reservas",
+      "settings": "Configuración",
+      "logout": "Cerrar sesión",
+      "accountMenu": "Menú de cuenta",
+      "profilePicture": "Foto de perfil",
+      "user": "Usuario"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count, plural, one {# plaza disponible} other {# plazas disponibles}}",
+      "free": "Gratis",
+      "vatIncluded": "IVA incluido"
+    },
+    "shareButtons": {
+      "title": "Compartir artículo",
+      "shareMastodon": "Compartir en Mastodon",
+      "shareX": "Compartir en X",
+      "shareLinkedin": "Compartir en LinkedIn",
+      "shareFacebook": "Compartir en Facebook",
+      "mastodonHint": "Para Mastodon: elige tu instancia después de hacer clic"
+    },
+    "serviceCta": {
+      "heading": "¿Listo para empezar?",
+      "desc": "Reserve ahora su cita para nuestros servicios de {serviceTitle}.",
+      "contact": "Contacto",
+      "backToServices": "Volver a servicios"
+    },
+    "helperCard": {
+      "helps": "{count, plural, one {# ayuda} other {# ayudas}}",
+      "gratis": "Gratis",
+      "contacting": "Contactando...",
+      "contact": "Contactar",
+      "messageSent": "¡Mensaje enviado a {name}!"
+    },
+    "co2Badge": {
+      "tooltip": "Ahorro estimado de CO₂ en comparación con un dispositivo nuevo (Fraunhofer IZM 2023)",
+      "saved": "~{amount} kg CO₂ ahorrado"
+    },
+    "geschichteSection": {
+      "badge": "Nuestra historia",
+      "milestoneTitle": "Hitos",
+      "milestoneDesc": "De un pequeño taller a la organización líder en IT sostenible en Suiza.",
+      "currentTitle": "Hoy",
+      "yearsActive": "Años de actividad",
+      "teamMembers": "Miembros del equipo",
+      "devicesPerYear": "Dispositivos rescatados por año"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "Cifras & Hechos",
+      "environmentalTitle": "Impacto ambiental",
+      "socialTitle": "Impacto social",
+      "devicesSaved": "Dispositivos IT rescatados en lugar de desechados",
+      "co2Saved": "CO₂ ahorrado mediante reutilización",
+      "ewasteReduced": "Residuos electrónicos evitados",
+      "members": "Miembros en nuestra comunidad",
+      "repairsCompleted": "Solicitudes de ayuda IT procesadas",
+      "trainedPeople": "Personas formadas en talleres",
+      "learnMore": "Saber más sobre nuestro impacto"
     }
   }
 }

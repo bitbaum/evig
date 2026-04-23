@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
@@ -33,6 +34,7 @@ interface HelperCardProps {
 }
 
 export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps) {
+  const t = useTranslations('components.helperCard')
   const [isContacting, setIsContacting] = useState(false)
   const [contactSuccess, setContactSuccess] = useState(false)
 
@@ -104,7 +106,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
             </span>
           )}
           {helper.totalHelpsCompleted ? (
-            <span>{helper.totalHelpsCompleted} {helper.totalHelpsCompleted === 1 ? 'Hilfe' : 'Hilfen'}</span>
+            <span>{t('helps', { count: helper.totalHelpsCompleted })}</span>
           ) : null}
         </div>
       ) : null}
@@ -149,7 +151,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
         {helper.acceptsGratis && (
           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${BUDGET_TIERS[0].badgeClass}`}>
             <Users className="w-3 h-3" />
-            Gratis
+            {t('gratis')}
           </span>
         )}
         {helper.acceptsKulturlegi && (
@@ -170,7 +172,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
       {contactSuccess ? (
         <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-4 py-2.5 rounded-lg text-sm font-medium">
           <CheckCircle className="w-4 h-4 flex-shrink-0" />
-          Nachricht an {helper.name} gesendet!
+          {t('messageSent', { name: helper.name })}
         </div>
       ) : (
         <button
@@ -178,7 +180,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
           disabled={isContacting}
           className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-4 py-2.5 rounded-lg font-medium hover:from-blue-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isContacting ? 'Wird kontaktiert...' : 'Kontaktieren'}
+          {isContacting ? t('contacting') : t('contact')}
         </button>
       )}
     </div>

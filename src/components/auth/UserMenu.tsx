@@ -20,6 +20,7 @@ import {
   BadgeCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
 /**
  * UserMenu Component
@@ -28,6 +29,7 @@ import { cn } from '@/lib/utils'
  * - Elegant dropdown when logged in
  */
 export function UserMenu() {
+  const t = useTranslations('components.userMenu')
   // Use session hook with non-blocking configuration
   // This ensures buttons show immediately even if session check is slow
   // Critical for local hosting where DB connections can be slow
@@ -74,7 +76,7 @@ export function UserMenu() {
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
           )}
         >
-          Anmelden
+          {t('login')}
         </Link>
         <Link
           href="/auth/register"
@@ -86,7 +88,7 @@ export function UserMenu() {
             "shadow-sm hover:shadow"
           )}
         >
-          Registrieren
+          {t('register')}
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -108,22 +110,22 @@ export function UserMenu() {
   const menuGroups = [
     // Core navigation
     [
-      ...(isStaff ? [{ href: '/admin', icon: Shield, label: 'Admin-Bereich', highlight: true }] : []),
-      { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-      { href: '/dashboard/profile', icon: User, label: 'Mein Profil' },
-      { href: '/dashboard/messages', icon: MessageSquare, label: 'Nachrichten' },
-      { href: '/dashboard/membership', icon: BadgeCheck, label: 'Mitgliedschaft' },
+      ...(isStaff ? [{ href: '/admin', icon: Shield, label: t('admin'), highlight: true }] : []),
+      { href: '/dashboard', icon: LayoutDashboard, label: t('dashboard') },
+      { href: '/dashboard/profile', icon: User, label: t('myProfile') },
+      { href: '/dashboard/messages', icon: MessageSquare, label: t('messages') },
+      { href: '/dashboard/membership', icon: BadgeCheck, label: t('membership') },
     ],
     // Marketplace
     [
-      { href: '/dashboard/listings', icon: Store, label: 'Meine Inserate' },
-      { href: '/dashboard/orders', icon: ShoppingBag, label: 'Meine Bestellungen' },
+      { href: '/dashboard/listings', icon: Store, label: t('myListings') },
+      { href: '/dashboard/orders', icon: ShoppingBag, label: t('myOrders') },
     ],
     // Services
     [
-      { href: '/dashboard/appointments', icon: Calendar, label: 'Meine Termine' },
-      { href: '/dashboard/workshops', icon: Calendar, label: 'Meine Workshops' },
-      { href: '/dashboard/bookings', icon: Wrench, label: 'Meine Buchungen' },
+      { href: '/dashboard/appointments', icon: Calendar, label: t('myAppointments') },
+      { href: '/dashboard/workshops', icon: Calendar, label: t('myWorkshops') },
+      { href: '/dashboard/bookings', icon: Wrench, label: t('myBookings') },
     ],
   ]
 
@@ -142,12 +144,12 @@ export function UserMenu() {
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
-        title={`${session.user.name || session.user.email} - Konto-Menü`}
+        title={`${session.user.name || session.user.email} - ${t('accountMenu')}`}
       >
         {session.user.image ? (
           <Image
             src={session.user.image}
-            alt={session.user.name || 'Profilbild'}
+            alt={session.user.name || t('profilePicture')}
             width={32}
             height={32}
             className="w-8 h-8 rounded-full ring-2 ring-white"
@@ -183,7 +185,7 @@ export function UserMenu() {
               {session.user.image ? (
                 <Image
                   src={session.user.image}
-                  alt={session.user.name || 'Profilbild'}
+                  alt={session.user.name || t('profilePicture')}
                   width={40}
                   height={40}
                   className="w-10 h-10 rounded-full"
@@ -196,7 +198,7 @@ export function UserMenu() {
               )}
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 truncate">
-                  {session.user.name || 'Benutzer'}
+                  {session.user.name || t('user')}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
                   {session.user.email}
@@ -250,7 +252,7 @@ export function UserMenu() {
               )}
             >
               <Settings className="w-4 h-4 text-gray-500 group-hover:text-emerald-600 transition-colors" />
-              Einstellungen
+              {t('settings')}
             </Link>
             <button
               onClick={() => {
@@ -264,7 +266,7 @@ export function UserMenu() {
               )}
             >
               <LogOut className="w-4 h-4 text-gray-500 group-hover:text-red-500 transition-colors" />
-              Abmelden
+              {t('logout')}
             </button>
           </div>
         </div>

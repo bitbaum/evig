@@ -7,6 +7,7 @@
 
 import { Leaf, Users } from 'lucide-react'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import Heading from '@/components/ui/Heading'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -67,35 +68,38 @@ async function fetchImpactStats() {
 }
 
 export default async function ImpactStatsSection() {
-  const stats = await fetchImpactStats()
+  const [stats, t] = await Promise.all([
+    fetchImpactStats(),
+    getTranslations('components.impactStatsSection'),
+  ])
 
   const environmentalStats = [
     {
       value: `${stats.totalDevices}+`,
-      description: 'IT-Geräte gerettet statt entsorgt',
+      description: t('devicesSaved'),
     },
     {
       value: `~${stats.co2SavedTons} t`,
-      description: 'CO₂ eingespart durch Wiederverwendung',
+      description: t('co2Saved'),
     },
     {
       value: `${Math.round((stats.totalDevices * 2.5) / 1000 * 10) / 10} t`,
-      description: 'Elektroschrott verhindert',
+      description: t('ewasteReduced'),
     },
   ]
 
   const socialStats = [
     {
       value: `${stats.users}+`,
-      description: 'Mitglieder in unserer Community',
+      description: t('members'),
     },
     {
       value: `${stats.repairs}+`,
-      description: 'IT-Hilfe Anfragen bearbeitet',
+      description: t('repairsCompleted'),
     },
     {
       value: `${getDefaultNumeric('annual_people_trained')}+`,
-      description: 'Menschen in Workshops ausgebildet',
+      description: t('trainedPeople'),
     },
   ]
 
@@ -103,7 +107,7 @@ export default async function ImpactStatsSection() {
     <section className="py-12 sm:py-16 md:py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <Heading level={2} className="text-2xl sm:text-3xl font-bold mb-8 sm:mb-12 text-center">
-          Zahlen & Fakten
+          {t('sectionTitle')}
         </Heading>
         <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
           {/* Environmental Impact */}
@@ -113,7 +117,7 @@ export default async function ImpactStatsSection() {
                 <Leaf className="h-5 w-5 text-white" />
               </div>
               <Heading level={3} className="text-xl sm:text-2xl font-bold text-green-800">
-                Umweltwirkung
+                {t('environmentalTitle')}
               </Heading>
             </div>
             <div className="space-y-4 sm:space-y-6">
@@ -137,7 +141,7 @@ export default async function ImpactStatsSection() {
                 <Users className="h-5 w-5 text-white" />
               </div>
               <Heading level={3} className="text-xl sm:text-2xl font-bold text-green-800">
-                Soziale Wirkung
+                {t('socialTitle')}
               </Heading>
             </div>
             <div className="space-y-4 sm:space-y-6">
@@ -160,7 +164,7 @@ export default async function ImpactStatsSection() {
             href="/about/impact"
             className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium transition-colors"
           >
-            Mehr zu unserer Wirkung erfahren
+            {t('learnMore')}
             <span aria-hidden="true">→</span>
           </Link>
         </div>

@@ -5891,6 +5891,76 @@
       "tierCity": "City of Zurich",
       "tierOrg": "Organisations",
       "tierCommunity": "Community"
+    },
+    "userMenu": {
+      "login": "Sign in",
+      "register": "Register",
+      "admin": "Admin Area",
+      "dashboard": "Dashboard",
+      "myProfile": "My Profile",
+      "messages": "Messages",
+      "membership": "Membership",
+      "myListings": "My Listings",
+      "myOrders": "My Orders",
+      "myAppointments": "My Appointments",
+      "myWorkshops": "My Workshops",
+      "myBookings": "My Bookings",
+      "settings": "Settings",
+      "logout": "Sign out",
+      "accountMenu": "Account menu",
+      "profilePicture": "Profile picture",
+      "user": "User"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count, plural, one {# spot available} other {# spots available}}",
+      "free": "Free",
+      "vatIncluded": "incl. VAT"
+    },
+    "shareButtons": {
+      "title": "Share article",
+      "shareMastodon": "Share on Mastodon",
+      "shareX": "Share on X",
+      "shareLinkedin": "Share on LinkedIn",
+      "shareFacebook": "Share on Facebook",
+      "mastodonHint": "For Mastodon: choose your instance after clicking"
+    },
+    "serviceCta": {
+      "heading": "Ready to get started?",
+      "desc": "Book your appointment for our {serviceTitle} services now.",
+      "contact": "Contact",
+      "backToServices": "Back to Services"
+    },
+    "helperCard": {
+      "helps": "{count, plural, one {# help} other {# helps}}",
+      "gratis": "Free",
+      "contacting": "Contacting...",
+      "contact": "Contact",
+      "messageSent": "Message sent to {name}!"
+    },
+    "co2Badge": {
+      "tooltip": "Estimated CO₂ savings compared to a new device (Fraunhofer IZM 2023)",
+      "saved": "~{amount} kg CO₂ saved"
+    },
+    "geschichteSection": {
+      "badge": "Our History",
+      "milestoneTitle": "Milestones",
+      "milestoneDesc": "From a small workshop to the leading organization for sustainable IT in Switzerland.",
+      "currentTitle": "Today",
+      "yearsActive": "Years active",
+      "teamMembers": "Team members",
+      "devicesPerYear": "Devices rescued per year"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "Numbers & Facts",
+      "environmentalTitle": "Environmental Impact",
+      "socialTitle": "Social Impact",
+      "devicesSaved": "IT devices rescued instead of discarded",
+      "co2Saved": "CO₂ saved through reuse",
+      "ewasteReduced": "E-waste prevented",
+      "members": "Members in our community",
+      "repairsCompleted": "IT help requests processed",
+      "trainedPeople": "People trained in workshops",
+      "learnMore": "Learn more about our impact"
     }
   }
 }

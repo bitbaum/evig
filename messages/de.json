@@ -5942,6 +5942,76 @@
       "tierCity": "Stadt Zürich",
       "tierOrg": "Organisationen",
       "tierCommunity": "Community"
+    },
+    "userMenu": {
+      "login": "Anmelden",
+      "register": "Registrieren",
+      "admin": "Admin-Bereich",
+      "dashboard": "Dashboard",
+      "myProfile": "Mein Profil",
+      "messages": "Nachrichten",
+      "membership": "Mitgliedschaft",
+      "myListings": "Meine Inserate",
+      "myOrders": "Meine Bestellungen",
+      "myAppointments": "Meine Termine",
+      "myWorkshops": "Meine Workshops",
+      "myBookings": "Meine Buchungen",
+      "settings": "Einstellungen",
+      "logout": "Abmelden",
+      "accountMenu": "Konto-Menü",
+      "profilePicture": "Profilbild",
+      "user": "Benutzer"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count, plural, one {# Platz verfügbar} other {# Plätze verfügbar}}",
+      "free": "Kostenlos",
+      "vatIncluded": "inkl. MwSt."
+    },
+    "shareButtons": {
+      "title": "Artikel teilen",
+      "shareMastodon": "Auf Mastodon teilen",
+      "shareX": "Auf X teilen",
+      "shareLinkedin": "Auf LinkedIn teilen",
+      "shareFacebook": "Auf Facebook teilen",
+      "mastodonHint": "Für Mastodon: Wähle nach dem Klick deine Instanz aus"
+    },
+    "serviceCta": {
+      "heading": "Bereit loszulegen?",
+      "desc": "Buche jetzt deinen Termin für unsere {serviceTitle} Dienstleistungen.",
+      "contact": "Kontakt",
+      "backToServices": "Zurück zu Services"
+    },
+    "helperCard": {
+      "helps": "{count, plural, one {# Hilfe} other {# Hilfen}}",
+      "gratis": "Gratis",
+      "contacting": "Wird kontaktiert...",
+      "contact": "Kontaktieren",
+      "messageSent": "Nachricht an {name} gesendet!"
+    },
+    "co2Badge": {
+      "tooltip": "Geschätzte CO₂-Einsparung gegenüber einem Neugerät (Fraunhofer IZM 2023)",
+      "saved": "~{amount} kg CO₂ eingespart"
+    },
+    "geschichteSection": {
+      "badge": "Unsere Geschichte",
+      "milestoneTitle": "Meilensteine",
+      "milestoneDesc": "Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT in der Schweiz.",
+      "currentTitle": "Heute",
+      "yearsActive": "Jahre aktiv",
+      "teamMembers": "Teammitglieder",
+      "devicesPerYear": "Geräte pro Jahr gerettet"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "Zahlen & Fakten",
+      "environmentalTitle": "Umweltwirkung",
+      "socialTitle": "Soziale Wirkung",
+      "devicesSaved": "IT-Geräte gerettet statt entsorgt",
+      "co2Saved": "CO₂ eingespart durch Wiederverwendung",
+      "ewasteReduced": "Elektroschrott verhindert",
+      "members": "Mitglieder in unserer Community",
+      "repairsCompleted": "IT-Hilfe Anfragen bearbeitet",
+      "trainedPeople": "Menschen in Workshops ausgebildet",
+      "learnMore": "Mehr zu unserer Wirkung erfahren"
     }
   }
 }

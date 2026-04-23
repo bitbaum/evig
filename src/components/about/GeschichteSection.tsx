@@ -5,7 +5,10 @@
  * Uses warm, storytelling-focused design with visual timeline.
  */
 
+'use client'
+
 import { Clock, Rocket, Award, TrendingUp, Users, Building } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import {
   HISTORY_CONFIG,
@@ -98,6 +101,7 @@ function TimelineItem({
 }
 
 export default function GeschichteSection() {
+  const t = useTranslations('components.geschichteSection')
   const { founding, milestones, currentState } = HISTORY_CONFIG
 
   return (
@@ -107,7 +111,7 @@ export default function GeschichteSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Clock className="h-4 w-4" />
-            Unsere Geschichte
+            {t('badge')}
           </div>
           <Heading level={2} className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             {founding.title}
@@ -133,11 +137,10 @@ export default function GeschichteSection() {
         {/* Timeline Header */}
         <div className="text-center mb-12">
           <Heading level={3} className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-            Meilensteine
+            {t('milestoneTitle')}
           </Heading>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT
-            in der Schweiz.
+            {t('milestoneDesc')}
           </p>
         </div>
 
@@ -160,19 +163,19 @@ export default function GeschichteSection() {
 
         {/* Current State Summary */}
         <div className="mt-20 bg-green-600 rounded-2xl p-8 text-white text-center">
-          <Heading level={3} className="text-2xl font-bold mb-6">Heute</Heading>
+          <Heading level={3} className="text-2xl font-bold mb-6">{t('currentTitle')}</Heading>
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.yearsActive}</p>
-              <p className="text-green-100">Jahre aktiv</p>
+              <p className="text-green-100">{t('yearsActive')}</p>
             </div>
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.teamSize}</p>
-              <p className="text-green-100">Teammitglieder</p>
+              <p className="text-green-100">{t('teamMembers')}</p>
             </div>
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.devicesPerYear}</p>
-              <p className="text-green-100">Geräte pro Jahr gerettet</p>
+              <p className="text-green-100">{t('devicesPerYear')}</p>
             </div>
           </div>
         </div>

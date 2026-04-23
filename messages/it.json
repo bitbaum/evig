@@ -5791,6 +5791,76 @@
       "tierCity": "Città di Zurigo",
       "tierOrg": "Organizzazioni",
       "tierCommunity": "Comunità"
+    },
+    "userMenu": {
+      "login": "Accedi",
+      "register": "Registrati",
+      "admin": "Area admin",
+      "dashboard": "Pannello",
+      "myProfile": "Il mio profilo",
+      "messages": "Messaggi",
+      "membership": "Adesione",
+      "myListings": "I miei annunci",
+      "myOrders": "I miei ordini",
+      "myAppointments": "I miei appuntamenti",
+      "myWorkshops": "I miei workshop",
+      "myBookings": "Le mie prenotazioni",
+      "settings": "Impostazioni",
+      "logout": "Esci",
+      "accountMenu": "Menu account",
+      "profilePicture": "Foto profilo",
+      "user": "Utente"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count, plural, one {# posto disponibile} other {# posti disponibili}}",
+      "free": "Gratuito",
+      "vatIncluded": "IVA inclusa"
+    },
+    "shareButtons": {
+      "title": "Condividi articolo",
+      "shareMastodon": "Condividi su Mastodon",
+      "shareX": "Condividi su X",
+      "shareLinkedin": "Condividi su LinkedIn",
+      "shareFacebook": "Condividi su Facebook",
+      "mastodonHint": "Per Mastodon: scegli la tua istanza dopo il clic"
+    },
+    "serviceCta": {
+      "heading": "Pronto per iniziare?",
+      "desc": "Prenota ora il tuo appuntamento per i nostri servizi {serviceTitle}.",
+      "contact": "Contatto",
+      "backToServices": "Torna ai servizi"
+    },
+    "helperCard": {
+      "helps": "{count, plural, one {# aiuto} other {# aiuti}}",
+      "gratis": "Gratuito",
+      "contacting": "Contattando...",
+      "contact": "Contatta",
+      "messageSent": "Messaggio inviato a {name}!"
+    },
+    "co2Badge": {
+      "tooltip": "Risparmio stimato di CO₂ rispetto a un nuovo dispositivo (Fraunhofer IZM 2023)",
+      "saved": "~{amount} kg CO₂ risparmiati"
+    },
+    "geschichteSection": {
+      "badge": "La nostra storia",
+      "milestoneTitle": "Tappe",
+      "milestoneDesc": "Da un piccolo laboratorio all'organizzazione leader per l'IT sostenibile in Svizzera.",
+      "currentTitle": "Oggi",
+      "yearsActive": "Anni di attività",
+      "teamMembers": "Membri del team",
+      "devicesPerYear": "Dispositivi salvati all'anno"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "Numeri & Fatti",
+      "environmentalTitle": "Impatto ambientale",
+      "socialTitle": "Impatto sociale",
+      "devicesSaved": "Dispositivi IT salvati invece di smaltiti",
+      "co2Saved": "CO₂ risparmiata grazie al riutilizzo",
+      "ewasteReduced": "Rifiuti elettronici evitati",
+      "members": "Membri nella nostra comunità",
+      "repairsCompleted": "Richieste di aiuto IT elaborate",
+      "trainedPeople": "Persone formate nei workshop",
+      "learnMore": "Scopri di più sul nostro impatto"
     }
   }
 }

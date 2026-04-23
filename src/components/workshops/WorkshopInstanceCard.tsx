@@ -1,6 +1,7 @@
 'use client'
 
 import { Calendar, MapPin, Users } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 import type { WorkshopInstance } from './types'
 
@@ -15,6 +16,7 @@ export function WorkshopInstanceCard({
   spotsLeft,
   priceCents
 }: WorkshopInstanceCardProps) {
+  const t = useTranslations('components.workshopInstanceCard')
   return (
     <>
       {/* Workshop Details */}
@@ -32,7 +34,7 @@ export function WorkshopInstanceCard({
 
           <div className="flex items-center text-sm">
             <Users className="w-4 h-4 text-gray-400 mr-2" />
-            <span>{spotsLeft} Plätze verfügbar</span>
+            <span>{t('spotsAvailable', { count: spotsLeft })}</span>
           </div>
         </div>
       </div>
@@ -40,10 +42,10 @@ export function WorkshopInstanceCard({
       {/* Price */}
       <div className="text-center mb-4">
         <div className="text-2xl font-bold text-green-600">
-          {priceCents === 0 ? 'Kostenlos' : `CHF ${(priceCents / 100).toFixed(0)}`}
+          {priceCents === 0 ? t('free') : `CHF ${(priceCents / 100).toFixed(0)}`}
         </div>
         {priceCents > 0 && (
-          <div className="text-sm text-gray-500">inkl. MwSt.</div>
+          <div className="text-sm text-gray-500">{t('vatIncluded')}</div>
         )}
       </div>
     </>

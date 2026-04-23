@@ -5749,6 +5749,76 @@
       "tierCity": "Ville de Zurich",
       "tierOrg": "Organisations",
       "tierCommunity": "Communauté"
+    },
+    "userMenu": {
+      "login": "Se connecter",
+      "register": "S'inscrire",
+      "admin": "Espace admin",
+      "dashboard": "Tableau de bord",
+      "myProfile": "Mon profil",
+      "messages": "Messages",
+      "membership": "Adhésion",
+      "myListings": "Mes annonces",
+      "myOrders": "Mes commandes",
+      "myAppointments": "Mes rendez-vous",
+      "myWorkshops": "Mes ateliers",
+      "myBookings": "Mes réservations",
+      "settings": "Paramètres",
+      "logout": "Se déconnecter",
+      "accountMenu": "Menu du compte",
+      "profilePicture": "Photo de profil",
+      "user": "Utilisateur"
+    },
+    "workshopInstanceCard": {
+      "spotsAvailable": "{count, plural, one {# place disponible} other {# places disponibles}}",
+      "free": "Gratuit",
+      "vatIncluded": "TVA incluse"
+    },
+    "shareButtons": {
+      "title": "Partager l'article",
+      "shareMastodon": "Partager sur Mastodon",
+      "shareX": "Partager sur X",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "shareFacebook": "Partager sur Facebook",
+      "mastodonHint": "Pour Mastodon: choisissez votre instance après avoir cliqué"
+    },
+    "serviceCta": {
+      "heading": "Prêt à commencer?",
+      "desc": "Réservez maintenant votre rendez-vous pour nos services {serviceTitle}.",
+      "contact": "Contact",
+      "backToServices": "Retour aux services"
+    },
+    "helperCard": {
+      "helps": "{count, plural, one {# aide} other {# aides}}",
+      "gratis": "Gratuit",
+      "contacting": "Contacting...",
+      "contact": "Contacter",
+      "messageSent": "Message envoyé à {name}!"
+    },
+    "co2Badge": {
+      "tooltip": "Économies de CO₂ estimées par rapport à un nouvel appareil (Fraunhofer IZM 2023)",
+      "saved": "~{amount} kg CO₂ économisés"
+    },
+    "geschichteSection": {
+      "badge": "Notre histoire",
+      "milestoneTitle": "Jalons",
+      "milestoneDesc": "D'un petit atelier à l'organisation leader pour l'IT durable en Suisse.",
+      "currentTitle": "Aujourd'hui",
+      "yearsActive": "Années d'activité",
+      "teamMembers": "Membres de l'équipe",
+      "devicesPerYear": "Appareils sauvés par an"
+    },
+    "impactStatsSection": {
+      "sectionTitle": "Chiffres & Faits",
+      "environmentalTitle": "Impact environnemental",
+      "socialTitle": "Impact social",
+      "devicesSaved": "Appareils IT sauvés au lieu d'être jetés",
+      "co2Saved": "CO₂ économisé grâce à la réutilisation",
+      "ewasteReduced": "Déchets électroniques évités",
+      "members": "Membres dans notre communauté",
+      "repairsCompleted": "Demandes d'aide IT traitées",
+      "trainedPeople": "Personnes formées en ateliers",
+      "learnMore": "En savoir plus sur notre impact"
     }
   }
 }
