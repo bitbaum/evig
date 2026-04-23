@@ -5574,6 +5574,33 @@
       "receiptInfoText": "RevampIT은 비영리 단체입니다. CHF 100 이상 기부 시 세금 신고용 기부 확인서를 발급해 드립니다. 문의:",
       "loadError": "기부 로드 오류",
       "networkError": "데이터 로드 중 네트워크 오류"
+    },
+    "sellerProfile": {
+      "backToDashboard": "대시보드로 돌아가기",
+      "pageTitle": "판매자 프로필",
+      "noProfileDesc": "판매자 프로필을 만드세요. 첫 번째 게시물을 공개하면 자동으로 생성됩니다.",
+      "editProfileDesc": "공개 판매자 프로필을 수정하세요.",
+      "displayNameLabel": "표시 이름",
+      "displayNamePlaceholder": "공개 이름",
+      "bioLabel": "소개",
+      "bioPlaceholder": "자신에 대해 조금 알려주세요...",
+      "avatarLabel": "프로필 사진",
+      "avatarAlt": "프로필 사진",
+      "uploading": "업로드 중...",
+      "uploadImage": "이미지 업로드",
+      "avatarUrlPlaceholder": "또는 URL 입력: https://...",
+      "cityLabel": "도시",
+      "cityPlaceholder": "예: 취리히",
+      "cantonLabel": "주",
+      "cantonPlaceholder": "예: ZH",
+      "saving": "저장 중...",
+      "saveProfile": "프로필 저장",
+      "savedSuccess": "프로필이 저장되었습니다",
+      "loadError": "프로필 로드 오류",
+      "saveError": "저장 오류",
+      "uploadError": "업로드 오류",
+      "uploadImageError": "이미지 업로드 오류",
+      "unexpectedError": "예상치 못한 오류가 발생했습니다"
     }
   },
   "components": {

@@ -5725,6 +5725,33 @@
       "receiptInfoText": "RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter",
       "loadError": "Fehler beim Laden der Spenden",
       "networkError": "Netzwerkfehler beim Laden der Daten"
+    },
+    "sellerProfile": {
+      "backToDashboard": "Zurück zum Dashboard",
+      "pageTitle": "Verkäuferprofil",
+      "noProfileDesc": "Erstelle dein Verkäuferprofil. Es wird automatisch erstellt, wenn du dein erstes Inserat veröffentlichst.",
+      "editProfileDesc": "Bearbeite dein öffentliches Verkäuferprofil.",
+      "displayNameLabel": "Anzeigename",
+      "displayNamePlaceholder": "Dein öffentlicher Name",
+      "bioLabel": "Über mich",
+      "bioPlaceholder": "Erzähle etwas über dich...",
+      "avatarLabel": "Profilbild",
+      "avatarAlt": "Profilbild",
+      "uploading": "Wird hochgeladen...",
+      "uploadImage": "Bild hochladen",
+      "avatarUrlPlaceholder": "Oder URL eingeben: https://...",
+      "cityLabel": "Stadt",
+      "cityPlaceholder": "z.B. Zürich",
+      "cantonLabel": "Kanton",
+      "cantonPlaceholder": "z.B. ZH",
+      "saving": "Wird gespeichert...",
+      "saveProfile": "Profil speichern",
+      "savedSuccess": "Profil gespeichert",
+      "loadError": "Fehler beim Laden des Profils",
+      "saveError": "Fehler beim Speichern",
+      "uploadError": "Fehler beim Hochladen",
+      "uploadImageError": "Fehler beim Hochladen des Bildes",
+      "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
     }
   },
   "components": {

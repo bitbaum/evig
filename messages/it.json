@@ -5574,6 +5574,33 @@
       "receiptInfoText": "RevampIT è un'associazione senza scopo di lucro. Per donazioni di CHF 100 o più, emettiamo una conferma di donazione per la dichiarazione dei redditi. Contattaci a",
       "loadError": "Errore nel caricamento delle donazioni",
       "networkError": "Errore di rete nel caricamento dei dati"
+    },
+    "sellerProfile": {
+      "backToDashboard": "Torna alla dashboard",
+      "pageTitle": "Profilo venditore",
+      "noProfileDesc": "Crea il tuo profilo venditore. Verrà creato automaticamente quando pubblichi il tuo primo annuncio.",
+      "editProfileDesc": "Modifica il tuo profilo venditore pubblico.",
+      "displayNameLabel": "Nome visualizzato",
+      "displayNamePlaceholder": "Il tuo nome pubblico",
+      "bioLabel": "Su di me",
+      "bioPlaceholder": "Raccontaci qualcosa di te...",
+      "avatarLabel": "Foto profilo",
+      "avatarAlt": "Foto profilo",
+      "uploading": "Caricamento...",
+      "uploadImage": "Carica immagine",
+      "avatarUrlPlaceholder": "O inserisci URL: https://...",
+      "cityLabel": "Città",
+      "cityPlaceholder": "Es. Zurigo",
+      "cantonLabel": "Cantone",
+      "cantonPlaceholder": "Es. ZH",
+      "saving": "Salvataggio...",
+      "saveProfile": "Salva profilo",
+      "savedSuccess": "Profilo salvato",
+      "loadError": "Errore nel caricamento del profilo",
+      "saveError": "Errore nel salvataggio",
+      "uploadError": "Errore nel caricamento",
+      "uploadImageError": "Errore nel caricamento dell'immagine",
+      "unexpectedError": "Si è verificato un errore imprevisto"
     }
   },
   "components": {

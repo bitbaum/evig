@@ -5674,6 +5674,33 @@
       "receiptInfoText": "RevampIT is a non-profit association. For donations of CHF 100 or more, we are happy to issue a donation confirmation for your tax return. Contact us at",
       "loadError": "Error loading donations",
       "networkError": "Network error loading data"
+    },
+    "sellerProfile": {
+      "backToDashboard": "Back to dashboard",
+      "pageTitle": "Seller Profile",
+      "noProfileDesc": "Create your seller profile. It will be automatically created when you publish your first listing.",
+      "editProfileDesc": "Edit your public seller profile.",
+      "displayNameLabel": "Display name",
+      "displayNamePlaceholder": "Your public name",
+      "bioLabel": "About me",
+      "bioPlaceholder": "Tell us something about you...",
+      "avatarLabel": "Profile picture",
+      "avatarAlt": "Profile picture",
+      "uploading": "Uploading...",
+      "uploadImage": "Upload image",
+      "avatarUrlPlaceholder": "Or enter URL: https://...",
+      "cityLabel": "City",
+      "cityPlaceholder": "e.g. Zurich",
+      "cantonLabel": "Canton",
+      "cantonPlaceholder": "e.g. ZH",
+      "saving": "Saving...",
+      "saveProfile": "Save profile",
+      "savedSuccess": "Profile saved",
+      "loadError": "Error loading profile",
+      "saveError": "Error saving",
+      "uploadError": "Error uploading",
+      "uploadImageError": "Error uploading image",
+      "unexpectedError": "An unexpected error occurred"
     }
   },
   "components": {

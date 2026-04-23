@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
@@ -27,6 +28,7 @@ interface SellerProfileData {
 }
 
 export default function SellerProfileEditPage() {
+  const t = useTranslations('dashboard.sellerProfile')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
@@ -64,7 +66,7 @@ export default function SellerProfileEditPage() {
           setNoProfile(true)
         }
       } catch {
-        setError('Fehler beim Laden des Profils')
+        setError(t('loadError'))
       } finally {
         setIsLoading(false)
       }
@@ -90,14 +92,14 @@ export default function SellerProfileEditPage() {
       })
 
       if (result.success) {
-        setSuccess('Profil gespeichert')
+        setSuccess(t('savedSuccess'))
         setNoProfile(false)
         setTimeout(() => setSuccess(null), 3000)
       } else {
-        setError(result.error || 'Fehler beim Speichern')
+        setError(result.error || t('saveError'))
       }
     } catch {
-      setError('Ein unerwarteter Fehler ist aufgetreten')
+      setError(t('unexpectedError'))
     } finally {
       setIsSaving(false)
     }
@@ -116,10 +118,10 @@ export default function SellerProfileEditPage() {
       if (data.success && data.data?.urls?.[0]) {
         setAvatarUrl(data.data.urls[0])
       } else {
-        setError(data.error || 'Fehler beim Hochladen')
+        setError(data.error || t('uploadError'))
       }
     } catch {
-      setError('Fehler beim Hochladen des Bildes')
+      setError(t('uploadImageError'))
     } finally {
       setIsUploading(false)
     }
@@ -140,59 +142,57 @@ export default function SellerProfileEditPage() {
         className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
-        Zurück zum Dashboard
+        {t('backToDashboard')}
       </Link>
 
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
           <Heading level={1} className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
             <User className="w-5 h-5 text-green-600" />
-            Verkäuferprofil
+            {t('pageTitle')}
           </Heading>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            {noProfile
-              ? 'Erstelle Ihr Verkäuferprofil. Es wird automatisch erstellt, wenn du Ihr erstes Inserat veröffentlichen.'
-              : 'Bearbeite dein öffentliches Verkäuferprofil.'}
+            {noProfile ? t('noProfileDesc') : t('editProfileDesc')}
           </p>
         </div>
 
         <div className="p-6 space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Anzeigename
+              {t('displayNameLabel')}
             </label>
             <input
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              placeholder="Ihr öffentlicher Name"
+              placeholder={t('displayNamePlaceholder')}
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Über mich
+              {t('bioLabel')}
             </label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={3}
-              placeholder="Erzähle etwas über dich..."
+              placeholder={t('bioPlaceholder')}
               className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Profilbild
+              {t('avatarLabel')}
             </label>
             <div className="flex items-center gap-4">
               {avatarUrl ? (
                 <div className="relative">
                   <img
                     src={avatarUrl}
-                    alt="Profilbild"
+                    alt={t('avatarAlt')}
                     className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
                   />
                   <button
@@ -214,7 +214,7 @@ export default function SellerProfileEditPage() {
                 ) : (
                   <Upload className="w-4 h-4" />
                 )}
-                {isUploading ? 'Wird hochgeladen...' : 'Bild hochladen'}
+                {isUploading ? t('uploading') : t('uploadImage')}
                 <input
                   type="file"
                   accept="image/*"
@@ -228,7 +228,7 @@ export default function SellerProfileEditPage() {
               type="url"
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
-              placeholder="Oder URL eingeben: https://..."
+              placeholder={t('avatarUrlPlaceholder')}
               className="mt-2 w-full px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
           </div>
@@ -236,25 +236,25 @@ export default function SellerProfileEditPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Stadt
+                {t('cityLabel')}
               </label>
               <input
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="z.B. Zürich"
+                placeholder={t('cityPlaceholder')}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Kanton
+                {t('cantonLabel')}
               </label>
               <input
                 type="text"
                 value={canton}
                 onChange={(e) => setCanton(e.target.value)}
-                placeholder="z.B. ZH"
+                placeholder={t('cantonPlaceholder')}
                 className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
@@ -284,7 +284,7 @@ export default function SellerProfileEditPage() {
             ) : (
               <Save className="w-4 h-4" />
             )}
-            {isSaving ? 'Wird gespeichert...' : 'Profil speichern'}
+            {isSaving ? t('saving') : t('saveProfile')}
           </Button>
         </div>
       </div>

@@ -5574,6 +5574,33 @@
       "receiptInfoText": "RevampIT は非営利団体です。CHF 100 以上の寄付には税務申告用の寄付確認書を発行します。お問い合わせ:",
       "loadError": "寄付の読み込みエラー",
       "networkError": "データ読み込み時のネットワークエラー"
+    },
+    "sellerProfile": {
+      "backToDashboard": "ダッシュボードへ戻る",
+      "pageTitle": "販売者プロフィール",
+      "noProfileDesc": "販売者プロフィールを作成してください。最初のリストを公開するときに自動的に作成されます。",
+      "editProfileDesc": "公開販売者プロフィールを編集してください。",
+      "displayNameLabel": "表示名",
+      "displayNamePlaceholder": "あなたの公開名",
+      "bioLabel": "自己紹介",
+      "bioPlaceholder": "自分について少し教えてください...",
+      "avatarLabel": "プロフィール写真",
+      "avatarAlt": "プロフィール写真",
+      "uploading": "アップロード中...",
+      "uploadImage": "画像をアップロード",
+      "avatarUrlPlaceholder": "またはURLを入力: https://...",
+      "cityLabel": "市区町村",
+      "cityPlaceholder": "例: チューリッヒ",
+      "cantonLabel": "州",
+      "cantonPlaceholder": "例: ZH",
+      "saving": "保存中...",
+      "saveProfile": "プロフィールを保存",
+      "savedSuccess": "プロフィールを保存しました",
+      "loadError": "プロフィールの読み込みエラー",
+      "saveError": "保存エラー",
+      "uploadError": "アップロードエラー",
+      "uploadImageError": "画像のアップロードエラー",
+      "unexpectedError": "予期しないエラーが発生しました"
     }
   },
   "components": {
