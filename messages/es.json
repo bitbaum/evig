@@ -2320,7 +2320,15 @@
         "locationPlaceholder": "Ej. Zúrich, 8005",
         "contactHeading": "Información de contacto",
         "contactLabel": "Información de contacto adicional (opcional)",
-        "contactPlaceholder": "p.ej. número de teléfono, horarios de contacto preferidos, opciones de envío..."
+        "contactPlaceholder": "p.ej. número de teléfono, horarios de contacto preferidos, opciones de envío...",
+        "errors": {
+          "titleRequired": "El título es obligatorio",
+          "descriptionRequired": "La descripción es obligatoria",
+          "priceRequired": "El precio es obligatorio",
+          "categoryRequired": "La categoría es obligatoria",
+          "conditionRequired": "El estado es obligatorio",
+          "locationRequired": "La ubicación es obligatoria"
+        }
       },
       "basicInfo": {
         "heading": "Información básica",
@@ -6317,6 +6325,10 @@
     },
     "messageButton": {
       "title": "Mensajes"
+    },
+    "stepper": {
+      "progressLabel": "Progreso",
+      "stepOf": "Paso {current} de {total}"
     }
   },
   "profil": {

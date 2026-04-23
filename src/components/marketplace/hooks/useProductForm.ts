@@ -1,27 +1,9 @@
-/**
- * useProductForm Hook
- * 
- * Custom hook for product form state management
- * 
- * Created: 2025-12-17
- * Last Modified: 2025-12-17
- * Last Modified Summary: Extracted form state management from ProductListingForm
- */
+'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ProductFormData, ProductListingErrors } from '../types'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
-
-function validateProductForm(formData: ProductFormData): ProductListingErrors {
-  const errors: ProductListingErrors = {}
-  if (!formData.title.trim()) errors.title = 'Titel ist erforderlich'
-  if (!formData.description.trim()) errors.description = 'Beschreibung ist erforderlich'
-  if (!formData.price.trim()) errors.price = 'Preis ist erforderlich'
-  if (!formData.category) errors.category = 'Kategorie ist erforderlich'
-  if (!formData.condition) errors.condition = 'Zustand ist erforderlich'
-  if (!formData.location.trim()) errors.location = 'Standort ist erforderlich'
-  return errors
-}
 
 function isFormValid(errors: ProductListingErrors): boolean {
   return Object.keys(errors).length === 0
@@ -40,8 +22,21 @@ const initialFormData: ProductFormData = {
 }
 
 export function useProductForm() {
+  const t = useTranslations('marketplace.sell')
+  const tf = useTranslations('marketplace.sell.form.errors')
   const [formData, setFormData] = useState<ProductFormData>(initialFormData)
   const [errors, setErrors] = useState<ProductListingErrors>({})
+
+  const validateProductForm = (data: ProductFormData): ProductListingErrors => {
+    const errs: ProductListingErrors = {}
+    if (!data.title.trim()) errs.title = tf('titleRequired')
+    if (!data.description.trim()) errs.description = tf('descriptionRequired')
+    if (!data.price.trim()) errs.price = tf('priceRequired')
+    if (!data.category) errs.category = tf('categoryRequired')
+    if (!data.condition) errs.condition = tf('conditionRequired')
+    if (!data.location.trim()) errs.location = tf('locationRequired')
+    return errs
+  }
 
   const updateField = (field: keyof ProductFormData, value: string | File[]) => {
     setFormData(prev => ({ ...prev, [field]: value }))
@@ -57,7 +52,7 @@ export function useProductForm() {
 
   const addImages = (files: File[]) => {
     if (formData.images.length + files.length > MARKETPLACE_LIMITS.MAX_IMAGES) {
-      throw new Error(`Maximal ${MARKETPLACE_LIMITS.MAX_IMAGES} Bilder erlaubt`)
+      throw new Error(t('maxImagesError', { max: MARKETPLACE_LIMITS.MAX_IMAGES }))
     }
     setFormData(prev => ({
       ...prev,
@@ -93,6 +88,3 @@ export function useProductForm() {
     reset,
   }
 }
-
-
-

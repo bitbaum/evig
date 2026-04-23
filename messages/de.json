@@ -570,7 +570,15 @@
         "locationPlaceholder": "z.B. Zürich, 8005",
         "contactHeading": "Kontaktinformationen",
         "contactLabel": "Zusätzliche Kontaktinformationen (optional)",
-        "contactPlaceholder": "z.B. Telefonnummer, bevorzugte Kontaktzeiten, Versandmöglichkeiten..."
+        "contactPlaceholder": "z.B. Telefonnummer, bevorzugte Kontaktzeiten, Versandmöglichkeiten...",
+        "errors": {
+          "titleRequired": "Titel ist erforderlich",
+          "descriptionRequired": "Beschreibung ist erforderlich",
+          "priceRequired": "Preis ist erforderlich",
+          "categoryRequired": "Kategorie ist erforderlich",
+          "conditionRequired": "Zustand ist erforderlich",
+          "locationRequired": "Standort ist erforderlich"
+        }
       },
       "basicInfo": {
         "heading": "Grundinformationen",
@@ -6468,6 +6476,10 @@
     },
     "messageButton": {
       "title": "Nachrichten"
+    },
+    "stepper": {
+      "progressLabel": "Fortschritt",
+      "stepOf": "Schritt {current} von {total}"
     }
   },
   "profil": {

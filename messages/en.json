@@ -519,7 +519,15 @@
         "locationPlaceholder": "e.g. Zurich, 8005",
         "contactHeading": "Contact information",
         "contactLabel": "Additional contact information (optional)",
-        "contactPlaceholder": "e.g. phone number, preferred contact times, shipping options..."
+        "contactPlaceholder": "e.g. phone number, preferred contact times, shipping options...",
+        "errors": {
+          "titleRequired": "Title is required",
+          "descriptionRequired": "Description is required",
+          "priceRequired": "Price is required",
+          "categoryRequired": "Category is required",
+          "conditionRequired": "Condition is required",
+          "locationRequired": "Location is required"
+        }
       },
       "basicInfo": {
         "heading": "Basic Information",
@@ -6417,6 +6425,10 @@
     },
     "messageButton": {
       "title": "Messages"
+    },
+    "stepper": {
+      "progressLabel": "Progress",
+      "stepOf": "Step {current} of {total}"
     }
   },
   "profil": {

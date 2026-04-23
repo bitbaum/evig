@@ -2320,7 +2320,15 @@
         "locationPlaceholder": "例：チューリッヒ、8005",
         "contactHeading": "連絡先情報",
         "contactLabel": "追加の連絡先情報（任意）",
-        "contactPlaceholder": "例：電話番号、希望連絡時間、配送オプション…"
+        "contactPlaceholder": "例：電話番号、希望連絡時間、配送オプション…",
+        "errors": {
+          "titleRequired": "タイトルは必須です",
+          "descriptionRequired": "説明は必須です",
+          "priceRequired": "価格は必須です",
+          "categoryRequired": "カテゴリーは必須です",
+          "conditionRequired": "状態は必須です",
+          "locationRequired": "場所は必須です"
+        }
       },
       "basicInfo": {
         "heading": "基本情報",
@@ -6317,6 +6325,10 @@
     },
     "messageButton": {
       "title": "メッセージ"
+    },
+    "stepper": {
+      "progressLabel": "進捗",
+      "stepOf": "ステップ {current} / {total}"
     }
   },
   "profil": {

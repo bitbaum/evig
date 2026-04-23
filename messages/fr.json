@@ -478,7 +478,15 @@
         "locationPlaceholder": "Ex. Genève, 1200",
         "contactHeading": "Informations de contact",
         "contactLabel": "Informations de contact supplémentaires (facultatif)",
-        "contactPlaceholder": "p.ex. numéro de téléphone, horaires de contact préférés, options d'expédition..."
+        "contactPlaceholder": "p.ex. numéro de téléphone, horaires de contact préférés, options d'expédition...",
+        "errors": {
+          "titleRequired": "Le titre est obligatoire",
+          "descriptionRequired": "La description est obligatoire",
+          "priceRequired": "Le prix est obligatoire",
+          "categoryRequired": "La catégorie est obligatoire",
+          "conditionRequired": "L'état est obligatoire",
+          "locationRequired": "Le lieu est obligatoire"
+        }
       },
       "basicInfo": {
         "heading": "Informations de base",
@@ -6275,6 +6283,10 @@
     },
     "messageButton": {
       "title": "Messages"
+    },
+    "stepper": {
+      "progressLabel": "Progression",
+      "stepOf": "Étape {current} sur {total}"
     }
   },
   "profil": {

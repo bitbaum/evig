@@ -6,6 +6,8 @@ export interface FilterConfig {
   options: string[]
   defaultValue?: string
   color?: 'green' | 'blue' | 'purple' | 'orange'
+  /** The sentinel value that means "show all" — set automatically by useFiltering */
+  allValue?: string
 }
 
 export interface FilterableItem {
@@ -41,7 +43,8 @@ export function useFiltering<T extends FilterableItem>({
       const uniqueValues = Array.from(new Set(items.map(item => item[filter.key])))
       return {
         ...filter,
-        options: [allLabel, ...filter.options.filter(opt => 
+        allValue: allLabel,
+        options: [allLabel, ...filter.options.filter(opt =>
           opt === allLabel || uniqueValues.includes(opt)
         )]
       }

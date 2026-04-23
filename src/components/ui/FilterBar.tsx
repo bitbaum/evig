@@ -51,7 +51,7 @@ const FilterBarComponent: React.FC<FilterBarProps> = ({
             const colorScheme = colorVariants[filter.color || 'green']
             
             const handleClick = () => {
-              if (enableToggle && onFilterToggle && option !== 'Alle') {
+              if (enableToggle && onFilterToggle && option !== (filter.allValue ?? '')) {
                 onFilterToggle(filter.key, option)
               } else {
                 onFilterChange(filter.key, option)

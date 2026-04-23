@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 export interface Step {
@@ -22,12 +23,14 @@ const StepperComponent: React.FC<StepperProps> = ({
   onStepClick,
   className
 }) => {
+  const t = useTranslations('components.stepper')
+
   return (
-    <nav aria-label="Fortschritt" className={cn('w-full', className)}>
+    <nav aria-label={t('progressLabel')} className={cn('w-full', className)}>
       {/* Mobile view - compact */}
       <div className="sm:hidden">
         <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-          Schritt {currentStep + 1} von {steps.length}
+          {t('stepOf', { current: currentStep + 1, total: steps.length })}
         </p>
         <p className="text-lg font-semibold text-gray-900 dark:text-white mt-1">
           {steps[currentStep]?.label}

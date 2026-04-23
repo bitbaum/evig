@@ -2320,7 +2320,15 @@
         "locationPlaceholder": "예: 취리히, 8005",
         "contactHeading": "연락처 정보",
         "contactLabel": "추가 연락처 정보 (선택 사항)",
-        "contactPlaceholder": "예: 전화번호, 선호 연락 시간, 배송 옵션..."
+        "contactPlaceholder": "예: 전화번호, 선호 연락 시간, 배송 옵션...",
+        "errors": {
+          "titleRequired": "제목은 필수입니다",
+          "descriptionRequired": "설명은 필수입니다",
+          "priceRequired": "가격은 필수입니다",
+          "categoryRequired": "카테고리는 필수입니다",
+          "conditionRequired": "상태는 필수입니다",
+          "locationRequired": "위치는 필수입니다"
+        }
       },
       "basicInfo": {
         "heading": "기본 정보",
@@ -6317,6 +6325,10 @@
     },
     "messageButton": {
       "title": "메시지"
+    },
+    "stepper": {
+      "progressLabel": "진행 상황",
+      "stepOf": "{current} / {total} 단계"
     }
   },
   "profil": {

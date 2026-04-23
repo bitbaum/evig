@@ -2320,7 +2320,15 @@
         "locationPlaceholder": "Es. Zurigo, 8005",
         "contactHeading": "Informazioni di contatto",
         "contactLabel": "Informazioni di contatto aggiuntive (facoltativo)",
-        "contactPlaceholder": "es. numero di telefono, orari di contatto preferiti, opzioni di spedizione..."
+        "contactPlaceholder": "es. numero di telefono, orari di contatto preferiti, opzioni di spedizione...",
+        "errors": {
+          "titleRequired": "Il titolo è obbligatorio",
+          "descriptionRequired": "La descrizione è obbligatoria",
+          "priceRequired": "Il prezzo è obbligatorio",
+          "categoryRequired": "La categoria è obbligatoria",
+          "conditionRequired": "Lo stato è obbligatorio",
+          "locationRequired": "La posizione è obbligatoria"
+        }
       },
       "basicInfo": {
         "heading": "Informazioni di base",
@@ -6317,6 +6325,10 @@
     },
     "messageButton": {
       "title": "Messaggi"
+    },
+    "stepper": {
+      "progressLabel": "Avanzamento",
+      "stepOf": "Passaggio {current} di {total}"
     }
   },
   "profil": {
