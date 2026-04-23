@@ -10,6 +10,8 @@ import { auth } from '@/auth'
 import { getAccessibleSections, isSuperAdmin, type AdminSection } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
 import AppShell from '@/components/layout/AppShell'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, getLocale } from 'next-intl/server'
 
 export default async function AdminLayout({
   children,
@@ -41,7 +43,11 @@ export default async function AdminLayout({
     redirect('/?error=no_admin_access')
   }
 
+  const messages = await getMessages()
+  const locale = await getLocale()
+
   return (
+    <NextIntlClientProvider messages={messages} locale={locale}>
     <AppShell>
       <AdminLayoutClient
         user={{
@@ -55,5 +61,6 @@ export default async function AdminLayout({
         {children}
       </AdminLayoutClient>
     </AppShell>
+    </NextIntlClientProvider>
   )
 }
