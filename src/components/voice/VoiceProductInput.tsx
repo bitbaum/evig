@@ -70,7 +70,7 @@ export function VoiceProductInput({
       setState('error')
       onError?.(voiceError || t('errorProcessing'))
     }
-  }, [processVoiceRecording, voiceError, onProductData, onTranscription, onError])
+  }, [t, processVoiceRecording, voiceError, onProductData, onTranscription, onError])
 
   const startRecording = useCallback(async () => {
     try {
@@ -119,7 +119,7 @@ export function VoiceProductInput({
       setState('error')
       onError?.(t('errorMicrophone'))
     }
-  }, [onError, processRecording])
+  }, [t, onError, processRecording])
 
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && state === 'recording') {
@@ -213,7 +213,7 @@ export function VoiceProductInput({
       {/* Recording hint */}
       {state === 'recording' && (
         <div className="text-sm text-gray-600">
-          Sprich jetzt... z.B. &quot;Dell Latitude 7470, guter Zustand, 280 Franken&quot;
+          {t('recordingHint')}
         </div>
       )}
     </div>

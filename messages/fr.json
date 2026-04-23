@@ -5844,7 +5844,8 @@
       "stateError": "Error",
       "transcribedPrefix": "Recognized:",
       "errorProcessing": "Processing failed",
-      "errorMicrophone": "Could not activate microphone"
+      "errorMicrophone": "Could not activate microphone",
+      "recordingHint": "Speak now... e.g. \"Dell Latitude 7470, good condition, 280 francs\""
     },
     "erfassung": {
       "productImage": {
@@ -5985,6 +5986,34 @@
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
       }
+    },
+    "eWasteProblem": {
+      "badge": "The Problem",
+      "heading": "The E-Waste Crisis",
+      "intro": "Electronic waste is the world's fastest-growing waste stream. The figures show the scale of the problem — and why urgent action is needed.",
+      "keyMessage": "Less than a quarter of all electronic devices are correctly recycled.",
+      "consequence": "The rest ends up in landfills, is illegally exported or improperly processed — with devastating consequences for people and the environment."
+    },
+    "communitySpace": {
+      "badge": "Our Location",
+      "heading": "Visit Us",
+      "intro": "Our shop in Zurich is more than just a store — it is a meeting place for everyone interested in sustainable IT and open source.",
+      "offeringsTitle": "What you can find with us:",
+      "planRoute": "Plan route",
+      "workshopDesc": "Learn from experts in our regular workshops and talks. For beginners to advanced.",
+      "workshopLink": "Workshop programme",
+      "visionLabel": "Our Vision",
+      "visionCta": "Help us make this vision a reality.",
+      "supportProject": "Support the project"
+    },
+    "messageSidebar": {
+      "title": "Messages",
+      "searchPlaceholder": "Search conversations...",
+      "noConversations": "No conversations found",
+      "loading": "Loading...",
+      "noMessages": "No messages yet",
+      "newConversation": "New conversation",
+      "messagePlaceholder": "Write a message..."
     }
   }
 }

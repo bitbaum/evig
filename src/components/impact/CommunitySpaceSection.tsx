@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Community Space Section
  *
@@ -18,6 +20,7 @@ import {
   ArrowRight,
   Sparkles
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { PHYSICAL_SPACE, getFormattedAddress } from '@/data/impact-metrics'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
@@ -38,6 +41,7 @@ const visionIcons: Record<number, React.ReactNode> = {
 }
 
 export default function CommunitySpaceSection() {
+  const t = useTranslations('components.communitySpace')
   const address = getFormattedAddress()
 
   return (
@@ -53,14 +57,13 @@ export default function CommunitySpaceSection() {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <MapPin className="h-4 w-4" />
-            Unser Standort
+            {t('badge')}
           </div>
           <Heading level={2} className="text-4xl md:text-5xl font-bold mb-6">
-            Besuche uns
+            {t('heading')}
           </Heading>
           <p className="text-xl text-gray-500 max-w-3xl mx-auto">
-            Unser Laden in Zürich ist mehr als nur ein Geschäft – er ist ein Treffpunkt
-            für alle, die sich für nachhaltige IT und Open Source interessieren.
+            {t('intro')}
           </p>
         </div>
 
@@ -73,7 +76,7 @@ export default function CommunitySpaceSection() {
               {address}
             </p>
 
-            <Heading level={4} className="text-lg font-semibold mb-4 text-gray-300">Was du bei uns finden:</Heading>
+            <Heading level={4} className="text-lg font-semibold mb-4 text-gray-300">{t('offeringsTitle')}</Heading>
             <ul className="space-y-3">
               {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
                 <li key={index} className="flex items-center gap-3">
@@ -91,7 +94,7 @@ export default function CommunitySpaceSection() {
                 onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(address + ', Schweiz')}`, '_blank')}
               >
                 <MapPin className="h-4 w-4 mr-2" />
-                Route planen
+                {t('planRoute')}
               </Button>
             </div>
           </div>
@@ -106,8 +109,7 @@ export default function CommunitySpaceSection() {
             </div>
 
             <p className="text-gray-400 mb-6">
-              Lerne von Experten in unseren regelmässigen Workshops und Vorträgen.
-              Für Anfänger bis Fortgeschrittene.
+              {t('workshopDesc')}
             </p>
 
             <ul className="space-y-2 mb-6">
@@ -120,7 +122,7 @@ export default function CommunitySpaceSection() {
             </ul>
 
             <Button variant="outline-light" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white w-full sm:w-auto">
-              Zum Workshop-Programm
+              {t('workshopLink')}
             </Button>
           </div>
         </div>
@@ -132,7 +134,7 @@ export default function CommunitySpaceSection() {
               <Sparkles className="h-6 w-6" />
             </div>
             <div>
-              <span className="text-sm text-green-400 font-medium">Unsere Vision</span>
+              <span className="text-sm text-green-400 font-medium">{t('visionLabel')}</span>
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.vision.title}</Heading>
             </div>
           </div>
@@ -157,10 +159,10 @@ export default function CommunitySpaceSection() {
 
           <div className="mt-8 pt-8 border-t border-gray-700/50 text-center">
             <p className="text-gray-400 mb-4">
-              Hilf uns, diese Vision Wirklichkeit werden zu lassen.
+              {t('visionCta')}
             </p>
             <Button>
-              Projekt unterstützen
+              {t('supportProject')}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>

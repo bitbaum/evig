@@ -6037,7 +6037,8 @@
       "stateError": "Fehler",
       "transcribedPrefix": "Erkannt:",
       "errorProcessing": "Verarbeitung fehlgeschlagen",
-      "errorMicrophone": "Mikrofon konnte nicht aktiviert werden"
+      "errorMicrophone": "Mikrofon konnte nicht aktiviert werden",
+      "recordingHint": "Sprich jetzt... z.B. „Dell Latitude 7470, guter Zustand, 280 Franken\""
     },
     "erfassung": {
       "productImage": {
@@ -6178,6 +6179,34 @@
         "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
         "unmappedColumns": "Nicht zugeordnete Spalten:"
       }
+    },
+    "eWasteProblem": {
+      "badge": "Das Problem",
+      "heading": "Die E-Waste Krise",
+      "intro": "Elektroschrott ist der am schnellsten wachsende Abfallstrom der Welt. Die Zahlen zeigen das Ausmass des Problems – und warum Handeln dringend nötig ist.",
+      "keyMessage": "Weniger als ein Viertel aller Elektrogeräte werden korrekt recycelt.",
+      "consequence": "Der Rest landet auf Deponien, wird illegal exportiert oder unsachgemäss verarbeitet – mit verheerenden Folgen für Mensch und Umwelt."
+    },
+    "communitySpace": {
+      "badge": "Unser Standort",
+      "heading": "Besuche uns",
+      "intro": "Unser Laden in Zürich ist mehr als nur ein Geschäft – er ist ein Treffpunkt für alle, die sich für nachhaltige IT und Open Source interessieren.",
+      "offeringsTitle": "Was du bei uns finden:",
+      "planRoute": "Route planen",
+      "workshopDesc": "Lerne von Experten in unseren regelmässigen Workshops und Vorträgen. Für Anfänger bis Fortgeschrittene.",
+      "workshopLink": "Zum Workshop-Programm",
+      "visionLabel": "Unsere Vision",
+      "visionCta": "Hilf uns, diese Vision Wirklichkeit werden zu lassen.",
+      "supportProject": "Projekt unterstützen"
+    },
+    "messageSidebar": {
+      "title": "Nachrichten",
+      "searchPlaceholder": "Unterhaltungen suchen...",
+      "noConversations": "Keine Unterhaltungen gefunden",
+      "loading": "Laden...",
+      "noMessages": "Noch keine Nachrichten",
+      "newConversation": "Neue Unterhaltung",
+      "messagePlaceholder": "Nachricht schreiben..."
     }
   }
 }

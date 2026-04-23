@@ -7,6 +7,7 @@
  */
 
 import { AlertTriangle, ExternalLink, Globe, Recycle, Laptop, Scale } from 'lucide-react'
+import { getTranslations } from 'next-intl/server'
 import Heading from '@/components/ui/Heading'
 import { EWASTE_GLOBAL_STATS, type EWasteStat } from '@/data/impact-metrics'
 
@@ -49,7 +50,9 @@ function StatCard({ stat }: { stat: EWasteStat }) {
   )
 }
 
-export default function EWasteProblemSection() {
+export default async function EWasteProblemSection() {
+  const t = await getTranslations('components.eWasteProblem')
+
   return (
     <section className="py-20 bg-gradient-to-br from-red-700 via-red-600 to-red-800 relative overflow-hidden">
       {/* Background Pattern */}
@@ -64,14 +67,13 @@ export default function EWasteProblemSection() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-6">
             <AlertTriangle className="h-4 w-4" />
-            Das Problem
+            {t('badge')}
           </div>
           <Heading level={2} className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Die E-Waste Krise
+            {t('heading')}
           </Heading>
           <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Elektroschrott ist der am schnellsten wachsende Abfallstrom der Welt.
-            Die Zahlen zeigen das Ausmass des Problems – und warum Handeln dringend nötig ist.
+            {t('intro')}
           </p>
         </div>
 
@@ -85,11 +87,10 @@ export default function EWasteProblemSection() {
         {/* Key Message */}
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 text-center">
           <p className="text-2xl md:text-3xl font-semibold text-white mb-4">
-            Weniger als ein Viertel aller Elektrogeräte werden korrekt recycelt.
+            {t('keyMessage')}
           </p>
           <p className="text-lg text-white/80">
-            Der Rest landet auf Deponien, wird illegal exportiert oder unsachgemäss verarbeitet –
-            mit verheerenden Folgen für Mensch und Umwelt.
+            {t('consequence')}
           </p>
         </div>
       </div>

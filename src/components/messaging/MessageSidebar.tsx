@@ -12,6 +12,7 @@ import {
   Check,
   CheckCheck
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatTime } from '@/lib/date-formats'
@@ -49,6 +50,7 @@ interface MessageSidebarProps {
 }
 
 export function MessageSidebar({ isOpen, onClose, initialConversationId }: MessageSidebarProps) {
+  const t = useTranslations('components.messageSidebar')
   const { data: session } = useSession()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null)
@@ -133,7 +135,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
       <div className="ml-auto w-full max-w-md bg-white h-full flex flex-col">
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-          <Heading level={2} className="text-lg font-semibold">Nachrichten</Heading>
+          <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded"
@@ -152,7 +154,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                   <input
                     type="text"
-                    placeholder="Unterhaltungen suchen..."
+                    placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -165,7 +167,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                 {filteredConversations.length === 0 ? (
                   <div className="p-8 text-center text-gray-500">
                     <MessageSquare className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                    <p>Keine Unterhaltungen gefunden</p>
+                    <p>{t('noConversations')}</p>
                   </div>
                 ) : (
                   filteredConversations.map((conversation) => (
@@ -187,7 +189,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 truncate mb-1">
-                          {conversation.last_message_preview || 'Neue Unterhaltung'}
+                          {conversation.last_message_preview || t('newConversation')}
                         </p>
                         <div className="flex items-center gap-2">
                           <span className="text-xs text-gray-500 capitalize">
@@ -231,11 +233,11 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {isLoading ? (
-                  <div className="text-center text-gray-500">Laden...</div>
+                  <div className="text-center text-gray-500">{t('loading')}</div>
                 ) : messages.length === 0 ? (
                   <div className="text-center text-gray-500">
                     <MessageSquare className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                    <p>Noch keine Nachrichten</p>
+                    <p>{t('noMessages')}</p>
                   </div>
                 ) : (
                   messages.map((message) => {
@@ -280,7 +282,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                    placeholder="Nachricht schreiben..."
+                    placeholder={t('messagePlaceholder')}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                   <button
