@@ -12,6 +12,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Package, CheckCircle, Loader2, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
@@ -48,6 +49,7 @@ export function AISearchModal({
   searchResults,
   onSelectResult,
 }: AISearchModalProps) {
+  const t = useTranslations('components.aiSearchModal')
   const searchExamples = [
     'iPhone 13 Pro Max',
     'MacBook Air M1',
@@ -82,17 +84,17 @@ export function AISearchModal({
                   </div>
                   <div>
                     <Heading level={2} className={cn('text-xl font-semibold', getTextColor('white', 'primary'))}>
-                      AI Schnellsuche
+                      {t('title')}
                     </Heading>
                     <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-                      Gib einen Produktnamen oder Artikelnummer ein
+                      {t('subtitle')}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
                   className="text-neutral-400 hover:text-neutral-600 transition-colors min-h-[touch] touch-target p-2"
-                  aria-label="Schliessen"
+                  aria-label={t('close')}
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -125,14 +127,14 @@ export function AISearchModal({
                     ) : (
                       <Search className="w-4 h-4" />
                     )}
-                    Suchen
+                    {t('search')}
                   </button>
                 </div>
 
                 {/* Search Examples */}
                 <div className="mt-4 p-4 bg-info-50 rounded-lg border border-info-200">
                   <p className={cn('text-sm font-medium mb-2', getStatusColors('info').text)}>
-                    Beispiele:
+                    {t('examples')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {searchExamples.map((example) => (
@@ -152,7 +154,7 @@ export function AISearchModal({
               {searchResults.length > 0 && (
                 <div className="space-y-4">
                   <Heading level={3} className={cn('text-lg font-medium', getTextColor('white', 'primary'))}>
-                    {searchResults.length} Produkt{searchResults.length !== 1 ? 'e' : ''} gefunden
+                    {t('resultsFound', { count: searchResults.length })}
                   </Heading>
 
                   <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -182,7 +184,7 @@ export function AISearchModal({
                                   confidenceColors.bg,
                                   confidenceColors.text
                                 )}>
-                                  {Math.round(result.confidence * 100)}% Übereinstimmung
+                                  {t('confidence', { percent: Math.round(result.confidence * 100) })}
                                 </span>
                               </div>
                               <p className={cn('text-sm mb-2', getTextColor('white', 'muted'))}>
@@ -212,13 +214,13 @@ export function AISearchModal({
                       }}
                       className="flex-1 px-4 py-2 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target"
                     >
-                      Neue Suche
+                      {t('newSearch')}
                     </button>
                     <button
                       onClick={onClose}
                       className="px-4 py-2 text-neutral-600 hover:text-neutral-800 transition-colors min-h-[touch] touch-target"
                     >
-                      Manueller Eintrag
+                      {t('manualEntry')}
                     </button>
                   </div>
                 </div>
@@ -229,10 +231,10 @@ export function AISearchModal({
                 <div className="text-center py-12">
                   <Loader2 className="w-8 h-8 text-info-600 animate-spin mx-auto mb-4" />
                   <Heading level={3} className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
-                    Produkt wird gesucht...
+                    {t('searching')}
                   </Heading>
                   <p className={cn('text-sm', getTextColor('white', 'muted'))}>
-                    Durchsuche Produktdatenbank nach passenden Artikeln
+                    {t('searchingDesc')}
                   </p>
                 </div>
               )}
@@ -242,23 +244,23 @@ export function AISearchModal({
                 <div className="text-center py-12">
                   <Search className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
                   <Heading level={3} className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
-                    Keine Produkte gefunden
+                    {t('noResults')}
                   </Heading>
                   <p className={cn('text-sm mb-4', getTextColor('white', 'muted'))}>
-                    Für "{searchQuery}" wurden keine passenden Produkte gefunden.
+                    {t('noResultsDesc', { query: searchQuery })}
                   </p>
                   <div className="flex gap-3 justify-center">
                     <button
                       onClick={() => onSearchQueryChange('')}
                       className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors min-h-[touch] touch-target"
                     >
-                      Neue Suche
+                      {t('newSearch')}
                     </button>
                     <button
                       onClick={onClose}
                       className="px-4 py-2 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target"
                     >
-                      Manueller Eintrag
+                      {t('manualEntry')}
                     </button>
                   </div>
                 </div>

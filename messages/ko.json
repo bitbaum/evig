@@ -5644,6 +5644,76 @@
       "supportButton": "RevampIT 후원하기",
       "successMessage": "환영합니다! 이메일을 확인해 주세요.",
       "networkError": "연결 오류. 나중에 다시 시도해 주세요."
+    },
+    "pagination": {
+      "of": "/",
+      "morePages": "더 많은 페이지"
+    },
+    "serviceBooking": {
+      "genericError": "오류가 발생했습니다"
+    },
+    "listingReviews": {
+      "title": "리뷰",
+      "empty": "이 매물에 대한 리뷰가 아직 없습니다.",
+      "writeReview": "리뷰 작성"
+    },
+    "productSuccessModal": {
+      "title": "제품 인식 완료!",
+      "identified": "{name}이(가) 성공적으로 식별되어 양식이 작성되었습니다.",
+      "confidence": "{percent}% 일치",
+      "editForm": "양식 편집"
+    },
+    "aiSearchModal": {
+      "title": "AI 빠른 검색",
+      "subtitle": "제품명 또는 품번을 입력하세요",
+      "close": "닫기",
+      "search": "검색",
+      "examples": "예시:",
+      "resultsFound": "{count, plural, other {# 개의 제품을 찾았습니다}}",
+      "confidence": "{percent}% 일치",
+      "newSearch": "새 검색",
+      "manualEntry": "수동 입력",
+      "searching": "제품을 검색하는 중...",
+      "searchingDesc": "제품 데이터베이스에서 검색 중",
+      "noResults": "제품을 찾을 수 없습니다",
+      "noResultsDesc": "\"{query}\"에 대한 제품을 찾을 수 없습니다."
+    },
+    "breadcrumbs": {
+      "admin": "관리",
+      "products": "제품",
+      "workshops": "워크숍",
+      "services": "서비스",
+      "users": "사용자",
+      "team": "팀",
+      "locations": "위치",
+      "content": "콘텐츠",
+      "analyse": "분석",
+      "approvals": "승인",
+      "settings": "설정",
+      "hirn": "HIRN",
+      "finanzen": "재무",
+      "erfassung": "재고 등록",
+      "inventory": "재고",
+      "dashboard": "대시보드",
+      "seller": "판매자",
+      "repairer": "기술자",
+      "techniker": "기술자",
+      "messages": "메시지",
+      "profile": "프로필",
+      "shop": "상점",
+      "cart": "장바구니",
+      "checkout": "결제",
+      "search": "검색",
+      "category": "카테고리",
+      "orders": "주문",
+      "blog": "블로그",
+      "marketplace": "마켓플레이스",
+      "itHilfe": "IT 도움",
+      "new": "새로 만들기",
+      "edit": "편집",
+      "create": "만들기",
+      "home": "홈",
+      "detail": "세부 정보"
     }
   }
 }

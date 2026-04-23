@@ -6,6 +6,7 @@
 
 import { motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import type { ProductSuggestion } from './types'
 import Heading from '@/components/ui/Heading'
 
@@ -15,6 +16,7 @@ interface ProductSuccessModalProps {
 }
 
 export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModalProps) {
+  const t = useTranslations('components.productSuccessModal')
   const IconComponent = suggestion.icon
   return (
     <motion.div
@@ -31,10 +33,10 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
       >
         <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
         <Heading level={2} className="text-2xl font-bold text-gray-900 mb-2">
-          Produkt erkannt!
+          {t('title')}
         </Heading>
         <p className="text-gray-600 mb-6">
-          {suggestion.name} wurde erfolgreich identifiziert und das Formular ausgefüllt.
+          {t('identified', { name: suggestion.name })}
         </p>
         <div className="bg-gray-50 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
@@ -47,14 +49,14 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
           </div>
           <p className="text-sm text-gray-600">CHF {suggestion.estimatedPrice}</p>
           <p className="text-xs text-green-600 mt-1">
-            {Math.round(suggestion.confidence * 100)}% Übereinstimmung
+            {t('confidence', { percent: Math.round(suggestion.confidence * 100) })}
           </p>
         </div>
         <button
           onClick={onClose}
           className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium"
         >
-          Formular bearbeiten
+          {t('editForm')}
         </button>
       </motion.div>
     </motion.div>

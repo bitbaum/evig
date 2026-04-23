@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { Star, Loader2, MessageSquare } from 'lucide-react'
 import ReviewForm from './ReviewForm'
 import Heading from '@/components/ui/Heading'
@@ -30,6 +31,7 @@ interface ListingReviewsProps {
 }
 
 export default function ListingReviews({ listingId, sellerId }: ListingReviewsProps) {
+  const t = useTranslations('components.listingReviews')
   const { data: session } = useSession()
   const [reviews, setReviews] = useState<Review[]>([])
   const [stats, setStats] = useState<ReviewStats>({ average_rating: null, review_count: 0 })
@@ -84,7 +86,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
       <div className="flex items-center justify-between mb-4">
         <Heading level={2} className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <MessageSquare className="w-5 h-5" />
-          Bewertungen
+          {t('title')}
           {stats.review_count > 0 && (
             <span className="text-sm font-normal text-gray-500">({stats.review_count})</span>
           )}
@@ -103,7 +105,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
       {/* Review List */}
       {reviews.length === 0 ? (
         <p className="text-gray-500 dark:text-gray-400 text-sm py-4">
-          Noch keine Bewertungen für dieses Inserat.
+          {t('empty')}
         </p>
       ) : (
         <div className="space-y-4 mb-4">
@@ -151,7 +153,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
           onClick={() => setShowForm(true)}
           className="w-full py-2.5 px-4 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
         >
-          Bewertung schreiben
+          {t('writeReview')}
         </button>
       )}
 

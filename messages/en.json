@@ -5744,6 +5744,76 @@
       "supportButton": "Support RevampIT",
       "successMessage": "Welcome! Check your email.",
       "networkError": "Connection error. Please try again later."
+    },
+    "pagination": {
+      "of": "of",
+      "morePages": "more pages"
+    },
+    "serviceBooking": {
+      "genericError": "An error occurred"
+    },
+    "listingReviews": {
+      "title": "Reviews",
+      "empty": "No reviews yet for this listing.",
+      "writeReview": "Write a review"
+    },
+    "productSuccessModal": {
+      "title": "Product recognised!",
+      "identified": "{name} was successfully identified and the form filled in.",
+      "confidence": "{percent}% match",
+      "editForm": "Edit form"
+    },
+    "aiSearchModal": {
+      "title": "AI Quick Search",
+      "subtitle": "Enter a product name or article number",
+      "close": "Close",
+      "search": "Search",
+      "examples": "Examples:",
+      "resultsFound": "{count, plural, one {1 product found} other {# products found}}",
+      "confidence": "{percent}% match",
+      "newSearch": "New search",
+      "manualEntry": "Manual entry",
+      "searching": "Searching for product...",
+      "searchingDesc": "Searching product database for matching items",
+      "noResults": "No products found",
+      "noResultsDesc": "No matching products found for \"{query}\"."
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "products": "Products",
+      "workshops": "Workshops",
+      "services": "Services",
+      "users": "Users",
+      "team": "Team",
+      "locations": "Locations",
+      "content": "Content",
+      "analyse": "Analytics",
+      "approvals": "Approvals",
+      "settings": "Settings",
+      "hirn": "HIRN",
+      "finanzen": "Finances",
+      "erfassung": "Inventory Entry",
+      "inventory": "Inventory",
+      "dashboard": "Dashboard",
+      "seller": "Seller",
+      "repairer": "Technician",
+      "techniker": "Technician",
+      "messages": "Messages",
+      "profile": "Profile",
+      "shop": "Shop",
+      "cart": "Cart",
+      "checkout": "Checkout",
+      "search": "Search",
+      "category": "Category",
+      "orders": "Orders",
+      "blog": "Blog",
+      "marketplace": "Marketplace",
+      "itHilfe": "IT Help",
+      "new": "New",
+      "edit": "Edit",
+      "create": "Create",
+      "home": "Home",
+      "detail": "Detail"
     }
   }
 }

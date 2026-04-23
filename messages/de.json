@@ -5795,6 +5795,76 @@
       "supportButton": "RevampIT unterstützen",
       "successMessage": "Willkommen! Überprüfe deine E-Mail.",
       "networkError": "Verbindungsfehler. Bitte versuche es später erneut."
+    },
+    "pagination": {
+      "of": "von",
+      "morePages": "weitere Seiten"
+    },
+    "serviceBooking": {
+      "genericError": "Ein Fehler ist aufgetreten"
+    },
+    "listingReviews": {
+      "title": "Bewertungen",
+      "empty": "Noch keine Bewertungen für dieses Inserat.",
+      "writeReview": "Bewertung schreiben"
+    },
+    "productSuccessModal": {
+      "title": "Produkt erkannt!",
+      "identified": "{name} wurde erfolgreich identifiziert und das Formular ausgefüllt.",
+      "confidence": "{percent}% Übereinstimmung",
+      "editForm": "Formular bearbeiten"
+    },
+    "aiSearchModal": {
+      "title": "AI Schnellsuche",
+      "subtitle": "Gib einen Produktnamen oder Artikelnummer ein",
+      "close": "Schliessen",
+      "search": "Suchen",
+      "examples": "Beispiele:",
+      "resultsFound": "{count, plural, one {1 Produkt gefunden} other {# Produkte gefunden}}",
+      "confidence": "{percent}% Übereinstimmung",
+      "newSearch": "Neue Suche",
+      "manualEntry": "Manueller Eintrag",
+      "searching": "Produkt wird gesucht...",
+      "searchingDesc": "Durchsuche Produktdatenbank nach passenden Artikeln",
+      "noResults": "Keine Produkte gefunden",
+      "noResultsDesc": "Für \"{query}\" wurden keine passenden Produkte gefunden."
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "products": "Produkte",
+      "workshops": "Workshops",
+      "services": "Dienstleistungen",
+      "users": "Benutzer",
+      "team": "Team",
+      "locations": "Standorte",
+      "content": "Inhalte",
+      "analyse": "Analyse",
+      "approvals": "Freigaben",
+      "settings": "Einstellungen",
+      "hirn": "Hirn",
+      "finanzen": "Finanzen",
+      "erfassung": "Erfassung",
+      "inventory": "Inventar",
+      "dashboard": "Dashboard",
+      "seller": "Verkäufer",
+      "repairer": "Techniker",
+      "techniker": "Techniker",
+      "messages": "Nachrichten",
+      "profile": "Profil",
+      "shop": "Shop",
+      "cart": "Warenkorb",
+      "checkout": "Kasse",
+      "search": "Suche",
+      "category": "Kategorie",
+      "orders": "Bestellungen",
+      "blog": "Blog",
+      "marketplace": "Marktplatz",
+      "itHilfe": "IT-Hilfe",
+      "new": "Neu",
+      "edit": "Bearbeiten",
+      "create": "Erstellen",
+      "home": "Home",
+      "detail": "Detail"
     }
   }
 }

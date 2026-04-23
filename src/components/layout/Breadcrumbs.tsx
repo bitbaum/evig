@@ -2,65 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { ChevronRight, Home } from 'lucide-react'
-
-/**
- * Breadcrumb path label overrides
- *
- * Maps URL path segments to German display labels.
- * Add entries here when new routes need readable breadcrumbs.
- */
-const PATH_LABELS: Record<string, string> = {
-  // Admin sections
-  admin: 'Admin',
-  products: 'Produkte',
-  workshops: 'Workshops',
-  services: 'Dienstleistungen',
-  users: 'Benutzer',
-  team: 'Team',
-  locations: 'Standorte',
-  content: 'Inhalte',
-  analyse: 'Analyse',
-  approvals: 'Freigaben',
-  settings: 'Einstellungen',
-  hirn: 'Hirn',
-  finanzen: 'Finanzen',
-  erfassung: 'Erfassung',
-  inventory: 'Inventar',
-
-  // Dashboard sections
-  dashboard: 'Dashboard',
-  seller: 'Verkäufer',
-  repairer: 'Techniker',
-  techniker: 'Techniker',
-  messages: 'Nachrichten',
-  profile: 'Profil',
-
-  // Shop sections
-  shop: 'Shop',
-  cart: 'Warenkorb',
-  checkout: 'Kasse',
-  search: 'Suche',
-  category: 'Kategorie',
-  orders: 'Bestellungen',
-
-  // Other
-  blog: 'Blog',
-  marketplace: 'Marktplatz',
-  'it-hilfe': 'IT-Hilfe',
-
-  // Actions
-  new: 'Neu',
-  edit: 'Bearbeiten',
-  create: 'Erstellen',
-}
-
-/**
- * Get a readable label for a path segment
- */
-function getLabel(segment: string): string {
-  return PATH_LABELS[segment] ?? segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ')
-}
 
 interface BreadcrumbsProps {
   /** Override the home path (default: contextual — /admin for admin pages, / for others) */
@@ -69,7 +12,23 @@ interface BreadcrumbsProps {
   className?: string
 }
 
+// Segments that map directly to a breadcrumb translation key
+const SEGMENT_KEYS: Record<string, string> = {
+  admin: 'admin', products: 'products', workshops: 'workshops',
+  services: 'services', users: 'users', team: 'team',
+  locations: 'locations', content: 'content', analyse: 'analyse',
+  approvals: 'approvals', settings: 'settings', hirn: 'hirn',
+  finanzen: 'finanzen', erfassung: 'erfassung', inventory: 'inventory',
+  dashboard: 'dashboard', seller: 'seller', repairer: 'repairer',
+  techniker: 'techniker', messages: 'messages', profile: 'profile',
+  shop: 'shop', cart: 'cart', checkout: 'checkout', search: 'search',
+  category: 'category', orders: 'orders', blog: 'blog',
+  marketplace: 'marketplace', 'it-hilfe': 'itHilfe',
+  new: 'new', edit: 'edit', create: 'create',
+}
+
 export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
+  const t = useTranslations('components.breadcrumbs')
   const pathname = usePathname()
   const segments = pathname.split('/').filter(Boolean)
 
@@ -79,7 +38,13 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
   const isAdmin = segments[0] === 'admin'
   const isDashboard = segments[0] === 'dashboard'
   const resolvedHomePath = homePath ?? (isAdmin ? '/admin' : isDashboard ? '/dashboard' : '/')
-  const homeLabel = isAdmin ? 'Admin' : isDashboard ? 'Dashboard' : 'Home'
+  const homeLabel = isAdmin ? t('admin') : isDashboard ? t('dashboard') : t('home')
+
+  function getLabel(segment: string): string {
+    const key = SEGMENT_KEYS[segment]
+    if (key) return t(key as Parameters<typeof t>[0])
+    return segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ')
+  }
 
   // Build breadcrumb items (skip the first segment since it's covered by home)
   const items = segments.slice(1).map((segment, index) => {
@@ -88,7 +53,7 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
 
     // Skip UUID-like segments in display but keep them in path
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(segment)
-    const label = isUuid ? 'Detail' : getLabel(segment)
+    const label = isUuid ? t('detail') : getLabel(segment)
 
     return { path, label, isLast }
   })

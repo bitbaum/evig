@@ -5602,6 +5602,76 @@
       "supportButton": "Soutenir RevampIT",
       "successMessage": "Bienvenue ! Vérifiez votre e-mail.",
       "networkError": "Erreur de connexion. Veuillez réessayer plus tard."
+    },
+    "pagination": {
+      "of": "sur",
+      "morePages": "plus de pages"
+    },
+    "serviceBooking": {
+      "genericError": "Une erreur est survenue"
+    },
+    "listingReviews": {
+      "title": "Avis",
+      "empty": "Pas encore d'avis pour cette annonce.",
+      "writeReview": "Écrire un avis"
+    },
+    "productSuccessModal": {
+      "title": "Produit reconnu !",
+      "identified": "{name} a été identifié avec succès et le formulaire rempli.",
+      "confidence": "{percent}% de correspondance",
+      "editForm": "Modifier le formulaire"
+    },
+    "aiSearchModal": {
+      "title": "Recherche rapide AI",
+      "subtitle": "Entrez un nom de produit ou un numéro d'article",
+      "close": "Fermer",
+      "search": "Rechercher",
+      "examples": "Exemples :",
+      "resultsFound": "{count, plural, one {1 produit trouvé} other {# produits trouvés}}",
+      "confidence": "{percent}% de correspondance",
+      "newSearch": "Nouvelle recherche",
+      "manualEntry": "Saisie manuelle",
+      "searching": "Recherche du produit...",
+      "searchingDesc": "Recherche dans la base de données produits",
+      "noResults": "Aucun produit trouvé",
+      "noResultsDesc": "Aucun produit correspondant à \"{query}\" n'a été trouvé."
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "products": "Produits",
+      "workshops": "Ateliers",
+      "services": "Services",
+      "users": "Utilisateurs",
+      "team": "Équipe",
+      "locations": "Emplacements",
+      "content": "Contenu",
+      "analyse": "Analyse",
+      "approvals": "Approbations",
+      "settings": "Paramètres",
+      "hirn": "HIRN",
+      "finanzen": "Finances",
+      "erfassung": "Saisie",
+      "inventory": "Inventaire",
+      "dashboard": "Tableau de bord",
+      "seller": "Vendeur",
+      "repairer": "Technicien",
+      "techniker": "Technicien",
+      "messages": "Messages",
+      "profile": "Profil",
+      "shop": "Boutique",
+      "cart": "Panier",
+      "checkout": "Commande",
+      "search": "Recherche",
+      "category": "Catégorie",
+      "orders": "Commandes",
+      "blog": "Blog",
+      "marketplace": "Marché",
+      "itHilfe": "Aide IT",
+      "new": "Nouveau",
+      "edit": "Modifier",
+      "create": "Créer",
+      "home": "Accueil",
+      "detail": "Détail"
     }
   }
 }

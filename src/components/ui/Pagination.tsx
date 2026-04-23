@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 interface PaginationProps {
   currentPage: number
@@ -102,6 +103,7 @@ export function Pagination({
   hrefBase,
   onPageChange,
 }: PaginationProps) {
+  const t = useTranslations('components.pagination')
   if (totalPages <= 1) return null
 
   const from = (currentPage - 1) * pageSize + 1
@@ -119,7 +121,7 @@ export function Pagination({
   return (
     <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-gray-100 dark:border-gray-700">
       <p className="text-sm text-gray-600 dark:text-gray-400">
-        {from}–{to} von {totalItems}
+        {from}–{to} {t('of')} {totalItems}
       </p>
       <div className="flex items-center gap-1">
         <NavButton page={currentPage - 1} disabled={currentPage <= 1} hrefBase={hrefBase} onPageChange={onPageChange}>
@@ -135,7 +137,7 @@ export function Pagination({
                 {prev && page - prev > 1 && (
                   <span
                     className="min-w-[2.75rem] text-center text-sm text-gray-400"
-                    aria-label="weitere Seiten"
+                    aria-label={t('morePages')}
                   >
                     …
                   </span>

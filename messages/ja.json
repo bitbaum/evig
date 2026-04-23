@@ -5644,6 +5644,76 @@
       "supportButton": "RevampITを支援する",
       "successMessage": "ようこそ！メールを確認してください。",
       "networkError": "接続エラー。後でもう一度お試しください。"
+    },
+    "pagination": {
+      "of": "の",
+      "morePages": "さらにページ"
+    },
+    "serviceBooking": {
+      "genericError": "エラーが発生しました"
+    },
+    "listingReviews": {
+      "title": "レビュー",
+      "empty": "この出品のレビューはまだありません。",
+      "writeReview": "レビューを書く"
+    },
+    "productSuccessModal": {
+      "title": "製品を認識しました！",
+      "identified": "{name} が正常に識別され、フォームが入力されました。",
+      "confidence": "{percent}% 一致",
+      "editForm": "フォームを編集"
+    },
+    "aiSearchModal": {
+      "title": "AI クイック検索",
+      "subtitle": "製品名または品番を入力してください",
+      "close": "閉じる",
+      "search": "検索",
+      "examples": "例：",
+      "resultsFound": "{count, plural, other {# 件の製品が見つかりました}}",
+      "confidence": "{percent}% 一致",
+      "newSearch": "新しい検索",
+      "manualEntry": "手動入力",
+      "searching": "製品を検索中...",
+      "searchingDesc": "製品データベースを検索中",
+      "noResults": "製品が見つかりません",
+      "noResultsDesc": "\"{query}\" に一致する製品が見つかりませんでした。"
+    },
+    "breadcrumbs": {
+      "admin": "管理",
+      "products": "製品",
+      "workshops": "ワークショップ",
+      "services": "サービス",
+      "users": "ユーザー",
+      "team": "チーム",
+      "locations": "場所",
+      "content": "コンテンツ",
+      "analyse": "分析",
+      "approvals": "承認",
+      "settings": "設定",
+      "hirn": "HIRN",
+      "finanzen": "財務",
+      "erfassung": "在庫登録",
+      "inventory": "在庫",
+      "dashboard": "ダッシュボード",
+      "seller": "出品者",
+      "repairer": "技術者",
+      "techniker": "技術者",
+      "messages": "メッセージ",
+      "profile": "プロフィール",
+      "shop": "ショップ",
+      "cart": "カート",
+      "checkout": "精算",
+      "search": "検索",
+      "category": "カテゴリー",
+      "orders": "注文",
+      "blog": "ブログ",
+      "marketplace": "マーケットプレイス",
+      "itHilfe": "ITサポート",
+      "new": "新規",
+      "edit": "編集",
+      "create": "作成",
+      "home": "ホーム",
+      "detail": "詳細"
     }
   }
 }

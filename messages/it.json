@@ -5644,6 +5644,76 @@
       "supportButton": "Supporta RevampIT",
       "successMessage": "Benvenuto! Controlla la tua email.",
       "networkError": "Errore di connessione. Riprova più tardi."
+    },
+    "pagination": {
+      "of": "di",
+      "morePages": "altre pagine"
+    },
+    "serviceBooking": {
+      "genericError": "Si è verificato un errore"
+    },
+    "listingReviews": {
+      "title": "Recensioni",
+      "empty": "Ancora nessuna recensione per questo annuncio.",
+      "writeReview": "Scrivi una recensione"
+    },
+    "productSuccessModal": {
+      "title": "Prodotto riconosciuto!",
+      "identified": "{name} è stato identificato con successo e il modulo compilato.",
+      "confidence": "{percent}% di corrispondenza",
+      "editForm": "Modifica modulo"
+    },
+    "aiSearchModal": {
+      "title": "Ricerca rapida AI",
+      "subtitle": "Inserisci un nome prodotto o numero articolo",
+      "close": "Chiudi",
+      "search": "Cerca",
+      "examples": "Esempi:",
+      "resultsFound": "{count, plural, one {1 prodotto trovato} other {# prodotti trovati}}",
+      "confidence": "{percent}% di corrispondenza",
+      "newSearch": "Nuova ricerca",
+      "manualEntry": "Inserimento manuale",
+      "searching": "Ricerca del prodotto...",
+      "searchingDesc": "Ricerca nel database prodotti",
+      "noResults": "Nessun prodotto trovato",
+      "noResultsDesc": "Nessun prodotto trovato per \"{query}\"."
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "products": "Prodotti",
+      "workshops": "Workshop",
+      "services": "Servizi",
+      "users": "Utenti",
+      "team": "Team",
+      "locations": "Sedi",
+      "content": "Contenuto",
+      "analyse": "Analisi",
+      "approvals": "Approvazioni",
+      "settings": "Impostazioni",
+      "hirn": "HIRN",
+      "finanzen": "Finanze",
+      "erfassung": "Registrazione",
+      "inventory": "Inventario",
+      "dashboard": "Dashboard",
+      "seller": "Venditore",
+      "repairer": "Tecnico",
+      "techniker": "Tecnico",
+      "messages": "Messaggi",
+      "profile": "Profilo",
+      "shop": "Negozio",
+      "cart": "Carrello",
+      "checkout": "Pagamento",
+      "search": "Ricerca",
+      "category": "Categoria",
+      "orders": "Ordini",
+      "blog": "Blog",
+      "marketplace": "Mercato",
+      "itHilfe": "Aiuto IT",
+      "new": "Nuovo",
+      "edit": "Modifica",
+      "create": "Crea",
+      "home": "Home",
+      "detail": "Dettaglio"
     }
   }
 }

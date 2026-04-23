@@ -5644,6 +5644,76 @@
       "supportButton": "Apoyar RevampIT",
       "successMessage": "¡Bienvenido! Revisa tu correo electrónico.",
       "networkError": "Error de conexión. Por favor inténtalo más tarde."
+    },
+    "pagination": {
+      "of": "de",
+      "morePages": "más páginas"
+    },
+    "serviceBooking": {
+      "genericError": "Se produjo un error"
+    },
+    "listingReviews": {
+      "title": "Reseñas",
+      "empty": "Todavía no hay reseñas para este anuncio.",
+      "writeReview": "Escribir una reseña"
+    },
+    "productSuccessModal": {
+      "title": "¡Producto reconocido!",
+      "identified": "{name} fue identificado con éxito y el formulario rellenado.",
+      "confidence": "{percent}% de coincidencia",
+      "editForm": "Editar formulario"
+    },
+    "aiSearchModal": {
+      "title": "Búsqueda rápida AI",
+      "subtitle": "Introduce un nombre de producto o número de artículo",
+      "close": "Cerrar",
+      "search": "Buscar",
+      "examples": "Ejemplos:",
+      "resultsFound": "{count, plural, one {1 producto encontrado} other {# productos encontrados}}",
+      "confidence": "{percent}% de coincidencia",
+      "newSearch": "Nueva búsqueda",
+      "manualEntry": "Entrada manual",
+      "searching": "Buscando producto...",
+      "searchingDesc": "Buscando en la base de datos de productos",
+      "noResults": "No se encontraron productos",
+      "noResultsDesc": "No se encontraron productos para \"{query}\"."
+    },
+    "breadcrumbs": {
+      "admin": "Admin",
+      "products": "Productos",
+      "workshops": "Talleres",
+      "services": "Servicios",
+      "users": "Usuarios",
+      "team": "Equipo",
+      "locations": "Ubicaciones",
+      "content": "Contenido",
+      "analyse": "Análisis",
+      "approvals": "Aprobaciones",
+      "settings": "Configuración",
+      "hirn": "HIRN",
+      "finanzen": "Finanzas",
+      "erfassung": "Registro",
+      "inventory": "Inventario",
+      "dashboard": "Panel",
+      "seller": "Vendedor",
+      "repairer": "Técnico",
+      "techniker": "Técnico",
+      "messages": "Mensajes",
+      "profile": "Perfil",
+      "shop": "Tienda",
+      "cart": "Carrito",
+      "checkout": "Pago",
+      "search": "Búsqueda",
+      "category": "Categoría",
+      "orders": "Pedidos",
+      "blog": "Blog",
+      "marketplace": "Mercado",
+      "itHilfe": "Ayuda IT",
+      "new": "Nuevo",
+      "edit": "Editar",
+      "create": "Crear",
+      "home": "Inicio",
+      "detail": "Detalle"
     }
   }
 }

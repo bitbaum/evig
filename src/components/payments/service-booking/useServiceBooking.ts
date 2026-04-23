@@ -3,6 +3,7 @@
  */
 
 import { useState, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { calculateVAT, calculatePaymentFees } from '@/lib/pricing'
 import type { PaymentResult } from '@/types/common'
@@ -57,6 +58,7 @@ export function useServiceBooking({
   onSuccess,
   onError,
 }: UseServiceBookingProps): UseServiceBookingReturn {
+  const t = useTranslations('components.serviceBooking')
   const [step, setStep] = useState<BookingStep>('details')
   const [selectedCurrency, setSelectedCurrency] = useState<SupportedCurrency>('CHF')
   const [currencyPricing, setCurrencyPricing] = useState<ServicePricing | null>(null)
@@ -127,7 +129,7 @@ export function useServiceBooking({
 
       setStep('payment')
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('genericError')
       setError(message)
       setStep('error')
       onError?.(message)
@@ -148,7 +150,7 @@ export function useServiceBooking({
         })
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('genericError')
       setError('Payment succeeded but booking confirmation failed')
       setStep('error')
       onError?.(message)
