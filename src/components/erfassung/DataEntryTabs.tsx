@@ -14,6 +14,7 @@
 
 import { useState, useCallback, useEffect } from 'react'
 import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
@@ -42,36 +43,6 @@ interface TabConfig {
   description: string
 }
 
-const CORE_TABS: TabConfig[] = [
-  {
-    id: 'form',
-    label: 'Text',
-    icon: <Zap className="w-4 h-4" />,
-    description: 'Produktinfos eingeben, KI füllt aus',
-  },
-  {
-    id: 'file',
-    label: 'Datei',
-    icon: <FileUp className="w-4 h-4" />,
-    description: 'CSV-Datei hochladen',
-  },
-]
-
-const FUTURE_TABS: TabConfig[] = [
-  {
-    id: 'speech',
-    label: 'Sprache',
-    icon: <Mic className="w-4 h-4" />,
-    description: 'Produkte per Sprache erfassen',
-  },
-  {
-    id: 'picture',
-    label: 'Bild',
-    icon: <Camera className="w-4 h-4" />,
-    description: 'Produkte per Foto erfassen',
-  },
-]
-
 type QuickEntryState = 'idle' | 'loading' | 'success' | 'error'
 
 export function DataEntryTabs({
@@ -85,6 +56,38 @@ export function DataEntryTabs({
   showAllTabs = false,
   collapsed = false,
 }: DataEntryTabsProps) {
+  const t = useTranslations('components.erfassung.dataEntryTabs')
+
+  const CORE_TABS: TabConfig[] = [
+    {
+      id: 'form',
+      label: t('tabTextLabel'),
+      icon: <Zap className="w-4 h-4" />,
+      description: t('tabTextDesc'),
+    },
+    {
+      id: 'file',
+      label: t('tabFileLabel'),
+      icon: <FileUp className="w-4 h-4" />,
+      description: t('tabFileDesc'),
+    },
+  ]
+
+  const FUTURE_TABS: TabConfig[] = [
+    {
+      id: 'speech',
+      label: t('tabSpeechLabel'),
+      icon: <Mic className="w-4 h-4" />,
+      description: t('tabSpeechDesc'),
+    },
+    {
+      id: 'picture',
+      label: t('tabPictureLabel'),
+      icon: <Camera className="w-4 h-4" />,
+      description: t('tabPictureDesc'),
+    },
+  ]
+
   const tabs = showAllTabs ? [...CORE_TABS, ...FUTURE_TABS] : CORE_TABS
   const [activeMode, setActiveMode] = useState<EntryMode>(initialMode)
   const [quickText, setQuickText] = useState('')
@@ -144,7 +147,7 @@ export function DataEntryTabs({
         })
 
         if (!result.success) {
-          throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
+          throw new Error(result.error || t('processingFailed'))
         }
 
         onBulkData(result.data!.products)
@@ -164,7 +167,7 @@ export function DataEntryTabs({
         })
 
         if (!result.success) {
-          throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
+          throw new Error(result.error || t('processingFailed'))
         }
 
         const productData = result.data!.data
@@ -198,7 +201,7 @@ export function DataEntryTabs({
       onError?.(message)
       logger.error('Quick text entry failed', { error })
     }
-  }, [quickText, onProductData, onBulkData, onError, onDataFilled])
+  }, [t, quickText, onProductData, onBulkData, onError, onDataFilled])
 
   // Handle CSV file upload
   const handleFileUpload = useCallback(async (file: File) => {
@@ -216,7 +219,7 @@ export function DataEntryTabs({
       })
 
       if (apiError || !result) {
-        throw new Error(apiError || 'Datei konnte nicht verarbeitet werden')
+        throw new Error(apiError || t('processingFailed'))
       }
 
       onBulkData(result.products)
@@ -230,7 +233,7 @@ export function DataEntryTabs({
     } finally {
       setIsUploading(false)
     }
-  }, [onBulkData, onError])
+  }, [t, onBulkData, onError])
 
   return (
     <div
@@ -244,9 +247,9 @@ export function DataEntryTabs({
       >
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-          <span className="font-semibold text-gray-900 dark:text-white">KI-Schnelleingabe</span>
+          <span className="font-semibold text-gray-900 dark:text-white">{t('quickEntryTitle')}</span>
           {isCollapsed && quickEntryState === 'success' && (
-            <span className="text-sm text-green-600 dark:text-green-400">(Ausgefüllt)</span>
+            <span className="text-sm text-green-600 dark:text-green-400">{t('quickEntryFilled')}</span>
           )}
         </div>
         {isCollapsed ? (
@@ -283,8 +286,8 @@ export function DataEntryTabs({
         {activeMode === 'speech' && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Spracherfassung kommt bald</p>
-            <p className="text-sm">Erfordert selbst-gehosteten Transkriptionsdienst</p>
+            <p>{t('speechComingSoon')}</p>
+            <p className="text-sm">{t('speechRequires')}</p>
           </div>
         )}
 
@@ -292,8 +295,8 @@ export function DataEntryTabs({
         {activeMode === 'picture' && (
           <div className="text-center py-8 text-gray-500 dark:text-gray-400">
             <Camera className="w-12 h-12 mx-auto mb-3 opacity-50" />
-            <p>Bilderfassung kommt bald</p>
-            <p className="text-sm">Erfordert Vision-KI-Modell</p>
+            <p>{t('pictureComingSoon')}</p>
+            <p className="text-sm">{t('pictureRequires')}</p>
           </div>
         )}
 
@@ -302,10 +305,10 @@ export function DataEntryTabs({
           <div className="space-y-4">
             <div className="text-center mb-2">
               <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
-                KI-Schnelleingabe
+                {t('quickEntryTitle')}
               </Heading>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Ein Produkt oder mehrere auf einmal — die KI erkennt es automatisch
+                {t('quickEntryPlaceholder')}
               </p>
             </div>
 
@@ -319,7 +322,7 @@ export function DataEntryTabs({
                     handleQuickTextSubmit()
                   }
                 }}
-                placeholder={"Ein Produkt:\nDell Latitude E7470 i5 8GB 256GB SSD guter Zustand 280 CHF\n\nOder mehrere:\nLenovo ThinkPad T480 i5 8GB 256GB SSD 299\nDell Latitude 5490 i7 16GB 512GB 449\nHP EliteBook 840 G5 i5 8GB 256GB 199"}
+                placeholder={"Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"}
                 disabled={quickEntryState === 'loading'}
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 text-base resize-none"
@@ -333,12 +336,12 @@ export function DataEntryTabs({
                 {quickEntryState === 'loading' ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>KI analysiert...</span>
+                    <span>{t('analyzing')}</span>
                   </>
                 ) : (
                   <>
                     <Zap className="w-5 h-5" />
-                    <span>Formular ausfüllen</span>
+                    <span>{t('fillForm')}</span>
                   </>
                 )}
               </Button>
@@ -348,7 +351,7 @@ export function DataEntryTabs({
             {quickEntryState === 'success' && (
               <div className="flex items-center justify-center gap-2 py-2 px-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-700 dark:text-green-400">
                 <CheckCircle2 className="w-5 h-5" />
-                <span className="font-medium">Daten wurden verarbeitet! Bitte prüfen und ergänzen.</span>
+                <span className="font-medium">{t('dataFilled')}</span>
               </div>
             )}
             {quickEntryState === 'error' && quickEntryError && (
@@ -365,10 +368,10 @@ export function DataEntryTabs({
           <div className="space-y-4">
             <div className="text-center mb-2">
               <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
-                Datei-Import
+                {t('fileImportTitle')}
               </Heading>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Lade eine CSV- oder Excel-Datei mit Produktdaten hoch
+                {t('fileImportDesc')}
               </p>
             </div>
 
@@ -376,13 +379,13 @@ export function DataEntryTabs({
               {isUploading ? (
                 <>
                   <Loader2 className="w-10 h-10 text-purple-500 mb-2 animate-spin" />
-                  <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">Wird verarbeitet...</span>
+                  <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">{t('processing')}</span>
                 </>
               ) : (
                 <>
                   <FileUp className="w-10 h-10 text-purple-400 mb-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">CSV- oder Excel-Datei wählen oder hierher ziehen</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">CSV, TSV, XLSX — Spalten werden automatisch erkannt</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">{t('chooseFile')}</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">{t('fileHint')}</span>
                 </>
               )}
               <input
@@ -401,7 +404,7 @@ export function DataEntryTabs({
               <div className="flex items-start gap-2 py-2 px-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-yellow-700 dark:text-yellow-400 text-sm">
                 <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
                 <div>
-                  <span className="font-medium">Nicht zugeordnete Spalten:</span>{' '}
+                  <span className="font-medium">{t('unmappedColumns')}</span>{' '}
                   {unmappedColumns.join(', ')}
                 </div>
               </div>

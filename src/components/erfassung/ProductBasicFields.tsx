@@ -8,6 +8,7 @@
  */
 
 import { Package } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
@@ -28,17 +29,19 @@ export function ProductBasicFields({
   onFieldChange,
   onCategoryChange,
 }: ProductBasicFieldsProps) {
+  const t = useTranslations('components.erfassung.basicFields')
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
         <Package className="w-5 h-5" />
-        Grundinformationen
+        {t('title')}
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         <div>
           <label htmlFor="basic-manufacturer" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Hersteller *</span>
+            <span>{t('manufacturer')}</span>
             {aiMetadata.hersteller && (
               <AIFieldIndicator source={aiMetadata.hersteller} fieldName="hersteller" />
             )}
@@ -51,14 +54,14 @@ export function ProductBasicFields({
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
               aiMetadata.hersteller ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
             }`}
-            placeholder="z.B. Dell, HP, Lenovo"
+            placeholder={t('manufacturerPlaceholder')}
             required
           />
         </div>
 
         <div>
           <label htmlFor="basic-condition" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Zustand *</span>
+            <span>{t('condition')}</span>
             {aiMetadata.zustand && (
               <AIFieldIndicator source={aiMetadata.zustand} fieldName="zustand" />
             )}
@@ -80,7 +83,7 @@ export function ProductBasicFields({
 
         <div className="md:col-span-2">
           <label htmlFor="basic-product-name" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Produktname / Modell *</span>
+            <span>{t('productName')}</span>
             {aiMetadata.produktname && (
               <AIFieldIndicator source={aiMetadata.produktname} fieldName="produktname" />
             )}
@@ -93,7 +96,7 @@ export function ProductBasicFields({
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
               aiMetadata.produktname ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
             }`}
-            placeholder="z.B. Latitude 7470"
+            placeholder={t('productNamePlaceholder')}
             required
           />
         </div>
@@ -101,7 +104,7 @@ export function ProductBasicFields({
         {/* Price field moved up for mobile */}
         <div className="md:hidden">
           <label htmlFor="basic-price" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Verkaufspreis (CHF) *</span>
+            <span>{t('price')}</span>
             {aiMetadata.verkaufspreis && (
               <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
             )}
@@ -115,14 +118,14 @@ export function ProductBasicFields({
             className={`w-full px-4 py-3 border rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation min-h-[48px] text-xl font-semibold ${
               aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
             }`}
-            placeholder="0.00"
+            placeholder={t('pricePlaceholder')}
             required
           />
         </div>
 
         <div className="md:col-span-2">
           <label htmlFor="basic-description" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Kurzbeschreibung</span>
+            <span>{t('description')}</span>
             {aiMetadata.kurzbeschreibung && (
               <AIFieldIndicator source={aiMetadata.kurzbeschreibung} fieldName="kurzbeschreibung" />
             )}
@@ -135,13 +138,13 @@ export function ProductBasicFields({
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-base touch-manipulation ${
               aiMetadata.kurzbeschreibung ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
             }`}
-            placeholder="Kurze Beschreibung..."
+            placeholder={t('descriptionPlaceholder')}
           />
         </div>
 
         <div>
           <label htmlFor="basic-category" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Kategorie</span>
+            <span>{t('category')}</span>
             {aiMetadata.hauptkategorie && (
               <AIFieldIndicator source={aiMetadata.hauptkategorie} fieldName="hauptkategorie" />
             )}
@@ -154,7 +157,7 @@ export function ProductBasicFields({
               aiMetadata.hauptkategorie ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
             }`}
           >
-            <option value="">Wählen...</option>
+            <option value="">{t('categoryPlaceholder')}</option>
             {KATEGORIEN.map(kat => (
               <option key={kat.value} value={kat.value}>{kat.icon} {kat.label}</option>
             ))}
@@ -163,7 +166,7 @@ export function ProductBasicFields({
 
         <div>
           <label htmlFor="basic-subcategory" className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            <span>Unterkategorie</span>
+            <span>{t('subcategory')}</span>
             {aiMetadata.unterkategorie && (
               <AIFieldIndicator source={aiMetadata.unterkategorie} fieldName="unterkategorie" />
             )}
@@ -177,7 +180,7 @@ export function ProductBasicFields({
             }`}
             disabled={!formData.hauptkategorie}
           >
-            <option value="">Wählen...</option>
+            <option value="">{t('categoryPlaceholder')}</option>
             {subcategories.map(sub => (
               <option key={sub.value} value={sub.value}>{sub.label}</option>
             ))}

@@ -28,6 +28,7 @@ import {
   CheckCircle2,
   ImageIcon,
 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { useProductAnalysis } from '@/hooks/useProductAnalysis'
 import type { ErfassungFormData } from '@/types/erfassung'
@@ -49,6 +50,7 @@ export function ImageCapture({
   disabled = false,
   className = '',
 }: ImageCaptureProps) {
+  const t = useTranslations('components.erfassung.imageCapture')
   const { isAnalyzing, error: analysisError, analyzeProduct } = useProductAnalysis()
   const [state, setState] = useState<CaptureState>('idle')
   const [imagePreview, setImagePreview] = useState<string | null>(null)
@@ -62,7 +64,7 @@ export function ImageCapture({
   const handleFileSelect = useCallback(
     (file: File) => {
       if (!file.type.startsWith('image/')) {
-        setErrorMessage('Bitte nur Bildateien hochladen')
+        setErrorMessage(t('errorImageOnly'))
         setState('error')
         return
       }
@@ -75,13 +77,13 @@ export function ImageCapture({
         onImageCapture(base64)
       }
       reader.onerror = () => {
-        setErrorMessage('Fehler beim Lesen der Datei')
+        setErrorMessage(t('errorReadFile'))
         setState('error')
-        onError?.('Fehler beim Lesen der Datei')
+        onError?.(t('errorReadFile'))
       }
       reader.readAsDataURL(file)
     },
-    [onImageCapture, onError]
+    [t, onImageCapture, onError]
   )
 
   // Handle file input change
@@ -149,12 +151,11 @@ export function ImageCapture({
         setState('preview')
       }, 2000)
     } else {
-      // analyzeProduct sets its own error; surface it to the component
-      setErrorMessage(analysisError || 'Analyse fehlgeschlagen')
+      setErrorMessage(analysisError || t('errorAnalysis'))
       setState('error')
-      onError?.(analysisError || 'Analyse fehlgeschlagen')
+      onError?.(analysisError || t('errorAnalysis'))
     }
-  }, [imagePreview, analyzeProduct, analysisError, onAnalysisComplete, onError])
+  }, [t, imagePreview, analyzeProduct, analysisError, onAnalysisComplete, onError])
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
@@ -179,7 +180,7 @@ export function ImageCapture({
 
               <div>
                 <p className="text-gray-600 dark:text-gray-400 mb-2">
-                  Bild hierhin ziehen oder
+                  {t('dragOrText')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button
@@ -190,7 +191,7 @@ export function ImageCapture({
                     className="inline-flex items-center gap-2"
                   >
                     <Upload className="w-4 h-4" />
-                    Datei wählen
+                    {t('chooseFile')}
                   </Button>
                   <Button
                     type="button"
@@ -200,13 +201,13 @@ export function ImageCapture({
                     className="inline-flex items-center gap-2"
                   >
                     <Camera className="w-4 h-4" />
-                    Kamera
+                    {t('camera')}
                   </Button>
                 </div>
               </div>
 
               <p className="text-xs text-gray-500 dark:text-gray-500">
-                JPG, PNG, WebP bis 10 MB
+                {t('fileHint')}
               </p>
             </div>
 
@@ -240,7 +241,7 @@ export function ImageCapture({
                 <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                   <Image
                     src={imagePreview}
-                    alt="Produktbild Vorschau"
+                    alt={t('imageAlt')}
                     fill
                     className="object-contain"
                   />
@@ -266,7 +267,7 @@ export function ImageCapture({
                       className="inline-flex items-center gap-2"
                     >
                       <Upload className="w-4 h-4" />
-                      Anderes Bild
+                      {t('changeImage')}
                     </Button>
                     <Button
                       type="button"
@@ -274,7 +275,7 @@ export function ImageCapture({
                       className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
                     >
                       <Zap className="w-4 h-4" />
-                      Mit KI ausfüllen
+                      {t('analyzeWithAI')}
                     </Button>
                   </>
                 )}
@@ -282,19 +283,19 @@ export function ImageCapture({
                 {state === 'analyzing' && (
                   <div className="flex items-center gap-2 text-purple-600">
                     <Loader2 className="w-5 h-5 animate-spin" />
-                    <span>Analysiere Bild...</span>
+                    <span>{t('analyzing')}</span>
                   </div>
                 )}
 
                 {state === 'success' && (
                   <div className="flex items-center gap-2 text-green-600">
                     <CheckCircle2 className="w-5 h-5" />
-                    <span>Formular wurde ausgefüllt!</span>
+                    <span>{t('success')}</span>
                   </div>
                 )}
               </div>
 
-              {/* Hidden file input for "Anderes Bild" */}
+              {/* Hidden file input for change image */}
               <input
                 ref={fileInputRef}
                 type="file"
@@ -312,10 +313,10 @@ export function ImageCapture({
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
             <p className="text-red-600 dark:text-red-400 mb-4">
-              {errorMessage || 'Ein Fehler ist aufgetreten'}
+              {errorMessage || t('errorGeneric')}
             </p>
             <Button type="button" variant="outline" onClick={clearImage}>
-              Erneut versuchen
+              {t('retry')}
             </Button>
           </div>
         )}

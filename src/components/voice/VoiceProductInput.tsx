@@ -12,6 +12,7 @@
 
 import { useState, useRef, useCallback } from 'react'
 import { Mic, MicOff, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { logger } from '@/lib/logger'
 import { useVoiceProduct } from '@/hooks/useVoiceProduct'
@@ -37,6 +38,7 @@ export function VoiceProductInput({
   disabled = false,
   className = '',
 }: VoiceProductInputProps) {
+  const t = useTranslations('components.voice')
   const { isProcessing: isVoiceProcessing, error: voiceError, processRecording: processVoiceRecording } = useVoiceProduct()
   const [state, setState] = useState<RecordingState>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -64,9 +66,9 @@ export function VoiceProductInput({
         setState('idle')
       }, 3000)
     } else {
-      setErrorMessage(voiceError || 'Verarbeitung fehlgeschlagen')
+      setErrorMessage(voiceError || t('errorProcessing'))
       setState('error')
-      onError?.(voiceError || 'Verarbeitung fehlgeschlagen')
+      onError?.(voiceError || t('errorProcessing'))
     }
   }, [processVoiceRecording, voiceError, onProductData, onTranscription, onError])
 
@@ -113,9 +115,9 @@ export function VoiceProductInput({
       logger.info('Voice recording started')
     } catch (error) {
       logger.error('Failed to start recording', { error })
-      setErrorMessage('Mikrofon konnte nicht aktiviert werden')
+      setErrorMessage(t('errorMicrophone'))
       setState('error')
-      onError?.('Mikrofon konnte nicht aktiviert werden')
+      onError?.(t('errorMicrophone'))
     }
   }, [onError, processRecording])
 
@@ -168,15 +170,15 @@ export function VoiceProductInput({
   const getLabel = () => {
     switch (state) {
       case 'recording':
-        return 'Stopp'
+        return t('stateRecording')
       case 'processing':
-        return 'Verarbeite...'
+        return t('stateProcessing')
       case 'success':
-        return 'Erkannt!'
+        return t('stateSuccess')
       case 'error':
-        return 'Fehler'
+        return t('stateError')
       default:
-        return 'Diktieren'
+        return t('stateIdle')
     }
   }
 
@@ -197,7 +199,7 @@ export function VoiceProductInput({
       {/* Transcription preview */}
       {transcribedText && state === 'success' && (
         <div className="text-sm text-green-700 bg-green-50 px-3 py-2 rounded-md">
-          <span className="font-medium">Erkannt:</span> {transcribedText}
+          <span className="font-medium">{t('transcribedPrefix')}</span> {transcribedText}
         </div>
       )}
 

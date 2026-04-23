@@ -8,6 +8,7 @@
  */
 
 import { Plus, Trash2, FileText } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
 import type { AIFieldMetadata, SpecField } from '@/types/erfassung'
@@ -27,12 +28,14 @@ export function ProductSpecFields({
   onSpecAdd,
   onSpecRemove,
 }: ProductSpecFieldsProps) {
+  const t = useTranslations('components.erfassung.specFields')
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
         <Heading level={2} className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <FileText className="w-5 h-5" />
-          <span>Technische Daten</span>
+          <span>{t('title')}</span>
           {aiMetadata.specs && (
             <AIFieldIndicator source={aiMetadata.specs} fieldName="specs" />
           )}
@@ -43,7 +46,7 @@ export function ProductSpecFields({
           className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 touch-manipulation p-2 -m-2"
         >
           <Plus className="w-4 h-4" />
-          <span className="hidden sm:inline">Feld hinzufügen</span>
+          <span className="hidden sm:inline">{t('addField')}</span>
         </button>
       </div>
 
@@ -55,14 +58,14 @@ export function ProductSpecFields({
               value={spec.key}
               onChange={(e) => onSpecChange(index, 'key', e.target.value)}
               className="w-1/3 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-sm touch-manipulation"
-              placeholder="Eigenschaft"
+              placeholder={t('keyPlaceholder')}
             />
             <input
               type="text"
               value={spec.value}
               onChange={(e) => onSpecChange(index, 'value', e.target.value)}
               className="flex-1 px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 text-sm touch-manipulation"
-              placeholder="Wert"
+              placeholder={t('valuePlaceholder')}
             />
             <button
               type="button"

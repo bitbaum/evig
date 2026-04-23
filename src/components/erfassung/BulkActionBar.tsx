@@ -7,6 +7,7 @@
  */
 
 import { Save, Package, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 
 interface BulkActionBarProps {
@@ -28,6 +29,8 @@ export function BulkActionBar({
   onSelectAll,
   allSelected,
 }: BulkActionBarProps) {
+  const t = useTranslations('components.erfassung.bulkActionBar')
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 z-30 safe-area-inset-bottom shadow-lg">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
@@ -38,10 +41,10 @@ export function BulkActionBar({
             onClick={onSelectAll}
             className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium"
           >
-            {allSelected ? 'Auswahl aufheben' : 'Alle auswählen'}
+            {allSelected ? t('deselectAll') : t('selectAll')}
           </button>
           <span className="text-sm text-gray-600 dark:text-gray-400">
-            {selectedCount} von {totalCount} ausgewählt
+            {selectedCount} {t('ofText')} {totalCount} {t('selectedText')}
           </span>
         </div>
 
@@ -71,7 +74,7 @@ export function BulkActionBar({
             className="gap-1.5 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-300"
           >
             <Save className="w-4 h-4" />
-            <span className="hidden sm:inline">Entwurf</span>
+            <span className="hidden sm:inline">{t('draft')}</span>
           </Button>
 
           <Button
@@ -82,7 +85,7 @@ export function BulkActionBar({
             variant="primary" className="gap-1.5 disabled:bg-blue-300"
           >
             <Package className="w-4 h-4" />
-            <span className="hidden sm:inline">Erfassen</span>
+            <span className="hidden sm:inline">{t('capture')}</span>
           </Button>
 
           <Button
@@ -93,7 +96,7 @@ export function BulkActionBar({
             className="gap-1.5"
           >
             <Package className="w-4 h-4" />
-            <span className="hidden sm:inline">Erfassen & Shop</span>
+            <span className="hidden sm:inline">{t('captureAndShop')}</span>
           </Button>
         </div>
       </div>

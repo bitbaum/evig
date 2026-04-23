@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Save, Loader2, Package } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 
 interface Props {
@@ -9,6 +12,8 @@ interface Props {
 }
 
 export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
+  const t = useTranslations('components.erfassung.submitBar')
+
   return (
     <>
       {/* Desktop */}
@@ -17,16 +22,16 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
           href="/admin/products"
           className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-900"
         >
-          Abbrechen
+          {t('cancel')}
         </Link>
 
         <div className="flex gap-3">
           {isEditMode ? (
             <Button type="submit" disabled={isLoading} className="gap-2 px-6 py-3">
               {isLoading ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> Speichere...</>
+                <><Loader2 className="w-5 h-5 animate-spin" /> {t('saving')}</>
               ) : (
-                <><Save className="w-5 h-5" /> Änderungen speichern</>
+                <><Save className="w-5 h-5" /> {t('saveChanges')}</>
               )}
             </Button>
           ) : (
@@ -40,7 +45,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <><Save className="w-5 h-5" /> Entwurf</>
+                  <><Save className="w-5 h-5" /> {t('draft')}</>
                 )}
               </Button>
 
@@ -53,7 +58,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <><Package className="w-5 h-5" /> Erfassen</>
+                  <><Package className="w-5 h-5" /> {t('capture')}</>
                 )}
               </Button>
 
@@ -66,7 +71,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <><Package className="w-5 h-5" /> Erfassen & Shop</>
+                  <><Package className="w-5 h-5" /> {t('captureAndShop')}</>
                 )}
               </Button>
             </>
@@ -92,7 +97,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
             ) : (
               <>
                 <Save className="w-5 h-5" />
-                <span>Änderungen speichern</span>
+                <span>{t('saveChanges')}</span>
               </>
             )}
           </Button>
@@ -122,7 +127,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               ) : (
                 <>
                   <Package className="w-5 h-5" />
-                  <span>Erfassen</span>
+                  <span>{t('capture')}</span>
                 </>
               )}
             </Button>

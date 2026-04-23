@@ -9,6 +9,7 @@
 
 import { useState } from 'react'
 import { CheckCircle2, AlertCircle, AlertTriangle, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import type { BulkProduct, BulkProductStatus } from '@/types/erfassung'
 import { BULK_TABLE_COLUMNS, BULK_LIMITS } from '@/config/erfassung'
 import { KATEGORIEN, ZUSTAND_OPTIONS } from '@/config/erfassung'
@@ -58,6 +59,7 @@ export function BulkTable({
   onSelectAll,
   onProductClick,
 }: BulkTableProps) {
+  const t = useTranslations('components.erfassung.bulkTable')
   const [editingCell, setEditingCell] = useState<{ tempId: string; field: string } | null>(null)
   const [editValue, setEditValue] = useState('')
 
@@ -95,7 +97,7 @@ export function BulkTable({
                 />
               </th>
               {/* Row number */}
-              <th className="w-10 px-2 py-3 text-left text-gray-600 dark:text-gray-400 font-medium">#</th>
+              <th className="w-10 px-2 py-3 text-left text-gray-600 dark:text-gray-400 font-medium">{t('columnNumber')}</th>
               {/* Dynamic columns */}
               {BULK_TABLE_COLUMNS.map(col => (
                 <th
@@ -107,7 +109,7 @@ export function BulkTable({
                 </th>
               ))}
               {/* Status */}
-              <th className="w-16 px-3 py-3 text-center text-gray-700 dark:text-gray-300 font-medium">Status</th>
+              <th className="w-16 px-3 py-3 text-center text-gray-700 dark:text-gray-300 font-medium">{t('columnStatus')}</th>
             </tr>
           </thead>
           <tbody>
@@ -218,7 +220,7 @@ export function BulkTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
           <span className="text-sm text-gray-600 dark:text-gray-400">
-            {page * pageSize + 1}-{Math.min((page + 1) * pageSize, products.length)} von {products.length} Produkten
+            {page * pageSize + 1}-{Math.min((page + 1) * pageSize, products.length)} {t('ofText')} {products.length} {t('productsText')}
           </span>
           <div className="flex gap-2">
             <button

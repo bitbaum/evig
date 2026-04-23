@@ -9,6 +9,7 @@
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ProductForm } from '@/components/erfassung/ProductForm'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
@@ -22,6 +23,7 @@ interface BulkDetailPanelProps {
 }
 
 export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelProps) {
+  const t = useTranslations('components.erfassung.bulkDetail')
   const [localData, setLocalData] = useState<BulkProduct>({ ...product })
   const [showAdvanced, setShowAdvanced] = useState(false)
 
@@ -70,14 +72,13 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
   }
 
   const handleApply = () => {
-    // Validate and determine status
     const hasRequired = localData.hersteller && localData.produktname
     const status = hasRequired ? 'valid' : 'warning'
 
     onUpdate({
       ...localData,
       _status: status,
-      _errors: hasRequired ? [] : ['Hersteller und Produktname erforderlich'],
+      _errors: hasRequired ? [] : [t('validationError')],
     })
     onClose()
   }
@@ -96,10 +97,10 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
         <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between z-10">
           <div>
             <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
-              {localData.hersteller || 'Produkt'} {localData.produktname || 'bearbeiten'}
+              {localData.hersteller || 'Produkt'} {localData.produktname || t('editLabel')}
             </Heading>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Quelle: {localData._source}
+              {t('sourcePrefix')}{localData._source}
             </p>
           </div>
           <button
@@ -141,10 +142,10 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
         {/* Footer with apply button */}
         <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-3 flex gap-3">
           <Button type="button" onClick={onClose} variant="outline" className="flex-1 py-2.5">
-            Schliessen
+            {t('close')}
           </Button>
           <Button type="button" onClick={handleApply} className="flex-1 py-2.5">
-            Übernehmen
+            {t('apply')}
           </Button>
         </div>
       </div>

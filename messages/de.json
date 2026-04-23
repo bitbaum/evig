@@ -6012,6 +6012,172 @@
       "repairsCompleted": "IT-Hilfe Anfragen bearbeitet",
       "trainedPeople": "Menschen in Workshops ausgebildet",
       "learnMore": "Mehr zu unserer Wirkung erfahren"
+    },
+    "zeroWaste": {
+      "badge": "Die Lösung",
+      "heading": "Unser Zero-Waste Ansatz",
+      "description": "RevampIT folgt dem Prinzip: Reparieren vor Aufbereiten vor Recyceln. So maximieren wir den Wert jedes Geräts und minimieren Umweltauswirkungen.",
+      "impactTitle": "Unsere Wirkung durch diesen Ansatz",
+      "devicesSavedLabel": "Geräte pro Jahr gerettet",
+      "devicesSavedDesc": "Vor dem Schredder bewahrt und wiederverwendet",
+      "reuseRateLabel": "Wiederverwendungsrate",
+      "reuseRateDesc": "Der gespendeten Geräte werden wieder eingesetzt",
+      "co2Label": "Tonnen CO₂ eingespart",
+      "co2Desc": "Durch Reparatur statt Neuproduktion",
+      "whyRepairTitle": "Warum Reparatur zuerst?",
+      "whyRepairText": "Die Herstellung eines neuen Laptops verursacht durchschnittlich 331 kg CO₂. Eine Reparatur verursacht nur etwa 15 kg – eine Einsparung von über 95 %.",
+      "whyRepairConclusion": "Die nachhaltigste Option ist immer die Reparatur",
+      "priority": "Priorität {priority}"
+    },
+    "voice": {
+      "stateIdle": "Diktieren",
+      "stateRecording": "Stopp",
+      "stateProcessing": "Verarbeite…",
+      "stateSuccess": "Erkannt!",
+      "stateError": "Fehler",
+      "transcribedPrefix": "Erkannt:",
+      "errorProcessing": "Verarbeitung fehlgeschlagen",
+      "errorMicrophone": "Mikrofon konnte nicht aktiviert werden"
+    },
+    "erfassung": {
+      "productImage": {
+        "title": "Produktbild",
+        "upload": "Bild hochladen",
+        "drag": "oder hierher ziehen",
+        "hint": "JPG, PNG oder WebP. Max 5 MB."
+      },
+      "basicFields": {
+        "title": "Grundinformationen",
+        "manufacturer": "Hersteller *",
+        "manufacturerPlaceholder": "z.B. Dell, HP, Lenovo",
+        "condition": "Zustand *",
+        "productName": "Produktname / Modell *",
+        "productNamePlaceholder": "z.B. Latitude 7470",
+        "price": "Verkaufspreis (CHF) *",
+        "pricePlaceholder": "0.00",
+        "description": "Kurzbeschreibung",
+        "descriptionPlaceholder": "Kurze Beschreibung…",
+        "category": "Kategorie",
+        "categoryPlaceholder": "Wählen…",
+        "subcategory": "Unterkategorie"
+      },
+      "specFields": {
+        "title": "Technische Daten",
+        "addField": "Feld hinzufügen",
+        "keyPlaceholder": "Eigenschaft",
+        "valuePlaceholder": "Wert"
+      },
+      "dimensionFields": {
+        "dimensionsTitle": "Abmessungen",
+        "length": "Länge (mm)",
+        "width": "Breite (mm)",
+        "height": "Höhe (mm)",
+        "weight": "Gewicht (kg)",
+        "stockTitle": "Lager & Preis",
+        "price": "Verkaufspreis (CHF) *",
+        "stock": "Anzahl auf Lager",
+        "location": "Lagerort",
+        "locationPlaceholder": "S-B816-01-…",
+        "boxId": "Box ID",
+        "boxIdPlaceholder": "B-YYMMDD-NNNN"
+      },
+      "submitBar": {
+        "cancel": "Abbrechen",
+        "saving": "Speichere…",
+        "saveChanges": "Änderungen speichern",
+        "draft": "Entwurf",
+        "capture": "Erfassen",
+        "captureAndShop": "Erfassen & Shop"
+      },
+      "successScreen": {
+        "title": "Produkt erfasst!",
+        "itemUUIDLabel": "Item UUID:",
+        "printFactsheet": "Factsheet drucken",
+        "captureAnother": "Weiteres Produkt erfassen",
+        "toOverview": "Zur Produktübersicht"
+      },
+      "bulkSuccess": {
+        "titlePartial": "Teilweise erfasst",
+        "titleAll": "Alle Produkte erfasst!",
+        "summary": "{succeeded} von {total} Produkten erfolgreich gespeichert",
+        "failed": "{count} fehlgeschlagen",
+        "successLabel": "Erfolgreich",
+        "failedLabel": "Fehlgeschlagen",
+        "totalLabel": "Gesamt",
+        "createdIds": "Erstellte Artikel-IDs:",
+        "retryFailed": "Fehlgeschlagene korrigieren",
+        "downloadCsv": "CSV herunterladen",
+        "newCapture": "Neue Erfassung"
+      },
+      "profileFields": {
+        "title": "Geeignet für (Kundenprofile)",
+        "hint": "Wähle die Zielgruppen, für die dieses Produkt geeignet ist. Hover für Details."
+      },
+      "bulkDetail": {
+        "editLabel": "bearbeiten",
+        "sourcePrefix": "Quelle: ",
+        "validationError": "Hersteller und Produktname erforderlich",
+        "close": "Schliessen",
+        "apply": "Übernehmen"
+      },
+      "bulkTable": {
+        "columnNumber": "#",
+        "columnStatus": "Status",
+        "ofText": "von",
+        "productsText": "Produkten"
+      },
+      "bulkActionBar": {
+        "deselectAll": "Auswahl aufheben",
+        "selectAll": "Alle auswählen",
+        "ofText": "von",
+        "selectedText": "ausgewählt",
+        "draft": "Entwurf",
+        "capture": "Erfassen",
+        "captureAndShop": "Erfassen & Shop"
+      },
+      "imageCapture": {
+        "dragOrText": "Bild hierhin ziehen oder",
+        "chooseFile": "Datei wählen",
+        "camera": "Kamera",
+        "fileHint": "JPG, PNG, WebP bis 10 MB",
+        "imageAlt": "Produktbild Vorschau",
+        "changeImage": "Anderes Bild",
+        "analyzeWithAI": "Mit KI ausfüllen",
+        "analyzing": "Analysiere Bild…",
+        "success": "Formular wurde ausgefüllt!",
+        "errorGeneric": "Ein Fehler ist aufgetreten",
+        "retry": "Erneut versuchen",
+        "errorImageOnly": "Bitte nur Bildateien hochladen",
+        "errorReadFile": "Fehler beim Lesen der Datei",
+        "errorAnalysis": "Analyse fehlgeschlagen"
+      },
+      "dataEntryTabs": {
+        "tabTextLabel": "Text",
+        "tabTextDesc": "Produktinfos eingeben, KI füllt aus",
+        "tabFileLabel": "Datei",
+        "tabFileDesc": "CSV-Datei hochladen",
+        "tabSpeechLabel": "Sprache",
+        "tabSpeechDesc": "Produkte per Sprache erfassen",
+        "tabPictureLabel": "Bild",
+        "tabPictureDesc": "Produkte per Foto erfassen",
+        "quickEntryTitle": "KI-Schnelleingabe",
+        "quickEntryFilled": "(Ausgefüllt)",
+        "quickEntryPlaceholder": "Ein Produkt oder mehrere auf einmal — die KI erkennt es automatisch",
+        "processingFailed": "Verarbeitung fehlgeschlagen",
+        "dataFilled": "Daten wurden verarbeitet! Bitte prüfen und ergänzen.",
+        "speechComingSoon": "Spracherfassung kommt bald",
+        "speechRequires": "Erfordert selbst-gehosteten Transkriptionsdienst",
+        "pictureComingSoon": "Bilderfassung kommt bald",
+        "pictureRequires": "Erfordert Vision-KI-Modell",
+        "analyzing": "KI analysiert…",
+        "fillForm": "Formular ausfüllen",
+        "fileImportTitle": "Datei-Import",
+        "fileImportDesc": "Lade eine CSV- oder Excel-Datei mit Produktdaten hoch",
+        "processing": "Wird verarbeitet…",
+        "chooseFile": "CSV- oder Excel-Datei wählen oder hierher ziehen",
+        "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
+        "unmappedColumns": "Nicht zugeordnete Spalten:"
+      }
     }
   }
 }

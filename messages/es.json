@@ -5861,6 +5861,172 @@
       "repairsCompleted": "Solicitudes de ayuda IT procesadas",
       "trainedPeople": "Personas formadas en talleres",
       "learnMore": "Saber más sobre nuestro impacto"
+    },
+    "zeroWaste": {
+      "badge": "The Solution",
+      "heading": "Our Zero-Waste Approach",
+      "description": "RevampIT follows the principle: Repair before Refurbish before Recycle. This maximises the value of every device and minimises environmental impact.",
+      "impactTitle": "Our Impact Through This Approach",
+      "devicesSavedLabel": "Devices saved per year",
+      "devicesSavedDesc": "Rescued from the shredder and reused",
+      "reuseRateLabel": "Reuse rate",
+      "reuseRateDesc": "Of donated devices are put back into use",
+      "co2Label": "Tonnes of CO₂ saved",
+      "co2Desc": "Through repair instead of new production",
+      "whyRepairTitle": "Why repair first?",
+      "whyRepairText": "Manufacturing a new laptop produces on average 331 kg of CO₂. A repair produces only about 15 kg – a saving of over 95%.",
+      "whyRepairConclusion": "The most sustainable option is always repair",
+      "priority": "Priority {priority}"
+    },
+    "voice": {
+      "stateIdle": "Dictate",
+      "stateRecording": "Stop",
+      "stateProcessing": "Processing…",
+      "stateSuccess": "Recognized!",
+      "stateError": "Error",
+      "transcribedPrefix": "Recognized:",
+      "errorProcessing": "Processing failed",
+      "errorMicrophone": "Could not activate microphone"
+    },
+    "erfassung": {
+      "productImage": {
+        "title": "Product image",
+        "upload": "Upload image",
+        "drag": "or drag here",
+        "hint": "JPG, PNG or WebP. Max 5 MB."
+      },
+      "basicFields": {
+        "title": "Basic information",
+        "manufacturer": "Manufacturer *",
+        "manufacturerPlaceholder": "e.g. Dell, HP, Lenovo",
+        "condition": "Condition *",
+        "productName": "Product name / model *",
+        "productNamePlaceholder": "e.g. Latitude 7470",
+        "price": "Selling price (CHF) *",
+        "pricePlaceholder": "0.00",
+        "description": "Short description",
+        "descriptionPlaceholder": "Short description…",
+        "category": "Category",
+        "categoryPlaceholder": "Select…",
+        "subcategory": "Subcategory"
+      },
+      "specFields": {
+        "title": "Technical specifications",
+        "addField": "Add field",
+        "keyPlaceholder": "Property",
+        "valuePlaceholder": "Value"
+      },
+      "dimensionFields": {
+        "dimensionsTitle": "Dimensions",
+        "length": "Length (mm)",
+        "width": "Width (mm)",
+        "height": "Height (mm)",
+        "weight": "Weight (kg)",
+        "stockTitle": "Stock & Price",
+        "price": "Selling price (CHF) *",
+        "stock": "Quantity in stock",
+        "location": "Storage location",
+        "locationPlaceholder": "S-B816-01-…",
+        "boxId": "Box ID",
+        "boxIdPlaceholder": "B-YYMMDD-NNNN"
+      },
+      "submitBar": {
+        "cancel": "Cancel",
+        "saving": "Saving…",
+        "saveChanges": "Save changes",
+        "draft": "Draft",
+        "capture": "Capture",
+        "captureAndShop": "Capture & Shop"
+      },
+      "successScreen": {
+        "title": "Product captured!",
+        "itemUUIDLabel": "Item UUID:",
+        "printFactsheet": "Print factsheet",
+        "captureAnother": "Capture another product",
+        "toOverview": "To product overview"
+      },
+      "bulkSuccess": {
+        "titlePartial": "Partially captured",
+        "titleAll": "All products captured!",
+        "summary": "{succeeded} of {total} products successfully saved",
+        "failed": "{count} failed",
+        "successLabel": "Successful",
+        "failedLabel": "Failed",
+        "totalLabel": "Total",
+        "createdIds": "Created item IDs:",
+        "retryFailed": "Correct failed entries",
+        "downloadCsv": "Download CSV",
+        "newCapture": "New capture"
+      },
+      "profileFields": {
+        "title": "Suitable for (customer profiles)",
+        "hint": "Select the target groups this product is suitable for. Hover for details."
+      },
+      "bulkDetail": {
+        "editLabel": "edit",
+        "sourcePrefix": "Source: ",
+        "validationError": "Manufacturer and product name required",
+        "close": "Close",
+        "apply": "Apply"
+      },
+      "bulkTable": {
+        "columnNumber": "#",
+        "columnStatus": "Status",
+        "ofText": "of",
+        "productsText": "products"
+      },
+      "bulkActionBar": {
+        "deselectAll": "Deselect all",
+        "selectAll": "Select all",
+        "ofText": "of",
+        "selectedText": "selected",
+        "draft": "Draft",
+        "capture": "Capture",
+        "captureAndShop": "Capture & Shop"
+      },
+      "imageCapture": {
+        "dragOrText": "Drag image here or",
+        "chooseFile": "Choose file",
+        "camera": "Camera",
+        "fileHint": "JPG, PNG, WebP up to 10 MB",
+        "imageAlt": "Product image preview",
+        "changeImage": "Different image",
+        "analyzeWithAI": "Fill with AI",
+        "analyzing": "Analysing image…",
+        "success": "Form has been filled in!",
+        "errorGeneric": "An error occurred",
+        "retry": "Try again",
+        "errorImageOnly": "Please upload image files only",
+        "errorReadFile": "Error reading file",
+        "errorAnalysis": "Analysis failed"
+      },
+      "dataEntryTabs": {
+        "tabTextLabel": "Text",
+        "tabTextDesc": "Enter product info, AI fills in the rest",
+        "tabFileLabel": "File",
+        "tabFileDesc": "Upload CSV file",
+        "tabSpeechLabel": "Speech",
+        "tabSpeechDesc": "Capture products by voice",
+        "tabPictureLabel": "Image",
+        "tabPictureDesc": "Capture products by photo",
+        "quickEntryTitle": "AI quick entry",
+        "quickEntryFilled": "(Filled in)",
+        "quickEntryPlaceholder": "One product or several at once — the AI recognises automatically",
+        "processingFailed": "Processing failed",
+        "dataFilled": "Data processed! Please review and complete.",
+        "speechComingSoon": "Voice capture coming soon",
+        "speechRequires": "Requires self-hosted transcription service",
+        "pictureComingSoon": "Image capture coming soon",
+        "pictureRequires": "Requires vision AI model",
+        "analyzing": "AI analysing…",
+        "fillForm": "Fill form",
+        "fileImportTitle": "File import",
+        "fileImportDesc": "Upload a CSV or Excel file with product data",
+        "processing": "Processing…",
+        "chooseFile": "Choose CSV or Excel file or drag here",
+        "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
+        "unmappedColumns": "Unmapped columns:"
+      }
     }
   }
 }

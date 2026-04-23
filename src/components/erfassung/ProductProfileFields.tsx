@@ -8,6 +8,7 @@
  */
 
 import { Users } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { getProfilesByCategory } from '@/config/erfassung'
 import Heading from '@/components/ui/Heading'
 
@@ -20,14 +21,16 @@ export function ProductProfileFields({
   kundenprofile,
   onProfileToggle,
 }: ProductProfileFieldsProps) {
+  const t = useTranslations('components.erfassung.profileFields')
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
       <Heading level={2} className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
         <Users className="w-5 h-5" />
-        Geeignet für (Kundenprofile)
+        {t('title')}
       </Heading>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 hidden sm:block">
-        Wähle die Zielgruppen, für die dieses Produkt geeignet ist. Hover für Details.
+        {t('hint')}
       </p>
 
       {Object.entries(getProfilesByCategory()).map(([categoryName, profiles]) => (
