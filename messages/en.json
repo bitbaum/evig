@@ -6014,7 +6014,9 @@
       "searching": "Searching for product...",
       "searchingDesc": "Searching product database for matching items",
       "noResults": "No products found",
-      "noResultsDesc": "No matching products found for \"{query}\"."
+      "noResultsDesc": "No matching products found for \"{query}\".",
+      "searchPlaceholder": "e.g. iPhone 13 Pro Max, Dell XPS 13, Item No. 12345...",
+      "articleNumberExample": "Item No. 12345"
     },
     "breadcrumbs": {
       "admin": "Admin",

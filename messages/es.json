@@ -5914,7 +5914,9 @@
       "searching": "Buscando producto...",
       "searchingDesc": "Buscando en la base de datos de productos",
       "noResults": "No se encontraron productos",
-      "noResultsDesc": "No se encontraron productos para \"{query}\"."
+      "noResultsDesc": "No se encontraron productos para \"{query}\".",
+      "searchPlaceholder": "p.ej. iPhone 13 Pro Max, Dell XPS 13, N.° de artículo 12345...",
+      "articleNumberExample": "N.° de artículo 12345"
     },
     "breadcrumbs": {
       "admin": "Admin",

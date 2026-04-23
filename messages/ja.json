@@ -5914,7 +5914,9 @@
       "searching": "製品を検索中...",
       "searchingDesc": "製品データベースを検索中",
       "noResults": "製品が見つかりません",
-      "noResultsDesc": "\"{query}\" に一致する製品が見つかりませんでした。"
+      "noResultsDesc": "\"{query}\" に一致する製品が見つかりませんでした。",
+      "searchPlaceholder": "例：iPhone 13 Pro Max、Dell XPS 13、品番 12345...",
+      "articleNumberExample": "品番 12345"
     },
     "breadcrumbs": {
       "admin": "管理",

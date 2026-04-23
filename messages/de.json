@@ -6065,7 +6065,9 @@
       "searching": "Produkt wird gesucht...",
       "searchingDesc": "Durchsuche Produktdatenbank nach passenden Artikeln",
       "noResults": "Keine Produkte gefunden",
-      "noResultsDesc": "Für \"{query}\" wurden keine passenden Produkte gefunden."
+      "noResultsDesc": "Für \"{query}\" wurden keine passenden Produkte gefunden.",
+      "searchPlaceholder": "z.B. iPhone 13 Pro Max, Dell XPS 13, Artikel-Nr. 12345...",
+      "articleNumberExample": "Artikel-Nr. 12345"
     },
     "breadcrumbs": {
       "admin": "Admin",

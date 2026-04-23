@@ -5914,7 +5914,9 @@
       "searching": "제품을 검색하는 중...",
       "searchingDesc": "제품 데이터베이스에서 검색 중",
       "noResults": "제품을 찾을 수 없습니다",
-      "noResultsDesc": "\"{query}\"에 대한 제품을 찾을 수 없습니다."
+      "noResultsDesc": "\"{query}\"에 대한 제품을 찾을 수 없습니다.",
+      "searchPlaceholder": "예: iPhone 13 Pro Max, Dell XPS 13, 품목 번호 12345...",
+      "articleNumberExample": "품목 번호 12345"
     },
     "breadcrumbs": {
       "admin": "관리",

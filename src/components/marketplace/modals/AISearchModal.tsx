@@ -55,7 +55,7 @@ export function AISearchModal({
     'MacBook Air M1',
     'Dell Latitude E7470',
     'Samsung Galaxy S21',
-    'Artikel-Nr. 12345'
+    t('articleNumberExample'),
   ]
 
   return (
@@ -113,7 +113,7 @@ export function AISearchModal({
                       value={searchQuery}
                       onChange={(e) => onSearchQueryChange(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && onSearch()}
-                      placeholder="z.B. iPhone 13 Pro Max, Dell XPS 13, Artikel-Nr. 12345..."
+                      placeholder={t('searchPlaceholder')}
                       className="w-full pl-10 pr-4 py-3 border-2 border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-info-500 text-base"
                     />
                   </div>
