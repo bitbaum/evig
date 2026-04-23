@@ -1353,7 +1353,11 @@
       "heading": "Pronto a fare la differenza?",
       "body": "Unisciti alla nostra comunità di agenti di cambiamento e aiutaci a creare un futuro più sostenibile attraverso la tecnologia.",
       "contactBtn": "Contattaci",
-      "workshopsBtn": "Scopri i workshop"
+      "workshopsBtn": "Scopri i workshop",
+      "readyHeading": "Pronto per iniziare?",
+      "readyBody": "Hai domande o vuoi saperne di più? Siamo qui per aiutarti con il prossimo passo.",
+      "expressInterestBtn": "Esprimere interesse",
+      "exploreOptionsBtn": "Esplorare altre opzioni"
     },
     "volunteer": {
       "meta": {
@@ -2313,7 +2317,10 @@
         "payment": "Metodo di pagamento",
         "shippingCost": "Spese di spedizione (CHF)",
         "pickupLocation": "Luogo di ritiro",
-        "locationPlaceholder": "Es. Zurigo, 8005"
+        "locationPlaceholder": "Es. Zurigo, 8005",
+        "contactHeading": "Informazioni di contatto",
+        "contactLabel": "Informazioni di contatto aggiuntive (facoltativo)",
+        "contactPlaceholder": "es. numero di telefono, orari di contatto preferiti, opzioni di spedizione..."
       },
       "basicInfo": {
         "heading": "Informazioni di base",

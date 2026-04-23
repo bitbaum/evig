@@ -567,7 +567,10 @@
         "payment": "Zahlungsart",
         "shippingCost": "Versandkosten (CHF)",
         "pickupLocation": "Abholstandort",
-        "locationPlaceholder": "z.B. Zürich, 8005"
+        "locationPlaceholder": "z.B. Zürich, 8005",
+        "contactHeading": "Kontaktinformationen",
+        "contactLabel": "Zusätzliche Kontaktinformationen (optional)",
+        "contactPlaceholder": "z.B. Telefonnummer, bevorzugte Kontaktzeiten, Versandmöglichkeiten..."
       },
       "basicInfo": {
         "heading": "Grundinformationen",
@@ -3265,7 +3268,11 @@
       "heading": "Bereit, einen Unterschied zu machen?",
       "body": "Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.",
       "contactBtn": "Kontaktiere uns",
-      "workshopsBtn": "Workshops entdecken"
+      "workshopsBtn": "Workshops entdecken",
+      "readyHeading": "Bereit anzufangen?",
+      "readyBody": "Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten Schritt zu helfen.",
+      "expressInterestBtn": "Interesse bekunden",
+      "exploreOptionsBtn": "Andere Optionen erkunden"
     },
     "volunteer": {
       "meta": {

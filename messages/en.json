@@ -516,7 +516,10 @@
         "payment": "Payment method",
         "shippingCost": "Shipping cost (CHF)",
         "pickupLocation": "Pickup location",
-        "locationPlaceholder": "e.g. Zurich, 8005"
+        "locationPlaceholder": "e.g. Zurich, 8005",
+        "contactHeading": "Contact information",
+        "contactLabel": "Additional contact information (optional)",
+        "contactPlaceholder": "e.g. phone number, preferred contact times, shipping options..."
       },
       "basicInfo": {
         "heading": "Basic Information",
@@ -3379,7 +3382,11 @@
       "heading": "Ready to make a difference?",
       "body": "Join our community of changemakers and help us create a more sustainable future through technology.",
       "contactBtn": "Contact us",
-      "workshopsBtn": "Discover workshops"
+      "workshopsBtn": "Discover workshops",
+      "readyHeading": "Ready to get started?",
+      "readyBody": "Have questions or want to learn more? We are here to help you with your next step.",
+      "expressInterestBtn": "Express interest",
+      "exploreOptionsBtn": "Explore other options"
     },
     "volunteer": {
       "meta": {

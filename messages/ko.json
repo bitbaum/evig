@@ -1353,7 +1353,11 @@
       "heading": "변화를 만들 준비가 됐나요?",
       "body": "변화를 이끄는 우리 커뮤니티에 참여하여 기술을 통해 더 지속 가능한 미래를 만드는 데 도움을 주세요.",
       "contactBtn": "문의하기",
-      "workshopsBtn": "워크숍 발견하기"
+      "workshopsBtn": "워크숍 발견하기",
+      "readyHeading": "시작할 준비가 되셨나요?",
+      "readyBody": "질문이 있거나 더 알고 싶으신가요? 다음 단계를 도와드리겠습니다.",
+      "expressInterestBtn": "관심 표명하기",
+      "exploreOptionsBtn": "다른 옵션 탐색하기"
     },
     "volunteer": {
       "meta": {
@@ -2313,7 +2317,10 @@
         "payment": "결제 방법",
         "shippingCost": "배송비(CHF)",
         "pickupLocation": "수령 장소",
-        "locationPlaceholder": "예: 취리히, 8005"
+        "locationPlaceholder": "예: 취리히, 8005",
+        "contactHeading": "연락처 정보",
+        "contactLabel": "추가 연락처 정보 (선택 사항)",
+        "contactPlaceholder": "예: 전화번호, 선호 연락 시간, 배송 옵션..."
       },
       "basicInfo": {
         "heading": "기본 정보",

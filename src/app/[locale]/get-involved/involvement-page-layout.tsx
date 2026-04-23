@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
@@ -12,13 +13,15 @@ interface InvolvementPageLayoutProps {
   ctaHref: string
 }
 
-export function InvolvementPageLayout({
+export async function InvolvementPageLayout({
   title,
   description,
   children,
   ctaText,
   ctaHref
 }: InvolvementPageLayoutProps) {
+  const t = await getTranslations('getInvolved.cta')
+
   return (
     <main className="min-h-screen">
       <ResponsiveHero title={title} description={description}>
@@ -43,27 +46,27 @@ export function InvolvementPageLayout({
       <section className={`${responsiveSpacing.section} bg-gray-50`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
           <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbMedium}`}>
-            Bereit anzufangen?
+            {t('readyHeading')}
           </Heading>
           <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-gray-600`}>
-            Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten Schritt zu helfen.
+            {t('readyBody')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href="/get-involved/kontakt"
               className={`${responsiveButtons.large} bg-green-600 text-white hover:bg-green-700`}
             >
-              Interesse bekunden
+              {t('expressInterestBtn')}
             </Link>
             <Link
               href="/get-involved"
               className={`${responsiveButtons.large} bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-50`}
             >
-              Andere Optionen erkunden
+              {t('exploreOptionsBtn')}
             </Link>
           </div>
         </div>
       </section>
     </main>
   )
-} 
+}

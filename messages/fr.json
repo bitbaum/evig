@@ -475,7 +475,10 @@
         "payment": "Mode de paiement",
         "shippingCost": "Frais de port (CHF)",
         "pickupLocation": "Lieu de retrait",
-        "locationPlaceholder": "Ex. Genève, 1200"
+        "locationPlaceholder": "Ex. Genève, 1200",
+        "contactHeading": "Informations de contact",
+        "contactLabel": "Informations de contact supplémentaires (facultatif)",
+        "contactPlaceholder": "p.ex. numéro de téléphone, horaires de contact préférés, options d'expédition..."
       },
       "basicInfo": {
         "heading": "Informations de base",
@@ -3252,7 +3255,11 @@
       "heading": "Prêt à faire une différence?",
       "body": "Rejoignez notre communauté de changeurs et aidez-nous à créer un avenir plus durable grâce à la technologie.",
       "contactBtn": "Nous contacter",
-      "workshopsBtn": "Découvrir les ateliers"
+      "workshopsBtn": "Découvrir les ateliers",
+      "readyHeading": "Prêt à commencer?",
+      "readyBody": "Des questions ou envie d'en savoir plus? Nous sommes là pour vous aider dans votre prochaine étape.",
+      "expressInterestBtn": "Exprimer son intérêt",
+      "exploreOptionsBtn": "Explorer d'autres options"
     },
     "volunteer": {
       "meta": {

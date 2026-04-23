@@ -1353,7 +1353,11 @@
       "heading": "違いを生み出す準備ができていますか？",
       "body": "変革者のコミュニティに参加し、技術を通じてより持続可能な未来を作るのを助けてください。",
       "contactBtn": "お問い合わせ",
-      "workshopsBtn": "ワークショップを発見する"
+      "workshopsBtn": "ワークショップを発見する",
+      "readyHeading": "始める準備はできましたか？",
+      "readyBody": "ご質問がありますか、またはもっと詳しく知りたいですか？次のステップをお手伝いします。",
+      "expressInterestBtn": "興味を示す",
+      "exploreOptionsBtn": "他のオプションを探る"
     },
     "volunteer": {
       "meta": {
@@ -2313,7 +2317,10 @@
         "payment": "支払い方法",
         "shippingCost": "送料（CHF）",
         "pickupLocation": "受け取り場所",
-        "locationPlaceholder": "例：チューリッヒ、8005"
+        "locationPlaceholder": "例：チューリッヒ、8005",
+        "contactHeading": "連絡先情報",
+        "contactLabel": "追加の連絡先情報（任意）",
+        "contactPlaceholder": "例：電話番号、希望連絡時間、配送オプション…"
       },
       "basicInfo": {
         "heading": "基本情報",
