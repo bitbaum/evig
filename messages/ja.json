@@ -2518,6 +2518,13 @@
       "errorNoRatingOrder": "星評価を選択してください。",
       "errorCommentTooShort": "コメントは10文字以上か、空欄にしてください。",
       "errorSaveFailed": "レビューを保存できませんでした。"
+    },
+    "orderStatus": {
+      "ordered": "注文済み",
+      "paid": "支払い済み",
+      "shipped": "発送済み",
+      "delivered": "受取済み",
+      "reviewed": "レビュー済み"
     }
   },
   "membership": {

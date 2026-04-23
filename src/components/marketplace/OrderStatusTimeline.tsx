@@ -4,12 +4,13 @@
  * OrderStatusTimeline
  *
  * Visual progress indicator for a marketplace order.
- * Steps: Bestellt -> Bezahlt -> Versandt -> Erhalten -> Bewertet.
+ * Steps: ordered -> paid -> shipped -> delivered -> reviewed.
  * Completed steps show a checkmark (with date when available);
  * the current step is highlighted; future steps are greyed out.
  */
 
 import { CheckCircle, Circle } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { ORDER_STATUS } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 
@@ -32,13 +33,7 @@ interface OrderStatusTimelineProps {
 
 type StepKey = 'ordered' | 'paid' | 'shipped' | 'delivered' | 'reviewed'
 
-const STEPS: Array<{ key: StepKey; label: string }> = [
-  { key: 'ordered',   label: 'Bestellt' },
-  { key: 'paid',      label: 'Bezahlt' },
-  { key: 'shipped',   label: 'Versandt' },
-  { key: 'delivered', label: 'Erhalten' },
-  { key: 'reviewed',  label: 'Bewertet' },
-]
+const STEP_KEYS: StepKey[] = ['ordered', 'paid', 'shipped', 'delivered', 'reviewed']
 
 /**
  * Determine how far along the order is.
@@ -68,6 +63,8 @@ export function OrderStatusTimeline({
   hasReview = false,
   className = '',
 }: OrderStatusTimelineProps) {
+  const t = useTranslations('marketplace.orderStatus')
+  const steps = STEP_KEYS.map(key => ({ key, label: t(key) }))
   const currentIdx = getCurrentStepIndex(status, hasReview)
 
   const stepDate = (key: StepKey): string | null => {
@@ -83,7 +80,7 @@ export function OrderStatusTimeline({
 
   return (
     <div className={`flex items-center justify-between ${className}`}>
-      {STEPS.map((step, idx) => {
+      {steps.map((step, idx) => {
         const reached = idx <= currentIdx
         const isCurrent = idx === currentIdx
         const date = stepDate(step.key)
@@ -114,7 +111,7 @@ export function OrderStatusTimeline({
                 </span>
               )}
             </div>
-            {idx < STEPS.length - 1 && (
+            {idx < steps.length - 1 && (
               <div className={`flex-1 h-0.5 mx-2 ${
                 idx < currentIdx ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
               }`} />

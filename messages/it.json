@@ -2518,6 +2518,13 @@
       "errorNoRatingOrder": "Scegli una valutazione a stelle.",
       "errorCommentTooShort": "Il tuo commento deve avere almeno 10 caratteri o essere vuoto.",
       "errorSaveFailed": "Impossibile salvare la recensione."
+    },
+    "orderStatus": {
+      "ordered": "Ordinato",
+      "paid": "Pagato",
+      "shipped": "Spedito",
+      "delivered": "Ricevuto",
+      "reviewed": "Recensito"
     }
   },
   "membership": {

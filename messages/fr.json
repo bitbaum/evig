@@ -704,6 +704,13 @@
       "errorNoRatingOrder": "Veuillez choisir une note en étoiles.",
       "errorCommentTooShort": "Votre commentaire doit contenir au moins 10 caractères ou rester vide.",
       "errorSaveFailed": "Impossible d'enregistrer l'avis."
+    },
+    "orderStatus": {
+      "ordered": "Commandé",
+      "paid": "Payé",
+      "shipped": "Expédié",
+      "delivered": "Reçu",
+      "reviewed": "Évalué"
     }
   },
   "services": {

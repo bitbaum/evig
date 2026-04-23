@@ -802,6 +802,13 @@
       "errorNoRatingOrder": "Bitte wähle eine Sternebewertung.",
       "errorCommentTooShort": "Dein Kommentar muss mindestens 10 Zeichen enthalten oder leer bleiben.",
       "errorSaveFailed": "Bewertung konnte nicht gespeichert werden."
+    },
+    "orderStatus": {
+      "ordered": "Bestellt",
+      "paid": "Bezahlt",
+      "shipped": "Versandt",
+      "delivered": "Erhalten",
+      "reviewed": "Bewertet"
     }
   },
   "services": {

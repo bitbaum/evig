@@ -751,6 +751,13 @@
       "errorNoRatingOrder": "Please choose a star rating.",
       "errorCommentTooShort": "Your comment must contain at least 10 characters or be left empty.",
       "errorSaveFailed": "Review could not be saved."
+    },
+    "orderStatus": {
+      "ordered": "Ordered",
+      "paid": "Paid",
+      "shipped": "Shipped",
+      "delivered": "Received",
+      "reviewed": "Reviewed"
     }
   },
   "services": {
