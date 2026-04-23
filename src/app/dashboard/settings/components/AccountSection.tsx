@@ -3,6 +3,7 @@
 import { Mail, Trash2 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { SETTINGS_CONFIG } from '@/config/profile'
+import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 
 interface AccountSectionProps {
@@ -13,6 +14,7 @@ interface AccountSectionProps {
 
 export function AccountSection({ profile, email, handleChange }: AccountSectionProps) {
   const labels = SETTINGS_CONFIG.labels.account
+  const t = useTranslations('dashboard.settings.account')
 
   return (
     <div className="space-y-8">
@@ -86,7 +88,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
           {labels.passwordDescription}
         </p>
         <p className="text-sm text-blue-600 dark:text-blue-400">
-          Password ändern wird über die Profil-Seite verwaltet (wird später hier integriert)
+          {t('passwordNote')}
         </p>
       </div>
 

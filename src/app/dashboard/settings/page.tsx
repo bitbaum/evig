@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { User, Bell, Shield, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SETTINGS_CONFIG } from '@/config/profile'
+import { useTranslations } from 'next-intl'
 
 // Hooks (reuse from profile)
 import { useProfileData } from '../profile/hooks/useProfileData'
@@ -24,6 +25,7 @@ export default function SettingsPage() {
   const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({ profile, setProfile })
 
   const [activeTab, setActiveTab] = useState<TabId>('account')
+  const t = useTranslations('dashboard.settings')
 
   const labels = SETTINGS_CONFIG.labels
 
@@ -47,7 +49,7 @@ export default function SettingsPage() {
             className="inline-flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
           <div className="flex items-center justify-between">
             <div>
@@ -63,7 +65,7 @@ export default function SettingsPage() {
               className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors text-sm"
             >
               <User className="w-4 h-4" />
-              <span className="hidden sm:inline">Profil bearbeiten</span>
+              <span className="hidden sm:inline">{t('editProfile')}</span>
             </Link>
           </div>
         </div>

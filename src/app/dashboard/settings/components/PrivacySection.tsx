@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Heading from '@/components/ui/Heading'
 import { Globe, Lock, Eye, EyeOff, Download, Loader2 } from 'lucide-react'
 import { SETTINGS_CONFIG } from '@/config/profile'
+import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../../profile/hooks/useProfileData'
 
 interface PrivacySectionProps {
@@ -13,6 +14,7 @@ interface PrivacySectionProps {
 
 export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
   const labels = SETTINGS_CONFIG.labels.privacy
+  const t = useTranslations('dashboard.settings.privacy')
   const [isExporting, setIsExporting] = useState(false)
   const [exportError, setExportError] = useState<string | null>(null)
 
@@ -23,7 +25,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
       const response = await fetch('/api/user/export-data')
       if (!response.ok) {
         const data = await response.json().catch(() => ({}))
-        throw new Error(data.error || 'Export fehlgeschlagen')
+        throw new Error(data.error || t('exportFailed'))
       }
       const blob = await response.blob()
       const url = URL.createObjectURL(blob)
@@ -38,7 +40,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
       URL.revokeObjectURL(url)
     } catch (error) {
       setExportError(
-        error instanceof Error ? error.message : 'Export fehlgeschlagen. Bitte versuche es später erneut.',
+        error instanceof Error ? error.message : t('exportFailedRetry'),
       )
     } finally {
       setIsExporting(false)
@@ -185,11 +187,10 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
       {/* Data Export (GDPR / Swiss DSG) */}
       <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
         <Heading level={4} className="text-base font-semibold text-gray-900 dark:text-white mb-2">
-          Datenschutz & Export
+          {t('dataExportTitle')}
         </Heading>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Gemäss Schweizer Datenschutzgesetz (DSG) und EU-DSGVO kannst du jederzeit
-          eine Kopie Ihrer Daten anfordern.
+          {t('dataExportDescription')}
         </p>
 
         {exportError && (
@@ -207,12 +208,12 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           {isExporting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Export wird erstellt...
+              {t('exportLoading')}
             </>
           ) : (
             <>
               <Download className="h-4 w-4" />
-              Meine Daten herunterladen
+              {t('downloadButton')}
             </>
           )}
         </button>

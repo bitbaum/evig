@@ -5774,6 +5774,21 @@
       "uploadError": "Fehler beim Hochladen",
       "uploadImageError": "Fehler beim Hochladen des Bildes",
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
+    },
+    "settings": {
+      "backToDashboard": "Zurück zum Dashboard",
+      "editProfile": "Profil bearbeiten",
+      "account": {
+        "passwordNote": "Passwort ändern wird über die Profil-Seite verwaltet (wird später hier integriert)"
+      },
+      "privacy": {
+        "dataExportTitle": "Datenschutz & Export",
+        "dataExportDescription": "Gemäss Schweizer Datenschutzgesetz (DSG) und EU-DSGVO kannst du jederzeit eine Kopie deiner Daten anfordern.",
+        "exportFailed": "Export fehlgeschlagen",
+        "exportFailedRetry": "Export fehlgeschlagen. Bitte versuche es später erneut.",
+        "exportLoading": "Export wird erstellt...",
+        "downloadButton": "Meine Daten herunterladen"
+      }
     }
   },
   "components": {

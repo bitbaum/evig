@@ -5623,6 +5623,21 @@
       "uploadError": "Errore nel caricamento",
       "uploadImageError": "Errore nel caricamento dell'immagine",
       "unexpectedError": "Si è verificato un errore imprevisto"
+    },
+    "settings": {
+      "backToDashboard": "Back to Dashboard",
+      "editProfile": "Edit Profile",
+      "account": {
+        "passwordNote": "Password change is managed via the Profile page (will be integrated here later)"
+      },
+      "privacy": {
+        "dataExportTitle": "Privacy & Export",
+        "dataExportDescription": "Under Swiss data protection law (DSG) and EU GDPR, you can request a copy of your data at any time.",
+        "exportFailed": "Export failed",
+        "exportFailedRetry": "Export failed. Please try again later.",
+        "exportLoading": "Creating export...",
+        "downloadButton": "Download my data"
+      }
     }
   },
   "components": {
