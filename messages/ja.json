@@ -4452,7 +4452,9 @@
   "shop": {
     "meta": {
       "title": "ショップ — リファービッシュ・ハードウェア",
-      "description": "検査済みの再生パソコンを公正な価格で。保証付き。"
+      "description": "検査済みの再生パソコンを公正な価格で。保証付き。",
+      "productNotFound": "商品が見つかりません",
+      "productFallbackDesc": "{brand} {model} — {orgName}により検査・整備済み"
     },
     "title": "私たちのショップ",
     "subtitle": "検査済みリファービッシュ・ハードウェア",

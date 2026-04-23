@@ -4452,7 +4452,9 @@
   "shop": {
     "meta": {
       "title": "Shop — Hardware ricondizionato",
-      "description": "Computer verificati e ricondizionati a prezzi equi. Con garanzia."
+      "description": "Computer verificati e ricondizionati a prezzi equi. Con garanzia.",
+      "productNotFound": "Prodotto non trovato",
+      "productFallbackDesc": "{brand} {model} — ispezionato e ricondizionato da {orgName}"
     },
     "title": "Il nostro shop",
     "subtitle": "Hardware ricondizionato verificato",

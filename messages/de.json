@@ -356,7 +356,9 @@
   "shop": {
     "meta": {
       "title": "Shop — Refurbished Hardware",
-      "description": "Geprüfte, aufgearbeitete Computer zu fairen Preisen. Mit Garantie."
+      "description": "Geprüfte, aufgearbeitete Computer zu fairen Preisen. Mit Garantie.",
+      "productNotFound": "Produkt nicht gefunden",
+      "productFallbackDesc": "{brand} {model} — geprüft und aufbereitet von {orgName}"
     },
     "title": "Unser Shop",
     "subtitle": "Geprüfte Refurbished-Hardware",

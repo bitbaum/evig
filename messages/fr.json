@@ -265,7 +265,9 @@
   "shop": {
     "meta": {
       "title": "Boutique — Matériel reconditionné",
-      "description": "Ordinateurs reconditionnés et vérifiés à des prix équitables. Avec garantie."
+      "description": "Ordinateurs reconditionnés et vérifiés à des prix équitables. Avec garantie.",
+      "productNotFound": "Produit introuvable",
+      "productFallbackDesc": "{brand} {model} — inspecté et remis à neuf par {orgName}"
     },
     "title": "Notre boutique",
     "subtitle": "Matériel reconditionné vérifié",

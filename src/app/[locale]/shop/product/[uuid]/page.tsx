@@ -18,12 +18,13 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const { uuid } = await params
+  const { locale, uuid } = await params
+  const t = await getTranslations({ locale, namespace: 'shop.meta' })
   const product = await getInventoryProductByUuid(uuid).catch(() => null)
-  if (!product) return { title: 'Produkt nicht gefunden' }
+  if (!product) return { title: t('productNotFound') }
   return {
     title: `${product.title} | ${ORG.name}`,
-    description: product.description ?? `${product.brand} ${product.model} — geprüft und aufbereitet von ${ORG.name}`,
+    description: product.description ?? t('productFallbackDesc', { brand: product.brand, model: product.model, orgName: ORG.name }),
   }
 }
 

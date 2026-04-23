@@ -4452,7 +4452,9 @@
   "shop": {
     "meta": {
       "title": "Tienda — Hardware reacondicionado",
-      "description": "Ordenadores verificados y reacondicionados a precios justos. Con garantía."
+      "description": "Ordenadores verificados y reacondicionados a precios justos. Con garantía.",
+      "productNotFound": "Producto no encontrado",
+      "productFallbackDesc": "{brand} {model} — inspeccionado y reacondicionado por {orgName}"
     },
     "title": "Nuestra tienda",
     "subtitle": "Hardware reacondicionado verificado",

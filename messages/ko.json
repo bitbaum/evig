@@ -4452,7 +4452,9 @@
   "shop": {
     "meta": {
       "title": "쇼핑몰 — 리퍼비시 하드웨어",
-      "description": "검증된 재정비 컴퓨터를 합리적인 가격에. 보증 포함."
+      "description": "검증된 재정비 컴퓨터를 합리적인 가격에. 보증 포함.",
+      "productNotFound": "제품을 찾을 수 없습니다",
+      "productFallbackDesc": "{brand} {model} — {orgName}가 검사 및 재건한 제품"
     },
     "title": "저희 쇼핑몰",
     "subtitle": "검증된 리퍼비시 하드웨어",

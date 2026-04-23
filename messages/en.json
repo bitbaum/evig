@@ -305,7 +305,9 @@
   "shop": {
     "meta": {
       "title": "Shop — Refurbished Hardware",
-      "description": "Tested, refurbished computers at fair prices. With warranty."
+      "description": "Tested, refurbished computers at fair prices. With warranty.",
+      "productNotFound": "Product not found",
+      "productFallbackDesc": "{brand} {model} — inspected and refurbished by {orgName}"
     },
     "title": "Our shop",
     "subtitle": "Tested refurbished hardware",
