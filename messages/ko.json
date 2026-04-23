@@ -988,7 +988,27 @@
     "relatedArticles": "관련 기사",
     "all": "전체",
     "navSubmitPost": "글 제출",
-    "filterCount": "{count} 필터"
+    "filterCount": "{count} 필터",
+    "admin": {
+      "backToBlog": "블로그로 돌아가기",
+      "heading": "제출물 관리",
+      "subtitle": "사용자가 제출한 콘텐츠를 검토하고 게시하세요",
+      "statPending": "보류 중",
+      "statApproved": "승인됨",
+      "filterAll": "전체 ({count})",
+      "filterPending": "보류 중 ({count})",
+      "filterApproved": "승인됨 ({count})",
+      "filterRejected": "거부됨 ({count})",
+      "loading": "제출물 로드 중...",
+      "noResults": "제출물을 찾을 수 없습니다.",
+      "typeIdea": "아이디어",
+      "typeDraft": "초안",
+      "contentLabel": "내용:",
+      "downloadMarkdown": "Markdown으로 다운로드",
+      "selectPrompt": "제출물을 선택하여 세부 정보를 보세요",
+      "tipText": "💡 {strong}팁:{/strong} Markdown 파일을 다운로드하여 {code}content/posts/{/code} 폴더에 복사하세요. 그런 다음 TinaCMS에서 편집하고 게시할 수 있습니다!",
+      "submittedBy": "제출자: {name} ({email})"
+    }
   },
   "contact": {
     "meta": {

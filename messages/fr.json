@@ -2737,7 +2737,27 @@
     "relatedArticles": "Articles Connexes",
     "all": "Tous",
     "navSubmitPost": "Soumettre un Article",
-    "filterCount": "{count} Filtres"
+    "filterCount": "{count} Filtres",
+    "admin": {
+      "backToBlog": "Retour au Blog",
+      "heading": "Gérer les soumissions",
+      "subtitle": "Examiner et publier le contenu soumis par les utilisateurs",
+      "statPending": "En attente",
+      "statApproved": "Approuvé",
+      "filterAll": "Tous ({count})",
+      "filterPending": "En attente ({count})",
+      "filterApproved": "Approuvé ({count})",
+      "filterRejected": "Refusé ({count})",
+      "loading": "Chargement des soumissions...",
+      "noResults": "Aucune soumission trouvée.",
+      "typeIdea": "Idée",
+      "typeDraft": "Brouillon",
+      "contentLabel": "Contenu :",
+      "downloadMarkdown": "Télécharger en Markdown",
+      "selectPrompt": "Sélectionnez une soumission pour voir les détails",
+      "tipText": "💡 {strong}Conseil :{/strong} Téléchargez le fichier Markdown et copiez-le dans le dossier {code}content/posts/{/code}. Modifiez-le et publiez-le dans TinaCMS !",
+      "submittedBy": "Soumis par : {name} ({email})"
+    }
   },
   "auth": {
     "login": {

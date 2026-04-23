@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Eye, Check, X, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
+import { ArrowLeft, Eye, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
@@ -25,6 +26,7 @@ interface Submission {
 }
 
 export default function SubmissionsAdminPage() {
+  const t = useTranslations('blog.admin')
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [filter, setFilter] = useState<'all' | string>('all')
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
@@ -54,9 +56,7 @@ export default function SubmissionsAdminPage() {
   const approvedCount = submissions.filter(s => s.status === APPROVAL_STATUS.APPROVED).length
   const rejectedCount = submissions.filter(s => s.status === APPROVAL_STATUS.REJECTED).length
 
-
   const handleConvertToPost = (submission: Submission) => {
-    // Create markdown content
     const markdown = `---
 title: '${submission.title}'
 excerpt: ''
@@ -72,10 +72,9 @@ ${submission.content}
 
 ---
 
-*Eingereicht von: ${submission.name} (${submission.email})*
+*${t('submittedBy', { name: submission.name, email: submission.email })}*
 `
 
-    // Download as markdown file
     const blob = new Blob([markdown], { type: 'text/markdown' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -97,23 +96,21 @@ ${submission.content}
             className="inline-flex items-center text-green-200 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Blog
+            {t('backToBlog')}
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <Heading level={1} className="text-4xl font-bold mb-2">Einreichungen verwalten</Heading>
-              <p className="text-green-100">
-                Überprüfe und veröffentliche von Benutzern eingereichte Inhalte
-              </p>
+              <Heading level={1} className="text-4xl font-bold mb-2">{t('heading')}</Heading>
+              <p className="text-green-100">{t('subtitle')}</p>
             </div>
             <div className="flex gap-4">
               <div className="bg-white bg-opacity-10 rounded-lg px-4 py-2">
                 <div className="text-2xl font-bold">{pendingCount}</div>
-                <div className="text-sm text-green-200">Ausstehend</div>
+                <div className="text-sm text-green-200">{t('statPending')}</div>
               </div>
               <div className="bg-white bg-opacity-10 rounded-lg px-4 py-2">
                 <div className="text-2xl font-bold">{approvedCount}</div>
-                <div className="text-sm text-green-200">Genehmigt</div>
+                <div className="text-sm text-green-200">{t('statApproved')}</div>
               </div>
             </div>
           </div>
@@ -132,7 +129,7 @@ ${submission.content}
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Alle ({submissions.length})
+              {t('filterAll', { count: submissions.length })}
             </button>
             <button
               onClick={() => setFilter(APPROVAL_STATUS.PENDING)}
@@ -142,7 +139,7 @@ ${submission.content}
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Ausstehend ({pendingCount})
+              {t('filterPending', { count: pendingCount })}
             </button>
             <button
               onClick={() => setFilter(APPROVAL_STATUS.APPROVED)}
@@ -152,7 +149,7 @@ ${submission.content}
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Genehmigt ({approvedCount})
+              {t('filterApproved', { count: approvedCount })}
             </button>
             <button
               onClick={() => setFilter(APPROVAL_STATUS.REJECTED)}
@@ -162,7 +159,7 @@ ${submission.content}
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Abgelehnt ({rejectedCount})
+              {t('filterRejected', { count: rejectedCount })}
             </button>
           </div>
         </div>
@@ -170,11 +167,11 @@ ${submission.content}
         {isLoading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto"></div>
-            <p className="text-gray-600 mt-4">Lädt Einreichungen...</p>
+            <p className="text-gray-600 mt-4">{t('loading')}</p>
           </div>
         ) : filteredSubmissions.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <p className="text-gray-600">Keine Einreichungen gefunden.</p>
+            <p className="text-gray-600">{t('noResults')}</p>
           </div>
         ) : (
           <div className="grid lg:grid-cols-2 gap-6">
@@ -200,7 +197,7 @@ ${submission.content}
                               : 'bg-purple-100 text-purple-800'
                           }`}
                         >
-                          {submission.submissionType === 'idea' ? 'Idee' : 'Entwurf'}
+                          {submission.submissionType === 'idea' ? t('typeIdea') : t('typeDraft')}
                         </span>
                         <span
                           className={`px-2 py-1 text-xs rounded-full font-medium ${getApprovalStatusBadge(submission.status).bg} ${getApprovalStatusBadge(submission.status).color}`}
@@ -280,7 +277,7 @@ ${submission.content}
                   </div>
 
                   <div className="mb-6">
-                    <Heading level={3} className="font-semibold text-gray-900 mb-3">Inhalt:</Heading>
+                    <Heading level={3} className="font-semibold text-gray-900 mb-3">{t('contentLabel')}</Heading>
                     <div className="bg-gray-50 rounded-lg p-4 max-h-96 overflow-y-auto">
                       <pre className="whitespace-pre-wrap text-sm text-gray-800 font-sans">
                         {selectedSubmission.content}
@@ -294,19 +291,22 @@ ${submission.content}
                       className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                     >
                       <Edit className="w-4 h-4 mr-2" />
-                      Als Markdown herunterladen
+                      {t('downloadMarkdown')}
                     </button>
                   </div>
 
                   <p className="mt-4 text-xs text-gray-500 bg-blue-50 border border-blue-200 rounded p-3">
-                    💡 <strong>Tipp:</strong> Lade die Markdown-Datei herunter und kopiere sie in den <code>content/posts/</code> Ordner. Dann kannst du sie in TinaCMS bearbeiten und veröffentlichen!
+                    💡 {t.rich('tipText', {
+                      strong: (chunks) => <strong>{chunks}</strong>,
+                      code: (chunks) => <code>{chunks}</code>,
+                    })}
                   </p>
                 </div>
               ) : (
                 <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                   <Eye className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                   <p className="text-gray-600">
-                    Wähle eine Einreichung aus, um Details anzuzeigen
+                    {t('selectPrompt')}
                   </p>
                 </div>
               )}

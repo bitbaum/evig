@@ -2865,7 +2865,27 @@
     "relatedArticles": "Related Articles",
     "all": "All",
     "navSubmitPost": "Submit Article",
-    "filterCount": "{count} Filter"
+    "filterCount": "{count} Filter",
+    "admin": {
+      "backToBlog": "Back to Blog",
+      "heading": "Manage Submissions",
+      "subtitle": "Review and publish user-submitted content",
+      "statPending": "Pending",
+      "statApproved": "Approved",
+      "filterAll": "All ({count})",
+      "filterPending": "Pending ({count})",
+      "filterApproved": "Approved ({count})",
+      "filterRejected": "Rejected ({count})",
+      "loading": "Loading submissions...",
+      "noResults": "No submissions found.",
+      "typeIdea": "Idea",
+      "typeDraft": "Draft",
+      "contentLabel": "Content:",
+      "downloadMarkdown": "Download as Markdown",
+      "selectPrompt": "Select a submission to view details",
+      "tipText": "💡 {strong}Tip:{/strong} Download the Markdown file and copy it to the {code}content/posts/{/code} folder. Then edit and publish it in TinaCMS!",
+      "submittedBy": "Submitted by: {name} ({email})"
+    }
   },
   "auth": {
     "login": {

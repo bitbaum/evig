@@ -2916,7 +2916,27 @@
     "relatedArticles": "Verwandte Artikel",
     "all": "Alle",
     "navSubmitPost": "Beitrag einreichen",
-    "filterCount": "{count} Filter"
+    "filterCount": "{count} Filter",
+    "admin": {
+      "backToBlog": "Zurück zum Blog",
+      "heading": "Einreichungen verwalten",
+      "subtitle": "Überprüfe und veröffentliche von Benutzern eingereichte Inhalte",
+      "statPending": "Ausstehend",
+      "statApproved": "Genehmigt",
+      "filterAll": "Alle ({count})",
+      "filterPending": "Ausstehend ({count})",
+      "filterApproved": "Genehmigt ({count})",
+      "filterRejected": "Abgelehnt ({count})",
+      "loading": "Lädt Einreichungen...",
+      "noResults": "Keine Einreichungen gefunden.",
+      "typeIdea": "Idee",
+      "typeDraft": "Entwurf",
+      "contentLabel": "Inhalt:",
+      "downloadMarkdown": "Als Markdown herunterladen",
+      "selectPrompt": "Wähle eine Einreichung aus, um Details anzuzeigen",
+      "tipText": "💡 {strong}Tipp:{/strong} Lade die Markdown-Datei herunter und kopiere sie in den {code}content/posts/{/code} Ordner. Dann kannst du sie in TinaCMS bearbeiten und veröffentlichen!",
+      "submittedBy": "Eingereicht von: {name} ({email})"
+    }
   },
   "auth": {
     "login": {

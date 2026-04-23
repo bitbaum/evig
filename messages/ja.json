@@ -988,7 +988,27 @@
     "relatedArticles": "関連記事",
     "all": "すべて",
     "navSubmitPost": "記事を投稿",
-    "filterCount": "{count} フィルター"
+    "filterCount": "{count} フィルター",
+    "admin": {
+      "backToBlog": "ブログへ戻る",
+      "heading": "投稿を管理",
+      "subtitle": "ユーザーが投稿したコンテンツを確認・公開する",
+      "statPending": "保留中",
+      "statApproved": "承認済み",
+      "filterAll": "すべて ({count})",
+      "filterPending": "保留中 ({count})",
+      "filterApproved": "承認済み ({count})",
+      "filterRejected": "却下済み ({count})",
+      "loading": "投稿を読み込み中...",
+      "noResults": "投稿が見つかりませんでした。",
+      "typeIdea": "アイデア",
+      "typeDraft": "草稿",
+      "contentLabel": "コンテンツ:",
+      "downloadMarkdown": "Markdownとしてダウンロード",
+      "selectPrompt": "投稿を選択して詳細を表示",
+      "tipText": "💡 {strong}ヒント:{/strong} Markdownファイルをダウンロードして{code}content/posts/{/code}フォルダにコピーしてください。その後TinaCMSで編集・公開できます！",
+      "submittedBy": "投稿者: {name} ({email})"
+    }
   },
   "contact": {
     "meta": {

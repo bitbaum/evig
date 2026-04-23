@@ -988,7 +988,27 @@
     "relatedArticles": "Artículos Relacionados",
     "all": "Todos",
     "navSubmitPost": "Enviar Artículo",
-    "filterCount": "{count} Filtros"
+    "filterCount": "{count} Filtros",
+    "admin": {
+      "backToBlog": "Volver al Blog",
+      "heading": "Gestionar envíos",
+      "subtitle": "Revisa y publica el contenido enviado por usuarios",
+      "statPending": "Pendiente",
+      "statApproved": "Aprobado",
+      "filterAll": "Todos ({count})",
+      "filterPending": "Pendiente ({count})",
+      "filterApproved": "Aprobado ({count})",
+      "filterRejected": "Rechazado ({count})",
+      "loading": "Cargando envíos...",
+      "noResults": "No se encontraron envíos.",
+      "typeIdea": "Idea",
+      "typeDraft": "Borrador",
+      "contentLabel": "Contenido:",
+      "downloadMarkdown": "Descargar como Markdown",
+      "selectPrompt": "Selecciona un envío para ver los detalles",
+      "tipText": "💡 {strong}Consejo:{/strong} Descarga el archivo Markdown y cópialo en la carpeta {code}content/posts/{/code}. ¡Luego edítalo y publícalo en TinaCMS!",
+      "submittedBy": "Enviado por: {name} ({email})"
+    }
   },
   "contact": {
     "meta": {
