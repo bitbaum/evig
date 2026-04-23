@@ -2849,7 +2849,9 @@
       "errorInvalidToken": "Invalid verification link",
       "errorVerificationFailed": "Email verification failed. The link may have expired.",
       "errorVerificationError": "An error occurred during email verification",
-      "errorConnection": "Connection problem. Please try again in a minute."
+      "errorConnection": "Connection problem. Please try again in a minute.",
+      "backHome": "Back to home",
+      "pageTitle": "Sign in | RevampIT"
     },
     "register": {
       "title": "Register",
@@ -2924,6 +2926,12 @@
       "verify": "Verify",
       "successHeading": "Email verified!",
       "successDesc": "Your account is now fully activated."
+    },
+    "error": {
+      "heading": "Authentication error",
+      "message": "An error occurred while signing in. Please try again.",
+      "retry": "Try again",
+      "goToLogin": "Go to sign in"
     }
   },
   "cookies": {
@@ -5294,7 +5302,20 @@
         "expertiseHint": "Separate areas with commas",
         "radiusLabel": "Service radius (km)",
         "radiusHint": "Maximum radius for home visits"
-      }
+      },
+      "personalInfo": {
+        "title": "Personal details",
+        "description": "Your basic information",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "company": "Company"
+      },
+      "backToDashboard": "Back to dashboard",
+      "accountOverview": "Account overview",
+      "accountOverviewDesc": "Status and security of your account",
+      "emailVerified": "Email verified",
+      "nameNotSet": "Name not set",
+      "memberSince": "Member since {year}"
     },
     "emailVerification": {
       "heading": "Email address not confirmed",
@@ -6127,6 +6148,11 @@
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
+      },
+      "formErrors": {
+        "updateFailed": "Product could not be updated",
+        "saveFailed": "Product could not be saved",
+        "genericSaveError": "Error saving. Please try again."
       }
     },
     "eWasteProblem": {

@@ -284,7 +284,9 @@
       "errorInvalidToken": "Enlace de verificación no válido",
       "errorVerificationFailed": "Verificación de correo fallida. El enlace puede haber caducado.",
       "errorVerificationError": "Se produjo un error durante la verificación del correo",
-      "errorConnection": "Problema de conexión. Por favor, inténtalo de nuevo en un minuto."
+      "errorConnection": "Problema de conexión. Por favor, inténtalo de nuevo en un minuto.",
+      "backHome": "Back to home",
+      "pageTitle": "Sign in | RevampIT"
     },
     "register": {
       "title": "Crear cuenta",
@@ -359,6 +361,12 @@
       "verify": "Verificar",
       "successHeading": "¡Correo verificado!",
       "successDesc": "Tu cuenta está ahora completamente activada."
+    },
+    "error": {
+      "heading": "Authentication error",
+      "message": "An error occurred while signing in. Please try again.",
+      "retry": "Try again",
+      "goToLogin": "Go to sign in"
     }
   },
   "cookies": {
@@ -5194,7 +5202,20 @@
         "expertiseHint": "Separa las áreas con comas",
         "radiusLabel": "Radio de servicio (km)",
         "radiusHint": "Radio máximo para visitas a domicilio"
-      }
+      },
+      "personalInfo": {
+        "title": "Personal details",
+        "description": "Your basic information",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "company": "Company"
+      },
+      "backToDashboard": "Back to dashboard",
+      "accountOverview": "Account overview",
+      "accountOverviewDesc": "Status and security of your account",
+      "emailVerified": "Email verified",
+      "nameNotSet": "Name not set",
+      "memberSince": "Member since {year}"
     },
     "emailVerification": {
       "heading": "Dirección de correo no confirmada",
@@ -6027,6 +6048,11 @@
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
+      },
+      "formErrors": {
+        "updateFailed": "Product could not be updated",
+        "saveFailed": "Product could not be saved",
+        "genericSaveError": "Error saving. Please try again."
       }
     },
     "eWasteProblem": {

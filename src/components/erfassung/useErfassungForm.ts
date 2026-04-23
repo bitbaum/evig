@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
@@ -24,6 +25,7 @@ function mergeFormData(prev: ErfassungFormData, data: Partial<ErfassungFormData>
 }
 
 export function useErfassungForm() {
+  const t = useTranslations('components.erfassung.formErrors')
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams.get('edit')
@@ -203,7 +205,7 @@ export function useErfassungForm() {
         })
 
         if (!result.success) {
-          throw new Error(result.error || 'Produkt konnte nicht aktualisiert werden')
+          throw new Error(result.error || t('updateFailed'))
         }
 
         router.push('/admin/products')
@@ -216,7 +218,7 @@ export function useErfassungForm() {
         })
 
         if (!result.success) {
-          throw new Error(result.error || 'Produkt konnte nicht gespeichert werden')
+          throw new Error(result.error || t('saveFailed'))
         }
 
         if (result.data) {
@@ -226,7 +228,7 @@ export function useErfassungForm() {
       }
     } catch (error) {
       logger.error('Error saving product', { error })
-      setSaveError(error instanceof Error ? error.message : 'Fehler beim Speichern. Bitte erneut versuchen.')
+      setSaveError(error instanceof Error ? error.message : t('genericSaveError'))
     } finally {
       setIsLoading(false)
     }

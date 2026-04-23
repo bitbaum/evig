@@ -284,7 +284,9 @@
       "errorInvalidToken": "無効な確認リンクです",
       "errorVerificationFailed": "メール確認に失敗しました。リンクが期限切れの可能性があります。",
       "errorVerificationError": "メール確認中にエラーが発生しました",
-      "errorConnection": "接続の問題が発生しました。1分後にもう一度お試しください。"
+      "errorConnection": "接続の問題が発生しました。1分後にもう一度お試しください。",
+      "backHome": "Back to home",
+      "pageTitle": "Sign in | RevampIT"
     },
     "register": {
       "title": "新規登録",
@@ -359,6 +361,12 @@
       "verify": "確認する",
       "successHeading": "メールが確認されました！",
       "successDesc": "アカウントが完全に有効化されました。"
+    },
+    "error": {
+      "heading": "Authentication error",
+      "message": "An error occurred while signing in. Please try again.",
+      "retry": "Try again",
+      "goToLogin": "Go to sign in"
     }
   },
   "cookies": {
@@ -5194,7 +5202,20 @@
         "expertiseHint": "分野をカンマで区切ってください",
         "radiusLabel": "サービス範囲（km）",
         "radiusHint": "自宅訪問の最大範囲"
-      }
+      },
+      "personalInfo": {
+        "title": "Personal details",
+        "description": "Your basic information",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "company": "Company"
+      },
+      "backToDashboard": "Back to dashboard",
+      "accountOverview": "Account overview",
+      "accountOverviewDesc": "Status and security of your account",
+      "emailVerified": "Email verified",
+      "nameNotSet": "Name not set",
+      "memberSince": "Member since {year}"
     },
     "emailVerification": {
       "heading": "メールアドレスが未確認",
@@ -6027,6 +6048,11 @@
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
+      },
+      "formErrors": {
+        "updateFailed": "Product could not be updated",
+        "saveFailed": "Product could not be saved",
+        "genericSaveError": "Error saving. Please try again."
       }
     },
     "eWasteProblem": {

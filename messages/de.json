@@ -2900,7 +2900,9 @@
       "errorInvalidToken": "Ungültiger Verifizierungslink",
       "errorVerificationFailed": "E-Mail-Verifizierung fehlgeschlagen. Der Link könnte abgelaufen sein.",
       "errorVerificationError": "Ein Fehler ist bei der E-Mail-Verifizierung aufgetreten",
-      "errorConnection": "Verbindungsproblem. Bitte versuche es in einer Minute erneut."
+      "errorConnection": "Verbindungsproblem. Bitte versuche es in einer Minute erneut.",
+      "backHome": "Zurück zur Startseite",
+      "pageTitle": "Anmelden | RevampIT"
     },
     "register": {
       "title": "Registrieren",
@@ -2975,6 +2977,12 @@
       "verify": "Verifizieren",
       "successHeading": "E-Mail verifiziert!",
       "successDesc": "Dein Konto ist jetzt vollständig aktiviert."
+    },
+    "error": {
+      "heading": "Authentifizierungsfehler",
+      "message": "Beim Anmelden ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+      "retry": "Erneut versuchen",
+      "goToLogin": "Zur Anmeldeseite"
     }
   },
   "cookies": {
@@ -5345,7 +5353,20 @@
         "expertiseHint": "Trenne Fachgebiete mit Kommas",
         "radiusLabel": "Service-Radius (km)",
         "radiusHint": "Maximaler Radius für Hausbesuche"
-      }
+      },
+      "personalInfo": {
+        "title": "Persönliche Daten",
+        "description": "Ihre grundlegenden Informationen",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "company": "Firma"
+      },
+      "backToDashboard": "Zurück zum Dashboard",
+      "accountOverview": "Kontoübersicht",
+      "accountOverviewDesc": "Status und Sicherheit deines Kontos",
+      "emailVerified": "E-Mail bestätigt",
+      "nameNotSet": "Name nicht angegeben",
+      "memberSince": "Mitglied seit {year}"
     },
     "emailVerification": {
       "heading": "E-Mail-Adresse nicht bestätigt",
@@ -6178,6 +6199,11 @@
         "chooseFile": "CSV- oder Excel-Datei wählen oder hierher ziehen",
         "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
         "unmappedColumns": "Nicht zugeordnete Spalten:"
+      },
+      "formErrors": {
+        "updateFailed": "Produkt konnte nicht aktualisiert werden",
+        "saveFailed": "Produkt konnte nicht gespeichert werden",
+        "genericSaveError": "Fehler beim Speichern. Bitte erneut versuchen."
       }
     },
     "eWasteProblem": {

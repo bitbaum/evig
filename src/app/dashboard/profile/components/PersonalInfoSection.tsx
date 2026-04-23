@@ -1,6 +1,7 @@
 'use client'
 
 import { User, Building2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import type { ProfileData } from '../hooks/useProfileData'
 
@@ -10,6 +11,9 @@ interface PersonalInfoSectionProps {
 }
 
 export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSectionProps) {
+  const t = useTranslations('dashboard.profile.personalInfo')
+  const tAddr = useTranslations('dashboard.profile.address')
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -18,16 +22,16 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-            Persönliche Daten
+            {t('title')}
           </Heading>
-          <p className="text-sm text-gray-500">Ihre grundlegenden Informationen</p>
+          <p className="text-sm text-gray-500">{t('description')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Vorname
+            {t('firstName')}
           </label>
           <input
             type="text"
@@ -39,7 +43,7 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Nachname
+            {t('lastName')}
           </label>
           <input
             type="text"
@@ -51,7 +55,7 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
         </div>
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Firma <span className="text-gray-400">(optional)</span>
+            {t('company')} <span className="text-gray-400">{tAddr('optional')}</span>
           </label>
           <div className="relative">
             <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

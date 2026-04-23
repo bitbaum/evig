@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Heading from '@/components/ui/Heading'
 import { User, Save, Loader2, CheckCircle2, ArrowLeft, Shield, Settings as SettingsIcon } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { PROFILE_CONFIG } from '@/config/profile'
 
@@ -18,6 +19,7 @@ import { PublicProfileSection } from './components/PublicProfileSection'
 import { ServiceProviderSection } from './components/ServiceProviderSection'
 
 export default function ProfilePage() {
+  const t = useTranslations('dashboard.profile')
   const { session, status, isLoading, profile, setProfile, isServiceProvider } = useProfileData()
   const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({ profile, setProfile })
 
@@ -41,7 +43,7 @@ export default function ProfilePage() {
             className="inline-flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
           <div className="flex items-center justify-between">
             <div>
@@ -73,10 +75,10 @@ export default function ProfilePage() {
             </div>
             <div>
               <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-                Kontoübersicht
+                {t('accountOverview')}
               </Heading>
               <p className="text-sm text-gray-600 dark:text-neutral-400">
-                Status und Sicherheit deines Kontos
+                {t('accountOverviewDesc')}
               </p>
             </div>
           </div>
@@ -89,7 +91,7 @@ export default function ProfilePage() {
               </div>
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
-                  E-Mail bestätigt
+                  {t('emailVerified')}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-neutral-400">
                   {session?.user?.email}
@@ -106,10 +108,10 @@ export default function ProfilePage() {
                 <p className="font-medium text-gray-900 dark:text-white">
                   {profile.first_name && profile.last_name
                     ? `${profile.first_name} ${profile.last_name}`
-                    : profile.display_name || 'Name nicht angegeben'}
+                    : profile.display_name || t('nameNotSet')}
                 </p>
                 <p className="text-sm text-gray-600 dark:text-neutral-400">
-                  Mitglied seit {new Date().getFullYear()}
+                  {t('memberSince', { year: new Date().getFullYear() })}
                 </p>
               </div>
             </div>

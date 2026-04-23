@@ -284,7 +284,9 @@
       "errorInvalidToken": "유효하지 않은 인증 링크",
       "errorVerificationFailed": "이메일 인증에 실패했습니다. 링크가 만료되었을 수 있습니다.",
       "errorVerificationError": "이메일 인증 중 오류가 발생했습니다",
-      "errorConnection": "연결 문제입니다. 1분 후에 다시 시도해 주세요."
+      "errorConnection": "연결 문제입니다. 1분 후에 다시 시도해 주세요.",
+      "backHome": "Back to home",
+      "pageTitle": "Sign in | RevampIT"
     },
     "register": {
       "title": "회원가입",
@@ -359,6 +361,12 @@
       "verify": "인증하기",
       "successHeading": "이메일이 인증되었습니다!",
       "successDesc": "계정이 이제 완전히 활성화되었습니다."
+    },
+    "error": {
+      "heading": "Authentication error",
+      "message": "An error occurred while signing in. Please try again.",
+      "retry": "Try again",
+      "goToLogin": "Go to sign in"
     }
   },
   "cookies": {
@@ -5194,7 +5202,20 @@
         "expertiseHint": "분야를 쉼표로 구분하세요",
         "radiusLabel": "서비스 범위(km)",
         "radiusHint": "가정 방문 최대 범위"
-      }
+      },
+      "personalInfo": {
+        "title": "Personal details",
+        "description": "Your basic information",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "company": "Company"
+      },
+      "backToDashboard": "Back to dashboard",
+      "accountOverview": "Account overview",
+      "accountOverviewDesc": "Status and security of your account",
+      "emailVerified": "Email verified",
+      "nameNotSet": "Name not set",
+      "memberSince": "Member since {year}"
     },
     "emailVerification": {
       "heading": "이메일 주소가 확인되지 않음",
@@ -6027,6 +6048,11 @@
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
+      },
+      "formErrors": {
+        "updateFailed": "Product could not be updated",
+        "saveFailed": "Product could not be saved",
+        "genericSaveError": "Error saving. Please try again."
       }
     },
     "eWasteProblem": {
