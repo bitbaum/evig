@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { ROLES } from '@/lib/constants'
@@ -54,6 +55,7 @@ interface DashboardData {
 }
 
 export default function SellerDashboard() {
+  const t = useTranslations('dashboard.seller')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [data, setData] = useState<DashboardData | null>(null)
@@ -99,10 +101,10 @@ export default function SellerDashboard() {
       if (result.success && result.data) {
         setData(result.data)
       } else {
-        throw new Error(result.error || 'Fehler beim Laden des Dashboards')
+        throw new Error(result.error || t('loadErrorGeneric'))
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
+      setError(err instanceof Error ? err.message : t('unexpectedError'))
     } finally {
       setIsLoading(false)
     }
@@ -110,29 +112,29 @@ export default function SellerDashboard() {
 
   const quickActions = [
     {
-      title: 'Neues Produkt',
-      description: 'Produkt zum Marketplace hinzufügen',
+      title: t('quickNewProduct'),
+      description: t('quickNewProductDesc'),
       href: '/marketplace/sell',
       icon: Plus,
       color: 'bg-green-500',
     },
     {
-      title: 'Meine Produkte',
-      description: 'Alle deine Produkte verwalten',
+      title: t('quickMyProducts'),
+      description: t('quickMyProductsDesc'),
       href: '/dashboard/listings',
       icon: Package,
       color: 'bg-blue-500',
     },
     {
-      title: 'Verkäufe',
-      description: 'Bestellungen und Verkäufe anzeigen',
+      title: t('quickSales'),
+      description: t('quickSalesDesc'),
       href: '/dashboard/orders',
       icon: TrendingUp,
       color: 'bg-purple-500',
     },
     {
-      title: 'Marketplace',
-      description: 'Marketplace ansehen',
+      title: t('quickMarketplace'),
+      description: t('quickMarketplaceDesc'),
       href: '/marketplace',
       icon: BarChart3,
       color: 'bg-orange-500',
@@ -149,7 +151,7 @@ export default function SellerDashboard() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <span className="ml-3 text-gray-600 dark:text-gray-400">Dashboard wird geladen...</span>
+        <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
       </div>
     )
   }
@@ -159,12 +161,12 @@ export default function SellerDashboard() {
       <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <Heading level={3} className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
-          Fehler beim Laden
+          {t('loadErrorTitle')}
         </Heading>
         <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
         <Button onClick={fetchDashboardData} variant="destructive" className="gap-2">
           <RefreshCw className="w-4 h-4" />
-          Erneut versuchen
+          {t('retry')}
         </Button>
       </div>
     )
@@ -192,13 +194,13 @@ export default function SellerDashboard() {
               Seller Dashboard
             </Heading>
             <p className="text-green-100">
-              Verwalte deine Produkte im RevampIT Marketplace und verfolge deine Verkäufe.
+              {t('pageSubtitle')}
             </p>
           </div>
           <button
             onClick={fetchDashboardData}
             className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-            title="Aktualisieren"
+            title={t('refresh')}
           >
             <RefreshCw className="w-5 h-5" />
           </button>
@@ -210,9 +212,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Meine Produkte</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsProducts')}</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalProducts}</p>
-              <p className="text-sm text-green-600">{stats.activeProducts} aktiv</p>
+              <p className="text-sm text-green-600">{t('statsActive', { count: stats.activeProducts })}</p>
             </div>
             <Package className="w-8 h-8 text-blue-600" />
           </div>
@@ -221,13 +223,13 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Umsatz</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsRevenue')}</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">
                 CHF {stats.totalRevenue.toLocaleString('de-CH')}
               </p>
               <p className="text-sm text-green-600 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
-                Gesamtumsatz
+                {t('statsTotalRevenue')}
               </p>
             </div>
             <DollarSign className="w-8 h-8 text-green-600" />
@@ -237,9 +239,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Produkt-Aufrufe</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsViews')}</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-blue-600">{stats.totalFavorites} Favoriten</p>
+              <p className="text-sm text-blue-600">{t('statsFavorites', { count: stats.totalFavorites })}</p>
             </div>
             <Eye className="w-8 h-8 text-blue-600" />
           </div>
@@ -248,9 +250,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bestellungen</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsOrders')}</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
-              <p className="text-sm text-purple-600">ausstehend: {stats.pendingOrders}</p>
+              <p className="text-sm text-purple-600">{t('statsPending', { count: stats.pendingOrders })}</p>
             </div>
             <Users className="w-8 h-8 text-purple-600" />
           </div>
@@ -262,10 +264,10 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="p-6 border-b border-gray-100 dark:border-gray-700">
             <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-              Meine Produkte
+              {t('recentTitle')}
             </Heading>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Übersicht Ihrer Produkte
+              {t('recentSubtitle')}
             </p>
           </div>
 
@@ -274,14 +276,14 @@ export default function SellerDashboard() {
               <div className="text-center py-8">
                 <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Du hast noch keine Produkte erstellt.
+                  {t('noProducts')}
                 </p>
                 <Link
                   href="/marketplace/sell"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
                 >
                   <Plus className="w-4 h-4" />
-                  Erstes Produkt erstellen
+                  {t('createFirst')}
                 </Link>
               </div>
             ) : (
@@ -298,7 +300,7 @@ export default function SellerDashboard() {
                           {product.title}
                         </Heading>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          CHF {product.price} • {product.viewsCount} Aufrufe
+                          CHF {product.price} • {t('viewCount', { count: product.viewsCount })}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -318,7 +320,7 @@ export default function SellerDashboard() {
                   href="/dashboard/listings"
                   className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center gap-1"
                 >
-                  Alle Produkte verwalten
+                  {t('manageAll')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -330,10 +332,10 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="p-6 border-b border-gray-100 dark:border-gray-700">
             <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-              Schnellzugriff
+              {t('quickActionsTitle')}
             </Heading>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Häufig verwendete Seller-Funktionen
+              {t('quickActionsSubtitle')}
             </p>
           </div>
 
@@ -371,25 +373,23 @@ export default function SellerDashboard() {
           </div>
           <div>
             <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
-              RevampIT Marketplace
+              {t('infoTitle')}
             </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              Als Seller kannst du Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
-              deine Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,
-              die Kreislaufwirtschaft zu fördern.
+              {t('infoDesc')}
             </p>
             <div className="mt-3 flex gap-3">
               <Link
                 href="/marketplace"
                 className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
               >
-                Marketplace ansehen
+                {t('viewMarketplace')}
               </Link>
               <Link
                 href="/marketplace/sell"
                 className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition-colors"
               >
-                Produkt hinzufügen
+                {t('addProduct')}
               </Link>
             </div>
           </div>

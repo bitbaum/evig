@@ -10,10 +10,12 @@ import type { Conversation } from '@/components/messages/ConversationList'
 import MessageThread from '@/components/messages/MessageThread'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 
 function MessagesContent() {
+  const t = useTranslations('dashboard.messages')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -79,9 +81,9 @@ function MessagesContent() {
   return (
     <div className="space-y-4">
       <div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Nachrichten</Heading>
+        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">{t('pageTitle')}</Heading>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Deine Konversationen mit Käufern und Verkäufern
+          {t('pageSubtitle')}
         </p>
       </div>
 
@@ -90,14 +92,14 @@ function MessagesContent() {
           icon={MessageSquare}
           iconBg="bg-blue-50 dark:bg-blue-900/20"
           iconColor="text-blue-500 dark:text-blue-400"
-          title="Keine Nachrichten"
-          description="Stöbere im Marketplace und kontaktiere Verkäufer, um eine Konversation zu starten."
+          title={t('emptyTitle')}
+          description={t('emptyDesc')}
           action={
             <Link
               href="/marketplace"
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
-              Zum Marketplace
+              {t('goToMarketplace')}
             </Link>
           }
         />
@@ -124,7 +126,7 @@ function MessagesContent() {
                   conversationId={selectedConvId}
                   currentUserId={session.user.id}
                   recipientId={selectedConv.other_user_id}
-                  recipientName={selectedConv.other_user_name || 'Unbekannt'}
+                  recipientName={selectedConv.other_user_name || t('unknownRecipient')}
                   contextType={selectedConv.type}
                   contextId={selectedConv.context_id}
                   onBack={handleBack}
@@ -132,7 +134,7 @@ function MessagesContent() {
               ) : (
                 <div className="text-center text-gray-400 dark:text-gray-500 p-8">
                   <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" aria-hidden="true" />
-                  <p className="text-sm">Wähle eine Konversation aus</p>
+                  <p className="text-sm">{t('selectConversation')}</p>
                 </div>
               )}
             </div>

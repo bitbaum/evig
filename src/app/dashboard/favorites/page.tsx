@@ -12,6 +12,7 @@ import {
   MapPin,
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
@@ -38,6 +39,7 @@ interface FavoriteListing {
 }
 
 export default function FavoritesPage() {
+  const t = useTranslations('dashboard.favorites')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const [favorites, setFavorites] = useState<FavoriteListing[]>([])
@@ -54,10 +56,10 @@ export default function FavoritesPage() {
       if (data.success) {
         setFavorites(data.data.items)
       } else {
-        throw new Error(data.error || 'Fehler beim Laden')
+        throw new Error(data.error || t('loadError'))
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
+      setError(err instanceof Error ? err.message : t('unexpectedError'))
     } finally {
       setIsLoading(false)
     }
@@ -98,17 +100,17 @@ export default function FavoritesPage() {
       <div>
         <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <Heart className="w-6 h-6 text-red-500" />
-          Meine Favoriten
+          {t('pageTitle')}
         </Heading>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          Ihre gemerkten Inserate auf einen Blick
+          {t('pageSubtitle')}
         </p>
       </div>
 
       {isLoading && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600 dark:text-gray-400">Favoriten werden geladen...</span>
+          <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
         </div>
       )}
 
@@ -118,7 +120,7 @@ export default function FavoritesPage() {
           <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
           <Button onClick={fetchFavorites} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
-            Erneut versuchen
+            {t('retry')}
           </Button>
         </div>
       )}
@@ -128,14 +130,14 @@ export default function FavoritesPage() {
           icon={Heart}
           iconBg="bg-rose-50 dark:bg-rose-900/20"
           iconColor="text-rose-500 dark:text-rose-400"
-          title="Noch keine Favoriten"
-          description="Klicke auf das Herz-Symbol bei einem Inserat, um es hier zu speichern."
+          title={t('emptyTitle')}
+          description={t('emptyDesc')}
           action={
             <Link
               href="/marketplace"
               className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
-              Marketplace durchsuchen
+              {t('browseMarketplace')}
             </Link>
           }
         />
@@ -162,7 +164,7 @@ export default function FavoritesPage() {
                     {listing.status !== 'active' && (
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <span className="text-white font-semibold text-sm">
-                          {listing.status === 'sold' ? 'Verkauft' : 'Nicht verfügbar'}
+                          {listing.status === 'sold' ? t('statusSold') : t('statusUnavailable')}
                         </span>
                       </div>
                     )}
@@ -196,7 +198,7 @@ export default function FavoritesPage() {
                     ) : (
                       <Heart className="w-3 h-3 fill-red-500" />
                     )}
-                    Entfernen
+                    {t('removeButton')}
                   </button>
                 </div>
               </div>

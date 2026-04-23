@@ -17,6 +17,7 @@ import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Dashboard | RevampIT',
@@ -34,11 +35,6 @@ interface ActivityCounts {
   pendingQuotes: number
 }
 
-const MEMBER_TYPE_LABELS: Record<string, string> = {
-  regular: 'Ordentliches Mitglied',
-  reduced: 'Ermässigtes Mitglied',
-  honorary: 'Ehrenmitglied',
-}
 
 async function getMemberStatus(userId: string): Promise<MemberStatus> {
   try {
@@ -88,6 +84,7 @@ async function getActivityCounts(userId: string): Promise<ActivityCounts> {
 }
 
 export default async function DashboardPage() {
+  const t = await getTranslations('dashboard.home')
   const session = await auth()
 
   if (!session?.user) {
@@ -108,15 +105,15 @@ export default async function DashboardPage() {
   // Inject live count badges on relevant cards
   const cardsWithBadges = allCards.map(card => {
     if (card.id === 'appointments' && counts.activeAppointments > 0)
-      return { ...card, badge: `${counts.activeAppointments} aktiv` }
+      return { ...card, badge: t('activeBadge', { count: counts.activeAppointments }) }
     if (card.id === 'bookings' && counts.activeAppointments > 0)
-      return { ...card, badge: `${counts.activeAppointments} aktiv` }
+      return { ...card, badge: t('activeBadge', { count: counts.activeAppointments }) }
     return card
   })
 
   const grouped = groupCardsByCategory(cardsWithBadges)
 
-  const userName = session.user.name || session.user.email || 'Unbekannt'
+  const userName = session.user.name || session.user.email || t('unknownUser')
 
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
@@ -134,10 +131,10 @@ export default async function DashboardPage() {
               level={1}
               className={cn('text-2xl sm:text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}
             >
-              Willkommen zurück, {userName}!
+              {t('welcomeBack', { name: userName })}
             </Heading>
             <p className={cn('mt-1 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-              Verwalte dein Konto und entdecke alle verfügbaren Funktionen.
+              {t('subtitle')}
             </p>
           </div>
 
@@ -146,11 +143,12 @@ export default async function DashboardPage() {
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-sm font-medium shrink-0">
               <span>🏅</span>
               <span>
-                {memberStatus.memberType
-                  ? MEMBER_TYPE_LABELS[memberStatus.memberType] ?? 'Mitglied'
-                  : 'Mitglied'}
+                {memberStatus.memberType === 'regular' ? t('memberTypeRegular')
+                  : memberStatus.memberType === 'reduced' ? t('memberTypeReduced')
+                  : memberStatus.memberType === 'honorary' ? t('memberTypeHonorary')
+                  : t('memberFallback')}
                 {memberStatus.memberSince && (
-                  <span className="font-normal opacity-75"> · seit {formatDate(memberStatus.memberSince)}</span>
+                  <span className="font-normal opacity-75"> · {t('memberSince', { date: formatDate(memberStatus.memberSince) })}</span>
                 )}
               </span>
             </div>
@@ -159,7 +157,7 @@ export default async function DashboardPage() {
               href="/mitglied-werden"
               className="shrink-0 text-sm text-blue-600 dark:text-blue-400 hover:underline font-medium"
             >
-              Mitglied werden →
+              {t('becomeMember')}
             </Link>
           )}
         </div>
@@ -168,16 +166,12 @@ export default async function DashboardPage() {
         {counts.pendingQuotes > 0 && (
           <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg flex items-center gap-3 text-amber-800 dark:text-amber-300">
             <AlertCircle className="h-5 w-5 shrink-0" />
-            <span>
-              Du hast{' '}
-              <strong>{counts.pendingQuotes} {counts.pendingQuotes === 1 ? 'Angebot' : 'Angebote'}</strong>{' '}
-              zur Bestätigung.
-            </span>
+            <span>{t('pendingQuotes', { count: counts.pendingQuotes })}</span>
             <Link
               href="/dashboard/bookings"
               className="ml-auto text-sm font-medium text-amber-900 dark:text-amber-200 hover:underline shrink-0"
             >
-              Ansehen →
+              {t('viewAlerts')}
             </Link>
           </div>
         )}
