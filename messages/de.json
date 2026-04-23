@@ -6234,5 +6234,53 @@
       "newConversation": "Neue Unterhaltung",
       "messagePlaceholder": "Nachricht schreiben..."
     }
+  },
+  "profil": {
+    "techniker": {
+      "pageTitle": "Techniker-Profil",
+      "pageDesc": "Erfasse deine Skills und Verfügbarkeit, um anderen bei IT-Problemen zu helfen.",
+      "backToDashboard": "Zurück zum Dashboard",
+      "saveSuccess": "Profil erfolgreich gespeichert!",
+      "saveFailed": "Speichern fehlgeschlagen",
+      "skills": {
+        "heading": "Deine Skills",
+        "desc": "Wähle die Bereiche aus, in denen du anderen helfen kannst."
+      },
+      "serviceType": {
+        "heading": "Art der Hilfe",
+        "desc": "Wie möchtest du Hilfe anbieten?"
+      },
+      "location": {
+        "heading": "Standort",
+        "desc": "Wo bist du verfügbar?",
+        "postalCode": "PLZ",
+        "city": "Ort",
+        "canton": "Kanton",
+        "cantonPlaceholder": "Bitte wählen...",
+        "maxTravel": "Max. Anfahrt (km)"
+      },
+      "pricing": {
+        "heading": "Vergütung",
+        "desc": "Lege fest, wie du vergütet werden möchtest.",
+        "hourlyRate": "Stundensatz (CHF)",
+        "hourlyRateHint": "Leer lassen wenn du nur gratis helfen möchtest",
+        "acceptsGratis": "Ich helfe auch gratis (Community-Hilfe)",
+        "acceptsKulturlegi": "Ich akzeptiere KulturLegi (50% Rabatt)"
+      },
+      "bio": {
+        "heading": "Über dich",
+        "desc": "Erzähle etwas über deine Erfahrung und warum du anderen helfen möchtest.",
+        "placeholder": "z.B. Ich repariere seit 10 Jahren Computer und helfe gerne Leuten, ihre Geräte länger zu nutzen...",
+        "charCount": "{count}/1000 Zeichen"
+      },
+      "activate": {
+        "heading": "Profil aktivieren",
+        "desc": "Dein Profil wird in der Techniker-Suche angezeigt"
+      },
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "saving": "Speichert...",
+      "skillRequired": "Bitte wähle mindestens einen Skill aus."
+    }
   }
 }

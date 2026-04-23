@@ -6183,5 +6183,53 @@
       "newConversation": "New conversation",
       "messagePlaceholder": "Write a message..."
     }
+  },
+  "profil": {
+    "techniker": {
+      "pageTitle": "Technician profile",
+      "pageDesc": "Enter your skills and availability to help others with IT problems.",
+      "backToDashboard": "Back to dashboard",
+      "saveSuccess": "Profile saved successfully!",
+      "saveFailed": "Save failed",
+      "skills": {
+        "heading": "Your skills",
+        "desc": "Choose the areas where you can help others."
+      },
+      "serviceType": {
+        "heading": "Type of help",
+        "desc": "How would you like to offer help?"
+      },
+      "location": {
+        "heading": "Location",
+        "desc": "Where are you available?",
+        "postalCode": "Postal code",
+        "city": "City",
+        "canton": "Canton",
+        "cantonPlaceholder": "Please select...",
+        "maxTravel": "Max. travel (km)"
+      },
+      "pricing": {
+        "heading": "Compensation",
+        "desc": "Specify how you would like to be compensated.",
+        "hourlyRate": "Hourly rate (CHF)",
+        "hourlyRateHint": "Leave blank if you only want to help for free",
+        "acceptsGratis": "I also help for free (community help)",
+        "acceptsKulturlegi": "I accept KulturLegi (50% discount)"
+      },
+      "bio": {
+        "heading": "About you",
+        "desc": "Tell us about your experience and why you want to help others.",
+        "placeholder": "e.g. I have been repairing computers for 10 years and love helping people use their devices longer...",
+        "charCount": "{count}/1000 characters"
+      },
+      "activate": {
+        "heading": "Activate profile",
+        "desc": "Your profile will appear in the technician search"
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving...",
+      "skillRequired": "Please select at least one skill."
+    }
   }
 }
