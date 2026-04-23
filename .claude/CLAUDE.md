@@ -4,6 +4,21 @@
 
 ---
 
+## Mission
+
+**Used computers get repaired and rehomed — not landfilled.**
+
+Revamp-IT serves two users: people who need affordable tech and can't get it through commercial channels, and donors/volunteers who want their old hardware to have a second life. The platform succeeds when a working computer reaches someone who needs it, a repair technician earns meaningful work, or a community member gains digital skills — all without extracting profit.
+
+**Engineering guardrails derived from this mission:**
+- Features that don't move hardware from donors to recipients, or connect repair needs to technicians, need strong justification before being built.
+- Complexity that serves staff over users should be deferred until core user journeys are bulletproof.
+- The platform is Swiss-based with international reach — multilingual support is not a nice-to-have, it is the mission.
+
+**One-line value proposition:** Used computers repaired and rehomed — not landfilled.
+
+---
+
 ## Overview
 
 Revamp-IT is a **Swiss non-profit** enabling free exchange of technology, promoting open-source hardware and software. Built with Next.js 16, TypeScript, and Tailwind.

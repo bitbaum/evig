@@ -1,16 +1,29 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-02-17
-last_modified_summary: Updated audit after reliability hardening - build fix, DB timeouts, middleware fix, AI caching, email fallback, test coverage at 312 tests
+last_modified_date: 2026-04-24
+last_modified_summary: Updated after i18n pass — all public pages translated; test count 312→354; BlogFeaturedGrid img already migrated (removed stale TODO); upload preview img tags are correct (blob URLs, not Next.js Image candidates)
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-02-17
+**Last Audit Date**: 2026-04-24
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
+
+## Summary of Recent Fixes (2026-04-24)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| Full i18n pass (all public pages) | FIXED | All hardcoded German strings wired to next-intl across 7 locales |
+| Hardcoded German loading text (24 files) | FIXED | Removed text prop from LoadingSpinner — icon is universal |
+| Layout metadata (8 layouts) | FIXED | Converted static German metadata to async generateMetadata with getTranslations |
+| Dashboard/auth metadata (12 pages) | FIXED | All use getLocale() pattern for non-locale routes |
+| IT-Hilfe card/offer actions | FIXED | useTranslations wired in RequestCard, OffersList, MarkCompletedCard |
+| Involvement layout CTA | FIXED | 4 hardcoded German strings → getInvolved.cta namespace |
+| AISearchModal German strings | FIXED | searchPlaceholder + articleNumberExample keys added |
+| Blog admin submissions page | FIXED | All 17 keys wired including t.rich() for tip text |
 
 ## Summary of Recent Fixes (2026-02-17)
 
@@ -32,7 +45,7 @@ This document tracks code quality issues, security findings, and performance pro
 |-----|--------|--------|
 | Security auth/rate limiting | FIXED | Previously completed |
 | N+1 query in reviews | FIXED | `33dff13` - Used json_agg |
-| Swiss German compliance (ss not ss) | FIXED | `ddcd6ac` - 16 files |
+| Swiss German compliance (ss not ß) | FIXED | `ddcd6ac` - 16 files |
 | Cache headers for public APIs | FIXED | `66e70cc` - repairers endpoints |
 | React.memo optimizations | FIXED | FilterBar + ComparisonCard |
 | Hardcoded table names | FIXED | `2af0448` - Using TABLE_NAMES |
@@ -74,8 +87,7 @@ This document tracks code quality issues, security findings, and performance pro
 | AI provider config queried every call | FIXED | 60s TTL cache |
 | User columns cache never invalidates | FIXED | 5-minute TTL |
 | Neon cold start connection failures | FIXED | 10s timeout, longer retry delays |
-| Duplicate count queries | TODO | Use COUNT(*) OVER() |
-| Raw `<img>` tags | TODO | Migrate to Next.js `<Image>` |
+| Duplicate count queries | LOW TODO | Use COUNT(*) OVER() for pagination |
 
 ---
 
@@ -89,12 +101,16 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 ## Remaining TODOs
 
 ### Low Priority
-- Migrate raw `<img>` tags to `next/image` in BlogFeaturedGrid.tsx
-- Consider COUNT(*) OVER() for pagination queries
+- Consider COUNT(*) OVER() for pagination queries (avoids separate count query)
 - Voice transcription service is manual start (`npm run transcription:start`) — consider adding to docker-compose when Python deps are standardized
+- itHilfe Phase 2: update all queries to use `repairer_profiles`, then drop legacy table (see `src/db/schema/itHilfe.ts:146`)
+
+### Notes on img tags
+- `BlogFeaturedGrid.tsx` already uses `next/image` — stale TODO removed
+- `ImageUploadGrid.tsx` and `ProductImageUpload.tsx` use raw `<img>` for blob URL previews — this is **correct** (`next/image` cannot optimize blob: URLs)
 
 ### Testing Coverage
-**Current Coverage**: 312 tests across 24 test suites
+**Current Coverage**: 354 tests across 27 test suites (updated 2026-04-24)
 - API route tests (notifications, admin endpoints)
 - Business logic tests (protocols, payments, services, hirn)
 - UI tests (marketplace, auth, middleware)
@@ -102,4 +118,4 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 
 ---
 
-**Last Updated**: 2026-02-17
+**Last Updated**: 2026-04-24
