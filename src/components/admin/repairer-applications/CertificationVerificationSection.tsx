@@ -1,5 +1,6 @@
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
+import { CERTIFICATION_STATUS, CERTIFICATION_STATUS_LABELS, getCertificationStatusBadge } from '@/config/certification-status'
 import type { RepairerApplication, Certification, ActionDialogState } from './types'
 
 interface Props {
@@ -52,7 +53,7 @@ export function CertificationVerificationSection({
                           )}
                           {cert.isExpired && (
                             <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
-                              Abgelaufen
+                              {CERTIFICATION_STATUS_LABELS.expired}
                             </span>
                           )}
                           {cert.daysUntilExpiry && cert.daysUntilExpiry <= 90 && cert.daysUntilExpiry > 0 && (
@@ -97,7 +98,7 @@ export function CertificationVerificationSection({
                       </div>
 
                       <div className="flex flex-col gap-2 ml-4">
-                        {cert.verificationStatus === 'pending' && (
+                        {cert.verificationStatus === CERTIFICATION_STATUS.PENDING && (
                           <>
                             <button
                               onClick={() => onOpenDialog('verify_cert', cert.id)}
@@ -115,21 +116,14 @@ export function CertificationVerificationSection({
                             </button>
                           </>
                         )}
-                        {cert.verificationStatus === 'verified' && (
-                          <span className="px-3 py-1.5 bg-green-100 text-green-800 rounded text-xs font-medium">
-                            Verifiziert
-                          </span>
-                        )}
-                        {cert.verificationStatus === 'rejected' && (
-                          <span className="px-3 py-1.5 bg-red-100 text-red-800 rounded text-xs font-medium">
-                            Abgelehnt
-                          </span>
-                        )}
-                        {cert.verificationStatus === 'expired' && (
-                          <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded text-xs font-medium">
-                            Abgelaufen
-                          </span>
-                        )}
+                        {cert.verificationStatus !== CERTIFICATION_STATUS.PENDING && (() => {
+                          const badge = getCertificationStatusBadge(cert.verificationStatus)
+                          return (
+                            <span className={`px-3 py-1.5 ${badge.bg} ${badge.color} rounded text-xs font-medium`}>
+                              {badge.label}
+                            </span>
+                          )
+                        })()}
                       </div>
                     </div>
                   </div>

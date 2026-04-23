@@ -1,6 +1,7 @@
 import { CheckCircle, XCircle, Clock, AlertCircle, Mail, Phone, ExternalLink, MapPin } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
+import { getDocumentStatusBadge } from '@/config/document-status'
 import { formatDateShort } from '@/lib/date-formats'
 import type { RepairerApplication, ActionDialogState } from './types'
 
@@ -40,19 +41,14 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
               {application.businessName || application.applicantName}
             </Heading>
             {getStatusBadge(application.status)}
-            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              application.documentVerificationStatus === 'approved' ? 'bg-green-100 text-green-800' :
-              application.documentVerificationStatus === 'in_review' ? 'bg-blue-100 text-blue-800' :
-              application.documentVerificationStatus === 'incomplete' ? 'bg-red-100 text-red-800' :
-              'bg-gray-100 text-gray-800'
-            }`}>
-              Dokumente: {
-                application.documentVerificationStatus === 'approved' ? 'Verifiziert' :
-                application.documentVerificationStatus === 'in_review' ? 'In Prüfung' :
-                application.documentVerificationStatus === 'incomplete' ? 'Unvollständig' :
-                'Ausstehend'
-              }
-            </span>
+            {(() => {
+              const docBadge = getDocumentStatusBadge(application.documentVerificationStatus)
+              return (
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${docBadge.bg} ${docBadge.color}`}>
+                  Dokumente: {docBadge.label}
+                </span>
+              )
+            })()}
           </div>
           <div className="flex items-center gap-4 text-sm text-gray-600">
             <span className="flex items-center gap-1">

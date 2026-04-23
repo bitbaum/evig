@@ -1,4 +1,4 @@
-import { APPROVAL_STATUS } from '@/config/approval-status'
+import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status'
 import Heading from '@/components/admin/AdminHeading'
 import type { RepairerApplication, VerificationDocument, DocumentType, ActionDialogState } from './types'
 
@@ -88,10 +88,10 @@ export function DocumentVerificationSection({
                         </>
                       )}
                       {doc.status === APPROVAL_STATUS.APPROVED && (
-                        <span className="text-xs text-green-600 font-medium">Genehmigt</span>
+                        <span className="text-xs text-green-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.APPROVED)}</span>
                       )}
                       {doc.status === APPROVAL_STATUS.REJECTED && (
-                        <span className="text-xs text-red-600 font-medium">Abgelehnt</span>
+                        <span className="text-xs text-red-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.REJECTED)}</span>
                       )}
                     </div>
                   </div>
