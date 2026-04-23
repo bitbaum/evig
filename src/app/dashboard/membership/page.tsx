@@ -11,11 +11,15 @@ import { MEMBERSHIP, ORG } from '@/config/org'
 import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
 import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Mitgliedschaft | RevampIT Dashboard',
-  description: 'Deine Vereinsmitgliedschaft bei Revamp-IT.',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  return {
+    title: `${t('membershipTitle')} | ${ORG.name} Dashboard`,
+    description: t('membershipDesc'),
+  }
 }
 
 interface MemberRow {

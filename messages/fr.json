@@ -5752,6 +5752,19 @@
       "personalInfo": {
         "cantonDefault": "Select canton"
       }
+    },
+    "meta": {
+      "dashboardTitle": "Tableau de bord",
+      "dashboardDesc": "Gérez votre compte RevampIT, ateliers, commandes et plus.",
+      "technikerTitle": "Tableau de bord technicien",
+      "technikerDesc": "Gérez vos demandes et offres IT-Help.",
+      "blogSubmissionsTitle": "Mes soumissions",
+      "blogSubmissionsDesc": "Consultez et modifiez le statut de vos articles de blog soumis.",
+      "membershipTitle": "Adhésion",
+      "membershipDesc": "Votre adhésion à l'association Revamp-IT.",
+      "decisionsTitle": "Votes",
+      "decisionsDesc": "Votes ouverts où votre voix compte.",
+      "decisionDetailTitle": "Vote"
     }
   },
   "components": {

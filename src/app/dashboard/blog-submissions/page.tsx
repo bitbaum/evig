@@ -1,11 +1,17 @@
 import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { ORG } from '@/config/org'
 import BlogSubmissionsClient from './BlogSubmissionsClient'
 
-export const metadata: Metadata = {
-  title: 'Meine Einreichungen | RevampIT',
-  description: 'Status Ihrer eingereichten Blog-Beiträge einsehen und überarbeiten.',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  return {
+    title: `${t('blogSubmissionsTitle')} | ${ORG.name}`,
+    description: t('blogSubmissionsDesc'),
+  }
 }
 
 export default async function BlogSubmissionsPage() {

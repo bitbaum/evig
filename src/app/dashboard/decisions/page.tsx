@@ -10,11 +10,16 @@ import { DECISION_STATUS_CONFIG, VOTING_METHOD_CONFIG, type DecisionStatus, type
 import { formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: 'Abstimmungen | RevampIT Dashboard',
-  description: 'Offene Abstimmungen, bei denen deine Stimme zählt.',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  return {
+    title: `${t('decisionsTitle')} | ${ORG.name} Dashboard`,
+    description: t('decisionsDesc'),
+  }
 }
 
 export default async function DashboardDecisionsPage() {

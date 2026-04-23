@@ -13,11 +13,16 @@ import {
   getMyOffers,
 } from '@/lib/dashboard/techniker'
 import { UrgencyBadge, OfferStatusBadge } from '@/components/dashboard/TechnikerBadges'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: 'Techniker Dashboard | RevampIT',
-  description: 'Verwalte deine IT-Hilfe Anfragen und Angebote.',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  return {
+    title: `${t('technikerTitle')} | ${ORG.name}`,
+    description: t('technikerDesc'),
+  }
 }
 
 export default async function TechnikerDashboardPage() {

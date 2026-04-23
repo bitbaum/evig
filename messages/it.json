@@ -5794,6 +5794,19 @@
       "personalInfo": {
         "cantonDefault": "Select canton"
       }
+    },
+    "meta": {
+      "dashboardTitle": "Dashboard",
+      "dashboardDesc": "Gestisci il tuo account RevampIT, workshop, ordini e altro.",
+      "technikerTitle": "Dashboard tecnico",
+      "technikerDesc": "Gestisci le tue richieste e offerte IT-Help.",
+      "blogSubmissionsTitle": "I miei invii",
+      "blogSubmissionsDesc": "Visualizza e modifica lo stato dei tuoi articoli di blog inviati.",
+      "membershipTitle": "Abbonamento",
+      "membershipDesc": "La tua adesione all'associazione Revamp-IT.",
+      "decisionsTitle": "Votazioni",
+      "decisionsDesc": "Votazioni aperte dove la tua voce conta.",
+      "decisionDetailTitle": "Votazione"
     }
   },
   "components": {

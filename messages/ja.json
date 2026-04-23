@@ -5794,6 +5794,19 @@
       "personalInfo": {
         "cantonDefault": "Select canton"
       }
+    },
+    "meta": {
+      "dashboardTitle": "ダッシュボード",
+      "dashboardDesc": "RevampITのアカウント、ワークショップ、注文などを管理できます。",
+      "technikerTitle": "技術者ダッシュボード",
+      "technikerDesc": "ITサポートのリクエストと申し出を管理できます。",
+      "blogSubmissionsTitle": "投稿した記事",
+      "blogSubmissionsDesc": "投稿したブログ記事のステータスを確認・編集できます。",
+      "membershipTitle": "会員資格",
+      "membershipDesc": "Revamp-ITの会員資格。",
+      "decisionsTitle": "投票",
+      "decisionsDesc": "あなたの声が届くオープン投票。",
+      "decisionDetailTitle": "投票"
     }
   },
   "components": {

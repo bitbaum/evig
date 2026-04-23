@@ -5794,6 +5794,19 @@
       "personalInfo": {
         "cantonDefault": "Select canton"
       }
+    },
+    "meta": {
+      "dashboardTitle": "대시보드",
+      "dashboardDesc": "RevampIT 계정, 워크숍, 주문 등을 관리하세요.",
+      "technikerTitle": "기술자 대시보드",
+      "technikerDesc": "IT 지원 요청 및 제안을 관리하세요.",
+      "blogSubmissionsTitle": "내 제출물",
+      "blogSubmissionsDesc": "제출한 블로그 게시물의 상태를 확인하고 수정하세요.",
+      "membershipTitle": "회원권",
+      "membershipDesc": "Revamp-IT 협회 회원권입니다.",
+      "decisionsTitle": "투표",
+      "decisionsDesc": "당신의 목소리가 중요한 공개 투표.",
+      "decisionDetailTitle": "투표"
     }
   },
   "components": {

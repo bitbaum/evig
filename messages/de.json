@@ -5945,6 +5945,19 @@
       "personalInfo": {
         "cantonDefault": "Kanton wählen"
       }
+    },
+    "meta": {
+      "dashboardTitle": "Dashboard",
+      "dashboardDesc": "Verwalte dein RevampIT-Konto, Workshops, Bestellungen und mehr.",
+      "technikerTitle": "Techniker Dashboard",
+      "technikerDesc": "Verwalte deine IT-Hilfe Anfragen und Angebote.",
+      "blogSubmissionsTitle": "Meine Einreichungen",
+      "blogSubmissionsDesc": "Status deiner eingereichten Blog-Beiträge.",
+      "membershipTitle": "Mitgliedschaft",
+      "membershipDesc": "Deine Vereinsmitgliedschaft bei Revamp-IT.",
+      "decisionsTitle": "Abstimmungen",
+      "decisionsDesc": "Offene Abstimmungen, bei denen deine Stimme zählt.",
+      "decisionDetailTitle": "Abstimmung"
     }
   },
   "components": {

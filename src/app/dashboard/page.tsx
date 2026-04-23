@@ -17,11 +17,16 @@ import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: 'Dashboard | RevampIT',
-  description: 'Verwalte dein RevampIT-Konto, Workshops, Bestellungen und mehr.',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  return {
+    title: `${t('dashboardTitle')} | ${ORG.name}`,
+    description: t('dashboardDesc'),
+  }
 }
 
 interface MemberStatus {

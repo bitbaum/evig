@@ -21,9 +21,13 @@ import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import DashboardVotingClient from './DashboardVotingClient'
 import BackgroundSection from './BackgroundSection'
+import { getTranslations, getLocale } from 'next-intl/server'
+import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: 'Abstimmung | RevampIT Dashboard',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  return { title: `${t('decisionDetailTitle')} | ${ORG.name} Dashboard` }
 }
 
 type Props = { params: Promise<{ id: string }> }
