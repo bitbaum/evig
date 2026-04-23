@@ -913,7 +913,8 @@
   "blog": {
     "meta": {
       "title": "ブログ",
-      "description": "持続可能なテクノロジーに関するヒント、ストーリー、背景情報。"
+      "description": "持続可能なテクノロジーに関するヒント、ストーリー、背景情報。",
+      "layoutTitle": "ブログ — ニュース & 知識"
     },
     "hero": {
       "title": "ブログ",
@@ -1915,7 +1916,13 @@
   "itHelp": {
     "meta": {
       "title": "ITヘルプ — 無料のコミュニティ修理",
-      "description": "個人と非営利団体向けの無料ITサポート。コミュニティ技術者がパソコン、ラップトップ、Wi-Fi、その他の問題を解決します。"
+      "description": "個人と非営利団体向けの無料ITサポート。コミュニティ技術者がパソコン、ラップトップ、Wi-Fi、その他の問題を解決します。",
+      "layoutTitle": "ITヘルプ — コミュニティ修理",
+      "detailTitle": "{title} | ITヘルプ | {orgName}",
+      "detailDescription": "ITヘルプリクエスト：{title}{location}。コミュニティベースの技術修理サポート。",
+      "detailOgDescription": "修理リクエスト{location} — 助けるか詳細を見る。",
+      "notFoundTitle": "リクエストが見つかりません | {orgName}",
+      "inCity": "（{city}）"
     },
     "page": {
       "title": "ITヘルプ",
@@ -2192,7 +2199,13 @@
   "marketplace": {
     "meta": {
       "title": "マーケットプレイス — 中古ITを購入・販売",
-      "description": "中古IT用コミュニティマーケットプレイス。直接購入・販売。"
+      "description": "中古IT用コミュニティマーケットプレイス。直接購入・販売。",
+      "layoutTitle": "マーケットプレイス — 中古電子機器を購入・販売",
+      "priceOnRequest": "価格はお問い合わせください",
+      "detailTitle": "{brand}{title} | {orgName} マーケットプレイス",
+      "detailDescription": "{brand}{title} — {price}。{orgName} マーケットプレイスで中古電子機器を持続可能な方法で購入。",
+      "detailOgDescription": "{price} — {orgName} で持続可能なお買い物。",
+      "notFoundTitle": "出品が見つかりません | {orgName}"
     },
     "title": "マーケットプレイス",
     "subtitle": "中古ITを購入・販売",
@@ -2573,7 +2586,9 @@
   "projects": {
     "meta": {
       "title": "私たちのプロジェクト",
-      "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。"
+      "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。",
+      "layoutTitle": "プロジェクト",
+      "templateSuffix": "プロジェクト"
     },
     "hero": {
       "title": "私たちのプロジェクト",
@@ -3324,7 +3339,8 @@
   "services": {
     "meta": {
       "title": "サービス | チューリッヒのITサービス",
-      "description": "チューリッヒでのプロフェッショナルなパソコン修理、ウェブ開発、データ復旧、Linuxサポート、ハードウェアリサイクル。"
+      "description": "チューリッヒでのプロフェッショナルなパソコン修理、ウェブ開発、データ復旧、Linuxサポート、ハードウェアリサイクル。",
+      "layoutTitle": "コンピュータ修理・ITサービス"
     },
     "page": {
       "schemaName": "パソコン修理 & ITサービス",
@@ -6306,5 +6322,10 @@
     "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
     "saving": "Saving...",
     "submit": "Submit vote"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "古いハードウェア。新しい命。",
+    "description": "{orgName}は持続可能な技術のためのスイスの非営利団体です：修復、修理、オープンソースソリューション、ワークショップ。"
   }
 }

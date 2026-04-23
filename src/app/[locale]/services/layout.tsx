@@ -1,15 +1,26 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: `Computer Reparatur & IT Services | ${ORG.name}`,
-  description: 'Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling. Günstige und nachhaltige Lösungen für deine Technik.',
-  openGraph: {
-    title: `Computer Reparatur & IT Services | ${ORG.name}`,
-    description: 'Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling. Günstige und nachhaltige Lösungen für deine Technik.',
-    type: 'website',
-    url: 'https://revamp-it.ch/services',
-  },
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'services.meta' })
+  const title = `${t('layoutTitle')} | ${ORG.name}`
+  const description = t('description')
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      url: `${ORG.website}/services`,
+    },
+  }
 }
 
 export default function ServicesLayout({
@@ -18,4 +29,4 @@ export default function ServicesLayout({
   children: React.ReactNode
 }) {
   return <>{children}</>
-} 
+}

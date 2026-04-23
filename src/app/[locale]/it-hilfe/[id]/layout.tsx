@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { ORG } from '@/config/org'
@@ -18,22 +19,23 @@ async function getRequestMeta(id: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ locale: string; id: string }>
 }): Promise<Metadata> {
-  const { id } = await params
+  const { locale, id } = await params
+  const t = await getTranslations({ locale, namespace: 'itHelp.meta' })
   const request = await getRequestMeta(id)
 
   if (!request) {
-    return { title: `Anfrage nicht gefunden | ${ORG.name}` }
+    return { title: t('notFoundTitle', { orgName: ORG.name }) }
   }
 
-  const location = request.city ? ` in ${request.city}` : ''
+  const location = request.city ? t('inCity', { city: request.city }) : ''
   return {
-    title: `${request.title} | IT-Hilfe | ${ORG.name}`,
-    description: `IT-Hilfe Anfrage: ${request.title}${location}. Community-basierte Tech-Reparaturhilfe.`,
+    title: t('detailTitle', { title: request.title, orgName: ORG.name }),
+    description: t('detailDescription', { title: request.title, location }),
     openGraph: {
-      title: `${request.title} | IT-Hilfe`,
-      description: `Reparaturanfrage${location} — Hilf mit oder erfahre mehr.`,
+      title: t('detailTitle', { title: request.title, orgName: ORG.name }),
+      description: t('detailOgDescription', { location }),
       type: 'article',
     },
   }

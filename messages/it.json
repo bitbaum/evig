@@ -913,7 +913,8 @@
   "blog": {
     "meta": {
       "title": "Blog",
-      "description": "Consigli, storie e approfondimenti sulla tecnologia sostenibile."
+      "description": "Consigli, storie e approfondimenti sulla tecnologia sostenibile.",
+      "layoutTitle": "Blog — Notizie & Conoscenza"
     },
     "hero": {
       "title": "Blog",
@@ -1915,7 +1916,13 @@
   "itHelp": {
     "meta": {
       "title": "Assistenza IT — Riparazione community gratuita",
-      "description": "Supporto IT gratuito per privati e organizzazioni no-profit. I tecnici della community aiutano con computer, laptop, Wi-Fi e molto altro."
+      "description": "Supporto IT gratuito per privati e organizzazioni no-profit. I tecnici della community aiutano con computer, laptop, Wi-Fi e molto altro.",
+      "layoutTitle": "Assistenza IT — Riparazione Community",
+      "detailTitle": "{title} | Assistenza IT | {orgName}",
+      "detailDescription": "Richiesta di assistenza IT: {title}{location}. Supporto comunitario per la riparazione tecnologica.",
+      "detailOgDescription": "Richiesta di riparazione{location} — Aiuta o scopri di più.",
+      "notFoundTitle": "Richiesta non trovata | {orgName}",
+      "inCity": " a {city}"
     },
     "page": {
       "title": "Assistenza IT",
@@ -2192,7 +2199,13 @@
   "marketplace": {
     "meta": {
       "title": "Mercato — Compra e vendi IT usato",
-      "description": "Mercato community per IT usato. Compra e vendi direttamente."
+      "description": "Mercato community per IT usato. Compra e vendi direttamente.",
+      "layoutTitle": "Mercato — Compra e vendi elettronica usata",
+      "priceOnRequest": "Prezzo su richiesta",
+      "detailTitle": "{brand}{title} | {orgName} Mercato",
+      "detailDescription": "{brand}{title} — {price}. Acquista elettronica usata in modo sostenibile sul mercato {orgName}.",
+      "detailOgDescription": "{price} — Acquista in modo sostenibile da {orgName}.",
+      "notFoundTitle": "Annuncio non trovato | {orgName}"
     },
     "title": "Marketplace",
     "subtitle": "Compra e vendi IT usato",
@@ -2573,7 +2586,9 @@
   "projects": {
     "meta": {
       "title": "I nostri progetti",
-      "description": "Scopri il nostro variegato spettro di progetti, dai contributi Open Source alle iniziative comunitarie e allo sviluppo hardware."
+      "description": "Scopri il nostro variegato spettro di progetti, dai contributi Open Source alle iniziative comunitarie e allo sviluppo hardware.",
+      "layoutTitle": "I Nostri Progetti",
+      "templateSuffix": "Progetti"
     },
     "hero": {
       "title": "I nostri progetti",
@@ -3324,7 +3339,8 @@
   "services": {
     "meta": {
       "title": "Servizi | Servizi IT a Zurigo",
-      "description": "Riparazione professionale di computer, sviluppo web, recupero dati, supporto Linux e riciclo hardware a Zurigo."
+      "description": "Riparazione professionale di computer, sviluppo web, recupero dati, supporto Linux e riciclo hardware a Zurigo.",
+      "layoutTitle": "Riparazione Computer & Servizi IT"
     },
     "page": {
       "schemaName": "Riparazione computer e servizi IT",
@@ -6306,5 +6322,10 @@
     "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
     "saving": "Saving...",
     "submit": "Submit vote"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "Hardware vecchio. Nuova vita.",
+    "description": "{orgName} è un'associazione svizzera senza scopo di lucro per la tecnologia sostenibile: ricondizionamento, riparazione, soluzioni open source e workshop."
   }
 }

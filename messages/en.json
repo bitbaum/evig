@@ -440,7 +440,13 @@
   "marketplace": {
     "meta": {
       "title": "Marketplace — Buy & sell used IT equipment",
-      "description": "Community marketplace for used IT equipment. Buy and sell directly."
+      "description": "Community marketplace for used IT equipment. Buy and sell directly.",
+      "layoutTitle": "Marketplace — Buy & sell used electronics",
+      "priceOnRequest": "Price on request",
+      "detailTitle": "{brand}{title} | {orgName} Marketplace",
+      "detailDescription": "{brand}{title} — {price}. Buy used electronics sustainably on the {orgName} Marketplace.",
+      "detailOgDescription": "{price} — Shop sustainably at {orgName}.",
+      "notFoundTitle": "Listing not found | {orgName}"
     },
     "title": "Marketplace",
     "subtitle": "Buy & sell used IT equipment",
@@ -748,7 +754,8 @@
   "services": {
     "meta": {
       "title": "Services | IT Services in Zurich",
-      "description": "Professional computer repair, web development, data recovery, Linux support and hardware recycling in Zurich."
+      "description": "Professional computer repair, web development, data recovery, Linux support and hardware recycling in Zurich.",
+      "layoutTitle": "Computer Repair & IT Services"
     },
     "title": "Services",
     "subtitle": "What we can do for you",
@@ -2493,7 +2500,13 @@
   "itHelp": {
     "meta": {
       "title": "IT Help — Free Community Repair",
-      "description": "Free IT support for individuals and non-profit organisations. Community technicians help with computers, laptops, Wi-Fi, and more."
+      "description": "Free IT support for individuals and non-profit organisations. Community technicians help with computers, laptops, Wi-Fi, and more.",
+      "layoutTitle": "IT Help — Community Repair",
+      "detailTitle": "{title} | IT Help | {orgName}",
+      "detailDescription": "IT Help request: {title}{location}. Community-based tech repair support.",
+      "detailOgDescription": "Repair request{location} — Help out or learn more.",
+      "notFoundTitle": "Request not found | {orgName}",
+      "inCity": " in {city}"
     },
     "title": "IT Help",
     "subtitle": "Free support from the community",
@@ -2748,7 +2761,8 @@
   "blog": {
     "meta": {
       "title": "Blog",
-      "description": "Tips, stories and background information on sustainable technology."
+      "description": "Tips, stories and background information on sustainable technology.",
+      "layoutTitle": "Blog — News & Knowledge"
     },
     "title": "Blog",
     "subtitle": "Knowledge from the community",
@@ -4456,7 +4470,9 @@
     },
     "meta": {
       "title": "Our Projects",
-      "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development."
+      "description": "Discover our diverse range of projects, from open-source contributions to community initiatives and hardware development.",
+      "layoutTitle": "Our Projects",
+      "templateSuffix": "Projects"
     },
     "hero": {
       "title": "Our Projects",
@@ -6406,5 +6422,10 @@
     "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
     "saving": "Saving...",
     "submit": "Submit vote"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "Old Hardware. New Life.",
+    "description": "{orgName} is a Swiss non-profit for sustainable technology: refurbishment, repair, open-source solutions and workshops."
   }
 }

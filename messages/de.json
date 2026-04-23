@@ -491,7 +491,13 @@
   "marketplace": {
     "meta": {
       "title": "Marktplatz — Gebrauchte IT kaufen & verkaufen",
-      "description": "Community-Marktplatz für gebrauchte IT. Direkt kaufen und verkaufen."
+      "description": "Community-Marktplatz für gebrauchte IT. Direkt kaufen und verkaufen.",
+      "layoutTitle": "Marktplatz — Gebrauchte Elektronik kaufen & verkaufen",
+      "priceOnRequest": "Preis auf Anfrage",
+      "detailTitle": "{brand}{title} | {orgName} Marktplatz",
+      "detailDescription": "{brand}{title} — {price}. Gebrauchte Elektronik nachhaltig kaufen auf dem {orgName} Marktplatz.",
+      "detailOgDescription": "{price} — Nachhaltig einkaufen bei {orgName}.",
+      "notFoundTitle": "Inserat nicht gefunden | {orgName}"
     },
     "title": "Marketplace",
     "subtitle": "Gebrauchte IT kaufen & verkaufen",
@@ -799,7 +805,8 @@
   "services": {
     "meta": {
       "title": "Dienstleistungen | IT-Services in Zürich",
-      "description": "Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling in Zürich."
+      "description": "Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling in Zürich.",
+      "layoutTitle": "Computer Reparatur & IT Services"
     },
     "title": "Dienstleistungen",
     "subtitle": "Was wir für dich tun können",
@@ -2544,7 +2551,13 @@
   "itHelp": {
     "meta": {
       "title": "IT-Hilfe — Kostenlose Community-Reparatur",
-      "description": "Kostenlose IT-Unterstützung für Privatpersonen und gemeinnützige Organisationen. Community-Techniker helfen mit Computer, Laptop, WLAN und mehr."
+      "description": "Kostenlose IT-Unterstützung für Privatpersonen und gemeinnützige Organisationen. Community-Techniker helfen mit Computer, Laptop, WLAN und mehr.",
+      "layoutTitle": "IT-Hilfe — Community-Reparatur",
+      "detailTitle": "{title} | IT-Hilfe | {orgName}",
+      "detailDescription": "IT-Hilfe Anfrage: {title}{location}. Community-basierte Tech-Reparaturhilfe.",
+      "detailOgDescription": "Reparaturanfrage{location} — Hilf mit oder erfahre mehr.",
+      "notFoundTitle": "Anfrage nicht gefunden | {orgName}",
+      "inCity": " in {city}"
     },
     "title": "IT-Hilfe",
     "subtitle": "Kostenlose Unterstützung durch die Community",
@@ -2799,7 +2812,8 @@
   "blog": {
     "meta": {
       "title": "Blog",
-      "description": "Tipps, Geschichten und Hintergründe rund um nachhaltige Technologie."
+      "description": "Tipps, Geschichten und Hintergründe rund um nachhaltige Technologie.",
+      "layoutTitle": "Blog — Neuigkeiten & Wissen"
     },
     "title": "Blog",
     "subtitle": "Wissen aus der Community",
@@ -4262,7 +4276,9 @@
     },
     "meta": {
       "title": "Unsere Projekte",
-      "description": "Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung."
+      "description": "Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.",
+      "layoutTitle": "Unsere Projekte",
+      "templateSuffix": "Projekte"
     },
     "hero": {
       "title": "Unsere Projekte",
@@ -6457,5 +6473,10 @@
     "notStartedDesc": "Der Link ist gültig, aber die Abstimmungsphase hat noch nicht begonnen.",
     "saving": "Wird gespeichert...",
     "submit": "Stimme abgeben"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "Alte Hardware. Neues Leben.",
+    "description": "{orgName} ist ein Schweizer Non-Profit-Verein für nachhaltige Technologie: Aufarbeitung, Reparatur, Open-Source-Lösungen und Workshops."
   }
 }

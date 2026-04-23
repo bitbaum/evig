@@ -913,7 +913,8 @@
   "blog": {
     "meta": {
       "title": "블로그",
-      "description": "지속 가능한 기술에 관한 팁, 이야기, 배경 정보."
+      "description": "지속 가능한 기술에 관한 팁, 이야기, 배경 정보.",
+      "layoutTitle": "블로그 — 소식 & 지식"
     },
     "hero": {
       "title": "블로그",
@@ -1915,7 +1916,13 @@
   "itHelp": {
     "meta": {
       "title": "IT 지원 — 무료 커뮤니티 수리",
-      "description": "개인 및 비영리 단체를 위한 무료 IT 지원. 커뮤니티 기술자가 컴퓨터, 노트북, Wi-Fi 등을 도와드립니다."
+      "description": "개인 및 비영리 단체를 위한 무료 IT 지원. 커뮤니티 기술자가 컴퓨터, 노트북, Wi-Fi 등을 도와드립니다.",
+      "layoutTitle": "IT 지원 — 커뮤니티 수리",
+      "detailTitle": "{title} | IT 지원 | {orgName}",
+      "detailDescription": "IT 지원 요청: {title}{location}. 커뮤니티 기반 기술 수리 지원.",
+      "detailOgDescription": "수리 요청{location} — 도움을 주거나 자세히 알아보세요.",
+      "notFoundTitle": "요청을 찾을 수 없습니다 | {orgName}",
+      "inCity": " ({city})"
     },
     "page": {
       "title": "IT 지원",
@@ -2192,7 +2199,13 @@
   "marketplace": {
     "meta": {
       "title": "마켓플레이스 — 중고 IT 구매 & 판매",
-      "description": "중고 IT를 위한 커뮤니티 마켓플레이스. 직접 구매하고 판매하세요."
+      "description": "중고 IT를 위한 커뮤니티 마켓플레이스. 직접 구매하고 판매하세요.",
+      "layoutTitle": "마켓플레이스 — 중고 전자기기 구매 & 판매",
+      "priceOnRequest": "가격 문의",
+      "detailTitle": "{brand}{title} | {orgName} 마켓플레이스",
+      "detailDescription": "{brand}{title} — {price}. {orgName} 마켓플레이스에서 중고 전자기기를 지속 가능하게 구매하세요.",
+      "detailOgDescription": "{price} — {orgName}에서 지속 가능하게 쇼핑하세요.",
+      "notFoundTitle": "게시물을 찾을 수 없습니다 | {orgName}"
     },
     "title": "마켓플레이스",
     "subtitle": "중고 IT 구매 & 판매",
@@ -2573,7 +2586,9 @@
   "projects": {
     "meta": {
       "title": "우리의 프로젝트",
-      "description": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요."
+      "description": "오픈 소스 기여부터 커뮤니티 이니셔티브, 하드웨어 개발까지 저희의 다양한 프로젝트를 탐색하세요.",
+      "layoutTitle": "저희 프로젝트",
+      "templateSuffix": "프로젝트"
     },
     "hero": {
       "title": "우리의 프로젝트",
@@ -3324,7 +3339,8 @@
   "services": {
     "meta": {
       "title": "서비스 | 취리히 IT 서비스",
-      "description": "취리히에서 전문적인 컴퓨터 수리, 웹 개발, 데이터 복구, Linux 지원, 하드웨어 재활용."
+      "description": "취리히에서 전문적인 컴퓨터 수리, 웹 개발, 데이터 복구, Linux 지원, 하드웨어 재활용.",
+      "layoutTitle": "컴퓨터 수리 & IT 서비스"
     },
     "page": {
       "schemaName": "컴퓨터 수리 & IT 서비스",
@@ -6306,5 +6322,10 @@
     "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
     "saving": "Saving...",
     "submit": "Submit vote"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "오래된 하드웨어. 새 생명.",
+    "description": "{orgName}은(는) 지속 가능한 기술을 위한 스위스 비영리 단체입니다: 재건, 수리, 오픈 소스 솔루션 및 워크숍."
   }
 }

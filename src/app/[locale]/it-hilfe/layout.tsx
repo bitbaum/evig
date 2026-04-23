@@ -1,25 +1,25 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: `IT-Hilfe - Community-basierte Tech-Reparatur | ${ORG.name}`,
-  description:
-    'Finde Hilfe für deine IT-Probleme. Unsere Community aus Technikerinnen und Technikern hilft bei Laptop-, Smartphone- und PC-Reparaturen — kostenlos oder gegen faire Bezahlung.',
-  keywords: [
-    'IT Hilfe',
-    'Computer Reparatur',
-    'Computer Hilfe',
-    'Laptop Reparatur',
-    'Smartphone Reparatur',
-    'Community Tech Support',
-    'Zürich',
-  ],
-  openGraph: {
-    title: `IT-Hilfe - Community-basierte Tech-Reparatur | ${ORG.name}`,
-    description:
-      'IT-Hilfe von der Community. Stelle eine Reparaturanfrage und erhalte Hilfe von erfahrenen Technikern.',
-    type: 'website',
-  },
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'itHelp.meta' })
+  const title = `${t('layoutTitle')} | ${ORG.name}`
+  const description = t('description')
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+    },
+  }
 }
 
 export default function ITHilfeLayout({

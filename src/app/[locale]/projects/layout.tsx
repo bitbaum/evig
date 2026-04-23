@@ -1,12 +1,21 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: {
-    template: `%s | ${ORG.name} Projekte`,
-    default: `Unsere Projekte | ${ORG.name}`
-  },
-  description: 'Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.'
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'projects.meta' })
+  return {
+    title: {
+      template: `%s | ${ORG.name} ${t('templateSuffix')}`,
+      default: `${t('layoutTitle')} | ${ORG.name}`,
+    },
+    description: t('description'),
+  }
 }
 
 export default function ProjectsLayout({
@@ -19,4 +28,4 @@ export default function ProjectsLayout({
       {children}
     </div>
   )
-} 
+}

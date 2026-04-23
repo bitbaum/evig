@@ -913,7 +913,8 @@
   "blog": {
     "meta": {
       "title": "Blog",
-      "description": "Consejos, historias y perspectivas sobre tecnología sostenible."
+      "description": "Consejos, historias y perspectivas sobre tecnología sostenible.",
+      "layoutTitle": "Blog — Noticias y Conocimiento"
     },
     "hero": {
       "title": "Blog",
@@ -1915,7 +1916,13 @@
   "itHelp": {
     "meta": {
       "title": "Ayuda TI — Reparación comunitaria gratuita",
-      "description": "Soporte TI gratuito para particulares y organizaciones sin ánimo de lucro. Técnicos de la comunidad ayudan con ordenadores, portátiles, WiFi y más."
+      "description": "Soporte TI gratuito para particulares y organizaciones sin ánimo de lucro. Técnicos de la comunidad ayudan con ordenadores, portátiles, WiFi y más.",
+      "layoutTitle": "Ayuda TI — Reparación Comunitaria",
+      "detailTitle": "{title} | Ayuda TI | {orgName}",
+      "detailDescription": "Solicitud de ayuda TI: {title}{location}. Soporte comunitario de reparación tecnológica.",
+      "detailOgDescription": "Solicitud de reparación{location} — Ayuda o conoce más.",
+      "notFoundTitle": "Solicitud no encontrada | {orgName}",
+      "inCity": " en {city}"
     },
     "page": {
       "title": "Ayuda TI",
@@ -2192,7 +2199,13 @@
   "marketplace": {
     "meta": {
       "title": "Mercado — Compra y vende TI de segunda mano",
-      "description": "Mercado comunitario de TI de segunda mano. Compra y vende directamente."
+      "description": "Mercado comunitario de TI de segunda mano. Compra y vende directamente.",
+      "layoutTitle": "Mercado — Compra y vende electrónica de segunda mano",
+      "priceOnRequest": "Precio a consultar",
+      "detailTitle": "{brand}{title} | {orgName} Mercado",
+      "detailDescription": "{brand}{title} — {price}. Compra electrónica de segunda mano de forma sostenible en el {orgName} Mercado.",
+      "detailOgDescription": "{price} — Compra sostenible en {orgName}.",
+      "notFoundTitle": "Anuncio no encontrado | {orgName}"
     },
     "title": "Marketplace",
     "subtitle": "Compra y vende TI de segunda mano",
@@ -2573,7 +2586,9 @@
   "projects": {
     "meta": {
       "title": "Nuestros proyectos",
-      "description": "Descubre nuestro diverso espectro de proyectos, desde contribuciones Open Source hasta iniciativas comunitarias y desarrollo de hardware."
+      "description": "Descubre nuestro diverso espectro de proyectos, desde contribuciones Open Source hasta iniciativas comunitarias y desarrollo de hardware.",
+      "layoutTitle": "Nuestros Proyectos",
+      "templateSuffix": "Proyectos"
     },
     "hero": {
       "title": "Nuestros proyectos",
@@ -3324,7 +3339,8 @@
   "services": {
     "meta": {
       "title": "Servicios | Servicios TI en Zúrich",
-      "description": "Reparaciones de ordenadores profesionales, desarrollo web, recuperación de datos, soporte Linux y reciclaje de hardware en Zúrich."
+      "description": "Reparaciones de ordenadores profesionales, desarrollo web, recuperación de datos, soporte Linux y reciclaje de hardware en Zúrich.",
+      "layoutTitle": "Reparación de Computadoras & Servicios TI"
     },
     "page": {
       "schemaName": "Reparación de ordenadores y servicios TI",
@@ -6306,5 +6322,10 @@
     "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
     "saving": "Saving...",
     "submit": "Submit vote"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "Hardware viejo. Vida nueva.",
+    "description": "{orgName} es una asociación suiza sin ánimo de lucro para la tecnología sostenible: reacondicionamiento, reparación, soluciones de código abierto y talleres."
   }
 }

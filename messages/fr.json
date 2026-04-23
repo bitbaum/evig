@@ -399,7 +399,13 @@
   "marketplace": {
     "meta": {
       "title": "Place de marché — Acheter et vendre du matériel informatique d'occasion",
-      "description": "Place de marché communautaire pour le matériel informatique d'occasion. Achat et vente directs."
+      "description": "Place de marché communautaire pour le matériel informatique d'occasion. Achat et vente directs.",
+      "layoutTitle": "Place de marché — Acheter & vendre de l'électronique d'occasion",
+      "priceOnRequest": "Prix sur demande",
+      "detailTitle": "{brand}{title} | {orgName} Place de marché",
+      "detailDescription": "{brand}{title} — {price}. Achetez de l'électronique d'occasion de façon durable sur la place de marché {orgName}.",
+      "detailOgDescription": "{price} — Achetez de façon durable chez {orgName}.",
+      "notFoundTitle": "Annonce introuvable | {orgName}"
     },
     "title": "Place de marché",
     "subtitle": "Acheter et vendre du matériel informatique d'occasion",
@@ -701,7 +707,8 @@
   "services": {
     "meta": {
       "title": "Services | IT à Zurich",
-      "description": "Réparation informatique professionnelle, développement web, récupération de données, support Linux et recyclage hardware à Zurich."
+      "description": "Réparation informatique professionnelle, développement web, récupération de données, support Linux et recyclage hardware à Zurich.",
+      "layoutTitle": "Réparation Informatique & Services TI"
     },
     "title": "Services",
     "subtitle": "Ce que nous pouvons faire pour vous",
@@ -2402,7 +2409,13 @@
   "itHelp": {
     "meta": {
       "title": "Aide informatique — Réparation communautaire gratuite",
-      "description": "Soutien informatique gratuit pour les particuliers et les organisations à but non lucratif. Des techniciens bénévoles vous aident avec ordinateur, laptop, Wi-Fi et plus."
+      "description": "Soutien informatique gratuit pour les particuliers et les organisations à but non lucratif. Des techniciens bénévoles vous aident avec ordinateur, laptop, Wi-Fi et plus.",
+      "layoutTitle": "Aide Informatique — Réparation Communautaire",
+      "detailTitle": "{title} | Aide Informatique | {orgName}",
+      "detailDescription": "Demande d'aide informatique : {title}{location}. Soutien communautaire de réparation technologique.",
+      "detailOgDescription": "Demande de réparation{location} — Aidez ou en savoir plus.",
+      "notFoundTitle": "Demande introuvable | {orgName}",
+      "inCity": " à {city}"
     },
     "title": "Aide informatique",
     "subtitle": "Soutien gratuit par la communauté",
@@ -2620,7 +2633,8 @@
   "blog": {
     "meta": {
       "title": "Blog",
-      "description": "Conseils, histoires et informations sur la technologie durable."
+      "description": "Conseils, histoires et informations sur la technologie durable.",
+      "layoutTitle": "Blog — Actualités & Savoirs"
     },
     "title": "Blog",
     "subtitle": "Savoirs partagés par la communauté",
@@ -4094,7 +4108,9 @@
   "projects": {
     "meta": {
       "title": "Nos projets",
-      "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel."
+      "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel.",
+      "layoutTitle": "Nos Projets",
+      "templateSuffix": "Projets"
     },
     "hero": {
       "title": "Nos projets",
@@ -6264,5 +6280,10 @@
     "notStartedDesc": "The link is valid, but the voting phase has not started yet.",
     "saving": "Saving...",
     "submit": "Submit vote"
+  },
+  "meta": {
+    "meta": {},
+    "tagline": "Vieux matériel. Nouvelle vie.",
+    "description": "{orgName} est une association suisse à but non lucratif pour la technologie durable : remise à neuf, réparation, solutions open source et ateliers."
   }
 }

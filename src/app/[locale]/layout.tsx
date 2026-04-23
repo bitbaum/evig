@@ -5,7 +5,7 @@
  */
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages } from 'next-intl/server'
+import { getMessages, getTranslations } from 'next-intl/server'
 import { Providers } from '@/components/providers/providers'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { CookieBanner } from '@/components/ui/CookieBanner'
@@ -18,21 +18,28 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
 
-export const metadata: Metadata = {
-  title: {
-    template: `%s | ${ORG.name}`,
-    default: `${ORG.name} — Alte Hardware. Neues Leben.`,
-  },
-  description: `${ORG.name} ist ein Schweizer Non-Profit-Verein für nachhaltige Technologie: Aufarbeitung, Reparatur, Open-Source-Lösungen und Workshops.`,
-  keywords: ['Elektroschrott', 'Recycling', 'Aufarbeitung', 'nachhaltige Technologie', 'Workshops', 'Freiwilligenarbeit'],
-  openGraph: {
-    url: ORG.website,
-    siteName: ORG.name,
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-  },
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'meta' })
+  return {
+    title: {
+      template: `%s | ${ORG.name}`,
+      default: `${ORG.name} — ${t('tagline')}`,
+    },
+    description: t('description', { orgName: ORG.name }),
+    openGraph: {
+      url: ORG.website,
+      siteName: ORG.name,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+  }
 }
 
 export default async function LocaleLayout({

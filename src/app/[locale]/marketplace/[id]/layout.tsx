@@ -1,4 +1,5 @@
-import { Metadata } from 'next'
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -44,23 +45,26 @@ async function getListingMeta(id: string) {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ locale: string; id: string }>
 }): Promise<Metadata> {
-  const { id } = await params
+  const { locale, id } = await params
+  const t = await getTranslations({ locale, namespace: 'marketplace.meta' })
   const listing = await getListingMeta(id)
 
   if (!listing) {
-    return { title: `Inserat nicht gefunden | ${ORG.name}` }
+    return { title: t('notFoundTitle', { orgName: ORG.name }) }
   }
 
-  const price = listing.price_chf ? `CHF ${listing.price_chf}` : 'Preis auf Anfrage'
+  const price = listing.price_chf ? `CHF ${listing.price_chf}` : t('priceOnRequest')
   const brand = listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : ''
+  const title = t('detailTitle', { brand, title: listing.title, orgName: ORG.name })
+  const description = t('detailDescription', { brand, title: listing.title, price, orgName: ORG.name })
   return {
-    title: `${brand}${listing.title} | ${ORG.name} Marktplatz`,
-    description: `${brand}${listing.title} — ${price}. Gebrauchte Elektronik nachhaltig kaufen auf dem ${ORG.name} Marktplatz.`,
+    title,
+    description,
     openGraph: {
-      title: `${brand}${listing.title} | ${ORG.name} Marktplatz`,
-      description: `${price} — Nachhaltig einkaufen bei ${ORG.name}.`,
+      title,
+      description: t('detailOgDescription', { price, orgName: ORG.name }),
       type: 'website',
       ...(listing.image_url && {
         images: [{ url: listing.image_url, alt: `${brand}${listing.title}` }],
@@ -74,7 +78,7 @@ export default async function MarketplaceDetailLayout({
   params,
 }: {
   children: React.ReactNode
-  params: Promise<{ id: string }>
+  params: Promise<{ locale: string; id: string }>
 }) {
   const { id } = await params
   const listing = await getListingMeta(id)
