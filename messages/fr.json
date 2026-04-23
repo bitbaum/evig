@@ -717,7 +717,9 @@
     "meta": {
       "title": "Services | IT à Zurich",
       "description": "Réparation informatique professionnelle, développement web, récupération de données, support Linux et recyclage hardware à Zurich.",
-      "layoutTitle": "Réparation Informatique & Services TI"
+      "layoutTitle": "Réparation Informatique & Services TI",
+      "serviceDetailTitle": "Détails du service",
+      "serviceDetailDesc": "Services informatiques professionnels de Revamp-IT à Zurich."
     },
     "title": "Services",
     "subtitle": "Ce que nous pouvons faire pour vous",

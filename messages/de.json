@@ -815,7 +815,9 @@
     "meta": {
       "title": "Dienstleistungen | IT-Services in Zürich",
       "description": "Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling in Zürich.",
-      "layoutTitle": "Computer Reparatur & IT Services"
+      "layoutTitle": "Computer Reparatur & IT Services",
+      "serviceDetailTitle": "Service Details",
+      "serviceDetailDesc": "Professionelle IT-Dienstleistungen von Revamp-IT in Zürich."
     },
     "title": "Dienstleistungen",
     "subtitle": "Was wir für dich tun können",

@@ -3362,7 +3362,9 @@
     "meta": {
       "title": "Servicios | Servicios TI en Zúrich",
       "description": "Reparaciones de ordenadores profesionales, desarrollo web, recuperación de datos, soporte Linux y reciclaje de hardware en Zúrich.",
-      "layoutTitle": "Reparación de Computadoras & Servicios TI"
+      "layoutTitle": "Reparación de Computadoras & Servicios TI",
+      "serviceDetailTitle": "Detalles del servicio",
+      "serviceDetailDesc": "Servicios de TI profesionales de Revamp-IT en Zúrich."
     },
     "page": {
       "schemaName": "Reparación de ordenadores y servicios TI",

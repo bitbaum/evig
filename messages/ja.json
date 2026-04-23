@@ -3362,7 +3362,9 @@
     "meta": {
       "title": "サービス | チューリッヒのITサービス",
       "description": "チューリッヒでのプロフェッショナルなパソコン修理、ウェブ開発、データ復旧、Linuxサポート、ハードウェアリサイクル。",
-      "layoutTitle": "コンピュータ修理・ITサービス"
+      "layoutTitle": "コンピュータ修理・ITサービス",
+      "serviceDetailTitle": "サービス詳細",
+      "serviceDetailDesc": "チューリッヒのRevamp-ITによるプロフェッショナルなITサービス。"
     },
     "page": {
       "schemaName": "パソコン修理 & ITサービス",

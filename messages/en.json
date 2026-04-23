@@ -764,7 +764,9 @@
     "meta": {
       "title": "Services | IT Services in Zurich",
       "description": "Professional computer repair, web development, data recovery, Linux support and hardware recycling in Zurich.",
-      "layoutTitle": "Computer Repair & IT Services"
+      "layoutTitle": "Computer Repair & IT Services",
+      "serviceDetailTitle": "Service Details",
+      "serviceDetailDesc": "Professional IT services from Revamp-IT in Zurich."
     },
     "title": "Services",
     "subtitle": "What we can do for you",

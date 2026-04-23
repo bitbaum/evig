@@ -1,9 +1,18 @@
 import { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 
-export const metadata: Metadata = {
-  title: `Service Details | ${ORG.name}`,
-  description: 'Detailed information about our professional IT services.',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'services.meta' })
+  return {
+    title: `${t('serviceDetailTitle')} | ${ORG.name}`,
+    description: t('serviceDetailDesc'),
+  }
 }
 
 export default function ServiceLayout({

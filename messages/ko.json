@@ -3362,7 +3362,9 @@
     "meta": {
       "title": "서비스 | 취리히 IT 서비스",
       "description": "취리히에서 전문적인 컴퓨터 수리, 웹 개발, 데이터 복구, Linux 지원, 하드웨어 재활용.",
-      "layoutTitle": "컴퓨터 수리 & IT 서비스"
+      "layoutTitle": "컴퓨터 수리 & IT 서비스",
+      "serviceDetailTitle": "서비스 상세",
+      "serviceDetailDesc": "취리히 Revamp-IT의 전문 IT 서비스."
     },
     "page": {
       "schemaName": "컴퓨터 수리 & IT 서비스",

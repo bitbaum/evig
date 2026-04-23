@@ -3362,7 +3362,9 @@
     "meta": {
       "title": "Servizi | Servizi IT a Zurigo",
       "description": "Riparazione professionale di computer, sviluppo web, recupero dati, supporto Linux e riciclo hardware a Zurigo.",
-      "layoutTitle": "Riparazione Computer & Servizi IT"
+      "layoutTitle": "Riparazione Computer & Servizi IT",
+      "serviceDetailTitle": "Dettagli del servizio",
+      "serviceDetailDesc": "Servizi IT professionali da Revamp-IT a Zurigo."
     },
     "page": {
       "schemaName": "Riparazione computer e servizi IT",
