@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import {
   APPROVAL_STATUS,
@@ -58,6 +59,7 @@ interface ApiResponse {
 }
 
 export default function BlogSubmissionsClient() {
+  const t = useTranslations('dashboard.blogSubmissions')
   const [submissions, setSubmissions] = useState<MySubmission[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
@@ -76,7 +78,7 @@ export default function BlogSubmissionsClient() {
       setSubmissions(result.data.submissions || [])
       setError('')
     } else {
-      setError(result.error || 'Fehler beim Laden Ihrer Einreichungen')
+      setError(result.error || t('loadError'))
     }
     setLoading(false)
   }
@@ -91,7 +93,7 @@ export default function BlogSubmissionsClient() {
         setSubmissions(result.data.submissions || [])
         setError('')
       } else {
-        setError(result.error || 'Fehler beim Laden Ihrer Einreichungen')
+        setError(result.error || t('loadError'))
       }
       setLoading(false)
     }
@@ -125,7 +127,7 @@ export default function BlogSubmissionsClient() {
 
   const resubmit = async (id: string) => {
     if (!editContent.trim()) {
-      setError('Bitte gib den überarbeiteten Inhalt ein.')
+      setError(t('emptyContent'))
       return
     }
     setSaving(true)
@@ -141,7 +143,7 @@ export default function BlogSubmissionsClient() {
       cancelEditing()
       await load()
     } else {
-      setError(result.error || 'Erneutes Einreichen fehlgeschlagen')
+      setError(result.error || t('resubmitError'))
     }
   }
 
@@ -188,13 +190,13 @@ export default function BlogSubmissionsClient() {
             className="inline-flex items-center mb-4 text-neutral-600 dark:text-neutral-400 hover:text-primary-600"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
           <Heading level={1} className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">
-            Meine Einreichungen
+            {t('pageTitle')}
           </Heading>
           <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
-            Status Ihrer Blog-Beiträge und Rückmeldungen des Redaktionsteams
+            {t('pageSubtitle')}
           </p>
         </div>
 
@@ -210,25 +212,25 @@ export default function BlogSubmissionsClient() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <StatCard
               icon={<Clock className="w-5 h-5" />}
-              label="Ausstehend"
+              label={t('statPending')}
               value={stats.pending}
               tone="yellow"
             />
             <StatCard
               icon={<CheckCircle2 className="w-5 h-5" />}
-              label="Veröffentlicht"
+              label={t('statPublished')}
               value={stats.published}
               tone="blue"
             />
             <StatCard
               icon={<PenSquare className="w-5 h-5" />}
-              label="Überarbeiten"
+              label={t('statRevise')}
               value={stats.requiresChanges}
               tone="orange"
             />
             <StatCard
               icon={<XCircle className="w-5 h-5" />}
-              label="Abgelehnt"
+              label={t('statRejected')}
               value={stats.rejected}
               tone="red"
             />
@@ -259,10 +261,7 @@ export default function BlogSubmissionsClient() {
                         {submission.title}
                       </Heading>
                       <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-                        Eingereicht am{' '}
-                        {formatDate(
-                          submission.submittedAt || submission.createdAt || '',
-                        )}
+                        {t('submittedOn', { date: formatDate(submission.submittedAt || submission.createdAt || '') })}
                       </p>
                     </div>
                     <span
@@ -287,7 +286,7 @@ export default function BlogSubmissionsClient() {
                         className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
                       >
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        Veröffentlichten Beitrag ansehen
+                        {t('viewPublished')}
                       </Link>
                     )}
 
@@ -300,8 +299,8 @@ export default function BlogSubmissionsClient() {
                         >
                           <AlertCircle className="w-4 h-4 mr-1" />
                           {feedbackShown
-                            ? 'Ablehnungsgrund ausblenden'
-                            : 'Ablehnungsgrund anzeigen'}
+                            ? t('hideRejection')
+                            : t('showRejection')}
                         </button>
                         {feedbackShown && (
                           <div className="mt-2 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300 whitespace-pre-wrap">
@@ -316,7 +315,7 @@ export default function BlogSubmissionsClient() {
                       {submission.adminFeedback && (
                         <div className="rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 p-3 text-sm text-orange-900 dark:text-orange-200 whitespace-pre-wrap mb-3">
                           <strong className="block mb-1">
-                            Rückmeldung vom Redaktionsteam:
+                            {t('editorialFeedback')}
                           </strong>
                           {submission.adminFeedback}
                         </div>
@@ -328,13 +327,13 @@ export default function BlogSubmissionsClient() {
                           className="inline-flex items-center px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700 text-sm font-medium"
                         >
                           <PenSquare className="w-4 h-4 mr-2" />
-                          Überarbeiten
+                          {t('reviseButton')}
                         </button>
                       ) : (
                         <div className="space-y-3">
                           <div>
                             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                              Titel
+                              {t('titleLabel')}
                             </label>
                             <input
                               type="text"
@@ -345,13 +344,13 @@ export default function BlogSubmissionsClient() {
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                              Überarbeiteter Inhalt
+                              {t('contentLabel')}
                             </label>
                             <textarea
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
                               rows={10}
-                              placeholder="Füge Ihren überarbeiteten Beitrag hier ein..."
+                              placeholder={t('contentPlaceholder')}
                               className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
                             />
                           </div>
@@ -361,14 +360,14 @@ export default function BlogSubmissionsClient() {
                               disabled={saving}
                               className="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
                             >
-                              {saving ? 'Wird gesendet...' : 'Erneut einreichen'}
+                              {saving ? t('submitting') : t('resubmit')}
                             </button>
                             <button
                               onClick={cancelEditing}
                               disabled={saving}
                               className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
                             >
-                              Abbrechen
+                              {t('cancel')}
                             </button>
                           </div>
                         </div>
@@ -422,20 +421,21 @@ function StatCard({
 }
 
 function EmptyState() {
+  const t = useTranslations('dashboard.blogSubmissions')
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-8 text-center border-2 border-neutral-200 dark:border-neutral-700">
       <FileText className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
       <Heading level={3} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
-        Du hast noch keine Blogbeiträge eingereicht
+        {t('emptyTitle')}
       </Heading>
       <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-        Teile Ihr Wissen mit der Community.
+        {t('emptyDesc')}
       </p>
       <Link
         href="/blog/submit"
         className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
       >
-        Jetzt einreichen
+        {t('submitNow')}
       </Link>
     </div>
   )

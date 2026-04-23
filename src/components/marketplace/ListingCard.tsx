@@ -12,6 +12,7 @@ import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketpl
 import { ListingImage } from './ListingImage'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
+import { getTranslations } from 'next-intl/server'
 
 export interface ListingCardData {
   id: string
@@ -52,7 +53,8 @@ function getSpecTags(specs?: Array<{ key: string; value: string; unit: string | 
   return tags
 }
 
-export function ListingCard({ listing, variant = 'default', className = '' }: ListingCardProps) {
+export async function ListingCard({ listing, variant = 'default', className = '' }: ListingCardProps) {
+  const t = await getTranslations('components.listingCard')
   const conditionInfo = getConditionBadge(listing.condition)
   const sellerName = listing.seller_display_name || listing.seller_name
   const isCompact = variant === 'compact'
@@ -152,7 +154,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
         {/* Stats */}
         {!isCompact && (
           <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
-            <span>{listing.view_count} Aufrufe</span>
+            <span>{listing.view_count} {t('views')}</span>
             {listing.favorite_count > 0 && (
               <span className="inline-flex items-center gap-0.5">
                 <Heart className="w-3 h-3" />

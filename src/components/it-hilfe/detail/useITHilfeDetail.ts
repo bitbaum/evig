@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
@@ -9,6 +10,7 @@ import { REVIEW_TARGET_TYPES } from '@/config/database'
 import type { ITHilfeRequest, Offer } from './types'
 
 export function useITHilfeDetail(id: string) {
+  const t = useTranslations('itHelp.detail')
   const { data: session } = useSession()
 
   const [request, setRequest] = useState<ITHilfeRequest | null>(null)
@@ -53,13 +55,13 @@ export function useITHilfeDetail(id: string) {
       const result = await apiFetch<{ request: ITHilfeRequest }>(`/api/it-hilfe/requests/${id}`)
 
       if (!result.success || !result.data) {
-        setError(result.error || 'Fehler beim Laden der Anfrage')
+        setError(result.error || t('errorLoading'))
         return
       }
 
       setRequest(result.data.request)
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       setError(message)
       logger.error('Error fetching peer repair request', { error: err })
     } finally {
@@ -173,7 +175,7 @@ export function useITHilfeDetail(id: string) {
       })
 
       if (!result.success) {
-        setOfferError(result.error || 'Fehler beim Senden des Angebots')
+        setOfferError(result.error || t('errorSubmitOffer'))
         return
       }
 
@@ -187,7 +189,7 @@ export function useITHilfeDetail(id: string) {
       // Refresh request to update offer count
       fetchRequest()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       setOfferError(message)
     } finally {
       setSubmittingOffer(false)
@@ -196,7 +198,7 @@ export function useITHilfeDetail(id: string) {
 
   const handleWithdrawOffer = async () => {
     if (!userOffer) return
-    if (!confirm('Angebot wirklich zurückziehen?')) return
+    if (!confirm(t('confirmWithdraw'))) return
 
     setWithdrawing(true)
     try {
@@ -204,13 +206,13 @@ export function useITHilfeDetail(id: string) {
         method: 'DELETE',
       })
       if (!result.success) {
-        alert(result.error || 'Fehler beim Zurückziehen')
+        alert(result.error || t('errorWithdraw'))
         return
       }
       setUserOffer(null)
       fetchRequest()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       alert(message)
     } finally {
       setWithdrawing(false)
@@ -218,7 +220,7 @@ export function useITHilfeDetail(id: string) {
   }
 
   const handleAcceptOffer = async (offerId: string) => {
-    if (!confirm('Möchtest du dieses Angebot wirklich akzeptieren? Alle anderen Angebote werden abgelehnt.')) {
+    if (!confirm(t('confirmAccept'))) {
       return
     }
 
@@ -230,7 +232,7 @@ export function useITHilfeDetail(id: string) {
       })
 
       if (!result.success) {
-        alert(result.error || 'Fehler beim Akzeptieren des Angebots')
+        alert(result.error || t('errorAccept'))
         return
       }
 
@@ -238,7 +240,7 @@ export function useITHilfeDetail(id: string) {
       fetchRequest()
       fetchOffers()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       alert(message)
     } finally {
       setAcceptingOfferId(null)
@@ -246,7 +248,7 @@ export function useITHilfeDetail(id: string) {
   }
 
   const handleDeclineOffer = async (offerId: string) => {
-    if (!confirm('Dieses Angebot wirklich ablehnen?')) return
+    if (!confirm(t('confirmDecline'))) return
 
     setDecliningOfferId(offerId)
     try {
@@ -254,13 +256,13 @@ export function useITHilfeDetail(id: string) {
         method: 'POST',
       })
       if (!result.success) {
-        alert(result.error || 'Fehler beim Ablehnen')
+        alert(result.error || t('errorDecline'))
         return
       }
       fetchRequest()
       fetchOffers()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       alert(message)
     } finally {
       setDecliningOfferId(null)
@@ -270,8 +272,8 @@ export function useITHilfeDetail(id: string) {
   const handleStatusChange = async (status: string) => {
     if (!request) return
     const confirmMsg = status === REQUEST_STATUS.COMPLETED
-      ? 'Anfrage als abgeschlossen markieren?'
-      : 'Anfrage wirklich abbrechen?'
+      ? t('confirmMarkCompleted')
+      : t('confirmCancelRequest')
     if (!confirm(confirmMsg)) return
 
     try {
@@ -282,10 +284,10 @@ export function useITHilfeDetail(id: string) {
       if (result.success) {
         fetchRequest()
       } else {
-        alert(result.error || 'Fehler beim Aktualisieren')
+        alert(result.error || t('errorUpdate'))
       }
     } catch {
-      alert('Fehler beim Aktualisieren')
+      alert(t('errorUpdate'))
     }
   }
 
@@ -314,7 +316,7 @@ export function useITHilfeDetail(id: string) {
 
   const handleMarkCompleted = async () => {
     if (!request) return
-    if (!confirm('Bestätige, dass die Hilfe abgeschlossen ist?')) return
+    if (!confirm(t('confirmComplete'))) return
 
     setMarkingCompleted(true)
     try {
@@ -322,12 +324,12 @@ export function useITHilfeDetail(id: string) {
         method: 'POST',
       })
       if (!result.success) {
-        alert(result.error || 'Fehler beim Abschliessen')
+        alert(result.error || t('errorComplete'))
         return
       }
       fetchRequest()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       alert(message)
       logger.error('Error marking IT-Hilfe completed', { error: err })
     } finally {
@@ -351,13 +353,13 @@ export function useITHilfeDetail(id: string) {
         },
       )
       if (!result.success) {
-        alert(result.error || 'Fehler beim Abgeben der Bewertung')
+        alert(result.error || t('errorReview'))
         return
       }
       setReviewSubmitted(true)
       fetchRequest()
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Ein Fehler ist aufgetreten'
+      const message = err instanceof Error ? err.message : t('unexpectedError')
       alert(message)
       logger.error('Error confirming IT-Hilfe review', { error: err })
     } finally {

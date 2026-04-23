@@ -13,22 +13,23 @@ import {
   getMyOffers,
 } from '@/lib/dashboard/techniker'
 import { UrgencyBadge, OfferStatusBadge } from '@/components/dashboard/TechnikerBadges'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Techniker Dashboard | RevampIT',
   description: 'Verwalte deine IT-Hilfe Anfragen und Angebote.',
 }
 
-const REQUEST_STATUS_LABELS: Record<string, string> = {
-  open: 'Offen',
-  in_discussion: 'In Gespräch',
-  matched: 'Vergeben',
-  completed: 'Abgeschlossen',
-  cancelled: 'Abgebrochen',
-}
-
 export default async function TechnikerDashboardPage() {
+  const t = await getTranslations('dashboard.techniker')
   const session = await auth()
+  const requestStatusLabels: Record<string, string> = {
+    open: t('statusOpen'),
+    in_discussion: t('statusInDiscussion'),
+    matched: t('statusMatched'),
+    completed: t('statusCompleted'),
+    cancelled: t('statusCancelled'),
+  }
 
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/dashboard/techniker')
@@ -51,23 +52,23 @@ export default async function TechnikerDashboardPage() {
             <span className="text-4xl">💻</span>
           </div>
           <Heading level={1} className={cn('text-2xl font-bold mb-3', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-            Kein Techniker-Profil gefunden
+            {t('noProfile')}
           </Heading>
           <p className={cn('text-base mb-8', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-            Erstelle zuerst ein Techniker-Profil, um IT-Hilfe Anfragen zu sehen und Angebote zu machen.
+            {t('noProfileDesc')}
           </p>
           <Link
             href={IT_HILFE.routes.register}
             className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-600 text-white font-medium rounded-lg hover:bg-cyan-700 transition-colors"
           >
-            Profil erstellen
+            {t('createProfile')}
           </Link>
           <div className="mt-4">
             <Link
               href="/dashboard"
               className={cn('text-sm', getTextColor('neutral', 'muted'), 'hover:underline dark:text-neutral-400')}
             >
-              Zurück zum Dashboard
+              {t('backToDashboard')}
             </Link>
           </div>
         </div>
@@ -87,14 +88,14 @@ export default async function TechnikerDashboardPage() {
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <Heading level={1} className={cn('text-2xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-              Techniker Dashboard
+              {t('pageTitle')}
             </Heading>
             <p className={cn('mt-1 text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-              Übersicht deiner IT-Hilfe Aktivitäten
+              {t('pageSubtitle')}
               {profile.city ? ` · ${profile.city}` : ''}
               {!profile.isActive && (
                 <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
-                  Profil inaktiv
+                  {t('profileInactive')}
                 </span>
               )}
             </p>
@@ -104,13 +105,13 @@ export default async function TechnikerDashboardPage() {
               href={IT_HILFE.routes.register}
               className="px-4 py-2 text-sm border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
-              Profil bearbeiten
+              {t('editProfile')}
             </Link>
             <Link
               href={IT_HILFE.routes.browse}
               className="px-4 py-2 text-sm bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors"
             >
-              Alle Anfragen
+              {t('allRequests')}
             </Link>
           </div>
         </div>
@@ -119,37 +120,37 @@ export default async function TechnikerDashboardPage() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-5">
             <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-              Abgeschlossen
+              {t('statsCompleted')}
             </p>
             <p className={cn('text-3xl font-bold mt-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {profile.totalJobsCompleted}
             </p>
             <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-500')}>
-              Hilfen gesamt
+              {t('statsCompletedSub')}
             </p>
           </div>
 
           <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-5">
             <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-              Bewertung
+              {t('statsRating')}
             </p>
             <p className={cn('text-3xl font-bold mt-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {ratingDisplay}
             </p>
             <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-500')}>
-              Ø Sterne
+              {t('statsRatingSub')}
             </p>
           </div>
 
           <div className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-5 col-span-2 md:col-span-1">
             <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-              Aktive Angebote
+              {t('statsActiveOffers')}
             </p>
             <p className={cn('text-3xl font-bold mt-1', getTextColor('neutral', 'primary'), 'dark:text-white')}>
               {activeOfferCount}
             </p>
             <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-500')}>
-              Ausstehend
+              {t('statsActiveOffersSub')}
             </p>
           </div>
         </div>
@@ -162,17 +163,17 @@ export default async function TechnikerDashboardPage() {
             <div className="p-5 border-b border-neutral-100 dark:border-neutral-700 flex items-center justify-between">
               <div>
                 <Heading level={2} className={cn('text-base font-semibold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-                  Passende Anfragen
+                  {t('matchingTitle')}
                 </Heading>
                 <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                  Offene Anfragen, die deinen Skills entsprechen
+                  {t('matchingSubtitle')}
                 </p>
               </div>
               <Link
                 href={IT_HILFE.routes.browse}
                 className="text-xs text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 font-medium"
               >
-                Alle ansehen →
+                {t('viewAll')}
               </Link>
             </div>
 
@@ -181,13 +182,13 @@ export default async function TechnikerDashboardPage() {
                 <div className="text-center py-8">
                   <span className="text-3xl block mb-3">🔍</span>
                   <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                    Keine passenden Anfragen gefunden.
+                    {t('noMatching')}
                   </p>
                   <Link
                     href={IT_HILFE.routes.register}
                     className="text-sm text-cyan-600 hover:underline mt-2 inline-block"
                   >
-                    Skills im Profil ergänzen
+                    {t('addSkills')}
                   </Link>
                 </div>
               ) : (
@@ -208,7 +209,7 @@ export default async function TechnikerDashboardPage() {
                         {req.city}, {req.canton}
                         {' · '}
                         {formatBudget(req.budgetAmountCents, req.budgetTier ?? undefined)}
-                        {req.offerCount > 0 && ` · ${req.offerCount} Angebot${req.offerCount === 1 ? '' : 'e'}`}
+                        {req.offerCount > 0 && ` · ${t('offerCount', { count: req.offerCount })}`}
                       </p>
                     </Link>
                   ))}
@@ -222,10 +223,10 @@ export default async function TechnikerDashboardPage() {
             <div className="p-5 border-b border-neutral-100 dark:border-neutral-700 flex items-center justify-between">
               <div>
                 <Heading level={2} className={cn('text-base font-semibold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-                  Meine Angebote
+                  {t('myOffersTitle')}
                 </Heading>
                 <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                  Deine zuletzt gemachten Angebote
+                  {t('myOffersSubtitle')}
                 </p>
               </div>
             </div>
@@ -235,13 +236,13 @@ export default async function TechnikerDashboardPage() {
                 <div className="text-center py-8">
                   <span className="text-3xl block mb-3">📋</span>
                   <p className={cn('text-sm', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-                    Du hast noch keine Angebote gemacht.
+                    {t('noOffers')}
                   </p>
                   <Link
                     href={IT_HILFE.routes.browse}
                     className="text-sm text-cyan-600 hover:underline mt-2 inline-block"
                   >
-                    Anfragen durchsuchen
+                    {t('browseRequests')}
                   </Link>
                 </div>
               ) : (
@@ -261,7 +262,7 @@ export default async function TechnikerDashboardPage() {
                       <p className={cn('text-xs mt-1', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
                         {offer.city}, {offer.canton}
                         {' · '}
-                        Anfrage: {REQUEST_STATUS_LABELS[offer.requestStatus] ?? offer.requestStatus}
+                        {t('requestStatus', { status: requestStatusLabels[offer.requestStatus] ?? offer.requestStatus })}
                       </p>
                     </Link>
                   ))}
@@ -282,7 +283,7 @@ export default async function TechnikerDashboardPage() {
               'hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors'
             )}
           >
-            ✏️ Profil bearbeiten
+            ✏️ {t('editProfile')}
           </Link>
           <Link
             href={IT_HILFE.routes.browse}
@@ -293,7 +294,7 @@ export default async function TechnikerDashboardPage() {
               'hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors'
             )}
           >
-            🔍 Alle Anfragen
+            🔍 {t('allRequests')}
           </Link>
           <Link
             href="/dashboard"
@@ -304,7 +305,7 @@ export default async function TechnikerDashboardPage() {
               'hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors'
             )}
           >
-            ← Zum Dashboard
+            ← {t('backToDashboard')}
           </Link>
         </div>
 

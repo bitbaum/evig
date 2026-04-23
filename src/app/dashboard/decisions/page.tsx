@@ -10,6 +10,7 @@ import { DECISION_STATUS_CONFIG, VOTING_METHOD_CONFIG, type DecisionStatus, type
 import { formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Abstimmungen | RevampIT Dashboard',
@@ -17,6 +18,7 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardDecisionsPage() {
+  const t = await getTranslations('dashboard.decisions')
   const session = await auth()
   if (!session?.user?.email) redirect('/auth/signin')
 
@@ -38,15 +40,15 @@ export default async function DashboardDecisionsPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
       <Heading level={1} className="mb-1 text-2xl font-bold text-gray-900">
-        Abstimmungen
+        {t('pageTitle')}
       </Heading>
       <p className="mb-6 text-sm text-gray-500">
-        Offene Abstimmungen, bei denen deine Stimme gefragt ist.
+        {t('pageSubtitle')}
       </p>
 
       {votingDecisions.length === 0 ? (
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-          <p className="text-sm text-gray-500">Keine offenen Abstimmungen im Moment.</p>
+          <p className="text-sm text-gray-500">{t('noVotings')}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -54,7 +56,7 @@ export default async function DashboardDecisionsPage() {
             const statusConf = DECISION_STATUS_CONFIG[d.status as DecisionStatus]
             const methodConf = VOTING_METHOD_CONFIG[d.votingMethod as VotingMethod]
             const deadlineInfo = d.votingDeadline
-              ? `Frist: ${formatDateShort(d.votingDeadline)}`
+              ? t('deadline', { date: formatDateShort(d.votingDeadline) })
               : null
 
             return (
@@ -85,11 +87,11 @@ export default async function DashboardDecisionsPage() {
                       )}
                       {d.hasUserVoted ? (
                         <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">
-                          Abgestimmt
+                          {t('voted')}
                         </span>
                       ) : (
                         <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-700 font-medium">
-                          Stimme steht aus
+                          {t('votePending')}
                         </span>
                       )}
                     </div>
