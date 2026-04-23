@@ -6,6 +6,7 @@ import { LogOut, Loader2, AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 const LOGOUT_CALLBACK = '/auth/login?logout=1'
 
@@ -41,22 +42,23 @@ async function forceServerSignOut(callbackUrl: string): Promise<void> {
 }
 
 export default function LogoutPage() {
+  const t = useTranslations('auth.logout')
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    document.title = 'Abmelden | RevampIT'
+    document.title = t('pageTitle')
 
     const performSignOut = async () => {
       try {
         await forceServerSignOut(LOGOUT_CALLBACK)
         window.location.replace(LOGOUT_CALLBACK)
       } catch {
-        setError('Abmeldung fehlgeschlagen. Bitte versuche es erneut.')
+        setError(t('errorMessage'))
       }
     }
 
     performSignOut()
-  }, [])
+  }, [t])
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -84,9 +86,9 @@ export default function LogoutPage() {
                   <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
                 </div>
                 <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
-                  Abmeldung läuft...
+                  {t('heading')}
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400">Bitte warte einen Moment.</p>
+                <p className="text-gray-600 dark:text-gray-400">{t('wait')}</p>
               </>
             ) : (
               <>
@@ -94,7 +96,7 @@ export default function LogoutPage() {
                   <AlertCircle className="w-8 h-8 text-red-600" />
                 </div>
                 <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
-                  Abmeldung fehlgeschlagen
+                  {t('errorHeading')}
                 </Heading>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
                 <div className="space-y-3">
@@ -107,20 +109,20 @@ export default function LogoutPage() {
                         })
                         .catch((error) => {
                           logger.error('Logout failed', { error })
-                          setError('Abmeldung fehlgeschlagen. Bitte versuche es erneut.')
+                          setError(t('errorMessage'))
                         })
                     }}
                     variant="destructive"
                     className="w-full gap-2 px-6 py-3"
                   >
                     <LogOut className="w-4 h-4" />
-                    Erneut abmelden
+                    {t('retry')}
                   </Button>
                   <Link
                     href="/dashboard"
                     className="inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
                   >
-                    Zurück zum Dashboard
+                    {t('backToDashboard')}
                   </Link>
                 </div>
               </>

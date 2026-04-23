@@ -6,8 +6,10 @@ import Link from 'next/link'
 import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 function ResetPasswordContent() {
+  const t = useTranslations('auth.resetPassword')
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
@@ -25,13 +27,13 @@ function ResetPasswordContent() {
   useEffect(() => {
     if (!token) {
       setTokenValid(false)
-      setError('Ungültiger Reset-Link')
+      setError(t('errorInvalidToken'))
       return
     }
 
     // You could add token validation here if needed
     setTokenValid(true)
-  }, [token])
+  }, [token, t])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,13 +42,13 @@ function ResetPasswordContent() {
 
     // Validate passwords - matches AUTH_CONFIG (SSOT: minLength=8, no complexity)
     if (password.length < 8) {
-      setError('Das Passwort muss mindestens 8 Zeichen lang sein')
+      setError(t('errorTooShort'))
       setIsLoading(false)
       return
     }
 
     if (password !== confirmPassword) {
-      setError('Die Passwörter stimmen nicht überein')
+      setError(t('errorMismatch'))
       setIsLoading(false)
       return
     }
@@ -61,7 +63,7 @@ function ResetPasswordContent() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || 'Passwort-Reset fehlgeschlagen')
+        throw new Error(data.error || t('errorResetFailed'))
       }
 
       setSuccess(true)
@@ -71,7 +73,7 @@ function ResetPasswordContent() {
         router.push('/auth/login?reset=success')
       }, 3000)
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Ein Fehler ist aufgetreten')
+      setError(error instanceof Error ? error.message : t('genericError'))
     } finally {
       setIsLoading(false)
     }
@@ -87,10 +89,10 @@ function ResetPasswordContent() {
             </div>
           </div>
           <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
-            Ungültiger Link
+            {t('invalidLink')}
           </Heading>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Dieser Passwort-Reset-Link ist ungültig oder abgelaufen.
+            {t('invalidLinkDesc')}
           </p>
         </div>
 
@@ -101,11 +103,11 @@ function ResetPasswordContent() {
                 href="/auth/forgot-password"
                 className="inline-block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors font-medium"
               >
-                Neuen Reset-Link anfordern
+                {t('requestNewLink')}
               </Link>
               <p className="text-sm text-gray-600">
                 <Link href="/auth/login" className="text-green-600 hover:text-green-500">
-                  Zurück zur Anmeldung
+                  {t('backToLogin')}
                 </Link>
               </p>
             </div>
@@ -125,23 +127,23 @@ function ResetPasswordContent() {
             </div>
           </div>
           <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
-            Passwort geändert!
+            {t('successHeading')}
           </Heading>
           <p className="mt-2 text-center text-sm text-gray-600">
-            dein Passwort wurde erfolgreich geändert. du kannst sich jetzt mit deinem neuen Passwort anmelden.
+            {t('successDesc')}
           </p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10 text-center">
             <p className="text-sm text-gray-600 mb-6">
-              du wirst in wenigen Sekunden zur Anmeldung weitergeleitet...
+              {t('successRedirect')}
             </p>
             <Link
               href="/auth/login"
               className="inline-block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors font-medium"
             >
-              Jetzt anmelden
+              {t('loginNow')}
             </Link>
           </div>
         </div>
@@ -158,10 +160,10 @@ function ResetPasswordContent() {
           </div>
         </div>
         <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
-          Neues Passwort festlegen
+          {t('heading')}
         </Heading>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Gib dein neues Passwort ein.
+          {t('subheading')}
         </p>
       </div>
 
@@ -178,7 +180,7 @@ function ResetPasswordContent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Neues Passwort
+                {t('newPasswordLabel')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -194,7 +196,7 @@ function ResetPasswordContent() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="Mindestens 8 Zeichen"
+                  placeholder={t('newPasswordPlaceholder')}
                 />
                 <button
                   type="button"
@@ -208,7 +210,7 @@ function ResetPasswordContent() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Passwort bestätigen
+                {t('confirmPasswordLabel')}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
@@ -224,7 +226,7 @@ function ResetPasswordContent() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="Passwort wiederholen"
+                  placeholder={t('confirmPasswordPlaceholder')}
                 />
                 <button
                   type="button"
@@ -237,13 +239,13 @@ function ResetPasswordContent() {
             </div>
 
             <div className="text-sm text-gray-600 space-y-1">
-              <p className="font-medium">Passwort-Anforderungen:</p>
+              <p className="font-medium">{t('requirementsTitle')}</p>
               <ul className="ml-4 space-y-0.5">
                 <li className={password.length >= 8 ? 'text-green-600' : 'text-gray-500'}>
-                  ✓ Mindestens 8 Zeichen
+                  ✓ {t('requirementLength')}
                 </li>
                 <li className={password === confirmPassword && password ? 'text-green-600' : 'text-gray-500'}>
-                  ✓ Passwörter stimmen überein
+                  ✓ {t('requirementMatch')}
                 </li>
               </ul>
             </div>
@@ -252,10 +254,10 @@ function ResetPasswordContent() {
               {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Ändere Passwort...
+                  {t('submitLoading')}
                 </>
               ) : (
-                'Passwort ändern'
+                t('submit')
               )}
             </Button>
           </form>
@@ -274,9 +276,6 @@ function ResetPasswordFallback() {
             <Lock className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
-          Neues Passwort festlegen
-        </Heading>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
@@ -296,5 +295,3 @@ export default function ResetPasswordPage() {
     </Suspense>
   )
 }
-
-

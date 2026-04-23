@@ -5,8 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 
 function VerifyEmailContent() {
+  const t = useTranslations('auth.verifyEmail')
   const router = useRouter()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
@@ -18,7 +20,7 @@ function VerifyEmailContent() {
 
       if (!token) {
         setStatus('error')
-        setMessage('Ungültiger Verifizierungslink. Token fehlt.')
+        setMessage(t('noToken'))
         return
       }
 
@@ -43,16 +45,16 @@ function VerifyEmailContent() {
         } else {
           const error = await response.json()
           setStatus('error')
-          setMessage(error.error || 'Verifizierung fehlgeschlagen')
+          setMessage(error.error || t('genericError'))
         }
-      } catch (error) {
+      } catch {
         setStatus('error')
-        setMessage('Netzwerkfehler. Bitte versuche es später erneut.')
+        setMessage(t('networkError'))
       }
     }
 
     verifyEmail()
-  }, [searchParams, router])
+  }, [searchParams, router, t])
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -63,10 +65,10 @@ function VerifyEmailContent() {
           </div>
         </div>
         <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
-          E-Mail-Adresse bestätigen
+          {t('heading')}
         </Heading>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Wir bestätigen deine E-Mail-Adresse...
+          {t('subheading')}
         </p>
       </div>
 
@@ -76,7 +78,7 @@ function VerifyEmailContent() {
             {status === 'loading' && (
               <div className="flex flex-col items-center">
                 <Loader2 className="w-12 h-12 text-blue-500 animate-spin mb-4" />
-                <p className="text-gray-600">E-Mail-Adresse wird bestätigt...</p>
+                <p className="text-gray-600">{t('loading')}</p>
               </div>
             )}
 
@@ -84,18 +86,18 @@ function VerifyEmailContent() {
               <div className="flex flex-col items-center">
                 <CheckCircle className="w-12 h-12 text-green-500 mb-4" />
                 <Heading level={3} className="text-lg text-green-900 mb-2">
-                  E-Mail-Adresse bestätigt!
+                  {t('successHeading')}
                 </Heading>
                 <p className="text-gray-600 mb-4">{message}</p>
                 <p className="text-sm text-gray-500">
-                  du wirst in wenigen Sekunden zur Anmeldung weitergeleitet...
+                  {t('successRedirect')}
                 </p>
                 <div className="mt-6">
                   <Link
                     href="/auth/login"
                     className="text-green-600 hover:text-green-500 font-medium"
                   >
-                    Jetzt anmelden →
+                    {t('successLogin')}
                   </Link>
                 </div>
               </div>
@@ -105,7 +107,7 @@ function VerifyEmailContent() {
               <div className="flex flex-col items-center">
                 <XCircle className="w-12 h-12 text-red-500 mb-4" />
                 <Heading level={3} className="text-lg text-red-900 mb-2">
-                  Verifizierung fehlgeschlagen
+                  {t('errorHeading')}
                 </Heading>
                 <p className="text-gray-600 mb-4">{message}</p>
                 <div className="space-y-3">
@@ -113,14 +115,14 @@ function VerifyEmailContent() {
                     href="/auth/login"
                     className="inline-block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors"
                   >
-                    Zur Anmeldung
+                    {t('errorLogin')}
                   </Link>
                   <div>
                     <button
                       onClick={() => window.location.reload()}
                       className="text-green-600 hover:text-green-500 text-sm"
                     >
-                      Erneut versuchen
+                      {t('errorRetry')}
                     </button>
                   </div>
                 </div>
@@ -142,9 +144,6 @@ function VerifyEmailFallback() {
             <Mail className="w-8 h-8 text-green-600" />
           </div>
         </div>
-        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
-          E-Mail-Adresse bestätigen
-        </Heading>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
@@ -164,9 +163,3 @@ export default function VerifyEmailPage() {
     </Suspense>
   )
 }
-
-
-
-
-
-
