@@ -5400,6 +5400,14 @@
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
         "visibilityDescription": "Choose who can see your profile"
+      },
+      "contactInfo": {
+        "heading": "Contact Details",
+        "subtitle": "How we can reach you",
+        "emailLabel": "Email",
+        "emailReadOnly": "Email cannot be changed",
+        "phoneLabel": "Phone",
+        "mobileLabel": "Mobile"
       }
     },
     "emailVerification": {
@@ -5570,7 +5578,31 @@
       "statusPendingModeration": "Awaiting moderation",
       "statusHidden": "Hidden",
       "statusDeleted": "Deleted",
-      "statusUnknown": "Unknown"
+      "statusUnknown": "Unknown",
+      "editOverallRating": "Overall Rating",
+      "editCommunication": "Communication",
+      "editProfessionalism": "Professionalism",
+      "editQuality": "Quality",
+      "editTimeliness": "Timeliness",
+      "editTitle": "Title (optional)",
+      "editTitlePlaceholder": "Summary of your experience...",
+      "editContent": "Review Text",
+      "editContentPlaceholder": "Share your experience...",
+      "save": "Save",
+      "cancel": "Cancel",
+      "reviewFor": "Review for {name}",
+      "verifiedPurchase": "Verified Purchase",
+      "responseFrom": "Response from {name}",
+      "edit": "Edit",
+      "delete": "Delete",
+      "helpfulVotes": "{count} helpful votes",
+      "helpful": "Helpful ({count})",
+      "notHelpful": "Not helpful",
+      "loadError": "Error loading",
+      "pageTitle": "My Reviews",
+      "pageDescription": "Manage your reviews and see how other users found your reviews.",
+      "emptyTitle": "No reviews yet",
+      "emptyDescription": "You haven't left any reviews yet. Visit a technician or attend a workshop to leave a review."
     },
     "home": {
       "welcomeBack": "Welcome back, {name}!",

@@ -5300,6 +5300,14 @@
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
         "visibilityDescription": "Choose who can see your profile"
+      },
+      "contactInfo": {
+        "heading": "連絡先情報",
+        "subtitle": "ご連絡方法",
+        "emailLabel": "メール",
+        "emailReadOnly": "メールアドレスは変更できません",
+        "phoneLabel": "電話番号",
+        "mobileLabel": "携帯電話"
       }
     },
     "emailVerification": {
@@ -5470,7 +5478,31 @@
       "statusPendingModeration": "審査待ち",
       "statusHidden": "非表示",
       "statusDeleted": "削除済み",
-      "statusUnknown": "不明"
+      "statusUnknown": "不明",
+      "editOverallRating": "総合評価",
+      "editCommunication": "コミュニケーション",
+      "editProfessionalism": "プロフェッショナリズム",
+      "editQuality": "品質",
+      "editTimeliness": "時間厳守",
+      "editTitle": "タイトル（任意）",
+      "editTitlePlaceholder": "体験の概要...",
+      "editContent": "レビューテキスト",
+      "editContentPlaceholder": "体験を共有する...",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "reviewFor": "{name}へのレビュー",
+      "verifiedPurchase": "確認済み購入",
+      "responseFrom": "{name}からの返信",
+      "edit": "編集",
+      "delete": "削除",
+      "helpfulVotes": "{count}件の参考になった",
+      "helpful": "参考になった ({count})",
+      "notHelpful": "参考にならなかった",
+      "loadError": "読み込みエラー",
+      "pageTitle": "マイレビュー",
+      "pageDescription": "レビューを管理し、他のユーザーがどのように見つけたかを確認します。",
+      "emptyTitle": "まだレビューがありません",
+      "emptyDescription": "まだレビューを投稿していません。技術者を訪問するかワークショップに参加してレビューを残してください。"
     },
     "home": {
       "welcomeBack": "おかえりなさい、{name}さん！",

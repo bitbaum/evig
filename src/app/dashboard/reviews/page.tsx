@@ -79,55 +79,56 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
   onSave: () => void
   onCancel: () => void
 }) {
+  const t = useTranslations('dashboard.reviews')
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Gesamtbewertung</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('editOverallRating')}</label>
         <StarRating rating={editForm.overallRating} interactive onChange={(r) => setEditForm({...editForm, overallRating: r})} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {[
-          { label: 'Kommunikation', key: 'communicationRating' as const },
-          { label: 'Professionalität', key: 'professionalismRating' as const },
-          { label: 'Qualität', key: 'qualityRating' as const },
-          { label: 'Pünktlichkeit', key: 'timelinessRating' as const },
-        ].map(({ label, key }) => (
+        {([
+          { labelKey: 'editCommunication', key: 'communicationRating' as const },
+          { labelKey: 'editProfessionalism', key: 'professionalismRating' as const },
+          { labelKey: 'editQuality', key: 'qualityRating' as const },
+          { labelKey: 'editTimeliness', key: 'timelinessRating' as const },
+        ] as const).map(({ labelKey, key }) => (
           <div key={key}>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t(labelKey)}</label>
             <StarRating rating={editForm[key]} interactive onChange={(r) => setEditForm({...editForm, [key]: r})} />
           </div>
         ))}
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Titel (optional)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('editTitle')}</label>
         <input
           type="text"
           value={editForm.title}
           onChange={(e) => setEditForm({...editForm, title: e.target.value})}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          placeholder="Zusammenfassung Ihrer Erfahrung..."
+          placeholder={t('editTitlePlaceholder')}
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Bewertungstext</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('editContent')}</label>
         <textarea
           value={editForm.content}
           onChange={(e) => setEditForm({...editForm, content: e.target.value})}
           rows={4}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          placeholder="Teile deine Erfahrung..."
+          placeholder={t('editContentPlaceholder')}
         />
       </div>
 
       <div className="flex gap-2">
         <button onClick={onSave} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-          Speichern
+          {t('save')}
         </button>
         <button onClick={onCancel} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
-          Abbrechen
+          {t('cancel')}
         </button>
       </div>
     </div>
@@ -147,7 +148,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   getUserVote: (id: string) => 'helpful' | 'unhelpful' | undefined
   canEdit: (createdAt: string) => boolean
 }) {
-  const t = useTranslations('dashboard.dates')
+  const t = useTranslations('dashboard.reviews')
+  const tDates = useTranslations('dashboard.dates')
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
       <div className="p-6 border-b border-gray-200">
@@ -155,13 +157,13 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
               <Heading level={3} className="text-lg font-semibold text-gray-900">
-                Bewertung für {review.targetName}
+                {t('reviewFor', { name: review.targetName })}
               </Heading>
               <StatusBadge status={review.status} />
               {review.isVerifiedPurchase && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 gap-1">
                   <CheckCircle className="w-3 h-3" />
-                  Verifizierter Kauf
+                  {t('verifiedPurchase')}
                 </span>
               )}
             </div>
@@ -189,7 +191,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                     <div className="flex items-center gap-2 mb-2">
                       <MessageSquare className="w-4 h-4 text-blue-600" />
                       <span className="text-sm font-medium text-blue-900">
-                        Antwort von {review.response.responderName}
+                        {t('responseFrom', { name: review.response.responderName })}
                       </span>
                     </div>
                     <p className="text-blue-800 text-sm">{review.response.content}</p>
@@ -208,7 +210,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                   className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 flex items-center gap-1"
                 >
                   <Edit3 className="w-3 h-3" />
-                  Bearbeiten
+                  {t('edit')}
                 </button>
               )}
               <button
@@ -216,7 +218,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 className="px-3 py-1.5 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200 flex items-center gap-1"
               >
                 <Trash2 className="w-3 h-3" />
-                Löschen
+                {t('delete')}
               </button>
             </div>
           )}
@@ -225,10 +227,10 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
         {/* Review Stats */}
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
           <div className="flex items-center gap-4 text-sm text-gray-500">
-            <span>{review.helpfulVotes} hilfreiche Stimmen</span>
-            <span>{t('createdOn', { date: formatDateShort(review.createdAt) })}</span>
+            <span>{t('helpfulVotes', { count: review.helpfulVotes })}</span>
+            <span>{tDates('createdOn', { date: formatDateShort(review.createdAt) })}</span>
             {review.updatedAt !== review.createdAt && (
-              <span>{t('lastEdited', { date: formatDateShort(review.updatedAt) })}</span>
+              <span>{tDates('lastEdited', { date: formatDateShort(review.updatedAt) })}</span>
             )}
           </div>
 
@@ -244,7 +246,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 }`}
               >
                 <ThumbsUp className="w-3 h-3" />
-                Hilfreich ({review.helpfulVotes})
+                {t('helpful', { count: review.helpfulVotes })}
               </button>
               <button
                 onClick={() => onVote(review.id, 'unhelpful')}
@@ -255,7 +257,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 }`}
               >
                 <ThumbsDown className="w-3 h-3" />
-                Nicht hilfreich
+                {t('notHelpful')}
               </button>
             </div>
           )}
@@ -266,6 +268,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
 }
 
 export default function UserReviewsPage() {
+  const t = useTranslations('dashboard.reviews')
   const { status } = useSession()
   const {
     reviews,
@@ -297,7 +300,7 @@ export default function UserReviewsPage() {
         <div className="flex">
           <div className="text-red-400">⚠️</div>
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-red-800">Fehler beim Laden</Heading>
+            <Heading level={3} className="text-sm font-medium text-red-800">{t('loadError')}</Heading>
             <p className="text-sm text-red-700 mt-1">{error}</p>
           </div>
         </div>
@@ -309,9 +312,9 @@ export default function UserReviewsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <Heading level={1} className="text-2xl font-bold text-gray-900 mb-2">Meine Bewertungen</Heading>
+        <Heading level={1} className="text-2xl font-bold text-gray-900 mb-2">{t('pageTitle')}</Heading>
         <p className="text-gray-600">
-          Verwalte deine Bewertungen und sieh, wie andere Nutzer:innen deine Bewertungen gefunden haben.
+          {t('pageDescription')}
         </p>
       </div>
 
@@ -322,8 +325,8 @@ export default function UserReviewsPage() {
             icon={MessageSquare}
             iconBg="bg-amber-50 dark:bg-amber-900/20"
             iconColor="text-amber-500 dark:text-amber-400"
-            title="Noch keine Bewertungen"
-            description="Du hast noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen."
+            title={t('emptyTitle')}
+            description={t('emptyDescription')}
           />
         ) : (
           reviews.map((review) => (

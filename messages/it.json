@@ -5300,6 +5300,14 @@
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
         "visibilityDescription": "Choose who can see your profile"
+      },
+      "contactInfo": {
+        "heading": "Dati di Contatto",
+        "subtitle": "Come possiamo contattarti",
+        "emailLabel": "E-mail",
+        "emailReadOnly": "L'e-mail non può essere modificata",
+        "phoneLabel": "Telefono",
+        "mobileLabel": "Cellulare"
       }
     },
     "emailVerification": {
@@ -5470,7 +5478,31 @@
       "statusPendingModeration": "In attesa di moderazione",
       "statusHidden": "Nascosto",
       "statusDeleted": "Eliminato",
-      "statusUnknown": "Sconosciuto"
+      "statusUnknown": "Sconosciuto",
+      "editOverallRating": "Valutazione Complessiva",
+      "editCommunication": "Comunicazione",
+      "editProfessionalism": "Professionalità",
+      "editQuality": "Qualità",
+      "editTimeliness": "Puntualità",
+      "editTitle": "Titolo (opzionale)",
+      "editTitlePlaceholder": "Riepilogo della tua esperienza...",
+      "editContent": "Testo della Recensione",
+      "editContentPlaceholder": "Condividi la tua esperienza...",
+      "save": "Salva",
+      "cancel": "Annulla",
+      "reviewFor": "Recensione per {name}",
+      "verifiedPurchase": "Acquisto Verificato",
+      "responseFrom": "Risposta da {name}",
+      "edit": "Modifica",
+      "delete": "Elimina",
+      "helpfulVotes": "{count} voti utili",
+      "helpful": "Utile ({count})",
+      "notHelpful": "Non utile",
+      "loadError": "Errore di caricamento",
+      "pageTitle": "Le Mie Recensioni",
+      "pageDescription": "Gestisci le tue recensioni e vedi come altri utenti le hanno trovate.",
+      "emptyTitle": "Ancora nessuna recensione",
+      "emptyDescription": "Non hai ancora lasciato recensioni. Visita un tecnico o partecipa a un workshop per lasciare una recensione."
     },
     "home": {
       "welcomeBack": "Bentornato, {name}!",

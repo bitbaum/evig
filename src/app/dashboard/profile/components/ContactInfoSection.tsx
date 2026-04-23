@@ -2,6 +2,7 @@
 
 import { Phone, Mail } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../hooks/useProfileData'
 
 interface ContactInfoSectionProps {
@@ -11,6 +12,8 @@ interface ContactInfoSectionProps {
 }
 
 export function ContactInfoSection({ profile, email, handleChange }: ContactInfoSectionProps) {
+  const t = useTranslations('dashboard.profile.contactInfo')
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -19,16 +22,16 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-            Kontaktdaten
+            {t('heading')}
           </Heading>
-          <p className="text-sm text-gray-500">So können wir dich erreichen</p>
+          <p className="text-sm text-gray-500">{t('subtitle')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            E-Mail
+            {t('emailLabel')}
           </label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -39,11 +42,11 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
               className="w-full pl-11 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">E-Mail kann nicht geändert werden</p>
+          <p className="text-xs text-gray-500 mt-1">{t('emailReadOnly')}</p>
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Telefon
+            {t('phoneLabel')}
           </label>
           <input
             type="tel"
@@ -55,7 +58,7 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Mobiltelefon
+            {t('mobileLabel')}
           </label>
           <input
             type="tel"

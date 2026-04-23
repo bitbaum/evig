@@ -5300,6 +5300,14 @@
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
         "visibilityDescription": "Choose who can see your profile"
+      },
+      "contactInfo": {
+        "heading": "Datos de Contacto",
+        "subtitle": "Cómo podemos contactarte",
+        "emailLabel": "Correo electrónico",
+        "emailReadOnly": "El correo electrónico no se puede cambiar",
+        "phoneLabel": "Teléfono",
+        "mobileLabel": "Teléfono Móvil"
       }
     },
     "emailVerification": {
@@ -5470,7 +5478,31 @@
       "statusPendingModeration": "Pendiente de moderación",
       "statusHidden": "Oculto",
       "statusDeleted": "Eliminado",
-      "statusUnknown": "Desconocido"
+      "statusUnknown": "Desconocido",
+      "editOverallRating": "Valoración General",
+      "editCommunication": "Comunicación",
+      "editProfessionalism": "Profesionalismo",
+      "editQuality": "Calidad",
+      "editTimeliness": "Puntualidad",
+      "editTitle": "Título (opcional)",
+      "editTitlePlaceholder": "Resumen de tu experiencia...",
+      "editContent": "Texto de la Valoración",
+      "editContentPlaceholder": "Comparte tu experiencia...",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "reviewFor": "Valoración para {name}",
+      "verifiedPurchase": "Compra Verificada",
+      "responseFrom": "Respuesta de {name}",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "helpfulVotes": "{count} votos útiles",
+      "helpful": "Útil ({count})",
+      "notHelpful": "No útil",
+      "loadError": "Error al cargar",
+      "pageTitle": "Mis Valoraciones",
+      "pageDescription": "Gestiona tus valoraciones y observa cómo otros usuarios las encontraron.",
+      "emptyTitle": "Aún no hay valoraciones",
+      "emptyDescription": "Aún no has dejado ninguna valoración. Visita un técnico o asiste a un taller para dejar una valoración."
     },
     "home": {
       "welcomeBack": "¡Bienvenido de nuevo, {name}!",

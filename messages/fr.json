@@ -5258,6 +5258,14 @@
         "visibilityPublic": "Public",
         "visibilityPrivate": "Private",
         "visibilityDescription": "Choose who can see your profile"
+      },
+      "contactInfo": {
+        "heading": "Coordonnées",
+        "subtitle": "Comment nous pouvons vous contacter",
+        "emailLabel": "E-mail",
+        "emailReadOnly": "L'e-mail ne peut pas être modifié",
+        "phoneLabel": "Téléphone",
+        "mobileLabel": "Téléphone Mobile"
       }
     },
     "emailVerification": {
@@ -5428,7 +5436,31 @@
       "statusPendingModeration": "En attente de modération",
       "statusHidden": "Masqué",
       "statusDeleted": "Supprimé",
-      "statusUnknown": "Inconnu"
+      "statusUnknown": "Inconnu",
+      "editOverallRating": "Note Générale",
+      "editCommunication": "Communication",
+      "editProfessionalism": "Professionnalisme",
+      "editQuality": "Qualité",
+      "editTimeliness": "Ponctualité",
+      "editTitle": "Titre (optionnel)",
+      "editTitlePlaceholder": "Résumé de votre expérience...",
+      "editContent": "Texte de l'Avis",
+      "editContentPlaceholder": "Partagez votre expérience...",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "reviewFor": "Avis pour {name}",
+      "verifiedPurchase": "Achat Vérifié",
+      "responseFrom": "Réponse de {name}",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "helpfulVotes": "{count} votes utiles",
+      "helpful": "Utile ({count})",
+      "notHelpful": "Pas utile",
+      "loadError": "Erreur de chargement",
+      "pageTitle": "Mes Avis",
+      "pageDescription": "Gérez vos avis et voyez comment d'autres utilisateurs les ont trouvés.",
+      "emptyTitle": "Pas encore d'avis",
+      "emptyDescription": "Vous n'avez pas encore laissé d'avis. Visitez un technicien ou assistez à un atelier pour laisser un avis."
     },
     "home": {
       "welcomeBack": "Bon retour, {name}!",

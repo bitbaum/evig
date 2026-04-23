@@ -5451,6 +5451,14 @@
         "visibilityPublic": "Öffentlich",
         "visibilityPrivate": "Privat",
         "visibilityDescription": "Bestimme, wer dein Profil sehen kann"
+      },
+      "contactInfo": {
+        "heading": "Kontaktdaten",
+        "subtitle": "So können wir dich erreichen",
+        "emailLabel": "E-Mail",
+        "emailReadOnly": "E-Mail kann nicht geändert werden",
+        "phoneLabel": "Telefon",
+        "mobileLabel": "Mobiltelefon"
       }
     },
     "emailVerification": {
@@ -5621,7 +5629,31 @@
       "statusPendingModeration": "Wartet auf Moderation",
       "statusHidden": "Ausgeblendet",
       "statusDeleted": "Gelöscht",
-      "statusUnknown": "Unbekannt"
+      "statusUnknown": "Unbekannt",
+      "editOverallRating": "Gesamtbewertung",
+      "editCommunication": "Kommunikation",
+      "editProfessionalism": "Professionalität",
+      "editQuality": "Qualität",
+      "editTimeliness": "Pünktlichkeit",
+      "editTitle": "Titel (optional)",
+      "editTitlePlaceholder": "Zusammenfassung Ihrer Erfahrung...",
+      "editContent": "Bewertungstext",
+      "editContentPlaceholder": "Teile deine Erfahrung...",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "reviewFor": "Bewertung für {name}",
+      "verifiedPurchase": "Verifizierter Kauf",
+      "responseFrom": "Antwort von {name}",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "helpfulVotes": "{count} hilfreiche Stimmen",
+      "helpful": "Hilfreich ({count})",
+      "notHelpful": "Nicht hilfreich",
+      "loadError": "Fehler beim Laden",
+      "pageTitle": "Meine Bewertungen",
+      "pageDescription": "Verwalte deine Bewertungen und sieh, wie andere Nutzer:innen deine Bewertungen gefunden haben.",
+      "emptyTitle": "Noch keine Bewertungen",
+      "emptyDescription": "Du hast noch keine Bewertungen abgegeben. Besuche einen Techniker oder nimm an einem Workshop teil, um eine Bewertung zu hinterlassen."
     },
     "home": {
       "welcomeBack": "Willkommen zurück, {name}!",
