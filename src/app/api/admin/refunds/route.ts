@@ -23,48 +23,48 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
     }
     const where = conditions.length > 0 ? conditions[0] : undefined
 
-    // Get refunds with related data
-    const refundRows = await db
-      .select({
-        id: refunds.id,
-        refundNumber: refunds.refundNumber,
-        originalTransactionId: refunds.originalTransactionId,
-        amountCents: refunds.amountCents,
-        currency: refunds.currency,
-        reason: refunds.reason,
-        reasonDetails: refunds.reasonDetails,
-        status: refunds.status,
-        requestedBy: refunds.requestedBy,
-        approvedBy: refunds.approvedBy,
-        processedBy: refunds.processedBy,
-        customerNotes: refunds.customerNotes,
-        internalNotes: refunds.internalNotes,
-        createdAt: refunds.createdAt,
-        approvedAt: refunds.approvedAt,
-        processedAt: refunds.processedAt,
-        customer_name: users.name,
-        customer_email: users.email,
-        original_amount: sql<number>`${paymentTransactions.amountCents} / 100.0`,
-        transaction_currency: paymentTransactions.currency,
-        refund_amount: sql<number>`ROUND(${refunds.amountCents} / 100.0, 2)`,
-        approved_by_name: approvedByUser.name,
-        requested_by_name: requestedByUser.name,
-      })
-      .from(refunds)
-      .innerJoin(users, eq(refunds.requestedBy, users.id))
-      .innerJoin(paymentTransactions, eq(refunds.originalTransactionId, paymentTransactions.id))
-      .leftJoin(approvedByUser, eq(refunds.approvedBy, approvedByUser.id))
-      .leftJoin(requestedByUser, eq(refunds.requestedBy, requestedByUser.id))
-      .where(where)
-      .orderBy(desc(refunds.createdAt))
-      .limit(limit)
-      .offset(offset)
-
-    // Get total count
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)::int` })
-      .from(refunds)
-      .where(where)
+    // Get refunds with related data + total count (parallel — independent queries)
+    const [refundRows, [countRow]] = await Promise.all([
+      db
+        .select({
+          id: refunds.id,
+          refundNumber: refunds.refundNumber,
+          originalTransactionId: refunds.originalTransactionId,
+          amountCents: refunds.amountCents,
+          currency: refunds.currency,
+          reason: refunds.reason,
+          reasonDetails: refunds.reasonDetails,
+          status: refunds.status,
+          requestedBy: refunds.requestedBy,
+          approvedBy: refunds.approvedBy,
+          processedBy: refunds.processedBy,
+          customerNotes: refunds.customerNotes,
+          internalNotes: refunds.internalNotes,
+          createdAt: refunds.createdAt,
+          approvedAt: refunds.approvedAt,
+          processedAt: refunds.processedAt,
+          customer_name: users.name,
+          customer_email: users.email,
+          original_amount: sql<number>`${paymentTransactions.amountCents} / 100.0`,
+          transaction_currency: paymentTransactions.currency,
+          refund_amount: sql<number>`ROUND(${refunds.amountCents} / 100.0, 2)`,
+          approved_by_name: approvedByUser.name,
+          requested_by_name: requestedByUser.name,
+        })
+        .from(refunds)
+        .innerJoin(users, eq(refunds.requestedBy, users.id))
+        .innerJoin(paymentTransactions, eq(refunds.originalTransactionId, paymentTransactions.id))
+        .leftJoin(approvedByUser, eq(refunds.approvedBy, approvedByUser.id))
+        .leftJoin(requestedByUser, eq(refunds.requestedBy, requestedByUser.id))
+        .where(where)
+        .orderBy(desc(refunds.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db
+        .select({ total: sql<number>`count(*)::int` })
+        .from(refunds)
+        .where(where),
+    ])
 
     return apiSuccess({
       refunds: refundRows,

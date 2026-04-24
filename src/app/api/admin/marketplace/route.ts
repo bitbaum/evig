@@ -61,35 +61,36 @@ export const GET = withAdmin('marketplace', async (request) => {
 
     const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    const rows = await db
-      .select({
-        id: listings.id,
-        title: listings.title,
-        price_chf: listings.priceChf,
-        category: listings.category,
-        condition: listings.condition,
-        status: listings.status,
-        is_revampit: listings.isRevampit,
-        verified_at: listings.verifiedAt,
-        admin_notes: listings.adminNotes,
-        created_at: listings.createdAt,
-        seller_name: seller.name,
-        seller_email: seller.email,
-        report_count: sql<number>`(SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.LISTING_REPORTS)} lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`,
-      })
-      .from(listings)
-      .innerJoin(seller, eq(listings.sellerId, seller.id))
-      .where(where)
-      .orderBy(sql`${listings.createdAt} DESC`)
-      .limit(limit)
-      .offset(offset)
-
-    // Count query
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)` })
-      .from(listings)
-      .innerJoin(seller, eq(listings.sellerId, seller.id))
-      .where(where)
+    // Listings page + total count (parallel — independent queries)
+    const [rows, [countRow]] = await Promise.all([
+      db
+        .select({
+          id: listings.id,
+          title: listings.title,
+          price_chf: listings.priceChf,
+          category: listings.category,
+          condition: listings.condition,
+          status: listings.status,
+          is_revampit: listings.isRevampit,
+          verified_at: listings.verifiedAt,
+          admin_notes: listings.adminNotes,
+          created_at: listings.createdAt,
+          seller_name: seller.name,
+          seller_email: seller.email,
+          report_count: sql<number>`(SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.LISTING_REPORTS)} lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`,
+        })
+        .from(listings)
+        .innerJoin(seller, eq(listings.sellerId, seller.id))
+        .where(where)
+        .orderBy(sql`${listings.createdAt} DESC`)
+        .limit(limit)
+        .offset(offset),
+      db
+        .select({ total: sql<number>`count(*)` })
+        .from(listings)
+        .innerJoin(seller, eq(listings.sellerId, seller.id))
+        .where(where),
+    ])
 
     const total = Number(countRow?.total ?? 0)
 

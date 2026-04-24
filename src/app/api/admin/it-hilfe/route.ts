@@ -45,37 +45,39 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
 
     const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    const rows = await db
-      .select({
-        id: itHilfeRequests.id,
-        title: itHilfeRequests.title,
-        category_id: itHilfeRequests.categoryId,
-        urgency: itHilfeRequests.urgency,
-        status: itHilfeRequests.status,
-        postal_code: itHilfeRequests.postalCode,
-        city: itHilfeRequests.city,
-        canton: itHilfeRequests.canton,
-        budget_amount_cents: itHilfeRequests.budgetAmountCents,
-        budget_type: itHilfeRequests.budgetType,
-        offer_count: itHilfeRequests.offerCount,
-        admin_notes: itHilfeRequests.adminNotes,
-        created_at: itHilfeRequests.createdAt,
-        updated_at: itHilfeRequests.updatedAt,
-        requester_name: users.name,
-        requester_email: users.email,
-      })
-      .from(itHilfeRequests)
-      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
-      .where(where)
-      .orderBy(desc(itHilfeRequests.createdAt))
-      .limit(limit)
-      .offset(offset)
-
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)` })
-      .from(itHilfeRequests)
-      .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
-      .where(where)
+    // Requests page + total count (parallel — independent queries)
+    const [rows, [countRow]] = await Promise.all([
+      db
+        .select({
+          id: itHilfeRequests.id,
+          title: itHilfeRequests.title,
+          category_id: itHilfeRequests.categoryId,
+          urgency: itHilfeRequests.urgency,
+          status: itHilfeRequests.status,
+          postal_code: itHilfeRequests.postalCode,
+          city: itHilfeRequests.city,
+          canton: itHilfeRequests.canton,
+          budget_amount_cents: itHilfeRequests.budgetAmountCents,
+          budget_type: itHilfeRequests.budgetType,
+          offer_count: itHilfeRequests.offerCount,
+          admin_notes: itHilfeRequests.adminNotes,
+          created_at: itHilfeRequests.createdAt,
+          updated_at: itHilfeRequests.updatedAt,
+          requester_name: users.name,
+          requester_email: users.email,
+        })
+        .from(itHilfeRequests)
+        .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+        .where(where)
+        .orderBy(desc(itHilfeRequests.createdAt))
+        .limit(limit)
+        .offset(offset),
+      db
+        .select({ total: sql<number>`count(*)` })
+        .from(itHilfeRequests)
+        .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
+        .where(where),
+    ])
 
     const total = Number(countRow?.total ?? 0)
 
