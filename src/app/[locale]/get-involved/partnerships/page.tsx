@@ -19,9 +19,12 @@ const BENEFIT_ICONS = [Target, Globe, Share2, Users]
 export async function generateMetadata({ params }: PartnershipsPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const title = `${t('partnerships.meta.title')} | ${ORG.name}`
+  const description = t('partnerships.meta.description')
   return {
-    title: `${t('partnerships.meta.title')} | ${ORG.name}`,
-    description: t('partnerships.meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

@@ -40,9 +40,12 @@ const DISTRO_NAMES = ['Ubuntu', 'Linux Mint', 'Fedora', 'Debian', 'MX Linux']
 export async function generateMetadata({ params }: LinuxPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'services.linuxOpenSource' })
+  const title = `${t('meta.title')} | ${ORG.name}`
+  const description = t('meta.description')
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
-    description: t('meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

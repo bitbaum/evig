@@ -64,13 +64,11 @@ export async function generateMetadata({
       })
     : t("category.metaTitle", { categoryName: category.name, orgName: ORG.name });
 
-  return {
-    title,
-    description: t("category.metaDesc", {
-      categoryNameLower: category.name.toLowerCase(),
-      orgName: ORG.name,
-    }),
-  };
+  const description = t("category.metaDesc", {
+    categoryNameLower: category.name.toLowerCase(),
+    orgName: ORG.name,
+  })
+  return { title, description, openGraph: { title, description, type: 'website' } };
 }
 
 /**

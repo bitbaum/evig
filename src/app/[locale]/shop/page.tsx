@@ -14,9 +14,12 @@ interface ShopPageProps {
 export async function generateMetadata({ params }: ShopPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'shop' })
+  const title = `${t('meta.title')} | ${ORG.name}`
+  const description = t('page.metaDescription', { orgName: ORG.name })
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
-    description: t('page.metaDescription', { orgName: ORG.name }),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

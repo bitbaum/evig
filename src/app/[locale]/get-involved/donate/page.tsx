@@ -18,9 +18,12 @@ export const revalidate = 0
 export async function generateMetadata({ params }: DonatePageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'donate' })
+  const title = `${t('meta.title')} | ${ORG.name}`
+  const description = t('meta.description')
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
-    description: t('meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

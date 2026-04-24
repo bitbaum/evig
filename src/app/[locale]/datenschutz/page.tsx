@@ -11,9 +11,12 @@ interface DatenschutzPageProps {
 export async function generateMetadata({ params }: DatenschutzPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'datenschutz' })
+  const title = `${t('meta.title')} | ${ORG.name}`
+  const description = t('meta.description', { orgName: ORG.name })
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
-    description: t('meta.description', { orgName: ORG.name }),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

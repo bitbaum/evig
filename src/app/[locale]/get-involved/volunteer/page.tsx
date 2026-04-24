@@ -19,9 +19,12 @@ const BENEFIT_ICONS = [Wrench, BookOpen, Heart, Users]
 export async function generateMetadata({ params }: VolunteerPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const title = `${t('volunteer.meta.title')} | ${ORG.name}`
+  const description = t('volunteer.meta.description')
   return {
-    title: `${t('volunteer.meta.title')} | ${ORG.name}`,
-    description: t('volunteer.meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

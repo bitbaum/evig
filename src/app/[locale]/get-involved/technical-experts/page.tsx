@@ -19,9 +19,12 @@ const BENEFIT_ICONS = [Code, Cpu, Users, Lightbulb]
 export async function generateMetadata({ params }: TechnicalExpertsPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const title = `${t('technicalExperts.meta.title')} | ${ORG.name}`
+  const description = t('technicalExperts.meta.description')
   return {
-    title: `${t('technicalExperts.meta.title')} | ${ORG.name}`,
-    description: t('technicalExperts.meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

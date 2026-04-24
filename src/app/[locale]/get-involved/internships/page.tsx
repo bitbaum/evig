@@ -19,9 +19,12 @@ const BENEFIT_ICONS = [Briefcase, GraduationCap, Users, BookOpen]
 export async function generateMetadata({ params }: InternshipsPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const title = `${t('internships.meta.title')} | ${ORG.name}`
+  const description = t('internships.meta.description')
   return {
-    title: `${t('internships.meta.title')} | ${ORG.name}`,
-    description: t('internships.meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

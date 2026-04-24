@@ -28,16 +28,14 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "shop" });
 
   if (q) {
-    return {
-      title: t("search.metaTitleWithQuery", { query: q, orgName: ORG.name }),
-      description: t("search.metaDescWithQuery", { query: q, orgName: ORG.name }),
-    };
+    const title = t("search.metaTitleWithQuery", { query: q, orgName: ORG.name })
+    const description = t("search.metaDescWithQuery", { query: q, orgName: ORG.name })
+    return { title, description, openGraph: { title, description, type: 'website' } };
   }
 
-  return {
-    title: t("search.metaTitle", { orgName: ORG.name }),
-    description: t("search.metaDesc"),
-  };
+  const title = t("search.metaTitle", { orgName: ORG.name })
+  const description = t("search.metaDesc")
+  return { title, description, openGraph: { title, description, type: 'website' } };
 }
 
 /**

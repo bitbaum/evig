@@ -18,10 +18,13 @@ export async function generateMetadata({
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
 
+  const title = `${t('meta.title')} | ${ORG.name}`
+  const description = t('meta.description')
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
-    description: t('meta.description'),
+    title,
+    description,
     keywords: t.raw('meta.keywords') as string[],
+    openGraph: { title, description, type: 'website' },
   }
 }
 

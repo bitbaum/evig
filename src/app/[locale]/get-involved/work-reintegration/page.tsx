@@ -19,9 +19,12 @@ const BENEFIT_ICONS = [GraduationCap, Briefcase, Users, Heart]
 export async function generateMetadata({ params }: WorkReintegrationPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const title = `${t('workReintegration.meta.title')} | ${ORG.name}`
+  const description = t('workReintegration.meta.description')
   return {
-    title: `${t('workReintegration.meta.title')} | ${ORG.name}`,
-    description: t('workReintegration.meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

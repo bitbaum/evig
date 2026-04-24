@@ -36,9 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (!tech) return { title: `${t('meta.title')} | ${ORG.name}` }
     const tierLabel = tech.profileTier === 'professional' ? t('detail.professional') : t('detail.community')
     const displayName = tech.name ?? t('meta.title')
+    const title = `${displayName} – ${tierLabel} | ${ORG.name}`
+    const description = tech.bio ?? `${displayName} · ${tierLabel} · ${ORG.name}`
     return {
-      title: `${displayName} – ${tierLabel} | ${ORG.name}`,
-      description: tech.bio ?? `${displayName} · ${tierLabel} · ${ORG.name}`,
+      title,
+      description,
+      openGraph: { title, description, type: 'website' },
     }
   } catch {
     return { title: `${t('meta.title')} | ${ORG.name}` }

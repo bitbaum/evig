@@ -12,9 +12,12 @@ import ContactForm from './ContactForm'
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'contact' })
+  const title = `${t('meta.title')} | ${ORG.name}`
+  const description = t('meta.description')
   return {
-    title: `${t('meta.title')} | ${ORG.name}`,
-    description: t('meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

@@ -19,9 +19,12 @@ const BENEFIT_ICONS = [Cpu, Calendar, Users, BookOpen]
 export async function generateMetadata({ params }: ITHilfeTechnikerPageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const title = `${t('itHilfeTechniker.meta.title')} | ${ORG.name}`
+  const description = t('itHilfeTechniker.meta.description')
   return {
-    title: `${t('itHilfeTechniker.meta.title')} | ${ORG.name}`,
-    description: t('itHilfeTechniker.meta.description'),
+    title,
+    description,
+    openGraph: { title, description, type: 'website' },
   }
 }
 

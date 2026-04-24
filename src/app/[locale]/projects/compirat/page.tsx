@@ -15,7 +15,9 @@ type PageMessages = {
 export async function generateMetadata() {
   const t = await getTranslations('projects')
   const p = t.raw('compirat') as PageMessages
-  return { title: p.meta.title, description: p.meta.description }
+  const title = p.meta.title
+  const description = p.meta.description
+  return { title, description, openGraph: { title, description, type: 'website' } }
 }
 
 export default async function CompiratPage() {
