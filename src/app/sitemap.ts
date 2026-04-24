@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/db'
-import { blogPosts, workshops, aiExtractedProducts, listings } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { blogPosts, workshops, aiExtractedProducts, listings, sellerProfiles } from '@/db/schema'
+import { eq, gt } from 'drizzle-orm'
 import { locales, defaultLocale } from '@/i18n/routing'
 import { APP_URL } from '@/config/urls'
 import { OSS_ALTERNATIVES } from '@/config/open-source-registry'
@@ -176,6 +176,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch (error) {
     logger.error('Sitemap: failed to fetch marketplace listings', { error })
+  }
+
+  // 9. Seller profiles with at least 1 active listing
+  try {
+    const activeSellers = await db
+      .select({ userId: sellerProfiles.userId, updatedAt: sellerProfiles.updatedAt })
+      .from(sellerProfiles)
+      .where(gt(sellerProfiles.totalListings, 0))
+
+    for (const seller of activeSellers) {
+      for (const locale of locales) {
+        entries.push({
+          url: url(`/sellers/${seller.userId}`, locale),
+          lastModified: seller.updatedAt ? new Date(seller.updatedAt) : undefined,
+          changeFrequency: 'weekly',
+          priority: 0.5,
+        })
+      }
+    }
+  } catch (error) {
+    logger.error('Sitemap: failed to fetch seller profiles', { error })
   }
 
   return entries
