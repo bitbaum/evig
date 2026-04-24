@@ -1,12 +1,12 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-05-01
-last_modified_summary: Seller profile pages gained SEO metadata + JSON-LD (layout.tsx). Email template tests completed across all 11 modules (254 tests). Test suite at 2581 tests / 92 suites.
+last_modified_date: 2026-05-02
+last_modified_summary: Shop product pages gained JSON-LD Product schema + openGraph. Fixed item_uuid alias bug in getInventoryProductByUuid (product detail pages were 404ing). Fixed sitemap shop product URLs to use itemUuid + join inventory_items for valid-only URLs.
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-05-01
+**Last Audit Date**: 2026-05-02
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
@@ -195,4 +195,14 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 
 ---
 
-**Last Updated**: 2026-05-01
+## Summary of Recent Fixes (2026-05-02)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| JSON-LD Product schema on shop product pages | FIXED | `/shop/product/[uuid]/page.tsx` now emits Product schema (name, brand, condition, price CHF, availability, seller org) + openGraph with image. |
+| Wrong item_uuid alias in getInventoryProductByUuid | FIXED | `WHERE i.item_uuid` queried `inventory_items` (no such column). Fixed to `WHERE p.item_uuid` from `ai_extracted_products`. Product detail page was always 404-ing. |
+| Sitemap shop product URLs used wrong UUID | FIXED | Sitemap used `aiExtractedProducts.id` (PK UUID) instead of `aiExtractedProducts.itemUuid` (I-YYMMDD-NNNN). Also added `INNER JOIN inventory_items` to only include products with published+in-stock inventory. |
+
+---
+
+**Last Updated**: 2026-05-02
