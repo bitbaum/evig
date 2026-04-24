@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, sql, desc } from 'drizzle-orm'
@@ -50,7 +50,8 @@ export async function GET() {
       .where(eq(subscriptionPools.status, POOL_STATUS.ACTIVE))
       .orderBy(desc(subscriptionPools.createdAt))
 
-    return apiSuccess(pools)
+    // Pools are public; spotsLeft changes when members join/leave — cache 30s, stale 15s
+    return apiSuccessCached(pools, 30, 15)
   } catch (error) {
     logger.error('GET /api/pools failed', { error })
     return apiError(error, 'Fehler beim Laden der Abo-Pools')

@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { itHilfeRequests, repairerProfiles, users } from '@/db/schema'
 import { eq, and, sql, desc, inArray } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
@@ -87,10 +87,11 @@ export async function GET(
       matchCount: matchingRequests.length,
     })
 
-    return apiSuccess({
+    // Matching requests change as new requests are posted — cache 30s, stale 15s
+    return apiSuccessCached({
       requests: matchingRequests,
       repairerServices: repairer.servicesOffered,
-    })
+    }, 30, 15)
   } catch (error) {
     logger.error('Error fetching matching requests for repairer', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

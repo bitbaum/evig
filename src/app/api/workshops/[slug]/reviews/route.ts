@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { workshops, workshopRegistrations, workshopInstances, users } from '@/db/schema'
 import { eq, and, isNotNull, ne, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { API_DEFAULTS } from '@/config/api-defaults'
 import { logger } from '@/lib/logger'
 
@@ -60,13 +60,14 @@ export async function GET(
         )),
     ])
 
-    return apiSuccess({
+    // Workshop reviews are public and change infrequently — cache 60s, stale 30s
+    return apiSuccessCached({
       reviews,
       stats: {
         averageRating: parseFloat(statsRow?.average_rating || '0') || 0,
         reviewCount: parseInt(statsRow?.review_count || '0') || 0,
       },
-    })
+    }, 60, 30)
 
   } catch (error) {
     logger.error('Error fetching workshop reviews', { error })

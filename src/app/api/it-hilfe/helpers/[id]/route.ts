@@ -7,7 +7,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { helperProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -73,12 +73,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     logger.info('Fetched helper profile', { helperId: id })
 
-    return apiSuccess({
+    // Helper profiles are public and semi-static — cache 60s, stale 30s
+    return apiSuccessCached({
       helper: {
         ...helper,
         skills: helper.skills || [],
       },
-    })
+    }, 60, 30)
   } catch (error) {
     logger.error('Error fetching helper profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

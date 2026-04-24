@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
 import { eq, sql, asc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 
 export async function GET(
   request: NextRequest,
@@ -42,11 +42,13 @@ export async function GET(
       .groupBy(workshopInstances.id)
       .orderBy(asc(workshopInstances.startDate))
 
-    return apiSuccess(
+    // Workshop instances are public; participant count changes on registration — cache 30s, stale 15s
+    return apiSuccessCached(
       rows.map(instance => ({
         ...instance,
         current_participants: parseInt(instance.current_participants) || 0,
-      }))
+      })),
+      30, 15
     )
 
   } catch (error) {

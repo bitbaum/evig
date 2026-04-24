@@ -1,16 +1,22 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-04-27
-last_modified_summary: Cache-Control headers added to 11 public read-only API endpoints (technicians, shop inventory, listings browse/similar/search, sellers, repairers, org-numbers, financials, services, blog/categories).
+last_modified_date: 2026-04-28
+last_modified_summary: Cache-Control headers extended to 7 more public endpoints (stats/community, stats/impact, workshops instances/reviews, it-hilfe helpers/[id] + requests/[id]/matches, repairers/[id]/matching-requests, pools).
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-04-27
+**Last Audit Date**: 2026-04-28
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
+
+## Summary of Recent Fixes (2026-04-28)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| Cache-Control extended to remaining public APIs | FIXED | apiSuccessCached applied to 7 more endpoints: stats/community (300s), stats/impact (3600s), workshops/[slug]/instances (30s), workshops/[slug]/reviews (60s), it-hilfe/helpers/[id] (60s), it-hilfe/requests/[id]/matches (30s), repairers/[id]/matching-requests (30s), pools (30s) |
 
 ## Summary of Recent Fixes (2026-04-27)
 

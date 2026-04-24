@@ -7,7 +7,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { itHilfeRequests, helperProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, ne, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { getCategoryById, MATCH_SCORES } from '@/config/it-hilfe'
@@ -221,10 +221,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       topScore: matchedHelpers[0]?.matchScore || 0,
     })
 
-    return apiSuccess({
+    // Matching helpers change as helper profiles update — cache 30s, stale 15s
+    return apiSuccessCached({
       matches: matchedHelpers,
       total: matchedHelpers.length,
-    })
+    }, 30, 15)
   } catch (error) {
     logger.error('Error finding matching helpers', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

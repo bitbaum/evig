@@ -2,7 +2,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CATEGORY_WEIGHT_KG, CO2_PER_KG } from '@/config/co2-impact'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { apiSuccessCached, apiError } from '@/lib/api/helpers'
 
 export const revalidate = 3600 // Cache for 1 hour
 
@@ -61,7 +61,8 @@ export async function GET() {
 
     const co2SavedTons = Math.round((co2SavedKg / 1000) * 10) / 10
 
-    return apiSuccess({
+    // Impact data is public transparency data; changes hourly at most — cache 1h, stale 5 min
+    return apiSuccessCached({
       devices: {
         total: totalDevices,
         sold: soldDevices,
@@ -73,7 +74,7 @@ export async function GET() {
       repairs: Number(repairRows.rows[0]?.count || 0),
       users: Number(userRows.rows[0]?.count || 0),
       meta: { source: 'database', computedAt: new Date().toISOString() },
-    })
+    }, 3600, 300)
   } catch (error) {
     logger.error('Failed to compute impact stats', { error })
     return apiError(error, 'Impact-Statistiken konnten nicht geladen werden')
