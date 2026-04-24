@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/db'
-import { blogPosts, workshops, aiExtractedProducts, listings, sellerProfiles } from '@/db/schema'
-import { eq, gt } from 'drizzle-orm'
+import { blogPosts, workshops, aiExtractedProducts, inventoryItems, listings, sellerProfiles } from '@/db/schema'
+import { eq, gt, and } from 'drizzle-orm'
 import { locales, defaultLocale } from '@/i18n/routing'
 import { APP_URL } from '@/config/urls'
 import { OSS_ALTERNATIVES } from '@/config/open-source-registry'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { PRODUCT_STATUS } from '@/config/marketplace-status'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { SERVICE_CONFIGS } from '@/app/[locale]/services/data'
 import { logger } from '@/lib/logger'
 
@@ -139,9 +140,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 7. Shop products (approved, visible in shop)
   try {
     const products = await db
-      .select({ itemUuid: aiExtractedProducts.itemUuid, updatedAt: aiExtractedProducts.updatedAt })
+      .selectDistinct({ itemUuid: aiExtractedProducts.itemUuid, updatedAt: aiExtractedProducts.updatedAt })
       .from(aiExtractedProducts)
-      .where(eq(aiExtractedProducts.status, PRODUCT_STATUS.APPROVED))
+      .innerJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+      .where(and(
+        eq(aiExtractedProducts.status, PRODUCT_STATUS.APPROVED),
+        eq(inventoryItems.marketplaceStatus, APPROVAL_STATUS.PUBLISHED),
+        gt(inventoryItems.quantityAvailable, 0)
+      ))
 
     for (const product of products) {
       if (!product.itemUuid) continue
