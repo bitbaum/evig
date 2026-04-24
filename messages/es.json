@@ -2076,7 +2076,20 @@
       "submittingButton": "Creando...",
       "aiPlaceholder": "p. ej. Mi MacBook Pro 2019 ya no enciende, la pantalla queda en negro al encenderlo...",
       "errorCreateFailed": "Error al crear la solicitud",
-      "errorGeneric": "Ha ocurrido un error"
+      "errorGeneric": "Ha ocurrido un error",
+      "problemHeading": "Describe el problema",
+      "deviceBrand": "Marca",
+      "deviceBrandPlaceholder": "p. ej. Apple, Samsung, Lenovo",
+      "deviceModel": "Modelo",
+      "deviceModelPlaceholder": "p. ej. MacBook Pro 2020",
+      "problemTitle": "Título",
+      "problemTitlePlaceholder": "Descripción breve",
+      "problemDescription": "Descripción",
+      "problemDescriptionPlaceholder": "¿Cuál es el problema?",
+      "locationHeading": "¿Dónde estás?",
+      "postalCode": "Código postal",
+      "city": "Ciudad",
+      "canton": "Cantón"
     },
     "myRequests": {
       "title": "Mis solicitudes de reparación",
@@ -2345,7 +2358,8 @@
         "locationPlaceholder": "Ej. Zúrich, Berna, Basilea"
       },
       "imageAlt": "Foto del producto {index}",
-      "removeImageLabel": "Eliminar foto {index}"
+      "removeImageLabel": "Eliminar foto {index}",
+      "label": "Publicar anuncio"
     },
     "listingsAvailable": "{count, plural, one {# anuncio} other {# anuncios}} disponible{count, plural, one {} other {s}}",
     "searchPlaceholder": "Portátil, monitor, smartphone...",
@@ -2426,7 +2440,13 @@
       "share": "Compartir",
       "copied": "¡Copiado!",
       "edit": "Editar",
-      "report": "Denunciar"
+      "report": "Denunciar",
+      "errorFavorite": "Error al actualizar favorito",
+      "errorNetworkFavorite": "Error de red al actualizar favorito",
+      "errorMessage": "Error al enviar el mensaje",
+      "errorNetworkMessage": "Error de red al enviar el mensaje",
+      "errorReport": "Error al reportar el anuncio",
+      "errorNetworkReport": "Error de red al reportar el anuncio"
     },
     "empty": "No se encontraron anuncios",
     "conditions": {
@@ -4618,7 +4638,8 @@
       "goToShop": "Ir a la tienda en línea",
       "allShopOptions": "Todas las opciones de tienda",
       "relatedIn": "Más en {parentName}",
-      "breadcrumbHome": "Inicio"
+      "breadcrumbHome": "Inicio",
+      "showAllProducts": "Ver los {count} productos"
     },
     "loading": {
       "text": "Cargando tienda..."
@@ -5000,7 +5021,8 @@
       "successRegistered": "Estás registrado en este taller.",
       "successDashboard": "Encuentra los detalles en tu panel.",
       "invoiceNumber": "Número de factura: {number}",
-      "dashboardLink": "Ir al panel"
+      "dashboardLink": "Ir al panel",
+      "loginRequired": "Inicio de sesión requerido"
     },
     "propose": {
       "meta": {

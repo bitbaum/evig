@@ -55,7 +55,53 @@
     "sectionMembership": "Adhésion",
     "learn": "Apprendre",
     "sectionAbos": "Bourse aux abonnements",
-    "aboPools": "Pools d'abonnements"
+    "aboPools": "Pools d'abonnements",
+    "languageSelection": "Sélection de la langue",
+    "experimentalBanner": "Site expérimental",
+    "experimentalBannerLink": "aller au site actuel",
+    "loggedIn": "Connecté",
+    "toDashboard": "Tableau de bord",
+    "defaultUser": "Utilisateur",
+    "items": {
+      "aboutDesc": "Mission, impact et projets",
+      "missionHistoryDesc": "Qui nous sommes et ce qui nous anime",
+      "impactDesc": "Résultats mesurables et transparence",
+      "projectsDesc": "Nos initiatives",
+      "locationsDesc": "Nos espaces à Zurich",
+      "faqDesc": "Questions fréquemment posées",
+      "servicesDesc": "Services informatiques professionnels",
+      "repairUpgradesDesc": "Remettre votre ordinateur en état",
+      "dataRecoveryDesc": "Sauvegarder et transférer des données",
+      "hardwareRecyclingDesc": "Élimination responsable",
+      "linuxOpenSourceDesc": "Installation et support",
+      "webDevDesc": "Sites web avec logiciels open source",
+      "openSourceSolutionsDesc": "Conseil et mise en œuvre",
+      "marketplaceDesc": "Acheter, vendre et aide informatique",
+      "communityListingsDesc": "Informatique d'occasion — 0% de frais",
+      "orgShopDesc": "Appareils testés et remis à neuf",
+      "storeDesc": "Parcourez en personne et obtenez des conseils",
+      "createListingDesc": "Vendez vos appareils — gratuitement",
+      "myListingsDesc": "Gérer les annonces et les ventes",
+      "findHelpDesc": "Techniciens communautaires près de chez vous",
+      "findTechnicianDesc": "Techniciens communautaires et professionnels",
+      "becomeTechnicianDesc": "Partager des connaissances informatiques et aider les autres",
+      "aboPoolsDesc": "Partager des abonnements numériques et diviser les coûts",
+      "learnDesc": "Ateliers, guides et ressources",
+      "workshopsDesc": "Réserver des cours en personne",
+      "guidesDesc": "Instructions étape par étape",
+      "blogDesc": "Conseils et histoires",
+      "wikiDesc": "Portail de connaissances partagées",
+      "getInvolvedDesc": "Faire partie du mouvement",
+      "volunteerDesc": "Contribuer votre temps et vos compétences",
+      "internshipDesc": "Acquérir de l'expérience",
+      "reintegrationDesc": "Retour à la vie professionnelle",
+      "itHelpTechnicianDesc": "Partager des connaissances informatiques et aider les autres",
+      "donateDesc": "Soutenir notre mission",
+      "donateDevicesDesc": "Donner une seconde vie au matériel",
+      "partnershipDesc": "Devenir partenaire en tant qu'entreprise",
+      "becomeMemberDesc": "Rejoindre l'association et avoir votre mot à dire",
+      "contactDesc": "Nous sommes impatients de vous entendre"
+    }
   },
   "common": {
     "loading": "Chargement...",
@@ -370,7 +416,8 @@
       "goToShop": "Accéder à la boutique en ligne",
       "allShopOptions": "Toutes les options de boutique",
       "relatedIn": "Autres dans {parentName}",
-      "breadcrumbHome": "Accueil"
+      "breadcrumbHome": "Accueil",
+      "showAllProducts": "Afficher les {count} produits"
     },
     "loading": {
       "text": "Chargement de la boutique..."
@@ -592,7 +639,13 @@
       "share": "Partager",
       "copied": "Copié !",
       "edit": "Modifier",
-      "report": "Signaler"
+      "report": "Signaler",
+      "errorFavorite": "Erreur lors de la mise à jour du favori",
+      "errorNetworkFavorite": "Erreur réseau lors de la mise à jour du favori",
+      "errorMessage": "Erreur lors de l'envoi du message",
+      "errorNetworkMessage": "Erreur réseau lors de l'envoi du message",
+      "errorReport": "Erreur lors du signalement de l'annonce",
+      "errorNetworkReport": "Erreur réseau lors du signalement de l'annonce"
     },
     "conditionExplainer": "Que signifie \"{condition}\" pour {category} ?",
     "pagination": {
@@ -1941,7 +1994,8 @@
       "successRegistered": "Vous êtes inscrit à cet atelier.",
       "successDashboard": "Consultez les détails dans votre tableau de bord.",
       "invoiceNumber": "Numéro de facture : {number}",
-      "dashboardLink": "Aller au tableau de bord"
+      "dashboardLink": "Aller au tableau de bord",
+      "loginRequired": "Connexion requise"
     },
     "propose": {
       "meta": {
@@ -2569,7 +2623,20 @@
       "submittingButton": "Création en cours...",
       "aiPlaceholder": "p. ex. Mon MacBook Pro 2019 ne démarre plus, l'écran reste noir après l'allumage...",
       "errorCreateFailed": "Erreur lors de la création de la demande",
-      "errorGeneric": "Une erreur s'est produite"
+      "errorGeneric": "Une erreur s'est produite",
+      "problemHeading": "Décrivez le problème",
+      "deviceBrand": "Marque",
+      "deviceBrandPlaceholder": "ex. Apple, Samsung, Lenovo",
+      "deviceModel": "Modèle",
+      "deviceModelPlaceholder": "ex. MacBook Pro 2020",
+      "problemTitle": "Titre",
+      "problemTitlePlaceholder": "Brève description",
+      "problemDescription": "Description",
+      "problemDescriptionPlaceholder": "Quel est le problème ?",
+      "locationHeading": "Où êtes-vous ?",
+      "postalCode": "Code postal",
+      "city": "Ville",
+      "canton": "Canton"
     },
     "myRequests": {
       "title": "Mes demandes de réparation",

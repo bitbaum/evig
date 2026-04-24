@@ -95,7 +95,12 @@
       "partnershipDesc": "Partner with us as a business",
       "becomeMemberDesc": "Become part of the association and have your say",
       "contactDesc": "We look forward to hearing from you"
-    }
+    },
+    "experimentalBanner": "Experimental Site",
+    "experimentalBannerLink": "go to current site",
+    "loggedIn": "Signed in",
+    "toDashboard": "To Dashboard",
+    "defaultUser": "User"
   },
   "common": {
     "loading": "Loading...",

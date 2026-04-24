@@ -2076,7 +2076,20 @@
       "submittingButton": "생성 중...",
       "aiPlaceholder": "예: 2019년형 MacBook Pro가 시작되지 않아요, 켜면 화면이 검게 유지됩니다...",
       "errorCreateFailed": "요청 생성 중 오류가 발생했습니다",
-      "errorGeneric": "오류가 발생했습니다"
+      "errorGeneric": "오류가 발생했습니다",
+      "problemHeading": "문제를 설명해 주세요",
+      "deviceBrand": "브랜드",
+      "deviceBrandPlaceholder": "예: Apple, Samsung, Lenovo",
+      "deviceModel": "모델",
+      "deviceModelPlaceholder": "예: MacBook Pro 2020",
+      "problemTitle": "제목",
+      "problemTitlePlaceholder": "간략한 설명",
+      "problemDescription": "설명",
+      "problemDescriptionPlaceholder": "문제가 무엇인가요?",
+      "locationHeading": "어디에 계신가요?",
+      "postalCode": "우편번호",
+      "city": "도시",
+      "canton": "주(칸톤)"
     },
     "myRequests": {
       "title": "내 수리 요청",
@@ -2345,7 +2358,8 @@
         "locationPlaceholder": "예: 취리히, 베른, 바젤"
       },
       "imageAlt": "제품 사진 {index}",
-      "removeImageLabel": "사진 {index} 삭제"
+      "removeImageLabel": "사진 {index} 삭제",
+      "label": "판매 등록"
     },
     "listingsAvailable": "{count, plural, other {# 개의}} 판매 목록 이용 가능",
     "searchPlaceholder": "노트북, 모니터, 스마트폰...",
@@ -2426,7 +2440,13 @@
       "share": "공유",
       "copied": "복사됨!",
       "edit": "편집",
-      "report": "신고"
+      "report": "신고",
+      "errorFavorite": "즐겨찾기 업데이트 오류",
+      "errorNetworkFavorite": "즐겨찾기 업데이트 네트워크 오류",
+      "errorMessage": "메시지 전송 오류",
+      "errorNetworkMessage": "메시지 전송 네트워크 오류",
+      "errorReport": "게시물 신고 오류",
+      "errorNetworkReport": "게시물 신고 네트워크 오류"
     },
     "empty": "판매 목록을 찾을 수 없습니다",
     "conditions": {
@@ -4618,7 +4638,8 @@
       "goToShop": "온라인 쇼핑몰로 이동",
       "allShopOptions": "모든 쇼핑몰 옵션",
       "relatedIn": "{parentName}의 더 많은 제품",
-      "breadcrumbHome": "홈"
+      "breadcrumbHome": "홈",
+      "showAllProducts": "전체 {count}개 제품 보기"
     },
     "loading": {
       "text": "쇼핑몰 로딩 중..."
@@ -5000,7 +5021,8 @@
       "successRegistered": "이 워크숍에 등록되었습니다.",
       "successDashboard": "대시보드에서 자세한 내용을 확인하세요.",
       "invoiceNumber": "청구서 번호: {number}",
-      "dashboardLink": "대시보드로 이동"
+      "dashboardLink": "대시보드로 이동",
+      "loginRequired": "로그인이 필요합니다"
     },
     "propose": {
       "meta": {

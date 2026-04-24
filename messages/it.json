@@ -2076,7 +2076,20 @@
       "submittingButton": "Creazione in corso...",
       "aiPlaceholder": "es. Il mio MacBook Pro 2019 non si avvia più, lo schermo rimane nero all'accensione...",
       "errorCreateFailed": "Errore durante la creazione della richiesta",
-      "errorGeneric": "Si è verificato un errore"
+      "errorGeneric": "Si è verificato un errore",
+      "problemHeading": "Descrivi il problema",
+      "deviceBrand": "Marca",
+      "deviceBrandPlaceholder": "es. Apple, Samsung, Lenovo",
+      "deviceModel": "Modello",
+      "deviceModelPlaceholder": "es. MacBook Pro 2020",
+      "problemTitle": "Titolo",
+      "problemTitlePlaceholder": "Breve descrizione",
+      "problemDescription": "Descrizione",
+      "problemDescriptionPlaceholder": "Qual è il problema?",
+      "locationHeading": "Dove sei?",
+      "postalCode": "Codice postale",
+      "city": "Città",
+      "canton": "Cantone"
     },
     "myRequests": {
       "title": "Le mie richieste di riparazione",
@@ -2345,7 +2358,8 @@
         "locationPlaceholder": "Es. Zurigo, Berna, Basilea"
       },
       "imageAlt": "Foto del prodotto {index}",
-      "removeImageLabel": "Rimuovi foto {index}"
+      "removeImageLabel": "Rimuovi foto {index}",
+      "label": "Pubblica annuncio"
     },
     "listingsAvailable": "{count, plural, one {# annuncio} other {# annunci}} disponibili",
     "searchPlaceholder": "Laptop, monitor, smartphone...",
@@ -2426,7 +2440,13 @@
       "share": "Condividi",
       "copied": "Copiato!",
       "edit": "Modifica",
-      "report": "Segnala"
+      "report": "Segnala",
+      "errorFavorite": "Errore nell'aggiornamento del preferito",
+      "errorNetworkFavorite": "Errore di rete nell'aggiornamento del preferito",
+      "errorMessage": "Errore nell'invio del messaggio",
+      "errorNetworkMessage": "Errore di rete nell'invio del messaggio",
+      "errorReport": "Errore nella segnalazione dell'annuncio",
+      "errorNetworkReport": "Errore di rete nella segnalazione dell'annuncio"
     },
     "empty": "Nessun annuncio trovato",
     "conditions": {
@@ -4618,7 +4638,8 @@
       "goToShop": "Vai allo shop online",
       "allShopOptions": "Tutte le opzioni shop",
       "relatedIn": "Altri in {parentName}",
-      "breadcrumbHome": "Home"
+      "breadcrumbHome": "Home",
+      "showAllProducts": "Mostra tutti i {count} prodotti"
     },
     "loading": {
       "text": "Caricamento shop..."
@@ -5000,7 +5021,8 @@
       "successRegistered": "Sei iscritto a questo workshop.",
       "successDashboard": "Trovi i dettagli nella tua dashboard.",
       "invoiceNumber": "Numero fattura: {number}",
-      "dashboardLink": "Vai alla dashboard"
+      "dashboardLink": "Vai alla dashboard",
+      "loginRequired": "Accesso richiesto"
     },
     "propose": {
       "meta": {

@@ -2076,7 +2076,20 @@
       "submittingButton": "作成中...",
       "aiPlaceholder": "例：MacBook Pro 2019が起動しなくなりました。電源を入れると画面が真っ暗です...",
       "errorCreateFailed": "リクエストの作成中にエラーが発生しました",
-      "errorGeneric": "エラーが発生しました"
+      "errorGeneric": "エラーが発生しました",
+      "problemHeading": "問題を説明してください",
+      "deviceBrand": "ブランド",
+      "deviceBrandPlaceholder": "例：Apple、Samsung、Lenovo",
+      "deviceModel": "モデル",
+      "deviceModelPlaceholder": "例：MacBook Pro 2020",
+      "problemTitle": "タイトル",
+      "problemTitlePlaceholder": "簡単な説明",
+      "problemDescription": "説明",
+      "problemDescriptionPlaceholder": "何が問題ですか？",
+      "locationHeading": "お住まいの場所は？",
+      "postalCode": "郵便番号",
+      "city": "市区町村",
+      "canton": "州（カントン）"
     },
     "myRequests": {
       "title": "マイ修理リクエスト",
@@ -2345,7 +2358,8 @@
         "locationPlaceholder": "例：チューリッヒ、ベルン、バーゼル"
       },
       "imageAlt": "商品写真 {index}",
-      "removeImageLabel": "写真 {index} を削除"
+      "removeImageLabel": "写真 {index} を削除",
+      "label": "出品する"
     },
     "listingsAvailable": "{count, plural, other {{count}件の出品}}が利用可能",
     "searchPlaceholder": "ラップトップ、モニター、スマートフォン...",
@@ -2426,7 +2440,13 @@
       "share": "シェア",
       "copied": "コピーしました！",
       "edit": "編集",
-      "report": "報告する"
+      "report": "報告する",
+      "errorFavorite": "お気に入りの更新に失敗しました",
+      "errorNetworkFavorite": "ネットワークエラー：お気に入りを更新できませんでした",
+      "errorMessage": "メッセージの送信に失敗しました",
+      "errorNetworkMessage": "ネットワークエラー：メッセージを送信できませんでした",
+      "errorReport": "出品の通報に失敗しました",
+      "errorNetworkReport": "ネットワークエラー：出品を通報できませんでした"
     },
     "empty": "出品が見つかりませんでした",
     "conditions": {
@@ -4618,7 +4638,8 @@
       "goToShop": "オンラインショップへ",
       "allShopOptions": "すべてのショップオプション",
       "relatedIn": "{parentName}の関連商品",
-      "breadcrumbHome": "ホーム"
+      "breadcrumbHome": "ホーム",
+      "showAllProducts": "全{count}件の商品を表示"
     },
     "loading": {
       "text": "ショップを読み込み中..."
@@ -5000,7 +5021,8 @@
       "successRegistered": "このワークショップに登録されています。",
       "successDashboard": "詳細はダッシュボードで確認できます。",
       "invoiceNumber": "請求書番号: {number}",
-      "dashboardLink": "ダッシュボードへ"
+      "dashboardLink": "ダッシュボードへ",
+      "loginRequired": "ログインが必要です"
     },
     "propose": {
       "meta": {

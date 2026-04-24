@@ -121,9 +121,14 @@ logger.info('User fetched', { userId: user.id });
 // WRONG
 const query = `SELECT * FROM users WHERE id = $1`;
 
-// CORRECT
+// CORRECT — plain JS template literal (passed to query())
 import { TABLE_NAMES } from '@/config/database';
 const query = `SELECT * FROM ${TABLE_NAMES.USERS} WHERE id = $1`;
+
+// CORRECT — inside Drizzle's sql`` template tag, MUST use sql.raw()
+// (plain string interpolation creates a bound parameter $1 — invalid as table name)
+import { sql } from 'drizzle-orm';
+const sub = sql`SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.USERS)}`;
 ```
 
 ### 3. ALWAYS Use Parameterized Queries
