@@ -16,6 +16,7 @@ import { taskRequests, tasks, users } from '@/db/schema';
 import { eq, and, ne, isNull, or, desc, sql, SQL } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import { logger } from '@/lib/logger';
+import { REQUEST_STATUSES } from '@/config/tasks';
 
 const requestedByUser = alias(users, 'requested_by_user');
 
@@ -26,7 +27,7 @@ const requestedByUser = alias(users, 'requested_by_user');
 export const GET = withAdmin(async (request: NextRequest, session: ValidSession) => {
   try {
     const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status') || 'pending';
+    const status = searchParams.get('status') || REQUEST_STATUSES.PENDING;
     const includeBroadcasts = searchParams.get('include_broadcasts') !== 'false';
 
     // Build conditions

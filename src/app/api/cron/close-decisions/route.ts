@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
       try {
         const result = await transitionDecision(
           decision.id,
-          'closed',
+          DECISION_STATUS.CLOSED,
           decision.createdBy,
           { outcomeSummary: 'Automatisch geschlossen (Frist abgelaufen)' }
         )
