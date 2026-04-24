@@ -5075,6 +5075,11 @@
       "deliveryOnsite": "Vor Ort"
     },
     "seller": {
+      "meta": {
+        "title": "{name} – Verkäufer auf dem RevampIT Marketplace",
+        "titleFallback": "Verkäuferprofil – RevampIT Marketplace",
+        "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
+      },
       "backToMarketplace": "Zurück zum Marketplace",
       "memberSince": "Mitglied seit {date}",
       "listings": "Inserate",
