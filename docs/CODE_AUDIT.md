@@ -140,20 +140,34 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 - `ImageUploadGrid.tsx` and `ProductImageUpload.tsx` use raw `<img>` for blob URL previews — this is **correct** (`next/image` cannot optimize blob: URLs)
 
 ### Testing Coverage
-**Current Coverage**: 608 tests across 35 test suites (updated 2026-04-29)
-- API route tests (notifications, admin endpoints)
-- Business logic tests (protocols, payments, services, hirn)
-- UI tests (marketplace, auth, middleware)
-- Utility tests (erfassung, currency, tax compliance)
-- Voting logic (validateVoteData + computeTallies, all 6 methods)
-- Intake checklist (getChecklistForDevice, isChecklistComplete, getChecklistProgress)
-- Spec parsing (normalizeSpecValue: TB→GB, numeric extraction, edge cases)
-- Erfassung fallback parser (fastParseProductText: manufacturer, model, specs, price, condition, category)
-- Pricing calculations (getVATRate, calculateVAT, calculatePaymentFees, calculateTotalWithFees, calculateServicePricing)
-- Payment security (maskSensitiveData, validatePaymentData, PaymentRateLimiter)
-- Hirn chunking (chunkText, chunkMarkdown: separators, overlap, section metadata, summary threshold)
-- CSRF utilities (isExcludedPath, requiresCsrfProtection, getCsrfFromCookies, generateCsrfToken)
+**Current Coverage**: 2248 tests across 78 test suites (updated 2026-04-30)
+
+**Config utilities** (src/config/__tests__/):
+- it-hilfe: deriveBudgetType, formatBudget, isRequestAcceptingOffers, skill/category/status lookups
+- marketplace-status, invoice-status, location-status: label/badge functions
+- donations: label lookups, getEstimatedValue, formatAmountCHF, options generators
+- activity: null-safe label/color functions for activity stream
+- document-status, certification-status, appointment-status: badge/label functions
+- dashboard: getDashboardCardsForRole, groupCardsByCategory, getAllDashboardCards
+- build-computer, editable-fields: getMockRecommendation, getFieldLabel
+- open-source-registry: category/alternative/app lookups, searchAlternatives
+- protocols: getFollowUpStatusColor (null safety, fallback)
+- report-status: getReportStatusLabel (umlauts verified)
+- status-config: isStatusEditable/Commentable, approval/urgency badges, canton coords
+- co2-impact: estimateCO2Savings, CO2_PER_KG constant
+- erfassung/categories: getCategoryByValue, getParentCategory, getAllCategoriesFlat, getCategoryDetails
+- erfassung/conditions: getConditionLabel, normalizeConditionValue, getConditionBadge, parseConditionFromText
+- remaining: marketplace/team/urls/review/workshop/refund/service/shop utilities
+
+**Lib utilities** (src/lib/__tests__/):
+- utils: cn (Tailwind class merge), formatRelativeTime (German timestamps)
+- pricing: VAT rates (CHF 7.7% vs EUR 19%), payment fee formula, calculateTotalWithFees
+- detect-multi: detectMultipleProducts (numbered lists, bullets, brands, CSV, prices)
+- api-helpers: parsePagination (clamping, NaN fallback, page→offset derivation)
+- suggestion-utils: getSuggestionIcon (keyword/href/category lookup), ensureIconInLabel
+- chatbot-language, date-formats, design-system, org-numbers, permissions, swiss-postal-codes
+- utils/date, utils/error, utils/slug
 
 ---
 
-**Last Updated**: 2026-04-29
+**Last Updated**: 2026-04-30
