@@ -5577,7 +5577,8 @@
       "feedbackPlaceholder": "경험이 어떠셨나요?",
       "cancel": "취소",
       "saving": "저장 중…",
-      "save": "저장"
+      "save": "저장",
+      "paymentSuccess": "결제 성공! 워크숍 등록이 확인되었습니다."
     },
     "appointments": {
       "pageTitle": "내 예약",

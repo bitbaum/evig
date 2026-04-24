@@ -5577,7 +5577,8 @@
       "feedbackPlaceholder": "あなたの体験はいかがでしたか？",
       "cancel": "キャンセル",
       "saving": "保存中…",
-      "save": "保存"
+      "save": "保存",
+      "paymentSuccess": "お支払いが完了しました！ワークショップへの参加登録が確認されました。"
     },
     "appointments": {
       "pageTitle": "マイ予約",

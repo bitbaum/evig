@@ -5590,7 +5590,8 @@
       "feedbackPlaceholder": "Wie war deine Erfahrung?",
       "cancel": "Abbrechen",
       "saving": "Speichern…",
-      "save": "Speichern"
+      "save": "Speichern",
+      "paymentSuccess": "Zahlung erfolgreich! Deine Workshop-Anmeldung ist bestätigt."
     },
     "appointments": {
       "pageTitle": "Meine Termine",

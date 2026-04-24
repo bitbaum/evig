@@ -5541,7 +5541,8 @@
       "feedbackPlaceholder": "Comment était votre expérience ?",
       "cancel": "Annuler",
       "saving": "Enregistrement…",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "paymentSuccess": "Paiement réussi! Votre inscription au workshop est confirmée."
     },
     "appointments": {
       "pageTitle": "Mes rendez-vous",

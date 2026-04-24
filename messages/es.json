@@ -5577,7 +5577,8 @@
       "feedbackPlaceholder": "¿Cómo fue tu experiencia?",
       "cancel": "Cancelar",
       "saving": "Guardando…",
-      "save": "Guardar"
+      "save": "Guardar",
+      "paymentSuccess": "¡Pago exitoso! Tu inscripción al taller está confirmada."
     },
     "appointments": {
       "pageTitle": "Mis citas",
