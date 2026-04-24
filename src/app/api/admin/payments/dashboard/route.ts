@@ -100,119 +100,124 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
       dateFilter = sql`AND pt.created_at >= CURRENT_DATE - INTERVAL '1 day' * ${period}`
     }
 
-    // Get payment overview metrics
-    const overviewResult = await db.execute(sql`
-      SELECT
-        COUNT(*) as total_transactions,
-        COUNT(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN 1 END) as successful_transactions,
-        COUNT(CASE WHEN status = ${PAYMENT_STATUS.FAILED} THEN 1 END) as failed_transactions,
-        COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN amount_cents END), 0) as total_volume_cents,
-        COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN fee_cents END), 0) as total_fees_cents,
-        COALESCE(SUM(CASE WHEN type = 'refund' AND status IN (${PAYMENT_STATUS.SUCCEEDED}, ${REFUND_STATUS.COMPLETED}) THEN amount_cents END), 0) as total_refunds_cents,
-        ROUND(
-          AVG(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN EXTRACT(EPOCH FROM (processed_at - created_at)) END) / 60,
-          2
-        ) as avg_processing_time_minutes
-      FROM ${sql.raw(ptTable)} pt
-      WHERE 1=1 ${dateFilter}
-    `)
+    // All 8 queries are independent — run in parallel to reduce latency from 8×RTT → 1×RTT
+    const [
+      overviewResult,
+      currencyResult,
+      providerResult,
+      dailyVolumeResult,
+      recentTransactionsResult,
+      escrowResult,
+      refundResult,
+      disputeResult,
+    ] = await Promise.all([
+      // Payment overview metrics
+      db.execute(sql`
+        SELECT
+          COUNT(*) as total_transactions,
+          COUNT(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN 1 END) as successful_transactions,
+          COUNT(CASE WHEN status = ${PAYMENT_STATUS.FAILED} THEN 1 END) as failed_transactions,
+          COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN amount_cents END), 0) as total_volume_cents,
+          COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN fee_cents END), 0) as total_fees_cents,
+          COALESCE(SUM(CASE WHEN type = 'refund' AND status IN (${PAYMENT_STATUS.SUCCEEDED}, ${REFUND_STATUS.COMPLETED}) THEN amount_cents END), 0) as total_refunds_cents,
+          ROUND(
+            AVG(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN EXTRACT(EPOCH FROM (processed_at - created_at)) END) / 60,
+            2
+          ) as avg_processing_time_minutes
+        FROM ${sql.raw(ptTable)} pt
+        WHERE 1=1 ${dateFilter}
+      `),
+      // Transactions by currency
+      db.execute(sql`
+        SELECT
+          currency,
+          COUNT(*) as transaction_count,
+          COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN amount_cents END), 0) as volume_cents
+        FROM ${sql.raw(ptTable)} pt
+        WHERE status = ${PAYMENT_STATUS.SUCCEEDED} ${dateFilter}
+        GROUP BY currency
+        ORDER BY volume_cents DESC
+      `),
+      // Transactions by payment method/provider
+      db.execute(sql`
+        SELECT
+          pp.name as provider_name,
+          COUNT(*) as transaction_count,
+          COALESCE(SUM(CASE WHEN pt.status = ${PAYMENT_STATUS.SUCCEEDED} THEN pt.amount_cents END), 0) as volume_cents,
+          ROUND(
+            AVG(CASE WHEN pt.status = ${PAYMENT_STATUS.SUCCEEDED} THEN pt.fee_cents END),
+            2
+          ) as avg_fee_cents
+        FROM ${sql.raw(ptTable)} pt
+        JOIN ${sql.raw(ppTable)} pp ON pt.provider_id = pp.id
+        WHERE 1=1 ${dateFilter}
+        GROUP BY pp.id, pp.name
+        ORDER BY volume_cents DESC
+      `),
+      // Daily transaction volume (last 30 days — fixed window, not period-filtered)
+      db.execute(sql`
+        SELECT
+          DATE(created_at) as date,
+          COUNT(*) as transaction_count,
+          COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN amount_cents END), 0) as volume_cents
+        FROM ${sql.raw(ptTable)} pt
+        WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
+        GROUP BY DATE(created_at)
+        ORDER BY date DESC
+      `),
+      // Recent transactions
+      db.execute(sql`
+        SELECT
+          pt.id,
+          pt.provider_transaction_id,
+          pt.type,
+          pt.status,
+          pt.amount_cents / 100.0 as amount,
+          pt.currency,
+          pt.created_at,
+          pt.description,
+          u.name as customer_name,
+          pp.name as provider_name
+        FROM ${sql.raw(ptTable)} pt
+        JOIN ${sql.raw(uTable)} u ON pt.user_id = u.id
+        JOIN ${sql.raw(ppTable)} pp ON pt.provider_id = pp.id
+        ORDER BY pt.created_at DESC
+        LIMIT 10
+      `),
+      // Escrow overview
+      db.execute(sql`
+        SELECT
+          COUNT(*) as total_escrows,
+          COUNT(CASE WHEN status = ${ESCROW_STATUS.ACTIVE} THEN 1 END) as active_escrows,
+          COUNT(CASE WHEN status = ${ESCROW_STATUS.RELEASED} THEN 1 END) as released_escrows,
+          COALESCE(SUM(total_amount_cents), 0) as total_escrow_amount_cents,
+          COALESCE(SUM(released_amount_cents), 0) as total_released_amount_cents
+        FROM ${sql.raw(eaTable)} ea
+        WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
+      `),
+      // Refund overview
+      db.execute(sql`
+        SELECT
+          COUNT(*) as total_refunds,
+          COUNT(CASE WHEN status = ${REFUND_STATUS.COMPLETED} THEN 1 END) as completed_refunds,
+          COUNT(CASE WHEN status = ${REFUND_STATUS.REQUESTED} THEN 1 END) as pending_refunds,
+          COALESCE(SUM(CASE WHEN status IN (${REFUND_STATUS.COMPLETED}, ${REFUND_STATUS.PROCESSING}) THEN amount_cents END), 0) as total_refund_amount_cents
+        FROM ${sql.raw(rTable)} r
+        WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
+      `),
+      // Dispute overview
+      db.execute(sql`
+        SELECT
+          COUNT(*) as total_disputes,
+          COUNT(CASE WHEN status = ${PAYMENT_DISPUTE_STATUS.OPENED} THEN 1 END) as open_disputes,
+          COUNT(CASE WHEN status = ${PAYMENT_DISPUTE_STATUS.LOST} THEN 1 END) as lost_disputes,
+          COALESCE(SUM(amount_cents), 0) as total_dispute_amount_cents
+        FROM ${sql.raw(pdTable)} pd
+        WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
+      `),
+    ])
 
     const overview = overviewResult.rows[0] as unknown as OverviewRow
-
-    // Get transactions by currency
-    const currencyResult = await db.execute(sql`
-      SELECT
-        currency,
-        COUNT(*) as transaction_count,
-        COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN amount_cents END), 0) as volume_cents
-      FROM ${sql.raw(ptTable)} pt
-      WHERE status = ${PAYMENT_STATUS.SUCCEEDED} ${dateFilter}
-      GROUP BY currency
-      ORDER BY volume_cents DESC
-    `)
-
-    // Get transactions by payment method/provider
-    const providerResult = await db.execute(sql`
-      SELECT
-        pp.name as provider_name,
-        COUNT(*) as transaction_count,
-        COALESCE(SUM(CASE WHEN pt.status = ${PAYMENT_STATUS.SUCCEEDED} THEN pt.amount_cents END), 0) as volume_cents,
-        ROUND(
-          AVG(CASE WHEN pt.status = ${PAYMENT_STATUS.SUCCEEDED} THEN pt.fee_cents END),
-          2
-        ) as avg_fee_cents
-      FROM ${sql.raw(ptTable)} pt
-      JOIN ${sql.raw(ppTable)} pp ON pt.provider_id = pp.id
-      WHERE 1=1 ${dateFilter}
-      GROUP BY pp.id, pp.name
-      ORDER BY volume_cents DESC
-    `)
-
-    // Get daily transaction volume (last 30 days)
-    const dailyVolumeResult = await db.execute(sql`
-      SELECT
-        DATE(created_at) as date,
-        COUNT(*) as transaction_count,
-        COALESCE(SUM(CASE WHEN status = ${PAYMENT_STATUS.SUCCEEDED} THEN amount_cents END), 0) as volume_cents
-      FROM ${sql.raw(ptTable)} pt
-      WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
-      GROUP BY DATE(created_at)
-      ORDER BY date DESC
-    `)
-
-    // Get recent transactions
-    const recentTransactionsResult = await db.execute(sql`
-      SELECT
-        pt.id,
-        pt.provider_transaction_id,
-        pt.type,
-        pt.status,
-        pt.amount_cents / 100.0 as amount,
-        pt.currency,
-        pt.created_at,
-        pt.description,
-        u.name as customer_name,
-        pp.name as provider_name
-      FROM ${sql.raw(ptTable)} pt
-      JOIN ${sql.raw(uTable)} u ON pt.user_id = u.id
-      JOIN ${sql.raw(ppTable)} pp ON pt.provider_id = pp.id
-      ORDER BY pt.created_at DESC
-      LIMIT 10
-    `)
-
-    // Get escrow overview
-    const escrowResult = await db.execute(sql`
-      SELECT
-        COUNT(*) as total_escrows,
-        COUNT(CASE WHEN status = ${ESCROW_STATUS.ACTIVE} THEN 1 END) as active_escrows,
-        COUNT(CASE WHEN status = ${ESCROW_STATUS.RELEASED} THEN 1 END) as released_escrows,
-        COALESCE(SUM(total_amount_cents), 0) as total_escrow_amount_cents,
-        COALESCE(SUM(released_amount_cents), 0) as total_released_amount_cents
-      FROM ${sql.raw(eaTable)} ea
-      WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
-    `)
-
-    // Get refund overview
-    const refundResult = await db.execute(sql`
-      SELECT
-        COUNT(*) as total_refunds,
-        COUNT(CASE WHEN status = ${REFUND_STATUS.COMPLETED} THEN 1 END) as completed_refunds,
-        COUNT(CASE WHEN status = ${REFUND_STATUS.REQUESTED} THEN 1 END) as pending_refunds,
-        COALESCE(SUM(CASE WHEN status IN (${REFUND_STATUS.COMPLETED}, ${REFUND_STATUS.PROCESSING}) THEN amount_cents END), 0) as total_refund_amount_cents
-      FROM ${sql.raw(rTable)} r
-      WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
-    `)
-
-    // Get dispute overview
-    const disputeResult = await db.execute(sql`
-      SELECT
-        COUNT(*) as total_disputes,
-        COUNT(CASE WHEN status = ${PAYMENT_DISPUTE_STATUS.OPENED} THEN 1 END) as open_disputes,
-        COUNT(CASE WHEN status = ${PAYMENT_DISPUTE_STATUS.LOST} THEN 1 END) as lost_disputes,
-        COALESCE(SUM(amount_cents), 0) as total_dispute_amount_cents
-      FROM ${sql.raw(pdTable)} pd
-      WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
-    `)
 
     // Calculate key metrics
     const successRate = overview.total_transactions > 0

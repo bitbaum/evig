@@ -114,101 +114,106 @@ export const GET = withAdmin('team', async (request, session) => {
       ? sql`AND tp.department = ${filters.department}`
       : sql``
 
-    // Get task completions per user
-    const taskCompletionsResult = await db.execute(sql`
-      SELECT
-        tc.completed_by as user_id,
-        u.name as user_name,
-        u.email as user_email,
-        tp.department,
-        COUNT(*) as count
-      FROM ${sql.raw(tcTable)} tc
-      JOIN ${sql.raw(uTable)} u ON tc.completed_by = u.id
-      LEFT JOIN ${sql.raw(tpTable)} tp ON tc.completed_by = tp.user_id
-      WHERE tc.completed_at >= ${since} AND tc.completed_at <= ${until}
-      ${departmentCondition}
-      GROUP BY tc.completed_by, u.name, u.email, tp.department
-      ORDER BY count DESC
-    `)
-
-    // Get activity updates per user
-    const activityUpdatesResult = await db.execute(sql`
-      SELECT
-        au.user_id,
-        u.name as user_name,
-        u.email as user_email,
-        tp.department,
-        COUNT(*) as count
-      FROM ${sql.raw(auTable)} au
-      JOIN ${sql.raw(uTable)} u ON au.user_id = u.id
-      LEFT JOIN ${sql.raw(tpTable)} tp ON au.user_id = tp.user_id
-      WHERE au.occurred_at >= ${since} AND au.occurred_at <= ${until}
-      ${departmentCondition}
-      GROUP BY au.user_id, u.name, u.email, tp.department
-      ORDER BY count DESC
-    `)
-
-    // Get help requests created per user
-    const helpCreatedResult = await db.execute(sql`
-      SELECT
-        hr.requester_id as user_id,
-        u.name as user_name,
-        u.email as user_email,
-        tp.department,
-        COUNT(*) as count
-      FROM ${sql.raw(hrTable)} hr
-      JOIN ${sql.raw(uTable)} u ON hr.requester_id = u.id
-      LEFT JOIN ${sql.raw(tpTable)} tp ON hr.requester_id = tp.user_id
-      WHERE hr.created_at >= ${since} AND hr.created_at <= ${until}
-      ${departmentCondition}
-      GROUP BY hr.requester_id, u.name, u.email, tp.department
-      ORDER BY count DESC
-    `)
-
-    // Get help requests resolved per user
-    const helpResolvedResult = await db.execute(sql`
-      SELECT
-        hr.resolved_by as user_id,
-        u.name as user_name,
-        u.email as user_email,
-        tp.department,
-        COUNT(*) as count
-      FROM ${sql.raw(hrTable)} hr
-      JOIN ${sql.raw(uTable)} u ON hr.resolved_by = u.id
-      LEFT JOIN ${sql.raw(tpTable)} tp ON hr.resolved_by = tp.user_id
-      WHERE hr.resolved_at >= ${since} AND hr.resolved_at <= ${until}
-      AND hr.resolved_by IS NOT NULL
-      ${departmentCondition}
-      GROUP BY hr.resolved_by, u.name, u.email, tp.department
-      ORDER BY count DESC
-    `)
-
-    // Get task completions by category
-    const categoryStatsResult = await db.execute(sql`
-      SELECT
-        t.category,
-        COUNT(*) as count
-      FROM ${sql.raw(tcTable)} tc
-      JOIN ${sql.raw(tTable)} t ON tc.task_id = t.id
-      WHERE tc.completed_at >= ${since} AND tc.completed_at <= ${until}
-      GROUP BY t.category
-      ORDER BY count DESC
-    `)
-
-    // Get recent milestones
-    const milestonesResult = await db.execute(sql`
-      SELECT
-        au.id,
-        u.name as user_name,
-        au.title,
-        au.occurred_at
-      FROM ${sql.raw(auTable)} au
-      JOIN ${sql.raw(uTable)} u ON au.user_id = u.id
-      WHERE au.update_type = 'milestone'
-      AND au.occurred_at >= ${since} AND au.occurred_at <= ${until}
-      ORDER BY au.occurred_at DESC
-      LIMIT 10
-    `)
+    // All 6 queries are independent — run in parallel to reduce latency from 6×RTT → 1×RTT
+    const [
+      taskCompletionsResult,
+      activityUpdatesResult,
+      helpCreatedResult,
+      helpResolvedResult,
+      categoryStatsResult,
+      milestonesResult,
+    ] = await Promise.all([
+      // Task completions per user
+      db.execute(sql`
+        SELECT
+          tc.completed_by as user_id,
+          u.name as user_name,
+          u.email as user_email,
+          tp.department,
+          COUNT(*) as count
+        FROM ${sql.raw(tcTable)} tc
+        JOIN ${sql.raw(uTable)} u ON tc.completed_by = u.id
+        LEFT JOIN ${sql.raw(tpTable)} tp ON tc.completed_by = tp.user_id
+        WHERE tc.completed_at >= ${since} AND tc.completed_at <= ${until}
+        ${departmentCondition}
+        GROUP BY tc.completed_by, u.name, u.email, tp.department
+        ORDER BY count DESC
+      `),
+      // Activity updates per user
+      db.execute(sql`
+        SELECT
+          au.user_id,
+          u.name as user_name,
+          u.email as user_email,
+          tp.department,
+          COUNT(*) as count
+        FROM ${sql.raw(auTable)} au
+        JOIN ${sql.raw(uTable)} u ON au.user_id = u.id
+        LEFT JOIN ${sql.raw(tpTable)} tp ON au.user_id = tp.user_id
+        WHERE au.occurred_at >= ${since} AND au.occurred_at <= ${until}
+        ${departmentCondition}
+        GROUP BY au.user_id, u.name, u.email, tp.department
+        ORDER BY count DESC
+      `),
+      // Help requests created per user
+      db.execute(sql`
+        SELECT
+          hr.requester_id as user_id,
+          u.name as user_name,
+          u.email as user_email,
+          tp.department,
+          COUNT(*) as count
+        FROM ${sql.raw(hrTable)} hr
+        JOIN ${sql.raw(uTable)} u ON hr.requester_id = u.id
+        LEFT JOIN ${sql.raw(tpTable)} tp ON hr.requester_id = tp.user_id
+        WHERE hr.created_at >= ${since} AND hr.created_at <= ${until}
+        ${departmentCondition}
+        GROUP BY hr.requester_id, u.name, u.email, tp.department
+        ORDER BY count DESC
+      `),
+      // Help requests resolved per user
+      db.execute(sql`
+        SELECT
+          hr.resolved_by as user_id,
+          u.name as user_name,
+          u.email as user_email,
+          tp.department,
+          COUNT(*) as count
+        FROM ${sql.raw(hrTable)} hr
+        JOIN ${sql.raw(uTable)} u ON hr.resolved_by = u.id
+        LEFT JOIN ${sql.raw(tpTable)} tp ON hr.resolved_by = tp.user_id
+        WHERE hr.resolved_at >= ${since} AND hr.resolved_at <= ${until}
+        AND hr.resolved_by IS NOT NULL
+        ${departmentCondition}
+        GROUP BY hr.resolved_by, u.name, u.email, tp.department
+        ORDER BY count DESC
+      `),
+      // Task completions by category
+      db.execute(sql`
+        SELECT
+          t.category,
+          COUNT(*) as count
+        FROM ${sql.raw(tcTable)} tc
+        JOIN ${sql.raw(tTable)} t ON tc.task_id = t.id
+        WHERE tc.completed_at >= ${since} AND tc.completed_at <= ${until}
+        GROUP BY t.category
+        ORDER BY count DESC
+      `),
+      // Recent milestones
+      db.execute(sql`
+        SELECT
+          au.id,
+          u.name as user_name,
+          au.title,
+          au.occurred_at
+        FROM ${sql.raw(auTable)} au
+        JOIN ${sql.raw(uTable)} u ON au.user_id = u.id
+        WHERE au.update_type = 'milestone'
+        AND au.occurred_at >= ${since} AND au.occurred_at <= ${until}
+        ORDER BY au.occurred_at DESC
+        LIMIT 10
+      `),
+    ])
 
     // Aggregate user stats
     const userStatsMap = new Map<string, UserStats>()

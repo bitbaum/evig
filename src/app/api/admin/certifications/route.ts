@@ -59,29 +59,29 @@ export const GET = withAdmin('services', async (request, session) => {
       return apiBadRequest('Ungültiger Status-Filter')
     }
 
-    // Get certifications for this application
-    const certificationsResult = await db.execute(sql`
-      SELECT
-        rc.*,
-        ct.name as certification_type_name,
-        ct.description as certification_type_description,
-        ct.category,
-        ct.issuing_authority as default_issuing_authority,
-        ct.validity_period_months,
-        ct.requires_verification
-      FROM ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)} rc
-      LEFT JOIN ${sql.raw(TABLE_NAMES.CERTIFICATION_TYPES)} ct ON rc.certification_type_id = ct.id
-      WHERE rc.application_id = ${applicationId} AND rc.verification_status = ${status}
-      ORDER BY rc.created_at ASC
-    `)
-
-    // Get application details
-    const applicationResult = await db.execute(sql`
-      SELECT ra.*, u.name, u.email
-      FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
-      JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
-      WHERE ra.id = ${applicationId}
-    `)
+    // Both queries use only applicationId (known upfront) — run in parallel
+    const [certificationsResult, applicationResult] = await Promise.all([
+      db.execute(sql`
+        SELECT
+          rc.*,
+          ct.name as certification_type_name,
+          ct.description as certification_type_description,
+          ct.category,
+          ct.issuing_authority as default_issuing_authority,
+          ct.validity_period_months,
+          ct.requires_verification
+        FROM ${sql.raw(TABLE_NAMES.REPAIRER_CERTIFICATIONS)} rc
+        LEFT JOIN ${sql.raw(TABLE_NAMES.CERTIFICATION_TYPES)} ct ON rc.certification_type_id = ct.id
+        WHERE rc.application_id = ${applicationId} AND rc.verification_status = ${status}
+        ORDER BY rc.created_at ASC
+      `),
+      db.execute(sql`
+        SELECT ra.*, u.name, u.email
+        FROM ${sql.raw(TABLE_NAMES.REPAIRER_APPLICATIONS)} ra
+        JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON ra.user_id = u.id
+        WHERE ra.id = ${applicationId}
+      `),
+    ])
 
     if (applicationResult.rows.length === 0) {
       return apiNotFound('Reparatur-Bewerbung nicht gefunden')

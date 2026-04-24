@@ -135,23 +135,33 @@ export const GET = withAdmin('intake', async (request) => {
 
     const whereClause = sql`WHERE ${sql.join(conditions, sql` AND `)}`
 
-    const itemsResult = await db.execute(sql`
-      SELECT
-        ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
-        ii.checklist_complete, ii.marketplace_status, ii.selling_price_chf,
-        ii.source_donation_id, ii.created_at,
-        ap.item_uuid, ap.product_name, ap.brand, ap.condition,
-        ap.category, ap.subcategory, ap.short_description,
-        u.name as created_by_name,
-        d.donor_name
-      FROM ${sql.raw(iiTable)} ii
-      JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
-      LEFT JOIN ${sql.raw(uTable)} u ON ap.created_by = u.id
-      LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
-      ${whereClause}
-      ORDER BY ii.created_at DESC
-      LIMIT ${limit} OFFSET ${offset}
-    `)
+    // Items + count are independent — run in parallel
+    const [itemsResult, countResult] = await Promise.all([
+      db.execute(sql`
+        SELECT
+          ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
+          ii.checklist_complete, ii.marketplace_status, ii.selling_price_chf,
+          ii.source_donation_id, ii.created_at,
+          ap.item_uuid, ap.product_name, ap.brand, ap.condition,
+          ap.category, ap.subcategory, ap.short_description,
+          u.name as created_by_name,
+          d.donor_name
+        FROM ${sql.raw(iiTable)} ii
+        JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
+        LEFT JOIN ${sql.raw(uTable)} u ON ap.created_by = u.id
+        LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
+        ${whereClause}
+        ORDER BY ii.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `),
+      db.execute(sql`
+        SELECT COUNT(*) as total
+        FROM ${sql.raw(iiTable)} ii
+        JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
+        LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
+        ${whereClause}
+      `),
+    ])
 
     // Compute progress for each item
     interface IntakeRow {
@@ -169,14 +179,6 @@ export const GET = withAdmin('intake', async (request) => {
       return { ...row, checklist_progress: progress, checklist_complete: complete }
     })
 
-    // Count
-    const countResult = await db.execute(sql`
-      SELECT COUNT(*) as total
-       FROM ${sql.raw(iiTable)} ii
-       JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
-       LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
-       ${whereClause}
-    `)
     const total = parseInt((countResult.rows[0] as { total: string })?.total || '0')
 
     return apiSuccess({

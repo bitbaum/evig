@@ -54,43 +54,41 @@ export const GET = withAdmin('content', async (request, session) => {
       return apiBadRequest('applicationId Parameter ist erforderlich')
     }
 
-    // Get application details
-    const applicationResult = await db.execute(sql`
-      SELECT ra.*, u.name, u.email
-      FROM ${sql.raw(getTableName(repairerApplications))} ra
-      JOIN ${sql.raw(getTableName(users))} u ON ra.user_id = u.id
-      WHERE ra.id = ${applicationId}
-    `)
+    // All 3 queries use only applicationId (known before any query) — run in parallel
+    const [applicationResult, documentsResult, requiredTypesResult] = await Promise.all([
+      db.execute(sql`
+        SELECT ra.*, u.name, u.email
+        FROM ${sql.raw(getTableName(repairerApplications))} ra
+        JOIN ${sql.raw(getTableName(users))} u ON ra.user_id = u.id
+        WHERE ra.id = ${applicationId}
+      `),
+      db.execute(sql`
+        SELECT
+          vd.*,
+          dt.name as document_type_name,
+          dt.description as document_type_description,
+          dt.is_required,
+          dt.allowed_extensions,
+          dt.max_file_size_mb
+        FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+        LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
+        WHERE vd.application_id = ${applicationId}
+        ORDER BY dt.is_required DESC, vd.created_at ASC
+      `),
+      db.execute(sql`
+        SELECT dt.*
+        FROM ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt
+        WHERE dt.is_required = true
+          AND NOT EXISTS (
+            SELECT 1 FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
+            WHERE vd.application_id = ${applicationId} AND vd.document_type_id = dt.id
+          )
+      `),
+    ])
 
     if (applicationResult.rows.length === 0) {
       return apiNotFound('Reparateur-Bewerbung nicht gefunden')
     }
-
-    // Get documents for this application
-    const documentsResult = await db.execute(sql`
-      SELECT
-        vd.*,
-        dt.name as document_type_name,
-        dt.description as document_type_description,
-        dt.is_required,
-        dt.allowed_extensions,
-        dt.max_file_size_mb
-      FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
-      LEFT JOIN ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt ON vd.document_type_id = dt.id
-      WHERE vd.application_id = ${applicationId}
-      ORDER BY dt.is_required DESC, vd.created_at ASC
-    `)
-
-    // Get required document types that haven't been uploaded yet
-    const requiredTypesResult = await db.execute(sql`
-      SELECT dt.*
-      FROM ${sql.raw(TABLE_NAMES.DOCUMENT_TYPES)} dt
-      WHERE dt.is_required = true
-        AND NOT EXISTS (
-          SELECT 1 FROM ${sql.raw(TABLE_NAMES.VERIFICATION_DOCUMENTS)} vd
-          WHERE vd.application_id = ${applicationId} AND vd.document_type_id = dt.id
-        )
-    `)
 
     const documents = (documentsResult.rows as unknown as DocumentRow[]).map(doc => ({
       id: doc.id,

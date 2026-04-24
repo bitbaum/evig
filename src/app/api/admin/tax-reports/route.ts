@@ -169,21 +169,21 @@ interface CountRow {
 }
 
 async function generateComplianceReport(transactions: TaxTransactionWithJoins[], startDate: Date, endDate: Date) {
-  // Get additional compliance data
-  const refundCount = await db.execute(sql`
-    SELECT COUNT(*) as count FROM ${sql.raw(rTable)}
-    WHERE created_at >= ${startDate} AND created_at <= ${endDate}
-  `)
-
-  const escrowCount = await db.execute(sql`
-    SELECT COUNT(*) as count FROM ${sql.raw(eaTable)}
-    WHERE created_at >= ${startDate} AND created_at <= ${endDate}
-  `)
-
-  const disputeCount = await db.execute(sql`
-    SELECT COUNT(*) as count FROM ${sql.raw(pdTable)}
-    WHERE created_at >= ${startDate} AND created_at <= ${endDate}
-  `)
+  // All 3 queries are independent — run in parallel
+  const [refundCount, escrowCount, disputeCount] = await Promise.all([
+    db.execute(sql`
+      SELECT COUNT(*) as count FROM ${sql.raw(rTable)}
+      WHERE created_at >= ${startDate} AND created_at <= ${endDate}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) as count FROM ${sql.raw(eaTable)}
+      WHERE created_at >= ${startDate} AND created_at <= ${endDate}
+    `),
+    db.execute(sql`
+      SELECT COUNT(*) as count FROM ${sql.raw(pdTable)}
+      WHERE created_at >= ${startDate} AND created_at <= ${endDate}
+    `),
+  ])
 
   const refundRow = refundCount.rows[0] as unknown as CountRow
   const escrowRow = escrowCount.rows[0] as unknown as CountRow
