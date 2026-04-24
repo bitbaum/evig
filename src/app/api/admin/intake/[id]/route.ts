@@ -142,30 +142,31 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     if (data.hauptkategorie !== undefined) productUpdate.category = data.hauptkategorie
     if (data.unterkategorie !== undefined) productUpdate.subcategory = data.unterkategorie
 
-    if (Object.keys(productUpdate).length > 0 && productId) {
-      productUpdate.updatedAt = sql`NOW()`
-      await db.update(aiExtractedProducts).set(productUpdate).where(eq(aiExtractedProducts.id, productId))
-    }
-
     // Update inventory fields if provided
     const invUpdate: Record<string, unknown> = {}
     if (data.intake_tier !== undefined) invUpdate.intakeTier = data.intake_tier
     if (data.verkaufspreis !== undefined) invUpdate.sellingPriceChf = data.verkaufspreis
 
-    if (Object.keys(invUpdate).length > 0) {
-      invUpdate.updatedAt = sql`NOW()`
-      await db.update(inventoryItems).set(invUpdate).where(eq(inventoryItems.id, id))
-    }
-
-    // Record timeline event
+    // Product update, inventory update, and timeline event are all independent — run in parallel
     const updatedFields = Object.keys(data).filter(k => data[k as keyof typeof data] !== undefined)
-    await appendIntakeEvent(id, {
-      type: 'field_updated',
-      description: `Felder aktualisiert: ${updatedFields.join(', ')}`,
-      userId: session.user.id,
-      userEmail: session.user.email,
-      metadata: { fields: updatedFields },
-    })
+    if (Object.keys(productUpdate).length > 0 && productId) productUpdate.updatedAt = sql`NOW()`
+    if (Object.keys(invUpdate).length > 0) invUpdate.updatedAt = sql`NOW()`
+
+    await Promise.all([
+      Object.keys(productUpdate).length > 0 && productId
+        ? db.update(aiExtractedProducts).set(productUpdate).where(eq(aiExtractedProducts.id, productId))
+        : Promise.resolve(),
+      Object.keys(invUpdate).length > 0
+        ? db.update(inventoryItems).set(invUpdate).where(eq(inventoryItems.id, id))
+        : Promise.resolve(),
+      appendIntakeEvent(id, {
+        type: 'field_updated',
+        description: `Felder aktualisiert: ${updatedFields.join(', ')}`,
+        userId: session.user.id,
+        userEmail: session.user.email,
+        metadata: { fields: updatedFields },
+      }),
+    ])
 
     logger.info('Intake item updated', {
       inventoryId: id,

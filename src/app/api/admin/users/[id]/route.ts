@@ -174,9 +174,11 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
       return apiBadRequest('Du kannst dich nicht selbst löschen')
     }
 
-    // Delete related data first (foreign key constraints)
-    await db.delete(sessions).where(eq(sessions.userId, id))
-    await db.delete(accounts).where(eq(accounts.userId, id))
+    // Delete related data first (FK constraints) — sessions + accounts are independent
+    await Promise.all([
+      db.delete(sessions).where(eq(sessions.userId, id)),
+      db.delete(accounts).where(eq(accounts.userId, id)),
+    ])
     await db.delete(users).where(eq(users.id, id))
 
     logger.info('User deleted by admin', {
