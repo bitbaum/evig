@@ -139,14 +139,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 7. Shop products (approved, visible in shop)
   try {
     const products = await db
-      .select({ id: aiExtractedProducts.id, updatedAt: aiExtractedProducts.updatedAt })
+      .select({ itemUuid: aiExtractedProducts.itemUuid, updatedAt: aiExtractedProducts.updatedAt })
       .from(aiExtractedProducts)
       .where(eq(aiExtractedProducts.status, PRODUCT_STATUS.APPROVED))
 
     for (const product of products) {
+      if (!product.itemUuid) continue
       for (const locale of locales) {
         entries.push({
-          url: url(`/shop/product/${product.id}`, locale),
+          url: url(`/shop/product/${product.itemUuid}`, locale),
           lastModified: product.updatedAt ? new Date(product.updatedAt) : undefined,
           changeFrequency: 'weekly',
           priority: 0.6,

@@ -288,7 +288,7 @@ export async function getInventoryProductByUuid(
         (SELECT file_path FROM ${sql.raw(piTable)} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url
       FROM ${sql.raw(aepTable)} p
       JOIN ${sql.raw(iiTable)} i ON i.ai_product_id = p.id
-      WHERE i.item_uuid = ${itemUuid}
+      WHERE p.item_uuid = ${itemUuid}
         AND i.marketplace_status = ${APPROVAL_STATUS.PUBLISHED}
         AND p.status = ${APPROVAL_STATUS.APPROVED}
         AND i.quantity_available > 0
