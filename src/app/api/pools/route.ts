@@ -10,7 +10,7 @@ import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, sql, desc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database'
 import { z } from 'zod'
 
 // ============================================================================
@@ -35,19 +35,19 @@ export async function GET() {
         memberCount: sql<number>`(
           SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
-          AND pm.status = 'active'
+          AND pm.status = ${POOL_MEMBERSHIP_STATUS.ACTIVE}
         )`,
         spotsLeft: sql<number>`(
           ${subscriptionPools.maxMembers} - (
             SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
             WHERE pm.pool_id = ${subscriptionPools.id}
-            AND pm.status = 'active'
+            AND pm.status = ${POOL_MEMBERSHIP_STATUS.ACTIVE}
           )
         )`,
       })
       .from(subscriptionPools)
       .leftJoin(users, eq(subscriptionPools.ownerId, users.id))
-      .where(eq(subscriptionPools.status, 'active'))
+      .where(eq(subscriptionPools.status, POOL_STATUS.ACTIVE))
       .orderBy(desc(subscriptionPools.createdAt))
 
     return apiSuccess(pools)
@@ -90,7 +90,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
         ownerId: session.user.id,
         description: description ?? null,
         rules: rules ?? null,
-        status: 'active',
+        status: POOL_STATUS.ACTIVE,
       })
       .returning()
 
@@ -99,7 +99,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       poolId: pool.id,
       userId: session.user.id,
       role: 'owner',
-      status: 'active',
+      status: POOL_MEMBERSHIP_STATUS.ACTIVE,
     })
 
     logger.info('Pool created', { poolId: pool.id, userId: session.user.id })

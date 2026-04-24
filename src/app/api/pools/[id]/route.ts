@@ -9,7 +9,7 @@ import { apiSuccess, apiError, apiNotFound, apiForbidden, apiBadRequest } from '
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 type Params = { id: string }
@@ -42,7 +42,7 @@ export async function GET(
         memberCount: sql<number>`(
           SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
-          AND pm.status = 'active'
+          AND pm.status = ${POOL_MEMBERSHIP_STATUS.ACTIVE}
         )`,
       })
       .from(subscriptionPools)
@@ -84,7 +84,7 @@ export const DELETE = withAuth(async (
 
     await db
       .update(subscriptionPools)
-      .set({ status: 'closed' })
+      .set({ status: POOL_STATUS.CLOSED })
       .where(eq(subscriptionPools.id, id))
 
     logger.info('Pool closed', { poolId: id, userId: session.user.id })

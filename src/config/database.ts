@@ -248,3 +248,24 @@ export const FEATURED_SERVICE_SLUGS = [
 ] as const;
 
 export type FeaturedServiceSlug = typeof FEATURED_SERVICE_SLUGS[number];
+
+/**
+ * Subscription pool status values
+ */
+export const POOL_STATUS = {
+  ACTIVE: 'active',
+  CLOSED: 'closed',
+} as const;
+
+export type PoolStatus = typeof POOL_STATUS[keyof typeof POOL_STATUS];
+
+/**
+ * Pool membership status values
+ */
+export const POOL_MEMBERSHIP_STATUS = {
+  ACTIVE: 'active',
+  LEFT: 'left',
+  PENDING: 'pending',
+} as const;
+
+export type PoolMembershipStatus = typeof POOL_MEMBERSHIP_STATUS[keyof typeof POOL_MEMBERSHIP_STATUS];

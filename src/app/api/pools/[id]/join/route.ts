@@ -8,7 +8,7 @@ import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { TABLE_NAMES } from '@/config/database'
+import { TABLE_NAMES, POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 type Params = { id: string }
@@ -31,7 +31,7 @@ export const POST = withAuth(async (
         memberCount: sql<number>`(
           SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
-          AND pm.status = 'active'
+          AND pm.status = ${POOL_MEMBERSHIP_STATUS.ACTIVE}
         )`,
       })
       .from(subscriptionPools)
@@ -39,7 +39,7 @@ export const POST = withAuth(async (
       .limit(1)
 
     if (!pool) return apiNotFound('Pool nicht gefunden')
-    if (pool.status !== 'active') return apiBadRequest('Dieser Pool ist nicht aktiv')
+    if (pool.status !== POOL_STATUS.ACTIVE) return apiBadRequest('Dieser Pool ist nicht aktiv')
     if (Number(pool.memberCount) >= pool.maxMembers) {
       return apiBadRequest('Dieser Pool ist bereits voll')
     }
@@ -57,13 +57,13 @@ export const POST = withAuth(async (
       .limit(1)
 
     if (existing) {
-      if (existing.status === 'active') {
+      if (existing.status === POOL_MEMBERSHIP_STATUS.ACTIVE) {
         return apiBadRequest('Du bist bereits Mitglied dieses Pools')
       }
       // Re-activate if previously left
       const [updated] = await db
         .update(poolMemberships)
-        .set({ status: 'active', leftAt: null })
+        .set({ status: POOL_MEMBERSHIP_STATUS.ACTIVE, leftAt: null })
         .where(eq(poolMemberships.id, existing.id))
         .returning()
       return apiSuccess(updated)
@@ -75,7 +75,7 @@ export const POST = withAuth(async (
         poolId: id,
         userId: session.user.id,
         role: 'member',
-        status: 'active',
+        status: POOL_MEMBERSHIP_STATUS.ACTIVE,
       })
       .returning()
 

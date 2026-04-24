@@ -8,6 +8,7 @@ import { db } from '@/db'
 import { poolMemberships } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
+import { POOL_MEMBERSHIP_STATUS } from '@/config/database'
 
 export const GET = withAuth(async (_request, session) => {
   try {
@@ -17,7 +18,7 @@ export const GET = withAuth(async (_request, session) => {
       .where(
         and(
           eq(poolMemberships.userId, session.user.id),
-          eq(poolMemberships.status, 'active')
+          eq(poolMemberships.status, POOL_MEMBERSHIP_STATUS.ACTIVE)
         )
       )
 
