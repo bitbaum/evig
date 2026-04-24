@@ -106,7 +106,7 @@ export function useIntakeCreateForm() {
     applyAiData(data)
   }, [applyAiData])
 
-  const handleCreate = useCallback(async (onSuccess?: () => void) => {
+  const handleCreate = useCallback(async (onSuccess?: (inventoryId: string) => void) => {
     setSaving(true)
     try {
       const res = await fetch('/api/admin/intake', {
@@ -121,7 +121,7 @@ export function useIntakeCreateForm() {
       const json = await res.json()
       if (json.success) {
         setFormData({ ...INITIAL_FORM_DATA })
-        onSuccess?.()
+        onSuccess?.(json.inventory_id)
       }
     } finally {
       setSaving(false)

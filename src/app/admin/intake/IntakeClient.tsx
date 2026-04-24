@@ -40,9 +40,15 @@ export default function IntakeClient() {
   }
 
   const handleCreate = () => {
-    createForm.handleCreate(() => {
-      setView('pipeline')
-      pipeline.fetchItems()
+    createForm.handleCreate((inventoryId) => {
+      // After intake save, immediately open checklist/detail for the new item
+      // so the staff member can complete the checklist in one flow
+      if (inventoryId) {
+        handleOpenDetail(inventoryId)
+      } else {
+        setView('pipeline')
+        pipeline.fetchItems()
+      }
     })
   }
 
