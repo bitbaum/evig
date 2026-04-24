@@ -122,8 +122,16 @@ export function InventoryProductsTable({
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center">
-                    <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
-                      <Package className="w-6 h-6 text-gray-400" />
+                    <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-3 flex-shrink-0 overflow-hidden">
+                      {product.image_url ? (
+                        <img
+                          src={product.image_url}
+                          alt={`${product.brand} ${product.product_name}`}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <Package className="w-6 h-6 text-gray-400" />
+                      )}
                     </div>
                     <div>
                       <div className="font-medium text-gray-900">

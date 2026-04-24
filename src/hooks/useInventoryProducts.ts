@@ -22,6 +22,7 @@ export interface InventoryProduct {
   quantity_available: number
   marketplace_status: string
   customer_profiles: string[]
+  image_url: string | null
 }
 
 interface UseInventoryProductsReturn {
