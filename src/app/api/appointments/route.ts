@@ -158,7 +158,7 @@ export const POST = withAuth(async (
     // since the Drizzle schema has it as notNull but the DB allows null
     if (!service_type_id) {
       const result = await db.execute(sql`
-        INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (user_id, description, status, urgency, is_home_visit,
+        INSERT INTO ${sql.raw(TABLE_NAMES.SERVICE_APPOINTMENTS)} (user_id, description, status, urgency, is_home_visit,
           repairer_id, repairer_profile_id, device_info, preferred_date, visit_address, visit_city)
         VALUES (${session.user.id}, ${description}, ${BOOKING_STATUS.REQUESTED},
           ${urgency || 'normal'}, ${is_home_visit || false},

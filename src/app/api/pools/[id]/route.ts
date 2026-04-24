@@ -40,7 +40,7 @@ export async function GET(
         ownerId: subscriptionPools.ownerId,
         ownerName: users.name,
         memberCount: sql<number>`(
-          SELECT COUNT(*) FROM ${TABLE_NAMES.POOL_MEMBERSHIPS} pm
+          SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
           AND pm.status = 'active'
         )`,

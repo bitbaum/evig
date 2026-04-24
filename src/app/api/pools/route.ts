@@ -33,13 +33,13 @@ export async function GET() {
         createdAt: subscriptionPools.createdAt,
         ownerName: users.name,
         memberCount: sql<number>`(
-          SELECT COUNT(*) FROM ${TABLE_NAMES.POOL_MEMBERSHIPS} pm
+          SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
           AND pm.status = 'active'
         )`,
         spotsLeft: sql<number>`(
           ${subscriptionPools.maxMembers} - (
-            SELECT COUNT(*) FROM ${TABLE_NAMES.POOL_MEMBERSHIPS} pm
+            SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
             WHERE pm.pool_id = ${subscriptionPools.id}
             AND pm.status = 'active'
           )
