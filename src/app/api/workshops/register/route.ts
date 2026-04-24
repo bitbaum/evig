@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { workshops, workshopInstances, workshopRegistrations, users } from '@/db/schema'
+import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -35,15 +35,32 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       return apiNotFound('Workshop')
     }
 
-    // Check if user is already registered for this workshop
-    const [existing] = await db
-      .select({ id: workshopRegistrations.id })
-      .from(workshopRegistrations)
-      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
-      .where(and(
-        eq(workshopRegistrations.userId, session.user.id),
-        eq(workshopInstances.workshopId, workshop.id)
-      ))
+    // Duplicate check + next instance lookup are independent — run in parallel
+    const [existing, instance] = await Promise.all([
+      db
+        .select({ id: workshopRegistrations.id })
+        .from(workshopRegistrations)
+        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+        .where(and(
+          eq(workshopRegistrations.userId, session.user.id),
+          eq(workshopInstances.workshopId, workshop.id)
+        ))
+        .then(rows => rows[0]),
+      db
+        .select({
+          id: workshopInstances.id,
+          startDate: workshopInstances.startDate,
+          location: workshopInstances.location,
+        })
+        .from(workshopInstances)
+        .where(and(
+          eq(workshopInstances.workshopId, workshop.id),
+          eq(workshopInstances.status, WORKSHOP_INSTANCE_STATUS.SCHEDULED)
+        ))
+        .orderBy(workshopInstances.startDate)
+        .limit(1)
+        .then(rows => rows[0]),
+    ])
 
     if (existing) {
       return apiError(
@@ -52,17 +69,6 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         409
       )
     }
-
-    // Find the next scheduled instance for this workshop
-    const [instance] = await db
-      .select({ id: workshopInstances.id })
-      .from(workshopInstances)
-      .where(and(
-        eq(workshopInstances.workshopId, workshop.id),
-        eq(workshopInstances.status, WORKSHOP_INSTANCE_STATUS.SCHEDULED)
-      ))
-      .orderBy(workshopInstances.startDate)
-      .limit(1)
 
     if (!instance) {
       return apiBadRequest('Aktuell sind keine Termine für diesen Workshop verfügbar')
@@ -78,29 +84,18 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       })
       .returning({ id: workshopRegistrations.id, createdAt: workshopRegistrations.createdAt })
 
-    // Get user details and workshop instance for email
-    const [user] = await db
-      .select({ name: users.name, email: users.email })
-      .from(users)
-      .where(eq(users.id, session.user.id))
-
-    const [instanceDetails] = await db
-      .select({ startDate: workshopInstances.startDate, location: workshopInstances.location })
-      .from(workshopInstances)
-      .where(eq(workshopInstances.id, instance.id))
-
-    // Send registration confirmation email
+    // Send registration confirmation email — user details come from session (no extra RTT)
     const workshopUrl = `${APP_URL}/workshops/${workshop.slug}`
-    const workshopDate = formatDateTimeWithWeekday(instanceDetails.startDate)
+    const workshopDate = formatDateTimeWithWeekday(instance.startDate)
 
     try {
       await sendEmail(
-        user.email,
+        session.user.email,
         'workshopRegistrationConfirmation',
-        user.name || 'Benutzer',
+        session.user.name || 'Benutzer',
         workshop.title,
         workshopDate,
-        instanceDetails.location || 'Wird noch bekannt gegeben',
+        instance.location || 'Wird noch bekannt gegeben',
         workshop.priceCents || 0,
         workshopUrl
       )

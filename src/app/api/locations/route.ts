@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { locations, users } from '@/db/schema'
+import { locations } from '@/db/schema'
 import { eq, and, ilike, sql, desc, getTableColumns } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -126,17 +126,11 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       })
       .returning()
 
-    // Fire-and-forget: send submission confirmation email
-    const userRows = await db
-      .select({ name: users.name, email: users.email })
-      .from(users)
-      .where(eq(users.id, session.user.id))
-
-    if (userRows[0]?.email) {
-      const userName = userRows[0].name || 'Benutzer'
+    // Fire-and-forget: send submission confirmation email (user data comes from session)
+    if (session.user.email) {
       sendCustomEmail(
-        userRows[0].email,
-        locationSubmissionConfirmation(userName, name, city)
+        session.user.email,
+        locationSubmissionConfirmation(session.user.name || 'Benutzer', name, city)
       ).catch(err => {
         logger.warn('Failed to send location submission confirmation email', { error: err, locationId: newLocation.id })
       })

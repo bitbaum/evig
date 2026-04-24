@@ -162,25 +162,16 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const orderUrl = `${APP_URL}/marketplace/orders/${orderId}`;
     const deliveryLabel = data.delivery_method === 'shipping' ? 'Versand' : 'Abholung';
 
-    // Notify buyer
-    try {
-      const [buyer] = await db
-        .select({ email: users.email, name: users.name })
-        .from(users)
-        .where(eq(users.id, session.user.id))
-        .limit(1);
-      if (buyer?.email) {
-        sendCustomEmail(buyer.email, orderConfirmationBuyer({
-          recipientName: buyer.name || 'Käufer',
-          listingTitle: listing.title,
-          amountChf: `CHF ${totalChf.toFixed(2)}`,
-          commissionChf: `CHF ${(Math.round(totalChf * COMMISSION_RATE * 100) / 100).toFixed(2)}`,
-          deliveryMethod: deliveryLabel,
-          orderUrl,
-        })).catch(err => logger.error('Failed to send buyer order confirmation', { err, orderId }));
-      }
-    } catch (err) {
-      logger.error('Failed to look up buyer for order email', { err, orderId });
+    // Notify buyer — user data comes from session (no extra RTT)
+    if (session.user.email) {
+      sendCustomEmail(session.user.email, orderConfirmationBuyer({
+        recipientName: session.user.name || 'Käufer',
+        listingTitle: listing.title,
+        amountChf: `CHF ${totalChf.toFixed(2)}`,
+        commissionChf: `CHF ${(Math.round(totalChf * COMMISSION_RATE * 100) / 100).toFixed(2)}`,
+        deliveryMethod: deliveryLabel,
+        orderUrl,
+      })).catch(err => logger.error('Failed to send buyer order confirmation', { err, orderId }));
     }
 
     // Notify seller
