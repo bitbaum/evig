@@ -12,7 +12,7 @@ import { eq, and, sql, gte, lte, desc, asc, inArray, type SQL } from 'drizzle-or
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
 import { normalizeSpecValue } from '@/config/marketplace';
-import { indexListingInSearch } from '@/lib/marketplace/listing-helpers';
+import { indexListingInSearch, listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
 import { LISTING_STATUS, MARKETPLACE_SELLER_TYPE } from '@/config/marketplace';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
@@ -134,12 +134,7 @@ export async function GET(request: NextRequest) {
         seller_display_name: sellerProfiles.displayName,
         seller_rating: sellerProfiles.averageRating,
         seller_city: sellerProfiles.city,
-        thumbnail: sql<string | null>`(
-          SELECT ${listingImages.url} FROM ${listingImages}
-          WHERE ${listingImages.listingId} = ${listings.id}
-            AND ${listingImages.isPrimary} = true
-          LIMIT 1
-        )`,
+        thumbnail: listingThumbnailSubquery,
       })
       .from(listings)
       .innerJoin(users, eq(listings.sellerId, users.id))

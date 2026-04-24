@@ -6,10 +6,10 @@ import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingFavorites, listingImages, users, sellerProfiles } from '@/db/schema';
+import { listings, listingFavorites, users, sellerProfiles } from '@/db/schema';
 import { eq, and, ne, sql } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
-import { TABLE_NAMES } from '@/config/database';
+import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
 
 export const GET = withAuth(async (
   request: NextRequest,
@@ -42,7 +42,7 @@ export const GET = withAuth(async (
         seller_name: users.name,
         seller_display_name: sellerProfiles.displayName,
         seller_city: sellerProfiles.city,
-        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${sql.raw(TABLE_NAMES.LISTING_IMAGES)} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+        thumbnail: listingThumbnailSubquery,
         favorited_at: listingFavorites.createdAt,
       })
       .from(listingFavorites)

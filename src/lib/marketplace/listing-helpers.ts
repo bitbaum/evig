@@ -1,16 +1,35 @@
 /**
- * Shared listing helpers — Meilisearch indexing utilities.
+ * Shared listing helpers — Meilisearch indexing utilities + reusable SQL fragments.
  *
  * The raw SQL batch-insert helpers (insertListingImages, upsertListingSpecs)
  * were removed after callers migrated to inline Drizzle ORM calls.
  */
 
+import { sql } from 'drizzle-orm';
+import { listings, listingImages } from '@/db/schema';
 import { SPEC_MEILI_FIELD_MAP } from '@/config/marketplace';
 import { normalizeSpecValue } from './spec-utils';
 import { logger } from '@/lib/logger';
 import { indexListing } from '@/lib/search/meilisearch';
 import type { MeilisearchDocument } from '@/lib/search/meilisearch';
 import type { ListingSpecInput } from '@/lib/schemas/marketplace';
+
+// ============================================================================
+// Reusable SQL fragments
+// ============================================================================
+
+/**
+ * Correlated subquery that resolves the primary image thumbnail URL for a
+ * listing row. Safe to embed in any SELECT that includes the listings table.
+ *
+ * Usage: `thumbnail: listingThumbnailSubquery`
+ */
+export const listingThumbnailSubquery = sql<string | null>`(
+  SELECT ${listingImages.url} FROM ${listingImages}
+  WHERE ${listingImages.listingId} = ${listings.id}
+    AND ${listingImages.isPrimary} = true
+  LIMIT 1
+)`;
 
 // ============================================================================
 // Meilisearch indexing helper

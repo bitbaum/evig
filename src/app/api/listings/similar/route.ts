@@ -7,10 +7,10 @@
 import { NextRequest } from 'next/server';
 import { apiSuccessCached, apiError, apiBadRequest, parsePagination } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingImages } from '@/db/schema';
+import { listings } from '@/db/schema';
 import { eq, and, ne, sql, desc } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
-import { TABLE_NAMES } from '@/config/database';
+import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         view_count: listings.viewCount,
         favorite_count: listings.favoriteCount,
         created_at: listings.createdAt,
-        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${sql.raw(TABLE_NAMES.LISTING_IMAGES)} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+        thumbnail: listingThumbnailSubquery,
       })
       .from(listings)
       .where(and(

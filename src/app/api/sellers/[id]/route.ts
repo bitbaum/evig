@@ -5,11 +5,12 @@
 import { NextRequest } from 'next/server';
 import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { sellerProfiles, listings, listingImages, users, reviews } from '@/db/schema';
+import { sellerProfiles, listings, users, reviews } from '@/db/schema';
 import { eq, and, sql, getTableName } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
 import { LISTING_STATUS } from '@/config/marketplace';
+import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
 
 // ============================================================================
 // GET — Public seller profile
@@ -61,12 +62,7 @@ export async function GET(
         brand: listings.brand,
         model: listings.model,
         created_at: listings.createdAt,
-        thumbnail: sql<string | null>`(
-          SELECT ${listingImages.url}
-          FROM ${listingImages}
-          WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true
-          LIMIT 1
-        )`,
+        thumbnail: listingThumbnailSubquery,
       })
       .from(listings)
       .where(and(eq(listings.sellerId, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
