@@ -40,92 +40,90 @@ export async function GET(
       .where(and(eq(listings.id, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
       .catch(err => logger.error('Failed to increment view count', { error: err, listingId: id }));
 
-    // Fetch listing with seller info
-    const [listing] = await db
-      .select({
-        id: listings.id,
-        seller_id: listings.sellerId,
-        title: listings.title,
-        description: listings.description,
-        price_chf: listings.priceChf,
-        category: listings.category,
-        condition: listings.condition,
-        brand: listings.brand,
-        model: listings.model,
-        delivery_options: listings.deliveryOptions,
-        shipping_cost_chf: listings.shippingCostChf,
-        pickup_location: listings.pickupLocation,
-        payment_mode: listings.paymentMode,
-        status: listings.status,
-        is_revampit: listings.isRevampit,
-        view_count: listings.viewCount,
-        favorite_count: listings.favoriteCount,
-        created_at: listings.createdAt,
-        updated_at: listings.updatedAt,
-        verified_at: listings.verifiedAt,
-        verified_by: listings.verifiedBy,
-        verification_notes: listings.verificationNotes,
-        condition_checks: listings.conditionChecks,
-        seller_name: users.name,
-        seller_display_name: sellerProfiles.displayName,
-        seller_bio: sellerProfiles.bio,
-        seller_avatar_url: sellerProfiles.avatarUrl,
-        seller_city: sellerProfiles.city,
-        seller_canton: sellerProfiles.canton,
-        seller_rating: sellerProfiles.averageRating,
-        seller_total_sold: sellerProfiles.totalSold,
-        seller_total_reviews: sellerProfiles.totalReviews,
-      })
-      .from(listings)
-      .innerJoin(users, eq(listings.sellerId, users.id))
-      .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
-      .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)));
+    // Fetch listing + session in parallel (session needed for favorite check)
+    const [[listing], session] = await Promise.all([
+      db
+        .select({
+          id: listings.id,
+          seller_id: listings.sellerId,
+          title: listings.title,
+          description: listings.description,
+          price_chf: listings.priceChf,
+          category: listings.category,
+          condition: listings.condition,
+          brand: listings.brand,
+          model: listings.model,
+          delivery_options: listings.deliveryOptions,
+          shipping_cost_chf: listings.shippingCostChf,
+          pickup_location: listings.pickupLocation,
+          payment_mode: listings.paymentMode,
+          status: listings.status,
+          is_revampit: listings.isRevampit,
+          view_count: listings.viewCount,
+          favorite_count: listings.favoriteCount,
+          created_at: listings.createdAt,
+          updated_at: listings.updatedAt,
+          verified_at: listings.verifiedAt,
+          verified_by: listings.verifiedBy,
+          verification_notes: listings.verificationNotes,
+          condition_checks: listings.conditionChecks,
+          seller_name: users.name,
+          seller_display_name: sellerProfiles.displayName,
+          seller_bio: sellerProfiles.bio,
+          seller_avatar_url: sellerProfiles.avatarUrl,
+          seller_city: sellerProfiles.city,
+          seller_canton: sellerProfiles.canton,
+          seller_rating: sellerProfiles.averageRating,
+          seller_total_sold: sellerProfiles.totalSold,
+          seller_total_reviews: sellerProfiles.totalReviews,
+        })
+        .from(listings)
+        .innerJoin(users, eq(listings.sellerId, users.id))
+        .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
+        .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED))),
+      auth(),
+    ]);
 
     if (!listing) return apiNotFound('Inserat');
 
-    // Fetch all images
-    const images = await db
-      .select({
-        id: listingImages.id,
-        url: listingImages.url,
-        position: listingImages.position,
-        is_primary: listingImages.isPrimary,
-      })
-      .from(listingImages)
-      .where(eq(listingImages.listingId, id))
-      .orderBy(asc(listingImages.position));
-
-    // Fetch specs
-    const specs = await db
-      .select({
-        spec_key: listingSpecs.specKey,
-        spec_value: listingSpecs.specValue,
-        spec_unit: listingSpecs.specUnit,
-        normalized_value: listingSpecs.normalizedValue,
-      })
-      .from(listingSpecs)
-      .where(eq(listingSpecs.listingId, id))
-      .orderBy(asc(listingSpecs.specKey));
-
-    // Check if current user has favorited
-    let is_favorited = false;
-    const session = await auth();
-    if (session?.user?.id) {
-      const [fav] = await db
-        .select({ id: listingFavorites.id })
-        .from(listingFavorites)
-        .where(and(
-          eq(listingFavorites.userId, session.user.id),
-          eq(listingFavorites.listingId, id)
-        ));
-      is_favorited = !!fav;
-    }
+    // Images, specs, and favorite check are all independent — run in parallel
+    const [images, specs, favRows] = await Promise.all([
+      db
+        .select({
+          id: listingImages.id,
+          url: listingImages.url,
+          position: listingImages.position,
+          is_primary: listingImages.isPrimary,
+        })
+        .from(listingImages)
+        .where(eq(listingImages.listingId, id))
+        .orderBy(asc(listingImages.position)),
+      db
+        .select({
+          spec_key: listingSpecs.specKey,
+          spec_value: listingSpecs.specValue,
+          spec_unit: listingSpecs.specUnit,
+          normalized_value: listingSpecs.normalizedValue,
+        })
+        .from(listingSpecs)
+        .where(eq(listingSpecs.listingId, id))
+        .orderBy(asc(listingSpecs.specKey)),
+      session?.user?.id
+        ? db
+            .select({ id: listingFavorites.id })
+            .from(listingFavorites)
+            .where(and(
+              eq(listingFavorites.userId, session.user.id),
+              eq(listingFavorites.listingId, id)
+            ))
+        : Promise.resolve([]),
+    ]);
 
     return apiSuccess({
       ...listing,
       images,
       specs,
-      is_favorited,
+      is_favorited: favRows.length > 0,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Laden des Inserats');

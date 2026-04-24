@@ -65,13 +65,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest('Ungültige ID')
     }
 
-    // Get request details and verify ownership
-    const requestResult = await db.execute(sql`
-      SELECT r.requester_id, r.status, r.title, u.name as requester_name
-      FROM ${sql.raw(reqTable)} r
-      JOIN ${sql.raw(uTable)} u ON r.requester_id = u.id
-      WHERE r.id = ${id}
-    `)
+    // Fetch request + offer in parallel — both only need their respective IDs
+    const [requestResult, offerResult] = await Promise.all([
+      db.execute(sql`
+        SELECT r.requester_id, r.status, r.title, u.name as requester_name
+        FROM ${sql.raw(reqTable)} r
+        JOIN ${sql.raw(uTable)} u ON r.requester_id = u.id
+        WHERE r.id = ${id}
+      `),
+      db.execute(sql`
+        SELECT o.id, o.helper_id, o.status, u.name as helper_name, u.email as helper_email
+        FROM ${sql.raw(offTable)} o
+        JOIN ${sql.raw(uTable)} u ON o.helper_id = u.id
+        WHERE o.id = ${offerId} AND o.request_id = ${id}
+      `),
+    ])
 
     if (requestResult.rows.length === 0) {
       return apiNotFound('Reparaturanfrage')
@@ -87,14 +95,6 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     if (requestData.status !== REQUEST_STATUS.OPEN && requestData.status !== REQUEST_STATUS.IN_DISCUSSION) {
       return apiBadRequest('Diese Anfrage kann keine Angebote mehr akzeptieren')
     }
-
-    // Get offer details with helper info
-    const offerResult = await db.execute(sql`
-      SELECT o.id, o.helper_id, o.status, u.name as helper_name, u.email as helper_email
-      FROM ${sql.raw(offTable)} o
-      JOIN ${sql.raw(uTable)} u ON o.helper_id = u.id
-      WHERE o.id = ${offerId} AND o.request_id = ${id}
-    `)
 
     if (offerResult.rows.length === 0) {
       return apiNotFound('Angebot')

@@ -22,11 +22,20 @@ export const POST = withAuth<{ id: string }>(async (
     if (!validation.success) return validation.error
     const { voteType } = validation.data
 
-    // Check if review exists and is published
-    const reviewRows = await db
-      .select({ id: reviews.id, status: reviews.status })
-      .from(reviews)
-      .where(eq(reviews.id, reviewId))
+    // Review existence + existing vote check are independent — run in parallel
+    const [reviewRows, existingVote] = await Promise.all([
+      db
+        .select({ id: reviews.id, status: reviews.status })
+        .from(reviews)
+        .where(eq(reviews.id, reviewId)),
+      db
+        .select({ voteType: reviewVotes.voteType })
+        .from(reviewVotes)
+        .where(and(
+          eq(reviewVotes.reviewId, reviewId),
+          eq(reviewVotes.voterId, session.user.id),
+        )),
+    ])
 
     if (reviewRows.length === 0) {
       return apiNotFound('Bewertung nicht gefunden')
@@ -36,17 +45,6 @@ export const POST = withAuth<{ id: string }>(async (
     if (review.status !== REVIEW_STATUS.PUBLISHED) {
       return apiBadRequest('Diese Bewertung ist nicht verfügbar')
     }
-
-    // Check if user already voted
-    const existingVote = await db
-      .select({ voteType: reviewVotes.voteType })
-      .from(reviewVotes)
-      .where(
-        and(
-          eq(reviewVotes.reviewId, reviewId),
-          eq(reviewVotes.voterId, session.user.id)
-        )
-      )
 
     if (existingVote.length > 0) {
       const currentVote = existingVote[0].voteType
