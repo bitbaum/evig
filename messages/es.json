@@ -105,7 +105,8 @@
       "becomeMember": "Hacerse socio/a",
       "becomeMemberDesc": "Ser parte de la asociación y participar",
       "contact": "Contacto",
-      "contactDesc": "Estamos deseando conocerte"
+      "contactDesc": "Estamos deseando conocerte",
+      "aboPoolsDesc": "Comparte suscripciones digitales y divide los costos"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -1008,7 +1009,12 @@
       "selectPrompt": "Selecciona un envío para ver los detalles",
       "tipText": "💡 {strong}Consejo:{/strong} Descarga el archivo Markdown y cópialo en la carpeta {code}content/posts/{/code}. ¡Luego edítalo y publícalo en TinaCMS!",
       "submittedBy": "Enviado por: {name} ({email})"
-    }
+    },
+    "title": "Blog",
+    "subtitle": "Conocimiento de la comunidad",
+    "readMore": "Leer más",
+    "by": "por",
+    "categories": "Categorías"
   },
   "contact": {
     "meta": {
@@ -1049,7 +1055,17 @@
       "submitting": "Enviando…",
       "successMessage": "¡Muchas gracias! Tu mensaje ha sido enviado.",
       "errorFallback": "Error al enviar. Por favor, inténtalo más tarde."
-    }
+    },
+    "title": "Contacto",
+    "subtitle": "Nos alegra saber de ti",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "openingHours": "Horario de atención",
+    "message": "Mensaje",
+    "send": "Enviar mensaje",
+    "success": "Tu mensaje ha sido enviado. ¡Nos pondremos en contacto pronto!"
   },
   "faq": {
     "meta": {
@@ -1839,6 +1855,21 @@
         "technische-experten": "Expertos técnicos",
         "partnerschaft": "Alianza",
         "it-hilfe-techniker": "Técnico IT Help"
+      },
+      "form": {
+        "nameLabel": "Tu nombre",
+        "namePlaceholder": "Nombre Apellido",
+        "emailLabel": "Dirección de correo electrónico",
+        "emailPlaceholder": "tu@correo.ch",
+        "messageLabel": "Tu mensaje",
+        "messagePlaceholder": "Cuéntanos brevemente quién eres y qué te interesa…",
+        "responseNote": "Normalmente respondemos en pocos días laborables.",
+        "charCount": "{count}/2000 caracteres (mín. 20)",
+        "submit": "Enviar solicitud",
+        "submitting": "Enviando…",
+        "successHeading": "¡Gracias, {name}!",
+        "successText": "Hemos recibido tu solicitud sobre {topic} y nos pondremos en contacto contigo pronto.",
+        "successBackLink": "Descubrir más formas de participar"
       }
     }
   },
@@ -2189,6 +2220,34 @@
       "timeLeftLessThanHour": "< 1 h",
       "timeLeftHours": "{count} h restantes",
       "offersCount": "{count, plural, one {# oferta} other {# ofertas}}"
+    },
+    "title": "Ayuda informática",
+    "subtitle": "Apoyo gratuito de la comunidad",
+    "request": "Solicitar ayuda",
+    "volunteer": "Registrarse como voluntario/a",
+    "review": {
+      "heading": "Dejar una valoración",
+      "confirmHeading": "Ayuda completada – por favor valora",
+      "confirmDescription": "El técnico ha marcado «{requestTitle}» como completado. Comparte tu experiencia para ayudar a la comunidad.",
+      "experienceWith": "¿Cómo fue tu experiencia con «{title}»?",
+      "overallRating": "Valoración general *",
+      "quality": "Calidad",
+      "communication": "Comunicación",
+      "recommendLabel": "¿Recomendarías a este técnico? *",
+      "recommendYes": "Sí, con gusto",
+      "recommendNo": "No",
+      "reviewTextLabel": "Tu experiencia *",
+      "reviewTextOptionalLabel": "Tu experiencia (opcional)",
+      "reviewTextPlaceholder": "Describe tu experiencia (mín. 10 caracteres)…",
+      "reviewTextOptionalPlaceholder": "¿Cómo fue tu experiencia? (opcional, mín. 10 caracteres)",
+      "starAriaLabel": "{count} estrellas",
+      "submitButton": "Enviar valoración",
+      "submittingButton": "Enviando…",
+      "errorNoStars": "Por favor selecciona una valoración con estrellas",
+      "errorNoRating": "Por favor deja una valoración general",
+      "errorNoRecommend": "Por favor indica si recomendarías al técnico",
+      "errorTextTooShort": "El texto de la valoración debe tener al menos 10 caracteres",
+      "errorGeneric": "Se ha producido un error"
     }
   },
   "knowhow": {
@@ -4528,7 +4587,12 @@
     },
     "pricingTitle": "Precios",
     "mediaCostsTitle": "Costes de Medios",
-    "processTitle": "Nuestro Proceso"
+    "processTitle": "Nuestro Proceso",
+    "title": "Servicios",
+    "subtitle": "Lo que podemos hacer por ti",
+    "bookAppointment": "Reservar cita",
+    "requestQuote": "Solicitar presupuesto",
+    "priceFrom": "Desde CHF"
   },
   "shop": {
     "meta": {
@@ -5166,7 +5230,21 @@
       "emptyMessage": "Las reseñas aparecerán aquí una vez que los participantes den su opinión.",
       "count": "{count, plural, one {# reseña} other {# reseñas}}",
       "showAll": "Ver todas las {count} reseñas"
-    }
+    },
+    "title": "Talleres",
+    "subtitle": "Aprende de la comunidad",
+    "register": "Inscribirse",
+    "upcoming": "Próximas fechas",
+    "past": "Talleres pasados",
+    "duration": "Duración",
+    "free": "Gratis",
+    "full": "Completo",
+    "level": {
+      "beginner": "Principiante",
+      "intermediate": "Avanzado",
+      "advanced": "Experto"
+    },
+    "spots": "{count} plazas disponibles"
   },
   "donate": {
     "meta": {

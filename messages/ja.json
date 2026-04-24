@@ -105,7 +105,8 @@
       "becomeMember": "会員になる",
       "becomeMemberDesc": "団体の一員として意思決定に参加する",
       "contact": "お問い合わせ",
-      "contactDesc": "お待ちしています"
+      "contactDesc": "お待ちしています",
+      "aboPoolsDesc": "デジタルサブスクリプションを共有してコストを分担"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",
@@ -1008,7 +1009,12 @@
       "selectPrompt": "投稿を選択して詳細を表示",
       "tipText": "💡 {strong}ヒント:{/strong} Markdownファイルをダウンロードして{code}content/posts/{/code}フォルダにコピーしてください。その後TinaCMSで編集・公開できます！",
       "submittedBy": "投稿者: {name} ({email})"
-    }
+    },
+    "title": "ブログ",
+    "subtitle": "コミュニティからの知識",
+    "readMore": "続きを読む",
+    "by": "著者：",
+    "categories": "カテゴリー"
   },
   "contact": {
     "meta": {
@@ -1049,7 +1055,17 @@
       "submitting": "送信中…",
       "successMessage": "ありがとうございます！メッセージが送信されました。",
       "errorFallback": "送信エラーが発生しました。後でもう一度お試しください。"
-    }
+    },
+    "title": "お問い合わせ",
+    "subtitle": "ご連絡をお待ちしています",
+    "name": "名前",
+    "email": "メールアドレス",
+    "phone": "電話",
+    "address": "住所",
+    "openingHours": "営業時間",
+    "message": "メッセージ",
+    "send": "送信する",
+    "success": "メッセージが送信されました。近日中にご連絡いたします！"
   },
   "faq": {
     "meta": {
@@ -1839,6 +1855,21 @@
         "technische-experten": "技術専門家",
         "partnerschaft": "パートナーシップ",
         "it-hilfe-techniker": "ITヘルプ技術者"
+      },
+      "form": {
+        "nameLabel": "お名前",
+        "namePlaceholder": "姓名",
+        "emailLabel": "メールアドレス",
+        "emailPlaceholder": "your@email.ch",
+        "messageLabel": "メッセージ",
+        "messagePlaceholder": "あなたが誰で、何に興味があるかを簡単に教えてください…",
+        "responseNote": "通常、数営業日以内にご返答いたします。",
+        "charCount": "{count}/2000文字（最低20文字）",
+        "submit": "リクエストを送信",
+        "submitting": "送信中…",
+        "successHeading": "ありがとう、{name}さん！",
+        "successText": "{topic}に関するリクエストを受け付けました。近日中にご連絡いたします。",
+        "successBackLink": "参加方法をもっと見る"
       }
     }
   },
@@ -2189,6 +2220,34 @@
       "timeLeftLessThanHour": "1時間未満",
       "timeLeftHours": "残り{count}時間",
       "offersCount": "{count}件の申し出"
+    },
+    "title": "ITヘルプ",
+    "subtitle": "コミュニティによる無料サポート",
+    "request": "ヘルプをリクエスト",
+    "volunteer": "ヘルパーとして登録",
+    "review": {
+      "heading": "レビューを投稿",
+      "confirmHeading": "サポート完了 – レビューをお願いします",
+      "confirmDescription": "テクニシャンが「{requestTitle}」を完了としてマークしました。コミュニティのためにぜひご評価ください。",
+      "experienceWith": "「{title}」でのご体験はいかがでしたか？",
+      "overallRating": "総合評価 *",
+      "quality": "品質",
+      "communication": "コミュニケーション",
+      "recommendLabel": "このテクニシャンを推薦しますか？ *",
+      "recommendYes": "はい、ぜひ",
+      "recommendNo": "いいえ",
+      "reviewTextLabel": "あなたの体験 *",
+      "reviewTextOptionalLabel": "あなたの体験（任意）",
+      "reviewTextPlaceholder": "あなたの体験を記述してください（最低10文字）…",
+      "reviewTextOptionalPlaceholder": "あなたの体験はいかがでしたか？（任意、最低10文字）",
+      "starAriaLabel": "{count}つ星",
+      "submitButton": "レビューを送信",
+      "submittingButton": "送信中…",
+      "errorNoStars": "星評価を選択してください",
+      "errorNoRating": "総合評価を入力してください",
+      "errorNoRecommend": "テクニシャンを推薦するかどうか選択してください",
+      "errorTextTooShort": "レビューテキストは最低10文字必要です",
+      "errorGeneric": "エラーが発生しました"
     }
   },
   "knowhow": {
@@ -4528,7 +4587,12 @@
     },
     "pricingTitle": "料金",
     "mediaCostsTitle": "メディアコスト",
-    "processTitle": "私たちのプロセス"
+    "processTitle": "私たちのプロセス",
+    "title": "サービス",
+    "subtitle": "私たちができること",
+    "bookAppointment": "予約する",
+    "requestQuote": "見積もりを依頼",
+    "priceFrom": "CHF〜"
   },
   "shop": {
     "meta": {
@@ -5166,7 +5230,21 @@
       "emptyMessage": "参加者がフィードバックを送ると、ここにレビューが表示されます。",
       "count": "{count}件のレビュー",
       "showAll": "全{count}件のレビューを表示"
-    }
+    },
+    "title": "ワークショップ",
+    "subtitle": "コミュニティから学ぶ",
+    "register": "申し込む",
+    "upcoming": "次回の日程",
+    "past": "過去のワークショップ",
+    "duration": "所要時間",
+    "free": "無料",
+    "full": "満員",
+    "level": {
+      "beginner": "初心者",
+      "intermediate": "中級",
+      "advanced": "上級"
+    },
+    "spots": "残り{count}席"
   },
   "donate": {
     "meta": {

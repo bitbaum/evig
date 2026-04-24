@@ -2779,6 +2779,30 @@
       "timeLeftLessThanHour": "< 1 h",
       "timeLeftHours": "{count} h restantes",
       "offersCount": "{count, plural, one {# offre} other {# offres}}"
+    },
+    "review": {
+      "heading": "Laisser un avis",
+      "confirmHeading": "Aide terminée – veuillez évaluer",
+      "confirmDescription": "Le technicien a marqué « {requestTitle} » comme terminé. Partagez votre expérience pour aider la communauté.",
+      "experienceWith": "Quelle a été votre expérience avec « {title} » ?",
+      "overallRating": "Note globale *",
+      "quality": "Qualité",
+      "communication": "Communication",
+      "recommendLabel": "Recommanderiez-vous ce technicien ? *",
+      "recommendYes": "Oui, volontiers",
+      "recommendNo": "Non",
+      "reviewTextLabel": "Votre expérience *",
+      "reviewTextOptionalLabel": "Votre expérience (facultatif)",
+      "reviewTextPlaceholder": "Décrivez votre expérience (min. 10 caractères)…",
+      "reviewTextOptionalPlaceholder": "Quelle a été votre expérience ? (facultatif, min. 10 caractères)",
+      "starAriaLabel": "{count} étoiles",
+      "submitButton": "Envoyer l'avis",
+      "submittingButton": "Envoi en cours…",
+      "errorNoStars": "Veuillez sélectionner une note en étoiles",
+      "errorNoRating": "Veuillez donner une note globale",
+      "errorNoRecommend": "Veuillez indiquer si vous recommanderiez le technicien",
+      "errorTextTooShort": "Le texte de l'avis doit comporter au moins 10 caractères",
+      "errorGeneric": "Une erreur s'est produite"
     }
   },
   "blog": {
@@ -3861,6 +3885,21 @@
         "technische-experten": "Experts techniques",
         "partnerschaft": "Partenariat",
         "it-hilfe-techniker": "Technicien IT Help"
+      },
+      "form": {
+        "nameLabel": "Votre nom",
+        "namePlaceholder": "Prénom Nom",
+        "emailLabel": "Adresse e-mail",
+        "emailPlaceholder": "votre@email.ch",
+        "messageLabel": "Votre message",
+        "messagePlaceholder": "Dites-nous brièvement qui vous êtes et ce qui vous intéresse…",
+        "responseNote": "Nous répondons généralement dans quelques jours ouvrables.",
+        "charCount": "{count}/2000 caractères (min. 20)",
+        "submit": "Envoyer la demande",
+        "submitting": "Envoi en cours…",
+        "successHeading": "Merci, {name} !",
+        "successText": "Nous avons reçu votre demande concernant {topic} et nous vous répondrons bientôt.",
+        "successBackLink": "Découvrir d'autres façons de participer"
       }
     }
   },

@@ -105,7 +105,8 @@
       "becomeMember": "Diventa membro",
       "becomeMemberDesc": "Entra nell'associazione e partecipa alle decisioni",
       "contact": "Contatto",
-      "contactDesc": "Siamo felici di sentirti"
+      "contactDesc": "Siamo felici di sentirti",
+      "aboPoolsDesc": "Condividi abbonamenti digitali e dividi i costi"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",
@@ -1008,7 +1009,12 @@
       "selectPrompt": "Seleziona un invio per vedere i dettagli",
       "tipText": "💡 {strong}Suggerimento:{/strong} Scarica il file Markdown e copialo nella cartella {code}content/posts/{/code}. Poi modificalo e pubblicalo in TinaCMS!",
       "submittedBy": "Inviato da: {name} ({email})"
-    }
+    },
+    "title": "Blog",
+    "subtitle": "Conoscenza dalla comunità",
+    "readMore": "Leggi di più",
+    "by": "di",
+    "categories": "Categorie"
   },
   "contact": {
     "meta": {
@@ -1049,7 +1055,17 @@
       "submitting": "Invio in corso…",
       "successMessage": "Grazie! Il tuo messaggio è stato inviato.",
       "errorFallback": "Errore nell'invio. Riprova più tardi."
-    }
+    },
+    "title": "Contatto",
+    "subtitle": "Siamo felici di sentirti",
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefono",
+    "address": "Indirizzo",
+    "openingHours": "Orari di apertura",
+    "message": "Messaggio",
+    "send": "Invia messaggio",
+    "success": "Il tuo messaggio è stato inviato. Ti contatteremo presto!"
   },
   "faq": {
     "meta": {
@@ -1839,6 +1855,21 @@
         "technische-experten": "Esperti tecnici",
         "partnerschaft": "Partnership",
         "it-hilfe-techniker": "Tecnico IT Help"
+      },
+      "form": {
+        "nameLabel": "Il tuo nome",
+        "namePlaceholder": "Nome Cognome",
+        "emailLabel": "Indirizzo e-mail",
+        "emailPlaceholder": "tuo@email.ch",
+        "messageLabel": "Il tuo messaggio",
+        "messagePlaceholder": "Dicci brevemente chi sei e cosa ti interessa…",
+        "responseNote": "Di solito rispondiamo entro pochi giorni lavorativi.",
+        "charCount": "{count}/2000 caratteri (min. 20)",
+        "submit": "Invia richiesta",
+        "submitting": "Invio in corso…",
+        "successHeading": "Grazie, {name}!",
+        "successText": "Abbiamo ricevuto la tua richiesta su {topic} e ti risponderemo presto.",
+        "successBackLink": "Scopri altri modi per partecipare"
       }
     }
   },
@@ -2189,6 +2220,34 @@
       "timeLeftLessThanHour": "< 1 ora",
       "timeLeftHours": "{count} ore rimanenti",
       "offersCount": "{count, plural, one {# offerta} other {# offerte}}"
+    },
+    "title": "Aiuto informatico",
+    "subtitle": "Supporto gratuito dalla comunità",
+    "request": "Richiedere aiuto",
+    "volunteer": "Registrarsi come assistente",
+    "review": {
+      "heading": "Lascia una valutazione",
+      "confirmHeading": "Aiuto completato – valuta ora",
+      "confirmDescription": "Il tecnico ha contrassegnato «{requestTitle}» come completato. Condividi la tua esperienza per aiutare la comunità.",
+      "experienceWith": "Come è stata la tua esperienza con «{title}»?",
+      "overallRating": "Valutazione complessiva *",
+      "quality": "Qualità",
+      "communication": "Comunicazione",
+      "recommendLabel": "Raccomanderesti questo tecnico? *",
+      "recommendYes": "Sì, volentieri",
+      "recommendNo": "No",
+      "reviewTextLabel": "La tua esperienza *",
+      "reviewTextOptionalLabel": "La tua esperienza (opzionale)",
+      "reviewTextPlaceholder": "Descrivi la tua esperienza (min. 10 caratteri)…",
+      "reviewTextOptionalPlaceholder": "Come è stata la tua esperienza? (opzionale, min. 10 caratteri)",
+      "starAriaLabel": "{count} stelle",
+      "submitButton": "Invia valutazione",
+      "submittingButton": "Invio in corso…",
+      "errorNoStars": "Seleziona una valutazione a stelle",
+      "errorNoRating": "Inserisci una valutazione complessiva",
+      "errorNoRecommend": "Indica se raccomanderesti il tecnico",
+      "errorTextTooShort": "Il testo della valutazione deve avere almeno 10 caratteri",
+      "errorGeneric": "Si è verificato un errore"
     }
   },
   "knowhow": {
@@ -4528,7 +4587,12 @@
     },
     "pricingTitle": "Prezzi",
     "mediaCostsTitle": "Costi dei Supporti",
-    "processTitle": "Il Nostro Processo"
+    "processTitle": "Il Nostro Processo",
+    "title": "Servizi",
+    "subtitle": "Cosa possiamo fare per te",
+    "bookAppointment": "Prenota un appuntamento",
+    "requestQuote": "Richiedi un preventivo",
+    "priceFrom": "Da CHF"
   },
   "shop": {
     "meta": {
@@ -5166,7 +5230,21 @@
       "emptyMessage": "Le recensioni appariranno qui una volta che i partecipanti daranno il loro feedback.",
       "count": "{count, plural, one {# recensione} other {# recensioni}}",
       "showAll": "Mostra tutte le {count} recensioni"
-    }
+    },
+    "title": "Workshop",
+    "subtitle": "Impara dalla comunità",
+    "register": "Iscriviti",
+    "upcoming": "Prossime date",
+    "past": "Workshop passati",
+    "duration": "Durata",
+    "free": "Gratuito",
+    "full": "Al completo",
+    "level": {
+      "beginner": "Principiante",
+      "intermediate": "Intermedio",
+      "advanced": "Esperto"
+    },
+    "spots": "{count} posti disponibili"
   },
   "donate": {
     "meta": {

@@ -105,7 +105,8 @@
       "becomeMember": "회원 가입",
       "becomeMemberDesc": "단체의 일원이 되어 의사 결정에 참여",
       "contact": "문의",
-      "contactDesc": "언제든지 연락해 주세요"
+      "contactDesc": "언제든지 연락해 주세요",
+      "aboPoolsDesc": "디지털 구독을 공유하고 비용을 분담하세요"
     },
     "language": "언어",
     "missionHistory": "미션 & 역사",
@@ -1008,7 +1009,12 @@
       "selectPrompt": "제출물을 선택하여 세부 정보를 보세요",
       "tipText": "💡 {strong}팁:{/strong} Markdown 파일을 다운로드하여 {code}content/posts/{/code} 폴더에 복사하세요. 그런 다음 TinaCMS에서 편집하고 게시할 수 있습니다!",
       "submittedBy": "제출자: {name} ({email})"
-    }
+    },
+    "title": "블로그",
+    "subtitle": "커뮤니티의 지식",
+    "readMore": "더 읽기",
+    "by": "작성자:",
+    "categories": "카테고리"
   },
   "contact": {
     "meta": {
@@ -1049,7 +1055,17 @@
       "submitting": "전송 중…",
       "successMessage": "감사합니다! 메시지가 전송되었습니다.",
       "errorFallback": "전송 오류. 나중에 다시 시도해 주세요."
-    }
+    },
+    "title": "연락처",
+    "subtitle": "연락 주시면 기쁘겠습니다",
+    "name": "이름",
+    "email": "이메일",
+    "phone": "전화",
+    "address": "주소",
+    "openingHours": "운영 시간",
+    "message": "메시지",
+    "send": "메시지 보내기",
+    "success": "메시지가 전송되었습니다. 곧 연락드리겠습니다!"
   },
   "faq": {
     "meta": {
@@ -1839,6 +1855,21 @@
         "technische-experten": "기술 전문가",
         "partnerschaft": "파트너십",
         "it-hilfe-techniker": "IT 도움 기술자"
+      },
+      "form": {
+        "nameLabel": "이름",
+        "namePlaceholder": "성명",
+        "emailLabel": "이메일 주소",
+        "emailPlaceholder": "your@email.ch",
+        "messageLabel": "메시지",
+        "messagePlaceholder": "간단히 자신을 소개하고 관심 있는 것을 알려주세요…",
+        "responseNote": "보통 며칠 이내 영업일 안에 답변드립니다.",
+        "charCount": "{count}/2000자 (최소 20자)",
+        "submit": "요청 보내기",
+        "submitting": "전송 중…",
+        "successHeading": "감사합니다, {name}님!",
+        "successText": "{topic}에 대한 요청을 받았습니다. 곧 연락드리겠습니다.",
+        "successBackLink": "참여 방법 더 알아보기"
       }
     }
   },
@@ -2189,6 +2220,34 @@
       "timeLeftLessThanHour": "1시간 미만",
       "timeLeftHours": "{count}시간 남음",
       "offersCount": "{count}개 제안"
+    },
+    "title": "IT 도움",
+    "subtitle": "커뮤니티의 무료 지원",
+    "request": "도움 요청",
+    "volunteer": "도우미로 등록",
+    "review": {
+      "heading": "리뷰 작성",
+      "confirmHeading": "지원 완료 – 평가해 주세요",
+      "confirmDescription": "기술자가 «{requestTitle}»를 완료로 표시했습니다. 커뮤니티를 위해 경험을 공유해 주세요.",
+      "experienceWith": "«{title}»와의 경험은 어떠셨나요?",
+      "overallRating": "전체 평점 *",
+      "quality": "품질",
+      "communication": "소통",
+      "recommendLabel": "이 기술자를 추천하시겠습니까? *",
+      "recommendYes": "네, 기꺼이",
+      "recommendNo": "아니요",
+      "reviewTextLabel": "경험 *",
+      "reviewTextOptionalLabel": "경험 (선택)",
+      "reviewTextPlaceholder": "경험을 설명해 주세요 (최소 10자)…",
+      "reviewTextOptionalPlaceholder": "경험은 어떠셨나요? (선택, 최소 10자)",
+      "starAriaLabel": "{count}개 별",
+      "submitButton": "리뷰 제출",
+      "submittingButton": "전송 중…",
+      "errorNoStars": "별점을 선택해 주세요",
+      "errorNoRating": "전체 평점을 입력해 주세요",
+      "errorNoRecommend": "기술자 추천 여부를 선택해 주세요",
+      "errorTextTooShort": "리뷰 텍스트는 최소 10자 이상이어야 합니다",
+      "errorGeneric": "오류가 발생했습니다"
     }
   },
   "knowhow": {
@@ -4528,7 +4587,12 @@
     },
     "pricingTitle": "가격",
     "mediaCostsTitle": "미디어 비용",
-    "processTitle": "저희 프로세스"
+    "processTitle": "저희 프로세스",
+    "title": "서비스",
+    "subtitle": "우리가 할 수 있는 것",
+    "bookAppointment": "예약하기",
+    "requestQuote": "견적 요청",
+    "priceFrom": "CHF~"
   },
   "shop": {
     "meta": {
@@ -5166,7 +5230,21 @@
       "emptyMessage": "참가자들이 피드백을 제공하면 여기에 리뷰가 표시됩니다.",
       "count": "{count}개의 리뷰",
       "showAll": "전체 {count}개 리뷰 보기"
-    }
+    },
+    "title": "워크숍",
+    "subtitle": "커뮤니티에서 배우기",
+    "register": "신청하기",
+    "upcoming": "다음 일정",
+    "past": "지난 워크숍",
+    "duration": "시간",
+    "free": "무료",
+    "full": "마감",
+    "level": {
+      "beginner": "초급",
+      "intermediate": "중급",
+      "advanced": "고급"
+    },
+    "spots": "남은 {count}석"
   },
   "donate": {
     "meta": {
