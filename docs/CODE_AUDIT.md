@@ -1,16 +1,27 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-04-24
-last_modified_summary: Fixed sql.raw() for TABLE_NAMES in Drizzle sql`` templates (plain string interpolation parameterizes values — invalid as SQL identifiers); fixed remaining hardcoded table names in appointments, close-decisions, create-review.
+last_modified_date: 2026-04-25
+last_modified_summary: Full i18n gap closure (workshops.materials/registration/reviews, blog/contact/itHelp/services/workshops for es/it/ja/ko, getInvolved.kontakt.form + itHelp.review for fr); POOL_STATUS + POOL_MEMBERSHIP_STATUS SSOT constants added; DECISION_STATUS.CLOSED and REQUEST_STATUSES.PENDING used consistently.
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-04-24
+**Last Audit Date**: 2026-04-25
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
+
+## Summary of Recent Fixes (2026-04-25)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| workshops.materials/registration/reviews translations | FIXED | 3 namespaces × 5 locales (fr/es/it/ja/ko) — 215 additions |
+| blog/contact/itHelp/services/workshops translations (es/it/ja/ko) | FIXED | 72 keys × 4 locales; fr got 35 (getInvolved.kontakt.form + itHelp.review) |
+| POOL_STATUS + POOL_MEMBERSHIP_STATUS SSOT | FIXED | Added to src/config/database.ts; all pool routes (5 files) updated |
+| DECISION_STATUS.CLOSED usage | FIXED | close-decisions cron was using hardcoded 'closed' despite importing DECISION_STATUS |
+| REQUEST_STATUSES.PENDING usage | FIXED | task-requests route used hardcoded 'pending' default |
+| Translation coverage | FIXED | All 6 locales now have 0 missing real keys vs de.json (dead keys excluded) |
 
 ## Summary of Recent Fixes (2026-04-24)
 
@@ -112,7 +123,7 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 - `ImageUploadGrid.tsx` and `ProductImageUpload.tsx` use raw `<img>` for blob URL previews — this is **correct** (`next/image` cannot optimize blob: URLs)
 
 ### Testing Coverage
-**Current Coverage**: 354 tests across 27 test suites (updated 2026-04-24)
+**Current Coverage**: 354 tests across 27 test suites (updated 2026-04-25)
 - API route tests (notifications, admin endpoints)
 - Business logic tests (protocols, payments, services, hirn)
 - UI tests (marketplace, auth, middleware)
@@ -120,4 +131,4 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 
 ---
 
-**Last Updated**: 2026-04-24
+**Last Updated**: 2026-04-25
