@@ -132,14 +132,14 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         cancelRedirectUrl: `${APP_URL}/marketplace/checkout/${listing.id}?error=cancelled`,
       });
     } catch (gatewayError) {
-      // Rollback: delete order and restore listing to ACTIVE
+      // Rollback: delete order and restore listing to ACTIVE — independent, run in parallel
       logger.error('Payrexx gateway creation failed, rolling back order', {
         error: gatewayError, orderId, listingId: listing.id,
       });
-      await db.delete(marketplaceOrders).where(eq(marketplaceOrders.id, orderId));
-      await db.update(listings)
-        .set({ status: LISTING_STATUS.ACTIVE })
-        .where(eq(listings.id, listing.id));
+      await Promise.all([
+        db.delete(marketplaceOrders).where(eq(marketplaceOrders.id, orderId)),
+        db.update(listings).set({ status: LISTING_STATUS.ACTIVE }).where(eq(listings.id, listing.id)),
+      ]);
       return apiError(gatewayError, 'Zahlungsgateway konnte nicht erstellt werden. Bitte versuche es erneut.');
     }
 
@@ -174,27 +174,25 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       })).catch(err => logger.error('Failed to send buyer order confirmation', { err, orderId }));
     }
 
-    // Notify seller
-    try {
-      const [seller] = await db
-        .select({ email: users.email, name: users.name })
-        .from(users)
-        .where(eq(users.id, listing.seller_id))
-        .limit(1);
-      const payoutChf = Math.round((totalChf - Math.round(totalChf * COMMISSION_RATE * 100) / 100) * 100) / 100;
-      if (seller?.email) {
-        sendCustomEmail(seller.email, newOrderNotificationSeller({
-          recipientName: seller.name || 'Verkäufer',
-          buyerName: session.user.name || 'Käufer',
-          listingTitle: listing.title,
-          payoutAmountChf: `CHF ${payoutChf.toFixed(2)}`,
-          deliveryMethod: deliveryLabel,
-          orderUrl,
-        })).catch(err => logger.error('Failed to send seller order notification', { err, orderId }));
-      }
-    } catch (err) {
-      logger.error('Failed to look up seller for order email', { err, orderId });
-    }
+    // Notify seller — fire-and-forget (seller lookup + email, non-blocking)
+    const payoutChf = Math.round((totalChf - Math.round(totalChf * COMMISSION_RATE * 100) / 100) * 100) / 100;
+    db.select({ email: users.email, name: users.name })
+      .from(users)
+      .where(eq(users.id, listing.seller_id))
+      .limit(1)
+      .then(([seller]) => {
+        if (seller?.email) {
+          sendCustomEmail(seller.email, newOrderNotificationSeller({
+            recipientName: seller.name || 'Verkäufer',
+            buyerName: session.user.name || 'Käufer',
+            listingTitle: listing.title,
+            payoutAmountChf: `CHF ${payoutChf.toFixed(2)}`,
+            deliveryMethod: deliveryLabel,
+            orderUrl,
+          })).catch(err => logger.error('Failed to send seller order notification', { err, orderId }));
+        }
+      })
+      .catch(err => logger.error('Failed to look up seller for order email', { err, orderId }));
 
     return apiSuccess({
       orderId,
