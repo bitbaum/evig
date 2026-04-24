@@ -5627,7 +5627,8 @@
       "dateLabel": "Bevorzugtes Datum/Zeit",
       "cancel": "Abbrechen",
       "saving": "Speichern…",
-      "save": "Speichern"
+      "save": "Speichern",
+      "paymentSuccess": "Zahlung erfolgreich! Dein Termin ist bestätigt."
     },
     "orders": {
       "pageTitle": "Meine Bestellungen",

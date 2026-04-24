@@ -5614,7 +5614,8 @@
       "dateLabel": "Data/ora preferita",
       "cancel": "Annulla",
       "saving": "Salvataggio…",
-      "save": "Salva"
+      "save": "Salva",
+      "paymentSuccess": "Pagamento riuscito! Il tuo appuntamento è confermato."
     },
     "orders": {
       "pageTitle": "I miei ordini",

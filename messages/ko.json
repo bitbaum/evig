@@ -5614,7 +5614,8 @@
       "dateLabel": "선호 날짜/시간",
       "cancel": "취소",
       "saving": "저장 중…",
-      "save": "저장"
+      "save": "저장",
+      "paymentSuccess": "결제 성공! 예약이 확인되었습니다."
     },
     "orders": {
       "pageTitle": "내 주문",

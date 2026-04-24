@@ -5578,7 +5578,8 @@
       "dateLabel": "Date/heure préférée",
       "cancel": "Annuler",
       "saving": "Enregistrement…",
-      "save": "Enregistrer"
+      "save": "Enregistrer",
+      "paymentSuccess": "Paiement réussi! Votre rendez-vous est confirmé."
     },
     "orders": {
       "pageTitle": "Mes commandes",

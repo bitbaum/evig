@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -33,13 +33,23 @@ export default function AppointmentsDashboard() {
   const t = useTranslations('dashboard.appointments')
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editDescription, setEditDescription] = useState<string>('')
   const [editPreferredDate, setEditPreferredDate] = useState<string>('')
   const [saving, setSaving] = useState(false)
+
+  // Show success banner after Payrexx redirect, then clean the URL
+  useEffect(() => {
+    if (searchParams.get('payment') === 'success') {
+      setPaymentSuccess(true)
+      router.replace('/dashboard/appointments')
+    }
+  }, [searchParams, router])
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -185,6 +195,23 @@ export default function AppointmentsDashboard() {
             {t('pageSubtitle')}
           </p>
         </div>
+
+        {/* Payment success banner (shown after Payrexx redirect) */}
+        {paymentSuccess && (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+              <p className="text-emerald-800 font-medium">{t('paymentSuccess')}</p>
+            </div>
+            <button
+              onClick={() => setPaymentSuccess(false)}
+              className="text-emerald-600 hover:text-emerald-800 text-lg leading-none"
+              aria-label="Schliessen"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         {/* Error Message */}
         {error && (

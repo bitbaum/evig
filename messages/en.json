@@ -5576,7 +5576,8 @@
       "dateLabel": "Preferred date/time",
       "cancel": "Cancel",
       "saving": "Saving…",
-      "save": "Save"
+      "save": "Save",
+      "paymentSuccess": "Payment successful! Your appointment is confirmed."
     },
     "orders": {
       "pageTitle": "My Orders",

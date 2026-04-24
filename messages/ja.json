@@ -5614,7 +5614,8 @@
       "dateLabel": "希望日時",
       "cancel": "キャンセル",
       "saving": "保存中…",
-      "save": "保存"
+      "save": "保存",
+      "paymentSuccess": "お支払いが完了しました！予約が確認されました。"
     },
     "orders": {
       "pageTitle": "マイオーダー",
