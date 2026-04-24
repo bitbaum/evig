@@ -8,9 +8,37 @@
 
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
-import { listings, listingImages, marketplaceOrders } from '@/db/schema'
+import { listings, listingImages, marketplaceOrders, sellerProfiles } from '@/db/schema'
 import { logger } from '@/lib/logger'
 import { LISTING_STATUS } from '@/config/marketplace'
+
+// ============================================================================
+// Shared select shapes
+// ============================================================================
+
+/**
+ * Core seller profile fields returned by both GET /sellers/me and
+ * GET /sellers/[id]. Spread into .select() or .returning() to avoid
+ * repeating this shape in multiple routes.
+ *
+ * Route-specific extras (updated_at for /me, user_name for /[id]) are
+ * added at the call site.
+ */
+export const sellerProfileCoreFields = {
+  id: sellerProfiles.id,
+  user_id: sellerProfiles.userId,
+  display_name: sellerProfiles.displayName,
+  bio: sellerProfiles.bio,
+  avatar_url: sellerProfiles.avatarUrl,
+  city: sellerProfiles.city,
+  canton: sellerProfiles.canton,
+  is_verified: sellerProfiles.isVerified,
+  average_rating: sellerProfiles.averageRating,
+  total_reviews: sellerProfiles.totalReviews,
+  total_listings: sellerProfiles.totalListings,
+  total_sold: sellerProfiles.totalSold,
+  created_at: sellerProfiles.createdAt,
+} as const;
 
 // Table name refs for raw SQL
 const listingsTable = getTableName(listings)

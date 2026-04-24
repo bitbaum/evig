@@ -11,6 +11,7 @@ import { db } from '@/db';
 import { sellerProfiles } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
+import { sellerProfileCoreFields } from '@/lib/services/seller-service';
 
 // ============================================================================
 // Validation
@@ -32,19 +33,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
   try {
     const [profile] = await db
       .select({
-        id: sellerProfiles.id,
-        user_id: sellerProfiles.userId,
-        display_name: sellerProfiles.displayName,
-        bio: sellerProfiles.bio,
-        avatar_url: sellerProfiles.avatarUrl,
-        city: sellerProfiles.city,
-        canton: sellerProfiles.canton,
-        is_verified: sellerProfiles.isVerified,
-        average_rating: sellerProfiles.averageRating,
-        total_reviews: sellerProfiles.totalReviews,
-        total_listings: sellerProfiles.totalListings,
-        total_sold: sellerProfiles.totalSold,
-        created_at: sellerProfiles.createdAt,
+        ...sellerProfileCoreFields,
         updated_at: sellerProfiles.updatedAt,
       })
       .from(sellerProfiles)
@@ -109,19 +98,7 @@ export const PATCH = withAuth(async (request: NextRequest, session: ValidSession
       .set(update)
       .where(eq(sellerProfiles.userId, session.user.id))
       .returning({
-        id: sellerProfiles.id,
-        user_id: sellerProfiles.userId,
-        display_name: sellerProfiles.displayName,
-        bio: sellerProfiles.bio,
-        avatar_url: sellerProfiles.avatarUrl,
-        city: sellerProfiles.city,
-        canton: sellerProfiles.canton,
-        is_verified: sellerProfiles.isVerified,
-        average_rating: sellerProfiles.averageRating,
-        total_reviews: sellerProfiles.totalReviews,
-        total_listings: sellerProfiles.totalListings,
-        total_sold: sellerProfiles.totalSold,
-        created_at: sellerProfiles.createdAt,
+        ...sellerProfileCoreFields,
         updated_at: sellerProfiles.updatedAt,
       });
 

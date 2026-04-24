@@ -11,6 +11,7 @@ import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
 import { LISTING_STATUS } from '@/config/marketplace';
 import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
+import { sellerProfileCoreFields } from '@/lib/services/seller-service';
 
 // ============================================================================
 // GET — Public seller profile
@@ -28,19 +29,7 @@ export async function GET(
     // Fetch seller profile joined with user data
     const [profile] = await db
       .select({
-        id: sellerProfiles.id,
-        user_id: sellerProfiles.userId,
-        display_name: sellerProfiles.displayName,
-        bio: sellerProfiles.bio,
-        avatar_url: sellerProfiles.avatarUrl,
-        city: sellerProfiles.city,
-        canton: sellerProfiles.canton,
-        is_verified: sellerProfiles.isVerified,
-        average_rating: sellerProfiles.averageRating,
-        total_reviews: sellerProfiles.totalReviews,
-        total_listings: sellerProfiles.totalListings,
-        total_sold: sellerProfiles.totalSold,
-        created_at: sellerProfiles.createdAt,
+        ...sellerProfileCoreFields,
         user_name: users.name,
       })
       .from(sellerProfiles)
