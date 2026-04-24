@@ -1,6 +1,7 @@
 import {
   FileText,
   PackageCheck,
+  ScanLine,
   GraduationCap,
   Wrench,
   MapPin,
@@ -14,7 +15,7 @@ export function buildQuickActions(
 
   if (canAccessSection('content')) {
     actions.push({
-      label: 'Neuer Artikel',
+      label: 'Neuer Blogartikel',
       href: '/admin/content/blog/new',
       icon: FileText,
       color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 hover:bg-blue-200 dark:hover:bg-blue-900/50',
@@ -23,10 +24,19 @@ export function buildQuickActions(
 
   if (canAccessSection('intake')) {
     actions.push({
-      label: 'Neues Gerät',
+      label: 'Gerät annehmen',
       href: '/admin/intake',
       icon: PackageCheck,
       color: 'bg-green-100 dark:bg-green-900/30 text-green-600 hover:bg-green-200 dark:hover:bg-green-900/50',
+    })
+  }
+
+  if (canAccessSection('products')) {
+    actions.push({
+      label: 'Gerät erfassen',
+      href: '/admin/erfassung',
+      icon: ScanLine,
+      color: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 hover:bg-emerald-200 dark:hover:bg-emerald-900/50',
     })
   }
 
