@@ -358,9 +358,34 @@ Antworte NUR mit folgendem JSON (alle Felder sind Pflicht):
 Wichtig: Schweizer Deutsch (ss statt ß, korrekte Umlaute). Neutral formulieren, alle Seiten fair darstellen.
 Gib options nur an, wenn sinnvoll (nicht bei sense_check oder approve ohne klare Optionen).`,
     schema: null,
+    refine: `Verbessere die folgende Entscheidungsvorlage gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON. Behalte alle Felder aus dem Original bei; ändere nur was die Anweisung verlangt.
+Felder: title, description, options (Array mit label/description), recommendedDecisionType, recommendedVotingMethod, recommendedCategory, recommendedParticipantScope, recommendedQuorum, recommendationReason.
+Schweizer Deutsch (ss statt ß, korrekte Umlaute).`,
     quickActions: {
-      prosAndCons: { label: 'Pro/Contra', prompt: 'Erstelle eine Pro/Contra-Analyse für den beschriebenen Vorschlag. Berücksichtige Kosten, Aufwand, Nutzen und Risiken für den Verein.' },
-      suggestOptions: { label: 'Optionen erweitern', prompt: 'Schlage 2-3 alternative Optionen oder Varianten vor, die der Verein zusätzlich in Betracht ziehen könnte.' },
+      prosAndCons: {
+        label: 'Pro/Contra analysieren',
+        prompt: 'Erstelle eine ausgewogene Pro/Contra-Analyse für den Vorschlag. Berücksichtige: Kosten und Ressourcen für den Verein, Nutzen für Community und Mission, Machbarkeit mit Freiwilligen, mögliche Risiken oder Nebenwirkungen. Aktualisiere die Beschreibung um diese Analyse.',
+      },
+      suggestOptions: {
+        label: 'Abstimmungsoptionen verbessern',
+        prompt: 'Überprüfe und verbessere die Abstimmungsoptionen: Sind sie klar formuliert, präzise und unterscheidbar? Schlage ggf. eine Enthaltungsoption oder eine "weiter diskutieren"-Option vor. Optionen sollen für Abstimmende ohne Vorwissen verständlich sein.',
+      },
+      clarifyQuestion: {
+        label: 'Fragestellung schärfen',
+        prompt: 'Überprüfe ob die Fragestellung präzise und eindeutig ist. Formuliere Titel und Beschreibung so, dass klar ist WAS entschieden wird, WARUM jetzt und WAS die Konsequenz der Entscheidung ist. Vermeide Mehrdeutigkeiten.',
+      },
+      discussionPrompts: {
+        label: 'Diskussionsfragen vorschlagen',
+        prompt: 'Schlage 3-4 Diskussionsfragen vor, die das Team vor der Abstimmung klären sollte. Nutze die Beschreibung als Kontext. Fragen sollen verschiedene Perspektiven beleuchten (Kosten, Nutzen, Risiko, Alternativen).',
+      },
     },
     auth: 'staff',
   },

@@ -42,10 +42,10 @@ export default function DecisionFormClient() {
       {/* AI Assistant */}
       <AIFormAssist
         formType="decision"
-        placeholder="Beschreibe den Vorschlag in 1-2 Sätzen..."
+        placeholder="Beschreibe was entschieden werden soll – z.B. 'Wir möchten eine Solaranlage aufs Dach installieren lassen und brauchen eine Entscheidung ob wir das Budget von 8000 CHF dafür freigeben.' Die KI strukturiert den Vorschlag und empfiehlt die passende Abstimmungsmethode."
         defaultExpanded={true}
         onFieldsFilled={form.handleAIFieldsFilled}
-        currentData={{ title: form.title, description: form.description, options: form.options }}
+        currentData={{ title: form.title, description: form.description, background: form.background, options: form.options }}
       />
 
       {/* AI Recommendation Banner */}
