@@ -1,16 +1,22 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-04-25
-last_modified_summary: Full i18n gap closure (workshops.materials/registration/reviews, blog/contact/itHelp/services/workshops for es/it/ja/ko, getInvolved.kontakt.form + itHelp.review for fr); POOL_STATUS + POOL_MEMBERSHIP_STATUS SSOT constants added; DECISION_STATUS.CLOSED and REQUEST_STATUSES.PENDING used consistently.
+last_modified_date: 2026-04-26
+last_modified_summary: Dynamic sitemap (src/app/sitemap.ts) replaces static public/sitemap.xml; covers 7 locales × static pages + dynamic blog/workshop/shop content; excludes admin/auth/dashboard paths.
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-04-25
+**Last Audit Date**: 2026-04-26
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
+
+## Summary of Recent Fixes (2026-04-26)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| Dynamic sitemap | FIXED | src/app/sitemap.ts replaces static public/sitemap.xml; 7 locales × static pages + blog/workshops/shop products; excludes auth/dashboard/admin |
 
 ## Summary of Recent Fixes (2026-04-25)
 
