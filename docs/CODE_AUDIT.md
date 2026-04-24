@@ -1,16 +1,23 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-04-28
-last_modified_summary: Cache-Control headers extended to 7 more public endpoints (stats/community, stats/impact, workshops instances/reviews, it-hilfe helpers/[id] + requests/[id]/matches, repairers/[id]/matching-requests, pools).
+last_modified_date: 2026-05-01
+last_modified_summary: Seller profile pages gained SEO metadata + JSON-LD (layout.tsx). Email template tests completed across all 11 modules (254 tests). Test suite at 2581 tests / 92 suites.
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-04-28
+**Last Audit Date**: 2026-05-01
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
+
+## Summary of Recent Fixes (2026-05-01)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| Seller profile SEO metadata | FIXED | `/sellers/[id]/layout.tsx` added — generateMetadata + JSON-LD Person schema. Translation keys (techniker.seller.meta.*) added to de.json with deepMerge fallback. |
+| Email template test coverage | FIXED | 11 email template modules now fully tested (254 tests): auth, it-hilfe, marketplace, workshop, admin, blog, appointments, decisions, locations, repairer, misc (content/inquiry/notification/newsletter/reviews/sellers) |
 
 ## Summary of Recent Fixes (2026-04-28)
 
@@ -140,7 +147,7 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 - `ImageUploadGrid.tsx` and `ProductImageUpload.tsx` use raw `<img>` for blob URL previews — this is **correct** (`next/image` cannot optimize blob: URLs)
 
 ### Testing Coverage
-**Current Coverage**: 2248 tests across 78 test suites (updated 2026-04-30)
+**Current Coverage**: 2581 tests across 92 test suites (updated 2026-05-01)
 
 **Config utilities** (src/config/__tests__/):
 - it-hilfe: deriveBudgetType, formatBudget, isRequestAcceptingOffers, skill/category/status lookups
@@ -168,6 +175,24 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 - chatbot-language, date-formats, design-system, org-numbers, permissions, swiss-postal-codes
 - utils/date, utils/error, utils/slug
 
+**Email templates** (src/lib/email/__tests__/):
+- auth: verificationCode, emailVerification, welcome, staffVerificationCode, staffWelcome, passwordReset, passwordChangeConfirmation
+- it-hilfe: itHilfeRequestConfirmation, helperNewMatchingRequest, adminNewITHilfeRequest, itHilfeOfferAccepted, itHilfeNewOfferReceived, itHilfeCompleted, itHilfeReviewReceived, itHilfeOfferRejected
+- marketplace: listingPublishedConfirmation, newMarketplaceMessage, orderConfirmationBuyer, newOrderNotificationSeller, orderStatusUpdate, orderReceiptConfirmed, orderReviewPrompt, orderReviewReceived, listingReviewNotification
+- workshop: workshopRegistrationConfirmation, workshopRegistrationStatusUpdate, workshopReminder, workshopCancellation, workshopFeedbackRequest, workshopProposalSubmitted, workshopProposalApproved, workshopProposalRejected, workshopProposalChangesRequested
+- admin: adminNewRepairerApplication, adminNewWorkshopProposal, adminNewBlogSubmission, adminNewSellerApplication
+- blog: blogSubmissionReceived, blogSubmissionApproved, blogSubmissionRejected, blogSubmissionPublished, blogSubmissionChangesRequested
+- appointments: appointmentNewBooking, appointmentQuoteReceived, appointmentStatusUpdate, appointmentUnassignedAlert
+- decisions: decisionVotingOpened, decisionDeadlineReminder, decisionClosed
+- locations: locationApprovalNotification, locationSubmissionConfirmation
+- repairer: repairerApplicationSubmitted, repairerApplicationApproved, repairerApplicationRejected, repairerApplicationChangesRequested
+- misc: contentSubmissionApproved, contentSubmissionRejected, inquiryNotification, inquiryConfirmation, notificationEmail, newsletterConfirmation, newReviewNotification, sellerApplicationSubmitted
+
+**Untestable** (env-dependent or React component returns):
+- sections.ts, service-icons.ts: return LucideIcon components
+- email.ts, redis.ts: require environment variables (Brevo SMTP, Redis)
+- Integration tests: require live Neon DB connection
+
 ---
 
-**Last Updated**: 2026-04-30
+**Last Updated**: 2026-05-01
