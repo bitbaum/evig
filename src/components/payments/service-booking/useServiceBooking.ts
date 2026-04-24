@@ -96,7 +96,7 @@ export function useServiceBooking({
 
     try {
       const { data: result, error: apiError } = await apiFetch<{
-        clientSecret: string
+        paymentUrl: string
         amount: number
         appointmentId: string
         invoiceId: string
@@ -119,7 +119,7 @@ export function useServiceBooking({
       }
 
       setPaymentData({
-        clientSecret: result.clientSecret,
+        paymentUrl: result.paymentUrl,
         amount: result.amount,
         appointmentId: result.appointmentId,
         invoiceId: result.invoiceId,

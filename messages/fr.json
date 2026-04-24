@@ -1866,8 +1866,7 @@
       "paymentViewDesc": "Finalisez le paiement pour {name}",
       "servicePriceLabel": "Prix du service :",
       "feesLabel": "Frais :",
-      "comingSoonTitle": "Paiement en ligne bientôt disponible",
-      "comingSoonDesc": "Contactez-nous directement pour les réservations."
+      "redirectingToPayment": "Redirection vers le paiement sécurisé..."
     },
     "appointment": {
       "bookButton": "Prendre rendez-vous",

@@ -4556,8 +4556,7 @@
       "paymentViewDesc": "Completa el pago para {name}",
       "servicePriceLabel": "Precio del servicio:",
       "feesLabel": "Tarifas:",
-      "comingSoonTitle": "Pago en línea próximamente",
-      "comingSoonDesc": "Contáctanos directamente para las reservas."
+      "redirectingToPayment": "Redirigiendo al pago seguro..."
     },
     "appointment": {
       "bookButton": "Reservar cita",

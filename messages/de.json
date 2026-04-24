@@ -910,8 +910,7 @@
       "paymentViewDesc": "Schliesse die Zahlung für {name} ab",
       "servicePriceLabel": "Service-Preis:",
       "feesLabel": "Gebühren:",
-      "comingSoonTitle": "Online-Zahlung wird bald verfügbar sein",
-      "comingSoonDesc": "Kontaktiere uns direkt für Buchungen."
+      "redirectingToPayment": "Weiterleitung zur sicheren Zahlung..."
     },
     "appointment": {
       "bookButton": "Termin buchen",

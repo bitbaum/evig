@@ -864,8 +864,7 @@
       "paymentViewDesc": "Complete the payment for {name}",
       "servicePriceLabel": "Service price:",
       "feesLabel": "Fees:",
-      "comingSoonTitle": "Online payment coming soon",
-      "comingSoonDesc": "Contact us directly for bookings."
+      "redirectingToPayment": "Redirecting to secure payment..."
     },
     "appointment": {
       "bookButton": "Book appointment",

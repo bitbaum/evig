@@ -4556,8 +4556,7 @@
       "paymentViewDesc": "{name}の支払いを完了してください",
       "servicePriceLabel": "サービス料金：",
       "feesLabel": "手数料：",
-      "comingSoonTitle": "オンライン決済は近日公開予定",
-      "comingSoonDesc": "予約はお問い合わせください。"
+      "redirectingToPayment": "安全な決済ページへリダイレクト中..."
     },
     "appointment": {
       "bookButton": "予約する",

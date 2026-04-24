@@ -42,7 +42,7 @@ export interface BookingData {
 }
 
 export interface PaymentData {
-  clientSecret: string
+  paymentUrl: string
   amount: number
   appointmentId: string
   invoiceId: string

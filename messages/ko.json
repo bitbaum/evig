@@ -4556,8 +4556,7 @@
       "paymentViewDesc": "{name} 결제를 완료하세요",
       "servicePriceLabel": "서비스 가격:",
       "feesLabel": "수수료:",
-      "comingSoonTitle": "온라인 결제 서비스 준비 중",
-      "comingSoonDesc": "예약은 직접 문의해 주세요."
+      "redirectingToPayment": "보안 결제 페이지로 이동 중..."
     },
     "appointment": {
       "bookButton": "예약하기",
