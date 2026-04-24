@@ -5,7 +5,7 @@
  */
 
 import { NextRequest } from 'next/server';
-import { apiSuccess, apiError, apiBadRequest, parsePagination } from '@/lib/api/helpers';
+import { apiSuccessCached, apiError, apiBadRequest, parsePagination } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { listings, listingImages } from '@/db/schema';
 import { eq, and, ne, sql, desc } from 'drizzle-orm';
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       .where(eq(listings.id, listingId));
 
     if (!source) {
-      return apiSuccess([]);
+      return apiSuccessCached([], 60, 30);
     }
 
     const price = Number(source.priceChf);
@@ -55,7 +55,8 @@ export async function GET(request: NextRequest) {
       .orderBy(desc(listings.viewCount))
       .limit(limit);
 
-    return apiSuccess(rows);
+    // Similar listings are public, quasi-static — cache 60s, stale 30s
+    return apiSuccessCached(rows, 60, 30);
   } catch (error) {
     return apiError(error, 'Fehler beim Laden ähnlicher Inserate');
   }

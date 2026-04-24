@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { repairerProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
@@ -157,7 +157,8 @@ export async function GET(request: NextRequest) {
       total,
     })
 
-    return apiSuccess({
+    // Technician listings are semi-static public data — cache 60s, stale 30s
+    return apiSuccessCached({
       technicians,
       pagination: {
         total,
@@ -165,7 +166,7 @@ export async function GET(request: NextRequest) {
         offset,
         hasMore: offset + technicians.length < total,
       },
-    })
+    }, 60, 30)
   } catch (error) {
     logger.error('Error fetching technicians', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

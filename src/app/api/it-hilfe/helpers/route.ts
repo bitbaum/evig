@@ -25,6 +25,8 @@ export async function GET(request: NextRequest) {
       pagination: { total?: number } | undefined
       [key: string]: unknown
     }
+    // Forward the cache headers from the proxied technicians response
+    const cacheControl = response.headers.get('Cache-Control')
     return Response.json(
       {
         helpers: technicians ?? [],
@@ -32,7 +34,10 @@ export async function GET(request: NextRequest) {
         pagination,
         ...rest,
       },
-      { status: response.status }
+      {
+        status: response.status,
+        headers: cacheControl ? { 'Cache-Control': cacheControl } : undefined,
+      }
     )
   } catch (error) {
     logger.error('Error in legacy /api/it-hilfe/helpers proxy', { error })

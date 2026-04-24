@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { listings, listingImages, listingSpecs, users, sellerProfiles } from '@/db/schema';
 import { eq, and, sql, gte, lte, desc, asc, inArray, type SQL } from 'drizzle-orm';
@@ -173,8 +173,8 @@ export async function GET(request: NextRequest) {
         specsMap.get(row.listing_id)!.push({ key: row.key, value: row.value, unit: row.unit });
       }
 
-      // Attach specs to items
-      return apiSuccess({
+      // Attach specs to items — public browse, cache 30s, stale 15s
+      return apiSuccessCached({
         items: items.map(item => ({
           ...item,
           specs: specsMap.get(item.id) || [],
@@ -184,17 +184,18 @@ export async function GET(request: NextRequest) {
           limit: filters.limit,
           offset: filters.offset,
         },
-      });
+      }, 30, 15);
     }
 
-    return apiSuccess({
+    // Public browse — cache 30s, stale 15s
+    return apiSuccessCached({
       items,
       pagination: {
         total,
         limit: filters.limit,
         offset: filters.offset,
       },
-    });
+    }, 30, 15);
   } catch (error) {
     return apiError(error, 'Fehler beim Laden der Inserate');
   }

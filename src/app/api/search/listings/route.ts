@@ -6,7 +6,7 @@
  */
 
 import { NextRequest } from 'next/server';
-import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { apiSuccessCached, apiError } from '@/lib/api/helpers';
 import { validateQuery, ListingsQuerySchema } from '@/lib/schemas';
 import { searchListings } from '@/lib/search/meilisearch';
 import { logger } from '@/lib/logger';
@@ -41,14 +41,15 @@ export async function GET(request: NextRequest) {
 
     if (!result) {
       // Meilisearch unavailable — redirect client to standard API
-      return apiSuccess({
+      return apiSuccessCached({
         items: [],
         pagination: { total: 0, limit: filters.limit, offset: filters.offset },
         fallback: true,
-      });
+      }, 15, 10);
     }
 
-    return apiSuccess({
+    // Cache identical search queries for 15s to reduce Meilisearch load
+    return apiSuccessCached({
       items: result.hits,
       pagination: {
         total: result.estimatedTotalHits,
@@ -56,7 +57,7 @@ export async function GET(request: NextRequest) {
         offset: filters.offset,
       },
       facets: result.facetDistribution || null,
-    });
+    }, 15, 10);
   } catch (error) {
     logger.error('Search error', { error });
     return apiError(error, 'Fehler bei der Suche');

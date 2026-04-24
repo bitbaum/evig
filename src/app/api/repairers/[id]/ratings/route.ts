@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { repairerProfiles, reviews, reviewResponses, users } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -124,13 +124,14 @@ export async function GET(
       totalReviews: ratings.overview.totalReviews
     })
 
-    return apiSuccess({
+    // Ratings are public, change infrequently — cache 60s, stale 30s
+    return apiSuccessCached({
       repairer: {
         id: profile.id,
         businessName: profile.businessName
       },
       ratings
-    })
+    }, 60, 30)
 
   } catch (error) {
     logger.error('Error fetching repairer ratings', { error, repairerId })

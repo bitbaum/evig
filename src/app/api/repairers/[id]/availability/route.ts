@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { repairerProfiles, repairerAvailability } from '@/db/schema'
 import { eq, and, gte, lte, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REPAIRER_STATUS, REPAIRER_AVAILABILITY_TYPE } from '@/config/repairer-status'
@@ -141,7 +141,8 @@ export async function GET(
       slotsCount: slots.length
     })
 
-    return apiSuccess({
+    // Availability is public but time-sensitive — short cache 15s, stale 10s
+    return apiSuccessCached({
       repairer_id: id,
       date_range: {
         start: startDate,
@@ -151,7 +152,7 @@ export async function GET(
       total_available_slots: slots.filter(s =>
         !bookedSlots.some(b => b.date === s.date && b.start_time === s.start_time)
       ).length
-    })
+    }, 15, 10)
 
   } catch (error) {
     logger.error('Error fetching repairer availability', { error })

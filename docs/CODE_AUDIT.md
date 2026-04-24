@@ -1,16 +1,22 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-04-26
-last_modified_summary: Dynamic sitemap (src/app/sitemap.ts) replaces static public/sitemap.xml; covers 7 locales × static pages + dynamic blog/workshop/shop content; excludes admin/auth/dashboard paths.
+last_modified_date: 2026-04-27
+last_modified_summary: Cache-Control headers added to 11 public read-only API endpoints (technicians, shop inventory, listings browse/similar/search, sellers, repairers, org-numbers, financials, services, blog/categories).
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-04-26
+**Last Audit Date**: 2026-04-27
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
 ---
+
+## Summary of Recent Fixes (2026-04-27)
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| Cache-Control on public APIs | FIXED | apiSuccessCached applied to 11 endpoints: technicians (list+detail, 60s), shop inventory (list+detail, 30s), listings browse+similar (30/60s), search/listings (15s), sellers/[id] (60s), repairers proxy+ratings (60s), availability (15s), org-numbers (300s), financials (3600s), services (300s), blog/categories (300s) |
 
 ## Summary of Recent Fixes (2026-04-26)
 

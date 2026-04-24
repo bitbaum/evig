@@ -7,7 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { z } from 'zod'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { getInventoryProducts } from '@/lib/services/inventory-service'
 
 const inventoryQuerySchema = z.object({
@@ -31,8 +31,8 @@ export async function GET(request: NextRequest) {
     // 2. Call service
     const result = await getInventoryProducts(parsed.data)
 
-    // 3. Return response
-    return apiSuccess(result)
+    // 3. Return response — shop inventory is public, cache 30s (stock levels change)
+    return apiSuccessCached(result, 30, 15)
   } catch (error) {
     return apiError(error, 'Fehler beim Laden der Produkte')
   }

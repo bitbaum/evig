@@ -11,7 +11,7 @@
 
 import { NextRequest } from 'next/server'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { apiSuccessCached, apiError } from '@/lib/api/helpers'
 import {
   getFeaturedServices,
   getBookableServices,
@@ -59,7 +59,8 @@ export async function GET(request: NextRequest) {
       displayOrder: service.displayOrder,
     }))
 
-    return apiSuccess(response)
+    // Services list is stable public data — cache 5 min, stale 1 min
+    return apiSuccessCached(response, 300, 60)
   } catch (error) {
     logger.error('Failed to list services', { error })
     return apiError(error, 'Services konnten nicht geladen werden')

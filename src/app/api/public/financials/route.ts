@@ -1,4 +1,4 @@
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached } from '@/lib/api/helpers'
 import { loadFinancialData, getAvailableYears } from '@/lib/hirn/data/financial-loader'
 import { logger } from '@/lib/logger'
 
@@ -37,7 +37,8 @@ export async function GET() {
       })
     )
 
-    return apiSuccess(yearlyData.filter(Boolean))
+    // Financial data is public by design (mission: transparency) and changes yearly
+    return apiSuccessCached(yearlyData.filter(Boolean), 3600, 300)
   } catch (error) {
     logger.error('Failed to load public financials', { error })
     return apiError(error, 'Finanzdaten konnten nicht geladen werden')

@@ -10,7 +10,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { repairerProfiles, repairerServices, userSkills, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
@@ -124,13 +124,14 @@ export async function GET(_request: NextRequest, { params }: RouteParams) {
 
     logger.info('Fetched technician profile', { technicianId: id, tier: profile.profileTier })
 
-    return apiSuccess({
+    // Individual technician profiles are semi-static public data — cache 60s, stale 30s
+    return apiSuccessCached({
       technician: {
         ...profile,
         skills: profile.skills || [],
         services,
       },
-    })
+    }, 60, 30)
   } catch (error) {
     logger.error('Error fetching technician profile', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

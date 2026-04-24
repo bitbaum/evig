@@ -20,10 +20,15 @@ export async function GET(request: NextRequest) {
     const body = await response.json() as Record<string, unknown>
 
     // Remap { technicians } → { repairers } for backwards compatibility
+    // Forward cache headers from the proxied technicians response
+    const cacheControl = response.headers.get('Cache-Control')
     const { technicians, ...rest } = body
     return Response.json(
       { repairers: technicians ?? [], ...rest },
-      { status: response.status }
+      {
+        status: response.status,
+        headers: cacheControl ? { 'Cache-Control': cacheControl } : undefined,
+      }
     )
   } catch (error) {
     logger.error('Error in legacy /api/repairers proxy', { error })

@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiBadRequest, apiError } from '@/lib/api/helpers'
+import { apiSuccessCached, apiBadRequest, apiError } from '@/lib/api/helpers'
 import { getOrgNumbers, ORG_NUMBERS_DEFAULTS, type OrgNumberCategory } from '@/lib/org-numbers'
 
 const VALID_CATEGORIES: OrgNumberCategory[] = ['impact', 'social', 'economic', 'operations']
@@ -32,16 +32,18 @@ export async function GET(request: NextRequest) {
         ? defaults.filter(n => n.category === category)
         : defaults
 
-      return apiSuccess({
+      // Org numbers are stable, public data — cache 5 min, stale 1 min
+      return apiSuccessCached({
         items: filtered,
         meta: { source: 'defaults', count: filtered.length }
-      })
+      }, 300, 60)
     }
 
-    return apiSuccess({
+    // Org numbers are stable, public data — cache 5 min, stale 1 min
+    return apiSuccessCached({
       items: numbers,
       meta: { source: 'database', count: numbers.length }
-    })
+    }, 300, 60)
   } catch (error) {
     return apiError(error, 'Serverfehler')
   }

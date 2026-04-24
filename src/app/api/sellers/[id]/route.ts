@@ -3,7 +3,7 @@
  */
 
 import { NextRequest } from 'next/server';
-import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
+import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { sellerProfiles, listings, listingImages, users, reviews } from '@/db/schema';
 import { eq, and, sql, getTableName } from 'drizzle-orm';
@@ -86,14 +86,15 @@ export async function GET(
 
     const reviewStats = reviewStatsResult.rows[0] as { avg_rating: string | null; review_count: string } | undefined;
 
-    return apiSuccess({
+    // Public seller profiles are semi-static — cache 60s, stale 30s
+    return apiSuccessCached({
       profile,
       listings: activeListings,
       review_stats: {
         average_rating: reviewStats?.avg_rating ? Number(reviewStats.avg_rating) : 0,
         total_reviews: reviewStats?.review_count ? Number(reviewStats.review_count) : 0,
       },
-    });
+    }, 60, 30);
   } catch (error) {
     return apiError(error, 'Fehler beim Laden des Verkäuferprofils');
   }
