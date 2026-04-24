@@ -5123,6 +5123,49 @@
           "privacyLink": "개인정보 처리방침"
         }
       }
+    },
+    "materials": {
+      "error": "자료 로딩 오류",
+      "networkError": "네트워크 오류",
+      "emptyTitle": "사용 가능한 자료 없음",
+      "loginHint": "더 많은 자료에 접근하려면 로그인하세요",
+      "accessAttended": "전체 접근 (참가자)",
+      "accessRegistered": "확장 접근 (등록됨)",
+      "badgeAttended": "참가자",
+      "badgeRegistered": "등록됨"
+    },
+    "registration": {
+      "loading": "등록 상태 로딩 중...",
+      "registrationFailed": "등록 실패",
+      "networkError": "네트워크 오류입니다. 다시 시도해 주세요.",
+      "processingError": "등록 생성 중 오류",
+      "loadError": "등록 상태 로딩 중 오류",
+      "fullHeading": "워크샵 마감",
+      "fullNoSpots": "자리 없음",
+      "fullMessage": "이 워크샵은 마감되었습니다. 새 날짜를 위해 정기적으로 확인해 주세요.",
+      "fullButton": "매진",
+      "errorHeading": "오류",
+      "errorTitle": "오류가 발생했습니다",
+      "retryButton": "다시 시도",
+      "paymentHeading": "결제 완료",
+      "paymentWorkshopLabel": "워크샵",
+      "paymentAmountLabel": "금액",
+      "cancelButton": "취소",
+      "preparingPayment": "결제 준비 중...",
+      "registering": "등록 중...",
+      "registerHeading": "워크샵 등록",
+      "registerFree": "워크샵 등록",
+      "registerPaid": "등록 및 결제",
+      "paymentNote": "결제 제공업체를 통한 안전한 결제.",
+      "confirmationNote": "모든 세부 정보가 포함된 확인 이메일을 받게 됩니다."
+    },
+    "reviews": {
+      "error": "리뷰 로딩 오류",
+      "networkError": "네트워크 오류",
+      "emptyTitle": "아직 리뷰 없음",
+      "emptyMessage": "참가자들이 피드백을 제공하면 여기에 리뷰가 표시됩니다.",
+      "count": "{count}개의 리뷰",
+      "showAll": "전체 {count}개 리뷰 보기"
     }
   },
   "donate": {

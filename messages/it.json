@@ -5123,6 +5123,49 @@
           "privacyLink": "Informativa sulla privacy"
         }
       }
+    },
+    "materials": {
+      "error": "Errore nel caricamento dei materiali",
+      "networkError": "Errore di rete",
+      "emptyTitle": "Nessun materiale disponibile",
+      "loginHint": "Accedi per visualizzare più materiali",
+      "accessAttended": "Accesso completo (partecipante)",
+      "accessRegistered": "Accesso esteso (iscritto)",
+      "badgeAttended": "Partecipante",
+      "badgeRegistered": "Iscritto"
+    },
+    "registration": {
+      "loading": "Caricamento stato iscrizione...",
+      "registrationFailed": "Iscrizione non riuscita",
+      "networkError": "Errore di rete. Per favore riprova.",
+      "processingError": "Errore nella creazione dell'iscrizione",
+      "loadError": "Errore nel caricamento dello stato dell'iscrizione",
+      "fullHeading": "Workshop al completo",
+      "fullNoSpots": "Nessun posto disponibile",
+      "fullMessage": "Questo workshop è al completo. Controlla regolarmente per nuove date.",
+      "fullButton": "Esaurito",
+      "errorHeading": "Errore",
+      "errorTitle": "Si è verificato un errore",
+      "retryButton": "Riprova",
+      "paymentHeading": "Completa il pagamento",
+      "paymentWorkshopLabel": "Workshop",
+      "paymentAmountLabel": "Importo",
+      "cancelButton": "Annulla",
+      "preparingPayment": "Preparazione pagamento...",
+      "registering": "Iscrizione in corso...",
+      "registerHeading": "Iscriviti al workshop",
+      "registerFree": "Iscriviti al workshop",
+      "registerPaid": "Iscriviti e paga",
+      "paymentNote": "Pagamento sicuro tramite il nostro provider di pagamento.",
+      "confirmationNote": "Riceverai una email di conferma con tutti i dettagli."
+    },
+    "reviews": {
+      "error": "Errore nel caricamento delle recensioni",
+      "networkError": "Errore di rete",
+      "emptyTitle": "Nessuna recensione ancora",
+      "emptyMessage": "Le recensioni appariranno qui una volta che i partecipanti daranno il loro feedback.",
+      "count": "{count, plural, one {# recensione} other {# recensioni}}",
+      "showAll": "Mostra tutte le {count} recensioni"
     }
   },
   "donate": {

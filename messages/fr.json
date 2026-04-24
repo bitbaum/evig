@@ -2096,6 +2096,49 @@
           "privacyLink": "Politique de confidentialité"
         }
       }
+    },
+    "materials": {
+      "error": "Erreur lors du chargement des materiaux",
+      "networkError": "Erreur reseau",
+      "emptyTitle": "Aucun materiel disponible",
+      "loginHint": "Connectez-vous pour acceder a plus de materiaux",
+      "accessAttended": "Acces complet (participant)",
+      "accessRegistered": "Acces etendu (inscrit)",
+      "badgeAttended": "Participant",
+      "badgeRegistered": "Inscrit"
+    },
+    "registration": {
+      "loading": "Chargement du statut d'inscription...",
+      "registrationFailed": "Echec de l'inscription",
+      "networkError": "Erreur reseau. Veuillez reessayer.",
+      "processingError": "Erreur lors de la creation de l'inscription",
+      "loadError": "Erreur lors du chargement du statut d'inscription",
+      "fullHeading": "Atelier complet",
+      "fullNoSpots": "Plus de places disponibles",
+      "fullMessage": "Cet atelier est complet. Revenez regulierement pour de nouvelles dates.",
+      "fullButton": "Complet",
+      "errorHeading": "Erreur",
+      "errorTitle": "Une erreur est survenue",
+      "retryButton": "Reessayer",
+      "paymentHeading": "Finaliser le paiement",
+      "paymentWorkshopLabel": "Atelier",
+      "paymentAmountLabel": "Montant",
+      "cancelButton": "Annuler",
+      "preparingPayment": "Preparation du paiement...",
+      "registering": "Inscription en cours...",
+      "registerHeading": "S'inscrire a l'atelier",
+      "registerFree": "S'inscrire a l'atelier",
+      "registerPaid": "S'inscrire et payer",
+      "paymentNote": "Paiement securise via notre prestataire de paiement.",
+      "confirmationNote": "Vous recevrez un e-mail de confirmation avec tous les details."
+    },
+    "reviews": {
+      "error": "Erreur lors du chargement des avis",
+      "networkError": "Erreur reseau",
+      "emptyTitle": "Pas encore d'avis",
+      "emptyMessage": "Les avis apparaitront ici une fois que les participants auront donne leur retour.",
+      "count": "{count, plural, one {# avis} other {# avis}}",
+      "showAll": "Afficher les {count} avis"
     }
   },
   "about": {

@@ -5123,6 +5123,49 @@
           "privacyLink": "プライバシーポリシー"
         }
       }
+    },
+    "materials": {
+      "error": "教材の読み込みエラー",
+      "networkError": "ネットワークエラー",
+      "emptyTitle": "教材はありません",
+      "loginHint": "ログインしてさらに教材にアクセスしてください",
+      "accessAttended": "フルアクセス（参加者）",
+      "accessRegistered": "拡張アクセス（登録済み）",
+      "badgeAttended": "参加者",
+      "badgeRegistered": "登録済み"
+    },
+    "registration": {
+      "loading": "登録状況を読み込み中...",
+      "registrationFailed": "登録に失敗しました",
+      "networkError": "ネットワークエラーです。もう一度お試しください。",
+      "processingError": "登録の作成中にエラーが発生しました",
+      "loadError": "登録状況の読み込み中にエラーが発生しました",
+      "fullHeading": "ワークショップは満員です",
+      "fullNoSpots": "空きがありません",
+      "fullMessage": "このワークショップは満員です。新しい日程については定期的にご確認ください。",
+      "fullButton": "満員",
+      "errorHeading": "エラー",
+      "errorTitle": "エラーが発生しました",
+      "retryButton": "再試行",
+      "paymentHeading": "支払いを完了する",
+      "paymentWorkshopLabel": "ワークショップ",
+      "paymentAmountLabel": "金額",
+      "cancelButton": "キャンセル",
+      "preparingPayment": "支払いを準備中...",
+      "registering": "登録中...",
+      "registerHeading": "ワークショップに登録する",
+      "registerFree": "ワークショップに登録する",
+      "registerPaid": "登録して支払う",
+      "paymentNote": "決済プロバイダーを通じた安全な支払い。",
+      "confirmationNote": "詳細を記載した確認メールが届きます。"
+    },
+    "reviews": {
+      "error": "レビューの読み込みエラー",
+      "networkError": "ネットワークエラー",
+      "emptyTitle": "まだレビューはありません",
+      "emptyMessage": "参加者がフィードバックを送ると、ここにレビューが表示されます。",
+      "count": "{count}件のレビュー",
+      "showAll": "全{count}件のレビューを表示"
     }
   },
   "donate": {

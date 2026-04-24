@@ -5123,6 +5123,49 @@
           "privacyLink": "Política de privacidad"
         }
       }
+    },
+    "materials": {
+      "error": "Error al cargar los materiales",
+      "networkError": "Error de red",
+      "emptyTitle": "No hay materiales disponibles",
+      "loginHint": "Inicia sesión para acceder a más materiales",
+      "accessAttended": "Acceso completo (participante)",
+      "accessRegistered": "Acceso ampliado (inscrito)",
+      "badgeAttended": "Participante",
+      "badgeRegistered": "Inscrito"
+    },
+    "registration": {
+      "loading": "Cargando estado de inscripción...",
+      "registrationFailed": "Inscripción fallida",
+      "networkError": "Error de red. Por favor, inténtalo de nuevo.",
+      "processingError": "Error al crear la inscripción",
+      "loadError": "Error al cargar el estado de inscripción",
+      "fullHeading": "Taller completo",
+      "fullNoSpots": "No quedan plazas disponibles",
+      "fullMessage": "Este taller está completo. Vuelve regularmente para nuevas fechas.",
+      "fullButton": "Agotado",
+      "errorHeading": "Error",
+      "errorTitle": "Ha ocurrido un error",
+      "retryButton": "Intentar de nuevo",
+      "paymentHeading": "Completar el pago",
+      "paymentWorkshopLabel": "Taller",
+      "paymentAmountLabel": "Importe",
+      "cancelButton": "Cancelar",
+      "preparingPayment": "Preparando el pago...",
+      "registering": "Inscribiendo...",
+      "registerHeading": "Inscribirse al taller",
+      "registerFree": "Inscribirse al taller",
+      "registerPaid": "Inscribirse y pagar",
+      "paymentNote": "Pago seguro a través de nuestro proveedor de pago.",
+      "confirmationNote": "Recibirás un correo de confirmación con todos los detalles."
+    },
+    "reviews": {
+      "error": "Error al cargar las reseñas",
+      "networkError": "Error de red",
+      "emptyTitle": "Sin reseñas aún",
+      "emptyMessage": "Las reseñas aparecerán aquí una vez que los participantes den su opinión.",
+      "count": "{count, plural, one {# reseña} other {# reseñas}}",
+      "showAll": "Ver todas las {count} reseñas"
     }
   },
   "donate": {
