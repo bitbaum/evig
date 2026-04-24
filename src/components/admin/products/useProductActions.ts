@@ -44,14 +44,14 @@ export function useProductActions() {
   // Confirmation flows (delegated)
   const confirm = useProductConfirmActions({ refetchBoth })
 
-  // Computed stats
+  // Computed stats — use server total for accuracy; status counts from current page
   const inventoryStats: InventoryStats = useMemo(() => ({
-    total: inventoryProducts.length,
+    total: inventoryData?.total ?? inventoryProducts.length,
     published: inventoryProducts.filter(p => p.marketplace_status === MARKETPLACE_STATUS.PUBLISHED).length,
     draft: inventoryProducts.filter(p => p.marketplace_status === MARKETPLACE_STATUS.DRAFT).length,
     approved: inventoryProducts.filter(p => p.status === PRODUCT_STATUS.APPROVED).length,
     pending: inventoryProducts.filter(p => p.status === PRODUCT_STATUS.PENDING_REVIEW).length,
-  }), [inventoryProducts])
+  }), [inventoryData?.total, inventoryProducts])
 
   const shopStats: ShopStats = useMemo(() => {
     const byCondition: Record<string, number> = {}
