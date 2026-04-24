@@ -12,6 +12,7 @@ import {
   type InventoryProduct,
 } from '@/lib/services/inventory-service'
 import { SHOPWARE_URL } from '@/lib/constants'
+import { APP_URL } from '@/config/urls'
 
 interface ProductPageProps {
   params: Promise<{ locale: string; uuid: string }>
@@ -22,9 +23,26 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const t = await getTranslations({ locale, namespace: 'shop.meta' })
   const product = await getInventoryProductByUuid(uuid).catch(() => null)
   if (!product) return { title: t('productNotFound') }
+  const title = `${product.title} | ${ORG.name}`
+  const description = product.description ?? t('productFallbackDesc', { brand: product.brand, model: product.model, orgName: ORG.name })
   return {
-    title: `${product.title} | ${ORG.name}`,
-    description: product.description ?? t('productFallbackDesc', { brand: product.brand, model: product.model, orgName: ORG.name }),
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      ...(product.image_url && {
+        images: [{ url: product.image_url, alt: product.title }],
+      }),
+    },
+  }
+}
+
+function mapConditionToSchema(condition: string): string {
+  switch (condition.toLowerCase()) {
+    case 'wie neu': return 'https://schema.org/NewCondition'
+    default: return 'https://schema.org/UsedCondition'
   }
 }
 
@@ -61,7 +79,30 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
   const conditionLabel = CONDITION_LABEL_MAP[conditionKey] ?? product.condition
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    ...(product.description && { description: product.description }),
+    ...(product.image_url && { image: product.image_url }),
+    brand: { '@type': 'Brand', name: product.brand },
+    offers: {
+      '@type': 'Offer',
+      price: String(product.price.toFixed(2)),
+      priceCurrency: 'CHF',
+      availability: 'https://schema.org/InStock',
+      itemCondition: mapConditionToSchema(product.condition),
+      url: `${APP_URL}/shop/product/${uuid}`,
+      seller: { '@type': 'Organization', name: ORG.name },
+    },
+  }
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumbs */}
       <div className="bg-white border-b border-gray-100">
@@ -240,5 +281,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
         )}
       </div>
     </div>
+    </>
   )
 }
