@@ -12,7 +12,7 @@ import { sellerProfiles } from '@/db/schema/marketplace'
 import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { REVIEW_STATUS } from '@/config/review-status'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
+import { REVIEW_TARGET_TYPES, TABLE_NAMES } from '@/config/database'
 import { OFFER_STATUS } from '@/config/it-hilfe'
 
 interface CreateReviewParams {
@@ -114,7 +114,7 @@ async function updateTargetRating(targetType: string, targetId: string): Promise
 async function updateHelperRating(requestId: string): Promise<void> {
   // Find the helper for this request (via accepted offer)
   const result = await db.execute(sql`
-    UPDATE helper_profiles SET
+    UPDATE ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} SET
       average_rating = sub.avg_rating,
       total_reviews = sub.review_count
     FROM (
@@ -122,14 +122,14 @@ async function updateHelperRating(requestId: string): Promise<void> {
         o.user_id AS helper_user_id,
         AVG(r.overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(r.id)::int AS review_count
-      FROM reviews r
-      JOIN it_hilfe_offers o ON o.request_id = r.target_id AND o.status = ${OFFER_STATUS.ACCEPTED}
+      FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
+      JOIN ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} o ON o.request_id = r.target_id AND o.status = ${OFFER_STATUS.ACCEPTED}
       WHERE r.target_type = ${REVIEW_TARGET_TYPES.IT_HILFE} AND r.status = ${REVIEW_STATUS.PUBLISHED}
       GROUP BY o.user_id
     ) sub
-    WHERE helper_profiles.user_id = sub.helper_user_id
+    WHERE ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id = sub.helper_user_id
     AND EXISTS (
-      SELECT 1 FROM it_hilfe_offers WHERE request_id = ${requestId} AND status = ${OFFER_STATUS.ACCEPTED} AND user_id = helper_profiles.user_id
+      SELECT 1 FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)} WHERE request_id = ${requestId} AND status = ${OFFER_STATUS.ACCEPTED} AND user_id = ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)}.user_id
     )
   `)
   logger.info('Updated helper rating', { requestId, rows: result.rowCount })
@@ -138,7 +138,7 @@ async function updateHelperRating(requestId: string): Promise<void> {
 /** Update seller_profiles average rating from all listing reviews for that seller */
 async function updateSellerRatingFromListing(listingId: string): Promise<void> {
   const result = await db.execute(sql`
-    UPDATE seller_profiles SET
+    UPDATE ${sql.raw(TABLE_NAMES.SELLER_PROFILES)} SET
       average_rating = sub.avg_rating,
       total_reviews = sub.review_count
     FROM (
@@ -146,13 +146,13 @@ async function updateSellerRatingFromListing(listingId: string): Promise<void> {
         l.seller_id,
         AVG(r.overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(r.id)::int AS review_count
-      FROM reviews r
-      JOIN listings l ON l.id = r.target_id
+      FROM ${sql.raw(TABLE_NAMES.REVIEWS)} r
+      JOIN ${sql.raw(TABLE_NAMES.LISTINGS)} l ON l.id = r.target_id
       WHERE r.target_type = ${REVIEW_TARGET_TYPES.LISTING} AND r.status = ${REVIEW_STATUS.PUBLISHED}
       GROUP BY l.seller_id
     ) sub
-    WHERE seller_profiles.user_id = sub.seller_id
-    AND sub.seller_id = (SELECT seller_id FROM listings WHERE id = ${listingId})
+    WHERE ${sql.raw(TABLE_NAMES.SELLER_PROFILES)}.user_id = sub.seller_id
+    AND sub.seller_id = (SELECT seller_id FROM ${sql.raw(TABLE_NAMES.LISTINGS)} WHERE id = ${listingId})
   `)
   logger.info('Updated seller rating from listing', { listingId, rows: result.rowCount })
 }
@@ -160,7 +160,7 @@ async function updateSellerRatingFromListing(listingId: string): Promise<void> {
 /** Update repairer_profiles average rating from all repairer reviews */
 async function updateRepairerRating(repairerId: string): Promise<void> {
   const result = await db.execute(sql`
-    UPDATE repairer_profiles SET
+    UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} SET
       average_rating = sub.avg_rating,
       total_reviews = sub.review_count
     FROM (
@@ -168,11 +168,11 @@ async function updateRepairerRating(repairerId: string): Promise<void> {
         target_id AS repairer_id,
         AVG(overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(id)::int AS review_count
-      FROM reviews
+      FROM ${sql.raw(TABLE_NAMES.REVIEWS)}
       WHERE target_type = 'repairer' AND status = 'published' AND target_id = ${repairerId}
       GROUP BY target_id
     ) sub
-    WHERE repairer_profiles.user_id = sub.repairer_id
+    WHERE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)}.user_id = sub.repairer_id
   `)
   logger.info('Updated repairer rating', { repairerId, rows: result.rowCount })
 }
