@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { locations, users } from '@/db/schema'
-import { eq, and, ilike, sql, desc } from 'drizzle-orm'
+import { eq, and, ilike, sql, desc, getTableColumns } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { LOCATION_STATUS } from '@/config/location-status'
@@ -38,7 +38,7 @@ export const GET = withAuth(async (request: NextRequest, session) => {
     const where = conditions.length > 0 ? and(...conditions) : undefined
 
     const rows = await db
-      .select({ _total: sql<number>`count(*) over()`, ...locations })
+      .select({ _total: sql<number>`count(*) over()`, ...getTableColumns(locations) })
       .from(locations)
       .where(where)
       .orderBy(desc(locations.createdAt))

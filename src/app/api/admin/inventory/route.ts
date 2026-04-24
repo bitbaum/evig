@@ -42,6 +42,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
     // Fetch products with inventory data
     const productRows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: aiExtractedProducts.id,
         product_name: aiExtractedProducts.productName,
         brand: aiExtractedProducts.brand,
@@ -65,14 +66,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
       .limit(limit)
       .offset(offset)
 
-    // Get total count
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)::int` })
-      .from(aiExtractedProducts)
-      .leftJoin(inventoryItems, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
-      .where(where)
-
-    const total = countRow?.total ?? 0
+    const total = Number(productRows[0]?._total ?? 0)
 
     // Fetch customer profiles for each product
     const productIds = productRows.map(p => p.id)
@@ -98,7 +92,7 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
     }
 
     // Combine products with profiles
-    const products = productRows.map(product => ({
+    const products = productRows.map(({ _total, ...product }) => ({
       ...product,
       customer_profiles: profilesMap[product.id] || [],
     }))

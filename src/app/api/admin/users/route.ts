@@ -80,17 +80,9 @@ export const GET = withAdmin('users', async (request, session) => {
 
     const where = conditions.length > 0 ? and(...conditions) : undefined
 
-    // Get total count
-    const [countRow] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(users)
-      .where(where)
-
-    const total = Number(countRow?.count ?? 0)
-
-    // Get paginated users
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: users.id,
         name: users.name,
         email: users.email,
@@ -106,8 +98,10 @@ export const GET = withAdmin('users', async (request, session) => {
       .limit(filters.limit)
       .offset(offset)
 
+    const total = Number(rows[0]?._total ?? 0)
+
     // Add computed fields
-    const usersWithDetails = rows.map(user => ({
+    const usersWithDetails = rows.map(({ _total, ...user }) => ({
       ...user,
       is_super_admin_computed: isSuperAdmin(user.email, user.is_super_admin ?? undefined),
     }))
