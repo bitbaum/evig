@@ -207,6 +207,9 @@ export default async function DashboardDecisionPage({ params }: Props) {
           dotCount={decision.dotCount}
           hasUserVoted={decision.hasUserVoted}
           votingDeadline={decision.votingDeadline}
+          decisionTitle={decision.title}
+          decisionDescription={decision.description}
+          decisionBackground={decision.background}
         />
       )}
 

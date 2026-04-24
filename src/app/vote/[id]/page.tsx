@@ -116,6 +116,9 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
         {/* Voting form (client component) */}
         <PublicVoteClient
           decisionId={decision.id}
+          title={decision.title}
+          description={decision.description}
+          background={decision.background}
           votingMethod={decision.votingMethod}
           options={decision.options}
           dotCount={decision.dotCount}

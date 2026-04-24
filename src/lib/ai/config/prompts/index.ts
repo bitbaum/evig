@@ -26,9 +26,12 @@ export type { BlogQuickAction } from './content'
 
 export {
   PROTOCOL_PROMPTS,
+  VOTING_ADVISOR_PROMPTS,
+  VOTING_METHOD_LABELS,
+  VOTING_METHOD_EXPLANATIONS,
   getProtocolQuickActionPrompt,
 } from './decisions'
-export type { ProtocolQuickAction } from './decisions'
+export type { ProtocolQuickAction, VotingAdvisorQuickQuestion } from './decisions'
 
 // =============================================================================
 // FORM AI REGISTRY

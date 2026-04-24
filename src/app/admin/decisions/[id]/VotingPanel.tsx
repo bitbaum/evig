@@ -10,6 +10,7 @@ import { DotVote } from './voting/DotVote';
 import { ScoreVote } from './voting/ScoreVote';
 import { RankedChoiceVote } from './voting/RankedChoiceVote';
 import { SimpleMajorityVote } from './voting/SimpleMajorityVote';
+import { VoteAIAdvisor } from '@/components/decisions/VoteAIAdvisor';
 
 interface Option {
   id: string;
@@ -27,6 +28,10 @@ interface Props {
   onVoted: () => void;
   votingDeadline?: string | null;
   status?: string;
+  // Decision context for AI advisor
+  decisionTitle?: string;
+  decisionDescription?: string;
+  decisionBackground?: string | null;
 }
 
 export default function VotingPanel({
@@ -38,6 +43,9 @@ export default function VotingPanel({
   onVoted,
   votingDeadline,
   status,
+  decisionTitle,
+  decisionDescription,
+  decisionBackground,
 }: Props) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -150,7 +158,19 @@ export default function VotingPanel({
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-sm">
+    <div className="space-y-4">
+      {/* AI Advisor — appears above the ballot so voters can consult before voting */}
+      {decisionTitle && decisionDescription && (
+        <VoteAIAdvisor
+          title={decisionTitle}
+          description={decisionDescription}
+          background={decisionBackground}
+          votingMethod={votingMethod}
+          options={options.map(o => ({ label: o.label, description: o.description }))}
+        />
+      )}
+
+      <div className="rounded-lg bg-white p-6 shadow-sm">
       {votingDeadline && status === 'voting' && (
         <div className="mb-4">
           <DeadlineCountdown deadline={votingDeadline} />
@@ -218,6 +238,7 @@ export default function VotingPanel({
       >
         {submitting ? 'Wird gesendet...' : 'Stimme abgeben'}
       </button>
+      </div>
     </div>
   );
 }

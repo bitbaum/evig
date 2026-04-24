@@ -19,6 +19,9 @@ interface Props {
   dotCount: number | null;
   hasUserVoted: boolean;
   votingDeadline: string | null;
+  decisionTitle?: string;
+  decisionDescription?: string;
+  decisionBackground?: string | null;
 }
 
 export default function DashboardVotingClient({
@@ -28,6 +31,9 @@ export default function DashboardVotingClient({
   dotCount,
   hasUserVoted,
   votingDeadline,
+  decisionTitle,
+  decisionDescription,
+  decisionBackground,
 }: Props) {
   const router = useRouter();
   const [voted, setVoted] = useState(hasUserVoted);
@@ -48,6 +54,9 @@ export default function DashboardVotingClient({
       onVoted={handleVoted}
       votingDeadline={votingDeadline}
       status="voting"
+      decisionTitle={decisionTitle}
+      decisionDescription={decisionDescription}
+      decisionBackground={decisionBackground}
     />
   );
 }

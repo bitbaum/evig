@@ -419,6 +419,9 @@ export default function DecisionDetailClient({
           onVoted={fetchDecision}
           votingDeadline={decision.votingDeadline}
           status={decision.status}
+          decisionTitle={decision.title}
+          decisionDescription={decision.description}
+          decisionBackground={decision.background}
         />
       )}
 

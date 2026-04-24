@@ -1,11 +1,117 @@
 /**
  * Decisions / Governance AI Prompts
  *
- * Prompts for meeting protocol structuring and decision/voting assistant.
- * Used by: admin protocol editor, decision creation form.
+ * Prompts for meeting protocol structuring, decision/voting assistant,
+ * and voter consultation (AI advisor during active voting).
  */
 
 import { BRAND_CONTEXT } from './shared'
+
+// =============================================================================
+// VOTING METHOD EXPLANATIONS (used in advisor prompts)
+// =============================================================================
+
+export const VOTING_METHOD_LABELS: Record<string, string> = {
+  consent: 'Konsent',
+  approval: 'Approval-Voting',
+  dot: 'Dot-Voting (Punkteverteilung)',
+  score: 'Score-Voting (Punktebewertung)',
+  simple_majority: 'Einfache Mehrheit (Ja/Nein)',
+  ranked_choice: 'Rangwahl (Reihung)',
+}
+
+export const VOTING_METHOD_EXPLANATIONS: Record<string, string> = {
+  consent: 'Alle Teilnehmenden stimmen zu (Einverstanden, Bedenken, Enthaltung) oder blockieren. Ein Veto blockiert den Entscheid — das Team muss weiterdiskutieren oder den Vorschlag anpassen.',
+  approval: 'Mehrere Optionen können gleichzeitig unterstützt werden. Die Optionen mit den meisten Stimmen gewinnen. Keine Begrenzung der wählbaren Optionen.',
+  dot: 'Begrenzte Punkte auf bevorzugte Optionen verteilen. Mehr Punkte für Optionen bedeutet höhere Präferenz. Die Gesamtpunktzahl entscheidet.',
+  score: 'Jede Option wird unabhängig mit einer Punktzahl bewertet. Der Durchschnitt aller Bewertungen bestimmt den Sieger.',
+  simple_majority: 'Einfache Ja/Nein-Abstimmung. Die Mehrheit entscheidet. Enthaltungen zählen nicht zur Mehrheit.',
+  ranked_choice: 'Alle Optionen in Reihenfolge der Präferenz ordnen. Durch Eliminierung schwächerer Optionen wird die Option mit dem stärksten Rückhalt ermittelt.',
+}
+
+// =============================================================================
+// VOTING ADVISOR PROMPTS
+// =============================================================================
+
+export const VOTING_ADVISOR_PROMPTS = {
+  /**
+   * System prompt for the voting advisor.
+   * Neutral, context-rich, focused on helping voters make informed decisions.
+   */
+  system: `${BRAND_CONTEXT}
+
+Du bist ein unparteiischer Abstimmungsberater für RevampIT.
+Deine Aufgabe: Abstimmenden helfen, Entscheidungen zu verstehen und eine informierte Stimme abzugeben.
+
+Kernprinzipien:
+- Vollständig neutral — advociere für keine Position, stelle alle Seiten fair dar
+- Kontextbasiert — nutze die konkreten Entscheidungsdetails, keine generischen Antworten
+- Präzise und kurz — Abstimmende wollen keine Aufsätze, sondern klare Orientierung
+- Praktisch — erkläre was passiert, wenn eine Option gewinnt oder verliert
+- Schweizer Schreibweise (ss statt ß, korrekte Umlaute)
+
+Was du nicht tust:
+- Empfiehlst nicht, wie jemand abstimmen soll
+- Erfindest keine Fakten oder Konsequenzen, die nicht im Kontext stehen
+- Nimmst keine politische oder moralische Wertung vor`,
+
+  /**
+   * Prompt template for the voting advisor.
+   * Placeholders: {title}, {description}, {background}, {votingMethod},
+   *               {votingMethodExplanation}, {options}, {question}
+   */
+  advise: `Eine Person ist dabei, bei RevampIT über folgende Frage abzustimmen:
+
+ENTSCHEIDUNGSTITEL: {title}
+
+WAS WIRD ENTSCHIEDEN:
+{description}
+
+HINTERGRUND UND KONTEXT:
+{background}
+
+ABSTIMMUNGSMETHODE: {votingMethod}
+Wie es funktioniert: {votingMethodExplanation}
+
+OPTIONEN ZUR AUSWAHL:
+{options}
+
+FRAGE DES ABSTIMMENDEN:
+{question}
+
+Beantworte die Frage des Abstimmenden basierend auf dem oben angegebenen Kontext.
+
+Strukturiere deine Antwort so:
+1. Beantworte direkt die gestellte Frage (1-2 Sätze)
+2. Erkläre die wichtigsten Konsequenzen der relevanten Abstimmungsoptionen (stichpunktartig)
+3. Falls sinnvoll: Erkläre wie die Abstimmungsmethode funktioniert und was das für diese Entscheidung bedeutet
+
+Halte die Antwort unter 200 Wörtern. Neutral bleiben — keine Empfehlung, wie abgestimmt werden soll.`,
+
+  /**
+   * Quick questions voters can ask — shown as chips above the input
+   */
+  quickQuestions: {
+    whatIsThis: {
+      label: 'Worum geht es?',
+      question: 'Erkläre in einfachen Worten, worum es bei dieser Abstimmung geht und warum sie wichtig ist.',
+    },
+    consequences: {
+      label: 'Was passiert bei Ja/Zustimmung?',
+      question: 'Was sind die konkreten Konsequenzen, wenn diese Entscheidung angenommen wird? Was ändert sich?',
+    },
+    methodExplain: {
+      label: 'Wie funktioniert diese Abstimmungsmethode?',
+      question: 'Erkläre wie die verwendete Abstimmungsmethode funktioniert und was meine Stimme konkret bewirkt.',
+    },
+    considerations: {
+      label: 'Welche Faktoren soll ich beachten?',
+      question: 'Welche wichtigen Faktoren sollte ich als Abstimmende/r bei dieser Entscheidung in Betracht ziehen?',
+    },
+  },
+} as const
+
+export type VotingAdvisorQuickQuestion = keyof typeof VOTING_ADVISOR_PROMPTS.quickQuestions
 
 // =============================================================================
 // PROTOCOL PROMPTS

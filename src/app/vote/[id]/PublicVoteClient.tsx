@@ -11,6 +11,7 @@ import { ScoreVote } from '@/app/admin/decisions/[id]/voting/ScoreVote'
 import { RankedChoiceVote } from '@/app/admin/decisions/[id]/voting/RankedChoiceVote'
 import { SimpleMajorityVote } from '@/app/admin/decisions/[id]/voting/SimpleMajorityVote'
 import { DeadlineCountdown } from '@/app/admin/decisions/[id]/voting/DeadlineCountdown'
+import { VoteAIAdvisor } from '@/components/decisions/VoteAIAdvisor'
 
 interface Option {
   id: string
@@ -21,6 +22,9 @@ interface Option {
 
 interface Props {
   decisionId: string
+  title: string
+  description: string
+  background?: string | null
   votingMethod: VotingMethod
   options: Option[]
   dotCount: number | null
@@ -30,6 +34,9 @@ interface Props {
 
 export default function PublicVoteClient({
   decisionId,
+  title,
+  description,
+  background,
   votingMethod,
   options,
   dotCount,
@@ -159,6 +166,15 @@ export default function PublicVoteClient({
       {votingDeadline && (
         <DeadlineCountdown deadline={votingDeadline} />
       )}
+
+      {/* AI Advisor — lets voters understand the decision before voting */}
+      <VoteAIAdvisor
+        title={title}
+        description={description}
+        background={background}
+        votingMethod={votingMethod}
+        options={options.map(o => ({ label: o.label, description: o.description }))}
+      />
 
       {/* Email identification */}
       <div className="rounded-xl bg-blue-50 border border-blue-200 p-5">
