@@ -5,7 +5,7 @@ import { db } from '@/db'
 import { sql, getTableName, SQL } from 'drizzle-orm'
 import { itHilfeRequests } from '@/db/schema/itHilfe'
 import { users } from '@/db/schema/auth'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiSuccessCached, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import {
@@ -129,7 +129,8 @@ export async function GET(request: NextRequest) {
       total,
     })
 
-    return apiSuccess({
+    // Public request browse — search results change quickly, cache 15s, stale 10s
+    return apiSuccessCached({
       requests,
       total,
       pagination: {
@@ -137,7 +138,7 @@ export async function GET(request: NextRequest) {
         offset,
         hasMore: offset + limit < total,
       },
-    })
+    }, 15, 10)
   } catch (error) {
     logger.error('Error fetching IT-Hilfe requests', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

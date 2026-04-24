@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiNotFound, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccessCached, apiSuccess, apiError, apiNotFound, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
@@ -51,7 +51,8 @@ export async function GET(
       .limit(1)
 
     if (!pool) return apiNotFound('Pool nicht gefunden')
-    return apiSuccess(pool)
+    // Pool detail is public; memberCount changes on join/leave — cache 30s, stale 15s
+    return apiSuccessCached(pool, 30, 15)
   } catch (error) {
     logger.error('GET /api/pools/[id] failed', { error })
     return apiError(error, 'Fehler beim Laden des Pools')

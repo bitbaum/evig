@@ -49,30 +49,32 @@ async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
 
     const workshopIds = workshopRows.map(w => w.id)
 
-    // Fetch instances with registration counts
-    const instanceRows = await db
-      .select({
-        id: workshopInstances.id,
-        workshop_id: workshopInstances.workshopId,
-        start_date: workshopInstances.startDate,
-        end_date: workshopInstances.endDate,
-        location: workshopInstances.location,
-        instructor: workshopInstances.instructor,
-        max_participants: workshopInstances.maxParticipants,
-        notes: workshopInstances.notes,
-        status: workshopInstances.status,
-        created_at: workshopInstances.createdAt,
-        updated_at: workshopInstances.updatedAt,
-        current_participants: sql<number>`count(${workshopRegistrations.id})`,
-      })
-      .from(workshopInstances)
-      .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))
-      .where(inArray(workshopInstances.workshopId, workshopIds))
-      .groupBy(workshopInstances.id)
-      .orderBy(asc(workshopInstances.startDate))
+    // Fetch instances + session concurrently (both depend only on workshopIds/nothing from each other)
+    const [instanceRows, session] = await Promise.all([
+      db
+        .select({
+          id: workshopInstances.id,
+          workshop_id: workshopInstances.workshopId,
+          start_date: workshopInstances.startDate,
+          end_date: workshopInstances.endDate,
+          location: workshopInstances.location,
+          instructor: workshopInstances.instructor,
+          max_participants: workshopInstances.maxParticipants,
+          notes: workshopInstances.notes,
+          status: workshopInstances.status,
+          created_at: workshopInstances.createdAt,
+          updated_at: workshopInstances.updatedAt,
+          current_participants: sql<number>`count(${workshopRegistrations.id})`,
+        })
+        .from(workshopInstances)
+        .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))
+        .where(inArray(workshopInstances.workshopId, workshopIds))
+        .groupBy(workshopInstances.id)
+        .orderBy(asc(workshopInstances.startDate)),
+      auth(),
+    ])
 
-    // Check user registrations
-    const session = await auth()
+    // Check user registrations (needs session.user.id resolved above)
     const registeredWorkshopIds = new Set<string>()
 
     if (session?.user?.id) {
