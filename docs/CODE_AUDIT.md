@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
 last_modified_date: 2026-04-24
-last_modified_summary: Updated after i18n pass — all public pages translated; test count 312→354; BlogFeaturedGrid img already migrated (removed stale TODO); upload preview img tags are correct (blob URLs, not Next.js Image candidates)
+last_modified_summary: Fixed sql.raw() for TABLE_NAMES in Drizzle sql`` templates (plain string interpolation parameterizes values — invalid as SQL identifiers); fixed remaining hardcoded table names in appointments, close-decisions, create-review.
 ---
 
 # RevampIT Code Audit Findings
@@ -16,6 +16,8 @@ This document tracks code quality issues, security findings, and performance pro
 
 | Fix | Status | Details |
 |-----|--------|---------|
+| sql.raw() for TABLE_NAMES in Drizzle sql templates | FIXED | Plain string interpolation in sql`` parameterizes values; fixed pools (3), appointments, close-decisions, create-review (7 tables), listing routes (3) |
+| Hardcoded table names in API routes | FIXED | appointments/route.ts, cron/close-decisions, lib/reviews/create-review.ts |
 | Full i18n pass (all public pages) | FIXED | All hardcoded German strings wired to next-intl across 7 locales |
 | Hardcoded German loading text (24 files) | FIXED | Removed text prop from LoadingSpinner — icon is universal |
 | Layout metadata (8 layouts) | FIXED | Converted static German metadata to async generateMetadata with getTranslations |
@@ -60,7 +62,7 @@ This document tracks code quality issues, security findings, and performance pro
 | console.log statements | ~5 | LOW | Only in logger.ts (correct) |
 | `any` type usage | 1 | LOW | Only `window.next` check (acceptable) |
 | Hardcoded role strings | 0 | FIXED | Using constants |
-| Missing TABLE_NAMES | 0 | FIXED | All added to database.ts |
+| Missing TABLE_NAMES | 0 | FIXED | All table refs use TABLE_NAMES + sql.raw() in Drizzle sql templates |
 | Missing auth checks | 0 | FIXED | Auth added to endpoints |
 | Missing rate limiting | 0 | FIXED | Rate limiting in place |
 
