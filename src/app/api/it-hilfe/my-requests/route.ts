@@ -27,6 +27,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
 
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: itHilfeRequests.id,
         categoryId: itHilfeRequests.categoryId,
         deviceBrand: itHilfeRequests.deviceBrand,
@@ -55,15 +56,8 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .limit(limit)
       .offset(offset)
 
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)` })
-      .from(itHilfeRequests)
-      .where(where)
-
-    const total = Number(countRow?.total ?? 0)
-
-    // Map to camelCase for API response
-    const requests = rows.map(row => ({
+    const total = Number(rows[0]?._total ?? 0)
+    const requests = rows.map(({ _total, ...row }) => ({
       ...row,
       skillsNeeded: row.skillsNeeded || [],
       imageUrls: row.imageUrls || [],

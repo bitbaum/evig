@@ -30,17 +30,9 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
 
     const where = and(...conditions);
 
-    // Get total count
-    const [countRow] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(listings)
-      .where(where);
-    const total = Number(countRow?.count ?? 0);
-    const totalPages = Math.ceil(total / limit);
-
-    // Get paginated items
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: listings.id,
         title: listings.title,
         price_chf: listings.priceChf,
@@ -59,8 +51,12 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .limit(limit)
       .offset(offset);
 
+    const total = Number(rows[0]?._total ?? 0);
+    const totalPages = Math.ceil(total / limit);
+    const items = rows.map(({ _total, ...rest }) => rest);
+
     return apiSuccess({
-      items: rows,
+      items,
       total,
       page,
       totalPages,

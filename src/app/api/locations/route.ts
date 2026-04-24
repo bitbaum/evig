@@ -38,22 +38,18 @@ export const GET = withAuth(async (request: NextRequest, session) => {
     const where = conditions.length > 0 ? and(...conditions) : undefined
 
     const rows = await db
-      .select()
+      .select({ _total: sql<number>`count(*) over()`, ...locations })
       .from(locations)
       .where(where)
       .orderBy(desc(locations.createdAt))
       .limit(limit)
       .offset(offset)
 
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)` })
-      .from(locations)
-      .where(where)
-
-    const totalCount = Number(countRow?.total ?? 0)
+    const totalCount = Number(rows[0]?._total ?? 0)
+    const locationList = rows.map(({ _total, ...rest }) => rest)
 
     return apiSuccess({
-      locations: rows,
+      locations: locationList,
       pagination: {
         total: totalCount,
         limit,

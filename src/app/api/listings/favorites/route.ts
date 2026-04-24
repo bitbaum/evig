@@ -18,19 +18,14 @@ export const GET = withAuth(async (
   try {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 100 });
 
-    // Count query
-    const [countRow] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(listingFavorites)
-      .innerJoin(listings, eq(listingFavorites.listingId, listings.id))
-      .where(and(
-        eq(listingFavorites.userId, session.user.id),
-        ne(listings.status, LISTING_STATUS.REMOVED)
-      ));
-    const total = Number(countRow?.count ?? 0);
+    const where = and(
+      eq(listingFavorites.userId, session.user.id),
+      ne(listings.status, LISTING_STATUS.REMOVED)
+    );
 
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: listings.id,
         title: listings.title,
         price_chf: listings.priceChf,
@@ -54,16 +49,16 @@ export const GET = withAuth(async (
       .innerJoin(listings, eq(listingFavorites.listingId, listings.id))
       .innerJoin(users, eq(listings.sellerId, users.id))
       .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
-      .where(and(
-        eq(listingFavorites.userId, session.user.id),
-        ne(listings.status, LISTING_STATUS.REMOVED)
-      ))
+      .where(where)
       .orderBy(sql`${listingFavorites.createdAt} DESC`)
       .limit(limit)
       .offset(offset);
 
+    const total = Number(rows[0]?._total ?? 0);
+    const items = rows.map(({ _total, ...rest }) => rest);
+
     return apiSuccess({
-      items: rows,
+      items,
       pagination: { total, limit, offset },
     });
   } catch (error) {

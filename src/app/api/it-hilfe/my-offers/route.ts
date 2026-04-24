@@ -27,6 +27,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
 
     const rows = await db
       .select({
+        _total: sql<number>`count(*) over()`,
         id: itHilfeOffers.id,
         requestId: itHilfeOffers.requestId,
         message: itHilfeOffers.message,
@@ -53,14 +54,8 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .limit(limit)
       .offset(offset)
 
-    const [countRow] = await db
-      .select({ total: sql<number>`count(*)` })
-      .from(itHilfeOffers)
-      .where(where)
-
-    const total = Number(countRow?.total ?? 0)
-
-    const offers = rows.map(row => ({
+    const total = Number(rows[0]?._total ?? 0)
+    const offers = rows.map(({ _total, ...row }) => ({
       id: row.id,
       requestId: row.requestId,
       message: row.message,
