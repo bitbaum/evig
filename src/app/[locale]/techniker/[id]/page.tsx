@@ -17,39 +17,9 @@ import { getSkillById } from '@/config/it-hilfe'
 import { BUDGET_TIERS } from '@/config/it-hilfe'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { getTechnicianById } from '@/lib/services/technician-service'
 
-interface Service {
-  id: string
-  serviceCategory: string
-  serviceName: string
-  description: string | null
-  basePriceCents: number | null
-  hourlyRateCents: number | null
-  estimatedHours: string | null
-}
-
-interface Technician {
-  id: string
-  userId: string
-  name: string
-  bio: string | null
-  hourlyRateCents: number | null
-  averageRating: number | null
-  totalJobsCompleted: number
-  totalReviews: number
-  profileTier: string
-  city: string | null
-  postalCode: string | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  isVerified: boolean
-  serviceDeliveryTypes: string[] | null
-  maxTravelKm: number | null
-  responseTimeHours: number | null
-  createdAt: string
-  skills: string[]
-  services: Service[]
-}
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
 interface Props {
   params: Promise<{ id: string; locale: string }>
@@ -58,18 +28,17 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id, locale } = await params
   const t = await getTranslations({ locale, namespace: 'techniker' })
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ORG.website
+
+  if (!UUID_RE.test(id)) return { title: `${t('meta.title')} | ${ORG.name}` }
 
   try {
-    const res = await fetch(`${baseUrl}/api/technicians/${id}`, { cache: 'no-store' })
-    if (!res.ok) return { title: `${t('meta.title')} | ${ORG.name}` }
-    const data = await res.json()
-    const tech: Technician = data.data?.technician
+    const tech = await getTechnicianById(id)
     if (!tech) return { title: `${t('meta.title')} | ${ORG.name}` }
     const tierLabel = tech.profileTier === 'professional' ? t('detail.professional') : t('detail.community')
+    const displayName = tech.name ?? t('meta.title')
     return {
-      title: `${tech.name} – ${tierLabel} | ${ORG.name}`,
-      description: tech.bio ?? `${tech.name} · ${tierLabel} · ${ORG.name}`,
+      title: `${displayName} – ${tierLabel} | ${ORG.name}`,
+      description: tech.bio ?? `${displayName} · ${tierLabel} · ${ORG.name}`,
     }
   } catch {
     return { title: `${t('meta.title')} | ${ORG.name}` }
@@ -79,13 +48,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TechnikerDetailPage({ params }: Props) {
   const { id, locale } = await params
   const t = await getTranslations({ locale, namespace: 'techniker' })
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || ORG.website
 
-  const res = await fetch(`${baseUrl}/api/technicians/${id}`, { cache: 'no-store' })
-  if (!res.ok) notFound()
+  if (!UUID_RE.test(id)) notFound()
 
-  const data = await res.json()
-  const technician: Technician | undefined = data.data?.technician
+  const technician = await getTechnicianById(id)
   if (!technician) notFound()
 
   const isProfessional = technician.profileTier === 'professional'
