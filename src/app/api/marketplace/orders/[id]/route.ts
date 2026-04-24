@@ -195,17 +195,16 @@ export const PATCH = withAuth<{ id: string }>(async (
       .set(updateValues)
       .where(eq(marketplaceOrders.id, orderId));
 
-    // If completed: update listing status to sold and increment seller total_sold
+    // If completed: update listing + seller total_sold — independent, run in parallel
     if (newStatus === ORDER_STATUS.COMPLETED) {
-      await db
-        .update(listings)
-        .set({ status: LISTING_STATUS.SOLD })
-        .where(eq(listings.id, order.listingId));
-
-      await db
-        .update(sellerProfiles)
-        .set({ totalSold: sql`${sellerProfiles.totalSold} + 1` })
-        .where(eq(sellerProfiles.userId, order.sellerId));
+      await Promise.all([
+        db.update(listings)
+          .set({ status: LISTING_STATUS.SOLD })
+          .where(eq(listings.id, order.listingId)),
+        db.update(sellerProfiles)
+          .set({ totalSold: sql`${sellerProfiles.totalSold} + 1` })
+          .where(eq(sellerProfiles.userId, order.sellerId)),
+      ])
     }
 
     // If cancelled: restore listing to active

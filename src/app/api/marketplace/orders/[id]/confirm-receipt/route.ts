@@ -83,28 +83,29 @@ export const POST = withAuth<{ id: string }>(async (
       }
     }
 
-    // Update order — set delivered_at (if not already) and completed_at
-    await db
-      .update(marketplaceOrders)
-      .set({
-        status: ORDER_STATUS.COMPLETED,
-        deliveredAt: sql`COALESCE(${marketplaceOrders.deliveredAt}, NOW())`,
-        completedAt: sql`NOW()`,
-        updatedAt: sql`NOW()`,
-      })
-      .where(eq(marketplaceOrders.id, orderId))
-
-    // Mark listing as sold
-    await db
-      .update(listings)
-      .set({ status: LISTING_STATUS.SOLD })
-      .where(eq(listings.id, order.listingId))
-
-    // Increment seller total_sold
-    await db
-      .update(sellerProfiles)
-      .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + 1` })
-      .where(eq(sellerProfiles.userId, order.sellerId))
+    // All three state updates are independent — run in parallel
+    await Promise.all([
+      // Mark order completed
+      db
+        .update(marketplaceOrders)
+        .set({
+          status: ORDER_STATUS.COMPLETED,
+          deliveredAt: sql`COALESCE(${marketplaceOrders.deliveredAt}, NOW())`,
+          completedAt: sql`NOW()`,
+          updatedAt: sql`NOW()`,
+        })
+        .where(eq(marketplaceOrders.id, orderId)),
+      // Mark listing as sold
+      db
+        .update(listings)
+        .set({ status: LISTING_STATUS.SOLD })
+        .where(eq(listings.id, order.listingId)),
+      // Increment seller total_sold
+      db
+        .update(sellerProfiles)
+        .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + 1` })
+        .where(eq(sellerProfiles.userId, order.sellerId)),
+    ])
 
     logger.info('Buyer confirmed receipt', {
       orderId,
