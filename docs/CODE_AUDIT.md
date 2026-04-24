@@ -100,7 +100,7 @@ This document tracks code quality issues, security findings, and performance pro
 | AI provider config queried every call | FIXED | 60s TTL cache |
 | User columns cache never invalidates | FIXED | 5-minute TTL |
 | Neon cold start connection failures | FIXED | 10s timeout, longer retry delays |
-| Duplicate count queries | LOW TODO | Use COUNT(*) OVER() for pagination |
+| Duplicate count queries | FIXED | COUNT(*) OVER() in 8 routes: listings/mine, listings/favorites, it-hilfe/my-requests, it-hilfe/my-offers, locations, admin/users, admin/inventory |
 
 ---
 
@@ -114,7 +114,6 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 ## Remaining TODOs
 
 ### Low Priority
-- Consider COUNT(*) OVER() for pagination queries (avoids separate count query)
 - Voice transcription service is manual start (`npm run transcription:start`) — consider adding to docker-compose when Python deps are standardized
 - itHilfe Phase 2: update all queries to use `repairer_profiles`, then drop legacy table (see `src/db/schema/itHilfe.ts:146`)
 
