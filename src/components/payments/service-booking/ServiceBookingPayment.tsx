@@ -59,8 +59,6 @@ export default function ServiceBookingPayment({
       <PaymentView
         service={service}
         paymentData={paymentData}
-        onPaymentSuccess={handlePaymentSuccess}
-        onPaymentError={handlePaymentError}
       />
     )
   }

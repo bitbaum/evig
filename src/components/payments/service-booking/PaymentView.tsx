@@ -9,8 +9,6 @@ import type { ServiceInfo, PaymentData } from './types'
 interface PaymentViewProps {
   service: ServiceInfo
   paymentData: PaymentData
-  onPaymentSuccess: (paymentResult: { id: string }) => void
-  onPaymentError: (error: string) => void
 }
 
 export function PaymentView({ service, paymentData }: PaymentViewProps) {
