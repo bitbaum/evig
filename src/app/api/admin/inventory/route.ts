@@ -9,7 +9,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, parsePagination } from '@/lib/api/helpers'
 import { db } from '@/db'
-import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles } from '@/db/schema'
+import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles, productImages } from '@/db/schema'
 import { and, eq, ilike, or, sql, desc, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
@@ -55,6 +55,12 @@ export const GET = withAdmin('products', async (request: NextRequest, session) =
         status: aiExtractedProducts.status,
         created_at: aiExtractedProducts.createdAt,
         item_uuid: aiExtractedProducts.itemUuid,
+        image_url: sql<string | null>`(
+          SELECT pi.file_path FROM ${productImages} pi
+          WHERE pi.product_id = ${aiExtractedProducts.id}
+            AND pi.is_primary = true
+          LIMIT 1
+        )`,
         location: inventoryItems.location,
         box_id: inventoryItems.boxId,
         quantity_available: sql<number>`COALESCE(${inventoryItems.quantityAvailable}, 1)`,
