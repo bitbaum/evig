@@ -5366,7 +5366,8 @@
       "rules": "Rules (optional)",
       "rulesPlaceholder": "e.g. Payment by 1st of month via TWINT",
       "cancel": "Cancel",
-      "submit": "Create pool"
+      "submit": "Create pool",
+      "unknownError": "An unknown error occurred"
     },
     "categories": {
       "streaming": "Streaming",

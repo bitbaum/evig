@@ -192,7 +192,7 @@ function CreatePoolModal({ onClose, onCreate }: {
       onCreate(json.data)
       onClose()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error')
+      setError(err instanceof Error ? err.message : t('modal.unknownError'))
     } finally {
       setLoading(false)
     }

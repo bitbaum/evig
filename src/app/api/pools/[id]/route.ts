@@ -3,12 +3,13 @@
  * DELETE /api/pools/[id] — Delete pool (owner only)
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiNotFound, apiForbidden } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiNotFound, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
+import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 type Params = { id: string }
@@ -39,7 +40,7 @@ export async function GET(
         ownerId: subscriptionPools.ownerId,
         ownerName: users.name,
         memberCount: sql<number>`(
-          SELECT COUNT(*) FROM pool_memberships pm
+          SELECT COUNT(*) FROM ${TABLE_NAMES.POOL_MEMBERSHIPS} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
           AND pm.status = 'active'
         )`,
@@ -94,6 +95,3 @@ export const DELETE = withAuth(async (
   }
 })
 
-function apiBadRequest(message: string) {
-  return NextResponse.json({ success: false, error: message }, { status: 400 })
-}

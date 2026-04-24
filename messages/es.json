@@ -5266,7 +5266,8 @@
       "rules": "Reglas (opcional)",
       "rulesPlaceholder": "p.ej. Pago antes del día 1 del mes por TWINT",
       "cancel": "Cancelar",
-      "submit": "Crear pool"
+      "submit": "Crear pool",
+      "unknownError": "Se produjo un error desconocido"
     },
     "categories": {
       "streaming": "Streaming",

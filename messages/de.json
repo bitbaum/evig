@@ -5417,7 +5417,8 @@
       "rules": "Regeln (optional)",
       "rulesPlaceholder": "z.B. Zahlung bis 1. des Monats per TWINT",
       "cancel": "Abbrechen",
-      "submit": "Pool erstellen"
+      "submit": "Pool erstellen",
+      "unknownError": "Ein unbekannter Fehler ist aufgetreten"
     },
     "categories": {
       "streaming": "Streaming",

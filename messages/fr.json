@@ -5224,7 +5224,8 @@
       "rules": "Règles (facultatif)",
       "rulesPlaceholder": "ex. Paiement avant le 1er du mois par TWINT",
       "cancel": "Annuler",
-      "submit": "Créer le pool"
+      "submit": "Créer le pool",
+      "unknownError": "Une erreur inconnue s'est produite"
     },
     "categories": {
       "streaming": "Streaming",

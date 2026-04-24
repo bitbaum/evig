@@ -5266,7 +5266,8 @@
       "rules": "ルール（任意）",
       "rulesPlaceholder": "例: 毎月1日までにTWINTで支払い",
       "cancel": "キャンセル",
-      "submit": "プールを作成"
+      "submit": "プールを作成",
+      "unknownError": "不明なエラーが発生しました"
     },
     "categories": {
       "streaming": "ストリーミング",

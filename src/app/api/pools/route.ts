@@ -10,6 +10,7 @@ import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, sql, desc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
+import { TABLE_NAMES } from '@/config/database'
 import { z } from 'zod'
 
 // ============================================================================
@@ -32,13 +33,13 @@ export async function GET() {
         createdAt: subscriptionPools.createdAt,
         ownerName: users.name,
         memberCount: sql<number>`(
-          SELECT COUNT(*) FROM pool_memberships pm
+          SELECT COUNT(*) FROM ${TABLE_NAMES.POOL_MEMBERSHIPS} pm
           WHERE pm.pool_id = ${subscriptionPools.id}
           AND pm.status = 'active'
         )`,
         spotsLeft: sql<number>`(
           ${subscriptionPools.maxMembers} - (
-            SELECT COUNT(*) FROM pool_memberships pm
+            SELECT COUNT(*) FROM ${TABLE_NAMES.POOL_MEMBERSHIPS} pm
             WHERE pm.pool_id = ${subscriptionPools.id}
             AND pm.status = 'active'
           )
