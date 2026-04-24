@@ -40,31 +40,31 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       termsAccepted
     } = validation.data
 
-    // Check if user already has pending proposals (limit to prevent spam)
-    const [proposalCount] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(workshopProposals)
-      .where(and(
-        eq(workshopProposals.userId, session.user.id),
-        sql`${workshopProposals.status} IN (${APPROVAL_STATUS.PENDING}, ${APPROVAL_STATUS.APPROVED})`,
-        gte(workshopProposals.createdAt, sql`NOW() - INTERVAL '30 days'`),
-      ))
+    // Spam check + location validation are independent — run in parallel
+    const [proposalCount, location] = await Promise.all([
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(workshopProposals)
+        .where(and(
+          eq(workshopProposals.userId, session.user.id),
+          sql`${workshopProposals.status} IN (${APPROVAL_STATUS.PENDING}, ${APPROVAL_STATUS.APPROVED})`,
+          gte(workshopProposals.createdAt, sql`NOW() - INTERVAL '30 days'`),
+        ))
+        .then(rows => rows[0]),
+      selectedLocationId
+        ? db
+            .select({ id: locations.id, isApproved: locations.isApproved })
+            .from(locations)
+            .where(eq(locations.id, selectedLocationId))
+            .then(rows => rows[0])
+        : Promise.resolve(undefined),
+    ])
 
     if (Number(proposalCount?.count ?? 0) >= 3) {
       return apiBadRequest('Du hast bereits 3 ausstehende oder genehmigte Workshop-Vorschläge. Bitte warte auf deren Bearbeitung.')
     }
 
-    // Calculate duration in minutes and price in cents
-    const durationMinutes = Math.round(durationHours * 60)
-    const priceCents = Math.round(pricePerPerson * 100)
-
-    // Validate selected location if provided
     if (selectedLocationId) {
-      const [location] = await db
-        .select({ id: locations.id, isApproved: locations.isApproved })
-        .from(locations)
-        .where(eq(locations.id, selectedLocationId))
-
       if (!location) {
         return apiBadRequest('Ausgewählter Ort existiert nicht')
       }
@@ -72,6 +72,10 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         return apiBadRequest('Ausgewählter Ort ist nicht zur Buchung freigegeben')
       }
     }
+
+    // Calculate duration in minutes and price in cents
+    const durationMinutes = Math.round(durationHours * 60)
+    const priceCents = Math.round(pricePerPerson * 100)
 
     // Create workshop proposal
     const [proposal] = await db

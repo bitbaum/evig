@@ -16,40 +16,45 @@ export async function GET(
     const session = await auth()
     const { slug } = await params
 
-    // Get the workshop
-    const [workshop] = await db
-      .select({ id: workshops.id, title: workshops.title })
-      .from(workshops)
-      .where(and(eq(workshops.slug, slug), eq(workshops.isActive, true)))
+    // Workshop lookup + registration check are independent — run in parallel
+    // (Registration uses slug join to avoid a sequential workshop-id dependency)
+    const [workshop, registration] = await Promise.all([
+      db
+        .select({ id: workshops.id, title: workshops.title })
+        .from(workshops)
+        .where(and(eq(workshops.slug, slug), eq(workshops.isActive, true)))
+        .then(rows => rows[0]),
+      session?.user?.id
+        ? db
+            .select({
+              status: workshopRegistrations.status,
+              attended: workshopRegistrations.attended,
+            })
+            .from(workshopRegistrations)
+            .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+            .innerJoin(workshops, and(
+              eq(workshopInstances.workshopId, workshops.id),
+              eq(workshops.slug, slug),
+              eq(workshops.isActive, true),
+            ))
+            .where(eq(workshopRegistrations.userId, session.user.id))
+            .orderBy(desc(workshopRegistrations.createdAt))
+            .limit(1)
+            .then(rows => rows[0])
+        : Promise.resolve(undefined),
+    ])
 
     if (!workshop) {
       return apiNotFound('Workshop')
     }
 
-    // Determine user's access level
+    // Determine user's access level from the registration fetched in parallel
     let accessLevel: 'public' | 'registered' | 'attended' = 'public'
-
-    if (session?.user?.id) {
-      const [registration] = await db
-        .select({
-          status: workshopRegistrations.status,
-          attended: workshopRegistrations.attended,
-        })
-        .from(workshopRegistrations)
-        .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
-        .where(and(
-          eq(workshopInstances.workshopId, workshop.id),
-          eq(workshopRegistrations.userId, session.user.id),
-        ))
-        .orderBy(desc(workshopRegistrations.createdAt))
-        .limit(1)
-
-      if (registration) {
-        if (registration.attended || registration.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
-          accessLevel = 'attended'
-        } else if (registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
-          accessLevel = 'registered'
-        }
+    if (registration) {
+      if (registration.attended || registration.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
+        accessLevel = 'attended'
+      } else if (registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
+        accessLevel = 'registered'
       }
     }
 
