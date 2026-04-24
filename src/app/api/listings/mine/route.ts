@@ -51,7 +51,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         favorite_count: listings.favoriteCount,
         created_at: listings.createdAt,
         updated_at: listings.updatedAt,
-        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${TABLE_NAMES.LISTING_IMAGES} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${sql.raw(TABLE_NAMES.LISTING_IMAGES)} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
       })
       .from(listings)
       .where(where)

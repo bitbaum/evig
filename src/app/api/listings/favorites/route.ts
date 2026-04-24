@@ -47,7 +47,7 @@ export const GET = withAuth(async (
         seller_name: users.name,
         seller_display_name: sellerProfiles.displayName,
         seller_city: sellerProfiles.city,
-        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${TABLE_NAMES.LISTING_IMAGES} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
+        thumbnail: sql<string | null>`(SELECT ${listingImages.url} FROM ${sql.raw(TABLE_NAMES.LISTING_IMAGES)} WHERE ${listingImages.listingId} = ${listings.id} AND ${listingImages.isPrimary} = true LIMIT 1)`,
         favorited_at: listingFavorites.createdAt,
       })
       .from(listingFavorites)
