@@ -12,6 +12,7 @@ import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email'
 import { REVAMPIT_NOTIFICATION_EMAIL } from '@/config/it-hilfe'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { APP_URL } from '@/config/urls'
+import { TABLE_NAMES } from '@/config/database'
 
 const customer = alias(users, 'customer')
 const repairer = alias(users, 'repairer')
@@ -157,7 +158,7 @@ export const POST = withAuth(async (
     // since the Drizzle schema has it as notNull but the DB allows null
     if (!service_type_id) {
       const result = await db.execute(sql`
-        INSERT INTO service_appointments (user_id, description, status, urgency, is_home_visit,
+        INSERT INTO ${TABLE_NAMES.SERVICE_APPOINTMENTS} (user_id, description, status, urgency, is_home_visit,
           repairer_id, repairer_profile_id, device_info, preferred_date, visit_address, visit_city)
         VALUES (${session.user.id}, ${description}, ${BOOKING_STATUS.REQUESTED},
           ${urgency || 'normal'}, ${is_home_visit || false},

@@ -17,6 +17,7 @@ import { resolveEligibleUserIds } from '@/lib/services/decisions-voting'
 import { asArray } from '@/lib/services/decisions-crud'
 import { logger } from '@/lib/logger'
 import { DECISION_STATUS } from '@/config/decisions'
+import { TABLE_NAMES } from '@/config/database'
 
 export async function GET(request: NextRequest) {
   // Verify cron secret (skip in dev if not set)
@@ -57,7 +58,7 @@ export async function GET(request: NextRequest) {
 
           // Find who hasn't voted yet
           const votedResult = await db.execute(
-            sql`SELECT user_id FROM decision_votes WHERE decision_id = ${decision.id}`
+            sql`SELECT user_id FROM ${TABLE_NAMES.DECISION_VOTES} WHERE decision_id = ${decision.id}`
           )
           const votedIds = new Set(
             (votedResult.rows as Array<{ user_id: string }>).map(r => r.user_id)
