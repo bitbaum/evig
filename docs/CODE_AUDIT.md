@@ -140,14 +140,19 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 - `ImageUploadGrid.tsx` and `ProductImageUpload.tsx` use raw `<img>` for blob URL previews — this is **correct** (`next/image` cannot optimize blob: URLs)
 
 ### Testing Coverage
-**Current Coverage**: 474 tests across 30 test suites (updated 2026-04-29)
+**Current Coverage**: 608 tests across 35 test suites (updated 2026-04-29)
 - API route tests (notifications, admin endpoints)
 - Business logic tests (protocols, payments, services, hirn)
 - UI tests (marketplace, auth, middleware)
 - Utility tests (erfassung, currency, tax compliance)
 - Voting logic (validateVoteData + computeTallies, all 6 methods)
 - Intake checklist (getChecklistForDevice, isChecklistComplete, getChecklistProgress)
-- Spec parsing (normalizeSpecValue: TB→GB conversion, numeric extraction, edge cases)
+- Spec parsing (normalizeSpecValue: TB→GB, numeric extraction, edge cases)
+- Erfassung fallback parser (fastParseProductText: manufacturer, model, specs, price, condition, category)
+- Pricing calculations (getVATRate, calculateVAT, calculatePaymentFees, calculateTotalWithFees, calculateServicePricing)
+- Payment security (maskSensitiveData, validatePaymentData, PaymentRateLimiter)
+- Hirn chunking (chunkText, chunkMarkdown: separators, overlap, section metadata, summary threshold)
+- CSRF utilities (isExcludedPath, requiresCsrfProtection, getCsrfFromCookies, generateCsrfToken)
 
 ---
 
