@@ -13,7 +13,7 @@ export function useIntakeCreateForm() {
   const [aiText, setAiText] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState<string | null>(null)
-  const [aiOpen, setAiOpen] = useState(false)
+  const [aiOpen, setAiOpen] = useState(true)
 
   // Voice recording
   const [voiceState, setVoiceState] = useState<'idle' | 'recording' | 'processing'>('idle')

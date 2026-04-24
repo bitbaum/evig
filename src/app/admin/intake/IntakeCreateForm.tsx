@@ -67,7 +67,7 @@ export function IntakeCreateForm({
       {/* Tier Selection */}
       <div>
         <label className="block text-sm font-medium mb-2">Verarbeitungsstufe</label>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {tierOptions.map(opt => (
             <button
               key={opt.value}
@@ -203,7 +203,7 @@ export function IntakeCreateForm({
       </div>
 
       {/* Device Info */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium mb-1">Hersteller *</label>
           <input
@@ -237,7 +237,7 @@ export function IntakeCreateForm({
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium mb-1">Kategorie</label>
           <select
@@ -306,7 +306,7 @@ export function IntakeCreateForm({
         </label>
 
         {formData.is_donation && (
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium mb-1 text-gray-600">Name Spender/in</label>
               <input
