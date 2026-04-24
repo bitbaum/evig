@@ -6,13 +6,14 @@
  */
 
 // CRUD operations + shared types/helpers
-export type { DbDecisionRow, DecisionStats } from './decisions-crud';
+export type { DbDecisionRow, DecisionStats, PublicDecision, PublicDecisionOption } from './decisions-crud';
 export {
   asArray,
   asObject,
   getDecisionStats,
   getDecisions,
   getDecisionById,
+  getPublicDecision,
   createDecision,
   updateDecision,
   deleteDecision,

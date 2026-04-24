@@ -11,9 +11,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { query } from '@/lib/auth/db'
-import { submitVote } from '@/lib/services/decisions'
+import { submitVote, getPublicDecision } from '@/lib/services/decisions'
 import { TABLE_NAMES } from '@/config/database'
-import { DECISION_STATUS } from '@/config/decisions'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { params: Promise<{ id: string }> }
@@ -27,51 +26,27 @@ export async function GET(
   try {
     const { id: decisionId } = await params
 
-    const result = await query<{
-      id: string
-      title: string
-      description: string
-      background: string | null
-      status: string
-      voting_method: string
-      options: unknown
-      dot_count: number | null
-      voting_deadline: string | null
-    }>(
-      `SELECT id, title, description, background, status, voting_method, options, dot_count, voting_deadline
-       FROM ${TABLE_NAMES.DECISIONS}
-       WHERE id = $1`,
-      [decisionId]
-    )
+    const decision = await getPublicDecision(decisionId)
 
-    if (result.rows.length === 0) {
-      return NextResponse.json({ success: false, error: 'Entscheidung nicht gefunden' }, { status: 404 })
-    }
-
-    const d = result.rows[0]
-
-    // Only expose decisions that are in voting phase (or discussion for transparency)
-    if (!([DECISION_STATUS.VOTING, DECISION_STATUS.DISCUSSION] as string[]).includes(d.status)) {
+    if (!decision) {
       return NextResponse.json(
-        { success: false, error: 'Diese Abstimmung ist nicht aktiv' },
-        { status: 403 }
+        { success: false, error: 'Entscheidung nicht gefunden oder nicht aktiv' },
+        { status: 404 }
       )
     }
-
-    const options = Array.isArray(d.options) ? d.options : (typeof d.options === 'string' ? JSON.parse(d.options) : [])
 
     return NextResponse.json({
       success: true,
       data: {
-        id: d.id,
-        title: d.title,
-        description: d.description,
-        background: d.background,
-        status: d.status,
-        votingMethod: d.voting_method,
-        options,
-        dotCount: d.dot_count,
-        votingDeadline: d.voting_deadline,
+        id: decision.id,
+        title: decision.title,
+        description: decision.description,
+        background: decision.background,
+        status: decision.status,
+        votingMethod: decision.votingMethod,
+        options: decision.options,
+        dotCount: decision.dotCount,
+        votingDeadline: decision.votingDeadline,
       },
     })
   } catch (error) {

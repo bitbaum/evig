@@ -6,11 +6,12 @@
  */
 
 // Core CRUD, transitions, tally computation
-export type { DecisionStats } from './decisions-core'
+export type { DecisionStats, PublicDecision, PublicDecisionOption } from './decisions-core'
 export {
   getDecisionStats,
   getDecisions,
   getDecisionById,
+  getPublicDecision,
   createDecision,
   updateDecision,
   deleteDecision,

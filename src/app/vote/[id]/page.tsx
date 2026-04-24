@@ -10,47 +10,15 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ExternalLink } from 'lucide-react'
 import { DECISION_STATUS } from '@/config/decisions'
-import type { VotingMethod } from '@/config/decisions'
 import { getTranslations } from 'next-intl/server'
 import PublicVoteClient from './PublicVoteClient'
 import { ORG } from '@/config/org'
-
-interface Option {
-  id: string
-  label: string
-  description?: string
-  imageUrl?: string
-}
-
-interface PublicDecision {
-  id: string
-  title: string
-  description: string
-  background: string | null
-  status: string
-  votingMethod: VotingMethod
-  options: Option[]
-  dotCount: number | null
-  votingDeadline: string | null
-}
-
-async function fetchPublicDecision(id: string): Promise<PublicDecision | null> {
-  try {
-    // Use absolute URL for server-side fetch
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-    const res = await fetch(`${baseUrl}/api/vote/${id}`, { cache: 'no-store' })
-    const json = await res.json()
-    if (!json.success) return null
-    return json.data as PublicDecision
-  } catch {
-    return null
-  }
-}
+import { getPublicDecision } from '@/lib/services/decisions'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   const [decision, t] = await Promise.all([
-    fetchPublicDecision(id),
+    getPublicDecision(id),
     getTranslations('vote'),
   ])
   return {
@@ -62,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function PublicVotePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const [decision, t] = await Promise.all([
-    fetchPublicDecision(id),
+    getPublicDecision(id),
     getTranslations('vote'),
   ])
 
