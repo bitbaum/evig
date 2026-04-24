@@ -32,14 +32,14 @@ export interface TechnicianDetail {
   bio: string | null
   hourlyRateCents: number | null
   averageRating: number | null
-  totalJobsCompleted: number
-  totalReviews: number
-  profileTier: string
+  totalJobsCompleted: number   // coerced: default 0
+  totalReviews: number          // coerced: default 0
+  profileTier: string           // coerced: default 'community'
   city: string | null
   postalCode: string | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  isVerified: boolean
+  acceptsGratis: boolean        // coerced: default false
+  acceptsKulturlegi: boolean    // coerced: default false
+  isVerified: boolean           // coerced: default false
   serviceDeliveryTypes: string[] | null
   maxTravelKm: number | null
   responseTimeHours: number | null
@@ -137,8 +137,17 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
 
   return {
     ...profile,
-    // Drizzle decimal columns come back as strings — parse to number for callers
+    // Drizzle decimal comes back as string — parse to number for callers
     averageRating: profile.averageRating != null ? parseFloat(String(profile.averageRating)) : null,
+    // Drizzle returns integer-with-default columns as number | null — coerce nulls to 0
+    totalJobsCompleted: profile.totalJobsCompleted ?? 0,
+    totalReviews: profile.totalReviews ?? 0,
+    // Boolean columns with defaults can also be null — coerce
+    acceptsGratis: profile.acceptsGratis ?? false,
+    acceptsKulturlegi: profile.acceptsKulturlegi ?? false,
+    isVerified: profile.isVerified ?? false,
+    // profileTier has a default so treat null as the default tier
+    profileTier: profile.profileTier ?? 'community',
     skills: profile.skills || [],
     services,
   }
