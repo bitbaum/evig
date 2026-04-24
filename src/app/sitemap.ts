@@ -1,10 +1,13 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/db'
-import { blogPosts, workshops, aiExtractedProducts } from '@/db/schema'
+import { blogPosts, workshops, aiExtractedProducts, listings } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { locales, defaultLocale } from '@/i18n/routing'
 import { APP_URL } from '@/config/urls'
 import { OSS_ALTERNATIVES } from '@/config/open-source-registry'
+import { LISTING_STATUS } from '@/config/marketplace'
+import { PRODUCT_STATUS } from '@/config/marketplace-status'
+import { SERVICE_CONFIGS } from '@/app/[locale]/services/data'
 import { logger } from '@/lib/logger'
 
 const BASE = APP_URL
@@ -13,15 +16,6 @@ const BASE = APP_URL
 function url(path: string, locale: string): string {
   const prefix = locale === defaultLocale ? '' : `/${locale}`
   return `${BASE}${prefix}${path}`
-}
-
-/** Expand a path to all locale variants */
-function allLocales(path: string, priority = 0.6, changeFrequency: MetadataRoute.Sitemap[0]['changeFrequency'] = 'monthly'): MetadataRoute.Sitemap {
-  return locales.map(locale => ({
-    url: url(path, locale),
-    changeFrequency,
-    priority,
-  }))
 }
 
 // Static public pages — excludes /auth/*, /dashboard/*, /admin/*, /inventory/*
@@ -33,9 +27,6 @@ const STATIC_PAGES: Array<{ path: string; priority: number; changeFrequency: Met
   { path: '/blog', priority: 0.8, changeFrequency: 'daily' },
   { path: '/services', priority: 0.8, changeFrequency: 'monthly' },
   { path: '/services/open-source-solutions', priority: 0.8, changeFrequency: 'monthly' },
-  { path: '/services/hardware-recycling', priority: 0.7, changeFrequency: 'monthly' },
-  { path: '/services/linux-open-source', priority: 0.7, changeFrequency: 'monthly' },
-  { path: '/services/build-your-computer', priority: 0.7, changeFrequency: 'monthly' },
   { path: '/it-hilfe', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/it-hilfe/create', priority: 0.6, changeFrequency: 'monthly' },
   { path: '/techniker', priority: 0.7, changeFrequency: 'weekly' },
@@ -80,16 +71,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 2. Open-source alternatives (config-driven, same for all locales)
-  const ossEntries = OSS_ALTERNATIVES.flatMap(alt =>
-    locales.map(locale => ({
-      url: url(`/services/open-source-solutions/${alt.id}`, locale),
-      changeFrequency: 'monthly' as const,
-      priority: 0.6,
-    }))
-  )
-  entries.push(...ossEntries)
+  for (const alt of OSS_ALTERNATIVES) {
+    for (const locale of locales) {
+      entries.push({
+        url: url(`/services/open-source-solutions/${alt.id}`, locale),
+        changeFrequency: 'monthly',
+        priority: 0.6,
+      })
+    }
+  }
 
-  // 3. Published blog posts
+  // 3. Individual service pages (derived from SERVICE_CONFIGS — auto-updates when new services added)
+  for (const service of SERVICE_CONFIGS) {
+    // Skip the open-source-solutions listing (handled above with its own entries per-alt)
+    if (service.href === '/services/open-source-solutions') continue
+    for (const locale of locales) {
+      entries.push({
+        url: url(service.href, locale),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+      })
+    }
+  }
+
+  // 5. Published blog posts
   try {
     const posts = await db
       .select({ slug: blogPosts.slug, updatedAt: blogPosts.updatedAt })
@@ -110,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     logger.error('Sitemap: failed to fetch blog posts', { error })
   }
 
-  // 4. Active workshops
+  // 6. Active workshops
   try {
     const activeWorkshops = await db
       .select({ slug: workshops.slug, updatedAt: workshops.updatedAt })
@@ -131,12 +136,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     logger.error('Sitemap: failed to fetch workshops', { error })
   }
 
-  // 5. Shop products (approved, visible in shop)
+  // 7. Shop products (approved, visible in shop)
   try {
     const products = await db
       .select({ id: aiExtractedProducts.id, updatedAt: aiExtractedProducts.updatedAt })
       .from(aiExtractedProducts)
-      .where(eq(aiExtractedProducts.status, 'approved'))
+      .where(eq(aiExtractedProducts.status, PRODUCT_STATUS.APPROVED))
 
     for (const product of products) {
       for (const locale of locales) {
@@ -150,6 +155,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch (error) {
     logger.error('Sitemap: failed to fetch shop products', { error })
+  }
+
+  // 8. Active marketplace (P2P) listings
+  try {
+    const activeListings = await db
+      .select({ id: listings.id, updatedAt: listings.updatedAt })
+      .from(listings)
+      .where(eq(listings.status, LISTING_STATUS.ACTIVE))
+
+    for (const listing of activeListings) {
+      for (const locale of locales) {
+        entries.push({
+          url: url(`/marketplace/${listing.id}`, locale),
+          lastModified: listing.updatedAt ? new Date(listing.updatedAt) : undefined,
+          changeFrequency: 'weekly',
+          priority: 0.7,
+        })
+      }
+    }
+  } catch (error) {
+    logger.error('Sitemap: failed to fetch marketplace listings', { error })
   }
 
   return entries
