@@ -29,6 +29,7 @@ export function useErfassungForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams.get('edit')
+  const returnTo = searchParams.get('returnTo')
 
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingProduct, setIsLoadingProduct] = useState(false)
@@ -208,7 +209,7 @@ export function useErfassungForm() {
           throw new Error(result.error || t('updateFailed'))
         }
 
-        router.push('/admin/products')
+        router.push(returnTo || '/admin/products')
       } else {
         const payload = formDataToPayload(formData, action)
 

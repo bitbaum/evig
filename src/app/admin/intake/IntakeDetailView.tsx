@@ -1,8 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import {
   Check, RefreshCw, ExternalLink,
-  AlertCircle, ArrowDownUp, Clock, CheckCheck,
+  AlertCircle, ArrowDownUp, Clock, CheckCheck, ClipboardList,
 } from 'lucide-react'
 import {
   INTAKE_TIER_LABELS,
@@ -178,7 +179,7 @@ export function IntakeDetailView({
             </div>
           )}
 
-          <div className="flex items-end gap-3">
+          <div className="flex flex-wrap items-end gap-3">
             <div>
               <label className="block text-sm font-medium mb-1">Verkaufspreis (CHF)</label>
               <input
@@ -197,6 +198,16 @@ export function IntakeDetailView({
             >
               {publishing ? 'Publizieren...' : 'Jetzt publizieren'}
             </button>
+            {detail.checklist_complete && (
+              <Link
+                href={`/admin/erfassung?edit=${detail.id}&returnTo=/admin/intake`}
+                className="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium"
+                title="Produkt in Erfassung öffnen um Details zu ergänzen"
+              >
+                <ClipboardList className="w-4 h-4" />
+                Vollständig erfassen
+              </Link>
+            )}
           </div>
         </div>
       )}
