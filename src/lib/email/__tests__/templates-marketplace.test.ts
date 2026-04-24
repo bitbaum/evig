@@ -190,15 +190,16 @@ describe('orderStatusUpdate', () => {
 // ─── orderReceiptConfirmed ────────────────────────────────────────────────────
 
 describe('orderReceiptConfirmed', () => {
+  // OrderReceiptConfirmedData: { recipientName, orderNumber, listingTitle, orderUrl }
   it('returns { subject, html, text }', () => {
-    const email = orderReceiptConfirmed({ recipientName: 'Jonas', listingTitle: 'Surface Pro', orderUrl: ORDER_URL })
+    const email = orderReceiptConfirmed({ recipientName: 'Jonas', orderNumber: 'ORD-123', listingTitle: 'Surface Pro', orderUrl: ORDER_URL })
     expect(email).toHaveProperty('subject')
     expect(email).toHaveProperty('html')
     expect(email).toHaveProperty('text')
   })
 
   it('html contains the name and listing title', () => {
-    const email = orderReceiptConfirmed({ recipientName: 'Jonas', listingTitle: 'Surface Pro', orderUrl: ORDER_URL })
+    const email = orderReceiptConfirmed({ recipientName: 'Jonas', orderNumber: 'ORD-123', listingTitle: 'Surface Pro', orderUrl: ORDER_URL })
     expect(email.html).toContain('Jonas')
     expect(email.html).toContain('Surface Pro')
   })
@@ -207,17 +208,18 @@ describe('orderReceiptConfirmed', () => {
 // ─── orderReviewPrompt ────────────────────────────────────────────────────────
 
 describe('orderReviewPrompt', () => {
+  // OrderReviewPromptData: { recipientName, listingTitle, reviewUrl }
   const REVIEW_URL = 'https://revamp-it.ch/marketplace/orders/123/review'
 
   it('returns { subject, html, text }', () => {
-    const email = orderReviewPrompt({ recipientName: 'Sophie', sellerName: 'Tom', listingTitle: 'MacBook Air', reviewUrl: REVIEW_URL })
+    const email = orderReviewPrompt({ recipientName: 'Sophie', listingTitle: 'MacBook Air', reviewUrl: REVIEW_URL })
     expect(email).toHaveProperty('subject')
     expect(email).toHaveProperty('html')
     expect(email).toHaveProperty('text')
   })
 
   it('html contains review URL', () => {
-    const email = orderReviewPrompt({ recipientName: 'Sophie', sellerName: 'Tom', listingTitle: 'MacBook Air', reviewUrl: REVIEW_URL })
+    const email = orderReviewPrompt({ recipientName: 'Sophie', listingTitle: 'MacBook Air', reviewUrl: REVIEW_URL })
     expect(email.html).toContain(REVIEW_URL)
   })
 })
@@ -225,15 +227,18 @@ describe('orderReviewPrompt', () => {
 // ─── orderReviewReceived ──────────────────────────────────────────────────────
 
 describe('orderReviewReceived', () => {
+  // OrderReviewReceivedData: { recipientName, listingTitle, rating, content, reviewUrl }
+  const REVIEW_URL = 'https://revamp-it.ch/marketplace/orders/123/review'
+
   it('returns { subject, html, text }', () => {
-    const email = orderReviewReceived({ recipientName: 'Tom', buyerName: 'Sophie', listingTitle: 'MacBook Air', rating: 5, orderUrl: ORDER_URL })
+    const email = orderReviewReceived({ recipientName: 'Tom', listingTitle: 'MacBook Air', rating: 5, content: 'Super!', reviewUrl: REVIEW_URL })
     expect(email).toHaveProperty('subject')
     expect(email).toHaveProperty('html')
     expect(email).toHaveProperty('text')
   })
 
   it('html contains the rating', () => {
-    const email = orderReviewReceived({ recipientName: 'Tom', buyerName: 'Sophie', listingTitle: 'MacBook Air', rating: 5, orderUrl: ORDER_URL })
+    const email = orderReviewReceived({ recipientName: 'Tom', listingTitle: 'MacBook Air', rating: 5, content: 'Super!', reviewUrl: REVIEW_URL })
     expect(email.html).toContain('5')
   })
 })

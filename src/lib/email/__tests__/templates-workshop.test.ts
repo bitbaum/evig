@@ -102,21 +102,22 @@ describe('workshopRegistrationStatusUpdate', () => {
 // ─── workshopReminder ─────────────────────────────────────────────────────────
 
 describe('workshopReminder', () => {
+  // workshopReminder(name, workshopTitle, workshopDate, workshopTime, workshopLocation, instructor, workshopUrl)
   it('returns { subject, html, text }', () => {
-    const email = workshopReminder('Max', 'Reparaturkurs', '2026-06-01 10:00', 'Basel', WORKSHOP_URL)
+    const email = workshopReminder('Max', 'Reparaturkurs', '2026-06-01', '10:00', 'Basel', null, WORKSHOP_URL)
     expect(email).toHaveProperty('subject')
     expect(email).toHaveProperty('html')
     expect(email).toHaveProperty('text')
   })
 
   it('html contains name and workshop title', () => {
-    const email = workshopReminder('Max', 'Reparaturkurs', '2026-06-01', 'Basel', WORKSHOP_URL)
+    const email = workshopReminder('Max', 'Reparaturkurs', '2026-06-01', '10:00', 'Basel', null, WORKSHOP_URL)
     expect(email.html).toContain('Max')
     expect(email.html).toContain('Reparaturkurs')
   })
 
   it('subject mentions "Erinnerung" or "Reminder"', () => {
-    const email = workshopReminder('Max', 'Reparaturkurs', '2026-06-01', 'Basel', WORKSHOP_URL)
+    const email = workshopReminder('Max', 'Reparaturkurs', '2026-06-01', '10:00', 'Basel', null, WORKSHOP_URL)
     expect(email.subject.toLowerCase()).toMatch(/erinnerung|reminder/)
   })
 })
@@ -151,21 +152,22 @@ describe('workshopCancellation', () => {
 // ─── workshopFeedbackRequest ──────────────────────────────────────────────────
 
 describe('workshopFeedbackRequest', () => {
+  // workshopFeedbackRequest(name, workshopTitle, workshopDate, feedbackUrl)
   const feedbackUrl = 'https://revamp-it.ch/workshops/feedback/123'
 
   it('returns { subject, html, text }', () => {
-    const email = workshopFeedbackRequest('Lena', 'Open Source Intro', feedbackUrl)
+    const email = workshopFeedbackRequest('Lena', 'Open Source Intro', '2026-05-01', feedbackUrl)
     expect(email).toHaveProperty('subject')
     expect(email).toHaveProperty('html')
     expect(email).toHaveProperty('text')
   })
 
   it('html contains the feedback URL', () => {
-    expect(workshopFeedbackRequest('Lena', 'Open Source', feedbackUrl).html).toContain(feedbackUrl)
+    expect(workshopFeedbackRequest('Lena', 'Open Source', '2026-05-01', feedbackUrl).html).toContain(feedbackUrl)
   })
 
   it('html contains the name', () => {
-    expect(workshopFeedbackRequest('Lena', 'Open Source', feedbackUrl).html).toContain('Lena')
+    expect(workshopFeedbackRequest('Lena', 'Open Source', '2026-05-01', feedbackUrl).html).toContain('Lena')
   })
 })
 
@@ -198,20 +200,21 @@ describe('workshopProposalSubmitted', () => {
 // ─── workshopProposalApproved ─────────────────────────────────────────────────
 
 describe('workshopProposalApproved', () => {
+  // workshopProposalApproved(name, workshopTitle)
   it('returns { subject, html, text }', () => {
-    const email = workshopProposalApproved('Maria', 'Intro to Linux', 'https://revamp-it.ch/workshops/linux')
+    const email = workshopProposalApproved('Maria', 'Intro to Linux')
     expect(email).toHaveProperty('subject')
     expect(email).toHaveProperty('html')
     expect(email).toHaveProperty('text')
   })
 
   it('subject indicates approval', () => {
-    const email = workshopProposalApproved('Maria', 'Intro to Linux', 'https://x.com')
+    const email = workshopProposalApproved('Maria', 'Intro to Linux')
     expect(email.subject.toLowerCase()).toMatch(/angenom|genehmigt|approved|zugelassen/)
   })
 
   it('html contains the name and workshop title', () => {
-    const email = workshopProposalApproved('Maria', 'Intro to Linux', 'https://x.com')
+    const email = workshopProposalApproved('Maria', 'Intro to Linux')
     expect(email.html).toContain('Maria')
     expect(email.html).toContain('Intro to Linux')
   })
