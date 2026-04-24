@@ -301,9 +301,8 @@ export class ResponseQualityService {
     suggestions = [
       {
         label: language === 'de' ? '🛒 Computer kaufen' : '🛒 Buy Computer',
-        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
+        href: '/shop',
         description: language === 'de' ? 'Refurbished Computer shop' : 'Refurbished computer shop',
-        external: true,
         category: 'product',
         priority: 10
       },

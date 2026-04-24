@@ -263,9 +263,8 @@ export class NavigationService {
     if (queryLower.match(/(buy|shop|purchase|kaufen|bestellen)/)) {
       suggestions.push({
         label: language === 'de' ? '🛒 Refurbished Computer kaufen' : '🛒 Buy Refurbished Computers',
-        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
+        href: '/shop',
         description: language === 'de' ? 'Hochwertige aufbereitete Elektronik' : 'High-quality refurbished electronics',
-        external: true,
         category: 'product',
         priority: 15
       })
@@ -391,9 +390,8 @@ export class NavigationService {
     return [
       {
         label: language === 'de' ? '🛒 Online Shop besuchen' : '🛒 Visit Online Shop',
-        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
+        href: '/shop',
         description: language === 'de' ? '24/7 verfügbar' : '24/7 available',
-        external: true,
         category: 'product',
         priority: 11
       }
@@ -447,9 +445,8 @@ export class NavigationService {
     if (currentPage.startsWith('/services')) {
       suggestions.push({
         label: language === 'de' ? '🛒 Computer kaufen' : '🛒 Buy Computer',
-        href: 'https://www.revamp-it.ch/index.php/de/shop-de',
-        description: language === 'de' ? 'Alternative: Neuen Computer kaufen' : 'Alternative: Buy new computer',
-        external: true,
+        href: '/shop',
+        description: language === 'de' ? 'Alternative: Gebrauchten Computer kaufen' : 'Alternative: Buy refurbished computer',
         priority: 5
       })
     }

@@ -274,9 +274,7 @@ export default function ServicesPage() {
                 {t('ctaContact')}
               </Link>
               <Link
-                href="https://www.revamp-it.ch/index.php/de/shop-de"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/shop"
                 className="inline-block border-2 border-blue-300 text-blue-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}
