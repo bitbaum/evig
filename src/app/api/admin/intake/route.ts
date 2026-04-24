@@ -135,8 +135,19 @@ export const GET = withAdmin('intake', async (request) => {
 
     const whereClause = sql`WHERE ${sql.join(conditions, sql` AND `)}`
 
-    // Items + count are independent — run in parallel
-    const [itemsResult, countResult] = await Promise.all([
+    // Aggregate counts use base conditions only (no status filter) so stats
+    // always reflect the full filtered set regardless of selected status tab.
+    const baseConditions: SQL[] = [sql`ii.intake_tier IS NOT NULL`]
+    if (tier) baseConditions.push(sql`ii.intake_tier = ${tier}`)
+    if (category) baseConditions.push(sql`ap.category = ${category}`)
+    if (search) {
+      const pattern = `%${search}%`
+      baseConditions.push(sql`(ap.brand ILIKE ${pattern} OR ap.product_name ILIKE ${pattern})`)
+    }
+    const baseWhere = sql`WHERE ${sql.join(baseConditions, sql` AND `)}`
+
+    // Items + filtered count + aggregate status counts — run in parallel
+    const [itemsResult, countResult, statusCountsResult] = await Promise.all([
       db.execute(sql`
         SELECT
           ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
@@ -161,6 +172,17 @@ export const GET = withAdmin('intake', async (request) => {
         LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
         ${whereClause}
       `),
+      db.execute(sql`
+        SELECT
+          COUNT(*) FILTER (WHERE ii.checklist_complete = false AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}) AS in_progress,
+          COUNT(*) FILTER (WHERE ii.checklist_complete = true AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}) AS ready,
+          COUNT(*) FILTER (WHERE ii.marketplace_status = ${INTAKE_STATUS.PUBLISHED}) AS published,
+          COUNT(*) AS total_unfiltered
+        FROM ${sql.raw(iiTable)} ii
+        JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
+        LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
+        ${baseWhere}
+      `),
     ])
 
     // Compute progress for each item
@@ -180,10 +202,20 @@ export const GET = withAdmin('intake', async (request) => {
     })
 
     const total = parseInt((countResult.rows[0] as { total: string })?.total || '0')
+    const sc = statusCountsResult.rows[0] as {
+      in_progress: string; ready: string; published: string; total_unfiltered: string
+    } | undefined
+    const statusCounts = {
+      inProgress: parseInt(sc?.in_progress || '0'),
+      ready: parseInt(sc?.ready || '0'),
+      published: parseInt(sc?.published || '0'),
+      total: parseInt(sc?.total_unfiltered || '0'),
+    }
 
     return apiSuccess({
       items,
       pagination: { total, limit, offset, hasMore: offset + limit < total },
+      statusCounts,
     })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

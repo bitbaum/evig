@@ -10,11 +10,21 @@ interface PaginationState {
   hasMore: boolean
 }
 
+interface StatusCounts {
+  inProgress: number
+  ready: number
+  published: number
+  total: number
+}
+
 export function useIntakePipeline(active: boolean) {
   const [items, setItems] = useState<PipelineItem[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState<PaginationState>({
     total: 0, limit: 20, offset: 0, hasMore: false,
+  })
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    inProgress: 0, ready: 0, published: 0, total: 0,
   })
 
   // Filters
@@ -37,6 +47,7 @@ export function useIntakePipeline(active: boolean) {
       if (json.success) {
         setItems(json.data.items)
         setPagination(json.data.pagination)
+        if (json.data.statusCounts) setStatusCounts(json.data.statusCounts)
       }
     } finally {
       setLoading(false)
@@ -74,6 +85,7 @@ export function useIntakePipeline(active: boolean) {
     items,
     loading,
     pagination,
+    statusCounts,
     tierFilter, setTierFilter,
     statusFilter, setStatusFilter,
     categoryFilter, setCategoryFilter,

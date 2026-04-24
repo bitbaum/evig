@@ -10,7 +10,6 @@ import {
 } from '@/config/intake-checklist'
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { INTAKE_STATUS } from '@/config/intake-status'
-import { LISTING_STATUS } from '@/config/marketplace'
 import { Pagination } from '@/components/ui/Pagination'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
@@ -19,6 +18,7 @@ interface IntakePipelineViewProps {
   items: PipelineItem[]
   loading: boolean
   pagination: { total: number; limit: number; offset: number; hasMore: boolean }
+  statusCounts: { inProgress: number; ready: number; published: number; total: number }
   tierFilter: string
   statusFilter: string
   categoryFilter: string
@@ -36,6 +36,7 @@ export function IntakePipelineView({
   items,
   loading,
   pagination,
+  statusCounts,
   tierFilter,
   statusFilter,
   categoryFilter,
@@ -50,13 +51,13 @@ export function IntakePipelineView({
 }: IntakePipelineViewProps) {
   return (
     <div className="space-y-4">
-      {/* Stats */}
+      {/* Stats — sourced from server aggregate counts, not current-page items */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total', value: pagination.total, color: 'bg-gray-100 text-gray-800' },
-          { label: 'In Bearbeitung', value: items.filter(i => !i.checklist_complete && i.marketplace_status === LISTING_STATUS.DRAFT).length, color: 'bg-yellow-100 text-yellow-800' },
-          { label: 'Bereit', value: items.filter(i => i.checklist_complete && i.marketplace_status === LISTING_STATUS.DRAFT).length, color: 'bg-green-100 text-green-800' },
-          { label: 'Publiziert', value: items.filter(i => i.marketplace_status === INTAKE_STATUS.PUBLISHED).length, color: 'bg-blue-100 text-blue-800' },
+          { label: 'Total', value: statusCounts.total, color: 'bg-gray-100 text-gray-800' },
+          { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-yellow-100 text-yellow-800' },
+          { label: 'Bereit', value: statusCounts.ready, color: 'bg-green-100 text-green-800' },
+          { label: 'Publiziert', value: statusCounts.published, color: 'bg-blue-100 text-blue-800' },
         ].map((stat) => (
           <div key={stat.label} className={`rounded-lg p-3 ${stat.color}`}>
             <div className="text-2xl font-bold">{stat.value}</div>

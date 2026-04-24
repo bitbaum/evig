@@ -59,6 +59,7 @@ export default function IntakeClient() {
           items={pipeline.items}
           loading={pipeline.loading}
           pagination={pipeline.pagination}
+          statusCounts={pipeline.statusCounts}
           tierFilter={pipeline.tierFilter}
           statusFilter={pipeline.statusFilter}
           categoryFilter={pipeline.categoryFilter}
