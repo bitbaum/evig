@@ -21,15 +21,15 @@ import { EmptyState } from '@/components/ui/EmptyState'
 
 interface OrderItem {
   id: string
-  listing_id: string
-  listing_title: string
+  listingId: string
+  listingTitle: string
   thumbnail: string | null
-  amount_chf: number
+  amountChf: number
   status: string
-  delivery_method: string
-  counterparty_name: string | null
-  counterparty_id: string
-  created_at: string
+  deliveryMethod: string
+  counterpartyName: string | null
+  counterpartyId: string
+  createdAt: string
 }
 
 export default function DashboardOrdersPage() {
@@ -172,7 +172,7 @@ export default function DashboardOrdersPage() {
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
                   {order.thumbnail ? (
-                    <Image src={order.thumbnail} alt={order.listing_title || t('itemImage')} width={56} height={56} className="w-full h-full object-cover" />
+                    <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={56} height={56} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-6 h-6 text-gray-400" />
@@ -181,15 +181,15 @@ export default function DashboardOrdersPage() {
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">{order.listing_title}</Heading>
+                  <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">{order.listingTitle}</Heading>
                   <div className="flex items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    <span>{role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}: {order.counterparty_name}</span>
-                    <span>{formatDateShort(order.created_at)}</span>
+                    <span>{role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}: {order.counterpartyName}</span>
+                    <span>{formatDateShort(order.createdAt)}</span>
                   </div>
                 </div>
 
                 <div className="text-right flex-shrink-0">
-                  <p className="font-bold text-gray-900 dark:text-white">{formatCHF(Number(order.amount_chf))}</p>
+                  <p className="font-bold text-gray-900 dark:text-white">{formatCHF(Number(order.amountChf))}</p>
                   {statusConfig && (
                     <span className={`inline-flex mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}>
                       {statusConfig.label}
