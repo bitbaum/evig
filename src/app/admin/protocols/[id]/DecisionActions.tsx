@@ -14,6 +14,7 @@
 
 import { useState } from 'react'
 import {
+  DECISION_RESULTS,
   DECISION_RESULT_LABELS,
   DECISION_RESULT_COLORS,
   PRIORITY_HINT_LABELS,
@@ -63,7 +64,7 @@ export default function DecisionActions({
   const [localOutcome, setLocalOutcome] = useState(outcome)
 
   const isClosed = localOutcome?.is_closed ?? false
-  const result = (localOutcome?.result ?? 'pending') as DecisionResult
+  const result = (localOutcome?.result ?? DECISION_RESULTS.PENDING) as DecisionResult
   const votesUp = localOutcome?.votes_up ?? localVotes.filter(v => v.vote_type === 'up').length
   const votesDown = localOutcome?.votes_down ?? localVotes.filter(v => v.vote_type === 'down').length
   const totalVoters = new Set(localVotes.map(v => v.voter_id)).size
@@ -300,7 +301,7 @@ export default function DecisionActions({
             )}
 
             {/* Stage 2: Approved, no proposals yet */}
-            {result === 'approved' && !hasProposals && !tasksCreated && isProtocolCreator && (
+            {result === DECISION_RESULTS.APPROVED && !hasProposals && !tasksCreated && isProtocolCreator && (
               <button
                 onClick={handlePropose}
                 disabled={loading === 'propose'}

@@ -98,7 +98,7 @@ export async function approveRepairerApplicationAction(applicationId: string) {
     await db
       .update(repairerApplications)
       .set({
-        status: 'approved',
+        status: APPROVAL_STATUS.APPROVED,
         reviewedBy: user.id,
         reviewedAt: sql`NOW()`,
         updatedAt: sql`NOW()`,

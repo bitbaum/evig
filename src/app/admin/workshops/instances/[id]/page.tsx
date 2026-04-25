@@ -22,7 +22,7 @@ import {
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
 import Heading from '@/components/admin/AdminHeading'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
@@ -118,13 +118,13 @@ export default function AdminWorkshopInstanceDetailPage({
 
   const getPaymentBadge = (paymentStatus: string) => {
     switch (paymentStatus) {
-      case 'paid':
+      case WORKSHOP_PAYMENT_STATUS.PAID:
         return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Bezahlt</span>
-      case 'pending':
+      case WORKSHOP_PAYMENT_STATUS.PENDING:
         return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
-      case 'refunded':
+      case WORKSHOP_PAYMENT_STATUS.REFUNDED:
         return <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">Erstattet</span>
-      case 'not_required':
+      case WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED:
         return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">Kostenlos</span>
       default:
         return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">{paymentStatus}</span>
@@ -271,7 +271,7 @@ export default function AdminWorkshopInstanceDetailPage({
               <div>
                 <div className="text-2xl font-bold text-gray-900">
                   CHF {(registrations
-                    .filter(r => r.payment_status === 'paid' && r.payment_amount_cents)
+                    .filter(r => r.payment_status === WORKSHOP_PAYMENT_STATUS.PAID && r.payment_amount_cents)
                     .reduce((sum, r) => sum + (r.payment_amount_cents || 0), 0) / 100
                   ).toFixed(0)}
                 </div>
