@@ -2,7 +2,6 @@
 
 import { useSession } from 'next-auth/react'
 import {
-  Star,
   MessageSquare,
   Edit3,
   Trash2,
@@ -13,6 +12,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react'
+import { StarRating } from '@/components/ui/StarRating'
 import { useTranslations } from 'next-intl'
 import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
@@ -48,26 +48,10 @@ function StatusBadge({ status }: { status: string }) {
   )
 }
 
-function StarRating({ rating, interactive = false, onChange }: {
-  rating: number
-  interactive?: boolean
-  onChange?: (rating: number) => void
-}) {
+function StarRow({ rating, onChange }: { rating: number; onChange?: (r: number) => void }) {
   return (
     <div className="flex items-center gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          disabled={!interactive}
-          onClick={() => onChange?.(star)}
-          className={`w-5 h-5 ${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : ''} ${
-            star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-          }`}
-        >
-          <Star className="w-full h-full" />
-        </button>
-      ))}
+      <StarRating value={rating} onChange={onChange} />
       <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
     </div>
   )
@@ -84,7 +68,7 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">{t('editOverallRating')}</label>
-        <StarRating rating={editForm.overallRating} interactive onChange={(r) => setEditForm({...editForm, overallRating: r})} />
+        <StarRow rating={editForm.overallRating} onChange={(r) => setEditForm({...editForm, overallRating: r})} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -96,7 +80,7 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
         ] as const).map(({ labelKey, key }) => (
           <div key={key}>
             <label className="block text-sm font-medium text-gray-700 mb-1">{t(labelKey)}</label>
-            <StarRating rating={editForm[key]} interactive onChange={(r) => setEditForm({...editForm, [key]: r})} />
+            <StarRow rating={editForm[key]} onChange={(r) => setEditForm({...editForm, [key]: r})} />
           </div>
         ))}
       </div>
@@ -169,7 +153,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
             </div>
 
             <div className="mb-3">
-              <StarRating rating={review.overallRating} />
+              <StarRow rating={review.overallRating} />
             </div>
 
             {editingReview === review.id ? (

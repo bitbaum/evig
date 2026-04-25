@@ -1,26 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { MapPin, Star, User, CheckCircle, Users, Sparkles, Euro } from 'lucide-react'
+import { MapPin, User, CheckCircle, Users, Sparkles, Euro } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { StarRating } from '@/components/ui/StarRating'
 import { type TechnicianProfile } from './types'
 
 interface TechnicianCardProps {
   technician: TechnicianProfile
-}
-
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center gap-0.5">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={`w-4 h-4 ${star <= Math.round(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
-        />
-      ))}
-    </div>
-  )
 }
 
 export function TechnicianCard({ technician }: TechnicianCardProps) {
@@ -63,7 +51,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {/* Rating */}
         {technician.averageRating !== null && (
           <div className="flex items-center gap-2 mb-3">
-            <StarRating rating={technician.averageRating} />
+            <StarRating value={technician.averageRating} size="sm" />
             <span className="text-sm text-gray-600">
               {technician.averageRating.toFixed(1)}
             </span>

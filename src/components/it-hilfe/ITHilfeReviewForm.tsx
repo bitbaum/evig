@@ -1,55 +1,18 @@
 'use client'
 
 import { useState } from 'react'
-import { Star, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import Heading from '@/components/ui/Heading'
+import { StarRating } from '@/components/ui/StarRating'
 
 interface ITHilfeReviewFormProps {
   requestId: string
   requestTitle: string
   onSuccess: () => void
-}
-
-function StarRating({
-  value,
-  onChange,
-  label,
-}: {
-  value: number
-  onChange: (rating: number) => void
-  label: string
-}) {
-  const [hover, setHover] = useState(0)
-
-  return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            type="button"
-            onClick={() => onChange(star)}
-            onMouseEnter={() => setHover(star)}
-            onMouseLeave={() => setHover(0)}
-            className="p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded"
-          >
-            <Star
-              className={`w-6 h-6 transition-colors ${
-                star <= (hover || value)
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-gray-300'
-              }`}
-            />
-          </button>
-        ))}
-      </div>
-    </div>
-  )
 }
 
 export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilfeReviewFormProps) {
@@ -120,6 +83,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
           value={overallRating}
           onChange={setOverallRating}
           label={t('overallRating')}
+          size="lg"
         />
 
         <div className="grid grid-cols-2 gap-4">
@@ -127,11 +91,13 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
             value={communicationRating}
             onChange={setCommunicationRating}
             label={t('communication')}
+            size="lg"
           />
           <StarRating
             value={qualityRating}
             onChange={setQualityRating}
             label={t('quality')}
+            size="lg"
           />
         </div>
 
