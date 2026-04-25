@@ -40,16 +40,17 @@ export default function WorkshopsDashboard() {
   const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
-  const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(
+    () => searchParams.get('payment') === 'success'
+  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRating, setEditRating] = useState<number>(5)
   const [editFeedback, setEditFeedback] = useState<string>('')
   const [saving, setSaving] = useState(false)
 
-  // Show success banner after Payrexx redirect, then clean the URL
+  // Strip the ?payment=success param from the URL after we've captured it into state
   useEffect(() => {
     if (searchParams.get('payment') === 'success') {
-      setPaymentSuccess(true)
       router.replace('/dashboard/workshops')
     }
   }, [searchParams, router])

@@ -37,16 +37,17 @@ export default function AppointmentsDashboard() {
   const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
-  const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(
+    () => searchParams.get('payment') === 'success'
+  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editDescription, setEditDescription] = useState<string>('')
   const [editPreferredDate, setEditPreferredDate] = useState<string>('')
   const [saving, setSaving] = useState(false)
 
-  // Show success banner after Payrexx redirect, then clean the URL
+  // Strip the ?payment=success param from the URL after we've captured it into state
   useEffect(() => {
     if (searchParams.get('payment') === 'success') {
-      setPaymentSuccess(true)
       router.replace('/dashboard/appointments')
     }
   }, [searchParams, router])
