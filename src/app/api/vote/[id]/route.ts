@@ -14,6 +14,7 @@ import { query } from '@/lib/auth/db'
 import { submitVote, getPublicDecision } from '@/lib/services/decisions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 
 type RouteParams = { params: Promise<{ id: string }> }
 
@@ -29,29 +30,26 @@ export async function GET(
     const decision = await getPublicDecision(decisionId)
 
     if (!decision) {
+      // Custom 404 message — null means either missing OR not in voting phase
       return NextResponse.json(
         { success: false, error: 'Entscheidung nicht gefunden oder nicht aktiv' },
         { status: 404 }
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        id: decision.id,
-        title: decision.title,
-        description: decision.description,
-        background: decision.background,
-        status: decision.status,
-        votingMethod: decision.votingMethod,
-        options: decision.options,
-        dotCount: decision.dotCount,
-        votingDeadline: decision.votingDeadline,
-      },
+    return apiSuccess({
+      id: decision.id,
+      title: decision.title,
+      description: decision.description,
+      background: decision.background,
+      status: decision.status,
+      votingMethod: decision.votingMethod,
+      options: decision.options,
+      dotCount: decision.dotCount,
+      votingDeadline: decision.votingDeadline,
     })
   } catch (error) {
-    logger.error('Public vote GET error', { error })
-    return NextResponse.json({ success: false, error: 'Serverfehler' }, { status: 500 })
+    return apiError(error, 'Serverfehler')
   }
 }
 
@@ -67,10 +65,10 @@ export async function POST(
     const { email, voteData } = body as { email?: string; voteData?: unknown }
 
     if (!email || typeof email !== 'string') {
-      return NextResponse.json({ success: false, error: 'E-Mail-Adresse erforderlich' }, { status: 400 })
+      return apiBadRequest('E-Mail-Adresse erforderlich')
     }
     if (!voteData) {
-      return NextResponse.json({ success: false, error: 'Stimmdaten erforderlich' }, { status: 400 })
+      return apiBadRequest('Stimmdaten erforderlich')
     }
 
     // Look up user by email
@@ -80,6 +78,7 @@ export async function POST(
     )
 
     if (userResult.rows.length === 0) {
+      // Custom 404 with sign-in CTA
       return NextResponse.json(
         { success: false, error: 'Keine Benutzer:in mit dieser E-Mail-Adresse gefunden. Bitte melde dich erst an.' },
         { status: 404 }
@@ -98,16 +97,12 @@ export async function POST(
         not_participant: 'Du bist nicht zur Abstimmung berechtigt',
         invalid_data: 'Ungültige Stimmdaten',
       }
-      return NextResponse.json(
-        { success: false, error: messages[result.error as string] || 'Fehler beim Abstimmen' },
-        { status: 400 }
-      )
+      return apiBadRequest(messages[result.error as string] || 'Fehler beim Abstimmen')
     }
 
     logger.info('Public vote submitted', { decisionId, userId })
-    return NextResponse.json({ success: true, data: result.vote })
+    return apiSuccess(result.vote)
   } catch (error) {
-    logger.error('Public vote POST error', { error })
-    return NextResponse.json({ success: false, error: 'Serverfehler' }, { status: 500 })
+    return apiError(error, 'Serverfehler')
   }
 }

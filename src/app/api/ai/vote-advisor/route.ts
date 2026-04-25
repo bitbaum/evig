@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
 import { callWithFallback } from '@/lib/ai/providers'
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import {
   VOTING_ADVISOR_PROMPTS,
   VOTING_METHOD_LABELS,
@@ -38,15 +39,12 @@ export async function POST(request: NextRequest) {
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ success: false, error: 'Ungültiger JSON-Body' }, { status: 400 })
+      return apiBadRequest('Ungültiger JSON-Body')
     }
 
     const parsed = requestSchema.safeParse(body)
     if (!parsed.success) {
-      return NextResponse.json(
-        { success: false, error: 'Ungültige Anfrage', details: parsed.error.flatten().fieldErrors },
-        { status: 400 }
-      )
+      return apiBadRequest('Ungültige Anfrage', parsed.error.flatten().fieldErrors)
     }
 
     const { title, description, background, votingMethod, options, question } = parsed.data
@@ -86,21 +84,15 @@ export async function POST(request: NextRequest) {
     ])
 
     if (!result) {
+      // Custom 503 — AI fallback chain exhausted
       return NextResponse.json(
         { success: false, error: 'KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut.' },
         { status: 503 }
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      data: { analysis: result.text, model: result.model },
-    })
+    return apiSuccess({ analysis: result.text, model: result.model })
   } catch (error) {
-    logger.error('Vote advisor error', { error })
-    return NextResponse.json(
-      { success: false, error: 'Fehler beim Erstellen der Analyse' },
-      { status: 500 }
-    )
+    return apiError(error, 'Fehler beim Erstellen der Analyse')
   }
 }
