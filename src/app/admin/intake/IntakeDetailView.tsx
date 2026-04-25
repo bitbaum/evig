@@ -6,6 +6,7 @@ import {
   AlertCircle, ArrowDownUp, Clock, CheckCheck, ClipboardList,
 } from 'lucide-react'
 import {
+  INTAKE_TIERS,
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
   getIntakeTierOptions,
@@ -95,7 +96,7 @@ export function IntakeDetailView({
             <>
               <button
                 type="button"
-                onClick={() => { setNewTier(detail.intake_tier === 'refurbish' ? 'parts' : 'refurbish'); setShowTierChange(true) }}
+                onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
                 className="flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg hover:bg-gray-50"
                 title="Stufe ändern"
               >
@@ -161,7 +162,7 @@ export function IntakeDetailView({
       </div>
 
       {/* Publish Section */}
-      {detail.intake_tier === 'refurbish' && detail.marketplace_status !== 'published' && (
+      {detail.intake_tier === INTAKE_TIERS.REFURBISH && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
             ? 'border-green-300 bg-green-50'

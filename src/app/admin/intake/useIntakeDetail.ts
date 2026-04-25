@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
-import type { IntakeTier } from '@/config/intake-checklist'
+import { INTAKE_TIERS, type IntakeTier } from '@/config/intake-checklist'
 import type { DetailData } from './types'
 
 export function useIntakeDetail() {
@@ -16,7 +16,7 @@ export function useIntakeDetail() {
 
   // Tier change
   const [showTierChange, setShowTierChange] = useState(false)
-  const [newTier, setNewTier] = useState<IntakeTier>('refurbish')
+  const [newTier, setNewTier] = useState<IntakeTier>(INTAKE_TIERS.REFURBISH)
   const [tierChangeReason, setTierChangeReason] = useState('')
   const [tierChanging, setTierChanging] = useState(false)
 

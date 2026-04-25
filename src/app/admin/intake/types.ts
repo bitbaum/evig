@@ -1,4 +1,4 @@
-import type { IntakeTier, ChecklistState, ChecklistCategory } from '@/config/intake-checklist'
+import { INTAKE_TIERS, type IntakeTier, type ChecklistState, type ChecklistCategory } from '@/config/intake-checklist'
 
 export interface ChecklistProgress {
   completed: number
@@ -96,7 +96,7 @@ export const INITIAL_FORM_DATA: CreateFormData = {
   zustand: 'good',
   hauptkategorie: '',
   unterkategorie: '',
-  intake_tier: 'refurbish',
+  intake_tier: INTAKE_TIERS.REFURBISH,
   is_donation: false,
   donor_name: '',
   donor_email: '',

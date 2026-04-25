@@ -4,7 +4,7 @@ import {
   X, ChevronDown, ChevronRight,
   AlertCircle, Type, Mic, Camera, Loader2,
 } from 'lucide-react'
-import { getIntakeTierOptions } from '@/config/intake-checklist'
+import { INTAKE_TIERS, getIntakeTierOptions } from '@/config/intake-checklist'
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ImageCapture } from '@/components/erfassung/ImageCapture'
@@ -279,7 +279,7 @@ export function IntakeCreateForm({
         </div>
       </div>
 
-      {formData.intake_tier === 'refurbish' && (
+      {formData.intake_tier === INTAKE_TIERS.REFURBISH && (
         <div>
           <label className="block text-sm font-medium mb-1">Geschätzter Verkaufspreis (CHF)</label>
           <input

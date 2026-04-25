@@ -9,7 +9,7 @@ import {
   getIntakeTierOptions,
 } from '@/config/intake-checklist'
 import { KATEGORIEN } from '@/config/erfassung/categories'
-import { INTAKE_STATUS } from '@/config/intake-status'
+import { INTAKE_STATUS, INTAKE_STATUS_LABELS } from '@/config/intake-status'
 import { Pagination } from '@/components/ui/Pagination'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
@@ -96,9 +96,9 @@ export function IntakePipelineView({
           className="border rounded-lg px-2 py-1.5 text-sm"
         >
           <option value="">Alle Status</option>
-          <option value="in_progress">In Bearbeitung</option>
-          <option value="ready">Bereit</option>
-          <option value="published">Publiziert</option>
+          {Object.values(INTAKE_STATUS).map(status => (
+            <option key={status} value={status}>{INTAKE_STATUS_LABELS[status]}</option>
+          ))}
         </select>
 
         <select
