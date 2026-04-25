@@ -12,7 +12,7 @@ import { CheckCircle2, AlertCircle, AlertTriangle, Loader2, ChevronLeft, Chevron
 import { useTranslations } from 'next-intl'
 import type { BulkProduct, BulkProductStatus } from '@/types/erfassung'
 import { BULK_TABLE_COLUMNS, BULK_LIMITS } from '@/config/erfassung'
-import { KATEGORIEN, ZUSTAND_OPTIONS } from '@/config/erfassung'
+import { KATEGORIEN, getConditionLabel } from '@/config/erfassung'
 
 interface BulkTableProps {
   products: BulkProduct[]
@@ -43,11 +43,6 @@ function StatusIcon({ status }: { status: BulkProductStatus }) {
 function getCategoryLabel(value: string): string {
   const kat = KATEGORIEN.find(k => k.value === value)
   return kat ? `${kat.icon || ''} ${kat.label}` : value || '-'
-}
-
-function getConditionLabel(value: string): string {
-  const opt = ZUSTAND_OPTIONS.find(o => o.value === value)
-  return opt ? opt.label : value || '-'
 }
 
 export function BulkTable({
@@ -154,7 +149,7 @@ export function BulkTable({
                     if (col.key === 'zustand' && !isEditing(col.key)) {
                       return (
                         <td key={col.key} className="px-3 py-2">
-                          <span className="text-sm">{getConditionLabel(value)}</span>
+                          <span className="text-sm">{value ? getConditionLabel(value) : '-'}</span>
                         </td>
                       )
                     }

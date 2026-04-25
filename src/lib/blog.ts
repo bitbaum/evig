@@ -87,4 +87,3 @@ export function getPostBySlug(slug: string): BlogPost | null {
   }
 }
 
-// Note: formatDate and getReadingTime moved to blog-utils.ts to avoid fs import in client components

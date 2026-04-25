@@ -1,12 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { Clock } from 'lucide-react'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
-
-function getReadingTime(content: string): number {
-  return Math.ceil(content.trim().split(/\s+/).length / 200)
-}
-import { Clock } from 'lucide-react'
+import { getReadingTime } from '@/lib/blog-utils'
 import Heading from '@/components/ui/Heading'
 
 interface BlogLatestListProps {

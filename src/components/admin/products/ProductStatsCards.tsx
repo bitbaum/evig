@@ -7,6 +7,7 @@ import {
   AlertTriangle,
   Tag,
 } from 'lucide-react'
+import { getConditionLabel } from '@/config/erfassung'
 import type { TabType, InventoryStats, ShopStats } from './types'
 
 interface ProductStatsCardsProps {
@@ -85,19 +86,6 @@ export function ProductStatsCards({
       />
     </div>
   )
-}
-
-// Condition labels in German
-function getConditionLabel(condition: string): string {
-  const labels: Record<string, string> = {
-    'new': 'Neu',
-    'like_new': 'Wie neu',
-    'very_good': 'Sehr gut',
-    'good': 'Gut',
-    'acceptable': 'Akzeptabel',
-    'for_parts': 'Für Teile',
-  }
-  return labels[condition] || condition
 }
 
 interface StatCardProps {
