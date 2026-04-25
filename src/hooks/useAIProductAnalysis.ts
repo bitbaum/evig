@@ -1,9 +1,7 @@
 /**
- * useAIProductAnalysis — SSOT for AI image-based product analysis
- *
- * Consolidates useAICamera + useAICapture into a single hook.
- * Both called the same endpoint (/api/ai/analyze-product) with
- * different response transformations. This hook supports both modes.
+ * useAIProductAnalysis — SSOT for AI image-based product analysis.
+ * Wraps /api/ai/analyze-product with camera capture, file upload,
+ * and configurable response transformation.
  */
 
 'use client'
