@@ -201,7 +201,7 @@ export function IntakeDetailView({
             </button>
             {detail.checklist_complete && (
               <Link
-                href={`/admin/erfassung?edit=${detail.id}&returnTo=/admin/intake`}
+                href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
                 className="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm font-medium"
                 title="Produkt in Erfassung öffnen um Details zu ergänzen"
               >

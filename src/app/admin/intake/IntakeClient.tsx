@@ -16,15 +16,19 @@ export default function IntakeClient() {
   const detail = useIntakeDetail()
   const createForm = useIntakeCreateForm()
 
-  // URL param pre-fill for donation cross-link
+  // URL param pre-fill for donation cross-link, or reopen detail after erfassung edit
   const searchParams = useSearchParams()
   useEffect(() => {
     const donorName = searchParams.get('donor_name')
     const donorEmail = searchParams.get('donor_email')
     const donationId = searchParams.get('donation_id')
+    const detailId = searchParams.get('detail')
     if (donationId || donorName || donorEmail) {
       setView('create')
       createForm.prefillFromDonation(donorName || '', donorEmail || '')
+    } else if (detailId) {
+      setView('detail')
+      detail.openDetail(detailId)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
