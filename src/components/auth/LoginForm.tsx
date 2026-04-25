@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { getTextColor, getStatusColors, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 
@@ -15,9 +16,8 @@ export function LoginForm() {
   const t = useTranslations('auth.login')
   const router = useRouter()
   const searchParams = useSearchParams()
-  const rawCallbackUrl = searchParams.get('callbackUrl') || '/dashboard'
-  // Prevent open redirect: only allow relative paths (same-origin)
-  const callbackUrl = rawCallbackUrl.startsWith('/') && !rawCallbackUrl.startsWith('//') ? rawCallbackUrl : '/dashboard'
+  // Prevent open redirect: only allow same-origin paths
+  const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard')
   const error = searchParams.get('error')
   const verified = searchParams.get('verified')
   const reset = searchParams.get('reset')

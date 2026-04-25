@@ -3,6 +3,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
@@ -29,7 +30,8 @@ export function useErfassungForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams.get('edit')
-  const returnTo = searchParams.get('returnTo')
+  // Prevent open-redirect: only same-origin paths
+  const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/products')
 
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingProduct, setIsLoadingProduct] = useState(false)
@@ -209,7 +211,7 @@ export function useErfassungForm() {
           throw new Error(result.error || t('updateFailed'))
         }
 
-        router.push(returnTo || '/admin/products')
+        router.push(returnTo)
       } else {
         const payload = formDataToPayload(formData, action)
 
