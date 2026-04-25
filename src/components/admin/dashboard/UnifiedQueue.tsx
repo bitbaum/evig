@@ -2,18 +2,11 @@ import Link from 'next/link'
 import { Zap, Check, ArrowRight } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { InlineActionButton } from './InlineActionButton'
+import { formatQueueAge } from './format'
 import type { UnifiedQueueItem } from './types'
 
 interface UnifiedQueueProps {
   items: UnifiedQueueItem[]
-}
-
-function formatAge(isoDate: string | null | undefined): string | null {
-  if (!isoDate) return null
-  const days = Math.floor((Date.now() - new Date(isoDate).getTime()) / (1000 * 60 * 60 * 24))
-  if (days <= 0) return 'heute eingegangen'
-  if (days === 1) return 'seit gestern'
-  return `ältestes: vor ${days} Tagen`
 }
 
 const URGENCY_CONFIG = {
@@ -61,7 +54,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
           <ul className="space-y-2" role="list">
             {items.map((item, index) => {
               const urgency = URGENCY_CONFIG[item.type]
-              const age = formatAge(item.oldestAt)
+              const age = formatQueueAge(item.oldestAt)
               const ariaLabel = `${urgency.label}: ${item.label}${age ? `, ${age}` : ''}${item.count ? `, ${item.count} Einträge` : ''}`
 
               return (

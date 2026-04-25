@@ -2,6 +2,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { activityFeed, users } from '@/db/schema'
 import { logger } from '@/lib/logger'
+import { formatRelativeTime } from '@/lib/utils'
 
 const feedTable = getTableName(activityFeed)
 const usersTable = getTableName(users)
@@ -21,16 +22,6 @@ const ACTION_LABELS: Record<string, string> = {
   captured_device: 'erfasste Gerät',
   approved_blog: 'genehmigte Blogartikel',
   approved_repairer: 'genehmigte Reparateur',
-}
-
-function formatAge(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 60) return `vor ${mins} Min.`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `vor ${hours} Std.`
-  const days = Math.floor(hours / 24)
-  return `vor ${days} Tag${days !== 1 ? 'en' : ''}`
 }
 
 export async function TeamActivityFeed() {
@@ -76,7 +67,7 @@ export async function TeamActivityFeed() {
                 )}
                 {' '}
                 <span className="text-gray-400 dark:text-gray-500 text-xs">
-                  {formatAge(row.created_at)}
+                  {formatRelativeTime(row.created_at)}
                 </span>
               </span>
             </li>

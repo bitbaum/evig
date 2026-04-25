@@ -1,18 +1,11 @@
 import Link from 'next/link'
 import { Zap, ArrowRight, Check } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { formatQueueAge } from './format'
 import type { ActionItem } from './types'
 
 interface ActionItemsSectionProps {
   actionItems: ActionItem[]
-}
-
-function formatAge(isoDate: string | null | undefined): string | null {
-  if (!isoDate) return null
-  const days = Math.floor((Date.now() - new Date(isoDate).getTime()) / (1000 * 60 * 60 * 24))
-  if (days <= 0) return 'heute eingegangen'
-  if (days === 1) return 'seit gestern'
-  return `ältestes: vor ${days} Tagen`
 }
 
 const URGENCY_CONFIG = {
@@ -57,7 +50,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
           <ul className="space-y-2" role="list">
             {actionItems.map((item, index) => {
               const urgency = URGENCY_CONFIG[item.type]
-              const age = formatAge(item.oldestAt)
+              const age = formatQueueAge(item.oldestAt)
               return (
                 <li key={index}>
                   <Link
