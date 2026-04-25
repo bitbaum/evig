@@ -9,6 +9,11 @@ jest.mock('next/navigation', () => ({
   }),
 }))
 
+// AIFormAssist uses useTranslations which requires IntlProvider — mock it out in unit tests
+jest.mock('@/components/ai/AIFormAssist', () => ({
+  AIFormAssist: () => null,
+}))
+
 const teamMembers = [
   { id: 'u1', name: 'Alice' },
   { id: 'u2', name: 'Bob' },

@@ -4,10 +4,7 @@ import DecisionListClient from '../DecisionListClient'
 describe('DecisionListClient', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-  })
-
-  it('renders error state on failed fetch and retries successfully', async () => {
-    ;(global.fetch as jest.Mock)
+    global.fetch = jest.fn()
       .mockResolvedValueOnce({
         ok: false,
         json: async () => ({ success: false, error: 'Kaputt' }),
@@ -15,7 +12,10 @@ describe('DecisionListClient', () => {
       .mockResolvedValueOnce({
         ok: true,
         json: async () => ({ success: true, data: { decisions: [], total: 0, page: 1, limit: 20 } }),
-      })
+      }) as jest.Mock
+  })
+
+  it('renders error state on failed fetch and retries successfully', async () => {
 
     const stats = { voting: 0, discussion: 0, closed: 0, pendingVotes: 0 }
     render(<DecisionListClient currentUserId="test-user-id" isSuperAdmin={false} stats={stats} />)
