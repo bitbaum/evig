@@ -5,6 +5,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import { Wallet, TrendingUp, Heart, ArrowUpRight, ArrowDownRight } from 'lucide-react'
 import { logger } from '@/lib/logger'
+import { formatCHF } from '@/lib/hirn/format'
 import Heading from '@/components/ui/Heading'
 import { AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -24,15 +25,6 @@ interface YearData {
     earnedTotal: number
     donationsTotal: number
   }
-}
-
-function formatCHF(value: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value)
 }
 
 function TrendIndicator({ current, previous }: { current: number; previous: number }) {

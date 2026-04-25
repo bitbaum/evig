@@ -6,6 +6,7 @@
  */
 
 import type { YearlyAggregation, MonthlyData, TracedValue } from './financial-loader';
+import { formatCHF, formatPercent } from '../format';
 
 // ============================================================================
 // Types
@@ -80,18 +81,6 @@ function calculateTrend(current: number, previous: number): TrendAnalysis {
   };
 }
 
-function formatCHF(value: number): string {
-  return new Intl.NumberFormat('de-CH', {
-    style: 'currency',
-    currency: 'CHF',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function formatPercent(value: number): string {
-  return `${value.toFixed(1)}%`;
-}
 
 // ============================================================================
 // Analysis Functions
