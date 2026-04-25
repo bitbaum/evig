@@ -4,6 +4,7 @@
  */
 
 import bcrypt from 'bcryptjs'
+import { AUTH_CONFIG } from '@/lib/auth/config'
 
 const SALT_ROUNDS = 12
 
@@ -57,9 +58,6 @@ export function validatePasswordStrength(password: string): {
   errors: string[]
 } {
   const errors: string[] = []
-
-  // Import AUTH_CONFIG dynamically to use actual configuration
-  const { AUTH_CONFIG } = require('@/lib/auth/config')
   const config = AUTH_CONFIG.password
 
   // Length validation

@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { validateBody, ForgotPasswordSchema } from '@/lib/schemas'
 import { ORG } from '@/config/org'
+import { getPasswordResetUrl } from '@/config/urls'
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,7 +45,6 @@ export async function POST(request: NextRequest) {
     const resetToken = await createPasswordResetToken(email)
 
     // Send reset email
-    const { getPasswordResetUrl } = require('@/config/urls')
     const resetUrl = getPasswordResetUrl(resetToken)
     try {
       await sendEmail(email, 'passwordReset', user.name || `${ORG.name} Benutzer`, resetUrl)
