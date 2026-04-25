@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { DECISION_CATEGORIES, DECISION_CATEGORY_LABELS, type DecisionCategory } from '@/config/decisions';
+import { DECISION_CATEGORIES, DECISION_CATEGORY_LABELS, DECISION_STATUS, type DecisionCategory } from '@/config/decisions';
 import { AIFormAssist } from '@/components/ai/AIFormAssist';
 import Heading from '@/components/admin/AdminHeading';
 import DecisionTemplateSelector from '@/components/decisions/DecisionTemplateSelector';
@@ -204,7 +204,7 @@ export default function DecisionFormClient() {
         <button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.setInitialStatus('draft'); }}
+          onClick={() => { form.setInitialStatus(DECISION_STATUS.DRAFT); }}
           className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
         >
           Als Entwurf speichern
@@ -212,7 +212,7 @@ export default function DecisionFormClient() {
         <button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.setInitialStatus('discussion'); }}
+          onClick={() => { form.setInitialStatus(DECISION_STATUS.DISCUSSION); }}
           className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
           Zur Diskussion freigeben
@@ -220,7 +220,7 @@ export default function DecisionFormClient() {
         <button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.setInitialStatus('voting'); }}
+          onClick={() => { form.setInitialStatus(DECISION_STATUS.VOTING); }}
           className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
         >
           Direkt zur Abstimmung

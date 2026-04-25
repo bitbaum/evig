@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions';
+import { DECISION_STATUS, type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions';
 import Heading from '@/components/admin/AdminHeading';
 import { DeadlineCountdown } from './voting/DeadlineCountdown';
 import { ConsentVote } from './voting/ConsentVote';
@@ -144,7 +144,7 @@ export default function VotingPanel({
   if (success || hasUserVoted) {
     return (
       <div className="space-y-3">
-        {votingDeadline && status === 'voting' && (
+        {votingDeadline && status === DECISION_STATUS.VOTING && (
           <DeadlineCountdown deadline={votingDeadline} />
         )}
         <div className="rounded-lg bg-green-50 p-6 text-center shadow-sm">
@@ -171,7 +171,7 @@ export default function VotingPanel({
       )}
 
       <div className="rounded-lg bg-white p-6 shadow-sm">
-      {votingDeadline && status === 'voting' && (
+      {votingDeadline && status === DECISION_STATUS.VOTING && (
         <div className="mb-4">
           <DeadlineCountdown deadline={votingDeadline} />
         </div>

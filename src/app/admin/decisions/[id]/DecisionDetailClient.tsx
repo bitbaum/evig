@@ -219,22 +219,22 @@ export default function DecisionDetailClient({
                 )}
               </button>
             )}
-            {validTargets.includes('discussion') && (
-              <AdminButton variant="action" onClick={() => handleTransition('discussion')}>
+            {validTargets.includes(DECISION_STATUS.DISCUSSION) && (
+              <AdminButton variant="action" onClick={() => handleTransition(DECISION_STATUS.DISCUSSION)}>
                 Zur Diskussion
               </AdminButton>
             )}
-            {validTargets.includes('voting') && (
-              <AdminButton variant="warning" onClick={() => handleTransition('voting')}>
+            {validTargets.includes(DECISION_STATUS.VOTING) && (
+              <AdminButton variant="warning" onClick={() => handleTransition(DECISION_STATUS.VOTING)}>
                 Zur Abstimmung
               </AdminButton>
             )}
-            {validTargets.includes('closed') && !showCloseInput && (
+            {validTargets.includes(DECISION_STATUS.CLOSED) && !showCloseInput && (
               <AdminButton variant="primary" onClick={() => setShowCloseInput(true)}>
                 Abstimmung schliessen
               </AdminButton>
             )}
-            {validTargets.includes('cancelled') && !showCancelInput && (
+            {validTargets.includes(DECISION_STATUS.CANCELLED) && !showCancelInput && (
               <AdminButton variant="dangerOutline" onClick={() => setShowCancelInput(true)}>
                 Abbrechen
               </AdminButton>
@@ -278,7 +278,7 @@ export default function DecisionDetailClient({
               <AdminButton
                 variant="primary"
                 onClick={() => {
-                  handleTransition('closed', { outcomeSummary: closeSummary || undefined });
+                  handleTransition(DECISION_STATUS.CLOSED, { outcomeSummary: closeSummary || undefined });
                   setShowCloseInput(false);
                 }}
               >
@@ -310,7 +310,7 @@ export default function DecisionDetailClient({
                 disabled={!cancelReason.trim()}
                 onClick={() => {
                   if (cancelReason.trim()) {
-                    handleTransition('cancelled', { cancelReason });
+                    handleTransition(DECISION_STATUS.CANCELLED, { cancelReason });
                     setShowCancelInput(false);
                   }
                 }}

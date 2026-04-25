@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
+  DECISION_STATUS,
   DECISION_TYPE_DEFAULTS,
   VOTING_METHODS,
   DECISION_TYPES,
@@ -58,8 +59,12 @@ export function useDecisionForm() {
   const [quorumValue, setQuorumValue] = useState(50);
   const [discussionDeadline, setDiscussionDeadline] = useState('');
   const [votingDeadline, setVotingDeadline] = useState('');
-  const initialStatusRef = useRef<'draft' | 'discussion' | 'voting'>('draft');
-  const setInitialStatus = (status: 'draft' | 'discussion' | 'voting') => {
+  type InitialStatus =
+    | typeof DECISION_STATUS.DRAFT
+    | typeof DECISION_STATUS.DISCUSSION
+    | typeof DECISION_STATUS.VOTING;
+  const initialStatusRef = useRef<InitialStatus>(DECISION_STATUS.DRAFT);
+  const setInitialStatus = (status: InitialStatus) => {
     initialStatusRef.current = status;
   };
 
