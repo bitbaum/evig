@@ -40,11 +40,11 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
             />
             <span className="text-sm font-medium text-gray-700">
               {t('sections.terms.checkboxPrefix')}{' '}
-              <Link href="/terms" className="text-green-600 hover:text-green-700 underline">
+              <Link href="/agb" className="text-green-600 hover:text-green-700 underline">
                 {t('sections.terms.termsLink')}
               </Link>{' '}
               {t('sections.terms.checkboxMiddle')}{' '}
-              <Link href="/privacy" className="text-green-600 hover:text-green-700 underline">
+              <Link href="/datenschutz" className="text-green-600 hover:text-green-700 underline">
                 {t('sections.terms.privacyLink')}
               </Link>
             </span>

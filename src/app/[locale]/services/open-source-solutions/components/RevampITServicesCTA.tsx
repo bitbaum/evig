@@ -25,7 +25,7 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
           <div>
             <p className="text-sm text-blue-800">{services.itHilfeNote}</p>
             <Link
-              href="/services/it-hilfe"
+              href="/it-hilfe"
               className="text-sm font-medium text-blue-700 hover:text-blue-900 underline"
             >
               {t('itHilfeLink')}

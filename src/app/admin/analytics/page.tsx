@@ -410,8 +410,8 @@ export default async function AnalyticsPage() {
         <p className="text-sm text-blue-700 dark:text-blue-300">
           <strong>Hinweis:</strong> Die Statistiken werden in Echtzeit aus der Datenbank berechnet.
           Für detaillierte Finanz-Analytics, siehe{' '}
-          <Link href="/admin/hirn/finanzen" className="underline hover:text-blue-800">
-            Hirn Finanzen
+          <Link href="/admin/analyse/finanzen" className="underline hover:text-blue-800">
+            Finanzen-Analyse
           </Link>.
         </p>
       </div>
