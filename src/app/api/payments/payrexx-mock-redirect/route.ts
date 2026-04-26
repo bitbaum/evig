@@ -13,6 +13,19 @@ import { logger } from '@/lib/logger';
 import { apiForbidden } from '@/lib/api/helpers';
 import { APP_URL } from '@/config/urls';
 import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client';
+import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
+
+/** Escape special HTML characters so user input can't break out of text content. */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+const SUPPORTED_CURRENCIES = new Set(['CHF', 'EUR']);
 
 export async function GET(request: NextRequest) {
   // Block in production
@@ -21,13 +34,21 @@ export async function GET(request: NextRequest) {
   }
 
   const { searchParams } = new URL(request.url);
-  const referenceId = searchParams.get('referenceId') || '';
-  const amount = searchParams.get('amount') || '0';
-  const currency = searchParams.get('currency') || 'CHF';
-  const successUrl = searchParams.get('successUrl') || '/';
-  const cancelUrl = searchParams.get('cancelUrl') || '/';
+  const rawReferenceId = searchParams.get('referenceId') || '';
+  const rawAmount = searchParams.get('amount') || '0';
+  const rawCurrency = searchParams.get('currency') || 'CHF';
 
-  const amountFormatted = (Number(amount) / 100).toFixed(2);
+  // Defense-in-depth: even though this route is dev-only, sanitize all
+  // user-controlled values that flow into HTML or window.location.
+  const referenceId = escapeHtml(rawReferenceId.slice(0, 64));
+  const referenceIdRaw = rawReferenceId.slice(0, 64); // for the JS-string context (JSON.stringify-encoded)
+  const currency = SUPPORTED_CURRENCIES.has(rawCurrency.toUpperCase())
+    ? rawCurrency.toUpperCase()
+    : 'CHF';
+  const amountFormatted = (Number(rawAmount) / 100).toFixed(2);
+  const successUrl = sanitizeReturnTo(searchParams.get('successUrl'), '/');
+  const cancelUrl = sanitizeReturnTo(searchParams.get('cancelUrl'), '/');
+
   const webhookUrl = `${APP_URL}/api/payments/payrexx-webhook`;
 
   const html = `<!DOCTYPE html>
@@ -69,7 +90,7 @@ export async function GET(request: NextRequest) {
     const webhookUrl = ${JSON.stringify(webhookUrl)};
     const successUrl = ${JSON.stringify(successUrl)};
     const cancelUrl = ${JSON.stringify(cancelUrl)};
-    const referenceId = ${JSON.stringify(referenceId)};
+    const referenceId = ${JSON.stringify(referenceIdRaw)};
 
     async function handlePay() {
       const btn = document.getElementById('payBtn');
@@ -85,7 +106,7 @@ export async function GET(request: NextRequest) {
           body: JSON.stringify({
             transaction: {
               id: mockTxId,
-              status: PAYREXX_TRANSACTION_STATUS.RESERVED,
+              status: ${JSON.stringify(PAYREXX_TRANSACTION_STATUS.RESERVED)},
               referenceId: referenceId,
             },
           }),
@@ -105,7 +126,7 @@ export async function GET(request: NextRequest) {
 </body>
 </html>`;
 
-  logger.info('Mock Payrexx payment page rendered', { referenceId, amount });
+  logger.info('Mock Payrexx payment page rendered', { referenceId: referenceIdRaw, amount: rawAmount });
 
   return new NextResponse(html, {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
