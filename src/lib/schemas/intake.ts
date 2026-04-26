@@ -38,6 +38,9 @@ export const IntakeCreateSchema = z.object({
   donor_name: z.string().optional(),
   donor_email: z.string().email().optional().or(z.literal('')),
   donor_notes: z.string().optional(),
+  // Link to an existing donation row (set when admin opens intake from /admin/donations)
+  // — prevents creating a duplicate donation for the same physical drop-off.
+  existing_donation_id: z.string().uuid().optional(),
 })
 
 // =============================================================================

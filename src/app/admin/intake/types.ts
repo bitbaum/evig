@@ -85,6 +85,8 @@ export interface CreateFormData {
   donor_name: string
   donor_email: string
   donor_notes: string
+  /** Set when intake was opened from an existing donation row (donations table) */
+  existing_donation_id: string | null
   image: string | null
 }
 
@@ -101,5 +103,6 @@ export const INITIAL_FORM_DATA: CreateFormData = {
   donor_name: '',
   donor_email: '',
   donor_notes: '',
+  existing_donation_id: null,
   image: null,
 }

@@ -8,7 +8,7 @@
  */
 
 import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
+import { sql, getTableName, eq } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { PRODUCT_STATUS, MARKETPLACE_STATUS, INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
 import { MARKETPLACE_LISTING_PLATFORM } from '@/config/shop'
@@ -51,6 +51,11 @@ export interface CreateProductOptions {
     notes?: string | null
     deviceCategory?: string | null
   }
+  /**
+   * Link to an existing donations row instead of creating a new one.
+   * Mutually exclusive with `donation`; takes precedence when both are set.
+   */
+  existingDonationId?: string
   /** Forces DRAFT marketplace status, skips marketplace_listings insert */
   checklistGated?: boolean
 }
@@ -163,9 +168,21 @@ export async function createErfassungProduct(
 
   const productId = productRow.id
 
-  // 2. Create donation record if intake with donation
+  // 2. Create donation record if intake with donation, or link to existing
   let donationId: string | null = null
-  if (options?.donation) {
+  if (options?.existingDonationId) {
+    // Verify the donation actually exists before linking
+    const existing = await tx
+      .select({ id: donations.id })
+      .from(donations)
+      .where(eq(donations.id, options.existingDonationId))
+      .limit(1)
+    if (existing.length > 0) {
+      donationId = options.existingDonationId
+    }
+    // If the ID doesn't resolve, fall through with donationId=null rather than
+    // failing the intake — the staff member can re-link later.
+  } else if (options?.donation) {
     const [donationRow] = await tx.insert(donations).values({
       donationType: 'device',
       deviceCategory: options.donation.deviceCategory || payload.hauptkategorie || 'other',

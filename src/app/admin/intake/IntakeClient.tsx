@@ -25,7 +25,7 @@ export default function IntakeClient() {
     const detailId = searchParams.get('detail')
     if (donationId || donorName || donorEmail) {
       setView('create')
-      createForm.prefillFromDonation(donorName || '', donorEmail || '')
+      createForm.prefillFromDonation(donorName || '', donorEmail || '', donationId || undefined)
     } else if (detailId) {
       setView('detail')
       detail.openDetail(detailId)

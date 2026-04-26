@@ -116,24 +116,28 @@ export function useIntakeCreateForm() {
           ...formData,
           verkaufspreis: formData.verkaufspreis || undefined,
           donor_email: formData.donor_email || undefined,
+          // Zod schema accepts uuid().optional() — convert null sentinel to undefined
+          existing_donation_id: formData.existing_donation_id || undefined,
         }),
       })
       const json = await res.json()
       if (json.success) {
         setFormData({ ...INITIAL_FORM_DATA })
-        onSuccess?.(json.inventory_id)
+        // apiSuccess() wraps payload in { success: true, data: {...} }
+        onSuccess?.(json.data?.inventory_id)
       }
     } finally {
       setSaving(false)
     }
   }, [formData])
 
-  const prefillFromDonation = useCallback((donorName: string, donorEmail: string) => {
+  const prefillFromDonation = useCallback((donorName: string, donorEmail: string, donationId?: string) => {
     setFormData(f => ({
       ...f,
       is_donation: true,
       donor_name: donorName,
       donor_email: donorEmail,
+      existing_donation_id: donationId ?? null,
     }))
   }, [])
 

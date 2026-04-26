@@ -50,7 +50,9 @@ export const POST = withAdmin('intake', async (request, session) => {
         {
           source: 'intake',
           intakeTier: data.intake_tier,
-          donation: data.is_donation ? {
+          existingDonationId: data.existing_donation_id,
+          // Skip new-donation creation when linking to an existing one
+          donation: !data.existing_donation_id && data.is_donation ? {
             donorName: data.donor_name,
             donorEmail: data.donor_email,
             notes: data.donor_notes,
