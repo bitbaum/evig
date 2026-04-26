@@ -6,6 +6,11 @@
 
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
+
+// Every `${X}` interpolated into an html: body that comes from a user
+// (name/workshopTitle/workshopDate/workshopLocation/instructor/reason/
+// notes/refundInfo) gets escaped. Subject + text bodies stay raw.
 
 export const workshopRegistrationConfirmation = (
   name: string,
@@ -33,12 +38,12 @@ export const workshopRegistrationConfirmation = (
           <h1>🎓 Workshop-Anmeldung bestätigt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Vielen Dank für deine Anmeldung! Du bist nun für den folgenden Workshop angemeldet:</p>
           <div class="details">
-            <p><strong>Workshop:</strong> ${workshopTitle}</p>
-            <p><strong>Datum:</strong> ${workshopDate}</p>
-            <p><strong>Ort:</strong> ${workshopLocation}</p>
+            <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
+            <p><strong>Datum:</strong> ${escapeHtml(workshopDate)}</p>
+            <p><strong>Ort:</strong> ${escapeHtml(workshopLocation)}</p>
             ${priceCents > 0 ? `<p><strong>Preis:</strong> CHF ${(priceCents / 100).toFixed(2)}</p>` : '<p><strong>Preis:</strong> Kostenlos</p>'}
           </div>
           <p>Bitte merk dir den Termin vor. Du erhältst rechtzeitig vor dem Workshop eine Erinnerung mit weiteren Details.</p>
@@ -95,12 +100,12 @@ export const workshopRegistrationStatusUpdate = (
           <h1>${newStatus === 'confirmed' ? '✅ Anmeldung bestätigt' : newStatus === 'cancelled' ? '❌ Anmeldung storniert' : '⏳ Warteliste'}</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Der Status deiner Workshop-Anmeldung wurde aktualisiert.</p>
-          <p><strong>Workshop:</strong> ${workshopTitle}</p>
-          <p><strong>Datum:</strong> ${workshopDate}</p>
+          <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
+          <p><strong>Datum:</strong> ${escapeHtml(workshopDate)}</p>
           <p><strong>Status:</strong> ${newStatus === 'confirmed' ? 'Bestätigt' : newStatus === 'cancelled' ? 'Storniert' : 'Auf der Warteliste'}</p>
-          ${reason ? `<p><strong>Hinweis:</strong> ${reason}</p>` : ''}
+          ${reason ? `<p><strong>Hinweis:</strong> ${escapeHtml(reason)}</p>` : ''}
           ${newStatus === 'confirmed' ? '<p>Wir freuen uns auf deine Teilnahme! Du erhältst rechtzeitig vor dem Workshop eine Erinnerung.</p>' : ''}
           ${newStatus === 'waitlist' ? '<p>Du wirst automatisch benachrichtigt, sobald ein Platz frei wird.</p>' : ''}
           ${newStatus === 'cancelled' ? '<p>Falls du Fragen hast, kannst du uns jederzeit kontaktieren.</p>' : ''}
@@ -157,14 +162,14 @@ export const workshopReminder = (
           <h1>📅 Workshop-Erinnerung</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Wir möchten dich an deinen bevorstehenden Workshop erinnern:</p>
           <div class="details">
-            <p><strong>📚 Workshop:</strong> ${workshopTitle}</p>
-            <p><strong>📅 Datum:</strong> ${workshopDate}</p>
-            <p><strong>🕐 Uhrzeit:</strong> ${workshopTime}</p>
-            <p><strong>📍 Ort:</strong> ${workshopLocation}</p>
-            ${instructor ? `<p><strong>👨‍🏫 Instruktor:</strong> ${instructor}</p>` : ''}
+            <p><strong>📚 Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
+            <p><strong>📅 Datum:</strong> ${escapeHtml(workshopDate)}</p>
+            <p><strong>🕐 Uhrzeit:</strong> ${escapeHtml(workshopTime)}</p>
+            <p><strong>📍 Ort:</strong> ${escapeHtml(workshopLocation)}</p>
+            ${instructor ? `<p><strong>👨‍🏫 Instruktor:</strong> ${escapeHtml(instructor)}</p>` : ''}
           </div>
           <p><strong>Tipps für deine Vorbereitung:</strong></p>
           <ul>
@@ -231,15 +236,15 @@ export const workshopCancellation = (
           <h1>Workshop abgesagt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Leider müssen wir dir mitteilen, dass der folgende Workshop abgesagt wurde:</p>
           <div class="notice">
-            <p><strong>Workshop:</strong> ${workshopTitle}</p>
-            <p><strong>Geplantes Datum:</strong> ${workshopDate}</p>
-            ${reason ? `<p><strong>Grund:</strong> ${reason}</p>` : ''}
+            <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
+            <p><strong>Geplantes Datum:</strong> ${escapeHtml(workshopDate)}</p>
+            ${reason ? `<p><strong>Grund:</strong> ${escapeHtml(reason)}</p>` : ''}
           </div>
           <p>Wir bedauern die Unannehmlichkeiten und hoffen, dich bei einem zukünftigen Workshop begrüssen zu dürfen.</p>
-          ${refundInfo ? `<p><strong>Rückerstattung:</strong> ${refundInfo}</p>` : ''}
+          ${refundInfo ? `<p><strong>Rückerstattung:</strong> ${escapeHtml(refundInfo)}</p>` : ''}
           <p>Bei Fragen stehen wir dir gerne zur Verfügung.</p>
         </div>
         <div class="footer">
@@ -290,9 +295,9 @@ export const workshopFeedbackRequest = (
           <h1>⭐ Dein Feedback ist gefragt!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Wir hoffen, du hattest eine gute Erfahrung beim Workshop:</p>
-          <p><strong>${workshopTitle}</strong> am ${workshopDate}</p>
+          <p><strong>${escapeHtml(workshopTitle)}</strong> am ${escapeHtml(workshopDate)}</p>
           <p>Deine Meinung ist uns wichtig! Mit deinem Feedback hilfst du uns, unsere Workshops kontinuierlich zu verbessern und anderen Teilnehmern bei ihrer Entscheidung.</p>
           <p>Es dauert nur 2 Minuten:</p>
           <a href="${feedbackUrl}" class="button button-purple">Jetzt Feedback geben</a>
@@ -342,10 +347,10 @@ export const workshopProposalSubmitted = (
           <h1>Workshop-Vorschlag eingereicht</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Vielen Dank für deinen Workshop-Vorschlag bei RevampIT! Wir haben deine Einreichung erhalten.</p>
-          <p><strong>Workshop-Titel:</strong> ${workshopTitle}</p>
-          <p><strong>Vorschlags-ID:</strong> ${proposalId}</p>
+          <p><strong>Workshop-Titel:</strong> ${escapeHtml(workshopTitle)}</p>
+          <p><strong>Vorschlags-ID:</strong> ${escapeHtml(proposalId)}</p>
           <p>Unser Team wird deinen Vorschlag zeitnah prüfen. Der Prüfungsprozess umfasst:</p>
           <ul>
             <li>Überprüfung der Workshop-Inhalte</li>
@@ -400,9 +405,9 @@ export const workshopProposalApproved = (
           <h1>Workshop-Vorschlag genehmigt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Gute Nachrichten! Dein Workshop-Vorschlag wurde genehmigt.</p>
-          <p><strong>Workshop:</strong> ${workshopTitle}</p>
+          <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
           <p>Unser Team wird deinen Workshop nun für die Planung vorbereiten. Du erhältst weitere Informationen zu Terminen und Details.</p>
           <p>Vielen Dank für deinen Beitrag zur RevampIT Community!</p>
         </div>
@@ -449,10 +454,10 @@ export const workshopProposalRejected = (
           <h1>Workshop-Vorschlag abgelehnt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Leider können wir deinen Workshop-Vorschlag derzeit nicht annehmen.</p>
-          <p><strong>Workshop:</strong> ${workshopTitle}</p>
-          <p><strong>Grund:</strong> ${reason}</p>
+          <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
+          <p><strong>Grund:</strong> ${escapeHtml(reason)}</p>
           <p>Wir schätzen dein Engagement und ermutigen dich, weitere Vorschläge einzureichen.</p>
         </div>
         <div class="footer">
@@ -497,12 +502,12 @@ export const workshopProposalChangesRequested = (
           <h1>Änderungen angefragt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Unser Team hat deinen Workshop-Vorschlag überprüft und einige Änderungsvorschläge.</p>
-          <p><strong>Workshop:</strong> ${workshopTitle}</p>
+          <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
           <p><strong>Anmerkungen:</strong></p>
           <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            ${notes.replace(/\n/g, '<br>')}
+            ${escapeHtml(notes).replace(/\n/g, '<br>')}
           </div>
           <p>Bitte überarbeite deinen Vorschlag entsprechend und reiche ihn erneut ein.</p>
         </div>

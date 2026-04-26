@@ -7,6 +7,11 @@
 import type { EmailContent } from '../types'
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
 import { LOCATIONS } from '@/config/org'
+import { escapeHtml } from '@/lib/utils/escape-html'
+
+// Every `${data}` interpolated into an html: body that comes from a user
+// (userName/helperName/requesterName/requestTitle/aiDiagnosis/offerMessage/
+// reviewText/requesterEmail) gets escaped. Subject + text bodies stay raw.
 
 /**
  * Confirmation email sent to the user after creating an IT-Hilfe request
@@ -35,16 +40,16 @@ export const itHilfeRequestConfirmation = (
           <h1>Deine IT-Hilfe Anfrage</h1>
         </div>
         <div class="content">
-          <p>Hallo ${userName},</p>
+          <p>Hallo ${escapeHtml(userName)},</p>
           <p>Deine IT-Hilfe Anfrage wurde erfolgreich erstellt!</p>
 
-          <p><strong>Titel:</strong> ${requestTitle}</p>
-          <p><strong>Kategorie:</strong> ${categoryName}</p>
+          <p><strong>Titel:</strong> ${escapeHtml(requestTitle)}</p>
+          <p><strong>Kategorie:</strong> ${escapeHtml(categoryName)}</p>
 
           ${aiDiagnosis ? `
           <div class="highlight-box">
             <p><strong>Unsere KI-Ersteinschätzung:</strong></p>
-            <p>${aiDiagnosis}</p>
+            <p>${escapeHtml(aiDiagnosis)}</p>
             <p style="font-size: 12px; color: #666; margin-top: 10px;">
               Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose.
             </p>
@@ -133,35 +138,35 @@ export const helperNewMatchingRequest = (
           <h1>Neue passende Anfrage</h1>
         </div>
         <div class="content">
-          <p>Hallo ${helperName},</p>
+          <p>Hallo ${escapeHtml(helperName)},</p>
           <p>Es gibt eine neue IT-Hilfe Anfrage, die zu deinen Fähigkeiten passt!</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Titel</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${requestTitle}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(requestTitle)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Kategorie</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${categoryName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(categoryName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Dringlichkeit</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${urgencyName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(urgencyName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Kanton</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${canton}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(canton)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Service-Art</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceTypeName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(serviceTypeName)}</td>
             </tr>
           </table>
 
           <p><strong>Deine passenden Fähigkeiten:</strong></p>
           <div style="margin: 10px 0;">
-            ${matchingSkillNames.map(skill => `<span style="display: inline-block; background-color: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 2px;">${skill}</span>`).join('')}
+            ${matchingSkillNames.map(skill => `<span style="display: inline-block; background-color: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 2px;">${escapeHtml(skill)}</span>`).join('')}
           </div>
 
           <a href="${requestUrl}" class="button button-green">Anfrage ansehen &amp; Angebot machen</a>
@@ -228,23 +233,23 @@ export const adminNewITHilfeRequest = (
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Anfragender</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${requesterName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(requesterName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">E-Mail</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${requesterEmail}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(requesterEmail)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Titel</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${requestTitle}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(requestTitle)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Kategorie</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${categoryName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(categoryName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Dringlichkeit</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${urgencyName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(urgencyName)}</td>
             </tr>
           </table>
 
@@ -299,11 +304,11 @@ export const itHilfeOfferAccepted = (
           <h1>Dein Angebot wurde angenommen!</h1>
         </div>
         <div class="content">
-          <p>Hallo ${helperName},</p>
-          <p>Gute Nachrichten! <strong>${requesterName}</strong> hat dein Angebot für die folgende Anfrage angenommen:</p>
+          <p>Hallo ${escapeHtml(helperName)},</p>
+          <p>Gute Nachrichten! <strong>${escapeHtml(requesterName)}</strong> hat dein Angebot für die folgende Anfrage angenommen:</p>
 
           <div class="highlight-box">
-            <p><strong>${requestTitle}</strong></p>
+            <p><strong>${escapeHtml(requestTitle)}</strong></p>
           </div>
 
           <p><strong>Nächste Schritte:</strong></p>
@@ -374,16 +379,16 @@ export const itHilfeNewOfferReceived = (
           <h1>Neues Angebot erhalten!</h1>
         </div>
         <div class="content">
-          <p>Hallo ${requesterName},</p>
-          <p><strong>${helperName}</strong> hat ein Angebot für deine Anfrage abgegeben:</p>
+          <p>Hallo ${escapeHtml(requesterName)},</p>
+          <p><strong>${escapeHtml(helperName)}</strong> hat ein Angebot für deine Anfrage abgegeben:</p>
 
           <div class="highlight-box">
-            <p><strong>${requestTitle}</strong></p>
+            <p><strong>${escapeHtml(requestTitle)}</strong></p>
           </div>
 
           <p><strong>Nachricht des Technikers:</strong></p>
           <p style="background-color: #f9fafb; padding: 12px; border-radius: 6px; border-left: 3px solid #10b981;">
-            ${offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage}
+            ${escapeHtml(offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage)}
           </p>
 
           <a href="${requestUrl}" class="button button-green">Angebot ansehen</a>
@@ -438,11 +443,11 @@ export const itHilfeCompleted = (
           <h1>Die Hilfe wurde abgeschlossen</h1>
         </div>
         <div class="content">
-          <p>Hallo ${requesterName},</p>
+          <p>Hallo ${escapeHtml(requesterName)},</p>
           <p>Der Techniker hat deine Anfrage als abgeschlossen markiert:</p>
 
           <div class="highlight-box">
-            <p><strong>${requestTitle}</strong></p>
+            <p><strong>${escapeHtml(requestTitle)}</strong></p>
           </div>
 
           <p>Bitte bestätige, dass die Hilfe erfolgreich war, und gib eine kurze Bewertung ab. Dein Feedback hilft der Community, gute Techniker zu finden.</p>
@@ -500,16 +505,16 @@ export const itHilfeReviewReceived = (
           <h1>Du hast eine Bewertung erhalten</h1>
         </div>
         <div class="content">
-          <p>Hallo ${helperName},</p>
+          <p>Hallo ${escapeHtml(helperName)},</p>
           <p>Vielen Dank für deine Hilfe! Der Anfragende hat deinen Einsatz bewertet:</p>
 
           <div class="highlight-box">
-            <p><strong>${requestTitle}</strong></p>
+            <p><strong>${escapeHtml(requestTitle)}</strong></p>
             <p style="font-size: 22px; color: #f59e0b; margin: 8px 0;">
               ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}
               <span style="color: #374151; font-size: 16px;">(${rating}/5)</span>
             </p>
-            ${reviewText ? `<p style="font-style: italic; color: #4b5563;">&ldquo;${reviewText}&rdquo;</p>` : ''}
+            ${reviewText ? `<p style="font-style: italic; color: #4b5563;">&ldquo;${escapeHtml(reviewText)}&rdquo;</p>` : ''}
           </div>
 
           <p>Dank dir wird Technik wieder nutzbar gemacht - herzlichen Dank für dein Engagement!</p>
@@ -562,11 +567,11 @@ export const itHilfeOfferRejected = (
           <h1>Anfrage vergeben</h1>
         </div>
         <div class="content">
-          <p>Hallo ${helperName},</p>
+          <p>Hallo ${escapeHtml(helperName)},</p>
           <p>Die folgende Anfrage wurde an einen anderen Techniker vergeben:</p>
 
           <div class="highlight-box">
-            <p><strong>${requestTitle}</strong></p>
+            <p><strong>${escapeHtml(requestTitle)}</strong></p>
           </div>
 
           <p>Vielen Dank für dein Angebot! Es gibt bestimmt bald wieder passende Anfragen für dich.</p>
