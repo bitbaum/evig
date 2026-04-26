@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
+import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 
 function ResetPasswordContent() {
@@ -54,16 +55,13 @@ function ResetPasswordContent() {
     }
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
+      const result = await apiFetch<unknown>('/api/auth/reset-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password }),
+        body: { token, password },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || t('errorResetFailed'))
+      if (!result.success) {
+        throw new Error(result.error || t('errorResetFailed'))
       }
 
       setSuccess(true)

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, Eye, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
@@ -38,11 +39,12 @@ export default function SubmissionsAdminPage() {
 
   const fetchSubmissions = async () => {
     try {
-      const response = await fetch('/api/blog/submit')
-      const data = await response.json()
-      setSubmissions(data.submissions || [])
-    } catch (error) {
-      logger.error('Error fetching submissions', { error })
+      const result = await apiFetch<{ submissions: Submission[] }>('/api/blog/submit')
+      if (result.success && result.data) {
+        setSubmissions(result.data.submissions || [])
+      } else {
+        logger.error('Error fetching submissions', { error: result.error })
+      }
     } finally {
       setIsLoading(false)
     }

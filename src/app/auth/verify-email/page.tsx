@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
 import Heading from '@/components/ui/Heading'
+import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 
 function VerifyEmailContent() {
@@ -24,32 +25,22 @@ function VerifyEmailContent() {
         return
       }
 
-      try {
-        const response = await fetch('/api/auth/verify-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ token }),
-        })
+      const result = await apiFetch<{ message: string }>('/api/auth/verify-email', {
+        method: 'POST',
+        body: { token },
+      })
 
-        if (response.ok) {
-          const data = await response.json()
-          setStatus('success')
-          setMessage(data.message)
+      if (result.success && result.data) {
+        setStatus('success')
+        setMessage(result.data.message)
 
-          // Redirect to login after 3 seconds
-          setTimeout(() => {
-            router.push('/auth/login?verified=true')
-          }, 3000)
-        } else {
-          const error = await response.json()
-          setStatus('error')
-          setMessage(error.error || t('genericError'))
-        }
-      } catch {
+        // Redirect to login after 3 seconds
+        setTimeout(() => {
+          router.push('/auth/login?verified=true')
+        }, 3000)
+      } else {
         setStatus('error')
-        setMessage(t('networkError'))
+        setMessage(result.error || t('genericError'))
       }
     }
 

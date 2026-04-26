@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 interface RegisterParams {
   email: string
@@ -32,27 +33,21 @@ export function useRegistration(): UseRegistrationResult {
     setErrors([])
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const result = await apiFetch<{ userId: string; emailSent: boolean }>('/api/auth/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           email: params.email,
           password: params.password,
           name: params.name,
-        }),
+        },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        setErrors(data.errors || [data.error || 'Registrierung fehlgeschlagen'])
+      if (!result.success || !result.data) {
+        setErrors([result.error || 'Registrierung fehlgeschlagen'])
         return null
       }
 
-      return { userId: data.data?.userId, emailSent: data.data?.emailSent }
-    } catch {
-      setErrors(['Ein Netzwerkfehler ist aufgetreten'])
-      return null
+      return { userId: result.data.userId, emailSent: result.data.emailSent }
     } finally {
       setIsLoading(false)
     }
@@ -61,39 +56,26 @@ export function useRegistration(): UseRegistrationResult {
   const verifyCode = useCallback(async (email: string, code: string): Promise<boolean> => {
     setVerifyError(undefined)
 
-    try {
-      const response = await fetch('/api/auth/verify-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code }),
-      })
+    const result = await apiFetch<unknown>('/api/auth/verify-code', {
+      method: 'POST',
+      body: { email, code },
+    })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        setVerifyError(data.error || 'Ungültiger Code')
-        return false
-      }
-
-      return true
-    } catch {
-      setVerifyError('Ein Fehler ist aufgetreten')
+    if (!result.success) {
+      setVerifyError(result.error || 'Ungültiger Code')
       return false
     }
+
+    return true
   }, [])
 
   const resendCode = useCallback(async (email: string): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/auth/resend-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
+    const result = await apiFetch<unknown>('/api/auth/resend-code', {
+      method: 'POST',
+      body: { email },
+    })
 
-      return response.ok
-    } catch {
-      return false
-    }
+    return result.success
   }, [])
 
   return {

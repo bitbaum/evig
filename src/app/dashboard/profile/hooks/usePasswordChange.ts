@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 
@@ -23,20 +24,14 @@ export function usePasswordChange() {
     logger.info('Password change starting')
 
     try {
-      const response = await fetch('/api/user/change-password', {
+      const result = await apiFetch<unknown>('/api/user/change-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(passwordData),
+        body: passwordData,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        logger.error('Password change failed', {
-          status: response.status,
-          error: data.error,
-        })
-        throw new Error(data.error || 'Passwort-Änderung fehlgeschlagen')
+      if (!result.success) {
+        logger.error('Password change failed', { error: result.error })
+        throw new Error(result.error || 'Passwort-Änderung fehlgeschlagen')
       }
 
       logger.info('Password changed successfully')

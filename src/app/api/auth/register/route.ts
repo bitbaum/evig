@@ -47,10 +47,7 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      return apiSuccess({
-        message: 'Konto erfolgreich erstellt. Bitte bestätige deine E-Mail-Adresse.',
-        data: result.data,
-      })
+      return apiSuccess(result.data)
     } catch (dbError) {
       // Handle database connection errors gracefully
       const errorMessage = dbError instanceof Error ? dbError.message : String(dbError)

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Mail, ArrowLeft, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
+import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 
 export default function ForgotPasswordPage() {
@@ -20,16 +21,13 @@ export default function ForgotPasswordPage() {
     setError(null)
 
     try {
-      const response = await fetch('/api/auth/forgot-password', {
+      const result = await apiFetch<unknown>('/api/auth/forgot-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: { email },
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || t('resetFailed'))
+      if (!result.success) {
+        throw new Error(result.error || t('resetFailed'))
       }
 
       setSuccess(true)

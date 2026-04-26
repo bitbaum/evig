@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 import {
@@ -79,15 +80,14 @@ export default function TechnikerProfilPage() {
 
     const fetchProfile = async () => {
       try {
-        const response = await fetch('/api/user/technician-profile')
-        if (response.ok) {
-          const data = await response.json()
-          if (data.data?.profile) {
-            setProfile(data.data.profile)
-          }
+        const result = await apiFetch<{ profile: TechnicianProfile | null }>(
+          '/api/user/technician-profile',
+        )
+        if (result.success && result.data?.profile) {
+          setProfile(result.data.profile)
+        } else if (!result.success) {
+          logger.warn('Error fetching technician profile', { error: result.error })
         }
-      } catch (err) {
-        logger.error('Error fetching technician profile', { error: err })
       } finally {
         setLoading(false)
       }
@@ -120,15 +120,13 @@ export default function TechnikerProfilPage() {
     setSuccess(false)
 
     try {
-      const response = await fetch('/api/user/technician-profile', {
+      const result = await apiFetch<unknown>('/api/user/technician-profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profile),
+        body: profile,
       })
 
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || t('saveFailed'))
+      if (!result.success) {
+        throw new Error(result.error || t('saveFailed'))
       }
 
       setSuccess(true)

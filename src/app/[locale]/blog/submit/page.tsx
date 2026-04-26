@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { ArrowLeft, Send, Lightbulb, FileText, Edit, CheckCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
@@ -49,16 +50,13 @@ export default function SubmitPostPage() {
 
   // Fetch categories from database
   useEffect(() => {
-    fetch('/api/blog/categories')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success && data.data) {
-          setCategories(data.data)
-        }
-      })
-      .catch((error) => {
-        logger.warn('Failed to load blog categories', { error })
-      })
+    apiFetch<Category[]>('/api/blog/categories').then(result => {
+      if (result.success && result.data) {
+        setCategories(result.data)
+      } else if (result.error) {
+        logger.warn('Failed to load blog categories', { error: result.error })
+      }
+    })
   }, [])
 
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
@@ -79,25 +77,22 @@ export default function SubmitPostPage() {
     setSubmitStatus('idle')
 
     try {
-      const response = await fetch('/api/public/blog/submit', {
+      const result = await apiFetch<unknown>('/api/public/blog/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        body: {
           ...formData,
           submissionType,
           tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
           submittedAt: new Date().toISOString(),
-        }),
+        },
       })
 
-      if (!response.ok) throw new Error('Submission failed')
-
-      setSubmitStatus('success')
-    } catch (err) {
-      logger.warn('Failed to submit blog post', { error: err })
-      setSubmitStatus('error')
+      if (!result.success) {
+        logger.warn('Failed to submit blog post', { error: result.error })
+        setSubmitStatus('error')
+      } else {
+        setSubmitStatus('success')
+      }
     } finally {
       setIsSubmitting(false)
     }
