@@ -13,6 +13,7 @@ import {
 } from '@/lib/services/inventory-service'
 import { SHOPWARE_URL } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 
 interface ProductPageProps {
   params: Promise<{ locale: string; uuid: string }>
@@ -101,7 +102,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <>
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
     />
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumbs */}

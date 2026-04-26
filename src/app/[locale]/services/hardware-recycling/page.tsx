@@ -17,6 +17,7 @@ import {
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 
 interface HardwareRecyclingPageProps {
   params: Promise<{ locale: string }>
@@ -52,7 +53,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             '@context': 'https://schema.org',
             '@type': 'Service',
             'name': t('hero.title'),

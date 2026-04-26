@@ -5,6 +5,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 
 interface FAQPageProps {
   params: Promise<{ locale: string }>
@@ -52,7 +53,7 @@ function FAQSchema({ groups }: { groups: FAQGroup[] }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
     />
   )
 }

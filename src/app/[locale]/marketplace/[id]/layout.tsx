@@ -5,6 +5,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 
 interface ListingMeta {
   title: string
@@ -113,7 +114,7 @@ export default async function MarketplaceDetailLayout({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
       />
       {children}
     </>

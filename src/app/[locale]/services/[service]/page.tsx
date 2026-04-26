@@ -9,6 +9,7 @@ import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 
 /**
  * Generate static paths for all featured services
@@ -83,7 +84,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: safeJsonLd({
               '@context': 'https://schema.org',
               '@type': 'Service',
               'name': 'Data Recovery & Transfer Services',

@@ -10,6 +10,7 @@ import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CommunityStats } from '@/components/community/CommunityStats'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -136,7 +137,7 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "name": ORG.name,

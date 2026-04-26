@@ -10,6 +10,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
+import { safeJsonLd } from '@/lib/seo/json-ld'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -224,7 +225,7 @@ export default function ServicesPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: safeJsonLd({
             '@context': 'https://schema.org',
             '@type': 'Service',
             'name': t('schemaName'),
