@@ -15,6 +15,7 @@ import {
   ShoppingBag,
 } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
+import { logger } from '@/lib/logger'
 import { formatCHF } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
@@ -79,7 +80,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         } else {
           setError(data.error || t('seller.sellerNotFound'))
         }
-      } catch {
+      } catch (err) {
+        logger.warn('Failed to load seller profile', { error: err })
         setError(t('seller.errorLoading'))
       } finally {
         setIsLoading(false)

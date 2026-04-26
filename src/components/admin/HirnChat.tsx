@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { apiFetch } from '@/lib/api/client'
+import { logger } from '@/lib/logger'
 
 interface HirnActionCard {
   id: string
@@ -126,7 +127,8 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       })
       setMessages([])
       onSessionChange?.()
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to delete Hirn chat session', { error: err })
       setError('Fehler beim Löschen')
     }
   }

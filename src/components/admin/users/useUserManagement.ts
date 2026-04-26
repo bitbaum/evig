@@ -7,6 +7,7 @@
 
 import { useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { logger } from '@/lib/logger'
 import type { UserRow } from './types'
 
 interface UseUserManagementReturn {
@@ -90,7 +91,8 @@ export function useUserManagement(): UseUserManagementReturn {
       }
 
       window.location.reload()
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to update user', { error: err })
       setError('Failed to update user')
     } finally {
       setIsSaving(false)
@@ -114,7 +116,8 @@ export function useUserManagement(): UseUserManagementReturn {
       }
 
       window.location.reload()
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to delete user', { error: err })
       setError('Failed to delete user')
     } finally {
       setIsDeleting(false)

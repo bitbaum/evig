@@ -286,7 +286,8 @@ export function useITHilfeDetail(id: string) {
       } else {
         alert(result.error || t('errorUpdate'))
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to update IT-Hilfe request status', { error: err, requestId: request.id, status })
       alert(t('errorUpdate'))
     }
   }

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
+import { logger } from '@/lib/logger'
 
 interface NewsletterSignupProps {
   title?: string
@@ -46,7 +47,8 @@ export function NewsletterSignup({
         setErrorMsg(apiError)
         setStatus('error')
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Newsletter signup failed', { error: err })
       setErrorMsg(t('networkError'))
       setStatus('error')
     }
