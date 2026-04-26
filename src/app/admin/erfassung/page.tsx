@@ -2,6 +2,7 @@
 
 import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { DataEntryTabs } from '@/components/erfassung/DataEntryTabs'
@@ -68,14 +69,15 @@ function ErfassungContent() {
     ))
 
     try {
-      const response = await fetch('/api/admin/erfassung/bulk-save', {
+      const response = await apiFetch<BulkSaveResponse>('/api/admin/erfassung/bulk-save', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ products: payloads, action }),
+        body: { products: payloads, action },
       })
 
-      const json = await response.json()
-      const result: BulkSaveResponse = json.data ?? json
+      if (!response.success || !response.data) {
+        throw new Error(response.error || 'Bulk save failed')
+      }
+      const result = response.data
 
       setBulkProducts(prev => {
         const updated = [...prev]

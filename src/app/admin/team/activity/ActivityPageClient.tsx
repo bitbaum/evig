@@ -9,6 +9,7 @@
 
 import { useState, useEffect } from 'react'
 import { ActivityFeed } from '@/components/admin/team/activity'
+import { apiFetch } from '@/lib/api/client'
 
 interface TeamMemberOption {
   id: string
@@ -21,20 +22,17 @@ export function ActivityPageClient() {
 
   useEffect(() => {
     async function fetchTeamMembers() {
-      try {
-        const res = await fetch('/api/admin/team/profiles')
-        const data = await res.json()
-        if (data.success && data.data) {
-          const members = data.data.map((m: { user_id: string; user_name: string | null; user_email: string }) => ({
-            id: m.user_id,
-            name: m.user_name,
-            email: m.user_email,
-          }))
-          setTeamMembers(members)
-        }
-      } catch {
-        // Team members are optional — filter just won't appear
+      const result = await apiFetch<Array<{ user_id: string; user_name: string | null; user_email: string }>>(
+        '/api/admin/team/profiles',
+      )
+      if (result.success && result.data) {
+        setTeamMembers(result.data.map(m => ({
+          id: m.user_id,
+          name: m.user_name,
+          email: m.user_email,
+        })))
       }
+      // Team members are optional — filter just won't appear on failure
     }
     fetchTeamMembers()
   }, [])

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api/client';
 import {
   DECISION_STATUS,
   DECISION_TYPE_DEFAULTS,
@@ -209,23 +210,16 @@ export function useDecisionForm() {
       initialStatus: initialStatusRef.current,
     };
 
-    try {
-      const res = await fetch('/api/decisions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const json = await res.json();
-      if (!json.success) {
-        setError(json.error || 'Fehler beim Erstellen');
-        setSubmitting(false);
-        return;
-      }
-      router.push(`/admin/decisions/${json.data.id}`);
-    } catch {
-      setError('Netzwerkfehler');
+    const result = await apiFetch<{ id: string }>('/api/decisions', {
+      method: 'POST',
+      body: payload,
+    });
+    if (!result.success || !result.data) {
+      setError(result.error || 'Fehler beim Erstellen');
       setSubmitting(false);
+      return;
     }
+    router.push(`/admin/decisions/${result.data.id}`);
   }
 
   return {

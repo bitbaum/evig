@@ -16,6 +16,7 @@ import {
   PROTOCOL_VISIBILITY_LABELS,
 } from '@/config/protocols'
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
+import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
@@ -147,22 +148,22 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
     try {
       // 1. Create protocol
-      const createRes = await fetch('/api/protocols', {
+      const createResult = await apiFetch<{ id: string }>('/api/protocols', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           title,
           meeting_date: meetingDate,
           meeting_type: meetingType,
           visibility,
           input_method: detectedInputMethod,
           attendees: selectedAttendees,
-        }),
+        },
       })
-      const createData = await createRes.json()
-      if (!createData.success) throw new Error(createData.error || 'Fehler beim Erstellen')
+      if (!createResult.success || !createResult.data) {
+        throw new Error(createResult.error || 'Fehler beim Erstellen')
+      }
 
-      const protocolId = createData.data.id
+      const protocolId = createResult.data.id
 
       // 2. Process content
       setProcessing(true)

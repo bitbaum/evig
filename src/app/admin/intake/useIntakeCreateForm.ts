@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useRef } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { CreateFormData } from './types'
 import { INITIAL_FORM_DATA } from './types'
 
@@ -38,19 +39,15 @@ export function useIntakeCreateForm() {
     setAiLoading(true)
     setAiError(null)
     try {
-      const res = await fetch('/api/admin/intake/extract-text', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: aiText }),
-      })
-      const json = await res.json()
-      if (json.success) {
-        applyAiData(json.data.data)
+      const result = await apiFetch<{ data: Record<string, unknown> }>(
+        '/api/admin/intake/extract-text',
+        { method: 'POST', body: { text: aiText } },
+      )
+      if (result.success && result.data) {
+        applyAiData(result.data.data)
       } else {
-        setAiError(json.error || 'Extraktion fehlgeschlagen')
+        setAiError(result.error || 'Extraktion fehlgeschlagen')
       }
-    } catch {
-      setAiError('Netzwerkfehler')
     } finally {
       setAiLoading(false)
     }
@@ -75,16 +72,16 @@ export function useIntakeCreateForm() {
         try {
           const fd = new FormData()
           fd.append('audio', audioBlob, 'recording.webm')
-          const res = await fetch('/api/admin/intake/extract-voice', { method: 'POST', body: fd })
-          const json = await res.json()
-          if (json.success) {
-            applyAiData(json.data.data)
-            setAiText(json.data.transcription || '')
+          const result = await apiFetch<{ data: Record<string, unknown>; transcription?: string }>(
+            '/api/admin/intake/extract-voice',
+            { method: 'POST', body: fd, formData: true },
+          )
+          if (result.success && result.data) {
+            applyAiData(result.data.data)
+            setAiText(result.data.transcription || '')
           } else {
-            setAiError(json.error || 'Spracherkennung fehlgeschlagen')
+            setAiError(result.error || 'Spracherkennung fehlgeschlagen')
           }
-        } catch {
-          setAiError('Netzwerkfehler')
         } finally {
           setVoiceState('idle')
         }
@@ -109,22 +106,19 @@ export function useIntakeCreateForm() {
   const handleCreate = useCallback(async (onSuccess?: (inventoryId: string) => void) => {
     setSaving(true)
     try {
-      const res = await fetch('/api/admin/intake', {
+      const result = await apiFetch<{ inventory_id: string }>('/api/admin/intake', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           ...formData,
           verkaufspreis: formData.verkaufspreis || undefined,
           donor_email: formData.donor_email || undefined,
           // Zod schema accepts uuid().optional() — convert null sentinel to undefined
           existing_donation_id: formData.existing_donation_id || undefined,
-        }),
+        },
       })
-      const json = await res.json()
-      if (json.success) {
+      if (result.success && result.data) {
         setFormData({ ...INITIAL_FORM_DATA })
-        // apiSuccess() wraps payload in { success: true, data: {...} }
-        onSuccess?.(json.data?.inventory_id)
+        onSuccess?.(result.data.inventory_id)
       }
     } finally {
       setSaving(false)

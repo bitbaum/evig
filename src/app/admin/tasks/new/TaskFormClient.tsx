@@ -17,6 +17,7 @@ import {
   TASK_PRIORITIES,
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
+import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
@@ -128,19 +129,16 @@ export default function TaskFormClient() {
           : [],
       }
 
-      const res = await fetch('/api/tasks', {
+      const result = await apiFetch<{ id: string }>('/api/tasks', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       })
 
-      const data = await res.json()
-
-      if (!data.success) {
-        throw new Error(data.error || 'Fehler beim Erstellen')
+      if (!result.success || !result.data) {
+        throw new Error(result.error || 'Fehler beim Erstellen')
       }
 
-      router.push(`/admin/tasks/${data.data.id}`)
+      router.push(`/admin/tasks/${result.data.id}`)
     } catch (err) {
       setError(getErrorMessage(err))
     } finally {
