@@ -7,6 +7,11 @@
 import type { EmailContent } from '../types';
 import { createEmailLayout, createTextFooter, BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT } from './base-styles';
 import { CONTACT, ORG } from '@/config/org';
+import { escapeHtml } from '@/lib/utils/escape-html';
+
+// `name` is the user-supplied display name from registration. Verification
+// codes (6-digit numerics) and reset URLs (server-generated tokens) don't
+// need escaping but the name does — escape before HTML interpolation.
 
 export const verificationCode = (name: string, code: string): EmailContent => ({
   subject: 'Dein Bestätigungscode - RevampIT',
@@ -25,7 +30,7 @@ export const verificationCode = (name: string, code: string): EmailContent => ({
           <h1>Bestätigungscode</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name || 'Benutzer'},</h2>
+          <h2>Hallo ${escapeHtml(name || 'Benutzer')},</h2>
           <p>Vielen Dank für deine Registrierung bei RevampIT! Gib den folgenden Code ein, um deine E-Mail-Adresse zu bestätigen:</p>
           <div class="code">${code}</div>
           <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teile diesen Code mit niemandem.</p>
@@ -70,7 +75,7 @@ export const emailVerification = (name: string, verificationUrl: string): EmailC
           <h1>Willkommen bei RevampIT!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Vielen Dank für deine Registrierung bei RevampIT! Um dein Konto zu aktivieren, bestätige bitte deine E-Mail-Adresse.</p>
           <p>Klicke auf den folgenden Button, um deine E-Mail-Adresse zu bestätigen:</p>
           <a href="${verificationUrl}" class="button button-green">E-Mail-Adresse bestätigen</a>
@@ -119,7 +124,7 @@ export const welcome = (name: string): EmailContent => ({
           <h1>Willkommen bei RevampIT!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Herzlich willkommen bei RevampIT! Dein Konto wurde erfolgreich aktiviert.</p>
           <p>Du kannst jetzt:</p>
           <ul>
@@ -170,7 +175,7 @@ export const staffVerificationCode = (name: string, code: string): EmailContent 
           <h1>Willkommen im Team!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name || 'Teammitglied'},</h2>
+          <h2>Hallo ${escapeHtml(name || 'Teammitglied')},</h2>
           <p>Schön, dass du dabei bist! Als Mitglied des RevampIT Teams erhältst du Zugang zum Admin-Dashboard und kannst aktiv an unserer Mission mitwirken.</p>
           <p>Dein Bestätigungscode:</p>
           <div class="code">${code}</div>
@@ -233,7 +238,7 @@ export const staffWelcome = (name: string): EmailContent => ({
           <h1>Willkommen im RevampIT Team!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des RevampIT Teams!</p>
           <h3>Deine ersten Schritte:</h3>
           <ol>
@@ -296,7 +301,7 @@ export const passwordReset = (name: string, resetUrl: string): EmailContent => (
           <h1>Passwort zurücksetzen</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Du hast eine Anfrage zum Zurücksetzen deines Passworts erhalten.</p>
           <p>Klicke auf den folgenden Button, um dein Passwort zurückzusetzen:</p>
           <a href="${resetUrl}" class="button button-green">Passwort zurücksetzen</a>
@@ -349,7 +354,7 @@ export const passwordChangeConfirmation = (name: string): EmailContent => ({
           <h1>Passwort geändert</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Dein Passwort wurde erfolgreich geändert.</p>
           <p><strong>Sicherheitshinweis:</strong> Falls du diese Änderung nicht vorgenommen hast, kontaktiere uns bitte umgehend unter ${CONTACT.email}.</p>
         </div>

@@ -1,5 +1,6 @@
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 export const newReviewNotification = (
   repairerName: string,
@@ -27,13 +28,13 @@ export const newReviewNotification = (
           <h1>Neue Bewertung erhalten</h1>
         </div>
         <div class="content">
-          <p>Hallo ${repairerName},</p>
+          <p>Hallo ${escapeHtml(repairerName)},</p>
           <p>Du hast eine neue Bewertung erhalten!</p>
-          <p><strong>Bewerter:</strong> ${reviewerName}</p>
+          <p><strong>Bewerter:</strong> ${escapeHtml(reviewerName)}</p>
           <p><strong>Bewertung:</strong> <span class="rating">${'★'.repeat(Math.floor(rating))}${'☆'.repeat(5 - Math.floor(rating))} (${rating}/5)</span></p>
           <p><strong>Bewertungstext:</strong></p>
           <div class="review-box">
-            ${reviewContent.replace(/\n/g, '<br>')}
+            ${escapeHtml(reviewContent).replace(/\n/g, '<br>')}
           </div>
           <p>Diese Bewertung hilft anderen Kunden, fundierte Entscheidungen zu treffen. Du kannst auf diese Bewertung antworten, um dein Engagement zu zeigen.</p>
           <a href="${reviewUrl}" class="button button-green">Bewertung anzeigen & antworten</a>

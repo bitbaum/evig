@@ -1,5 +1,6 @@
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 export const contentSubmissionApproved = (
   name: string,
@@ -22,10 +23,10 @@ export const contentSubmissionApproved = (
           <h1>Einreichung genehmigt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Gute Nachrichten! Deine Einreichung wurde genehmigt.</p>
-          <p><strong>Titel:</strong> ${title}</p>
-          <p><strong>Typ:</strong> ${contentType}</p>
+          <p><strong>Titel:</strong> ${escapeHtml(title)}</p>
+          <p><strong>Typ:</strong> ${escapeHtml(contentType)}</p>
           <p>Vielen Dank für deinen Beitrag zur RevampIT Community!</p>
         </div>
         <div class="footer">
@@ -70,10 +71,10 @@ export const contentSubmissionRejected = (
           <h1>Einreichung abgelehnt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Leider wurde deine Einreichung abgelehnt.</p>
-          <p><strong>Titel:</strong> ${title}</p>
-          <p><strong>Typ:</strong> ${contentType}</p>
+          <p><strong>Titel:</strong> ${escapeHtml(title)}</p>
+          <p><strong>Typ:</strong> ${escapeHtml(contentType)}</p>
           <p>Bei Fragen kannst du uns jederzeit kontaktieren.</p>
         </div>
         <div class="footer">
