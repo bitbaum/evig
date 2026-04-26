@@ -114,15 +114,16 @@ export default function SellerProfileEditPage() {
     try {
       const formData = new FormData()
       formData.append('files', file)
-      const response = await fetch('/api/uploads', { method: 'POST', body: formData })
-      const data = await response.json()
-      if (data.success && data.data?.urls?.[0]) {
-        setAvatarUrl(data.data.urls[0])
+      const result = await apiFetch<{ urls: string[] }>('/api/uploads', {
+        method: 'POST',
+        body: formData,
+        formData: true,
+      })
+      if (result.success && result.data?.urls?.[0]) {
+        setAvatarUrl(result.data.urls[0])
       } else {
-        setError(data.error || t('uploadError'))
+        setError(result.error || t('uploadError'))
       }
-    } catch {
-      setError(t('uploadImageError'))
     } finally {
       setIsUploading(false)
     }

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 import { Button } from '@/components/ui/button'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { validateListingForm, transformListingFormToPayload } from '@/lib/domain/marketplace'
 import type { ListingFormData } from '@/types/listing-form'
@@ -175,13 +176,16 @@ function SellPageContent() {
       const uploadData = new FormData()
       Array.from(files).forEach(file => uploadData.append('files', file))
 
-      const response = await fetch('/api/uploads', { method: 'POST', body: uploadData })
-      const data = await response.json()
+      const result = await apiFetch<{ urls: string[] }>('/api/uploads', {
+        method: 'POST',
+        body: uploadData,
+        formData: true,
+      })
 
-      if (data.success && data.data?.urls) {
-        setFormData(prev => ({ ...prev, images: [...prev.images, ...data.data.urls] }))
+      if (result.success && result.data?.urls) {
+        setFormData(prev => ({ ...prev, images: [...prev.images, ...result.data!.urls] }))
       } else {
-        setError(data.error || t('uploadError'))
+        setError(result.error || t('uploadError'))
       }
     } catch (err) {
       logger.warn('Failed to upload listing images', { error: err })

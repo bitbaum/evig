@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { ErfassungFormData } from '@/types/erfassung'
 
@@ -23,32 +24,34 @@ export function useProductAnalysis(): UseProductAnalysisResult {
     setError(null)
 
     try {
-      const response = await fetch('/api/ai/analyze-product', {
+      const result = await apiFetch<{
+        analysis?: {
+          brand?: string
+          product_name?: string
+          condition?: string
+          estimated_price_chf?: number
+        }
+      }>('/api/ai/analyze-product', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageBase64, saveToDatabase: false }),
+        body: { image: imageBase64, saveToDatabase: false },
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
+      if (!result.success) {
         throw new Error(result.error || 'Analyse fehlgeschlagen')
       }
 
-      if (result.success && result.analysis) {
-        const a = result.analysis
-        const formData: Partial<ErfassungFormData> = {
-          hersteller: a.brand || '',
-          produktname: a.product_name || '',
-          zustand: a.condition || '',
-          verkaufspreis: a.estimated_price_chf?.toString() || '',
-        }
+      const a = result.data?.analysis
+      if (!a) throw new Error('Keine Analysedaten erhalten')
 
-        logger.info('Image analysis completed', { product: a.product_name })
-        return { formData }
-      } else {
-        throw new Error('Keine Analysedaten erhalten')
+      const formData: Partial<ErfassungFormData> = {
+        hersteller: a.brand || '',
+        produktname: a.product_name || '',
+        zustand: a.condition || '',
+        verkaufspreis: a.estimated_price_chf?.toString() || '',
       }
+
+      logger.info('Image analysis completed', { product: a.product_name })
+      return { formData }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Analyse fehlgeschlagen'
       logger.error('Image analysis failed', { error: err })

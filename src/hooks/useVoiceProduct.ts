@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { VoiceProductData } from '@/types/erfassung'
 
@@ -29,14 +30,12 @@ export function useVoiceProduct(): UseVoiceProductResult {
       const formData = new FormData()
       formData.append('audio', audioBlob, 'recording.webm')
 
-      const response = await fetch('/api/admin/erfassung/voice', {
-        method: 'POST',
-        body: formData,
-      })
+      const result = await apiFetch<{ transcription: string; data: VoiceProductData }>(
+        '/api/admin/erfassung/voice',
+        { method: 'POST', body: formData, formData: true },
+      )
 
-      const result = await response.json()
-
-      if (!response.ok) {
+      if (!result.success || !result.data) {
         throw new Error(result.error || 'Unbekannter Fehler')
       }
 

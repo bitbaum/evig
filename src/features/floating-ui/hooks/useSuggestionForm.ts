@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { FeedbackScope, SelectedElement } from '../types'
 
@@ -83,26 +84,20 @@ export function useSuggestionForm({ feedbackScope, selectedElements, onSubmitSuc
         timestamp: new Date().toISOString()
       }
 
-      const response = await fetch('/api/suggestions', {
+      const result = await apiFetch<unknown>('/api/suggestions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submissionData),
+        body: submissionData,
       })
 
-      if (!response.ok) {
-        throw new Error('Fehler beim Senden der Nachricht')
+      if (!result.success) {
+        logger.error('Submission error', { error: result.error })
+        setSubmitError('Fehler beim Senden. Bitte versuche es erneut.')
+      } else {
+        setSubmitted(true)
+        setTimeout(() => {
+          onSubmitSuccessRef.current()
+        }, 2000)
       }
-
-      setSubmitted(true)
-      setTimeout(() => {
-        onSubmitSuccessRef.current()
-      }, 2000)
-
-    } catch (error) {
-      logger.error('Submission error', { error })
-      setSubmitError('Fehler beim Senden. Bitte versuche es erneut.')
     } finally {
       setIsSubmitting(false)
     }

@@ -17,6 +17,7 @@ import { ListingImage } from '@/components/marketplace/ListingImage'
 import Heading from '@/components/ui/Heading'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 
 interface ListingForCheckout {
@@ -58,11 +59,22 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     const fetchListing = async () => {
       try {
         const { listingId } = await params
-        const response = await fetch(`/api/listings/${listingId}`)
-        const data = await response.json()
+        const result = await apiFetch<{
+          id: string
+          title: string
+          price_chf: number | string
+          delivery_options: string
+          shipping_cost_chf: number | string | null
+          payment_mode: string
+          pickup_location: string | null
+          images?: Array<{ url: string }>
+          seller_name: string
+          seller_display_name: string | null
+          seller_id: string
+        }>(`/api/listings/${listingId}`)
 
-        if (data.success && data.data) {
-          const l = data.data
+        if (result.success && result.data) {
+          const l = result.data
           setListing({
             id: l.id,
             title: l.title,
@@ -79,7 +91,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           if (l.delivery_options === 'shipping') setDeliveryMethod('shipping')
           else setDeliveryMethod('pickup')
         } else {
-          setError(data.error || t('notFound'))
+          setError(result.error || t('notFound'))
         }
       } catch (err) {
         logger.warn('Failed to load checkout listing', { error: err })
@@ -97,23 +109,20 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     setError(null)
 
     try {
-      const response = await fetch('/api/marketplace/orders', {
+      const result = await apiFetch<{ paymentUrl?: string }>('/api/marketplace/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           listing_id: listing.id,
           delivery_method: deliveryMethod,
           shipping_address: deliveryMethod === 'shipping' ? shippingAddress : null,
-        }),
+        },
       })
 
-      const data = await response.json()
-
-      if (data.success && data.data?.paymentUrl) {
+      if (result.success && result.data?.paymentUrl) {
         // Redirect to Payrexx hosted payment page
-        window.location.href = data.data.paymentUrl
+        window.location.href = result.data.paymentUrl
       } else {
-        setError(data.error || t('orderError'))
+        setError(result.error || t('orderError'))
         setCreatingOrder(false)
       }
     } catch (err) {

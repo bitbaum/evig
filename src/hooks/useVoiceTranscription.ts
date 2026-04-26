@@ -7,6 +7,7 @@
  */
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
 
@@ -40,20 +41,23 @@ export function useVoiceTranscription({
       const formData = new FormData()
       formData.append('audio', audioBlob, 'recording.webm')
 
-      const response = await fetch('/api/admin/erfassung/voice', {
+      const result = await apiFetch<{
+        transcription: string
+        data: VoiceProductData
+        metadata?: AIFieldMetadata
+      }>('/api/admin/erfassung/voice', {
         method: 'POST',
         body: formData,
+        formData: true,
       })
 
-      const result = await response.json()
-
-      if (!response.ok) {
+      if (!result.success || !result.data) {
         throw new Error(result.error || 'Unbekannter Fehler')
       }
 
       setTranscribedText(result.data.transcription)
       onTranscription?.(result.data.transcription)
-      onTranscriptionComplete?.(result.data.data, result.data.metadata as AIFieldMetadata)
+      onTranscriptionComplete?.(result.data.data, result.data.metadata)
       onSuccess?.()
 
       logger.info('Voice transcription completed', {

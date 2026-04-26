@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
 
@@ -22,10 +23,9 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
     if (mode === active || isPending) return
     setActive(mode)
     startTransition(async () => {
-      await fetch('/api/me/preferences', {
+      await apiFetch<unknown>('/api/me/preferences', {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dashboardMode: mode }),
+        body: { dashboardMode: mode },
       })
     })
   }

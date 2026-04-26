@@ -10,6 +10,7 @@
 
 import { useState } from 'react'
 import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { VOTING_ADVISOR_PROMPTS } from '@/lib/ai/config/prompts'
 
 interface Option {
@@ -47,31 +48,24 @@ export function VoteAIAdvisor({
     setError('')
     setAnalysis('')
 
-    try {
-      const res = await fetch('/api/ai/vote-advisor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title,
-          description,
-          background: background || undefined,
-          votingMethod,
-          options: options?.map(o => ({ label: o.label, description: o.description })),
-          question: q.trim(),
-        }),
-      })
-      const json = await res.json()
-      if (!json.success) {
-        setError(json.error || 'Fehler bei der KI-Analyse')
-      } else {
-        setAnalysis(json.data.analysis)
-        setQuestion('')
-      }
-    } catch {
-      setError('Netzwerkfehler — bitte versuche es erneut')
-    } finally {
-      setLoading(false)
+    const result = await apiFetch<{ analysis: string }>('/api/ai/vote-advisor', {
+      method: 'POST',
+      body: {
+        title,
+        description,
+        background: background || undefined,
+        votingMethod,
+        options: options?.map(o => ({ label: o.label, description: o.description })),
+        question: q.trim(),
+      },
+    })
+    if (!result.success || !result.data) {
+      setError(result.error || 'Fehler bei der KI-Analyse')
+    } else {
+      setAnalysis(result.data.analysis)
+      setQuestion('')
     }
+    setLoading(false)
   }
 
   function handleSubmit() {

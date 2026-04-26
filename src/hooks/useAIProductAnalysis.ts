@@ -7,6 +7,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 
 // Full analysis response from the API
@@ -66,39 +67,36 @@ export function useAIProductAnalysis(options: UseAIProductAnalysisOptions = {}) 
     setSustainabilityScore(null)
 
     try {
-      const res = await fetch('/api/ai/analyze-product', {
+      const response = await apiFetch<{
+        analysis?: ProductAnalysis
+        sustainability_score?: SustainabilityScore
+        saved_product_id?: string
+      }>('/api/ai/analyze-product', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image: imageData, saveToDatabase }),
+        body: { image: imageData, saveToDatabase },
       })
 
-      const data = await res.json()
-
-      if (!res.ok || !data.success) {
-        setError(data.error || 'Analyse fehlgeschlagen')
+      if (!response.success || !response.data) {
+        setError(response.error || 'Analyse fehlgeschlagen')
         return null
       }
 
-      const result = data.data?.analysis || data.analysis
+      const result = response.data.analysis
       if (!result) {
         setError('Keine Produktdaten erkannt. Versuche es mit der Text-Eingabe.')
         return null
       }
 
       setAnalysis(result)
-      if (data.data?.sustainability_score || data.sustainability_score) {
-        setSustainabilityScore(data.data?.sustainability_score || data.sustainability_score)
+      if (response.data.sustainability_score) {
+        setSustainabilityScore(response.data.sustainability_score)
       }
-      if (data.saved_product_id) {
-        setSavedProductId(data.saved_product_id)
+      if (response.data.saved_product_id) {
+        setSavedProductId(response.data.saved_product_id)
       }
 
-      onAnalyzed?.(result, data.data?.sustainability_score || data.sustainability_score)
+      onAnalyzed?.(result, response.data.sustainability_score)
       return result
-    } catch (err) {
-      logger.error('AI image analysis failed', { error: err })
-      setError('Netzwerkfehler. Bitte versuche es erneut.')
-      return null
     } finally {
       setIsAnalyzing(false)
     }
