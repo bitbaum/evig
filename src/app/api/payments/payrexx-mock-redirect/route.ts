@@ -14,16 +14,7 @@ import { apiForbidden } from '@/lib/api/helpers';
 import { APP_URL } from '@/config/urls';
 import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client';
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
-
-/** Escape special HTML characters so user input can't break out of text content. */
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 const SUPPORTED_CURRENCIES = new Set(['CHF', 'EUR']);
 
