@@ -132,16 +132,20 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
       const adminDashboardUrl = `${APP_URL}/admin/workshop-proposals`
 
-      for (const admin of adminEmails) {
-        await sendEmail(
-          admin.email,
-          'adminNewWorkshopProposal',
-          session.user.name || 'Unbekannt',
-          session.user.email ?? 'nicht angegeben',
-          title,
-          adminDashboardUrl
+      // Fan out in parallel — sequential awaits would add ~200 ms × N
+      // admins to the user's response time.
+      await Promise.allSettled(
+        adminEmails.map(admin =>
+          sendEmail(
+            admin.email,
+            'adminNewWorkshopProposal',
+            session.user.name || 'Unbekannt',
+            session.user.email ?? 'nicht angegeben',
+            title,
+            adminDashboardUrl
+          )
         )
-      }
+      )
     } catch (adminEmailError) {
       logger.warn('Failed to send workshop proposal admin notification', {
         proposalId: proposal.id,

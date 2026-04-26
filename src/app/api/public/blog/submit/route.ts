@@ -119,18 +119,22 @@ export async function POST(request: NextRequest) {
 
       const adminDashboardUrl = `${APP_URL}/admin/content/submissions`
 
-      for (const admin of adminRows) {
-        if (admin.email) {
-          await sendEmail(
-            admin.email,
-            'adminNewBlogSubmission',
-            data.name,
-            data.email,
-            data.title,
-            adminDashboardUrl
+      // Fan out in parallel — sequential awaits would add ~200 ms × N
+      // admins to the public submitter's response.
+      await Promise.allSettled(
+        adminRows
+          .filter(admin => admin.email)
+          .map(admin =>
+            sendEmail(
+              admin.email!,
+              'adminNewBlogSubmission',
+              data.name,
+              data.email,
+              data.title,
+              adminDashboardUrl
+            )
           )
-        }
-      }
+      )
     } catch (adminEmailError) {
       logger.warn('Failed to send blog submission admin notification', {
         submissionId,

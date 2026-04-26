@@ -138,20 +138,26 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
       const adminDashboardUrl = `${APP_URL}/admin/repairer-applications`
 
-      for (const admin of adminEmails) {
-        const adminEmailResult = await sendEmail(
-          admin.email,
-          'adminNewRepairerApplication',
-          session.user.name || 'Unbekannter Bewerber',
-          session.user.email ?? 'nicht angegeben',
-          adminDashboardUrl
+      // Fan out in parallel — sequential awaits would add ~200 ms × N
+      // admins to the user's response time.
+      const results = await Promise.allSettled(
+        adminEmails.map(admin =>
+          sendEmail(
+            admin.email,
+            'adminNewRepairerApplication',
+            session.user.name || 'Unbekannter Bewerber',
+            session.user.email ?? 'nicht angegeben',
+            adminDashboardUrl
+          ).then(r => ({ admin, result: r }))
         )
+      )
 
-        if (!adminEmailResult.success) {
+      for (const settled of results) {
+        if (settled.status === 'fulfilled' && !settled.value.result.success) {
           logger.warn('Failed to send new repairer application notification to admin', {
-            adminEmail: admin.email,
+            adminEmail: settled.value.admin.email,
             applicationId: createdApplication.id,
-            error: adminEmailResult.error
+            error: settled.value.result.error,
           })
         }
       }
