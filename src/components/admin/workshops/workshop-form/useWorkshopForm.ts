@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { logger } from '@/lib/logger'
 import type { WorkshopFormData } from './types'
 import { INITIAL_WORKSHOP_FORM_DATA } from './types'
@@ -75,7 +76,7 @@ export function useWorkshopForm() {
 
     try {
       if (!formData.title || !formData.description || !formData.date || !formData.instructor) {
-        alert('Bitte fülle alle Pflichtfelder aus')
+        toast.error('Bitte fülle alle Pflichtfelder aus')
         return
       }
 

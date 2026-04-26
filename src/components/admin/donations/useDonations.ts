@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
+import { logger } from '@/lib/logger'
 import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { DONATION_TYPES, DONATION_STATUSES, type DonationType } from '@/config/donations'
@@ -138,7 +140,7 @@ export function useDonations() {
       if (formType === DONATION_TYPES.MONETARY) {
         const amountCents = Math.round(parseFloat(formData.amount_chf) * 100)
         if (isNaN(amountCents) || amountCents < 100) {
-          alert('Bitte gib einen gültigen Betrag ein (mind. CHF 1.00)')
+          toast.error('Bitte gib einen gültigen Betrag ein (mind. CHF 1.00)')
           setSubmitting(false)
           return
         }
@@ -146,7 +148,7 @@ export function useDonations() {
         payload.payment_method = formData.payment_method || null
       } else {
         if (!formData.device_category) {
-          alert('Bitte wähle eine Gerätekategorie')
+          toast.error('Bitte wähle eine Gerätekategorie')
           setSubmitting(false)
           return
         }
@@ -173,10 +175,11 @@ export function useDonations() {
         setFormData(DEFAULT_FORM_DATA)
         loadDonations()
       } else {
-        alert(result.error || 'Fehler beim Speichern')
+        toast.error(result.error || 'Fehler beim Speichern')
       }
-    } catch {
-      alert(ERROR_MESSAGES.NETWORK_ERROR)
+    } catch (err) {
+      logger.warn('Failed to save donation', { error: err })
+      toast.error(ERROR_MESSAGES.NETWORK_ERROR)
     } finally {
       setSubmitting(false)
     }
@@ -189,8 +192,9 @@ export function useDonations() {
         body: { thank_you_sent: true, status: DONATION_STATUSES.THANKED },
       })
       if (result.success) loadDonations()
-    } catch {
-      alert(ERROR_MESSAGES.NETWORK_ERROR)
+    } catch (err) {
+      logger.warn('Failed to mark donation as thanked', { error: err, donationId: id })
+      toast.error(ERROR_MESSAGES.NETWORK_ERROR)
     }
   }
 
@@ -201,8 +205,9 @@ export function useDonations() {
         body: { receipt_sent: true, status: DONATION_STATUSES.RECEIPT_SENT },
       })
       if (result.success) loadDonations()
-    } catch {
-      alert(ERROR_MESSAGES.NETWORK_ERROR)
+    } catch (err) {
+      logger.warn('Failed to mark donation receipt sent', { error: err, donationId: id })
+      toast.error(ERROR_MESSAGES.NETWORK_ERROR)
     }
   }
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import type { ProductFormData } from './types'
@@ -108,7 +109,8 @@ export function useProductForm() {
       router.push('/admin/products')
     } catch (error) {
       logger.error('Error saving product', { error })
-      alert(`Error creating product: ${error}`)
+      const message = error instanceof Error ? error.message : String(error)
+      toast.error(`Fehler beim Erstellen des Produkts: ${message}`)
     } finally {
       setIsLoading(false)
     }

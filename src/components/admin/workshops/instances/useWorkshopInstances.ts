@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
+import { toast } from 'sonner'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData, InstanceFiltersState } from './types'
@@ -117,10 +118,11 @@ export function useWorkshopInstances() {
       if (result.success) {
         loadInstances()
       } else {
-        alert(result.error || 'Fehler beim Löschen')
+        toast.error(result.error || 'Fehler beim Löschen')
       }
-    } catch {
-      alert('Netzwerkfehler')
+    } catch (err) {
+      logger.warn('Failed to delete workshop instance', { error: err, instanceId })
+      toast.error('Netzwerkfehler')
     }
   }
 

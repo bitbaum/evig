@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { redirect } from 'next/navigation'
@@ -121,9 +122,10 @@ export function useReviewManagement(authStatus: string) {
 
       await fetchUserReviews()
       setEditingReview(null)
-      alert('Bewertung erfolgreich aktualisiert!')
+      toast.success('Bewertung erfolgreich aktualisiert!')
     } catch (err) {
-      alert('Fehler beim Aktualisieren der Bewertung: ' + (err instanceof Error ? err.message : 'Unknown error'))
+      logger.warn('Failed to update review', { error: err, reviewId: editingReview })
+      toast.error('Fehler beim Aktualisieren der Bewertung: ' + (err instanceof Error ? err.message : 'Unknown error'))
     }
   }
 
@@ -142,9 +144,10 @@ export function useReviewManagement(authStatus: string) {
       }
 
       await fetchUserReviews()
-      alert('Bewertung erfolgreich gelöscht!')
+      toast.success('Bewertung erfolgreich gelöscht!')
     } catch (err) {
-      alert('Fehler beim Löschen der Bewertung: ' + (err instanceof Error ? err.message : 'Unknown error'))
+      logger.warn('Failed to delete review', { error: err, reviewId })
+      toast.error('Fehler beim Löschen der Bewertung: ' + (err instanceof Error ? err.message : 'Unknown error'))
     }
   }
 
@@ -183,7 +186,7 @@ export function useReviewManagement(authStatus: string) {
 
     } catch (err) {
       logger.error('Vote error', { error: err, reviewId, voteType })
-      alert('Fehler bei der Abstimmung: ' + (err instanceof Error ? err.message : 'Unknown error'))
+      toast.error('Fehler bei der Abstimmung: ' + (err instanceof Error ? err.message : 'Unknown error'))
     }
   }
 
