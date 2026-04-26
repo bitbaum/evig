@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Plus, Users, ChevronRight, RefreshCw, Tag, X } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 
 // ============================================================================
@@ -178,18 +179,16 @@ function CreatePoolModal({ onClose, onCreate }: {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/pools', {
+      const result = await apiFetch<Pool>('/api/pools', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           ...form,
           maxMembers: Number(form.maxMembers),
           monthlyCostChf: Number(form.monthlyCostChf),
-        }),
+        },
       })
-      const json = await res.json()
-      if (!res.ok || !json.success) throw new Error(json.error ?? 'Error')
-      onCreate(json.data)
+      if (!result.success || !result.data) throw new Error(result.error ?? 'Error')
+      onCreate(result.data)
       onClose()
     } catch (err) {
       setError(err instanceof Error ? err.message : t('modal.unknownError'))
@@ -331,11 +330,12 @@ export default function AbosPage() {
 
   const loadPools = useCallback(async () => {
     try {
-      const res = await fetch('/api/pools')
-      const json = await res.json()
-      if (json.success) setPools(json.data)
-    } catch (err) {
-      logger.error('Failed to load pools', { error: err })
+      const result = await apiFetch<Pool[]>('/api/pools')
+      if (result.success && result.data) {
+        setPools(result.data)
+      } else {
+        logger.error('Failed to load pools', { error: result.error })
+      }
     } finally {
       setLoading(false)
     }
@@ -343,15 +343,11 @@ export default function AbosPage() {
 
   const loadMyMemberships = useCallback(async () => {
     if (!session?.user) return
-    try {
-      const res = await fetch('/api/pools/my')
-      const json = await res.json()
-      if (json.success) {
-        setMyPoolIds(new Set((json.data as { poolId: string }[]).map(m => m.poolId)))
-      }
-    } catch {
-      // not critical
+    const result = await apiFetch<{ poolId: string }[]>('/api/pools/my')
+    if (result.success && result.data) {
+      setMyPoolIds(new Set(result.data.map(m => m.poolId)))
     }
+    // not critical on failure
   }, [session?.user])
 
   useEffect(() => {
@@ -360,9 +356,8 @@ export default function AbosPage() {
   }, [loadPools, loadMyMemberships])
 
   const handleJoin = async (id: string) => {
-    const res = await fetch(`/api/pools/${id}/join`, { method: 'POST' })
-    const json = await res.json()
-    if (!json.success) throw new Error(json.error)
+    const result = await apiFetch<unknown>(`/api/pools/${id}/join`, { method: 'POST' })
+    if (!result.success) throw new Error(result.error)
     setMyPoolIds(prev => new Set([...prev, id]))
     setPools(prev => prev.map(p =>
       p.id === id ? { ...p, memberCount: p.memberCount + 1, spotsLeft: p.spotsLeft - 1 } : p
@@ -370,9 +365,8 @@ export default function AbosPage() {
   }
 
   const handleLeave = async (id: string) => {
-    const res = await fetch(`/api/pools/${id}/leave`, { method: 'POST' })
-    const json = await res.json()
-    if (!json.success) throw new Error(json.error)
+    const result = await apiFetch<unknown>(`/api/pools/${id}/leave`, { method: 'POST' })
+    if (!result.success) throw new Error(result.error)
     setMyPoolIds(prev => { const s = new Set(prev); s.delete(id); return s })
     setPools(prev => prev.map(p =>
       p.id === id ? { ...p, memberCount: p.memberCount - 1, spotsLeft: p.spotsLeft + 1 } : p

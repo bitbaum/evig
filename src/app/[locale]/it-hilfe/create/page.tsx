@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { useTranslations } from 'next-intl'
 import {
@@ -93,23 +94,19 @@ export default function CreatePeerRepairPage() {
   // Pre-fill location from user's technician profile
   useEffect(() => {
     if (status !== 'authenticated') return
-    fetch('/api/user/technician-profile')
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        if (data.success && data.data.profile) {
-          const p = data.data.profile
-          setFormData(prev => ({
-            ...prev,
-            postalCode: prev.postalCode || p.postalCode || '',
-            city: prev.city || p.city || '',
-            canton: prev.canton || p.canton || '',
-          }))
-        }
-      })
-      .catch(err => logger.warn('Failed to load technician profile', { error: err }))
+    apiFetch<{ profile: { postalCode?: string; city?: string; canton?: string } | null }>(
+      '/api/user/technician-profile',
+    ).then(result => {
+      if (result.success && result.data?.profile) {
+        const p = result.data.profile
+        setFormData(prev => ({
+          ...prev,
+          postalCode: prev.postalCode || p.postalCode || '',
+          city: prev.city || p.city || '',
+          canton: prev.canton || p.canton || '',
+        }))
+      }
+    })
   }, [status])
 
   // Auto-fill city and canton from postal code
@@ -164,21 +161,18 @@ export default function CreatePeerRepairPage() {
     try {
       const payload = transformITHilfeFormToPayload(formData)
 
-      const response = await fetch('/api/it-hilfe/requests', {
+      const result = await apiFetch<{ requestId: string }>('/api/it-hilfe/requests', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       })
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || t('errorCreateFailed'))
+      if (!result.success || !result.data) {
+        throw new Error(result.error || t('errorCreateFailed'))
       }
 
       setSuccess(true)
       setTimeout(() => {
-        router.push(`/it-hilfe/${data.data.requestId}`)
+        router.push(`/it-hilfe/${result.data!.requestId}`)
       }, 1500)
     } catch (err) {
       const message = err instanceof Error ? err.message : t('errorGeneric')

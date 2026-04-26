@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -97,17 +98,15 @@ export function WorkshopProposalForm() {
 
   const loadAvailableLocations = async () => {
     setLoadingLocations(true)
-    try {
-      const response = await fetch('/api/locations?status=approved&type=venue&limit=50')
-      if (response.ok) {
-        const data = await response.json()
-        setAvailableLocations(data.locations || [])
-      }
-    } catch (error) {
-      logger.error('Failed to load locations', { error })
-    } finally {
-      setLoadingLocations(false)
+    const result = await apiFetch<{ locations: WorkshopLocation[] }>(
+      '/api/locations?status=approved&type=venue&limit=50',
+    )
+    if (result.success && result.data) {
+      setAvailableLocations(result.data.locations || [])
+    } else {
+      logger.warn('Failed to load locations', { error: result.error })
     }
+    setLoadingLocations(false)
   }
 
   const handleFieldChange = (field: string, value: string) => {
@@ -173,17 +172,12 @@ export function WorkshopProposalForm() {
     setSubmitResult(null)
 
     try {
-      const response = await fetch('/api/workshops/propose', {
+      const result = await apiFetch<unknown>('/api/workshops/propose', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
+        body: formData,
       })
 
-      const data = await response.json()
-
-      if (data.success) {
+      if (result.success) {
         setSubmitResult({
           success: true,
           message: formData.title,
@@ -191,14 +185,14 @@ export function WorkshopProposalForm() {
       } else {
         setSubmitResult({
           success: false,
-          message: data.error || t('form.genericError')
+          message: result.error || t('form.genericError'),
         })
       }
     } catch (error) {
       logger.error('Workshop proposal submission failed', { error })
       setSubmitResult({
         success: false,
-        message: t('form.networkError')
+        message: t('form.networkError'),
       })
     } finally {
       setIsSubmitting(false)

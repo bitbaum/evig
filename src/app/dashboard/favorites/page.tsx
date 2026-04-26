@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { useTranslations } from 'next-intl'
+import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
@@ -50,19 +51,13 @@ export default function FavoritesPage() {
   const fetchFavorites = useCallback(async () => {
     setIsLoading(true)
     setError(null)
-    try {
-      const response = await fetch('/api/listings/favorites')
-      const data = await response.json()
-      if (data.success) {
-        setFavorites(data.data.items)
-      } else {
-        throw new Error(data.error || t('loadError'))
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('unexpectedError'))
-    } finally {
-      setIsLoading(false)
+    const result = await apiFetch<{ items: FavoriteListing[] }>('/api/listings/favorites')
+    if (result.success && result.data) {
+      setFavorites(result.data.items)
+    } else {
+      setError(result.error || t('loadError'))
     }
+    setIsLoading(false)
   }, [t])
 
   useEffect(() => {
@@ -77,9 +72,8 @@ export default function FavoritesPage() {
   const removeFavorite = async (listingId: string) => {
     setRemovingId(listingId)
     try {
-      const response = await fetch(`/api/listings/${listingId}/favorite`, { method: 'POST' })
-      const data = await response.json()
-      if (data.success) {
+      const result = await apiFetch<unknown>(`/api/listings/${listingId}/favorite`, { method: 'POST' })
+      if (result.success) {
         setFavorites(prev => prev.filter(f => f.id !== listingId))
       }
     } finally {

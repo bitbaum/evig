@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
 import { cn } from '@/lib/utils'
@@ -52,20 +53,14 @@ export default function DonationsDashboard() {
     if (!session?.user) return
     let cancelled = false
     async function fetchDonations() {
-      try {
-        const response = await fetch('/api/user/donations')
-        if (cancelled) return
-        if (response.ok) {
-          const data = await response.json()
-          setDonations(data.data || [])
-        } else {
-          setError(t('loadError'))
-        }
-      } catch {
-        if (!cancelled) setError(t('networkError'))
-      } finally {
-        if (!cancelled) setLoading(false)
+      const result = await apiFetch<Donation[]>('/api/user/donations')
+      if (cancelled) return
+      if (result.success && result.data) {
+        setDonations(result.data)
+      } else {
+        setError(result.error || t('loadError'))
       }
+      setLoading(false)
     }
     fetchDonations()
     return () => { cancelled = true }

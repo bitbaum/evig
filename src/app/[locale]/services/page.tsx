@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import Link from 'next/link'
 import { useState } from 'react'
@@ -50,25 +51,24 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
     setErrorMessage('')
 
     try {
-      const response = await fetch('/api/appointments', {
+      const result = await apiFetch<unknown>('/api/appointments', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+        body: {
           serviceSlug: service.slug,
           description: `Termin für ${service.title}`,
-          urgency: 'normal'
-        }),
+          urgency: 'normal',
+        },
       })
 
-      if (response.ok) {
+      if (result.success) {
         setBookingStatus('booked')
         setTimeout(() => {
           router.push('/dashboard/appointments')
         }, 1500)
       } else {
-        const error = await response.text()
+        logger.warn('Failed to book service appointment', { error: result.error })
         setBookingStatus('error')
-        setErrorMessage(error || t('bookingFailed'))
+        setErrorMessage(result.error || t('bookingFailed'))
       }
     } catch (err) {
       logger.warn('Failed to book service appointment', { error: err })
