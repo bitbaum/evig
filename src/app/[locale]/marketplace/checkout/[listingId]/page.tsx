@@ -17,6 +17,7 @@ import { ListingImage } from '@/components/marketplace/ListingImage'
 import Heading from '@/components/ui/Heading'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
+import { logger } from '@/lib/logger'
 
 interface ListingForCheckout {
   id: string
@@ -80,7 +81,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         } else {
           setError(data.error || t('notFound'))
         }
-      } catch {
+      } catch (err) {
+        logger.warn('Failed to load checkout listing', { error: err })
         setError(t('loadError'))
       } finally {
         setIsLoading(false)
@@ -114,7 +116,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         setError(data.error || t('orderError'))
         setCreatingOrder(false)
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to create checkout order', { error: err })
       setError(t('networkError'))
       setCreatingOrder(false)
     }

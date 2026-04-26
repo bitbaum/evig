@@ -183,7 +183,8 @@ function SellPageContent() {
       } else {
         setError(data.error || t('uploadError'))
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to upload listing images', { error: err })
       setError(t('uploadImagesError'))
     } finally {
       setIsUploading(false)
@@ -227,7 +228,8 @@ function SellPageContent() {
         setError(data.error || (editId ? t('saveError') : t('createError')))
         setStep('form')
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to submit listing', { error: err })
       setError(t('unexpectedError'))
       setStep('form')
     } finally {

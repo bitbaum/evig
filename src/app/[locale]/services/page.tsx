@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { logger } from '@/lib/logger'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -69,7 +70,8 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         setBookingStatus('error')
         setErrorMessage(error || t('bookingFailed'))
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to book service appointment', { error: err })
       setBookingStatus('error')
       setErrorMessage(t('networkError'))
     }

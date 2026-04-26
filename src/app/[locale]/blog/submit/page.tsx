@@ -95,7 +95,8 @@ export default function SubmitPostPage() {
       if (!response.ok) throw new Error('Submission failed')
 
       setSubmitStatus('success')
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to submit blog post', { error: err })
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
