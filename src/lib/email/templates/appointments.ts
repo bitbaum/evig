@@ -6,6 +6,11 @@
 
 import type { EmailContent } from '../types'
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
+import { escapeHtml } from '@/lib/utils/escape-html'
+
+// Customer-supplied text (description, customer/repairer names, service
+// names) flows into the HTML bodies below — escape before interpolation.
+// Subject + text bodies stay raw (mail clients render text/plain literally).
 
 /**
  * Email to repairer when a new booking is created
@@ -33,21 +38,21 @@ export const appointmentNewBooking = (
           <h1>Neuer Reparaturauftrag</h1>
         </div>
         <div class="content">
-          <p>Hallo ${repairerName},</p>
+          <p>Hallo ${escapeHtml(repairerName)},</p>
           <p>Du hast einen neuen Reparaturauftrag erhalten!</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Kunde</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${customerName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(customerName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Service</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(serviceName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Beschreibung</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${description}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(description)}</td>
             </tr>
           </table>
 
@@ -107,8 +112,8 @@ export const appointmentQuoteReceived = (
           <h1>Angebot erhalten</h1>
         </div>
         <div class="content">
-          <p>Hallo ${customerName},</p>
-          <p>${repairerName} hat dir ein Angebot für deine Reparatur geschickt.</p>
+          <p>Hallo ${escapeHtml(customerName)},</p>
+          <p>${escapeHtml(repairerName)} hat dir ein Angebot für deine Reparatur geschickt.</p>
 
           <div style="background-color: #f5f3ff; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center;">
             <p style="font-size: 14px; color: #6b21a8; margin: 0;">Preis</p>
@@ -118,7 +123,7 @@ export const appointmentQuoteReceived = (
           ${diagnosisNotes ? `
           <div class="highlight-box">
             <p><strong>Diagnose:</strong></p>
-            <p>${diagnosisNotes}</p>
+            <p>${escapeHtml(diagnosisNotes)}</p>
           </div>
           ` : ''}
 
@@ -176,21 +181,21 @@ export const appointmentStatusUpdate = (
           <h1>Statusänderung</h1>
         </div>
         <div class="content">
-          <p>Hallo ${recipientName},</p>
+          <p>Hallo ${escapeHtml(recipientName)},</p>
           <p>Der Status deines Reparaturauftrags wurde aktualisiert.</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Service</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(serviceName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Neuer Status</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>${newStatusLabel}</strong></td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>${escapeHtml(newStatusLabel)}</strong></td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Andere Partei</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${otherPartyName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(otherPartyName)}</td>
             </tr>
           </table>
 
@@ -247,25 +252,25 @@ export const appointmentUnassignedAlert = (
           <h1>Unzugewiesener Auftrag</h1>
         </div>
         <div class="content">
-          <p>Hallo ${adminName},</p>
+          <p>Hallo ${escapeHtml(adminName)},</p>
           <p>Ein neuer Reparaturauftrag wurde ohne Techniker erstellt und benötigt manuelle Zuweisung.</p>
 
           <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Kunde</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${customerName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(customerName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Service</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${serviceName}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(serviceName)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Beschreibung</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${description}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(description)}</td>
             </tr>
             <tr>
               <td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">Dringlichkeit</td>
-              <td style="padding: 8px; border-bottom: 1px solid #eee;">${urgency}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(urgency)}</td>
             </tr>
           </table>
 

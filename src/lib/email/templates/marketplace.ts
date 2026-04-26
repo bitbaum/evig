@@ -3,7 +3,14 @@
  *
  * All marketplace-related email notifications.
  * Swiss German text (ss not ß, proper umlauts).
+ *
+ * SECURITY: Every `${data.X}` interpolated into the `html:` body must go
+ * through escapeHtml — listingTitle / messagePreview / reviewer & buyer
+ * names are user-supplied. The `subject:` and `text:` strings stay raw
+ * because mail clients render those as plain text.
  */
+
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 export interface MarketplaceEmailData {
   recipientName: string;
@@ -38,8 +45,8 @@ export function listingPublishedConfirmation(data: ListingPublishedData): { subj
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Ihr Inserat ist online!</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p>Dein Inserat <strong>"${data.listingTitle}"</strong> wurde erfolgreich veröffentlicht und ist jetzt im Marketplace sichtbar.</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p>Dein Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> wurde erfolgreich veröffentlicht und ist jetzt im Marketplace sichtbar.</p>
         <p>
           <a href="${data.listingUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Inserat ansehen
@@ -63,10 +70,10 @@ export function newMarketplaceMessage(data: NewMarketplaceMessageData): { subjec
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Nachricht erhalten</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p><strong>${data.senderName}</strong> hat dir eine Nachricht zu deinem Inserat <strong>"${data.listingTitle}"</strong> geschickt:</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p><strong>${escapeHtml(data.senderName)}</strong> hat dir eine Nachricht zu deinem Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> geschickt:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
-          <p style="margin: 0; color: #374151;">${data.messagePreview}</p>
+          <p style="margin: 0; color: #374151;">${escapeHtml(data.messagePreview)}</p>
         </div>
         <p>
           <a href="${data.conversationUrl}" style="display: inline-block; background-color: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
@@ -124,13 +131,13 @@ export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): { subj
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Bestellung aufgegeben</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p>deine Bestellung für <strong>"${data.listingTitle}"</strong> wurde erfolgreich aufgegeben.</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p>deine Bestellung für <strong>"${escapeHtml(data.listingTitle)}"</strong> wurde erfolgreich aufgegeben.</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 4px 0; color: #6b7280;">Betrag</td><td style="padding: 4px 0; text-align: right; font-weight: 600;">${data.amountChf}</td></tr>
-            <tr><td style="padding: 4px 0; color: #6b7280;">davon Servicegebühr</td><td style="padding: 4px 0; text-align: right;">${data.commissionChf}</td></tr>
-            <tr><td style="padding: 4px 0; color: #6b7280;">Lieferart</td><td style="padding: 4px 0; text-align: right;">${data.deliveryMethod}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">Betrag</td><td style="padding: 4px 0; text-align: right; font-weight: 600;">${escapeHtml(data.amountChf)}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">davon Servicegebühr</td><td style="padding: 4px 0; text-align: right;">${escapeHtml(data.commissionChf)}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">Lieferart</td><td style="padding: 4px 0; text-align: right;">${escapeHtml(data.deliveryMethod)}</td></tr>
           </table>
         </div>
         <p>
@@ -156,12 +163,12 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Bestellung erhalten!</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p><strong>${data.buyerName}</strong> hat dein Inserat <strong>"${data.listingTitle}"</strong> bestellt.</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p><strong>${escapeHtml(data.buyerName)}</strong> hat dein Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> bestellt.</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 4px 0; color: #6b7280;">Deine Auszahlung</td><td style="padding: 4px 0; text-align: right; font-weight: 600; color: #16a34a;">${data.payoutAmountChf}</td></tr>
-            <tr><td style="padding: 4px 0; color: #6b7280;">Lieferart</td><td style="padding: 4px 0; text-align: right;">${data.deliveryMethod}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">Deine Auszahlung</td><td style="padding: 4px 0; text-align: right; font-weight: 600; color: #16a34a;">${escapeHtml(data.payoutAmountChf)}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">Lieferart</td><td style="padding: 4px 0; text-align: right;">${escapeHtml(data.deliveryMethod)}</td></tr>
           </table>
         </div>
         <p>
@@ -187,12 +194,12 @@ export function orderStatusUpdate(data: OrderStatusUpdateData): { subject: strin
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Bestellstatus aktualisiert</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p>Der Status deiner Bestellung <strong>"${data.listingTitle}"</strong> wurde aktualisiert:</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p>Der Status deiner Bestellung <strong>"${escapeHtml(data.listingTitle)}"</strong> wurde aktualisiert:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
-          <p style="font-size: 18px; font-weight: 600; margin: 0;">${data.newStatusLabel}</p>
+          <p style="font-size: 18px; font-weight: 600; margin: 0;">${escapeHtml(data.newStatusLabel)}</p>
         </div>
-        ${data.actionHint ? `<p style="color: #374151;">${data.actionHint}</p>` : ''}
+        ${data.actionHint ? `<p style="color: #374151;">${escapeHtml(data.actionHint)}</p>` : ''}
         <p>
           <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bestellung ansehen
@@ -237,9 +244,9 @@ export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subjec
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Der Käufer hat den Erhalt bestätigt</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p>Der Käufer hat den Erhalt von <strong>"${data.listingTitle}"</strong> bestätigt. Die Zahlung wurde freigegeben und wird dir in Kürze ausbezahlt.</p>
-        <p style="color: #6b7280; font-size: 14px;">Bestellnummer: ${data.orderNumber}</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p>Der Käufer hat den Erhalt von <strong>"${escapeHtml(data.listingTitle)}"</strong> bestätigt. Die Zahlung wurde freigegeben und wird dir in Kürze ausbezahlt.</p>
+        <p style="color: #6b7280; font-size: 14px;">Bestellnummer: ${escapeHtml(data.orderNumber)}</p>
         <p>
           <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bestellung ansehen
@@ -262,8 +269,8 @@ export function orderReviewPrompt(data: OrderReviewPromptData): { subject: strin
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Vielen Dank für deinen Kauf!</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p>Wir hoffen, du bist zufrieden mit <strong>"${data.listingTitle}"</strong>. Deine Bewertung hilft anderen Käuferinnen und Käufern bei der Entscheidung und unterstützt verantwortungsvolle Verkäufer.</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p>Wir hoffen, du bist zufrieden mit <strong>"${escapeHtml(data.listingTitle)}"</strong>. Deine Bewertung hilft anderen Käuferinnen und Käufern bei der Entscheidung und unterstützt verantwortungsvolle Verkäufer.</p>
         <p>
           <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Jetzt bewerten
@@ -288,14 +295,14 @@ export function orderReviewReceived(data: OrderReviewReceivedData): { subject: s
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Bewertung erhalten</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p>Du hast eine neue Bewertung für dein Inserat <strong>"${data.listingTitle}"</strong> erhalten:</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p>Du hast eine neue Bewertung für dein Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> erhalten:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
           <p style="font-size: 24px; margin: 0; color: #f59e0b;">${stars}</p>
           <p style="margin: 8px 0 0; color: #374151; font-weight: 600;">${data.rating} von 5 Sternen</p>
         </div>
         <blockquote style="margin: 16px 0; padding: 12px 16px; border-left: 4px solid #d1d5db; color: #374151;">
-          ${data.content}
+          ${escapeHtml(data.content)}
         </blockquote>
         <p>
           <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
@@ -317,8 +324,8 @@ export function listingReviewNotification(data: ListingReviewData): { subject: s
     html: `
       <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Neue Bewertung erhalten</h2>
-        <p>Hallo ${data.recipientName},</p>
-        <p><strong>${data.reviewerName}</strong> hat dein Inserat <strong>"${data.listingTitle}"</strong> bewertet:</p>
+        <p>Hallo ${escapeHtml(data.recipientName)},</p>
+        <p><strong>${escapeHtml(data.reviewerName)}</strong> hat dein Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> bewertet:</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; text-align: center;">
           <p style="font-size: 24px; margin: 0; color: #f59e0b;">${stars}</p>
           <p style="margin: 8px 0 0; color: #374151; font-weight: 600;">${data.rating} von 5 Sternen</p>
