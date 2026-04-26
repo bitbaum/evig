@@ -70,17 +70,27 @@ async function trySendEmail(
   payload: NotificationPayload,
 ): Promise<void> {
   const emailContent = getEmailContent(payload)
+
+  // Default to true when preference is null (new users)
+  const eligible = recipients.filter(r => r.email && r.email_notifications !== false)
+
+  // Send in parallel — sequential awaits would block the caller for
+  // ~200 ms × N recipients on a fan-out (e.g. all-staff decision
+  // notifications can be 50+ users).
+  const results = await Promise.allSettled(
+    eligible.map(r => sendCustomEmail(r.email!, emailContent))
+  )
+
   let anySent = false
-
-  for (const r of recipients) {
-    // Default to true when preference is null (new users)
-    if (!r.email || r.email_notifications === false) continue
-
-    try {
-      await sendCustomEmail(r.email, emailContent)
+  for (let i = 0; i < results.length; i++) {
+    const settled = results[i]
+    if (settled.status === 'fulfilled') {
       anySent = true
-    } catch (err) {
-      logger.error('Notification email failed', { userId: r.user_id, error: err })
+    } else {
+      logger.error('Notification email failed', {
+        userId: eligible[i].user_id,
+        error: settled.reason,
+      })
     }
   }
 
