@@ -48,7 +48,8 @@ export function useListingDetail(params: Promise<{ id: string }>): UseListingDet
         } else {
           setError(result.error || t('notFound'))
         }
-      } catch {
+      } catch (err) {
+        logger.warn('Failed to load marketplace listing detail', { error: err })
         if (!cancelled) setError(t('loadError'))
       } finally {
         if (!cancelled) setIsLoading(false)

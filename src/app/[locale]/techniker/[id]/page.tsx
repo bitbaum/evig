@@ -18,6 +18,7 @@ import { BUDGET_TIERS } from '@/config/it-hilfe'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { getTechnicianById } from '@/lib/services/technician-service'
+import { logger } from '@/lib/logger'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -43,7 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       openGraph: { title, description, type: 'website' },
     }
-  } catch {
+  } catch (err) {
+    logger.warn('Failed to generate technician metadata', { error: err })
     return { title: `${t('meta.title')} | ${ORG.name}` }
   }
 }

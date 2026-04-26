@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm'
 import { ORG } from '@/config/org'
 import { APP_URL } from '@/config/urls'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { logger } from '@/lib/logger'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -35,7 +36,8 @@ async function getSellerMeta(id: string): Promise<SellerMeta | null> {
       .innerJoin(users, eq(sellerProfiles.userId, users.id))
       .where(eq(sellerProfiles.userId, id))
     return row ?? null
-  } catch {
+  } catch (err) {
+    logger.warn('Failed to load seller meta', { error: err })
     return null
   }
 }
