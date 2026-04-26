@@ -7,6 +7,11 @@
 import type { EmailContent } from '../types'
 import { createEmailLayout, createTextFooter } from './base-styles'
 import { APP_URL } from '@/config/urls'
+import { escapeHtml } from '@/lib/utils/escape-html'
+
+// `title` is the decision title — staff-entered text that flows into the
+// HTML body. Date interpolation comes from `new Date().toLocaleDateString`
+// which is internally generated, no escape needed.
 
 /** Resolve a deep link for a specific decision — non-admin members land on
  *  /dashboard/decisions/:id, admin links fall back to /admin/decisions. */
@@ -36,7 +41,7 @@ export const decisionVotingOpened = (
     `
       <h2>Abstimmung geöffnet</h2>
       <p>Eine neue Abstimmung wartet auf deine Stimme:</p>
-      <p><strong>${title}</strong></p>
+      <p><strong>${escapeHtml(title)}</strong></p>
       ${deadlineText}
       <p style="margin-top: 20px;">
         <a href="${link}" class="button button-blue">
@@ -76,7 +81,7 @@ export const decisionDeadlineReminder = (
     `
       <h2>Erinnerung: Abstimmung endet bald</h2>
       <p>Die folgende Abstimmung endet morgen:</p>
-      <p><strong>${title}</strong></p>
+      <p><strong>${escapeHtml(title)}</strong></p>
       <p><strong>Frist:</strong> ${deadlineFormatted}</p>
       <p>Falls du noch nicht abgestimmt hast, gib bitte noch deine Stimme ab.</p>
       <p style="margin-top: 20px;">
@@ -108,7 +113,7 @@ export const decisionClosed = (
     `
       <h2>Abstimmung abgeschlossen</h2>
       <p>Die folgende Abstimmung wurde abgeschlossen:</p>
-      <p><strong>${title}</strong></p>
+      <p><strong>${escapeHtml(title)}</strong></p>
       <p>Das Ergebnis steht jetzt fest. Du kannst die Beschlussfassung einsehen.</p>
       <p style="margin-top: 20px;">
         <a href="${link}" class="button button-blue">
