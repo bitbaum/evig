@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { RefreshCw, Users } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { isSuperAdmin } from '@/lib/permissions'
 import {
   UsersTableClient,
@@ -21,18 +22,14 @@ interface UsersListClientProps {
   currentUserIsSuperAdmin: boolean
 }
 
-interface UsersApiResponse {
-  success: boolean
-  data?: {
-    items: (UserRow & { is_super_admin_computed?: boolean })[]
-    pagination: {
-      total: number
-      page: number
-      limit: number
-      pages: number
-    }
+interface UsersApiData {
+  items: (UserRow & { is_super_admin_computed?: boolean })[]
+  pagination: {
+    total: number
+    page: number
+    limit: number
+    pages: number
   }
-  error?: string
 }
 
 interface FilterState {
@@ -81,21 +78,18 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       params.set('page', pagination.page.toString())
       params.set('limit', pagination.limit.toString())
 
-      const response = await fetch(`/api/admin/users?${params.toString()}`)
-      const result: UsersApiResponse = await response.json()
+      const result = await apiFetch<UsersApiData>(`/api/admin/users?${params.toString()}`)
 
-      if (!response.ok) {
+      if (!result.success || !result.data) {
         throw new Error(result.error || 'Fehler beim Laden der Benutzer')
       }
 
-      if (result.data) {
-        setUsers(result.data.items)
-        setPagination(prev => ({
-          ...prev,
-          total: result.data!.pagination.total,
-          pages: result.data!.pagination.pages,
-        }))
-      }
+      setUsers(result.data.items)
+      setPagination(prev => ({
+        ...prev,
+        total: result.data!.pagination.total,
+        pages: result.data!.pagination.pages,
+      }))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
       setUsers([])

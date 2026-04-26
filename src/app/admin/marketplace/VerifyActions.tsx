@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ShieldCheck, ShieldOff, Loader2 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 
 interface VerifyActionsProps {
   listingId: string
@@ -19,12 +20,11 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   async function handleVerify() {
     setLoading(true)
     try {
-      const res = await fetch(`/api/admin/listings/${listingId}/verify`, {
+      const result = await apiFetch<unknown>(`/api/admin/listings/${listingId}/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ verification_notes: notes || undefined }),
+        body: { verification_notes: notes || undefined },
       })
-      if (res.ok) {
+      if (result.success) {
         setShowNotes(false)
         setNotes('')
         router.refresh()
@@ -38,10 +38,10 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
     if (!confirm(`Verifizierung von "${title}" entfernen?`)) return
     setLoading(true)
     try {
-      const res = await fetch(`/api/admin/listings/${listingId}/verify`, {
+      const result = await apiFetch<unknown>(`/api/admin/listings/${listingId}/verify`, {
         method: 'DELETE',
       })
-      if (res.ok) {
+      if (result.success) {
         router.refresh()
       }
     } finally {

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { adminSurface, adminType, adminStatus } from '@/lib/admin-ui';
 import { AdminSectionHeader } from '@/components/admin/AdminSectionHeader';
+import { apiFetch } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
 
 interface ParticipationData {
@@ -20,11 +21,9 @@ export default function ParticipationCard({ decisionId }: { decisionId: string }
 
   useEffect(() => {
     function fetchParticipation() {
-      fetch(`/api/decisions/${decisionId}/votes/participation`)
-        .then((res) => res.json())
-        .then((json) => {
-          if (json.success) setData(json.data);
-        });
+      apiFetch<ParticipationData>(`/api/decisions/${decisionId}/votes/participation`).then(result => {
+        if (result.success && result.data) setData(result.data);
+      });
     }
     fetchParticipation();
     const interval = setInterval(fetchParticipation, 30_000);

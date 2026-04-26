@@ -62,22 +62,22 @@ export default function TaskFormClient() {
   })
 
   useEffect(() => {
-    fetch('/api/admin/team/profiles')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && Array.isArray(data.data)) {
-          setTeamMembers(
-            data.data
-              .filter((p: Record<string, unknown>) => p.is_active !== false)
-              .map((p: Record<string, unknown>) => ({
-                user_id: p.user_id as string,
-                name: (p.user_name || 'Unbekannt') as string,
-                position: (p.position || null) as string | null,
-              }))
-          )
-        }
-      })
-      .catch(() => { /* team members optional */ })
+    apiFetch<Array<{ user_id: string; user_name?: string | null; position?: string | null; is_active?: boolean }>>(
+      '/api/admin/team/profiles',
+    ).then(result => {
+      if (result.success && result.data) {
+        setTeamMembers(
+          result.data
+            .filter(p => p.is_active !== false)
+            .map(p => ({
+              user_id: p.user_id,
+              name: p.user_name || 'Unbekannt',
+              position: p.position || null,
+            }))
+        )
+      }
+      // team members optional on failure
+    })
   }, [])
 
   const handleChange = (

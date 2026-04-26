@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/api/client'
 import {
   Search,
   Monitor,
@@ -188,12 +189,9 @@ export function CommandBar() {
   // Fetch index once when first opened
   useEffect(() => {
     if (!open || index) return
-    fetch('/api/admin/search-index')
-      .then(r => r.json())
-      .then((envelope: { success: boolean; data?: SearchIndex }) => {
-        if (envelope.success && envelope.data) setIndex(envelope.data)
-      })
-      .catch(() => {/* silently ignore */})
+    apiFetch<SearchIndex>('/api/admin/search-index').then(result => {
+      if (result.success && result.data) setIndex(result.data)
+    })
   }, [open, index])
 
   // Global keyboard shortcut

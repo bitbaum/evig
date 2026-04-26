@@ -19,6 +19,7 @@ import { EditHistoryView } from '@/components/admin/EditHistoryView';
 import { EditProposalModal } from '@/components/admin/workshops/EditProposalModal';
 import { getEditableFieldLabels } from '@/config/editable-fields';
 import { formatDateTime, formatDateShort } from '@/lib/date-formats';
+import { apiFetch } from '@/lib/api/client';
 import { logger } from '@/lib/logger';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
@@ -37,17 +38,16 @@ export default function WorkshopProposalDetailPage() {
   const fetchProposal = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/admin/workshops/proposals/${proposalId}`);
-      const data = await response.json();
+      const result = await apiFetch<{ proposal: WorkshopProposalWithProposer }>(
+        `/api/admin/workshops/proposals/${proposalId}`,
+      );
 
-      if (data.success && data.data.proposal) {
-        setProposal(data.data.proposal);
+      if (result.success && result.data?.proposal) {
+        setProposal(result.data.proposal);
       } else {
-        setError(data.error || 'Fehler beim Laden des Vorschlags');
+        if (result.error) logger.warn('Error fetching proposal', { error: result.error });
+        setError(result.error || 'Fehler beim Laden des Vorschlags');
       }
-    } catch (err) {
-      logger.error('Error fetching proposal', { error: err });
-      setError('Netzwerkfehler beim Laden des Vorschlags');
     } finally {
       setIsLoading(false);
     }

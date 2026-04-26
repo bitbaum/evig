@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { apiFetch } from '@/lib/api/client';
 import {
   DECISION_TYPES,
   DECISION_TYPE_CONFIG,
@@ -60,36 +61,34 @@ export default function DecisionEditFormClient({
   const [quorumValue, setQuorumValue] = useState(50);
 
   useEffect(() => {
-    fetch(`/api/decisions/${decisionId}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.success) {
-          const d: DecisionData = json.data;
-          setDecisionType(d.decisionType);
-          setTitle(d.title);
-          setDescription(d.description);
-          setBackground(d.background ?? '');
-          setVotingMethod(d.votingMethod);
-          const loadedOptions = d.options.length > 0
-            ? d.options.map((o: { id: string; label: string; description?: string; imageUrl?: string }) => ({
-                id: o.id,
-                label: o.label,
-                description: o.description || '',
-                imageUrl: o.imageUrl || '',
-              }))
-            : [
-                { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
-                { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
-              ];
-          setOptions(loadedOptions);
-          if (loadedOptions.some((o: OptionItem) => o.imageUrl)) setShowImageUrls(true);
-          setBlindVoting(d.blindVoting);
-          setDotCount(d.dotCount || DOT_VOTING_DEFAULTS.default);
-          setQuorumType(d.quorum.type);
-          setQuorumValue(d.quorum.value);
-        }
-        setLoading(false);
-      });
+    apiFetch<DecisionData>(`/api/decisions/${decisionId}`).then((result) => {
+      if (result.success && result.data) {
+        const d = result.data;
+        setDecisionType(d.decisionType);
+        setTitle(d.title);
+        setDescription(d.description);
+        setBackground(d.background ?? '');
+        setVotingMethod(d.votingMethod);
+        const loadedOptions: OptionItem[] = d.options.length > 0
+          ? d.options.map((o) => ({
+              id: o.id,
+              label: o.label,
+              description: o.description || '',
+              imageUrl: o.imageUrl || '',
+            }))
+          : [
+              { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+              { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+            ];
+        setOptions(loadedOptions);
+        if (loadedOptions.some((o) => o.imageUrl)) setShowImageUrls(true);
+        setBlindVoting(d.blindVoting);
+        setDotCount(d.dotCount || DOT_VOTING_DEFAULTS.default);
+        setQuorumType(d.quorum.type);
+        setQuorumValue(d.quorum.value);
+      }
+      setLoading(false);
+    });
   }, [decisionId]);
 
   function addOption() {
@@ -132,25 +131,18 @@ export default function DecisionEditFormClient({
       dotCount: votingMethod === 'dot' ? dotCount : null,
     };
 
-    try {
-      const res = await fetch(`/api/decisions/${decisionId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const json = await res.json();
+    const result = await apiFetch<unknown>(`/api/decisions/${decisionId}`, {
+      method: 'PATCH',
+      body: payload,
+    });
 
-      if (!json.success) {
-        setError(json.error || 'Fehler beim Speichern');
-        setSubmitting(false);
-        return;
-      }
-
-      router.push(`/admin/decisions/${decisionId}`);
-    } catch {
-      setError('Netzwerkfehler');
+    if (!result.success) {
+      setError(result.error || 'Fehler beim Speichern');
       setSubmitting(false);
+      return;
     }
+
+    router.push(`/admin/decisions/${decisionId}`);
   }
 
   if (loading) {

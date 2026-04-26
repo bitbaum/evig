@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 import type { PipelineItem } from './types'
 
 interface PaginationState {
@@ -42,12 +43,15 @@ export function useIntakePipeline(active: boolean) {
       if (categoryFilter) params.set('category', categoryFilter)
       if (searchFilter) params.set('search', searchFilter)
 
-      const res = await fetch(`/api/admin/intake?${params}`)
-      const json = await res.json()
-      if (json.success) {
-        setItems(json.data.items)
-        setPagination(json.data.pagination)
-        if (json.data.statusCounts) setStatusCounts(json.data.statusCounts)
+      const result = await apiFetch<{
+        items: PipelineItem[]
+        pagination: PaginationState
+        statusCounts?: StatusCounts
+      }>(`/api/admin/intake?${params}`)
+      if (result.success && result.data) {
+        setItems(result.data.items)
+        setPagination(result.data.pagination)
+        if (result.data.statusCounts) setStatusCounts(result.data.statusCounts)
       }
     } finally {
       setLoading(false)
@@ -67,11 +71,13 @@ export function useIntakePipeline(active: boolean) {
         if (categoryFilter) params.set('category', categoryFilter)
         if (searchFilter) params.set('search', searchFilter)
 
-        const res = await fetch(`/api/admin/intake?${params}`)
-        const json = await res.json()
-        if (!cancelled && json.success) {
-          setItems(json.data.items)
-          setPagination(json.data.pagination)
+        const result = await apiFetch<{
+          items: PipelineItem[]
+          pagination: PaginationState
+        }>(`/api/admin/intake?${params}`)
+        if (!cancelled && result.success && result.data) {
+          setItems(result.data.items)
+          setPagination(result.data.pagination)
         }
       } finally {
         if (!cancelled) setLoading(false)

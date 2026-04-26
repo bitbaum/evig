@@ -77,19 +77,15 @@ export function useDecisionForm() {
   useEffect(() => {
     // Fetch team members (staff) and Verein members — needed for 'invited' scope.
     Promise.all([
-      fetch('/api/admin/team/profiles').then((res) => res.json()).catch(() => null),
-      fetch('/api/admin/membership/members').then((res) => res.json()).catch(() => null),
-    ]).then(([teamJson, memberJson]) => {
-      const teamList: TeamMember[] = teamJson?.success && Array.isArray(teamJson.data)
-        ? teamJson.data.map((m: { userId: string; name: string | null; email: string }) => ({
-            id: m.userId, name: m.name, email: m.email,
-          }))
+      apiFetch<Array<{ user_id: string; user_name: string | null; user_email: string }>>('/api/admin/team/profiles'),
+      apiFetch<Array<{ id: string; name: string | null; email: string }>>('/api/admin/membership/members'),
+    ]).then(([teamResult, memberResult]) => {
+      const teamList: TeamMember[] = teamResult.success && teamResult.data
+        ? teamResult.data.map((m) => ({ id: m.user_id, name: m.user_name, email: m.user_email }))
         : [];
 
-      const memberList: TeamMember[] = memberJson?.success && Array.isArray(memberJson.data)
-        ? memberJson.data.map((m: { id: string; name: string | null; email: string }) => ({
-            id: m.id, name: m.name, email: m.email,
-          }))
+      const memberList: TeamMember[] = memberResult.success && memberResult.data
+        ? memberResult.data.map((m) => ({ id: m.id, name: m.name, email: m.email }))
         : [];
 
       const byId = new Map<string, TeamMember>();

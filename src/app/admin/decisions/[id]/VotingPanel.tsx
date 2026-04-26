@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { DECISION_STATUS, type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions';
+import { apiFetch } from '@/lib/api/client';
 import Heading from '@/components/admin/AdminHeading';
 import { DeadlineCountdown } from './voting/DeadlineCountdown';
 import { ConsentVote } from './voting/ConsentVote';
@@ -121,23 +122,17 @@ export default function VotingPanel({
       case 'ranked_choice':  voteData = { ranking }; break;
     }
 
-    try {
-      const res = await fetch(`/api/decisions/${decisionId}/votes`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(voteData),
-      });
-      const json = await res.json();
-      if (!json.success) {
-        setError(json.error || 'Fehler beim Abstimmen');
-        setSubmitting(false);
-        return;
-      }
-      setSuccess(true);
-      onVoted();
-    } catch {
-      setError('Netzwerkfehler');
+    const result = await apiFetch<unknown>(`/api/decisions/${decisionId}/votes`, {
+      method: 'POST',
+      body: voteData,
+    });
+    if (!result.success) {
+      setError(result.error || 'Fehler beim Abstimmen');
+      setSubmitting(false);
+      return;
     }
+    setSuccess(true);
+    onVoted();
     setSubmitting(false);
   }
 

@@ -28,6 +28,7 @@ import {
 import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
 import { ORG, LOCATIONS } from '@/config/org'
 import { CONDITION_COLORS } from '@/config/ui-colors'
+import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
 
 // Profile icons mapped by slug
@@ -84,22 +85,15 @@ export default function FactSheetPage() {
 
   useEffect(() => {
     async function fetchProduct() {
-      try {
-        const response = await fetch(`/api/admin/inventory/${productId}`)
-        if (!response.ok) {
-          throw new Error('Produkt nicht gefunden')
-        }
-        const data = await response.json()
-        if (data.success && data.data?.product) {
-          setProduct({ ...data.data.product, id: productId })
-        } else {
-          throw new Error(data.error || 'Produkt nicht gefunden')
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Fehler beim Laden')
-      } finally {
-        setLoading(false)
+      const result = await apiFetch<{ product: Omit<ProductData, 'id'> }>(
+        `/api/admin/inventory/${productId}`,
+      )
+      if (result.success && result.data?.product) {
+        setProduct({ ...result.data.product, id: productId })
+      } else {
+        setError(result.error || 'Produkt nicht gefunden')
       }
+      setLoading(false)
     }
 
     if (productId) {

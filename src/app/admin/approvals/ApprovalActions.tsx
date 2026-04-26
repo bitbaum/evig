@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { apiFetch } from '@/lib/api/client'
 
 interface ApprovalActionsProps {
   submissionId: string
@@ -17,24 +18,19 @@ export function ApprovalActions({ submissionId, title }: ApprovalActionsProps) {
   const handleAction = async (action: 'approve' | 'reject') => {
     setIsLoading(action)
 
-    try {
-      const response = await fetch(`/api/admin/approvals/${submissionId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action }),
-      })
+    const result = await apiFetch<unknown>(`/api/admin/approvals/${submissionId}`, {
+      method: 'PATCH',
+      body: { action },
+    })
 
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.error || 'Fehler bei der Verarbeitung')
-      }
-
-      // Refresh the page to reflect the updated status
-      router.refresh()
-    } catch {
+    if (!result.success) {
       // Show inline feedback on error
       setIsLoading(null)
+      return
     }
+
+    // Refresh the page to reflect the updated status
+    router.refresh()
   }
 
   return (

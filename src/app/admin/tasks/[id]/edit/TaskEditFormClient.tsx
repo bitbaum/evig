@@ -18,6 +18,7 @@ import {
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
 import type { TaskEditItem } from '@/lib/schemas/tasks'
+import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
 
@@ -65,22 +66,22 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
   })
 
   useEffect(() => {
-    fetch('/api/admin/team/profiles')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && Array.isArray(data.data)) {
-          setTeamMembers(
-            data.data
-              .filter((p: Record<string, unknown>) => p.is_active !== false)
-              .map((p: Record<string, unknown>) => ({
-                user_id: p.user_id as string,
-                name: (p.user_name || 'Unbekannt') as string,
-                position: (p.position || null) as string | null,
-              }))
-          )
-        }
-      })
-      .catch(() => { /* team members optional */ })
+    apiFetch<Array<{ user_id: string; user_name?: string | null; position?: string | null; is_active?: boolean }>>(
+      '/api/admin/team/profiles',
+    ).then(result => {
+      if (result.success && result.data) {
+        setTeamMembers(
+          result.data
+            .filter(p => p.is_active !== false)
+            .map(p => ({
+              user_id: p.user_id,
+              name: p.user_name || 'Unbekannt',
+              position: p.position || null,
+            }))
+        )
+      }
+      // team members optional on failure
+    })
   }, [])
 
   const handleChange = (
@@ -114,16 +115,13 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
           : [],
       }
 
-      const res = await fetch(`/api/tasks/${task.id}`, {
+      const result = await apiFetch<unknown>(`/api/tasks/${task.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       })
 
-      const data = await res.json()
-
-      if (!data.success) {
-        throw new Error(data.error || 'Fehler beim Speichern')
+      if (!result.success) {
+        throw new Error(result.error || 'Fehler beim Speichern')
       }
 
       router.push(`/admin/tasks/${task.id}`)

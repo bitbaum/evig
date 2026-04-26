@@ -23,6 +23,7 @@ import {
 import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
+import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import Heading from '@/components/admin/AdminHeading'
 
@@ -47,13 +48,11 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     setSavingAttendees(true)
     setAttendeeError(null)
     try {
-      const res = await fetch(`/api/protocols/${protocol.id}`, {
+      const result = await apiFetch<unknown>(`/api/protocols/${protocol.id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ attendees: editedAttendees }),
+        body: { attendees: editedAttendees },
       })
-      const data = await res.json()
-      if (!data.success) throw new Error(data.error || 'Fehler beim Speichern')
+      if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
       setEditingAttendees(false)
       router.refresh()
     } catch (err) {

@@ -20,6 +20,7 @@ import { Pagination } from '@/components/ui/Pagination';
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { adminSurface, adminTable, adminForm, adminType } from '@/lib/admin-ui';
+import { apiFetch } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
 
@@ -75,17 +76,17 @@ export default function DecisionListClient({
         urlParams.set('page', String(page));
         urlParams.set('limit', String(DECISIONS_PAGE_SIZE));
 
-        const response = await fetch(`/api/decisions?${urlParams.toString()}`);
-        const json = await response.json();
+        const result = await apiFetch<{ decisions: DecisionListItem[]; total: number }>(
+          `/api/decisions?${urlParams.toString()}`,
+        );
 
-        if (!response.ok || !json?.success) {
-          throw new Error(json?.error || 'Entscheidungen konnten nicht geladen werden.');
+        if (!result.success || !result.data) {
+          throw new Error(result.error || 'Entscheidungen konnten nicht geladen werden.');
         }
 
         if (!cancelled) {
-          const data = json.data as { decisions: DecisionListItem[]; total: number };
-          setDecisions(Array.isArray(data?.decisions) ? data.decisions : []);
-          setTotal(typeof data?.total === 'number' ? data.total : 0);
+          setDecisions(Array.isArray(result.data.decisions) ? result.data.decisions : []);
+          setTotal(typeof result.data.total === 'number' ? result.data.total : 0);
         }
       } catch (error) {
         if (!cancelled) {
@@ -108,20 +109,15 @@ export default function DecisionListClient({
     if (!deleteTarget) return;
     setDeleting(true);
     setDeleteError(null);
-    try {
-      const res = await fetch(`/api/decisions/${deleteTarget.id}`, { method: 'DELETE' });
-      const json = await res.json();
-      if (!res.ok || !json?.success) {
-        setDeleteError(json?.error || 'Fehler beim Löschen');
-        return;
-      }
-      setDeleteTarget(null);
-      setReloadToken((prev) => prev + 1);
-    } catch {
-      setDeleteError('Netzwerkfehler');
-    } finally {
+    const result = await apiFetch<unknown>(`/api/decisions/${deleteTarget.id}`, { method: 'DELETE' });
+    if (!result.success) {
+      setDeleteError(result.error || 'Fehler beim Löschen');
       setDeleting(false);
+      return;
     }
+    setDeleteTarget(null);
+    setReloadToken((prev) => prev + 1);
+    setDeleting(false);
   }
 
   return (

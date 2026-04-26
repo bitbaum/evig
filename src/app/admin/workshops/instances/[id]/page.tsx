@@ -20,6 +20,7 @@ import {
   Star,
   MessageSquare
 } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
@@ -58,18 +59,17 @@ export default function AdminWorkshopInstanceDetailPage({
   const loadInstanceDetails = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(`/api/admin/workshops/instances/${id}`)
+      const result = await apiFetch<{ instance: WorkshopInstanceWithDetails; registrations: Registration[] }>(
+        `/api/admin/workshops/instances/${id}`,
+      )
 
-      if (response.ok) {
-        const data = await response.json()
-        setInstance(data.data.instance)
-        setRegistrations(data.data.registrations)
+      if (result.success && result.data) {
+        setInstance(result.data.instance)
+        setRegistrations(result.data.registrations)
       } else {
-        setError('Termin nicht gefunden')
+        if (result.error) logger.warn('Error loading instance details', { error: result.error })
+        setError(result.error || 'Termin nicht gefunden')
       }
-    } catch (err) {
-      logger.error('Error loading instance details', { error: err })
-      setError('Netzwerkfehler')
     } finally {
       setLoading(false)
     }
@@ -82,20 +82,15 @@ export default function AdminWorkshopInstanceDetailPage({
   }, [status, loadInstanceDetails])
 
   const updateRegistrationStatus = async (registrationId: string, newStatus: string) => {
-    try {
-      const response = await fetch(`/api/admin/workshops/registrations/${registrationId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
-      })
+    const result = await apiFetch<unknown>(`/api/admin/workshops/registrations/${registrationId}`, {
+      method: 'PUT',
+      body: { status: newStatus },
+    })
 
-      if (response.ok) {
-        loadInstanceDetails()
-      } else {
-        setError('Fehler beim Aktualisieren')
-      }
-    } catch {
-      setError('Netzwerkfehler')
+    if (result.success) {
+      loadInstanceDetails()
+    } else {
+      setError(result.error || 'Fehler beim Aktualisieren')
     }
   }
 
