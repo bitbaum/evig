@@ -190,7 +190,9 @@ export function CommandBar() {
     if (!open || index) return
     fetch('/api/admin/search-index')
       .then(r => r.json())
-      .then((data: SearchIndex) => setIndex(data))
+      .then((envelope: { success: boolean; data?: SearchIndex }) => {
+        if (envelope.success && envelope.data) setIndex(envelope.data)
+      })
       .catch(() => {/* silently ignore */})
   }, [open, index])
 
