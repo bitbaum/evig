@@ -168,7 +168,8 @@ export function useErfassungForm() {
     setShowAIRefine(true)
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent, action: 'draft' | 'erfassen' | 'publish' = 'draft') => {
+  // SyntheticEvent — accepts both <form onSubmit> (FormEvent) and inline button clicks (MouseEvent)
+  const handleSubmit = async (e: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish' = 'draft') => {
     e.preventDefault()
     setIsLoading(true)
     setSaveError('')

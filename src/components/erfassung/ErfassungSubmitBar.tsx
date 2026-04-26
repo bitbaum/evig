@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button'
 interface Props {
   isEditMode: boolean
   isLoading: boolean
-  onSubmit: (e: React.FormEvent, action: 'draft' | 'erfassen' | 'publish') => void
+  // SyntheticEvent — both <form onSubmit> and inline buttons need to invoke this
+  onSubmit: (e: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void
 }
 
 export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
@@ -38,7 +39,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
             <>
               <Button
                 type="button"
-                onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'draft')}
+                onClick={(e) => onSubmit(e, 'draft')}
                 disabled={isLoading}
                 className="gap-2 px-5 py-3 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400"
               >
@@ -51,7 +52,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
 
               <Button
                 type="button"
-                onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'erfassen')}
+                onClick={(e) => onSubmit(e, 'erfassen')}
                 disabled={isLoading}
                 variant="primary" className="gap-2 px-5 py-3 disabled:bg-blue-400"
               >
@@ -64,7 +65,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
 
               <Button
                 type="button"
-                onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'publish')}
+                onClick={(e) => onSubmit(e, 'publish')}
                 disabled={isLoading}
                 className="gap-2 px-5 py-3"
               >
@@ -105,7 +106,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
           <div className="flex gap-2">
             <Button
               type="button"
-              onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'draft')}
+              onClick={(e) => onSubmit(e, 'draft')}
               disabled={isLoading}
               className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400"
             >
@@ -118,7 +119,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
 
             <Button
               type="button"
-              onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'erfassen')}
+              onClick={(e) => onSubmit(e, 'erfassen')}
               disabled={isLoading}
               variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-blue-400"
             >
@@ -134,7 +135,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
 
             <Button
               type="button"
-              onClick={(e) => onSubmit(e as unknown as React.FormEvent, 'publish')}
+              onClick={(e) => onSubmit(e, 'publish')}
               disabled={isLoading}
               className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
             >
