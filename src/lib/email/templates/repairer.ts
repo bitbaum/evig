@@ -6,6 +6,10 @@
 
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
+
+// Applicant `name`, `rejectionReason`, and `requestedChanges` are
+// user/admin-entered free text — escape before HTML interpolation.
 
 export const repairerApplicationSubmitted = (name: string, applicationId: string): EmailContent => ({
   subject: 'Techniker-Bewerbung erhalten - RevampIT',
@@ -24,9 +28,9 @@ export const repairerApplicationSubmitted = (name: string, applicationId: string
           <h1>Techniker-Bewerbung erhalten</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Vielen Dank für deine Bewerbung als Techniker bei RevampIT! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.</p>
-          <p><strong>Bewerbungs-ID:</strong> ${applicationId}</p>
+          <p><strong>Bewerbungs-ID:</strong> ${escapeHtml(applicationId)}</p>
           <p>Der Prüfungsprozess umfasst:</p>
           <ul>
             <li>Verifizierung deiner Dokumente</li>
@@ -80,7 +84,7 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
           <h1>🎉 Herzlichen Glückwunsch!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Wir freuen uns, dir mitteilen zu können, dass deine Bewerbung als Techniker bei RevampIT <strong>genehmigt</strong> wurde!</p>
           <p>Du hast jetzt Zugriff auf:</p>
           <ul>
@@ -141,12 +145,12 @@ export const repairerApplicationRejected = (
           <h1>Techniker-Bewerbung</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei RevampIT müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.</p>
           <p><strong>Grund:</strong></p>
-          <p>${rejectionReason}</p>
+          <p>${escapeHtml(rejectionReason)}</p>
           <p>Du kannst dich jederzeit erneut bewerben, nachdem du die genannten Punkte behoben hast. Bei Fragen stehen wir dir gerne zur Verfügung.</p>
-          <p>Kontaktiere uns unter: <a href="mailto:${supportEmail}">${supportEmail}</a></p>
+          <p>Kontaktiere uns unter: <a href="mailto:${escapeHtml(supportEmail)}">${escapeHtml(supportEmail)}</a></p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -192,11 +196,11 @@ export const repairerApplicationChangesRequested = (
           <h1>Änderungen erforderlich</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Wir haben deine Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
           <p><strong>Erforderliche Änderungen:</strong></p>
           <div class="highlight-box">
-            ${requestedChanges.replace(/\n/g, '<br>')}
+            ${escapeHtml(requestedChanges).replace(/\n/g, '<br>')}
           </div>
           <p>Bitte nimm diese Änderungen in deinem Bewerbungsformular vor und reiche deine Bewerbung erneut ein.</p>
           <a href="${dashboardUrl}" class="button button-orange">Bewerbung bearbeiten</a>

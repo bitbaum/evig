@@ -1,12 +1,16 @@
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 export const sellerApplicationSubmitted = (
   name: string,
   applicationId: string
-): EmailContent => ({
-  subject: 'Verkäufer-Bewerbung eingereicht - RevampIT',
-  html: `
+): EmailContent => {
+  const eName = escapeHtml(name);
+  const eId = escapeHtml(applicationId);
+  return {
+    subject: 'Verkäufer-Bewerbung eingereicht - RevampIT',
+    html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
@@ -21,9 +25,9 @@ export const sellerApplicationSubmitted = (
           <h1>Verkäufer-Bewerbung eingereicht</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${eName},</h2>
           <p>Vielen Dank für deine Bewerbung als Verkäufer auf dem RevampIT Marktplatz! Wir haben deine Unterlagen erhalten.</p>
-          <p><strong>Bewerbungs-ID:</strong> ${applicationId}</p>
+          <p><strong>Bewerbungs-ID:</strong> ${eId}</p>
           <p>Der Prüfungsprozess umfasst:</p>
           <ul>
             <li>Verifizierung deiner Angaben</li>
@@ -41,7 +45,7 @@ export const sellerApplicationSubmitted = (
     </body>
     </html>
   `,
-  text: `
+    text: `
 Hallo ${name},
 
 Vielen Dank für deine Bewerbung als Verkäufer auf dem RevampIT Marktplatz! Wir haben deine Unterlagen erhalten.
@@ -56,4 +60,5 @@ Der Prüfungsprozess umfasst:
 Du erhältst eine Benachrichtigung, sobald wir unsere Prüfung abgeschlossen haben.
 ${createTextFooter()}
   `.trim(),
-});
+  };
+};

@@ -1,13 +1,21 @@
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
+
+// `name`, `articleTitle`, `reason`, `notes` are all user/admin-entered
+// strings interpolated into HTML below — escape before reaching the body.
 
 export const blogSubmissionReceived = (
   name: string,
   articleTitle: string,
   submissionId: string
-): EmailContent => ({
-  subject: 'Blog-Beitrag eingereicht - RevampIT',
-  html: `
+): EmailContent => {
+  const eName = escapeHtml(name);
+  const eTitle = escapeHtml(articleTitle);
+  const eId = escapeHtml(submissionId);
+  return {
+    subject: 'Blog-Beitrag eingereicht - RevampIT',
+    html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
@@ -22,10 +30,10 @@ export const blogSubmissionReceived = (
           <h1>Blog-Beitrag eingereicht</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${eName},</h2>
           <p>Vielen Dank für deinen Blog-Beitrag bei RevampIT! Wir haben deine Einreichung erhalten.</p>
-          <p><strong>Titel:</strong> ${articleTitle}</p>
-          <p><strong>Einreichungs-ID:</strong> ${submissionId}</p>
+          <p><strong>Titel:</strong> ${eTitle}</p>
+          <p><strong>Einreichungs-ID:</strong> ${eId}</p>
           <p>Unser Redaktionsteam wird deinen Beitrag prüfen. Der Prozess umfasst:</p>
           <ul>
             <li>Inhaltliche Überprüfung</li>
@@ -42,7 +50,7 @@ export const blogSubmissionReceived = (
     </body>
     </html>
   `,
-  text: `
+    text: `
 Hallo ${name},
 
 Vielen Dank für deinen Blog-Beitrag bei RevampIT! Wir haben deine Einreichung erhalten.
@@ -58,14 +66,18 @@ Unser Redaktionsteam wird deinen Beitrag prüfen. Der Prozess umfasst:
 Du erhältst eine Benachrichtigung über den Status deiner Einreichung.
 ${createTextFooter()}
   `.trim(),
-});
+  };
+};
 
 export const blogSubmissionApproved = (
   name: string,
   articleTitle: string
-): EmailContent => ({
-  subject: 'Blog-Beitrag genehmigt - RevampIT',
-  html: `
+): EmailContent => {
+  const eName = escapeHtml(name);
+  const eTitle = escapeHtml(articleTitle);
+  return {
+    subject: 'Blog-Beitrag genehmigt - RevampIT',
+    html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
@@ -80,9 +92,9 @@ export const blogSubmissionApproved = (
           <h1>Blog-Beitrag genehmigt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${eName},</h2>
           <p>Gute Nachrichten! Dein Blog-Beitrag wurde genehmigt.</p>
-          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <p><strong>Titel:</strong> ${eTitle}</p>
           <p>Unser Redaktionsteam wird deinen Beitrag nun für die Veröffentlichung vorbereiten. Du erhältst eine weitere Benachrichtigung, sobald er live ist.</p>
         </div>
         <div class="footer">
@@ -93,7 +105,7 @@ export const blogSubmissionApproved = (
     </body>
     </html>
   `,
-  text: `
+    text: `
 Hallo ${name},
 
 Gute Nachrichten! Dein Blog-Beitrag wurde genehmigt.
@@ -103,15 +115,20 @@ Titel: ${articleTitle}
 Unser Redaktionsteam wird deinen Beitrag nun für die Veröffentlichung vorbereiten.
 ${createTextFooter()}
   `.trim(),
-});
+  };
+};
 
 export const blogSubmissionRejected = (
   name: string,
   articleTitle: string,
   reason: string
-): EmailContent => ({
-  subject: 'Blog-Beitrag abgelehnt - RevampIT',
-  html: `
+): EmailContent => {
+  const eName = escapeHtml(name);
+  const eTitle = escapeHtml(articleTitle);
+  const eReason = escapeHtml(reason);
+  return {
+    subject: 'Blog-Beitrag abgelehnt - RevampIT',
+    html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
@@ -126,10 +143,10 @@ export const blogSubmissionRejected = (
           <h1>Blog-Beitrag abgelehnt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${eName},</h2>
           <p>Leider können wir deinen Blog-Beitrag nicht veröffentlichen.</p>
-          <p><strong>Titel:</strong> ${articleTitle}</p>
-          <p><strong>Grund:</strong> ${reason}</p>
+          <p><strong>Titel:</strong> ${eTitle}</p>
+          <p><strong>Grund:</strong> ${eReason}</p>
           <p>Wir schätzen deinen Beitrag zur Community und ermutigen dich, weitere Themen einzureichen.</p>
         </div>
         <div class="footer">
@@ -140,7 +157,7 @@ export const blogSubmissionRejected = (
     </body>
     </html>
   `,
-  text: `
+    text: `
 Hallo ${name},
 
 Leider können wir deinen Blog-Beitrag nicht veröffentlichen.
@@ -151,15 +168,19 @@ Grund: ${reason}
 Wir schätzen deinen Beitrag zur Community und ermutigen dich, weitere Themen einzureichen.
 ${createTextFooter()}
   `.trim(),
-});
+  };
+};
 
 export const blogSubmissionPublished = (
   name: string,
   articleTitle: string,
   articleUrl: string
-): EmailContent => ({
-  subject: 'Ihr Blog-Beitrag ist live! - RevampIT',
-  html: `
+): EmailContent => {
+  const eName = escapeHtml(name);
+  const eTitle = escapeHtml(articleTitle);
+  return {
+    subject: 'Ihr Blog-Beitrag ist live! - RevampIT',
+    html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
@@ -174,9 +195,9 @@ export const blogSubmissionPublished = (
           <h1>Dein Beitrag ist live!</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${eName},</h2>
           <p>Herzlichen Glückwunsch! Dein Blog-Beitrag wurde veröffentlicht.</p>
-          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <p><strong>Titel:</strong> ${eTitle}</p>
           <a href="${articleUrl}" class="button button-green">Beitrag ansehen</a>
           <p>Vielen Dank für deinen wertvollen Beitrag zur RevampIT Community!</p>
         </div>
@@ -188,7 +209,7 @@ export const blogSubmissionPublished = (
     </body>
     </html>
   `,
-  text: `
+    text: `
 Hallo ${name},
 
 Herzlichen Glückwunsch! Dein Blog-Beitrag wurde veröffentlicht.
@@ -199,15 +220,20 @@ Link: ${articleUrl}
 Vielen Dank für deinen wertvollen Beitrag zur RevampIT Community!
 ${createTextFooter()}
   `.trim(),
-});
+  };
+};
 
 export const blogSubmissionChangesRequested = (
   name: string,
   articleTitle: string,
   notes: string
-): EmailContent => ({
-  subject: 'Änderungen für Blog-Beitrag angefragt - RevampIT',
-  html: `
+): EmailContent => {
+  const eName = escapeHtml(name);
+  const eTitle = escapeHtml(articleTitle);
+  const eNotesHtml = escapeHtml(notes).replace(/\n/g, '<br>');
+  return {
+    subject: 'Änderungen für Blog-Beitrag angefragt - RevampIT',
+    html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
@@ -222,12 +248,12 @@ export const blogSubmissionChangesRequested = (
           <h1>Änderungen angefragt</h1>
         </div>
         <div class="content">
-          <h2>Hallo ${name},</h2>
+          <h2>Hallo ${eName},</h2>
           <p>Unser Redaktionsteam hat deinen Blog-Beitrag überprüft und einige Änderungsvorschläge.</p>
-          <p><strong>Titel:</strong> ${articleTitle}</p>
+          <p><strong>Titel:</strong> ${eTitle}</p>
           <p><strong>Anmerkungen:</strong></p>
           <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            ${notes.replace(/\n/g, '<br>')}
+            ${eNotesHtml}
           </div>
           <p>Bitte überarbeite deinen Beitrag entsprechend und reiche ihn erneut ein.</p>
         </div>
@@ -239,7 +265,7 @@ export const blogSubmissionChangesRequested = (
     </body>
     </html>
   `,
-  text: `
+    text: `
 Hallo ${name},
 
 Unser Redaktionsteam hat deinen Blog-Beitrag überprüft und einige Änderungsvorschläge.
@@ -252,4 +278,5 @@ ${notes}
 Bitte überarbeite deinen Beitrag entsprechend und reiche ihn erneut ein.
 ${createTextFooter()}
   `.trim(),
-});
+  };
+};
