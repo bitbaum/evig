@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import {
   Search,
@@ -187,20 +188,18 @@ export default function TechnikerListClient() {
       params.set('limit', String(limit))
       params.set('offset', String(offset))
 
-      const response = await fetch(`/api/technicians?${params}`)
-      if (!response.ok) throw new Error(t('list.loadingError'))
+      const result = await apiFetch<{ technicians: Technician[]; pagination: Pagination }>(
+        `/api/technicians?${params}`,
+      )
 
-      const data = await response.json()
-      if (data.success) {
-        setTechnicians(data.data.technicians)
-        setPagination(data.data.pagination)
+      if (result.success && result.data) {
+        setTechnicians(result.data.technicians)
+        setPagination(result.data.pagination)
       } else {
-        setError(data.error || t('list.loadingError'))
+        logger.warn('Error fetching technicians', { error: result.error })
+        setError(result.error || t('list.loadingError'))
+        setTechnicians([])
       }
-    } catch (err) {
-      logger.error('Error fetching technicians', { error: err })
-      setError(t('list.loadingError'))
-      setTechnicians([])
     } finally {
       setLoading(false)
     }

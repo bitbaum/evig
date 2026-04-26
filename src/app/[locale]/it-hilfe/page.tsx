@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { useTranslations } from 'next-intl'
 import {
@@ -69,24 +70,18 @@ export default function ITHilfePage() {
       params.set('limit', String(limit))
       params.set('offset', String(offset))
 
-      const response = await fetch(`/api/it-hilfe/requests?${params}`)
+      const result = await apiFetch<{ requests: ITHilfeRequest[]; total: number }>(
+        `/api/it-hilfe/requests?${params}`,
+      )
 
-      if (!response.ok) {
-        throw new Error(t('retryButton'))
-      }
-
-      const data = await response.json()
-
-      if (data.success) {
-        setRequests(data.data.requests)
-        setTotal(data.data.total)
+      if (result.success && result.data) {
+        setRequests(result.data.requests)
+        setTotal(result.data.total)
       } else {
-        setError(data.error ?? t('retryButton'))
+        logger.warn('Error fetching IT-Hilfe requests', { error: result.error })
+        setError(result.error ?? t('retryButton'))
+        setRequests([])
       }
-    } catch (error) {
-      logger.error('Error fetching IT-Hilfe requests', { error })
-      setError(t('retryButton'))
-      setRequests([])
     } finally {
       setLoading(false)
     }

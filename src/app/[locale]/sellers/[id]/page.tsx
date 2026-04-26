@@ -15,6 +15,7 @@ import {
   ShoppingBag,
 } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatCHF } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
@@ -63,11 +64,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     const fetchSeller = async () => {
       try {
         const { id } = await params
-        const response = await fetch(`/api/sellers/${id}`)
-        const data = await response.json()
+        const result = await apiFetch<{
+          profile: Omit<SellerProfile, 'member_since' | 'listings' | 'review_stats'> & { created_at: string }
+          listings: SellerProfile['listings']
+          review_stats: { average_rating: number | null; total_reviews: number }
+        }>(`/api/sellers/${id}`)
 
-        if (data.success && data.data) {
-          const { profile, listings, review_stats } = data.data
+        if (result.success && result.data) {
+          const { profile, listings, review_stats } = result.data
           setSeller({
             ...profile,
             member_since: profile.created_at,
@@ -78,7 +82,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             },
           })
         } else {
-          setError(data.error || t('seller.sellerNotFound'))
+          setError(result.error || t('seller.sellerNotFound'))
         }
       } catch (err) {
         logger.warn('Failed to load seller profile', { error: err })

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -52,18 +53,17 @@ export default function MyRequestsPage() {
       const params = new URLSearchParams()
       if (statusFilter) params.set('status', statusFilter)
 
-      const response = await fetch(`/api/it-hilfe/my-requests?${params}`)
-      const data = await response.json()
+      const result = await apiFetch<{ requests: ITHilfeRequest[]; total: number }>(
+        `/api/it-hilfe/my-requests?${params}`,
+      )
 
-      if (data.success) {
-        setRequests(data.data.requests)
-        setTotal(data.data.total)
+      if (result.success && result.data) {
+        setRequests(result.data.requests)
+        setTotal(result.data.total)
       } else {
+        logger.warn('Error fetching my IT-Hilfe requests', { error: result.error })
         setFetchError(true)
       }
-    } catch (error) {
-      logger.error('Error fetching my requests', { error })
-      setFetchError(true)
     } finally {
       setLoading(false)
     }
