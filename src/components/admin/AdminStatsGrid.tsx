@@ -6,10 +6,6 @@ export interface StatCardItem {
   icon: LucideIcon
   /** Semantic color key from adminIconColor */
   color?: AdminIconColorKey
-  /** @deprecated use color instead */
-  iconBgColor?: string
-  /** @deprecated use color instead */
-  iconColor?: string
   label: string
   value: number | string
   /** Optional override for the value text color */
@@ -42,10 +38,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
     <div className={`grid ${GRID_COLS[columns]} gap-4`}>
       {items.map((item, index) => {
         const Icon = item.icon
-        // Resolve color: new API (color key) takes priority over deprecated raw strings
-        const colorClasses = item.color
-          ? adminIconColor[item.color]
-          : `${item.iconBgColor ?? 'bg-gray-100'} ${item.iconColor ?? 'text-gray-600'}`
+        const colorClasses = adminIconColor[item.color ?? 'gray']
         const valueColor = item.valueColor ?? ''
 
         return (

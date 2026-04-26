@@ -244,31 +244,28 @@ export default async function TasksAdminPage({
       <AdminStatsGrid items={[
         {
           icon: ClipboardList,
-          iconBgColor: 'bg-gray-100',
-          iconColor: 'text-gray-600',
+          color: 'gray',
           label: 'Gesamt',
           value: stats.total,
         },
         {
           icon: AlertTriangle,
-          iconBgColor: 'bg-red-100',
-          iconColor: 'text-red-600',
+          color: 'red',
           label: 'Braucht Aufmerksamkeit',
           value: stats.needsAttention,
           valueColor: 'text-red-600',
         },
         {
           icon: Clock,
-          iconBgColor: 'bg-yellow-100',
-          iconColor: 'text-yellow-600',
+          // amber is the SSOT "pending/warning" tone (no yellow token in adminIconColor)
+          color: 'amber',
           label: 'Angefragt',
           value: stats.requested,
-          valueColor: 'text-yellow-600',
+          valueColor: 'text-amber-600',
         },
         {
           icon: CheckCircle2,
-          iconBgColor: 'bg-green-100',
-          iconColor: 'text-green-600',
+          color: 'green',
           label: 'Heute erledigt',
           value: stats.completedToday,
           valueColor: 'text-green-600',

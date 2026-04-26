@@ -82,9 +82,9 @@ export default async function MembershipPage() {
   const unpaidCount = members.length - paidCount
 
   const stats: StatCardItem[] = [
-    { icon: Users, iconBgColor: 'bg-green-100', iconColor: 'text-green-600', label: 'Mitglieder', value: members.length },
-    { icon: CheckCircle, iconBgColor: 'bg-blue-100', iconColor: 'text-blue-600', label: 'Bezahlt', value: paidCount },
-    { icon: AlertCircle, iconBgColor: 'bg-orange-100', iconColor: 'text-orange-600', label: 'Offen', value: unpaidCount, valueColor: unpaidCount > 0 ? 'text-orange-600' : undefined },
+    { icon: Users, color: 'green', label: 'Mitglieder', value: members.length },
+    { icon: CheckCircle, color: 'blue', label: 'Bezahlt', value: paidCount },
+    { icon: AlertCircle, color: 'orange', label: 'Offen', value: unpaidCount, valueColor: unpaidCount > 0 ? 'text-orange-600' : undefined },
   ]
 
   return (

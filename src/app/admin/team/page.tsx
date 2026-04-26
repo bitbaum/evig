@@ -139,29 +139,25 @@ export default async function TeamPage() {
       <AdminStatsGrid items={[
         {
           icon: Briefcase,
-          iconBgColor: 'bg-blue-100',
-          iconColor: 'text-blue-600',
+          color: 'blue',
           label: 'Staff Gesamt',
           value: stats.totalStaff,
         },
         {
           icon: Crown,
-          iconBgColor: 'bg-purple-100',
-          iconColor: 'text-purple-600',
+          color: 'purple',
           label: 'Profile',
           value: stats.totalProfiles,
         },
         {
           icon: Shield,
-          iconBgColor: 'bg-green-100',
-          iconColor: 'text-green-600',
+          color: 'green',
           label: 'Mit Abteilung',
           value: Object.values(stats.byDepartment).reduce((a, b) => a + b, 0) || 0,
         },
         {
           icon: UserPlus,
-          iconBgColor: 'bg-orange-100',
-          iconColor: 'text-orange-600',
+          color: 'orange',
           label: 'Ohne Profil',
           value: staffWithoutProfiles.length,
         },
