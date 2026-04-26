@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 import { apiFetch } from '@/lib/api/client'
+import { logger } from '@/lib/logger'
 import type { ListingDetail } from './types'
 
 interface UseListingActionsProps {
@@ -91,7 +92,8 @@ export function useListingActions({
       } else {
         setActionError(result.error || t('errorFavorite'))
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to toggle listing favorite', { error: err })
       setActionError(t('errorNetworkFavorite'))
     } finally {
       setTogglingFav(false)
@@ -117,7 +119,8 @@ export function useListingActions({
       } else {
         setActionError(result.error || t('errorMessage'))
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to send listing message', { error: err })
       setActionError(t('errorNetworkMessage'))
     } finally {
       setSendingMessage(false)
@@ -156,7 +159,8 @@ export function useListingActions({
       } else {
         setActionError(result.error || t('errorReport'))
       }
-    } catch {
+    } catch (err) {
+      logger.warn('Failed to submit listing report', { error: err })
       setActionError(t('errorNetworkReport'))
     } finally {
       setReportSending(false)
