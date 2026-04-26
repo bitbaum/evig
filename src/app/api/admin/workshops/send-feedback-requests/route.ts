@@ -47,15 +47,14 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       ))
       .orderBy(sql`${workshopInstances.startDate} DESC`)
 
-    let sentCount = 0
-    let failedCount = 0
-
-    for (const registration of completed) {
-      try {
+    // Send all requests in parallel — one batch can carry hundreds of
+    // recipients, and sequential awaits would block the admin's response
+    // by ~200 ms × N. Promise.allSettled keeps per-recipient error tracking.
+    const results = await Promise.allSettled(
+      completed.map(registration => {
         const workshopDate = formatDateWithWeekday(registration.start_date)
         const feedbackUrl = `${APP_URL}/workshops/${registration.workshop_slug}#feedback`
-
-        await sendEmail(
+        return sendEmail(
           registration.user_email!,
           'workshopFeedbackRequest',
           registration.user_name || 'Benutzer',
@@ -63,18 +62,26 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
           workshopDate,
           feedbackUrl
         )
+      })
+    )
 
+    let sentCount = 0
+    let failedCount = 0
+    for (let i = 0; i < results.length; i++) {
+      const settled = results[i]
+      const registration = completed[i]
+      if (settled.status === 'fulfilled') {
         sentCount++
         logger.info('Workshop feedback request sent', {
           registrationId: registration.registration_id,
           userId: registration.user_id,
-          workshopTitle: registration.workshop_title
+          workshopTitle: registration.workshop_title,
         })
-      } catch (emailError) {
+      } else {
         failedCount++
         logger.error('Failed to send workshop feedback request', {
           registrationId: registration.registration_id,
-          error: emailError
+          error: settled.reason,
         })
       }
     }
