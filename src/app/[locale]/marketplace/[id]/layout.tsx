@@ -6,6 +6,7 @@ import { LISTING_STATUS } from '@/config/marketplace'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { logger } from '@/lib/logger'
 
 interface ListingMeta {
   title: string
@@ -38,7 +39,8 @@ async function getListingMeta(id: string) {
       [id]
     )
     return result.rows[0] ?? null
-  } catch {
+  } catch (err) {
+    logger.warn('Failed to load listing meta', { error: err, id })
     return null
   }
 }

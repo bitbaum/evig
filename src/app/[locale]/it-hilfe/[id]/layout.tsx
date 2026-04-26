@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { ORG } from '@/config/org'
+import { logger } from '@/lib/logger'
 
 async function getRequestMeta(id: string) {
   try {
@@ -11,7 +12,8 @@ async function getRequestMeta(id: string) {
       [id]
     )
     return result.rows[0] ?? null
-  } catch {
+  } catch (err) {
+    logger.warn('Failed to load IT-Hilfe request meta', { error: err, id })
     return null
   }
 }
