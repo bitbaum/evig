@@ -11,6 +11,7 @@ import { sendCustomEmail } from '@/lib/email'
 import { CONTACT, ORG } from '@/config/org'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { z } from 'zod'
+import { escapeHtml } from '@/lib/utils/escape-html'
 
 const SuggestionSchema = z.object({
   suggestion: z.string().min(1).max(5000),
@@ -46,12 +47,19 @@ export async function POST(request: NextRequest) {
       ip: clientIp,
     })
 
+    // Public form — every interpolated user field gets HTML-escaped
+    // before reaching the html: body. text: bodies stay verbatim.
+    const truncated = data.suggestion.slice(0, 500) + (data.suggestion.length > 500 ? '...' : '')
+    const eContact = escapeHtml(data.contact || 'Anonym')
+    const ePage = escapeHtml(data.page || '-')
+    const eTimestamp = escapeHtml(data.timestamp || new Date().toISOString())
+
     // Send confirmation to submitter if they provided an email (fire-and-forget)
     if (data.contact && data.contact.includes('@')) {
       sendCustomEmail(data.contact, {
         subject: `Deine Nachricht wurde empfangen — ${ORG.name}`,
-        html: `<p>Hallo,</p><p>vielen Dank für deine Nachricht an ${ORG.name}. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.</p><p>Deine Nachricht:<br><em>${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}</em></p><p>Mit freundlichen Grüssen,<br>Das ${ORG.name} Team</p>`,
-        text: `Hallo,\n\nvielen Dank für deine Nachricht an ${ORG.name}. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.\n\nDeine Nachricht:\n${data.suggestion.slice(0, 500)}${data.suggestion.length > 500 ? '...' : ''}\n\nMit freundlichen Grüssen,\nDas ${ORG.name} Team`,
+        html: `<p>Hallo,</p><p>vielen Dank für deine Nachricht an ${ORG.name}. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.</p><p>Deine Nachricht:<br><em>${escapeHtml(truncated)}</em></p><p>Mit freundlichen Grüssen,<br>Das ${ORG.name} Team</p>`,
+        text: `Hallo,\n\nvielen Dank für deine Nachricht an ${ORG.name}. Wir haben sie erhalten und melden uns so bald wie möglich bei dir.\n\nDeine Nachricht:\n${truncated}\n\nMit freundlichen Grüssen,\nDas ${ORG.name} Team`,
       }).catch(err => logger.warn('Failed to send suggestion confirmation email', { error: err }))
     }
 
@@ -61,12 +69,12 @@ export async function POST(request: NextRequest) {
       html: `
         <div style="font-family: sans-serif; max-width: 600px;">
           <h2>Neue Nachricht</h2>
-          <p><strong>Von:</strong> ${data.contact || 'Anonym'}</p>
-          <p><strong>Seite:</strong> ${data.page || '-'}</p>
-          <p><strong>Zeitpunkt:</strong> ${data.timestamp || new Date().toISOString()}</p>
+          <p><strong>Von:</strong> ${eContact}</p>
+          <p><strong>Seite:</strong> ${ePage}</p>
+          <p><strong>Zeitpunkt:</strong> ${eTimestamp}</p>
           <hr />
           <div style="white-space: pre-wrap; padding: 16px; background: #f9f9f9; border-radius: 8px;">
-${data.suggestion}
+${escapeHtml(data.suggestion)}
           </div>
         </div>
       `,

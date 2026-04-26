@@ -10,6 +10,7 @@ import { eq, and } from 'drizzle-orm'
 import { sendCustomEmail } from '@/lib/email'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
 import { MEMBERSHIP_APPLICATION_STATUS } from '@/config/membership-status'
+import { escapeHtml } from '@/lib/utils/escape-html'
 
 const MembershipSchema = z.object({
   applicantName: z.string().min(2, 'Name erforderlich').max(200),
@@ -112,11 +113,13 @@ export async function POST(request: NextRequest) {
       memberType: result.data.memberType,
     })
 
-    // Send welcome email with payment instructions (fire-and-forget)
+    // Send welcome email with payment instructions (fire-and-forget).
+    // applicantName is user-supplied; escape before HTML interpolation.
     const fee = result.data.memberType === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
+    const eName = escapeHtml(result.data.applicantName)
     sendCustomEmail(result.data.applicantEmail, {
       subject: `Willkommen im ${ORG.legalName}!`,
-      html: `<p>Hallo ${result.data.applicantName},</p><p>du bist jetzt Mitglied von ${ORG.name}! Bitte überweise den Jahresbeitrag von CHF ${fee} an:</p><p><strong>IBAN:</strong> ${BANK.iban}<br><strong>Bank:</strong> ${BANK.name}<br><strong>Empfänger:</strong> ${BANK.accountHolder}</p><p>Vielen Dank!</p>`,
+      html: `<p>Hallo ${eName},</p><p>du bist jetzt Mitglied von ${ORG.name}! Bitte überweise den Jahresbeitrag von CHF ${fee} an:</p><p><strong>IBAN:</strong> ${BANK.iban}<br><strong>Bank:</strong> ${BANK.name}<br><strong>Empfänger:</strong> ${BANK.accountHolder}</p><p>Vielen Dank!</p>`,
       text: `Hallo ${result.data.applicantName}, du bist jetzt Mitglied von ${ORG.name}! Jahresbeitrag CHF ${fee} an IBAN ${BANK.iban} (${BANK.name}, ${BANK.accountHolder}).`,
     }).catch(err => logger.error('Failed to send membership welcome email', { err, applicationId: application.id }))
 
