@@ -26,6 +26,7 @@ import Link from 'next/link'
 import { PageHero } from '@/components/layout/PageHero'
 import type { BuildResult } from '@/config/build-computer'
 import { getMockRecommendation } from '@/config/build-computer'
+import { getDefaultValue } from '@/lib/org-numbers.defaults'
 
 const USE_CASE_IDS = ['office', 'creative', 'gaming', 'development', 'server', 'ai'] as const
 const PERFORMANCE_IDS = ['basic', 'moderate', 'high', 'extreme'] as const
@@ -431,15 +432,15 @@ export default function BuildYourComputerPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">95%</div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">{getDefaultValue('reuse_rate')}</div>
                   <div className="text-sm text-gray-600">{t('certification.sustainabilityScore')}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">120kg</div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">{getDefaultValue('co2_savings_per_device')} kg</div>
                   <div className="text-sm text-gray-600">{t('certification.co2Saved')}</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600 mb-2">2000+</div>
+                  <div className="text-3xl font-bold text-green-600 mb-2">{getDefaultValue('devices_processed_per_year')}</div>
                   <div className="text-sm text-gray-600">{t('certification.certifiedComputers')}</div>
                 </div>
               </div>

@@ -5,10 +5,12 @@ import { AboutSubNav, GeschichteSection, ImpactStatsSection } from '@/components
 import { ORG } from '@/config/org'
 import { Target, Recycle, Code, Users, Quote, Leaf } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { getTranslations } from 'next-intl/server'
 
 export default async function HardcodedAboutPage() {
   const t = await getTranslations('about')
+  const yearsActive = new Date().getFullYear() - getDefaultNumeric('founding_year')
 
   return (
     <main className="min-h-screen">
@@ -52,7 +54,7 @@ export default async function HardcodedAboutPage() {
               </div>
               {/* Floating Badge */}
               <div className="absolute -bottom-6 -right-6 bg-green-600 text-white p-4 rounded-xl shadow-lg hidden md:block">
-                <p className="text-3xl font-bold">20+</p>
+                <p className="text-3xl font-bold">{yearsActive}+</p>
                 <p className="text-sm">{t('mission.yearsExperience')}</p>
               </div>
             </div>
