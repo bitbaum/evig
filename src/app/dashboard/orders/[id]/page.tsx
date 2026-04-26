@@ -22,6 +22,7 @@ import {
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
 import type { OrderStatus, DeliveryOption } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
+import { apiFetch } from '@/lib/api/client'
 import { formatDateShort } from '@/lib/date-formats'
 import { OrderStatusTimeline } from '@/components/marketplace/OrderStatusTimeline'
 import { OrderReviewForm } from '@/components/marketplace/OrderReviewForm'
@@ -80,16 +81,13 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     const fetchOrder = async () => {
       try {
         const { id } = await params
-        const response = await fetch(`/api/marketplace/orders/${id}`)
-        const data = await response.json()
+        const result = await apiFetch<OrderDetail>(`/api/marketplace/orders/${id}`)
 
-        if (data.success && data.data) {
-          setOrder(data.data)
+        if (result.success && result.data) {
+          setOrder(result.data)
         } else {
-          setError(data.error || t('errorNotFound'))
+          setError(result.error || t('errorNotFound'))
         }
-      } catch {
-        setError(t('errorLoading'))
       } finally {
         setIsLoading(false)
       }
@@ -103,12 +101,10 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     setError(null)
     try {
       const { id } = await params
-      const response = await fetch(`/api/marketplace/orders/${id}/confirm-receipt`, {
+      const result = await apiFetch<unknown>(`/api/marketplace/orders/${id}/confirm-receipt`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
       })
-      const data = await response.json()
-      if (data.success) {
+      if (result.success) {
         setOrder(prev => prev ? {
           ...prev,
           status: ORDER_STATUS.COMPLETED,
@@ -116,10 +112,8 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           deliveredAt: prev.deliveredAt ?? new Date().toISOString(),
         } : null)
       } else {
-        setError(data.error || t('errorConfirmReceipt'))
+        setError(result.error || t('errorConfirmReceipt'))
       }
-    } catch {
-      setError(t('networkError'))
     } finally {
       setUpdatingStatus(false)
     }
@@ -137,21 +131,16 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
       }
 
       const { id } = await params
-      const response = await fetch(`/api/marketplace/orders/${id}`, {
+      const result = await apiFetch<unknown>(`/api/marketplace/orders/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body,
       })
 
-      const data = await response.json()
-
-      if (data.success) {
+      if (result.success) {
         setOrder(prev => prev ? { ...prev, status: newStatus } : null)
       } else {
-        setError(data.error || t('errorUpdateStatus'))
+        setError(result.error || t('errorUpdateStatus'))
       }
-    } catch {
-      setError(t('networkError'))
     } finally {
       setUpdatingStatus(false)
     }

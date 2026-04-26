@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import {
   ArrowRight,
@@ -70,19 +71,17 @@ export default function MyOffersPage() {
       const params = new URLSearchParams()
       if (statusFilter) params.set('status', statusFilter)
 
-      const response = await fetch(`/api/it-hilfe/my-offers?${params}`)
-      const data = await response.json()
+      const result = await apiFetch<{ offers: OfferWithRequest[]; total: number }>(
+        `/api/it-hilfe/my-offers?${params}`,
+      )
 
-      if (data.success) {
-        setOffers(data.data.offers)
-        setTotal(data.data.total)
+      if (result.success && result.data) {
+        setOffers(result.data.offers)
+        setTotal(result.data.total)
       } else {
-        setError(data.error || t('errorMessage'))
-        logger.error('Error fetching my offers', { error: data.error })
+        setError(result.error || t('errorMessage'))
+        logger.error('Error fetching my offers', { error: result.error })
       }
-    } catch (err) {
-      logger.error('Error fetching my offers', { error: err })
-      setError(t('errorRetry'))
     } finally {
       setLoading(false)
     }
@@ -99,12 +98,12 @@ export default function MyOffersPage() {
 
     setWithdrawingId(offer.id)
     try {
-      const response = await fetch(`/api/it-hilfe/requests/${offer.requestId}/offers/${offer.id}`, {
-        method: 'DELETE',
-      })
-      const data = await response.json()
-      if (!response.ok) {
-        throw new Error(data.error || t('withdrawError'))
+      const result = await apiFetch<unknown>(
+        `/api/it-hilfe/requests/${offer.requestId}/offers/${offer.id}`,
+        { method: 'DELETE' },
+      )
+      if (!result.success) {
+        throw new Error(result.error || t('withdrawError'))
       }
       fetchOffers()
     } catch (err) {

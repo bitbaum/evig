@@ -15,6 +15,7 @@ import {
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
+import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -55,15 +56,14 @@ export default function DashboardOrdersPage() {
       const params = new URLSearchParams({ role })
       if (activeTab) params.set('status', activeTab)
 
-      const response = await fetch(`/api/marketplace/orders?${params}`)
-      const data = await response.json()
+      const result = await apiFetch<{ items: OrderItem[]; pagination: { total: number } }>(
+        `/api/marketplace/orders?${params}`,
+      )
 
-      if (data.success && data.data) {
-        setOrders(data.data.items)
-        setTotal(data.data.pagination.total)
+      if (result.success && result.data) {
+        setOrders(result.data.items)
+        setTotal(result.data.pagination.total)
       }
-    } catch {
-      // Silently fail
     } finally {
       setIsLoading(false)
     }

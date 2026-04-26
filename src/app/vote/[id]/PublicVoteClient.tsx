@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { CheckCircle, Vote } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { apiFetch } from '@/lib/api/client'
 import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions'
 import { ConsentVote } from '@/app/admin/decisions/[id]/voting/ConsentVote'
 import { ApprovalVote } from '@/app/admin/decisions/[id]/voting/ApprovalVote'
@@ -119,22 +120,16 @@ export default function PublicVoteClient({
       case 'ranked_choice':   voteData = { ranking }; break
     }
 
-    try {
-      const res = await fetch(`/api/vote/${decisionId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim(), voteData }),
-      })
-      const json = await res.json()
-      if (!json.success) {
-        setError(json.error || t('submitError'))
-        setSubmitting(false)
-        return
-      }
-      setSuccess(true)
-    } catch {
-      setError(t('networkError'))
+    const result = await apiFetch<unknown>(`/api/vote/${decisionId}`, {
+      method: 'POST',
+      body: { email: email.trim(), voteData },
+    })
+    if (!result.success) {
+      setError(result.error || t('submitError'))
+      setSubmitting(false)
+      return
     }
+    setSuccess(true)
     setSubmitting(false)
   }
 

@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, Package, ArrowRight, Loader2 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatCHF } from '@/config/marketplace'
 import { ORDER_STATUS_CONFIG } from '@/config/marketplace'
@@ -32,17 +33,14 @@ function CheckoutSuccessContent() {
   useEffect(() => {
     if (!orderId) return
 
-    fetch(`/api/marketplace/orders/${orderId}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        if (data.success && data.data) {
-          setOrder(data.data)
+    apiFetch<OrderSummary>(`/api/marketplace/orders/${orderId}`)
+      .then(result => {
+        if (result.success && result.data) {
+          setOrder(result.data)
+        } else if (result.error) {
+          logger.warn('Failed to load order details', { error: result.error, orderId })
         }
       })
-      .catch(err => logger.warn('Failed to load order details', { error: err, orderId }))
       .finally(() => setIsLoading(false))
   }, [orderId])
 

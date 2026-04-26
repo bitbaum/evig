@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { PageHero } from '@/components/layout/PageHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import { Wallet, TrendingUp, Heart, ArrowUpRight, ArrowDownRight } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatCHF } from '@/lib/hirn/format'
 import Heading from '@/components/ui/Heading'
@@ -47,18 +48,14 @@ export default function FinancesContent() {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    fetch('/api/public/financials')
-      .then(res => res.json())
+    apiFetch<YearData[]>('/api/public/financials')
       .then(result => {
         if (result.success && Array.isArray(result.data)) {
           setData(result.data)
         } else {
+          if (result.error) logger.error('Failed to load financials', { error: result.error })
           setError(true)
         }
-      })
-      .catch(err => {
-        logger.error('Failed to load financials', { error: err })
-        setError(true)
       })
       .finally(() => setLoading(false))
   }, [])

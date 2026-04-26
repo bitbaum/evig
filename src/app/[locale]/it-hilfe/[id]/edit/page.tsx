@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import {
   ArrowLeft,
@@ -45,54 +46,66 @@ export default function EditRequestPage() {
   useEffect(() => {
     if (authStatus !== 'authenticated') return
 
-    fetch(`/api/it-hilfe/requests/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        if (!data.success) {
-          setError(data.error || t('errorNotFound'))
-          setLoading(false)
-          return
-        }
-
-        const r = data.data.request
-
-        // Only owner can edit
-        if (!r.isOwner) {
-          setError(t('errorNotOwner'))
-          setLoading(false)
-          return
-        }
-
-        // Only open/in_discussion requests can be edited
-        if (r.status !== REQUEST_STATUS.OPEN && r.status !== REQUEST_STATUS.IN_DISCUSSION) {
-          setError(t('errorNotEditable'))
-          setLoading(false)
-          return
-        }
-
-        setFormData({
-          categoryId: r.categoryId || '',
-          deviceBrand: r.deviceBrand || '',
-          deviceModel: r.deviceModel || '',
-          title: r.title || '',
-          description: r.description || '',
-          urgency: r.urgency || 'normal',
-          maxBudget: r.budgetAmountCents ? String(r.budgetAmountCents / 100) : '',
-          postalCode: r.postalCode || '',
-          city: r.city || '',
-          canton: r.canton || '',
-          serviceType: r.serviceType || 'flexible',
-          skillsNeeded: r.skillsNeeded || [],
-          imageUrls: r.imageUrls || [],
-          aiDiagnosis: r.aiDiagnosis || '',
-        })
+    apiFetch<{
+      request: {
+        isOwner: boolean
+        status: string
+        categoryId?: string
+        deviceBrand?: string
+        deviceModel?: string
+        title?: string
+        description?: string
+        urgency?: string
+        budgetAmountCents?: number
+        postalCode?: string
+        city?: string
+        canton?: string
+        serviceType?: string
+        skillsNeeded?: string[]
+        imageUrls?: string[]
+        aiDiagnosis?: string
+      }
+    }>(`/api/it-hilfe/requests/${id}`).then(result => {
+      if (!result.success || !result.data) {
+        setError(result.error || t('errorNotFound'))
         setLoading(false)
-      })
-      .catch(err => {
-        logger.error('Error fetching request for edit', { error: err })
-        setError(t('errorLoadFailed'))
+        return
+      }
+
+      const r = result.data.request
+
+      // Only owner can edit
+      if (!r.isOwner) {
+        setError(t('errorNotOwner'))
         setLoading(false)
+        return
+      }
+
+      // Only open/in_discussion requests can be edited
+      if (r.status !== REQUEST_STATUS.OPEN && r.status !== REQUEST_STATUS.IN_DISCUSSION) {
+        setError(t('errorNotEditable'))
+        setLoading(false)
+        return
+      }
+
+      setFormData({
+        categoryId: r.categoryId || '',
+        deviceBrand: r.deviceBrand || '',
+        deviceModel: r.deviceModel || '',
+        title: r.title || '',
+        description: r.description || '',
+        urgency: r.urgency || 'normal',
+        maxBudget: r.budgetAmountCents ? String(r.budgetAmountCents / 100) : '',
+        postalCode: r.postalCode || '',
+        city: r.city || '',
+        canton: r.canton || '',
+        serviceType: r.serviceType || 'flexible',
+        skillsNeeded: r.skillsNeeded || [],
+        imageUrls: r.imageUrls || [],
+        aiDiagnosis: r.aiDiagnosis || '',
       })
+      setLoading(false)
+    })
   }, [id, authStatus, t])
 
   // Redirect if not authenticated
@@ -155,15 +168,13 @@ export default function EditRequestPage() {
     setSaving(true)
     try {
       const payload = transformITHilfeFormToPayload(formData)
-      const response = await fetch(`/api/it-hilfe/requests/${id}`, {
+      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: payload,
       })
-      const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || t('errorSaveFailed'))
+      if (!result.success) {
+        throw new Error(result.error || t('errorSaveFailed'))
       }
 
       setSuccess(true)

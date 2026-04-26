@@ -77,19 +77,32 @@ function SellPageContent() {
     setIsLoadingEdit(true)
     setError(null)
 
-    fetch(`/api/listings/${id}`)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then(data => {
-        if (!data.success || !data.data) {
+    apiFetch<{
+      seller_id: string
+      title?: string
+      description?: string
+      price_chf?: number | string | null
+      category?: string
+      condition?: string
+      brand?: string
+      model?: string
+      delivery_options?: string
+      shipping_cost_chf?: number | string | null
+      pickup_location?: string
+      payment_mode?: string
+      images?: Array<{ url: string }>
+      specs?: Array<{ key: string; value: string; unit?: string }>
+      condition_checks?: Array<{ key: string; label: string; checked: boolean }>
+    }>(`/api/listings/${id}`)
+      .then(result => {
+        if (!result.success || !result.data) {
+          if (result.error) logger.warn('Failed to load listing for edit', { error: result.error })
           setError(t('loadListingError'))
           setEditId(null)
           return
         }
 
-        const listing = data.data
+        const listing = result.data
 
         if (session.user.id !== listing.seller_id) {
           setError(t('ownListingError'))
@@ -110,28 +123,15 @@ function SellPageContent() {
           pickupLocation: listing.pickup_location || '',
           paymentMode: listing.payment_mode || 'direct',
           images: Array.isArray(listing.images)
-            ? listing.images.map((img: { url: string }) => img.url)
+            ? listing.images.map(img => img.url)
             : [],
           specs: Array.isArray(listing.specs)
-            ? listing.specs.map((s: { key: string; value: string; unit?: string }) => ({
-                key: s.key,
-                value: s.value || '',
-                unit: s.unit,
-              }))
+            ? listing.specs.map(s => ({ key: s.key, value: s.value || '', unit: s.unit }))
             : [],
           conditionChecks: Array.isArray(listing.condition_checks)
-            ? listing.condition_checks.map((c: { key: string; label: string; checked: boolean }) => ({
-                key: c.key,
-                label: c.label,
-                checked: c.checked,
-              }))
+            ? listing.condition_checks.map(c => ({ key: c.key, label: c.label, checked: c.checked }))
             : [],
         })
-      })
-      .catch((err) => {
-        logger.error('Failed to load listing for edit', { error: err })
-        setError(t('loadError'))
-        setEditId(null)
       })
       .finally(() => {
         setIsLoadingEdit(false)
@@ -218,18 +218,13 @@ function SellPageContent() {
       const url = editId ? `/api/listings/${editId}` : '/api/listings'
       const method = editId ? 'PATCH' : 'POST'
 
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      })
-      const data = await response.json()
+      const result = await apiFetch<{ id: string }>(url, { method, body })
 
-      if (data.success && data.data?.id) {
+      if (result.success && result.data?.id) {
         setSuccess(editId ? t('saveSuccess') : t('createSuccess'))
-        setTimeout(() => router.push(`/marketplace/${data.data.id}`), 1500)
+        setTimeout(() => router.push(`/marketplace/${result.data!.id}`), 1500)
       } else {
-        setError(data.error || (editId ? t('saveError') : t('createError')))
+        setError(result.error || (editId ? t('saveError') : t('createError')))
         setStep('form')
       }
     } catch (err) {
