@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { parseCSV, parseExcel } from '@/lib/erfassung/file-parser'
 import { BULK_LIMITS } from '@/config/erfassung'
+import { FILE_SIZE_LIMITS } from '@/config/limits'
 
 export const POST = withAdmin('products', async (request, session) => {
   try {
@@ -26,6 +27,13 @@ export const POST = withAdmin('products', async (request, session) => {
     const fileName = file.name.toLowerCase()
     if (!allowedTypes.some(ext => fileName.endsWith(ext))) {
       return apiBadRequest('Nur CSV-, TSV-, TXT- und Excel-Dateien (.xlsx, .xls) werden unterstützt')
+    }
+
+    // Cap before reading the file into memory — protects the serverless
+    // function from OOM on a multi-GB upload.
+    if (file.size > FILE_SIZE_LIMITS.CSV_MAX) {
+      const limitMb = Math.round(FILE_SIZE_LIMITS.CSV_MAX / (1024 * 1024))
+      return apiBadRequest(`Datei zu gross (max ${limitMb} MB)`)
     }
 
     const isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls')
