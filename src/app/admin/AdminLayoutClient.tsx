@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, Globe } from 'lucide-react'
-import { Toaster } from 'sonner'
 import { AdminSidebar } from './AdminSidebar'
 import { UserMenuDropdown } from './UserMenuDropdown'
 import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
@@ -125,8 +124,6 @@ export function AdminLayoutClient({
 
       {/* Hirn Floating Button */}
       <HirnFloatingButton hasAccess={!!hasHirnAccess} />
-
-      <Toaster position="bottom-right" richColors closeButton />
     </div>
   )
 }

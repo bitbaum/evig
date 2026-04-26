@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
+import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
@@ -206,14 +207,14 @@ export function useITHilfeDetail(id: string) {
         method: 'DELETE',
       })
       if (!result.success) {
-        alert(result.error || t('errorWithdraw'))
+        toast.error(result.error || t('errorWithdraw'))
         return
       }
       setUserOffer(null)
       fetchRequest()
     } catch (err) {
       const message = err instanceof Error ? err.message : t('unexpectedError')
-      alert(message)
+      toast.error(message)
     } finally {
       setWithdrawing(false)
     }
@@ -232,7 +233,7 @@ export function useITHilfeDetail(id: string) {
       })
 
       if (!result.success) {
-        alert(result.error || t('errorAccept'))
+        toast.error(result.error || t('errorAccept'))
         return
       }
 
@@ -241,7 +242,7 @@ export function useITHilfeDetail(id: string) {
       fetchOffers()
     } catch (err) {
       const message = err instanceof Error ? err.message : t('unexpectedError')
-      alert(message)
+      toast.error(message)
     } finally {
       setAcceptingOfferId(null)
     }
@@ -256,14 +257,14 @@ export function useITHilfeDetail(id: string) {
         method: 'POST',
       })
       if (!result.success) {
-        alert(result.error || t('errorDecline'))
+        toast.error(result.error || t('errorDecline'))
         return
       }
       fetchRequest()
       fetchOffers()
     } catch (err) {
       const message = err instanceof Error ? err.message : t('unexpectedError')
-      alert(message)
+      toast.error(message)
     } finally {
       setDecliningOfferId(null)
     }
@@ -284,11 +285,11 @@ export function useITHilfeDetail(id: string) {
       if (result.success) {
         fetchRequest()
       } else {
-        alert(result.error || t('errorUpdate'))
+        toast.error(result.error || t('errorUpdate'))
       }
     } catch (err) {
       logger.warn('Failed to update IT-Hilfe request status', { error: err, requestId: request.id, status })
-      alert(t('errorUpdate'))
+      toast.error(t('errorUpdate'))
     }
   }
 
@@ -325,13 +326,13 @@ export function useITHilfeDetail(id: string) {
         method: 'POST',
       })
       if (!result.success) {
-        alert(result.error || t('errorComplete'))
+        toast.error(result.error || t('errorComplete'))
         return
       }
       fetchRequest()
     } catch (err) {
       const message = err instanceof Error ? err.message : t('unexpectedError')
-      alert(message)
+      toast.error(message)
       logger.error('Error marking IT-Hilfe completed', { error: err })
     } finally {
       setMarkingCompleted(false)
@@ -354,14 +355,14 @@ export function useITHilfeDetail(id: string) {
         },
       )
       if (!result.success) {
-        alert(result.error || t('errorReview'))
+        toast.error(result.error || t('errorReview'))
         return
       }
       setReviewSubmitted(true)
       fetchRequest()
     } catch (err) {
       const message = err instanceof Error ? err.message : t('unexpectedError')
-      alert(message)
+      toast.error(message)
       logger.error('Error confirming IT-Hilfe review', { error: err })
     } finally {
       setConfirmingReview(false)
