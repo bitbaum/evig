@@ -28,11 +28,14 @@
  */
 
 // ---------------------------------------------------------------------------
-// fetch mock
+// fetch mock — save/restore to prevent global leak into other test files
 // ---------------------------------------------------------------------------
 
+const originalFetch = global.fetch
 const mockFetch = jest.fn()
-global.fetch = mockFetch
+
+beforeAll(() => { global.fetch = mockFetch })
+afterAll(() => { global.fetch = originalFetch })
 
 function mockFetchResponse(data: unknown, ok = true, status = 200) {
   mockFetch.mockResolvedValueOnce({
