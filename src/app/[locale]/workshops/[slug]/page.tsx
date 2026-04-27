@@ -6,7 +6,7 @@ import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger'
 import { formatDateWithWeekday, formatTime } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
-import { getLevelBadgeClass, WORKSHOP_CATEGORIES } from '@/config/workshops'
+import { getLevelBadgeClass, WORKSHOP_CATEGORIES, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import {
   Calendar,
   Clock,
@@ -153,7 +153,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
 
   const instances = await getWorkshopInstances(workshop.id)
   const upcomingInstances = instances.filter(
-    inst => inst.status === 'scheduled' && new Date(inst.start_date) > new Date()
+    inst => inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED && new Date(inst.start_date) > new Date()
   )
   const nextInstance = upcomingInstances[0]
   const categoryName = WORKSHOP_CATEGORIES.find(c => c.id === workshop.category)?.name || workshop.category

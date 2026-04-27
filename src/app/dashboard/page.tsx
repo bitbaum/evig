@@ -13,6 +13,7 @@ import {
 import Heading from '@/components/ui/Heading'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { BOOKING_STATUS } from '@/config/booking-status'
 import { formatDate } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import { cn } from '@/lib/utils'
@@ -72,8 +73,8 @@ async function getActivityCounts(userId: string): Promise<ActivityCounts> {
       pending_quotes: string
     }>(
       `SELECT
-        COUNT(CASE WHEN status NOT IN ('completed', 'cancelled', 'rejected') THEN 1 END) AS active_appointments,
-        COUNT(CASE WHEN status = 'quoted' THEN 1 END) AS pending_quotes
+        COUNT(CASE WHEN status NOT IN ('${BOOKING_STATUS.COMPLETED}', '${BOOKING_STATUS.CANCELLED}', '${BOOKING_STATUS.REJECTED}') THEN 1 END) AS active_appointments,
+        COUNT(CASE WHEN status = '${BOOKING_STATUS.QUOTED}' THEN 1 END) AS pending_quotes
        FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS}
        WHERE user_id = $1`,
       [userId]

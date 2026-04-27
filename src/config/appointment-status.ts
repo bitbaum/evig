@@ -10,6 +10,7 @@ export const APPOINTMENT_STATUS = {
   PENDING_APPROVAL: 'pending_approval',
   REQUESTED: 'requested',
   CONFIRMED: 'confirmed',
+  IN_PROGRESS: 'in_progress',
   CANCELLED: 'cancelled',
   COMPLETED: 'completed',
 } as const
@@ -20,6 +21,7 @@ export const APPOINTMENT_STATUS_LABELS: Record<string, string> = {
   [APPOINTMENT_STATUS.PENDING_APPROVAL]: 'Genehmigung ausstehend',
   [APPOINTMENT_STATUS.REQUESTED]: 'Angefragt',
   [APPOINTMENT_STATUS.CONFIRMED]: 'Bestätigt',
+  [APPOINTMENT_STATUS.IN_PROGRESS]: 'In Bearbeitung',
   [APPOINTMENT_STATUS.CANCELLED]: 'Storniert',
   [APPOINTMENT_STATUS.COMPLETED]: 'Abgeschlossen',
 }

@@ -16,6 +16,7 @@ import {
 import {
   WORKSHOP_CATEGORIES,
   WORKSHOP_LEVELS,
+  WORKSHOP_INSTANCE_STATUS,
   getCategoryIcon,
   getLevelBadgeClass,
 } from '@/config/workshops'
@@ -134,7 +135,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
               const IconComponent = getCategoryIcon(workshop.category)
               const instances = workshop.instances || []
               const upcomingInstances = instances.filter(
-                inst => inst.status === 'scheduled' && new Date(inst.start_date) > new Date()
+                inst => inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED && new Date(inst.start_date) > new Date()
               )
               const nextInstance = upcomingInstances[0]
               const maxParticipants = nextInstance?.max_participants ?? workshop.max_participants

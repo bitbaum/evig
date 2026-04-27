@@ -24,6 +24,7 @@ import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import Heading from '@/components/admin/AdminHeading'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
 
@@ -200,7 +201,7 @@ export default function AdminWorkshopInstanceDetailPage({
                 </div>
                 <div className="text-sm text-gray-600">Teilnehmer</div>
               </div>
-              {getStatusBadge(instance.status === 'scheduled' ? (isPast ? 'completed' : 'scheduled') : instance.status)}
+              {getStatusBadge(instance.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED ? (isPast ? WORKSHOP_INSTANCE_STATUS.COMPLETED : WORKSHOP_INSTANCE_STATUS.SCHEDULED) : instance.status)}
             </div>
           </div>
         </div>

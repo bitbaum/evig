@@ -5,6 +5,7 @@
 import { db } from '@/db'
 import { serviceAppointments, serviceTypes } from '@/db/schema'
 import { eq, and, inArray, desc } from 'drizzle-orm'
+import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 
 // ============================================================================
 // Service appointment queries
@@ -68,7 +69,7 @@ export async function hasPendingAppointmentForService(userId: string, serviceSlu
       and(
         eq(serviceAppointments.userId, userId),
         eq(serviceTypes.slug, serviceSlug),
-        inArray(serviceAppointments.status, ['requested', 'confirmed'])
+        inArray(serviceAppointments.status, [APPOINTMENT_STATUS.REQUESTED, APPOINTMENT_STATUS.CONFIRMED])
       )
     )
     .limit(1)

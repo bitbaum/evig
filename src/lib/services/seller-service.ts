@@ -10,7 +10,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { listings, listingImages, marketplaceOrders, sellerProfiles } from '@/db/schema'
 import { logger } from '@/lib/logger'
-import { LISTING_STATUS } from '@/config/marketplace'
+import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
 
 // ============================================================================
 // Shared select shapes
@@ -168,7 +168,7 @@ async function fetchOrderStats(userId: string) {
     const result = await db.execute(sql`
       SELECT
         COUNT(*) as total_orders,
-        COUNT(*) FILTER (WHERE status IN ('pending_payment', 'paid')) as pending_orders,
+        COUNT(*) FILTER (WHERE status IN (${ORDER_STATUS.PENDING_PAYMENT}, ${ORDER_STATUS.PAID})) as pending_orders,
         COALESCE(SUM(seller_payout_chf), 0) as total_revenue
       FROM ${sql.raw(ordersTable)}
       WHERE seller_id = ${userId}

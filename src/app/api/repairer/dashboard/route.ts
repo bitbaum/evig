@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       .select({
         total_bookings: sql<string>`COUNT(*)`,
         completed_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} = ${APPOINTMENT_STATUS.COMPLETED})`,
-        pending_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} IN (${APPOINTMENT_STATUS.REQUESTED}, 'in_progress'))`,
+        pending_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} IN (${APPOINTMENT_STATUS.REQUESTED}, ${APPOINTMENT_STATUS.IN_PROGRESS}))`,
         confirmed_bookings: sql<string>`COUNT(*) FILTER (WHERE ${serviceAppointments.status} = ${APPOINTMENT_STATUS.CONFIRMED})`,
         total_revenue: sql<string>`COALESCE(SUM(${serviceAppointments.priceChargedCents}), 0)`,
       })
