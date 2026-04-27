@@ -5,6 +5,7 @@ import { GET as techniciansGET } from '@/app/api/technicians/route'
 import { apiError } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function GET(request: NextRequest) {
     target.pathname = '/api/technicians'
     // Forward all inbound params, then force tier
     target.search = inbound.search
-    target.searchParams.set('tier', 'community')
+    target.searchParams.set('tier', REPAIRER_PROFILE_TIER.COMMUNITY)
 
     const proxied = new NextRequest(target, { headers: request.headers })
     const response = await techniciansGET(proxied)

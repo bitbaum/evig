@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { SERVICE_CATEGORIES, IT_SKILLS, getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
@@ -172,8 +173,8 @@ export default function TechnikerListClient() {
 
   const tierTabs = [
     { value: '', label: t('list.tierAll') },
-    { value: 'community', label: t('list.tierCommunity') },
-    { value: 'professional', label: t('list.tierProfessional') },
+    { value: REPAIRER_PROFILE_TIER.COMMUNITY, label: t('list.tierCommunity') },
+    { value: REPAIRER_PROFILE_TIER.PROFESSIONAL, label: t('list.tierProfessional') },
   ]
 
   const fetchTechnicians = useCallback(async () => {
