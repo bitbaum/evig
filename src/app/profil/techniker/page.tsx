@@ -24,6 +24,7 @@ import {
   SERVICE_CATEGORIES,
   IT_SKILLS,
   SERVICE_TYPES,
+  SERVICE_TYPE,
   BUDGET_TIERS,
   SWISS_CANTONS,
   type ITSkill,
@@ -240,7 +241,7 @@ export default function TechnikerProfilPage() {
           </p>
 
           <div className="flex flex-wrap gap-2">
-            {SERVICE_TYPES.filter((t) => t.id !== 'flexible').map((type) => (
+            {SERVICE_TYPES.filter((t) => t.id !== SERVICE_TYPE.FLEXIBLE).map((type) => (
               <button
                 key={type.id}
                 type="button"

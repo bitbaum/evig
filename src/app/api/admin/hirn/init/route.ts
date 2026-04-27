@@ -13,6 +13,7 @@ import { sql } from 'drizzle-orm'
 import { hirnProviderSettings } from '@/db/schema/hirn'
 import { logger } from '@/lib/logger'
 import { OLLAMA_URL } from '@/config/urls'
+import { TABLE_NAMES } from '@/config/database'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
 
 export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
@@ -22,7 +23,7 @@ export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
       CREATE TABLE IF NOT EXISTS hirn_provider_settings (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         scope TEXT NOT NULL DEFAULT 'system',
-        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        user_id UUID REFERENCES ${sql.raw(TABLE_NAMES.USERS)}(id) ON DELETE CASCADE,
         provider TEXT NOT NULL,
         is_enabled BOOLEAN DEFAULT true,
         is_default BOOLEAN DEFAULT false,

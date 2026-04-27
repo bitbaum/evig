@@ -14,6 +14,7 @@ import {
   URGENCY_LEVELS,
   URGENCY_DEFAULT,
   SERVICE_TYPES,
+  SERVICE_TYPE_DEFAULT,
   REQUEST_STATUS,
   deriveBudgetType,
 } from '@/config/it-hilfe'
@@ -184,7 +185,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       postalCode = null,
       city = null,
       canton = null,
-      serviceType = 'flexible',
+      serviceType = SERVICE_TYPE_DEFAULT,
       skillsNeeded = [],
       budgetTier,
     } = validatedData

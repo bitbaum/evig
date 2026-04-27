@@ -13,8 +13,7 @@ import {
   Clock,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
-import { getSkillById } from '@/config/it-hilfe'
-import { BUDGET_TIERS } from '@/config/it-hilfe'
+import { getSkillById, BUDGET_TIERS, SERVICE_TYPE } from '@/config/it-hilfe'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { getTechnicianById } from '@/lib/services/technician-service'
@@ -274,7 +273,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   key={type}
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700"
                 >
-                  {type === 'remote' ? t('detail.deliveryRemote') : type === 'onsite' ? t('detail.deliveryOnsite') : type}
+                  {type === SERVICE_TYPE.REMOTE ? t('detail.deliveryRemote') : type === SERVICE_TYPE.ONSITE ? t('detail.deliveryOnsite') : type}
                 </span>
               ))}
             </div>

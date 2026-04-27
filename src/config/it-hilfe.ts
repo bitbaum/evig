@@ -419,12 +419,22 @@ export interface ServiceType {
   description: string
 }
 
+export const SERVICE_TYPE = {
+  FLEXIBLE: 'flexible',
+  REMOTE: 'remote',
+  ONSITE: 'onsite',
+  PICKUP: 'pickup',
+  DROPOFF: 'dropoff',
+} as const
+
+export const SERVICE_TYPE_DEFAULT = SERVICE_TYPE.FLEXIBLE
+
 export const SERVICE_TYPES: ServiceType[] = [
-  { id: 'flexible', name: 'Flexibel', description: 'Offen für verschiedene Optionen' },
-  { id: 'remote', name: 'Remote', description: 'Fernhilfe per Video/Telefon' },
-  { id: 'onsite', name: 'Vor Ort', description: 'Hilfe vor Ort beim Kunden' },
-  { id: 'pickup', name: 'Abholung', description: 'Gerät wird abgeholt' },
-  { id: 'dropoff', name: 'Bringen', description: 'Gerät wird vorbeigebracht' },
+  { id: SERVICE_TYPE.FLEXIBLE, name: 'Flexibel', description: 'Offen für verschiedene Optionen' },
+  { id: SERVICE_TYPE.REMOTE, name: 'Remote', description: 'Fernhilfe per Video/Telefon' },
+  { id: SERVICE_TYPE.ONSITE, name: 'Vor Ort', description: 'Hilfe vor Ort beim Kunden' },
+  { id: SERVICE_TYPE.PICKUP, name: 'Abholung', description: 'Gerät wird abgeholt' },
+  { id: SERVICE_TYPE.DROPOFF, name: 'Bringen', description: 'Gerät wird vorbeigebracht' },
 ]
 
 // ============================================================================
