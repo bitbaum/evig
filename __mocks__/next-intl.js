@@ -28,6 +28,20 @@ const getMessages = async () => ({})
 
 const getLocale = async () => 'de'
 
+const defineRouting = (config) => config
+
+const createNavigation = (_routing) => {
+  const Link = ({ href, children, className, ...props }) => {
+    const React = require('react')
+    return React.createElement('a', { href: typeof href === 'string' ? href : href?.pathname ?? '#', className, ...props }, children)
+  }
+  const redirect = jest.fn()
+  const usePathname = () => '/'
+  const useRouter = () => ({ push: jest.fn(), replace: jest.fn(), refresh: jest.fn() })
+  const getPathname = ({ href }) => (typeof href === 'string' ? href : href?.pathname ?? '/')
+  return { Link, redirect, usePathname, useRouter, getPathname }
+}
+
 module.exports = {
   useTranslations,
   useLocale,
@@ -37,4 +51,6 @@ module.exports = {
   getTranslations,
   getMessages,
   getLocale,
+  defineRouting,
+  createNavigation,
 }
