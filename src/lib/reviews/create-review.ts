@@ -110,9 +110,8 @@ async function updateTargetRating(targetType: string, targetId: string): Promise
   }
 }
 
-/** Update helper_profiles average rating from all it_hilfe reviews */
+/** Update repairer_profiles average rating from all it_hilfe reviews */
 async function updateHelperRating(requestId: string): Promise<void> {
-  // Find the helper for this request (via accepted offer)
   const result = await db.execute(sql`
     UPDATE ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} SET
       average_rating = sub.avg_rating,

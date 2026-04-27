@@ -77,7 +77,7 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
     let totalTechnicians = 0
     try {
       const techResult = await query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true`
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true AND profile_tier = 'community'`
       )
       totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
     } catch {

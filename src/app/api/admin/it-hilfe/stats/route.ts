@@ -1,11 +1,12 @@
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { itHilfeRequests, itHilfeOffers, helperProfiles } from '@/db/schema'
+import { itHilfeRequests, repairerProfiles } from '@/db/schema'
 import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
 
 // GET /api/admin/it-hilfe/stats - Dashboard statistics
 export const GET = withAdmin('it-hilfe-admin', async () => {
@@ -22,8 +23,8 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
         normal: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'normal')`,
         high: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'high')`,
         urgent: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'urgent')`,
-        activeHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${helperProfiles.isActive} = true AND ${helperProfiles.suspendedAt} IS NULL)`,
-        verifiedHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${helperProfiles.isVerified} = true)`,
+        activeHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${repairerProfiles.isActive} = true AND ${repairerProfiles.status} != ${REPAIRER_STATUS.SUSPENDED} AND ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
+        verifiedHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${repairerProfiles.isVerified} = true AND ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
         totalOffers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)})`,
       })
       .from(itHilfeRequests)
