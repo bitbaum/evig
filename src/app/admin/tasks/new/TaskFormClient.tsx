@@ -53,7 +53,7 @@ export default function TaskFormClient() {
     instructions: '',
     task_type: 'recurring_as_needed',
     category: 'other',
-    priority: 'normal',
+    priority: TASK_PRIORITIES.NORMAL,
     schedule_human: '',
     estimated_minutes: '',
     due_date: '',

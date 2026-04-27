@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import { SUPPORT_EMAIL } from '@/lib/constants'
 import { BANK } from '@/config/org'
+import type { InvoiceStatus } from '@/config/invoice-status'
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -30,7 +31,7 @@ export interface InvoiceData {
   id: string
   invoice_number: string
   user_id: string
-  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled'
+  status: InvoiceStatus
   issue_date: string | Date
   due_date?: string | Date
   currency: string

@@ -19,6 +19,7 @@ import {
   DECISION_RESULT_COLORS,
   PRIORITY_HINT_LABELS,
 } from '@/config/protocols'
+import { TASK_PRIORITIES } from '@/config/tasks'
 import type { DecisionResult } from '@/config/protocols'
 import type {
   DecisionVoteRecord,
@@ -326,7 +327,7 @@ export default function DecisionActions({
                   <li key={i} className="flex items-start gap-2 text-xs text-gray-700 bg-gray-50 rounded px-2 py-1.5">
                     <span className="flex-1">
                       {task.title}
-                      {task.priority && task.priority !== 'normal' && (
+                      {task.priority && task.priority !== TASK_PRIORITIES.NORMAL && (
                         <span className="ml-1 text-gray-500">
                           ({PRIORITY_HINT_LABELS[task.priority] || task.priority})
                         </span>

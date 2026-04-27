@@ -4,6 +4,7 @@ import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
+import { TASK_PRIORITIES } from '@/config/tasks'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateShort } from '@/lib/date-formats'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
@@ -216,7 +217,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
             description: `Aus Protokoll: ${protocol.title} (${formatDateShort(protocol.meeting_date)})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
             task_type: 'one_time',
             category: 'admin',
-            priority: actionItem.priority_hint || 'normal',
+            priority: actionItem.priority_hint || TASK_PRIORITIES.NORMAL,
           },
         },
       })
@@ -249,7 +250,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
               description: `Aus Protokoll: ${protocol.title} (${formatDateShort(protocol.meeting_date)})${topicTitle ? `\nThema: ${topicTitle}` : ''}`,
               task_type: 'one_time',
               category: 'admin',
-              priority: item.priority_hint || 'normal',
+              priority: item.priority_hint || TASK_PRIORITIES.NORMAL,
             },
           },
         })
