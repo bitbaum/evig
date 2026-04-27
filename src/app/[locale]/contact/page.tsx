@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Mail, Phone, MapPin, Clock, Map as MapIcon, Shield, MessageCircle } from 'lucide-react'
 import { STORE_GOOGLE_MAPS_URL, STORE_OSM_URL, WAREHOUSE_GOOGLE_MAPS_URL, WAREHOUSE_OSM_URL } from '@/lib/constants'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'

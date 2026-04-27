@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { type OSSAlternative, getProprietaryAppById, getCategoryById } from '@/config/open-source-registry'
 import { MaturityBadge } from './MaturityBadge'

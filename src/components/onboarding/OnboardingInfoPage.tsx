@@ -7,7 +7,7 @@
  * Used by both seller and repairer onboarding pages.
  */
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, ArrowRight } from 'lucide-react'
 import type { OnboardingConfig } from '@/config/onboarding'

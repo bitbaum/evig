@@ -7,7 +7,7 @@
 
 import { ProjectHero as ProjectHeroType } from './types'
 import Heading from '@/components/ui/Heading'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { getTextColor, getButtonVariant } from '@/lib/design-system'
 

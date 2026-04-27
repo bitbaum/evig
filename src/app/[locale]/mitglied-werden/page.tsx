@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG, MEMBERSHIP } from '@/config/org'

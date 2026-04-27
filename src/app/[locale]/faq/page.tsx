@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { HelpCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'

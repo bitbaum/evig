@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ORG, CONTACT, LOCATIONS } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'

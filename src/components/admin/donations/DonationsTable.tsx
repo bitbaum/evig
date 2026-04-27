@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Heart, Package, CheckCircle, Clock, Receipt, ArrowRight } from 'lucide-react'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {

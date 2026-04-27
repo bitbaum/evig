@@ -7,7 +7,7 @@
  * Uses config for labels and colors (SSOT).
  */
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Mail, Calendar, Eye, Edit2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import {

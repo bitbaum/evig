@@ -6,7 +6,7 @@
  */
 
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
 
 interface AboutCTAProps {

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Wrench, GraduationCap } from 'lucide-react'
 import { type OSSAlternative } from '@/config/open-source-registry'
 import Heading from '@/components/ui/Heading'

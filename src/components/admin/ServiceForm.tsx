@@ -9,7 +9,7 @@
  * Sub-components extracted to service-form/ directory.
  */
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'

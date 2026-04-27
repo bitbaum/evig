@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Search, Home } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'

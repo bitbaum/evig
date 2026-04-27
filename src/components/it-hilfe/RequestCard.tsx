@@ -7,7 +7,7 @@
  * Eliminates duplicated code across IT-Hilfe pages.
  */
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Wrench, MapPin, Users, Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'

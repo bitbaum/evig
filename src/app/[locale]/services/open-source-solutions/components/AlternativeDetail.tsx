@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'

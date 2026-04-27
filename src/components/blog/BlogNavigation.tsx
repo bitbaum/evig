@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'

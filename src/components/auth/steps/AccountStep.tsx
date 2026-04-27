@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'

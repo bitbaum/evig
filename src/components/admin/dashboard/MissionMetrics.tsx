@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Users, UserCheck, Wrench, Monitor } from 'lucide-react'
 import type { DashboardStats, MissionDelta } from './types'
 

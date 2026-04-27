@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { PiggyBank, TrendingUp, Target, Eye } from 'lucide-react'

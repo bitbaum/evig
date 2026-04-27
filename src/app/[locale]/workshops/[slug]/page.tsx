@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { query } from '@/lib/auth/db'
 import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger'

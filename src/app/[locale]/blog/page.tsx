@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Suspense } from 'react'
 import { BookOpen } from 'lucide-react'
 import { getAllPosts, getAllCategories, type BlogCategory } from '@/lib/blog-db'

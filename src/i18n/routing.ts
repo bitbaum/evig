@@ -20,4 +20,7 @@ export const routing = defineRouting({
   defaultLocale,
   // /de/shop → /shop (default locale has no prefix)
   localePrefix: 'as-needed',
+  // Only URL prefix determines locale — no Accept-Language guessing.
+  // Prevents users being randomly switched to their browser language.
+  localeDetection: false,
 })

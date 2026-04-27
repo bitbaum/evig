@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'

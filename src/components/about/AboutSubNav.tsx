@@ -7,7 +7,7 @@
 
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Info, BarChart3, Newspaper, Wallet } from 'lucide-react'

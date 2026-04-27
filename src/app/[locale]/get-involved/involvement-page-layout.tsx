@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'

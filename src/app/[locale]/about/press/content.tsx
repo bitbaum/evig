@@ -8,7 +8,7 @@
 'use client'
 
 import { ExternalLink, Quote, Newspaper, Award, Star, ArrowLeft } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ORG, CONTACT } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'

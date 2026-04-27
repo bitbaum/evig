@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'

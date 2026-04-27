@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { CheckCircle, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
 
 interface InquiryFormProps {

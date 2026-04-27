@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowLeft, Eye, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'

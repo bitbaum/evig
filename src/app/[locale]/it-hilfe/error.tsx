@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { AlertCircle, ArrowLeft } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import { useTranslations } from 'next-intl'

@@ -1,5 +1,5 @@
 import { Recycle, Store, Wrench, BookOpen, Heart, Users, Award, Gift } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { getCompactMetrics } from '@/data/impact-metrics'

@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'

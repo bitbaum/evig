@@ -7,7 +7,7 @@
 
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import AppointmentBookingForm from './AppointmentBookingForm'
 import Heading from '@/components/ui/Heading'

@@ -1,7 +1,7 @@
 'use client'
 
 import { forwardRef } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { adminBtn, type AdminBtnVariant } from '@/lib/admin-ui'
 import { cn } from '@/lib/utils'
 

@@ -11,7 +11,7 @@
 
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { getTextColor } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'

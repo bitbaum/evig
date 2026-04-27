@@ -12,7 +12,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { Menu } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Logo } from '@/components/ui/Logo'
 import { MobileMenu } from '../MobileMenu'

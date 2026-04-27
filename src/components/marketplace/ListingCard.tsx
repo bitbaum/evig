@@ -5,7 +5,7 @@
  * Shows spec tags, gratis badge, and verified badge.
  */
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Zap, Check, ArrowRight } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { InlineActionButton } from './InlineActionButton'

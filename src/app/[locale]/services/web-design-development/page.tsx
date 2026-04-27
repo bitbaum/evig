@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Code } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'

@@ -6,7 +6,7 @@
 
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ProjectCard } from './types'
 import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'

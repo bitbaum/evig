@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Heart, Recycle, Users, Zap, Globe } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'

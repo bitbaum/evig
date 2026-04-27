@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { CheckSquare, FileText, Calendar, AlertCircle, ArrowRight } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { db } from '@/db'

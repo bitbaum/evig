@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { ArrowRight, Filter, CheckCircle2, Calendar, Code, Globe, Users, Wrench, Rocket } from 'lucide-react'
 import Heading from '@/components/ui/Heading'

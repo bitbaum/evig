@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { X, Brain, Maximize2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { HirnChat } from './HirnChat'
 
 interface HirnSlideOverProps {

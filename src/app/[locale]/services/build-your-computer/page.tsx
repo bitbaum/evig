@@ -22,7 +22,7 @@ import {
   Award,
   Sparkles
 } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import type { BuildResult } from '@/config/build-computer'
 import { getMockRecommendation } from '@/config/build-computer'

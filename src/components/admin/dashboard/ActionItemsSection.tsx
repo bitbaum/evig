@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Zap, ArrowRight, Check } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { formatQueueAge } from './format'

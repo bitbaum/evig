@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { BookOpen, FileText, Users, LinkIcon, Lightbulb } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'

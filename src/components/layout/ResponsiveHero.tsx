@@ -13,7 +13,7 @@ import { ReactNode } from 'react'
 import { responsiveSpacing, responsiveTypography, responsiveButtons } from '@/lib/responsive'
 import { cn } from '@/lib/utils'
 import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
 
 export interface ResponsiveHeroProps {

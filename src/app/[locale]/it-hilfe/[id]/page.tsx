@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import {
   User,
   LogOut,

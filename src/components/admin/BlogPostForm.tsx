@@ -7,7 +7,7 @@
  * Used by /admin/content/blog/new and /admin/content/blog/[id]
  */
 
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Heading from '@/components/admin/AdminHeading'
 import {
   ArrowLeft,

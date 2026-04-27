@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Wrench, CheckCircle2, Clock, Shield, Zap } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'

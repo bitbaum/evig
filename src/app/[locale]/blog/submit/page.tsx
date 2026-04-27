@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowLeft, Send, Lightbulb, FileText, Edit, CheckCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'

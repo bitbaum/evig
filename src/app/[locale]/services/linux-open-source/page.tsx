@@ -15,7 +15,7 @@ import {
   CheckCircle2,
   XCircle
 } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG, CONTACT } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
