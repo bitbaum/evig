@@ -10,6 +10,7 @@ import { sql, getTableName } from 'drizzle-orm';
 import { decisions, decisionVotes } from '@/db/schema/misc';
 import { users } from '@/db/schema/auth';
 import { notifyUsers, createNotification, fireNotification } from '@/lib/services/notifications';
+import { RELATED_TYPES } from '@/config/notifications';
 import {
   VALID_TRANSITIONS,
   DECISION_STATUS,
@@ -130,7 +131,7 @@ export async function transitionDecision(
         type: 'decision_closed',
         title: 'Entscheidung abgeschlossen',
         content: `"${txResult.title}" wurde abgeschlossen.`,
-        related_type: 'decision',
+        related_type: RELATED_TYPES.DECISION,
         related_id: txResult.id,
         metadata: { decisionId: txResult.id },
       }),
@@ -193,7 +194,7 @@ export async function transitionDecision(
           type: 'decision_voting',
           title: 'Abstimmung geöffnet',
           content: `"${updatedDecision.title}" wartet auf deine Stimme.${deadlineInfo}`,
-          related_type: 'decision',
+          related_type: RELATED_TYPES.DECISION,
           related_id: updatedDecision.id,
           metadata: {
             decisionId: updatedDecision.id,

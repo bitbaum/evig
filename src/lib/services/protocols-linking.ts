@@ -7,6 +7,7 @@ import { sql, getTableName } from 'drizzle-orm'
 import { protocolActionLinks, tasks, decisions } from '@/db/schema/misc'
 import { logger } from '@/lib/logger'
 import { DECISION_STATUS } from '@/config/decisions'
+import { RELATED_TYPES } from '@/config/notifications'
 import type { ActionLinkRecord } from '@/lib/schemas/protocols'
 
 // Table name refs
@@ -75,7 +76,7 @@ export async function linkActionItemToTask(
     const linkResult = await tx.execute(sql`
       INSERT INTO ${sql.raw(palTable)} (
         protocol_id, action_item_id, link_type, linked_task_id
-      ) VALUES (${protocolId}, ${actionItemId}, 'task', ${taskId})
+      ) VALUES (${protocolId}, ${actionItemId}, ${RELATED_TYPES.TASK}, ${taskId})
       RETURNING id
     `)
 
@@ -129,7 +130,7 @@ export async function linkActionItemToDecision(
     const linkResult = await tx.execute(sql`
       INSERT INTO ${sql.raw(palTable)} (
         protocol_id, action_item_id, link_type, linked_decision_id
-      ) VALUES (${protocolId}, ${actionItemId}, 'decision', ${decisionId})
+      ) VALUES (${protocolId}, ${actionItemId}, ${RELATED_TYPES.DECISION}, ${decisionId})
       RETURNING id
     `)
 

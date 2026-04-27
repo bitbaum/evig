@@ -7,6 +7,7 @@
 
 import { z } from 'zod';
 import { uuidSchema } from './common';
+import { WORKSHOP_REGISTRATION_STATUS_VALUES } from '@/config/workshop-registration-status';
 
 // =============================================================================
 // ADMIN AUTH
@@ -49,7 +50,7 @@ export type AdminApprovalActionInput = z.infer<typeof AdminApprovalActionSchema>
 
 export const AdminWorkshopRegistrationUpdateSchema = z.object({
   status: z
-    .enum(['pending', 'confirmed', 'waitlist', 'attended', 'cancelled', 'no_show'])
+    .enum(WORKSHOP_REGISTRATION_STATUS_VALUES)
     .optional(),
   attended: z.boolean().optional(),
   notes: z.string().max(2000, 'Notizen dürfen maximal 2000 Zeichen enthalten').optional().nullable(),

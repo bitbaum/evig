@@ -7,7 +7,7 @@ import {
   inventoryItems, workshopRegistrations,
 } from '@/db/schema'
 import { blogPosts, blogSubmissions } from '@/db/schema/content'
-import { APPROVAL_STATUS } from '@/config/approval-status'
+import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE } from '@/config/approval-status'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
@@ -116,7 +116,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(ucsTable)}
       WHERE status = ${APPROVAL_STATUS.PENDING}
-        AND content_type IN ('workshop', 'blog_post')
+        AND content_type IN (${SUBMISSION_CONTENT_TYPE.WORKSHOP}, ${SUBMISSION_CONTENT_TYPE.BLOG_POST})
     `),
     isSuper
       ? db.execute(sql`
@@ -225,7 +225,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       SELECT id, COALESCE(title, content_type, 'Einreichung') AS label
       FROM ${sql.raw(ucsTable)}
       WHERE status = ${APPROVAL_STATUS.PENDING}
-        AND content_type IN ('workshop', 'blog_post')
+        AND content_type IN (${SUBMISSION_CONTENT_TYPE.WORKSHOP}, ${SUBMISSION_CONTENT_TYPE.BLOG_POST})
       ORDER BY created_at ASC
       LIMIT 1
     `),

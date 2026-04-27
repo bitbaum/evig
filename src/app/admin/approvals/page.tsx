@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield, ExternalLink } from 'lucide-react'
-import { APPROVAL_STATUS } from '@/config/approval-status'
+import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE, SUBMISSION_CONTENT_TYPE_LABELS } from '@/config/approval-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
@@ -154,10 +154,7 @@ async function getPendingSubmissions(): Promise<ContentSubmission[]> {
   }
 }
 
-const contentTypeLabels: Record<string, string> = {
-  workshop: 'Workshop',
-  blog_post: 'Blog-Artikel',
-}
+const contentTypeLabels: Record<string, string> = SUBMISSION_CONTENT_TYPE_LABELS
 
 export default async function ApprovalsPage() {
   const session = await auth()

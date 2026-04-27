@@ -16,6 +16,7 @@ import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { NOTIFICATION_TYPES } from '@/config/notifications';
 import { requestResponseSchema } from '@/lib/schemas/tasks';
 import { createNotification, fireNotification } from '@/lib/services/notifications';
+import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger';
 
 type RouteParams = { id: string };
@@ -134,7 +135,7 @@ export const PATCH = withAdmin<RouteParams>(async (
           || (accepted
             ? `${responderName} hat deine Anfrage angenommen.`
             : `${responderName} hat deine Anfrage abgelehnt.`),
-        related_type: 'task',
+        related_type: RELATED_TYPES.TASK,
         related_id: taskRequest.taskId,
       }),
       'task-request-response',

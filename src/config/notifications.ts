@@ -39,12 +39,23 @@ export const NOTIFICATION_TYPES = {
 
 export type NotificationType = typeof NOTIFICATION_TYPES[keyof typeof NOTIFICATION_TYPES]
 
+export const RELATED_TYPES = {
+  TASK: 'task',
+  PROTOCOL: 'protocol',
+  DECISION: 'decision',
+  CONVERSATION: 'conversation',
+  APPOINTMENT: 'appointment',
+  IT_HILFE: 'it_hilfe',
+} as const
+
+export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
+
 /** Maps `related_type` to the base route for navigation in NotificationBell */
 export const RELATED_TYPE_HREFS: Record<string, string> = {
-  task: '/admin/tasks/',
-  protocol: '/admin/protocols/',
-  decision: '/admin/decisions/',
-  conversation: '/messages/',
-  appointment: '/dashboard/appointments/',
-  it_hilfe: '/it-hilfe/',
+  [RELATED_TYPES.TASK]: '/admin/tasks/',
+  [RELATED_TYPES.PROTOCOL]: '/admin/protocols/',
+  [RELATED_TYPES.DECISION]: '/admin/decisions/',
+  [RELATED_TYPES.CONVERSATION]: '/messages/',
+  [RELATED_TYPES.APPOINTMENT]: '/dashboard/appointments/',
+  [RELATED_TYPES.IT_HILFE]: '/it-hilfe/',
 }

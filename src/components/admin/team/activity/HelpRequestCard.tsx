@@ -16,6 +16,7 @@ import {
   getActivityCategoryLabel,
   HELP_REQUEST_STATUSES,
 } from '@/config/activity'
+import { URGENCY } from '@/config/it-hilfe'
 import { formatRelativeTime } from '@/lib/utils'
 import type { HelpRequest } from './types'
 
@@ -73,9 +74,9 @@ export function HelpRequestCard({
       className={`bg-white dark:bg-gray-800 rounded-xl border p-4 ${
         isResolved
           ? 'border-gray-200 dark:border-gray-700 opacity-75'
-          : request.urgency === 'urgent'
+          : request.urgency === URGENCY.URGENT
             ? 'border-red-300 dark:border-red-700'
-            : request.urgency === 'high'
+            : request.urgency === URGENCY.HIGH
               ? 'border-orange-300 dark:border-orange-700'
               : 'border-gray-200 dark:border-gray-700'
       }`}

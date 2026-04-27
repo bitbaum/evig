@@ -13,13 +13,12 @@
 // =============================================================================
 
 import type { WorkshopRegistrationStatus, WorkshopPaymentStatus } from '@/config/workshop-registration-status'
-import type { ProposalStatus as _ProposalStatus } from '@/config/workshops'
+import type { ProposalStatus as _ProposalStatus, WorkshopInstanceStatus as _WorkshopInstanceStatus } from '@/config/workshops'
 
 export type RegistrationStatus = WorkshopRegistrationStatus
 export type PaymentStatus = WorkshopPaymentStatus
 export type ProposalStatus = _ProposalStatus
-
-export type WorkshopInstanceStatus = 'scheduled' | 'cancelled' | 'completed'
+export type WorkshopInstanceStatus = _WorkshopInstanceStatus
 
 export type LocationType = 'venue' | 'online' | 'home' | 'community_center' | 'business'
 
@@ -271,7 +270,7 @@ export interface WorkshopInstanceDetails {
  */
 export interface RegistrationData {
   id: string
-  status: string
+  status: RegistrationStatus
   registered_at: string
   workshop_instance?: WorkshopInstanceDetails
 }

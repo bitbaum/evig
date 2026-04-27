@@ -5,6 +5,8 @@
  * Lives in types/ to avoid circular dependency (domain ↔ components).
  */
 
+import { URGENCY_DEFAULT } from '@/config/it-hilfe'
+
 export interface ITHilfeCreateFormData {
   categoryId: string
   deviceBrand: string
@@ -28,7 +30,7 @@ export const INITIAL_IT_HILFE_FORM: ITHilfeCreateFormData = {
   deviceModel: '',
   title: '',
   description: '',
-  urgency: 'normal',
+  urgency: URGENCY_DEFAULT,
   maxBudget: '',
   postalCode: '',
   city: '',

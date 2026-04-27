@@ -6,7 +6,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { validateBody, AdminWorkshopRegistrationUpdateSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_REGISTRATION_STATUS, type WorkshopRegistrationStatus } from '@/config/workshop-registration-status'
 import { sendEmail } from '@/lib/email'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 
@@ -86,7 +86,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
             details.userName || 'Benutzer',
             details.workshopTitle,
             workshopDate,
-            status as 'confirmed' | 'cancelled' | 'waitlist',
+            status as WorkshopRegistrationStatus,
             notes || undefined
           )
 

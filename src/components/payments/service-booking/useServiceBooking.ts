@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { calculateVAT, calculatePaymentFees } from '@/lib/pricing'
 import type { PaymentResult } from '@/types/common'
+import { URGENCY } from '@/config/it-hilfe'
 import type {
   ApiPricingResponse,
   BookingStep,
@@ -46,7 +47,7 @@ interface UseServiceBookingReturn {
 
 const INITIAL_BOOKING_DATA: BookingData = {
   description: '',
-  urgency: 'normal',
+  urgency: URGENCY.NORMAL,
   deviceInfo: '',
   useEscrow: true,
   preferredDate: '',

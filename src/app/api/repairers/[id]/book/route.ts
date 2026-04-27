@@ -9,6 +9,7 @@ import { logger } from '@/lib/logger'
 import { sendCustomEmail, appointmentNewBooking } from '@/lib/email'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { URGENCY_DEFAULT } from '@/config/it-hilfe'
 import { REPAIRER_STATUS, REPAIRER_AVAILABILITY_TYPE } from '@/config/repairer-status'
 import { APP_URL } from '@/config/urls'
 
@@ -35,7 +36,7 @@ export const POST = withAuth<{ id: string }>(async (
       device_info,
       preferred_date,
       preferred_time,
-      urgency = 'normal',
+      urgency = URGENCY_DEFAULT,
       is_home_visit = false,
       visit_address,
       visit_postal_code,

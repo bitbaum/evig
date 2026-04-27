@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
 import Heading from '@/components/ui/Heading'
+import { URGENCY } from '@/config/it-hilfe'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -21,9 +22,9 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
   const { data: session } = useSession()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{ description: string; urgency: string; preferredDate: string; preferredTime: string }>({
     description: '',
-    urgency: 'normal' as 'normal' | 'high' | 'urgent',
+    urgency: URGENCY.NORMAL,
     preferredDate: '',
     preferredTime: ''
   })
@@ -64,7 +65,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
         // Reset form
         setFormData({
           description: '',
-          urgency: 'normal',
+          urgency: URGENCY.NORMAL,
           preferredDate: '',
           preferredTime: ''
         })
@@ -180,12 +181,12 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 </label>
                 <select
                   value={formData.urgency}
-                  onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value as 'normal' | 'high' | 'urgent' }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, urgency: e.target.value }))}
                   className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                 >
-                  <option value="normal">{t('urgencyNormal')}</option>
-                  <option value="high">{t('urgencyHigh')}</option>
-                  <option value="urgent">{t('urgencyUrgent')}</option>
+                  <option value={URGENCY.NORMAL}>{t('urgencyNormal')}</option>
+                  <option value={URGENCY.HIGH}>{t('urgencyHigh')}</option>
+                  <option value={URGENCY.URGENT}>{t('urgencyUrgent')}</option>
                 </select>
               </div>
 

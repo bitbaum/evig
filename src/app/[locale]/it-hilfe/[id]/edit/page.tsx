@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import {
   DEVICE_CATEGORIES,
+  URGENCY,
   URGENCY_LEVELS,
   SERVICE_TYPES,
   getCategoryById,
@@ -94,7 +95,7 @@ export default function EditRequestPage() {
         deviceModel: r.deviceModel || '',
         title: r.title || '',
         description: r.description || '',
-        urgency: r.urgency || 'normal',
+        urgency: r.urgency || URGENCY.NORMAL,
         maxBudget: r.budgetAmountCents ? String(r.budgetAmountCents / 100) : '',
         postalCode: r.postalCode || '',
         city: r.city || '',

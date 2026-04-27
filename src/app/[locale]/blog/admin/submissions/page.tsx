@@ -6,13 +6,13 @@ import { ArrowLeft, Eye, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
+import { APPROVAL_STATUS, getApprovalStatusBadge, type ApprovalStatus } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 
 interface Submission {
   id: string
-  status: 'pending' | 'approved' | 'rejected'
+  status: ApprovalStatus
   submissionType: 'idea' | 'draft'
   name: string
   email: string

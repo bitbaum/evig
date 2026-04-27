@@ -6,7 +6,7 @@ import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger'
 import { formatDateWithWeekday, formatTime } from '@/lib/date-formats'
 import { TABLE_NAMES } from '@/config/database'
-import { getLevelBadgeClass, WORKSHOP_CATEGORIES, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
+import { getLevelBadgeClass, WORKSHOP_CATEGORIES, WORKSHOP_INSTANCE_STATUS, type WorkshopInstanceStatus } from '@/config/workshops'
 import {
   Calendar,
   Clock,
@@ -107,7 +107,7 @@ async function getWorkshopInstances(workshopId: string): Promise<WorkshopInstanc
       instructor: row.instructor,
       max_participants: row.max_participants,
       notes: row.notes,
-      status: row.status as 'scheduled' | 'cancelled' | 'completed',
+      status: row.status as WorkshopInstanceStatus,
       created_at: row.created_at,
       updated_at: row.updated_at,
       current_participants: parseInt(row.current_participants) || 0

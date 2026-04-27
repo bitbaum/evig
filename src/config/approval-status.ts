@@ -59,6 +59,24 @@ export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   },
 }
 
+export const SUBMISSION_CONTENT_TYPE = {
+  WORKSHOP: 'workshop',
+  BLOG_POST: 'blog_post',
+  PRODUCT: 'product',
+  SERVICE: 'service',
+  LISTING: 'listing',
+} as const
+
+export type SubmissionContentType = typeof SUBMISSION_CONTENT_TYPE[keyof typeof SUBMISSION_CONTENT_TYPE]
+
+export const SUBMISSION_CONTENT_TYPE_LABELS: Record<string, string> = {
+  [SUBMISSION_CONTENT_TYPE.WORKSHOP]: 'Workshop',
+  [SUBMISSION_CONTENT_TYPE.BLOG_POST]: 'Blog-Artikel',
+  [SUBMISSION_CONTENT_TYPE.PRODUCT]: 'Produkt',
+  [SUBMISSION_CONTENT_TYPE.SERVICE]: 'Dienstleistung',
+  [SUBMISSION_CONTENT_TYPE.LISTING]: 'Inserat',
+}
+
 /**
  * Get approval status label
  */

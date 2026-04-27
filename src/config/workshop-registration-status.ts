@@ -13,6 +13,8 @@ export const WORKSHOP_REGISTRATION_STATUS = {
 
 export type WorkshopRegistrationStatus = typeof WORKSHOP_REGISTRATION_STATUS[keyof typeof WORKSHOP_REGISTRATION_STATUS];
 
+export const WORKSHOP_REGISTRATION_STATUS_VALUES = Object.values(WORKSHOP_REGISTRATION_STATUS) as [WorkshopRegistrationStatus, ...WorkshopRegistrationStatus[]];
+
 export const WORKSHOP_REGISTRATION_STATUS_LABELS: Record<string, string> = {
   [WORKSHOP_REGISTRATION_STATUS.PENDING]: 'Ausstehend',
   [WORKSHOP_REGISTRATION_STATUS.CONFIRMED]: 'Bestätigt',

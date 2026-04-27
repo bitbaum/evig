@@ -5,7 +5,7 @@ import { sql } from 'drizzle-orm'
 import { apiError, apiSuccess } from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
 import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
 
 // GET /api/admin/it-hilfe/stats - Dashboard statistics
@@ -19,10 +19,10 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
         matched: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.MATCHED})`,
         completed: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.COMPLETED})`,
         cancelled: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.CANCELLED})`,
-        low: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'low')`,
-        normal: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'normal')`,
-        high: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'high')`,
-        urgent: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = 'urgent')`,
+        low: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = ${URGENCY.LOW})`,
+        normal: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = ${URGENCY.NORMAL})`,
+        high: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = ${URGENCY.HIGH})`,
+        urgent: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.urgency} = ${URGENCY.URGENT})`,
         activeHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${repairerProfiles.isActive} = true AND ${repairerProfiles.status} != ${REPAIRER_STATUS.SUSPENDED} AND ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
         verifiedHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} WHERE ${repairerProfiles.isVerified} = true AND ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
         totalOffers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)})`,

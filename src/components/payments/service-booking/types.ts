@@ -3,10 +3,11 @@
  */
 
 import type { SupportedCurrency, ServicePricing } from '@/lib/payments/currency'
+import type { URGENCY } from '@/config/it-hilfe'
 
 export type BookingStep = 'details' | 'payment' | 'processing' | 'success' | 'error'
 
-export type UrgencyLevel = 'low' | 'normal' | 'high' | 'urgent'
+export type UrgencyLevel = typeof URGENCY[keyof typeof URGENCY]
 
 // API response pricing structure
 export interface ApiPricingResponse {

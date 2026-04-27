@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import { auth } from '@/auth'
 import WorkshopBrowseClient from './WorkshopBrowseClient'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
+import { type WorkshopInstanceStatus, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
@@ -124,7 +125,7 @@ async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
         instructor: inst.instructor,
         max_participants: inst.max_participants,
         notes: inst.notes,
-        status: (inst.status ?? 'scheduled') as 'scheduled' | 'cancelled' | 'completed',
+        status: (inst.status ?? WORKSHOP_INSTANCE_STATUS.SCHEDULED) as WorkshopInstanceStatus,
         created_at: inst.created_at ?? '',
         updated_at: inst.updated_at ?? '',
         current_participants: Number(inst.current_participants) || 0,

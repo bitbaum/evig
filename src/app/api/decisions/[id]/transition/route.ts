@@ -14,6 +14,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { notifyAllStaff } from '@/lib/services/notifications'
 import { logger } from '@/lib/logger'
 import { DECISION_STATUS } from '@/config/decisions'
+import { RELATED_TYPES } from '@/config/notifications'
 
 type RouteParams = { id: string }
 
@@ -65,7 +66,7 @@ export const POST = withAdmin<RouteParams>(async (
         type: 'decision_voting',
         title: `Neue Abstimmung: ${decision.title}`,
         content: 'Eine neue Entscheidung wartet auf deine Stimme.',
-        related_type: 'decision',
+        related_type: RELATED_TYPES.DECISION,
         related_id: decisionId,
       }, dbUserId)
     } else if (parsed.data.status === DECISION_STATUS.CLOSED) {
@@ -73,7 +74,7 @@ export const POST = withAdmin<RouteParams>(async (
         type: 'decision_closed',
         title: `Entscheidung getroffen: ${decision.title}`,
         content: parsed.data.outcomeSummary || 'Die Abstimmung wurde abgeschlossen.',
-        related_type: 'decision',
+        related_type: RELATED_TYPES.DECISION,
         related_id: decisionId,
       }, dbUserId)
     }

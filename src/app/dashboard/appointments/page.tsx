@@ -11,6 +11,7 @@ import { useTranslations } from 'next-intl'
 import { formatDateTime } from '@/lib/date-formats'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { URGENCY } from '@/config/it-hilfe'
 import { Modal } from '@/components/ui/Modal'
 import Heading from '@/components/ui/Heading'
 
@@ -147,12 +148,12 @@ export default function AppointmentsDashboard() {
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'urgent':
-      case 'high':
+      case URGENCY.URGENT:
+      case URGENCY.HIGH:
         return 'text-error-700 bg-error-50 border border-error-200'
-      case 'normal':
+      case URGENCY.NORMAL:
         return 'text-warning-700 bg-warning-50 border border-warning-200'
-      case 'low':
+      case URGENCY.LOW:
         return 'text-success-700 bg-success-50 border border-success-200'
       default:
         return 'text-neutral-700 bg-neutral-50 border border-neutral-200'
@@ -246,7 +247,7 @@ export default function AppointmentsDashboard() {
                           <span>{formatDateTime(appointment.created_at)}</span>
                         </div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(appointment.urgency)}`}>
-                          {appointment.urgency === 'urgent' ? t('urgencyUrgent') : appointment.urgency === 'high' ? t('urgencyHigh') : appointment.urgency === 'normal' ? t('urgencyNormal') : t('urgencyLow')}
+                          {appointment.urgency === URGENCY.URGENT ? t('urgencyUrgent') : appointment.urgency === URGENCY.HIGH ? t('urgencyHigh') : appointment.urgency === URGENCY.NORMAL ? t('urgencyNormal') : t('urgencyLow')}
                         </span>
                       </div>
                       {appointment.description && (

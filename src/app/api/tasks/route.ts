@@ -20,6 +20,7 @@ import { TASK_PRIORITIES } from '@/config/tasks';
 const assignedUser = alias(users, 'assigned_user');
 import { createTaskSchema } from '@/lib/schemas/tasks';
 import { notifyUsers } from '@/lib/services/notifications';
+import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger';
 
 /**
@@ -166,7 +167,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         type: 'task_assigned',
         title: 'Aufgabe zugewiesen',
         content: `Dir wurde eine Aufgabe zugewiesen: ${data.title}`,
-        related_type: 'task',
+        related_type: RELATED_TYPES.TASK,
         related_id: task.id,
       }).catch(err => logger.error('Failed to notify task assignee', { error: err, taskId: task.id }));
     }

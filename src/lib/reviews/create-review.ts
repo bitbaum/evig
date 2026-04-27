@@ -168,7 +168,7 @@ async function updateRepairerRating(repairerId: string): Promise<void> {
         AVG(overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(id)::int AS review_count
       FROM ${sql.raw(TABLE_NAMES.REVIEWS)}
-      WHERE target_type = 'repairer' AND status = 'published' AND target_id = ${repairerId}
+      WHERE target_type = ${REVIEW_TARGET_TYPES.REPAIRER} AND status = ${REVIEW_STATUS.PUBLISHED} AND target_id = ${repairerId}
       GROUP BY target_id
     ) sub
     WHERE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)}.user_id = sub.repairer_id

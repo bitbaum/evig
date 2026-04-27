@@ -18,6 +18,7 @@ import { asArray } from '@/lib/services/decisions-crud'
 import { logger } from '@/lib/logger'
 import { DECISION_STATUS, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions'
 import { TABLE_NAMES } from '@/config/database'
+import { RELATED_TYPES } from '@/config/notifications'
 
 export async function GET(request: NextRequest) {
   // Verify cron secret (skip in dev if not set)
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
               type: 'decision_deadline',
               title: `Abstimmung endet morgen: ${decision.title}`,
               content: `Die Abstimmungsfrist für "${decision.title}" endet morgen. Bitte gib noch deine Stimme ab.`,
-              related_type: 'decision',
+              related_type: RELATED_TYPES.DECISION,
               related_id: decision.id,
               metadata: {
                 decisionId: decision.id,
@@ -125,7 +126,7 @@ export async function GET(request: NextRequest) {
             type: 'decision_closed',
             title: `Abstimmung abgelaufen: ${decision.title}`,
             content: 'Die Abstimmungsfrist ist abgelaufen. Die Entscheidung wurde automatisch geschlossen.',
-            related_type: 'decision',
+            related_type: RELATED_TYPES.DECISION,
             related_id: decision.id,
             metadata: { decisionId: decision.id },
           })

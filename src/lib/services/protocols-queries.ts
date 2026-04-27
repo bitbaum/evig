@@ -8,6 +8,7 @@ import { meetingProtocols, protocolActionLinks, protocolDecisionVotes, protocolD
 import { users } from '@/db/schema/auth'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { notifyUsers, fireNotification } from '@/lib/services/notifications'
+import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
 import type {
   ProtocolListItem,
@@ -353,7 +354,7 @@ export async function finalizeProtocol(
         type: 'protocol_finalized',
         title: 'Protokoll abgeschlossen',
         content: `Das Protokoll "${title}" ist jetzt verfügbar.`,
-        related_type: 'protocol',
+        related_type: RELATED_TYPES.PROTOCOL,
         related_id: id,
       }),
       `protocol_finalized:${id}`

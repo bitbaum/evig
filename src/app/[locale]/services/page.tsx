@@ -13,6 +13,7 @@ import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { URGENCY } from '@/config/it-hilfe'
 import { Link } from '@/i18n/navigation'
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
@@ -56,7 +57,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         body: {
           serviceSlug: service.slug,
           description: `Termin für ${service.title}`,
-          urgency: 'normal',
+          urgency: URGENCY.NORMAL,
         },
       })
 

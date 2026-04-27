@@ -17,6 +17,7 @@ import { tasks, taskAttentionFlags } from '@/db/schema/misc';
 import { TASK_STATUSES } from '@/config/tasks';
 import { attentionFlagSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
+import { RELATED_TYPES } from '@/config/notifications'
 
 type RouteParams = { id: string };
 
@@ -73,7 +74,7 @@ export const POST = withAdmin<RouteParams>(async (
       type: 'task_attention',
       title: `Aufgabe braucht Aufmerksamkeit: ${task.title}`,
       content: data.message?.trim() || 'Eine Aufgabe wurde als aufmerksamkeitsbedürftig markiert.',
-      related_type: 'task',
+      related_type: RELATED_TYPES.TASK,
       related_id: taskId,
     }, dbUserId)
 

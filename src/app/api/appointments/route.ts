@@ -9,8 +9,9 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { validateBody, validateQuery, CreateAppointmentSchema, GetAppointmentsQuerySchema } from '@/lib/schemas'
 import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email'
-import { REVAMPIT_NOTIFICATION_EMAIL } from '@/config/it-hilfe'
+import { REVAMPIT_NOTIFICATION_EMAIL, URGENCY_DEFAULT } from '@/config/it-hilfe'
 import { BOOKING_STATUS } from '@/config/booking-status'
+import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 import { TABLE_NAMES } from '@/config/database'
 
@@ -35,7 +36,7 @@ export const GET = withAuth(async (
 
     const conditions = []
 
-    if (role === 'repairer') {
+    if (role === ROLES.REPAIRER) {
       conditions.push(eq(serviceAppointments.repairerId, session.user.id))
     } else {
       conditions.push(eq(serviceAppointments.userId, session.user.id))
@@ -161,7 +162,7 @@ export const POST = withAuth(async (
         INSERT INTO ${sql.raw(TABLE_NAMES.SERVICE_APPOINTMENTS)} (user_id, description, status, urgency, is_home_visit,
           repairer_id, repairer_profile_id, device_info, preferred_date, visit_address, visit_city)
         VALUES (${session.user.id}, ${description}, ${BOOKING_STATUS.REQUESTED},
-          ${urgency || 'normal'}, ${is_home_visit || false},
+          ${urgency || URGENCY_DEFAULT}, ${is_home_visit || false},
           ${repairer_id || null}, ${repairer_profile_id || null},
           ${device_info || null}, ${preferred_date || null},
           ${visit_address || null}, ${visit_city || null})
@@ -181,7 +182,7 @@ export const POST = withAuth(async (
         serviceTypeId: service_type_id,
         description,
         status: BOOKING_STATUS.REQUESTED,
-        urgency: urgency || 'normal',
+        urgency: urgency || URGENCY_DEFAULT,
         isHomeVisit: is_home_visit || false,
         repairerId: repairer_id || undefined,
         repairerProfileId: repairer_profile_id || undefined,
@@ -226,7 +227,7 @@ function notifyUnassigned(
       session.user.name || 'Kunde',
       'Reparatur',
       description,
-      urgency || 'normal',
+      urgency || URGENCY_DEFAULT,
       baseUrl + '/admin/services'
     )
     sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, emailContent).catch(err => {

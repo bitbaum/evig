@@ -15,6 +15,7 @@ import { taskCompletions } from '@/db/schema';
 import { sql } from 'drizzle-orm';
 import { taskCompletionSchema } from '@/lib/schemas/tasks';
 import { notifyUsers } from '@/lib/services/notifications';
+import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger';
 
 type RouteParams = { id: string };
@@ -77,7 +78,7 @@ export const POST = withAdmin<RouteParams>(async (
         type: 'task_completed',
         title: `Aufgabe erledigt: ${task.title}`,
         content: `${session.user.name || session.user.email} hat die Aufgabe erledigt.${data.notes ? ` Notiz: ${data.notes}` : ''}`,
-        related_type: 'task',
+        related_type: RELATED_TYPES.TASK,
         related_id: taskId,
       })
     }

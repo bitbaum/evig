@@ -24,6 +24,7 @@ import {
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Heading from '@/components/ui/Heading'
 import {
   PaymentForm,
@@ -104,7 +105,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         setRegistrationUIStatus('registered')
         setRegistrationData({
           id: result.data!.registrationId,
-          status: 'confirmed',
+          status: WORKSHOP_REGISTRATION_STATUS.CONFIRMED,
           registered_at: new Date().toISOString(),
           workshop_instance: {
             start_date: instance.start_date,

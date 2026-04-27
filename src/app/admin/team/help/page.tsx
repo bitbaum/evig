@@ -14,6 +14,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { canAccessSection } from '@/lib/permissions'
 import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
+import { URGENCY } from '@/config/it-hilfe'
 import { HelpCircle, ArrowLeft, Users, AlertTriangle, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { HelpRequestsPageClient } from './HelpRequestsPageClient'
@@ -49,7 +50,7 @@ async function getHelpStats(): Promise<HelpStats> {
         [HELP_REQUEST_STATUS.RESOLVED, weekAgo]
       ),
       query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1 AND urgency = 'urgent'`,
+        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.HELP_REQUESTS} WHERE status = $1 AND urgency = '${URGENCY.URGENT}'`,
         [HELP_REQUEST_STATUS.OPEN]
       ),
     ])

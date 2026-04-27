@@ -11,6 +11,7 @@ import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { finalizeProtocol } from '@/lib/services/protocols'
 import { notifyAllStaff } from '@/lib/services/notifications'
+import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }
@@ -43,7 +44,7 @@ export const POST = withAdmin<RouteParams>(async (
       type: 'protocol_finalized',
       title: 'Protokoll abgeschlossen',
       content: `Ein Sitzungsprotokoll wurde fertiggestellt.`,
-      related_type: 'protocol',
+      related_type: RELATED_TYPES.PROTOCOL,
       related_id: protocolId,
     }, session.user.id)
 

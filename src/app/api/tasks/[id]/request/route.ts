@@ -21,6 +21,7 @@ import { users } from '@/db/schema/auth';
 import { TASK_STATUSES, REQUEST_STATUSES } from '@/config/tasks';
 import { taskRequestSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
+import { RELATED_TYPES } from '@/config/notifications'
 
 type RouteParams = { id: string };
 
@@ -92,7 +93,7 @@ export const POST = withAdmin<RouteParams>(async (
       type: 'task_request',
       title: `Aufgabenanfrage: ${task.title}`,
       content: data.message?.trim() || 'Eine Aufgabe wurde zur Bearbeitung angefragt.',
-      related_type: 'task' as const,
+      related_type: RELATED_TYPES.TASK,
       related_id: taskId,
     }
 

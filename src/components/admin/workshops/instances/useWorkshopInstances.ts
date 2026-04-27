@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData, InstanceFiltersState } from './types'
 import { initialFormData } from './types'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 
 export function useWorkshopInstances() {
   const { data: session, status: sessionStatus } = useSession()
@@ -150,11 +151,11 @@ export function useWorkshopInstances() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'scheduled':
+      case WORKSHOP_INSTANCE_STATUS.SCHEDULED:
         return { label: 'Geplant', className: 'bg-blue-100 text-blue-800' }
-      case 'cancelled':
+      case WORKSHOP_INSTANCE_STATUS.CANCELLED:
         return { label: 'Abgesagt', className: 'bg-red-100 text-red-800' }
-      case 'completed':
+      case WORKSHOP_INSTANCE_STATUS.COMPLETED:
         return { label: 'Abgeschlossen', className: 'bg-green-100 text-green-800' }
       default:
         return { label: status, className: 'bg-gray-100 text-gray-800' }
