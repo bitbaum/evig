@@ -10,7 +10,7 @@ import {
   ChevronRight, Loader2, RefreshCw, Home, Phone
 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
-import { BOOKING_STATUS, BOOKING_STATUS_BADGES } from '@/config/booking-status'
+import { BOOKING_STATUS, BOOKING_STATUS_BADGES, type BookingStatus } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
@@ -25,7 +25,7 @@ interface Appointment {
   preferred_date: string | null
   confirmed_date: string | null
   urgency: string
-  status: string
+  status: BookingStatus
   is_home_visit: boolean
   visit_address: string | null
   visit_city: string | null
@@ -100,12 +100,13 @@ export default function CustomerBookings() {
     }
   }
 
+  const doneStatuses: BookingStatus[] = [BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED]
   const filteredAppointments = appointments.filter(apt => {
-    if (activeTab === 'active') return ![BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED].includes(apt.status)
-    return [BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED].includes(apt.status)
+    if (activeTab === 'active') return !doneStatuses.includes(apt.status)
+    return doneStatuses.includes(apt.status)
   })
 
-  const activeCount = appointments.filter(a => ![BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED].includes(a.status)).length
+  const activeCount = appointments.filter(a => !doneStatuses.includes(a.status)).length
   const needsAction = appointments.filter(a => a.status === BOOKING_STATUS.QUOTED).length
 
   if (sessionStatus === 'loading' || loading) {
@@ -287,7 +288,7 @@ export default function CustomerBookings() {
                     </button>
                   )}
 
-                  {[BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED].includes(apt.status) && (
+                  {([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as BookingStatus[]).includes(apt.status) && (
                     <button
                       onClick={() => handleAction(apt.id, 'cancel')}
                       disabled={actionLoading === apt.id}
