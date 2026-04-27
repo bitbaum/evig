@@ -120,12 +120,12 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       <div className="flex items-center gap-3">
         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
           isFinalized ? 'bg-green-100 text-green-800' :
-          protocol.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+          protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'bg-yellow-100 text-yellow-800' :
           isDraft ? 'bg-gray-100 text-gray-800' :
           'bg-blue-100 text-blue-800'
         }`}>
           {isFinalized ? 'Abgeschlossen' :
-           protocol.status === 'processing' ? 'Wird verarbeitet...' :
+           protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'Wird verarbeitet...' :
            isDraft ? 'Entwurf' :
            'Zur Überprüfung'}
         </span>
@@ -342,7 +342,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         </>
       )}
 
-      {!notes && !isDraft && protocol.status !== 'processing' && (
+      {!notes && !isDraft && protocol.status !== PROTOCOL_STATUSES.PROCESSING && (
         <div className="bg-white rounded-lg border p-12 text-center">
           <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">

@@ -3,6 +3,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { CATEGORY_WEIGHT_KG, CO2_PER_KG } from '@/config/co2-impact'
 import { logger } from '@/lib/logger'
 import { apiSuccessCached, apiError } from '@/lib/api/helpers'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 export const revalidate = 3600 // Cache for 1 hour
 
@@ -18,7 +19,7 @@ export async function GET() {
       query<{ category: string; status: string; count: string }>(
         `SELECT category, status, COUNT(*) as count
          FROM ${TABLE_NAMES.LISTINGS}
-         WHERE status != 'removed'
+         WHERE status != '${LISTING_STATUS.REMOVED}'
          GROUP BY category, status`
       ),
       // IT-Hilfe repairs
@@ -33,7 +34,7 @@ export async function GET() {
       query<{ count: string }>(
         `SELECT COUNT(*) as count
          FROM ${TABLE_NAMES.MARKETPLACE_LISTINGS}
-         WHERE status = 'sold'`
+         WHERE status = '${LISTING_STATUS.SOLD}'`
       ),
     ])
 
@@ -46,7 +47,7 @@ export async function GET() {
       const count = Number(row.count)
       totalDevices += count
 
-      if (row.status === 'sold') {
+      if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
         // Fallback to avg laptop weight (2 kg) for unknown categories
         const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? 2.0

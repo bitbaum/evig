@@ -12,19 +12,14 @@
 // WORKSHOP STATUS ENUMS
 // =============================================================================
 
+import type { WorkshopRegistrationStatus, WorkshopPaymentStatus } from '@/config/workshop-registration-status'
+import type { ProposalStatus as _ProposalStatus } from '@/config/workshops'
+
+export type RegistrationStatus = WorkshopRegistrationStatus
+export type PaymentStatus = WorkshopPaymentStatus
+export type ProposalStatus = _ProposalStatus
+
 export type WorkshopInstanceStatus = 'scheduled' | 'cancelled' | 'completed'
-
-export type RegistrationStatus =
-  | 'pending'
-  | 'confirmed'
-  | 'waitlist'
-  | 'attended'
-  | 'cancelled'
-  | 'no_show'
-
-export type PaymentStatus = 'not_required' | 'pending' | 'paid' | 'refunded'
-
-export type ProposalStatus = 'pending' | 'approved' | 'rejected' | 'requires_changes'
 
 export type LocationType = 'venue' | 'online' | 'home' | 'community_center' | 'business'
 

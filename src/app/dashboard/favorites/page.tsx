@@ -18,7 +18,7 @@ import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
-import { formatCHF } from '@/config/marketplace'
+import { formatCHF, LISTING_STATUS } from '@/config/marketplace'
 
 interface FavoriteListing {
   id: string
@@ -155,10 +155,10 @@ export default function FavoritesPage() {
                         {conditionInfo.label}
                       </span>
                     </div>
-                    {listing.status !== 'active' && (
+                    {listing.status !== LISTING_STATUS.ACTIVE && (
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <span className="text-white font-semibold text-sm">
-                          {listing.status === 'sold' ? t('statusSold') : t('statusUnavailable')}
+                          {listing.status === LISTING_STATUS.SOLD ? t('statusSold') : t('statusUnavailable')}
                         </span>
                       </div>
                     )}

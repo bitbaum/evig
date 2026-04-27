@@ -12,6 +12,7 @@ import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
 import {
   BarChart3,
@@ -99,7 +100,7 @@ async function getAnalyticsStats(): Promise<AnalyticsStats> {
     try {
       const approvalsResult = await query<{ count: string }>(
         `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USER_CONTENT_SUBMISSIONS} WHERE status = $1`,
-        ['pending']
+        [APPROVAL_STATUS.PENDING]
       )
       pendingApprovals = parseInt(approvalsResult.rows[0]?.count || '0')
     } catch {

@@ -14,6 +14,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { CATEGORY_WEIGHT_KG, CO2_PER_KG } from '@/config/co2-impact'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { logger } from '@/lib/logger'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 async function fetchImpactStats() {
   try {
@@ -21,7 +22,7 @@ async function fetchImpactStats() {
       query<{ category: string; status: string; count: string }>(
         `SELECT category, status, COUNT(*) as count
          FROM ${TABLE_NAMES.LISTINGS}
-         WHERE status != 'removed'
+         WHERE status != '${LISTING_STATUS.REMOVED}'
          GROUP BY category, status`
       ),
       query<{ count: string }>(
@@ -39,7 +40,7 @@ async function fetchImpactStats() {
     for (const row of listingRows.rows) {
       const count = Number(row.count)
       totalDevices += count
-      if (row.status === 'sold') {
+      if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
         const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? 2.0
         co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
