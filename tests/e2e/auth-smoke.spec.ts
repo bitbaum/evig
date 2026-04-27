@@ -11,9 +11,10 @@ test('auth health endpoint is healthy', async ({ request }) => {
     expect(body).toHaveProperty('error')
     return
   }
-  expect(body).toHaveProperty('checks')
-  expect(body.checks).toHaveProperty('authSecret')
-  expect(body.checks).toHaveProperty('database')
+  expect(body).toHaveProperty('data')
+  expect(body.data).toHaveProperty('checks')
+  expect(body.data.checks).toHaveProperty('authSecret')
+  expect(body.data.checks).toHaveProperty('database')
 })
 
 test('credentials login flow creates a session', async ({ request }) => {
