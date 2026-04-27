@@ -203,19 +203,19 @@ export const PARTICIPANT_SCOPE_CONFIG: Record<
   ParticipantScope,
   { label: string; description: string }
 > = {
-  all_staff: {
+  [PARTICIPANT_SCOPE.ALL_STAFF]: {
     label: 'Alle Mitarbeitenden',
     description: 'Alle aktiven Mitarbeitenden können abstimmen',
   },
-  board_only: {
+  [PARTICIPANT_SCOPE.BOARD_ONLY]: {
     label: 'Nur Vorstand',
     description: 'Nur Vorstandsmitglieder (Berechtigung: vorstand)',
   },
-  all_members: {
+  [PARTICIPANT_SCOPE.ALL_MEMBERS]: {
     label: 'Alle Vereinsmitglieder',
     description: 'Alle eingetragenen Vereinsmitglieder',
   },
-  invited: {
+  [PARTICIPANT_SCOPE.INVITED]: {
     label: 'Eingeladene Personen',
     description: 'Nur explizit eingeladene Personen',
   },
@@ -223,12 +223,12 @@ export const PARTICIPANT_SCOPE_CONFIG: Record<
 
 // Advisory scope defaults per category (used by AI recommender and templates)
 export const CATEGORY_SCOPE_DEFAULTS: Record<DecisionCategory, ParticipantScope> = {
-  vorstandsbeschluss: 'board_only',
-  mitgliederbeschluss: 'all_members',
-  ratifizierung: 'board_only',
-  statutenaenderung: 'all_members',
-  budget: 'board_only',
-  operativ: 'all_staff',
+  vorstandsbeschluss: PARTICIPANT_SCOPE.BOARD_ONLY,
+  mitgliederbeschluss: PARTICIPANT_SCOPE.ALL_MEMBERS,
+  ratifizierung: PARTICIPANT_SCOPE.BOARD_ONLY,
+  statutenaenderung: PARTICIPANT_SCOPE.ALL_MEMBERS,
+  budget: PARTICIPANT_SCOPE.BOARD_ONLY,
+  operativ: PARTICIPANT_SCOPE.ALL_STAFF,
 };
 
 // ─── Decision Templates ───────────────────────────────────────────────────
@@ -255,7 +255,7 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
     category: 'operativ',
     decisionType: 'choose',
     votingMethod: 'approval',
-    participantScope: 'all_staff',
+    participantScope: PARTICIPANT_SCOPE.ALL_STAFF,
     quorum: { type: 'percentage', value: 66 },
     blindVoting: true,
     durationHours: 120,
@@ -272,7 +272,7 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
     category: 'budget',
     decisionType: 'approve',
     votingMethod: 'simple_majority',
-    participantScope: 'board_only',
+    participantScope: PARTICIPANT_SCOPE.BOARD_ONLY,
     quorum: { type: 'percentage', value: 75 },
     blindVoting: false,
     durationHours: 72,
@@ -284,7 +284,7 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
     category: 'operativ',
     decisionType: 'prioritize',
     votingMethod: 'dot',
-    participantScope: 'all_staff',
+    participantScope: PARTICIPANT_SCOPE.ALL_STAFF,
     quorum: { type: 'percentage', value: 50 },
     blindVoting: true,
     durationHours: 72,
@@ -301,7 +301,7 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
     category: 'statutenaenderung',
     decisionType: 'approve',
     votingMethod: 'simple_majority',
-    participantScope: 'all_members',
+    participantScope: PARTICIPANT_SCOPE.ALL_MEMBERS,
     quorum: { type: 'percentage', value: 66 },
     blindVoting: false,
     durationHours: 168,
@@ -313,7 +313,7 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
     category: 'vorstandsbeschluss',
     decisionType: 'election',
     votingMethod: 'ranked_choice',
-    participantScope: 'all_members',
+    participantScope: PARTICIPANT_SCOPE.ALL_MEMBERS,
     quorum: { type: 'percentage', value: 50 },
     blindVoting: true,
     durationHours: 168,
@@ -329,7 +329,7 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
     category: 'vorstandsbeschluss',
     decisionType: 'approve',
     votingMethod: 'consent',
-    participantScope: 'board_only',
+    participantScope: PARTICIPANT_SCOPE.BOARD_ONLY,
     quorum: { type: 'percentage', value: 75 },
     blindVoting: false,
     durationHours: 120,
