@@ -14,7 +14,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { notifyAllStaff } from '@/lib/services/notifications'
 import { logger } from '@/lib/logger'
 import { DECISION_STATUS } from '@/config/decisions'
-import { RELATED_TYPES } from '@/config/notifications'
+import { RELATED_TYPES, NOTIFICATION_TYPES } from '@/config/notifications'
 
 type RouteParams = { id: string }
 
@@ -63,7 +63,7 @@ export const POST = withAdmin<RouteParams>(async (
     // Notify team on key transitions
     if (parsed.data.status === DECISION_STATUS.VOTING) {
       await notifyAllStaff({
-        type: 'decision_voting',
+        type: NOTIFICATION_TYPES.DECISION_VOTING,
         title: `Neue Abstimmung: ${decision.title}`,
         content: 'Eine neue Entscheidung wartet auf deine Stimme.',
         related_type: RELATED_TYPES.DECISION,
@@ -71,7 +71,7 @@ export const POST = withAdmin<RouteParams>(async (
       }, dbUserId)
     } else if (parsed.data.status === DECISION_STATUS.CLOSED) {
       await notifyAllStaff({
-        type: 'decision_closed',
+        type: NOTIFICATION_TYPES.DECISION_CLOSED,
         title: `Entscheidung getroffen: ${decision.title}`,
         content: parsed.data.outcomeSummary || 'Die Abstimmung wurde abgeschlossen.',
         related_type: RELATED_TYPES.DECISION,

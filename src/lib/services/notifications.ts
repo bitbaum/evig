@@ -25,6 +25,7 @@ import {
   decisionClosed,
 } from '@/lib/email/templates/decisions'
 import type { EmailContent } from '@/lib/email/types'
+import { NOTIFICATION_TYPES } from '@/config/notifications'
 
 export interface NotificationPayload {
   type: string
@@ -50,13 +51,13 @@ function getEmailContent(payload: NotificationPayload): EmailContent {
   const id = metadata?.decisionId ?? payload.related_id
   const deadline = metadata?.votingDeadline ?? undefined
 
-  if (type === 'decision_voting') {
+  if (type === NOTIFICATION_TYPES.DECISION_VOTING) {
     return decisionVotingOpened(title, deadline || undefined, id)
   }
-  if (type === 'decision_closed') {
+  if (type === NOTIFICATION_TYPES.DECISION_CLOSED) {
     return decisionClosed(title, id)
   }
-  if (type === 'decision_deadline') {
+  if (type === NOTIFICATION_TYPES.DECISION_DEADLINE) {
     return decisionDeadlineReminder(title, deadline ?? '', id)
   }
 

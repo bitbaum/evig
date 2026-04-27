@@ -9,6 +9,7 @@ export const NOTIFICATION_TYPES = {
   // Decision system
   DECISION_VOTING: 'decision_voting',
   DECISION_CLOSED: 'decision_closed',
+  DECISION_DEADLINE: 'decision_deadline',
 
   // Protocols
   PROTOCOL_FINALIZED: 'protocol_finalized',

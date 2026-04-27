@@ -17,8 +17,8 @@ import { resolveEligibleUserIds } from '@/lib/services/decisions-voting'
 import { asArray } from '@/lib/services/decisions-crud'
 import { logger } from '@/lib/logger'
 import { DECISION_STATUS, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { TABLE_NAMES } from '@/config/database'
-import { RELATED_TYPES } from '@/config/notifications'
 
 export async function GET(request: NextRequest) {
   // Verify cron secret (skip in dev if not set)
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
           if (nonVoterIds.length > 0) {
             await notifyUsers(nonVoterIds, {
-              type: 'decision_deadline',
+              type: NOTIFICATION_TYPES.DECISION_DEADLINE,
               title: `Abstimmung endet morgen: ${decision.title}`,
               content: `Die Abstimmungsfrist für "${decision.title}" endet morgen. Bitte gib noch deine Stimme ab.`,
               related_type: RELATED_TYPES.DECISION,
@@ -123,7 +123,7 @@ export async function GET(request: NextRequest) {
           closed++
 
           await notifyAllStaff({
-            type: 'decision_closed',
+            type: NOTIFICATION_TYPES.DECISION_CLOSED,
             title: `Abstimmung abgelaufen: ${decision.title}`,
             content: 'Die Abstimmungsfrist ist abgelaufen. Die Entscheidung wurde automatisch geschlossen.',
             related_type: RELATED_TYPES.DECISION,
