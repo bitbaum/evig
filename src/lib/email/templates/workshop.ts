@@ -7,6 +7,7 @@
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status';
 
 // Every `${X}` interpolated into an html: body that comes from a user
 // (name/workshopTitle/workshopDate/workshopLocation/instructor/reason/
@@ -81,10 +82,10 @@ export const workshopRegistrationStatusUpdate = (
   name: string,
   workshopTitle: string,
   workshopDate: string,
-  newStatus: 'confirmed' | 'cancelled' | 'waitlist',
+  newStatus: typeof WORKSHOP_REGISTRATION_STATUS.CONFIRMED | typeof WORKSHOP_REGISTRATION_STATUS.CANCELLED | typeof WORKSHOP_REGISTRATION_STATUS.WAITLIST,
   reason?: string
 ): EmailContent => ({
-  subject: `Workshop-Anmeldung ${newStatus === 'confirmed' ? 'bestätigt' : newStatus === 'cancelled' ? 'storniert' : 'Warteliste'} - RevampIT`,
+  subject: `Workshop-Anmeldung ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'storniert' : 'Warteliste'} - RevampIT`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -96,19 +97,19 @@ export const workshopRegistrationStatusUpdate = (
     </head>
     <body>
       <div class="container">
-        <div class="header ${newStatus === 'confirmed' ? 'header-green' : newStatus === 'cancelled' ? 'header-red' : 'header-orange'}">
-          <h1>${newStatus === 'confirmed' ? '✅ Anmeldung bestätigt' : newStatus === 'cancelled' ? '❌ Anmeldung storniert' : '⏳ Warteliste'}</h1>
+        <div class="header ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'header-green' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'header-red' : 'header-orange'}">
+          <h1>${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? '✅ Anmeldung bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? '❌ Anmeldung storniert' : '⏳ Warteliste'}</h1>
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
           <p>Der Status deiner Workshop-Anmeldung wurde aktualisiert.</p>
           <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
           <p><strong>Datum:</strong> ${escapeHtml(workshopDate)}</p>
-          <p><strong>Status:</strong> ${newStatus === 'confirmed' ? 'Bestätigt' : newStatus === 'cancelled' ? 'Storniert' : 'Auf der Warteliste'}</p>
+          <p><strong>Status:</strong> ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'Bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'Storniert' : 'Auf der Warteliste'}</p>
           ${reason ? `<p><strong>Hinweis:</strong> ${escapeHtml(reason)}</p>` : ''}
-          ${newStatus === 'confirmed' ? '<p>Wir freuen uns auf deine Teilnahme! Du erhältst rechtzeitig vor dem Workshop eine Erinnerung.</p>' : ''}
-          ${newStatus === 'waitlist' ? '<p>Du wirst automatisch benachrichtigt, sobald ein Platz frei wird.</p>' : ''}
-          ${newStatus === 'cancelled' ? '<p>Falls du Fragen hast, kannst du uns jederzeit kontaktieren.</p>' : ''}
+          ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? '<p>Wir freuen uns auf deine Teilnahme! Du erhältst rechtzeitig vor dem Workshop eine Erinnerung.</p>' : ''}
+          ${newStatus === WORKSHOP_REGISTRATION_STATUS.WAITLIST ? '<p>Du wirst automatisch benachrichtigt, sobald ein Platz frei wird.</p>' : ''}
+          ${newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? '<p>Falls du Fragen hast, kannst du uns jederzeit kontaktieren.</p>' : ''}
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -125,12 +126,12 @@ Der Status deiner Workshop-Anmeldung wurde aktualisiert.
 
 Workshop: ${workshopTitle}
 Datum: ${workshopDate}
-Status: ${newStatus === 'confirmed' ? 'Bestätigt' : newStatus === 'cancelled' ? 'Storniert' : 'Auf der Warteliste'}
+Status: ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'Bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'Storniert' : 'Auf der Warteliste'}
 ${reason ? `Hinweis: ${reason}` : ''}
 
-${newStatus === 'confirmed' ? 'Wir freuen uns auf deine Teilnahme!' : ''}
-${newStatus === 'waitlist' ? 'Du wirst automatisch benachrichtigt, sobald ein Platz frei wird.' : ''}
-${newStatus === 'cancelled' ? 'Falls du Fragen hast, kannst du uns jederzeit kontaktieren.' : ''}
+${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'Wir freuen uns auf deine Teilnahme!' : ''}
+${newStatus === WORKSHOP_REGISTRATION_STATUS.WAITLIST ? 'Du wirst automatisch benachrichtigt, sobald ein Platz frei wird.' : ''}
+${newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'Falls du Fragen hast, kannst du uns jederzeit kontaktieren.' : ''}
 ${createTextFooter()}
   `.trim(),
 });

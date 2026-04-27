@@ -10,7 +10,7 @@ import {
   ChevronRight, Loader2, RefreshCw, Home, Phone
 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
-import { BOOKING_STATUS_BADGES } from '@/config/booking-status'
+import { BOOKING_STATUS, BOOKING_STATUS_BADGES } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
@@ -101,12 +101,12 @@ export default function CustomerBookings() {
   }
 
   const filteredAppointments = appointments.filter(apt => {
-    if (activeTab === 'active') return !['completed', 'rejected', 'cancelled'].includes(apt.status)
-    return ['completed', 'rejected', 'cancelled'].includes(apt.status)
+    if (activeTab === 'active') return ![BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED].includes(apt.status)
+    return [BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED].includes(apt.status)
   })
 
-  const activeCount = appointments.filter(a => !['completed', 'rejected', 'cancelled'].includes(a.status)).length
-  const needsAction = appointments.filter(a => a.status === 'quoted').length
+  const activeCount = appointments.filter(a => ![BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED].includes(a.status)).length
+  const needsAction = appointments.filter(a => a.status === BOOKING_STATUS.QUOTED).length
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -256,7 +256,7 @@ export default function CustomerBookings() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 pt-4 border-t">
-                  {apt.status === 'quoted' && (
+                  {apt.status === BOOKING_STATUS.QUOTED && (
                     <>
                       <button
                         onClick={() => handleAction(apt.id, 'approve_quote')}
@@ -277,7 +277,7 @@ export default function CustomerBookings() {
                     </>
                   )}
 
-                  {apt.status === 'completed' && !apt.customer_rating && (
+                  {apt.status === BOOKING_STATUS.COMPLETED && !apt.customer_rating && (
                     <button
                       onClick={() => setRatingModal({ appointmentId: apt.id, open: true })}
                       className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 flex items-center gap-2"
@@ -287,7 +287,7 @@ export default function CustomerBookings() {
                     </button>
                   )}
 
-                  {['requested', 'accepted', 'quoted', 'quote_approved'].includes(apt.status) && (
+                  {[BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED].includes(apt.status) && (
                     <button
                       onClick={() => handleAction(apt.id, 'cancel')}
                       disabled={actionLoading === apt.id}

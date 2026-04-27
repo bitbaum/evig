@@ -18,27 +18,28 @@ import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { REVIEW_STATUS } from '@/config/review-status'
 
 const STATUS_STYLES: Record<string, string> = {
-  published: 'bg-green-100 text-green-800',
-  pending_moderation: 'bg-orange-100 text-orange-800',
-  hidden: 'bg-red-100 text-red-800',
-  deleted: 'bg-gray-100 text-gray-800'
+  [REVIEW_STATUS.PUBLISHED]: 'bg-green-100 text-green-800',
+  [REVIEW_STATUS.PENDING_MODERATION]: 'bg-orange-100 text-orange-800',
+  [REVIEW_STATUS.HIDDEN]: 'bg-red-100 text-red-800',
+  [REVIEW_STATUS.DELETED]: 'bg-gray-100 text-gray-800'
 }
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
-  published: <CheckCircle className="w-3 h-3" />,
-  pending_moderation: <Clock className="w-3 h-3" />,
-  hidden: <EyeOff className="w-3 h-3" />,
-  deleted: <Trash2 className="w-3 h-3" />
+  [REVIEW_STATUS.PUBLISHED]: <CheckCircle className="w-3 h-3" />,
+  [REVIEW_STATUS.PENDING_MODERATION]: <Clock className="w-3 h-3" />,
+  [REVIEW_STATUS.HIDDEN]: <EyeOff className="w-3 h-3" />,
+  [REVIEW_STATUS.DELETED]: <Trash2 className="w-3 h-3" />
 }
 
 function StatusBadge({ status }: { status: string }) {
   const t = useTranslations('dashboard.reviews')
-  const label = status === 'published' ? t('statusPublished')
-    : status === 'pending_moderation' ? t('statusPendingModeration')
-    : status === 'hidden' ? t('statusHidden')
-    : status === 'deleted' ? t('statusDeleted')
+  const label = status === REVIEW_STATUS.PUBLISHED ? t('statusPublished')
+    : status === REVIEW_STATUS.PENDING_MODERATION ? t('statusPendingModeration')
+    : status === REVIEW_STATUS.HIDDEN ? t('statusHidden')
+    : status === REVIEW_STATUS.DELETED ? t('statusDeleted')
     : t('statusUnknown')
   return (
     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1 ${STATUS_STYLES[status] || STATUS_STYLES.published}`}>
@@ -188,7 +189,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           {/* Action Buttons */}
           {editingReview !== review.id && (
             <div className="flex flex-col gap-2 ml-4">
-              {canEdit(review.createdAt) && review.status === 'published' && (
+              {canEdit(review.createdAt) && review.status === REVIEW_STATUS.PUBLISHED && (
                 <button
                   onClick={() => onEdit(review)}
                   className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 flex items-center gap-1"
@@ -219,7 +220,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           </div>
 
           {/* Vote Buttons */}
-          {review.status === 'published' && (
+          {review.status === REVIEW_STATUS.PUBLISHED && (
             <div className="flex items-center gap-2">
               <button
                 onClick={() => onVote(review.id, 'helpful')}

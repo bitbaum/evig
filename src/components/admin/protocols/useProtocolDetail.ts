@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { PROTOCOL_WORKFLOW_STEPS, getProtocolWorkflowProgress, type ProtocolWorkflowStepId } from '@/lib/protocols/workflow'
+import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateShort } from '@/lib/date-formats'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
@@ -32,9 +33,9 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
   const notes = protocol.structured_notes as StructuredNotes | null
-  const isReview = protocol.status === 'review'
-  const isDraft = protocol.status === 'draft'
-  const isFinalized = protocol.status === 'finalized'
+  const isReview = protocol.status === PROTOCOL_STATUS.REVIEW
+  const isDraft = protocol.status === PROTOCOL_STATUS.DRAFT
+  const isFinalized = protocol.status === PROTOCOL_STATUS.FINALIZED
 
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(
     () => new Set(isReview && notes?.topics ? notes.topics.map(t => t.id) : [])
