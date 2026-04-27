@@ -181,11 +181,20 @@ export const DECISION_TYPE_DEFAULTS: Record<
 
 // ─── Participant Scopes ───────────────────────────────────────────────────
 
+export const PARTICIPANT_SCOPE = {
+  ALL_STAFF: 'all_staff',
+  BOARD_ONLY: 'board_only',
+  ALL_MEMBERS: 'all_members',
+  INVITED: 'invited',
+} as const;
+
+export const PARTICIPANT_SCOPE_DEFAULT = PARTICIPANT_SCOPE.ALL_STAFF;
+
 export const PARTICIPANT_SCOPES = [
-  'all_staff',
-  'board_only',
-  'all_members',
-  'invited',
+  PARTICIPANT_SCOPE.ALL_STAFF,
+  PARTICIPANT_SCOPE.BOARD_ONLY,
+  PARTICIPANT_SCOPE.ALL_MEMBERS,
+  PARTICIPANT_SCOPE.INVITED,
 ] as const;
 
 export type ParticipantScope = (typeof PARTICIPANT_SCOPES)[number];

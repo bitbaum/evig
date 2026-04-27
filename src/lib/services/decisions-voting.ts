@@ -8,7 +8,7 @@
 import { db } from '@/db';
 import { sql, getTableName } from 'drizzle-orm';
 import { decisions, decisionVotes } from '@/db/schema/misc';
-import { DECISION_STATUS } from '@/config/decisions';
+import { DECISION_STATUS, PARTICIPANT_SCOPE, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions';
 import { users } from '@/db/schema/auth';
 import {
   type VotingMethod,
@@ -64,20 +64,20 @@ async function resolveEligibleUserIds(
   invitedParticipants: string[]
 ): Promise<string[]> {
   switch (participantScope) {
-    case 'board_only': {
+    case PARTICIPANT_SCOPE.BOARD_ONLY: {
       const result = await db.execute(sql`
         SELECT id FROM ${sql.raw(uTable)}
         WHERE is_staff = true AND staff_permissions @> ARRAY['vorstand']::text[]
       `);
       return (result.rows as unknown as { id: string }[]).map(r => r.id);
     }
-    case 'all_members': {
+    case PARTICIPANT_SCOPE.ALL_MEMBERS: {
       const result = await db.execute(sql`
         SELECT id FROM ${sql.raw(uTable)} WHERE is_member = true
       `);
       return (result.rows as unknown as { id: string }[]).map(r => r.id);
     }
-    case 'invited':
+    case PARTICIPANT_SCOPE.INVITED:
       return invitedParticipants;
     default: // 'all_staff'
       {
@@ -176,7 +176,7 @@ export async function submitVote(
     return { error: 'not_voting_phase' as const };
 
   // Check participant eligibility via scope
-  const participantScope = (decision.participant_scope as string) || 'all_staff';
+  const participantScope = (decision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
   const invited = asArray<string>(decision.invited_participants, []);
   const eligibleIds = await resolveEligibleUserIds(participantScope, invited);
   if (!eligibleIds.includes(userId)) {
@@ -269,7 +269,7 @@ export async function getParticipationStatus(decisionId: string) {
     quorum: QuorumConfig;
   };
   const invited = asArray<string>(decision.invited_participants, []);
-  const participantScope = (decision.participant_scope as string) || 'all_staff';
+  const participantScope = (decision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
 
   // Get eligible participant IDs via scope
   const eligibleIds = await resolveEligibleUserIds(participantScope, invited);

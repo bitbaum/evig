@@ -9,6 +9,7 @@ import {
   SCORE_RANGE,
   METHODS_REQUIRING_OPTIONS,
   PARTICIPANT_SCOPES,
+  PARTICIPANT_SCOPE_DEFAULT,
   type DecisionType,
   type VotingMethod,
   type DecisionStatus,
@@ -49,7 +50,7 @@ export const createDecisionSchema = z
     blindVoting: z.boolean().optional().default(true),
     dotCount: z.number().int().min(1).max(20).optional().nullable(),
     invitedParticipants: z.array(z.string()).optional().default([]),
-    participantScope: z.enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]]).optional().default('all_staff'),
+    participantScope: z.enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]]).optional().default(PARTICIPANT_SCOPE_DEFAULT),
     discussionDeadline: z.string().datetime().optional().nullable(),
     votingDeadline: z.string().datetime().optional().nullable(),
     // Allow immediate transition on create

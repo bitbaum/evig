@@ -16,7 +16,7 @@ import { notifyAllStaff, notifyUsers } from '@/lib/services/notifications'
 import { resolveEligibleUserIds } from '@/lib/services/decisions-voting'
 import { asArray } from '@/lib/services/decisions-crud'
 import { logger } from '@/lib/logger'
-import { DECISION_STATUS } from '@/config/decisions'
+import { DECISION_STATUS, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions'
 import { TABLE_NAMES } from '@/config/database'
 
 export async function GET(request: NextRequest) {
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
       for (const decision of upcomingDecisions) {
         try {
-          const scope = decision.participantScope ?? 'all_staff'
+          const scope = decision.participantScope ?? PARTICIPANT_SCOPE_DEFAULT
           const invited = asArray<string>(decision.invitedParticipants, [])
           const eligibleIds = await resolveEligibleUserIds(scope, invited)
 

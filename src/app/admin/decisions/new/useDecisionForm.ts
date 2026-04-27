@@ -13,6 +13,8 @@ import {
   DECISION_CATEGORIES,
   CATEGORY_SCOPE_DEFAULTS,
   PARTICIPANT_SCOPES,
+  PARTICIPANT_SCOPE,
+  PARTICIPANT_SCOPE_DEFAULT,
   type DecisionType,
   type VotingMethod,
   type DecisionCategory,
@@ -41,7 +43,7 @@ export function useDecisionForm() {
 
   // Core form state
   const [decisionType, setDecisionType] = useState<DecisionType>('sense_check');
-  const [participantScope, setParticipantScope] = useState<ParticipantScope>('all_staff');
+  const [participantScope, setParticipantScope] = useState<ParticipantScope>(PARTICIPANT_SCOPE_DEFAULT);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [background, setBackground] = useState('');
@@ -200,7 +202,7 @@ export function useDecisionForm() {
       blindVoting,
       dotCount: votingMethod === 'dot' ? dotCount : null,
       participantScope,
-      invitedParticipants: participantScope === 'invited' ? Array.from(selectedParticipants) : [],
+      invitedParticipants: participantScope === PARTICIPANT_SCOPE.INVITED ? Array.from(selectedParticipants) : [],
       discussionDeadline: discussionDeadline ? new Date(discussionDeadline).toISOString() : null,
       votingDeadline: votingDeadline ? new Date(votingDeadline).toISOString() : null,
       initialStatus: initialStatusRef.current,

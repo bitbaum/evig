@@ -1,6 +1,6 @@
 'use client';
 
-import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, type ParticipantScope } from '@/config/decisions';
+import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, PARTICIPANT_SCOPE, type ParticipantScope } from '@/config/decisions';
 import Heading from '@/components/admin/AdminHeading';
 import { type TeamMember } from './useDecisionForm';
 
@@ -48,7 +48,7 @@ export function ParticipantSelector({
         })}
       </div>
 
-      {participantScope === 'invited' && (
+      {participantScope === PARTICIPANT_SCOPE.INVITED && (
         <div className="space-y-2 pt-1">
           <input
             type="text"

@@ -13,6 +13,7 @@ import { notifyUsers, createNotification, fireNotification } from '@/lib/service
 import {
   VALID_TRANSITIONS,
   DECISION_STATUS,
+  PARTICIPANT_SCOPE_DEFAULT,
   type VotingMethod,
   type DecisionStatus,
 } from '@/config/decisions';
@@ -68,7 +69,7 @@ export async function transitionDecision(
     // Enforce quorum before closing
     const quorumConfig = asObject<{ type: string; value: number }>(decision.quorum, { type: 'percentage', value: 50 });
     const invitedParticipants = asArray<string>(decision.invited_participants, []);
-    const participantScope = (decision.participant_scope as string) || 'all_staff';
+    const participantScope = (decision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
 
     // Resolve eligible voters via scope
     const eligibleIds = await resolveEligibleUserIds(participantScope, invitedParticipants);
@@ -148,7 +149,7 @@ export async function transitionDecision(
           options,
           outcome,
           outcomeSummary: txResult.outcome_summary,
-          participantScope: (txResult.participant_scope as string) || 'all_staff',
+          participantScope: (txResult.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT,
           category: txResult.category || 'operativ',
         });
         if (narrative) {
@@ -178,7 +179,7 @@ export async function transitionDecision(
   // Notify eligible voters when voting opens (scope-aware)
   if (newStatus === DECISION_STATUS.VOTING && updatedDecision) {
     const invited = asArray<string>(updatedDecision.invited_participants, []);
-    const scope = (updatedDecision.participant_scope as string) || 'all_staff';
+    const scope = (updatedDecision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
     const eligibleIds = await resolveEligibleUserIds(scope, invited);
 
     const deadlineInfo = updatedDecision.voting_deadline

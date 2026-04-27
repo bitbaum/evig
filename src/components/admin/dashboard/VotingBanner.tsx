@@ -5,7 +5,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { decisions, decisionVotes, users } from '@/db/schema'
 import { logger } from '@/lib/logger'
-import { DECISION_STATUS } from '@/config/decisions'
+import { DECISION_STATUS, PARTICIPANT_SCOPE } from '@/config/decisions'
 
 interface VotingBannerProps {
   userId: string
@@ -59,11 +59,11 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
           WHERE v2.decision_id = d.id AND v2.user_id = ${userId}
         )
         AND (
-          d.participant_scope = 'all_staff'
-          OR (d.participant_scope = 'board_only' AND ${isSuper})
-          OR (d.participant_scope = 'all_members' AND ${isMember})
+          d.participant_scope = ${PARTICIPANT_SCOPE.ALL_STAFF}
+          OR (d.participant_scope = ${PARTICIPANT_SCOPE.BOARD_ONLY} AND ${isSuper})
+          OR (d.participant_scope = ${PARTICIPANT_SCOPE.ALL_MEMBERS} AND ${isMember})
           OR (
-            d.participant_scope = 'invited'
+            d.participant_scope = ${PARTICIPANT_SCOPE.INVITED}
             AND d.invited_participants::jsonb @> ${JSON.stringify([userId])}::jsonb
           )
         )
