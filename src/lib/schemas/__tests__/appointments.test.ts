@@ -73,8 +73,8 @@ describe('CreateAppointmentSchema', () => {
     }).success).toBe(false)
   })
 
-  it('accepts the three urgency levels', () => {
-    for (const u of ['normal', 'urgent', 'emergency']) {
+  it('accepts all four urgency levels', () => {
+    for (const u of ['low', 'normal', 'high', 'urgent']) {
       expect(CreateAppointmentSchema.safeParse({ ...valid, urgency: u }).success).toBe(true)
     }
   })
