@@ -10,8 +10,7 @@ import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
-
-type SubmissionType = 'idea' | 'draft'
+import { BLOG_SUBMISSION_TYPE, type BlogSubmissionType } from '@/config/approval-status'
 
 interface Category {
   id: string
@@ -24,7 +23,7 @@ interface Category {
 export default function SubmitPostPage() {
   const { data: session } = useSession()
   const t = useTranslations('blog.submit')
-  const [submissionType, setSubmissionType] = useState<SubmissionType>('idea')
+  const [submissionType, setSubmissionType] = useState<BlogSubmissionType>(BLOG_SUBMISSION_TYPE.IDEA)
   const [categories, setCategories] = useState<Category[]>([])
   const [formData, setFormData] = useState({
     name: '',
@@ -200,14 +199,14 @@ export default function SubmitPostPage() {
           <div className="grid md:grid-cols-2 gap-4">
             <button
               type="button"
-              onClick={() => setSubmissionType('idea')}
+              onClick={() => setSubmissionType(BLOG_SUBMISSION_TYPE.IDEA)}
               className={`p-6 rounded-lg border-2 transition-all ${
-                submissionType === 'idea'
+                submissionType === BLOG_SUBMISSION_TYPE.IDEA
                   ? 'border-green-600 bg-green-50'
                   : 'border-gray-200 hover:border-green-300'
               }`}
             >
-              <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === 'idea' ? 'text-green-600' : 'text-gray-400'}`} />
+              <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 'text-green-600' : 'text-gray-400'}`} />
               <Heading level={3} className="text-lg text-gray-900 mb-2">{t('typeIdea')}</Heading>
               <p className="text-sm text-gray-600">
                 {t('typeIdeaDesc')}
@@ -216,14 +215,14 @@ export default function SubmitPostPage() {
 
             <button
               type="button"
-              onClick={() => setSubmissionType('draft')}
+              onClick={() => setSubmissionType(BLOG_SUBMISSION_TYPE.DRAFT)}
               className={`p-6 rounded-lg border-2 transition-all ${
-                submissionType === 'draft'
+                submissionType === BLOG_SUBMISSION_TYPE.DRAFT
                   ? 'border-green-600 bg-green-50'
                   : 'border-gray-200 hover:border-green-300'
               }`}
             >
-              <FileText className={`w-8 h-8 mb-3 ${submissionType === 'draft' ? 'text-green-600' : 'text-gray-400'}`} />
+              <FileText className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.DRAFT ? 'text-green-600' : 'text-gray-400'}`} />
               <Heading level={3} className="text-lg text-gray-900 mb-2">{t('typeDraft')}</Heading>
               <p className="text-sm text-gray-600">
                 {t('typeDraftDesc')}
@@ -235,7 +234,7 @@ export default function SubmitPostPage() {
         {/* Submission Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8">
           <Heading level={2} className="text-2xl text-gray-900 mb-6">
-            {submissionType === 'idea' ? t('formHeadingIdea') : t('formHeadingDraft')}
+            {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('formHeadingIdea') : t('formHeadingDraft')}
           </Heading>
 
           {/* AI Assistant */}
@@ -243,7 +242,7 @@ export default function SubmitPostPage() {
             formType="blog-submit"
             variant="section"
             defaultExpanded={true}
-            placeholder={submissionType === 'idea' ? t('aiPlaceholderIdea') : t('aiPlaceholderDraft')}
+            placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('aiPlaceholderIdea') : t('aiPlaceholderDraft')}
             onFieldsFilled={handleAIFieldsFilled}
             currentData={formData}
             className="mb-6"
@@ -291,7 +290,7 @@ export default function SubmitPostPage() {
           {/* Post Info */}
           <div className="mb-6">
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-              {submissionType === 'idea' ? t('labelTitleIdea') : t('labelTitleDraft')}
+              {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelTitleIdea') : t('labelTitleDraft')}
             </label>
             <input
               type="text"
@@ -302,7 +301,7 @@ export default function SubmitPostPage() {
               required
               aria-required="true"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder={submissionType === 'idea' ? t('placeholderTitleIdea') : t('placeholderTitleDraft')}
+              placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderTitleIdea') : t('placeholderTitleDraft')}
             />
           </div>
 
@@ -345,7 +344,7 @@ export default function SubmitPostPage() {
 
           <div className="mb-6">
             <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
-              {submissionType === 'idea' ? t('labelContentIdea') : t('labelContentDraft')}
+              {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelContentIdea') : t('labelContentDraft')}
             </label>
             <textarea
               id="content"
@@ -354,11 +353,11 @@ export default function SubmitPostPage() {
               onChange={handleChange}
               required
               aria-required="true"
-              rows={submissionType === 'idea' ? 6 : 16}
+              rows={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 6 : 16}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
-              placeholder={submissionType === 'idea' ? t('placeholderContentIdea') : t('placeholderContentDraft')}
+              placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderContentIdea') : t('placeholderContentDraft')}
             />
-            {submissionType === 'draft' && (
+            {submissionType === BLOG_SUBMISSION_TYPE.DRAFT && (
               <p className="mt-2 text-sm text-gray-500">
                 {t('markdownHint')}
               </p>

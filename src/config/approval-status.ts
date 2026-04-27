@@ -77,6 +77,13 @@ export const SUBMISSION_CONTENT_TYPE_LABELS: Record<string, string> = {
   [SUBMISSION_CONTENT_TYPE.LISTING]: 'Inserat',
 }
 
+export const BLOG_SUBMISSION_TYPE = {
+  IDEA: 'idea',
+  DRAFT: 'draft',
+} as const
+
+export type BlogSubmissionType = typeof BLOG_SUBMISSION_TYPE[keyof typeof BLOG_SUBMISSION_TYPE]
+
 /**
  * Get approval status label
  */

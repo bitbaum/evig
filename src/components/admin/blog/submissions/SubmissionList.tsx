@@ -1,6 +1,6 @@
 'use client'
 
-import { APPROVAL_STATUS_BADGES } from '@/config/approval-status'
+import { APPROVAL_STATUS_BADGES, BLOG_SUBMISSION_TYPE } from '@/config/approval-status'
 import Heading from '@/components/admin/AdminHeading'
 import { formatDateTime } from '@/lib/date-formats'
 import {
@@ -36,17 +36,17 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
               <div className="flex items-center gap-2 mb-2">
                 <span
                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full font-medium ${
-                    submission.submission_type === 'idea'
+                    submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
                       ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
                       : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
                   }`}
                 >
-                  {submission.submission_type === 'idea' ? (
+                  {submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA ? (
                     <Lightbulb className="w-3 h-3" />
                   ) : (
                     <FileText className="w-3 h-3" />
                   )}
-                  {submission.submission_type === 'idea'
+                  {submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
                     ? 'Idee'
                     : 'Entwurf'}
                 </span>

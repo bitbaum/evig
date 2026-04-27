@@ -6,14 +6,14 @@ import { ArrowLeft, Eye, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { APPROVAL_STATUS, getApprovalStatusBadge, type ApprovalStatus } from '@/config/approval-status'
+import { APPROVAL_STATUS, BLOG_SUBMISSION_TYPE, getApprovalStatusBadge, type ApprovalStatus, type BlogSubmissionType } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 
 interface Submission {
   id: string
   status: ApprovalStatus
-  submissionType: 'idea' | 'draft'
+  submissionType: BlogSubmissionType
   name: string
   email: string
   title: string
@@ -194,12 +194,12 @@ ${submission.content}
                       <div className="flex items-center gap-2 mb-2">
                         <span
                           className={`px-2 py-1 text-xs rounded-full font-medium ${
-                            submission.submissionType === 'idea'
+                            submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA
                               ? 'bg-blue-100 text-blue-800'
                               : 'bg-purple-100 text-purple-800'
                           }`}
                         >
-                          {submission.submissionType === 'idea' ? t('typeIdea') : t('typeDraft')}
+                          {submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('typeIdea') : t('typeDraft')}
                         </span>
                         <span
                           className={`px-2 py-1 text-xs rounded-full font-medium ${getApprovalStatusBadge(submission.status).bg} ${getApprovalStatusBadge(submission.status).color}`}

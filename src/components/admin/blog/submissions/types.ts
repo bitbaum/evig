@@ -1,4 +1,4 @@
-import type { ApprovalStatus } from '@/config/approval-status'
+import type { ApprovalStatus, BlogSubmissionType } from '@/config/approval-status'
 
 export interface Submission {
   id: string
@@ -8,7 +8,7 @@ export interface Submission {
   slug: string
   content: string
   excerpt: string | null
-  submission_type: 'idea' | 'draft'
+  submission_type: BlogSubmissionType
   category_id: string | null
   category_name: string | null
   category_label: string | null
