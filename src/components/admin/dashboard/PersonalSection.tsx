@@ -5,6 +5,7 @@ import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
+import { APPROVAL_STATUS } from '@/config/approval-status'
 
 interface PersonalSectionProps {
   userId: string
@@ -72,7 +73,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
       SELECT id, content_type, title, status, created_at
       FROM ${sql.raw(TABLE_NAMES.USER_CONTENT_SUBMISSIONS)}
       WHERE user_id = ${userId}
-        AND status = 'pending'
+        AND status = ${APPROVAL_STATUS.PENDING}
       ORDER BY created_at DESC
       LIMIT ${SUBMISSION_LIMIT}
     `),
@@ -92,7 +93,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         id: String(r.id ?? ''),
         content_type: r.content_type ? String(r.content_type) : null,
         title: r.title ? String(r.title) : null,
-        status: String(r.status ?? 'pending'),
+        status: String(r.status ?? APPROVAL_STATUS.PENDING),
         created_at: String(r.created_at ?? ''),
       }))
     : (() => { logger.warn('PersonalSection submissions query failed', { error: (submissionsResult as PromiseRejectedResult).reason }); return [] })()

@@ -5,6 +5,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { decisions, decisionVotes, users } from '@/db/schema'
 import { logger } from '@/lib/logger'
+import { DECISION_STATUS } from '@/config/decisions'
 
 interface VotingBannerProps {
   userId: string
@@ -52,7 +53,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
         COUNT(dv.id)::int AS votes_cast
       FROM ${sql.raw(decisionsTable)} d
       LEFT JOIN ${sql.raw(votesTable)} dv ON dv.decision_id = d.id
-      WHERE d.status = 'voting'
+      WHERE d.status = ${DECISION_STATUS.VOTING}
         AND NOT EXISTS (
           SELECT 1 FROM ${sql.raw(votesTable)} v2
           WHERE v2.decision_id = d.id AND v2.user_id = ${userId}

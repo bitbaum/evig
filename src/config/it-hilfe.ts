@@ -199,6 +199,15 @@ export const IT_SKILLS: Record<string, ITSkill[]> = {
 // 3. NORMAL - Marktüblicher Preis
 // 4. SUPPORTER - Freiwilliger Aufschlag zur Unterstützung anderer
 
+export const BUDGET_TIER = {
+  GRATIS: 'gratis',
+  KULTURLEGI: 'kulturlegi',
+  NORMAL: 'normal',
+  SUPPORTER: 'supporter',
+} as const
+
+export type BudgetTierId = typeof BUDGET_TIER[keyof typeof BUDGET_TIER]
+
 export interface BudgetTier {
   id: string
   name: string

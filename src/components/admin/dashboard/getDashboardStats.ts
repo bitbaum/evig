@@ -10,8 +10,10 @@ import { blogPosts, blogSubmissions } from '@/db/schema/content'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { PERMISSION_REQUEST_STATUS } from '@/config/permission-request-status'
 import { LISTING_STATUS } from '@/config/marketplace'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
 import { REPAIRER_APPLICATION_STATUS } from '@/config/repairer-status'
+import { DECISION_STATUS } from '@/config/decisions'
+import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
 import { logger } from '@/lib/logger'
 import type { DashboardStats } from './types'
 
@@ -136,7 +138,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
       FROM ${sql.raw(itHilfeTable)}
-      WHERE status = ${REQUEST_STATUS.OPEN} AND urgency = 'urgent'
+      WHERE status = ${REQUEST_STATUS.OPEN} AND urgency = ${URGENCY.URGENT}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count, MIN(created_at) AS oldest
@@ -151,7 +153,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`
       SELECT COUNT(*) AS count
       FROM ${sql.raw(decisionsTable)}
-      WHERE status = 'voting'
+      WHERE status = ${DECISION_STATUS.VOTING}
     `),
     db.execute(sql`
       SELECT
@@ -183,12 +185,12 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`
       SELECT COUNT(*) AS count
       FROM ${sql.raw(inventoryTable)}
-      WHERE status = 'sold' AND updated_at >= ${monthStartISO}
+      WHERE status = ${INVENTORY_ITEM_STATUS.SOLD} AND updated_at >= ${monthStartISO}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count
       FROM ${sql.raw(itHilfeTable)}
-      WHERE status = 'completed' AND completed_at >= ${monthStartISO}
+      WHERE status = ${REQUEST_STATUS.COMPLETED} AND completed_at >= ${monthStartISO}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count
@@ -205,12 +207,12 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     db.execute(sql`
       SELECT COUNT(*) AS count
       FROM ${sql.raw(inventoryTable)}
-      WHERE status = 'sold' AND updated_at >= ${prevMonthStartISO} AND updated_at < ${prevMonthEndISO}
+      WHERE status = ${INVENTORY_ITEM_STATUS.SOLD} AND updated_at >= ${prevMonthStartISO} AND updated_at < ${prevMonthEndISO}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count
       FROM ${sql.raw(itHilfeTable)}
-      WHERE status = 'completed' AND completed_at >= ${prevMonthStartISO} AND completed_at < ${prevMonthEndISO}
+      WHERE status = ${REQUEST_STATUS.COMPLETED} AND completed_at >= ${prevMonthStartISO} AND completed_at < ${prevMonthEndISO}
     `),
     db.execute(sql`
       SELECT COUNT(*) AS count

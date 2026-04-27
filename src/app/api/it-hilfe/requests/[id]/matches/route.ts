@@ -10,7 +10,7 @@ import { eq, and, ne, sql } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { getCategoryById, MATCH_SCORES } from '@/config/it-hilfe'
+import { getCategoryById, MATCH_SCORES, BUDGET_TIER } from '@/config/it-hilfe'
 
 interface RequestData {
   id: string
@@ -84,8 +84,8 @@ function calculateMatchScore(
   // Budget compatibility — use budgetTier when available for more accurate matching
   const effectiveTier = request.budgetTier || request.budgetType
   const isBudgetCompatible =
-    (effectiveTier === 'gratis' && helper.acceptsGratis) ||
-    (effectiveTier === 'kulturlegi' && helper.acceptsKulturlegi) ||
+    (effectiveTier === BUDGET_TIER.GRATIS && helper.acceptsGratis) ||
+    (effectiveTier === BUDGET_TIER.KULTURLEGI && helper.acceptsKulturlegi) ||
     (effectiveTier === 'free' && helper.acceptsGratis) ||
     (request.budgetAmountCents && helper.hourlyRateCents &&
      helper.hourlyRateCents <= request.budgetAmountCents) ||
@@ -93,9 +93,9 @@ function calculateMatchScore(
 
   if (isBudgetCompatible) {
     score += MATCH_SCORES.BUDGET_COMPATIBLE
-    if (helper.acceptsGratis && (effectiveTier === 'gratis' || effectiveTier === 'free' || !request.budgetAmountCents)) {
+    if (helper.acceptsGratis && (effectiveTier === BUDGET_TIER.GRATIS || effectiveTier === 'free' || !request.budgetAmountCents)) {
       reasons.push('Bietet kostenlose Hilfe an')
-    } else if (helper.acceptsKulturlegi && effectiveTier === 'kulturlegi') {
+    } else if (helper.acceptsKulturlegi && effectiveTier === BUDGET_TIER.KULTURLEGI) {
       reasons.push('Akzeptiert KulturLegi')
     } else {
       reasons.push('Budget passt')
