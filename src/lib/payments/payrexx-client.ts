@@ -196,7 +196,7 @@ export async function cancelTransaction(transactionId: string): Promise<PayrexxT
 export async function refundTransaction(transactionId: string, amount: number): Promise<PayrexxTransactionResult> {
   if (!isConfigured()) {
     logger.info('Mock: Payrexx refund', { transactionId, amount });
-    return { id: Number(transactionId), status: 'refunded' };
+    return { id: Number(transactionId), status: PAYMENT_STATUS.REFUNDED };
   }
 
   const result = await apiRequest<PayrexxTransactionResult>(

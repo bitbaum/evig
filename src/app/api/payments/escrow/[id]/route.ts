@@ -4,7 +4,7 @@ import { db } from '@/db'
 import { escrowAccounts, escrowReleases, paymentTransactions, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { PAYMENT_STATUS, ESCROW_STATUS } from '@/config/payment-status'
+import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
 import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
 
@@ -246,7 +246,7 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
           userId: escrow.sellerId || escrow.buyerId,
           providerId: escrow.providerId,
           providerTransactionId: `release_${escrow.providerTransactionId}_${Date.now()}`,
-          type: 'transfer',
+          type: PAYMENT_TRANSACTION_TYPE.TRANSFER,
           status: PAYMENT_STATUS.SUCCEEDED,
           amountCents: releaseAmountCents,
           currency: escrow.currency,

@@ -4,7 +4,7 @@ import { db } from '@/db'
 import { paymentTransactions, paymentProviders, refunds, users } from '@/db/schema'
 import { eq, and, sql, inArray } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { PAYMENT_STATUS } from '@/config/payment-status'
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 import { logger } from '@/lib/logger'
 import { validateBody, RefundSchema } from '@/lib/schemas'
@@ -133,7 +133,7 @@ export const POST = withAuth(async (request, session) => {
               userId: txn.userId,
               providerId: txn.providerId,
               providerTransactionId: String(payrexxRefund.id),
-              type: 'refund',
+              type: PAYMENT_TRANSACTION_TYPE.REFUND,
               status: REFUND_STATUS.PROCESSING,
               amountCents: refundAmountCents,
               currency: txn.currency,

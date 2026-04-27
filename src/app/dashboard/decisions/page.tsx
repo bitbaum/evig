@@ -6,7 +6,7 @@ import { db } from '@/db'
 import { users } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { getDecisions } from '@/lib/services/decisions'
-import { DECISION_STATUS_CONFIG, VOTING_METHOD_CONFIG, type DecisionStatus, type VotingMethod } from '@/config/decisions'
+import { DECISION_STATUS, DECISION_STATUS_CONFIG, VOTING_METHOD_CONFIG, type DecisionStatus, type VotingMethod } from '@/config/decisions'
 import { formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
@@ -36,7 +36,7 @@ export default async function DashboardDecisionsPage() {
 
   let votingDecisions: Awaited<ReturnType<typeof getDecisions>>['decisions'] = []
   try {
-    const result = await getDecisions({ status: 'voting', page: 1, limit: 50 }, userRow.id)
+    const result = await getDecisions({ status: DECISION_STATUS.VOTING, page: 1, limit: 50 }, userRow.id)
     votingDecisions = result.decisions
   } catch (error) {
     logger.error('Failed to fetch voting decisions for dashboard', { userId: userRow.id, error })

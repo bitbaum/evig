@@ -7,6 +7,7 @@ import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { logger } from '@/lib/logger'
 import { validateBody, RefundActionSchema } from '@/lib/schemas'
 import { REFUND_STATUS } from '@/config/refund'
+import { PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { refundTransaction } from '@/lib/payments/payrexx-client'
 
 const approvedByUser = alias(users, 'approved_by_user')
@@ -168,7 +169,7 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
             userId: refund.requestedBy,
             providerId: refund.provider_id,
             providerTransactionId: String(payrexxRefund.id),
-            type: 'refund',
+            type: PAYMENT_TRANSACTION_TYPE.REFUND,
             status: REFUND_STATUS.PROCESSING,
             amountCents: Number(refund.amountCents),
             currency: refund.currency,
