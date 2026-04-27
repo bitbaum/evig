@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { FILE_SIZE_LIMITS } from '@/config/limits'
+import { MARKETPLACE_STATUS_VALUES, PRODUCT_STATUS_VALUES } from '@/config/marketplace-status'
 
 export const ImportCSVSchema = z.object({
   csvContent: z.string()
@@ -35,8 +36,8 @@ export const InventoryUpdateSchema = z.object({
 export type InventoryUpdateInput = z.infer<typeof InventoryUpdateSchema>
 
 export const InventoryPatchSchema = z.object({
-  marketplace_status: z.enum(['draft', 'published']).optional(),
-  status: z.enum(['pending_review', 'approved', 'rejected']).optional(),
+  marketplace_status: z.enum(MARKETPLACE_STATUS_VALUES).optional(),
+  status: z.enum(PRODUCT_STATUS_VALUES).optional(),
 })
 
 export type InventoryPatchInput = z.infer<typeof InventoryPatchSchema>

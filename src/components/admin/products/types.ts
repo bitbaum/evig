@@ -3,6 +3,7 @@
  */
 
 import type { ShopProduct } from '@/hooks/useShopProducts'
+import type { MarketplaceStatus } from '@/config/marketplace-status'
 
 // Re-export ShopProduct for convenience
 export type { ShopProduct } from '@/hooks/useShopProducts'
@@ -15,7 +16,7 @@ export interface ProductWithOwner {
   thumbnail?: string | null
   owner_id?: string
   owner_name?: string
-  status?: 'published' | 'draft'
+  status?: MarketplaceStatus
 }
 
 export interface ProductStats {
@@ -46,5 +47,5 @@ export interface ShopStats {
 }
 
 export type TabType = 'shop' | 'inventory'
-export type FilterStatus = 'all' | 'published' | 'draft'
+export type FilterStatus = 'all' | MarketplaceStatus
 export type FilterSource = 'all' | 'admin' | 'user'

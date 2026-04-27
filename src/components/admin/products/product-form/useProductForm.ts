@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import type { ProductFormData } from './types'
 import { INITIAL_PRODUCT_FORM_DATA } from './types'
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
 
 export function useProductForm() {
   const router = useRouter()
@@ -81,7 +82,7 @@ export function useProductForm() {
         title: formData.title,
         handle: formData.handle,
         description: formData.description,
-        status: 'published',
+        status: MARKETPLACE_STATUS.PUBLISHED,
         is_giftcard: false,
         discountable: true,
         tags: formData.tags.map(tag => ({ value: tag })),

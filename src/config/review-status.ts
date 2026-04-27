@@ -13,6 +13,8 @@ export const REVIEW_STATUS = {
 } as const
 
 export type ReviewStatus = typeof REVIEW_STATUS[keyof typeof REVIEW_STATUS]
+export const REVIEW_STATUS_VALUES = Object.values(REVIEW_STATUS) as [ReviewStatus, ...ReviewStatus[]]
+export const REVIEW_MODERATION_VALUES = [REVIEW_STATUS.PUBLISHED, REVIEW_STATUS.HIDDEN, REVIEW_STATUS.DELETED] as const
 
 export const REVIEW_STATUS_LABELS: Record<string, string> = {
   [REVIEW_STATUS.PUBLISHED]: 'Veröffentlicht',

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
+import { REVIEW_STATUS, REVIEW_STATUS_VALUES, REVIEW_MODERATION_VALUES } from '@/config/review-status';
 
 // Rating validation (1-5 stars)
 const ratingSchema = z.number()
@@ -38,9 +39,9 @@ export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 export const GetReviewsQuerySchema = z.object({
   targetType: z.enum(validTargetTypes),
   targetId: z.string().uuid('Ungültige targetId'),
-  status: z.enum(['published', 'pending_moderation', 'hidden', 'deleted'])
+  status: z.enum(REVIEW_STATUS_VALUES)
     .optional()
-    .default('published'),
+    .default(REVIEW_STATUS.PUBLISHED),
   limit: z.coerce.number().int().min(1).max(100).optional().default(10),
   offset: z.coerce.number().int().min(0).optional().default(0),
   sortBy: z.enum(['created_at', 'overall_rating', 'helpful_votes'])
@@ -89,7 +90,7 @@ export type ReviewResponseInput = z.infer<typeof ReviewResponseSchema>;
 
 // Moderate review schema
 export const ModerateReviewSchema = z.object({
-  status: z.enum(['published', 'hidden', 'deleted']),
+  status: z.enum(REVIEW_MODERATION_VALUES),
   moderationNote: z.string()
     .max(500, 'Moderationsnotiz darf maximal 500 Zeichen lang sein')
     .optional(),
