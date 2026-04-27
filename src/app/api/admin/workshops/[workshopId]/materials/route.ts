@@ -5,6 +5,7 @@ import { workshopMaterials } from '@/db/schema'
 import { eq, asc, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status'
 
 // GET /api/admin/workshops/[workshopId]/materials - List all materials for a workshop
 export const GET = withAdmin<{ workshopId: string }>('workshops-admin', async (request, session, context) => {
@@ -49,7 +50,7 @@ export const POST = withAdmin<{ workshopId: string }>('workshops-admin', async (
       materialType,
       url,
       fileSizeBytes,
-      accessType = 'registered',
+      accessType = WORKSHOP_MATERIAL_ACCESS_TYPE.REGISTERED,
       instanceId,
       displayOrder = 0
     } = body
@@ -68,7 +69,7 @@ export const POST = withAdmin<{ workshopId: string }>('workshops-admin', async (
       return apiBadRequest(`Invalid material type. Valid types: ${validTypes.join(', ')}`)
     }
 
-    const validAccessTypes = ['public', 'registered', 'attended']
+    const validAccessTypes = Object.values(WORKSHOP_MATERIAL_ACCESS_TYPE)
     if (!validAccessTypes.includes(accessType)) {
       return apiBadRequest(`Invalid access type. Valid types: ${validAccessTypes.join(', ')}`)
     }

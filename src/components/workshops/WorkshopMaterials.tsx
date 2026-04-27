@@ -14,6 +14,7 @@ import {
 import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status'
 
 interface Material {
   id: string
@@ -33,7 +34,7 @@ interface WorkshopMaterialsProps {
 export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsProps) {
   const t = useTranslations('workshops.materials')
   const [materials, setMaterials] = useState<Material[]>([])
-  const [accessLevel, setAccessLevel] = useState<string>('public')
+  const [accessLevel, setAccessLevel] = useState<string>(WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -109,7 +110,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
       <div className="text-center py-6">
         <FileText className="w-10 h-10 text-gray-300 mx-auto mb-2" />
         <p className="text-gray-500 text-sm">{t('emptyTitle')}</p>
-        {accessLevel === 'public' && (
+        {accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
           <p className="text-gray-500 text-xs mt-1">
             {t('loginHint')}
           </p>
@@ -120,11 +121,11 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
 
   return (
     <div className="space-y-3">
-      {accessLevel !== 'public' && (
+      {accessLevel !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
         <div className="flex items-center gap-2 text-xs text-green-600 mb-2">
           <Unlock className="w-3 h-3" />
           <span>
-            {accessLevel === 'attended'
+            {accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
               ? t('accessAttended')
               : t('accessRegistered')}
           </span>
@@ -154,13 +155,13 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
               <span className="font-medium text-gray-900 text-sm truncate">
                 {material.title}
               </span>
-              {material.access_type !== 'public' && (
+              {material.access_type !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
                 <span className={`text-xs px-1.5 py-0.5 rounded ${
-                  material.access_type === 'attended'
+                  material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
                     ? 'bg-purple-100 text-purple-700'
                     : 'bg-blue-100 text-blue-700'
                 }`}>
-                  {material.access_type === 'attended' ? t('badgeAttended') : t('badgeRegistered')}
+                  {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? t('badgeAttended') : t('badgeRegistered')}
                 </span>
               )}
             </div>

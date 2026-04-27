@@ -5,7 +5,7 @@ import { workshops, workshopMaterials, workshopRegistrations, workshopInstances 
 import { eq, and, sql, asc, desc, inArray } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status'
 
 // GET /api/workshops/[slug]/materials - Get materials for a workshop (respecting access levels)
 export async function GET(
@@ -49,20 +49,20 @@ export async function GET(
     }
 
     // Determine user's access level from the registration fetched in parallel
-    let accessLevel: 'public' | 'registered' | 'attended' = 'public'
+    let accessLevel: typeof WORKSHOP_MATERIAL_ACCESS_TYPE[keyof typeof WORKSHOP_MATERIAL_ACCESS_TYPE] = WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC
     if (registration) {
       if (registration.attended || registration.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
-        accessLevel = 'attended'
+        accessLevel = WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
       } else if (registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
-        accessLevel = 'registered'
+        accessLevel = WORKSHOP_MATERIAL_ACCESS_TYPE.REGISTERED
       }
     }
 
-    // Build access filter
+    // Build access filter — each level is cumulative (attended ⊇ registered ⊇ public)
     const accessTypes =
-      accessLevel === 'attended' ? ['public', 'registered', 'attended'] :
-      accessLevel === 'registered' ? ['public', 'registered'] :
-      ['public']
+      accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? [WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC, WORKSHOP_MATERIAL_ACCESS_TYPE.REGISTERED, WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED] :
+      accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.REGISTERED ? [WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC, WORKSHOP_MATERIAL_ACCESS_TYPE.REGISTERED] :
+      [WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC]
 
     const rows = await db
       .select({

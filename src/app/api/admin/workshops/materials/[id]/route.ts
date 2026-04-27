@@ -5,6 +5,7 @@ import { workshopMaterials } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status'
 
 // PUT /api/admin/workshops/materials/[id] - Update a material
 export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
@@ -49,7 +50,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
     if (url !== undefined) updateSet.url = url.trim()
 
     if (accessType !== undefined) {
-      const validAccessTypes = ['public', 'registered', 'attended']
+      const validAccessTypes = Object.values(WORKSHOP_MATERIAL_ACCESS_TYPE)
       if (!validAccessTypes.includes(accessType)) {
         return apiBadRequest(`Invalid access type. Valid types: ${validAccessTypes.join(', ')}`)
       }

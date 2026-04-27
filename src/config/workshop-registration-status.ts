@@ -38,3 +38,15 @@ export const WORKSHOP_PAYMENT_STATUS = {
 } as const;
 
 export type WorkshopPaymentStatus = typeof WORKSHOP_PAYMENT_STATUS[keyof typeof WORKSHOP_PAYMENT_STATUS];
+
+/**
+ * Workshop material access type constants (SSOT).
+ * Determines which registrants can view a given material.
+ */
+export const WORKSHOP_MATERIAL_ACCESS_TYPE = {
+  PUBLIC: 'public',
+  REGISTERED: 'registered',
+  ATTENDED: 'attended',
+} as const;
+
+export type WorkshopMaterialAccessType = typeof WORKSHOP_MATERIAL_ACCESS_TYPE[keyof typeof WORKSHOP_MATERIAL_ACCESS_TYPE];
