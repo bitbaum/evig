@@ -10,6 +10,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import {
   Plus,
   Wrench,
@@ -78,7 +79,7 @@ async function getServiceStats(): Promise<ServiceStats> {
 
   try {
     const techResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true AND profile_tier = 'community'`
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true AND profile_tier = '${REPAIRER_PROFILE_TIER.COMMUNITY}'`
     )
     totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
   } catch {
