@@ -10,6 +10,7 @@ import { escrowAccounts } from '@/db/schema'
 import { sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import type { SupportedCurrency } from '@/lib/payments/currency'
+import { ESCROW_STATUS } from '@/config/payment-status'
 
 // ============================================================================
 // Types
@@ -40,7 +41,7 @@ export async function createEscrowAccount(params: EscrowParams): Promise<void> {
       autoReleaseDays: params.autoReleaseDays,
       releaseDeadline: sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`,
       buyerId: params.buyerId,
-      status: 'active',
+      status: ESCROW_STATUS.ACTIVE,
     })
 
   logger.info('Escrow account created', {

@@ -7,6 +7,7 @@
 
 import { CreateListingSchema } from '@/lib/schemas/marketplace'
 import type { ListingFormData } from '@/types/listing-form'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 /**
  * Validate listing form data against the Zod schema (SSOT).
@@ -44,7 +45,7 @@ export function transformListingFormToPayload(formData: ListingFormData) {
       value: s.value.trim(),
       unit: s.unit || null,
     })),
-    status: 'active',
+    status: LISTING_STATUS.ACTIVE,
     condition_checks: formData.conditionChecks.length > 0
       ? formData.conditionChecks.map(c => ({ key: c.key, checked: c.checked }))
       : undefined,

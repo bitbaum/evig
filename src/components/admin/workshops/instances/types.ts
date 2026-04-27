@@ -1,5 +1,6 @@
 export type { Workshop, WorkshopInstanceWithDetails } from '@/components/workshops/types'
 import { LOCATIONS } from '@/config/org'
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 
 export interface InstanceFormData {
   workshopId: string
@@ -20,7 +21,7 @@ export const initialFormData: InstanceFormData = {
   instructor: '',
   maxParticipants: '',
   notes: '',
-  status: 'scheduled',
+  status: WORKSHOP_INSTANCE_STATUS.SCHEDULED,
 }
 
 export interface InstanceFiltersState {
