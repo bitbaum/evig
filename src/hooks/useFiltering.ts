@@ -10,9 +10,8 @@ export interface FilterConfig {
   allValue?: string
 }
 
-export interface FilterableItem {
-  [key: string]: unknown
-}
+// Any object type can be filtered — we cast to Record internally when reading by key
+export type FilterableItem = object
 
 export interface UseFilteringProps<T extends FilterableItem> {
   items: T[]
@@ -29,7 +28,6 @@ export function useFiltering<T extends FilterableItem>({
   filters,
   allLabel = 'Alle'
 }: UseFilteringProps<T>) {
-  // Initialize filter state with default values
   const initialState: FilterState = filters.reduce((acc, filter) => {
     acc[filter.key] = filter.defaultValue || allLabel
     return acc
@@ -37,10 +35,11 @@ export function useFiltering<T extends FilterableItem>({
 
   const [filterState, setFilterState] = useState<FilterState>(initialState)
 
-  // Get unique values for each filter
   const filterOptions = useMemo(() => {
     return filters.map(filter => {
-      const uniqueValues = Array.from(new Set(items.map(item => item[filter.key])))
+      const uniqueValues = Array.from(new Set(
+        items.map(item => (item as Record<string, unknown>)[filter.key])
+      ))
       return {
         ...filter,
         allValue: allLabel,
@@ -51,12 +50,12 @@ export function useFiltering<T extends FilterableItem>({
     })
   }, [items, filters, allLabel])
 
-  // Filter items based on current filter state
   const filteredItems = useMemo(() => {
     return items.filter(item => {
+      const row = item as Record<string, unknown>
       return filters.every(filter => {
         const selectedValue = filterState[filter.key]
-        return selectedValue === allLabel || item[filter.key] === selectedValue
+        return selectedValue === allLabel || row[filter.key] === selectedValue
       })
     })
   }, [items, filters, filterState, allLabel])

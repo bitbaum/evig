@@ -16,8 +16,15 @@ import { INTAKE_STATUS } from '@/config/intake-status'
 import type { IntakeEventType } from '@/lib/intake/timeline-types'
 import { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from '@/lib/intake/timeline-types'
 import { ChecklistGroup } from './ChecklistGroup'
+import { Stepper } from '@/components/ui/Stepper'
 import type { DetailData } from './types'
 import Heading from '@/components/admin/AdminHeading'
+
+const INTAKE_PIPELINE_STEPS = [
+  { label: 'Geräte-Eingang', description: 'Checkliste & Spende' },
+  { label: 'Erfassung', description: 'Produktdaten eingeben' },
+  { label: 'Im Shop', description: 'Veröffentlichen' },
+]
 
 interface IntakeDetailViewProps {
   detail: DetailData | null
@@ -66,8 +73,21 @@ export function IntakeDetailView({
 
   const progress = detail.checklist_progress
 
+  // Pipeline step: 0 = checklist in progress, 1 = ready for erfassung, 2 = published
+  const pipelineStep =
+    detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? 2
+    : detail.checklist_complete ? 1
+    : 0
+
   return (
     <div className="space-y-6">
+      {/* Pipeline progress — shown for refurbish-tier items */}
+      {detail.intake_tier === INTAKE_TIERS.REFURBISH && (
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3">
+          <Stepper steps={INTAKE_PIPELINE_STEPS} currentStep={pipelineStep} />
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>

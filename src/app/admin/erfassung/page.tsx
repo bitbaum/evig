@@ -2,6 +2,7 @@
 
 import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { ArrowLeft, Loader2 } from 'lucide-react'
@@ -15,12 +16,24 @@ import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
+import { Stepper } from '@/components/ui/Stepper'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 import Heading from '@/components/admin/AdminHeading'
 
+const INTAKE_PIPELINE_STEPS = [
+  { label: 'Geräte-Eingang', description: 'Checkliste & Spende' },
+  { label: 'Erfassung', description: 'Produktdaten eingeben' },
+  { label: 'Im Shop', description: 'Veröffentlichen' },
+]
+
 function ErfassungContent() {
   const form = useErfassungForm()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const returnToRaw = searchParams.get('returnTo') ?? ''
+  // Only treat as intake pipeline when returnTo is a same-origin intake path
+  const isIntakePipeline = returnToRaw.startsWith('/admin/intake')
 
   // Bulk mode state
   const [viewMode, setViewMode] = useState<'single' | 'bulk'>('single')
@@ -161,6 +174,17 @@ function ErfassungContent() {
 
   return (
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
+      {/* Pipeline progress — shown when entering from Geräte-Eingang */}
+      {isIntakePipeline && (
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3">
+          <Stepper
+            steps={INTAKE_PIPELINE_STEPS}
+            currentStep={1}
+            onStepClick={(step) => { if (step === 0) router.push(returnToRaw) }}
+          />
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4">
         <Link

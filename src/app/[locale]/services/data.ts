@@ -20,7 +20,6 @@ export interface ServiceConfig {
   available: boolean
   categoryKey: ServiceCategoryKey
   badge?: string
-  [key: string]: unknown       // Allow index access for FilterableItem compatibility
 }
 
 /** Fully hydrated service with translated strings — built in page.tsx */
