@@ -170,7 +170,7 @@ describe('indexListingInSearch', () => {
   })
 
   it('is fire-and-forget: returns void synchronously even though indexListing is async', () => {
-    let resolveIndex!: () => void
+    let resolveIndex!: (value?: unknown) => void
     mockIndexListing.mockReturnValueOnce(new Promise(r => { resolveIndex = r }))
 
     const result = indexListingInSearch(sampleDoc)

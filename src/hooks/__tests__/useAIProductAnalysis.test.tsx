@@ -33,7 +33,7 @@ jest.mock('@/lib/logger', () => ({
 }))
 
 import { renderHook, act, waitFor } from '@testing-library/react'
-import { useAIProductAnalysis, getConfidenceColor } from '../useAIProductAnalysis'
+import { useAIProductAnalysis, getConfidenceColor, type ProductAnalysis } from '../useAIProductAnalysis'
 
 const TINY_PNG_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
 
@@ -146,7 +146,7 @@ describe('analyzeImage — happy path', () => {
 
     const { result } = renderHook(() => useAIProductAnalysis())
 
-    let returned: typeof sampleAnalysis | null = null
+    let returned: ProductAnalysis | null = null
     await act(async () => {
       returned = await result.current.analyzeImage(TINY_PNG_BASE64)
     })
