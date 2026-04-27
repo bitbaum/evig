@@ -394,6 +394,8 @@ export const URGENCY = {
 } as const
 
 export const URGENCY_DEFAULT = URGENCY.NORMAL
+export type UrgencyValue = typeof URGENCY[keyof typeof URGENCY]
+export const URGENCY_VALUES = Object.values(URGENCY) as [UrgencyValue, ...UrgencyValue[]]
 
 export const URGENCY_LEVELS: UrgencyLevel[] = [
   { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-gray-100 text-gray-700' },

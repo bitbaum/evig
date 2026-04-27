@@ -13,7 +13,7 @@ import { CreditCard, Shield } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import CurrencySelector from '../CurrencySelector'
 import Heading from '@/components/ui/Heading'
-import type { ServiceInfo, BookingData, DisplayPricing, SupportedCurrency, ServicePricing } from './types'
+import type { ServiceInfo, BookingData, DisplayPricing, SupportedCurrency, ServicePricing, UrgencyLevel } from './types'
 
 interface BookingFormProps {
   service: ServiceInfo
@@ -181,7 +181,7 @@ function UrgencyField({
   t,
 }: {
   value: string
-  onChange: (value: 'low' | 'normal' | 'high' | 'urgent') => void
+  onChange: (value: UrgencyLevel) => void
   t: TFn
 }) {
   return (
@@ -192,7 +192,7 @@ function UrgencyField({
       <select
         id="booking-urgency"
         value={value}
-        onChange={(e) => onChange(e.target.value as 'low' | 'normal' | 'high' | 'urgent')}
+        onChange={(e) => onChange(e.target.value as UrgencyLevel)}
         className="w-full p-3 border rounded-lg"
       >
         <option value="low">{t('urgencyLow')}</option>

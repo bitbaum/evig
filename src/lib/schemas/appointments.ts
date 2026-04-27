@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { uuidSchema, paginationSchema } from './common'
 import { APPOINTMENT_ROLES } from '@/config/database'
+import { URGENCY_VALUES, URGENCY_DEFAULT } from '@/config/it-hilfe'
 
 const appointmentRoleValues = Object.values(APPOINTMENT_ROLES) as [string, ...string[]]
 
@@ -13,7 +14,7 @@ export const CreateAppointmentSchema = z.object({
   device_info: z.string().optional().nullable(),
   preferred_date: z.string().datetime({ offset: true }).optional().nullable(),
   preferredDate: z.string().datetime({ offset: true }).optional().nullable(),
-  urgency: z.enum(['normal', 'urgent', 'emergency']).default('normal'),
+  urgency: z.enum(URGENCY_VALUES).default(URGENCY_DEFAULT),
   is_home_visit: z.boolean().default(false),
   visit_address: z.string().optional().nullable(),
   visit_city: z.string().optional().nullable(),
@@ -40,7 +41,7 @@ export type GetAppointmentsQuery = z.infer<typeof GetAppointmentsQuerySchema>
 export const BookWithPaymentSchema = z.object({
   serviceSlug: z.string().min(1, 'Service-Slug ist erforderlich'),
   description: z.string().optional().nullable(),
-  urgency: z.enum(['normal', 'urgent', 'emergency']).default('normal'),
+  urgency: z.enum(URGENCY_VALUES).default(URGENCY_DEFAULT),
   deviceInfo: z.string().optional().nullable(),
   preferredDate: z.string().datetime({ offset: true }).optional().nullable(),
   preferredTimeSlots: z.array(z.string()).optional().nullable(),
