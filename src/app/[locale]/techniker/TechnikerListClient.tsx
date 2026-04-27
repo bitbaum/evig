@@ -67,12 +67,12 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         </Heading>
         <span
           className={`flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-            technician.profileTier === 'professional'
+            technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
               ? 'bg-emerald-100 text-emerald-700'
               : 'bg-blue-100 text-blue-700'
           }`}
         >
-          {technician.profileTier === 'professional' ? t('list.professional') : t('list.community')}
+          {technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL ? t('list.professional') : t('list.community')}
         </span>
       </div>
 

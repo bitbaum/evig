@@ -15,6 +15,7 @@ import {
   ACTIVITY_SOURCE_LABELS,
 } from '@/config/activity'
 import { formatRelativeTime } from '@/lib/utils'
+import { URGENCY_DEFAULT } from '@/config/it-hilfe'
 import type { UnifiedActivity } from './types'
 
 interface ActivityCardProps {
@@ -65,7 +66,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   // Extract metadata with type safety
   const metadata = activity.metadata || {}
   const updateType = String(metadata.update_type || 'note')
-  const urgency = String(metadata.urgency || 'normal')
+  const urgency = String(metadata.urgency || URGENCY_DEFAULT)
   const durationMinutes = metadata.duration_minutes ? Number(metadata.duration_minutes) : null
   const action = String(metadata.action || '')
 

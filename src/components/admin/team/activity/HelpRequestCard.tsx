@@ -14,6 +14,7 @@ import {
   getHelpRequestStatusLabel,
   getHelpRequestStatusColor,
   getActivityCategoryLabel,
+  HELP_REQUEST_STATUSES,
 } from '@/config/activity'
 import { formatRelativeTime } from '@/lib/utils'
 import type { HelpRequest } from './types'
@@ -58,9 +59,9 @@ export function HelpRequestCard({
 
   const requesterDisplayName = request.requester_name || request.requester_email.split('@')[0]
 
-  const isOpen = request.status === 'open'
-  const isInProgress = request.status === 'in_progress'
-  const isResolved = request.status === 'resolved'
+  const isOpen = request.status === HELP_REQUEST_STATUSES.OPEN
+  const isInProgress = request.status === HELP_REQUEST_STATUSES.IN_PROGRESS
+  const isResolved = request.status === HELP_REQUEST_STATUSES.RESOLVED
   const canResolve = (isOpen || isInProgress) && onResolve
   const canTakeOn = isOpen && request.is_broadcast && onTakeOn
 

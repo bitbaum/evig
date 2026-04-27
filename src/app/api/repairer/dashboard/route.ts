@@ -12,6 +12,7 @@ import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { REVIEW_STATUS } from '@/config/review-status'
+import { URGENCY_DEFAULT } from '@/config/it-hilfe'
 import { auth } from '@/auth'
 import { ROLES } from '@/lib/constants'
 
@@ -145,7 +146,7 @@ export async function GET(request: NextRequest) {
       customer: row.customer_name || row.customer_email?.split('@')[0] || 'Kunde',
       service: row.service_name,
       status: row.status,
-      urgency: row.urgency || 'normal',
+      urgency: row.urgency || URGENCY_DEFAULT,
       preferredDate: row.preferred_date,
       confirmedDate: row.confirmed_date,
       description: row.description,

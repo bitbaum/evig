@@ -19,6 +19,7 @@ import {
   type ActivityCategory,
 } from '@/config/activity'
 import { useHelpRequestMutations } from './useActivityStream'
+import { URGENCY_DEFAULT } from '@/config/it-hilfe'
 
 interface TeamMemberOption {
   id: string
@@ -41,7 +42,7 @@ export function CreateHelpRequestModal({
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState<string>('')
-  const [urgency, setUrgency] = useState<string>('normal')
+  const [urgency, setUrgency] = useState<string>(URGENCY_DEFAULT)
   const [isBroadcast, setIsBroadcast] = useState(true)
   const [targetUserId, setTargetUserId] = useState<string>('')
 

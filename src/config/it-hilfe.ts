@@ -377,11 +377,20 @@ export interface UrgencyLevel {
   badgeClass: string
 }
 
+export const URGENCY = {
+  LOW: 'low',
+  NORMAL: 'normal',
+  HIGH: 'high',
+  URGENT: 'urgent',
+} as const
+
+export const URGENCY_DEFAULT = URGENCY.NORMAL
+
 export const URGENCY_LEVELS: UrgencyLevel[] = [
-  { id: 'low', name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-gray-100 text-gray-700' },
-  { id: 'normal', name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-blue-100 text-blue-700' },
-  { id: 'high', name: 'Hoch', description: 'Möglichst bald benötigt', badgeClass: 'bg-orange-100 text-orange-700' },
-  { id: 'urgent', name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-red-100 text-red-700' },
+  { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-gray-100 text-gray-700' },
+  { id: URGENCY.NORMAL, name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-blue-100 text-blue-700' },
+  { id: URGENCY.HIGH, name: 'Hoch', description: 'Möglichst bald benötigt', badgeClass: 'bg-orange-100 text-orange-700' },
+  { id: URGENCY.URGENT, name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-red-100 text-red-700' },
 ]
 
 // ============================================================================

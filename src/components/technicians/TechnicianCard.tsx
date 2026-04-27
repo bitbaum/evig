@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { StarRating } from '@/components/ui/StarRating'
 import { type TechnicianProfile } from './types'
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 
 interface TechnicianCardProps {
   technician: TechnicianProfile
@@ -13,7 +14,7 @@ interface TechnicianCardProps {
 
 export function TechnicianCard({ technician }: TechnicianCardProps) {
   const t = useTranslations('components.technicianCard')
-  const isProfessional = technician.profileTier === 'professional'
+  const isProfessional = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
   const displayedSkills = technician.skills.slice(0, 5)
   const remainingSkillsCount = technician.skills.length - 5
 
