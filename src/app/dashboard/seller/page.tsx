@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
 import Link from 'next/link'
 import {
   Package,
@@ -19,9 +18,6 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
@@ -55,7 +51,6 @@ interface DashboardData {
 }
 
 export default function SellerDashboard() {
-  const t = useTranslations('dashboard.seller')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [data, setData] = useState<DashboardData | null>(null)
@@ -66,23 +61,6 @@ export default function SellerDashboard() {
     // Set page title
     document.title = 'Seller Dashboard | RevampIT'
   }, [])
-
-  const fetchDashboardData = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const result = await apiFetch<DashboardData>('/api/seller/dashboard')
-      if (result.success && result.data) {
-        setData(result.data)
-      } else {
-        throw new Error(result.error || t('loadErrorGeneric'))
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('unexpectedError'))
-    } finally {
-      setIsLoading(false)
-    }
-  }, [t])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -106,33 +84,53 @@ export default function SellerDashboard() {
     }
 
     fetchDashboardData()
-  }, [session, status, router, fetchDashboardData])
+  }, [session, status, router])
+
+  const fetchDashboardData = async () => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/seller/dashboard')
+      const result = await response.json()
+
+      if (result.success && result.data) {
+        setData(result.data)
+      } else {
+        throw new Error(result.error || 'Fehler beim Laden des Dashboards')
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const quickActions = [
     {
-      title: t('quickNewProduct'),
-      description: t('quickNewProductDesc'),
+      title: 'Neues Produkt',
+      description: 'Produkt zum Marketplace hinzufügen',
       href: '/marketplace/sell',
       icon: Plus,
       color: 'bg-green-500',
     },
     {
-      title: t('quickMyProducts'),
-      description: t('quickMyProductsDesc'),
+      title: 'Meine Produkte',
+      description: 'Alle Ihre Produkte verwalten',
       href: '/dashboard/listings',
       icon: Package,
       color: 'bg-blue-500',
     },
     {
-      title: t('quickSales'),
-      description: t('quickSalesDesc'),
+      title: 'Verkäufe',
+      description: 'Bestellungen und Verkäufe anzeigen',
       href: '/dashboard/orders',
       icon: TrendingUp,
       color: 'bg-purple-500',
     },
     {
-      title: t('quickMarketplace'),
-      description: t('quickMarketplaceDesc'),
+      title: 'Marketplace',
+      description: 'Marketplace ansehen',
       href: '/marketplace',
       icon: BarChart3,
       color: 'bg-orange-500',
@@ -149,7 +147,7 @@ export default function SellerDashboard() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
+        <span className="ml-3 text-gray-600 dark:text-gray-400">Dashboard wird geladen...</span>
       </div>
     )
   }
@@ -158,14 +156,17 @@ export default function SellerDashboard() {
     return (
       <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <Heading level={3} className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
-          {t('loadErrorTitle')}
-        </Heading>
+        <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+          Fehler beim Laden
+        </h3>
         <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
-        <Button onClick={fetchDashboardData} variant="destructive" className="gap-2">
+        <button
+          onClick={fetchDashboardData}
+          className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+        >
           <RefreshCw className="w-4 h-4" />
-          {t('retry')}
-        </Button>
+          Erneut versuchen
+        </button>
       </div>
     )
   }
@@ -188,17 +189,17 @@ export default function SellerDashboard() {
       <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <Heading level={1} className="text-2xl font-bold mb-2">
+            <h1 className="text-2xl font-bold mb-2">
               Seller Dashboard
-            </Heading>
+            </h1>
             <p className="text-green-100">
-              {t('pageSubtitle')}
+              Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
             </p>
           </div>
           <button
             onClick={fetchDashboardData}
             className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-            title={t('refresh')}
+            title="Aktualisieren"
           >
             <RefreshCw className="w-5 h-5" />
           </button>
@@ -210,9 +211,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsProducts')}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Meine Produkte</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalProducts}</p>
-              <p className="text-sm text-green-600">{t('statsActive', { count: stats.activeProducts })}</p>
+              <p className="text-sm text-green-600">{stats.activeProducts} aktiv</p>
             </div>
             <Package className="w-8 h-8 text-blue-600" />
           </div>
@@ -221,13 +222,13 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsRevenue')}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Umsatz</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">
                 CHF {stats.totalRevenue.toLocaleString('de-CH')}
               </p>
               <p className="text-sm text-green-600 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
-                {t('statsTotalRevenue')}
+                Gesamtumsatz
               </p>
             </div>
             <DollarSign className="w-8 h-8 text-green-600" />
@@ -237,9 +238,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsViews')}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Produkt-Aufrufe</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-blue-600">{t('statsFavorites', { count: stats.totalFavorites })}</p>
+              <p className="text-sm text-blue-600">{stats.totalFavorites} Favoriten</p>
             </div>
             <Eye className="w-8 h-8 text-blue-600" />
           </div>
@@ -248,9 +249,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{t('statsOrders')}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bestellungen</p>
               <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
-              <p className="text-sm text-purple-600">{t('statsPending', { count: stats.pendingOrders })}</p>
+              <p className="text-sm text-purple-600">ausstehend: {stats.pendingOrders}</p>
             </div>
             <Users className="w-8 h-8 text-purple-600" />
           </div>
@@ -261,11 +262,11 @@ export default function SellerDashboard() {
         {/* Recent Products */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-              {t('recentTitle')}
-            </Heading>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Meine Produkte
+            </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {t('recentSubtitle')}
+              Übersicht Ihrer Produkte
             </p>
           </div>
 
@@ -274,14 +275,14 @@ export default function SellerDashboard() {
               <div className="text-center py-8">
                 <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  {t('noProducts')}
+                  Sie haben noch keine Produkte erstellt.
                 </p>
                 <Link
                   href="/marketplace/sell"
                   className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
                 >
                   <Plus className="w-4 h-4" />
-                  {t('createFirst')}
+                  Erstes Produkt erstellen
                 </Link>
               </div>
             ) : (
@@ -294,11 +295,11 @@ export default function SellerDashboard() {
                         <ListingImage src={product.image} alt={product.title} fallbackIconSize="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">
+                        <h3 className="font-medium text-gray-900 dark:text-white truncate">
                           {product.title}
-                        </Heading>
+                        </h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          CHF {product.price} • {t('viewCount', { count: product.viewsCount })}
+                          CHF {product.price} • {product.viewsCount} Aufrufe
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -318,7 +319,7 @@ export default function SellerDashboard() {
                   href="/dashboard/listings"
                   className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center gap-1"
                 >
-                  {t('manageAll')}
+                  Alle Produkte verwalten
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -329,11 +330,11 @@ export default function SellerDashboard() {
         {/* Quick Actions */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
-              {t('quickActionsTitle')}
-            </Heading>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Schnellzugriff
+            </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {t('quickActionsSubtitle')}
+              Häufig verwendete Seller-Funktionen
             </p>
           </div>
 
@@ -349,9 +350,9 @@ export default function SellerDashboard() {
                     <div className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center`}>
                       <action.icon className="w-4 h-4 text-white" />
                     </div>
-                    <Heading level={3} className="font-medium text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
+                    <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
                       {action.title}
-                    </Heading>
+                    </h3>
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {action.description}
@@ -370,24 +371,26 @@ export default function SellerDashboard() {
             <Package className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
-              {t('infoTitle')}
-            </Heading>
+            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+              RevampIT Marketplace
+            </h3>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              {t('infoDesc')}
+              Als Seller können Sie Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
+              Ihre Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,
+              die Kreislaufwirtschaft zu fördern.
             </p>
             <div className="mt-3 flex gap-3">
               <Link
                 href="/marketplace"
                 className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
               >
-                {t('viewMarketplace')}
+                Marketplace ansehen
               </Link>
               <Link
                 href="/marketplace/sell"
                 className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition-colors"
               >
-                {t('addProduct')}
+                Produkt hinzufügen
               </Link>
             </div>
           </div>

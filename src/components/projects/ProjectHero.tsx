@@ -6,8 +6,7 @@
  */
 
 import { ProjectHero as ProjectHeroType } from './types'
-import Heading from '@/components/ui/Heading'
-import { Link } from '@/i18n/navigation'
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { getTextColor, getButtonVariant } from '@/lib/design-system'
 
@@ -35,7 +34,7 @@ export function ProjectHero({ hero }: ProjectHeroProps) {
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent"></div>
       <div className="container mx-auto px-4 relative">
         <div className="max-w-3xl">
-          <Heading level={1} className="text-5xl md:text-6xl font-bold mb-6 leading-tight">{title}</Heading>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">{title}</h1>
           <p className={cn('text-xl mb-8', getTextColor('primary', 'secondary'))}>
             {description}
           </p>

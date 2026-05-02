@@ -5,8 +5,7 @@
  */
 
 import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { Link } from '@/i18n/navigation'
+import Link from 'next/link'
 import { ProjectCard } from './types'
 import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
@@ -42,9 +41,9 @@ export function ProjectCallToAction({
     <section className={`py-20 ${bgClass}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <Heading level={2} className={`text-4xl font-bold mb-8 ${textColorClass}`}>
+          <h2 className={`text-4xl font-bold mb-8 ${textColorClass}`}>
             {title}
-          </Heading>
+          </h2>
           {subtitle && (
             <p className={`text-xl mb-12 ${textSecondaryClass}`}>
               {subtitle}
@@ -59,9 +58,9 @@ export function ProjectCallToAction({
                   backgroundColor === 'gray' ? 'bg-white' : 'bg-white/10'
                 }`}
               >
-                <Heading level={3} className={`text-xl font-semibold mb-4 ${textColorClass}`}>
+                <h3 className={`text-xl font-semibold mb-4 ${textColorClass}`}>
                   {action.title}
-                </Heading>
+                </h3>
                 <p className={`mb-4 flex-grow ${textSecondaryClass}`}>
                   {action.description}
                 </p>

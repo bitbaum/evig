@@ -13,8 +13,7 @@ import { ReactNode } from 'react'
 import { responsiveSpacing, responsiveTypography, responsiveButtons } from '@/lib/responsive'
 import { cn } from '@/lib/utils'
 import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
-import { Link } from '@/i18n/navigation'
-import Heading from '@/components/ui/Heading'
+import Link from 'next/link'
 
 export interface ResponsiveHeroProps {
   title: string
@@ -105,15 +104,15 @@ export function ResponsiveHero({
       
       <div className={cn('container mx-auto relative', responsiveSpacing.container)}>
         <div className="max-w-3xl">
-          <Heading level={1} className={cn(responsiveTypography.hero, 'font-bold mb-4 sm:mb-6 leading-tight')}>
+          <h1 className={cn(responsiveTypography.hero, 'font-bold mb-4 sm:mb-6 leading-tight')}>
             {title}
-          </Heading>
+          </h1>
           
           {subtitle && (
-            <Heading level={2} className={cn(
+            <h2 className={cn(
               responsiveTypography.subsection,
               'font-semibold mb-4 sm:mb-6 md:mb-8',
-              backgroundColor === 'white'
+              backgroundColor === 'white' 
                 ? getTextColor('white', 'secondary')
                 : backgroundColor === 'green'
                 ? 'text-primary-100'
@@ -122,7 +121,7 @@ export function ResponsiveHero({
                 : 'text-neutral-200'
             )}>
               {subtitle}
-            </Heading>
+            </h2>
           )}
           
           {description && (

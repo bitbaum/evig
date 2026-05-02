@@ -5,7 +5,6 @@
  */
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import Heading from '@/components/ui/Heading'
 import { ProjectSection as ProjectSectionType } from './types'
 import { CheckCircle } from 'lucide-react'
 import { getTextColor, getBackgroundColor } from '@/lib/design-system'
@@ -39,9 +38,9 @@ export function ProjectSection({ section }: ProjectSectionProps) {
           {(section.title || section.description) && (
             <div className="text-center mb-12">
               {section.title && (
-                <Heading level={2} className={`text-4xl font-bold mb-4 ${textColorClass}`}>
+                <h2 className={`text-4xl font-bold mb-4 ${textColorClass}`}>
                   {section.title}
-                </Heading>
+                </h2>
               )}
               {section.description && (
                 <p className={`text-xl max-w-3xl mx-auto ${textSecondaryClass}`}>
@@ -76,16 +75,17 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                         </div>
                       ) : typeof card.icon === 'function' ? (
                         <div className={`w-8 h-8 ${card.iconColor || 'text-blue-600'} mr-3`}>
-                          {(() => { const Icon = card.icon as React.ComponentType<{ className?: string }>; return <Icon className="w-8 h-8" /> })()}
+                          {/* @ts-ignore - Component type handling */}
+                          <card.icon className="w-8 h-8" />
                         </div>
                       ) : (
                         <div className={`w-8 h-8 ${card.iconColor || 'text-blue-600'} mr-3`}>
                           {card.icon}
                         </div>
                       )}
-                      <Heading level={3} className={`text-2xl font-semibold ${textColorClass}`}>
+                      <h3 className={`text-2xl font-semibold ${textColorClass}`}>
                         {card.title}
-                      </Heading>
+                      </h3>
                     </div>
                   )}
                   

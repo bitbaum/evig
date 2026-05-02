@@ -15,7 +15,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <Header />
 
-      <main id="main" className="pt-20">
+      <main className="pt-20">
         {children}
       </main>
 

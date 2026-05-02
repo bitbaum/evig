@@ -2,18 +2,12 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft, LogIn } from 'lucide-react'
-import { EmptyState } from '@/components/ui/EmptyState'
+import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
 import { formatDate } from '@/lib/date-formats'
-import { Modal } from '@/components/ui/Modal'
-import Heading from '@/components/ui/Heading'
 
 interface WorkshopRegistration {
   id: string
@@ -32,54 +26,35 @@ interface WorkshopRegistration {
 }
 
 export default function WorkshopsDashboard() {
-  const tDates = useTranslations('dashboard.dates')
-  const t = useTranslations('dashboard.workshops')
   const { data: session, status } = useSession()
-  const router = useRouter()
-  const searchParams = useSearchParams()
   const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string>('')
-  const [paymentSuccess, setPaymentSuccess] = useState(
-    () => searchParams.get('payment') === 'success'
-  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRating, setEditRating] = useState<number>(5)
   const [editFeedback, setEditFeedback] = useState<string>('')
   const [saving, setSaving] = useState(false)
 
-  // Strip the ?payment=success param from the URL after we've captured it into state
   useEffect(() => {
-    if (searchParams.get('payment') === 'success') {
-      router.replace('/dashboard/workshops')
+    if (session?.user) {
+      fetchRegistrations()
     }
-  }, [searchParams, router])
-
-  useEffect(() => {
-    if (!session?.user) return
-    let cancelled = false
-    async function load() {
-      const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
-      if (cancelled) return
-      if (result.success && result.data) {
-        setRegistrations(result.data.registrations || [])
-      } else {
-        setError(result.error || t('loadError'))
-      }
-      setLoading(false)
-    }
-    load()
-    return () => { cancelled = true }
-  }, [session, t])
+  }, [session])
 
   const fetchRegistrations = async () => {
-    const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
-    if (result.success && result.data) {
-      setRegistrations(result.data.registrations || [])
-    } else {
-      setError(result.error || t('loadError'))
+    try {
+      const response = await fetch('/api/user/workshop-registrations')
+      if (response.ok) {
+        const data = await response.json()
+        setRegistrations(data.data?.registrations || [])
+      } else {
+        setError('Fehler beim Laden der Workshop-Anmeldungen')
+      }
+    } catch (error) {
+      setError('Netzwerkfehler beim Laden der Daten')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const openEdit = (reg: WorkshopRegistration) => {
@@ -91,17 +66,23 @@ export default function WorkshopsDashboard() {
   const saveEdit = async () => {
     if (!editingId) return
     setSaving(true)
-    const result = await apiFetch<void>(`/api/workshops/registrations/${editingId}`, {
-      method: 'PATCH',
-      body: { rating: editRating, feedback: editFeedback }
-    })
-    if (result.success) {
-      setEditingId(null)
-      fetchRegistrations()
-    } else {
-      setError(result.error || t('saveFailed'))
+    try {
+      const resp = await fetch(`/api/workshops/registrations/${editingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rating: editRating, feedback: editFeedback })
+      })
+      if (resp.ok) {
+        setEditingId(null)
+        fetchRegistrations()
+      } else {
+        alert('Speichern fehlgeschlagen')
+      }
+    } catch {
+      alert('Netzwerkfehler beim Speichern')
+    } finally {
+      setSaving(false)
     }
-    setSaving(false)
   }
 
   const getStatusIcon = (status: string) => {
@@ -120,11 +101,11 @@ export default function WorkshopsDashboard() {
   const getStatusText = (status: string) => {
     switch (status) {
       case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-        return t('statusConfirmed')
+        return 'Bestätigt'
       case WORKSHOP_REGISTRATION_STATUS.PENDING:
-        return t('statusPending')
+        return 'Ausstehend'
       case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-        return t('statusCancelled')
+        return 'Storniert'
       default:
         return status
     }
@@ -154,19 +135,18 @@ export default function WorkshopsDashboard() {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <EmptyState
-            icon={LogIn}
-            title={t('loginRequired')}
-            description={t('loginDesc')}
-            action={
-              <Link
-                href="/auth/login"
-                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
-              >
-                {t('login')}
-              </Link>
-            }
-          />
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
+            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</h1>
+            <p className={cn('mb-6', getTextColor('white', 'muted'))}>
+              Bitte melden Sie sich an, um Ihre Workshop-Anmeldungen zu sehen.
+            </p>
+            <Link
+              href="/auth/login"
+              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
+            >
+              Anmelden
+            </Link>
+          </div>
         </div>
       </div>
     )
@@ -182,30 +162,13 @@ export default function WorkshopsDashboard() {
             className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToDashboard')}
+            Zurück zum Dashboard
           </Link>
-          <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>{t('pageTitle')}</Heading>
+          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</h1>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            {t('pageSubtitle')}
+            Übersicht Ihrer Workshop-Anmeldungen und Teilnahmen
           </p>
         </div>
-
-        {/* Payment success banner (shown after Payrexx redirect) */}
-        {paymentSuccess && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-              <p className="text-emerald-800 font-medium">{t('paymentSuccess')}</p>
-            </div>
-            <button
-              onClick={() => setPaymentSuccess(false)}
-              className="text-emerald-600 hover:text-emerald-800 text-lg leading-none"
-              aria-label="Schliessen"
-            >
-              ×
-            </button>
-          </div>
-        )}
 
         {/* Error Message */}
         {error && (
@@ -221,9 +184,9 @@ export default function WorkshopsDashboard() {
               <div key={registration.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-neutral-200">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <Heading level={3} className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
+                    <h3 className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
                       {registration.workshop_title}
-                    </Heading>
+                    </h3>
                     <div className={cn('flex items-center gap-4 text-sm mb-3', getTextColor('white', 'muted'))}>
                       <div className="flex items-center">
                         {getStatusIcon(registration.status)}
@@ -231,7 +194,7 @@ export default function WorkshopsDashboard() {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>{tDates('registeredOn', { date: formatDate(registration.created_at) })}</span>
+                        <span>Angemeldet am {formatDate(registration.created_at)}</span>
                       </div>
                     </div>
                   </div>
@@ -242,10 +205,10 @@ export default function WorkshopsDashboard() {
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center text-green-800">
                       <CheckCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">{t('confirmedTitle')}</span>
+                      <span className="font-medium">Ihre Anmeldung wurde bestätigt!</span>
                     </div>
                     <p className="text-green-700 text-sm mt-1">
-                      {t('confirmedDesc')}
+                      Sie erhalten in Kürze weitere Informationen zu Datum und Ort.
                     </p>
                   </div>
                 )}
@@ -254,10 +217,10 @@ export default function WorkshopsDashboard() {
                   <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <div className="flex items-center text-yellow-800">
                       <AlertCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">{t('pendingTitle')}</span>
+                      <span className="font-medium">Anmeldung ausstehend</span>
                     </div>
                     <p className="text-yellow-700 text-sm mt-1">
-                      {t('pendingDesc')}
+                      Ihre Anmeldung wird von unserem Team geprüft. Sie erhalten eine Bestätigung per E-Mail.
                     </p>
                   </div>
                 )}
@@ -266,11 +229,11 @@ export default function WorkshopsDashboard() {
                   <div className="bg-red-50 border border-red-200 rounded-lg p-4">
                     <div className="flex items-center text-red-800">
                       <XCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">{t('cancelledTitle')}</span>
+                      <span className="font-medium">Anmeldung storniert</span>
                     </div>
                     {registration.cancelled_at && (
                       <p className="text-red-700 text-sm mt-1">
-                        {t('cancelledOn', { date: formatDate(registration.cancelled_at) })}
+                        Storniert am {formatDate(registration.cancelled_at)}
                       </p>
                     )}
                   </div>
@@ -281,26 +244,31 @@ export default function WorkshopsDashboard() {
                   <div className="mt-4 flex gap-3">
                     <button
                       onClick={async () => {
-                        if (!confirm(t('confirmCancel'))) return
-                        const result = await apiFetch<void>(`/api/workshops/registrations/${registration.id}`, {
-                          method: 'PATCH',
-                          body: { action: 'cancel' }
-                        })
-                        if (result.success) {
-                          fetchRegistrations()
-                        } else {
-                          setError(result.error || t('cancelFailed'))
+                        if (!confirm('Möchten Sie diese Anmeldung wirklich stornieren?')) return
+                        try {
+                          const resp = await fetch(`/api/workshops/registrations/${registration.id}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ action: 'cancel' })
+                          })
+                          if (resp.ok) {
+                            fetchRegistrations()
+                          } else {
+                            alert('Stornierung fehlgeschlagen')
+                          }
+                        } catch {
+                          alert('Netzwerkfehler bei der Stornierung')
                         }
                       }}
                       className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
                     >
-                      {t('cancelButton')}
+                      Anmeldung stornieren
                     </button>
                     <button
                       onClick={() => openEdit(registration)}
                       className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50"
                     >
-                      {registration.feedback || registration.rating ? t('feedbackEdit') : t('feedbackAdd')}
+                      {registration.feedback || registration.rating ? 'Feedback bearbeiten' : 'Feedback hinzufügen'}
                     </button>
                   </div>
                 )}
@@ -308,58 +276,75 @@ export default function WorkshopsDashboard() {
             ))}
           </div>
         ) : (
-          <EmptyState
-            icon={Calendar}
-            iconBg="bg-green-50 dark:bg-green-900/20"
-            iconColor="text-green-600 dark:text-green-400"
-            title={t('emptyTitle')}
-            description={t('emptyDesc')}
-            action={
-              <Link
-                href="/workshops"
-                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
-              >
-                {t('discoverWorkshops')}
-              </Link>
-            }
-          />
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+            <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Noch keine Workshop-Anmeldungen
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Sie haben sich noch für keine Workshops angemeldet.
+            </p>
+            <Link
+              href="/workshops"
+              className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Workshops entdecken
+            </Link>
+          </div>
         )}
       </div>
 
-      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title={t('modalTitle')}>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('ratingLabel')}</label>
-            <input
-              type="number"
-              min={1}
-              max={5}
-              value={editRating}
-              onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
-              className="w-24 px-3 py-2 border border-gray-300 rounded-lg"
-            />
+      <Modal open={!!editingId} onClose={() => setEditingId(null)}>
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Feedback bearbeiten</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Bewertung (1-5)</label>
+              <input
+                type="number"
+                min={1}
+                max={5}
+                value={editRating}
+                onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
+                className="w-24 px-3 py-2 border border-gray-300 rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
+              <textarea
+                value={editFeedback}
+                onChange={(e) => setEditFeedback(e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                placeholder="Wie war Ihre Erfahrung?"
+              />
+            </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('feedbackLabel')}</label>
-            <textarea
-              value={editFeedback}
-              onChange={(e) => setEditFeedback(e.target.value)}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-              placeholder={t('feedbackPlaceholder')}
-            />
+          <div className="mt-6 flex justify-end gap-3">
+            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
+            <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
+              {saving ? 'Speichern…' : 'Speichern'}
+            </button>
           </div>
-        </div>
-        <div className="mt-6 flex justify-end gap-3">
-          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">{t('cancel')}</button>
-          <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
-            {saving ? t('saving') : t('save')}
-          </button>
         </div>
       </Modal>
     </div>
   )
 }
+
+// Simple modal
+function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
+  if (!open) return null
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+
 
 
 
