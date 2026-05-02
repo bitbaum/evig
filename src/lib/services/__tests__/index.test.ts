@@ -45,17 +45,17 @@ const mockCreateServiceType = jest.fn()
 const mockDeleteServiceType = jest.fn()
 
 jest.mock('../db', () => ({
-  getServiceTypeBySlug: (...args: unknown[]) => mockGetServiceTypeBySlug(...args),
-  getServiceTypeById: (...args: unknown[]) => mockGetServiceTypeById(...args),
-  getAllServiceTypes: (...args: unknown[]) => mockGetAllServiceTypes(...args),
-  getFeaturedServiceTypes: (...args: unknown[]) => mockGetFeaturedServiceTypes(...args),
-  getBookableServiceTypes: (...args: unknown[]) => mockGetBookableServiceTypes(...args),
-  getServiceTypesByCategory: (...args: unknown[]) => mockGetServiceTypesByCategory(...args),
-  getAllServiceSlugs: (...args: unknown[]) => mockGetAllServiceSlugsFromDb(...args),
-  getAllServiceTypesForAdmin: (...args: unknown[]) => mockGetAllServiceTypesForAdmin(...args),
-  updateServiceType: (...args: unknown[]) => mockUpdateServiceType(...args),
-  createServiceType: (...args: unknown[]) => mockCreateServiceType(...args),
-  deleteServiceType: (...args: unknown[]) => mockDeleteServiceType(...args),
+  getServiceTypeBySlug: (...args: unknown[]) => mockGetServiceTypeBySlug.apply(null, args),
+  getServiceTypeById: (...args: unknown[]) => mockGetServiceTypeById.apply(null, args),
+  getAllServiceTypes: (...args: unknown[]) => mockGetAllServiceTypes.apply(null, args),
+  getFeaturedServiceTypes: (...args: unknown[]) => mockGetFeaturedServiceTypes.apply(null, args),
+  getBookableServiceTypes: (...args: unknown[]) => mockGetBookableServiceTypes.apply(null, args),
+  getServiceTypesByCategory: (...args: unknown[]) => mockGetServiceTypesByCategory.apply(null, args),
+  getAllServiceSlugs: (...args: unknown[]) => mockGetAllServiceSlugsFromDb.apply(null, args),
+  getAllServiceTypesForAdmin: (...args: unknown[]) => mockGetAllServiceTypesForAdmin.apply(null, args),
+  updateServiceType: (...args: unknown[]) => mockUpdateServiceType.apply(null, args),
+  createServiceType: (...args: unknown[]) => mockCreateServiceType.apply(null, args),
+  deleteServiceType: (...args: unknown[]) => mockDeleteServiceType.apply(null, args),
 }))
 
 const mockGetServicePresentation = jest.fn()
@@ -63,8 +63,8 @@ const mockGetServicePricing = jest.fn()
 const mockServicePresentation: Record<string, unknown> = {}
 
 jest.mock('../presentation', () => ({
-  getServicePresentation: (...args: unknown[]) => mockGetServicePresentation(...args),
-  getServicePricing: (...args: unknown[]) => mockGetServicePricing(...args),
+  getServicePresentation: (...args: unknown[]) => mockGetServicePresentation.apply(null, args),
+  getServicePricing: (...args: unknown[]) => mockGetServicePricing.apply(null, args),
   // Getter defers access to mockServicePresentation until test execution
   // (direct value reference would hit TDZ during jest.mock hoisting)
   get servicePresentation() { return mockServicePresentation },
@@ -73,7 +73,7 @@ jest.mock('../presentation', () => ({
 const mockGetIconByName = jest.fn()
 
 jest.mock('@/config/service-icons', () => ({
-  getIconByName: (...args: unknown[]) => mockGetIconByName(...args),
+  getIconByName: (...args: unknown[]) => mockGetIconByName.apply(null, args),
 }))
 
 // The sub-modules that index.ts re-exports from
@@ -210,7 +210,7 @@ describe('mergeServiceData — DB priority', () => {
 
     const result = await getService('computer-repair')
 
-    expect(result?.process[0].title).toBe('DB Step')
+    expect(result?.process![0].title).toBe('DB Step')
   })
 
   it('falls back to presentation process when DB process_json is null', async () => {
@@ -218,7 +218,7 @@ describe('mergeServiceData — DB priority', () => {
 
     const result = await getService('computer-repair')
 
-    expect(result?.process[0].title).toBe('Step 1')
+    expect(result?.process![0].title).toBe('Step 1')
   })
 
   it('resolves icon_name via getIconByName when set', async () => {

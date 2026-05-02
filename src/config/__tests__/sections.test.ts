@@ -195,15 +195,15 @@ describe('getSensitivityReason', () => {
 
 describe('getSectionsByCategory', () => {
   it('returns sections matching the given category', () => {
-    const result = getSectionsByCategory('operations')
+    const result = getSectionsByCategory('management')
 
     for (const s of result) {
-      expect(s.category).toBe('operations')
+      expect(s.category).toBe('management')
     }
   })
 
   it('returns results sorted by priority', () => {
-    const result = getSectionsByCategory('operations')
+    const result = getSectionsByCategory('management')
 
     for (let i = 1; i < result.length; i++) {
       expect(result[i].priority).toBeGreaterThanOrEqual(result[i - 1].priority)

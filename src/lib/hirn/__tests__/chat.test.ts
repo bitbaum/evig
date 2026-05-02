@@ -56,10 +56,10 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
-    delete: (...args: unknown[]) => mockDbDelete(...args),
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -100,7 +100,7 @@ const mockGetDefaultChatProvider = jest.fn()
 jest.mock('../providers', () => ({
   // Wrapper captures mockGetDefaultChatProvider by reference (not by value),
   // so it resolves correctly when tests run (after module-level init).
-  getDefaultChatProvider: (...args: unknown[]) => mockGetDefaultChatProvider(...args),
+  getDefaultChatProvider: (...args: unknown[]) => mockGetDefaultChatProvider.apply(null, args),
 }))
 
 jest.mock('../system-prompt', () => ({

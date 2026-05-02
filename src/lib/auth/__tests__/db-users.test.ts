@@ -75,9 +75,9 @@ const mockDbUpdate = jest.fn(() => makeChain([]))
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
   },
 }))
 

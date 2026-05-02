@@ -35,7 +35,7 @@ const mockDbInsert = jest.fn(() => makeChain())
 
 jest.mock('@/db', () => ({
   db: {
-    insert: (...args: unknown[]) => mockDbInsert(...args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
   },
 }))
 
@@ -112,7 +112,7 @@ describe('createEscrowAccount', () => {
 
     await createEscrowAccount(BASE_PARAMS)
 
-    expect(capturedValues?.status).toBe('active')
+    expect((capturedValues as unknown as Record<string, unknown>)?.status).toBe('active')
   })
 
   it('passes all params from EscrowParams', async () => {
@@ -129,10 +129,10 @@ describe('createEscrowAccount', () => {
 
     await createEscrowAccount(BASE_PARAMS)
 
-    expect(capturedValues?.transactionId).toBe('tx-1')
-    expect(capturedValues?.totalAmountCents).toBe(15000)
-    expect(capturedValues?.currency).toBe('CHF')
-    expect(capturedValues?.autoReleaseDays).toBe(7)
-    expect(capturedValues?.buyerId).toBe('user-1')
+    expect((capturedValues as unknown as Record<string, unknown>)?.transactionId).toBe('tx-1')
+    expect((capturedValues as unknown as Record<string, unknown>)?.totalAmountCents).toBe(15000)
+    expect((capturedValues as unknown as Record<string, unknown>)?.currency).toBe('CHF')
+    expect((capturedValues as unknown as Record<string, unknown>)?.autoReleaseDays).toBe(7)
+    expect((capturedValues as unknown as Record<string, unknown>)?.buyerId).toBe('user-1')
   })
 })

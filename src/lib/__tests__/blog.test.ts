@@ -23,10 +23,10 @@ const mockReaddirSync = jest.fn()
 const mockStatSync = jest.fn()
 
 jest.mock('fs', () => ({
-  existsSync: (...args: unknown[]) => mockExistsSync(...args),
-  readFileSync: (...args: unknown[]) => mockReadFileSync(...args),
-  readdirSync: (...args: unknown[]) => mockReaddirSync(...args),
-  statSync: (...args: unknown[]) => mockStatSync(...args),
+  existsSync: (...args: unknown[]) => mockExistsSync.apply(null, args),
+  readFileSync: (...args: unknown[]) => mockReadFileSync.apply(null, args),
+  readdirSync: (...args: unknown[]) => mockReaddirSync.apply(null, args),
+  statSync: (...args: unknown[]) => mockStatSync.apply(null, args),
 }))
 
 import { getAllPosts, getPostBySlug } from '../blog'

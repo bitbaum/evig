@@ -47,7 +47,7 @@ const mockDbSelect = jest.fn(() => makeChain([]))
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
   },
 }))
 
@@ -75,13 +75,13 @@ jest.mock('drizzle-orm', () => ({
 const mockSendCustomEmail = jest.fn()
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
 }))
 
 const mockCreateInAppNotifications = jest.fn()
 
 jest.mock('@/lib/api/task-helpers', () => ({
-  createInAppNotifications: (...args: unknown[]) => mockCreateInAppNotifications(...args),
+  createInAppNotifications: (...args: unknown[]) => mockCreateInAppNotifications.apply(null, args),
 }))
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({
@@ -213,7 +213,7 @@ describe('sendRequestCreatedNotifications', () => {
   it('does not throw when DB query for helpers fails', async () => {
     mockDbSelect.mockImplementationOnce(() => {
       const chain = makeChain([])
-      chain.then = (_res: unknown, rej: unknown) => Promise.reject(new Error('DB error')).then(_res, rej)
+      chain.then = (_res: unknown, rej: unknown) => Promise.reject(new Error('DB error')).then(_res as never, rej as never)
       return chain
     })
 

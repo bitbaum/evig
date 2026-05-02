@@ -30,7 +30,7 @@ const mockHandleFileSelect = jest.fn()
 const mockUseAIProductAnalysis = jest.fn()
 
 jest.mock('../useAIProductAnalysis', () => ({
-  useAIProductAnalysis: (...args: unknown[]) => mockUseAIProductAnalysis(...args),
+  useAIProductAnalysis: (...args: unknown[]) => mockUseAIProductAnalysis.apply(null, args),
 }))
 
 jest.mock('@/components/marketplace/ai-camera/config', () => ({

@@ -48,7 +48,7 @@ Object.defineProperty(global, 'Audio', {
 import { renderHook, act } from '@testing-library/react'
 import { useAudioPlayback } from '../useAudioPlayback'
 
-const MockAudio = global.Audio as jest.MockedFunction<typeof Audio>
+const MockAudio = global.Audio as jest.MockedClass<typeof Audio>
 
 beforeEach(() => {
   MockAudio.mockClear()

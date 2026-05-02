@@ -30,15 +30,15 @@
 
 const mockDbExecute = jest.fn()
 const mockTxExecute = jest.fn()
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) }
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) }
 const mockDbTransaction = jest.fn().mockImplementation(
   async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
 )
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
-    transaction: (...args: unknown[]) => mockDbTransaction(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
   },
 }))
 

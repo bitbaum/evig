@@ -29,7 +29,7 @@
 const mockCallWithFallback = jest.fn()
 
 jest.mock('@/lib/ai/providers', () => ({
-  callWithFallback: (...args: unknown[]) => mockCallWithFallback(...args),
+  callWithFallback: (...args: unknown[]) => mockCallWithFallback.apply(null, args),
 }))
 
 const mockFillPromptTemplate = jest.fn((template: string) => `PROMPT:${template}`)
@@ -42,19 +42,19 @@ jest.mock('@/lib/ai/config/prompts', () => ({
     extract: 'Extract: {text}',
     schema: '{"produktname":"","hersteller":""}',
   },
-  fillPromptTemplate: (...args: unknown[]) => mockFillPromptTemplate(...args),
+  fillPromptTemplate: (...args: unknown[]) => mockFillPromptTemplate.apply(null, args),
 }))
 
 const mockCalculateFieldConfidence = jest.fn()
 const mockFastParseProductText = jest.fn()
 
 jest.mock('../ai-field-mapping', () => ({
-  calculateFieldConfidence: (...args: unknown[]) => mockCalculateFieldConfidence(...args),
+  calculateFieldConfidence: (...args: unknown[]) => mockCalculateFieldConfidence.apply(null, args),
   generateVerificationSources: jest.fn().mockReturnValue([]),
 }))
 
 jest.mock('../ai-classification', () => ({
-  fastParseProductText: (...args: unknown[]) => mockFastParseProductText(...args),
+  fastParseProductText: (...args: unknown[]) => mockFastParseProductText.apply(null, args),
 }))
 
 jest.mock('@/config/urls', () => ({

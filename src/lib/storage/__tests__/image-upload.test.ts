@@ -27,15 +27,15 @@ const mockWriteFileSync = jest.fn()
 const mockUnlinkSync = jest.fn()
 
 jest.mock('@vercel/blob', () => ({
-  put: (...args: unknown[]) => mockPut(...args),
-  del: (...args: unknown[]) => mockDel(...args),
+  put: (...args: unknown[]) => mockPut.apply(null, args),
+  del: (...args: unknown[]) => mockDel.apply(null, args),
 }))
 
 jest.mock('fs', () => ({
-  existsSync: (...args: unknown[]) => mockExistsSync(...args),
-  mkdirSync: (...args: unknown[]) => mockMkdirSync(...args),
-  writeFileSync: (...args: unknown[]) => mockWriteFileSync(...args),
-  unlinkSync: (...args: unknown[]) => mockUnlinkSync(...args),
+  existsSync: (...args: unknown[]) => mockExistsSync.apply(null, args),
+  mkdirSync: (...args: unknown[]) => mockMkdirSync.apply(null, args),
+  writeFileSync: (...args: unknown[]) => mockWriteFileSync.apply(null, args),
+  unlinkSync: (...args: unknown[]) => mockUnlinkSync.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({

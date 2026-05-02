@@ -86,10 +86,10 @@ const mockDbDelete = jest.fn(() => makeChain([]))
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
-    delete: (...args: unknown[]) => mockDbDelete(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
   },
 }))
 
@@ -220,7 +220,7 @@ describe('verifyEmailWithToken', () => {
   })
 
   it('returns { success: false } on DB error (does not throw)', async () => {
-    mockDbSelect.mockImplementationOnce({
+    mockDbSelect.mockReturnValueOnce({
       ...makeChain([]),
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockReturnValue(Promise.reject(new Error('DB error'))),
@@ -318,7 +318,7 @@ describe('verifyEmailCode', () => {
   })
 
   it('returns { success: false } on DB error (does not throw)', async () => {
-    mockDbSelect.mockImplementationOnce({
+    mockDbSelect.mockReturnValueOnce({
       ...makeChain([]),
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockReturnValue(Promise.reject(new Error('connection lost'))),
@@ -375,7 +375,7 @@ describe('verifyPasswordResetToken', () => {
   })
 
   it('returns { success: false } on DB error (does not throw)', async () => {
-    mockDbSelect.mockImplementationOnce({
+    mockDbSelect.mockReturnValueOnce({
       ...makeChain([]),
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockReturnValue(Promise.reject(new Error('timeout'))),
@@ -411,7 +411,7 @@ describe('updateUserPassword', () => {
   })
 
   it('returns { success: false } on DB error (does not throw)', async () => {
-    mockDbUpdate.mockImplementationOnce({
+    mockDbUpdate.mockReturnValueOnce({
       ...makeChain([]),
       set: jest.fn().mockReturnValue({
         where: jest.fn().mockReturnValue({

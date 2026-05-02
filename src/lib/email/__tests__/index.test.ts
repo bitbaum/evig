@@ -109,8 +109,8 @@ const mockGetTransporter = jest.fn()
 const mockGetFromEmail = jest.fn()
 
 jest.mock('../transporter', () => ({
-  getTransporter: (...args: unknown[]) => mockGetTransporter(...args),
-  getFromEmail: (...args: unknown[]) => mockGetFromEmail(...args),
+  getTransporter: (...args: unknown[]) => mockGetTransporter.apply(null, args),
+  getFromEmail: (...args: unknown[]) => mockGetFromEmail.apply(null, args),
   testEmailConfig: jest.fn(),
 }))
 
@@ -118,9 +118,9 @@ const mockSendViaListmonk = jest.fn()
 const mockIsListmonkEnabled = jest.fn()
 
 jest.mock('../listmonk', () => ({
-  sendViaListmonk: (...args: unknown[]) => mockSendViaListmonk(...args),
+  sendViaListmonk: (...args: unknown[]) => mockSendViaListmonk.apply(null, args),
   testListmonkConnection: jest.fn(),
-  isListmonkEnabled: (...args: unknown[]) => mockIsListmonkEnabled(...args),
+  isListmonkEnabled: (...args: unknown[]) => mockIsListmonkEnabled.apply(null, args),
   subscribeToList: jest.fn(),
   getListmonkConfig: jest.fn(),
 }))
@@ -128,7 +128,7 @@ jest.mock('../listmonk', () => ({
 const mockGetEmailProvider = jest.fn()
 
 jest.mock('@/config/email', () => ({
-  getEmailProvider: (...args: unknown[]) => mockGetEmailProvider(...args),
+  getEmailProvider: (...args: unknown[]) => mockGetEmailProvider.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({

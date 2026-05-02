@@ -61,11 +61,11 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
-    delete: (...args: unknown[]) => mockDbDelete(...args),
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -99,23 +99,23 @@ const mockChunkMarkdown = jest.fn().mockReturnValue([{ content: 'md chunk', inde
 const mockChunkCode = jest.fn().mockReturnValue([{ content: 'code chunk', index: 0, metadata: {} }])
 
 jest.mock('../chunking', () => ({
-  chunkText: (...args: unknown[]) => mockChunkText(...args),
-  chunkMarkdown: (...args: unknown[]) => mockChunkMarkdown(...args),
-  chunkCode: (...args: unknown[]) => mockChunkCode(...args),
+  chunkText: (...args: unknown[]) => mockChunkText.apply(null, args),
+  chunkMarkdown: (...args: unknown[]) => mockChunkMarkdown.apply(null, args),
+  chunkCode: (...args: unknown[]) => mockChunkCode.apply(null, args),
 }))
 
 const mockGenerateEmbeddings = jest.fn()
 
 jest.mock('../providers', () => ({
-  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings(...args),
+  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings.apply(null, args),
 }))
 
 const mockReadFile = jest.fn()
 const mockReaddir = jest.fn()
 
 jest.mock('fs/promises', () => ({
-  readFile: (...args: unknown[]) => mockReadFile(...args),
-  readdir: (...args: unknown[]) => mockReaddir(...args),
+  readFile: (...args: unknown[]) => mockReadFile.apply(null, args),
+  readdir: (...args: unknown[]) => mockReaddir.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({

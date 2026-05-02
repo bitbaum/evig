@@ -65,7 +65,7 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -121,8 +121,8 @@ const mockUploadImage = jest.fn().mockResolvedValue({ success: false, error: 'di
 const mockGenerateImageFilename = jest.fn().mockReturnValue('I-260427-0001.jpg')
 
 jest.mock('@/lib/storage/image-upload', () => ({
-  uploadImage: (...args: unknown[]) => mockUploadImage(...args),
-  generateImageFilename: (...args: unknown[]) => mockGenerateImageFilename(...args),
+  uploadImage: (...args: unknown[]) => mockUploadImage.apply(null, args),
+  generateImageFilename: (...args: unknown[]) => mockGenerateImageFilename.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -145,9 +145,9 @@ const mockTxInsert = jest.fn()
 const mockTxSelect = jest.fn()
 
 const mockTx = {
-  execute: (...args: unknown[]) => mockTxExecute(...args),
-  insert: (...args: unknown[]) => mockTxInsert(...args),
-  select: (...args: unknown[]) => mockTxSelect(...args),
+  execute: (...args: unknown[]) => mockTxExecute.apply(null, args),
+  insert: (...args: unknown[]) => mockTxInsert.apply(null, args),
+  select: (...args: unknown[]) => mockTxSelect.apply(null, args),
 }
 
 // ---------------------------------------------------------------------------
@@ -374,7 +374,7 @@ describe('createErfassungProduct — image handling', () => {
     })
 
     const result = await createErfassungProduct(
-      makePayload({ image: 'data:image/jpeg;base64,abc123' as unknown as File }),
+      makePayload({ image: 'data:image/jpeg;base64,abc123' }),
       'user-1',
       mockTx as never,
     )
@@ -389,7 +389,7 @@ describe('createErfassungProduct — image handling', () => {
     mockUploadImage.mockResolvedValueOnce({ success: false, error: 'quota exceeded' })
 
     const result = await createErfassungProduct(
-      makePayload({ image: 'data:image/jpeg;base64,abc123' as unknown as File }),
+      makePayload({ image: 'data:image/jpeg;base64,abc123' }),
       'user-1',
       mockTx as never,
     )

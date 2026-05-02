@@ -51,9 +51,9 @@ const mockDbDelete = jest.fn(() => makeChain([]))
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    delete: (...args: unknown[]) => mockDbDelete(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    delete: (...args: unknown[]) => mockDbDelete.apply(null, args),
   },
 }))
 
@@ -78,7 +78,7 @@ jest.mock('drizzle-orm', () => ({
 const mockGenerateEmbeddings = jest.fn()
 
 jest.mock('../providers', () => ({
-  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings(...args),
+  generateEmbeddings: (...args: unknown[]) => mockGenerateEmbeddings.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({

@@ -39,7 +39,7 @@
 const mockQuery = jest.fn()
 
 jest.mock('@/lib/auth/db', () => ({
-  query: (...args: unknown[]) => mockQuery(...args),
+  query: (...args: unknown[]) => mockQuery.apply(null, args),
 }))
 
 jest.mock('@/config/database', () => ({

@@ -109,9 +109,9 @@ const mockDbInsert = jest.fn(() => makeChain())
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
   },
 }))
 
@@ -339,9 +339,9 @@ describe('generateEmbeddings', () => {
     mockOllamaIsAvailable.mockResolvedValueOnce(true)
     mockOllamaEmbed.mockResolvedValueOnce({ embeddings: [[0.1, 0.2]] })
 
-    const result = await generateEmbeddings({ texts: ['hello'] })
+    const result = await generateEmbeddings({ input: ['hello'] })
 
-    expect(mockOllamaEmbed).toHaveBeenCalledWith({ texts: ['hello'] })
+    expect(mockOllamaEmbed).toHaveBeenCalledWith({ input: ['hello'] })
     expect(result.embeddings[0]).toEqual([0.1, 0.2])
   })
 })

@@ -50,15 +50,15 @@
 
 const mockDbExecute = jest.fn()
 const mockTxExecute = jest.fn()
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) }
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) }
 const mockDbTransaction = jest.fn().mockImplementation(
   async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
 )
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
-    transaction: (...args: unknown[]) => mockDbTransaction(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
   },
 }))
 
@@ -97,8 +97,8 @@ const mockFireNotification = jest.fn().mockImplementation((fn: () => void) => { 
 const mockNotifyUsers = jest.fn().mockResolvedValue(undefined)
 
 jest.mock('@/lib/services/notifications', () => ({
-  notifyUsers: (...args: unknown[]) => mockNotifyUsers(...args),
-  fireNotification: (...args: unknown[]) => mockFireNotification(...args),
+  notifyUsers: (...args: unknown[]) => mockNotifyUsers.apply(null, args),
+  fireNotification: (...args: unknown[]) => mockFireNotification.apply(null, args),
 }))
 
 jest.mock('@/config/notifications', () => ({

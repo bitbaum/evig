@@ -53,9 +53,9 @@ const mockDbUpdate = jest.fn(() => makeChain())
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
   },
 }))
 
@@ -201,7 +201,7 @@ describe('createTransaction', () => {
 
     await createTransaction({ ...BASE_TX_PARAMS, useEscrow: false })
 
-    expect(capturedValues?.escrowReleaseDate).toBeNull()
+    expect((capturedValues as unknown as Record<string, unknown>)?.escrowReleaseDate).toBeNull()
   })
 
   it('sets escrowReleaseDate SQL expression when useEscrow=true', async () => {
@@ -219,7 +219,7 @@ describe('createTransaction', () => {
     await createTransaction({ ...BASE_TX_PARAMS, useEscrow: true, autoReleaseDays: 14 })
 
     // escrowReleaseDate should be a sql expression (not null)
-    expect(capturedValues?.escrowReleaseDate).not.toBeNull()
+    expect((capturedValues as unknown as Record<string, unknown>)?.escrowReleaseDate).not.toBeNull()
   })
 })
 

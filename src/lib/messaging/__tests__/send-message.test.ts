@@ -45,9 +45,9 @@ const mockTxInsert = jest.fn(() => makeChain([]))
 const mockTxUpdate = jest.fn(() => makeChain([]))
 
 const mockTx = {
-  select: (...args: unknown[]) => mockTxSelect(...args),
-  insert: (...args: unknown[]) => mockTxInsert(...args),
-  update: (...args: unknown[]) => mockTxUpdate(...args),
+  select: (...args: unknown[]) => mockTxSelect.apply(null, args),
+  insert: (...args: unknown[]) => mockTxInsert.apply(null, args),
+  update: (...args: unknown[]) => mockTxUpdate.apply(null, args),
 }
 
 const mockDbTransaction = jest.fn().mockImplementation(
@@ -60,7 +60,7 @@ const mockDbTransaction = jest.fn().mockImplementation(
 
 jest.mock('@/db', () => ({
   db: {
-    transaction: (...args: unknown[]) => mockDbTransaction(...args),
+    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
   },
 }))
 

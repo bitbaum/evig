@@ -19,7 +19,7 @@
 const mockApiFetch = jest.fn()
 
 jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
+  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({

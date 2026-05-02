@@ -38,7 +38,7 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -94,9 +94,9 @@ const mockProcessNotes = jest.fn()
 const mockProcessTaskList = jest.fn()
 
 jest.mock('@/lib/ai/protocol-processing', () => ({
-  processProtocolTranscript: (...args: unknown[]) => mockProcessTranscript(...args),
-  processProtocolNotes: (...args: unknown[]) => mockProcessNotes(...args),
-  processTaskList: (...args: unknown[]) => mockProcessTaskList(...args),
+  processProtocolTranscript: (...args: unknown[]) => mockProcessTranscript.apply(null, args),
+  processProtocolNotes: (...args: unknown[]) => mockProcessNotes.apply(null, args),
+  processTaskList: (...args: unknown[]) => mockProcessTaskList.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -108,16 +108,16 @@ const mockParsedTaskListSafeParse = jest.fn().mockReturnValue({ success: false }
 
 jest.mock('@/lib/schemas/protocols', () => ({
   structuredNotesSchema: {
-    safeParse: (...args: unknown[]) => mockStructuredNotesSafeParse(...args),
+    safeParse: (...args: unknown[]) => mockStructuredNotesSafeParse.apply(null, args),
   },
   parsedTaskListSchema: {
-    safeParse: (...args: unknown[]) => mockParsedTaskListSafeParse(...args),
+    safeParse: (...args: unknown[]) => mockParsedTaskListSafeParse.apply(null, args),
   },
 }))
 
 const mockLinkActionItemToTask = jest.fn()
 jest.mock('../protocols-linking', () => ({
-  linkActionItemToTask: (...args: unknown[]) => mockLinkActionItemToTask(...args),
+  linkActionItemToTask: (...args: unknown[]) => mockLinkActionItemToTask.apply(null, args),
 }))
 
 // ---------------------------------------------------------------------------

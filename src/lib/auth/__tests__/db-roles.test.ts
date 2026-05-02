@@ -55,7 +55,7 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -355,7 +355,7 @@ describe('getUserSegments', () => {
     const result = await getUserSegments('user-1')
 
     expect(result[0].user_id).toBe('user-1')
-    expect(result[0].slug).toBe('early-adopter')
+    expect((result[0] as unknown as { slug: string }).slug).toBe('early-adopter')
   })
 })
 

@@ -19,14 +19,14 @@ const mockIndexListing = jest.fn()
 const mockLoggerError = jest.fn()
 
 jest.mock('@/lib/search/meilisearch', () => ({
-  indexListing: (...args: unknown[]) => mockIndexListing(...args),
+  indexListing: (...args: unknown[]) => mockIndexListing.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({
   logger: {
     info: jest.fn(),
     warn: jest.fn(),
-    error: (...args: unknown[]) => mockLoggerError(...args),
+    error: (...args: unknown[]) => mockLoggerError.apply(null, args),
     debug: jest.fn(),
   },
 }))

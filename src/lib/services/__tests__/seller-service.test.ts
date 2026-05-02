@@ -37,7 +37,7 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 

@@ -44,7 +44,7 @@ const mockDbInsert = jest.fn(() => makeChain([{ id: 'inv-1', invoiceNumber: 'INV
 
 jest.mock('@/db', () => ({
   db: {
-    insert: (...args: unknown[]) => mockDbInsert(...args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
   },
 }))
 
@@ -187,7 +187,7 @@ describe('createInvoice', () => {
 
     await createInvoice({ ...BASE_PARAMS, serviceAppointmentId: 'appt-1' })
 
-    expect(capturedValues?.serviceAppointmentId).toBe('appt-1')
+    expect((capturedValues as unknown as Record<string, unknown>)?.serviceAppointmentId).toBe('appt-1')
   })
 
   it('passes null for serviceAppointmentId when absent', async () => {
@@ -204,7 +204,7 @@ describe('createInvoice', () => {
 
     await createInvoice(BASE_PARAMS)
 
-    expect(capturedValues?.serviceAppointmentId).toBeNull()
+    expect((capturedValues as unknown as Record<string, unknown>)?.serviceAppointmentId).toBeNull()
   })
 
   it('passes workshopRegistrationId when provided', async () => {
@@ -221,7 +221,7 @@ describe('createInvoice', () => {
 
     await createInvoice({ ...BASE_PARAMS, workshopRegistrationId: 'ws-reg-1' })
 
-    expect(capturedValues?.workshopRegistrationId).toBe('ws-reg-1')
+    expect((capturedValues as unknown as Record<string, unknown>)?.workshopRegistrationId).toBe('ws-reg-1')
   })
 
   it('passes taxCents computed from calculateSwissVAT', async () => {
@@ -239,6 +239,6 @@ describe('createInvoice', () => {
     await createInvoice({ ...BASE_PARAMS, baseAmountCents: 10000 })
 
     // calculateSwissVAT(10000) = Math.round(10000 * 0.081) = 810
-    expect(capturedValues?.taxCents).toBe(810)
+    expect((capturedValues as unknown as Record<string, unknown>)?.taxCents).toBe(810)
   })
 })

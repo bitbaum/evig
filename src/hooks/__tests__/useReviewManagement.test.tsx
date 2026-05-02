@@ -30,25 +30,25 @@ const mockLoggerWarn = jest.fn()
 const mockLoggerError = jest.fn()
 
 jest.mock('@/lib/api/client', () => ({
-  apiFetch: (...args: unknown[]) => mockApiFetch(...args),
+  apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
 }))
 
 jest.mock('sonner', () => ({
   toast: {
-    success: (...args: unknown[]) => mockToastSuccess(...args),
-    error: (...args: unknown[]) => mockToastError(...args),
+    success: (...args: unknown[]) => mockToastSuccess.apply(null, args),
+    error: (...args: unknown[]) => mockToastError.apply(null, args),
   },
 }))
 
 jest.mock('next/navigation', () => ({
-  redirect: (...args: unknown[]) => mockRedirect(...args),
+  redirect: (...args: unknown[]) => mockRedirect.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({
   logger: {
     info: jest.fn(),
-    warn: (...args: unknown[]) => mockLoggerWarn(...args),
-    error: (...args: unknown[]) => mockLoggerError(...args),
+    warn: (...args: unknown[]) => mockLoggerWarn.apply(null, args),
+    error: (...args: unknown[]) => mockLoggerError.apply(null, args),
     debug: jest.fn(),
   },
 }))

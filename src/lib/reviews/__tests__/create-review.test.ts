@@ -54,9 +54,9 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 

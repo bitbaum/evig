@@ -55,9 +55,9 @@ const mockDbInsert = jest.fn(() => makeChain())
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
-    insert: (...args: unknown[]) => mockDbInsert(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
   },
 }))
 
@@ -92,8 +92,8 @@ const mockUploadImage = jest.fn()
 const mockDeleteImage = jest.fn()
 
 jest.mock('@/lib/storage/image-upload', () => ({
-  uploadImage: (...args: unknown[]) => mockUploadImage(...args),
-  deleteImage: (...args: unknown[]) => mockDeleteImage(...args),
+  uploadImage: (...args: unknown[]) => mockUploadImage.apply(null, args),
+  deleteImage: (...args: unknown[]) => mockDeleteImage.apply(null, args),
 }))
 
 jest.mock('@/config/marketplace-status', () => ({

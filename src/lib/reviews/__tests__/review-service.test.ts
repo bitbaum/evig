@@ -69,9 +69,9 @@ const mockDbUpdate = jest.fn(() => makeUpdateChain([]))
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => mockDbSelect(...args),
-    execute: (...args: unknown[]) => mockDbExecute(...args),
-    update: (...args: unknown[]) => mockDbUpdate(...args),
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
   },
 }))
 
@@ -113,7 +113,7 @@ jest.mock('@/config/urls', () => ({
 
 const mockSendEmail = jest.fn().mockResolvedValue({ success: true })
 jest.mock('@/lib/email', () => ({
-  sendEmail: (...args: unknown[]) => mockSendEmail(...args),
+  sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({

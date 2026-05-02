@@ -48,7 +48,7 @@ const mockDbExecute = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -92,7 +92,7 @@ jest.mock('@/lib/ai/config/prompts', () => ({
 
 const mockProcessDecisionProposal = jest.fn()
 jest.mock('@/lib/ai/protocol-processing', () => ({
-  processDecisionProposal: (...args: unknown[]) => mockProcessDecisionProposal(...args),
+  processDecisionProposal: (...args: unknown[]) => mockProcessDecisionProposal.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -101,7 +101,7 @@ jest.mock('@/lib/logger', () => ({
 
 const mockLinkActionItemToTask = jest.fn()
 jest.mock('../protocols-linking', () => ({
-  linkActionItemToTask: (...args: unknown[]) => mockLinkActionItemToTask(...args),
+  linkActionItemToTask: (...args: unknown[]) => mockLinkActionItemToTask.apply(null, args),
 }))
 
 // ---------------------------------------------------------------------------

@@ -26,7 +26,7 @@
 const mockCallWithFallback = jest.fn()
 
 jest.mock('@/lib/ai/providers', () => ({
-  callWithFallback: (...args: unknown[]) => mockCallWithFallback(...args),
+  callWithFallback: (...args: unknown[]) => mockCallWithFallback.apply(null, args),
 }))
 
 // BRAND_CONTEXT is a module-level constant read at import time — must be
@@ -51,7 +51,7 @@ const BASE_PARAMS = {
   title: 'Neue Logo-Wahl',
   description: 'Welches Logo soll verwendet werden?',
   votingMethod: 'simple_majority',
-  options: [{ id: 'o1', label: 'Ja', order: 0 }, { id: 'o2', label: 'Nein', order: 1 }],
+  options: [{ id: 'o1', label: 'Ja', imageUrl: undefined }, { id: 'o2', label: 'Nein', imageUrl: undefined }],
   outcome: { totalVotes: 10, counts: { yes: 7, no: 2, abstain: 1 }, passed: true },
   outcomeSummary: null,
   participantScope: 'members',

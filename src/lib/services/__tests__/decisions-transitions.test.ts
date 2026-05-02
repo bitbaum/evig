@@ -25,15 +25,15 @@
 
 const mockDbExecute = jest.fn()
 const mockTxExecute = jest.fn()
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute(...args) }
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) }
 const mockDbTransaction = jest.fn().mockImplementation(
   async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
 )
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockDbExecute(...args),
-    transaction: (...args: unknown[]) => mockDbTransaction(...args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
   },
 }))
 
@@ -61,8 +61,8 @@ const mockResolveEligibleUserIds = jest.fn()
 const mockComputeTallies = jest.fn()
 
 jest.mock('@/lib/services/decisions-voting', () => ({
-  resolveEligibleUserIds: (...args: unknown[]) => mockResolveEligibleUserIds(...args),
-  computeTallies: (...args: unknown[]) => mockComputeTallies(...args),
+  resolveEligibleUserIds: (...args: unknown[]) => mockResolveEligibleUserIds.apply(null, args),
+  computeTallies: (...args: unknown[]) => mockComputeTallies.apply(null, args),
 }))
 
 // fireNotification is fire-and-forget — execute the callback synchronously so

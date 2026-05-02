@@ -43,9 +43,9 @@ const mockDbExecute = jest.fn().mockResolvedValue({ rows: [{ id: 'sub-1', title:
 
 jest.mock('@/db', () => ({
   db: {
-    update: (...args: unknown[]) => mockDbUpdate(...args),
-    transaction: (...args: unknown[]) => mockDbTransaction(...args),
-    execute: (...args: unknown[]) => mockDbExecute(...args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -68,12 +68,12 @@ jest.mock('drizzle-orm', () => {
 
 const mockSendEmail = jest.fn().mockResolvedValue({ success: true })
 jest.mock('@/lib/email', () => ({
-  sendEmail: (...args: unknown[]) => mockSendEmail(...args),
+  sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
 }))
 
 const mockCreateNotification = jest.fn().mockResolvedValue(undefined)
 jest.mock('@/lib/services/notifications', () => ({
-  createNotification: (...args: unknown[]) => mockCreateNotification(...args),
+  createNotification: (...args: unknown[]) => mockCreateNotification.apply(null, args),
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -110,10 +110,23 @@ function makeSubmission(overrides: Partial<Record<string, unknown>> = {}) {
     slug: 'mein-blogbeitrag',
     content: 'Inhalt des Beitrags',
     excerpt: null,
+    submissionType: 'draft',
     categoryId: null,
+    categoryName: null,
     tags: [],
     status: APPROVAL_STATUS.PENDING,
+    reviewedBy: null,
+    reviewedAt: null,
+    reviewNotes: null,
+    rejectionReason: null,
+    publishedPostId: null,
+    publishedAt: null,
     editHistory: null,
+    lastEditedBy: null,
+    lastEditedAt: null,
+    submittedAt: '2026-01-01T00:00:00Z',
+    createdAt: '2026-01-01T00:00:00Z',
+    updatedAt: '2026-01-01T00:00:00Z',
     ...overrides,
   }
 }

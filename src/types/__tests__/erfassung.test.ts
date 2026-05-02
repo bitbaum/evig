@@ -43,7 +43,7 @@ describe('createDefaultBulkProduct', () => {
   })
 
   it('sets the provided source', () => {
-    expect(createDefaultBulkProduct('scanner')._source).toBe('scanner')
+    expect(createDefaultBulkProduct('image')._source).toBe('image')
     expect(createDefaultBulkProduct('voice')._source).toBe('voice')
     expect(createDefaultBulkProduct('manual')._source).toBe('manual')
   })
@@ -92,8 +92,8 @@ describe('formDataToBulkProduct', () => {
   })
 
   it('stores provided AI metadata', () => {
-    const metadata = { source: 'ai' as const, fields: {} }
-    const product = formDataToBulkProduct({ ...DEFAULT_FORM_DATA }, 'scanner', metadata)
+    const metadata = {} as import('@/lib/schemas/erfassung').AIFieldMetadata
+    const product = formDataToBulkProduct({ ...DEFAULT_FORM_DATA }, 'image', metadata)
     expect(product._aiMetadata).toBe(metadata)
   })
 
