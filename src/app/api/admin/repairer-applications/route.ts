@@ -3,7 +3,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { repairerApplications, users } from '@/db/schema'
-import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { DOCUMENT_STATUS } from '@/config/document-status'
@@ -131,7 +131,7 @@ export const GET = withAdmin('services', async (request, session) => {
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < total
+        hasMore: hasMoreItems(offset, limit, total)
       }
     })
 

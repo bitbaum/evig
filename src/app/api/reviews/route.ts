@@ -7,7 +7,7 @@ import { users } from '@/db/schema/auth'
 import { repairerProfiles } from '@/db/schema/services'
 import { listings } from '@/db/schema/marketplace'
 import { eq, and, sql, asc, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import { REVIEW_STATUS } from '@/config/review-status'
@@ -209,7 +209,7 @@ export async function GET(request: NextRequest) {
     return apiSuccess({
       reviews: reviewList,
       total,
-      pagination: { limit, offset, hasMore: offset + limit < total },
+      pagination: { limit, offset, hasMore: hasMoreItems(offset, limit, total) },
       filters: { targetType, targetId, status, sortBy: sortField, sortOrder: sortOrder === 'asc' ? 'ASC' : 'DESC' },
     })
   } catch (error) {

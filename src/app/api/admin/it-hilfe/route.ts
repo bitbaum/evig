@@ -2,7 +2,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { itHilfeRequests, users } from '@/db/schema'
 import { eq, and, ilike, or, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 
 // GET /api/admin/it-hilfe - List all IT-Hilfe requests with filters
@@ -87,7 +87,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
         total,
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
   } catch (error) {

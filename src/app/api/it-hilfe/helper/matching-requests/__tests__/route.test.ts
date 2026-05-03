@@ -49,7 +49,8 @@ jest.mock('@/lib/api/helpers', () => {
     apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
     parsePagination: () => ({ limit: 20, offset: 0 }),
-  }
+  
+    hasMoreItems: (offset: number, limit: number, total: number) => offset + limit < total,}
 })
 
 jest.mock('@/lib/logger', () => ({

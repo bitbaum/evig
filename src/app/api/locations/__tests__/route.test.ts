@@ -116,7 +116,8 @@ jest.mock('@/lib/api/helpers', () => {
     apiForbidden: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 403 }),
     apiUnauthorized: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 401 }),
     parsePagination: (_req: unknown) => ({ limit: 20, offset: 0 }),
-  }
+  
+    hasMoreItems: (offset: number, limit: number, total: number) => offset + limit < total,}
 })
 
 jest.mock('@/lib/logger', () => ({

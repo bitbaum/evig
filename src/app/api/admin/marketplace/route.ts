@@ -3,7 +3,7 @@ import { db } from '@/db'
 import { listings, listingReports, users } from '@/db/schema'
 import { eq, and, ilike, isNotNull, isNull, sql, or } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess , hasMoreItems} from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REPORT_STATUS } from '@/config/report-status'
@@ -100,7 +100,7 @@ export const GET = withAdmin('marketplace', async (request) => {
         total,
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
   } catch (error) {

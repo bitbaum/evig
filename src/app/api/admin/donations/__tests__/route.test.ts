@@ -114,6 +114,7 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
+    hasMoreItems: (offset: number, limit: number, total: number) => offset + limit < total,
   }
 })
 

@@ -4,7 +4,7 @@ import { workshopProposals, users, locations } from '@/db/schema'
 import { eq, desc, sql, ilike } from 'drizzle-orm'
 import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 
@@ -82,7 +82,7 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
         total,
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
 

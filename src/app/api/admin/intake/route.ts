@@ -11,7 +11,7 @@ import { sql, getTableName, SQL } from 'drizzle-orm'
 import { aiExtractedProducts, inventoryItems, productImages } from '@/db/schema/inventory'
 import { donations } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
@@ -216,7 +216,7 @@ export const GET = withAdmin('intake', async (request) => {
 
     return apiSuccess({
       items,
-      pagination: { total, limit, offset, hasMore: offset + limit < total },
+      pagination: { total, limit, offset, hasMore: hasMoreItems(offset, limit, total) },
       statusCounts,
     })
   } catch (error) {

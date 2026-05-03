@@ -5,7 +5,7 @@ import { db } from '@/db'
 import { sql, getTableName, SQL } from 'drizzle-orm'
 import { itHilfeRequests } from '@/db/schema/itHilfe'
 import { users } from '@/db/schema/auth'
-import { apiError, apiSuccess, apiSuccessCached, apiUnauthorized, apiBadRequest, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiSuccessCached, apiUnauthorized, apiBadRequest, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import {
@@ -138,7 +138,7 @@ export async function GET(request: NextRequest) {
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     }, 15, 10)
   } catch (error) {

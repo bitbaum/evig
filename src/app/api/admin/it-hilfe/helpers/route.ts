@@ -2,7 +2,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { helperProfiles, users, userSkills } from '@/db/schema'
 import { eq, and, isNull, isNotNull, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { TABLE_NAMES } from '@/config/database'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { HELPER_STATUS } from '@/config/helper-status'
@@ -82,7 +82,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
         total,
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
   } catch (error) {

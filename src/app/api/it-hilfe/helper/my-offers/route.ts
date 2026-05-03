@@ -3,7 +3,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { itHilfeOffers, itHilfeRequests } from '@/db/schema'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -80,7 +80,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     return apiSuccess({
       offers,
       total,
-      pagination: { limit, offset, hasMore: offset + limit < total },
+      pagination: { limit, offset, hasMore: hasMoreItems(offset, limit, total) },
     })
   } catch (error) {
     logger.error('Error fetching helper offers', { error })

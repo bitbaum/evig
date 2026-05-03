@@ -6,7 +6,7 @@ import { users } from '@/db/schema/auth'
 import { repairerProfiles } from '@/db/schema/services'
 import { workshops } from '@/db/schema/workshops'
 import { eq, and, sql, count, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { REVIEW_STATUS } from '@/config/review-status'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -141,7 +141,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
 

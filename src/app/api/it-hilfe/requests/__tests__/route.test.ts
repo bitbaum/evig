@@ -133,7 +133,8 @@ jest.mock('@/lib/api/helpers', () => {
     apiBadRequest: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
     parsePagination: jest.fn().mockReturnValue({ limit: 20, offset: 0, page: 1 }),
-  }
+  
+    hasMoreItems: (offset: number, limit: number, total: number) => offset + limit < total,}
 })
 
 jest.mock('@/config/error-messages', () => ({

@@ -182,6 +182,7 @@ export interface PaginationParams {
  *   const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
  */
 export function parsePagination(
+
   request: NextRequest | URLSearchParams,
   defaults?: { defaultLimit?: number; maxLimit?: number }
 ): PaginationParams {
@@ -207,4 +208,9 @@ export function parsePagination(
     : offset
 
   return { limit, offset: finalOffset, page }
+}
+
+/** Returns true when there are more pages after the current one. */
+export function hasMoreItems(offset: number, limit: number, total: number): boolean {
+  return offset + limit < total
 }

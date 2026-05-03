@@ -3,7 +3,7 @@ import { withAuth } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { locations } from '@/db/schema'
 import { eq, and, ilike, sql, desc, getTableColumns } from 'drizzle-orm'
-import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, parsePagination, hasMoreItems } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { LOCATION_STATUS } from '@/config/location-status'
 import { validateBody, CreateLocationSchema } from '@/lib/schemas'
@@ -54,7 +54,7 @@ export const GET = withAuth(async (request: NextRequest, session) => {
         total: totalCount,
         limit,
         offset,
-        hasMore: offset + limit < totalCount
+        hasMore: hasMoreItems(offset, limit, totalCount)
       }
     })
 

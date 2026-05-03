@@ -93,6 +93,7 @@ jest.mock('@/lib/api/helpers', () => {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
+    hasMoreItems: (offset: number, limit: number, total: number) => offset + limit < total,
   }
 })
 

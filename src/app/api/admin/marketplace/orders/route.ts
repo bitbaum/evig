@@ -4,7 +4,7 @@ import { eq, desc, sql } from 'drizzle-orm'
 import type { SQL } from 'drizzle-orm'
 import { alias } from 'drizzle-orm/pg-core'
 import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateQuery, AdminOrdersQuerySchema } from '@/lib/schemas'
 
@@ -67,7 +67,7 @@ export const GET = withAdmin('marketplace', async (request) => {
         total,
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
   } catch (error) {

@@ -3,7 +3,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { itHilfeOffers, itHilfeRequests, users } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
@@ -89,7 +89,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       pagination: {
         limit,
         offset,
-        hasMore: offset + limit < total,
+        hasMore: hasMoreItems(offset, limit, total),
       },
     })
   } catch (error) {

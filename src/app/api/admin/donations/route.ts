@@ -4,7 +4,7 @@ import { donations, users } from '@/db/schema'
 import { eq, and, gte, lte, desc, asc, sql } from 'drizzle-orm'
 import type { SQL } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiBadRequest, hasMoreItems } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { CreateDonationSchema, GetDonationsQuerySchema } from '@/lib/schemas/donations'
 import { logger } from '@/lib/logger'
@@ -113,7 +113,7 @@ export const GET = withAdmin('donations', async (request: NextRequest, session) 
         total,
         limit: filters.limit,
         offset: filters.offset,
-        hasMore: filters.offset + filters.limit < total,
+        hasMore: hasMoreItems(filters.offset, filters.limit, total),
       },
     })
 

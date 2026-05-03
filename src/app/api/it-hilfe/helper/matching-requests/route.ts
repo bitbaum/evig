@@ -4,7 +4,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { itHilfeRequests, itHilfeOffers, userSkills } from '@/db/schema'
 import { users } from '@/db/schema/auth'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { getCategoryIds, URGENCY_LEVELS, REQUEST_STATUS } from '@/config/it-hilfe'
@@ -121,7 +121,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     return apiSuccess({
       requests,
       total,
-      pagination: { limit, offset, hasMore: offset + limit < total },
+      pagination: { limit, offset, hasMore: hasMoreItems(offset, limit, total) },
     })
   } catch (error) {
     logger.error('Error fetching matching requests', { error })
