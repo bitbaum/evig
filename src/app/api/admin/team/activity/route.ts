@@ -20,6 +20,7 @@ import {
   apiError,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { HELP_REQUEST_STATUSES } from '@/config/activity'
 import { validateActivityStreamFilter } from '@/lib/schemas/activity'
 import { taskCompletions, tasks } from '@/db/schema/misc'
@@ -58,7 +59,7 @@ export const GET = withAdmin('team', async (request, session) => {
     })
 
     if (!filterResult.success) {
-      return apiBadRequest('Ungültige Filterparameter')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS)
     }
 
     const filters = filterResult.data

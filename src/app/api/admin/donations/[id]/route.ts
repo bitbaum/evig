@@ -116,7 +116,7 @@ export const PATCH = withAdmin<{ id: string }>('donations', async (request, sess
     }
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('Keine Änderungen angegeben')
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
     }
 
     await db

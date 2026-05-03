@@ -33,7 +33,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest('Ungültige Anfrage-ID')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
     }
 
     // Check if request exists and user is owner
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest('Ungültige Anfrage-ID')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
     }
 
     // Check if request exists and is open

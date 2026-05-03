@@ -7,6 +7,7 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db';
 import { sellerProfiles } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
@@ -88,7 +89,7 @@ export const PATCH = withAuth(async (request: NextRequest, session: ValidSession
     if (data.canton !== undefined) update.canton = data.canton;
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('Keine Änderungen angegeben');
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED);
     }
 
     update.updatedAt = sql`NOW()`;

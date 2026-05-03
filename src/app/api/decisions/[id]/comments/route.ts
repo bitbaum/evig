@@ -23,7 +23,7 @@ export const GET = withAdmin<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const comments = await getComments(decisionId)
     return apiSuccess(comments)
@@ -40,7 +40,7 @@ export const POST = withAdmin<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error

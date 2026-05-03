@@ -118,7 +118,7 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
     }
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('Keine Änderungen angegeben')
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
     }
 
     update.updatedAt = sql`NOW()`

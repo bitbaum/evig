@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest('Ungültige Anfrage-ID')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
     }
 
     // Use explicit snake_case aliases to match the RequestRow mapper interface
@@ -101,7 +101,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest('Ungültige Anfrage-ID')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
     }
 
     // Check ownership and current status
@@ -224,7 +224,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     if (Object.keys(updateSet).length === 0) {
-      return apiBadRequest('Keine Änderungen angegeben')
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
     }
 
     await db

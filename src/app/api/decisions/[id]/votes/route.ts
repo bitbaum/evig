@@ -22,7 +22,7 @@ export const GET = withAuth<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error
@@ -45,7 +45,7 @@ export const POST = withAuth<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error

@@ -94,7 +94,7 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
     if (data.admin_notes !== undefined) update.adminNotes = data.admin_notes
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('Keine Änderungen angegeben')
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
     }
 
     update.updatedAt = sql`NOW()`

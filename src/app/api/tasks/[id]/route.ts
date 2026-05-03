@@ -41,7 +41,7 @@ export const GET = withAdmin<RouteParams>(async (
     const taskId = context?.params?.id;
 
     if (!taskId) {
-      return apiBadRequest('Task ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.TASK_ID_REQUIRED);
     }
 
     // Fetch task, completions, flags, and requests in parallel
@@ -183,7 +183,7 @@ export const PATCH = withAdmin<RouteParams>(async (
     const taskId = context?.params?.id;
 
     if (!taskId) {
-      return apiBadRequest('Task ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.TASK_ID_REQUIRED);
     }
 
     const body = await request.json();
@@ -232,7 +232,7 @@ export const PATCH = withAdmin<RouteParams>(async (
     }
 
     if (Object.keys(updateSet).length === 0) {
-      return apiBadRequest('Keine Felder zum Aktualisieren');
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE);
     }
 
     updateSet.updatedAt = sql`NOW()`;
@@ -281,7 +281,7 @@ export const DELETE = withAdmin<RouteParams>(async (
     const taskId = context?.params?.id;
 
     if (!taskId) {
-      return apiBadRequest('Task ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.TASK_ID_REQUIRED);
     }
 
     const [result] = await db

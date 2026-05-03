@@ -35,7 +35,7 @@ export const POST = withAdmin<RouteParams>(async (
     const taskId = context?.params?.id;
 
     if (!taskId) {
-      return apiBadRequest('Task ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.TASK_ID_REQUIRED);
     }
 
     // Parse and validate body

@@ -25,7 +25,7 @@ export const POST = withAdmin<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const body = await request.json()
     const parsed = transitionDecisionSchema.safeParse(body)

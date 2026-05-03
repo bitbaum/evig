@@ -44,7 +44,12 @@ export const ERROR_MESSAGES = {
   PROTOCOL_ID_REQUIRED: 'Protokoll-ID erforderlich',
   ID_REQUIRED: 'ID erforderlich',
   PROJECT_ID_REQUIRED: 'Projekt-ID erforderlich',
+  DECISION_ID_REQUIRED: 'Entscheidungs-ID erforderlich',
+  TASK_ID_REQUIRED: 'Task-ID erforderlich',
+  INVALID_REQUEST_ID: 'Ungültige Anfrage-ID',
   NO_FIELDS_TO_UPDATE: 'Keine Felder zum Aktualisieren',
+  NO_CHANGES_SPECIFIED: 'Keine Änderungen angegeben',
+  INVALID_FILTER_PARAMS: 'Ungültige Filterparameter',
   EMAIL_REQUIRED: 'E-Mail erforderlich',
   PASSWORD_REQUIRED: 'Passwort erforderlich',
   EMAIL_PASSWORD_REQUIRED: 'E-Mail und Passwort sind erforderlich',
@@ -67,6 +72,8 @@ export const ERROR_MESSAGES = {
   // Workshops
   WORKSHOP_PROPOSALS_LOAD_FAILED: 'Fehler beim Laden der Workshop-Vorschläge',
   WORKSHOP_APPROVAL_FAILED: 'Fehler bei der Workshop-Genehmigung',
+  ALREADY_REGISTERED_WORKSHOP: 'Bereits für diesen Workshop angemeldet',
+  NO_WORKSHOP_INSTANCES: 'Aktuell sind keine Termine für diesen Workshop verfügbar',
   NETWORK_ERROR: 'Netzwerkfehler',
   ALREADY_APPROVED: 'Sie sind bereits als Verkäufer zugelassen',
   PENDING_APPLICATION: 'Du hast bereits eine ausstehende Bewerbung',
@@ -138,6 +145,9 @@ export const SUCCESS_MESSAGES = {
   COMMENT_CREATED: 'Kommentar erfolgreich erstellt',
   COMMENT_UPDATED: 'Kommentar erfolgreich aktualisiert',
   COMMENT_DELETED: 'Kommentar erfolgreich gelöscht',
+
+  // Workshops
+  WORKSHOP_REGISTERED: 'Erfolgreich für Workshop angemeldet',
 
   // Decision Voting (Protocol)
   VOTE_RECORDED: 'Stimme abgegeben',

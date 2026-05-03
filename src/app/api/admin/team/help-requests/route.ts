@@ -20,6 +20,7 @@ import {
   apiError,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import {
   validateCreateHelpRequest,
   validateHelpRequestFilter,
@@ -49,7 +50,7 @@ export const GET = withAdmin('team', async (request, session) => {
     })
 
     if (!filterResult.success) {
-      return apiBadRequest('Ungültige Filterparameter')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS)
     }
 
     const filters = filterResult.data

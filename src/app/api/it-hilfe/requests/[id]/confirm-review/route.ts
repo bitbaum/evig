@@ -43,7 +43,7 @@ export const POST = withAuth<{ id: string }>(async (
   try {
     const id = context?.params?.id
     if (!id || !UUID_REGEX.test(id)) {
-      return apiBadRequest('Ungültige Anfrage-ID')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
     }
 
     let body: ConfirmReviewBody

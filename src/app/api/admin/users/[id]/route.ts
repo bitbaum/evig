@@ -16,6 +16,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
 
 /**
@@ -110,7 +111,7 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     const hasProfileUpdate = Object.keys(profileUpdate).length > 0
 
     if (!hasUserUpdate && !hasProfileUpdate) {
-      return apiBadRequest('Keine Felder zum Aktualisieren')
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
     }
 
     if (hasUserUpdate) {

@@ -4,7 +4,7 @@ import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { sendEmail } from '@/lib/email'
@@ -65,13 +65,13 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     if (existing) {
       return apiError(
         new Error('Already registered'),
-        'Bereits für diesen Workshop angemeldet',
+        ERROR_MESSAGES.ALREADY_REGISTERED_WORKSHOP,
         409
       )
     }
 
     if (!instance) {
-      return apiBadRequest('Aktuell sind keine Termine für diesen Workshop verfügbar')
+      return apiBadRequest(ERROR_MESSAGES.NO_WORKSHOP_INSTANCES)
     }
 
     // Create the registration
@@ -109,7 +109,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     }
 
     return apiSuccess({
-      message: 'Erfolgreich für Workshop angemeldet',
+      message: SUCCESS_MESSAGES.WORKSHOP_REGISTERED,
       registrationId: registration.id,
       workshopTitle: workshop.title
     })

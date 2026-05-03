@@ -25,7 +25,7 @@ export const GET = withAuth<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error
@@ -48,7 +48,7 @@ export const PATCH = withAdmin<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const body = await request.json()
     const parsed = updateDecisionSchema.safeParse(body)
@@ -87,7 +87,7 @@ export const DELETE = withAdmin<RouteParams>(async (
 ) => {
   try {
     const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest('Entscheidungs-ID erforderlich')
+    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error

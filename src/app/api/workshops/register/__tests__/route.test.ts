@@ -75,7 +75,14 @@ jest.mock('@/config/workshops', () => ({
 }))
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
+  ERROR_MESSAGES: {
+    INTERNAL_SERVER_ERROR: 'Internal server error',
+    ALREADY_REGISTERED_WORKSHOP: 'Bereits für diesen Workshop angemeldet',
+    NO_WORKSHOP_INSTANCES: 'Aktuell sind keine Termine für diesen Workshop verfügbar',
+  },
+  SUCCESS_MESSAGES: {
+    WORKSHOP_REGISTERED: 'Erfolgreich für Workshop angemeldet',
+  },
 }))
 
 jest.mock('@/config/urls', () => ({

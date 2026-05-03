@@ -20,6 +20,7 @@ import {
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateUpdateTeamProfile } from '@/lib/schemas/team'
 
 /**
@@ -140,7 +141,7 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
     }
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('Keine Felder zum Aktualisieren')
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
     }
 
     update.updatedAt = sql`NOW()`
