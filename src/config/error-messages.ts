@@ -41,6 +41,10 @@ export const ERROR_MESSAGES = {
   INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste nicht vollständig — alle Pflichtpunkte müssen abgehakt sein',
   INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
   INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
+  REPAIRER_APPLICATION_NOT_FOUND: 'Reparateur-Bewerbung nicht gefunden',
+  WORKSHOP_PROPOSAL_NOT_FOUND: 'Workshop-Vorschlag nicht gefunden',
+  POOL_NOT_FOUND: 'Pool nicht gefunden',
+  DIENSTLEISTUNG_NOT_FOUND: 'Dienstleistung nicht gefunden',
 
   // Validation
   VALIDATION_FAILED: 'Validierung fehlgeschlagen',

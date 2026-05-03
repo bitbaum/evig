@@ -53,7 +53,7 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
       .where(eq(workshopProposals.id, proposalId))
 
     if (proposalRows.length === 0) {
-      return apiNotFound('Workshop-Vorschlag nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.WORKSHOP_PROPOSAL_NOT_FOUND)
     }
 
     const proposal = proposalRows[0]

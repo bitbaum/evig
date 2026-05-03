@@ -3,6 +3,7 @@ import { db } from "@/db"
 import { aiExtractedProducts, inventoryItems } from "@/db/schema"
 import { eq, sql } from "drizzle-orm"
 import { apiSuccess, apiError, apiNotFound } from "@/lib/api/helpers"
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from "@/lib/logger"
 import { withAdmin } from "@/lib/api/middleware"
 import { validateBody, AdminUpdateProductSchema } from '@/lib/schemas'
@@ -44,7 +45,7 @@ export const GET = withAdmin<{ id: string }>('products', async (
       .where(eq(aiExtractedProducts.id, params.id))
 
     if (rows.length === 0) {
-      return apiNotFound("Produkt nicht gefunden")
+      return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
     }
 
     return apiSuccess({ product: rows[0] })
@@ -140,7 +141,7 @@ export const DELETE = withAdmin<{ id: string }>('products', async (
       .where(eq(aiExtractedProducts.id, params.id))
 
     if (result.rowCount === 0) {
-      return apiNotFound("Produkt nicht gefunden")
+      return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
     }
 
     logger.info("Product deleted", { productId: params.id, user: session.user?.email })

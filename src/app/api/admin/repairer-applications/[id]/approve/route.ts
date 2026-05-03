@@ -58,7 +58,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     `)
 
     if (applicationResult.rows.length === 0) {
-      return apiNotFound('Reparateur-Bewerbung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_APPLICATION_NOT_FOUND)
     }
 
     const application = applicationResult.rows[0] as unknown as ApplicationRow

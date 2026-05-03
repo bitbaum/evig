@@ -63,7 +63,10 @@ jest.mock('drizzle-orm', () => ({
 }))
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
+  ERROR_MESSAGES: {
+    INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
+    REPAIRER_APPLICATION_NOT_FOUND: 'Reparateur-Bewerbung nicht gefunden',
+  },
   SUCCESS_MESSAGES: {},
 }))
 

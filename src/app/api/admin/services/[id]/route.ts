@@ -10,6 +10,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import {
   getAdminServiceById,
   updateServiceType,
@@ -23,7 +24,7 @@ export const GET = withAdmin<{ id: string }>('services', async (request, session
     const service = await getAdminServiceById(id)
 
     if (!service) {
-      return apiNotFound('Dienstleistung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND)
     }
 
     return apiSuccess(service)
@@ -96,7 +97,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     const service = await updateServiceType(id, updateData)
 
     if (!service) {
-      return apiNotFound('Dienstleistung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND)
     }
 
     logger.info('Service updated', { serviceId: id, userId: session.user.id, fields: Object.keys(updateData) })
@@ -119,7 +120,7 @@ export const DELETE = withAdmin<{ id: string }>('services', async (request, sess
     const success = await deleteServiceType(id)
 
     if (!success) {
-      return apiNotFound('Dienstleistung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND)
     }
 
     logger.info('Service deleted', { serviceId: id, userId: session.user.id })

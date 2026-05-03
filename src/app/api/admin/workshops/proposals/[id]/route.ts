@@ -73,7 +73,7 @@ export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, 
       .where(eq(workshopProposals.id, proposalId));
 
     if (!proposal) {
-      return apiNotFound('Workshop-Vorschlag nicht gefunden');
+      return apiNotFound(ERROR_MESSAGES.WORKSHOP_PROPOSAL_NOT_FOUND);
     }
 
     logger.info('Workshop proposal fetched', {
@@ -116,7 +116,7 @@ export const PATCH = withAdmin<{ id: string }>('workshops-admin', async (request
       .where(eq(workshopProposals.id, proposalId));
 
     if (!currentProposal) {
-      return apiNotFound('Workshop-Vorschlag nicht gefunden');
+      return apiNotFound(ERROR_MESSAGES.WORKSHOP_PROPOSAL_NOT_FOUND);
     }
 
     // Only allow editing pending proposals

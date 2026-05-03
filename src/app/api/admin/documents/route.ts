@@ -87,7 +87,7 @@ export const GET = withAdmin('content', async (request, session) => {
     ])
 
     if (applicationResult.rows.length === 0) {
-      return apiNotFound('Reparateur-Bewerbung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_APPLICATION_NOT_FOUND)
     }
 
     const documents = (documentsResult.rows as unknown as DocumentRow[]).map(doc => ({

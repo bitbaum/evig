@@ -19,6 +19,7 @@ import {
 import { eq, sql, inArray, and } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
@@ -52,7 +53,7 @@ export const GET = withAdmin<{ id: string }>('products', async (request, session
       .where(eq(aiExtractedProducts.id, productId))
 
     if (rows.length === 0) {
-      return apiNotFound('Produkt nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
     }
 
     const product = rows[0]
@@ -114,7 +115,7 @@ export const DELETE = withAdmin<{ id: string }>('products', async (request, sess
       .returning({ id: aiExtractedProducts.id, itemUuid: aiExtractedProducts.itemUuid })
 
     if (deleted.length === 0) {
-      return apiNotFound('Produkt nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
     }
 
     logger.info('Inventory product deleted', {
@@ -163,7 +164,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
       .returning()
 
     if (result.length === 0) {
-      return apiNotFound('Produkt nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
     }
 
     // Update inventory item if location/quantity fields provided

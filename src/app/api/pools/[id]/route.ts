@@ -51,7 +51,7 @@ export async function GET(
       .where(eq(subscriptionPools.id, id))
       .limit(1)
 
-    if (!pool) return apiNotFound('Pool nicht gefunden')
+    if (!pool) return apiNotFound(ERROR_MESSAGES.POOL_NOT_FOUND)
     // Pool detail is public; memberCount changes on join/leave — cache 30s, stale 15s
     return apiSuccessCached(pool, 30, 15)
   } catch (error) {
@@ -79,7 +79,7 @@ export const DELETE = withAuth(async (
       .where(eq(subscriptionPools.id, id))
       .limit(1)
 
-    if (!pool) return apiNotFound('Pool nicht gefunden')
+    if (!pool) return apiNotFound(ERROR_MESSAGES.POOL_NOT_FOUND)
     if (pool.ownerId !== session.user.id && !session.user.isSuperAdmin) {
       return apiForbidden('Nur der Pool-Inhaber kann den Pool löschen')
     }

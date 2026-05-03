@@ -76,7 +76,10 @@ jest.mock('drizzle-orm', () => ({
 }))
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
+  ERROR_MESSAGES: {
+    INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
+    WORKSHOP_PROPOSAL_NOT_FOUND: 'Workshop-Vorschlag nicht gefunden',
+  },
 }))
 
 jest.mock('@/config/approval-status', () => ({

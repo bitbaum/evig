@@ -39,7 +39,7 @@ export const POST = withAuth(async (
       .where(eq(subscriptionPools.id, id))
       .limit(1)
 
-    if (!pool) return apiNotFound('Pool nicht gefunden')
+    if (!pool) return apiNotFound(ERROR_MESSAGES.POOL_NOT_FOUND)
     if (pool.status !== POOL_STATUS.ACTIVE) return apiBadRequest('Dieser Pool ist nicht aktiv')
     if (Number(pool.memberCount) >= pool.maxMembers) {
       return apiBadRequest('Dieser Pool ist bereits voll')

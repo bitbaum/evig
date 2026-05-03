@@ -26,7 +26,7 @@ export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, 
       .where(eq(workshopProposals.id, proposalId))
 
     if (!row) {
-      return apiNotFound('Workshop-Vorschlag nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.WORKSHOP_PROPOSAL_NOT_FOUND)
     }
 
     const history = (row.editHistory as EditHistoryEntry[] | null) || []
