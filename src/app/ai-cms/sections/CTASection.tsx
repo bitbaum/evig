@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ORG } from '@/config/org'
 
 export function CTASection() {
   return (
@@ -8,7 +9,7 @@ export function CTASection() {
           Machen Sie Ihre Website besser — gemeinsam
         </h2>
         <p className="text-green-100 mb-8">
-          Registrieren Sie sich kostenlos und helfen Sie mit, revamp-it.ch kontinuierlich zu verbessern.
+          Registrieren Sie sich kostenlos und helfen Sie mit, {ORG.emailDomain} kontinuierlich zu verbessern.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link

@@ -1,3 +1,5 @@
+import { ORG } from '@/config/org'
+
 export function StatusSection() {
   return (
     <section className="py-16 px-4 bg-white">
@@ -10,7 +12,7 @@ export function StatusSection() {
           In Entwicklung — Beta
         </div>
         <p className="text-neutral-600 mb-8">
-          Das Verbesserungssystem wird schrittweise auf revamp-it.ch eingeführt. Zuerst auf ausgewählten
+          Das Verbesserungssystem wird schrittweise auf {ORG.emailDomain} eingeführt. Zuerst auf ausgewählten
           Seiten, dann auf der gesamten Plattform.
         </p>
         <div className="grid sm:grid-cols-3 gap-4 text-left">
