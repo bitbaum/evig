@@ -179,7 +179,7 @@ export default async function KennzahlenPage() {
                 </div>
                 {CATEGORY_LABELS[category]}
                 {pendingMetrics.length > 0 && (
-                  <span className="text-sm font-normal text-amber-600">
+                  <span className="text-sm font-normal text-warning-600">
                     ({pendingMetrics.length} ausstehend)
                   </span>
                 )}
@@ -251,7 +251,7 @@ export default async function KennzahlenPage() {
               </div>
             </div>
             <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
-              <div className="font-medium text-amber-600">Manuell</div>
+              <div className="font-medium text-warning-600">Manuell</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Manuelle Dateneingabe erforderlich
               </div>

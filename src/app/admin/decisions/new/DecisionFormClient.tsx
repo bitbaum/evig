@@ -221,7 +221,7 @@ export default function DecisionFormClient() {
           type="submit"
           disabled={form.submitting}
           onClick={() => { form.setInitialStatus(DECISION_STATUS.VOTING); }}
-          className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+          className="rounded-lg bg-warning-600 px-4 py-2 text-sm font-medium text-white hover:bg-warning-700 disabled:opacity-50"
         >
           Direkt zur Abstimmung
         </button>

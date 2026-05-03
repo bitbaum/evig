@@ -15,9 +15,9 @@ const URGENCY_CONFIG = {
     text: 'text-red-700 dark:text-red-400',
   },
   warning: {
-    dot: 'bg-amber-500',
+    dot: 'bg-warning-500',
     label: 'Ausstehend',
-    text: 'text-amber-700 dark:text-amber-400',
+    text: 'text-warning-700 dark:text-warning-400',
   },
   success: {
     dot: 'bg-primary-500',
@@ -32,7 +32,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
       <div className="p-4 border-b border-neutral-100 dark:border-neutral-700 flex items-center gap-2">
-        <Zap className="w-5 h-5 text-amber-500" aria-hidden="true" />
+        <Zap className="w-5 h-5 text-warning-500" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
           Was gibt es zu tun?
         </Heading>

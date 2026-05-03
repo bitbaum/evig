@@ -491,7 +491,7 @@ export default function TechnikerProfilPage() {
         </div>
 
         {profile.skills.length === 0 && (
-          <p className="text-sm text-amber-600 text-center mt-4">
+          <p className="text-sm text-warning-600 text-center mt-4">
             {t('skillRequired')}
           </p>
         )}

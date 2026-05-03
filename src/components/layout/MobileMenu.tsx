@@ -140,15 +140,15 @@ export function MobileMenu({
 
         {/* Experimental Site Banner */}
         <div className="mx-6 mt-4">
-          <div className="flex items-center gap-2 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl text-sm text-amber-700">
-            <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse flex-shrink-0" />
+          <div className="flex items-center gap-2 px-4 py-3 bg-warning-50 border border-warning-100 rounded-xl text-sm text-warning-700">
+            <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse flex-shrink-0" />
             <span>
               {t('experimentalBanner')} –
               <a
                 href={ORG.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-amber-800 hover:text-amber-900 underline ml-1"
+                className="font-medium text-warning-800 hover:text-warning-900 underline ml-1"
                 onClick={onClose}
               >
                 {t('experimentalBannerLink')}

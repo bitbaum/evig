@@ -29,10 +29,10 @@ function ImpactCard({ metric }: { metric: MetricDefinition }) {
       <div className="flex justify-between items-start mb-2">
         <div className="text-sm text-muted-foreground">{metric.name}</div>
         {needsData && (
-          <AlertCircle className="w-4 h-4 text-amber-500" />
+          <AlertCircle className="w-4 h-4 text-warning-500" />
         )}
       </div>
-      <div className={`text-2xl font-bold ${needsData ? 'text-amber-500' : ''}`}>
+      <div className={`text-2xl font-bold ${needsData ? 'text-warning-500' : ''}`}>
         {needsData ? '[TBD]' : '—'}
       </div>
       {metric.target && (
@@ -41,7 +41,7 @@ function ImpactCard({ metric }: { metric: MetricDefinition }) {
         </div>
       )}
       {needsData && metric.dataNeeded && (
-        <div className="text-xs text-amber-600 mt-2">
+        <div className="text-xs text-warning-600 mt-2">
           Benötigt: {metric.dataNeeded}
         </div>
       )}
@@ -141,7 +141,7 @@ export default async function WirkungPage() {
           <strong>Wirkungsbericht:</strong> Diese Seite zeigt die messbare Wirkung von Revamp-IT.
           Die Daten werden aus verschiedenen Quellen aggregiert und regelmässig aktualisiert.
           {missingMetrics.length > 0 && (
-            <span className="block mt-2 text-amber-700 dark:text-amber-300">
+            <span className="block mt-2 text-warning-700 dark:text-warning-300">
               <AlertCircle className="inline w-4 h-4 mr-1" />
               {missingMetrics.length} Metriken benötigen noch Daten für vollständige Berichterstattung.
             </span>
@@ -169,7 +169,7 @@ export default async function WirkungPage() {
                 <CardTitle className="flex items-center gap-2">
                   {area.title}
                   {pendingCount > 0 && (
-                    <span className="text-xs font-normal px-2 py-0.5 bg-amber-100 text-amber-700 rounded">
+                    <span className="text-xs font-normal px-2 py-0.5 bg-warning-100 text-warning-700 rounded">
                       {pendingCount} ausstehend
                     </span>
                   )}
@@ -250,15 +250,15 @@ export default async function WirkungPage() {
       </Card>
 
       {/* Data Collection Note */}
-      <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg text-sm">
-        <Heading level={4} className="font-medium text-amber-800 dark:text-amber-200 mb-2">
+      <div className="p-4 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg text-sm">
+        <Heading level={4} className="font-medium text-warning-800 dark:text-warning-200 mb-2">
           Datenerfassung erforderlich
         </Heading>
-        <p className="text-amber-700 dark:text-amber-300">
+        <p className="text-warning-700 dark:text-warning-300">
           Um die Wirkung vollständig zu erfassen, benötigen wir regelmässige Daten aus dem operativen Betrieb.
           Die verantwortlichen Teams sollten quartalsweise folgende Daten liefern:
         </p>
-        <ul className="mt-2 space-y-1 text-amber-700 dark:text-amber-300">
+        <ul className="mt-2 space-y-1 text-warning-700 dark:text-warning-300">
           <li>• <strong>Operations:</strong> Anzahl verarbeiteter Geräte, Gewichtsmessungen</li>
           <li>• <strong>Bildung:</strong> Workshop-Teilnehmer, Schulungsstunden</li>
           <li>• <strong>HR:</strong> Integrationen, Freiwilligenstunden</li>

@@ -261,7 +261,7 @@ export default async function TasksAdminPage({
           color: 'amber',
           label: 'Angefragt',
           value: stats.requested,
-          valueColor: 'text-amber-600',
+          valueColor: 'text-warning-600',
         },
         {
           icon: CheckCircle2,

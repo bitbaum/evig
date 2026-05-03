@@ -46,18 +46,18 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
 
   return (
     <div className={cn(
-      'bg-amber-50 dark:bg-amber-900/30 border-l-4 border-amber-400 dark:border-amber-500 p-4 rounded-r-lg',
+      'bg-warning-50 dark:bg-warning-900/30 border-l-4 border-warning-400 dark:border-warning-500 p-4 rounded-r-lg',
       className
     )}>
       <div className="flex items-start">
         <div className="flex-shrink-0">
-          <AlertTriangle className="h-5 w-5 text-amber-400" aria-hidden="true" />
+          <AlertTriangle className="h-5 w-5 text-warning-400" aria-hidden="true" />
         </div>
         <div className="ml-3 flex-1">
-          <Heading level={3} className="text-sm font-medium text-amber-800 dark:text-amber-200">
+          <Heading level={3} className="text-sm font-medium text-warning-800 dark:text-warning-200">
             {t('heading')}
           </Heading>
-          <div className="mt-2 text-sm text-amber-700 dark:text-amber-300">
+          <div className="mt-2 text-sm text-warning-700 dark:text-warning-300">
             <p>
               {t('description', { email })}
             </p>
@@ -76,9 +76,9 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
                   disabled={isLoading}
                   className={cn(
                     'inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md',
-                    'bg-amber-100 dark:bg-amber-800 text-amber-800 dark:text-amber-100',
-                    'hover:bg-amber-200 dark:hover:bg-amber-700',
-                    'focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2',
+                    'bg-warning-100 dark:bg-warning-800 text-warning-800 dark:text-warning-100',
+                    'hover:bg-warning-200 dark:hover:bg-warning-700',
+                    'focus:outline-none focus:ring-2 focus:ring-warning-500 focus:ring-offset-2',
                     'disabled:opacity-50 disabled:cursor-not-allowed',
                     'transition-colors'
                   )}
@@ -101,7 +101,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
           <button
             type="button"
             onClick={() => setIsVisible(false)}
-            className="inline-flex rounded-md text-amber-500 hover:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+            className="inline-flex rounded-md text-warning-500 hover:text-warning-600 focus:outline-none focus:ring-2 focus:ring-warning-500 focus:ring-offset-2"
           >
             <span className="sr-only">{t('close')}</span>
             <X className="h-5 w-5" aria-hidden="true" />

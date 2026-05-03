@@ -60,7 +60,7 @@ export default function MarketplacePage() {
   return (
     <div className="bg-white min-h-screen">
       {/* Compact hero — products visible without scrolling */}
-      <div className="bg-gradient-to-br from-orange-50 to-amber-50 py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-orange-50 to-warning-50 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>

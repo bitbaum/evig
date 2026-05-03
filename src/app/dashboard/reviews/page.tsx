@@ -308,8 +308,8 @@ export default function UserReviewsPage() {
         {reviews.length === 0 ? (
           <EmptyState
             icon={MessageSquare}
-            iconBg="bg-amber-50 dark:bg-amber-900/20"
-            iconColor="text-amber-500 dark:text-amber-400"
+            iconBg="bg-warning-50 dark:bg-warning-900/20"
+            iconColor="text-warning-500 dark:text-warning-400"
             title={t('emptyTitle')}
             description={t('emptyDescription')}
           />

@@ -147,9 +147,9 @@ export default function PublicVoteClient({
 
   if (!isVotingPhase) {
     return (
-      <div className="rounded-xl bg-amber-50 border border-amber-200 p-6 text-center">
-        <p className="text-amber-800 font-medium">{t('notStartedHeading')}</p>
-        <p className="mt-1 text-sm text-amber-700">
+      <div className="rounded-xl bg-warning-50 border border-warning-200 p-6 text-center">
+        <p className="text-warning-800 font-medium">{t('notStartedHeading')}</p>
+        <p className="mt-1 text-sm text-warning-700">
           {t('notStartedDesc')}
         </p>
       </div>

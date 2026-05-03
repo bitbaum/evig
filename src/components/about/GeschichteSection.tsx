@@ -33,7 +33,7 @@ const getTypeIcon = (type: Milestone['type']) => {
 const getTypeColor = (type: Milestone['type']) => {
   switch (type) {
     case 'founding':
-      return 'bg-amber-500'
+      return 'bg-warning-500'
     case 'growth':
       return 'bg-blue-500'
     case 'achievement':
@@ -105,11 +105,11 @@ export default function GeschichteSection() {
   const { founding, milestones, currentState } = HISTORY_CONFIG
 
   return (
-    <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
+    <section className="py-20 bg-gradient-to-b from-warning-50 to-white">
       <div className="max-w-6xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-warning-100 text-warning-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Clock className="h-4 w-4" />
             {t('badge')}
           </div>

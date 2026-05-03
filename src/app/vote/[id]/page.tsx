@@ -79,12 +79,12 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
           </p>
 
           {decision.background && (
-            <details className="mt-4 rounded-lg border border-amber-200 bg-amber-50">
-              <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium text-amber-800 select-none">
+            <details className="mt-4 rounded-lg border border-warning-200 bg-warning-50">
+              <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium text-warning-800 select-none">
                 📄 {t('backgroundTitle')}
               </summary>
-              <div className="border-t border-amber-200 px-4 py-3">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-amber-900">
+              <div className="border-t border-warning-200 px-4 py-3">
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-warning-900">
                   {decision.background}
                 </p>
               </div>

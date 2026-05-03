@@ -24,7 +24,7 @@ import {
 
 // Tier badge colors
 const TIER_STYLES = {
-  1: 'bg-amber-100 text-amber-800 border-amber-200',
+  1: 'bg-warning-100 text-warning-800 border-warning-200',
   2: 'bg-blue-100 text-blue-800 border-blue-200',
   3: 'bg-primary-100 text-primary-800 border-primary-200',
   4: 'bg-neutral-100 text-neutral-800 border-neutral-200'
@@ -157,9 +157,9 @@ export default function PressPageContent() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-center gap-2 mb-8">
-            <Star className="h-5 w-5 text-amber-500" />
+            <Star className="h-5 w-5 text-warning-500" />
             <Heading level={2} className="text-xl text-neutral-900">{t('nationalMedia')}</Heading>
-            <Star className="h-5 w-5 text-amber-500" />
+            <Star className="h-5 w-5 text-warning-500" />
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">

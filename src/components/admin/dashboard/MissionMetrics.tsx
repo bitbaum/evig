@@ -69,8 +69,8 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'Workshop-Teilnahmen',
       sublabel: MONTH_LABEL,
       icon: Users,
-      iconBg: 'bg-amber-100 dark:bg-amber-900/30',
-      iconColor: 'text-amber-600 dark:text-amber-400',
+      iconBg: 'bg-warning-100 dark:bg-warning-900/30',
+      iconColor: 'text-warning-600 dark:text-warning-400',
       href: '/admin/workshops',
     },
   ]

@@ -134,11 +134,11 @@ export default async function DashboardDecisionPage({ params }: Props) {
         {decision.votingDeadline && (
           <span>
             Frist:{' '}
-            <span className={timeRemaining ? 'text-amber-600 font-medium' : 'text-neutral-600'}>
+            <span className={timeRemaining ? 'text-warning-600 font-medium' : 'text-neutral-600'}>
               {formatDateShort(decision.votingDeadline)}
             </span>
             {timeRemaining && (
-              <span className="ml-1 text-amber-500">(noch {timeRemaining})</span>
+              <span className="ml-1 text-warning-500">(noch {timeRemaining})</span>
             )}
           </span>
         )}

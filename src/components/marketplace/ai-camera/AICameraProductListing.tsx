@@ -99,7 +99,7 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
             ) : (
               <>
                 {analysisError && (
-                  <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                  <div className="mb-4 p-3 bg-warning-50 border border-warning-200 rounded-lg text-sm text-warning-800">
                     {analysisError}
                   </div>
                 )}

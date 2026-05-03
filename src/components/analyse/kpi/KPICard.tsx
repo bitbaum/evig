@@ -89,7 +89,7 @@ export function KPICard({
         </div>
 
         <div className="flex items-baseline gap-2">
-          <span className={`text-2xl font-bold ${needsData ? 'text-amber-500' : ''}`}>
+          <span className={`text-2xl font-bold ${needsData ? 'text-warning-500' : ''}`}>
             {displayValue}
           </span>
           {!needsData && metric.unit && metric.unit !== 'CHF' && metric.unit !== '%' && (
@@ -98,7 +98,7 @@ export function KPICard({
         </div>
 
         {needsData && (
-          <div className="mt-2 flex items-center gap-1 text-amber-600 dark:text-amber-400">
+          <div className="mt-2 flex items-center gap-1 text-warning-600 dark:text-warning-400">
             <AlertCircle className="w-3 h-3" />
             <span className="text-xs">Daten benötigt</span>
           </div>

@@ -70,9 +70,9 @@ export default function ITHilfeDetailPage() {
 
         {/* Expiration Banner */}
         {detail.isExpired && (request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" aria-hidden="true" />
-            <p className="text-amber-800 text-sm font-medium">
+          <div className="bg-warning-50 border border-warning-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0" aria-hidden="true" />
+            <p className="text-warning-800 text-sm font-medium">
               {t('expiredBanner', { date: formatDate(request.expiresAt) })}
             </p>
           </div>

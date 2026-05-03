@@ -331,12 +331,12 @@ export default function DecisionDetailClient({
 
         {/* Background / rationale */}
         {decision.background && (
-          <details className="mt-3 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30">
-            <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium text-amber-800 dark:text-amber-300 select-none">
+          <details className="mt-3 rounded-lg border border-warning-200 bg-warning-50 dark:border-warning-800 dark:bg-warning-950/30">
+            <summary className="cursor-pointer px-4 py-2.5 text-sm font-medium text-warning-800 dark:text-warning-300 select-none">
               📄 Begründung & Hintergrund
             </summary>
-            <div className="border-t border-amber-200 dark:border-amber-800 px-4 py-3">
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-amber-900 dark:text-amber-200">
+            <div className="border-t border-warning-200 dark:border-warning-800 px-4 py-3">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-warning-900 dark:text-warning-200">
                 {decision.background}
               </p>
             </div>

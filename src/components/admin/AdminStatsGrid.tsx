@@ -30,7 +30,7 @@ const GRID_COLS: Record<2 | 3 | 4 | 5, string> = {
 const TREND_COLOR = {
   green: 'text-primary-600 dark:text-primary-400',
   red:   'text-red-600 dark:text-red-400',
-  amber: 'text-amber-600 dark:text-amber-400',
+  amber: 'text-warning-600 dark:text-warning-400',
 }
 
 export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {

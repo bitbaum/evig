@@ -144,7 +144,7 @@ export default async function AnalysePage() {
                 {latestData.derived.eigenfinanzierungPct.value.toFixed(1)}%
               </div>
               <div className={`text-sm mt-2 ${
-                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-primary-600' : 'text-amber-600'
+                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-primary-600' : 'text-warning-600'
               }`}>
                 {latestData.derived.eigenfinanzierungPct.value >= 50 ? 'Ziel erreicht' : 'Unter Ziel (50%)'}
               </div>
@@ -157,7 +157,7 @@ export default async function AnalysePage() {
               <div className="text-3xl font-bold mt-1">
                 {missingMetrics.length} ausstehend
               </div>
-              <div className="text-sm mt-2 text-amber-600">
+              <div className="text-sm mt-2 text-warning-600">
                 {Object.keys(missingByTeam).length} Teams betroffen
               </div>
             </CardContent>
@@ -167,13 +167,13 @@ export default async function AnalysePage() {
 
       {/* Missing Data Alert */}
       {missingMetrics.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50/50 dark:bg-amber-900/10">
+        <Card className="border-warning-200 bg-warning-50/50 dark:bg-warning-900/10">
           <CardHeader className="pb-2">
-            <CardTitle className="text-lg flex items-center gap-2 text-amber-700 dark:text-amber-300">
+            <CardTitle className="text-lg flex items-center gap-2 text-warning-700 dark:text-warning-300">
               <AlertCircle className="w-5 h-5" />
               Daten benötigt ({missingMetrics.length})
             </CardTitle>
-            <CardDescription className="text-amber-600 dark:text-amber-400">
+            <CardDescription className="text-warning-600 dark:text-warning-400">
               Folgende Kennzahlen können ohne manuelle Dateneingabe nicht berechnet werden
             </CardDescription>
           </CardHeader>
@@ -181,16 +181,16 @@ export default async function AnalysePage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {Object.entries(missingByTeam).slice(0, 6).map(([team, metrics]) => (
                 <div key={team} className="text-sm">
-                  <div className="font-medium text-amber-800 dark:text-amber-200">{team}</div>
+                  <div className="font-medium text-warning-800 dark:text-warning-200">{team}</div>
                   <ul className="mt-1 space-y-1">
                     {metrics.slice(0, 3).map(m => (
-                      <li key={m.id} className="text-amber-700 dark:text-amber-300 flex items-center gap-1">
-                        <span className="text-amber-500">•</span>
+                      <li key={m.id} className="text-warning-700 dark:text-warning-300 flex items-center gap-1">
+                        <span className="text-warning-500">•</span>
                         {m.name}
                       </li>
                     ))}
                     {metrics.length > 3 && (
-                      <li className="text-amber-600 dark:text-amber-400">
+                      <li className="text-warning-600 dark:text-warning-400">
                         +{metrics.length - 3} weitere
                       </li>
                     )}
@@ -200,7 +200,7 @@ export default async function AnalysePage() {
             </div>
             <div className="mt-4">
               <Link href="/admin/analyse/kennzahlen">
-                <Button variant="outline" size="sm" className="text-amber-700 border-amber-300 hover:bg-amber-100">
+                <Button variant="outline" size="sm" className="text-warning-700 border-warning-300 hover:bg-warning-100">
                   Alle Kennzahlen anzeigen
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>

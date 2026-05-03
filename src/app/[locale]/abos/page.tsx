@@ -113,7 +113,7 @@ function PoolCard({
           isFull
             ? 'bg-red-50 text-red-600'
             : pool.spotsLeft <= 2
-            ? 'bg-amber-50 text-amber-700'
+            ? 'bg-warning-50 text-warning-700'
             : 'bg-emerald-50 text-emerald-700'
         }`}>
           {isFull ? t('full') : spotsText}

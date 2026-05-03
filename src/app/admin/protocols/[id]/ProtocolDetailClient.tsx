@@ -130,7 +130,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
            'Zur Überprüfung'}
         </span>
         {unlinkedTaskItems.length > 0 && isReview && (
-          <span className="text-sm text-amber-600 font-medium">
+          <span className="text-sm text-warning-600 font-medium">
             {unlinkedTaskItems.length} Aufgabe{unlinkedTaskItems.length !== 1 ? 'n' : ''} noch nicht verknüpft
           </span>
         )}

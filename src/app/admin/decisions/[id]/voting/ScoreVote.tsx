@@ -31,7 +31,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                         onSet(opt.id, n);
                       }}
                       className={`text-lg transition ${
-                        (scores[opt.id] || 0) >= n ? 'text-amber-400' : 'text-neutral-300 hover:text-amber-300'
+                        (scores[opt.id] || 0) >= n ? 'text-warning-400' : 'text-neutral-300 hover:text-warning-300'
                       }`}
                     >
                       ★
@@ -71,8 +71,8 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                     onClick={() => onSet(opt.id, n)}
                     className={`h-9 w-9 rounded-md text-sm font-bold transition ${
                       (scores[opt.id] || 0) >= n
-                        ? 'bg-amber-400 text-white'
-                        : 'border border-neutral-300 text-neutral-500 hover:border-amber-300'
+                        ? 'bg-warning-400 text-white'
+                        : 'border border-neutral-300 text-neutral-500 hover:border-warning-300'
                     }`}
                   >
                     {n}

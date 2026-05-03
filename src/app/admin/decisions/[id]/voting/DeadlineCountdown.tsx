@@ -30,7 +30,7 @@ export function DeadlineCountdown({ deadline }: { deadline: string }) {
   if (hours < 24) {
     colorClass = 'text-red-600 font-medium';
   } else if (hours < 72) {
-    colorClass = 'text-amber-600 font-medium';
+    colorClass = 'text-warning-600 font-medium';
   }
 
   const dateStr = formatDateNumeric(deadline);

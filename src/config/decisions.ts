@@ -22,7 +22,7 @@ export const DECISION_STATUS_CONFIG: Record<
 > = {
   draft: { label: 'Entwurf', color: 'bg-neutral-100 text-neutral-700' },
   discussion: { label: 'Diskussion', color: 'bg-blue-100 text-blue-700' },
-  voting: { label: 'Abstimmung', color: 'bg-amber-100 text-amber-700' },
+  voting: { label: 'Abstimmung', color: 'bg-warning-100 text-warning-700' },
   closed: { label: 'Abgeschlossen', color: 'bg-primary-100 text-primary-700' },
   cancelled: { label: 'Abgebrochen', color: 'bg-red-100 text-red-700' },
 };

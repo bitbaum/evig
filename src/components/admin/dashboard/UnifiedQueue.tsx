@@ -17,10 +17,10 @@ const URGENCY_CONFIG = {
     badge: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
   },
   warning: {
-    dot: 'bg-amber-500',
+    dot: 'bg-warning-500',
     label: 'Ausstehend',
-    ageText: 'text-amber-700 dark:text-amber-400',
-    badge: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
+    ageText: 'text-warning-700 dark:text-warning-400',
+    badge: 'bg-warning-100 text-warning-700 dark:bg-warning-900/40 dark:text-warning-300',
   },
   success: {
     dot: 'bg-primary-500',
@@ -35,7 +35,7 @@ export function UnifiedQueue({ items }: UnifiedQueueProps) {
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
       {/* Card header */}
       <div className="p-4 border-b border-neutral-100 dark:border-neutral-700 flex items-center gap-2">
-        <Zap className="w-5 h-5 text-amber-500 flex-shrink-0" aria-hidden="true" />
+        <Zap className="w-5 h-5 text-warning-500 flex-shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
           Wartet auf Bearbeitung
         </Heading>

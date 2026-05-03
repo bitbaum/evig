@@ -88,7 +88,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
           </div>
           <div className="flex items-center gap-2">
             {expiryLabel && (
-              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-warning-50 text-warning-700">
                 <Clock className="w-3 h-3" />
                 {expiryLabel}
               </span>

@@ -205,7 +205,7 @@ export default async function FinanzenPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-amber-500" />
+              <AlertCircle className="w-5 h-5 text-warning-500" />
               Erkenntnisse & Handlungsempfehlungen
             </CardTitle>
             <CardDescription>
@@ -219,7 +219,7 @@ export default async function FinanzenPage() {
                   key={insight.id}
                   className={`border-l-4 pl-4 ${
                     insight.priority === 'high' ? 'border-red-400' :
-                    insight.priority === 'medium' ? 'border-amber-400' : 'border-primary-400'
+                    insight.priority === 'medium' ? 'border-warning-400' : 'border-primary-400'
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -228,7 +228,7 @@ export default async function FinanzenPage() {
                         {insight.type === 'positive' ? (
                           <CheckCircle2 className="w-4 h-4 text-primary-500" />
                         ) : insight.type === 'warning' ? (
-                          <AlertCircle className="w-4 h-4 text-amber-500" />
+                          <AlertCircle className="w-4 h-4 text-warning-500" />
                         ) : null}
                         {insight.title}
                       </div>
@@ -249,7 +249,7 @@ export default async function FinanzenPage() {
                     {insight.valueFormatted && (
                       <span className={`text-lg font-bold ${
                         insight.type === 'positive' ? 'text-primary-600' :
-                        insight.type === 'warning' ? 'text-amber-600' : ''
+                        insight.type === 'warning' ? 'text-warning-600' : ''
                       }`}>
                         {insight.valueFormatted}
                       </span>

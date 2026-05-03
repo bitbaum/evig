@@ -194,7 +194,7 @@ export function IntakeDetailView({
           </Heading>
 
           {!detail.checklist_complete && (
-            <div className="flex items-start gap-2 mb-3 text-sm text-amber-700 bg-amber-50 p-2 rounded">
+            <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 bg-warning-50 p-2 rounded">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <span>Alle Pflichtpunkte der Checkliste müssen abgehakt sein, bevor das Gerät publiziert werden kann.</span>
             </div>

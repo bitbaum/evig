@@ -44,10 +44,10 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
         })}
       </div>
       {workflowProgress.nextStepId && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+        <div className="rounded-lg border border-warning-200 bg-warning-50 px-3 py-2 text-sm text-warning-900">
           <p className="font-medium">Nächster Schritt: {PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowProgress.nextStepId)?.label}</p>
-          {workflowProgress.ctaHint && <p className="text-amber-800">{workflowProgress.ctaHint}</p>}
-          {workflowProgress.ctaLabel && <p className="text-amber-800">Aktion: {workflowProgress.ctaLabel}</p>}
+          {workflowProgress.ctaHint && <p className="text-warning-800">{workflowProgress.ctaHint}</p>}
+          {workflowProgress.ctaLabel && <p className="text-warning-800">Aktion: {workflowProgress.ctaLabel}</p>}
         </div>
       )}
     </div>

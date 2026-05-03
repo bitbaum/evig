@@ -180,7 +180,7 @@ export function AdminSidebar({
                             {section.ui.label}
                             {sensitive && (
                               <span title={sensitivityReason}>
-                                <Shield className="w-3 h-3 text-amber-400" />
+                                <Shield className="w-3 h-3 text-warning-400" />
                               </span>
                             )}
                           </span>

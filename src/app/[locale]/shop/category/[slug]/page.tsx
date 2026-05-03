@@ -203,7 +203,7 @@ function ProductCard({ product, t }: { product: InventoryProduct; t: ShopTFn }) 
           </div>
         )}
         {product.quantity <= 1 && (
-          <span className="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 font-medium px-2 py-0.5 rounded-full">
+          <span className="absolute top-2 right-2 text-xs bg-warning-100 text-warning-700 font-medium px-2 py-0.5 rounded-full">
             {t('product.stockOne')}
           </span>
         )}

@@ -62,7 +62,7 @@ function Bar({
         </div>
       ) : (
         isWinner !== undefined && (
-          <span className={`text-sm ${isWinner ? 'font-bold text-amber-500' : 'text-transparent'}`}>★</span>
+          <span className={`text-sm ${isWinner ? 'font-bold text-warning-500' : 'text-transparent'}`}>★</span>
         )
       )}
       <span className="w-28 truncate text-sm text-neutral-700">{label}</span>
@@ -78,18 +78,18 @@ function Bar({
 
 function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
   return (
-    <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-amber-400 bg-amber-50 p-4">
+    <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-warning-400 bg-warning-50 p-4">
       {opt.imageUrl ? (
-        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-amber-200 bg-white shadow">
+        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-warning-200 bg-white shadow">
           <Image src={opt.imageUrl} alt={opt.label} fill className="object-contain p-1" unoptimized />
         </div>
       ) : (
-        <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100 text-3xl font-bold text-amber-600">
+        <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-warning-100 text-3xl font-bold text-warning-600">
           {opt.label.charAt(0).toUpperCase()}
         </div>
       )}
       <div>
-        <div className="text-xs font-medium uppercase tracking-wide text-amber-600">Gewinner</div>
+        <div className="text-xs font-medium uppercase tracking-wide text-warning-600">Gewinner</div>
         <div className="text-lg font-bold text-neutral-900">{opt.label}</div>
         <div className="text-sm text-neutral-600">{metric}</div>
       </div>
@@ -223,7 +223,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               label={`${opt.label} (Ø ${opt.averageScore || 0})`}
               value={(opt.averageScore || 0) * 20}
               max={100}
-              color={i === 0 ? 'bg-amber-500' : 'bg-amber-300'}
+              color={i === 0 ? 'bg-warning-500' : 'bg-warning-300'}
               imageUrl={opt.imageUrl}
               isWinner={i === 0}
             />

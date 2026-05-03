@@ -128,7 +128,7 @@ export function RequestSidebar({
                 {formatDate(request.expiresAt)}
               </p>
               {timeRemaining && (
-                <p className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-red-600 font-medium' : 'text-amber-600'}`}>
+                <p className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-red-600 font-medium' : 'text-warning-600'}`}>
                   {timeRemaining}
                 </p>
               )}

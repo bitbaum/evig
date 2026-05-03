@@ -103,7 +103,7 @@ export function ContentInputStep({
         </div>
 
         {processing && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+          <div className="rounded-lg border border-warning-200 bg-warning-50 p-3 text-sm text-warning-800">
             {audioStage === 'uploading' && 'Audio wird hochgeladen...'}
             {audioStage === 'transcribing' && 'Audio wird transkribiert...'}
             {audioStage === 'processing' && 'Transkript wird in Protokoll und Aufgaben umgewandelt...'}

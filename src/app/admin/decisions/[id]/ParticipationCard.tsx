@@ -51,13 +51,13 @@ export default function ParticipationCard({ decisionId }: { decisionId: string }
           <span className={adminType.meta}>
             {data.voted.length} / {data.total} abgestimmt ({data.progressPercent}%)
           </span>
-          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-primary-600 dark:text-primary-400' : 'text-amber-600 dark:text-amber-400')}>
+          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-primary-600 dark:text-primary-400' : 'text-warning-600 dark:text-warning-400')}>
             Quorum: {quorumPct}% erforderlich
           </span>
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
           <div
-            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-primary-500' : 'bg-amber-500')}
+            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-primary-500' : 'bg-warning-500')}
             style={{ width: `${data.progressPercent}%` }}
           />
         </div>
@@ -65,7 +65,7 @@ export default function ParticipationCard({ decisionId }: { decisionId: string }
 
       {/* Quorum not yet met */}
       {!data.quorumMet && (
-        <div className="mt-3 rounded-md bg-amber-50 dark:bg-amber-900/20 px-3 py-2 text-xs text-amber-700 dark:text-amber-300">
+        <div className="mt-3 rounded-md bg-warning-50 dark:bg-warning-900/20 px-3 py-2 text-xs text-warning-700 dark:text-warning-300">
           Quorum noch nicht erreicht. {data.quorumTarget - data.voted.length} weitere Stimme(n) benötigt.
         </div>
       )}

@@ -126,7 +126,7 @@ export default function DecisionListClient({
       <AdminStatsGrid
         columns={4}
         items={[
-          { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-amber-600 dark:text-amber-400' },
+          { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
           { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-blue-600 dark:text-blue-400' },
           { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
           { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-red-600 dark:text-red-400' },

@@ -48,13 +48,13 @@ export async function SystemHealthBar() {
   if (unhealthy.length === 0) return null
 
   return (
-    <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 px-4 py-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400 mb-1">
+    <div className="rounded-lg border border-warning-200 dark:border-warning-800 bg-warning-50 dark:bg-warning-900/20 px-4 py-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-warning-700 dark:text-warning-400 mb-1">
         System-Warnungen
       </p>
       <ul className="space-y-1">
         {unhealthy.map(job => (
-          <li key={job.job_name} className="text-sm text-amber-800 dark:text-amber-300">
+          <li key={job.job_name} className="text-sm text-warning-800 dark:text-warning-300">
             ⚠ {job.job_name}: {job.failure_count} Fehler in {WINDOW_HOURS} Std.
             {' '}· Letzter Versuch: {formatAge(job.last_ran_at)}
           </li>

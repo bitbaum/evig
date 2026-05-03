@@ -223,14 +223,14 @@ export function UserMenu() {
                       "group flex items-center gap-3 px-5 py-2.5",
                       "text-sm transition-colors duration-150",
                       'highlight' in item && item.highlight
-                        ? "text-amber-700 bg-amber-50 hover:bg-amber-100 font-medium"
+                        ? "text-warning-700 bg-warning-50 hover:bg-warning-100 font-medium"
                         : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
                     )}
                   >
                     <item.icon className={cn(
                       "w-4 h-4 transition-colors",
                       'highlight' in item && item.highlight
-                        ? "text-amber-600"
+                        ? "text-warning-600"
                         : "text-neutral-400 group-hover:text-emerald-600"
                     )} />
                     {item.label}

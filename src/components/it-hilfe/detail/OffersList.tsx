@@ -70,7 +70,7 @@ export function OffersList({
                         </Link>
                         {Number(offer.repairerProfile.averageRating) > 0 && (
                           <span className="flex items-center gap-0.5 text-neutral-500">
-                            <Star className="w-3 h-3 text-amber-400 fill-amber-400" aria-hidden="true" />
+                            <Star className="w-3 h-3 text-warning-400 fill-warning-400" aria-hidden="true" />
                             {Number(offer.repairerProfile.averageRating).toFixed(1)}
                             <span className="text-neutral-400">({offer.repairerProfile.totalReviews})</span>
                           </span>

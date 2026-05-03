@@ -69,12 +69,12 @@ export interface OSSAlternative {
 export const MATURITY_CONFIG: Record<Maturity, { label: string; color: string }> = {
   established: { label: 'Etabliert', color: 'bg-primary-100 text-primary-800' },
   growing: { label: 'Wachsend', color: 'bg-blue-100 text-blue-800' },
-  emerging: { label: 'Aufkommend', color: 'bg-amber-100 text-amber-800' },
+  emerging: { label: 'Aufkommend', color: 'bg-warning-100 text-warning-800' },
 }
 
 export const MIGRATION_DIFFICULTY_CONFIG: Record<MigrationDifficulty, { label: string; color: string; description: string }> = {
   easy: { label: 'Einfach', color: 'bg-primary-100 text-primary-800', description: 'Direkter Umstieg, kaum Einarbeitung nötig' },
-  medium: { label: 'Mittel', color: 'bg-amber-100 text-amber-800', description: 'Etwas Einarbeitung nötig, aber machbar' },
+  medium: { label: 'Mittel', color: 'bg-warning-100 text-warning-800', description: 'Etwas Einarbeitung nötig, aber machbar' },
   advanced: { label: 'Anspruchsvoll', color: 'bg-red-100 text-red-800', description: 'Deutliche Unterschiede, Einarbeitung erforderlich' },
 }
 

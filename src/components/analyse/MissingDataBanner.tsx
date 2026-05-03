@@ -27,8 +27,8 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
 
   if (compact) {
     return (
-      <div className="p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-        <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300">
+      <div className="p-3 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg">
+        <div className="flex items-center gap-2 text-warning-700 dark:text-warning-300">
           <AlertCircle className="w-4 h-4" />
           <span className="text-sm font-medium">
             {metrics.length} Kennzahl{metrics.length !== 1 ? 'en' : ''} benötigt Daten
@@ -39,8 +39,8 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
   }
 
   return (
-    <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
-      <div className="flex items-center gap-2 text-amber-700 dark:text-amber-300 mb-3">
+    <div className="p-4 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg">
+      <div className="flex items-center gap-2 text-warning-700 dark:text-warning-300 mb-3">
         <Database className="w-5 h-5" />
         <span className="font-semibold">Daten benötigt ({metrics.length})</span>
       </div>
@@ -48,20 +48,20 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
       <div className="space-y-4">
         {Object.entries(byTeam).map(([team, teamMetrics]) => (
           <div key={team}>
-            <div className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">
+            <div className="text-sm font-medium text-warning-800 dark:text-warning-200 mb-2">
               {team}
             </div>
             <ul className="space-y-2">
               {teamMetrics.map(metric => (
                 <li
                   key={metric.id}
-                  className="flex items-start gap-2 text-sm text-amber-700 dark:text-amber-300"
+                  className="flex items-start gap-2 text-sm text-warning-700 dark:text-warning-300"
                 >
-                  <span className="text-amber-500 mt-0.5">•</span>
+                  <span className="text-warning-500 mt-0.5">•</span>
                   <div>
                     <span className="font-medium">{metric.name}</span>
                     {metric.dataNeeded && (
-                      <span className="text-amber-600 dark:text-amber-400">
+                      <span className="text-warning-600 dark:text-warning-400">
                         {' '}— {metric.dataNeeded}
                       </span>
                     )}
@@ -85,17 +85,17 @@ interface SingleMissingDataProps {
  */
 export function MissingDataIndicator({ metric }: SingleMissingDataProps) {
   return (
-    <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+    <div className="flex items-center gap-2 text-warning-600 dark:text-warning-400">
       <AlertCircle className="w-4 h-4" />
       <div className="text-sm">
         <span className="font-medium">Daten benötigt</span>
         {metric.dataNeeded && (
-          <span className="block text-xs text-amber-500">
+          <span className="block text-xs text-warning-500">
             {metric.dataNeeded}
           </span>
         )}
         {metric.responsibleTeam && (
-          <span className="block text-xs text-amber-500">
+          <span className="block text-xs text-warning-500">
             Verantwortlich: {metric.responsibleTeam}
           </span>
         )}

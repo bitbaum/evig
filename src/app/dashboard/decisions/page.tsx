@@ -86,7 +86,7 @@ export default async function DashboardDecisionsPage() {
                         {methodConf.label}
                       </span>
                       {deadlineInfo && (
-                        <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-700">
+                        <span className="rounded-full bg-warning-50 px-2 py-0.5 text-xs text-warning-700">
                           {deadlineInfo}
                         </span>
                       )}

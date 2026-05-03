@@ -32,14 +32,14 @@ export function ProtocolReprocessSection({
     : 'Transkript erneut verarbeiten'
 
   return (
-    <details id="protocol-step-input" className="bg-amber-50 rounded-lg border border-amber-200">
-      <summary className="p-4 cursor-pointer text-sm font-medium text-amber-800 hover:text-amber-900">
+    <details id="protocol-step-input" className="bg-warning-50 rounded-lg border border-warning-200">
+      <summary className="p-4 cursor-pointer text-sm font-medium text-warning-800 hover:text-warning-900">
         Nicht zufrieden? {summaryLabel}
       </summary>
       <div className="px-4 pb-4 space-y-3">
         {inputMethod === 'audio' ? (
           <>
-            <label className="flex items-center gap-1.5 text-sm text-amber-700 hover:text-amber-900 cursor-pointer">
+            <label className="flex items-center gap-1.5 text-sm text-warning-700 hover:text-warning-900 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
               Neue Audiodatei hochladen
               <input
@@ -50,7 +50,7 @@ export function ProtocolReprocessSection({
               />
             </label>
             {audioFile && (
-              <p className="text-xs text-amber-700">
+              <p className="text-xs text-warning-700">
                 Gewählt: {audioFile.name} ({(audioFile.size / (1024 * 1024)).toFixed(1)} MB)
               </p>
             )}
@@ -58,8 +58,8 @@ export function ProtocolReprocessSection({
         ) : (
           <>
             <div className="flex items-center justify-between">
-              <label className="text-sm text-amber-700">Überarbeiteter Inhalt</label>
-              <label className="flex items-center gap-1.5 text-sm text-amber-700 hover:text-amber-900 cursor-pointer">
+              <label className="text-sm text-warning-700">Überarbeiteter Inhalt</label>
+              <label className="flex items-center gap-1.5 text-sm text-warning-700 hover:text-warning-900 cursor-pointer">
                 <Upload className="w-3.5 h-3.5" />
                 .txt hochladen
                 <input
@@ -79,9 +79,9 @@ export function ProtocolReprocessSection({
                 : inputMethod === 'notes'
                 ? 'Überarbeitete Notizen einfügen...'
                 : 'Überarbeitetes Transkript einfügen...'}
-              className="w-full px-3 py-2 border border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-sm"
+              className="w-full px-3 py-2 border border-warning-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-warning-500 font-mono text-sm"
             />
-            <p className="text-xs text-amber-700">
+            <p className="text-xs text-warning-700">
               {transcript.length.toLocaleString()} Zeichen • mindestens {reprocessMinLength} Zeichen
             </p>
           </>
@@ -89,7 +89,7 @@ export function ProtocolReprocessSection({
         <button
           onClick={onProcess}
           disabled={processing || (inputMethod === 'audio' ? !audioFile : transcript.length < reprocessMinLength)}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-amber-800 border border-amber-300 rounded-lg hover:bg-amber-100 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 text-sm text-warning-800 border border-warning-300 rounded-lg hover:bg-warning-100 disabled:opacity-50"
         >
           {processing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
           Erneut verarbeiten

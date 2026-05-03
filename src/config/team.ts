@@ -66,7 +66,7 @@ export const DEPARTMENT_LABELS: Record<Department, string> = {
 
 export const DEPARTMENT_COLORS: Record<Department, string> = {
   IT: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300',
-  Werkstatt: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300',
+  Werkstatt: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
   Verwaltung: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300',
   Marketing: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
   Verkauf: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300',

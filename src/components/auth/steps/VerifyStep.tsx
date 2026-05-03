@@ -139,11 +139,11 @@ export function VerifyStep({
 
       {/* Email send failure warning */}
       {emailSendFailed && (
-        <div className="p-4 rounded-lg bg-amber-50 border border-amber-200">
-          <p className="text-sm text-amber-800 font-medium">
+        <div className="p-4 rounded-lg bg-warning-50 border border-warning-200">
+          <p className="text-sm text-warning-800 font-medium">
             {t('emailSendFailed')}
           </p>
-          <p className="text-sm text-amber-700 mt-1">
+          <p className="text-sm text-warning-700 mt-1">
             {t('emailSendFailedAction')}
           </p>
         </div>

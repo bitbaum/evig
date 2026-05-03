@@ -142,7 +142,7 @@ export async function AlternativeDetail({ alternative, locale }: AlternativeDeta
               <ul className="space-y-2">
                 {alternative.limitations.map((l, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <AlertTriangle className="w-5 h-5 text-warning-500 shrink-0 mt-0.5" />
                     <span className="text-neutral-700">{l}</span>
                   </li>
                 ))}

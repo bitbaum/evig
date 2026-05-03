@@ -172,12 +172,12 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                     href="/admin/approvals"
                     className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                   >
-                    <FileText className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <FileText className="w-4 h-4 text-warning-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                     <div className="min-w-0 flex-1">
                       <p className="font-medium text-neutral-900 dark:text-white leading-snug">
                         {sub.title ?? contentTypeLabel(sub.content_type)}
                       </p>
-                      <p className="text-sm text-amber-600 dark:text-amber-400 mt-0.5">
+                      <p className="text-sm text-warning-600 dark:text-warning-400 mt-0.5">
                         {contentTypeLabel(sub.content_type)} · wartet auf Freigabe
                       </p>
                     </div>
@@ -188,7 +188,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             {mySubmissions.length === SUBMISSION_LIMIT && (
               <Link
                 href="/admin/approvals"
-                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-warning-600 dark:text-warning-400 hover:text-warning-700 dark:hover:text-warning-300 hover:bg-warning-50 dark:hover:bg-warning-900/20 rounded-lg transition-colors"
               >
                 Alle Einreichungen ansehen
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />

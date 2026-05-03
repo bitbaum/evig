@@ -236,7 +236,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                             <p className="text-sm font-semibold">{action.title}</p>
                             <p className="text-xs text-neutral-600 dark:text-neutral-300 mt-1">{action.summary}</p>
                           </div>
-                          {action.risky && <TriangleAlert className="w-4 h-4 text-amber-500" />}
+                          {action.risky && <TriangleAlert className="w-4 h-4 text-warning-500" />}
                         </div>
                         <button
                           type="button"
