@@ -38,7 +38,7 @@ import ProtocolDetailClient from './ProtocolDetailClient'
 import { formatDateWithWeekday } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
-  title: 'Protokoll Details | RevampIT Admin',
+  title: 'Protokoll Details',
   description: 'Sitzungsprotokoll anzeigen und bearbeiten.',
 }
 

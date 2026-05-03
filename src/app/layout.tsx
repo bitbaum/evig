@@ -9,7 +9,10 @@ import "./globals.css";
 const interClassName = "";
 
 export const metadata: Metadata = {
-  title: ORG.name,
+  title: {
+    default: ORG.name,
+    template: `%s | ${ORG.name}`,
+  },
   description: `${ORG.name} - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.`,
   keywords: ["Elektroschrott", "Recycling", "Aufarbeitung", "nachhaltige Technologie", "Workshops", "Freiwilligenarbeit"],
 };

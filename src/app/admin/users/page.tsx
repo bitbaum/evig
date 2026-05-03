@@ -24,7 +24,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Benutzer verwalten | RevampIT Admin',
+  title: 'Benutzer verwalten',
   description: 'Benutzerkonten anzeigen und verwalten.',
 }
 

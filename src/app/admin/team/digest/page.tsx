@@ -18,7 +18,7 @@ import { DigestPageClient } from './DigestPageClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Wochenübersicht | RevampIT Admin',
+  title: 'Wochenübersicht',
   description: 'Wöchentliche Team-Aktivitätsübersicht.',
 }
 

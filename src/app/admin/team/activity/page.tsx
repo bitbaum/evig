@@ -17,7 +17,7 @@ import { ActivityPageClient } from './ActivityPageClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Aktivitäten | RevampIT Admin',
+  title: 'Aktivitäten',
   description: 'Team-Aktivitäten und Updates.',
 }
 

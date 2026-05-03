@@ -5,7 +5,7 @@ import { Package } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
-  title: 'Produktverwaltung | RevampIT Admin',
+  title: 'Produktverwaltung',
   description: 'Verwalte die RevampIT Shop-Produkte.',
 }
 

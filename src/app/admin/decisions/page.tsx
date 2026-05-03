@@ -16,7 +16,7 @@ import DecisionListClient from './DecisionListClient'
 import { getDecisionStats } from '@/lib/services/decisions'
 
 export const metadata: Metadata = {
-  title: 'Entscheidungen | RevampIT Admin',
+  title: 'Entscheidungen',
   description: 'Vorschläge und Abstimmungen im Team',
 }
 

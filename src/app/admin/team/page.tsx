@@ -25,7 +25,7 @@ import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Team & HR | RevampIT Admin',
+  title: 'Team & HR',
   description: 'Mitarbeiter und Team verwalten.',
 }
 

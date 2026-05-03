@@ -27,7 +27,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
 
 export const metadata: Metadata = {
-  title: 'Aufgaben Analyse | RevampIT Admin',
+  title: 'Aufgaben Analyse',
   description: 'Statistiken und Auswertungen zu Teamaufgaben.',
 }
 

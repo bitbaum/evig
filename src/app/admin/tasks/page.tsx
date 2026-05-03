@@ -40,7 +40,7 @@ import { Pagination } from '@/components/ui/Pagination'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 
 export const metadata: Metadata = {
-  title: 'Aufgaben | RevampIT Admin',
+  title: 'Aufgaben',
   description: 'Teamaufgaben verwalten und koordinieren.',
 }
 

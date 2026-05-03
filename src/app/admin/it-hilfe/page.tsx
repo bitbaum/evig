@@ -4,7 +4,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import ITHilfeAdminClient from './ITHilfeAdminClient'
 
 export const metadata: Metadata = {
-  title: 'IT-Hilfe | RevampIT Admin',
+  title: 'IT-Hilfe',
   description: 'Hilfsanfragen und Helfer verwalten.',
 }
 

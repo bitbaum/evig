@@ -17,7 +17,7 @@ import TaskEditFormClient from './TaskEditFormClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Aufgabe bearbeiten | RevampIT Admin',
+  title: 'Aufgabe bearbeiten',
   description: 'Aufgabe bearbeiten.',
 }
 

@@ -4,7 +4,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import MarketplaceAdminClient from './MarketplaceAdminClient'
 
 export const metadata: Metadata = {
-  title: 'Marketplace | RevampIT Admin',
+  title: 'Marketplace',
   description: 'Inserate verwalten, Meldungen bearbeiten, Bestellungen einsehen.',
 }
 

@@ -42,7 +42,7 @@ import TaskActionsClient from './TaskActionsClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Aufgabe Details | RevampIT Admin',
+  title: 'Aufgabe Details',
   description: 'Aufgabendetails und Verlauf anzeigen.',
 }
 

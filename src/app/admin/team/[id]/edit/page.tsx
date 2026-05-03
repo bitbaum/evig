@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: profile
-      ? `${profile.user_name || profile.user_email} bearbeiten | Team | RevampIT Admin`
+      ? `${profile.user_name || profile.user_email} bearbeiten | Team`
       : 'Profil bearbeiten | RevampIT Admin',
     description: 'Team-Profil bearbeiten',
   }

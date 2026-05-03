@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: service
-      ? `${service.name} bearbeiten | RevampIT Admin`
+      ? `${service.name} bearbeiten`
       : 'Dienstleistung bearbeiten | RevampIT Admin',
     description: 'Dienstleistung bearbeiten',
   }

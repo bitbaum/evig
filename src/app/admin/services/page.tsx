@@ -25,7 +25,7 @@ import {
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 
 export const metadata: Metadata = {
-  title: 'Dienstleistungen verwalten | RevampIT Admin',
+  title: 'Dienstleistungen verwalten',
   description: 'Dienstleistungen erstellen, bearbeiten und verwalten.',
 }
 

@@ -21,7 +21,7 @@ import { HelpRequestsPageClient } from './HelpRequestsPageClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Hilfsanfragen | RevampIT Admin',
+  title: 'Hilfsanfragen',
   description: 'Team-Hilfsanfragen verwalten.',
 }
 

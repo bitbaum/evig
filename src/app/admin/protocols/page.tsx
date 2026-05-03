@@ -47,7 +47,7 @@ import { getTeamMembers } from '@/lib/services/protocols'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 
 export const metadata: Metadata = {
-  title: 'Protokolle | RevampIT Admin',
+  title: 'Protokolle',
   description: 'Sitzungsprotokolle verwalten.',
 }
 

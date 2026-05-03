@@ -10,7 +10,7 @@ import { StatusSection } from './sections/StatusSection'
 import { CTASection } from './sections/CTASection'
 
 export const metadata: Metadata = {
-  title: 'Kontextuelle Website-Verbesserungen | RevampIT',
+  title: 'Kontextuelle Website-Verbesserungen',
   description: 'Unser Verbesserungssystem ermöglicht es Nutzern, direkt auf jeder Seite Feedback zu geben. Eine moderne Alternative zu herkömmlichen Content-Management-Systemen.',
   keywords: ['Website Feedback', 'Content Management', 'User Feedback', 'Website Verbesserung', 'Community-driven Development'],
 }

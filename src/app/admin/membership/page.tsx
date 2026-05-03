@@ -18,7 +18,7 @@ import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStats
 import { MEMBERSHIP } from '@/config/org'
 
 export const metadata: Metadata = {
-  title: 'Mitgliedschaften | RevampIT Admin',
+  title: 'Mitgliedschaften',
   description: 'Vereinsmitglieder verwalten',
 }
 

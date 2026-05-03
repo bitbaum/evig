@@ -5,7 +5,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Inhalte | RevampIT Admin',
+  title: 'Inhalte',
   description: 'Blog-Artikel, Seiten und Medien verwalten.',
 }
 

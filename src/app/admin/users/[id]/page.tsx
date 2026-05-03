@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: user
-      ? `${user.name || user.email} | Benutzer | RevampIT Admin`
+      ? `${user.name || user.email} | Benutzer`
       : 'Benutzer | RevampIT Admin',
     description: 'Benutzerdetails',
   }

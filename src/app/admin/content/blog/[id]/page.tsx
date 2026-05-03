@@ -12,7 +12,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { BlogPostForm } from '@/components/admin/BlogPostForm'
 
 export const metadata: Metadata = {
-  title: 'Artikel bearbeiten | RevampIT Admin',
+  title: 'Artikel bearbeiten',
   description: 'Blog-Artikel bearbeiten.',
 }
 

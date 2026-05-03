@@ -23,7 +23,7 @@ import {
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Kategorien | RevampIT Admin',
+  title: 'Kategorien',
   description: 'Blog-Kategorien erstellen und verwalten.',
 }
 

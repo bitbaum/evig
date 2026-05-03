@@ -12,7 +12,7 @@ import Heading from '@/components/admin/AdminHeading'
 import ProtocolFormClient from './ProtocolFormClient'
 
 export const metadata: Metadata = {
-  title: 'Neues Protokoll | RevampIT Admin',
+  title: 'Neues Protokoll',
   description: 'Neues Sitzungsprotokoll erstellen.',
 }
 

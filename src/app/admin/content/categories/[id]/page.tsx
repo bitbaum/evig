@@ -10,7 +10,7 @@ import { TABLE_NAMES } from '@/config/database'
 import CategoryForm from '@/components/admin/CategoryForm'
 
 export const metadata: Metadata = {
-  title: 'Kategorie bearbeiten | RevampIT Admin',
+  title: 'Kategorie bearbeiten',
   description: 'Blog-Kategorie bearbeiten.',
 }
 

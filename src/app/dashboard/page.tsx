@@ -11,7 +11,7 @@ import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificatio
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
 
 export const metadata: Metadata = {
-  title: 'Dashboard | RevampIT',
+  title: 'Dashboard',
   description: 'Verwalten Sie Ihr RevampIT-Konto, Workshops, Bestellungen und mehr.',
 }
 

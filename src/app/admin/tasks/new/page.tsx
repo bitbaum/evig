@@ -12,7 +12,7 @@ import TaskFormClient from './TaskFormClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Neue Aufgabe | RevampIT Admin',
+  title: 'Neue Aufgabe',
   description: 'Neue Aufgabe erstellen.',
 }
 

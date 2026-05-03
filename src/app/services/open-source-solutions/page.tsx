@@ -16,7 +16,7 @@ import {
 } from './data'
 
 export const metadata: Metadata = {
-  title: 'Open-Source-Lösungen | RevampIT',
+  title: 'Open-Source-Lösungen',
   description: 'Professionelle Implementierung, Unterstützung und Schulung für Open-Source-Software für Unternehmen und Privatpersonen.',
 }
 

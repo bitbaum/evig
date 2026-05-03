@@ -10,7 +10,7 @@ import { redirect } from 'next/navigation'
 import { BlogPostForm } from '@/components/admin/BlogPostForm'
 
 export const metadata: Metadata = {
-  title: 'Neuer Artikel | RevampIT Admin',
+  title: 'Neuer Artikel',
   description: 'Neuen Blog-Artikel erstellen.',
 }
 

@@ -9,7 +9,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import DecisionFormClient from './DecisionFormClient'
 
 export const metadata: Metadata = {
-  title: 'Neuer Vorschlag | RevampIT Admin',
+  title: 'Neuer Vorschlag',
   description: 'Neue Entscheidung erstellen',
 }
 

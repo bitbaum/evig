@@ -11,7 +11,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { ServiceForm } from '@/components/admin/ServiceForm'
 
 export const metadata: Metadata = {
-  title: 'Neue Dienstleistung | RevampIT Admin',
+  title: 'Neue Dienstleistung',
   description: 'Neue Dienstleistung erstellen',
 }
 

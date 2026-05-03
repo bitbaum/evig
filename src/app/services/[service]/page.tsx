@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   if (!service) {
     return {
-      title: 'Service Not Found | RevampIT',
+      title: 'Service Not Found',
       description: 'The requested service could not be found.',
     }
   }
@@ -56,10 +56,10 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   }
 
   return {
-    title: `${service.name} | RevampIT`,
+    title: `${service.name}`,
     description: service.description,
     openGraph: {
-      title: `${service.name} | RevampIT`,
+      title: `${service.name}`,
       description: service.description,
       type: 'website',
     },

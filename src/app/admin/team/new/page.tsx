@@ -15,7 +15,7 @@ import { TeamProfileForm } from '@/components/admin/team'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Neues Team-Profil | RevampIT Admin',
+  title: 'Neues Team-Profil',
   description: 'Neues Team-Profil erstellen',
 }
 

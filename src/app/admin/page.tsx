@@ -45,7 +45,7 @@ import type { DashboardStats } from '@/components/admin/dashboard'
 type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
 
 export const metadata: Metadata = {
-  title: 'Admin Dashboard | RevampIT',
+  title: 'Admin Dashboard',
   description: 'Verwalte das RevampIT-System.',
 }
 

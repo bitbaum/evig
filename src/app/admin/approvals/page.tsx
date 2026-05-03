@@ -12,8 +12,6 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield, ExternalLink } from 'lucide-react'
 import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE, SUBMISSION_CONTENT_TYPE_LABELS } from '@/config/approval-status'
-
-const APPROVAL_CONTENT_TYPES = [SUBMISSION_CONTENT_TYPE.WORKSHOP, SUBMISSION_CONTENT_TYPE.BLOG_POST]
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
@@ -23,8 +21,10 @@ import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
 
+const APPROVAL_CONTENT_TYPES = [SUBMISSION_CONTENT_TYPE.WORKSHOP, SUBMISSION_CONTENT_TYPE.BLOG_POST]
+
 export const metadata: Metadata = {
-  title: 'Freigaben | RevampIT Admin',
+  title: 'Freigaben',
   description: 'Eingereichte Inhalte prüfen und freigeben.',
 }
 

@@ -13,7 +13,7 @@ import DecisionDetailClient from './DecisionDetailClient'
 import { DECISION_TYPE_CONFIG } from '@/config/decisions'
 
 export const metadata: Metadata = {
-  title: 'Entscheidung | RevampIT Admin',
+  title: 'Entscheidung',
   description: 'Entscheidungsdetails und Abstimmung',
 }
 

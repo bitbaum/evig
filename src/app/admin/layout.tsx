@@ -5,10 +5,19 @@
  * Uses the simplified permission system.
  */
 
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { getAccessibleSections, isSuperAdmin, type AdminSection } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
+import { ORG } from '@/config/org'
+
+export const metadata: Metadata = {
+  title: {
+    default: `${ORG.name} Admin`,
+    template: `%s | ${ORG.name} Admin`,
+  },
+}
 
 export default async function AdminLayout({
   children,

@@ -7,7 +7,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Einstellungen | RevampIT Admin',
+  title: 'Einstellungen',
   description: 'Systemkonfiguration und Einstellungen.',
 }
 

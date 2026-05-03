@@ -9,7 +9,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import DecisionEditFormClient from './DecisionEditFormClient'
 
 export const metadata: Metadata = {
-  title: 'Entscheidung bearbeiten | RevampIT Admin',
+  title: 'Entscheidung bearbeiten',
   description: 'Entscheidung bearbeiten',
 }
 

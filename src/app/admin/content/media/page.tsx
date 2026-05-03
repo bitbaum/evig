@@ -25,7 +25,7 @@ import {
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Medienbibliothek | RevampIT Admin',
+  title: 'Medienbibliothek',
   description: 'Bilder, Videos und Dokumente verwalten.',
 }
 

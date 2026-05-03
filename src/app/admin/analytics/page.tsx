@@ -28,7 +28,7 @@ import {
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Analytics | RevampIT Admin',
+  title: 'Analytics',
   description: 'Statistiken und Auswertungen.',
 }
 

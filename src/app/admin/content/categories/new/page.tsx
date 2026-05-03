@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation'
 import CategoryForm from '@/components/admin/CategoryForm'
 
 export const metadata: Metadata = {
-  title: 'Neue Kategorie | RevampIT Admin',
+  title: 'Neue Kategorie',
   description: 'Neue Blog-Kategorie erstellen.',
 }
 

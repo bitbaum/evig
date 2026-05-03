@@ -23,7 +23,7 @@ import { BlogListClient } from './BlogListClient'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
-  title: 'Blog-Artikel | RevampIT Admin',
+  title: 'Blog-Artikel',
   description: 'Blog-Artikel erstellen und verwalten.',
 }
 
