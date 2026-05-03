@@ -82,7 +82,7 @@ export const adminIconBox = {
 // ─── Icon Box Colors ──────────────────────────────────────────────────────────
 
 export const adminIconColor = {
-  blue:   'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+  blue:   'bg-info-100 text-info-600 dark:bg-info-900/30 dark:text-info-400',
   green:  'bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400',
   amber:  'bg-warning-100 text-warning-600 dark:bg-warning-900/30 dark:text-warning-400',
   red:    'bg-error-100 text-error-600 dark:bg-error-900/30 dark:text-error-400',
@@ -103,7 +103,7 @@ export const adminStatus = {
   success: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
   warning: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
   danger:  'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300',
-  info:    'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+  info:    'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
   neutral: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300',
   purple:  'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
   teal:    'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
@@ -128,7 +128,7 @@ export const adminBtn = {
     'inline-flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-neutral-50 text-neutral-700 text-sm font-medium rounded-md border border-neutral-300 transition-colors dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700',
   /** Status transition: approve, publish, activate */
   action:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    'inline-flex items-center gap-2 px-3 py-1.5 bg-info-600 hover:bg-info-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   /** Warning state: suspend, pause */
   warning:
     'inline-flex items-center gap-2 px-3 py-1.5 bg-warning-500 hover:bg-warning-600 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
@@ -168,13 +168,13 @@ export const adminTable = {
 export const adminForm = {
   /** Standard text input */
   input:
-    'w-full rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50',
+    'w-full rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent disabled:opacity-50',
   /** Textarea */
   textarea:
-    'w-full rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none',
+    'w-full rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent resize-none',
   /** Select */
   select:
-    'rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+    'rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent',
   /** Field label */
   label:
     'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1',

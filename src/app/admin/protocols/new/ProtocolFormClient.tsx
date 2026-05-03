@@ -24,6 +24,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { adminForm as af } from '@/lib/admin-ui'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -243,7 +244,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               id="meeting_type"
               value={meetingType}
               onChange={(e) => setMeetingType(e.target.value as MeetingType)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               <option value="">Typ wählen...</option>
               {Object.entries(MEETING_TYPE_LABELS).map(([key, label]) => (
@@ -262,7 +263,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               type="date"
               value={meetingDate}
               onChange={(e) => setMeetingDate(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             />
           </div>
         </div>
@@ -278,7 +279,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="z.B. Teamsitzung — 2. April 2026"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
         </div>
 
@@ -292,7 +293,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               id="visibility"
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as ProtocolVisibility)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               {Object.entries(PROTOCOL_VISIBILITY_LABELS).map(([key, label]) => (
                 <option key={key} value={key}>{label}</option>
@@ -321,12 +322,12 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   value={attendeeSearch}
                   onChange={(e) => setAttendeeSearch(e.target.value)}
                   placeholder="Teilnehmer suchen..."
-                  className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-info-500"
                 />
                 <button
                   type="button"
                   onClick={selectAllAttendees}
-                  className="text-xs text-blue-600 hover:text-blue-800 font-medium whitespace-nowrap"
+                  className="text-xs text-info-600 hover:text-info-800 font-medium whitespace-nowrap"
                 >
                   {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
                 </button>
@@ -341,7 +342,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded border-neutral-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-neutral-300 text-info-600 focus:ring-info-500"
                     />
                     {member.name}
                   </label>
@@ -375,7 +376,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               placeholder="Sitzungsnotizen hier einfügen..."
               rows={10}
               disabled={!!audioFile}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-neutral-100 disabled:text-neutral-500 font-mono text-sm"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 disabled:bg-neutral-100 disabled:text-neutral-500 font-mono text-sm"
             />
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">
@@ -410,30 +411,30 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
             {/* Audio file selected */}
             {audioFile && (
-              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="mt-3 p-3 bg-info-50 border border-info-200 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Mic className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-800">{audioFile.name}</span>
-                    <span className="text-xs text-blue-600">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
+                    <Mic className="w-4 h-4 text-info-600" />
+                    <span className="text-sm font-medium text-info-800">{audioFile.name}</span>
+                    <span className="text-xs text-info-600">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
                   </div>
                   <button
                     onClick={() => setAudioFile(null)}
-                    className="text-xs text-blue-600 hover:text-blue-800"
+                    className="text-xs text-info-600 hover:text-info-800"
                   >
                     Entfernen
                   </button>
                 </div>
 
                 <div className="mt-2">
-                  <label htmlFor="whisper_model" className="block text-xs font-medium text-blue-700 mb-1">
+                  <label htmlFor="whisper_model" className="block text-xs font-medium text-info-700 mb-1">
                     Whisper-Modell
                   </label>
                   <select
                     id="whisper_model"
                     value={whisperModel}
                     onChange={(e) => setWhisperModel(e.target.value)}
-                    className="w-full px-2 py-1 text-sm border border-blue-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white"
+                    className="w-full px-2 py-1 text-sm border border-info-200 rounded focus:outline-none focus:ring-1 focus:ring-info-500 bg-white"
                   >
                     {WHISPER_MODELS.map((model) => (
                       <option key={model.id} value={model.id}>{model.label}</option>
@@ -458,7 +459,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             <button
               onClick={handleSubmit}
               disabled={!canSubmit}
-              className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {(loading || processing) ? (
                 <>
