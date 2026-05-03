@@ -128,7 +128,7 @@ export default function DecisionListClient({
         items={[
           { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-amber-600 dark:text-amber-400' },
           { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-blue-600 dark:text-blue-400' },
-          { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-green-600 dark:text-green-400' },
+          { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
           { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-red-600 dark:text-red-400' },
         ]}
       />
@@ -207,12 +207,12 @@ export default function DecisionListClient({
                     <td className={adminTable.td}>
                       <Link
                         href={`/admin/decisions/${d.id}`}
-                        className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        className="font-medium text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                       >
                         {d.title}
                       </Link>
                       {d.hasUserVoted && (
-                        <span className="ml-2 text-xs text-green-600 dark:text-green-400">✓ abgestimmt</span>
+                        <span className="ml-2 text-xs text-primary-600 dark:text-primary-400">✓ abgestimmt</span>
                       )}
                     </td>
                     <td className={cn(adminTable.td, 'hidden md:table-cell')}>
@@ -242,7 +242,7 @@ export default function DecisionListClient({
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
                         <button
                           onClick={() => setDeleteTarget(d)}
-                          className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 rounded"
+                          className="text-neutral-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 rounded"
                           title="Löschen"
                         >
                           <Trash2 className="w-4 h-4" />

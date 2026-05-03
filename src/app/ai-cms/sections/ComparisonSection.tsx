@@ -20,7 +20,7 @@ export function ComparisonSection() {
               <tr className="border-b border-neutral-200">
                 <th className="text-left py-3 pr-4 font-semibold text-neutral-700">Funktion</th>
                 <th className="text-left py-3 px-4 font-semibold text-neutral-500">Klassisch</th>
-                <th className="text-left py-3 pl-4 font-semibold text-green-700">Unser System</th>
+                <th className="text-left py-3 pl-4 font-semibold text-primary-700">Unser System</th>
               </tr>
             </thead>
             <tbody>

@@ -21,9 +21,9 @@ export function CertificationVerificationSection({
   onOpenDialog,
 }: Props) {
   return (
-    <div className="mt-6 pt-6 border-t border-gray-200">
+    <div className="mt-6 pt-6 border-t border-neutral-200">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={4} className="text-gray-900">Zertifizierungsverifizierung</Heading>
+        <Heading level={4} className="text-neutral-900">Zertifizierungsverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
           className="text-sm text-blue-600 hover:text-blue-700 font-medium"
@@ -36,14 +36,14 @@ export function CertificationVerificationSection({
         <div className="space-y-4">
           {certifications.length > 0 && (
             <div>
-              <h5 className="text-sm font-medium text-gray-700 mb-2">Eingereichte Zertifizierungen</h5>
+              <h5 className="text-sm font-medium text-neutral-700 mb-2">Eingereichte Zertifizierungen</h5>
               <div className="space-y-3">
                 {certifications.map((cert) => (
-                  <div key={cert.id} className="p-4 bg-gray-50 rounded-lg">
+                  <div key={cert.id} className="p-4 bg-neutral-50 rounded-lg">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h6 className="font-medium text-gray-900">
+                          <h6 className="font-medium text-neutral-900">
                             {cert.certificationTypeName || cert.customName}
                           </h6>
                           {cert.category && (
@@ -63,7 +63,7 @@ export function CertificationVerificationSection({
                           )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4 text-sm text-gray-600">
+                        <div className="grid grid-cols-2 gap-4 text-sm text-neutral-600">
                           {cert.issuingAuthority && (
                             <div>
                               <span className="font-medium">Ausstellende Stelle:</span><br />
@@ -103,7 +103,7 @@ export function CertificationVerificationSection({
                             <button
                               onClick={() => onOpenDialog('verify_cert', cert.id)}
                               disabled={certificationActionLoading === cert.id}
-                              className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50"
+                              className="px-3 py-1.5 bg-primary-600 text-white rounded text-xs hover:bg-primary-700 disabled:opacity-50"
                             >
                               {certificationActionLoading === cert.id ? '...' : 'Verifizieren'}
                             </button>
@@ -133,7 +133,7 @@ export function CertificationVerificationSection({
           )}
 
           {certifications.length === 0 && (
-            <p className="text-sm text-gray-600">Keine Zertifizierungen eingereicht</p>
+            <p className="text-sm text-neutral-600">Keine Zertifizierungen eingereicht</p>
           )}
         </div>
       )}

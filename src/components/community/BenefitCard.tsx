@@ -18,14 +18,14 @@ export interface BenefitCardProps {
 
 export function BenefitCard({ icon: Icon, title, description, className = '' }: BenefitCardProps) {
   return (
-    <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-gray-100 hover:border-green-200 transition-colors duration-300 ${className}`}>
-      <div className={`text-green-600 ${responsiveSpacing.mbSmall}`}>
+    <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-neutral-100 hover:border-primary-200 transition-colors duration-300 ${className}`}>
+      <div className={`text-primary-600 ${responsiveSpacing.mbSmall}`}>
         <Icon className="w-10 h-10" />
       </div>
-      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall} text-gray-900`}>
+      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold ${responsiveSpacing.mbSmall} text-neutral-900`}>
         {title}
       </Heading>
-      <p className={`${responsiveTypography.body} text-gray-600 leading-relaxed`}>
+      <p className={`${responsiveTypography.body} text-neutral-600 leading-relaxed`}>
         {description}
       </p>
     </div>

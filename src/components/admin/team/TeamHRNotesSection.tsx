@@ -37,7 +37,7 @@ export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Prop
             onChange={(e) => onChange('hr_notes', e.target.value)}
             rows={4}
             placeholder="Vertrauliche HR-Notizen (nur für Super-Admins sichtbar)..."
-            className="w-full px-4 py-2 border border-yellow-300 dark:border-yellow-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2 border border-yellow-300 dark:border-yellow-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
           />
           <p className="text-xs text-yellow-700 dark:text-yellow-400 mt-2">
             Diese Notizen sind nur für Super-Admins sichtbar.

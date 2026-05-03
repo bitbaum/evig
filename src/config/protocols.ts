@@ -31,9 +31,9 @@ export const MEETING_TYPE_LABELS: Record<MeetingType, string> = {
 export const MEETING_TYPE_COLORS: Record<MeetingType, string> = {
   team_weekly: 'bg-blue-100 text-blue-800',
   project_review: 'bg-purple-100 text-purple-800',
-  retro: 'bg-green-100 text-green-800',
+  retro: 'bg-primary-100 text-primary-800',
   board: 'bg-orange-100 text-orange-800',
-  ad_hoc: 'bg-gray-100 text-gray-800',
+  ad_hoc: 'bg-neutral-100 text-neutral-800',
 };
 
 export const MEETING_TYPE_ICONS: Record<MeetingType, string> = {
@@ -102,10 +102,10 @@ export const PROTOCOL_STATUS_LABELS: Record<ProtocolStatus, string> = {
 };
 
 export const PROTOCOL_STATUS_COLORS: Record<ProtocolStatus, string> = {
-  draft: 'bg-gray-100 text-gray-800',
+  draft: 'bg-neutral-100 text-neutral-800',
   processing: 'bg-yellow-100 text-yellow-800',
   review: 'bg-blue-100 text-blue-800',
-  finalized: 'bg-green-100 text-green-800',
+  finalized: 'bg-primary-100 text-primary-800',
 };
 
 // Visibility options
@@ -135,17 +135,17 @@ export const ACTION_ITEM_TYPE_LABELS: Record<ActionItemType, string> = {
 export const ACTION_ITEM_TYPE_COLORS: Record<ActionItemType, string> = {
   task: 'bg-blue-100 text-blue-800',
   decision: 'bg-purple-100 text-purple-800',
-  info: 'bg-gray-100 text-gray-800',
+  info: 'bg-neutral-100 text-neutral-800',
 };
 
 export const ACTION_ITEM_BORDER_COLORS: Record<ActionItemType, string> = {
   task: 'border-l-4 border-l-blue-400',
   decision: 'border-l-4 border-l-purple-400',
-  info: 'border-l-4 border-l-gray-300',
+  info: 'border-l-4 border-l-neutral-300',
 };
 
 export const FOLLOW_UP_STATUS_COLORS: Record<string, string> = {
-  erledigt: 'bg-green-100 text-green-800',
+  erledigt: 'bg-primary-100 text-primary-800',
   'in Arbeit': 'bg-blue-100 text-blue-800',
   offen: 'bg-yellow-100 text-yellow-800',
 };
@@ -217,7 +217,7 @@ export const DECISION_RESULT_LABELS: Record<DecisionResult, string> = {
 };
 
 export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
-  approved: 'bg-green-100 text-green-800',
+  approved: 'bg-primary-100 text-primary-800',
   rejected: 'bg-red-100 text-red-800',
   pending: 'bg-yellow-100 text-yellow-800',
 };

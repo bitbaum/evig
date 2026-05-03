@@ -23,9 +23,9 @@ export const ACTIVITY_UPDATE_TYPE_LABELS: Record<ActivityUpdateType, string> = {
 };
 
 export const ACTIVITY_UPDATE_TYPE_COLORS: Record<ActivityUpdateType, string> = {
-  accomplishment: 'bg-green-100 text-green-800',
+  accomplishment: 'bg-primary-100 text-primary-800',
   milestone: 'bg-purple-100 text-purple-800',
-  note: 'bg-gray-100 text-gray-800',
+  note: 'bg-neutral-100 text-neutral-800',
   announcement: 'bg-blue-100 text-blue-800',
 };
 
@@ -65,7 +65,7 @@ export const HELP_REQUEST_URGENCY_LABELS: Record<HelpRequestUrgency, string> = {
 };
 
 export const HELP_REQUEST_URGENCY_COLORS: Record<HelpRequestUrgency, string> = {
-  low: 'bg-gray-100 text-gray-800',
+  low: 'bg-neutral-100 text-neutral-800',
   normal: 'bg-blue-100 text-blue-800',
   high: 'bg-orange-100 text-orange-800',
   urgent: 'bg-red-100 text-red-800',
@@ -89,8 +89,8 @@ export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
 export const HELP_REQUEST_STATUS_COLORS: Record<HelpRequestStatus, string> = {
   open: 'bg-yellow-100 text-yellow-800',
   in_progress: 'bg-blue-100 text-blue-800',
-  resolved: 'bg-green-100 text-green-800',
-  cancelled: 'bg-gray-100 text-gray-800',
+  resolved: 'bg-primary-100 text-primary-800',
+  cancelled: 'bg-neutral-100 text-neutral-800',
 };
 
 // Activity stream source types (for unified feed)
@@ -155,8 +155,8 @@ export function getActivityUpdateTypeLabel(type: string | null): string {
 }
 
 export function getActivityUpdateTypeColor(type: string | null): string {
-  if (!type) return 'bg-gray-100 text-gray-800';
-  return ACTIVITY_UPDATE_TYPE_COLORS[type as ActivityUpdateType] || 'bg-gray-100 text-gray-800';
+  if (!type) return 'bg-neutral-100 text-neutral-800';
+  return ACTIVITY_UPDATE_TYPE_COLORS[type as ActivityUpdateType] || 'bg-neutral-100 text-neutral-800';
 }
 
 export function getVisibilityLabel(visibility: string | null): string {

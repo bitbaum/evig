@@ -33,14 +33,14 @@ export function DeleteUserModal({
       )}
 
       <div className="mb-6">
-        <p className="text-gray-700 dark:text-gray-300 mb-2">
+        <p className="text-neutral-700 dark:text-neutral-300 mb-2">
           Bist du sicher, dass du diesen Benutzer löschen möchten?
         </p>
-        <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-          <p className="font-medium text-gray-900 dark:text-white">
+        <div className="p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+          <p className="font-medium text-neutral-900 dark:text-white">
             {user.name || 'Kein Name'}
           </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {user.email}
           </p>
         </div>
@@ -52,7 +52,7 @@ export function DeleteUserModal({
       <div className="flex justify-end gap-3">
         <button
           onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+          className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
         >
           Abbrechen
         </button>

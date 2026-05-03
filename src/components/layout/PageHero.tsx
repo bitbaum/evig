@@ -46,13 +46,13 @@ export function PageHero({
           </div>
 
           {/* Title */}
-          <Heading level={1} variant="site" className="tracking-tight text-gray-900">
+          <Heading level={1} variant="site" className="tracking-tight text-neutral-900">
             {title}
           </Heading>
 
           {/* Subtitle */}
           {subtitle && (
-            <p className="mt-6 text-lg sm:text-xl leading-8 text-gray-600 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg sm:text-xl leading-8 text-neutral-600 max-w-2xl mx-auto">
               {subtitle}
             </p>
           )}

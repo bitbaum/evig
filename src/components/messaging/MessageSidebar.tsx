@@ -134,11 +134,11 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
       <div className="ml-auto w-full max-w-md bg-white h-full flex flex-col">
         {/* Header */}
-        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+        <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
           <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded"
+            className="p-1 hover:bg-neutral-100 rounded"
           >
             ×
           </button>
@@ -149,15 +149,15 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
           {!selectedConversation && (
             <div className="flex-1 flex flex-col">
               {/* Search */}
-              <div className="p-4 border-b border-gray-200">
+              <div className="p-4 border-b border-neutral-200">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
                   <input
                     type="text"
                     placeholder={t('searchPlaceholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                 </div>
               </div>
@@ -165,8 +165,8 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Conversations */}
               <div className="flex-1 overflow-y-auto">
                 {filteredConversations.length === 0 ? (
-                  <div className="p-8 text-center text-gray-500">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <div className="p-8 text-center text-neutral-500">
+                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
                     <p>{t('noConversations')}</p>
                   </div>
                 ) : (
@@ -174,29 +174,29 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     <button
                       key={conversation.id}
                       onClick={() => setSelectedConversation(conversation.id)}
-                      className="w-full p-4 border-b border-gray-100 hover:bg-gray-50 text-left flex items-start gap-3"
+                      className="w-full p-4 border-b border-neutral-100 hover:bg-neutral-50 text-left flex items-start gap-3"
                     >
-                      <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
-                        <User className="w-5 h-5 text-gray-600" />
+                      <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center flex-shrink-0">
+                        <User className="w-5 h-5 text-neutral-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between mb-1">
                           <p className="font-medium truncate">
                             {conversation.other_participant.name}
                           </p>
-                          <span className="text-xs text-gray-500 flex-shrink-0">
+                          <span className="text-xs text-neutral-500 flex-shrink-0">
                             {formatDateShort(conversation.last_message_at)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 truncate mb-1">
+                        <p className="text-sm text-neutral-600 truncate mb-1">
                           {conversation.last_message_preview || t('newConversation')}
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500 capitalize">
+                          <span className="text-xs text-neutral-500 capitalize">
                             {conversation.type}
                           </span>
                           {conversation.unread_count > 0 && (
-                            <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">
+                            <span className="bg-primary-600 text-white text-xs px-2 py-1 rounded-full">
                               {conversation.unread_count}
                             </span>
                           )}
@@ -213,10 +213,10 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
           {selectedConversation && (
             <div className="flex-1 flex flex-col">
               {/* Message Header */}
-              <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+              <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
                 <button
                   onClick={() => setSelectedConversation(null)}
-                  className="p-1 hover:bg-gray-100 rounded"
+                  className="p-1 hover:bg-neutral-100 rounded"
                 >
                   ←
                 </button>
@@ -225,7 +225,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     {conversations.find(c => c.id === selectedConversation)?.other_participant.name}
                   </Heading>
                 </div>
-                <button className="p-1 hover:bg-gray-100 rounded">
+                <button className="p-1 hover:bg-neutral-100 rounded">
                   <MoreVertical className="w-4 h-4" />
                 </button>
               </div>
@@ -233,10 +233,10 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               {/* Messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {isLoading ? (
-                  <div className="text-center text-gray-500">{t('loading')}</div>
+                  <div className="text-center text-neutral-500">{t('loading')}</div>
                 ) : messages.length === 0 ? (
-                  <div className="text-center text-gray-500">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <div className="text-center text-neutral-500">
+                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-neutral-300" />
                     <p>{t('noMessages')}</p>
                   </div>
                 ) : (
@@ -250,13 +250,13 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                         <div
                           className={`max-w-xs px-4 py-2 rounded-lg ${
                             isOwn
-                              ? 'bg-green-600 text-white'
-                              : 'bg-gray-100 text-gray-900'
+                              ? 'bg-primary-600 text-white'
+                              : 'bg-neutral-100 text-neutral-900'
                           }`}
                         >
                           <p className="text-sm">{message.content}</p>
                           <div className={`flex items-center gap-1 mt-1 text-xs ${
-                            isOwn ? 'text-green-100' : 'text-gray-500'
+                            isOwn ? 'text-primary-100' : 'text-neutral-500'
                           }`}>
                             <span>{formatTime(message.created_at)}</span>
                             {isOwn && (
@@ -275,7 +275,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
               </div>
 
               {/* Message Input */}
-              <div className="p-4 border-t border-gray-200">
+              <div className="p-4 border-t border-neutral-200">
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -283,12 +283,12 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
                     placeholder={t('messagePlaceholder')}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   />
                   <button
                     onClick={sendMessage}
                     disabled={!newMessage.trim()}
-                    className="p-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send className="w-4 h-4" />
                   </button>

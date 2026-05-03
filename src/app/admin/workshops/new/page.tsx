@@ -53,12 +53,12 @@ export default function NewWorkshopPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Link href="/admin/workshops" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+        <Link href="/admin/workshops" className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700">
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Workshop erstellen</Heading>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Plane und veröffentliche einen neuen Workshop</p>
+          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">Workshop erstellen</Heading>
+          <p className="text-neutral-600 dark:text-neutral-400 mt-1">Plane und veröffentliche einen neuen Workshop</p>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ export default function NewWorkshopPage() {
         <div className="flex justify-end gap-4">
           <Link
             href="/admin/workshops"
-            className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium"
+            className="px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 font-medium"
           >
             Abbrechen
           </Link>

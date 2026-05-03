@@ -31,7 +31,7 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
         <span className={`px-3 py-1 rounded-full text-xs font-medium ${conditionBadge.color}`}>
           {conditionBadge.label}
         </span>
-        <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+        <span className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
           {getCategoryLabel(listing.category)}
         </span>
         {isVerified && (
@@ -41,7 +41,7 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
           </span>
         )}
         {listing.is_revampit && !isVerified && (
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          <span className="px-3 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">
             {ORG.name}
           </span>
         )}
@@ -54,56 +54,56 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
 
       {/* Title & Price */}
       <div>
-        <Heading level={1} className="text-2xl lg:text-3xl text-gray-900 dark:text-white mb-2">
+        <Heading level={1} className="text-2xl lg:text-3xl text-neutral-900 dark:text-white mb-2">
           {listing.title}
         </Heading>
-        <p className={`text-3xl font-bold ${isGratis ? 'text-teal-600' : 'text-green-600'}`}>
+        <p className={`text-3xl font-bold ${isGratis ? 'text-teal-600' : 'text-primary-600'}`}>
           {formatCHF(Number(listing.price_chf))}
         </p>
       </div>
 
       {/* Details Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm space-y-3">
         {listing.brand && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">{t('brand')}</span>
-            <span className="font-medium text-gray-900 dark:text-white">{listing.brand}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">{t('brand')}</span>
+            <span className="font-medium text-neutral-900 dark:text-white">{listing.brand}</span>
           </div>
         )}
         {listing.model && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">{t('model')}</span>
-            <span className="font-medium text-gray-900 dark:text-white">{listing.model}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">{t('model')}</span>
+            <span className="font-medium text-neutral-900 dark:text-white">{listing.model}</span>
           </div>
         )}
         <div className="flex justify-between text-sm">
-          <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+          <span className="text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
             <Truck className="w-3.5 h-3.5" aria-hidden="true" /> {t('delivery')}
           </span>
-          <span className="font-medium text-gray-900 dark:text-white">
+          <span className="font-medium text-neutral-900 dark:text-white">
             {DELIVERY_LABELS[listing.delivery_options as DeliveryOption] || listing.delivery_options}
           </span>
         </div>
         {listing.shipping_cost_chf != null && listing.delivery_options !== 'pickup' && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400">{t('shippingCost')}</span>
-            <span className="font-medium text-gray-900 dark:text-white">{formatCHF(Number(listing.shipping_cost_chf))}</span>
+            <span className="text-neutral-500 dark:text-neutral-400">{t('shippingCost')}</span>
+            <span className="font-medium text-neutral-900 dark:text-white">{formatCHF(Number(listing.shipping_cost_chf))}</span>
           </div>
         )}
         <div className="flex justify-between text-sm">
-          <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+          <span className="text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
             <CreditCard className="w-3.5 h-3.5" aria-hidden="true" /> {t('payment')}
           </span>
-          <span className="font-medium text-gray-900 dark:text-white">
+          <span className="font-medium text-neutral-900 dark:text-white">
             {PAYMENT_MODE_LABELS[listing.payment_mode as PaymentMode] || listing.payment_mode}
           </span>
         </div>
         {listing.pickup_location && (
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500 dark:text-gray-400 flex items-center gap-1">
+            <span className="text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5" aria-hidden="true" /> {t('location')}
             </span>
-            <span className="font-medium text-gray-900 dark:text-white">{listing.pickup_location}</span>
+            <span className="font-medium text-neutral-900 dark:text-white">{listing.pickup_location}</span>
           </div>
         )}
       </div>

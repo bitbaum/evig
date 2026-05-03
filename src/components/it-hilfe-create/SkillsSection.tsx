@@ -12,9 +12,9 @@ interface Props {
 export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
   const t = useTranslations('components.skillsSection')
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-2">{t('title')}</Heading>
-      <p className="text-sm text-gray-600 mb-4">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-2">{t('title')}</Heading>
+      <p className="text-sm text-neutral-600 mb-4">
         {t('hint')}
       </p>
 
@@ -23,7 +23,7 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
         if (skills.length === 0) return null
         return (
           <div key={serviceCategory.id} className="mb-4">
-            <Heading level={3} className="text-sm font-medium text-gray-700 mb-2">
+            <Heading level={3} className="text-sm font-medium text-neutral-700 mb-2">
               {serviceCategory.name}
             </Heading>
             <div className="flex flex-wrap gap-2">
@@ -35,7 +35,7 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
                   className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                     skillsNeeded.includes(skill.id)
                       ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
-                      : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
+                      : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                   }`}
                 >
                   {skill.name}

@@ -142,7 +142,7 @@ export function AvatarUpload({
     <div className={`space-y-4 ${className}`}>
       {/* Avatar Display */}
       <div className="flex items-center gap-4">
-        <div className="relative w-32 h-32 rounded-full overflow-hidden bg-gray-100 border-2 border-gray-200">
+        <div className="relative w-32 h-32 rounded-full overflow-hidden bg-neutral-100 border-2 border-neutral-200">
           {previewUrl ? (
             <Image
               src={previewUrl}
@@ -152,7 +152,7 @@ export function AvatarUpload({
               unoptimized={previewUrl.startsWith('data:')} // Don't optimize data URLs
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400">
+            <div className="w-full h-full flex items-center justify-center text-neutral-400">
               <svg
                 className="w-16 h-16"
                 fill="none"
@@ -185,7 +185,7 @@ export function AvatarUpload({
             type="button"
             onClick={handleClick}
             disabled={isUploading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
           >
             {isUploading
               ? t('saving')
@@ -215,7 +215,7 @@ export function AvatarUpload({
       )}
 
       {/* Help Text */}
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-neutral-500">
         {config.allowedExtensions.join(', ').toUpperCase()} • Max {config.maxSizeMB}MB
       </p>
     </div>

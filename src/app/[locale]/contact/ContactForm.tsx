@@ -55,7 +55,7 @@ export default function ContactForm() {
     <div className="bg-white rounded-xl shadow-lg p-8">
       <Heading level={2} className="text-3xl font-bold mb-6 text-center">{t('title')}</Heading>
       {status === 'success' && (
-        <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-green-800 text-sm">
+        <div className="mb-6 rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 text-primary-800 text-sm">
           {t('successMessage')}
         </div>
       )}
@@ -67,12 +67,12 @@ export default function ContactForm() {
       <form className="space-y-6" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">
               {t('name')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-500" />
+                <User className="h-5 w-5 text-neutral-500" />
               </div>
               <input
                 type="text"
@@ -80,18 +80,18 @@ export default function ContactForm() {
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                 placeholder={t('namePlaceholder')}
               />
             </div>
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-2">
               {t('email')}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-500" />
+                <Mail className="h-5 w-5 text-neutral-500" />
               </div>
               <input
                 type="email"
@@ -99,14 +99,14 @@ export default function ContactForm() {
                 name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+                className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
                 placeholder={t('emailPlaceholder')}
               />
             </div>
           </div>
         </div>
         <div>
-          <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="subject" className="block text-sm font-medium text-neutral-700 mb-2">
             {t('subject')}
           </label>
           <input
@@ -115,17 +115,17 @@ export default function ContactForm() {
             name="subject"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+            className="block w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
             placeholder={t('subjectPlaceholder')}
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor="message" className="block text-sm font-medium text-neutral-700 mb-2">
             {t('message')}
           </label>
           <div className="relative">
             <div className="absolute top-3 left-3 pointer-events-none">
-              <MessageSquare className="h-5 w-5 text-gray-500" />
+              <MessageSquare className="h-5 w-5 text-neutral-500" />
             </div>
             <textarea
               id="message"
@@ -137,7 +137,7 @@ export default function ContactForm() {
               aria-required="true"
               aria-invalid={status === 'error'}
               aria-describedby={status === 'error' ? 'contact-error' : undefined}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500"
+              className="block w-full pl-10 pr-3 py-2 border border-neutral-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
               placeholder={t('messagePlaceholder')}
             />
           </div>
@@ -146,7 +146,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={status === 'submitting'}
-            className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 disabled:opacity-60"
+            className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200 disabled:opacity-60"
           >
             <Send className="w-5 h-5 mr-2" />
             {status === 'submitting' ? t('submitting') : t('submit')}

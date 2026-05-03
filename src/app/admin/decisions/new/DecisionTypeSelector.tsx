@@ -10,7 +10,7 @@ interface Props {
 export function DecisionTypeSelector({ selected, onChange }: Props) {
   return (
     <div>
-      <span className="mb-2 block text-sm font-medium text-gray-700">Entscheidungstyp</span>
+      <span className="mb-2 block text-sm font-medium text-neutral-700">Entscheidungstyp</span>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {DECISION_TYPES.map((type) => {
           const conf = DECISION_TYPE_CONFIG[type];
@@ -23,18 +23,18 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               className={`rounded-lg border-2 p-3 text-left transition-all ${
                 isSelected
                   ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
               }`}
             >
               <div className="flex items-center gap-2">
                 <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                  isSelected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'
+                  isSelected ? 'bg-blue-500 text-white' : 'bg-neutral-100 text-neutral-500'
                 }`}>
                   {conf.icon}
                 </span>
-                <span className="font-medium text-gray-900">{conf.label}</span>
+                <span className="font-medium text-neutral-900">{conf.label}</span>
               </div>
-              <p className="mt-1.5 text-xs text-gray-500">{conf.description}</p>
+              <p className="mt-1.5 text-xs text-neutral-500">{conf.description}</p>
               {isSelected && (
                 <p className="mt-1.5 rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">
                   {conf.mechanic}

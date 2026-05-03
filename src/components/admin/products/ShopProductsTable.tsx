@@ -58,10 +58,10 @@ export function ShopProductsTable({
   const allSelected = selectable && filteredIds.length > 0 && filteredIds.every(id => selectedIds.has(id))
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px]">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-neutral-50 border-b border-neutral-200">
             <tr>
               {selectable && (
                 <th className="w-10 px-3 py-3">
@@ -69,37 +69,37 @@ export function ShopProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                    className="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
                   />
                 </th>
               )}
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 Produkt
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 Preis
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 Zustand
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 Zielgruppen
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 Bestand
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
                 Aktionen
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="divide-y divide-neutral-200">
             {filteredProducts.map((product) => (
               <motion.tr
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-gray-50", selectable && selectedIds.has(product.id) && "bg-indigo-50")}
+                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-indigo-50")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">
@@ -107,13 +107,13 @@ export function ShopProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                      className="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
                     />
                   </td>
                 )}
                 <td className="px-6 py-4">
                   <div className="flex items-center">
-                    <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mr-3 overflow-hidden">
+                    <div className="w-12 h-12 bg-neutral-200 rounded-lg flex items-center justify-center mr-3 overflow-hidden">
                       {product.image_url ? (
                         <Image
                           src={product.image_url}
@@ -124,14 +124,14 @@ export function ShopProductsTable({
                           unoptimized
                         />
                       ) : (
-                        <ImageIcon className="w-6 h-6 text-gray-400" />
+                        <ImageIcon className="w-6 h-6 text-neutral-400" />
                       )}
                     </div>
                     <div>
-                      <div className="font-medium text-gray-900">{product.title}</div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs">
+                      <div className="font-medium text-neutral-900">{product.title}</div>
+                      <div className="text-sm text-neutral-500 truncate max-w-xs">
                         {product.category && (
-                          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded mr-2">
+                          <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded mr-2">
                             {product.category}
                           </span>
                         )}
@@ -142,7 +142,7 @@ export function ShopProductsTable({
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-neutral-900">
                     CHF {product.price.toFixed(2)}
                   </span>
                 </td>
@@ -172,10 +172,10 @@ export function ShopProductsTable({
                         </span>
                       ))
                     ) : (
-                      <span className="text-xs text-gray-400">Keine</span>
+                      <span className="text-xs text-neutral-400">Keine</span>
                     )}
                     {product.customer_profiles.length > 3 && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-neutral-500">
                         +{product.customer_profiles.length - 3}
                       </span>
                     )}
@@ -185,7 +185,7 @@ export function ShopProductsTable({
                   <span
                     className={cn(
                       "font-medium",
-                      product.quantity < 3 ? "text-red-600" : "text-gray-900"
+                      product.quantity < 3 ? "text-red-600" : "text-neutral-900"
                     )}
                   >
                     {product.quantity}
@@ -195,14 +195,14 @@ export function ShopProductsTable({
                   <div className="flex items-center justify-end gap-2">
                     <button
                       onClick={() => onView?.(product)}
-                      className="p-1 text-gray-500 hover:text-gray-600"
+                      className="p-1 text-neutral-500 hover:text-neutral-600"
                       title="Im Shop ansehen"
                     >
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => onEdit?.(product)}
-                      className="p-1 text-gray-500 hover:text-gray-600"
+                      className="p-1 text-neutral-500 hover:text-neutral-600"
                       title="Bearbeiten"
                     >
                       <Edit className="w-4 h-4" />
@@ -231,11 +231,11 @@ export function ShopProductsTable({
 
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
-          <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+          <Package className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
             {searchQuery ? 'Keine Produkte gefunden' : 'Keine veröffentlichten Produkte'}
           </Heading>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             {searchQuery
               ? 'Versuche eine andere Suche.'
               : 'Veröffentliche Produkte aus dem "Erfasste Produkte" Tab.'}

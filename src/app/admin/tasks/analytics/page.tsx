@@ -132,7 +132,7 @@ async function getRecentCompletions(): Promise<RecentCompletion[]> {
 function getProgressBarColor(index: number): string {
   const colors = [
     'bg-blue-500',
-    'bg-green-500',
+    'bg-primary-500',
     'bg-purple-500',
     'bg-orange-500',
     'bg-pink-500',
@@ -183,19 +183,19 @@ export default async function TaskAnalyticsPage() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/tasks"
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück
         </Link>
-        <div className="w-px h-6 bg-gray-300" />
+        <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
             <BarChart3 className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-gray-900">Aufgaben Analyse</Heading>
-            <p className="text-gray-600">Statistiken und Auswertungen</p>
+            <Heading level={1} className="text-2xl font-bold text-neutral-900">Aufgaben Analyse</Heading>
+            <p className="text-neutral-600">Statistiken und Auswertungen</p>
           </div>
         </div>
       </div>
@@ -217,20 +217,20 @@ export default async function TaskAnalyticsPage() {
               <CheckCircle2 className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{stats.total_tasks}</p>
-              <p className="text-sm text-gray-500">Aufgaben gesamt</p>
+              <p className="text-2xl font-bold text-neutral-900">{stats.total_tasks}</p>
+              <p className="text-sm text-neutral-500">Aufgaben gesamt</p>
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-green-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-primary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{stats.completions_today}</p>
-              <p className="text-sm text-gray-500">Heute erledigt</p>
+              <p className="text-2xl font-bold text-neutral-900">{stats.completions_today}</p>
+              <p className="text-sm text-neutral-500">Heute erledigt</p>
             </div>
           </div>
         </div>
@@ -241,8 +241,8 @@ export default async function TaskAnalyticsPage() {
               <BarChart3 className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{stats.completions_this_week}</p>
-              <p className="text-sm text-gray-500">Diese Woche</p>
+              <p className="text-2xl font-bold text-neutral-900">{stats.completions_this_week}</p>
+              <p className="text-sm text-neutral-500">Diese Woche</p>
             </div>
           </div>
         </div>
@@ -253,8 +253,8 @@ export default async function TaskAnalyticsPage() {
               <Users className="w-5 h-5 text-orange-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{stats.completions_this_month}</p>
-              <p className="text-sm text-gray-500">Diesen Monat</p>
+              <p className="text-2xl font-bold text-neutral-900">{stats.completions_this_month}</p>
+              <p className="text-sm text-neutral-500">Diesen Monat</p>
             </div>
           </div>
         </div>
@@ -265,10 +265,10 @@ export default async function TaskAnalyticsPage() {
               <Clock className="w-5 h-5 text-teal-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">
+              <p className="text-2xl font-bold text-neutral-900">
                 {stats.avg_completion_time ? `${stats.avg_completion_time}m` : '-'}
               </p>
-              <p className="text-sm text-gray-500">Ø Dauer</p>
+              <p className="text-sm text-neutral-500">Ø Dauer</p>
             </div>
           </div>
         </div>
@@ -277,20 +277,20 @@ export default async function TaskAnalyticsPage() {
       <div className="grid grid-cols-2 gap-6">
         {/* Contributor Stats */}
         <div className="bg-white rounded-lg border p-6">
-          <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
             Beiträge pro Person (letzte 30 Tage)
           </Heading>
           {contributors.length === 0 ? (
-            <p className="text-gray-500">Keine Daten vorhanden</p>
+            <p className="text-neutral-500">Keine Daten vorhanden</p>
           ) : (
             <div className="space-y-3">
               {contributors.map((contributor, index) => (
                 <div key={contributor.user_id}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-700">
+                    <span className="text-neutral-700">
                       {contributor.user_name || contributor.user_email}
                     </span>
-                    <span className="text-gray-500">
+                    <span className="text-neutral-500">
                       {contributor.completion_count} Erledigungen
                       {contributor.total_duration_minutes && (
                         <span className="ml-2">
@@ -299,7 +299,7 @@ export default async function TaskAnalyticsPage() {
                       )}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="w-full bg-neutral-100 rounded-full h-2">
                     <div
                       className={`h-2 rounded-full ${getProgressBarColor(index)}`}
                       style={{
@@ -315,22 +315,22 @@ export default async function TaskAnalyticsPage() {
 
         {/* Category Stats */}
         <div className="bg-white rounded-lg border p-6">
-          <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
             Erledigungen pro Kategorie (letzte 30 Tage)
           </Heading>
           {categories.length === 0 ? (
-            <p className="text-gray-500">Keine Daten vorhanden</p>
+            <p className="text-neutral-500">Keine Daten vorhanden</p>
           ) : (
             <div className="space-y-3">
               {categories.map((cat, index) => (
                 <div key={cat.category}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-gray-700">
+                    <span className="text-neutral-700">
                       {TASK_CATEGORY_LABELS[cat.category] || cat.category}
                     </span>
-                    <span className="text-gray-500">{cat.completion_count}</span>
+                    <span className="text-neutral-500">{cat.completion_count}</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="w-full bg-neutral-100 rounded-full h-2">
                     <div
                       className={`h-2 rounded-full ${getProgressBarColor(index)}`}
                       style={{
@@ -347,26 +347,26 @@ export default async function TaskAnalyticsPage() {
 
       {/* Recent Completions */}
       <div className="bg-white rounded-lg border p-6">
-        <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">
+        <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
           Letzte Erledigungen
         </Heading>
         {recentCompletions.length === 0 ? (
-          <p className="text-gray-500">Noch keine Erledigungen</p>
+          <p className="text-neutral-500">Noch keine Erledigungen</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neutral-500">
                     Aufgabe
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neutral-500">
                     Erledigt von
                   </th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">
+                  <th className="text-left py-3 px-4 text-sm font-medium text-neutral-500">
                     Zeitpunkt
                   </th>
-                  <th className="text-right py-3 px-4 text-sm font-medium text-gray-500">
+                  <th className="text-right py-3 px-4 text-sm font-medium text-neutral-500">
                     Dauer
                   </th>
                 </tr>
@@ -374,16 +374,16 @@ export default async function TaskAnalyticsPage() {
               <tbody>
                 {recentCompletions.map((completion) => (
                   <tr key={completion.id} className="border-b last:border-0">
-                    <td className="py-3 px-4 text-sm text-gray-900">
+                    <td className="py-3 px-4 text-sm text-neutral-900">
                       {completion.task_title}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600">
+                    <td className="py-3 px-4 text-sm text-neutral-600">
                       {completion.completed_by_name || 'Unbekannt'}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600">
+                    <td className="py-3 px-4 text-sm text-neutral-600">
                       {formatDateTimeNumeric(completion.completed_at)}
                     </td>
-                    <td className="py-3 px-4 text-sm text-gray-600 text-right">
+                    <td className="py-3 px-4 text-sm text-neutral-600 text-right">
                       {completion.duration_minutes
                         ? `${completion.duration_minutes}m`
                         : '-'}

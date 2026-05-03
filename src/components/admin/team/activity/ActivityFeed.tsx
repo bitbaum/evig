@@ -72,11 +72,11 @@ export function ActivityFeed({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Heading level={2} className="text-lg text-gray-900 dark:text-gray-100">
+          <Heading level={2} className="text-lg text-neutral-900 dark:text-neutral-100">
             Aktivitäten
           </Heading>
           {!loading && (
-            <span className="text-sm text-gray-500 dark:text-gray-400">({total})</span>
+            <span className="text-sm text-neutral-500 dark:text-neutral-400">({total})</span>
           )}
         </div>
 
@@ -84,7 +84,7 @@ export function ActivityFeed({
           <button
             onClick={() => refetch()}
             disabled={loading}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
             title="Aktualisieren"
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -96,7 +96,7 @@ export function ActivityFeed({
               className={`p-2 rounded-lg ${
                 hasActiveFilters
                   ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
-                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
               }`}
               title="Filter"
             >
@@ -119,17 +119,17 @@ export function ActivityFeed({
 
       {/* Filter Panel */}
       {showFilters && showFilterPanel && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Source Type Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 Typ
               </label>
               <select
                 value={filters.source_type || ''}
                 onChange={(e) => handleFilterChange('source_type', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle Typen</option>
                 {Object.entries(ACTIVITY_SOURCE_LABELS).map(([key, label]) => (
@@ -142,13 +142,13 @@ export function ActivityFeed({
 
             {/* Category Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 Kategorie
               </label>
               <select
                 value={filters.category || ''}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle Kategorien</option>
                 {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
@@ -162,13 +162,13 @@ export function ActivityFeed({
             {/* Person Filter */}
             {teamMembers.length > 0 && (
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                   Person
                 </label>
                 <select
                   value={filters.user_id || ''}
                   onChange={(e) => handleFilterChange('user_id', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
                 >
                   <option value="">Alle</option>
                   {teamMembers.map((member) => (
@@ -185,7 +185,7 @@ export function ActivityFeed({
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  className="px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
                 >
                   Filter zurücksetzen
                 </button>
@@ -208,14 +208,14 @@ export function ActivityFeed({
           {[...Array(compact ? 3 : 5)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 animate-pulse"
+              className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 animate-pulse"
             >
               <div className="flex gap-3">
-                <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                <div className="w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3" />
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4" />
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3" />
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-2/3" />
+                  <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-1/4" />
                 </div>
               </div>
             </div>
@@ -225,8 +225,8 @@ export function ActivityFeed({
 
       {/* Empty State */}
       {!loading && !error && activities.length === 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
+          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
             {hasActiveFilters
               ? 'Keine Aktivitäten mit diesen Filtern gefunden.'
               : 'Noch keine Aktivitäten vorhanden.'}

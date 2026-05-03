@@ -17,13 +17,13 @@ export function DonationFilters({ filters, onFiltersChange }: Props) {
     <div className="bg-white rounded-lg shadow p-4 mb-6">
       <div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
-          <Filter className="w-5 h-5 text-gray-500" />
-          <span className="text-sm font-medium text-gray-700">Filter:</span>
+          <Filter className="w-5 h-5 text-neutral-500" />
+          <span className="text-sm font-medium text-neutral-700">Filter:</span>
         </div>
         <select
           value={filters.donation_type}
           onChange={(e) => onFiltersChange({ ...filters, donation_type: e.target.value as DonationType | 'all' })}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm"
         >
           <option value="all">Alle Typen</option>
           {getDonationTypeOptions().map(opt => (
@@ -33,7 +33,7 @@ export function DonationFilters({ filters, onFiltersChange }: Props) {
         <select
           value={filters.status}
           onChange={(e) => onFiltersChange({ ...filters, status: e.target.value as DonationStatus | 'all' })}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm"
         >
           <option value="all">Alle Status</option>
           {getDonationStatusOptions().map(opt => (

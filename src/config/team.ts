@@ -31,7 +31,7 @@ export const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
 
 export const EMPLOYMENT_TYPE_COLORS: Record<EmploymentType, string> = {
   employee: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-  volunteer: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+  volunteer: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
   intern: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
   contractor: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
 }
@@ -227,14 +227,14 @@ export function getDepartmentLabel(dept: string | null | undefined): string {
  * Get color class for employment type badge
  */
 export function getEmploymentTypeColor(type: string | null | undefined): string {
-  if (!type) return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-  return EMPLOYMENT_TYPE_COLORS[type as EmploymentType] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+  if (!type) return 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
+  return EMPLOYMENT_TYPE_COLORS[type as EmploymentType] || 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
 }
 
 /**
  * Get color class for department badge
  */
 export function getDepartmentColor(dept: string | null | undefined): string {
-  if (!dept) return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-  return DEPARTMENT_COLORS[dept as Department] || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+  if (!dept) return 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
+  return DEPARTMENT_COLORS[dept as Department] || 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
 }

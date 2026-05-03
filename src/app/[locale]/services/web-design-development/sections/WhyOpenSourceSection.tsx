@@ -15,11 +15,11 @@ export async function WhyOpenSourceSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-neutral-600">
             {t('subtitle')}
           </p>
         </div>
@@ -27,12 +27,12 @@ export async function WhyOpenSourceSection() {
           {reasons.map((reason, index) => (
             <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-center mb-4">
-                <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
+                <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
                   <reason.icon className="w-6 h-6" />
                 </div>
                 <Heading level={3} className="">{reason.title}</Heading>
               </div>
-              <p className="text-gray-600">{reason.description}</p>
+              <p className="text-neutral-600">{reason.description}</p>
             </div>
           ))}
         </div>

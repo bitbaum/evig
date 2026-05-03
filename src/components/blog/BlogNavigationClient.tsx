@@ -60,12 +60,12 @@ export default function BlogNavigationClient({
   const isSelected = (slug: string) => selectedCategorySlugs.includes(slug)
 
   return (
-    <nav className="border-b border-gray-200 bg-white sticky top-0 z-40">
+    <nav className="border-b border-neutral-200 bg-white sticky top-0 z-40">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Title */}
           <Link href="/blog" className="flex items-center">
-            <Heading level={1} className="text-xl sm:text-2xl font-bold text-gray-900">Blog</Heading>
+            <Heading level={1} className="text-xl sm:text-2xl font-bold text-neutral-900">Blog</Heading>
           </Link>
 
           {/* Desktop Categories */}
@@ -75,8 +75,8 @@ export default function BlogNavigationClient({
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                 selectedCategorySlugs.length === 0
-                  ? "bg-gray-900 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  ? "bg-neutral-900 text-white"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
               )}
             >
               {t('all')}
@@ -93,7 +93,7 @@ export default function BlogNavigationClient({
                       "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                       selected
                         ? "text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >
@@ -109,9 +109,9 @@ export default function BlogNavigationClient({
 
                   {/* Tooltip with description */}
                   {category.description && (
-                    <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg whitespace-nowrap z-10 transition-all max-w-xs text-center">
+                    <div className="invisible group-hover:visible opacity-0 group-hover:opacity-100 absolute left-1/2 -translate-x-1/2 top-full mt-2 px-3 py-2 bg-neutral-900 text-white text-xs rounded-lg whitespace-nowrap z-10 transition-all max-w-xs text-center">
                       {category.description}
-                      <span className="absolute left-1/2 -translate-x-1/2 bottom-full border-4 border-transparent border-b-gray-900" />
+                      <span className="absolute left-1/2 -translate-x-1/2 bottom-full border-4 border-transparent border-b-neutral-900" />
                     </div>
                   )}
                 </div>
@@ -124,7 +124,7 @@ export default function BlogNavigationClient({
             {/* Mobile dropdown trigger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden inline-flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium"
+              className="md:hidden inline-flex items-center gap-1 px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-sm font-medium"
             >
               {selectedCategorySlugs.length > 0 ? (
                 <>
@@ -148,7 +148,7 @@ export default function BlogNavigationClient({
             {/* CTA */}
             <Link
               href="/blog/submit"
-              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm font-semibold"
+              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-xs sm:text-sm font-semibold"
             >
               {t('navSubmitPost')}
             </Link>
@@ -157,15 +157,15 @@ export default function BlogNavigationClient({
 
         {/* Mobile Categories Dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t border-gray-100">
+          <div className="md:hidden py-3 border-t border-neutral-100">
             <div className="flex flex-wrap gap-2">
               <button
                 onClick={handleClearFilters}
                 className={cn(
                   "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                   selectedCategorySlugs.length === 0
-                    ? "bg-gray-900 text-white"
-                    : "bg-gray-100 text-gray-700"
+                    ? "bg-neutral-900 text-white"
+                    : "bg-neutral-100 text-neutral-700"
                 )}
               >
                 {t('all')}
@@ -182,7 +182,7 @@ export default function BlogNavigationClient({
                       "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                       selected
                         ? "text-white"
-                        : "bg-gray-100 text-gray-700"
+                        : "bg-neutral-100 text-neutral-700"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >

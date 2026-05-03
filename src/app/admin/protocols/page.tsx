@@ -140,7 +140,7 @@ export default async function ProtocolsAdminPage({
       actions={
         <Link
           href="/admin/protocols/new"
-          className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+          className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           Neues Protokoll
@@ -173,7 +173,7 @@ export default async function ProtocolsAdminPage({
           color: 'green',
           label: 'Abgeschlossen',
           value: stats.finalized,
-          valueColor: 'text-green-600',
+          valueColor: 'text-primary-600',
         },
       ] satisfies StatCardItem[]} />
 
@@ -187,10 +187,10 @@ export default async function ProtocolsAdminPage({
         {listError ? (
           <div className="p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.protocols.errorMessage}
             </Heading>
-            <p className="text-gray-600 mb-4">
+            <p className="text-neutral-600 mb-4">
               Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
             </p>
             <Link
@@ -202,16 +202,16 @@ export default async function ProtocolsAdminPage({
           </div>
         ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
-            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+            <FileText className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.protocols.emptyTitle}
             </Heading>
-            <p className="text-gray-600 mb-4">
+            <p className="text-neutral-600 mb-4">
               {ADMIN_CONTENT.protocols.emptyDescription}
             </p>
             <Link
               href="/admin/protocols/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Neues Protokoll
@@ -219,30 +219,30 @@ export default async function ProtocolsAdminPage({
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-neutral-50 border-b">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Titel
                 </th>
                 {/* Typ hidden on mobile — narrow screens can't fit it */}
-                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Typ
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide whitespace-nowrap">
                   Datum
                 </th>
                 {/* Teilnehmer hidden on mobile and tablet */}
-                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Teilnehmer
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Status
                 </th>
                 {/* Workflow hidden on mobile */}
-                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Workflow
                 </th>
-                <th className="text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Aktionen
                 </th>
               </tr>
@@ -251,16 +251,16 @@ export default async function ProtocolsAdminPage({
               {filteredProtocols.map((protocol) => {
                 const TypeIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType]
                 return (
-                  <tr key={protocol.id} className="hover:bg-gray-50">
+                  <tr key={protocol.id} className="hover:bg-neutral-50">
                     <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
                         href={`/admin/protocols/${protocol.id}`}
-                        className="font-medium text-gray-900 hover:text-blue-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                        className="font-medium text-neutral-900 hover:text-blue-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                       >
                         {protocol.title}
                       </Link>
                       {protocol.created_by_name && (
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-sm text-neutral-500 truncate">
                           von {protocol.created_by_name}
                         </p>
                       )}
@@ -268,7 +268,7 @@ export default async function ProtocolsAdminPage({
                     <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2 py-1 text-xs font-medium rounded-full ${
-                          MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-gray-100 text-gray-800'
+                          MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-neutral-100 text-neutral-800'
                         }`}
                       >
                         {TypeIcon && <TypeIcon className="w-3 h-3" />}
@@ -276,7 +276,7 @@ export default async function ProtocolsAdminPage({
                       </span>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-neutral-600">
                         {formatDateShort(protocol.meeting_date)}
                       </span>
                     </td>
@@ -286,25 +286,25 @@ export default async function ProtocolsAdminPage({
                           {protocol.attendee_names.slice(0, 3).map((name, i) => (
                             <span
                               key={i}
-                              className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-700"
+                              className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-neutral-100 text-neutral-700"
                             >
                               {name.split(' ')[0]}
                             </span>
                           ))}
                           {protocol.attendee_names.length > 3 && (
-                            <span className="inline-flex px-1.5 py-0.5 text-xs text-gray-500">
+                            <span className="inline-flex px-1.5 py-0.5 text-xs text-neutral-500">
                               +{protocol.attendee_names.length - 3}
                             </span>
                           )}
                         </div>
                       ) : (
-                        <span className="text-xs text-gray-400">—</span>
+                        <span className="text-xs text-neutral-400">—</span>
                       )}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span
                         className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                          PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-gray-100 text-gray-800'
+                          PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-neutral-100 text-neutral-800'
                         }`}
                       >
                         {PROTOCOL_STATUS_LABELS[protocol.status]}
@@ -332,7 +332,7 @@ export default async function ProtocolsAdminPage({
                     <td className="px-4 py-3 text-right whitespace-nowrap">
                       <div className="inline-flex items-center gap-3">
                         {protocol.action_item_count > 0 && (
-                          <span className="hidden sm:inline text-sm text-gray-500">{protocol.action_item_count} Aktionen</span>
+                          <span className="hidden sm:inline text-sm text-neutral-500">{protocol.action_item_count} Aktionen</span>
                         )}
                         <Link
                           href={`/admin/protocols/${protocol.id}`}

@@ -109,7 +109,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     name: 'Installation & Setup',
     description: 'Software-Installation und Geräte-Einrichtung',
     icon: Settings,
-    color: 'bg-green-500',
+    color: 'bg-primary-500',
   },
   {
     id: 'support',
@@ -244,7 +244,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
     icon: '💰',
     requiresAmount: true,
     multiplier: 1.0,
-    badgeClass: 'bg-green-100 text-green-700',
+    badgeClass: 'bg-primary-100 text-primary-700',
   },
   {
     id: 'supporter',
@@ -308,7 +308,7 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     name: 'Desktop-PC',
     description: 'Tower-PCs, Workstations, All-in-Ones',
     icon: Monitor,
-    color: 'bg-gray-600',
+    color: 'bg-neutral-600',
     suggestedSkills: ['hardware_diagnosis', 'ssd_upgrade', 'os_installation', 'cleaning', 'virus_removal'],
     defaultTitle: 'PC-Hilfe benötigt',
     defaultDescription: 'Mein PC hat folgendes Problem:\n\n- \n\nKonfiguration: \nAlter: ca. ',
@@ -318,7 +318,7 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     name: 'Spielkonsole',
     description: 'PlayStation, Xbox, Nintendo, Retro-Konsolen',
     icon: Gamepad2,
-    color: 'bg-green-500',
+    color: 'bg-primary-500',
     suggestedSkills: ['hardware_diagnosis', 'soldering', 'cleaning'],
     defaultTitle: 'Konsolen-Hilfe benötigt',
     defaultDescription: 'Meine Spielkonsole hat folgendes Problem:\n\n- \n\nKonsole: \nAlter: ca. ',
@@ -398,7 +398,7 @@ export type UrgencyValue = typeof URGENCY[keyof typeof URGENCY]
 export const URGENCY_VALUES = Object.values(URGENCY) as [UrgencyValue, ...UrgencyValue[]]
 
 export const URGENCY_LEVELS: UrgencyLevel[] = [
-  { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-gray-100 text-gray-700' },
+  { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-neutral-100 text-neutral-700' },
   { id: URGENCY.NORMAL, name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-blue-100 text-blue-700' },
   { id: URGENCY.HIGH, name: 'Hoch', description: 'Möglichst bald benötigt', badgeClass: 'bg-orange-100 text-orange-700' },
   { id: URGENCY.URGENT, name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-red-100 text-red-700' },
@@ -482,11 +482,11 @@ export function deriveBudgetType(amountCents: number | null | undefined): 'free'
 }
 
 export const REQUEST_STATUSES: RequestStatus[] = [
-  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-green-100 text-green-700' },
+  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-primary-100 text-primary-700' },
   { id: REQUEST_STATUS.IN_DISCUSSION, name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-yellow-100 text-yellow-700' },
   { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-blue-100 text-blue-700' },
   { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-emerald-100 text-emerald-700' },
-  { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-gray-100 text-gray-500' },
+  { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]
 
 // ============================================================================
@@ -510,9 +510,9 @@ export type OfferStatusId = typeof OFFER_STATUS[keyof typeof OFFER_STATUS];
 
 export const OFFER_STATUSES: OfferStatus[] = [
   { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-yellow-100 text-yellow-700' },
-  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-green-100 text-green-700' },
+  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-primary-100 text-primary-700' },
   { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-red-100 text-red-700' },
-  { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-gray-100 text-gray-500' },
+  { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]
 
 // ============================================================================

@@ -17,9 +17,9 @@ export function ContactLink({
   const baseStyles = 'inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-300'
   
   const variants = {
-    default: 'bg-green-600 text-white hover:bg-green-700',
-    outline: 'bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-50',
-    ghost: 'bg-transparent text-green-600 hover:bg-green-50'
+    default: 'bg-primary-600 text-white hover:bg-primary-700',
+    outline: 'bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50',
+    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50'
   }
 
   const sizes = {

@@ -20,10 +20,10 @@ export const DECISION_STATUS_CONFIG: Record<
   DecisionStatus,
   { label: string; color: string }
 > = {
-  draft: { label: 'Entwurf', color: 'bg-gray-100 text-gray-700' },
+  draft: { label: 'Entwurf', color: 'bg-neutral-100 text-neutral-700' },
   discussion: { label: 'Diskussion', color: 'bg-blue-100 text-blue-700' },
   voting: { label: 'Abstimmung', color: 'bg-amber-100 text-amber-700' },
-  closed: { label: 'Abgeschlossen', color: 'bg-green-100 text-green-700' },
+  closed: { label: 'Abgeschlossen', color: 'bg-primary-100 text-primary-700' },
   cancelled: { label: 'Abgebrochen', color: 'bg-red-100 text-red-700' },
 };
 
@@ -351,8 +351,8 @@ export const CONSENT_RESPONSE_CONFIG: Record<
   ConsentResponse,
   { label: string; color: string }
 > = {
-  agree: { label: 'Zustimmen', color: 'bg-green-100 text-green-700' },
-  abstain: { label: 'Enthalten', color: 'bg-gray-100 text-gray-700' },
+  agree: { label: 'Zustimmen', color: 'bg-primary-100 text-primary-700' },
+  abstain: { label: 'Enthalten', color: 'bg-neutral-100 text-neutral-700' },
   disagree: { label: 'Ablehnen', color: 'bg-orange-100 text-orange-700' },
   block: { label: 'Blockieren', color: 'bg-red-100 text-red-700' },
 };
@@ -388,7 +388,7 @@ export const COMMENT_POSITION_CONFIG: Record<
   CommentPosition,
   { label: string; color: string }
 > = {
-  for: { label: 'Dafür', color: 'bg-green-100 text-green-700' },
+  for: { label: 'Dafür', color: 'bg-primary-100 text-primary-700' },
   against: { label: 'Dagegen', color: 'bg-red-100 text-red-700' },
   question: { label: 'Frage', color: 'bg-blue-100 text-blue-700' },
   info: { label: 'Information', color: 'bg-purple-100 text-purple-700' },

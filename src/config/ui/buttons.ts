@@ -18,10 +18,10 @@ export const BUTTONS = {
 
   // Variants (for marketplace)
   marketplace: {
-    primary: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-    secondary: 'bg-white text-green-600 border-2 border-green-600 hover:bg-green-50 focus:ring-green-500',
-    outline: 'bg-transparent text-green-600 border border-green-600 hover:bg-green-50 focus:ring-green-500',
-    ghost: 'bg-transparent text-green-600 hover:bg-green-50 focus:ring-green-500',
+    primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
+    secondary: 'bg-white text-primary-600 border-2 border-primary-600 hover:bg-primary-50 focus:ring-primary-500',
+    outline: 'bg-transparent text-primary-600 border border-primary-600 hover:bg-primary-50 focus:ring-primary-500',
+    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 focus:ring-primary-500',
   },
 
   // Variants (for IT-Hilfe)
@@ -35,8 +35,8 @@ export const BUTTONS = {
   // Common variants
   common: {
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-    success: 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500',
-    neutral: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500',
+    success: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
+    neutral: 'bg-neutral-200 text-neutral-800 hover:bg-neutral-300 focus:ring-neutral-500',
   },
 } as const
 

@@ -36,10 +36,10 @@ export function CameraCapture({
         <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Camera className="w-8 h-8 text-blue-600" />
         </div>
-        <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+        <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
           {t('title')}
         </Heading>
-        <p className="text-gray-600">
+        <p className="text-neutral-600">
           {t('subtitle')}
         </p>
       </div>
@@ -80,7 +80,7 @@ interface CameraLiveViewProps {
 function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePhoto, labelCancel }: CameraLiveViewProps) {
   return (
     <div className="space-y-4">
-      <div className="relative rounded-lg overflow-hidden bg-gray-100">
+      <div className="relative rounded-lg overflow-hidden bg-neutral-100">
         <video
           ref={videoRef}
           autoPlay
@@ -99,7 +99,7 @@ function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePho
         </button>
         <button
           onClick={onCancel}
-          className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-6 py-3 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
         >
           {labelCancel}
         </button>
@@ -126,17 +126,17 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
         className="p-6 border-2 border-dashed border-blue-300 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors text-center"
       >
         <Camera className="w-12 h-12 text-blue-600 mx-auto mb-3" />
-        <div className="font-medium text-gray-900">{labelOpenCamera}</div>
-        <div className="text-sm text-gray-600 mt-1">{labelLivePhoto}</div>
+        <div className="font-medium text-neutral-900">{labelOpenCamera}</div>
+        <div className="text-sm text-neutral-600 mt-1">{labelLivePhoto}</div>
       </button>
 
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="p-6 border-2 border-dashed border-green-300 rounded-lg hover:border-green-400 hover:bg-green-50 transition-colors text-center"
+        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 transition-colors text-center"
       >
-        <Upload className="w-12 h-12 text-green-600 mx-auto mb-3" />
-        <div className="font-medium text-gray-900">{labelUploadFile}</div>
-        <div className="text-sm text-gray-600 mt-1">{labelUseExisting}</div>
+        <Upload className="w-12 h-12 text-primary-600 mx-auto mb-3" />
+        <div className="font-medium text-neutral-900">{labelUploadFile}</div>
+        <div className="text-sm text-neutral-600 mt-1">{labelUseExisting}</div>
         <input
           ref={fileInputRef}
           type="file"

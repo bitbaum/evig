@@ -34,7 +34,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
   const isPositive = pctChange >= 0
 
   return (
-    <span className={`inline-flex items-center text-xs font-medium ${isPositive ? 'text-green-600' : 'text-red-500'}`}>
+    <span className={`inline-flex items-center text-xs font-medium ${isPositive ? 'text-primary-600' : 'text-red-500'}`}>
       {isPositive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
       {Math.abs(pctChange).toFixed(0)}%
     </span>
@@ -72,7 +72,7 @@ export default function FinancesContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       <PageHero
         theme="about"
         icon={Wallet}
@@ -94,48 +94,48 @@ export default function FinancesContent() {
         ) : error ? (
           <div className="text-center py-12">
             <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <p className="text-gray-600">{t('errorMessage')}</p>
+            <p className="text-neutral-600">{t('errorMessage')}</p>
           </div>
         ) : data.length === 0 ? (
           <div className="text-center py-12">
-            <Wallet className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-600">{t('noData')}</p>
+            <Wallet className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+            <p className="text-neutral-600">{t('noData')}</p>
           </div>
         ) : (
           <>
             {/* Key Metrics Cards */}
             {latest && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-neutral-100">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">{t('metrics.totalRevenue', { year: latest.year })}</span>
+                    <span className="text-sm text-neutral-600">{t('metrics.totalRevenue', { year: latest.year })}</span>
                     {previous && <TrendIndicator current={latest.totals.total} previous={previous.totals.total} />}
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">{formatCHF(latest.totals.total)}</p>
+                  <p className="text-2xl font-bold text-neutral-900">{formatCHF(latest.totals.total)}</p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-neutral-100">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600 flex items-center gap-1">
+                    <span className="text-sm text-neutral-600 flex items-center gap-1">
                       <TrendingUp className="w-4 h-4" />
                       {t('metrics.selfFinancing')}
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-green-600">{latest.derived.eigenfinanzierungPct}%</p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-2xl font-bold text-primary-600">{latest.derived.eigenfinanzierungPct}%</p>
+                  <p className="text-xs text-neutral-600 mt-1">
                     {formatCHF(latest.derived.earnedTotal)} {t('metrics.selfFinancingEarned')}
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <div className="bg-white rounded-xl p-6 shadow-sm border border-neutral-100">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600 flex items-center gap-1">
+                    <span className="text-sm text-neutral-600 flex items-center gap-1">
                       <Heart className="w-4 h-4" />
                       {t('metrics.donationsFunding')}
                     </span>
                   </div>
-                  <p className="text-2xl font-bold text-gray-900">{formatCHF(latest.derived.donationsTotal)}</p>
-                  <p className="text-xs text-gray-600 mt-1">
+                  <p className="text-2xl font-bold text-neutral-900">{formatCHF(latest.derived.donationsTotal)}</p>
+                  <p className="text-xs text-neutral-600 mt-1">
                     {(100 - latest.derived.eigenfinanzierungPct).toFixed(1)}% {t('metrics.donationsPct')}
                   </p>
                 </div>
@@ -143,44 +143,44 @@ export default function FinancesContent() {
             )}
 
             {/* Revenue Breakdown Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-10">
-              <div className="px-6 py-4 border-b border-gray-100">
-                <Heading level={2} className="text-lg text-gray-900">{t('table.title')}</Heading>
-                <p className="text-sm text-gray-600">{t('table.subtitle')}</p>
+            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden mb-10">
+              <div className="px-6 py-4 border-b border-neutral-100">
+                <Heading level={2} className="text-lg text-neutral-900">{t('table.title')}</Heading>
+                <p className="text-sm text-neutral-600">{t('table.subtitle')}</p>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="bg-gray-50">
-                      <th className="text-left px-6 py-3 font-medium text-gray-600">{t('table.source')}</th>
+                    <tr className="bg-neutral-50">
+                      <th className="text-left px-6 py-3 font-medium text-neutral-600">{t('table.source')}</th>
                       {data.map(d => (
-                        <th key={d.year} className="text-right px-6 py-3 font-medium text-gray-600">{d.year}</th>
+                        <th key={d.year} className="text-right px-6 py-3 font-medium text-neutral-600">{d.year}</th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
+                  <tbody className="divide-y divide-neutral-100">
                     {tableRows.map(row => (
-                      <tr key={row.key} className="hover:bg-gray-50">
-                        <td className="px-6 py-3 text-gray-700">{t(`table.${row.labelKey}` as Parameters<typeof t>[0])}</td>
+                      <tr key={row.key} className="hover:bg-neutral-50">
+                        <td className="px-6 py-3 text-neutral-700">{t(`table.${row.labelKey}` as Parameters<typeof t>[0])}</td>
                         {data.map(d => (
-                          <td key={d.year} className="px-6 py-3 text-right font-mono text-gray-900">
+                          <td key={d.year} className="px-6 py-3 text-right font-mono text-neutral-900">
                             {formatCHF(d.totals[row.key])}
                           </td>
                         ))}
                       </tr>
                     ))}
-                    <tr className="bg-gray-50 font-bold">
-                      <td className="px-6 py-3 text-gray-900">{t('table.rows.total')}</td>
+                    <tr className="bg-neutral-50 font-bold">
+                      <td className="px-6 py-3 text-neutral-900">{t('table.rows.total')}</td>
                       {data.map(d => (
-                        <td key={d.year} className="px-6 py-3 text-right font-mono text-gray-900">
+                        <td key={d.year} className="px-6 py-3 text-right font-mono text-neutral-900">
                           {formatCHF(d.totals.total)}
                         </td>
                       ))}
                     </tr>
-                    <tr className="border-t-2 border-gray-200">
-                      <td className="px-6 py-3 text-gray-700">{t('table.rows.eigenfinanzierungsquote')}</td>
+                    <tr className="border-t-2 border-neutral-200">
+                      <td className="px-6 py-3 text-neutral-700">{t('table.rows.eigenfinanzierungsquote')}</td>
                       {data.map(d => (
-                        <td key={d.year} className="px-6 py-3 text-right font-mono text-green-600 font-medium">
+                        <td key={d.year} className="px-6 py-3 text-right font-mono text-primary-600 font-medium">
                           {d.derived.eigenfinanzierungPct}%
                         </td>
                       ))}
@@ -191,9 +191,9 @@ export default function FinancesContent() {
             </div>
 
             {/* Methodology Note */}
-            <div className="bg-green-50 border border-green-200 rounded-xl p-6">
-              <Heading level={3} className="text-green-900 mb-2">{t('methodology.title')}</Heading>
-              <ul className="text-sm text-green-800 space-y-1">
+            <div className="bg-primary-50 border border-primary-200 rounded-xl p-6">
+              <Heading level={3} className="text-primary-900 mb-2">{t('methodology.title')}</Heading>
+              <ul className="text-sm text-primary-800 space-y-1">
                 <li>{t('methodology.point1')}</li>
                 <li>{t('methodology.point2')}</li>
                 <li>{t('methodology.point3')}</li>

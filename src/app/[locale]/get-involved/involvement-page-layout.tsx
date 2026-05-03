@@ -27,7 +27,7 @@ export async function InvolvementPageLayout({
       <ResponsiveHero title={title} description={description}>
         <a
           href={ctaHref}
-          className={`${responsiveButtons.primary} bg-white text-green-800 hover:bg-green-50 text-center`}
+          className={`${responsiveButtons.primary} bg-white text-primary-800 hover:bg-primary-50 text-center`}
         >
           {ctaText}
         </a>
@@ -43,24 +43,24 @@ export async function InvolvementPageLayout({
       </section>
 
       {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-gray-50`}>
+      <section className={`${responsiveSpacing.section} bg-neutral-50`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
           <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbMedium}`}>
             {t('readyHeading')}
           </Heading>
-          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-gray-600`}>
+          <p className={`${responsiveTypography.lead} ${responsiveSpacing.mbLarge} max-w-2xl mx-auto text-neutral-600`}>
             {t('readyBody')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Link
               href="/get-involved/kontakt"
-              className={`${responsiveButtons.large} bg-green-600 text-white hover:bg-green-700`}
+              className={`${responsiveButtons.large} bg-primary-600 text-white hover:bg-primary-700`}
             >
               {t('expressInterestBtn')}
             </Link>
             <Link
               href="/get-involved"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-green-600 text-green-600 hover:bg-green-50`}
+              className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50`}
             >
               {t('exploreOptionsBtn')}
             </Link>

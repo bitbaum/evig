@@ -28,7 +28,7 @@ const GRID_COLS: Record<2 | 3 | 4 | 5, string> = {
 }
 
 const TREND_COLOR = {
-  green: 'text-green-600 dark:text-green-400',
+  green: 'text-primary-600 dark:text-primary-400',
   red:   'text-red-600 dark:text-red-400',
   amber: 'text-amber-600 dark:text-amber-400',
 }
@@ -44,7 +44,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
         return (
           <div
             key={index}
-            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4"
+            className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4"
           >
             <div className="flex items-start gap-3">
               {/* Icon box */}
@@ -57,7 +57,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
                 <p className={cn(adminType.stat, valueColor)}>{item.value}</p>
                 <p className={adminType.statLabel}>{item.label}</p>
                 {item.trend && (
-                  <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-gray-400')}>
+                  <p className={cn('text-xs mt-0.5', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-neutral-400')}>
                     {item.trend}
                   </p>
                 )}

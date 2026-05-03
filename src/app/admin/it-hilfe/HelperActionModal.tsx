@@ -33,12 +33,12 @@ export function HelperActionModal({
     >
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notizen</label>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Notizen</label>
           <textarea
             value={helperNotes}
             onChange={e => setHelperNotes(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600"
             placeholder="Begründung (optional)..."
           />
         </div>

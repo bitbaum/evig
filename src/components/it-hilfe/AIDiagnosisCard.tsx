@@ -16,23 +16,23 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
     <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl border border-emerald-200 p-6">
       <div className="flex items-center gap-2 mb-3">
         <Stethoscope className="w-5 h-5 text-emerald-600" />
-        <Heading level={3} className="text-lg font-semibold text-gray-900">{t('title')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('title')}</Heading>
       </div>
 
       {deviceInfo && (
-        <p className="text-sm text-gray-500 mb-2">{deviceInfo}</p>
+        <p className="text-sm text-neutral-500 mb-2">{deviceInfo}</p>
       )}
 
-      <p className="text-gray-700 mb-4 whitespace-pre-wrap">{diagnosis}</p>
+      <p className="text-neutral-700 mb-4 whitespace-pre-wrap">{diagnosis}</p>
 
       <div className="bg-white/60 rounded-lg p-4 mb-3">
         <div className="flex items-start gap-2">
           <MapPin className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-neutral-900">
               {t('bringIn')}
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-neutral-600">
               {REVAMPIT_STORE.name} &ndash; {REVAMPIT_STORE.address}, {REVAMPIT_STORE.postalCode} {REVAMPIT_STORE.city}
             </p>
             <a
@@ -48,7 +48,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
         </div>
       </div>
 
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-neutral-500">
         {t('disclaimer')}
       </p>
     </div>

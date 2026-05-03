@@ -135,7 +135,7 @@ export default function SuggestionButton() {
             <div className="absolute top-4 left-4 right-4 sm:right-4 sm:left-auto flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2" style={{ pointerEvents: 'auto' }}>
               <button
                 onClick={() => setIsElementSelectionMode(false)}
-                className="bg-green-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-green-700 active:bg-green-800 transition-colors touch-manipulation"
+                className="bg-primary-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-primary-700 active:bg-primary-800 transition-colors touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 Fertig ({selectedElements.length})
@@ -145,7 +145,7 @@ export default function SuggestionButton() {
                   setIsElementSelectionMode(false)
                   resetToPageScope()
                 }}
-                className="bg-gray-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-gray-700 active:bg-gray-800 transition-colors touch-manipulation"
+                className="bg-neutral-600 text-white px-4 py-3 sm:px-3 sm:py-2 rounded-lg shadow-lg text-sm font-medium hover:bg-neutral-700 active:bg-neutral-800 transition-colors touch-manipulation"
                 style={{ pointerEvents: 'auto' }}
               >
                 Abbrechen
@@ -166,31 +166,31 @@ export default function SuggestionButton() {
             aria-labelledby="suggestion-panel-title"
             data-suggestion-panel
             className={cn(
-              "bg-white shadow-2xl border border-gray-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
+              "bg-white shadow-2xl border border-neutral-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
               "w-[calc(100%-2rem)] max-w-sm sm:w-80 md:w-96",
               isElementSelectionMode && "ring-2 ring-blue-500 ring-opacity-50 pointer-events-auto"
             )}
             style={{ pointerEvents: 'auto' }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-50 to-blue-50 border-b border-gray-200 px-4 py-3 flex-shrink-0">
+            <div className="bg-gradient-to-r from-primary-50 to-blue-50 border-b border-neutral-200 px-4 py-3 flex-shrink-0">
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
-                  <Edit3 className="w-4 h-4 text-green-600" />
-                  <Heading level={3} id="suggestion-panel-title" className="font-semibold text-gray-900 text-sm">
+                  <Edit3 className="w-4 h-4 text-primary-600" />
+                  <Heading level={3} id="suggestion-panel-title" className="font-semibold text-neutral-900 text-sm">
                     Verbesserungen vorschlagen
                   </Heading>
                 </div>
                 <button
                   onClick={closePanelAndReset}
-                  className="text-gray-500 hover:text-gray-600 active:bg-gray-200 transition-colors p-2 sm:p-1 hover:bg-gray-100 rounded-full touch-manipulation"
+                  className="text-neutral-500 hover:text-neutral-600 active:bg-neutral-200 transition-colors p-2 sm:p-1 hover:bg-neutral-100 rounded-full touch-manipulation"
                   aria-label="Panel schliessen"
                 >
                   <X className="w-5 h-5 sm:w-4 sm:h-4" />
                 </button>
               </div>
-              <div className="mt-2 text-xs text-gray-600">
-                Aktuelle Seite: <span className="font-medium text-gray-900">
+              <div className="mt-2 text-xs text-neutral-600">
+                Aktuelle Seite: <span className="font-medium text-neutral-900">
                   {getCurrentPageInfo().path === '/' ? 'Startseite' : getCurrentPageInfo().title}
                 </span>
               </div>
@@ -219,7 +219,7 @@ export default function SuggestionButton() {
                     />
 
                     <div>
-                      <label htmlFor="suggestion" className="block text-xs font-medium text-gray-700 mb-1">
+                      <label htmlFor="suggestion" className="block text-xs font-medium text-neutral-700 mb-1">
                         Ihr Verbesserungsvorschlag *
                       </label>
                       <textarea
@@ -228,7 +228,7 @@ export default function SuggestionButton() {
                         className={cn(
                           "w-full px-2 py-1.5 border rounded focus:outline-none focus:ring-1 focus:border-transparent resize-none text-xs transition-colors",
                           config.focusRing,
-                          submitError ? "border-red-500" : "border-gray-300"
+                          submitError ? "border-red-500" : "border-neutral-300"
                         )}
                         rows={3}
                         maxLength={500}
@@ -249,7 +249,7 @@ export default function SuggestionButton() {
                             {'\uD83C\uDFAF'} {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt
                           </p>
                         )}
-                        <p className="text-xs text-gray-500 ml-auto">
+                        <p className="text-xs text-neutral-500 ml-auto">
                           {textValue.length}/500
                         </p>
                       </div>
@@ -265,7 +265,7 @@ export default function SuggestionButton() {
                         ref={contactRef}
                         type="text"
                         id="contact"
-                        className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500 text-xs"
+                        className="w-full px-2 py-1 border border-neutral-300 rounded focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500 text-xs"
                         placeholder="Name/E-Mail (optional)"
                         autoComplete="off"
                       />
@@ -288,13 +288,13 @@ export default function SuggestionButton() {
                         type="button"
                         onClick={closePanelAndReset}
                         disabled={isSubmitting}
-                        className="px-2 py-1 text-xs rounded border-gray-300 hover:bg-gray-50 border"
+                        className="px-2 py-1 text-xs rounded border-neutral-300 hover:bg-neutral-50 border"
                       >
                         Abbrechen
                       </button>
                     </div>
 
-                    <div className="text-xs text-gray-400 text-center">
+                    <div className="text-xs text-neutral-400 text-center">
                       ESC schliesst | Ctrl+Enter sendet
                     </div>
                   </form>
@@ -303,7 +303,7 @@ export default function SuggestionButton() {
             </div>
 
             {/* Footer */}
-            <div className="border-t border-gray-200 px-4 py-3 bg-gray-50 flex-shrink-0">
+            <div className="border-t border-neutral-200 px-4 py-3 bg-neutral-50 flex-shrink-0">
             </div>
           </div>
         </div>
@@ -318,14 +318,14 @@ export default function SuggestionButton() {
         onClick={() => { setIsExpanded(true); uiEvents.emit('openSuggestion') }}
         className={cn(
           "group relative",
-          "bg-green-100 hover:bg-green-600 text-green-600 hover:text-white",
+          "bg-primary-100 hover:bg-primary-600 text-primary-600 hover:text-white",
           "w-12 h-12 sm:w-12 sm:h-12 rounded-full shadow-lg hover:shadow-xl",
           "transition-all duration-300 ease-out",
-          "focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
+          "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
           "flex items-center justify-center",
           "border-2 border-white shadow-black/10",
           "hover:scale-110 active:scale-95 touch-manipulation",
-          isExpanded && "ring-2 ring-green-500 ring-offset-2"
+          isExpanded && "ring-2 ring-primary-500 ring-offset-2"
         )}
         aria-label="Verbesserungen vorschlagen öffnen"
         aria-expanded={isExpanded}

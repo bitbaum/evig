@@ -17,21 +17,21 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Package className="w-8 h-8 text-green-600" />
+        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Package className="w-8 h-8 text-primary-600" />
         </div>
-        <Heading level={2} className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
           {t('title')}
         </Heading>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">
-          {t('itemUUIDLabel')} <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">{itemUUID}</code>
+        <p className="text-neutral-600 dark:text-neutral-400 mb-4">
+          {t('itemUUIDLabel')} <code className="bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">{itemUUID}</code>
         </p>
 
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
           <Link
             href={`/admin/products/${productId}/factsheet`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
             <Printer className="w-5 h-5" />
             {t('printFactsheet')}
@@ -39,14 +39,14 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
           >
             <Plus className="w-5 h-5" />
             {t('captureAnother')}
           </button>
           <Link
             href="/admin/products"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
           >
             <FileText className="w-5 h-5" />
             {t('toOverview')}

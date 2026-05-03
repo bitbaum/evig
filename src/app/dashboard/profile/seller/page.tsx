@@ -132,7 +132,7 @@ export default function SellerProfileEditPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
       </div>
     )
   }
@@ -141,26 +141,26 @@ export default function SellerProfileEditPage() {
     <div className="max-w-2xl mx-auto">
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6"
+        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToDashboard')}
       </Link>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-          <Heading level={1} className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <User className="w-5 h-5 text-green-600" />
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
+          <Heading level={1} className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
+            <User className="w-5 h-5 text-primary-600" />
             {t('pageTitle')}
           </Heading>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
             {noProfile ? t('noProfileDesc') : t('editProfileDesc')}
           </p>
         </div>
 
         <div className="p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('displayNameLabel')}
             </label>
             <input
@@ -168,12 +168,12 @@ export default function SellerProfileEditPage() {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder={t('displayNamePlaceholder')}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('bioLabel')}
             </label>
             <textarea
@@ -181,12 +181,12 @@ export default function SellerProfileEditPage() {
               onChange={(e) => setBio(e.target.value)}
               rows={3}
               placeholder={t('bioPlaceholder')}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
+              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white resize-y"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('avatarLabel')}
             </label>
             <div className="flex items-center gap-4">
@@ -195,7 +195,7 @@ export default function SellerProfileEditPage() {
                   <img
                     src={avatarUrl}
                     alt={t('avatarAlt')}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600"
+                    className="w-16 h-16 rounded-full object-cover border-2 border-neutral-200 dark:border-neutral-600"
                   />
                   <button
                     type="button"
@@ -206,11 +206,11 @@ export default function SellerProfileEditPage() {
                   </button>
                 </div>
               ) : (
-                <div className="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center border border-gray-200 dark:border-gray-600">
-                  <User className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <div className="w-16 h-16 rounded-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center border border-neutral-200 dark:border-neutral-600">
+                  <User className="w-6 h-6 text-neutral-500 dark:text-neutral-400" />
                 </div>
               )}
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
@@ -231,13 +231,13 @@ export default function SellerProfileEditPage() {
               value={avatarUrl}
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder={t('avatarUrlPlaceholder')}
-              className="mt-2 w-full px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="mt-2 w-full px-4 py-2 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 {t('cityLabel')}
               </label>
               <input
@@ -245,11 +245,11 @@ export default function SellerProfileEditPage() {
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
                 placeholder={t('cityPlaceholder')}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 {t('cantonLabel')}
               </label>
               <input
@@ -257,13 +257,13 @@ export default function SellerProfileEditPage() {
                 value={canton}
                 onChange={(e) => setCanton(e.target.value)}
                 placeholder={t('cantonPlaceholder')}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
               />
             </div>
           </div>
         </div>
 
-        <div className="p-6 border-t border-gray-100 dark:border-gray-700">
+        <div className="p-6 border-t border-neutral-100 dark:border-neutral-700">
           {error && (
             <div className="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -271,9 +271,9 @@ export default function SellerProfileEditPage() {
             </div>
           )}
           {success && (
-            <div className="mb-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
-              <p className="text-sm text-green-800 dark:text-green-200">{success}</p>
+            <div className="mb-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-3 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-primary-600 flex-shrink-0" />
+              <p className="text-sm text-primary-800 dark:text-primary-200">{success}</p>
             </div>
           )}
           <Button

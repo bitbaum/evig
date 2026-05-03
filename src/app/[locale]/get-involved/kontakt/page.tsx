@@ -39,7 +39,7 @@ export default async function KontaktPage({ params, searchParams }: KontaktPageP
         {/* Back link */}
         <Link
           href="/get-involved"
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700 mb-8"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backLink')}
@@ -47,16 +47,16 @@ export default async function KontaktPage({ params, searchParams }: KontaktPageP
 
         {/* Header */}
         <div className="mb-8">
-          <Heading level={1} className="text-gray-900 mb-2">
+          <Heading level={1} className="text-neutral-900 mb-2">
             {t('titlePrefix')} {topicLabel}
           </Heading>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             {t('body')}
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6 sm:p-8">
+        <div className="bg-neutral-50 rounded-2xl border border-neutral-200 p-6 sm:p-8">
           <InquiryForm defaultThema={thema} topicLabel={topicLabel} />
         </div>
 

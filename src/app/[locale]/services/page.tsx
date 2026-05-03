@@ -84,8 +84,8 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
             service.available
-              ? 'bg-green-100 text-green-600 group-hover:bg-green-600 group-hover:text-white'
-              : 'bg-gray-100 text-gray-400'
+              ? 'bg-primary-100 text-primary-600 group-hover:bg-primary-600 group-hover:text-white'
+              : 'bg-neutral-100 text-neutral-400'
           }`}>
             <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
           </div>
@@ -93,47 +93,47 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             <div className="flex items-center gap-2 mb-2">
               <Heading level={3} className="text-xl sm:text-2xl font-bold">{service.title}</Heading>
               {service.badge && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
                   {service.badge}
                 </span>
               )}
             </div>
             <div className={`flex items-center font-semibold mb-4 ${
-              service.available ? 'text-green-600' : 'text-gray-400'
+              service.available ? 'text-primary-600' : 'text-neutral-400'
             }`}>
               <Zap className="w-4 h-4 mr-2" />
               <span>{service.highlight}</span>
             </div>
           </div>
         </div>
-        <p className="text-gray-600 mb-6 flex-grow">{service.description}</p>
+        <p className="text-neutral-600 mb-6 flex-grow">{service.description}</p>
         <div className="space-y-3 mb-6">
           {service.features.map((feature, i) => (
-            <div key={i} className="flex items-center text-gray-600">
+            <div key={i} className="flex items-center text-neutral-600">
               <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${
-                service.available ? 'text-green-500' : 'text-gray-400'
+                service.available ? 'text-primary-500' : 'text-neutral-400'
               }`} />
               <span>{feature}</span>
             </div>
           ))}
         </div>
-        <div className="mt-auto pt-6 border-t border-gray-200">
+        <div className="mt-auto pt-6 border-t border-neutral-200">
           <div className="flex items-center justify-between mb-4">
             {service.pricing ? (
               <span className={`text-lg font-semibold ${
-                service.available ? 'text-green-600' : 'text-gray-400'
+                service.available ? 'text-primary-600' : 'text-neutral-400'
               }`}>
                 {service.pricing}
               </span>
             ) : (
-              <span className="text-gray-500 text-sm">{t('pricingTbd')}</span>
+              <span className="text-neutral-500 text-sm">{t('pricingTbd')}</span>
             )}
             <Link
               href={service.href}
               className={`inline-flex items-center font-medium transition-colors duration-300 group text-sm ${
                 service.available
-                  ? 'text-gray-600 hover:text-gray-700'
-                  : 'text-gray-500 hover:text-gray-600'
+                  ? 'text-neutral-600 hover:text-neutral-700'
+                  : 'text-neutral-500 hover:text-neutral-600'
               }`}
             >
               <span>{t('details')}</span>
@@ -144,19 +144,19 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
-                <div className="w-full inline-flex items-center justify-center text-green-600 font-semibold bg-green-50 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-primary-600 font-semibold bg-primary-50 px-4 py-2 rounded-lg">
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   {t('appointmentRequested')}
                 </div>
               ) : bookingStatus === 'booking' ? (
-                <div className="w-full inline-flex items-center justify-center text-gray-600 font-semibold bg-gray-50 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-neutral-600 font-semibold bg-neutral-50 px-4 py-2 rounded-lg">
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   {t('booking')}
                 </div>
               ) : !session?.user ? (
                 <button
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
-                  className="flex-1 inline-flex items-center justify-center text-green-600 hover:text-green-800 font-semibold bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 hover:bg-primary-100 px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
@@ -173,7 +173,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : (
                 <Link
                   href={service.href}
-                  className="flex-1 inline-flex items-center justify-center text-green-600 hover:text-green-800 font-semibold bg-green-50 hover:bg-green-100 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 hover:bg-primary-100 px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <ArrowRight className="w-4 h-4 mr-2" />
                   {t('learnMore')}
@@ -247,7 +247,7 @@ export default function ServicesPage() {
           })
         }}
       />
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-neutral-50">
         <PageHero
           theme="services"
           icon={Wrench}
@@ -266,10 +266,10 @@ export default function ServicesPage() {
           showResultsCount={true}
         />
 
-        <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-gray-200">
+        <section className="py-12 sm:py-16 md:py-20 bg-white border-t border-neutral-200">
           <div className="container mx-auto px-4 sm:px-6 text-center">
-            <Heading level={2} className="mb-4 sm:mb-6 text-gray-900">{t('ctaTitle')}</Heading>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-gray-600">{t('ctaSubtitle')}</p>
+            <Heading level={2} className="mb-4 sm:mb-6 text-neutral-900">{t('ctaTitle')}</Heading>
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-neutral-600">{t('ctaSubtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"

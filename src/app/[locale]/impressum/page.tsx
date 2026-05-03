@@ -41,8 +41,8 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
 
         <Heading level={3}>{t('contact')}</Heading>
         <p>
-          {t('emailLabel')} <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a><br />
-          {t('phoneLabel')} <a href={CONTACT.phoneTel} className="text-green-700 underline">{CONTACT.phone}</a>
+          {t('emailLabel')} <a href={`mailto:${CONTACT.email}`} className="text-primary-700 underline">{CONTACT.email}</a><br />
+          {t('phoneLabel')} <a href={CONTACT.phoneTel} className="text-primary-700 underline">{CONTACT.phone}</a>
         </p>
 
         <Heading level={3}>{t('authorised')}</Heading>
@@ -68,9 +68,9 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
         <Heading level={2}>{t('furtherLegal')}</Heading>
         <p>
           {t('furtherLegalText')}{' '}
-          <Link href="/datenschutz" className="text-green-700 underline">{t('privacyLinkLabel')}</Link>
+          <Link href="/datenschutz" className="text-primary-700 underline">{t('privacyLinkLabel')}</Link>
           {' '}{t('agbLinkLabel') && (
-            <Link href="/agb" className="text-green-700 underline">{t('agbLinkLabel')}</Link>
+            <Link href="/agb" className="text-primary-700 underline">{t('agbLinkLabel')}</Link>
           )}.
         </p>
 

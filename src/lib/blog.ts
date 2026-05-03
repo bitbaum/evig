@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import matter from 'gray-matter'
+import matter from 'neutral-matter'
 
 const postsDirectory = path.join(process.cwd(), 'content/posts')
 

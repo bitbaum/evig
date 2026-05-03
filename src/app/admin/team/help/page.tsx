@@ -115,7 +115,7 @@ export default async function HelpRequestsPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/team"
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
@@ -123,10 +123,10 @@ export default async function HelpRequestsPage() {
             <HelpCircle className="w-6 h-6 text-yellow-600" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
               Hilfsanfragen
             </Heading>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-neutral-600 dark:text-neutral-400">
               Hilfe anfordern und Kollegen unterstützen
             </p>
           </div>
@@ -135,50 +135,50 @@ export default async function HelpRequestsPage() {
 
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
               <HelpCircle className="w-5 h-5 text-yellow-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.open}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Offen</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.open}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Offen</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <Users className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.in_progress}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">In Bearbeitung</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.in_progress}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">In Bearbeitung</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-              <CheckCircle className="w-5 h-5 text-green-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <CheckCircle className="w-5 h-5 text-primary-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.resolved_this_week}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Diese Woche gelöst</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.resolved_this_week}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Diese Woche gelöst</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.urgent_open}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Dringend</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.urgent_open}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Dringend</p>
             </div>
           </div>
         </div>

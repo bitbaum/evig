@@ -116,7 +116,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   benefits: [
     {
       icon: Users,
-      iconColor: 'text-green-600',
+      iconColor: 'text-primary-600',
       title: 'Direkt mit Kunden verbinden',
       description: 'Erhalte direkte Anfragen von Kunden in deinem Einzugsgebiet. Keine Zwischenhändler, volle Kontrolle über deine Dienstleistungen.'
     },
@@ -174,7 +174,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   trustBadges: [
     {
       icon: Shield,
-      iconColor: 'text-green-600',
+      iconColor: 'text-primary-600',
       title: 'Verifiziert',
       subtitle: 'Qualitätsgeprüft'
     },

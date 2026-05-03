@@ -57,7 +57,7 @@ export default async function VolunteerPage({ params }: VolunteerPageProps) {
 
         {/* Benefits Section */}
         <section className="space-y-8">
-          <Heading level={2} className={`${responsiveTypography.section} text-gray-900`}>
+          <Heading level={2} className={`${responsiveTypography.section} text-neutral-900`}>
             {t('volunteer.benefitsHeading')}
           </Heading>
           <BenefitCardGrid>

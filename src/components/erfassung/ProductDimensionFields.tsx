@@ -29,60 +29,60 @@ export function ProductDimensionFields({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       {/* Dimensions */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
-        <Heading level={2} className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 sm:p-6">
+        <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
           <Ruler className="w-5 h-5" />
           {t('dimensionsTitle')}
         </Heading>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="dimension-length" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('length')}</label>
+            <label htmlFor="dimension-length" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('length')}</label>
             <input
               id="dimension-length"
               type="number"
               value={formData.laenge_mm}
               onChange={(e) => onFieldChange('laenge_mm', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
             />
           </div>
           <div>
-            <label htmlFor="dimension-width" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('width')}</label>
+            <label htmlFor="dimension-width" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('width')}</label>
             <input
               id="dimension-width"
               type="number"
               value={formData.breite_mm}
               onChange={(e) => onFieldChange('breite_mm', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
             />
           </div>
           <div>
-            <label htmlFor="dimension-height" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('height')}</label>
+            <label htmlFor="dimension-height" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('height')}</label>
             <input
               id="dimension-height"
               type="number"
               value={formData.hoehe_mm}
               onChange={(e) => onFieldChange('hoehe_mm', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
             />
           </div>
           <div>
-            <label htmlFor="dimension-weight" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('weight')}</label>
+            <label htmlFor="dimension-weight" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('weight')}</label>
             <input
               id="dimension-weight"
               type="number"
               step="0.01"
               value={formData.gewicht_kg}
               onChange={(e) => onFieldChange('gewicht_kg', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
             />
           </div>
         </div>
       </div>
 
       {/* Inventory */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6">
-        <Heading level={2} className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 sm:p-6">
+        <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
           <MapPin className="w-5 h-5" />
           {t('stockTitle')}
         </Heading>
@@ -90,7 +90,7 @@ export function ProductDimensionFields({
         <div className="grid grid-cols-2 gap-3">
           {/* Desktop price */}
           <div className="hidden sm:block">
-            <label htmlFor="dimension-price" className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-1">
+            <label htmlFor="dimension-price" className="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400 mb-1">
               <span>{t('price')}</span>
               {aiMetadata.verkaufspreis && (
                 <AIFieldIndicator source={aiMetadata.verkaufspreis} fieldName="verkaufspreis" />
@@ -102,41 +102,41 @@ export function ProductDimensionFields({
               step="0.01"
               value={formData.verkaufspreis}
               onChange={(e) => onFieldChange('verkaufspreis', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 ${
-                aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-gray-300 dark:border-gray-600'
+              className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 ${
+                aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
               }`}
               required
             />
           </div>
           <div>
-            <label htmlFor="dimension-stock" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('stock')}</label>
+            <label htmlFor="dimension-stock" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('stock')}</label>
             <input
               id="dimension-stock"
               type="number"
               value={formData.auf_lager}
               onChange={(e) => onFieldChange('auf_lager', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
             />
           </div>
           <div>
-            <label htmlFor="dimension-location" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('location')}</label>
+            <label htmlFor="dimension-location" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('location')}</label>
             <input
               id="dimension-location"
               type="text"
               value={formData.location}
               onChange={(e) => onFieldChange('location', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
               placeholder={t('locationPlaceholder')}
             />
           </div>
           <div>
-            <label htmlFor="dimension-box-id" className="block text-sm text-gray-600 dark:text-gray-400 mb-1">{t('boxId')}</label>
+            <label htmlFor="dimension-box-id" className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">{t('boxId')}</label>
             <input
               id="dimension-box-id"
               type="text"
               value={formData.box_id}
               onChange={(e) => onFieldChange('box_id', e.target.value)}
-              className="w-full px-3 py-2.5 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 touch-manipulation"
+              className="w-full px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 touch-manipulation"
               placeholder={t('boxIdPlaceholder')}
             />
           </div>

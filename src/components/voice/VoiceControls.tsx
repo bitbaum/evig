@@ -129,7 +129,7 @@ export function VoiceControls({
           <Button
             type="button"
             onClick={onSubmit}
-            className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white"
+            className="w-16 h-16 rounded-full bg-primary-500 hover:bg-primary-600 text-white"
           >
             <Send className="w-6 h-6" />
           </Button>
@@ -142,7 +142,7 @@ export function VoiceControls({
           <div className="w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center">
             <Loader2 className="w-8 h-8 text-white animate-spin" />
           </div>
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="text-sm text-neutral-600 dark:text-neutral-400">
             Verarbeite...
           </span>
         </div>
@@ -151,10 +151,10 @@ export function VoiceControls({
       {/* Success state */}
       {state === 'success' && (
         <div className="flex flex-col items-center gap-2">
-          <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-primary-500 flex items-center justify-center">
             <CheckCircle2 className="w-8 h-8 text-white" />
           </div>
-          <span className="text-sm text-green-600">Erkannt!</span>
+          <span className="text-sm text-primary-600">Erkannt!</span>
         </div>
       )}
 

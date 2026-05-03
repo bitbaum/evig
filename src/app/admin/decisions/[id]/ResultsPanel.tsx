@@ -57,7 +57,7 @@ function Bar({
   return (
     <div className="flex items-center gap-3">
       {imageUrl ? (
-        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 bg-white">
+        <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-md border border-neutral-200 bg-white">
           <Image src={imageUrl} alt={label} fill className="object-contain p-0.5" unoptimized />
         </div>
       ) : (
@@ -65,13 +65,13 @@ function Bar({
           <span className={`text-sm ${isWinner ? 'font-bold text-amber-500' : 'text-transparent'}`}>★</span>
         )
       )}
-      <span className="w-28 truncate text-sm text-gray-700">{label}</span>
+      <span className="w-28 truncate text-sm text-neutral-700">{label}</span>
       <div className="flex-1">
-        <div className="h-6 overflow-hidden rounded-md bg-gray-100">
+        <div className="h-6 overflow-hidden rounded-md bg-neutral-100">
           <div className={`h-full rounded-md ${color}`} style={{ width: `${pct}%` }} />
         </div>
       </div>
-      <span className="w-10 text-right text-sm font-medium text-gray-700">{value}</span>
+      <span className="w-10 text-right text-sm font-medium text-neutral-700">{value}</span>
     </div>
   );
 }
@@ -90,8 +90,8 @@ function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
       )}
       <div>
         <div className="text-xs font-medium uppercase tracking-wide text-amber-600">Gewinner</div>
-        <div className="text-lg font-bold text-gray-900">{opt.label}</div>
-        <div className="text-sm text-gray-600">{metric}</div>
+        <div className="text-lg font-bold text-neutral-900">{opt.label}</div>
+        <div className="text-sm text-neutral-600">{metric}</div>
       </div>
       <span className="ml-auto text-3xl">★</span>
     </div>
@@ -104,7 +104,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
-      <Heading level={2} className="mb-4 text-lg font-semibold text-gray-900">Ergebnis</Heading>
+      <Heading level={2} className="mb-4 text-lg font-semibold text-neutral-900">Ergebnis</Heading>
 
       {/* AI Outcome Narrative — Beschluss hero */}
       {aiOutcomeNarrative && (
@@ -112,7 +112,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
             Beschluss
           </p>
-          <p className="text-sm font-medium leading-relaxed text-gray-900 dark:text-white">
+          <p className="text-sm font-medium leading-relaxed text-neutral-900 dark:text-white">
             {aiOutcomeNarrative}
           </p>
         </div>
@@ -123,12 +123,12 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
         <div className="mb-4">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              data.passed ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+              data.passed ? 'bg-primary-100 text-primary-700' : 'bg-red-100 text-red-700'
             }`}
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
           </span>
-          <span className="ml-2 text-sm text-gray-500">{data.totalVotes} Stimmen</span>
+          <span className="ml-2 text-sm text-neutral-500">{data.totalVotes} Stimmen</span>
         </div>
       )}
 
@@ -142,10 +142,10 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               value={count}
               max={data.totalVotes || 0}
               color={
-                key === 'agree' ? 'bg-green-400'
+                key === 'agree' ? 'bg-primary-400'
                   : key === 'block' ? 'bg-red-400'
                   : key === 'disagree' ? 'bg-orange-400'
-                  : 'bg-gray-300'
+                  : 'bg-neutral-300'
               }
             />
           ))}
@@ -240,7 +240,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               label={SIMPLE_MAJORITY_RESPONSE_CONFIG[key]?.label || key}
               value={count}
               max={data.totalVotes || 0}
-              color={key === 'yes' ? 'bg-green-400' : key === 'no' ? 'bg-red-400' : 'bg-gray-300'}
+              color={key === 'yes' ? 'bg-primary-400' : key === 'no' ? 'bg-red-400' : 'bg-neutral-300'}
             />
           ))}
         </div>
@@ -271,7 +271,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               />
             );
           })}
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-neutral-500">
             Borda-Methode: {data.totalVotes} Stimmen · max. {data.maxPossiblePoints} mögliche Punkte
           </p>
         </div>

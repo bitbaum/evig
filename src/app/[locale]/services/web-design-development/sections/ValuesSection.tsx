@@ -14,7 +14,7 @@ import {
 const VALUE_ICONS = [Code, Globe, Shield, Database, Heart, Zap, Users, Monitor]
 
 const VALUE_STYLES = [
-  { borderColor: 'border-green-500', bgColor: 'bg-green-100', iconColor: 'text-green-600', titleColor: 'text-green-800' },
+  { borderColor: 'border-primary-500', bgColor: 'bg-primary-100', iconColor: 'text-primary-600', titleColor: 'text-primary-800' },
   { borderColor: 'border-blue-500', bgColor: 'bg-blue-100', iconColor: 'text-blue-600', titleColor: 'text-blue-800' },
   { borderColor: 'border-purple-500', bgColor: 'bg-purple-100', iconColor: 'text-purple-600', titleColor: 'text-purple-800' },
   { borderColor: 'border-orange-500', bgColor: 'bg-orange-100', iconColor: 'text-orange-600', titleColor: 'text-orange-800' },
@@ -37,11 +37,11 @@ export async function ValuesSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-green-50 to-blue-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-primary-50 to-blue-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
-          <Heading level={2} className="mb-6 text-gray-800">{t('title')}</Heading>
-          <p className="text-xl text-gray-600 mb-8"
+          <Heading level={2} className="mb-6 text-neutral-800">{t('title')}</Heading>
+          <p className="text-xl text-neutral-600 mb-8"
             dangerouslySetInnerHTML={{ __html: t.raw('subtitle') as string }}
           />
         </div>
@@ -53,7 +53,7 @@ export async function ValuesSection() {
                   <value.icon className={`w-7 h-7 ${value.iconColor}`} />
                 </div>
                 <Heading level={3} className={`mb-3 ${value.titleColor}`}>{value.title}</Heading>
-                <p className="text-gray-600 text-sm">{value.description}</p>
+                <p className="text-neutral-600 text-sm">{value.description}</p>
               </div>
             </div>
           ))}

@@ -157,7 +157,7 @@ export default function TaskActionsClient({
 
   return (
     <div className="bg-white rounded-lg border p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Aktionen</Heading>
+      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Aktionen</Heading>
 
       {error && (
         <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
@@ -169,7 +169,7 @@ export default function TaskActionsClient({
         {/* Complete Button */}
         <button
           onClick={() => setShowCompleteForm(!showCompleteForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
           <CheckCircle2 className="w-4 h-4" />
           Als erledigt markieren
@@ -196,13 +196,13 @@ export default function TaskActionsClient({
 
       {/* Complete Form */}
       {showCompleteForm && (
-        <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
-          <Heading level={3} className="font-medium text-green-800 mb-3">
+        <div className="mt-4 p-4 bg-primary-50 rounded-lg border border-primary-200">
+          <Heading level={3} className="font-medium text-primary-800 mb-3">
             Aufgabe als erledigt markieren
           </Heading>
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Dauer (Minuten)
               </label>
               <input
@@ -210,11 +210,11 @@ export default function TaskActionsClient({
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
                 placeholder="z.B. 30"
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Notizen (optional)
               </label>
               <textarea
@@ -222,14 +222,14 @@ export default function TaskActionsClient({
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Anmerkungen zur Erledigung..."
                 rows={3}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={handleComplete}
                 disabled={loading === 'complete'}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
                 {loading === 'complete' && (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -238,7 +238,7 @@ export default function TaskActionsClient({
               </button>
               <button
                 onClick={() => setShowCompleteForm(false)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
               >
                 Abbrechen
               </button>
@@ -255,7 +255,7 @@ export default function TaskActionsClient({
           </Heading>
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Nachricht (optional)
               </label>
               <textarea
@@ -279,7 +279,7 @@ export default function TaskActionsClient({
               </button>
               <button
                 onClick={() => setShowAttentionForm(false)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
               >
                 Abbrechen
               </button>
@@ -294,7 +294,7 @@ export default function TaskActionsClient({
           <Heading level={3} className="font-medium text-yellow-800 mb-3">Um Hilfe bitten</Heading>
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 An wen?
               </label>
               <select
@@ -311,7 +311,7 @@ export default function TaskActionsClient({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Nachricht (optional)
               </label>
               <textarea
@@ -335,7 +335,7 @@ export default function TaskActionsClient({
               </button>
               <button
                 onClick={() => setShowRequestForm(false)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
               >
                 Abbrechen
               </button>
@@ -373,7 +373,7 @@ export default function TaskActionsClient({
                 </button>
                 <button
                   onClick={() => setShowArchiveConfirm(false)}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900"
+                  className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
                 >
                   Abbrechen
                 </button>

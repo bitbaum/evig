@@ -24,13 +24,13 @@ export default function NewLocationPage() {
   } = useLocationForm()
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/admin/locations"
-            className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
+            className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zur Ortsverwaltung
@@ -40,10 +40,10 @@ export default function NewLocationPage() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
               <MapPin className="w-8 h-8 text-blue-600" />
             </div>
-            <Heading level={1} className="text-3xl font-bold text-gray-900 mb-2">
+            <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">
               Neuen Ort erstellen
             </Heading>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               Füge einen neuen Veranstaltungsort zur Plattform hinzu
             </p>
           </div>
@@ -54,7 +54,7 @@ export default function NewLocationPage() {
             id={submitResult.success ? undefined : 'location-form-error'}
             className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
-              ? 'bg-green-50 border-green-200 text-green-800'
+              ? 'bg-primary-50 border-primary-200 text-primary-800'
               : 'bg-red-50 border-red-200 text-red-800'
           }`}>
             <div className="flex items-center">
@@ -100,7 +100,7 @@ export default function NewLocationPage() {
               )}
             </button>
 
-            <p className="text-sm text-gray-600 mt-4">
+            <p className="text-sm text-neutral-600 mt-4">
               Nach Erstellung wird der Ort zur Genehmigung eingereicht und muss von einem Administrator freigegeben werden.
             </p>
           </div>

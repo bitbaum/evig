@@ -15,14 +15,14 @@ interface Props {
 
 export function SmartEntrySection({ query, isLoading, error, success, onQueryChange, onSubmit }: Props) {
   return (
-    <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl shadow-sm border border-green-200 dark:border-green-800 p-6">
+    <div className="bg-gradient-to-r from-primary-50 to-emerald-50 dark:from-primary-900/20 dark:to-emerald-900/20 rounded-xl shadow-sm border border-primary-200 dark:border-primary-800 p-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-green-600 rounded-lg">
+        <div className="p-2 bg-primary-600 rounded-lg">
           <Sparkles className="w-5 h-5 text-white" />
         </div>
         <div>
-          <Heading level={2} className="text-lg text-gray-900 dark:text-white">Smart Entry</Heading>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <Heading level={2} className="text-lg text-neutral-900 dark:text-white">Smart Entry</Heading>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Gib einfach den Produktnamen ein und die KI füllt das Formular aus
           </p>
         </div>
@@ -41,7 +41,7 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
               }
             }}
             placeholder="z.B. Dell Latitude e7470, ThinkPad T480, MacBook Pro 2019..."
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             disabled={isLoading}
           />
         </div>
@@ -69,7 +69,7 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
         <button
           type="button"
           disabled
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 rounded-lg cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 rounded-lg cursor-not-allowed"
           title="Spracheingabe (bald verfügbar)"
         >
           <Mic className="w-4 h-4" />
@@ -78,13 +78,13 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
         <button
           type="button"
           disabled
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 rounded-lg cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 rounded-lg cursor-not-allowed"
           title="Bilderkennung (bald verfügbar)"
         >
           <Camera className="w-4 h-4" />
           Foto
         </button>
-        <span className="text-xs text-gray-500 dark:text-gray-400 self-center ml-2">
+        <span className="text-xs text-neutral-500 dark:text-neutral-400 self-center ml-2">
           Sprache & Foto bald verfügbar
         </span>
       </div>
@@ -95,8 +95,8 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
         </div>
       )}
       {success && (
-        <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-sm text-green-700 dark:text-green-400">{success}</p>
+        <div className="mt-3 p-3 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+          <p className="text-sm text-primary-700 dark:text-primary-400">{success}</p>
         </div>
       )}
     </div>

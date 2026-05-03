@@ -39,8 +39,8 @@ export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   },
   [APPROVAL_STATUS.APPROVED]: {
     label: 'Genehmigt',
-    color: 'text-green-800 dark:text-green-300',
-    bg: 'bg-green-100 dark:bg-green-900/30',
+    color: 'text-primary-800 dark:text-primary-300',
+    bg: 'bg-primary-100 dark:bg-primary-900/30',
   },
   [APPROVAL_STATUS.REJECTED]: {
     label: 'Abgelehnt',
@@ -97,7 +97,7 @@ export function getApprovalStatusLabel(status: string): string {
 export function getApprovalStatusBadge(status: string): ApprovalBadge {
   return APPROVAL_STATUS_BADGES[status] ?? {
     label: status,
-    color: 'text-gray-800 dark:text-gray-300',
-    bg: 'bg-gray-100 dark:bg-gray-900/30',
+    color: 'text-neutral-800 dark:text-neutral-300',
+    bg: 'bg-neutral-100 dark:bg-neutral-900/30',
   }
 }

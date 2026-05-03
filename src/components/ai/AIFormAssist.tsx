@@ -128,7 +128,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
           {/* Success feedback — persistent until next action, shows field count */}
           {success && !error && (
-            <div className="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-lg text-sm">
+            <div className="flex items-center gap-2 bg-primary-50 border border-primary-200 text-primary-700 px-3 py-2 rounded-lg text-sm">
               <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
               <span>
                 {filledCount > 0
@@ -150,7 +150,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
               }
               rows={2}
               disabled={isExtracting}
-              className="flex-1 px-3 py-2 text-sm border border-purple-300 dark:border-purple-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+              className="flex-1 px-3 py-2 text-sm border border-purple-300 dark:border-purple-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
             />
             <button
               type="button"
@@ -176,7 +176,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
                       type="button"
                       onClick={() => handleSuggestedAction(action.prompt)}
                       disabled={isExtracting}
-                      className="px-2.5 py-1 bg-green-100 dark:bg-green-800/40 text-green-700 dark:text-green-300 rounded-md text-xs font-medium hover:bg-green-200 dark:hover:bg-green-700/50 disabled:opacity-50 transition-colors touch-manipulation"
+                      className="px-2.5 py-1 bg-primary-100 dark:bg-primary-800/40 text-primary-700 dark:text-primary-300 rounded-md text-xs font-medium hover:bg-primary-200 dark:hover:bg-primary-700/50 disabled:opacity-50 transition-colors touch-manipulation"
                     >
                       {action.label}
                     </button>

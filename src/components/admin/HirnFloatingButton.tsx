@@ -31,7 +31,7 @@ export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
         <Brain className="w-6 h-6 text-white" />
 
         {/* Tooltip */}
-        <span className="absolute right-full mr-3 px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        <span className="absolute right-full mr-3 px-3 py-1.5 bg-neutral-900 text-white text-sm rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
           Hirn AI
         </span>
       </button>

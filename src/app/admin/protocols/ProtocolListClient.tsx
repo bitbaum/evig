@@ -38,11 +38,11 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
   return (
     <div className="bg-white rounded-lg border p-4">
       <div className="flex items-center gap-4 flex-wrap">
-        <Filter className="w-5 h-5 text-gray-500" />
+        <Filter className="w-5 h-5 text-neutral-500" />
 
         {/* Search */}
         <div className="flex items-center gap-2">
-          <Search className="w-4 h-4 text-gray-500" />
+          <Search className="w-4 h-4 text-neutral-500" />
           <input
             type="text"
             placeholder="Suchen..."
@@ -64,7 +64,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Meeting type filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Typ:</label>
+          <label className="text-sm text-neutral-600">Typ:</label>
           <select
             className="text-sm border rounded px-2 py-1"
             value={searchParams.get('meeting_type') || ''}
@@ -81,7 +81,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Status filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Status:</label>
+          <label className="text-sm text-neutral-600">Status:</label>
           <select
             className="text-sm border rounded px-2 py-1"
             value={searchParams.get('status') || ''}
@@ -98,7 +98,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Workflow step filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Schritt:</label>
+          <label className="text-sm text-neutral-600">Schritt:</label>
           <select
             className="text-sm border rounded px-2 py-1"
             value={searchParams.get('step') || ''}
@@ -115,7 +115,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Attendee filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-gray-600">Teilnehmer:</label>
+          <label className="text-sm text-neutral-600">Teilnehmer:</label>
           <select
             className="text-sm border rounded px-2 py-1"
             value={searchParams.get('attendee') || ''}

@@ -152,7 +152,7 @@ export default async function TransparenzPage() {
               <ul className="space-y-2">
                 {principle.examples.map((example, idx) => (
                   <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                    <span className="text-green-500">✓</span>
+                    <span className="text-primary-500">✓</span>
                     {example}
                   </li>
                 ))}
@@ -190,7 +190,7 @@ export default async function TransparenzPage() {
                     <td className="py-2 px-4 font-medium">{source.name}</td>
                     <td className="py-2 px-4 text-muted-foreground">{source.type}</td>
                     <td className="py-2 px-4">
-                      <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm">
+                      <code className="bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded text-sm">
                         {source.format}
                       </code>
                     </td>
@@ -213,20 +213,20 @@ export default async function TransparenzPage() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-4">
-            Die vollständige Hirn-Dokumentation befindet sich im <code className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">docs/hirn/</code> Verzeichnis
+            Die vollständige Hirn-Dokumentation befindet sich im <code className="bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded">docs/hirn/</code> Verzeichnis
             und enthält:
           </p>
           <ul className="space-y-2 text-sm">
             <li className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-primary-500">✓</span>
               CLAUDE.md – Entwicklungsrichtlinien für AI-Agenten
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-primary-500">✓</span>
               Knowledge Graph und Glossar
             </li>
             <li className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
+              <span className="text-primary-500">✓</span>
               First Principles Templates für neue Bereiche
             </li>
           </ul>

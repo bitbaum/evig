@@ -13,9 +13,9 @@ interface Props {
 
 export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAdd, onRemove }: Props) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center justify-between mb-6">
-        <Heading level={2} className="text-lg text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={2} className="text-lg text-neutral-900 dark:text-white flex items-center gap-2">
           <FileText className="w-5 h-5" />
           Lernziele
         </Heading>
@@ -38,7 +38,7 @@ export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAd
                 type="text"
                 value={objective}
                 onChange={(e) => onObjectiveChange(index, e.target.value)}
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="z.B. Grundlagen der Computer-Hardware verstehen"
               />
             </div>

@@ -27,13 +27,13 @@ export function ProductStatsCards({
         <StatCard
           label="Gesamt"
           value={inventoryStats.total}
-          icon={<Package className="w-6 h-6 text-green-500" />}
+          icon={<Package className="w-6 h-6 text-primary-500" />}
         />
         <StatCard
           label="Veröffentlicht"
           value={inventoryStats.published}
-          valueColor="text-green-600"
-          icon={<CheckCircle className="w-6 h-6 text-green-500" />}
+          valueColor="text-primary-600"
+          icon={<CheckCircle className="w-6 h-6 text-primary-500" />}
         />
         <StatCard
           label="Entwürfe"
@@ -81,8 +81,8 @@ export function ProductStatsCards({
       <StatCard
         label="Niedriger Bestand"
         value={shopStats.lowStock}
-        valueColor={shopStats.lowStock > 0 ? "text-red-600" : "text-gray-600"}
-        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-red-500' : 'text-gray-400'}`} />}
+        valueColor={shopStats.lowStock > 0 ? "text-red-600" : "text-neutral-600"}
+        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-red-500' : 'text-neutral-400'}`} />}
       />
     </div>
   )
@@ -95,12 +95,12 @@ interface StatCardProps {
   icon: React.ReactNode
 }
 
-function StatCard({ label, value, valueColor = 'text-gray-900', icon }: StatCardProps) {
+function StatCard({ label, value, valueColor = 'text-neutral-900', icon }: StatCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-600">{label}</p>
+          <p className="text-xs text-neutral-600">{label}</p>
           <p className={`text-xl font-bold ${valueColor}`}>{value}</p>
         </div>
         {icon}

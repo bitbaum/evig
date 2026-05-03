@@ -21,12 +21,12 @@ export const SCOPE_CONFIG = {
     emoji: '\uD83D\uDCC4',
     name: 'Diese Seite',
     color: '#16a34a',
-    focusRing: 'focus:ring-green-500',
-    buttonBg: 'bg-green-600 hover:bg-green-700',
-    borderColor: 'border-green-500',
-    bgColor: 'bg-green-50',
-    textColor: 'text-green-900',
-    hoverBg: 'hover:bg-green-50 hover:border-green-300'
+    focusRing: 'focus:ring-primary-500',
+    buttonBg: 'bg-primary-600 hover:bg-primary-700',
+    borderColor: 'border-primary-500',
+    bgColor: 'bg-primary-50',
+    textColor: 'text-primary-900',
+    hoverBg: 'hover:bg-primary-50 hover:border-primary-300'
   },
   element: {
     emoji: '\uD83C\uDFAF',

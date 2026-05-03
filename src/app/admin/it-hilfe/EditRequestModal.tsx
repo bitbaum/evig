@@ -23,24 +23,24 @@ export function EditRequestModal({
     <Modal isOpen={true} onClose={onClose} title="Anfrage bearbeiten" size="sm">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
-          <select value={editData.status} onChange={e => setEditData(d => ({ ...d, status: e.target.value }))} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Status</label>
+          <select value={editData.status} onChange={e => setEditData(d => ({ ...d, status: e.target.value }))} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600">
             {REQUEST_STATUSES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Dringlichkeit</label>
-          <select value={editData.urgency} onChange={e => setEditData(d => ({ ...d, urgency: e.target.value }))} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Dringlichkeit</label>
+          <select value={editData.urgency} onChange={e => setEditData(d => ({ ...d, urgency: e.target.value }))} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600">
             {URGENCY_LEVELS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Admin-Notizen</label>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Admin-Notizen</label>
           <textarea
             value={editData.admin_notes}
             onChange={e => setEditData(d => ({ ...d, admin_notes: e.target.value }))}
             rows={3}
-            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600"
             placeholder="Interne Notizen..."
           />
         </div>

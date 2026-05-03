@@ -66,16 +66,16 @@ export function Modal({
         <div
           role="dialog"
           aria-modal="true"
-          className={`relative bg-white dark:bg-gray-800 rounded-xl shadow-xl ${SIZE_CLASSES[size]} w-full p-6 ${className}`}
+          className={`relative bg-white dark:bg-neutral-800 rounded-xl shadow-xl ${SIZE_CLASSES[size]} w-full p-6 ${className}`}
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
+            <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
               {title}
             </Heading>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+              className="text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300"
               aria-label={t('close')}
             >
               <X className="w-5 h-5" />

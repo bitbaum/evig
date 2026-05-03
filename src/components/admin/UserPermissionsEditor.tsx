@@ -93,7 +93,7 @@ export function UserPermissionsEditor({
 
   return (
     <Modal isOpen={true} onClose={onClose} title="Berechtigungen bearbeiten" size="lg">
-        <p className="text-sm text-gray-600 dark:text-gray-400 -mt-3 mb-4">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 -mt-3 mb-4">
           {userName || userEmail}
         </p>
 
@@ -119,7 +119,7 @@ export function UserPermissionsEditor({
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   superAdminStatus
                     ? 'bg-purple-600'
-                    : 'bg-gray-300 dark:bg-gray-600'
+                    : 'bg-neutral-300 dark:bg-neutral-600'
                 } ${isInHardcodedList && superAdminStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
@@ -154,7 +154,7 @@ export function UserPermissionsEditor({
                   className={`relative w-12 h-6 rounded-full transition-colors ${
                     grantFullAccess
                       ? 'bg-blue-600'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      : 'bg-neutral-300 dark:bg-neutral-600'
                   }`}
                 >
                   <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
@@ -168,7 +168,7 @@ export function UserPermissionsEditor({
           {/* Individual Permissions */}
           {!superAdminStatus && !grantFullAccess && (
             <div>
-              <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-3">
+              <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-3">
                 Einzelne Bereiche
               </Heading>
               <div className="grid grid-cols-2 gap-2">
@@ -178,15 +178,15 @@ export function UserPermissionsEditor({
                     onClick={() => togglePermission(section.id)}
                     className={`p-3 text-left rounded-lg border transition-colors ${
                       selectedPermissions.includes(section.id)
-                        ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                        : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
                     }`}
                   >
                     <div className="flex items-center gap-2">
                       <div className={`w-4 h-4 rounded border flex items-center justify-center ${
                         selectedPermissions.includes(section.id)
-                          ? 'bg-green-600 border-green-600'
-                          : 'border-gray-300'
+                          ? 'bg-primary-600 border-primary-600'
+                          : 'border-neutral-300'
                       }`}>
                         {selectedPermissions.includes(section.id) && (
                           <Check className="w-3 h-3 text-white" />
@@ -195,7 +195,7 @@ export function UserPermissionsEditor({
                       <span className={`font-medium ${
                         section.sensitive
                           ? 'text-red-700 dark:text-red-400'
-                          : 'text-gray-900 dark:text-white'
+                          : 'text-neutral-900 dark:text-white'
                       }`}>
                         {section.label}
                       </span>
@@ -218,7 +218,7 @@ export function UserPermissionsEditor({
         </div>
 
         {/* Footer */}
-        <div className="pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3 mt-6">
+        <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700 flex justify-end gap-3 mt-6">
           <Button
             onClick={onClose}
             variant="ghost"

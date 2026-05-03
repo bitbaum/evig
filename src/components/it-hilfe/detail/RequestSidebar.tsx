@@ -57,29 +57,29 @@ export function RequestSidebar({
   return (
     <div className="space-y-6">
       {/* Request Info */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+      <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+        <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
           {t('sidebarDetails')}
         </Heading>
 
         <div className="space-y-4">
           {/* Location */}
           <div className="flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+            <MapPin className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">{t('locationLabel')}</p>
-              <p className="font-medium text-gray-900">
+              <p className="text-sm text-neutral-500">{t('locationLabel')}</p>
+              <p className="font-medium text-neutral-900">
                 {request.postalCode} {request.city}
               </p>
-              <p className="text-sm text-gray-600">{request.canton}</p>
+              <p className="text-sm text-neutral-600">{request.canton}</p>
             </div>
           </div>
 
           {/* Budget */}
           <div className="flex items-start gap-3">
-            <Wrench className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+            <Wrench className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">{t('budgetLabel')}</p>
+              <p className="text-sm text-neutral-500">{t('budgetLabel')}</p>
               <p className="font-medium text-emerald-600">
                 {formatBudget(request.budgetAmountCents)}
               </p>
@@ -88,10 +88,10 @@ export function RequestSidebar({
 
           {/* Service Type */}
           <div className="flex items-start gap-3">
-            <User className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+            <User className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">{t('serviceTypeLabel')}</p>
-              <p className="font-medium text-gray-900">
+              <p className="text-sm text-neutral-500">{t('serviceTypeLabel')}</p>
+              <p className="font-medium text-neutral-900">
                 {serviceConfig?.name || request.serviceType}
               </p>
             </div>
@@ -99,10 +99,10 @@ export function RequestSidebar({
 
           {/* Offers */}
           <div className="flex items-start gap-3">
-            <Users className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+            <Users className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">{t('offersLabel')}</p>
-              <p className="font-medium text-gray-900">
+              <p className="text-sm text-neutral-500">{t('offersLabel')}</p>
+              <p className="font-medium text-neutral-900">
                 {t('offersCount', { count: request.offerCount })}
               </p>
             </div>
@@ -110,10 +110,10 @@ export function RequestSidebar({
 
           {/* Created */}
           <div className="flex items-start gap-3">
-            <Calendar className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+            <Calendar className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">{t('createdLabel')}</p>
-              <p className="font-medium text-gray-900">
+              <p className="text-sm text-neutral-500">{t('createdLabel')}</p>
+              <p className="font-medium text-neutral-900">
                 {formatDate(request.createdAt)}
               </p>
             </div>
@@ -121,10 +121,10 @@ export function RequestSidebar({
 
           {/* Expires */}
           <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 text-gray-400 mt-0.5" aria-hidden="true" />
+            <Clock className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
-              <p className="text-sm text-gray-500">{t('expiresLabel')}</p>
-              <p className="font-medium text-gray-900">
+              <p className="text-sm text-neutral-500">{t('expiresLabel')}</p>
+              <p className="font-medium text-neutral-900">
                 {formatDate(request.expiresAt)}
               </p>
               {timeRemaining && (
@@ -138,18 +138,18 @@ export function RequestSidebar({
       </div>
 
       {/* Requester Info */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+      <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+        <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
           {t('requesterSection')}
         </Heading>
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-            <User className="w-6 h-6 text-gray-500" aria-hidden="true" />
+          <div className="w-12 h-12 bg-neutral-200 rounded-full flex items-center justify-center">
+            <User className="w-6 h-6 text-neutral-500" aria-hidden="true" />
           </div>
           <div>
-            <p className="font-medium text-gray-900">{request.requesterName}</p>
+            <p className="font-medium text-neutral-900">{request.requesterName}</p>
             {request.isOwner && request.requesterEmail && (
-              <p className="text-sm text-gray-500">{request.requesterEmail}</p>
+              <p className="text-sm text-neutral-500">{request.requesterEmail}</p>
             )}
           </div>
         </div>
@@ -157,7 +157,7 @@ export function RequestSidebar({
 
       {/* Message Button */}
       {conversationId && hasSession && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
           <button
             onClick={onShowMessages}
             className="w-full py-3 px-4 min-h-[44px] bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -170,8 +170,8 @@ export function RequestSidebar({
 
       {/* Owner Actions */}
       {request.isOwner && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <Heading level={3} className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-4">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+          <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
             {t('actionsSection')}
           </Heading>
           <div className="space-y-2">
@@ -195,7 +195,7 @@ export function RequestSidebar({
             )}
             <Link
               href="/it-hilfe/my"
-              className="block w-full py-3 px-4 min-h-[44px] bg-gray-100 text-gray-700 rounded-lg text-center font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="block w-full py-3 px-4 min-h-[44px] bg-neutral-100 text-neutral-700 rounded-lg text-center font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
               {t('allMyRequests')}
             </Link>

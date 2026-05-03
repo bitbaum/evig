@@ -42,33 +42,33 @@ export default async function ShopPage({ params }: ShopPageProps) {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Physical Store */}
-            <Card className="overflow-hidden border-gray-200">
-              <CardHeader className="bg-green-50">
+            <Card className="overflow-hidden border-neutral-200">
+              <CardHeader className="bg-primary-50">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-green-600 text-white flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-primary-600 text-white flex items-center justify-center">
                     <Store className="w-5 h-5" />
                   </div>
                   <div>
                     <CardTitle id="ladenlokal">{t('page.store.title')}</CardTitle>
-                    <p className="text-sm text-gray-600">{t('page.store.tagline')}</p>
+                    <p className="text-sm text-neutral-600">{t('page.store.tagline')}</p>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <MapPin className="mt-0.5 w-5 h-5 text-green-700" />
+                  <MapPin className="mt-0.5 w-5 h-5 text-primary-700" />
                   <div>
-                    <p className="font-medium text-gray-900">{STORE_ADDRESS}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-neutral-900">{STORE_ADDRESS}</p>
+                    <p className="text-sm text-neutral-600">
                       {t('page.store.accessInfo')}
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Clock className="mt-0.5 w-5 h-5 text-green-700" />
+                  <Clock className="mt-0.5 w-5 h-5 text-primary-700" />
                   <div>
-                    <p className="font-medium text-gray-900">{t('page.store.openingHours')}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-neutral-900">{t('page.store.openingHours')}</p>
+                    <p className="text-sm text-neutral-600">
                       {t('page.store.openingHoursMonday', { hours: OPENING_HOURS.monday })}
                       <br />
                       {t('page.store.openingHoursTueFri', { hours: OPENING_HOURS.tuesdayToFriday })}
@@ -86,11 +86,11 @@ export default async function ShopPage({ params }: ShopPageProps) {
                     {t('page.store.contact')}
                   </Link>
                 </div>
-                <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+                <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700">
                   <div className="flex items-start gap-3">
-                    <Shield className="mt-0.5 w-4 h-4 text-green-700" />
+                    <Shield className="mt-0.5 w-4 h-4 text-primary-700" />
                     <div>
-                      <p className="font-medium text-gray-900 mb-1">{t('page.store.mapsInfoTitle')}</p>
+                      <p className="font-medium text-neutral-900 mb-1">{t('page.store.mapsInfoTitle')}</p>
                       <p>{t('page.store.mapsInfoBody')}</p>
                     </div>
                   </div>
@@ -99,7 +99,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
             </Card>
 
             {/* Online Shops */}
-            <Card className="overflow-hidden border-gray-200">
+            <Card className="overflow-hidden border-neutral-200">
               <CardHeader className="bg-blue-50">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center">
@@ -107,14 +107,14 @@ export default async function ShopPage({ params }: ShopPageProps) {
                   </div>
                   <div>
                     <CardTitle>{t('page.online.title')}</CardTitle>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-neutral-600">
                       {t('page.online.tagline')}
                     </p>
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <ul className="list-disc list-inside text-gray-700 space-y-1">
+                <ul className="list-disc list-inside text-neutral-700 space-y-1">
                   <li>{t('page.online.benefit1')}</li>
                   <li>{t('page.online.benefit2')}</li>
                   <li>{t('page.online.benefit3')}</li>
@@ -138,11 +138,11 @@ export default async function ShopPage({ params }: ShopPageProps) {
                     <ShoppingCart className="w-4 h-4 mr-2" /> {t('page.online.onlineShop', { orgName: ORG.name })}
                   </Link>
                 </div>
-                <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+                <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700">
                   <div className="flex items-start gap-3">
                     <Shield className="mt-0.5 w-4 h-4 text-blue-700" />
                     <div>
-                      <p className="font-medium text-gray-900 mb-1">{t('page.online.multiShopTitle')}</p>
+                      <p className="font-medium text-neutral-900 mb-1">{t('page.online.multiShopTitle')}</p>
                       <p>{t('page.online.multiShopBody', { orgName: ORG.name })}</p>
                     </div>
                   </div>

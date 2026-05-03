@@ -109,7 +109,7 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                       <ul className={`space-y-3 ${textSecondaryClass}`}>
                         {card.features.map((feature, fIndex) => (
                           <li key={fIndex} className="flex items-start">
-                            <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-1" />
+                            <CheckCircle className="w-5 h-5 text-primary-500 mr-2 flex-shrink-0 mt-1" />
                             <span>{feature}</span>
                           </li>
                         ))}

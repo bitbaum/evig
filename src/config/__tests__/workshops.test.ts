@@ -120,11 +120,11 @@ describe('getCategoryIcon', () => {
 
 describe('getLevelBadgeClass', () => {
   it('returns gray fallback for null', () => {
-    expect(getLevelBadgeClass(null)).toBe('bg-gray-100 text-gray-800')
+    expect(getLevelBadgeClass(null)).toBe('bg-neutral-100 text-neutral-800')
   })
 
   it('returns gray fallback for undefined', () => {
-    expect(getLevelBadgeClass(undefined)).toBe('bg-gray-100 text-gray-800')
+    expect(getLevelBadgeClass(undefined)).toBe('bg-neutral-100 text-neutral-800')
   })
 
   it('returns green badge class for "beginner"', () => {
@@ -143,7 +143,7 @@ describe('getLevelBadgeClass', () => {
   })
 
   it('returns gray fallback for unknown level', () => {
-    expect(getLevelBadgeClass('master')).toBe('bg-gray-100 text-gray-800')
+    expect(getLevelBadgeClass('master')).toBe('bg-neutral-100 text-neutral-800')
   })
 
   it('matches by level name (case-insensitive)', () => {

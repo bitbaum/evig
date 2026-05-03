@@ -61,17 +61,17 @@ export default function LogoutPage() {
   }, [t])
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <div className="flex items-center justify-center gap-2">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">R</span>
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                Revamp<span className="text-green-600">IT</span>
+              <span className="text-2xl font-bold text-neutral-900 dark:text-white">
+                Revamp<span className="text-primary-600">IT</span>
               </span>
             </div>
           </Link>
@@ -79,26 +79,26 @@ export default function LogoutPage() {
 
         {/* Logout Card */}
         <div className="w-full max-w-md mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700 text-center">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700 text-center">
             {!error ? (
               <>
-                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+                <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
                 </div>
-                <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
+                <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
                   {t('heading')}
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400">{t('wait')}</p>
+                <p className="text-neutral-600 dark:text-neutral-400">{t('wait')}</p>
               </>
             ) : (
               <>
                 <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
                   <AlertCircle className="w-8 h-8 text-red-600" />
                 </div>
-                <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
+                <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
                   {t('errorHeading')}
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">{error}</p>
+                <p className="text-neutral-600 dark:text-neutral-400 mb-6">{error}</p>
                 <div className="space-y-3">
                   <Button
                     onClick={() => {
@@ -120,7 +120,7 @@ export default function LogoutPage() {
                   </Button>
                   <Link
                     href="/dashboard"
-                    className="inline-flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
+                    className="inline-flex items-center justify-center gap-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
                   >
                     {t('backToDashboard')}
                   </Link>

@@ -274,12 +274,12 @@ export function CommandBar() {
       {/* Trigger button in top bar (Search icon) */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden sm:flex items-center gap-2 px-3 h-8 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg text-sm text-gray-500 dark:text-gray-400 transition-colors"
+        className="hidden sm:flex items-center gap-2 px-3 h-8 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg text-sm text-neutral-500 dark:text-neutral-400 transition-colors"
         aria-label="Suche öffnen (⌘K)"
       >
         <Search className="w-3.5 h-3.5" />
         <span className="text-xs">Suche</span>
-        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-gray-200 dark:bg-gray-600 rounded text-xs font-mono leading-none">
+        <kbd className="hidden md:inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-neutral-200 dark:bg-neutral-600 rounded text-xs font-mono leading-none">
           ⌘K
         </kbd>
       </button>
@@ -287,25 +287,25 @@ export function CommandBar() {
       {/* Native dialog */}
       <dialog
         ref={dialogRef}
-        className="w-full max-w-xl rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-0 backdrop:bg-black/40"
+        className="w-full max-w-xl rounded-xl shadow-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 p-0 backdrop:bg-black/40"
         onKeyDown={handleKeyDown}
         onClose={close}
         aria-label="Befehlspalette"
       >
         {/* Search input */}
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-          <Search className="w-4 h-4 text-gray-400 flex-shrink-0" aria-hidden="true" />
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-neutral-200 dark:border-neutral-700">
+          <Search className="w-4 h-4 text-neutral-400 flex-shrink-0" aria-hidden="true" />
           <input
             ref={inputRef}
             type="search"
             placeholder="Suche oder Befehl..."
             value={query}
             onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
-            className="flex-1 bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+            className="flex-1 bg-transparent outline-none text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-sm"
             autoComplete="off"
             spellCheck={false}
           />
-          <kbd className="flex-shrink-0 px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono text-gray-500 dark:text-gray-400 leading-none">
+          <kbd className="flex-shrink-0 px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-700 rounded text-xs font-mono text-neutral-500 dark:text-neutral-400 leading-none">
             Esc
           </kbd>
         </div>
@@ -313,13 +313,13 @@ export function CommandBar() {
         {/* Results */}
         <div className="overflow-y-auto max-h-96 py-2">
           {results.length === 0 ? (
-            <p className="px-4 py-8 text-center text-sm text-gray-400 dark:text-gray-500">
+            <p className="px-4 py-8 text-center text-sm text-neutral-400 dark:text-neutral-500">
               Keine Ergebnisse für &ldquo;{query}&rdquo;
             </p>
           ) : (
             Array.from(groups.entries()).map(([groupLabel, items]) => (
               <div key={groupLabel}>
-                <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500">
+                <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500">
                   {groupLabel}
                 </p>
                 {items.map(item => {
@@ -334,10 +334,10 @@ export function CommandBar() {
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                         isCurrent
                           ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                          : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
                       }`}
                     >
-                      <span className={`flex-shrink-0 ${isCurrent ? 'text-blue-500' : 'text-gray-400 dark:text-gray-500'}`}>
+                      <span className={`flex-shrink-0 ${isCurrent ? 'text-blue-500' : 'text-neutral-400 dark:text-neutral-500'}`}>
                         {item.icon}
                       </span>
                       <span className="flex-1 min-w-0">
@@ -345,7 +345,7 @@ export function CommandBar() {
                           {item.label}
                         </span>
                         {item.sub && (
-                          <span className="block text-xs text-gray-400 dark:text-gray-500 truncate mt-0.5">
+                          <span className="block text-xs text-neutral-400 dark:text-neutral-500 truncate mt-0.5">
                             {item.sub}
                           </span>
                         )}
@@ -362,17 +362,17 @@ export function CommandBar() {
         </div>
 
         {/* Footer hint */}
-        <div className="flex items-center gap-4 px-4 py-2 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-400 dark:text-gray-500">
+        <div className="flex items-center gap-4 px-4 py-2 border-t border-neutral-100 dark:border-neutral-700 text-xs text-neutral-400 dark:text-neutral-500">
           <span className="flex items-center gap-1">
-            <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 rounded font-mono">↑↓</kbd>
+            <kbd className="px-1 py-0.5 bg-neutral-100 dark:bg-neutral-700 rounded font-mono">↑↓</kbd>
             Navigieren
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 rounded font-mono">↵</kbd>
+            <kbd className="px-1 py-0.5 bg-neutral-100 dark:bg-neutral-700 rounded font-mono">↵</kbd>
             Öffnen
           </span>
           <span className="flex items-center gap-1">
-            <kbd className="px-1 py-0.5 bg-gray-100 dark:bg-gray-700 rounded font-mono">Esc</kbd>
+            <kbd className="px-1 py-0.5 bg-neutral-100 dark:bg-neutral-700 rounded font-mono">Esc</kbd>
             Schliessen
           </span>
         </div>

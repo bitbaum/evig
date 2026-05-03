@@ -17,11 +17,11 @@ interface AboutSectionProps {
 export default function AboutSection({ section }: AboutSectionProps) {
   const bgClass = {
     white: 'bg-white',
-    gray: 'bg-gray-50'
+    gray: 'bg-neutral-50'
   }[section.backgroundColor]
 
-  const textColorClass = 'text-gray-900'
-  const textSecondaryClass = 'text-gray-600'
+  const textColorClass = 'text-neutral-900'
+  const textSecondaryClass = 'text-neutral-600'
 
   return (
     <section className={`py-20 ${bgClass}`}>
@@ -78,7 +78,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
                       <ul className="space-y-2">
                         {card.features.map((feature, i) => (
                           <li key={i} className="flex items-start">
-                            <CheckCircle className="w-5 h-5 mr-3 flex-shrink-0 text-green-500 mt-0.5" />
+                            <CheckCircle className="w-5 h-5 mr-3 flex-shrink-0 text-primary-500 mt-0.5" />
                             <span className={textSecondaryClass}>{feature}</span>
                           </li>
                         ))}

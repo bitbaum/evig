@@ -25,7 +25,7 @@ function ImpactCard({ metric }: { metric: MetricDefinition }) {
   const needsData = metric.status === 'needs_data'
 
   return (
-    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+    <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
       <div className="flex justify-between items-start mb-2">
         <div className="text-sm text-muted-foreground">{metric.name}</div>
         {needsData && (
@@ -115,8 +115,8 @@ export default async function WirkungPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-green-100 rounded-lg">
-            <Target className="w-6 h-6 text-green-600" />
+          <div className="p-2 bg-primary-100 rounded-lg">
+            <Target className="w-6 h-6 text-primary-600" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Wirkung</Heading>
@@ -136,8 +136,8 @@ export default async function WirkungPage() {
       )}
 
       {/* Info Banner */}
-      <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-        <p className="text-sm text-green-700 dark:text-green-300">
+      <div className="p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg">
+        <p className="text-sm text-primary-700 dark:text-primary-300">
           <strong>Wirkungsbericht:</strong> Diese Seite zeigt die messbare Wirkung von Revamp-IT.
           Die Daten werden aus verschiedenen Quellen aggregiert und regelmässig aktualisiert.
           {missingMetrics.length > 0 && (
@@ -153,7 +153,7 @@ export default async function WirkungPage() {
       <div className="grid md:grid-cols-3 gap-6">
         {impactAreas.map(area => {
           const bgColor = {
-            green: 'bg-green-100 text-green-600',
+            green: 'bg-primary-100 text-primary-600',
             blue: 'bg-blue-100 text-blue-600',
             purple: 'bg-purple-100 text-purple-600',
           }[area.color]
@@ -202,7 +202,7 @@ export default async function WirkungPage() {
                 Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong> eingespart.
                 Diese Zahl basiert auf Studien zur Herstellungsenergie von Elektronikgeräten.
               </p>
-              <code className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded block">
+              <code className="text-xs bg-neutral-100 dark:bg-neutral-800 p-2 rounded block">
                 CO2 = Geräte × 285 kg
               </code>
             </div>
@@ -212,7 +212,7 @@ export default async function WirkungPage() {
                 Die Wiederverwendung von Hardware spart wertvolle Rohstoffe wie Seltene Erden,
                 Kupfer und andere Metalle, die sonst neu abgebaut werden müssten.
               </p>
-              <code className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded block">
+              <code className="text-xs bg-neutral-100 dark:bg-neutral-800 p-2 rounded block">
                 Rohstoffe = Gewichtsmessung Geräte
               </code>
             </div>
@@ -238,7 +238,7 @@ export default async function WirkungPage() {
             ].map(sdg => (
               <div
                 key={sdg.number}
-                className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-center"
+                className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center"
               >
                 <div className="text-2xl font-bold text-primary">SDG {sdg.number}</div>
                 <div className="text-sm font-medium mt-1">{sdg.name}</div>

@@ -83,28 +83,28 @@ function PoolCard({
     : t('spotsLeftPlural', { count: pool.spotsLeft })
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col gap-4">
+    <div className="bg-white rounded-2xl border border-neutral-100 shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col gap-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-3xl">{emoji}</span>
           <div>
-            <h3 className="font-semibold text-gray-900">{pool.serviceName}</h3>
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{catLabel}</span>
+            <h3 className="font-semibold text-neutral-900">{pool.serviceName}</h3>
+            <span className="text-xs text-neutral-500 bg-neutral-100 px-2 py-0.5 rounded-full">{catLabel}</span>
           </div>
         </div>
         <div className="text-right">
           <div className="text-lg font-bold text-emerald-600">
             CHF {Number(pool.costPerMemberChf).toFixed(2)}
           </div>
-          <div className="text-xs text-gray-500">{t('perMonthPerson')}</div>
+          <div className="text-xs text-neutral-500">{t('perMonthPerson')}</div>
         </div>
       </div>
 
       {pool.description && (
-        <p className="text-sm text-gray-600 line-clamp-2">{pool.description}</p>
+        <p className="text-sm text-neutral-600 line-clamp-2">{pool.description}</p>
       )}
 
-      <div className="flex items-center gap-4 text-sm text-gray-500">
+      <div className="flex items-center gap-4 text-sm text-neutral-500">
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4" />
           <span>{pool.memberCount}/{pool.maxMembers} {t('members')}</span>
@@ -120,8 +120,8 @@ function PoolCard({
         </div>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-gray-50">
-        <span className="text-xs text-gray-400">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
+      <div className="flex items-center justify-between pt-2 border-t border-neutral-50">
+        <span className="text-xs text-neutral-400">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
         {userId ? (
           <button
             onClick={handleAction}
@@ -147,7 +147,7 @@ function PoolCard({
             )}
           </button>
         ) : (
-          <span className="text-xs text-gray-400">{t('loginToJoin')}</span>
+          <span className="text-xs text-neutral-400">{t('loginToJoin')}</span>
         )}
       </div>
     </div>
@@ -202,7 +202,7 @@ function CreatePoolModal({ onClose, onCreate }: {
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-semibold">{t('modal.title')}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+          <button onClick={onClose} className="p-2 hover:bg-neutral-100 rounded-lg">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -213,23 +213,23 @@ function CreatePoolModal({ onClose, onCreate }: {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.serviceName')}</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.serviceName')}</label>
             <input
               required
               value={form.serviceName}
               onChange={e => setForm(f => ({ ...f, serviceName: e.target.value }))}
               placeholder={t('modal.serviceNamePlaceholder')}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.category')}</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.category')}</label>
               <select
                 value={form.serviceCategory}
                 onChange={e => setForm(f => ({ ...f, serviceCategory: e.target.value }))}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 {Object.keys(CATEGORY_EMOJIS).map(val => (
                   // @ts-expect-error — dynamic category key
@@ -238,7 +238,7 @@ function CreatePoolModal({ onClose, onCreate }: {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.maxMembers')}</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.maxMembers')}</label>
               <input
                 required
                 type="number"
@@ -246,13 +246,13 @@ function CreatePoolModal({ onClose, onCreate }: {
                 max={20}
                 value={form.maxMembers}
                 onChange={e => setForm(f => ({ ...f, maxMembers: Number(e.target.value) }))}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.monthlyCost')}</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.monthlyCost')}</label>
             <input
               required
               type="number"
@@ -261,7 +261,7 @@ function CreatePoolModal({ onClose, onCreate }: {
               value={form.monthlyCostChf}
               onChange={e => setForm(f => ({ ...f, monthlyCostChf: e.target.value }))}
               placeholder={t('modal.monthlyCostPlaceholder')}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             {form.monthlyCostChf && form.maxMembers > 0 && (
               <p className="text-xs text-emerald-600 mt-1">
@@ -271,24 +271,24 @@ function CreatePoolModal({ onClose, onCreate }: {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.description')}</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.description')}</label>
             <textarea
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={2}
               placeholder={t('modal.descriptionPlaceholder')}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t('modal.rules')}</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('modal.rules')}</label>
             <textarea
               value={form.rules}
               onChange={e => setForm(f => ({ ...f, rules: e.target.value }))}
               rows={2}
               placeholder={t('modal.rulesPlaceholder')}
-              className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
             />
           </div>
 
@@ -296,7 +296,7 @@ function CreatePoolModal({ onClose, onCreate }: {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50"
+              className="flex-1 px-4 py-2.5 border border-neutral-200 rounded-xl text-sm font-medium hover:bg-neutral-50"
             >
               {t('modal.cancel')}
             </button>
@@ -380,9 +380,9 @@ export default function AbosPage() {
   const categories = [...new Set(pools.map(p => p.serviceCategory))]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Hero */}
-      <div className="bg-white border-b border-gray-100">
+      <div className="bg-white border-b border-neutral-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div>
@@ -390,8 +390,8 @@ export default function AbosPage() {
                 <Tag className="w-5 h-5 text-emerald-600" />
                 <span className="text-sm font-medium text-emerald-600 uppercase tracking-wide">{t('tagline')}</span>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-              <p className="mt-2 text-gray-500 max-w-lg">
+              <h1 className="text-3xl font-bold text-neutral-900">{t('title')}</h1>
+              <p className="mt-2 text-neutral-500 max-w-lg">
                 {t('subtitle')}
               </p>
             </div>
@@ -415,7 +415,7 @@ export default function AbosPage() {
             <button
               onClick={() => setActiveCategory(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                !activeCategory ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                !activeCategory ? 'bg-emerald-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
               }`}
             >
               {t('filterAll')}
@@ -427,7 +427,7 @@ export default function AbosPage() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === cat ? 'bg-emerald-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                    activeCategory === cat ? 'bg-emerald-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
                   }`}
                 >
                   {/* @ts-expect-error — dynamic category key */}
@@ -442,20 +442,20 @@ export default function AbosPage() {
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-100 p-6 h-48 animate-pulse">
-                <div className="h-4 bg-gray-100 rounded w-2/3 mb-3" />
-                <div className="h-3 bg-gray-100 rounded w-full mb-2" />
-                <div className="h-3 bg-gray-100 rounded w-4/5" />
+              <div key={i} className="bg-white rounded-2xl border border-neutral-100 p-6 h-48 animate-pulse">
+                <div className="h-4 bg-neutral-100 rounded w-2/3 mb-3" />
+                <div className="h-3 bg-neutral-100 rounded w-full mb-2" />
+                <div className="h-3 bg-neutral-100 rounded w-4/5" />
               </div>
             ))}
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
-            <Tag className="w-12 h-12 text-gray-200 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-600 mb-1">
+            <Tag className="w-12 h-12 text-neutral-200 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-neutral-600 mb-1">
               {activeCategory ? t('emptyCategory') : t('emptyAll')}
             </h3>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-neutral-400">
               {session?.user ? t('emptyLoggedIn') : t('emptyGuest')}
             </p>
           </div>

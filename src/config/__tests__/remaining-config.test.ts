@@ -488,11 +488,11 @@ import {
 
 describe('getLevelBadgeClass', () => {
   it('null → gray badge class', () => {
-    expect(getLevelBadgeClass(null)).toBe('bg-gray-100 text-gray-800')
+    expect(getLevelBadgeClass(null)).toBe('bg-neutral-100 text-neutral-800')
   })
 
   it('undefined → gray badge class', () => {
-    expect(getLevelBadgeClass(undefined)).toBe('bg-gray-100 text-gray-800')
+    expect(getLevelBadgeClass(undefined)).toBe('bg-neutral-100 text-neutral-800')
   })
 
   it('returns a non-empty CSS string for a known level', () => {
@@ -503,7 +503,7 @@ describe('getLevelBadgeClass', () => {
   })
 
   it('unknown level → gray badge class', () => {
-    expect(getLevelBadgeClass('expert_ninja')).toBe('bg-gray-100 text-gray-800')
+    expect(getLevelBadgeClass('expert_ninja')).toBe('bg-neutral-100 text-neutral-800')
   })
 })
 

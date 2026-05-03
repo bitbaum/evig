@@ -180,13 +180,13 @@ export default function DecisionDetailClient({
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConf.color}`}>
               {statusConf.label}
             </span>
-            <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+            <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
               {typeConf.label}
             </span>
-            <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+            <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
               {methodConf.label}
             </span>
-            <span className="rounded-full bg-gray-100 dark:bg-gray-700 px-2.5 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+            <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2.5 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
               {DECISION_CATEGORY_LABELS[decision.category] || decision.category}
             </span>
             <span className={adminType.meta}>
@@ -208,8 +208,8 @@ export default function DecisionDetailClient({
                 className={cn(
                   'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
                   linkCopied
-                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
+                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
                 )}
               >
                 {linkCopied ? (
@@ -263,7 +263,7 @@ export default function DecisionDetailClient({
 
         {/* Close confirmation */}
         {showCloseInput && (
-          <div className="mt-3 rounded-md border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3">
+          <div className="mt-3 rounded-md border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20 p-3">
             <label className={cn('mb-1 block', adminType.subTitle)}>
               Zusammenfassung (optional)
             </label>
@@ -352,9 +352,9 @@ export default function DecisionDetailClient({
             {decision.options.some((o) => o.imageUrl) ? (
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 {decision.options.map((opt) => (
-                  <div key={opt.id} className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 overflow-hidden">
+                  <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-700/50 overflow-hidden">
                     {opt.imageUrl ? (
-                      <div className="relative aspect-square w-full bg-white dark:bg-gray-800">
+                      <div className="relative aspect-square w-full bg-white dark:bg-neutral-800">
                         <Image
                           src={opt.imageUrl}
                           alt={opt.label}
@@ -364,7 +364,7 @@ export default function DecisionDetailClient({
                         />
                       </div>
                     ) : (
-                      <div className="flex aspect-square w-full items-center justify-center bg-gray-100 dark:bg-gray-700 text-3xl font-bold text-gray-400">
+                      <div className="flex aspect-square w-full items-center justify-center bg-neutral-100 dark:bg-neutral-700 text-3xl font-bold text-neutral-400">
                         {opt.label.charAt(0).toUpperCase()}
                       </div>
                     )}
@@ -382,7 +382,7 @@ export default function DecisionDetailClient({
                 {decision.options.map((opt) => (
                   <div
                     key={opt.id}
-                    className="rounded-md border border-gray-200 dark:border-gray-700 px-3 py-2"
+                    className="rounded-md border border-neutral-200 dark:border-neutral-700 px-3 py-2"
                   >
                     <span className={cn('font-medium', adminType.body)}>{opt.label}</span>
                     {opt.description && (

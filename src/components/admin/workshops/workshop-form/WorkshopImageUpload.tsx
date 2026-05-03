@@ -11,18 +11,18 @@ interface Props {
 
 export function WorkshopImageUpload({ imagePreviews, onImageUpload, onRemoveImage }: Props) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+      <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-6 flex items-center gap-2">
         <Upload className="w-5 h-5" />
         Workshop-Bilder
       </Heading>
 
       <div className="space-y-4">
-        <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 text-center">
-          <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <div className="text-sm text-gray-600 dark:text-gray-400">
+        <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg p-8 text-center">
+          <Upload className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+          <div className="text-sm text-neutral-600 dark:text-neutral-400">
             <label htmlFor="workshop-image-upload" className="cursor-pointer">
-              <span className="font-medium text-green-600 hover:text-green-500">
+              <span className="font-medium text-primary-600 hover:text-primary-500">
                 Bilder auswählen
               </span>
               <span> oder hierhin ziehen</span>
@@ -36,7 +36,7 @@ export function WorkshopImageUpload({ imagePreviews, onImageUpload, onRemoveImag
               className="hidden"
             />
           </div>
-          <p className="text-xs text-gray-500 mt-2">
+          <p className="text-xs text-neutral-500 mt-2">
             PNG, JPG, GIF bis zu 10MB • Maximal 10 Bilder
           </p>
         </div>

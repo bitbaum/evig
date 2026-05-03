@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload, label }: {
   const total = payload.reduce((sum, entry) => sum + entry.value, 0)
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-3 border rounded-lg shadow-lg">
+    <div className="bg-white dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
       <p className="font-semibold mb-2">{label}</p>
       {payload.map((entry) => (
         <div key={entry.name} className="flex justify-between gap-4 text-sm">
@@ -81,7 +81,7 @@ export function RevenueAreaChart({ data, source, sourceDate }: RevenueAreaChartP
         data={sortedData}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
-        <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+        <CartesianGrid strokeDasharray="3 3" className="stroke-neutral-200 dark:stroke-neutral-700" />
         <XAxis
           dataKey="year"
           tick={{ fontSize: 12 }}

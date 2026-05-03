@@ -124,8 +124,8 @@ export default function ITHilfePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl text-gray-900">{t('title')}</Heading>
-              <p className="text-sm text-gray-600 mt-1">
+              <Heading level={1} className="text-2xl sm:text-3xl text-neutral-900">{t('title')}</Heading>
+              <p className="text-sm text-neutral-600 mt-1">
                 {t('requestCount', { count: total })} · {t('tagline')}
               </p>
             </div>
@@ -148,14 +148,14 @@ export default function ITHilfePage() {
           </div>
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
               />
               <button
                 type="submit"
@@ -182,13 +182,13 @@ export default function ITHilfePage() {
             </Link>
             <Link
               href={IT_HILFE.routes.my}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neutral-50 text-neutral-700 border border-neutral-200 rounded-lg text-sm font-medium transition-colors"
             >
               {t('myRequests')}
             </Link>
             <Link
               href={IT_HILFE.routes.myOffers}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-neutral-50 text-neutral-700 border border-neutral-200 rounded-lg text-sm font-medium transition-colors"
             >
               <Heart className="w-4 h-4" />
               {t('myOffers')}
@@ -197,11 +197,11 @@ export default function ITHilfePage() {
         )}
 
         {/* Filter Bar */}
-        <div className="mb-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
+        <div className="mb-6 bg-white rounded-2xl shadow-sm border border-neutral-100 p-4">
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
               aria-expanded={showFilters}
               aria-controls="filter-panel"
             >
@@ -218,7 +218,7 @@ export default function ITHilfePage() {
                 setSort(e.target.value)
                 setOffset(0)
               }}
-              className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               aria-label={t('sortLabel')}
             >
               {SORT_OPTIONS.map((option) => (
@@ -241,10 +241,10 @@ export default function ITHilfePage() {
 
           {/* Expanded Filters */}
           {showFilters && (
-            <div id="filter-panel" className="mt-4 pt-4 border-t border-gray-200">
+            <div id="filter-panel" className="mt-4 pt-4 border-t border-neutral-200">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label htmlFor="filter-category" className="block text-xs font-medium text-gray-700 mb-2">
+                  <label htmlFor="filter-category" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterCategory')}
                   </label>
                   <select
@@ -254,7 +254,7 @@ export default function ITHilfePage() {
                       setCategory(e.target.value)
                       setOffset(0)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCategoryAll')}</option>
                     {DEVICE_CATEGORIES.map((cat) => (
@@ -266,7 +266,7 @@ export default function ITHilfePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="filter-canton" className="block text-xs font-medium text-gray-700 mb-2">
+                  <label htmlFor="filter-canton" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterCanton')}
                   </label>
                   <select
@@ -276,7 +276,7 @@ export default function ITHilfePage() {
                       setCanton(e.target.value)
                       setOffset(0)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCantonAll')}</option>
                     {SWISS_CANTONS.map((c) => (
@@ -288,7 +288,7 @@ export default function ITHilfePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="filter-urgency" className="block text-xs font-medium text-gray-700 mb-2">
+                  <label htmlFor="filter-urgency" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterUrgency')}
                   </label>
                   <select
@@ -298,7 +298,7 @@ export default function ITHilfePage() {
                       setUrgency(e.target.value)
                       setOffset(0)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterUrgencyAll')}</option>
                     {URGENCY_LEVELS.map((u) => (
@@ -310,7 +310,7 @@ export default function ITHilfePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="filter-budget" className="block text-xs font-medium text-gray-700 mb-2">
+                  <label htmlFor="filter-budget" className="block text-xs font-medium text-neutral-700 mb-2">
                     {t('filterBudget')}
                   </label>
                   <select
@@ -320,7 +320,7 @@ export default function ITHilfePage() {
                       setBudgetType(e.target.value)
                       setOffset(0)
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterBudgetAll')}</option>
                     <option value="free">{t('filterBudgetFree')}</option>
@@ -386,18 +386,18 @@ export default function ITHilfePage() {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
               aria-label={t('prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm text-gray-600 px-4" aria-current="page">
+            <span className="text-sm text-neutral-600 px-4" aria-current="page">
               {t('pageOf', { current: currentPage, total: totalPages })}
             </span>
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
               aria-label={t('nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
@@ -407,16 +407,16 @@ export default function ITHilfePage() {
 
         {/* CTA Section for Becoming a Technician */}
         {!session?.user && (
-          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
                 <Wrench className="h-6 w-6 text-emerald-600" />
               </div>
             </div>
-            <Heading level={3} className="text-xl text-gray-900 mb-2">
+            <Heading level={3} className="text-xl text-neutral-900 mb-2">
               {t('ctaTitle')}
             </Heading>
-            <p className="text-base text-gray-600 mb-6 max-w-md mx-auto">
+            <p className="text-base text-neutral-600 mb-6 max-w-md mx-auto">
               {t('ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

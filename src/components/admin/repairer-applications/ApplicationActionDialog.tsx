@@ -25,20 +25,20 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
 
   return (
     <div className="bg-white rounded-lg shadow-lg border-2 border-blue-300 p-6">
-      <Heading level={3} className="text-lg text-gray-900 mb-4">
+      <Heading level={3} className="text-lg text-neutral-900 mb-4">
         {DIALOG_TITLES[dialog.type]}
       </Heading>
 
       {needsReason && (
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
             {dialog.type === 'request_changes' ? 'Geforderte Änderungen (erforderlich):' : 'Grund (erforderlich):'}
           </label>
           <textarea
             value={dialog.reason}
             onChange={(e) => onDialogChange({ ...dialog, reason: e.target.value })}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
             autoFocus
           />
         </div>
@@ -46,20 +46,20 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
 
       {dialog.type === 'approve_doc' && (
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 mb-1">
             Ablaufdatum (YYYY-MM-DD, optional):
           </label>
           <input
             type="date"
             value={dialog.expiresAt}
             onChange={(e) => onDialogChange({ ...dialog, expiresAt: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
           />
         </div>
       )}
 
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 mb-1">
           Admin-Notizen (optional):
         </label>
         <textarea
@@ -67,7 +67,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
           onChange={(e) => onDialogChange({ ...dialog, notes: e.target.value })}
           rows={2}
           placeholder="Optionale Notizen..."
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
         />
       </div>
 
@@ -81,7 +81,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
         </button>
         <button
           onClick={onClose}
-          className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
         >
           Abbrechen
         </button>

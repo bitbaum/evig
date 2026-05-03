@@ -141,7 +141,7 @@ export default function MyListingsPage() {
   if (sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
       </div>
     )
   }
@@ -151,14 +151,14 @@ export default function MyListingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">{t('pageTitle')}</Heading>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
             {t('pageSubtitle')}
           </p>
         </div>
         <Link
           href="/marketplace/sell"
-          className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-9 px-3 bg-green-600 text-white hover:bg-green-700 transition-colors"
+          className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-9 px-3 bg-primary-600 text-white hover:bg-primary-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
           {t('newListing')}
@@ -166,15 +166,15 @@ export default function MyListingsPage() {
       </div>
 
       {/* Status Tabs */}
-      <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+      <div className="flex gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
         {STATUS_TABS.map(tab => (
           <button
             key={tab.value}
             onClick={() => handleStatusFilterChange(tab.value)}
             className={`flex-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
               statusFilter === tab.value
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
+                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
             {tab.label}
@@ -185,8 +185,8 @@ export default function MyListingsPage() {
       {/* Loading */}
       {isLoading && (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
+          <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+          <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
         </div>
       )}
 
@@ -213,7 +213,7 @@ export default function MyListingsPage() {
           action={
             <Link
               href="/marketplace/sell"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
               {t('createFirst')}
@@ -231,7 +231,7 @@ export default function MyListingsPage() {
             return (
               <div
                 key={listing.id}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 flex items-center gap-4"
+                className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 flex items-center gap-4"
               >
                 {/* Thumbnail */}
                 <Link href={`/marketplace/${listing.id}`} className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
@@ -240,11 +240,11 @@ export default function MyListingsPage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <Link href={`/marketplace/${listing.id}`} className="hover:text-green-600 transition-colors">
-                    <Heading level={3} className="font-medium text-gray-900 dark:text-white truncate">{listing.title}</Heading>
+                  <Link href={`/marketplace/${listing.id}`} className="hover:text-primary-600 transition-colors">
+                    <Heading level={3} className="font-medium text-neutral-900 dark:text-white truncate">{listing.title}</Heading>
                   </Link>
-                  <div className="flex items-center gap-3 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold text-gray-900 dark:text-white">
+                  <div className="flex items-center gap-3 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+                    <span className="font-semibold text-neutral-900 dark:text-white">
                       {formatCHF(Number(listing.price_chf))}
                     </span>
                     <span>{listing.category}</span>
@@ -252,7 +252,7 @@ export default function MyListingsPage() {
                       {conditionInfo.label}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                  <div className="flex items-center gap-3 mt-1 text-xs text-neutral-400">
                     <span className="inline-flex items-center gap-1">
                       <Eye className="w-3 h-3" />
                       {listing.view_count}
@@ -275,7 +275,7 @@ export default function MyListingsPage() {
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Link
                     href={`/marketplace/sell?edit=${listing.id}`}
-                    className="p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="p-2 rounded-lg text-neutral-500 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                     title={t('actionEdit')}
                   >
                     <Pencil className="w-4 h-4" />
@@ -283,7 +283,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => handleDuplicate(listing.id)}
                     disabled={duplicatingId === listing.id}
-                    className="p-2 rounded-lg text-gray-500 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-neutral-500 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors disabled:opacity-50"
                     title={t('actionDuplicate')}
                   >
                     {duplicatingId === listing.id ? (
@@ -295,7 +295,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => handleDelete(listing.id)}
                     disabled={deletingId === listing.id}
-                    className="p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-neutral-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
                     title={t('actionDelete')}
                   >
                     {deletingId === listing.id ? (
@@ -314,25 +314,25 @@ export default function MyListingsPage() {
       {/* Pagination */}
       {!isLoading && !error && totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {t('totalCount', { count: total })}
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={() => fetchListings(page - 1)}
               disabled={page <= 1}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               {t('prevPage')}
             </button>
-            <span className="text-sm text-gray-600 dark:text-gray-400">
+            <span className="text-sm text-neutral-600 dark:text-neutral-400">
               {t('paginationPage', { page, total: totalPages })}
             </span>
             <button
               onClick={() => fetchListings(page + 1)}
               disabled={page >= totalPages}
-              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {t('nextPage')}
               <ChevronRight className="w-4 h-4" />

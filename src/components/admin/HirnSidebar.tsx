@@ -83,18 +83,18 @@ export function HirnSidebar({
       {stats && (
         <div className="px-4 pb-4">
           <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
               <FileText className="w-4 h-4 text-purple-600" />
               <div>
-                <p className="text-xs text-gray-500">Dokumente</p>
-                <p className="font-medium text-gray-900 dark:text-white">{stats.totalDocuments}</p>
+                <p className="text-xs text-neutral-500">Dokumente</p>
+                <p className="font-medium text-neutral-900 dark:text-white">{stats.totalDocuments}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
               <BarChart3 className="w-4 h-4 text-purple-600" />
               <div>
-                <p className="text-xs text-gray-500">Chunks</p>
-                <p className="font-medium text-gray-900 dark:text-white">{stats.totalChunks}</p>
+                <p className="text-xs text-neutral-500">Chunks</p>
+                <p className="font-medium text-neutral-900 dark:text-white">{stats.totalChunks}</p>
               </div>
             </div>
           </div>
@@ -103,16 +103,16 @@ export function HirnSidebar({
 
       {/* Sessions List */}
       <div className="flex-1 overflow-y-auto px-2">
-        <Heading level={3} className="px-2 py-1 text-xs font-medium text-gray-500 uppercase">
+        <Heading level={3} className="px-2 py-1 text-xs font-medium text-neutral-500 uppercase">
           Gespräche
         </Heading>
 
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-5 h-5 animate-spin text-gray-500" />
+            <Loader2 className="w-5 h-5 animate-spin text-neutral-500" />
           </div>
         ) : sessions.length === 0 ? (
-          <p className="px-2 py-4 text-sm text-gray-500 text-center">
+          <p className="px-2 py-4 text-sm text-neutral-500 text-center">
             Keine Gespräche vorhanden
           </p>
         ) : (
@@ -124,7 +124,7 @@ export function HirnSidebar({
                 className={`w-full flex items-center gap-2 p-2 rounded-lg text-left transition-colors ${
                   currentSessionId === session.sessionId
                     ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-100'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
+                    : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                 }`}
               >
                 <MessageSquare className="w-4 h-4 flex-shrink-0" />
@@ -133,7 +133,7 @@ export function HirnSidebar({
                     {session.firstMessage.slice(0, 40)}
                     {session.firstMessage.length > 40 ? '...' : ''}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-neutral-500">
                     {formatRelativeTime(session.lastActivity.toISOString())} · {session.messageCount} Nachrichten
                   </p>
                 </div>

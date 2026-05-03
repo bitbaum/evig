@@ -36,9 +36,9 @@ export function ReportModal({
     <Modal isOpen={true} onClose={onClose} title={t('title')} size="sm">
       {reportSent ? (
         <div className="text-center py-4">
-          <Check className="w-12 h-12 text-green-500 mx-auto mb-3" aria-hidden="true" />
-          <p className="text-green-700 dark:text-green-400 font-medium">{t('sent')}</p>
-          <p className="text-sm text-gray-500 mt-1">{t('sentThanks')}</p>
+          <Check className="w-12 h-12 text-primary-500 mx-auto mb-3" aria-hidden="true" />
+          <p className="text-primary-700 dark:text-primary-400 font-medium">{t('sent')}</p>
+          <p className="text-sm text-neutral-500 mt-1">{t('sentThanks')}</p>
         </div>
       ) : (
         <>
@@ -48,8 +48,8 @@ export function ReportModal({
                 key={r.value}
                 className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
                   reportReason === r.value
-                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                    : 'border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-neutral-200 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
                 }`}
               >
                 <input
@@ -58,9 +58,9 @@ export function ReportModal({
                   value={r.value}
                   checked={reportReason === r.value}
                   onChange={e => onReportReasonChange(e.target.value)}
-                  className="accent-green-600"
+                  className="accent-primary-600"
                 />
-                <span className="text-sm text-gray-900 dark:text-white">{r.label}</span>
+                <span className="text-sm text-neutral-900 dark:text-white">{r.label}</span>
               </label>
             ))}
           </div>
@@ -69,7 +69,7 @@ export function ReportModal({
             onChange={e => onReportDetailsChange(e.target.value)}
             placeholder={t('detailsPlaceholder')}
             rows={3}
-            className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 resize-none mb-4"
+            className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none mb-4"
           />
           <Button
             onClick={onReport}

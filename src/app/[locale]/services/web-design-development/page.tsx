@@ -48,7 +48,7 @@ export default async function WebDesignDevelopmentPage() {
           </Link>
           <Link
             href="#services"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-blue-600 hover:bg-gray-50 border-2 border-blue-600 transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-blue-600 hover:bg-neutral-50 border-2 border-blue-600 transition-colors"
           >
             {t('ctaDiscover')}
           </Link>

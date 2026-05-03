@@ -88,10 +88,10 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   if (loading) {
     return (
       <div className="animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/2 mb-4"></div>
+        <div className="h-6 bg-neutral-200 rounded w-1/2 mb-4"></div>
         <div className="space-y-2">
-          <div className="h-12 bg-gray-200 rounded"></div>
-          <div className="h-12 bg-gray-200 rounded"></div>
+          <div className="h-12 bg-neutral-200 rounded"></div>
+          <div className="h-12 bg-neutral-200 rounded"></div>
         </div>
       </div>
     )
@@ -108,10 +108,10 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   if (materials.length === 0) {
     return (
       <div className="text-center py-6">
-        <FileText className="w-10 h-10 text-gray-300 mx-auto mb-2" />
-        <p className="text-gray-500 text-sm">{t('emptyTitle')}</p>
+        <FileText className="w-10 h-10 text-neutral-300 mx-auto mb-2" />
+        <p className="text-neutral-500 text-sm">{t('emptyTitle')}</p>
         {accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
-          <p className="text-gray-500 text-xs mt-1">
+          <p className="text-neutral-500 text-xs mt-1">
             {t('loginHint')}
           </p>
         )}
@@ -122,7 +122,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   return (
     <div className="space-y-3">
       {accessLevel !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
-        <div className="flex items-center gap-2 text-xs text-green-600 mb-2">
+        <div className="flex items-center gap-2 text-xs text-primary-600 mb-2">
           <Unlock className="w-3 h-3" />
           <span>
             {accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
@@ -139,7 +139,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           target={isExternalLink(material.url) ? '_blank' : undefined}
           rel={isExternalLink(material.url) ? 'noopener noreferrer' : undefined}
           download={!isExternalLink(material.url)}
-          className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+          className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors group"
         >
           <div className={`p-2 rounded-lg ${
             material.material_type === 'pdf' ? 'bg-red-100 text-red-600' :
@@ -152,7 +152,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-medium text-gray-900 text-sm truncate">
+              <span className="font-medium text-neutral-900 text-sm truncate">
                 {material.title}
               </span>
               {material.access_type !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
@@ -166,11 +166,11 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
               )}
             </div>
             {material.description && (
-              <p className="text-gray-600 text-xs mt-0.5 line-clamp-1">
+              <p className="text-neutral-600 text-xs mt-0.5 line-clamp-1">
                 {material.description}
               </p>
             )}
-            <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+            <div className="flex items-center gap-2 mt-1 text-xs text-neutral-500">
               <span className="uppercase">{material.material_type}</span>
               {material.file_size_bytes && (
                 <>
@@ -183,9 +183,9 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
 
           <div className="opacity-0 group-hover:opacity-100 transition-opacity">
             {isExternalLink(material.url) ? (
-              <ExternalLink className="w-4 h-4 text-gray-400" />
+              <ExternalLink className="w-4 h-4 text-neutral-400" />
             ) : (
-              <Download className="w-4 h-4 text-gray-400" />
+              <Download className="w-4 h-4 text-neutral-400" />
             )}
           </div>
         </a>

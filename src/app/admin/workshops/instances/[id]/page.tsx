@@ -98,7 +98,7 @@ export default function AdminWorkshopInstanceDetailPage({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-        return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Bestätigt</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full">Bestätigt</span>
       case WORKSHOP_REGISTRATION_STATUS.PENDING:
         return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
       case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
@@ -106,30 +106,30 @@ export default function AdminWorkshopInstanceDetailPage({
       case WORKSHOP_REGISTRATION_STATUS.ATTENDED:
         return <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Teilgenommen</span>
       case WORKSHOP_REGISTRATION_STATUS.NO_SHOW:
-        return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">Nicht erschienen</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">Nicht erschienen</span>
       default:
-        return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">{status}</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">{status}</span>
     }
   }
 
   const getPaymentBadge = (paymentStatus: string) => {
     switch (paymentStatus) {
       case WORKSHOP_PAYMENT_STATUS.PAID:
-        return <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Bezahlt</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full">Bezahlt</span>
       case WORKSHOP_PAYMENT_STATUS.PENDING:
         return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
       case WORKSHOP_PAYMENT_STATUS.REFUNDED:
         return <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">Erstattet</span>
       case WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED:
-        return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-600 rounded-full">Kostenlos</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-600 rounded-full">Kostenlos</span>
       default:
-        return <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">{paymentStatus}</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">{paymentStatus}</span>
     }
   }
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
       </div>
     )
@@ -142,7 +142,7 @@ export default function AdminWorkshopInstanceDetailPage({
 
   if (error || !instance) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
             <p className="text-red-800">{error || 'Termin nicht gefunden'}</p>
@@ -162,13 +162,13 @@ export default function AdminWorkshopInstanceDetailPage({
   const isPast = new Date(instance.start_date) < new Date()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/admin/workshops/instances"
-            className="inline-flex items-center text-gray-600 hover:text-gray-800 mb-4"
+            className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Zurück zur Übersicht
@@ -178,9 +178,9 @@ export default function AdminWorkshopInstanceDetailPage({
             <div>
               <div className="flex items-center gap-3">
                 <GraduationCap className="w-8 h-8 text-blue-600" />
-                <Heading level={1} className="text-2xl font-bold text-gray-900">{instance.workshop_title}</Heading>
+                <Heading level={1} className="text-2xl font-bold text-neutral-900">{instance.workshop_title}</Heading>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-gray-600">
+              <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-neutral-600">
                 <div className="flex items-center gap-1">
                   <Calendar className="w-4 h-4" />
                   {formatDateTimeWithWeekday(instance.start_date)}
@@ -196,10 +196,10 @@ export default function AdminWorkshopInstanceDetailPage({
 
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-neutral-900">
                   {instance.current_participants}/{instance.max_participants || '∞'}
                 </div>
-                <div className="text-sm text-gray-600">Teilnehmer</div>
+                <div className="text-sm text-neutral-600">Teilnehmer</div>
               </div>
               {getStatusBadge(instance.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED ? (isPast ? WORKSHOP_INSTANCE_STATUS.COMPLETED : WORKSHOP_INSTANCE_STATUS.SCHEDULED) : instance.status)}
             </div>
@@ -219,14 +219,14 @@ export default function AdminWorkshopInstanceDetailPage({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-600" />
+              <div className="p-2 bg-primary-100 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-primary-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-neutral-900">
                   {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || r.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED).length}
                 </div>
-                <div className="text-sm text-gray-600">Bestätigt</div>
+                <div className="text-sm text-neutral-600">Bestätigt</div>
               </div>
             </div>
           </div>
@@ -237,10 +237,10 @@ export default function AdminWorkshopInstanceDetailPage({
                 <Clock className="w-5 h-5 text-yellow-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-neutral-900">
                   {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.PENDING).length}
                 </div>
-                <div className="text-sm text-gray-600">Ausstehend</div>
+                <div className="text-sm text-neutral-600">Ausstehend</div>
               </div>
             </div>
           </div>
@@ -251,10 +251,10 @@ export default function AdminWorkshopInstanceDetailPage({
                 <XCircle className="w-5 h-5 text-red-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-neutral-900">
                   {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED).length}
                 </div>
-                <div className="text-sm text-gray-600">Abgesagt</div>
+                <div className="text-sm text-neutral-600">Abgesagt</div>
               </div>
             </div>
           </div>
@@ -265,13 +265,13 @@ export default function AdminWorkshopInstanceDetailPage({
                 <DollarSign className="w-5 h-5 text-blue-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-neutral-900">
                   CHF {(registrations
                     .filter(r => r.payment_status === WORKSHOP_PAYMENT_STATUS.PAID && r.payment_amount_cents)
                     .reduce((sum, r) => sum + (r.payment_amount_cents || 0), 0) / 100
                   ).toFixed(0)}
                 </div>
-                <div className="text-sm text-gray-600">Einnahmen</div>
+                <div className="text-sm text-neutral-600">Einnahmen</div>
               </div>
             </div>
           </div>
@@ -279,44 +279,44 @@ export default function AdminWorkshopInstanceDetailPage({
 
         {/* Registrations Table */}
         <div className="bg-white rounded-xl shadow-sm border">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <Heading level={2} className="text-lg font-semibold text-gray-900">
+          <div className="px-6 py-4 border-b border-neutral-200">
+            <Heading level={2} className="text-lg font-semibold text-neutral-900">
               Anmeldungen ({registrations.length})
             </Heading>
           </div>
 
           {registrations.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">Noch keine Anmeldungen</Heading>
-              <p className="text-gray-600">
+              <Users className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">Noch keine Anmeldungen</Heading>
+              <p className="text-neutral-600">
                 Sobald sich jemand anmeldet, erscheinen die Daten hier.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-neutral-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Teilnehmer</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Zahlung</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Angemeldet</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Feedback</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktionen</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Teilnehmer</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Zahlung</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Angemeldet</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Feedback</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Aktionen</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-neutral-200">
                   {registrations.map((reg) => (
-                    <tr key={reg.id} className="hover:bg-gray-50">
+                    <tr key={reg.id} className="hover:bg-neutral-50">
                       <td className="px-6 py-4">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                            <User className="w-5 h-5 text-gray-600" />
+                          <div className="flex-shrink-0 h-10 w-10 bg-neutral-200 rounded-full flex items-center justify-center">
+                            <User className="w-5 h-5 text-neutral-600" />
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{reg.user_name}</div>
-                            <div className="text-sm text-gray-500 flex items-center gap-1">
+                            <div className="text-sm font-medium text-neutral-900">{reg.user_name}</div>
+                            <div className="text-sm text-neutral-500 flex items-center gap-1">
                               <Mail className="w-3 h-3" />
                               {reg.user_email}
                             </div>
@@ -330,13 +330,13 @@ export default function AdminWorkshopInstanceDetailPage({
                         <div className="flex flex-col gap-1">
                           {getPaymentBadge(reg.payment_status)}
                           {reg.payment_amount_cents && reg.payment_amount_cents > 0 && (
-                            <span className="text-sm text-gray-600">
+                            <span className="text-sm text-neutral-600">
                               CHF {(reg.payment_amount_cents / 100).toFixed(2)}
                             </span>
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
+                      <td className="px-6 py-4 text-sm text-neutral-600">
                         {formatDateShort(reg.registered_at)}
                       </td>
                       <td className="px-6 py-4">
@@ -347,7 +347,7 @@ export default function AdminWorkshopInstanceDetailPage({
                           </div>
                         )}
                         {reg.feedback && (
-                          <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
+                          <div className="flex items-center gap-1 text-sm text-neutral-500 mt-1">
                             <MessageSquare className="w-3 h-3" />
                             <span className="truncate max-w-[150px]">{reg.feedback}</span>
                           </div>
@@ -359,7 +359,7 @@ export default function AdminWorkshopInstanceDetailPage({
                             <>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CONFIRMED)}
-                                className="text-green-600 hover:text-green-800 text-sm"
+                                className="text-primary-600 hover:text-primary-800 text-sm"
                               >
                                 Bestätigen
                               </button>
@@ -381,7 +381,7 @@ export default function AdminWorkshopInstanceDetailPage({
                               </button>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.NO_SHOW)}
-                                className="text-gray-600 hover:text-gray-800 text-sm"
+                                className="text-neutral-600 hover:text-neutral-800 text-sm"
                               >
                                 Nicht erschienen
                               </button>
@@ -400,8 +400,8 @@ export default function AdminWorkshopInstanceDetailPage({
         {/* Notes Section */}
         {instance.notes && (
           <div className="mt-8 bg-white rounded-xl shadow-sm border p-6">
-            <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">Interne Notizen</Heading>
-            <p className="text-gray-600">{instance.notes}</p>
+            <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">Interne Notizen</Heading>
+            <p className="text-neutral-600">{instance.notes}</p>
           </div>
         )}
       </div>

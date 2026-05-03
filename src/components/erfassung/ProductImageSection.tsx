@@ -21,8 +21,8 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
   const t = useTranslations('components.erfassung.productImage')
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+      <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
         <Camera className="w-5 h-5" />
         {t('title')}
       </Heading>
@@ -46,10 +46,10 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors">
-            <Camera className="w-8 h-8 text-gray-500 mb-2" />
-            <span className="text-sm text-gray-600 dark:text-gray-400">{t('upload')}</span>
-            <span className="text-xs text-gray-500 dark:text-gray-500 mt-1">{t('drag')}</span>
+          <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-lg cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
+            <Camera className="w-8 h-8 text-neutral-500 mb-2" />
+            <span className="text-sm text-neutral-600 dark:text-neutral-400">{t('upload')}</span>
+            <span className="text-xs text-neutral-500 dark:text-neutral-500 mt-1">{t('drag')}</span>
             <input
               type="file"
               accept="image/*"
@@ -69,7 +69,7 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
           </label>
         )}
       </div>
-      <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+      <p className="mt-2 text-xs text-neutral-600 dark:text-neutral-400">
         {t('hint')}
       </p>
     </div>

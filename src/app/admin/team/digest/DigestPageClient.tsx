@@ -40,13 +40,13 @@ export function DigestPageClient() {
     <div className="space-y-6">
       {/* Period Selector */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
+        <div className="flex items-center gap-2 bg-neutral-100 dark:bg-neutral-800 p-1 rounded-lg">
           <button
             onClick={() => setDateRange('week')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'week'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
+                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
             Diese Woche
@@ -55,8 +55,8 @@ export function DigestPageClient() {
             onClick={() => setDateRange('month')}
             className={`px-4 py-2 text-sm rounded-md transition-colors ${
               dateRange === 'month'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm'
+                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
             }`}
           >
             Dieser Monat
@@ -66,7 +66,7 @@ export function DigestPageClient() {
         <button
           onClick={() => refetch()}
           disabled={loading}
-          className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+          className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
           title="Aktualisieren"
         >
           <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -87,18 +87,18 @@ export function DigestPageClient() {
             {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 animate-pulse"
+                className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 animate-pulse"
               >
-                <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-16 mb-2" />
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24" />
+                <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-16 mb-2" />
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-24" />
               </div>
             ))}
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 animate-pulse">
-            <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-40 mb-4" />
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 animate-pulse">
+            <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-40 mb-4" />
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
-                <div key={i} className="h-12 bg-gray-200 dark:bg-gray-700 rounded" />
+                <div key={i} className="h-12 bg-neutral-200 dark:bg-neutral-700 rounded" />
               ))}
             </div>
           </div>
@@ -109,7 +109,7 @@ export function DigestPageClient() {
       {!loading && !error && digest && (
         <>
           {/* Period Info */}
-          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
             <Calendar className="w-4 h-4" />
             <span>
               {formatDateNumeric(digest.period.since)} - {formatDateNumeric(digest.period.until)}
@@ -118,72 +118,72 @@ export function DigestPageClient() {
 
           {/* Totals */}
           <div className="grid md:grid-cols-5 gap-4">
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-green-600" />
+                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-primary-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                     {digest.totals.task_completions}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Aufgaben erledigt</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Aufgaben erledigt</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <FileText className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                     {digest.totals.activity_updates}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Aktivitäten</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Aktivitäten</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
                   <HelpCircle className="w-5 h-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                     {digest.totals.help_requests_created}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Hilfsanfragen</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Hilfsanfragen</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                     {digest.totals.help_requests_resolved}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Gelöst</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Gelöst</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
                   <Users className="w-5 h-5 text-indigo-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                     {digest.totals.active_users}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">Aktive Mitarbeiter</p>
+                  <p className="text-xs text-neutral-600 dark:text-neutral-400">Aktive Mitarbeiter</p>
                 </div>
               </div>
             </div>
@@ -192,14 +192,14 @@ export function DigestPageClient() {
           {/* Top Contributors & Milestones */}
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Top Contributors */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-yellow-500" />
-                <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100">Top Beiträger</Heading>
+                <Heading level={3} className="font-semibold text-neutral-900 dark:text-neutral-100">Top Beiträger</Heading>
               </div>
 
               {digest.top_contributors.length === 0 ? (
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm">
                   Noch keine Aktivitäten in diesem Zeitraum.
                 </p>
               ) : (
@@ -207,34 +207,34 @@ export function DigestPageClient() {
                   {digest.top_contributors.slice(0, 5).map((user, index) => (
                     <div
                       key={user.user_id}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700/50"
                     >
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                           index === 0
                             ? 'bg-yellow-100 text-yellow-700'
                             : index === 1
-                              ? 'bg-gray-200 text-gray-600'
+                              ? 'bg-neutral-200 text-neutral-600'
                               : index === 2
                                 ? 'bg-orange-100 text-orange-700'
-                                : 'bg-gray-100 text-gray-500'
+                                : 'bg-neutral-100 text-neutral-500'
                         }`}
                       >
                         {index + 1}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+                        <p className="font-medium text-neutral-900 dark:text-neutral-100 truncate">
                           {user.user_name || user.user_email.split('@')[0]}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
                           {user.task_completions} Aufgaben, {user.help_requests_resolved} gelöst
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                        <p className="text-lg font-bold text-neutral-900 dark:text-neutral-100">
                           {user.total_score}
                         </p>
-                        <p className="text-xs text-gray-500">Punkte</p>
+                        <p className="text-xs text-neutral-500">Punkte</p>
                       </div>
                     </div>
                   ))}
@@ -243,16 +243,16 @@ export function DigestPageClient() {
             </div>
 
             {/* Recent Milestones */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+            <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Flag className="w-5 h-5 text-purple-500" />
-                <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100">
+                <Heading level={3} className="font-semibold text-neutral-900 dark:text-neutral-100">
                   Letzte Meilensteine
                 </Heading>
               </div>
 
               {digest.recent_milestones.length === 0 ? (
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm">
                   Noch keine Meilensteine in diesem Zeitraum.
                 </p>
               ) : (
@@ -260,16 +260,16 @@ export function DigestPageClient() {
                   {digest.recent_milestones.map((milestone) => (
                     <div
                       key={milestone.id}
-                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      className="flex items-start gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700/50"
                     >
                       <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
                         <Flag className="w-4 h-4 text-purple-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-gray-900 dark:text-gray-100">
+                        <p className="font-medium text-neutral-900 dark:text-neutral-100">
                           {milestone.title}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
                           {milestone.user_name || 'Unbekannt'} • {formatRelativeTime(milestone.occurred_at)}
                         </p>
                       </div>
@@ -282,20 +282,20 @@ export function DigestPageClient() {
 
           {/* Category Breakdown */}
           {digest.by_category.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+              <Heading level={3} className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 Aufgaben nach Kategorie
               </Heading>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {digest.by_category.map((cat) => (
                   <div
                     key={cat.category}
-                    className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                    className="p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg"
                   >
-                    <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
                       {cat.count}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
                       {TASK_CATEGORY_LABELS[cat.category as TaskCategory] || cat.category}
                     </p>
                   </div>
@@ -306,27 +306,27 @@ export function DigestPageClient() {
 
           {/* All Users Activity */}
           {digest.by_user.length > 0 && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              <Heading level={3} className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+              <Heading level={3} className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
                 Alle Mitarbeiter
               </Heading>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 dark:border-gray-700">
-                      <th className="text-left py-2 px-3 font-medium text-gray-600 dark:text-gray-400">
+                    <tr className="border-b border-neutral-200 dark:border-neutral-700">
+                      <th className="text-left py-2 px-3 font-medium text-neutral-600 dark:text-neutral-400">
                         Name
                       </th>
-                      <th className="text-center py-2 px-3 font-medium text-gray-600 dark:text-gray-400">
+                      <th className="text-center py-2 px-3 font-medium text-neutral-600 dark:text-neutral-400">
                         Aufgaben
                       </th>
-                      <th className="text-center py-2 px-3 font-medium text-gray-600 dark:text-gray-400">
+                      <th className="text-center py-2 px-3 font-medium text-neutral-600 dark:text-neutral-400">
                         Aktivitäten
                       </th>
-                      <th className="text-center py-2 px-3 font-medium text-gray-600 dark:text-gray-400">
+                      <th className="text-center py-2 px-3 font-medium text-neutral-600 dark:text-neutral-400">
                         Hilfsanfragen
                       </th>
-                      <th className="text-center py-2 px-3 font-medium text-gray-600 dark:text-gray-400">
+                      <th className="text-center py-2 px-3 font-medium text-neutral-600 dark:text-neutral-400">
                         Gelöst
                       </th>
                     </tr>
@@ -335,28 +335,28 @@ export function DigestPageClient() {
                     {digest.by_user.map((user) => (
                       <tr
                         key={user.user_id}
-                        className="border-b border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30"
+                        className="border-b border-neutral-100 dark:border-neutral-700/50 hover:bg-neutral-50 dark:hover:bg-neutral-700/30"
                       >
                         <td className="py-2 px-3">
-                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                          <span className="font-medium text-neutral-900 dark:text-neutral-100">
                             {user.user_name || user.user_email.split('@')[0]}
                           </span>
                           {user.department && (
-                            <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                            <span className="ml-2 text-xs text-neutral-500 dark:text-neutral-400">
                               {user.department}
                             </span>
                           )}
                         </td>
-                        <td className="text-center py-2 px-3 text-gray-900 dark:text-gray-100">
+                        <td className="text-center py-2 px-3 text-neutral-900 dark:text-neutral-100">
                           {user.task_completions}
                         </td>
-                        <td className="text-center py-2 px-3 text-gray-900 dark:text-gray-100">
+                        <td className="text-center py-2 px-3 text-neutral-900 dark:text-neutral-100">
                           {user.activity_updates}
                         </td>
-                        <td className="text-center py-2 px-3 text-gray-900 dark:text-gray-100">
+                        <td className="text-center py-2 px-3 text-neutral-900 dark:text-neutral-100">
                           {user.help_requests_created}
                         </td>
-                        <td className="text-center py-2 px-3 text-gray-900 dark:text-gray-100">
+                        <td className="text-center py-2 px-3 text-neutral-900 dark:text-neutral-100">
                           {user.help_requests_resolved}
                         </td>
                       </tr>

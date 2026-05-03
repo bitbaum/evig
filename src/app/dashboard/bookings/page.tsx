@@ -174,7 +174,7 @@ export default function CustomerBookings() {
           <button
             onClick={() => setActiveTab('completed')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'completed' ? 'bg-green-100 text-green-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
+              (activeTab === 'completed' ? 'bg-primary-100 text-primary-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
           >
             <CheckCircle className="h-4 w-4" />
             {t('tabCompleted')}
@@ -262,7 +262,7 @@ export default function CustomerBookings() {
                       <button
                         onClick={() => handleAction(apt.id, 'approve_quote')}
                         disabled={actionLoading === apt.id}
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 flex items-center gap-2"
+                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
                       >
                         {actionLoading === apt.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
                         {t('acceptQuote')}

@@ -141,7 +141,7 @@ function SellPageContent() {
   if (status === 'loading' || isLoadingEdit) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
       </div>
     )
   }
@@ -149,14 +149,14 @@ function SellPageContent() {
   if (!session?.user) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
+        <Package className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
           {t('loginRequired')}
         </Heading>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-neutral-600 dark:text-neutral-400 mb-6">
           {t('loginRequiredDesc')}
         </p>
-        <Link href="/auth/login" className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+        <Link href="/auth/login" className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium">
           {t('login')}
         </Link>
       </div>
@@ -269,19 +269,19 @@ function SellPageContent() {
     <div className="max-w-3xl mx-auto">
       <Link
         href="/marketplace"
-        className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6"
+        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToMarketplace')}
       </Link>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-        <div className="p-4 md:p-6 border-b border-gray-100 dark:border-gray-700">
-          <Heading level={1} className="text-xl text-gray-900 dark:text-white flex items-center gap-2">
-            <Package className="w-5 h-5 text-green-600" />
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="p-4 md:p-6 border-b border-neutral-100 dark:border-neutral-700">
+          <Heading level={1} className="text-xl text-neutral-900 dark:text-white flex items-center gap-2">
+            <Package className="w-5 h-5 text-primary-600" />
             {editId ? t('editTitle') : t('createTitle')}
           </Heading>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
             {editId ? t('editSubtitle') : t('createSubtitle')}
           </p>
         </div>
@@ -311,7 +311,7 @@ function SellPageContent() {
                 <button
                   type="button"
                   onClick={() => setShowCamera(true)}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-green-300 dark:border-green-700 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
                 >
                   <Camera className="w-5 h-5" />
                   {t('cameraButton')}
@@ -333,12 +333,12 @@ function SellPageContent() {
         </div>
 
         {/* Footer */}
-        <div className="p-4 md:p-6 border-t border-gray-100 dark:border-gray-700">
+        <div className="p-4 md:p-6 border-t border-neutral-100 dark:border-neutral-700">
           {error && <ErrorAlert message={error} variant="inline" className="mb-4" />}
           <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Link
               href="/marketplace"
-              className="px-6 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 text-center"
+              className="px-6 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-600 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-center"
             >
               {t('cancelButton')}
             </Link>
@@ -361,7 +361,7 @@ export default function SellPage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
       </div>
     }>
       <SellPageContent />

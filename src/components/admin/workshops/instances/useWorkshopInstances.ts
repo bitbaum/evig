@@ -157,9 +157,9 @@ export function useWorkshopInstances() {
       case WORKSHOP_INSTANCE_STATUS.CANCELLED:
         return { label: 'Abgesagt', className: 'bg-red-100 text-red-800' }
       case WORKSHOP_INSTANCE_STATUS.COMPLETED:
-        return { label: 'Abgeschlossen', className: 'bg-green-100 text-green-800' }
+        return { label: 'Abgeschlossen', className: 'bg-primary-100 text-primary-800' }
       default:
-        return { label: status, className: 'bg-gray-100 text-gray-800' }
+        return { label: status, className: 'bg-neutral-100 text-neutral-800' }
     }
   }
 

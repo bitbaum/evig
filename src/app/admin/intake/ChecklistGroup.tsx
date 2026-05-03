@@ -31,7 +31,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-3 bg-gray-50 hover:bg-gray-100 text-left"
+        className="w-full flex items-center justify-between p-3 bg-neutral-50 hover:bg-neutral-100 text-left"
       >
         <div className="flex items-center gap-2">
           {expanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -39,8 +39,8 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
         </div>
         <span className={`text-xs px-2 py-0.5 rounded-full ${
           completedCount === group.items.length
-            ? 'bg-green-100 text-green-700'
-            : 'bg-gray-200 text-gray-600'
+            ? 'bg-primary-100 text-primary-700'
+            : 'bg-neutral-200 text-neutral-600'
         }`}>
           {completedCount}/{group.items.length}
         </span>
@@ -51,7 +51,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
           {group.items.map((item) => (
             <div
               key={item.id}
-              className={`p-3 transition-colors ${item.state.completed ? 'bg-green-50' : ''}`}
+              className={`p-3 transition-colors ${item.state.completed ? 'bg-primary-50' : ''}`}
             >
               <div className="flex items-start gap-3">
                 {/* Checkbox */}
@@ -60,8 +60,8 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   onClick={() => onToggle(item.id, !item.state.completed)}
                   className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                     item.state.completed
-                      ? 'bg-green-500 border-green-500 text-white'
-                      : 'border-gray-300 hover:border-blue-400'
+                      ? 'bg-primary-500 border-primary-500 text-white'
+                      : 'border-neutral-300 hover:border-blue-400'
                   }`}
                   aria-label={item.state.completed ? `${item.label} rückgängig machen` : `${item.label} abhaken`}
                 >
@@ -71,7 +71,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                 <div className="flex-1 min-w-0">
                   {/* Label + required marker */}
                   <div className="flex items-center gap-1.5">
-                    <span className={`text-sm ${item.state.completed ? 'line-through text-gray-400' : 'font-medium text-gray-900'}`}>
+                    <span className={`text-sm ${item.state.completed ? 'line-through text-neutral-400' : 'font-medium text-neutral-900'}`}>
                       {item.label}
                     </span>
                     {item.required && (
@@ -80,14 +80,14 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-gray-500 mt-0.5">{item.description}</p>
+                  <p className="text-xs text-neutral-500 mt-0.5">{item.description}</p>
 
                   {/* Completed metadata + notes */}
                   {item.state.completed && (
                     <div className="mt-1.5 space-y-1">
                       <div className="flex items-center gap-3 flex-wrap">
                         {item.state.completedAt && (
-                          <span className="text-xs text-green-600">
+                          <span className="text-xs text-primary-600">
                             Erledigt am {formatDateShort(item.state.completedAt)}
                           </span>
                         )}
@@ -95,7 +95,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           <button
                             type="button"
                             onClick={() => openNotes(item.id, item.state.notes)}
-                            className="text-xs text-gray-400 hover:text-blue-600 flex items-center gap-0.5 transition-colors"
+                            className="text-xs text-neutral-400 hover:text-blue-600 flex items-center gap-0.5 transition-colors"
                           >
                             <StickyNote className="w-3 h-3" />
                             {item.state.notes ? 'Notiz bearbeiten' : 'Notiz hinzufügen'}
@@ -105,7 +105,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
 
                       {/* Existing note preview (when textarea not open) */}
                       {item.state.notes && !notesOpen[item.id] && (
-                        <p className="text-xs text-gray-500 italic pl-0.5">„{item.state.notes}"</p>
+                        <p className="text-xs text-neutral-500 italic pl-0.5">„{item.state.notes}"</p>
                       )}
                     </div>
                   )}
@@ -120,7 +120,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         onChange={(e) => setNotesText(t => ({ ...t, [item.id]: e.target.value }))}
                         placeholder="z.B. CPU-Stresstest bestanden, max. 75 °C ..."
                         rows={2}
-                        className="w-full text-xs border border-gray-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-blue-400 focus:border-blue-400 resize-none"
+                        className="w-full text-xs border border-neutral-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-blue-400 focus:border-blue-400 resize-none"
                       />
                       <div className="flex gap-2">
                         <button
@@ -133,7 +133,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         <button
                           type="button"
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}
-                          className="text-xs px-2.5 py-1 border rounded hover:bg-gray-50 transition-colors"
+                          className="text-xs px-2.5 py-1 border rounded hover:bg-neutral-50 transition-colors"
                         >
                           Abbrechen
                         </button>

@@ -21,10 +21,10 @@ export default function ReviewsError({
     <div className="flex items-center justify-center min-h-[400px]">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={1} className="text-lg font-medium text-gray-900" role="alert">
+        <Heading level={1} className="text-lg font-medium text-neutral-900" role="alert">
           Fehler beim Laden der Bewertungen
         </Heading>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-neutral-600">
           Die Bewertungsübersicht konnte nicht geladen werden.
         </p>
         <div className="mt-6 flex flex-col gap-3">
@@ -36,7 +36,7 @@ export default function ReviewsError({
           </button>
           <Link
             href="/dashboard"
-            className="text-sm text-gray-600 hover:text-gray-900 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
+            className="text-sm text-neutral-600 hover:text-neutral-900 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
           >
             Zurück zum Dashboard
           </Link>

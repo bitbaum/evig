@@ -30,7 +30,7 @@ export function UserTableRow({
   const hasFullAccess = permissions.includes('*')
 
   return (
-    <tr className="hover:bg-gray-50 dark:hover:bg-gray-700">
+    <tr className="hover:bg-neutral-50 dark:hover:bg-neutral-700">
       <UserInfoCell user={user} userIsSuperAdmin={userIsSuperAdmin} userIsStaff={userIsStaff} />
       <StatusCell
         userIsSuperAdmin={userIsSuperAdmin}
@@ -69,8 +69,8 @@ function UserInfoCell({
   const avatarClass = userIsSuperAdmin
     ? 'bg-gradient-to-r from-purple-500 to-pink-600'
     : userIsStaff
-      ? 'bg-gradient-to-r from-blue-500 to-green-600'
-      : 'bg-gradient-to-r from-gray-400 to-gray-500'
+      ? 'bg-gradient-to-r from-blue-500 to-primary-600'
+      : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
 
   const initials = user.name
     ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2)
@@ -85,10 +85,10 @@ function UserInfoCell({
           </div>
         </div>
         <div className="ml-4">
-          <div className="text-sm font-medium text-gray-900 dark:text-white">
+          <div className="text-sm font-medium text-neutral-900 dark:text-white">
             {user.name || 'Kein Name'}
           </div>
-          <div className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
+          <div className="text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-1">
             <Mail className="w-3 h-3" />
             {user.email}
           </div>
@@ -123,12 +123,12 @@ function StatusCell({
           </span>
         )}
         {!userIsStaff && (
-          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300">
+          <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300">
             Benutzer
           </span>
         )}
         {emailVerified && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">
             <UserCheck className="w-3 h-3" />
             Verifiziert
           </span>
@@ -150,7 +150,7 @@ function PermissionsCell({
   if (!userIsStaff) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-gray-500">-</span>
+        <span className="text-sm text-neutral-500">-</span>
       </td>
     )
   }
@@ -168,7 +168,7 @@ function PermissionsCell({
   if (permissions.length === 0) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-gray-500">Keine Berechtigungen</span>
+        <span className="text-sm text-neutral-500">Keine Berechtigungen</span>
       </td>
     )
   }
@@ -177,12 +177,12 @@ function PermissionsCell({
     <td className="px-6 py-4">
       <div className="flex flex-wrap gap-1 max-w-xs">
         {permissions.slice(0, 3).map(p => (
-          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded">
+          <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-700 rounded">
             {p}
           </span>
         ))}
         {permissions.length > 3 && (
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-neutral-500">
             +{permissions.length - 3} mehr
           </span>
         )}
@@ -194,7 +194,7 @@ function PermissionsCell({
 function DateCell({ date }: { date: string }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap">
-      <div className="text-sm text-gray-900 dark:text-white">
+      <div className="text-sm text-neutral-900 dark:text-white">
         {formatDateShort(date)}
       </div>
     </td>
@@ -229,7 +229,7 @@ function ActionsCell({
         {userIsStaff && (
           <button
             onClick={() => onEditPermissions(user)}
-            className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+            className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
             title="Berechtigungen bearbeiten"
           >
             <Edit className="w-4 h-4" />

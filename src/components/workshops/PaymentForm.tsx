@@ -33,7 +33,7 @@ export function PaymentForm({
       <button
         onClick={handlePay}
         disabled={isRedirecting}
-        className="w-full inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+        className="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {isRedirecting ? (
           <>

@@ -21,12 +21,12 @@ export default function BlogNavigation({
   }
 
   return (
-    <nav className="border-b border-gray-200 bg-white sticky top-0 z-40">
+    <nav className="border-b border-neutral-200 bg-white sticky top-0 z-40">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Title */}
           <Link href="/blog" className="flex items-center">
-            <Heading level={1} className="text-2xl font-bold text-gray-900">Blog</Heading>
+            <Heading level={1} className="text-2xl font-bold text-neutral-900">Blog</Heading>
           </Link>
 
           {/* Categories */}
@@ -36,8 +36,8 @@ export default function BlogNavigation({
               className={cn(
                 "text-sm font-medium transition-colors",
                 selectedCategories.length === 0
-                  ? "text-green-600 font-bold"
-                  : "text-gray-700 hover:text-green-600"
+                  ? "text-primary-600 font-bold"
+                  : "text-neutral-700 hover:text-primary-600"
               )}
             >
               Alle
@@ -49,8 +49,8 @@ export default function BlogNavigation({
                 className={cn(
                   "text-sm font-medium transition-colors",
                   selectedCategories.includes(category)
-                    ? "text-green-600 font-bold"
-                    : "text-gray-700 hover:text-green-600"
+                    ? "text-primary-600 font-bold"
+                    : "text-neutral-700 hover:text-primary-600"
                 )}
               >
                 {category}
@@ -61,7 +61,7 @@ export default function BlogNavigation({
           {/* CTA */}
           <Link
             href="/blog/submit"
-            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-semibold"
+            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-semibold"
           >
             Beitrag einreichen
           </Link>

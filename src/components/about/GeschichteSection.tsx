@@ -37,7 +37,7 @@ const getTypeColor = (type: Milestone['type']) => {
     case 'growth':
       return 'bg-blue-500'
     case 'achievement':
-      return 'bg-green-500'
+      return 'bg-primary-500'
     case 'expansion':
       return 'bg-purple-500'
     case 'community':
@@ -61,8 +61,8 @@ function TimelineItem({
         className={`flex-1 ${isLeft ? 'md:text-right' : ''}`}
       >
         <div
-          className={`bg-white rounded-xl p-6 shadow-lg border border-gray-100
-            ${milestone.highlight ? 'ring-2 ring-green-500 ring-offset-2' : ''}`}
+          className={`bg-white rounded-xl p-6 shadow-lg border border-neutral-100
+            ${milestone.highlight ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
         >
           <div
             className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}
@@ -73,15 +73,15 @@ function TimelineItem({
               {getTypeIcon(milestone.type)}
             </span>
             <div>
-              <span className="text-sm font-medium text-gray-500">
+              <span className="text-sm font-medium text-neutral-500">
                 {milestone.year}
               </span>
-              <Heading level={3} className="text-lg font-bold text-gray-900">
+              <Heading level={3} className="text-lg font-bold text-neutral-900">
                 {milestone.title}
               </Heading>
             </div>
           </div>
-          <p className="text-gray-600">{milestone.description}</p>
+          <p className="text-neutral-600">{milestone.description}</p>
         </div>
       </div>
 
@@ -89,7 +89,7 @@ function TimelineItem({
       <div className="hidden md:flex flex-col items-center">
         <div
           className={`w-4 h-4 rounded-full ${
-            milestone.highlight ? 'bg-green-500 ring-4 ring-green-200' : 'bg-gray-300'
+            milestone.highlight ? 'bg-primary-500 ring-4 ring-primary-200' : 'bg-neutral-300'
           }`}
         />
       </div>
@@ -113,20 +113,20 @@ export default function GeschichteSection() {
             <Clock className="h-4 w-4" />
             {t('badge')}
           </div>
-          <Heading level={2} className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <Heading level={2} className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
             {founding.title}
           </Heading>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
             {founding.subtitle}
           </p>
         </div>
 
         {/* Founding Story */}
         <div className="max-w-3xl mx-auto mb-20">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-100">
             <div className="prose prose-lg max-w-none">
               {founding.paragraphs.map((paragraph, index) => (
-                <p key={index} className="text-gray-600 mb-4 last:mb-0">
+                <p key={index} className="text-neutral-600 mb-4 last:mb-0">
                   {paragraph}
                 </p>
               ))}
@@ -136,10 +136,10 @@ export default function GeschichteSection() {
 
         {/* Timeline Header */}
         <div className="text-center mb-12">
-          <Heading level={3} className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+          <Heading level={3} className="text-2xl md:text-3xl font-bold text-neutral-900 mb-4">
             {t('milestoneTitle')}
           </Heading>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-neutral-600 max-w-2xl mx-auto">
             {t('milestoneDesc')}
           </p>
         </div>
@@ -147,7 +147,7 @@ export default function GeschichteSection() {
         {/* Timeline */}
         <div className="relative">
           {/* Vertical Line - Hidden on mobile, shown on desktop */}
-          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gray-200" />
+          <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-neutral-200" />
 
           {/* Timeline Items */}
           <div className="space-y-8 md:space-y-12">
@@ -162,20 +162,20 @@ export default function GeschichteSection() {
         </div>
 
         {/* Current State Summary */}
-        <div className="mt-20 bg-green-600 rounded-2xl p-8 text-white text-center">
+        <div className="mt-20 bg-primary-600 rounded-2xl p-8 text-white text-center">
           <Heading level={3} className="text-2xl font-bold mb-6">{t('currentTitle')}</Heading>
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.yearsActive}</p>
-              <p className="text-green-100">{t('yearsActive')}</p>
+              <p className="text-primary-100">{t('yearsActive')}</p>
             </div>
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.teamSize}</p>
-              <p className="text-green-100">{t('teamMembers')}</p>
+              <p className="text-primary-100">{t('teamMembers')}</p>
             </div>
             <div>
               <p className="text-4xl font-bold mb-2">{currentState.devicesPerYear}</p>
-              <p className="text-green-100">{t('devicesPerYear')}</p>
+              <p className="text-primary-100">{t('devicesPerYear')}</p>
             </div>
           </div>
         </div>

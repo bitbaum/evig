@@ -31,25 +31,25 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
       </div>
 
       {/* Description */}
-      <div className="mt-4 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-        <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-3">{t('description')}</Heading>
-        <div className="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-300 whitespace-pre-line text-sm">
+      <div className="mt-4 bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+        <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-3">{t('description')}</Heading>
+        <div className="prose dark:prose-invert max-w-none text-neutral-600 dark:text-neutral-300 whitespace-pre-line text-sm">
           {listing.description}
         </div>
       </div>
 
       {/* Technische Daten (Specs) */}
       {listing.specs && listing.specs.length > 0 && (
-        <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-          <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-            <Cpu className="w-5 h-5 text-gray-400" aria-hidden="true" />
+        <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+          <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
+            <Cpu className="w-5 h-5 text-neutral-400" aria-hidden="true" />
             {t('technicalData')}
           </Heading>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2">
             {listing.specs.filter(s => s.value).map(spec => (
-              <div key={spec.key} className="flex justify-between py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
-                <span className="text-sm text-gray-500 dark:text-gray-400">{spec.key}</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+              <div key={spec.key} className="flex justify-between py-1.5 border-b border-neutral-100 dark:border-neutral-700 last:border-0">
+                <span className="text-sm text-neutral-500 dark:text-neutral-400">{spec.key}</span>
+                <span className="text-sm font-medium text-neutral-900 dark:text-white">
                   {spec.value}{spec.unit ? ` ${spec.unit}` : ''}
                 </span>
               </div>
@@ -60,16 +60,16 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
 
       {/* Verification Details */}
       {isVerified && (
-        <div className={`mt-6 rounded-xl p-6 shadow-sm border ${VERIFICATION_CONFIG.badge.borderColor} bg-green-50 dark:bg-green-900/10`}>
-          <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-green-600" aria-hidden="true" />
+        <div className={`mt-6 rounded-xl p-6 shadow-sm border ${VERIFICATION_CONFIG.badge.borderColor} bg-primary-50 dark:bg-primary-900/10`}>
+          <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-primary-600" aria-hidden="true" />
             {VERIFICATION_CONFIG.badge.label}
           </Heading>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-1">
             {t('verifiedOn', { date: formatDateShort(listing.verified_at!) })}
           </p>
           {listing.verification_notes && (
-            <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 whitespace-pre-line">
+            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-2 whitespace-pre-line">
               {listing.verification_notes}
             </p>
           )}
@@ -78,14 +78,14 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
 
       {/* Condition Criteria */}
       {conditionCriteria && conditionCriteria.length > 0 && (
-        <div className="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-          <Heading level={2} className="text-base text-gray-900 dark:text-white mb-3">
+        <div className="mt-6 bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+          <Heading level={2} className="text-base text-neutral-900 dark:text-white mb-3">
             {t('conditionMeaningFor', { condition: ZUSTAND_OPTIONS.find(o => o.value === listing.condition)?.label || listing.condition, category: getCategoryLabel(listing.category) })}
           </Heading>
           <ul className="space-y-1.5">
             {conditionCriteria.map(c => (
-              <li key={c.key} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                <span className="text-green-500 mt-0.5">&#10003;</span>
+              <li key={c.key} className="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-300">
+                <span className="text-primary-500 mt-0.5">&#10003;</span>
                 {c.label}
               </li>
             ))}

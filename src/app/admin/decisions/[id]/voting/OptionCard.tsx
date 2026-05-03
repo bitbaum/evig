@@ -28,12 +28,12 @@ export function OptionCard({
       } ${
         selected
           ? 'border-blue-500 bg-blue-50 shadow-md'
-          : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+          : 'border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-sm'
       }`}
     >
       {/* Image */}
       {opt.imageUrl ? (
-        <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-gray-100">
+        <div className="relative aspect-square w-full overflow-hidden rounded-t-xl bg-neutral-100">
           <Image
             src={opt.imageUrl}
             alt={opt.label}
@@ -50,18 +50,18 @@ export function OptionCard({
           )}
         </div>
       ) : (
-        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-400'}`}>
+        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-blue-100 text-blue-600' : 'bg-neutral-100 text-neutral-400'}`}>
           {opt.label.charAt(0).toUpperCase()}
         </div>
       )}
 
       {/* Label + controls */}
       <div className="p-3">
-        <p className={`truncate text-sm font-medium ${selected ? 'text-blue-700' : 'text-gray-800'}`}>
+        <p className={`truncate text-sm font-medium ${selected ? 'text-blue-700' : 'text-neutral-800'}`}>
           {opt.label}
         </p>
         {opt.description && (
-          <p className="mt-0.5 truncate text-xs text-gray-500">{opt.description}</p>
+          <p className="mt-0.5 truncate text-xs text-neutral-500">{opt.description}</p>
         )}
         {children}
       </div>

@@ -142,12 +142,12 @@ export default function DiscussionThread({
 
   return (
     <div className="rounded-lg bg-white p-6 shadow-sm">
-      <Heading level={2} className="mb-4 text-lg font-semibold text-gray-900">Diskussion</Heading>
+      <Heading level={2} className="mb-4 text-lg font-semibold text-neutral-900">Diskussion</Heading>
 
       {loading ? (
-        <p className="text-sm text-gray-500">Laden...</p>
+        <p className="text-sm text-neutral-500">Laden...</p>
       ) : comments.length === 0 ? (
-        <p className="text-sm text-gray-500">Noch keine Kommentare</p>
+        <p className="text-sm text-neutral-500">Noch keine Kommentare</p>
       ) : (
         <div className="space-y-4">
           {COMMENT_POSITIONS.map((pos) => {
@@ -171,10 +171,10 @@ export default function DiscussionThread({
                     return (
                       <div
                         key={c.id}
-                        className="rounded-md border border-gray-100 bg-gray-50 p-3"
+                        className="rounded-md border border-neutral-100 bg-neutral-50 p-3"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-xs text-gray-500">
+                          <div className="flex items-center gap-2 text-xs text-neutral-500">
                             <span>{c.user.email}</span>
                             <span>&middot;</span>
                             <span>
@@ -188,14 +188,14 @@ export default function DiscussionThread({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => startEdit(c)}
-                                className="p-2 text-gray-500 hover:text-blue-600 rounded"
+                                className="p-2 text-neutral-500 hover:text-blue-600 rounded"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => setDeleteId(c.id)}
-                                className="p-2 text-gray-500 hover:text-red-600 rounded"
+                                className="p-2 text-neutral-500 hover:text-red-600 rounded"
                                 title="Löschen"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -209,7 +209,7 @@ export default function DiscussionThread({
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
                               rows={2}
-                              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                             />
                             <div className="flex gap-2">
                               <button
@@ -222,7 +222,7 @@ export default function DiscussionThread({
                               </button>
                               <button
                                 onClick={cancelEdit}
-                                className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+                                className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-neutral-600 hover:bg-neutral-50"
                               >
                                 <X className="w-3 h-3" />
                                 Abbrechen
@@ -230,7 +230,7 @@ export default function DiscussionThread({
                             </div>
                           </div>
                         ) : (
-                          <p className="mt-1 text-sm text-gray-700">{c.content}</p>
+                          <p className="mt-1 text-sm text-neutral-700">{c.content}</p>
                         )}
                       </div>
                     );
@@ -259,7 +259,7 @@ export default function DiscussionThread({
                   className={`rounded-full px-3 py-1 text-xs font-medium transition ${
                     position === pos
                       ? conf.color
-                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      : 'bg-neutral-100 text-neutral-500 hover:bg-neutral-200'
                   }`}
                 >
                   {conf.label}
@@ -273,7 +273,7 @@ export default function DiscussionThread({
               onChange={(e) => setContent(e.target.value)}
               placeholder="Kommentar schreiben..."
               rows={2}
-              className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
             <button
               type="submit"

@@ -24,10 +24,10 @@ export const REVIEW_STATUS_LABELS: Record<string, string> = {
 }
 
 export const REVIEW_STATUS_BADGES: Record<string, string> = {
-  [REVIEW_STATUS.PUBLISHED]: 'bg-green-100 text-green-800',
+  [REVIEW_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
   [REVIEW_STATUS.PENDING_MODERATION]: 'bg-orange-100 text-orange-800',
   [REVIEW_STATUS.HIDDEN]: 'bg-red-100 text-red-800',
-  [REVIEW_STATUS.DELETED]: 'bg-gray-100 text-gray-800',
+  [REVIEW_STATUS.DELETED]: 'bg-neutral-100 text-neutral-800',
 }
 
 /** Short labels for filter tabs */

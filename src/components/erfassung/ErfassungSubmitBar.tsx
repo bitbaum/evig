@@ -21,7 +21,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       <div className="hidden sm:flex justify-between items-center pt-4">
         <Link
           href="/admin/products"
-          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-900"
+          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-900"
         >
           {t('cancel')}
         </Link>
@@ -41,7 +41,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 type="button"
                 onClick={(e) => onSubmit(e, 'draft')}
                 disabled={isLoading}
-                className="gap-2 px-5 py-3 bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400"
+                className="gap-2 px-5 py-3 bg-neutral-500 hover:bg-neutral-600 disabled:bg-neutral-400"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -81,7 +81,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       </div>
 
       {/* Mobile Sticky Bottom Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 z-50 safe-area-inset-bottom">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 border-t border-neutral-200 dark:border-neutral-700 p-4 z-50 safe-area-inset-bottom">
         {isEditMode ? (
           <Button
             type="button"
@@ -108,7 +108,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               type="button"
               onClick={(e) => onSubmit(e, 'draft')}
               disabled={isLoading}
-              className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-gray-500 hover:bg-gray-600 disabled:bg-gray-400"
+              className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-neutral-500 hover:bg-neutral-600 disabled:bg-neutral-400"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

@@ -247,9 +247,9 @@ export function DataEntryTabs({
       >
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-          <span className="font-semibold text-gray-900 dark:text-white">{t('quickEntryTitle')}</span>
+          <span className="font-semibold text-neutral-900 dark:text-white">{t('quickEntryTitle')}</span>
           {isCollapsed && quickEntryState === 'success' && (
-            <span className="text-sm text-green-600 dark:text-green-400">{t('quickEntryFilled')}</span>
+            <span className="text-sm text-primary-600 dark:text-primary-400">{t('quickEntryFilled')}</span>
           )}
         </div>
         {isCollapsed ? (
@@ -269,8 +269,8 @@ export function DataEntryTabs({
               onClick={() => setActiveMode(tab.id)}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeMode === tab.id
-                  ? 'bg-white dark:bg-gray-800 text-purple-700 dark:text-purple-300 border-b-2 border-purple-600 -mb-px'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
+                  ? 'bg-white dark:bg-neutral-800 text-purple-700 dark:text-purple-300 border-b-2 border-purple-600 -mb-px'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-white/50 dark:hover:bg-neutral-800/50'
               }`}
             >
               {tab.icon}
@@ -284,7 +284,7 @@ export function DataEntryTabs({
       {!isCollapsed && <div className="p-6">
         {/* Speech mode - Coming soon */}
         {activeMode === 'speech' && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
             <Mic className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>{t('speechComingSoon')}</p>
             <p className="text-sm">{t('speechRequires')}</p>
@@ -293,7 +293,7 @@ export function DataEntryTabs({
 
         {/* Picture mode - Coming soon */}
         {activeMode === 'picture' && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+          <div className="text-center py-8 text-neutral-500 dark:text-neutral-400">
             <Camera className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>{t('pictureComingSoon')}</p>
             <p className="text-sm">{t('pictureRequires')}</p>
@@ -304,10 +304,10 @@ export function DataEntryTabs({
         {activeMode === 'form' && (
           <div className="space-y-4">
             <div className="text-center mb-2">
-              <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
                 {t('quickEntryTitle')}
               </Heading>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">
                 {t('quickEntryPlaceholder')}
               </p>
             </div>
@@ -325,7 +325,7 @@ export function DataEntryTabs({
                 placeholder={"Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"}
                 disabled={quickEntryState === 'loading'}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 text-base resize-none"
+                className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 text-base resize-none"
               />
               <Button
                 type="button"
@@ -349,7 +349,7 @@ export function DataEntryTabs({
 
             {/* Status feedback */}
             {quickEntryState === 'success' && (
-              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-green-50 dark:bg-green-900/20 rounded-lg text-green-700 dark:text-green-400">
+              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg text-primary-700 dark:text-primary-400">
                 <CheckCircle2 className="w-5 h-5" />
                 <span className="font-medium">{t('dataFilled')}</span>
               </div>
@@ -367,10 +367,10 @@ export function DataEntryTabs({
         {activeMode === 'file' && (
           <div className="space-y-4">
             <div className="text-center mb-2">
-              <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white">
+              <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
                 {t('fileImportTitle')}
               </Heading>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">
                 {t('fileImportDesc')}
               </p>
             </div>
@@ -384,8 +384,8 @@ export function DataEntryTabs({
               ) : (
                 <>
                   <FileUp className="w-10 h-10 text-purple-400 mb-2" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">{t('chooseFile')}</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">{t('fileHint')}</span>
+                  <span className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">{t('chooseFile')}</span>
+                  <span className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">{t('fileHint')}</span>
                 </>
               )}
               <input

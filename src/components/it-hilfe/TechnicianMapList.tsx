@@ -129,9 +129,9 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-blue-600" />
-          <Heading level={3} className="text-lg font-semibold text-gray-900">{t('searchingTechnicians')}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('searchingTechnicians')}</Heading>
         </div>
-        <div className="animate-pulse bg-gray-100 rounded-lg min-h-[300px]" />
+        <div className="animate-pulse bg-neutral-100 rounded-lg min-h-[300px]" />
       </div>
     )
   }
@@ -149,7 +149,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
       {/* Header */}
       <div className="flex items-center gap-2">
         <Sparkles className="w-5 h-5 text-blue-600" />
-        <Heading level={3} className="text-lg font-semibold text-gray-900">
+        <Heading level={3} className="text-lg font-semibold text-neutral-900">
           {t('technicianSection')}
         </Heading>
       </div>
@@ -159,15 +159,15 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
         {/* Left: List */}
         <div className="space-y-4 order-1 lg:order-1">
           {/* RevampIT Store Card - Always visible */}
-          <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 rounded-xl p-5">
+          <div className="bg-gradient-to-r from-emerald-50 to-primary-50 border-2 border-emerald-300 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-2">
               <Store className="w-5 h-5 text-emerald-600" />
-              <Heading level={4} className="font-semibold text-gray-900">{REVAMPIT_STORE.name}</Heading>
+              <Heading level={4} className="font-semibold text-neutral-900">{REVAMPIT_STORE.name}</Heading>
             </div>
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-sm text-neutral-600 mb-2">
               {REVAMPIT_STORE.description}
             </p>
-            <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+            <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
               <MapPin className="w-4 h-4" />
               <span>{REVAMPIT_STORE.address}, {REVAMPIT_STORE.postalCode} {REVAMPIT_STORE.city}</span>
             </div>
@@ -187,7 +187,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
             <>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-blue-600" />
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-neutral-700">
                   {t('matchCount', { count: topMatches.length })}
                 </p>
               </div>
@@ -225,10 +225,10 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     )}
 
                     <div className="mb-2">
-                      <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                      <div className="flex items-center justify-between text-xs text-neutral-600 mb-1">
                         <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-1.5">
+                      <div className="w-full bg-neutral-200 rounded-full h-1.5">
                         <div
                           className="bg-gradient-to-r from-blue-500 to-cyan-500 h-1.5 rounded-full transition-all"
                           style={{ width: `${matchPercentage}%` }}
@@ -272,7 +272,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
             </>
           ) : (
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-neutral-600">
                 {t('noMatchesYet')}
               </p>
             </div>

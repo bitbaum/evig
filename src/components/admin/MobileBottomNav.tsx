@@ -19,7 +19,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 flex lg:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-700 flex lg:hidden"
       aria-label="Mobile Navigation"
     >
       {NAV_ITEMS.map(({ href, icon: Icon, label, exact }) => {
@@ -31,7 +31,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
             className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs transition-colors ${
               active
                 ? 'text-blue-600 dark:text-blue-400'
-                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
+                : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
             aria-current={active ? 'page' : undefined}
           >
@@ -44,7 +44,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
       {/* Mehr — opens sidebar */}
       <button
         onClick={onMenuClick}
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors"
         aria-label="Seitenleiste öffnen"
       >
         <Menu className="w-5 h-5" aria-hidden="true" />

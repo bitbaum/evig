@@ -47,7 +47,7 @@ export function LocaleSwitcher({ className }: Props) {
         aria-expanded={open}
         className={cn(
           'flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium uppercase tracking-wide',
-          'text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors',
+          'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors',
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500',
           isPending && 'opacity-50 cursor-wait'
         )}
@@ -61,7 +61,7 @@ export function LocaleSwitcher({ className }: Props) {
           role="listbox"
           className={cn(
             'absolute right-0 top-full mt-1 z-50',
-            'min-w-[7rem] rounded-lg border border-gray-200 bg-white shadow-lg py-1',
+            'min-w-[7rem] rounded-lg border border-neutral-200 bg-white shadow-lg py-1',
           )}
         >
           {locales.map((loc) => (
@@ -72,10 +72,10 @@ export function LocaleSwitcher({ className }: Props) {
               onClick={() => switchLocale(loc)}
               className={cn(
                 'w-full flex items-center gap-2 px-3 py-1.5 text-sm text-left',
-                'hover:bg-gray-50 transition-colors',
+                'hover:bg-neutral-50 transition-colors',
                 loc === locale
                   ? 'text-emerald-700 font-semibold bg-emerald-50'
-                  : 'text-gray-700'
+                  : 'text-neutral-700'
               )}
             >
               <span className="uppercase text-xs font-mono w-5">{loc}</span>

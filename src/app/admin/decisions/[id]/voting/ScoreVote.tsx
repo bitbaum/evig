@@ -15,7 +15,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
     <div className="space-y-3">
       {isGalleryMode ? (
         <>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-neutral-500">
             Bewerte jede Option von {SCORE_RANGE.min} bis {SCORE_RANGE.max} Sternen:
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
@@ -31,7 +31,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                         onSet(opt.id, n);
                       }}
                       className={`text-lg transition ${
-                        (scores[opt.id] || 0) >= n ? 'text-amber-400' : 'text-gray-300 hover:text-amber-300'
+                        (scores[opt.id] || 0) >= n ? 'text-amber-400' : 'text-neutral-300 hover:text-amber-300'
                       }`}
                     >
                       ★
@@ -39,7 +39,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                   ))}
                 </div>
                 {(scores[opt.id] || 0) > 0 && (
-                  <p className="mt-0.5 text-center text-xs text-gray-500">
+                  <p className="mt-0.5 text-center text-xs text-neutral-500">
                     {scores[opt.id]}/{SCORE_RANGE.max}
                   </p>
                 )}
@@ -49,16 +49,16 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
         </>
       ) : (
         <>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-neutral-500">
             Bewerte jede Option von {SCORE_RANGE.min} bis {SCORE_RANGE.max}:
           </p>
           {options.map((opt) => (
             <div
               key={opt.id}
-              className="flex items-center gap-3 rounded-md border border-gray-200 p-3"
+              className="flex items-center gap-3 rounded-md border border-neutral-200 p-3"
             >
               <div className="flex-1">
-                <span className="font-medium text-gray-800">{opt.label}</span>
+                <span className="font-medium text-neutral-800">{opt.label}</span>
               </div>
               <div className="flex gap-1">
                 {Array.from(
@@ -72,7 +72,7 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                     className={`h-9 w-9 rounded-md text-sm font-bold transition ${
                       (scores[opt.id] || 0) >= n
                         ? 'bg-amber-400 text-white'
-                        : 'border border-gray-300 text-gray-500 hover:border-amber-300'
+                        : 'border border-neutral-300 text-neutral-500 hover:border-amber-300'
                     }`}
                   >
                     {n}

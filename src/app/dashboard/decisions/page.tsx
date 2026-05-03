@@ -44,16 +44,16 @@ export default async function DashboardDecisionsPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
-      <Heading level={1} className="mb-1 text-2xl font-bold text-gray-900">
+      <Heading level={1} className="mb-1 text-2xl font-bold text-neutral-900">
         {t('pageTitle')}
       </Heading>
-      <p className="mb-6 text-sm text-gray-500">
+      <p className="mb-6 text-sm text-neutral-500">
         {t('pageSubtitle')}
       </p>
 
       {votingDecisions.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
-          <p className="text-sm text-gray-500">{t('noVotings')}</p>
+        <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-8 text-center">
+          <p className="text-sm text-neutral-500">{t('noVotings')}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -68,13 +68,13 @@ export default async function DashboardDecisionsPage() {
               <Link
                 key={d.id}
                 href={`/dashboard/decisions/${d.id}`}
-                className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-400 hover:shadow-sm transition-all"
+                className="block rounded-lg border border-neutral-200 bg-white p-4 hover:border-blue-400 hover:shadow-sm transition-all"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{d.title}</p>
+                    <p className="font-medium text-neutral-900 truncate">{d.title}</p>
                     {d.description && (
-                      <p className="mt-0.5 line-clamp-2 text-sm text-gray-500">
+                      <p className="mt-0.5 line-clamp-2 text-sm text-neutral-500">
                         {d.description}
                       </p>
                     )}
@@ -82,7 +82,7 @@ export default async function DashboardDecisionsPage() {
                       <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusConf.color}`}>
                         {statusConf.label}
                       </span>
-                      <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600">
+                      <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs text-neutral-600">
                         {methodConf.label}
                       </span>
                       {deadlineInfo && (
@@ -91,7 +91,7 @@ export default async function DashboardDecisionsPage() {
                         </span>
                       )}
                       {d.hasUserVoted ? (
-                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">
+                        <span className="rounded-full bg-primary-100 px-2 py-0.5 text-xs text-primary-700">
                           {t('voted')}
                         </span>
                       ) : (
@@ -102,7 +102,7 @@ export default async function DashboardDecisionsPage() {
                     </div>
                   </div>
                   <svg
-                    className="mt-1 h-4 w-4 flex-shrink-0 text-gray-400"
+                    className="mt-1 h-4 w-4 flex-shrink-0 text-neutral-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

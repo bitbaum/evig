@@ -151,10 +151,10 @@ export default async function AdminDashboard() {
       {/* Greeting — renders immediately, no data needed */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
             Hallo, {session.user.name?.split(' ')[0] || 'Admin'}
           </Heading>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {isSuper ? 'Super Admin' : 'Staff'}
           </p>
         </div>

@@ -25,26 +25,26 @@ export function ProtocolSummarySection({
 }: Props) {
   return (
     <div id="protocol-step-review" className="bg-white rounded-lg border p-6">
-      <Heading level={2} className="text-lg text-gray-900 mb-3">
-        <MessageSquare className="w-5 h-5 inline mr-2 text-gray-400" />
+      <Heading level={2} className="text-lg text-neutral-900 mb-3">
+        <MessageSquare className="w-5 h-5 inline mr-2 text-neutral-400" />
         Zusammenfassung
       </Heading>
-      <p className="text-gray-700">{notes.summary}</p>
+      <p className="text-neutral-700">{notes.summary}</p>
 
       {notes.detected_attendees && notes.detected_attendees.length > 0 && (
         <div className="mt-3 pt-3 border-t">
-          <p className="text-sm font-medium text-gray-600 mb-2">
+          <p className="text-sm font-medium text-neutral-600 mb-2">
             Erkannte Teilnehmer:
           </p>
           {isReview ? (
             <div className="space-y-2">
               {notes.detected_attendees.map((name) => (
                 <div key={name} className="flex items-center gap-3">
-                  <span className="text-sm text-gray-700 min-w-[120px]">{name}</span>
+                  <span className="text-sm text-neutral-700 min-w-[120px]">{name}</span>
                   <select
                     value={attendeeMapping[name] || ''}
                     onChange={(e) => onMappingChange(name, e.target.value)}
-                    className="text-sm border rounded px-2 py-1 text-gray-600"
+                    className="text-sm border rounded px-2 py-1 text-neutral-600"
                   >
                     <option value="">— Nicht zugeordnet —</option>
                     {teamMembers.map(m => (
@@ -69,7 +69,7 @@ export function ProtocolSummarySection({
               )}
             </div>
           ) : (
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-neutral-500">
               {notes.detected_attendees.join(', ')}
             </p>
           )}

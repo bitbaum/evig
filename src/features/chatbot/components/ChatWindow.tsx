@@ -40,7 +40,7 @@ export function ChatWindow({
   return (
     <>
       {/* Chat Messages */}
-      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-gray-50/30 to-transparent">
+      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-neutral-50/30 to-transparent">
         {messages.map((message) => (
           <ChatMessage
             key={message.id}
@@ -57,7 +57,7 @@ export function ChatWindow({
       </div>
 
       {/* Input Area */}
-      <div className="p-4 border-t border-gray-100 bg-white rounded-b-2xl">
+      <div className="p-4 border-t border-neutral-100 bg-white rounded-b-2xl">
         <ChatInput
           ref={inputRef}
           value={inputValue}

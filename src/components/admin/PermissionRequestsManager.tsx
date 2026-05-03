@@ -92,12 +92,12 @@ export function PermissionRequestsManager() {
 
   if (loading) {
     return (
-      <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+      <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
         <div className="animate-pulse">
-          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4" />
+          <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-4" />
           <div className="space-y-3">
-            <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded" />
-            <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded" />
+            <div className="h-16 bg-neutral-200 dark:bg-neutral-700 rounded" />
+            <div className="h-16 bg-neutral-200 dark:bg-neutral-700 rounded" />
           </div>
         </div>
       </div>
@@ -121,8 +121,8 @@ export function PermissionRequestsManager() {
 
   if (requests.length === 0) {
     return (
-      <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-3 text-gray-500 dark:text-gray-400">
+      <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="flex items-center gap-3 text-neutral-500 dark:text-neutral-400">
           <Shield className="w-5 h-5" />
           <span>Keine ausstehenden Berechtigungsanfragen</span>
         </div>
@@ -131,33 +131,33 @@ export function PermissionRequestsManager() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+      <div className="p-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-orange-500" />
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
             Berechtigungsanfragen ({requests.length})
           </Heading>
         </div>
         <button
           onClick={fetchRequests}
-          className="text-gray-500 hover:text-gray-600"
+          className="text-neutral-500 hover:text-neutral-600"
         >
           <RefreshCw className="w-4 h-4" />
         </button>
       </div>
 
-      <div className="divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
         {requests.map(request => (
           <div key={request.id} className="p-4">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <User className="w-4 h-4 text-gray-400" />
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <User className="w-4 h-4 text-neutral-400" />
+                  <span className="font-medium text-neutral-900 dark:text-white">
                     {request.user_name || request.user_email}
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-neutral-500">
                     {request.user_email}
                   </span>
                 </div>
@@ -173,11 +173,11 @@ export function PermissionRequestsManager() {
                   ))}
                 </div>
 
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">
                   {request.reason}
                 </p>
 
-                <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+                <div className="flex items-center gap-2 mt-2 text-xs text-neutral-400">
                   <Clock className="w-3 h-3" />
                   {formatDateTimeNumeric(request.created_at)}
                 </div>

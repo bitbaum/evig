@@ -84,7 +84,7 @@ export default function FavoritesPage() {
   if (sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
       </div>
     )
   }
@@ -92,19 +92,19 @@ export default function FavoritesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
           <Heart className="w-6 h-6 text-red-500" />
           {t('pageTitle')}
         </Heading>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
           {t('pageSubtitle')}
         </p>
       </div>
 
       {isLoading && (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-          <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
+          <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+          <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
         </div>
       )}
 
@@ -129,7 +129,7 @@ export default function FavoritesPage() {
           action={
             <Link
               href="/marketplace"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               {t('browseMarketplace')}
             </Link>
@@ -145,7 +145,7 @@ export default function FavoritesPage() {
             return (
               <div
                 key={listing.id}
-                className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
+                className="group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden"
               >
                 <Link href={`/marketplace/${listing.id}`}>
                   <div className="relative aspect-[4/3]">
@@ -164,13 +164,13 @@ export default function FavoritesPage() {
                     )}
                   </div>
                   <div className="p-3">
-                    <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                    <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
                       {listing.title}
                     </Heading>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                    <p className="text-lg font-bold text-neutral-900 dark:text-white mb-1">
                       {formatCHF(Number(listing.price_chf))}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
                       <span className="truncate">{sellerName}</span>
                       {listing.seller_city && (
                         <span className="flex items-center gap-0.5 flex-shrink-0">

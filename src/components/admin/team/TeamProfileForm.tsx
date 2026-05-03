@@ -78,7 +78,7 @@ export function TeamProfileForm({
         <button
           type="button"
           onClick={onCancel || (() => history.back())}
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Abbrechen
@@ -103,15 +103,15 @@ export function TeamProfileForm({
 
       {/* User Selection (only for new profiles) */}
       {!isEdit && users && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
           <div className="flex items-center gap-3 mb-4">
-            <User className="w-5 h-5 text-gray-500" />
-            <Heading level={2} className="text-gray-900 dark:text-white">Benutzer auswählen</Heading>
+            <User className="w-5 h-5 text-neutral-500" />
+            <Heading level={2} className="text-neutral-900 dark:text-white">Benutzer auswählen</Heading>
           </div>
           <select
             value={form.user_id}
             onChange={(e) => handleChange('user_id', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500"
             required
             aria-required="true"
             aria-invalid={!!error}
@@ -131,26 +131,26 @@ export function TeamProfileForm({
       {FORM_SECTIONS.map(section => (
         <div
           key={section.id}
-          className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden"
+          className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden"
         >
           <button
             type="button"
             onClick={() => toggleSection(section.id)}
-            className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            className="w-full flex items-center justify-between p-4 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
           >
             <div className="flex items-center gap-3">
-              <span className="text-gray-500">{section.icon}</span>
-              <span className="font-semibold text-gray-900 dark:text-white">{section.label}</span>
+              <span className="text-neutral-500">{section.icon}</span>
+              <span className="font-semibold text-neutral-900 dark:text-white">{section.label}</span>
             </div>
             {openSections.has(section.id) ? (
-              <ChevronDown className="w-5 h-5 text-gray-400" />
+              <ChevronDown className="w-5 h-5 text-neutral-400" />
             ) : (
-              <ChevronRight className="w-5 h-5 text-gray-400" />
+              <ChevronRight className="w-5 h-5 text-neutral-400" />
             )}
           </button>
 
           {openSections.has(section.id) && (
-            <div className="p-6 pt-2 border-t border-gray-100 dark:border-gray-700">
+            <div className="p-6 pt-2 border-t border-neutral-100 dark:border-neutral-700">
               {section.id === 'talent' ? (
                 <TeamTalentSection
                   form={form}

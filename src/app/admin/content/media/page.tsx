@@ -43,15 +43,15 @@ export default async function AdminMediaPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content"
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
               Medienbibliothek
             </Heading>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
               Bilder, Videos und Dokumente verwalten
             </p>
           </div>
@@ -64,56 +64,56 @@ export default async function AdminMediaPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <ImageIcon className="w-8 h-8 text-blue-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Bilder
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 0
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Video className="w-8 h-8 text-purple-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Videos
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 0
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <FileText className="w-8 h-8 text-orange-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Dokumente
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 0
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <FolderOpen className="w-8 h-8 text-green-600" />
+            <FolderOpen className="w-8 h-8 text-primary-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Speicher
               </p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                 0 MB
               </p>
             </div>
@@ -122,32 +122,32 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
             <input
               type="text"
               placeholder="Medien suchen..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />
           </div>
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <Filter className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+            <button className="flex items-center gap-2 px-3 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
+              <Filter className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+              <span className="text-sm text-neutral-700 dark:text-neutral-300">
                 Filter
               </span>
             </button>
 
-            <div className="flex border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+            <div className="flex border border-neutral-200 dark:border-neutral-600 rounded-lg overflow-hidden">
               <button className="p-2 bg-teal-50 dark:bg-teal-900/30 text-teal-600">
                 <Grid className="w-4 h-4" />
               </button>
-              <button className="p-2 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400">
+              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
                 <List className="w-4 h-4" />
               </button>
             </div>
@@ -156,30 +156,30 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Empty State */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
         <div className="text-center py-16">
-          <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-            <ImageIcon className="w-10 h-10 text-gray-400" />
+          <div className="w-20 h-20 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ImageIcon className="w-10 h-10 text-neutral-400" />
           </div>
-          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
             Noch keine Medien hochgeladen
           </Heading>
-          <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
+          <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-md mx-auto">
             Lade Bilder, Videos und Dokumente hoch, um sie in Ihren
             Blog-Artikeln und Seiten zu verwenden.
           </p>
 
           {/* Upload Area */}
           <div className="max-w-lg mx-auto">
-            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-8 hover:border-teal-500 dark:hover:border-teal-400 transition-colors cursor-pointer">
-              <Upload className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+            <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-8 hover:border-teal-500 dark:hover:border-teal-400 transition-colors cursor-pointer">
+              <Upload className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
                 <span className="text-teal-600 dark:text-teal-400 font-medium">
                   Klicken zum Hochladen
                 </span>{' '}
                 oder Dateien hierher ziehen
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500">
+              <p className="text-xs text-neutral-500 dark:text-neutral-500">
                 PNG, JPG, GIF, PDF, MP4 bis zu 50MB
               </p>
             </div>

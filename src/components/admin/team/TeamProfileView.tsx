@@ -59,7 +59,7 @@ export function TeamProfileView({
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück zum Team
@@ -75,13 +75,13 @@ export function TeamProfileView({
       </div>
 
       {/* Profile Header Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
             profile.is_active
               ? 'bg-gradient-to-r from-blue-500 to-purple-600'
-              : 'bg-gray-400'
+              : 'bg-neutral-400'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
           </div>
@@ -89,18 +89,18 @@ export function TeamProfileView({
           {/* Info */}
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <Heading level={1} className="text-2xl text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
                 {displayName}
               </Heading>
               {!profile.is_active && (
-                <span className="px-2 py-1 text-sm rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+                <span className="px-2 py-1 text-sm rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
                   Inaktiv
                 </span>
               )}
             </div>
 
             {profile.position && (
-              <p className="text-lg text-gray-600 dark:text-gray-400 mt-1">
+              <p className="text-lg text-neutral-600 dark:text-neutral-400 mt-1">
                 {profile.position}
               </p>
             )}
@@ -118,7 +118,7 @@ export function TeamProfileView({
               )}
             </div>
 
-            <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex flex-wrap gap-4 mt-4 text-sm text-neutral-500 dark:text-neutral-400">
               <div className="flex items-center gap-1">
                 <Mail className="w-4 h-4" />
                 {profile.user_email}
@@ -150,11 +150,11 @@ export function TeamProfileView({
         />
 
         {/* Activity Link */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-green-500" />
-              <Heading level={3} className="text-gray-900 dark:text-gray-100">Aktivitäten</Heading>
+              <Activity className="w-5 h-5 text-primary-500" />
+              <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktivitäten</Heading>
             </div>
             <Link
               href="/admin/team/activity"
@@ -163,7 +163,7 @@ export function TeamProfileView({
               Team-Aktivitäten ansehen
             </Link>
           </div>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
             Erledigte Aufgaben, Meilensteine und Hilfsanfragen
           </p>
         </div>
@@ -174,15 +174,15 @@ export function TeamProfileView({
         {/* Left Column */}
         <div className="space-y-6">
           {/* Skills & Interests */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+            <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               <Star className="w-5 h-5 text-yellow-500" />
               Fähigkeiten & Interessen
             </Heading>
 
             {profile.skills && profile.skills.length > 0 ? (
               <div className="mb-4">
-                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-2">
                   Fähigkeiten
                 </Heading>
                 <div className="flex flex-wrap gap-2">
@@ -197,19 +197,19 @@ export function TeamProfileView({
                 </div>
               </div>
             ) : (
-              <p className="text-gray-400 text-sm mb-4">Keine Fähigkeiten erfasst</p>
+              <p className="text-neutral-400 text-sm mb-4">Keine Fähigkeiten erfasst</p>
             )}
 
             {profile.interests && profile.interests.length > 0 && (
               <div>
-                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-2">
                   Interessen
                 </Heading>
                 <div className="flex flex-wrap gap-2">
                   {profile.interests.map((interest) => (
                     <span
                       key={interest}
-                      className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm rounded-full"
+                      className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm rounded-full"
                     >
                       {interest}
                     </span>
@@ -220,18 +220,18 @@ export function TeamProfileView({
           </div>
 
           {/* Development Areas */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+            <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-purple-500" />
               Entwicklung
             </Heading>
 
             {profile.goals && (
               <div className="mb-4">
-                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
                   Ziele
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
+                <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
                   {profile.goals}
                 </p>
               </div>
@@ -239,10 +239,10 @@ export function TeamProfileView({
 
             {profile.strengths && (
               <div className="mb-4">
-                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
                   Stärken
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
+                <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
                   {profile.strengths}
                 </p>
               </div>
@@ -250,17 +250,17 @@ export function TeamProfileView({
 
             {profile.development_areas && (
               <div>
-                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300 mb-1">
+                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300 mb-1">
                   Entwicklungsbereiche
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
+                <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
                   {profile.development_areas}
                 </p>
               </div>
             )}
 
             {!profile.goals && !profile.strengths && !profile.development_areas && (
-              <p className="text-gray-400 text-sm">Keine Entwicklungsdaten erfasst</p>
+              <p className="text-neutral-400 text-sm">Keine Entwicklungsdaten erfasst</p>
             )}
           </div>
         </div>
@@ -268,8 +268,8 @@ export function TeamProfileView({
         {/* Right Column */}
         <div className="space-y-6">
           {/* Availability */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+            <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-blue-500" />
               Verfügbarkeit
             </Heading>
@@ -277,10 +277,10 @@ export function TeamProfileView({
             <div className="space-y-3">
               {profile.working_hours && (
                 <div>
-                  <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
                     Arbeitszeiten
                   </Heading>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm">
                     {profile.working_hours}
                   </p>
                 </div>
@@ -288,10 +288,10 @@ export function TeamProfileView({
 
               {profile.contract_hours && (
                 <div>
-                  <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
                     Vertragsstunden
                   </Heading>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm">
                     {profile.contract_hours} Stunden/Woche
                   </p>
                 </div>
@@ -299,20 +299,20 @@ export function TeamProfileView({
 
               {profile.availability && (
                 <div>
-                  <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
                     Allgemeine Verfügbarkeit
                   </Heading>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm whitespace-pre-wrap">
+                  <p className="text-neutral-600 dark:text-neutral-400 text-sm whitespace-pre-wrap">
                     {profile.availability}
                   </p>
                 </div>
               )}
 
               <div>
-                <Heading level={3} className="text-sm text-gray-700 dark:text-gray-300">
+                <Heading level={3} className="text-sm text-neutral-700 dark:text-neutral-300">
                   Bevorzugte Kontaktart
                 </Heading>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                <p className="text-neutral-600 dark:text-neutral-400 text-sm">
                   {CONTACT_METHOD_LABELS[profile.preferred_contact as ContactMethod] || profile.preferred_contact}
                 </p>
               </div>
@@ -321,8 +321,8 @@ export function TeamProfileView({
 
           {/* Emergency Contact */}
           {(profile.emergency_contact_name || profile.emergency_contact_phone) && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-              <Heading level={2} className="text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+              <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-red-500" />
                 Notfallkontakt
               </Heading>
@@ -330,11 +330,11 @@ export function TeamProfileView({
               <div className="space-y-2">
                 {profile.emergency_contact_name && (
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400">
+                    <User className="w-4 h-4 text-neutral-400" />
+                    <span className="text-neutral-600 dark:text-neutral-400">
                       {profile.emergency_contact_name}
                       {profile.emergency_contact_relation && (
-                        <span className="text-gray-400 ml-2">
+                        <span className="text-neutral-400 ml-2">
                           ({EMERGENCY_RELATION_LABELS[profile.emergency_contact_relation as EmergencyRelation] || profile.emergency_contact_relation})
                         </span>
                       )}
@@ -343,8 +343,8 @@ export function TeamProfileView({
                 )}
                 {profile.emergency_contact_phone && (
                   <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400">
+                    <Phone className="w-4 h-4 text-neutral-400" />
+                    <span className="text-neutral-600 dark:text-neutral-400">
                       {profile.emergency_contact_phone}
                     </span>
                   </div>
@@ -369,7 +369,7 @@ export function TeamProfileView({
       </div>
 
       {/* Meta Info */}
-      <div className="text-xs text-gray-400 flex gap-4">
+      <div className="text-xs text-neutral-400 flex gap-4">
         <span>Erstellt: {formatDateShort(profile.created_at)}</span>
         <span>Aktualisiert: {formatDateShort(profile.updated_at)}</span>
       </div>

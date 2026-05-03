@@ -66,7 +66,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
   const groups = t.raw('groups') as FAQGroup[]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <main className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
       <FAQSchema groups={groups} />
       <PageHero
         theme="faq"
@@ -81,21 +81,21 @@ export default async function FAQPage({ params }: FAQPageProps) {
             <div className="space-y-8 sm:space-y-10">
               {groups.map((group) => (
                 <section key={group.category}>
-                  <Heading level={2} className="text-lg sm:text-xl text-gray-800 mb-3 sm:mb-4">
+                  <Heading level={2} className="text-lg sm:text-xl text-neutral-800 mb-3 sm:mb-4">
                     {group.category}
                   </Heading>
-                  <div className="divide-y divide-gray-200 rounded-xl border border-gray-200 bg-white">
+                  <div className="divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
                     {group.items.map((item, idx) => (
-                      <details key={idx} className="group p-4 sm:p-5 open:bg-gray-50/60">
+                      <details key={idx} className="group p-4 sm:p-5 open:bg-neutral-50/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
-                          <span className="text-sm sm:text-base text-gray-900 font-medium pr-2">
+                          <span className="text-sm sm:text-base text-neutral-900 font-medium pr-2">
                             {item.q}
                           </span>
-                          <span className="ml-4 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0">
+                          <span className="ml-4 text-neutral-400 group-open:rotate-180 transition-transform flex-shrink-0">
                             ▾
                           </span>
                         </summary>
-                        <div className="mt-3 text-gray-700 text-xs sm:text-sm">
+                        <div className="mt-3 text-neutral-700 text-xs sm:text-sm">
                           <p>{item.a}</p>
                           {item.link && (
                             <p className="mt-2">
@@ -115,11 +115,11 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-green-50 to-blue-50 border border-green-100 text-xs sm:text-sm">
-              <p className="text-gray-800">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-blue-50 border border-primary-100 text-xs sm:text-sm">
+              <p className="text-neutral-800">
                 {t('notListed')}
                 <span className="ml-2">
-                  <Link href="/contact" className="text-green-700 hover:text-green-800 underline font-medium">
+                  <Link href="/contact" className="text-primary-700 hover:text-primary-800 underline font-medium">
                     {t('contactTeam')}
                   </Link>
                 </span>

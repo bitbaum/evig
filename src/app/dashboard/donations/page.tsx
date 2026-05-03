@@ -133,7 +133,7 @@ export default function DonationsDashboard() {
             action={
               <Link
                 href="/auth/login"
-                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
               >
                 {t('loginButton')}
               </Link>
@@ -242,7 +242,7 @@ export default function DonationsDashboard() {
             action={
               <Link
                 href="/get-involved/donate"
-                className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium"
+                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
               >
                 {t('donateNow')}
               </Link>

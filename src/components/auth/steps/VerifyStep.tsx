@@ -110,13 +110,13 @@ export function VerifyStep({
   if (verified) {
     return (
       <div className="text-center py-8">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-8 h-8 text-green-600" />
+        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-8 h-8 text-primary-600" />
         </div>
-        <Heading level={2} className="text-xl font-bold text-gray-900 mb-2">
+        <Heading level={2} className="text-xl font-bold text-neutral-900 mb-2">
           {t('successHeading')}
         </Heading>
-        <p className="text-gray-600 mb-6">
+        <p className="text-neutral-600 mb-6">
           {t('successDesc')}
         </p>
       </div>
@@ -129,10 +129,10 @@ export function VerifyStep({
         <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Mail className="w-8 h-8 text-primary-600" />
         </div>
-        <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-neutral-600 dark:text-neutral-400">
           {t('description', { email })}
         </p>
       </div>
@@ -173,7 +173,7 @@ export function VerifyStep({
             className={cn(
               'w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border-2 transition-colors',
               'focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              digit ? 'border-primary-500 bg-primary-50' : 'border-gray-300',
+              digit ? 'border-primary-500 bg-primary-50' : 'border-neutral-300',
               (isVerifying || isLoading) && 'opacity-50'
             )}
           />
@@ -208,7 +208,7 @@ export function VerifyStep({
 
       {/* Resend */}
       <div className="text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
           {t('noCode')}
         </p>
         <button
@@ -231,15 +231,15 @@ export function VerifyStep({
       </div>
 
       {/* Skip Option */}
-      <div className="pt-4 border-t border-gray-200">
+      <div className="pt-4 border-t border-neutral-200">
         <button
           type="button"
           onClick={onSkip}
-          className="w-full text-center text-sm text-gray-500 hover:text-gray-700"
+          className="w-full text-center text-sm text-neutral-500 hover:text-neutral-700"
         >
           {t('skipVerify')}
         </button>
-        <p className="text-xs text-gray-500 text-center mt-2">
+        <p className="text-xs text-neutral-500 text-center mt-2">
           {t('skipDescription')}
         </p>
       </div>

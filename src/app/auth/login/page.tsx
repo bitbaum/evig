@@ -9,9 +9,9 @@ import { useTranslations } from 'next-intl'
 function LoginFormFallback() {
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700">
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
         </div>
       </div>
     </div>
@@ -27,13 +27,13 @@ export default function LoginPage() {
     document.title = t('pageTitle')
   }, [t])
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Back link */}
         <div className="mb-8">
           <Link
             href="/"
-            className="inline-flex items-center text-green-600 hover:text-green-700 dark:text-green-400 transition-colors"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -46,11 +46,11 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <div className="flex items-center justify-center gap-2">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">R</span>
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                Revamp<span className="text-green-600">IT</span>
+              <span className="text-2xl font-bold text-neutral-900 dark:text-white">
+                Revamp<span className="text-primary-600">IT</span>
               </span>
             </div>
           </Link>

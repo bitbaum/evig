@@ -23,52 +23,52 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
-        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-gray-800 dark:border-gray-600">
+        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
           <option value={REPORT_STATUS.PENDING}>{REPORT_STATUS_LABELS[REPORT_STATUS.PENDING]}</option>
           <option value={REPORT_STATUS.REVIEWED}>{REPORT_STATUS_LABELS[REPORT_STATUS.REVIEWED]}</option>
           <option value="all">Alle</option>
         </select>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-gray-700 text-left">
-              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Inserat</th>
-              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Grund</th>
-              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Melder</th>
-              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Datum</th>
-              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Status</th>
-              <th className="px-4 py-3 font-medium text-gray-600 dark:text-gray-400">Aktionen</th>
+            <tr className="border-b border-neutral-200 dark:border-neutral-700 text-left">
+              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Inserat</th>
+              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Grund</th>
+              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Melder</th>
+              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Datum</th>
+              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Status</th>
+              <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Aktionen</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
             {reports?.items.map(r => (
-              <tr key={r.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+              <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
                 <td className="px-4 py-3">
-                  <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-gray-900 dark:text-white hover:text-green-600 flex items-center gap-1">
+                  <a href={`/marketplace/${r.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-neutral-900 dark:text-white hover:text-primary-600 flex items-center gap-1">
                     {r.listing_title} <ExternalLink className="w-3 h-3" />
                   </a>
-                  <p className="text-xs text-gray-500">Verkäufer: {r.seller_name || r.seller_email}</p>
+                  <p className="text-xs text-neutral-500">Verkäufer: {r.seller_name || r.seller_email}</p>
                 </td>
                 <td className="px-4 py-3">
                   <span className="font-medium">{getReportReasonLabel(r.reason)}</span>
-                  {r.details && <p className="text-xs text-gray-500 mt-1 max-w-xs truncate">{r.details}</p>}
+                  {r.details && <p className="text-xs text-neutral-500 mt-1 max-w-xs truncate">{r.details}</p>}
                 </td>
-                <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{r.reporter_name || r.reporter_email}</td>
-                <td className="px-4 py-3 text-gray-500 whitespace-nowrap">{formatDateShort(r.created_at)}</td>
+                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">{r.reporter_name || r.reporter_email}</td>
+                <td className="px-4 py-3 text-neutral-500 whitespace-nowrap">{formatDateShort(r.created_at)}</td>
                 <td className="px-4 py-3">
                   {r.status === REPORT_STATUS.PENDING ? (
                     <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Offen</span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">{r.resolution_action ?? 'Bearbeitet'}</span>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">{r.resolution_action ?? 'Bearbeitet'}</span>
                   )}
                 </td>
                 <td className="px-4 py-3">
                   {r.status === REPORT_STATUS.PENDING && (
                     <button
                       onClick={() => onHandle(r.id)}
-                      className="px-3 py-1.5 text-sm rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                      className="px-3 py-1.5 text-sm rounded-lg border border-neutral-200 dark:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-700"
                     >
                       Bearbeiten
                     </button>
@@ -79,13 +79,13 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
           </tbody>
         </table>
         {reports && reports.items.length === 0 && (
-          <div className="p-8 text-center text-gray-500">Keine Meldungen gefunden</div>
+          <div className="p-8 text-center text-neutral-500">Keine Meldungen gefunden</div>
         )}
       </div>
 
       {reports && reports.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-500">{reports.pagination.total} Meldungen</span>
+          <span className="text-sm text-neutral-500">{reports.pagination.total} Meldungen</span>
           <div className="flex gap-2">
             <button disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
             <button disabled={!reports.pagination.hasMore} onClick={() => setOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>

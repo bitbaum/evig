@@ -27,7 +27,7 @@ export function buildQuickActions(
       label: 'Gerät annehmen',
       href: '/admin/intake',
       icon: PackageCheck,
-      color: 'bg-green-100 dark:bg-green-900/30 text-green-600 hover:bg-green-200 dark:hover:bg-green-900/50',
+      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
     })
   }
 

@@ -66,7 +66,7 @@ export default async function SettingsPage() {
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
       blue: 'bg-blue-100 text-blue-600',
-      green: 'bg-green-100 text-green-600',
+      green: 'bg-primary-100 text-primary-600',
       red: 'bg-red-100 text-red-600',
       purple: 'bg-purple-100 text-purple-600',
       orange: 'bg-orange-100 text-orange-600',
@@ -85,7 +85,7 @@ export default async function SettingsPage() {
         {settingsSections.map(section => (
           <div
             key={section.title}
-            className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 opacity-70"
+            className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 opacity-70"
             aria-disabled="true"
           >
             <div className="flex items-start gap-4">
@@ -94,12 +94,12 @@ export default async function SettingsPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Heading level={3} className="font-semibold text-gray-900 dark:text-white">{section.title}</Heading>
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                  <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">{section.title}</Heading>
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300">
                     Demnächst
                   </span>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{section.description}</p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{section.description}</p>
               </div>
             </div>
           </div>

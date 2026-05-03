@@ -113,7 +113,7 @@ export default function SellerDashboard() {
       description: 'Produkt zum Marketplace hinzufügen',
       href: '/marketplace/sell',
       icon: Plus,
-      color: 'bg-green-500',
+      color: 'bg-primary-500',
     },
     {
       title: 'Meine Produkte',
@@ -141,14 +141,14 @@ export default function SellerDashboard() {
   const getStatusLabel = (status: string) => {
     const config = LISTING_STATUS_CONFIG[status as ListingStatus]
     if (config) return { label: config.label, className: config.color }
-    return { label: status, className: 'bg-gray-100 text-gray-800' }
+    return { label: status, className: 'bg-neutral-100 text-neutral-800' }
   }
 
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <span className="ml-3 text-gray-600 dark:text-gray-400">Dashboard wird geladen...</span>
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <span className="ml-3 text-neutral-600 dark:text-neutral-400">Dashboard wird geladen...</span>
       </div>
     )
   }
@@ -187,13 +187,13 @@ export default function SellerDashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-xl p-6 text-white">
+      <div className="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2">
               Seller Dashboard
             </h1>
-            <p className="text-green-100">
+            <p className="text-primary-100">
               Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
             </p>
           </div>
@@ -209,49 +209,49 @@ export default function SellerDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Meine Produkte</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalProducts}</p>
-              <p className="text-sm text-green-600">{stats.activeProducts} aktiv</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Meine Produkte</p>
+              <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalProducts}</p>
+              <p className="text-sm text-primary-600">{stats.activeProducts} aktiv</p>
             </div>
             <Package className="w-8 h-8 text-blue-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Umsatz</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Umsatz</p>
+              <p className="text-3xl font-bold text-neutral-900 dark:text-white">
                 CHF {stats.totalRevenue.toLocaleString('de-CH')}
               </p>
-              <p className="text-sm text-green-600 flex items-center gap-1">
+              <p className="text-sm text-primary-600 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
                 Gesamtumsatz
               </p>
             </div>
-            <DollarSign className="w-8 h-8 text-green-600" />
+            <DollarSign className="w-8 h-8 text-primary-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Produkt-Aufrufe</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Produkt-Aufrufe</p>
+              <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
               <p className="text-sm text-blue-600">{stats.totalFavorites} Favoriten</p>
             </div>
             <Eye className="w-8 h-8 text-blue-600" />
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bestellungen</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.totalOrders}</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bestellungen</p>
+              <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalOrders}</p>
               <p className="text-sm text-purple-600">ausstehend: {stats.pendingOrders}</p>
             </div>
             <Users className="w-8 h-8 text-purple-600" />
@@ -261,12 +261,12 @@ export default function SellerDashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Products */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+          <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
               Meine Produkte
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
               Übersicht Ihrer Produkte
             </p>
           </div>
@@ -274,13 +274,13 @@ export default function SellerDashboard() {
           <div className="p-6">
             {products.length === 0 ? (
               <div className="text-center py-8">
-                <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
+                <Package className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
+                <p className="text-neutral-600 dark:text-neutral-400 mb-4">
                   Sie haben noch keine Produkte erstellt.
                 </p>
                 <Link
                   href="/marketplace/sell"
-                  className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+                  className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg"
                 >
                   <Plus className="w-4 h-4" />
                   Erstes Produkt erstellen
@@ -291,15 +291,15 @@ export default function SellerDashboard() {
                 {products.map((product) => {
                   const statusInfo = getStatusLabel(product.status)
                   return (
-                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
+                    <div key={product.id} className="flex items-center gap-4 p-3 rounded-lg border border-neutral-100 dark:border-neutral-700">
                       <div className="w-12 h-12 rounded-lg overflow-hidden">
                         <ListingImage src={product.image} alt={product.title} fallbackIconSize="w-5 h-5" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 dark:text-white truncate">
+                        <h3 className="font-medium text-neutral-900 dark:text-white truncate">
                           {product.title}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className="text-sm text-neutral-500 dark:text-neutral-400">
                           CHF {product.price} • {product.viewsCount} Aufrufe
                         </p>
                       </div>
@@ -315,10 +315,10 @@ export default function SellerDashboard() {
             )}
 
             {products.length > 0 && (
-              <div className="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+              <div className="mt-6 pt-4 border-t border-neutral-100 dark:border-neutral-700">
                 <Link
                   href="/dashboard/listings"
-                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 font-medium flex items-center gap-1"
+                  className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium flex items-center gap-1"
                 >
                   Alle Produkte verwalten
                   <ArrowRight className="w-4 h-4" />
@@ -329,12 +329,12 @@ export default function SellerDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <div className="p-6 border-b border-gray-100 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+          <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
+            <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
               Schnellzugriff
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
               Häufig verwendete Seller-Funktionen
             </p>
           </div>
@@ -345,17 +345,17 @@ export default function SellerDashboard() {
                 <Link
                   key={action.href}
                   href={action.href}
-                  className="group p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="group p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center`}>
                       <action.icon className="w-4 h-4 text-white" />
                     </div>
-                    <h3 className="font-medium text-gray-900 dark:text-white group-hover:text-green-600 transition-colors">
+                    <h3 className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors">
                       {action.title}
                     </h3>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400">
                     {action.description}
                   </p>
                 </Link>
@@ -389,7 +389,7 @@ export default function SellerDashboard() {
               </Link>
               <Link
                 href="/marketplace/sell"
-                className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition-colors"
+                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 Produkt hinzufügen
               </Link>

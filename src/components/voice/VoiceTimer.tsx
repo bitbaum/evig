@@ -28,24 +28,24 @@ export function VoiceTimer({ currentTime, maxDuration, state }: VoiceTimerProps)
     <>
       {/* Timer display */}
       <div className="text-center mb-4">
-        <span className="text-2xl font-mono text-gray-900 dark:text-white">
+        <span className="text-2xl font-mono text-neutral-900 dark:text-white">
           {formatTime(currentTime)}
         </span>
-        <span className="text-gray-600 dark:text-gray-400">
+        <span className="text-neutral-600 dark:text-neutral-400">
           {' '}
           / {formatTime(maxDuration)}
         </span>
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6">
+      <div className="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2 mb-6">
         <div
           className={`h-2 rounded-full transition-all duration-100 ${
             state === 'recording'
               ? 'bg-red-500'
               : state === 'paused'
                 ? 'bg-yellow-500'
-                : 'bg-green-500'
+                : 'bg-primary-500'
           }`}
           style={{ width: `${progressPercent}%` }}
         />

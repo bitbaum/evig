@@ -83,14 +83,14 @@ export default async function WissenPage() {
   }
 
   const colorClasses = {
-    green: 'bg-green-50 border-green-200 text-green-900',
+    green: 'bg-primary-50 border-primary-200 text-primary-900',
     blue: 'bg-blue-50 border-blue-200 text-blue-900',
     purple: 'bg-purple-50 border-purple-200 text-purple-900',
     orange: 'bg-orange-50 border-orange-200 text-orange-900',
   }
 
   const buttonClasses = {
-    green: 'bg-green-600 hover:bg-green-700',
+    green: 'bg-primary-600 hover:bg-primary-700',
     blue: 'bg-blue-600 hover:bg-blue-700',
     purple: 'bg-purple-600 hover:bg-purple-700',
     orange: 'bg-orange-600 hover:bg-orange-700',
@@ -138,15 +138,15 @@ export default async function WissenPage() {
       </section>
 
       {/* Resources Section */}
-      <section id="ressourcen" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8 bg-gray-50">
+      <section id="ressourcen" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8 bg-neutral-50">
         <div className="mx-auto max-w-6xl">
-          <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-gray-900 mb-8 sm:mb-12 md:mb-16 text-center">
+          <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-neutral-900 mb-8 sm:mb-12 md:mb-16 text-center">
             {t('curatedResources')}
           </Heading>
 
           {/* Open Source Software */}
           <div className="mb-12 sm:mb-16">
-            <Heading level={3} className="text-xl sm:text-2xl text-gray-900 mb-4 sm:mb-6">{t('openSourceSoftware')}</Heading>
+            <Heading level={3} className="text-xl sm:text-2xl text-neutral-900 mb-4 sm:mb-6">{t('openSourceSoftware')}</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.openSource.map((resource, idx) => (
                 <a
@@ -154,10 +154,10 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-green-500 hover:bg-green-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
                 >
-                  <Heading level={4} className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</Heading>
-                  <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
+                  <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
+                  <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>
                 </a>
               ))}
             </div>
@@ -165,7 +165,7 @@ export default async function WissenPage() {
 
           {/* Linux Distributionen */}
           <div className="mb-12 sm:mb-16">
-            <Heading level={3} className="text-xl sm:text-2xl text-gray-900 mb-4 sm:mb-6">{t('linuxDistros')}</Heading>
+            <Heading level={3} className="text-xl sm:text-2xl text-neutral-900 mb-4 sm:mb-6">{t('linuxDistros')}</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.linux.map((resource, idx) => (
                 <a
@@ -173,10 +173,10 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-blue-500 hover:bg-blue-50 transition-colors"
                 >
-                  <Heading level={4} className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</Heading>
-                  <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
+                  <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
+                  <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>
                 </a>
               ))}
             </div>
@@ -184,7 +184,7 @@ export default async function WissenPage() {
 
           {/* Documentation */}
           <div>
-            <Heading level={3} className="text-xl sm:text-2xl text-gray-900 mb-4 sm:mb-6">{t('externalDocs')}</Heading>
+            <Heading level={3} className="text-xl sm:text-2xl text-neutral-900 mb-4 sm:mb-6">{t('externalDocs')}</Heading>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {resources.documentation.map((resource, idx) => (
                 <a
@@ -192,10 +192,10 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-purple-500 hover:bg-purple-50 transition-colors"
                 >
-                  <Heading level={4} className="font-semibold text-sm sm:text-base text-gray-900 mb-2">{resource.name}</Heading>
-                  <p className="text-xs sm:text-sm text-gray-600">{resource.description}</p>
+                  <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
+                  <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>
                 </a>
               ))}
             </div>
@@ -206,15 +206,15 @@ export default async function WissenPage() {
       {/* CTA Section */}
       <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-gray-900 mb-4 sm:mb-6">
+          <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-neutral-900 mb-4 sm:mb-6">
             {t('cta.title')}
           </Heading>
-          <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-10">
+          <p className="text-base sm:text-lg text-neutral-600 mb-8 sm:mb-10">
             {t('cta.description')}
           </p>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-md bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors text-sm sm:text-base"
+            className="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-md bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors text-sm sm:text-base"
           >
             {t('cta.button')}
           </Link>

@@ -52,16 +52,16 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
   if (form.success) {
     return (
-      <div className="p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl">
+      <div className="p-6 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-            <Check className="w-5 h-5 text-green-600" />
+          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+            <Check className="w-5 h-5 text-primary-600" />
           </div>
           <div>
-            <Heading level={3} className="font-semibold text-green-900 dark:text-green-200">
+            <Heading level={3} className="font-semibold text-primary-900 dark:text-primary-200">
               Anfrage gesendet
             </Heading>
-            <p className="text-sm text-green-700 dark:text-green-300">
+            <p className="text-sm text-primary-700 dark:text-primary-300">
               Ein Super Admin wird deine Anfrage prüfen.
             </p>
           </div>
@@ -69,7 +69,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         {onClose && (
           <button
             onClick={onClose}
-            className="text-sm text-green-600 hover:text-green-700"
+            className="text-sm text-primary-600 hover:text-primary-700"
           >
             Schliessen
           </button>
@@ -85,10 +85,10 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <Shield className="w-5 h-5 text-blue-600" />
         </div>
         <div>
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white">
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
             Zugriff anfordern
           </Heading>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Wähle die Bereiche aus, auf die du Zugriff benötigst.
           </p>
         </div>
@@ -96,7 +96,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <button
             type="button"
             onClick={onClose}
-            className="ml-auto text-gray-500 hover:text-gray-600"
+            className="ml-auto text-neutral-500 hover:text-neutral-600"
           >
             <X className="w-5 h-5" />
           </button>
@@ -105,7 +105,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
       {/* Section Selection */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
           Bereiche auswählen
         </label>
         <div className="grid grid-cols-2 gap-2">
@@ -117,13 +117,13 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                  : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
               }`}
             >
-              <span className="font-medium text-gray-900 dark:text-white">
+              <span className="font-medium text-neutral-900 dark:text-white">
                 {section.label}
               </span>
-              <span className="block text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <span className="block text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                 {section.description}
               </span>
             </button>
@@ -133,7 +133,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
       {/* Reason */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Begründung
         </label>
         <textarea
@@ -144,7 +144,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           aria-required="true"
           aria-invalid={!!form.error}
           aria-describedby={form.error ? 'permission-form-error' : undefined}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
       </div>
 

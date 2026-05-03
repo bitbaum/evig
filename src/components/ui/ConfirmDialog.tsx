@@ -38,14 +38,14 @@ const VARIANT_STYLES = {
     icon: 'text-orange-500',
   },
   success: {
-    title: 'text-green-600 dark:text-green-400',
-    button: 'bg-green-600 hover:bg-green-700',
-    icon: 'text-green-500',
+    title: 'text-primary-600 dark:text-primary-400',
+    button: 'bg-primary-600 hover:bg-primary-700',
+    icon: 'text-primary-500',
   },
   default: {
-    title: 'text-gray-900 dark:text-white',
+    title: 'text-neutral-900 dark:text-white',
     button: 'bg-indigo-600 hover:bg-indigo-700',
-    icon: 'text-gray-600',
+    icon: 'text-neutral-600',
   },
 }
 
@@ -91,12 +91,12 @@ export function ConfirmDialog({
 
       {/* Content */}
       <div className="mb-6">
-        <p className="text-gray-700 dark:text-gray-300 mb-2">
+        <p className="text-neutral-700 dark:text-neutral-300 mb-2">
           {message}
         </p>
         {itemName && (
-          <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <p className="font-medium text-gray-900 dark:text-white">
+          <div className="p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg">
+            <p className="font-medium text-neutral-900 dark:text-white">
               {itemName}
             </p>
           </div>

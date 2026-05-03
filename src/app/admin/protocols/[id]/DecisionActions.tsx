@@ -234,8 +234,8 @@ export default function DecisionActions({
               disabled={loading === 'vote'}
               className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'up'
-                  ? 'bg-green-100 border-green-300 text-green-800'
-                  : 'bg-white border-gray-200 text-gray-600 hover:bg-green-50 hover:border-green-200'
+                  ? 'bg-primary-100 border-primary-300 text-primary-800'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-primary-50 hover:border-primary-200'
               } disabled:opacity-50`}
             >
               {loading === 'vote' ? (
@@ -251,7 +251,7 @@ export default function DecisionActions({
               className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'down'
                   ? 'bg-red-100 border-red-300 text-red-800'
-                  : 'bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:border-red-200'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-red-50 hover:border-red-200'
               } disabled:opacity-50`}
             >
               <ThumbsDown className="w-3.5 h-3.5" />
@@ -260,7 +260,7 @@ export default function DecisionActions({
           </div>
 
           {attendeeCount > 0 && (
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-neutral-500">
               {totalVoters} von {attendeeCount} abgestimmt
             </span>
           )}
@@ -269,7 +269,7 @@ export default function DecisionActions({
             <button
               onClick={handleClose}
               disabled={loading === 'close'}
-              className="text-xs text-gray-500 hover:text-gray-700 underline disabled:opacity-50"
+              className="text-xs text-neutral-500 hover:text-neutral-700 underline disabled:opacity-50"
             >
               {loading === 'close' ? (
                 <Loader2 className="w-3 h-3 animate-spin inline mr-1" />
@@ -289,13 +289,13 @@ export default function DecisionActions({
             }`}>
               {DECISION_RESULT_LABELS[result]}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-neutral-500">
               ({votesUp}:{votesDown})
             </span>
 
             {/* Stage 4: Tasks created */}
             {tasksCreated && (
-              <span className="flex items-center gap-1 text-xs text-green-600">
+              <span className="flex items-center gap-1 text-xs text-primary-600">
                 <CheckCircle2 className="w-3 h-3" />
                 {localOutcome?.proposed_tasks?.length || 0} Aufgaben erstellt
               </span>
@@ -321,14 +321,14 @@ export default function DecisionActions({
           {/* Stage 3: Proposals shown */}
           {hasProposals && !tasksCreated && (
             <div className="ml-0 space-y-2">
-              <p className="text-xs font-medium text-gray-600">KI-Vorschläge:</p>
+              <p className="text-xs font-medium text-neutral-600">KI-Vorschläge:</p>
               <ul className="space-y-1">
                 {localOutcome!.proposed_tasks!.map((task: ProposedTask, i: number) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-700 bg-gray-50 rounded px-2 py-1.5">
+                  <li key={i} className="flex items-start gap-2 text-xs text-neutral-700 bg-neutral-50 rounded px-2 py-1.5">
                     <span className="flex-1">
                       {task.title}
                       {task.priority && task.priority !== TASK_PRIORITIES.NORMAL && (
-                        <span className="ml-1 text-gray-500">
+                        <span className="ml-1 text-neutral-500">
                           ({PRIORITY_HINT_LABELS[task.priority] || task.priority})
                         </span>
                       )}

@@ -31,7 +31,7 @@ export function PricingSection({
   return (
     <CollapsibleSection title="Preisanzeige" defaultOpen={false}>
       <div>
-        <label htmlFor="pricing-base" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label htmlFor="pricing-base" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Basis-Preis (Anzeige)
         </label>
         <input
@@ -40,12 +40,12 @@ export function PricingSection({
           value={pricingBase}
           onChange={(e) => onBaseChange(e.target.value)}
           placeholder="z.B. CHF 70/Stunde, Kostenlos, Auf Anfrage"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
       <div>
-        <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Preisdetails
         </span>
         <div className="space-y-2">
@@ -56,7 +56,7 @@ export function PricingSection({
                 value={detail}
                 onChange={(e) => onDetailUpdate(index, e.target.value)}
                 placeholder="Detail-Zeile"
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
               />
               <button
                 type="button"
@@ -70,7 +70,7 @@ export function PricingSection({
           <button
             type="button"
             onClick={onDetailAdd}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Detail hinzufügen
@@ -79,7 +79,7 @@ export function PricingSection({
       </div>
 
       <div>
-        <span className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Medienpreise (optional, für Datenrettung)
         </span>
         <div className="space-y-2">
@@ -90,7 +90,7 @@ export function PricingSection({
                 value={price}
                 onChange={(e) => onMediaPriceUpdate(index, e.target.value)}
                 placeholder="z.B. Disketten: CHF 10 pro Stück"
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
               />
               <button
                 type="button"
@@ -104,7 +104,7 @@ export function PricingSection({
           <button
             type="button"
             onClick={onMediaPriceAdd}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg"
           >
             <Plus className="w-4 h-4" />
             Medienpreis hinzufügen

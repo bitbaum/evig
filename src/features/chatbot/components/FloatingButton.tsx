@@ -19,15 +19,15 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
       onClick={() => { uiEvents.emit('closeSuggestion'); onClick() }}
       className={cn(
         "fixed z-[600] pointer-events-auto",
-        "bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700",
+        "bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700",
         "text-white rounded-full shadow-lg hover:shadow-xl",
         "transition-all duration-300 ease-in-out transform hover:scale-105",
-        "focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2",
+        "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
         "hover:scale-110 active:scale-95 touch-manipulation",
         // Mobile: larger button, better positioning
         "bottom-4 right-4 sm:bottom-6 sm:right-6",
         "p-3 sm:p-4",
-        isOpen && "ring-2 ring-green-500 ring-offset-2"
+        isOpen && "ring-2 ring-primary-500 ring-offset-2"
       )}
       aria-label={currentLanguage === 'de' ? 'Revamp IT Assistent öffnen' : 'Open Revamp IT Assistant'}
     >

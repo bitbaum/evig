@@ -59,7 +59,7 @@ export function IntakeCreateForm({
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center justify-between">
         <Heading level={2} className="text-lg font-semibold">Neues Gerät erfassen</Heading>
-        <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">
+        <button onClick={onCancel} className="text-neutral-500 hover:text-neutral-700">
           <X className="w-5 h-5" />
         </button>
       </div>
@@ -76,12 +76,12 @@ export function IntakeCreateForm({
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
                   ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
               <div className="text-2xl mb-1">{opt.icon}</div>
               <div className="text-sm font-medium">{opt.label}</div>
-              <div className="text-xs text-gray-500">{opt.description}</div>
+              <div className="text-xs text-neutral-500">{opt.description}</div>
             </button>
           ))}
         </div>
@@ -117,7 +117,7 @@ export function IntakeCreateForm({
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px transition-colors ${
                     aiTab === tab.key
                       ? 'border-purple-600 text-purple-700 font-medium'
-                      : 'border-transparent text-gray-500 hover:text-gray-700'
+                      : 'border-transparent text-neutral-500 hover:text-neutral-700'
                   }`}
                 >
                   <tab.icon className="w-3.5 h-3.5" />
@@ -155,7 +155,7 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStartVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-400 w-full justify-center text-sm text-gray-600"
+                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-purple-400 w-full justify-center text-sm text-neutral-600"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme starten
@@ -178,7 +178,7 @@ export function IntakeCreateForm({
                   </div>
                 )}
                 {aiText && voiceState === 'idle' && (
-                  <p className="text-xs text-gray-500 bg-gray-50 p-2 rounded">Transkription: {aiText}</p>
+                  <p className="text-xs text-neutral-500 bg-neutral-50 p-2 rounded">Transkription: {aiText}</p>
                 )}
               </div>
             )}
@@ -294,7 +294,7 @@ export function IntakeCreateForm({
       )}
 
       {/* Donation Toggle */}
-      <div className="border rounded-lg p-4 bg-green-50">
+      <div className="border rounded-lg p-4 bg-primary-50">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -308,7 +308,7 @@ export function IntakeCreateForm({
         {formData.is_donation && (
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium mb-1 text-gray-600">Name Spender/in</label>
+              <label className="block text-xs font-medium mb-1 text-neutral-600">Name Spender/in</label>
               <input
                 type="text"
                 value={formData.donor_name}
@@ -318,7 +318,7 @@ export function IntakeCreateForm({
               />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1 text-gray-600">E-Mail Spender/in</label>
+              <label className="block text-xs font-medium mb-1 text-neutral-600">E-Mail Spender/in</label>
               <input
                 type="email"
                 value={formData.donor_email}
@@ -328,7 +328,7 @@ export function IntakeCreateForm({
               />
             </div>
             <div className="col-span-2">
-              <label className="block text-xs font-medium mb-1 text-gray-600">Notizen zur Spende</label>
+              <label className="block text-xs font-medium mb-1 text-neutral-600">Notizen zur Spende</label>
               <input
                 type="text"
                 value={formData.donor_notes}
@@ -352,7 +352,7 @@ export function IntakeCreateForm({
         </button>
         <button
           onClick={onCancel}
-          className="px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm"
+          className="px-4 py-2 border rounded-lg hover:bg-neutral-50 text-sm"
         >
           Abbrechen
         </button>

@@ -142,7 +142,7 @@ export default async function AdminServicesPage() {
       actions={
         <Link
           href="/admin/services/new"
-          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
           Dienstleistung erstellen
@@ -151,94 +151,94 @@ export default async function AdminServicesPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-blue-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Gesamt Services</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalServices}</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Gesamt Services</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalServices}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-8 h-8 text-green-600" />
+            <CheckCircle className="w-8 h-8 text-primary-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Aktiv</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.activeServices}</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Aktiv</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.activeServices}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-purple-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Buchungen</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalBookings}</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Buchungen</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalBookings}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-orange-600" />
             <div>
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Techniker</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalTechnicians}</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Techniker</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalTechnicians}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Services Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
         {services.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-700">
+              <thead className="bg-neutral-50 dark:bg-neutral-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
                     Dienstleistung
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
                     Kategorie
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
                     Preis
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
                     Flags
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">
                     Aktionen
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
                 {services.map((service) => (
-                  <tr key={service.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                  <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700">
                     <td className="px-6 py-4">
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className="text-sm font-medium text-neutral-900 dark:text-white">
                           {service.name}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
                           /{service.slug}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
+                      <span className="text-sm text-neutral-700 dark:text-neutral-300">
                         {service.category ? CATEGORY_LABELS[service.category as keyof typeof CATEGORY_LABELS] || service.category : '-'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                      <div className="text-sm font-medium text-neutral-900 dark:text-white">
                         {formatPrice(service.price_cents)}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <div className="text-xs text-neutral-500 dark:text-neutral-400">
                         {formatDuration(service.duration_minutes)}
                       </div>
                     </td>
@@ -246,8 +246,8 @@ export default async function AdminServicesPage() {
                       <div className="flex items-center gap-1.5">
                         <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
                           service.is_active
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300'
+                            ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
+                            : 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300'
                         }`}>
                           {service.is_active ? 'Aktiv' : 'Inaktiv'}
                         </span>
@@ -277,7 +277,7 @@ export default async function AdminServicesPage() {
                         )}
                         <Link
                           href={`/admin/services/${service.id}/edit`}
-                          className="p-2.5 text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded"
+                          className="p-2.5 text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded"
                           title="Bearbeiten"
                         >
                           <Edit className="w-4 h-4" />
@@ -291,16 +291,16 @@ export default async function AdminServicesPage() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Wrench className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <Wrench className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
               Noch keine Dienstleistungen
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-neutral-600 dark:text-neutral-400 mb-6">
               Erstellen Sie Ihre erste Dienstleistung, um Service-Termine anzubieten.
             </p>
             <Link
               href="/admin/services/new"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />
               Erste Dienstleistung erstellen

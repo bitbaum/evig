@@ -18,13 +18,13 @@ export default function ProfilError({
   }, [error])
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" aria-hidden="true" />
-        <Heading level={1} className="text-lg text-gray-900">
+        <Heading level={1} className="text-lg text-neutral-900">
           Etwas ist schiefgelaufen
         </Heading>
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-2 text-sm text-neutral-600">
           Beim Laden deines Profils ist ein Fehler aufgetreten.
         </p>
         <div className="mt-6 flex flex-col gap-3">
@@ -36,7 +36,7 @@ export default function ProfilError({
           </button>
           <Link
             href="/dashboard"
-            className="inline-flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
+            className="inline-flex items-center justify-center gap-2 text-neutral-600 hover:text-neutral-900 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 rounded"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             Zurück zum Dashboard

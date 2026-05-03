@@ -70,7 +70,7 @@ export function CurrentFocusInput({
               onChange={(e) => setFocus(e.target.value)}
               placeholder="Woran arbeitest du?"
               maxLength={200}
-              className="flex-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave()
@@ -80,7 +80,7 @@ export function CurrentFocusInput({
             <button
               onClick={handleSave}
               disabled={saving || !hasChanges}
-              className="p-1 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded disabled:opacity-50"
+              className="p-1 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded disabled:opacity-50"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -90,7 +90,7 @@ export function CurrentFocusInput({
             </button>
             <button
               onClick={handleCancel}
-              className="p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              className="p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
             >
               <X className="w-4 h-4" />
             </button>
@@ -98,7 +98,7 @@ export function CurrentFocusInput({
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="flex-1 text-left text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 truncate"
+            className="flex-1 text-left text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 truncate"
           >
             {focus || 'Fokus setzen...'}
           </button>
@@ -108,10 +108,10 @@ export function CurrentFocusInput({
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-blue-500" />
-        <Heading level={3} className="text-gray-900 dark:text-gray-100">Aktueller Fokus</Heading>
+        <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktueller Fokus</Heading>
       </div>
 
       {error && (
@@ -131,16 +131,16 @@ export function CurrentFocusInput({
             }}
             placeholder="Woran arbeitest du gerade?"
             maxLength={200}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
             {focus.length}/200
           </span>
         </div>
 
         {isEditing && (
           <div className="flex items-center justify-between">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
               Teile deinem Team mit, woran du arbeitest
             </p>
             <div className="flex gap-2">
@@ -155,7 +155,7 @@ export function CurrentFocusInput({
               )}
               <button
                 onClick={handleCancel}
-                className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                className="px-3 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
               >
                 Abbrechen
               </button>

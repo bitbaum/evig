@@ -127,8 +127,8 @@ export default async function AnalysePage() {
               </div>
               {comparison && (
                 <div className={`text-sm mt-2 ${
-                  comparison.totalChange.direction === 'up' ? 'text-green-600' :
-                  comparison.totalChange.direction === 'down' ? 'text-red-600' : 'text-gray-500'
+                  comparison.totalChange.direction === 'up' ? 'text-primary-600' :
+                  comparison.totalChange.direction === 'down' ? 'text-red-600' : 'text-neutral-500'
                 }`}>
                   {comparison.totalChange.direction === 'up' ? '+' : ''}
                   {comparison.totalChange.percentChange.toFixed(1)}% vs. {previousYear}
@@ -144,7 +144,7 @@ export default async function AnalysePage() {
                 {latestData.derived.eigenfinanzierungPct.value.toFixed(1)}%
               </div>
               <div className={`text-sm mt-2 ${
-                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-green-600' : 'text-amber-600'
+                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-primary-600' : 'text-amber-600'
               }`}>
                 {latestData.derived.eigenfinanzierungPct.value >= 50 ? 'Ziel erreicht' : 'Unter Ziel (50%)'}
               </div>
@@ -241,9 +241,9 @@ export default async function AnalysePage() {
 
         {/* Positive Insights */}
         {positiveInsights.length > 0 && (
-          <Card className="border-green-200">
+          <Card className="border-primary-200">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-green-700">
+              <CardTitle className="text-lg flex items-center gap-2 text-primary-700">
                 <CheckCircle2 className="w-5 h-5" />
                 Positive Entwicklungen
               </CardTitle>
@@ -251,11 +251,11 @@ export default async function AnalysePage() {
             <CardContent>
               <ul className="space-y-3">
                 {positiveInsights.map(insight => (
-                  <li key={insight.id} className="border-l-4 border-green-400 pl-3">
+                  <li key={insight.id} className="border-l-4 border-primary-400 pl-3">
                     <div className="font-medium">{insight.title}</div>
                     <div className="text-sm text-muted-foreground">{insight.description}</div>
                     {insight.implication && (
-                      <div className="text-sm text-green-700 mt-1">
+                      <div className="text-sm text-primary-700 mt-1">
                         {insight.implication}
                       </div>
                     )}
@@ -270,7 +270,7 @@ export default async function AnalysePage() {
       {/* Quick Links */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Link href="/admin/analyse/finanzen" className="block">
-          <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Finanzen</div>
               <div className="text-sm text-muted-foreground">
@@ -280,7 +280,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href="/admin/analyse/kennzahlen" className="block">
-          <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Kennzahlen</div>
               <div className="text-sm text-muted-foreground">
@@ -290,7 +290,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href="/admin/analyse/wirkung" className="block">
-          <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Wirkung</div>
               <div className="text-sm text-muted-foreground">
@@ -300,7 +300,7 @@ export default async function AnalysePage() {
           </Card>
         </Link>
         <Link href="/admin/analyse/transparenz" className="block">
-          <Card className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Transparenz</div>
               <div className="text-sm text-muted-foreground">
@@ -312,7 +312,7 @@ export default async function AnalysePage() {
       </div>
 
       {/* Data Source */}
-      <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-sm text-muted-foreground">
         <strong>Datenquellen:</strong> Finanzdaten aus Kivitendo • Letzte Aktualisierung: {latestData?.metadata.importedAt ? formatDateShort(latestData.metadata.importedAt) : 'N/A'}
       </div>
     </div>

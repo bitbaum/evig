@@ -139,8 +139,8 @@ function ErfassungContent() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-green-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">Produkt wird geladen...</p>
+          <Loader2 className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-4" />
+          <p className="text-neutral-600 dark:text-neutral-400">Produkt wird geladen...</p>
         </div>
       </div>
     )
@@ -176,7 +176,7 @@ function ErfassungContent() {
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
       {/* Pipeline progress — shown when entering from Geräte-Eingang */}
       {isIntakePipeline && (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3">
+        <div className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-4 py-3">
           <Stepper
             steps={INTAKE_PIPELINE_STEPS}
             currentStep={1}
@@ -189,15 +189,15 @@ function ErfassungContent() {
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
           href="/admin/products"
-          className="p-2 sm:p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 touch-manipulation"
+          className="p-2 sm:p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 touch-manipulation"
         >
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>
         <div className="flex-1 min-w-0">
-          <Heading level={1} className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+          <Heading level={1} className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white truncate">
             {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : 'Produkt Erfassung'}
           </Heading>
-          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hidden sm:block">
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 hidden sm:block">
             {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : 'Neues Produkt ins Inventar aufnehmen'}
           </p>
         </div>
@@ -205,7 +205,7 @@ function ErfassungContent() {
           <button
             type="button"
             onClick={handleBulkReset}
-            className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="text-sm text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"
           >
             Zurück zur Einzelerfassung
           </button>
@@ -329,8 +329,8 @@ function ErfassungFallback() {
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin mx-auto mb-4" />
-        <p className="text-gray-600 dark:text-gray-400">Erfassung wird geladen...</p>
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-4" />
+        <p className="text-neutral-600 dark:text-neutral-400">Erfassung wird geladen...</p>
       </div>
     </div>
   )

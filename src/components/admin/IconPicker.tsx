@@ -36,17 +36,17 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors"
       >
-        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-          <RenderIcon iconName={value} className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+        <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
+          <RenderIcon iconName={value} className="w-6 h-6 text-neutral-600 dark:text-neutral-300" />
         </div>
         <div className="flex-1 text-left">
-          <span className="text-gray-900 dark:text-white">{currentLabel}</span>
-          <span className="block text-xs text-gray-500 dark:text-gray-400">{value || 'Kein Icon gewählt'}</span>
+          <span className="text-neutral-900 dark:text-white">{currentLabel}</span>
+          <span className="block text-xs text-neutral-500 dark:text-neutral-400">{value || 'Kein Icon gewählt'}</span>
         </div>
         <svg
-          className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-neutral-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -65,7 +65,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
           />
 
           {/* Icon grid */}
-          <div className="absolute z-20 mt-2 w-full p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute z-20 mt-2 w-full p-4 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-lg max-h-80 overflow-y-auto">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {iconNames.map((iconName) => {
                 const IconComponent = SERVICE_ICONS[iconName].icon
@@ -84,15 +84,15 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     className={`
                       flex flex-col items-center justify-center p-2 rounded-lg transition-colors
                       ${isSelected
-                        ? 'bg-green-100 dark:bg-green-900/30 border-2 border-green-500'
-                        : 'hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-transparent'
+                        ? 'bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-500'
+                        : 'hover:bg-neutral-100 dark:hover:bg-neutral-700 border-2 border-transparent'
                       }
                     `}
                   >
                     <IconComponent
-                      className={`w-6 h-6 ${isSelected ? 'text-green-600' : 'text-gray-600 dark:text-gray-300'}`}
+                      className={`w-6 h-6 ${isSelected ? 'text-primary-600' : 'text-neutral-600 dark:text-neutral-300'}`}
                     />
-                    <span className="text-xs mt-1 text-gray-500 dark:text-gray-400 truncate w-full text-center">
+                    <span className="text-xs mt-1 text-neutral-500 dark:text-neutral-400 truncate w-full text-center">
                       {label.split('/')[0]}
                     </span>
                   </button>

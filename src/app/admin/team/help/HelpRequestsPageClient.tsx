@@ -96,7 +96,7 @@ export function HelpRequestsPageClient({
           <button
             onClick={() => refetch()}
             disabled={loading}
-            className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
             title="Aktualisieren"
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -107,7 +107,7 @@ export function HelpRequestsPageClient({
             className={`p-2 rounded-lg ${
               hasActiveFilters
                 ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
-                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
+                : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
             }`}
             title="Filter"
           >
@@ -115,7 +115,7 @@ export function HelpRequestsPageClient({
           </button>
 
           {!loading && (
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-sm text-neutral-500 dark:text-neutral-400">
               {total} Anfrage{total !== 1 ? 'n' : ''}
             </span>
           )}
@@ -129,17 +129,17 @@ export function HelpRequestsPageClient({
 
       {/* Filter Panel */}
       {showFilters && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Status Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 Status
               </label>
               <select
                 value={filters.status || ''}
                 onChange={(e) => handleFilterChange('status', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle Status</option>
                 {HELP_REQUEST_STATUS_OPTIONS.map((status) => (
@@ -152,13 +152,13 @@ export function HelpRequestsPageClient({
 
             {/* Urgency Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 Dringlichkeit
               </label>
               <select
                 value={filters.urgency || ''}
                 onChange={(e) => handleFilterChange('urgency', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle</option>
                 {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
@@ -171,7 +171,7 @@ export function HelpRequestsPageClient({
 
             {/* Broadcast Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
                 Empfänger
               </label>
               <select
@@ -182,7 +182,7 @@ export function HelpRequestsPageClient({
                     e.target.value === '' ? undefined : e.target.value === 'true'
                   )
                 }
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-sm"
+                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle</option>
                 <option value="true">An alle (Broadcast)</option>
@@ -195,7 +195,7 @@ export function HelpRequestsPageClient({
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  className="px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
                 >
                   Zurücksetzen
                 </button>
@@ -218,14 +218,14 @@ export function HelpRequestsPageClient({
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 animate-pulse"
+              className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 animate-pulse"
             >
               <div className="flex gap-3">
-                <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                <div className="w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
                 <div className="flex-1 space-y-2">
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2" />
-                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/4" />
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2" />
+                  <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4" />
+                  <div className="h-3 bg-neutral-200 dark:bg-neutral-700 rounded w-1/4" />
                 </div>
               </div>
             </div>
@@ -235,8 +235,8 @@ export function HelpRequestsPageClient({
 
       {/* Empty State */}
       {!loading && !error && requests.length === 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center">
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
+          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
             {hasActiveFilters
               ? 'Keine Hilfsanfragen mit diesen Filtern gefunden.'
               : 'Noch keine Hilfsanfragen vorhanden.'}
@@ -259,7 +259,7 @@ export function HelpRequestsPageClient({
           {/* Open Requests */}
           {openRequests.length > 0 && (
             <div>
-              <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-3">
                 Offene Anfragen ({openRequests.length})
               </Heading>
               <div className="space-y-4">
@@ -280,7 +280,7 @@ export function HelpRequestsPageClient({
           {/* In Progress Requests */}
           {inProgressRequests.length > 0 && (
             <div>
-              <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-3">
                 In Bearbeitung ({inProgressRequests.length})
               </Heading>
               <div className="space-y-4">
@@ -300,7 +300,7 @@ export function HelpRequestsPageClient({
           {/* Resolved Requests */}
           {resolvedRequests.length > 0 && (
             <div>
-              <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-3">
+              <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-3">
                 Abgeschlossen ({resolvedRequests.length})
               </Heading>
               <div className="space-y-4">

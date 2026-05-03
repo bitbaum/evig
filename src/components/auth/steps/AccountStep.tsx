@@ -64,10 +64,10 @@ export function AccountStep({
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="text-center mb-6">
-        <Heading level={2} className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-neutral-600 dark:text-neutral-400">
           {t('subtitle')}
         </p>
       </div>
@@ -97,7 +97,7 @@ export function AccountStep({
             onChange={(e) => onNameChange(e.target.value)}
             autoComplete="name"
             placeholder={t('namePlaceholder')}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
       </div>
@@ -120,7 +120,7 @@ export function AccountStep({
             placeholder={t('emailPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full pl-11 pr-4 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
       </div>
@@ -143,7 +143,7 @@ export function AccountStep({
             placeholder={t('passwordPlaceholder')}
             aria-invalid={errors.length > 0}
             aria-describedby={errors.length > 0 ? 'account-errors' : undefined}
-            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+            className="w-full pl-11 pr-12 py-3 border-2 rounded-lg border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
           <button
             type="button"
@@ -161,12 +161,12 @@ export function AccountStep({
             <div className="flex gap-1 mb-2">
               <div
                 className={`h-1.5 flex-1 rounded-full ${
-                  passwordChecks.length ? 'bg-green-500' : 'bg-gray-200'
+                  passwordChecks.length ? 'bg-primary-500' : 'bg-neutral-200'
                 }`}
               />
             </div>
-            <ul className="text-xs text-gray-500 space-y-0.5">
-              <li className={passwordChecks.length ? 'text-green-600' : ''}>
+            <ul className="text-xs text-neutral-500 space-y-0.5">
+              <li className={passwordChecks.length ? 'text-primary-600' : ''}>
                 {passwordChecks.length ? '✓' : '○'} {t('passwordMin')}
               </li>
             </ul>
@@ -193,7 +193,7 @@ export function AccountStep({
             aria-invalid={!!(confirmPassword && !passwordsMatch)}
             aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
             className={cn(
-              'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-white dark:bg-neutral-700 text-gray-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
+              'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
               confirmPassword && !passwordsMatch ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-600'
             )}
           />
@@ -219,15 +219,15 @@ export function AccountStep({
           checked={acceptTerms}
           onChange={(e) => onAcceptTermsChange(e.target.checked)}
           aria-required="true"
-          className="mt-1 w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
+          className="mt-1 w-4 h-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
         />
-        <label htmlFor="terms" className="text-sm text-gray-600 dark:text-gray-400">
+        <label htmlFor="terms" className="text-sm text-neutral-600 dark:text-neutral-400">
           {t('termsI')}{' '}
-          <Link href="/agb" className="text-green-600 hover:underline">
+          <Link href="/agb" className="text-primary-600 hover:underline">
             {t('agb')}
           </Link>{' '}
           {t('termsAnd')}{' '}
-          <Link href="/datenschutz" className="text-green-600 hover:underline">
+          <Link href="/datenschutz" className="text-primary-600 hover:underline">
             {t('datenschutz')}
           </Link>
         </label>
@@ -240,7 +240,7 @@ export function AccountStep({
             type="button"
             onClick={onBack}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             <span>{t('back')}</span>

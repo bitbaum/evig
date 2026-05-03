@@ -15,56 +15,56 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
   const t = useTranslations('dashboard.profile.contactInfo')
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
-          <Phone className="w-5 h-5 text-green-600" />
+        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+          <Phone className="w-5 h-5 text-primary-600" />
         </div>
         <div>
-          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
             {t('heading')}
           </Heading>
-          <p className="text-sm text-gray-500">{t('subtitle')}</p>
+          <p className="text-sm text-neutral-500">{t('subtitle')}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('emailLabel')}
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
             <input
               type="email"
               value={email}
               disabled
-              className="w-full pl-11 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+              className="w-full pl-11 pr-4 py-2.5 border border-neutral-200 dark:border-neutral-700 rounded-lg bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 cursor-not-allowed"
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">{t('emailReadOnly')}</p>
+          <p className="text-xs text-neutral-500 mt-1">{t('emailReadOnly')}</p>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('phoneLabel')}
           </label>
           <input
             type="tel"
             value={profile.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="+41 44 123 45 67 oder 044 123 45 67"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('mobileLabel')}
           </label>
           <input
             type="tel"
             value={profile.mobile}
             onChange={(e) => handleChange('mobile', e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="+41 79 123 45 67 oder 079 123 45 67"
           />
         </div>

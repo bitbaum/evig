@@ -41,7 +41,7 @@ export default async function RepairPage({ params }: Props) {
         title={t('hero.title')}
         subtitle={t('hero.description')}
       >
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto mt-4">
+        <p className="text-lg text-neutral-600 max-w-2xl mx-auto mt-4">
           <strong>{t('hero.subtitle')}</strong>
         </p>
       </PageHero>
@@ -55,12 +55,12 @@ export default async function RepairPage({ params }: Props) {
               return (
                 <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
                   <div className="flex items-start mb-6">
-                    <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
+                    <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div>
                       <Heading level={3} className="text-2xl font-bold mb-3">{feature.title}</Heading>
-                      <p className="text-gray-600">{feature.description}</p>
+                      <p className="text-neutral-600">{feature.description}</p>
                     </div>
                   </div>
                 </div>
@@ -76,12 +76,12 @@ export default async function RepairPage({ params }: Props) {
           <Heading level={2} className="text-3xl font-bold mb-12 text-center">{t('processHeading')}</Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {process.map((step, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-8">
-                <div className="w-12 h-12 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
+              <div key={index} className="bg-neutral-50 rounded-xl p-8">
+                <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                   {index + 1}
                 </div>
                 <Heading level={3} className="text-xl font-semibold mb-3">{step.title}</Heading>
-                <p className="text-gray-600">{step.description}</p>
+                <p className="text-neutral-600">{step.description}</p>
               </div>
             ))}
           </div>
@@ -94,13 +94,13 @@ export default async function RepairPage({ params }: Props) {
           <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 shadow-lg">
             <Heading level={2} className="text-3xl font-bold mb-8 text-center">{t('pricing.heading')}</Heading>
             <div className="text-center mb-8">
-              <p className="text-2xl font-bold text-green-600">{t('pricing.base')}</p>
+              <p className="text-2xl font-bold text-primary-600">{t('pricing.base')}</p>
             </div>
             <div className="space-y-4">
               {pricingDetails.map((detail, index) => (
                 <div key={index} className="flex items-center">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 mr-3" />
-                  <span className="text-gray-600">{detail}</span>
+                  <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3" />
+                  <span className="text-neutral-600">{detail}</span>
                 </div>
               ))}
             </div>
@@ -109,16 +109,16 @@ export default async function RepairPage({ params }: Props) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-green-700 to-green-800 text-white">
+      <section className="py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
         <div className="container mx-auto px-4 text-center">
           <Heading level={2} className="text-4xl font-bold mb-6">{t('cta.heading')}</Heading>
-          <p className="text-xl mb-8 max-w-2xl mx-auto text-green-100">
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">
             {t('cta.body')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-green-800 px-8 py-4 rounded-lg font-semibold hover:bg-green-50 transition-colors duration-300 text-lg"
+              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-300 text-lg"
             >
               {t('cta.contact')}
             </Link>

@@ -50,27 +50,27 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
         onClick={() => setUserMenuOpen(!userMenuOpen)}
         className={`flex items-center gap-3 p-1.5 pr-3 rounded-full transition-all duration-200 ${
           userMenuOpen
-            ? 'bg-gray-100 dark:bg-gray-700'
-            : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+            ? 'bg-neutral-100 dark:bg-neutral-700'
+            : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'
         }`}
         aria-expanded={userMenuOpen}
         aria-haspopup="true"
       >
-        <div className="w-9 h-9 bg-green-600 rounded-full flex items-center justify-center">
+        <div className="w-9 h-9 bg-primary-600 rounded-full flex items-center justify-center">
           <span className="text-white font-medium text-sm">
             {user?.name?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'S'}
           </span>
         </div>
         <div className="text-right hidden sm:block">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
+          <p className="text-sm font-medium text-neutral-900 dark:text-white">
             {user?.name || 'Staff'}
           </p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400">
             {user?.email}
           </p>
         </div>
         <ChevronDown
-          className={`w-4 h-4 text-gray-500 transition-transform duration-200 hidden sm:block ${
+          className={`w-4 h-4 text-neutral-500 transition-transform duration-200 hidden sm:block ${
             userMenuOpen ? 'rotate-180' : ''
           }`}
         />
@@ -83,12 +83,12 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50 border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-200 dark:border-gray-700">
-            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/50 border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+          <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-700/50 border-b border-neutral-200 dark:border-neutral-700">
+            <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
               {user?.name || 'Staff'}
             </p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 truncate">
               {user?.email}
             </p>
           </div>
@@ -97,27 +97,27 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             <Link
               href="/"
               onClick={() => setUserMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
             >
-              <ExternalLink className="w-4 h-4 text-gray-500" />
+              <ExternalLink className="w-4 h-4 text-neutral-500" />
               Zur Website
             </Link>
 
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
             >
               <div className="flex items-center gap-3">
                 {theme === 'dark' ? (
-                  <Sun className="w-4 h-4 text-gray-500" />
+                  <Sun className="w-4 h-4 text-neutral-500" />
                 ) : (
-                  <Moon className="w-4 h-4 text-gray-500" />
+                  <Moon className="w-4 h-4 text-neutral-500" />
                 )}
                 Dark Mode
               </div>
               <div
                 className={`w-9 h-5 rounded-full transition-colors ${
-                  theme === 'dark' ? 'bg-green-600' : 'bg-gray-300'
+                  theme === 'dark' ? 'bg-primary-600' : 'bg-neutral-300'
                 }`}
               >
                 <div
@@ -129,13 +129,13 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             </button>
           </div>
 
-          <div className="py-2 border-t border-gray-200 dark:border-gray-700">
+          <div className="py-2 border-t border-neutral-200 dark:border-neutral-700">
             <button
               onClick={() => {
                 setUserMenuOpen(false)
                 signOut({ callbackUrl: '/' })
               }}
-              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Abmelden

@@ -73,7 +73,7 @@ function MessagesContent() {
   if (sessionStatus === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" aria-hidden="true" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" aria-hidden="true" />
       </div>
     )
   }
@@ -81,8 +81,8 @@ function MessagesContent() {
   return (
     <div className="space-y-4">
       <div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">{t('pageTitle')}</Heading>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
           {t('pageSubtitle')}
         </p>
       </div>
@@ -97,17 +97,17 @@ function MessagesContent() {
           action={
             <Link
               href="/marketplace"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               {t('goToMarketplace')}
             </Link>
           }
         />
       ) : (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
           <div className="flex h-full">
             {/* Conversation list — hidden on mobile when thread is open */}
-            <div className={`w-full lg:w-80 lg:border-r border-gray-200 dark:border-gray-700 overflow-y-auto flex-shrink-0 ${
+            <div className={`w-full lg:w-80 lg:border-r border-neutral-200 dark:border-neutral-700 overflow-y-auto flex-shrink-0 ${
               selectedConvId ? 'hidden lg:block' : 'block'
             }`}>
               <ConversationList
@@ -132,7 +132,7 @@ function MessagesContent() {
                   onBack={handleBack}
                 />
               ) : (
-                <div className="text-center text-gray-400 dark:text-gray-500 p-8">
+                <div className="text-center text-neutral-400 dark:text-neutral-500 p-8">
                   <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" aria-hidden="true" />
                   <p className="text-sm">{t('selectConversation')}</p>
                 </div>
@@ -149,7 +149,7 @@ export default function MessagesPage() {
   return (
     <Suspense fallback={
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" aria-hidden="true" />
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" aria-hidden="true" />
       </div>
     }>
       <MessagesContent />

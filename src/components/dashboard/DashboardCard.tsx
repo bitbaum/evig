@@ -28,8 +28,8 @@ const colorClasses = {
     text: 'text-info-600 dark:text-info-400',
   },
   success: {
-    bg: 'bg-green-100 dark:bg-green-900',
-    text: 'text-green-600 dark:text-green-400',
+    bg: 'bg-primary-100 dark:bg-primary-900',
+    text: 'text-primary-600 dark:text-primary-400',
   },
   warning: {
     bg: 'bg-warning-100 dark:bg-warning-900',

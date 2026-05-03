@@ -34,22 +34,22 @@ export function InstanceList({
 }: InstanceListProps) {
   return (
     <div className="bg-white rounded-xl shadow-sm border">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <Heading level={2} className="text-lg text-gray-900">
+      <div className="px-6 py-4 border-b border-neutral-200">
+        <Heading level={2} className="text-lg text-neutral-900">
           Termine ({instances.length})
         </Heading>
       </div>
 
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-neutral-200">
         {instances.map((instance) => {
           const badge = getStatusBadge(instance.status)
           return (
-            <div key={instance.id} className="p-6 hover:bg-gray-50">
+            <div key={instance.id} className="p-6 hover:bg-neutral-50">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     <GraduationCap className="w-5 h-5 text-blue-600" />
-                    <Heading level={3} className="text-lg text-gray-900 truncate">
+                    <Heading level={3} className="text-lg text-neutral-900 truncate">
                       {instance.workshop_title}
                     </Heading>
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.className}`}>
@@ -57,7 +57,7 @@ export function InstanceList({
                     </span>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
                       {formatDateTime(instance.start_date)}
@@ -81,21 +81,21 @@ export function InstanceList({
                     )}
 
                     {instance.instructor && (
-                      <div className="text-gray-500">
+                      <div className="text-neutral-500">
                         Leitung: {instance.instructor}
                       </div>
                     )}
                   </div>
 
                   {instance.notes && (
-                    <p className="text-sm text-gray-500">{instance.notes}</p>
+                    <p className="text-sm text-neutral-500">{instance.notes}</p>
                   )}
                 </div>
 
                 <div className="flex items-center gap-2 ml-4">
                   <Link
                     href={`/admin/workshops/instances/${instance.id}`}
-                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     Details
@@ -103,7 +103,7 @@ export function InstanceList({
 
                   <button
                     onClick={() => onEdit(instance)}
-                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                   >
                     <Edit className="w-4 h-4 mr-1" />
                     Bearbeiten
@@ -125,9 +125,9 @@ export function InstanceList({
 
         {instances.length === 0 && !loading && (
           <div className="px-6 py-12 text-center">
-            <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg text-gray-900 mb-2">Keine Termine gefunden</Heading>
-            <p className="text-gray-600 mb-4">
+            <Calendar className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+            <Heading level={3} className="text-lg text-neutral-900 mb-2">Keine Termine gefunden</Heading>
+            <p className="text-neutral-600 mb-4">
               Erstelle einen neuen Termin für einen Workshop.
             </p>
             <button

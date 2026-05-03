@@ -29,7 +29,7 @@ export default function ITHilfeDetailPage() {
 
   if (detail.loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
       </div>
     )
@@ -37,11 +37,11 @@ export default function ITHilfeDetailPage() {
 
   if (detail.error || !detail.request) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-neutral-50 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
           <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" aria-hidden="true" />
-          <Heading level={1} className="text-2xl text-gray-900 mb-2">{t('error')}</Heading>
-          <p className="text-gray-600 mb-6">{detail.error || t('requestNotFound')}</p>
+          <Heading level={1} className="text-2xl text-neutral-900 mb-2">{t('error')}</Heading>
+          <p className="text-neutral-600 mb-6">{detail.error || t('requestNotFound')}</p>
           <Link
             href="/it-hilfe"
             className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 min-h-[44px] rounded-lg font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
@@ -57,12 +57,12 @@ export default function ITHilfeDetailPage() {
   const { request } = detail
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Back link */}
         <Link
           href="/it-hilfe"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           {t('backToList')}
@@ -97,7 +97,7 @@ export default function ITHilfeDetailPage() {
 
             {/* Technician Map */}
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
                 <TechnicianMapList requestId={request.id} requestTitle={request.title} />
               </div>
             )}

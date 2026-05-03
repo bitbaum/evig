@@ -21,35 +21,35 @@ export async function ServicesSection() {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
-          <p className="text-lg text-gray-600 mb-4">
+          <p className="text-lg text-neutral-600 mb-4">
             {t('subtitle')}
           </p>
-          <div className="text-green-600 font-semibold text-xl mb-8">
+          <div className="text-primary-600 font-semibold text-xl mb-8">
             {t('pricing')}
           </div>
-          <div className="bg-green-50 rounded-lg p-6 text-left">
-            <Heading level={3} className="text-green-800 mb-2">{t('consultationTitle')}</Heading>
-            <p className="text-green-700">
+          <div className="bg-primary-50 rounded-lg p-6 text-left">
+            <Heading level={3} className="text-primary-800 mb-2">{t('consultationTitle')}</Heading>
+            <p className="text-primary-700">
               {t('consultationText')}
             </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="bg-gray-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div key={index} className="bg-neutral-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="flex items-start mb-6">
-                <div className="p-3 bg-green-100 rounded-lg text-green-600 mr-4">
+                <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
                   <service.icon className="w-8 h-8" />
                 </div>
                 <div>
                   <Heading level={3} className="mb-3">{service.title}</Heading>
-                  <p className="text-gray-600 mb-4">{service.description}</p>
+                  <p className="text-neutral-600 mb-4">{service.description}</p>
                 </div>
               </div>
               <div className="space-y-2">
                 {service.features.map((feature, i) => (
-                  <div key={i} className="flex items-center text-gray-600">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                  <div key={i} className="flex items-center text-neutral-600">
+                    <CheckCircle2 className="w-5 h-5 text-primary-500 mr-3 flex-shrink-0" />
                     <span>{feature}</span>
                   </div>
                 ))}

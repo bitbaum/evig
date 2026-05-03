@@ -47,10 +47,10 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
   return (
     <div className="space-y-6">
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+        <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
           {labels.title}
         </Heading>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-6">
           {labels.description}
         </p>
       </div>
@@ -59,7 +59,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
         {notificationOptions.map((option) => (
           <div
             key={option.id}
-            className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-neutral-700/50 rounded-lg border-2 border-gray-200 dark:border-neutral-600"
+            className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600"
           >
             <div className="flex-shrink-0">
               <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
@@ -69,14 +69,14 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <Heading level={4} className="text-sm font-medium text-gray-900 dark:text-white">
+                <Heading level={4} className="text-sm font-medium text-neutral-900 dark:text-white">
                   {option.label}
                 </Heading>
                 <button
                   type="button"
                   onClick={() => handleChange(option.id, !option.value)}
                   className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    option.value ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-600'
+                    option.value ? 'bg-blue-600' : 'bg-neutral-200 dark:bg-neutral-600'
                   }`}
                 >
                   <span
@@ -86,7 +86,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                   />
                 </button>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">
                 {option.description}
               </p>
             </div>

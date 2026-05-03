@@ -105,7 +105,7 @@ function Breadcrumbs({
 }) {
   return (
     <nav aria-label="Breadcrumb" className="mb-6">
-      <ol className="flex items-center gap-2 text-sm text-gray-500">
+      <ol className="flex items-center gap-2 text-sm text-neutral-500">
         <li>
           <Link
             href="/"
@@ -115,7 +115,7 @@ function Breadcrumbs({
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
           </Link>
         </li>
-        <ChevronRight className="w-4 h-4 text-gray-300" />
+        <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
           <Link href="/shop" className="hover:text-emerald-600 transition-colors">
             {shopLabel}
@@ -123,7 +123,7 @@ function Breadcrumbs({
         </li>
         {parent && (
           <>
-            <ChevronRight className="w-4 h-4 text-gray-300" />
+            <ChevronRight className="w-4 h-4 text-neutral-300" />
             <li>
               <Link
                 href={getCategoryUrl(parent.slug)}
@@ -134,9 +134,9 @@ function Breadcrumbs({
             </li>
           </>
         )}
-        <ChevronRight className="w-4 h-4 text-gray-300" />
+        <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <span className="text-gray-900 font-medium">{category.name}</span>
+          <span className="text-neutral-900 font-medium">{category.name}</span>
         </li>
       </ol>
     </nav>
@@ -156,18 +156,18 @@ function SubcategoryCard({
   return (
     <Link
       href={getCategoryUrl(category.slug)}
-      className="group block p-4 bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all"
+      className="group block p-4 bg-white rounded-xl border border-neutral-200 hover:border-emerald-300 hover:shadow-md transition-all"
     >
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
           <Package className="w-5 h-5" />
         </div>
         <div>
-          <Heading level={3} className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors">
+          <Heading level={3} className="font-medium text-neutral-900 group-hover:text-emerald-600 transition-colors">
             {category.name}
           </Heading>
           {category.count !== undefined && (
-            <p className="text-sm text-gray-500">{productCountLabel(category.count)}</p>
+            <p className="text-sm text-neutral-500">{productCountLabel(category.count)}</p>
           )}
         </div>
       </div>
@@ -186,9 +186,9 @@ function ProductCard({ product, t }: { product: InventoryProduct; t: ShopTFn }) 
   return (
     <Link
       href={href}
-      className="group bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+      className="group bg-white rounded-xl border border-neutral-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
     >
-      <div className="relative aspect-[4/3] bg-gray-50">
+      <div className="relative aspect-[4/3] bg-neutral-50">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -199,7 +199,7 @@ function ProductCard({ product, t }: { product: InventoryProduct; t: ShopTFn }) 
           />
         ) : (
           <div className="flex items-center justify-center h-full">
-            <Package className="w-12 h-12 text-gray-200" />
+            <Package className="w-12 h-12 text-neutral-200" />
           </div>
         )}
         {product.quantity <= 1 && (
@@ -210,20 +210,20 @@ function ProductCard({ product, t }: { product: InventoryProduct; t: ShopTFn }) 
       </div>
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div>
-          <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{product.brand}</p>
-          <h3 className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug">
+          <p className="text-xs text-neutral-500 font-medium uppercase tracking-wide">{product.brand}</p>
+          <h3 className="font-medium text-neutral-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug">
             {product.title}
           </h3>
         </div>
         {product.description && (
-          <p className="text-sm text-gray-500 line-clamp-2">{product.description}</p>
+          <p className="text-sm text-neutral-500 line-clamp-2">{product.description}</p>
         )}
         <div className="mt-auto flex items-center justify-between pt-2">
           <div className="flex items-center gap-1.5">
             <Tag className="w-3.5 h-3.5 text-emerald-600" />
             <span className="font-bold text-emerald-700">CHF {product.price.toFixed(2)}</span>
           </div>
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full capitalize">
+          <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded-full capitalize">
             {product.condition}
           </span>
         </div>
@@ -252,7 +252,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }).catch(() => ({ products: [], total: 0, limit: 24, offset: 0 }))
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -281,7 +281,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Subcategories */}
         {hasSubcategories && (
           <div className="mb-12">
-            <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4">
+            <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-4">
               {t("category.subcategories")}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -300,7 +300,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {inventoryResult.products.length > 0 ? (
           <div>
             <div className="flex items-center justify-between mb-6">
-              <Heading level={2} className="text-xl font-semibold text-gray-900">
+              <Heading level={2} className="text-xl font-semibold text-neutral-900">
                 {t("category.categoryProductCount", { count: inventoryResult.total })}
               </Heading>
               <Link
@@ -329,15 +329,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+          <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
             <div className="max-w-md mx-auto">
               <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />
               </div>
-              <Heading level={2} className="text-xl font-semibold text-gray-900 mb-2">
+              <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-2">
                 {t("category.productsLoading")}
               </Heading>
-              <p className="text-gray-600 mb-6">
+              <p className="text-neutral-600 mb-6">
                 {t("category.productsComingSoon", { categoryName: category.name })}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -349,7 +349,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </Link>
                 <Link
                   href="/shop"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 text-neutral-700 font-semibold rounded-lg hover:bg-neutral-50 transition-colors"
                 >
                   {t("category.allShopOptions")}
                 </Link>
@@ -361,7 +361,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Related categories */}
         {parent && (
           <div className="mt-12">
-            <Heading level={2} className="text-xl font-semibold text-gray-900 mb-4">
+            <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-4">
               {t("category.relatedIn", { parentName: parent.name })}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -25,7 +25,7 @@ export function FeedbackScopeSelector({
 }: FeedbackScopeSelectorProps) {
   return (
     <div className="space-y-3">
-      <label className="block text-xs font-medium text-gray-700">
+      <label className="block text-xs font-medium text-neutral-700">
         Feedback-Bereich *
       </label>
       <div className="grid grid-cols-1 gap-2">
@@ -48,7 +48,7 @@ export function FeedbackScopeSelector({
                 "w-full px-3 py-2.5 text-xs rounded-lg border-2 transition-all duration-200",
                 isActive
                   ? `${config.bgColor} ${config.borderColor} ${config.textColor} shadow-md transform scale-[1.02]`
-                  : "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300"
+                  : "bg-white border-neutral-200 text-neutral-700 hover:bg-neutral-50 hover:border-neutral-300"
               )}
             >
               <div className="flex items-center space-x-3">

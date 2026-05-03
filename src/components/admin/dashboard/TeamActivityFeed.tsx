@@ -49,7 +49,7 @@ export async function TeamActivityFeed() {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">
+      <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">
         Team-Aktivität
       </p>
       <ul className="space-y-2" role="list">
@@ -57,16 +57,16 @@ export async function TeamActivityFeed() {
           const actorName = row.actor_name?.split(' ')[0] ?? 'Jemand'
           const actionLabel = ACTION_LABELS[row.action] ?? row.action
           return (
-            <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600 mt-2 flex-shrink-0" aria-hidden="true" />
+            <li key={i} className="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-600 mt-2 flex-shrink-0" aria-hidden="true" />
               <span className="leading-snug">
-                <strong className="text-gray-900 dark:text-white font-medium">{actorName}</strong>
+                <strong className="text-neutral-900 dark:text-white font-medium">{actorName}</strong>
                 {' '}{actionLabel}
                 {row.subject_label && (
                   <> &ldquo;{row.subject_label}&rdquo;</>
                 )}
                 {' '}
-                <span className="text-gray-400 dark:text-gray-500 text-xs">
+                <span className="text-neutral-400 dark:text-neutral-500 text-xs">
                   {formatRelativeTime(row.created_at)}
                 </span>
               </span>

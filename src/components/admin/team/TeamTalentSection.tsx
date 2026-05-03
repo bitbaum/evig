@@ -43,7 +43,7 @@ export function TeamTalentSection({
     <div className="space-y-4">
       {/* Skills */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Fähigkeiten
         </label>
         <div className="flex flex-wrap gap-2 mb-2">
@@ -76,16 +76,16 @@ export function TeamTalentSection({
               }
             }}
             placeholder="Fähigkeit hinzufügen..."
-            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
           {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
-            <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
+            <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg">
               {filteredSkillSuggestions.map(skill => (
                 <button
                   key={skill}
                   type="button"
                   onClick={() => onAddSkill(skill)}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                  className="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
                 >
                   {skill}
                 </button>
@@ -97,14 +97,14 @@ export function TeamTalentSection({
 
       {/* Interests */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Interessen
         </label>
         <div className="flex flex-wrap gap-2 mb-2">
           {form.interests.map(interest => (
             <span
               key={interest}
-              className="flex items-center gap-1 px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm rounded-full"
+              className="flex items-center gap-1 px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm rounded-full"
             >
               {interest}
               <button type="button" onClick={() => onRemoveInterest(interest)} className="hover:text-red-500">
@@ -125,12 +125,12 @@ export function TeamTalentSection({
               }
             }}
             placeholder="Interesse hinzufügen..."
-            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
           <button
             type="button"
             onClick={() => onAddInterest(interestInput)}
-            className="px-3 py-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg"
+            className="px-3 py-2 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg"
           >
             <Plus className="w-5 h-5" />
           </button>
@@ -138,35 +138,35 @@ export function TeamTalentSection({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Ziele</label>
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Ziele</label>
         <textarea
           value={form.goals}
           onChange={(e) => onChange('goals', e.target.value)}
           rows={3}
           placeholder="Was möchte die Person erreichen?"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Stärken</label>
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Stärken</label>
         <textarea
           value={form.strengths}
           onChange={(e) => onChange('strengths', e.target.value)}
           rows={2}
           placeholder="Worin ist die Person besonders gut?"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Entwicklungsbereiche</label>
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Entwicklungsbereiche</label>
         <textarea
           value={form.development_areas}
           onChange={(e) => onChange('development_areas', e.target.value)}
           rows={2}
           placeholder="In welchen Bereichen möchte sich die Person entwickeln?"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
     </div>

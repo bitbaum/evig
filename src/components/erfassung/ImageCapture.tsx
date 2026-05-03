@@ -160,26 +160,26 @@ export function ImageCapture({
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
       {/* Main capture area */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
         {/* Idle state: Upload area */}
         {state === 'idle' && (
           <div
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
               isDragging
-                ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                : 'border-gray-300 dark:border-gray-600'
+                ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                : 'border-neutral-300 dark:border-neutral-600'
             }`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
             <div className="flex flex-col items-center gap-4">
-              <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                <ImageIcon className="w-8 h-8 text-gray-500" />
+              <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center">
+                <ImageIcon className="w-8 h-8 text-neutral-500" />
               </div>
 
               <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
+                <p className="text-neutral-600 dark:text-neutral-400 mb-2">
                   {t('dragOrText')}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -206,7 +206,7 @@ export function ImageCapture({
                 </div>
               </div>
 
-              <p className="text-xs text-gray-500 dark:text-gray-500">
+              <p className="text-xs text-neutral-500 dark:text-neutral-500">
                 {t('fileHint')}
               </p>
             </div>
@@ -238,7 +238,7 @@ export function ImageCapture({
             <div className="space-y-4">
               {/* Image preview */}
               <div className="relative">
-                <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                <div className="relative w-full aspect-video bg-neutral-100 dark:bg-neutral-700 rounded-lg overflow-hidden">
                   <Image
                     src={imagePreview}
                     alt={t('imageAlt')}
@@ -288,7 +288,7 @@ export function ImageCapture({
                 )}
 
                 {state === 'success' && (
-                  <div className="flex items-center gap-2 text-green-600">
+                  <div className="flex items-center gap-2 text-primary-600">
                     <CheckCircle2 className="w-5 h-5" />
                     <span>{t('success')}</span>
                   </div>

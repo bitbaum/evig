@@ -193,12 +193,12 @@ export default async function ApprovalsPage() {
             </div>
           </div>
         </div>
-        <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+        <div className="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200 dark:border-primary-800">
           <div className="flex items-center gap-3">
-            <CheckCircle className="w-5 h-5 text-green-600" />
+            <CheckCircle className="w-5 h-5 text-primary-600" />
             <div>
-              <p className="text-2xl font-bold text-green-800 dark:text-green-200">{stats.approved}</p>
-              <p className="text-sm text-green-600 dark:text-green-400">Genehmigt (30 Tage)</p>
+              <p className="text-2xl font-bold text-primary-800 dark:text-primary-200">{stats.approved}</p>
+              <p className="text-sm text-primary-600 dark:text-primary-400">Genehmigt (30 Tage)</p>
             </div>
           </div>
         </div>
@@ -214,30 +214,30 @@ export default async function ApprovalsPage() {
       </div>
 
       {/* Übersicht — pending counts from all approval sources */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white">Übersicht</Heading>
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 border-b border-neutral-200 dark:border-neutral-700">
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">Übersicht</Heading>
         </div>
-        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
           {approvalSources.map(source => (
             <Link
               key={source.href}
               href={source.href}
-              className="p-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
-              <span className="text-gray-900 dark:text-white">{source.label}</span>
+              <span className="text-neutral-900 dark:text-white">{source.label}</span>
               <span className="flex items-center gap-2">
-                <span className={`text-sm font-medium ${source.count > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-400 dark:text-gray-500'}`}>
+                <span className={`text-sm font-medium ${source.count > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
                   {source.count} ausstehend
                 </span>
-                <ExternalLink className="w-4 h-4 text-gray-400" />
+                <ExternalLink className="w-4 h-4 text-neutral-400" />
               </span>
             </Link>
           ))}
           {/* Inline submissions count */}
           <div className="p-4 flex items-center justify-between">
-            <span className="text-gray-900 dark:text-white">Allgemeine Einreichungen</span>
-            <span className={`text-sm font-medium ${stats.pending > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-400 dark:text-gray-500'}`}>
+            <span className="text-neutral-900 dark:text-white">Allgemeine Einreichungen</span>
+            <span className={`text-sm font-medium ${stats.pending > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
               {stats.pending} ausstehend
             </span>
           </div>
@@ -245,24 +245,24 @@ export default async function ApprovalsPage() {
       </div>
 
       {/* Pending Items — inline list for user_content_submissions */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white">Ausstehende Freigaben</Heading>
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 border-b border-neutral-200 dark:border-neutral-700">
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">Ausstehende Freigaben</Heading>
         </div>
 
         {pendingItems.length > 0 ? (
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
             {pendingItems.map(item => (
               <div key={item.id} className="p-4 flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900 dark:text-white">{item.title}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="font-medium text-neutral-900 dark:text-white">{item.title}</p>
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
                     {contentTypeLabels[item.content_type] || item.content_type}
                     {' • '}{item.user_name || item.user_email}
                     {' • '}{formatDateShort(item.submitted_at)}
                   </p>
                   {item.summary && (
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-1">{item.summary}</p>
+                    <p className="text-sm text-neutral-500 mt-1 line-clamp-1">{item.summary}</p>
                   )}
                 </div>
                 <ApprovalActions submissionId={item.id} title={item.title} />
@@ -271,11 +271,11 @@ export default async function ApprovalsPage() {
           </div>
         ) : (
           <div className="p-8 text-center">
-            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
               Keine ausstehenden Freigaben
             </Heading>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-neutral-500 dark:text-neutral-400">
               Alle eingereichten Inhalte wurden bearbeitet.
             </p>
           </div>
@@ -285,7 +285,7 @@ export default async function ApprovalsPage() {
       {/* Permission Requests (super admin only) */}
       {isSuper && (
         <div>
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
             <Shield className="w-5 h-5 text-orange-500" />
             Berechtigungsanfragen
           </Heading>

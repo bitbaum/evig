@@ -41,7 +41,7 @@ export function OfferForm({
   const t = useTranslations('itHelp.offer')
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
       {!showForm ? (
         <button
           onClick={onShowForm}
@@ -52,7 +52,7 @@ export function OfferForm({
         </button>
       ) : (
         <form onSubmit={onSubmit}>
-          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('heading')}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
 
           {error && (
             <div id="offer-error" className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">
@@ -62,7 +62,7 @@ export function OfferForm({
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="offer-message" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="offer-message" className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('messageLabel')} <span className="text-red-500">*</span>
               </label>
               <textarea
@@ -77,13 +77,13 @@ export function OfferForm({
                 minLength={20}
                 maxLength={2000}
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-neutral-700 mb-1">
                   {t('estimatedTimeLabel')}
                 </label>
                 <input
@@ -92,11 +92,11 @@ export function OfferForm({
                   value={offerEstimatedTime}
                   onChange={(e) => onEstimatedTimeChange(e.target.value)}
                   placeholder={t('estimatedTimePlaceholder')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 />
               </div>
               <div>
-                <label htmlFor="offer-compensation" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="offer-compensation" className="block text-sm font-medium text-neutral-700 mb-1">
                   {t('compensationLabel')}
                 </label>
                 <input
@@ -105,13 +105,13 @@ export function OfferForm({
                   value={offerCompensation}
                   onChange={(e) => onCompensationChange(e.target.value)}
                   placeholder={t('compensationPlaceholder')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('skillsLabel')}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -123,7 +123,7 @@ export function OfferForm({
                     className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
                       offerSkills.includes(skill.id)
                         ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
-                        : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
+                        : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                     }`}
                   >
                     {skill.name}
@@ -137,7 +137,7 @@ export function OfferForm({
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-3 min-h-[44px] text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="px-4 py-3 min-h-[44px] text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
             >
               {t('cancelButton')}
             </button>

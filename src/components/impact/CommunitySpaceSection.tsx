@@ -45,45 +45,45 @@ export default function CommunitySpaceSection() {
   const address = getFormattedAddress()
 
   return (
-    <section className="py-20 bg-gray-900 text-white relative overflow-hidden">
+    <section className="py-20 bg-neutral-900 text-white relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-green-500 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-primary-500/20 text-primary-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <MapPin className="h-4 w-4" />
             {t('badge')}
           </div>
           <Heading level={2} className="text-4xl md:text-5xl font-bold mb-6">
             {t('heading')}
           </Heading>
-          <p className="text-xl text-gray-500 max-w-3xl mx-auto">
+          <p className="text-xl text-neutral-500 max-w-3xl mx-auto">
             {t('intro')}
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           {/* Current Location */}
-          <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+          <div className="bg-neutral-800 rounded-2xl p-8 border border-neutral-700">
             <Heading level={3} className="text-2xl font-bold mb-2">{PHYSICAL_SPACE.current.name}</Heading>
-            <p className="text-green-400 font-medium mb-6 flex items-center gap-2">
+            <p className="text-primary-400 font-medium mb-6 flex items-center gap-2">
               <MapPin className="h-4 w-4" />
               {address}
             </p>
 
-            <Heading level={4} className="text-lg font-semibold mb-4 text-gray-300">{t('offeringsTitle')}</Heading>
+            <Heading level={4} className="text-lg font-semibold mb-4 text-neutral-300">{t('offeringsTitle')}</Heading>
             <ul className="space-y-3">
               {PHYSICAL_SPACE.current.offerings.map((offering, index) => (
                 <li key={index} className="flex items-center gap-3">
-                  <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
+                  <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
                     {offeringIcons[index] || <Store className="h-5 w-5" />}
                   </div>
-                  <span className="text-gray-300">{offering}</span>
+                  <span className="text-neutral-300">{offering}</span>
                 </li>
               ))}
             </ul>
@@ -108,13 +108,13 @@ export default function CommunitySpaceSection() {
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</Heading>
             </div>
 
-            <p className="text-gray-400 mb-6">
+            <p className="text-neutral-400 mb-6">
               {t('workshopDesc')}
             </p>
 
             <ul className="space-y-2 mb-6">
               {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
-                <li key={index} className="flex items-center gap-2 text-gray-300">
+                <li key={index} className="flex items-center gap-2 text-neutral-300">
                   <ArrowRight className="h-4 w-4 text-blue-400 flex-shrink-0" />
                   {topic}
                 </li>
@@ -128,18 +128,18 @@ export default function CommunitySpaceSection() {
         </div>
 
         {/* Vision Section */}
-        <div className="bg-gradient-to-r from-green-900/30 to-emerald-900/30 rounded-2xl p-8 md:p-12 border border-green-700/50">
+        <div className="bg-gradient-to-r from-primary-900/30 to-emerald-900/30 rounded-2xl p-8 md:p-12 border border-primary-700/50">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-green-500/20 rounded-lg text-green-400">
+            <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
               <Sparkles className="h-6 w-6" />
             </div>
             <div>
-              <span className="text-sm text-green-400 font-medium">{t('visionLabel')}</span>
+              <span className="text-sm text-primary-400 font-medium">{t('visionLabel')}</span>
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.vision.title}</Heading>
             </div>
           </div>
 
-          <p className="text-lg text-gray-300 mb-8 max-w-3xl">
+          <p className="text-lg text-neutral-300 mb-8 max-w-3xl">
             {PHYSICAL_SPACE.vision.description}
           </p>
 
@@ -147,18 +147,18 @@ export default function CommunitySpaceSection() {
             {PHYSICAL_SPACE.vision.features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-gray-900/50 rounded-xl p-4 flex items-start gap-3 border border-gray-700/50"
+                className="bg-neutral-900/50 rounded-xl p-4 flex items-start gap-3 border border-neutral-700/50"
               >
-                <div className="p-2 bg-green-500/10 rounded-lg text-green-500 flex-shrink-0">
+                <div className="p-2 bg-primary-500/10 rounded-lg text-primary-500 flex-shrink-0">
                   {visionIcons[index] || <Sparkles className="h-5 w-5" />}
                 </div>
-                <span className="text-gray-300 text-sm">{feature}</span>
+                <span className="text-neutral-300 text-sm">{feature}</span>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 pt-8 border-t border-gray-700/50 text-center">
-            <p className="text-gray-400 mb-4">
+          <div className="mt-8 pt-8 border-t border-neutral-700/50 text-center">
+            <p className="text-neutral-400 mb-4">
               {t('visionCta')}
             </p>
             <Button>

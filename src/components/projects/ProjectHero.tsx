@@ -15,7 +15,7 @@ interface ProjectHeroProps {
 }
 
 export function ProjectHero({ hero }: ProjectHeroProps) {
-  const { title, description, backgroundColor = 'from-green-700 via-green-800 to-green-900', ctas } = hero
+  const { title, description, backgroundColor = 'from-primary-700 via-primary-800 to-primary-900', ctas } = hero
 
   return (
     <section className={cn(

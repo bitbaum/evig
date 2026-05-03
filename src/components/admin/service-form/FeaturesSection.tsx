@@ -19,10 +19,10 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
         {features.map((feature, index) => (
           <div
             key={index}
-            className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg space-y-3"
+            className="p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg space-y-3"
           >
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 text-gray-400">
+              <div className="flex items-center gap-2 text-neutral-400">
                 <GripVertical className="w-4 h-4" />
                 <span className="text-sm font-medium">Feature {index + 1}</span>
               </div>
@@ -40,7 +40,7 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
                 value={feature.title}
                 onChange={(e) => onUpdate(index, 'title', e.target.value)}
                 placeholder="Titel"
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                className="px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
               />
               <IconPicker
                 value={feature.icon}
@@ -52,14 +52,14 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
               onChange={(e) => onUpdate(index, 'description', e.target.value)}
               placeholder="Beschreibung"
               rows={2}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
             />
           </div>
         ))}
         <button
           type="button"
           onClick={onAdd}
-          className="flex items-center gap-2 px-4 py-2 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Feature hinzufügen

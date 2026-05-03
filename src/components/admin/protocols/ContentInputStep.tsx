@@ -50,8 +50,8 @@ export function ContentInputStep({
   if (inputMethod === 'audio') {
     return (
       <div className="bg-white rounded-lg border p-6 space-y-5">
-        <Heading level={2} className="text-lg text-gray-900">Audio hochladen</Heading>
-        <p className="text-sm text-gray-600">
+        <Heading level={2} className="text-lg text-neutral-900">Audio hochladen</Heading>
+        <p className="text-sm text-neutral-600">
           Lade eine Audiodatei hoch. Die Aufnahme wird automatisch transkribiert und danach in Aufgaben umgewandelt.
         </p>
 
@@ -67,7 +67,7 @@ export function ContentInputStep({
 
         <div className="space-y-3">
           <div>
-            <label htmlFor="whisper-model" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="whisper-model" className="block text-sm font-medium text-neutral-700 mb-1">
               Whisper-Modell
             </label>
             <select
@@ -94,9 +94,9 @@ export function ContentInputStep({
               className="hidden"
             />
           </label>
-          <p className="text-xs text-gray-500">Maximale Dateigrösse: {(AUDIO_UPLOAD_LIMITS.maxSizeBytes / (1024 * 1024)).toFixed(0)} MB</p>
+          <p className="text-xs text-neutral-500">Maximale Dateigrösse: {(AUDIO_UPLOAD_LIMITS.maxSizeBytes / (1024 * 1024)).toFixed(0)} MB</p>
           {audioFile && (
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-neutral-700">
               Gewählt: <span className="font-medium">{audioFile.name}</span> ({(audioFile.size / (1024 * 1024)).toFixed(1)} MB)
             </p>
           )}
@@ -126,8 +126,8 @@ export function ContentInputStep({
 
   return (
     <div className="bg-white rounded-lg border p-6 space-y-6">
-      <Heading level={2} className="text-lg text-gray-900">{config.title}</Heading>
-      <p className="text-sm text-gray-600">{config.description}</p>
+      <Heading level={2} className="text-lg text-neutral-900">{config.title}</Heading>
+      <p className="text-sm text-neutral-600">{config.description}</p>
 
       {inputMethod === 'transcript' && MEETING_TYPE_TEMPLATES[meetingType].agenda_hints.length > 0 && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
@@ -154,13 +154,13 @@ export function ContentInputStep({
       <div>
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-center gap-2">
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="content" className="block text-sm font-medium text-neutral-700">
               {config.fieldLabel}
             </label>
             {config.showFormatBadge && contentFormat && (
               <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
                 contentFormat === 'json'
-                  ? 'bg-green-100 text-green-800'
+                  ? 'bg-primary-100 text-primary-800'
                   : 'bg-blue-100 text-blue-800'
               }`}>
                 {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext erkannt'}
@@ -193,7 +193,7 @@ export function ContentInputStep({
           placeholder={config.placeholder}
           className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
         />
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-neutral-500">
           {content.length > 0
             ? `${content.length.toLocaleString()} Zeichen`
             : config.emptyHint}
@@ -294,7 +294,7 @@ function SubmitFooter({
           type="button"
           onClick={onCreateEmpty}
           disabled={loading}
-          className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg"
+          className="px-4 py-2 text-neutral-600 hover:text-neutral-900 border border-neutral-200 rounded-lg"
         >
           {loading && !processing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -306,7 +306,7 @@ function SubmitFooter({
         <button
           type="button"
           onClick={onBack}
-          className="px-4 py-2 text-gray-600 hover:text-gray-900 border border-gray-200 rounded-lg"
+          className="px-4 py-2 text-neutral-600 hover:text-neutral-900 border border-neutral-200 rounded-lg"
         >
           Zurück
         </button>

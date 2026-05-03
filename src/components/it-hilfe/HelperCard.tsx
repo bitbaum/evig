@@ -85,20 +85,20 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-xl border border-neutral-200 p-6 hover:shadow-lg transition-shadow">
       {/* Helper Info */}
       <div className="mb-4">
         <Link href={`/techniker/${helper.userId}`} className="hover:underline">
-          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">{helper.name}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">{helper.name}</Heading>
         </Link>
         {helper.bio && (
-          <p className="text-gray-600 text-sm line-clamp-2 mb-3">{helper.bio}</p>
+          <p className="text-neutral-600 text-sm line-clamp-2 mb-3">{helper.bio}</p>
         )}
       </div>
 
       {/* Rating & Help Count */}
       {(helper.averageRating || helper.totalHelpsCompleted) ? (
-        <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+        <div className="flex items-center gap-3 text-sm text-neutral-600 mb-3">
           {helper.averageRating && (
             <span className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -113,7 +113,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
 
       {/* Location */}
       {(helper.city || helper.canton) && (
-        <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+        <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
           <MapPin className="w-4 h-4" />
           <span>
             {helper.city && helper.canton
@@ -139,7 +139,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
             )
           })}
           {remainingSkillsCount > 0 && (
-            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
               +{remainingSkillsCount}
             </span>
           )}
@@ -161,7 +161,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
           </span>
         )}
         {helper.hourlyRateCents && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
             <Euro className="w-3 h-3" />
             CHF {(helper.hourlyRateCents / 100).toFixed(0)}/h
           </span>

@@ -21,11 +21,11 @@ export function CO2Badge({ category, className = '' }: CO2BadgeProps) {
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-full text-sm ${className}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-full text-sm ${className}`}
       title={t('tooltip')}
     >
-      <Leaf className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" aria-hidden="true" />
-      <span className="text-green-700 dark:text-green-300 font-medium">
+      <Leaf className="w-4 h-4 text-primary-600 dark:text-primary-400 flex-shrink-0" aria-hidden="true" />
+      <span className="text-primary-700 dark:text-primary-300 font-medium">
         {t('saved', { amount: co2Saved })}
       </span>
     </div>

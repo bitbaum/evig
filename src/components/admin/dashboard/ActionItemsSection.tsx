@@ -20,9 +20,9 @@ const URGENCY_CONFIG = {
     text: 'text-amber-700 dark:text-amber-400',
   },
   success: {
-    dot: 'bg-green-500',
+    dot: 'bg-primary-500',
     label: 'Information',
-    text: 'text-green-700 dark:text-green-400',
+    text: 'text-primary-700 dark:text-primary-400',
   },
 }
 
@@ -30,18 +30,18 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
   const hasNoActionItems = actionItems.length === 0
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-      <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="p-4 border-b border-neutral-100 dark:border-neutral-700 flex items-center gap-2">
         <Zap className="w-5 h-5 text-amber-500" aria-hidden="true" />
-        <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
+        <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
           Was gibt es zu tun?
         </Heading>
       </div>
 
       <div className="p-4">
         {hasNoActionItems ? (
-          <div className="flex items-center gap-3 text-green-600 dark:text-green-400">
-            <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+          <div className="flex items-center gap-3 text-primary-600 dark:text-primary-400">
+            <div className="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
               <Check className="w-5 h-5" aria-hidden="true" />
             </div>
             <span className="font-medium">Alles erledigt! Keine offenen Aufgaben.</span>
@@ -55,7 +55,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                 <li key={index}>
                   <Link
                     href={item.href}
-                    className="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group"
+                    className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors group"
                     aria-label={`${urgency.label}: ${item.label}${age ? ` (${age})` : ''}`}
                   >
                     <div className="flex items-start gap-3">
@@ -64,7 +64,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                         aria-hidden="true"
                       />
                       <div>
-                        <span className="font-medium text-gray-900 dark:text-white">
+                        <span className="font-medium text-neutral-900 dark:text-white">
                           {item.label}
                         </span>
                         {age && (
@@ -74,7 +74,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                         )}
                       </div>
                     </div>
-                    <span className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors flex-shrink-0 ml-3">
+                    <span className="flex items-center gap-1 text-sm text-neutral-600 dark:text-neutral-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors flex-shrink-0 ml-3">
                       {item.actionLabel}
                       <ArrowRight className="w-4 h-4" aria-hidden="true" />
                     </span>

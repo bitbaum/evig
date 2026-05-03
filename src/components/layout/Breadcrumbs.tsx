@@ -60,11 +60,11 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
 
   return (
     <nav aria-label="Breadcrumb" className={className}>
-      <ol className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+      <ol className="flex items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400">
         <li>
           <Link
             href={resolvedHomePath}
-            className="flex items-center gap-1 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-1 hover:text-neutral-900 transition-colors"
           >
             <Home className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
@@ -72,15 +72,15 @@ export function Breadcrumbs({ homePath, className }: BreadcrumbsProps) {
         </li>
         {items.map(({ path, label, isLast }) => (
           <li key={path} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 text-gray-300 flex-shrink-0" />
+            <ChevronRight className="h-3.5 w-3.5 text-neutral-300 flex-shrink-0" />
             {isLast ? (
-              <span className="font-medium text-gray-800 dark:text-gray-200 truncate max-w-[200px]" aria-current="page">
+              <span className="font-medium text-neutral-800 dark:text-neutral-200 truncate max-w-[200px]" aria-current="page">
                 {label}
               </span>
             ) : (
               <Link
                 href={path}
-                className="hover:text-gray-800 dark:hover:text-gray-200 transition-colors truncate max-w-[200px]"
+                className="hover:text-neutral-800 dark:hover:text-neutral-200 transition-colors truncate max-w-[200px]"
               >
                 {label}
               </Link>

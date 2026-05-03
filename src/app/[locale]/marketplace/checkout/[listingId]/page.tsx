@@ -135,8 +135,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
   if (isLoading || sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <span className="ml-3 text-gray-600 dark:text-gray-400">{t('loading')}</span>
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
       </div>
     )
   }
@@ -144,9 +144,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
   if (error && !listing) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">{error}</Heading>
-        <Link href="/marketplace" className="text-green-600 hover:text-green-700 font-medium">
+        <AlertCircle className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">{error}</Heading>
+        <Link href="/marketplace" className="text-primary-600 hover:text-primary-700 font-medium">
           {t('backToMarketplace')}
         </Link>
       </div>
@@ -161,13 +161,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
-        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
+        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
           {t('ownListing.title')}
         </Heading>
-        <p className="text-gray-600 dark:text-gray-400 mb-4">
+        <p className="text-neutral-600 dark:text-neutral-400 mb-4">
           {t('ownListing.message')}
         </p>
-        <Link href={`/marketplace/${listing.id}`} className="text-green-600 hover:text-green-700 font-medium">
+        <Link href={`/marketplace/${listing.id}`} className="text-primary-600 hover:text-primary-700 font-medium">
           {t('backToListing')}
         </Link>
       </div>
@@ -191,26 +191,26 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     <div className="max-w-3xl mx-auto">
       <Link
         href={`/marketplace/${listing.id}`}
-        className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('backToListing')}
       </Link>
 
-      <Heading level={1} className="text-2xl text-gray-900 dark:text-white mb-6">{t('title')}</Heading>
+      <Heading level={1} className="text-2xl text-neutral-900 dark:text-white mb-6">{t('title')}</Heading>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left: Form */}
         <div className="lg:col-span-3 space-y-6">
           {/* Delivery method selection */}
           {canSelectDelivery && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-              <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">{t('delivery.title')}</Heading>
+            <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+              <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('delivery.title')}</Heading>
               <div className="space-y-3">
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'pickup'
-                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
                 }`}>
                   <input
                     type="radio"
@@ -218,22 +218,22 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value="pickup"
                     checked={deliveryMethod === 'pickup'}
                     onChange={() => setDeliveryMethod('pickup')}
-                    className="text-green-600 focus:ring-green-500"
+                    className="text-primary-600 focus:ring-primary-500"
                   />
-                  <MapPin className="w-5 h-5 text-gray-500" />
+                  <MapPin className="w-5 h-5 text-neutral-500" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{t('delivery.pickup')}</p>
+                    <p className="font-medium text-neutral-900 dark:text-white">{t('delivery.pickup')}</p>
                     {listing.pickup_location && (
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{listing.pickup_location}</p>
+                      <p className="text-sm text-neutral-500 dark:text-neutral-400">{listing.pickup_location}</p>
                     )}
                   </div>
-                  <span className="ml-auto font-medium text-green-600">{t('delivery.free')}</span>
+                  <span className="ml-auto font-medium text-primary-600">{t('delivery.free')}</span>
                 </label>
 
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
                   deliveryMethod === 'shipping'
-                    ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                    : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
                 }`}>
                   <input
                     type="radio"
@@ -241,14 +241,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     value="shipping"
                     checked={deliveryMethod === 'shipping'}
                     onChange={() => setDeliveryMethod('shipping')}
-                    className="text-green-600 focus:ring-green-500"
+                    className="text-primary-600 focus:ring-primary-500"
                   />
-                  <Truck className="w-5 h-5 text-gray-500" />
+                  <Truck className="w-5 h-5 text-neutral-500" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{t('delivery.shipping')}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{t('delivery.shippingNationwide')}</p>
+                    <p className="font-medium text-neutral-900 dark:text-white">{t('delivery.shipping')}</p>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{t('delivery.shippingNationwide')}</p>
                   </div>
-                  <span className="ml-auto font-medium text-gray-900 dark:text-white">
+                  <span className="ml-auto font-medium text-neutral-900 dark:text-white">
                     {listing.shipping_cost_chf ? formatCHF(listing.shipping_cost_chf) : t('delivery.free')}
                   </span>
                 </label>
@@ -258,41 +258,41 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
           {/* Shipping address form */}
           {deliveryMethod === 'shipping' && (
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
-              <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">{t('address.title')}</Heading>
+            <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+              <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('address.title')}</Heading>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('address.name')}</label>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.name')}</label>
                   <input
                     type="text"
                     value={shippingAddress.name}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder={t('address.namePlaceholder')}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('address.street')}</label>
+                  <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.street')}</label>
                   <input
                     type="text"
                     value={shippingAddress.street}
                     onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                     placeholder={t('address.streetPlaceholder')}
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('address.postalCode')}</label>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.postalCode')}</label>
                     <input
                       type="text"
                       value={shippingAddress.postal_code}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value }))}
                       maxLength={4}
-                      className={`w-full rounded-lg border bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+                      className={`w-full rounded-lg border bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
                         shippingAddress.postal_code && !postalCodeValid
                           ? 'border-red-500'
-                          : 'border-gray-300 dark:border-gray-600'
+                          : 'border-neutral-300 dark:border-neutral-600'
                       }`}
                       placeholder="8000"
                     />
@@ -301,12 +301,12 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                     )}
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('address.city')}</label>
+                    <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">{t('address.city')}</label>
                     <input
                       type="text"
                       value={shippingAddress.city}
                       onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                       placeholder={t('address.cityPlaceholder')}
                     />
                   </div>
@@ -344,57 +344,57 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
         {/* Right: Order summary */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm sticky top-6">
-            <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">{t('summary.title')}</Heading>
+          <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm sticky top-6">
+            <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('summary.title')}</Heading>
 
             {/* Listing preview */}
             <div className="flex gap-3 mb-4">
-              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
+              <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100 dark:bg-neutral-700">
                 <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
               </div>
               <div className="min-w-0">
-                <Heading level={3} className="text-gray-900 dark:text-white text-sm line-clamp-2">{listing.title}</Heading>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <Heading level={3} className="text-neutral-900 dark:text-white text-sm line-clamp-2">{listing.title}</Heading>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
                   {t('summary.seller', { name: listing.seller_name })}
                 </p>
               </div>
             </div>
 
-            <hr className="border-gray-200 dark:border-gray-700 mb-4" />
+            <hr className="border-neutral-200 dark:border-neutral-700 mb-4" />
 
             {/* Price breakdown */}
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500 dark:text-gray-400">{t('summary.itemPrice')}</span>
-                <span className="text-gray-900 dark:text-white">{formatCHF(listing.price_chf)}</span>
+                <span className="text-neutral-500 dark:text-neutral-400">{t('summary.itemPrice')}</span>
+                <span className="text-neutral-900 dark:text-white">{formatCHF(listing.price_chf)}</span>
               </div>
               {deliveryMethod === 'shipping' && shippingCost > 0 && (
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">{t('summary.shippingCost')}</span>
-                  <span className="text-gray-900 dark:text-white">{formatCHF(shippingCost)}</span>
+                  <span className="text-neutral-500 dark:text-neutral-400">{t('summary.shippingCost')}</span>
+                  <span className="text-neutral-900 dark:text-white">{formatCHF(shippingCost)}</span>
                 </div>
               )}
               {deliveryMethod === 'pickup' && (
                 <div className="flex justify-between">
-                  <span className="text-gray-500 dark:text-gray-400">{t('summary.pickup')}</span>
-                  <span className="text-green-600">{t('delivery.free')}</span>
+                  <span className="text-neutral-500 dark:text-neutral-400">{t('summary.pickup')}</span>
+                  <span className="text-primary-600">{t('delivery.free')}</span>
                 </div>
               )}
-              <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500">
+              <div className="flex justify-between text-xs text-neutral-400 dark:text-neutral-500">
                 <span>{t('summary.serviceFee', { rate: COMMISSION_RATE * 100 })}</span>
                 <span>{t('summary.serviceIncl', { amount: formatCHF(commission) })}</span>
               </div>
             </div>
 
-            <hr className="border-gray-200 dark:border-gray-700 my-4" />
+            <hr className="border-neutral-200 dark:border-neutral-700 my-4" />
 
             <div className="flex justify-between text-lg font-bold">
-              <span className="text-gray-900 dark:text-white">{t('summary.total')}</span>
-              <span className="text-green-600">{formatCHF(totalAmount)}</span>
+              <span className="text-neutral-900 dark:text-white">{t('summary.total')}</span>
+              <span className="text-primary-600">{formatCHF(totalAmount)}</span>
             </div>
 
             {/* Delivery info */}
-            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-xs text-gray-500 dark:text-gray-400">
+            <div className="mt-4 p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg text-xs text-neutral-500 dark:text-neutral-400">
               <p className="flex items-center gap-1.5">
                 {deliveryMethod === 'shipping' ? (
                   <><Truck className="w-3.5 h-3.5" /> {t('summary.shipping')}</>
@@ -405,9 +405,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             </div>
 
             {/* Trust badges */}
-            <div className="mt-4 space-y-2 text-xs text-gray-500 dark:text-gray-400">
+            <div className="mt-4 space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
               <p className="flex items-center gap-1.5">
-                <Shield className="w-3.5 h-3.5 text-green-600" />
+                <Shield className="w-3.5 h-3.5 text-primary-600" />
                 {t('buyerProtection')}
               </p>
             </div>

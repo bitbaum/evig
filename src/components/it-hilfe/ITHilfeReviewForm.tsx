@@ -66,9 +66,9 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-2">{t('heading')}</Heading>
-      <p className="text-sm text-gray-600 mb-4">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">{t('heading')}</Heading>
+      <p className="text-sm text-neutral-600 mb-4">
         {t('experienceWith', { title: requestTitle })}
       </p>
 
@@ -102,7 +102,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
         </div>
 
         <div>
-          <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="review-comment" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('reviewTextLabel')}
           </label>
           <textarea
@@ -113,9 +113,9 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
             rows={4}
             minLength={10}
             maxLength={5000}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
           />
-          <p className="text-xs text-gray-500 mt-1">{content.length}/5000</p>
+          <p className="text-xs text-neutral-500 mt-1">{content.length}/5000</p>
         </div>
 
         <button

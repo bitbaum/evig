@@ -50,7 +50,7 @@ function mapConditionToSchema(condition: string): string {
 // Condition badge colors (labels come from translations)
 const CONDITION_COLORS: Record<string, string> = {
   'wie neu':    'bg-emerald-100 text-emerald-800',
-  'sehr gut':   'bg-green-100 text-green-800',
+  'sehr gut':   'bg-primary-100 text-primary-800',
   'gut':        'bg-blue-100 text-blue-800',
   'akzeptabel': 'bg-yellow-100 text-yellow-800',
 }
@@ -71,7 +71,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const relatedProducts = similar.products.filter(p => p.id !== product.id).slice(0, 3)
 
   const conditionKey = product.condition.toLowerCase()
-  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-gray-100 text-gray-800'
+  const conditionColor = CONDITION_COLORS[conditionKey] ?? 'bg-neutral-100 text-neutral-800'
   const CONDITION_LABEL_MAP: Record<string, string> = {
     'wie neu': t('product.conditionLabels.wieNeu'),
     'sehr gut': t('product.conditionLabels.sehrGut'),
@@ -104,24 +104,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
     />
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-neutral-50">
       {/* Breadcrumbs */}
-      <div className="bg-white border-b border-gray-100">
+      <div className="bg-white border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-          <nav className="flex items-center gap-2 text-sm text-gray-500">
+          <nav className="flex items-center gap-2 text-sm text-neutral-500">
             <Link href="/" className="hover:text-emerald-600 transition-colors">
               <Home className="w-4 h-4" />
             </Link>
-            <ChevronRight className="w-4 h-4 text-gray-300" />
+            <ChevronRight className="w-4 h-4 text-neutral-300" />
             <Link href="/shop" className="hover:text-emerald-600 transition-colors">Shop</Link>
             {product.category && (
               <>
-                <ChevronRight className="w-4 h-4 text-gray-300" />
-                <span className="text-gray-900 font-medium truncate max-w-[200px]">{product.category}</span>
+                <ChevronRight className="w-4 h-4 text-neutral-300" />
+                <span className="text-neutral-900 font-medium truncate max-w-[200px]">{product.category}</span>
               </>
             )}
-            <ChevronRight className="w-4 h-4 text-gray-300" />
-            <span className="text-gray-900 font-medium truncate max-w-[200px]">{product.title}</span>
+            <ChevronRight className="w-4 h-4 text-neutral-300" />
+            <span className="text-neutral-900 font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image */}
-          <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
             <div className="relative aspect-square">
               {product.image_url ? (
                 <Image
@@ -141,8 +141,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-gray-50">
-                  <Package className="w-24 h-24 text-gray-200" />
+                <div className="flex items-center justify-center h-full bg-neutral-50">
+                  <Package className="w-24 h-24 text-neutral-200" />
                 </div>
               )}
             </div>
@@ -154,11 +154,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <p className="text-sm font-semibold text-emerald-600 uppercase tracking-wider mb-1">
                 {product.brand}
               </p>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-gray-900 leading-tight">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 leading-tight">
                 {product.title}
               </Heading>
               {product.description && (
-                <p className="mt-3 text-gray-600">{product.description}</p>
+                <p className="mt-3 text-neutral-600">{product.description}</p>
               )}
             </div>
 
@@ -190,7 +190,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Customer profiles */}
             {product.customer_profiles.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-1.5">
+                <p className="text-sm font-medium text-neutral-700 mb-2 flex items-center gap-1.5">
                   <Layers className="w-4 h-4" />
                   {t('product.suitableFor')}
                 </p>
@@ -232,7 +232,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </a>
               <Link
                 href="/shop#ladenlokal"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-neutral-300 text-neutral-700 font-semibold rounded-xl hover:bg-neutral-50 transition-colors"
               >
                 {t('product.buyInStore')}
               </Link>
@@ -243,7 +243,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Related products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <Heading level={2} className="text-xl font-semibold text-gray-900 mb-6">
+            <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-6">
               {t('product.similarProducts')}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -251,9 +251,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Link
                   key={p.id}
                   href={`/shop/product/${p.item_uuid}`}
-                  className="group bg-white rounded-xl border border-gray-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+                  className="group bg-white rounded-xl border border-neutral-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
                 >
-                  <div className="relative aspect-[4/3] bg-gray-50">
+                  <div className="relative aspect-[4/3] bg-neutral-50">
                     {p.image_url ? (
                       <Image
                         src={p.image_url}
@@ -264,13 +264,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        <Package className="w-10 h-10 text-gray-200" />
+                        <Package className="w-10 h-10 text-neutral-200" />
                       </div>
                     )}
                   </div>
                   <div className="p-4">
-                    <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">{p.brand}</p>
-                    <h3 className="font-medium text-gray-900 group-hover:text-emerald-600 transition-colors line-clamp-2 mt-0.5">
+                    <p className="text-xs text-neutral-500 font-medium uppercase tracking-wide">{p.brand}</p>
+                    <h3 className="font-medium text-neutral-900 group-hover:text-emerald-600 transition-colors line-clamp-2 mt-0.5">
                       {p.title}
                     </h3>
                     <p className="mt-2 font-bold text-emerald-700">CHF {p.price.toFixed(2)}</p>

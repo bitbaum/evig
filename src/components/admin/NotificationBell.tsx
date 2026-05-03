@@ -125,10 +125,10 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         onClick={handleOpen}
-        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
         aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
       >
-        <Bell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+        <Bell className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
         {unreadCount > 0 && (
           <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-4 px-0.5 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -137,10 +137,10 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+        <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-neutral-800 rounded-xl shadow-2xl border border-neutral-200 dark:border-neutral-700 z-50 overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700">
-            <span className="font-semibold text-sm text-gray-900 dark:text-white">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100 dark:border-neutral-700">
+            <span className="font-semibold text-sm text-neutral-900 dark:text-white">
               Benachrichtigungen
               {unreadCount > 0 && (
                 <span className="ml-2 px-1.5 py-0.5 text-xs bg-red-100 text-red-600 rounded-full">
@@ -153,7 +153,7 @@ export function NotificationBell() {
                 <button
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 px-2 py-1 text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="flex items-center gap-1 px-2 py-1 text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                   title="Alle als gelesen markieren"
                 >
                   <Check className="w-3 h-3" />
@@ -162,15 +162,15 @@ export function NotificationBell() {
               )}
               <button
                 onClick={() => setOpen(false)}
-                className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="p-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
               >
-                <X className="w-4 h-4 text-gray-500" />
+                <X className="w-4 h-4 text-neutral-500" />
               </button>
             </div>
           </div>
 
           {/* List */}
-          <div className="max-h-[400px] overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
+          <div className="max-h-[400px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700">
             {error && notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <p className="text-sm text-red-500 dark:text-red-400 mb-2">{error}</p>
@@ -182,13 +182,13 @@ export function NotificationBell() {
                 </button>
               </div>
             ) : loading && notifications.length === 0 ? (
-              <div className="py-8 text-center text-sm text-gray-500">
+              <div className="py-8 text-center text-sm text-neutral-500">
                 Laden…
               </div>
             ) : notifications.length === 0 ? (
               <div className="py-8 text-center">
-                <Bell className="w-8 h-8 text-gray-200 dark:text-gray-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500">Keine Benachrichtigungen</p>
+                <Bell className="w-8 h-8 text-neutral-200 dark:text-neutral-600 mx-auto mb-2" />
+                <p className="text-sm text-neutral-500">Keine Benachrichtigungen</p>
               </div>
             ) : (
               notifications.map(n => {
@@ -197,7 +197,7 @@ export function NotificationBell() {
                   <button
                     key={n.id}
                     onClick={() => void markOneRead(n)}
-                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors ${
+                    className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors ${
                       !n.is_read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
                     }`}
                   >
@@ -208,16 +208,16 @@ export function NotificationBell() {
                       <div className={!n.is_read ? '' : 'pl-4'}>
                         <p className={`text-sm leading-snug ${
                           !n.is_read
-                            ? 'font-semibold text-gray-900 dark:text-white'
-                            : 'font-medium text-gray-700 dark:text-gray-300'
+                            ? 'font-semibold text-neutral-900 dark:text-white'
+                            : 'font-medium text-neutral-700 dark:text-neutral-300'
                         }`}>
                           {n.title}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 line-clamp-2">
                           {n.content}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-neutral-500">
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (

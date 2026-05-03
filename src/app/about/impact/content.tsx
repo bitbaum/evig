@@ -30,15 +30,15 @@ const SimpleTabs = ({
 
   return (
     <div className="w-full">
-      <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg mb-6">
+      <div className="flex space-x-1 bg-neutral-100 p-1 rounded-lg mb-6">
         {tabs.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setActiveTab(tab.value)}
             className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors flex-1 ${
               activeTab === tab.value
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-neutral-900 shadow-sm'
+                : 'text-neutral-600 hover:text-neutral-900'
             }`}
           >
             {tab.icon}
@@ -148,7 +148,7 @@ export default function ImpactPageContent() {
 
   const getCategoryIcon = (category: ImpactMetric['category']) => {
     switch (category) {
-      case 'environmental': return <Leaf className="h-5 w-5 text-green-600" />
+      case 'environmental': return <Leaf className="h-5 w-5 text-primary-600" />
       case 'social': return <Users className="h-5 w-5 text-blue-600" />
       case 'economic': return <TrendingUp className="h-5 w-5 text-purple-600" />
     }
@@ -156,7 +156,7 @@ export default function ImpactPageContent() {
 
   const getCategoryColor = (category: ImpactMetric['category']) => {
     switch (category) {
-      case 'environmental': return 'bg-green-50 border-green-200'
+      case 'environmental': return 'bg-primary-50 border-primary-200'
       case 'social': return 'bg-blue-50 border-blue-200'
       case 'economic': return 'bg-purple-50 border-purple-200'
     }
@@ -186,7 +186,7 @@ export default function ImpactPageContent() {
       <section className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Warum Transparenz wichtig ist</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
             Als gemeinnütziger Verein legen wir grössten Wert auf Transparenz. Jede unserer Zahlen ist nachvollziehbar dokumentiert,
             damit Sie als Spender:in genau verstehen, wie Ihre Unterstützung wirkt.
           </p>
@@ -200,7 +200,7 @@ export default function ImpactPageContent() {
                 <div className="flex items-center justify-between">
                   {getCategoryIcon(metric.category)}
                   {metric.verified && (
-                    <Badge className="bg-green-100 text-green-800">
+                    <Badge className="bg-primary-100 text-primary-800">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Verifiziert
                     </Badge>
@@ -210,11 +210,11 @@ export default function ImpactPageContent() {
                 <CardDescription className="font-medium">{metric.title}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-gray-600 mb-3">{metric.description}</p>
-                <details className="text-xs text-gray-500">
+                <p className="text-sm text-neutral-600 mb-3">{metric.description}</p>
+                <details className="text-xs text-neutral-500">
                   <summary className="cursor-pointer font-medium mb-2">Methodik & Berechnung</summary>
                   <p className="mb-2">{metric.methodology}</p>
-                  <p className="text-gray-500">Letzte Aktualisierung: {metric.lastUpdated}</p>
+                  <p className="text-neutral-500">Letzte Aktualisierung: {metric.lastUpdated}</p>
                 </details>
               </CardContent>
             </Card>
@@ -222,7 +222,7 @@ export default function ImpactPageContent() {
         </div>
 
         {/* Impact Stories */}
-        <div className="bg-gray-50 rounded-lg p-8">
+        <div className="bg-neutral-50 rounded-lg p-8">
           <h3 className="text-2xl font-bold mb-6 text-center">Wirkung in Zahlen verstehen</h3>
           <SimpleTabs
             defaultValue="environmental"
@@ -240,15 +240,15 @@ export default function ImpactPageContent() {
                       <h4 className="text-lg font-semibold mb-3">Umweltwirkung im Detail</h4>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                           <span>Jedes gerettete Gerät spart durchschnittlich {envSummary.co2PerDevice}kg CO₂-Emissionen</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                           <span>Wir vermeiden {envSummary.ewastePreventedTons.toFixed(1)} Tonnen Elektronikschrott pro Jahr</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                           <span>{Math.round(envSummary.reuseRate * 100)}% unserer Geräte werden wiederverwendet statt recycelt</span>
                         </li>
                       </ul>
@@ -262,11 +262,11 @@ export default function ImpactPageContent() {
                         </div>
                         <div className="flex justify-between">
                           <span>Refurbishment eines Geräts:</span>
-                          <span className="font-semibold text-green-600">{envSummary.co2RefurbishmentKg}kg CO₂</span>
+                          <span className="font-semibold text-primary-600">{envSummary.co2RefurbishmentKg}kg CO₂</span>
                         </div>
                         <div className="flex justify-between border-t pt-2">
                           <span>CO₂-Einsparung pro Gerät:</span>
-                          <span className="font-semibold text-green-600">{envSummary.co2PerDevice}kg</span>
+                          <span className="font-semibold text-primary-600">{envSummary.co2PerDevice}kg</span>
                         </div>
                       </div>
                     </div>
@@ -296,7 +296,7 @@ export default function ImpactPageContent() {
                       <h5 className="font-semibold mb-3">Erfolgsgeschichten</h5>
                       <div className="space-y-3 text-sm">
                         <p>{`"Dank ${ORG.name} habe ich nach 3 Jahren Arbeitslosigkeit wieder Fuss gefasst in der IT-Branche."`}</p>
-                        <p className="text-gray-500">- Sarah M., ehemalige Praktikantin</p>
+                        <p className="text-neutral-500">- Sarah M., ehemalige Praktikantin</p>
                       </div>
                     </div>
                   </div>
@@ -334,7 +334,7 @@ export default function ImpactPageContent() {
                         </div>
                         <div className="flex justify-between border-t pt-2">
                           <span>Einsparung pro Kunde:</span>
-                          <span className="font-semibold text-green-600">CHF {getDefaultNumeric('customer_savings_chf')}</span>
+                          <span className="font-semibold text-primary-600">CHF {getDefaultNumeric('customer_savings_chf')}</span>
                         </div>
                       </div>
                     </div>
@@ -347,11 +347,11 @@ export default function ImpactPageContent() {
       </section>
 
       {/* Donation Methods */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-neutral-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Wie Sie uns unterstützen können</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
               Jede Unterstützung zählt und trägt direkt zu unserer Mission bei. Wählen Sie die für Sie passende Art der Unterstützung.
             </p>
           </div>
@@ -361,7 +361,7 @@ export default function ImpactPageContent() {
               <Card
                 key={method.id}
                 className={`cursor-pointer transition-all hover:shadow-lg ${
-                  method.popular ? 'ring-2 ring-green-500 bg-green-50' : ''
+                  method.popular ? 'ring-2 ring-primary-500 bg-primary-50' : ''
                 }`}
                 onClick={() => setSelectedDonationMethod(method.id)}
               >
@@ -372,19 +372,19 @@ export default function ImpactPageContent() {
                       <CardTitle className="text-xl">{method.name}</CardTitle>
                     </div>
                     {method.popular && (
-                      <Badge className="bg-green-600 text-white">Beliebt</Badge>
+                      <Badge className="bg-primary-600 text-white">Beliebt</Badge>
                     )}
                   </div>
                   <CardDescription className="text-base">{method.description}</CardDescription>
                   {method.amount && (
-                    <p className="text-sm font-medium text-green-600">{method.amount}</p>
+                    <p className="text-sm font-medium text-primary-600">{method.amount}</p>
                   )}
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 mb-4">
                     {method.benefits.map((benefit, index) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
-                        <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                         <span>{benefit}</span>
                       </li>
                     ))}
@@ -409,16 +409,16 @@ export default function ImpactPageContent() {
             <CardContent>
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div className="space-y-2">
-                  <p className="text-2xl font-bold text-green-600">CHF {getDefaultNumeric('donation_impact_laptop_chf')}</p>
-                  <p className="text-sm text-gray-600">Reparatur eines Laptops für eine Familie</p>
+                  <p className="text-2xl font-bold text-primary-600">CHF {getDefaultNumeric('donation_impact_laptop_chf')}</p>
+                  <p className="text-sm text-neutral-600">Reparatur eines Laptops für eine Familie</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-2xl font-bold text-green-600">CHF {getDefaultNumeric('donation_impact_internship_chf')}</p>
-                  <p className="text-sm text-gray-600">Ein Monat Praktikumsstelle für Wiedereinsteiger:in</p>
+                  <p className="text-2xl font-bold text-primary-600">CHF {getDefaultNumeric('donation_impact_internship_chf')}</p>
+                  <p className="text-sm text-neutral-600">Ein Monat Praktikumsstelle für Wiedereinsteiger:in</p>
                 </div>
                 <div className="space-y-2">
-                  <p className="text-2xl font-bold text-green-600">CHF {getDefaultNumeric('donation_impact_data_recovery_chf')}</p>
-                  <p className="text-sm text-gray-600">Vollständige Datenrettung für KMU-Kunde</p>
+                  <p className="text-2xl font-bold text-primary-600">CHF {getDefaultNumeric('donation_impact_data_recovery_chf')}</p>
+                  <p className="text-sm text-neutral-600">Vollständige Datenrettung für KMU-Kunde</p>
                 </div>
               </div>
             </CardContent>
@@ -430,7 +430,7 @@ export default function ImpactPageContent() {
       <section className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Transparenz & Berichterstattung</h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
             Wir berichten regelmässig über unsere Aktivitäten und Wirkung. Alle Dokumente sind öffentlich zugänglich.
           </p>
         </div>
@@ -444,7 +444,7 @@ export default function ImpactPageContent() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-neutral-600 mb-4">
                 Vollständiger Tätigkeitsbericht mit allen Kennzahlen und Aktivitäten des Jahres 2023.
               </p>
               <Button variant="outline" className="w-full">
@@ -461,7 +461,7 @@ export default function ImpactPageContent() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-neutral-600 mb-4">
                 Detaillierte Analyse unserer sozialen und ökologischen Wirkung mit Methodik-Erläuterungen.
               </p>
               <Button variant="outline" className="w-full">
@@ -478,7 +478,7 @@ export default function ImpactPageContent() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-neutral-600 mb-4">
                 Öffentliches Register aller Spenden und wie diese verwendet wurden.
               </p>
               <Button variant="outline" className="w-full">
@@ -490,7 +490,7 @@ export default function ImpactPageContent() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 bg-green-600 text-white">
+      <section className="py-16 bg-primary-600 text-white">
         <div className="max-w-4xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold mb-6">Gemeinsam mehr erreichen</h2>
           <p className="text-xl mb-8">
@@ -498,7 +498,7 @@ export default function ImpactPageContent() {
             die Schweizer IT-Landschaft nachhaltiger zu gestalten und Menschen neue Chancen zu geben.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100">
+            <Button size="lg" className="bg-white text-primary-600 hover:bg-neutral-100">
               Jetzt spenden
               <Heart className="h-5 w-5 ml-2" />
             </Button>

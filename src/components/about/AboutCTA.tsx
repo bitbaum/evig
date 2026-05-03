@@ -18,7 +18,7 @@ interface AboutCTAProps {
 
 export default function AboutCTA({ title, description, buttonText, href }: AboutCTAProps) {
   return (
-    <section className="py-20 bg-green-600 text-white">
+    <section className="py-20 bg-primary-600 text-white">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <Heading level={2} className="text-3xl font-bold mb-6">{title}</Heading>
@@ -28,7 +28,7 @@ export default function AboutCTA({ title, description, buttonText, href }: About
           <Link href={href}>
             <Button 
               size="lg"
-              className="bg-white text-green-600 hover:bg-gray-100"
+              className="bg-white text-primary-600 hover:bg-neutral-100"
             >
               {buttonText}
             </Button>

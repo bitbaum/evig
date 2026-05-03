@@ -79,17 +79,17 @@ function ResetPasswordContent() {
 
   if (!token || tokenValid === false) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
           </div>
-          <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
+          <Heading level={2} className="mt-6 text-center text-3xl text-neutral-900">
             {t('invalidLink')}
           </Heading>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-neutral-600">
             {t('invalidLinkDesc')}
           </p>
         </div>
@@ -99,12 +99,12 @@ function ResetPasswordContent() {
             <div className="space-y-3">
               <Link
                 href="/auth/forgot-password"
-                className="inline-block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors font-medium"
+                className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
               >
                 {t('requestNewLink')}
               </Link>
-              <p className="text-sm text-gray-600">
-                <Link href="/auth/login" className="text-green-600 hover:text-green-500">
+              <p className="text-sm text-neutral-600">
+                <Link href="/auth/login" className="text-primary-600 hover:text-primary-500">
                   {t('backToLogin')}
                 </Link>
               </p>
@@ -117,29 +117,29 @@ function ResetPasswordContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-primary-600" />
             </div>
           </div>
-          <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
+          <Heading level={2} className="mt-6 text-center text-3xl text-neutral-900">
             {t('successHeading')}
           </Heading>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-neutral-600">
             {t('successDesc')}
           </p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10 text-center">
-            <p className="text-sm text-gray-600 mb-6">
+            <p className="text-sm text-neutral-600 mb-6">
               {t('successRedirect')}
             </p>
             <Link
               href="/auth/login"
-              className="inline-block bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors font-medium"
+              className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
             >
               {t('loginNow')}
             </Link>
@@ -150,17 +150,17 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
             <Lock className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-        <Heading level={2} className="mt-6 text-center text-3xl text-gray-900">
+        <Heading level={2} className="mt-6 text-center text-3xl text-neutral-900">
           {t('heading')}
         </Heading>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-neutral-600">
           {t('subheading')}
         </p>
       </div>
@@ -177,11 +177,11 @@ function ResetPasswordContent() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('newPasswordLabel')}
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
                 <input
                   id="password"
                   name="password"
@@ -193,13 +193,13 @@ function ResetPasswordContent() {
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 rounded-lg bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder={t('newPasswordPlaceholder')}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-600"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -207,11 +207,11 @@ function ResetPasswordContent() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-neutral-700 mb-1">
                 {t('confirmPasswordLabel')}
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -223,26 +223,26 @@ function ResetPasswordContent() {
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 rounded-lg bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder={t('confirmPasswordPlaceholder')}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-neutral-600"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
             </div>
 
-            <div className="text-sm text-gray-600 space-y-1">
+            <div className="text-sm text-neutral-600 space-y-1">
               <p className="font-medium">{t('requirementsTitle')}</p>
               <ul className="ml-4 space-y-0.5">
-                <li className={password.length >= 8 ? 'text-green-600' : 'text-gray-500'}>
+                <li className={password.length >= 8 ? 'text-primary-600' : 'text-neutral-500'}>
                   ✓ {t('requirementLength')}
                 </li>
-                <li className={password === confirmPassword && password ? 'text-green-600' : 'text-gray-500'}>
+                <li className={password === confirmPassword && password ? 'text-primary-600' : 'text-neutral-500'}>
                   ✓ {t('requirementMatch')}
                 </li>
               </ul>
@@ -267,7 +267,7 @@ function ResetPasswordContent() {
 
 function ResetPasswordFallback() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">

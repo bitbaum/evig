@@ -18,12 +18,12 @@ const STATUS_OPTIONS: ApplicationStatus[] = [
 
 export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange, onSearchChange }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-gray-400" />
-            <span className="text-sm font-medium text-gray-700">Status:</span>
+            <Filter className="w-5 h-5 text-neutral-400" />
+            <span className="text-sm font-medium text-neutral-700">Status:</span>
           </div>
           <div className="flex gap-2">
             {STATUS_OPTIONS.map((status) => (
@@ -32,8 +32,8 @@ export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange
                 onClick={() => onStatusChange(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-primary-100 text-primary-800'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}
               >
                 {getApprovalStatusLabel(status)}
@@ -43,13 +43,13 @@ export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange
         </div>
 
         <div className="relative">
-          <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+          <Search className="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
           <input
             type="text"
             placeholder="Suchen nach Name, E-Mail oder Beschreibung..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
       </div>

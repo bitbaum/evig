@@ -98,12 +98,12 @@ export interface ConditionBadge {
 }
 
 const CONDITION_BADGE_COLORS: Record<string, string> = {
-  new: 'bg-green-100 text-green-800',
+  new: 'bg-primary-100 text-primary-800',
   like_new: 'bg-blue-100 text-blue-800',
   good: 'bg-yellow-100 text-yellow-800',
   fair: 'bg-orange-100 text-orange-800',
   poor: 'bg-red-100 text-red-800',
-  defect: 'bg-gray-100 text-gray-800',
+  defect: 'bg-neutral-100 text-neutral-800',
 }
 
 /**
@@ -138,14 +138,14 @@ export function getConditionBadge(value: string): ConditionBadge {
   // Check canonical values first
   const condition = getConditionByValue(value)
   if (condition) {
-    return { label: condition.label, color: CONDITION_BADGE_COLORS[value] || 'bg-gray-100 text-gray-800' }
+    return { label: condition.label, color: CONDITION_BADGE_COLORS[value] || 'bg-neutral-100 text-neutral-800' }
   }
   // Check aliases
   const alias = CONDITION_VALUE_ALIASES[value]
   if (alias) {
-    return { label: alias.label, color: CONDITION_BADGE_COLORS[alias.canonical] || 'bg-gray-100 text-gray-800' }
+    return { label: alias.label, color: CONDITION_BADGE_COLORS[alias.canonical] || 'bg-neutral-100 text-neutral-800' }
   }
-  return { label: value, color: 'bg-gray-100 text-gray-800' }
+  return { label: value, color: 'bg-neutral-100 text-neutral-800' }
 }
 
 /**

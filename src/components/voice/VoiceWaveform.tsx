@@ -29,8 +29,8 @@ export function VoiceWaveform({ recordingTime, maxDuration, state }: VoiceWavefo
                 ? 'bg-red-500 animate-pulse'
                 : state === 'paused'
                   ? 'bg-yellow-500'
-                  : 'bg-green-500'
-              : 'bg-gray-300 dark:bg-gray-600'
+                  : 'bg-primary-500'
+              : 'bg-neutral-300 dark:bg-neutral-600'
           }`}
         />
       ))}

@@ -53,10 +53,10 @@ export function ConfirmReviewCard({
       <div className="flex items-start gap-3 mb-4">
         <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div>
-          <Heading level={3} className="text-lg font-semibold text-gray-900">
+          <Heading level={3} className="text-lg font-semibold text-neutral-900">
             {t('confirmHeading')}
           </Heading>
-          <p className="text-sm text-gray-700 mt-1">
+          <p className="text-sm text-neutral-700 mt-1">
             {t('confirmDescription', { requestTitle })}
           </p>
         </div>
@@ -71,7 +71,7 @@ export function ConfirmReviewCard({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Star rating */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('overallRating')}
           </label>
           <div className="flex gap-1">
@@ -89,7 +89,7 @@ export function ConfirmReviewCard({
                   className={`w-8 h-8 transition-colors ${
                     star <= (hover || rating)
                       ? 'fill-yellow-400 text-yellow-400'
-                      : 'text-gray-300'
+                      : 'text-neutral-300'
                   }`}
                 />
               </button>
@@ -99,7 +99,7 @@ export function ConfirmReviewCard({
 
         {/* Review text */}
         <div>
-          <label htmlFor="confirm-review-text" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="confirm-review-text" className="block text-sm font-medium text-neutral-700 mb-1">
             {t('reviewTextOptionalLabel')}
           </label>
           <textarea
@@ -109,14 +109,14 @@ export function ConfirmReviewCard({
             placeholder={t('reviewTextOptionalPlaceholder')}
             rows={4}
             maxLength={5000}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
           />
-          <p className="text-xs text-gray-500 mt-1">{reviewText.length}/5000</p>
+          <p className="text-xs text-neutral-500 mt-1">{reviewText.length}/5000</p>
         </div>
 
         {/* Recommend */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-neutral-700 mb-2">
             {t('recommendLabel')}
           </label>
           <div className="flex gap-3">
@@ -126,7 +126,7 @@ export function ConfirmReviewCard({
               className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
                 recommended === true
                   ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:border-emerald-400'
+                  : 'bg-white text-neutral-700 border-neutral-300 hover:border-emerald-400'
               }`}
             >
               {t('recommendYes')}
@@ -137,7 +137,7 @@ export function ConfirmReviewCard({
               className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
                 recommended === false
                   ? 'bg-red-600 text-white border-red-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:border-red-400'
+                  : 'bg-white text-neutral-700 border-neutral-300 hover:border-red-400'
               }`}
             >
               {t('recommendNo')}

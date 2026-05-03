@@ -27,15 +27,15 @@ export default function MarketplaceAdminClient() {
       )}
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 border-b border-gray-200 dark:border-gray-700">
+      <div className="flex gap-1 border-b border-neutral-200 dark:border-neutral-700">
         {TABS.map(t => (
           <button
             key={t.id}
             onClick={() => m.switchTab(t.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               m.tab === t.id
-                ? 'border-green-600 text-green-700 dark:text-green-400'
-                : 'border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+                ? 'border-primary-600 text-primary-700 dark:text-primary-400'
+                : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
           >
             <t.icon className="w-4 h-4" />
@@ -52,7 +52,7 @@ export default function MarketplaceAdminClient() {
       {/* Tab Content */}
       {m.loading && !m.listings && !m.reports && !m.orders ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
+          <Loader2 className="w-6 h-6 animate-spin text-neutral-500" />
         </div>
       ) : (
         <>

@@ -122,7 +122,7 @@ export default function SubmitPostPage() {
   // Success screen — shown instead of form after submission
   if (submitStatus === 'success') {
     return (
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-neutral-50">
         <div className="relative">
           <PageHero
             theme="about"
@@ -133,7 +133,7 @@ export default function SubmitPostPage() {
           <div className="absolute top-4 left-4 sm:left-8">
             <Link
               href="/blog"
-              className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
+              className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               {t('backToBlog')}
@@ -143,24 +143,24 @@ export default function SubmitPostPage() {
 
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="bg-white rounded-lg shadow-sm p-12">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
-            <Heading level={2} className="text-2xl text-gray-900 mb-3">{t('successTitle')}</Heading>
-            <p className="text-gray-700 text-lg mb-2">
+            <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-6" />
+            <Heading level={2} className="text-2xl text-neutral-900 mb-3">{t('successTitle')}</Heading>
+            <p className="text-neutral-700 text-lg mb-2">
               {t('successMessage')}
             </p>
-            <p className="text-gray-500 text-sm mb-8">
+            <p className="text-neutral-500 text-sm mb-8">
               {t('successEmailNote')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleReset}
-                className="inline-flex items-center justify-center px-6 py-3 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors font-medium"
+                className="inline-flex items-center justify-center px-6 py-3 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors font-medium"
               >
                 {t('submitAnotherButton')}
               </button>
               <Link
                 href="/blog"
-                className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
               >
                 {t('toBlogButton')}
               </Link>
@@ -172,7 +172,7 @@ export default function SubmitPostPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-neutral-50">
       <div className="relative">
         <PageHero
           theme="about"
@@ -183,7 +183,7 @@ export default function SubmitPostPage() {
         <div className="absolute top-4 left-4 sm:left-8">
           <Link
             href="/blog"
-            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
+            className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToBlog')}
@@ -195,20 +195,20 @@ export default function SubmitPostPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <Heading level={2} className="text-2xl text-gray-900 mb-6">{t('whatToSubmit')}</Heading>
+          <Heading level={2} className="text-2xl text-neutral-900 mb-6">{t('whatToSubmit')}</Heading>
           <div className="grid md:grid-cols-2 gap-4">
             <button
               type="button"
               onClick={() => setSubmissionType(BLOG_SUBMISSION_TYPE.IDEA)}
               className={`p-6 rounded-lg border-2 transition-all ${
                 submissionType === BLOG_SUBMISSION_TYPE.IDEA
-                  ? 'border-green-600 bg-green-50'
-                  : 'border-gray-200 hover:border-green-300'
+                  ? 'border-primary-600 bg-primary-50'
+                  : 'border-neutral-200 hover:border-primary-300'
               }`}
             >
-              <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 'text-green-600' : 'text-gray-400'}`} />
-              <Heading level={3} className="text-lg text-gray-900 mb-2">{t('typeIdea')}</Heading>
-              <p className="text-sm text-gray-600">
+              <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 'text-primary-600' : 'text-neutral-400'}`} />
+              <Heading level={3} className="text-lg text-neutral-900 mb-2">{t('typeIdea')}</Heading>
+              <p className="text-sm text-neutral-600">
                 {t('typeIdeaDesc')}
               </p>
             </button>
@@ -218,13 +218,13 @@ export default function SubmitPostPage() {
               onClick={() => setSubmissionType(BLOG_SUBMISSION_TYPE.DRAFT)}
               className={`p-6 rounded-lg border-2 transition-all ${
                 submissionType === BLOG_SUBMISSION_TYPE.DRAFT
-                  ? 'border-green-600 bg-green-50'
-                  : 'border-gray-200 hover:border-green-300'
+                  ? 'border-primary-600 bg-primary-50'
+                  : 'border-neutral-200 hover:border-primary-300'
               }`}
             >
-              <FileText className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.DRAFT ? 'text-green-600' : 'text-gray-400'}`} />
-              <Heading level={3} className="text-lg text-gray-900 mb-2">{t('typeDraft')}</Heading>
-              <p className="text-sm text-gray-600">
+              <FileText className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.DRAFT ? 'text-primary-600' : 'text-neutral-400'}`} />
+              <Heading level={3} className="text-lg text-neutral-900 mb-2">{t('typeDraft')}</Heading>
+              <p className="text-sm text-neutral-600">
                 {t('typeDraftDesc')}
               </p>
             </button>
@@ -233,7 +233,7 @@ export default function SubmitPostPage() {
 
         {/* Submission Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8">
-          <Heading level={2} className="text-2xl text-gray-900 mb-6">
+          <Heading level={2} className="text-2xl text-neutral-900 mb-6">
             {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('formHeadingIdea') : t('formHeadingDraft')}
           </Heading>
 
@@ -251,7 +251,7 @@ export default function SubmitPostPage() {
           {/* Personal Info */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelName')}
               </label>
               <input
@@ -263,13 +263,13 @@ export default function SubmitPostPage() {
                 required
                 aria-required="true"
                 readOnly={isLoggedIn}
-                className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isLoggedIn ? 'bg-gray-50 text-gray-600 cursor-default' : ''}`}
+                className={`w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}`}
                 placeholder={t('placeholderName')}
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelEmail')}
               </label>
               <input
@@ -281,7 +281,7 @@ export default function SubmitPostPage() {
                 required
                 aria-required="true"
                 readOnly={isLoggedIn}
-                className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${isLoggedIn ? 'bg-gray-50 text-gray-600 cursor-default' : ''}`}
+                className={`w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}`}
                 placeholder={t('placeholderEmail')}
               />
             </div>
@@ -289,7 +289,7 @@ export default function SubmitPostPage() {
 
           {/* Post Info */}
           <div className="mb-6">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelTitleIdea') : t('labelTitleDraft')}
             </label>
             <input
@@ -300,14 +300,14 @@ export default function SubmitPostPage() {
               onChange={handleChange}
               required
               aria-required="true"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderTitleIdea') : t('placeholderTitleDraft')}
             />
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelCategory')}
               </label>
               <select
@@ -315,7 +315,7 @@ export default function SubmitPostPage() {
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="">{t('categoryPlaceholder')}</option>
                 {categories.map((cat) => (
@@ -327,7 +327,7 @@ export default function SubmitPostPage() {
             </div>
 
             <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelTags')}
               </label>
               <input
@@ -336,14 +336,14 @@ export default function SubmitPostPage() {
                 name="tags"
                 value={formData.tags}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder={t('placeholderTags')}
               />
             </div>
           </div>
 
           <div className="mb-6">
-            <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="content" className="block text-sm font-medium text-neutral-700 mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelContentIdea') : t('labelContentDraft')}
             </label>
             <textarea
@@ -354,11 +354,11 @@ export default function SubmitPostPage() {
               required
               aria-required="true"
               rows={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 6 : 16}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+              className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono text-sm"
               placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderContentIdea') : t('placeholderContentDraft')}
             />
             {submissionType === BLOG_SUBMISSION_TYPE.DRAFT && (
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-neutral-500">
                 {t('markdownHint')}
               </p>
             )}
@@ -378,13 +378,13 @@ export default function SubmitPostPage() {
 
           {/* Submit Button */}
           <div className="flex items-center justify-between">
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-neutral-500">
               {t('requiredFields')}
             </div>
             <button
               type="submit"
               disabled={!canSubmit}
-              className="inline-flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? (
                 <>

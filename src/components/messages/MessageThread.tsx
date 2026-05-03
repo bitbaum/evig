@@ -125,18 +125,18 @@ export default function MessageThread({
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
         {onBack && (
           <button
             onClick={onBack}
-            className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors lg:hidden"
+            className="p-1 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors lg:hidden"
             aria-label={t('back')}
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </button>
         )}
         <div className="flex-1 min-w-0">
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white truncate">
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white truncate">
             {recipientName}
           </Heading>
         </div>
@@ -146,10 +146,10 @@ export default function MessageThread({
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {isLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-6 h-6 text-green-600 animate-spin" aria-hidden="true" />
+            <Loader2 className="w-6 h-6 text-primary-600 animate-spin" aria-hidden="true" />
           </div>
         ) : messages.length === 0 ? (
-          <p className="text-center text-gray-400 dark:text-gray-500 text-sm py-8">
+          <p className="text-center text-neutral-400 dark:text-neutral-500 text-sm py-8">
             {t('empty')}
           </p>
         ) : (
@@ -163,18 +163,18 @@ export default function MessageThread({
                 <div
                   className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                     isMine
-                      ? 'bg-green-600 text-white rounded-br-md'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-bl-md'
+                      ? 'bg-primary-600 text-white rounded-br-md'
+                      : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-white rounded-bl-md'
                   }`}
                 >
                   {!isMine && (
-                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+                    <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-0.5">
                       {msg.sender_name}
                     </p>
                   )}
                   <p className="text-sm whitespace-pre-line break-words">{msg.content}</p>
                   <p className={`text-xs mt-1 ${
-                    isMine ? 'text-green-200' : 'text-gray-400 dark:text-gray-500'
+                    isMine ? 'text-primary-200' : 'text-neutral-400 dark:text-neutral-500'
                   }`}>
                     {formatTime(msg.created_at)}
                   </p>
@@ -187,7 +187,7 @@ export default function MessageThread({
       </div>
 
       {/* Reply input */}
-      <div className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3">
+      <div className="border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-4 py-3">
         <div className="flex items-end gap-2">
           <textarea
             ref={textareaRef}
@@ -196,13 +196,13 @@ export default function MessageThread({
             onKeyDown={handleKeyDown}
             placeholder={t('placeholder')}
             rows={1}
-            className="flex-1 resize-none rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent max-h-32"
+            className="flex-1 resize-none rounded-xl border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent max-h-32"
             style={{ minHeight: '42px' }}
           />
           <button
             onClick={handleSend}
             disabled={!reply.trim() || sending}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-green-600 text-white hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             aria-label={t('send')}
           >
             {sending ? (

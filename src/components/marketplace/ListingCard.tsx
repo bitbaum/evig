@@ -65,7 +65,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
   return (
     <Link
       href={`/marketplace/${listing.id}`}
-      className={`group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow ${className}`}
+      className={`group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow ${className}`}
     >
       {/* Image */}
       <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-[4/3]'}`}>
@@ -95,7 +95,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
         {/* RevampIT Badge (top right, only if not verified — avoid overlap) */}
         {listing.is_revampit && !isVerified && (
           <div className="absolute top-2 right-2">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-full bg-primary-100 text-primary-800">
               {!isCompact && ORG.name}
             </span>
           </div>
@@ -113,11 +113,11 @@ export async function ListingCard({ listing, variant = 'default', className = ''
 
       {/* Info */}
       <div className={isCompact ? 'p-2 md:p-3' : 'p-3 md:p-4'}>
-        <Heading level={3} className={`font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-green-600 transition-colors`}>
+        <Heading level={3} className={`font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2 ${isCompact ? 'text-xs md:text-sm' : 'text-sm md:text-base'} group-hover:text-primary-600 transition-colors`}>
           {listing.title}
         </Heading>
 
-        <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold mb-1 ${isGratis ? 'text-teal-600' : 'text-gray-900 dark:text-white'}`}>
+        <p className={`${isCompact ? 'text-base' : 'text-lg'} font-bold mb-1 ${isGratis ? 'text-teal-600' : 'text-neutral-900 dark:text-white'}`}>
           {formatCHF(Number(listing.price_chf))}
         </p>
 
@@ -125,7 +125,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
         {specTags.length > 0 && !isCompact && (
           <div className="flex flex-wrap gap-1 mb-2">
             {specTags.map((tag, idx) => (
-              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300">
+              <span key={idx} className="inline-flex px-1.5 py-0.5 text-[10px] font-medium rounded bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">
                 {tag}
               </span>
             ))}
@@ -133,7 +133,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
         )}
 
         {/* Seller Info */}
-        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
           <span className="truncate">{sellerName}</span>
           {listing.seller_rating && Number(listing.seller_rating) > 0 && (
             <span className="inline-flex items-center gap-0.5 flex-shrink-0">
@@ -145,7 +145,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
 
         {/* Location */}
         {(listing.pickup_location || listing.seller_city) && (
-          <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+          <div className="flex items-center gap-1 mt-1 text-xs text-neutral-500">
             <MapPin className="w-3 h-3 flex-shrink-0" />
             <span className="truncate">{listing.pickup_location || listing.seller_city}</span>
           </div>
@@ -153,7 +153,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
 
         {/* Stats */}
         {!isCompact && (
-          <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
+          <div className="flex items-center gap-3 mt-2 text-xs text-neutral-500">
             <span>{listing.view_count} {t('views')}</span>
             {listing.favorite_count > 0 && (
               <span className="inline-flex items-center gap-0.5">

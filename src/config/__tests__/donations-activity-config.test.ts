@@ -291,7 +291,7 @@ describe('getActivityUpdateTypeLabel', () => {
 
 describe('getActivityUpdateTypeColor', () => {
   it('returns default gray for null', () => {
-    expect(getActivityUpdateTypeColor(null)).toBe('bg-gray-100 text-gray-800')
+    expect(getActivityUpdateTypeColor(null)).toBe('bg-neutral-100 text-neutral-800')
   })
 
   it('returns a non-empty CSS string for all known types', () => {
@@ -303,7 +303,7 @@ describe('getActivityUpdateTypeColor', () => {
   })
 
   it('returns default gray for unknown type', () => {
-    expect(getActivityUpdateTypeColor('unknown')).toBe('bg-gray-100 text-gray-800')
+    expect(getActivityUpdateTypeColor('unknown')).toBe('bg-neutral-100 text-neutral-800')
   })
 })
 

@@ -119,9 +119,9 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       {/* Status Badge */}
       <div className="flex items-center gap-3">
         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-          isFinalized ? 'bg-green-100 text-green-800' :
+          isFinalized ? 'bg-primary-100 text-primary-800' :
           protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'bg-yellow-100 text-yellow-800' :
-          isDraft ? 'bg-gray-100 text-gray-800' :
+          isDraft ? 'bg-neutral-100 text-neutral-800' :
           'bg-blue-100 text-blue-800'
         }`}>
           {isFinalized ? 'Abgeschlossen' :
@@ -141,8 +141,8 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">
+              <Users className="w-4 h-4 text-neutral-500" />
+              <span className="text-sm font-medium text-neutral-700">
                 Teilnehmer ({protocol.attendees?.length || 0})
               </span>
             </div>
@@ -162,7 +162,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setEditingAttendees(false)}
-                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                  className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700"
                 >
                   <X className="w-3.5 h-3.5" />
                   Abbrechen
@@ -201,7 +201,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                 {filteredTeamMembersForEdit.map((member) => (
                   <label
                     key={member.id}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-gray-50 cursor-pointer text-sm"
+                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-50 cursor-pointer text-sm"
                   >
                     <input
                       type="checkbox"
@@ -213,13 +213,13 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                             : [...prev, member.id]
                         )
                       }}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-neutral-300 text-blue-600 focus:ring-blue-500"
                     />
                     {member.name}
                   </label>
                 ))}
                 {filteredTeamMembersForEdit.length === 0 && (
-                  <p className="text-sm text-gray-500 px-2 py-1">Keine Teilnehmer gefunden</p>
+                  <p className="text-sm text-neutral-500 px-2 py-1">Keine Teilnehmer gefunden</p>
                 )}
               </div>
             </div>
@@ -344,11 +344,11 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
       {!notes && !isDraft && protocol.status !== PROTOCOL_STATUSES.PROCESSING && (
         <div className="bg-white rounded-lg border p-12 text-center">
-          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+          <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
             Keine strukturierten Notizen
           </Heading>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             Füge ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
           </p>
         </div>

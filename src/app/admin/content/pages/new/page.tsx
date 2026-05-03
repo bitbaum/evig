@@ -58,11 +58,11 @@ function NewStaticPageContent() {
   if (sessionStatus === 'loading') {
     return (
       <div className="space-y-8">
-        <div className="h-8 bg-gray-200 rounded w-1/3 animate-pulse"></div>
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-8">
+        <div className="h-8 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border p-8">
           <div className="animate-pulse space-y-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-12 bg-gray-200 rounded"></div>
+              <div key={i} className="h-12 bg-neutral-200 rounded"></div>
             ))}
           </div>
         </div>
@@ -81,15 +81,15 @@ function NewStaticPageContent() {
       <div className="flex items-center gap-4">
         <Link
           href="/admin/content/pages"
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+          className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
         >
-          <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+          <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
         </Link>
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
             Neue Seite erstellen
           </Heading>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-neutral-600 dark:text-neutral-400 mt-1">
             Erstelle eine neue statische Seite
           </p>
         </div>
@@ -105,10 +105,10 @@ function NewStaticPageContent() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Titel *
             </label>
             <input
@@ -122,7 +122,7 @@ function NewStaticPageContent() {
                   slug: prev.slug || generateSlug(title),
                 }))
               }}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
               placeholder="z.B. Über uns"
               required
               autoFocus
@@ -131,25 +131,25 @@ function NewStaticPageContent() {
 
           {/* Slug */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               URL-Slug *
             </label>
             <div className="flex gap-2">
-              <div className="flex items-center px-3 bg-gray-50 dark:bg-gray-700 border border-r-0 border-gray-300 dark:border-gray-600 rounded-l-lg text-sm text-gray-500">
+              <div className="flex items-center px-3 bg-neutral-50 dark:bg-neutral-700 border border-r-0 border-neutral-300 dark:border-neutral-600 rounded-l-lg text-sm text-neutral-500">
                 /
               </div>
               <input
                 type="text"
                 value={formData.slug}
                 onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-r-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+                className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-r-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
                 placeholder="ueber-uns"
                 required
               />
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
               >
                 Generieren
               </button>
@@ -158,14 +158,14 @@ function NewStaticPageContent() {
 
           {/* Content */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Inhalt
             </label>
             <textarea
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
               rows={15}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white font-mono text-sm"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white font-mono text-sm"
               placeholder="HTML oder Markdown Inhalt..."
             />
           </div>
@@ -177,20 +177,20 @@ function NewStaticPageContent() {
               id="is_published"
               checked={formData.is_published}
               onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-              className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+              className="w-4 h-4 text-teal-600 border-neutral-300 rounded focus:ring-teal-500"
             />
-            <label htmlFor="is_published" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="is_published" className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Sofort veröffentlichen
             </label>
           </div>
         </div>
 
         {/* SEO Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 space-y-6">
-          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">SEO</Heading>
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">SEO</Heading>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               SEO Titel
             </label>
             <input
@@ -198,19 +198,19 @@ function NewStaticPageContent() {
               value={formData.seo_title}
               onChange={(e) => setFormData(prev => ({ ...prev, seo_title: e.target.value }))}
               placeholder={formData.title || 'Wird vom Titel übernommen'}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               SEO Beschreibung
             </label>
             <textarea
               value={formData.seo_description}
               onChange={(e) => setFormData(prev => ({ ...prev, seo_description: e.target.value }))}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
               placeholder="Kurze Beschreibung für Suchmaschinen..."
             />
           </div>
@@ -220,7 +220,7 @@ function NewStaticPageContent() {
         <div className="flex justify-end gap-3">
           <Link
             href="/admin/content/pages"
-            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
           >
             Abbrechen
           </Link>
@@ -245,11 +245,11 @@ function NewStaticPageContent() {
 function NewStaticPageFallback() {
   return (
     <div className="space-y-8">
-      <div className="h-8 bg-gray-200 rounded w-1/3 animate-pulse"></div>
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-8">
+      <div className="h-8 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border p-8">
         <div className="animate-pulse space-y-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+            <div key={i} className="h-12 bg-neutral-200 rounded"></div>
           ))}
         </div>
       </div>

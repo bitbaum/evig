@@ -18,8 +18,8 @@ const STAT_CARDS = [
   {
     href: '/admin/team',
     icon: UserCheck,
-    iconBg: 'bg-green-100 dark:bg-green-900/30',
-    iconColor: 'text-green-600',
+    iconBg: 'bg-primary-100 dark:bg-primary-900/30',
+    iconColor: 'text-primary-600',
     valueKey: 'totalStaff' as const,
     label: 'Team',
   },
@@ -50,17 +50,17 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
           <Link
             key={card.href}
             href={card.href}
-            className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-colors"
+            className="bg-white dark:bg-neutral-800 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center`}>
                 <Icon className={`w-5 h-5 ${card.iconColor}`} />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-2xl font-bold text-neutral-900 dark:text-white">
                   {stats[card.valueKey]}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{card.label}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400">{card.label}</p>
               </div>
             </div>
           </Link>

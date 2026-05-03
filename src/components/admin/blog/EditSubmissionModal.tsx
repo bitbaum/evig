@@ -115,7 +115,7 @@ export function EditSubmissionModal({
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={15}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -126,7 +126,7 @@ export function EditSubmissionModal({
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -137,7 +137,7 @@ export function EditSubmissionModal({
             <select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value || null)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Keine Kategorie</option>
               {categories.map((cat) => (
@@ -158,7 +158,7 @@ export function EditSubmissionModal({
             type="text"
             value={tagsValue}
             onChange={(e) => handleTagsChange(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="tag1, tag2, tag3"
           />
         );
@@ -169,7 +169,7 @@ export function EditSubmissionModal({
             type="text"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -184,7 +184,7 @@ export function EditSubmissionModal({
           <Heading level={2} className="text-2xl">Einreichung bearbeiten</Heading>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-600 transition-colors"
+            className="text-neutral-500 hover:text-neutral-600 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -206,29 +206,29 @@ export function EditSubmissionModal({
             const config = BLOG_SUBMISSION_EDITABLE_FIELDS[field];
             return (
               <div key={field}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-neutral-700 mb-2">
                   {config.label}
                   {('required' in config && config.required) && <span className="text-red-500 ml-1">*</span>}
                 </label>
                 {renderField(field)}
-                {('help' in config && config.help) && <p className="mt-1 text-xs text-gray-500">{config.help}</p>}
+                {('help' in config && config.help) && <p className="mt-1 text-xs text-neutral-500">{config.help}</p>}
               </div>
             );
           })}
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-end gap-3">
+        <div className="sticky bottom-0 bg-neutral-50 border-t px-6 py-4 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
             disabled={isSaving}
           >
             Abbrechen
           </button>
           <button
             onClick={handleSave}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
             disabled={isSaving}
           >
             {isSaving ? (

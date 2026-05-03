@@ -67,12 +67,12 @@ export function ListingActionButtons({
     <div className="space-y-3">
       {/* P2P payment info */}
       {!isOwner && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 space-y-2">
-          <div className="flex items-center gap-2 text-green-800 dark:text-green-300 font-medium text-sm">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
+          <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
             <Shield className="w-4 h-4" aria-hidden="true" />
             {t('payment_info')}
           </div>
-          <p className="text-xs text-green-700 dark:text-green-400">
+          <p className="text-xs text-primary-700 dark:text-primary-400">
             {t('payment_methods')}
           </p>
         </div>
@@ -80,13 +80,13 @@ export function ListingActionButtons({
       {!isOwner && (
         <>
           {messageSent ? (
-            <div className="w-full bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 text-center space-y-2">
-              <p className="text-green-700 dark:text-green-400 font-medium">
+            <div className="w-full bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 text-center space-y-2">
+              <p className="text-primary-700 dark:text-primary-400 font-medium">
                 {t('messageSent')}
               </p>
               <Link
                 href="/dashboard/messages"
-                className="inline-flex items-center gap-1 text-sm text-green-600 hover:text-green-700 font-medium underline focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 rounded px-1"
+                className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-1"
               >
                 {t('goToMessages')}
               </Link>
@@ -98,13 +98,13 @@ export function ListingActionButtons({
                 onChange={(e) => onContactMessageChange(e.target.value)}
                 placeholder={t('messagePlaceholder', { sellerName })}
                 rows={4}
-                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 resize-none"
+                className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 resize-none"
               />
               <div className="flex gap-2">
                 <button
                   onClick={onSendMessage}
                   disabled={sendingMessage || !contactMessage.trim()}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-4 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-4 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 >
                   {sendingMessage ? (
                     <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -118,7 +118,7 @@ export function ListingActionButtons({
                     onShowMessageForm(false)
                     onContactMessageChange('')
                   }}
-                  className="py-3 px-4 min-h-[44px] rounded-lg font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                  className="py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 >
                   {t('cancel')}
                 </button>
@@ -133,7 +133,7 @@ export function ListingActionButtons({
                 }
                 onShowMessageForm(true)
               }}
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
               <MessageSquare className="w-5 h-5" aria-hidden="true" />
               {t('contactSeller')}
@@ -146,10 +146,10 @@ export function ListingActionButtons({
           <button
             onClick={onToggleFavorite}
             disabled={togglingFav}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
               isFavorited
                 ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600'
-                : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                : 'border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800'
             }`}
           >
             <Heart className={`w-4 h-4 ${isFavorited ? 'fill-red-500 text-red-500' : ''}`} aria-hidden="true" />
@@ -158,11 +158,11 @@ export function ListingActionButtons({
         )}
         <button
           onClick={onShare}
-          className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           title={t('share')}
         >
           {shareConfirm ? (
-            <Check className="w-4 h-4 text-green-600" aria-hidden="true" />
+            <Check className="w-4 h-4 text-primary-600" aria-hidden="true" />
           ) : (
             <Share2 className="w-4 h-4" aria-hidden="true" />
           )}
@@ -171,7 +171,7 @@ export function ListingActionButtons({
         {isOwner && (
           <Link
             href={`/marketplace/sell?edit=${listing.id}`}
-            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             {t('edit')}
           </Link>
@@ -179,7 +179,7 @@ export function ListingActionButtons({
         {sessionUserId && !isOwner && (
           <button
             onClick={onShowReportModal}
-            className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="flex items-center justify-center gap-2 py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             title={t('report')}
           >
             <Flag className="w-4 h-4" aria-hidden="true" />

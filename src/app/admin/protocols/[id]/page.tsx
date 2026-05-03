@@ -100,19 +100,19 @@ export default async function ProtocolDetailPage({
         <div className="flex items-center gap-4">
           <Link
             href="/admin/protocols"
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück
           </Link>
-          <div className="w-px h-6 bg-gray-300" />
+          <div className="w-px h-6 bg-neutral-300" />
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <MeetingIcon className="w-5 h-5 text-blue-600" />
             </div>
             <div>
-              <Heading level={1} className="text-2xl font-bold text-gray-900">{protocol.title}</Heading>
-              <p className="text-gray-600">
+              <Heading level={1} className="text-2xl font-bold text-neutral-900">{protocol.title}</Heading>
+              <p className="text-neutral-600">
                 {MEETING_TYPE_LABELS[protocol.meeting_type]}
               </p>
             </div>
@@ -124,14 +124,14 @@ export default async function ProtocolDetailPage({
       <div className="flex items-center gap-3">
         <span
           className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-gray-100 text-gray-800'
+            PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-neutral-100 text-neutral-800'
           }`}
         >
           {PROTOCOL_STATUS_LABELS[protocol.status]}
         </span>
         <span
           className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-gray-100 text-gray-800'
+            MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-neutral-100 text-neutral-800'
           }`}
         >
           {MEETING_TYPE_LABELS[protocol.meeting_type]}
@@ -161,44 +161,44 @@ export default async function ProtocolDetailPage({
         <div className="space-y-6">
           {/* Protocol Info */}
           <div className="bg-white rounded-lg border p-6">
-            <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">Details</Heading>
+            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Details</Heading>
             <dl className="space-y-4">
               <div>
-                <dt className="text-sm text-gray-500">Datum</dt>
+                <dt className="text-sm text-neutral-500">Datum</dt>
                 <dd className="flex items-center gap-2 mt-1">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-900">
+                  <Calendar className="w-4 h-4 text-neutral-400" />
+                  <span className="text-neutral-900">
                     {formatDateWithWeekday(protocol.meeting_date)}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-gray-500">Erstellt von</dt>
+                <dt className="text-sm text-neutral-500">Erstellt von</dt>
                 <dd className="flex items-center gap-2 mt-1">
-                  <User className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-900">
+                  <User className="w-4 h-4 text-neutral-400" />
+                  <span className="text-neutral-900">
                     {protocol.created_by_name || protocol.created_by_email || 'Unbekannt'}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-gray-500">Sichtbarkeit</dt>
+                <dt className="text-sm text-neutral-500">Sichtbarkeit</dt>
                 <dd className="flex items-center gap-2 mt-1">
-                  <Eye className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-900">
+                  <Eye className="w-4 h-4 text-neutral-400" />
+                  <span className="text-neutral-900">
                     {PROTOCOL_VISIBILITY_LABELS[protocol.visibility]}
                   </span>
                 </dd>
               </div>
               {protocol.input_method && (
                 <div>
-                  <dt className="text-sm text-gray-500">Eingabemethode</dt>
+                  <dt className="text-sm text-neutral-500">Eingabemethode</dt>
                   <dd className="flex items-center gap-2 mt-1">
                     {(() => {
                       const InputIcon = INPUT_METHOD_ICON_COMPONENTS[protocol.input_method as InputMethod]
-                      return InputIcon ? <InputIcon className="w-4 h-4 text-gray-400" /> : null
+                      return InputIcon ? <InputIcon className="w-4 h-4 text-neutral-400" /> : null
                     })()}
-                    <span className="text-gray-900">
+                    <span className="text-neutral-900">
                       {INPUT_METHOD_LABELS[protocol.input_method as InputMethod] || protocol.input_method}
                     </span>
                   </dd>
@@ -206,13 +206,13 @@ export default async function ProtocolDetailPage({
               )}
               {protocol.attendees && protocol.attendees.length > 0 && (
                 <div>
-                  <dt className="text-sm text-gray-500">Teilnehmer</dt>
+                  <dt className="text-sm text-neutral-500">Teilnehmer</dt>
                   <dd className="mt-1">
                     <div className="flex flex-wrap gap-1">
                       {protocol.attendees.map((uid) => (
                         <span
                           key={uid}
-                          className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-700"
+                          className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-neutral-100 text-neutral-700"
                         >
                           {attendeeNames[uid] || 'Unbekannt'}
                         </span>
@@ -223,9 +223,9 @@ export default async function ProtocolDetailPage({
               )}
               {protocol.processing_model && (
                 <div>
-                  <dt className="text-sm text-gray-500">KI-Modell</dt>
+                  <dt className="text-sm text-neutral-500">KI-Modell</dt>
                   <dd className="mt-1">
-                    <span className="text-sm text-gray-600 font-mono">
+                    <span className="text-sm text-neutral-600 font-mono">
                       {protocol.processing_model}
                     </span>
                   </dd>
@@ -237,11 +237,11 @@ export default async function ProtocolDetailPage({
           {/* Raw Transcript (collapsible) */}
           {protocol.raw_transcript && (
             <details className="bg-white rounded-lg border">
-              <summary className="p-4 cursor-pointer text-sm font-medium text-gray-700 hover:text-gray-900">
+              <summary className="p-4 cursor-pointer text-sm font-medium text-neutral-700 hover:text-neutral-900">
                 Rohtranskript anzeigen ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
               </summary>
               <div className="px-4 pb-4">
-                <pre className="text-xs text-gray-600 whitespace-pre-wrap max-h-96 overflow-y-auto bg-gray-50 rounded p-3">
+                <pre className="text-xs text-neutral-600 whitespace-pre-wrap max-h-96 overflow-y-auto bg-neutral-50 rounded p-3">
                   {protocol.raw_transcript}
                 </pre>
               </div>

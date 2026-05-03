@@ -58,11 +58,11 @@ function TechnicianCard({ technician }: { technician: Technician }) {
   return (
     <Link
       href={`/techniker/${technician.id}`}
-      className="block bg-white rounded-xl border border-gray-200 p-5 hover:shadow-lg transition-shadow"
+      className="block bg-white rounded-xl border border-neutral-200 p-5 hover:shadow-lg transition-shadow"
     >
       {/* Name + tier badge */}
       <div className="flex items-start justify-between gap-2 mb-3">
-        <Heading level={3} className="text-base font-semibold text-gray-900 line-clamp-1">
+        <Heading level={3} className="text-base font-semibold text-neutral-900 line-clamp-1">
           {technician.name}
         </Heading>
         <span
@@ -78,12 +78,12 @@ function TechnicianCard({ technician }: { technician: Technician }) {
 
       {/* Bio */}
       {technician.bio && (
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">{technician.bio}</p>
+        <p className="text-sm text-neutral-600 line-clamp-2 mb-3">{technician.bio}</p>
       )}
 
       {/* Rating + jobs */}
       {(technician.averageRating || technician.totalJobsCompleted > 0) && (
-        <div className="flex items-center gap-3 text-sm text-gray-600 mb-3">
+        <div className="flex items-center gap-3 text-sm text-neutral-600 mb-3">
           {technician.averageRating && (
             <span className="flex items-center gap-1">
               <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
@@ -101,7 +101,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
 
       {/* Location */}
       {technician.city && (
-        <div className="flex items-center gap-1.5 text-sm text-gray-500 mb-3">
+        <div className="flex items-center gap-1.5 text-sm text-neutral-500 mb-3">
           <MapPin className="w-3.5 h-3.5" />
           <span>{technician.city}</span>
         </div>
@@ -116,14 +116,14 @@ function TechnicianCard({ technician }: { technician: Technician }) {
             return (
               <span
                 key={skillId}
-                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700"
+                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"
               >
                 {skill.name}
               </span>
             )
           })}
           {remaining > 0 && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">
               +{remaining}
             </span>
           )}
@@ -145,7 +145,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
           </span>
         )}
         {technician.hourlyRateCents && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
             <Euro className="w-3 h-3" />
             CHF {(technician.hourlyRateCents / 100).toFixed(0)}/h
           </span>
@@ -231,10 +231,10 @@ export default function TechnikerListClient() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-gray-900">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900">
                 {t('list.title')}
               </Heading>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-sm text-neutral-600 mt-1">
                 {t('list.available', { count: pagination.total })}
               </p>
             </div>
@@ -252,14 +252,14 @@ export default function TechnikerListClient() {
           {/* Search */}
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
               <input
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('list.searchPlaceholder')}
                 aria-label={t('list.searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
               />
               <button
                 type="submit"
@@ -283,7 +283,7 @@ export default function TechnikerListClient() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
                   ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
               aria-pressed={tier === tab.value}
             >
@@ -297,7 +297,7 @@ export default function TechnikerListClient() {
           <select
             value={selectedSkill}
             onChange={(e) => { setSelectedSkill(e.target.value); setOffset(0) }}
-            className="px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             aria-label={t('list.skillsFilterLabel')}
           >
             <option value="">{t('list.skillsFilterAll')}</option>
@@ -368,18 +368,18 @@ export default function TechnikerListClient() {
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
               aria-label={t('list.prevPage')}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm text-gray-600 px-4" aria-current="page">
+            <span className="text-sm text-neutral-600 px-4" aria-current="page">
               {t('list.pageOf', { current: currentPage, total: totalPages })}
             </span>
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
               aria-label={t('list.nextPage')}
             >
               <ChevronRight className="w-4 h-4" />
@@ -389,16 +389,16 @@ export default function TechnikerListClient() {
 
         {/* CTA for non-logged-in */}
         {!session?.user && (
-          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
+          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
                 <Wrench className="h-6 w-6 text-blue-600" />
               </div>
             </div>
-            <Heading level={3} className="text-xl font-bold text-gray-900 mb-2">
+            <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2">
               {t('list.ctaTitle')}
             </Heading>
-            <p className="text-base text-gray-600 mb-6 max-w-md mx-auto">
+            <p className="text-base text-neutral-600 mb-6 max-w-md mx-auto">
               {t('list.ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">

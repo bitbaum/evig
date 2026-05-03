@@ -49,21 +49,21 @@ export default async function OpenSourceSolutionsPage({
         subtitle={t('meta.description')}
       />
 
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Quick stats */}
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-10 text-center">
             <div>
-              <p className="text-3xl font-bold text-gray-900">{alternatives.length}</p>
-              <p className="text-sm text-gray-500">{t('stats.alternativesLabel')}</p>
+              <p className="text-3xl font-bold text-neutral-900">{alternatives.length}</p>
+              <p className="text-sm text-neutral-500">{t('stats.alternativesLabel')}</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-gray-900">{proprietaryApps.length}</p>
-              <p className="text-sm text-gray-500">{t('stats.proprietaryLabel')}</p>
+              <p className="text-3xl font-bold text-neutral-900">{proprietaryApps.length}</p>
+              <p className="text-sm text-neutral-500">{t('stats.proprietaryLabel')}</p>
             </div>
             <div>
-              <p className="text-3xl font-bold text-gray-900">{categories.length}</p>
-              <p className="text-sm text-gray-500">{t('stats.categoriesLabel')}</p>
+              <p className="text-3xl font-bold text-neutral-900">{categories.length}</p>
+              <p className="text-sm text-neutral-500">{t('stats.categoriesLabel')}</p>
             </div>
           </div>
 

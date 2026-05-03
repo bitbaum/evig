@@ -51,13 +51,13 @@ export default function ParticipationCard({ decisionId }: { decisionId: string }
           <span className={adminType.meta}>
             {data.voted.length} / {data.total} abgestimmt ({data.progressPercent}%)
           </span>
-          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400')}>
+          <span className={cn('text-xs font-medium', data.quorumMet ? 'text-primary-600 dark:text-primary-400' : 'text-amber-600 dark:text-amber-400')}>
             Quorum: {quorumPct}% erforderlich
           </span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+        <div className="h-2 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-700">
           <div
-            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-green-500' : 'bg-amber-500')}
+            className={cn('h-full rounded-full transition-all', data.quorumMet ? 'bg-primary-500' : 'bg-amber-500')}
             style={{ width: `${data.progressPercent}%` }}
           />
         </div>
@@ -76,7 +76,7 @@ export default function ParticipationCard({ decisionId }: { decisionId: string }
           <p className={cn(adminType.meta, 'mb-1.5')}>Noch nicht abgestimmt:</p>
           <div className="flex flex-wrap gap-1">
             {data.notVoted.map((u) => (
-              <span key={u.id} className="rounded-md bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-600 dark:text-gray-400">
+              <span key={u.id} className="rounded-md bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">
                 {u.email}
               </span>
             ))}

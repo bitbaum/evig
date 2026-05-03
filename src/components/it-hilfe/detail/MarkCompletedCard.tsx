@@ -20,10 +20,10 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
       <div className="flex items-start gap-3">
         <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">
-          <Heading level={3} className="text-lg font-semibold text-gray-900 mb-1">
+          <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-1">
             {t('markCompletedTitle')}
           </Heading>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-neutral-600 mb-4">
             {t('markCompletedDesc')}
           </p>
           <button

@@ -49,12 +49,12 @@ export function OnboardingChecklist({ role, emailVerified, className }: Onboardi
         {steps.map((step) => (
           <li key={step.label} className="flex items-center gap-2 text-sm">
             {step.done ? (
-              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+              <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0" />
             ) : (
               <Circle className="w-4 h-4 text-neutral-300 dark:text-neutral-600 flex-shrink-0" />
             )}
             {step.href && !step.done ? (
-              <a href={step.href} className="text-neutral-600 dark:text-neutral-400 hover:text-green-600 dark:hover:text-green-400 hover:underline">
+              <a href={step.href} className="text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:underline">
                 {step.label}
               </a>
             ) : (

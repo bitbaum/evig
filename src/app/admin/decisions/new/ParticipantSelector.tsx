@@ -21,10 +21,10 @@ export function ParticipantSelector({
   participantSearch, onSearchChange, filteredMembers,
 }: Props) {
   return (
-    <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-3">
+    <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-3">
       <div>
-        <Heading level={3} className="text-sm font-medium text-gray-900">Abstimmungsberechtigt</Heading>
-        <p className="mt-0.5 text-xs text-gray-500">Wer darf an dieser Abstimmung teilnehmen?</p>
+        <Heading level={3} className="text-sm font-medium text-neutral-900">Abstimmungsberechtigt</Heading>
+        <p className="mt-0.5 text-xs text-neutral-500">Wer darf an dieser Abstimmung teilnehmen?</p>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -38,11 +38,11 @@ export function ParticipantSelector({
               className={`rounded-lg border-2 p-2.5 text-left transition ${
                 participantScope === scope
                   ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300 bg-white'
+                  : 'border-neutral-200 hover:border-neutral-300 bg-white'
               }`}
             >
-              <div className="text-xs font-medium text-gray-900">{conf.label}</div>
-              <div className="mt-0.5 text-xs text-gray-400 leading-tight">{conf.description}</div>
+              <div className="text-xs font-medium text-neutral-900">{conf.label}</div>
+              <div className="mt-0.5 text-xs text-neutral-400 leading-tight">{conf.description}</div>
             </button>
           );
         })}
@@ -55,16 +55,16 @@ export function ParticipantSelector({
             value={participantSearch}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Teilnehmer suchen..."
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
           />
           {teamMembers.length === 0 ? (
-            <p className="text-xs text-gray-400">Team wird geladen...</p>
+            <p className="text-xs text-neutral-400">Team wird geladen...</p>
           ) : (
             <div className="max-h-48 overflow-y-auto space-y-1">
               {filteredMembers.map((m) => (
                 <label
                   key={m.id}
-                  className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-gray-100 cursor-pointer"
+                  className="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-neutral-100 cursor-pointer"
                 >
                   <input
                     type="checkbox"
@@ -72,14 +72,14 @@ export function ParticipantSelector({
                     onChange={() => onToggle(m.id)}
                     className="rounded"
                   />
-                  <span className="text-sm text-gray-700">{m.name || m.email}</span>
-                  {m.name && <span className="text-xs text-gray-400">{m.email}</span>}
+                  <span className="text-sm text-neutral-700">{m.name || m.email}</span>
+                  {m.name && <span className="text-xs text-neutral-400">{m.email}</span>}
                 </label>
               ))}
             </div>
           )}
           {selectedParticipants.size > 0 && (
-            <p className="text-xs text-gray-500">{selectedParticipants.size} Personen eingeladen</p>
+            <p className="text-xs text-neutral-500">{selectedParticipants.size} Personen eingeladen</p>
           )}
         </div>
       )}

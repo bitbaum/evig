@@ -38,7 +38,7 @@ import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 
 const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
   [PROPOSAL_STATUS.APPROVED]: {
-    icon: <CheckCircle className="w-5 h-5 text-green-600" />,
+    icon: <CheckCircle className="w-5 h-5 text-primary-600" />,
   },
   [PROPOSAL_STATUS.PENDING]: {
     icon: <Clock className="w-5 h-5 text-yellow-600" />,
@@ -51,7 +51,7 @@ const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
   },
 }
 
-const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-gray-400" />
+const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-neutral-400" />
 
 // ─── Inline strings (can be moved to src/config/admin-content.ts later) ──────
 
@@ -179,10 +179,10 @@ export default function AdminWorkshopsPage() {
   if (status === 'loading' || loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+        <div className="h-8 bg-neutral-200 rounded w-1/4"></div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-200 rounded"></div>
+            <div key={i} className="h-16 bg-neutral-200 rounded"></div>
           ))}
         </div>
       </div>
@@ -251,28 +251,28 @@ export default function AdminWorkshopsPage() {
 
       {/* Proposals list */}
       <div className="bg-white rounded-xl shadow-sm border">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <Heading level={2} className="text-lg font-semibold text-gray-900">
+        <div className="px-6 py-4 border-b border-neutral-200">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900">
             Workshop-Vorschläge ({proposals.length})
           </Heading>
         </div>
 
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-neutral-200">
           {proposals.map((proposal) => {
             const statusIcon = PROPOSAL_STATUS_CONFIG[proposal.status]?.icon ?? DEFAULT_STATUS_ICON
             const statusLabel = PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status
 
             return (
-              <div key={proposal.id} className="p-6 hover:bg-gray-50">
+              <div key={proposal.id} className="p-6 hover:bg-neutral-50">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
                       <GraduationCap className="w-5 h-5 text-blue-600" />
-                      <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
+                      <Heading level={3} className="text-lg font-semibold text-neutral-900 truncate">
                         {proposal.title}
                       </Heading>
                       {statusIcon}
-                      <span className="text-sm text-gray-600">{statusLabel}</span>
+                      <span className="text-sm text-neutral-600">{statusLabel}</span>
                       {proposal.last_edited_at && (
                         <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
                           Von Admin bearbeitet
@@ -280,7 +280,7 @@ export default function AdminWorkshopsPage() {
                       )}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
                       <div className="flex items-center gap-1">
                         <BookOpen className="w-4 h-4" />
                         {proposal.category}
@@ -303,7 +303,7 @@ export default function AdminWorkshopsPage() {
                       </div>
                     </div>
 
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-neutral-500">
                       Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) •{' '}
                       {formatDateShort(proposal.created_at)}
                     </div>
@@ -312,7 +312,7 @@ export default function AdminWorkshopsPage() {
                   <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
                     <Link
                       href={`/admin/workshops/proposals/${proposal.id}`}
-                      className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                      className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                       <Eye className="w-4 h-4 mr-1" />
                       Details
@@ -323,7 +323,7 @@ export default function AdminWorkshopsPage() {
                         <button
                           onClick={() => handleApprove(proposal.id)}
                           disabled={approveLoading}
-                          className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="inline-flex items-center px-3 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {approveLoading ? (
                             <Loader2 className="w-4 h-4 mr-1 animate-spin" />
@@ -371,7 +371,7 @@ export default function AdminWorkshopsPage() {
                       </button>
                       <button
                         onClick={() => { setRejectingId(null); setRejectionReason(''); setRejectError(null) }}
-                        className="px-3 py-1.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        className="px-3 py-1.5 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                       >
                         Abbrechen
                       </button>
@@ -384,11 +384,11 @@ export default function AdminWorkshopsPage() {
 
           {proposals.length === 0 && (
             <div className="px-6 py-12 text-center">
-              <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+              <GraduationCap className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
                 Keine Workshop-Vorschläge gefunden
               </Heading>
-              <p className="text-gray-600 mb-4">
+              <p className="text-neutral-600 mb-4">
                 {searchTerm.trim()
                   ? STRINGS.EMPTY_SEARCH(searchTerm)
                   : filters.status === PROPOSAL_STATUS.PENDING

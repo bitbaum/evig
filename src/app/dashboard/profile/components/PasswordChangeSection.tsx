@@ -35,24 +35,24 @@ export function PasswordChangeSection({
 }: PasswordChangeSectionProps) {
   const t = useTranslations('dashboard.profile.password')
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
           <Shield className="w-5 h-5 text-red-600" />
         </div>
         <div>
-          <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
             {t('heading')}
           </Heading>
-          <p className="text-sm text-gray-500">{t('subtitle')}</p>
+          <p className="text-sm text-neutral-500">{t('subtitle')}</p>
         </div>
       </div>
 
       {/* Password Change Success */}
       {passwordSuccess && (
-        <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3">
-          <CheckCircle2 className="w-5 h-5 text-green-600" />
-          <p className="text-green-700 dark:text-green-300">{t('success')}</p>
+        <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg flex items-center gap-3">
+          <CheckCircle2 className="w-5 h-5 text-primary-600" />
+          <p className="text-primary-700 dark:text-primary-300">{t('success')}</p>
         </div>
       )}
 
@@ -65,14 +65,14 @@ export function PasswordChangeSection({
 
       <form onSubmit={handlePasswordChange} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('currentLabel')}
           </label>
           <input
             type="password"
             value={passwordData.currentPassword}
             onChange={(e) => handlePasswordFieldChange('currentPassword', e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder={t('currentPlaceholder')}
             required
             aria-required="true"
@@ -83,14 +83,14 @@ export function PasswordChangeSection({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('newLabel')}
             </label>
             <input
               type="password"
               value={passwordData.newPassword}
               onChange={(e) => handlePasswordFieldChange('newPassword', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={t('newPlaceholder')}
               required
               aria-required="true"
@@ -99,14 +99,14 @@ export function PasswordChangeSection({
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               {t('confirmLabel')}
             </label>
             <input
               type="password"
               value={passwordData.confirmPassword}
               onChange={(e) => handlePasswordFieldChange('confirmPassword', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={t('confirmPlaceholder')}
               required
               aria-required="true"

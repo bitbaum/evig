@@ -105,7 +105,7 @@ export default function LeafletMapInner({
 
       const popupHtml = `<div class="text-sm">
         <p class="font-semibold">${marker.label}</p>
-        ${marker.description ? `<p class="text-gray-600 mt-1">${marker.description}</p>` : ''}
+        ${marker.description ? `<p class="text-neutral-600 mt-1">${marker.description}</p>` : ''}
       </div>`
       leafletMarker.bindPopup(popupHtml)
 

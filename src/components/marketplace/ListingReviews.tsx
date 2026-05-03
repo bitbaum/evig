@@ -76,26 +76,26 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-6">
-        <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
+        <Loader2 className="w-5 h-5 text-neutral-400 animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={2} className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <Heading level={2} className="text-lg font-bold text-neutral-900 dark:text-white flex items-center gap-2">
           <MessageSquare className="w-5 h-5" />
           {t('title')}
           {stats.review_count > 0 && (
-            <span className="text-sm font-normal text-gray-500">({stats.review_count})</span>
+            <span className="text-sm font-normal text-neutral-500">({stats.review_count})</span>
           )}
         </Heading>
 
         {stats.average_rating && Number(stats.average_rating) > 0 && (
           <div className="flex items-center gap-1">
             <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-            <span className="font-bold text-gray-900 dark:text-white">
+            <span className="font-bold text-neutral-900 dark:text-white">
               {Number(stats.average_rating).toFixed(1)}
             </span>
           </div>
@@ -104,7 +104,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
       {/* Review List */}
       {reviews.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400 text-sm py-4">
+        <p className="text-neutral-500 dark:text-neutral-400 text-sm py-4">
           {t('empty')}
         </p>
       ) : (
@@ -112,11 +112,11 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-0 last:pb-0"
+              className="border-b border-neutral-100 dark:border-neutral-700 pb-4 last:border-0 last:pb-0"
             >
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-medium text-sm text-gray-900 dark:text-white">
+                  <span className="font-medium text-sm text-neutral-900 dark:text-white">
                     {review.reviewerName}
                   </span>
                   <div className="flex items-center gap-0.5">
@@ -126,22 +126,22 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                         className={`w-3 h-3 ${
                           i < review.overallRating
                             ? 'text-yellow-400 fill-yellow-400'
-                            : 'text-gray-300 dark:text-gray-600'
+                            : 'text-neutral-300 dark:text-neutral-600'
                         }`}
                       />
                     ))}
                   </div>
                 </div>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-neutral-500">
                   {formatDateShort(review.createdAt)}
                 </span>
               </div>
               {review.title && (
-                <Heading level={4} className="text-sm font-medium text-gray-900 dark:text-white mb-1">
+                <Heading level={4} className="text-sm font-medium text-neutral-900 dark:text-white mb-1">
                   {review.title}
                 </Heading>
               )}
-              <p className="text-sm text-gray-600 dark:text-gray-300">{review.content}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-300">{review.content}</p>
             </div>
           ))}
         </div>
@@ -151,7 +151,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
       {canReview && !hasReviewed && !showForm && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full py-2.5 px-4 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          className="w-full py-2.5 px-4 rounded-lg border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
         >
           {t('writeReview')}
         </button>

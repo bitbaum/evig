@@ -10,11 +10,11 @@ const MONTH_LABEL = new Date().toLocaleString('de-CH', { month: 'long' })
 
 function DeltaBadge({ value }: { value: number }) {
   if (value === 0) return (
-    <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">±0</span>
+    <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">±0</span>
   )
   const positive = value > 0
   return (
-    <span className={`text-xs font-semibold ${positive ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+    <span className={`text-xs font-semibold ${positive ? 'text-primary-600 dark:text-primary-400' : 'text-red-600 dark:text-red-400'}`}>
       {positive ? '+' : ''}{value}
     </span>
   )
@@ -49,8 +49,8 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'Geräte verkauft',
       sublabel: MONTH_LABEL,
       icon: Monitor,
-      iconBg: 'bg-green-100 dark:bg-green-900/30',
-      iconColor: 'text-green-600 dark:text-green-400',
+      iconBg: 'bg-primary-100 dark:bg-primary-900/30',
+      iconColor: 'text-primary-600 dark:text-primary-400',
       href: '/admin/products',
     },
     {
@@ -85,7 +85,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
             <Link
               key={card.href}
               href={card.href}
-              className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 transition-colors"
+              className="bg-white dark:bg-neutral-800 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
@@ -93,15 +93,15 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
                 </div>
                 <div className="min-w-0">
                   <div className="flex items-baseline gap-1.5">
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white leading-none">
+                    <p className="text-2xl font-bold text-neutral-900 dark:text-white leading-none">
                       {card.value}
                     </p>
                     <DeltaBadge value={card.delta} />
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">
                     {card.label}
                   </p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                  <p className="text-xs text-neutral-400 dark:text-neutral-500">
                     {card.sublabel}
                   </p>
                 </div>
@@ -112,24 +112,24 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       </div>
 
       {/* Reference stats — collapsed into a single compact row */}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-4 py-2.5 text-xs text-gray-500 dark:text-gray-400">
-        <Link href="/admin/users" className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50 px-4 py-2.5 text-xs text-neutral-500 dark:text-neutral-400">
+        <Link href="/admin/users" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-gray-700 dark:text-gray-200">{stats.totalUsers}</strong> Benutzer</span>
+          <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalUsers}</strong> Benutzer</span>
         </Link>
-        <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">·</span>
-        <Link href="/admin/team" className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+        <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
+        <Link href="/admin/team" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <UserCheck className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-gray-700 dark:text-gray-200">{stats.totalStaff}</strong> Team</span>
+          <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalStaff}</strong> Team</span>
         </Link>
-        <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">·</span>
-        <Link href="/admin/services" className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
+        <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
+        <Link href="/admin/services" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <Wrench className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-gray-700 dark:text-gray-200">{stats.totalTechnicians}</strong> Techniker</span>
+          <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalTechnicians}</strong> Techniker</span>
         </Link>
-        <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">·</span>
-        <Link href="/admin/marketplace" className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-300 transition-colors">
-          <span><strong className="text-gray-700 dark:text-gray-200">{stats.activeListings}</strong> aktive Inserate</span>
+        <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
+        <Link href="/admin/marketplace" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+          <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.activeListings}</strong> aktive Inserate</span>
         </Link>
       </div>
     </div>

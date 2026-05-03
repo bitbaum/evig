@@ -92,29 +92,29 @@ export default async function DashboardDecisionPage({ params }: Props) {
           {statusConf.label}
         </span>
         {typeConf && (
-          <span className="flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600">
+          <span className="flex items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-600">
             <span>{typeConf.icon}</span>
             {typeConf.label}
           </span>
         )}
-        <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600">
+        <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-600">
           {methodConf.label}
         </span>
         {scopeConf && (
-          <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600">
+          <span className="rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-600">
             {scopeConf.label}
           </span>
         )}
       </div>
 
       {/* Title */}
-      <Heading level={1} className="mb-3 text-2xl font-bold text-gray-900">
+      <Heading level={1} className="mb-3 text-2xl font-bold text-neutral-900">
         {decision.title}
       </Heading>
 
       {/* Description — what we're deciding */}
       {decision.description && (
-        <p className="mb-4 text-sm leading-relaxed text-gray-700">
+        <p className="mb-4 text-sm leading-relaxed text-neutral-700">
           {decision.description}
         </p>
       )}
@@ -125,16 +125,16 @@ export default async function DashboardDecisionPage({ params }: Props) {
       )}
 
       {/* Meta row: creator, deadline, time left */}
-      <div className="mb-6 flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-400">
+      <div className="mb-6 flex flex-wrap gap-x-4 gap-y-1 text-xs text-neutral-400">
         <span>
           Erstellt von{' '}
-          <span className="text-gray-600">{decision.creator.name ?? decision.creator.email}</span>
+          <span className="text-neutral-600">{decision.creator.name ?? decision.creator.email}</span>
           {' '}am {formatDateShort(decision.createdAt)}
         </span>
         {decision.votingDeadline && (
           <span>
             Frist:{' '}
-            <span className={timeRemaining ? 'text-amber-600 font-medium' : 'text-gray-600'}>
+            <span className={timeRemaining ? 'text-amber-600 font-medium' : 'text-neutral-600'}>
               {formatDateShort(decision.votingDeadline)}
             </span>
             {timeRemaining && (
@@ -146,28 +146,28 @@ export default async function DashboardDecisionPage({ params }: Props) {
 
       {/* Participation progress */}
       {decisionStatus === DECISION_STATUS.VOTING && totalCount > 0 && (
-        <div className="mb-6 rounded-lg border border-gray-200 bg-gray-50 p-4">
+        <div className="mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
           <div className="mb-2 flex items-center justify-between text-xs">
-            <span className="font-medium text-gray-700">
+            <span className="font-medium text-neutral-700">
               Beteiligung
             </span>
-            <span className={quorumMet ? 'text-green-600 font-semibold' : 'text-gray-500'}>
+            <span className={quorumMet ? 'text-primary-600 font-semibold' : 'text-neutral-500'}>
               {votedCount} / {totalCount} Stimmen
               {quorumTarget > 0 && (
-                <span className="ml-1.5 font-normal text-gray-400">
+                <span className="ml-1.5 font-normal text-neutral-400">
                   (Quorum: {quorumTarget})
                 </span>
               )}
             </span>
           </div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+          <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div
-              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-green-500' : 'bg-blue-400'}`}
+              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-primary-500' : 'bg-blue-400'}`}
               style={{ width: `${participationPct}%` }}
             />
           </div>
           {!quorumMet && quorumTarget > 0 && (
-            <p className="mt-1.5 text-xs text-gray-400">
+            <p className="mt-1.5 text-xs text-neutral-400">
               {quorumTarget - votedCount} weitere Stimme{quorumTarget - votedCount !== 1 ? 'n' : ''} für Quorum nötig
             </p>
           )}
@@ -176,18 +176,18 @@ export default async function DashboardDecisionPage({ params }: Props) {
 
       {/* Options preview (for informational context, shown before ballot) */}
       {decision.options.length > 0 && decisionStatus === DECISION_STATUS.VOTING && !decision.hasUserVoted && (
-        <div className="mb-4 rounded-lg border border-gray-200 bg-white p-4">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-gray-400">
+        <div className="mb-4 rounded-lg border border-neutral-200 bg-white p-4">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">
             Zur Auswahl stehen
           </p>
           <ul className="space-y-1.5">
             {decision.options.map((opt) => (
-              <li key={opt.id} className="flex items-start gap-2 text-sm text-gray-700">
-                <span className="mt-0.5 flex-shrink-0 text-gray-300">—</span>
+              <li key={opt.id} className="flex items-start gap-2 text-sm text-neutral-700">
+                <span className="mt-0.5 flex-shrink-0 text-neutral-300">—</span>
                 <span>
                   <span className="font-medium">{opt.label}</span>
                   {opt.description && (
-                    <span className="ml-1 text-gray-400">{opt.description}</span>
+                    <span className="ml-1 text-neutral-400">{opt.description}</span>
                   )}
                 </span>
               </li>

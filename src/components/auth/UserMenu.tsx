@@ -71,8 +71,8 @@ export function UserMenu() {
         <Link
           href="/auth/login"
           className={cn(
-            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-gray-600",
-            "hover:text-gray-900 transition-colors duration-200",
+            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600",
+            "hover:text-neutral-900 transition-colors duration-200",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
           )}
         >
@@ -82,9 +82,9 @@ export function UserMenu() {
           href="/auth/register"
           className={cn(
             "inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium",
-            "bg-green-600 text-white rounded-lg",
-            "hover:bg-green-700 transition-all duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2",
+            "bg-primary-600 text-white rounded-lg",
+            "hover:bg-primary-700 transition-all duration-200",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2",
             "shadow-sm hover:shadow"
           )}
         >
@@ -136,11 +136,11 @@ export function UserMenu() {
         className={cn(
           "flex items-center gap-2 p-1.5 rounded-full",
           "transition-all duration-200",
-          "ring-2 ring-green-100",
+          "ring-2 ring-primary-100",
           isOpen
-            ? "bg-green-50 ring-green-200"
-            : "hover:bg-green-50 hover:ring-green-200",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
+            ? "bg-primary-50 ring-primary-200"
+            : "hover:bg-primary-50 hover:ring-primary-200",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -156,14 +156,14 @@ export function UserMenu() {
             unoptimized
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
             {initials}
           </div>
         )}
         <ChevronDown
           className={cn(
-            "w-4 h-4 text-gray-500 transition-transform duration-200",
-            isOpen && "rotate-180 text-green-600"
+            "w-4 h-4 text-neutral-500 transition-transform duration-200",
+            isOpen && "rotate-180 text-primary-600"
           )}
         />
       </button>
@@ -178,9 +178,9 @@ export function UserMenu() {
             : "opacity-0 scale-95 pointer-events-none"
         )}
       >
-        <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-xl shadow-neutral-200/50 border border-neutral-100 overflow-hidden">
           {/* User Info Header */}
-          <div className="px-5 py-4 bg-gradient-to-br from-gray-50 to-white border-b border-gray-100">
+          <div className="px-5 py-4 bg-gradient-to-br from-neutral-50 to-white border-b border-neutral-100">
             <div className="flex items-center gap-3">
               {session.user.image ? (
                 <Image
@@ -197,10 +197,10 @@ export function UserMenu() {
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">
+                <p className="text-sm font-semibold text-neutral-900 truncate">
                   {session.user.name || t('user')}
                 </p>
-                <p className="text-xs text-gray-500 truncate">
+                <p className="text-xs text-neutral-500 truncate">
                   {session.user.email}
                 </p>
               </div>
@@ -212,7 +212,7 @@ export function UserMenu() {
             {menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 {groupIndex > 0 && (
-                  <div className="my-1 mx-3 border-t border-gray-100" />
+                  <div className="my-1 mx-3 border-t border-neutral-100" />
                 )}
                 {group.map((item) => (
                   <Link
@@ -224,14 +224,14 @@ export function UserMenu() {
                       "text-sm transition-colors duration-150",
                       'highlight' in item && item.highlight
                         ? "text-amber-700 bg-amber-50 hover:bg-amber-100 font-medium"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                        : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
                     )}
                   >
                     <item.icon className={cn(
                       "w-4 h-4 transition-colors",
                       'highlight' in item && item.highlight
                         ? "text-amber-600"
-                        : "text-gray-400 group-hover:text-emerald-600"
+                        : "text-neutral-400 group-hover:text-emerald-600"
                     )} />
                     {item.label}
                   </Link>
@@ -241,17 +241,17 @@ export function UserMenu() {
           </div>
 
           {/* Settings & Logout */}
-          <div className="py-2 border-t border-gray-100">
+          <div className="py-2 border-t border-neutral-100">
             <Link
               href="/dashboard/settings"
               onClick={() => setIsOpen(false)}
               className={cn(
                 "group flex items-center gap-3 px-5 py-2.5",
-                "text-sm text-gray-600 hover:text-gray-900",
-                "hover:bg-gray-50 transition-colors duration-150"
+                "text-sm text-neutral-600 hover:text-neutral-900",
+                "hover:bg-neutral-50 transition-colors duration-150"
               )}
             >
-              <Settings className="w-4 h-4 text-gray-500 group-hover:text-emerald-600 transition-colors" />
+              <Settings className="w-4 h-4 text-neutral-500 group-hover:text-emerald-600 transition-colors" />
               {t('settings')}
             </Link>
             <button
@@ -261,11 +261,11 @@ export function UserMenu() {
               }}
               className={cn(
                 "group flex items-center gap-3 w-full px-5 py-2.5",
-                "text-sm text-gray-600 hover:text-red-600",
+                "text-sm text-neutral-600 hover:text-red-600",
                 "hover:bg-red-50 transition-colors duration-150"
               )}
             >
-              <LogOut className="w-4 h-4 text-gray-500 group-hover:text-red-500 transition-colors" />
+              <LogOut className="w-4 h-4 text-neutral-500 group-hover:text-red-500 transition-colors" />
               {t('logout')}
             </button>
           </div>

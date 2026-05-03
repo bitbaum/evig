@@ -18,7 +18,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
       <article className="grid lg:grid-cols-2 gap-8 items-center">
         {/* Image */}
         {post.featuredImage ? (
-          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-gray-200 order-2 lg:order-1 relative">
+          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200 order-2 lg:order-1 relative">
             <Image
               src={post.featuredImage}
               alt={post.title}
@@ -44,23 +44,23 @@ export default function BlogHero({ post }: BlogHeroProps) {
           )}
 
           {/* Title */}
-          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight group-hover:text-primary-700 transition-colors">
+          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 leading-tight group-hover:text-primary-700 transition-colors">
             {post.title}
           </Heading>
 
           {/* Excerpt */}
           {post.excerpt && (
-            <p className="text-xl text-gray-600 mb-6 leading-relaxed line-clamp-3">
+            <p className="text-xl text-neutral-600 mb-6 leading-relaxed line-clamp-3">
               {post.excerpt}
             </p>
           )}
 
           {/* Meta */}
-          <div className="flex items-center gap-4 text-sm text-gray-500">
-            <span className="font-semibold text-gray-900">{post.author}</span>
-            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+          <div className="flex items-center gap-4 text-sm text-neutral-500">
+            <span className="font-semibold text-neutral-900">{post.author}</span>
+            <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
             <time>{formatDate(post.publishedAt || post.createdAt)}</time>
-            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+            <span className="w-1 h-1 bg-neutral-400 rounded-full"></span>
             <span className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
               {readingTime} min read

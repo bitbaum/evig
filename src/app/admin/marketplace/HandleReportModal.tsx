@@ -19,20 +19,20 @@ export function HandleReportModal({ reportAction, setReportAction, reportNotes, 
     <Modal isOpen={true} onClose={onClose} title="Meldung bearbeiten" size="sm">
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Aktion</label>
-          <select value={reportAction} onChange={e => setReportAction(e.target.value)} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Aktion</label>
+          <select value={reportAction} onChange={e => setReportAction(e.target.value)} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600">
             <option value="dismiss">Abweisen</option>
             <option value="warn_seller">Verkäufer verwarnen</option>
             <option value="remove_listing">Inserat entfernen</option>
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notizen</label>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Notizen</label>
           <textarea
             value={reportNotes}
             onChange={e => setReportNotes(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600"
+            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600"
             placeholder="Begründung..."
           />
         </div>

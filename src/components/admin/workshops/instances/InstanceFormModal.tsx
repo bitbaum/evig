@@ -29,11 +29,11 @@ export function InstanceFormModal({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <Heading level={2} className="text-xl text-gray-900">
+        <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
+          <Heading level={2} className="text-xl text-neutral-900">
             {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}
           </Heading>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-600">
+          <button onClick={onClose} className="text-neutral-500 hover:text-neutral-600">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -46,13 +46,13 @@ export function InstanceFormModal({
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               Workshop *
             </label>
             <select
               value={formData.workshopId}
               onChange={(e) => setFormData(prev => ({ ...prev, workshopId: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               disabled={!!editingInstance}
             >
               <option value="">Workshop auswählen...</option>
@@ -64,32 +64,32 @@ export function InstanceFormModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Start *
               </label>
               <input
                 type="datetime-local"
                 value={formData.startDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Ende
               </label>
               <input
                 type="datetime-local"
                 value={formData.endDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               Ort
             </label>
             <input
@@ -97,13 +97,13 @@ export function InstanceFormModal({
               value={formData.location}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
               placeholder={`z.B. RevampIT, ${LOCATIONS.store.full}`}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Leitung
               </label>
               <input
@@ -111,12 +111,12 @@ export function InstanceFormModal({
                 value={formData.instructor}
                 onChange={(e) => setFormData(prev => ({ ...prev, instructor: e.target.value }))}
                 placeholder="Name des Kursleiters"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-neutral-700 mb-1">
                 Max. Teilnehmer
               </label>
               <input
@@ -124,19 +124,19 @@ export function InstanceFormModal({
                 value={formData.maxParticipants}
                 onChange={(e) => setFormData(prev => ({ ...prev, maxParticipants: e.target.value }))}
                 placeholder="Standard vom Workshop"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               Status
             </label>
             <select
               value={formData.status}
               onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="scheduled">Geplant</option>
               <option value="cancelled">Abgesagt</option>
@@ -145,7 +145,7 @@ export function InstanceFormModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 mb-1">
               Notizen
             </label>
             <textarea
@@ -153,15 +153,15 @@ export function InstanceFormModal({
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Interne Notizen..."
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+        <div className="px-6 py-4 border-t border-neutral-200 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            className="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50"
           >
             Abbrechen
           </button>

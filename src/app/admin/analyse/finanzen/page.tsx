@@ -219,14 +219,14 @@ export default async function FinanzenPage() {
                   key={insight.id}
                   className={`border-l-4 pl-4 ${
                     insight.priority === 'high' ? 'border-red-400' :
-                    insight.priority === 'medium' ? 'border-amber-400' : 'border-green-400'
+                    insight.priority === 'medium' ? 'border-amber-400' : 'border-primary-400'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     <div>
                       <div className="font-medium flex items-center gap-2">
                         {insight.type === 'positive' ? (
-                          <CheckCircle2 className="w-4 h-4 text-green-500" />
+                          <CheckCircle2 className="w-4 h-4 text-primary-500" />
                         ) : insight.type === 'warning' ? (
                           <AlertCircle className="w-4 h-4 text-amber-500" />
                         ) : null}
@@ -248,7 +248,7 @@ export default async function FinanzenPage() {
                     </div>
                     {insight.valueFormatted && (
                       <span className={`text-lg font-bold ${
-                        insight.type === 'positive' ? 'text-green-600' :
+                        insight.type === 'positive' ? 'text-primary-600' :
                         insight.type === 'warning' ? 'text-amber-600' : ''
                       }`}>
                         {insight.valueFormatted}
@@ -276,7 +276,7 @@ export default async function FinanzenPage() {
                     <span>{year}</span>
                     <span className={`text-sm px-2 py-1 rounded ${
                       selfFinancingPct >= 50
-                        ? 'bg-green-100 text-green-700'
+                        ? 'bg-primary-100 text-primary-700'
                         : 'bg-yellow-100 text-yellow-700'
                     }`}>
                       {selfFinancingPct.toFixed(1)}% Eigenfinanzierung
@@ -319,7 +319,7 @@ export default async function FinanzenPage() {
       </div>
 
       {/* Data Source Info */}
-      <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-sm text-muted-foreground">
         <strong>Datenquelle:</strong> Kivitendo-Export • {yearsData.length} Jahre verfügbar ({availableYears[availableYears.length - 1]} - {availableYears[0]})
       </div>
     </div>

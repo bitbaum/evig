@@ -55,7 +55,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.QUOTE_APPROVED]: {
     label: 'Bestätigt',
-    color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
     description: 'Wartet auf Start',
   },
   [BOOKING_STATUS.QUOTE_REJECTED]: {
@@ -70,7 +70,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.COMPLETED]: {
     label: 'Abgeschlossen',
-    color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
     description: 'Reparatur fertig',
   },
   [BOOKING_STATUS.REJECTED]: {
@@ -80,7 +80,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.CANCELLED]: {
     label: 'Storniert',
-    color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
+    color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300',
     description: 'Termin abgebrochen',
   },
   // Repairer-view aliases
@@ -97,7 +97,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
 export function getBookingStatusBadge(status: string): BookingStatusBadge {
   return BOOKING_STATUS_BADGES[status] ?? {
     label: status,
-    color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300',
+    color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300',
   }
 }
 

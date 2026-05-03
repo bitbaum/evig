@@ -44,7 +44,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       {/* Search bar */}
       <div className="max-w-2xl mx-auto mb-8">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
           <input
             type="text"
             value={query}
@@ -52,8 +52,8 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             placeholder={t('placeholder')}
             aria-label={t('ariaLabel')}
             className={cn(
-              'w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl border-2 border-gray-200',
-              'bg-white text-gray-900 placeholder-gray-400',
+              'w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl border-2 border-neutral-200',
+              'bg-white text-neutral-900 placeholder-neutral-400',
               'focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100',
               'text-sm sm:text-base transition-colors'
             )}
@@ -61,7 +61,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600"
               aria-label={t('clearAriaLabel')}
             >
               <X className="w-5 h-5" />
@@ -78,7 +78,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           )}
         >
           {t('allCategories')}
@@ -91,7 +91,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
                 ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             )}
           >
             {cat.icon} {cat.label}
@@ -100,7 +100,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       </div>
 
       {/* Results count */}
-      <p className="text-sm text-gray-500 mb-6">{resultCountLabel}</p>
+      <p className="text-sm text-neutral-500 mb-6">{resultCountLabel}</p>
 
       {/* Results grid or empty state */}
       {filtered.length > 0 ? (

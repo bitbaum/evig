@@ -65,13 +65,13 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
   return (
     <div className="bg-white">
       {/* Compact header */}
-      <div className="bg-gradient-to-br from-green-50 to-emerald-50 py-8 sm:py-12">
+      <div className="bg-gradient-to-br from-primary-50 to-emerald-50 py-8 sm:py-12">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <Award className="w-10 h-10 text-green-600 mx-auto mb-4" />
-          <Heading level={1} className="text-2xl sm:text-3xl text-gray-900 mb-3">
+          <Award className="w-10 h-10 text-primary-600 mx-auto mb-4" />
+          <Heading level={1} className="text-2xl sm:text-3xl text-neutral-900 mb-3">
             {t('hero.title')}
           </Heading>
-          <p className="text-gray-600 max-w-xl mx-auto">
+          <p className="text-neutral-600 max-w-xl mx-auto">
             {t('hero.body')}
           </p>
         </div>
@@ -84,10 +84,10 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
             {whatYouGet.map((item, index) => {
               const Icon = WHAT_YOU_GET_ICONS[index]
               return (
-                <div key={index} className="bg-gray-50 rounded-xl p-5 border border-gray-100">
-                  <Icon className="h-6 w-6 text-green-600 mb-3" aria-hidden="true" />
-                  <Heading level={3} className="text-base text-gray-900">{item.title}</Heading>
-                  <p className="mt-1.5 text-sm text-gray-600">{item.description}</p>
+                <div key={index} className="bg-neutral-50 rounded-xl p-5 border border-neutral-100">
+                  <Icon className="h-6 w-6 text-primary-600 mb-3" aria-hidden="true" />
+                  <Heading level={3} className="text-base text-neutral-900">{item.title}</Heading>
+                  <p className="mt-1.5 text-sm text-neutral-600">{item.description}</p>
                 </div>
               )
             })}
@@ -96,24 +96,24 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       </div>
 
       {/* Form or status */}
-      <div className="bg-green-50 py-10 sm:py-14">
+      <div className="bg-primary-50 py-10 sm:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-sm">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-sm">
             {status.isMember ? (
               <div className="text-center">
-                <CheckCircle className="w-12 h-12 text-green-600 mx-auto mb-4" />
-                <Heading level={2} className="text-xl text-gray-900 mb-2">{t('member.title')}</Heading>
-                <p className="text-gray-600 mb-1">
+                <CheckCircle className="w-12 h-12 text-primary-600 mx-auto mb-4" />
+                <Heading level={2} className="text-xl text-neutral-900 mb-2">{t('member.title')}</Heading>
+                <p className="text-neutral-600 mb-1">
                   {t('member.thanks')}
                 </p>
                 {status.memberSince && (
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className="text-sm text-neutral-500 mb-6">
                     {t('member.since', { date: new Date(status.memberSince).toLocaleDateString(locale) })}
                   </p>
                 )}
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-green-500"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-500"
                 >
                   <UserIcon className="h-4 w-4" />
                   {t('member.dashboard')}
@@ -122,10 +122,10 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
             ) : (
               <>
                 <div className="text-center mb-6">
-                  <Heading level={2} className="text-xl text-gray-900">
+                  <Heading level={2} className="text-xl text-neutral-900">
                     {t('form.heading')}
                   </Heading>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-neutral-500 mt-1">
                     {t('form.subtitle')}
                   </p>
                 </div>
@@ -139,14 +139,14 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       {/* FAQ */}
       <div className="py-10 sm:py-14">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <Heading level={2} className="text-xl text-gray-900 text-center mb-8">
+          <Heading level={2} className="text-xl text-neutral-900 text-center mb-8">
             {t('faq.heading')}
           </Heading>
           <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-5 border border-gray-100">
-                <Heading level={3} className="text-sm font-bold text-gray-900">{item.question}</Heading>
-                <p className="mt-1.5 text-sm text-gray-600">{item.answer}</p>
+              <div key={index} className="bg-neutral-50 rounded-lg p-5 border border-neutral-100">
+                <Heading level={3} className="text-sm font-bold text-neutral-900">{item.question}</Heading>
+                <p className="mt-1.5 text-sm text-neutral-600">{item.answer}</p>
               </div>
             ))}
           </div>

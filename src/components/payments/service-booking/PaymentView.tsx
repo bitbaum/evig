@@ -31,7 +31,7 @@ export function PaymentView({ service, paymentData }: PaymentViewProps) {
       </CardHeader>
       <CardContent>
         {paymentData.pricing && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+          <div className="mb-6 p-4 bg-neutral-50 rounded-lg">
             <div className="flex justify-between items-center mb-2">
               <span>{t('detailService')}</span>
               <span className="font-semibold">{service.name}</span>
@@ -59,7 +59,7 @@ export function PaymentView({ service, paymentData }: PaymentViewProps) {
           <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
             <CreditCard className="w-6 h-6" />
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-neutral-600">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span className="text-sm">{t('redirectingToPayment')}</span>
           </div>

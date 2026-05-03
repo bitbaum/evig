@@ -24,10 +24,10 @@ export function ProtocolDraftInput({
 }: Props) {
   return (
     <div id="protocol-step-input" className="bg-white rounded-lg border p-6 space-y-4">
-      <Heading level={2} className="text-lg text-gray-900">
+      <Heading level={2} className="text-lg text-neutral-900">
         {inputMethod === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
       </Heading>
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-neutral-600">
         {inputMethod === 'audio'
           ? 'Lade eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'
           : 'Füge das Transkript ein, um es von der KI strukturieren zu lassen.'}
@@ -47,7 +47,7 @@ export function ProtocolDraftInput({
       ) : (
         <>
           <div className="flex items-center justify-between">
-            <label className="text-sm text-gray-600">Transkript</label>
+            <label className="text-sm text-neutral-600">Transkript</label>
             <label className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
               .txt hochladen

@@ -19,50 +19,50 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
           remarkPlugins={[remarkGfm]}
           components={{
             h1: ({ children }) => (
-              <Heading level={1} className="text-4xl font-bold text-gray-900 mt-12 mb-4 leading-tight">
+              <Heading level={1} className="text-4xl font-bold text-neutral-900 mt-12 mb-4 leading-tight">
                 {children}
               </Heading>
             ),
             h2: ({ children }) => (
-              <Heading level={2} className="text-3xl font-bold text-gray-900 mt-10 mb-3 leading-tight">
+              <Heading level={2} className="text-3xl font-bold text-neutral-900 mt-10 mb-3 leading-tight">
                 {children}
               </Heading>
             ),
             h3: ({ children }) => (
-              <Heading level={3} className="text-2xl font-bold text-gray-900 mt-8 mb-3 leading-tight">
+              <Heading level={3} className="text-2xl font-bold text-neutral-900 mt-8 mb-3 leading-tight">
                 {children}
               </Heading>
             ),
             p: ({ children }) => (
-              <p className="text-[21px] text-gray-800 leading-[1.58] mb-8 font-serif">
+              <p className="text-[21px] text-neutral-800 leading-[1.58] mb-8 font-serif">
                 {children}
               </p>
             ),
             ul: ({ children }) => (
-              <ul className="text-[21px] text-gray-800 leading-[1.58] mb-8 pl-8 space-y-2">
+              <ul className="text-[21px] text-neutral-800 leading-[1.58] mb-8 pl-8 space-y-2">
                 {children}
               </ul>
             ),
             ol: ({ children }) => (
-              <ol className="text-[21px] text-gray-800 leading-[1.58] mb-8 pl-8 space-y-2 list-decimal">
+              <ol className="text-[21px] text-neutral-800 leading-[1.58] mb-8 pl-8 space-y-2 list-decimal">
                 {children}
               </ol>
             ),
             li: ({ children }) => (
-              <li className="text-[21px] text-gray-800 leading-[1.58]">
+              <li className="text-[21px] text-neutral-800 leading-[1.58]">
                 {children}
               </li>
             ),
             a: ({ href, children }) => (
               <a
                 href={href}
-                className="text-gray-900 underline decoration-gray-900 hover:text-green-700 hover:decoration-green-700 transition-colors"
+                className="text-neutral-900 underline decoration-neutral-900 hover:text-primary-700 hover:decoration-primary-700 transition-colors"
               >
                 {children}
               </a>
             ),
             strong: ({ children }) => (
-              <strong className="font-bold text-gray-900">
+              <strong className="font-bold text-neutral-900">
                 {children}
               </strong>
             ),
@@ -72,7 +72,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               </em>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-gray-900 pl-6 py-2 my-8 italic text-[21px] text-gray-700 leading-[1.58]">
+              <blockquote className="border-l-4 border-neutral-900 pl-6 py-2 my-8 italic text-[21px] text-neutral-700 leading-[1.58]">
                 {children}
               </blockquote>
             ),
@@ -80,19 +80,19 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               const isInline = !className
               if (isInline) {
                 return (
-                  <code className="bg-gray-100 text-gray-800 px-2 py-0.5 rounded text-[18px] font-mono">
+                  <code className="bg-neutral-100 text-neutral-800 px-2 py-0.5 rounded text-[18px] font-mono">
                     {children}
                   </code>
                 )
               }
               return (
-                <code className="block bg-gray-900 text-gray-100 p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
+                <code className="block bg-neutral-900 text-neutral-100 p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
                   {children}
                 </code>
               )
             },
             hr: () => (
-              <hr className="my-12 border-t border-gray-200" />
+              <hr className="my-12 border-t border-neutral-200" />
             ),
           }}
         >
@@ -102,12 +102,12 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
       {/* Tags */}
       {post.tags && post.tags.length > 0 && (
-        <div className="py-8 border-t border-gray-200">
+        <div className="py-8 border-t border-neutral-200">
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200 transition-colors"
+                className="px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full hover:bg-neutral-200 transition-colors"
               >
                 {tag}
               </span>
@@ -117,7 +117,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
       )}
 
       {/* Share Buttons */}
-      <div className="py-8 border-t border-gray-200">
+      <div className="py-8 border-t border-neutral-200">
         <ShareButtons
           url={`${process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.ch'}/blog/${post.slug}`}
           title={post.title}

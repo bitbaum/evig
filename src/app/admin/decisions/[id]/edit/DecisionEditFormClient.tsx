@@ -146,7 +146,7 @@ export default function DecisionEditFormClient({
   }
 
   if (loading) {
-    return <div className="py-12 text-center text-gray-500">Laden...</div>;
+    return <div className="py-12 text-center text-neutral-500">Laden...</div>;
   }
 
   return (
@@ -159,7 +159,7 @@ export default function DecisionEditFormClient({
 
       {/* Decision Type */}
       <div>
-        <span className="mb-2 block text-sm font-medium text-gray-700">
+        <span className="mb-2 block text-sm font-medium text-neutral-700">
           Entscheidungstyp
         </span>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -174,18 +174,18 @@ export default function DecisionEditFormClient({
                 className={`rounded-lg border-2 p-3 text-left transition-all ${
                   selected
                     ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                    selected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-500'
+                    selected ? 'bg-blue-500 text-white' : 'bg-neutral-100 text-neutral-500'
                   }`}>
                     {conf.icon}
                   </span>
-                  <span className="font-medium text-gray-900">{conf.label}</span>
+                  <span className="font-medium text-neutral-900">{conf.label}</span>
                 </div>
-                <p className="mt-1.5 text-xs text-gray-500">{conf.description}</p>
+                <p className="mt-1.5 text-xs text-neutral-500">{conf.description}</p>
                 {selected && (
                   <p className="mt-1.5 rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">
                     {conf.mechanic}
@@ -201,7 +201,7 @@ export default function DecisionEditFormClient({
       <div>
         <label
           htmlFor="title"
-          className="mb-1 block text-sm font-medium text-gray-700"
+          className="mb-1 block text-sm font-medium text-neutral-700"
         >
           Titel
         </label>
@@ -212,7 +212,7 @@ export default function DecisionEditFormClient({
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={200}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
@@ -220,7 +220,7 @@ export default function DecisionEditFormClient({
       <div>
         <label
           htmlFor="description"
-          className="mb-1 block text-sm font-medium text-gray-700"
+          className="mb-1 block text-sm font-medium text-neutral-700"
         >
           Was wird entschieden?
         </label>
@@ -230,7 +230,7 @@ export default function DecisionEditFormClient({
           onChange={(e) => setDescription(e.target.value)}
           required
           rows={3}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
@@ -238,17 +238,17 @@ export default function DecisionEditFormClient({
       <div>
         <label
           htmlFor="background"
-          className="mb-1 block text-sm font-medium text-gray-700"
+          className="mb-1 block text-sm font-medium text-neutral-700"
         >
           Begründung & Hintergrund
-          <span className="ml-1.5 font-normal text-gray-400">(optional)</span>
+          <span className="ml-1.5 font-normal text-neutral-400">(optional)</span>
         </label>
         <textarea
           id="background"
           value={background}
           onChange={(e) => setBackground(e.target.value)}
           rows={4}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Begründung, Alternativen, Risiken — sichtbar für Abstimmungsberechtigte vor dem Abstimmen."
         />
       </div>
@@ -257,8 +257,8 @@ export default function DecisionEditFormClient({
       {needsOptions && (
         <div>
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700">Optionen</span>
-            <label className="flex cursor-pointer items-center gap-1.5 text-xs text-gray-500">
+            <span className="text-sm font-medium text-neutral-700">Optionen</span>
+            <label className="flex cursor-pointer items-center gap-1.5 text-xs text-neutral-500">
               <input
                 type="checkbox"
                 checked={showImageUrls}
@@ -270,27 +270,27 @@ export default function DecisionEditFormClient({
           </div>
           <div className="space-y-2">
             {options.map((opt, i) => (
-              <div key={opt.id} className="rounded-md border border-gray-200 p-2">
+              <div key={opt.id} className="rounded-md border border-neutral-200 p-2">
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={opt.label}
                     onChange={(e) => updateOption(opt.id, 'label', e.target.value)}
                     placeholder={`Option ${i + 1}`}
-                    className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   <input
                     type="text"
                     value={opt.description}
                     onChange={(e) => updateOption(opt.id, 'description', e.target.value)}
                     placeholder="Beschreibung (optional)"
-                    className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                   />
                   <button
                     type="button"
                     onClick={() => removeOption(opt.id)}
                     disabled={options.length <= 2}
-                    className="rounded-md px-2 text-gray-500 hover:text-red-500 disabled:opacity-30"
+                    className="rounded-md px-2 text-neutral-500 hover:text-red-500 disabled:opacity-30"
                   >
                     &times;
                   </button>
@@ -302,13 +302,13 @@ export default function DecisionEditFormClient({
                       value={opt.imageUrl}
                       onChange={(e) => updateOption(opt.id, 'imageUrl', e.target.value)}
                       placeholder="Bild-URL (https://...)"
-                      className="flex-1 rounded-md border border-gray-300 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
                     />
                     {opt.imageUrl && (
                       <img
                         src={opt.imageUrl}
                         alt=""
-                        className="h-8 w-8 rounded object-contain border border-gray-200"
+                        className="h-8 w-8 rounded object-contain border border-neutral-200"
                         onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                       />
                     )}
@@ -332,15 +332,15 @@ export default function DecisionEditFormClient({
         <button
           type="button"
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-sm text-gray-500 hover:text-gray-700"
+          className="text-sm text-neutral-500 hover:text-neutral-700"
         >
           {showAdvanced ? '▼' : '▶'} Erweiterte Einstellungen
         </button>
 
         {showAdvanced && (
-          <div className="mt-3 space-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="mt-3 space-y-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
             <div>
-              <label htmlFor="decision-edit-voting-method" className="mb-1 block text-sm font-medium text-gray-700">
+              <label htmlFor="decision-edit-voting-method" className="mb-1 block text-sm font-medium text-neutral-700">
                 Abstimmungsmethode
               </label>
               <select
@@ -349,7 +349,7 @@ export default function DecisionEditFormClient({
                 onChange={(e) =>
                   setVotingMethod(e.target.value as VotingMethod)
                 }
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
               >
                 {VOTING_METHODS.map((m) => (
                   <option key={m} value={m}>
@@ -361,7 +361,7 @@ export default function DecisionEditFormClient({
 
             {votingMethod === 'dot' && (
               <div>
-                <label htmlFor="decision-edit-dot-count" className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-edit-dot-count" className="mb-1 block text-sm font-medium text-neutral-700">
                   Punkte pro Person
                 </label>
                 <input
@@ -371,14 +371,14 @@ export default function DecisionEditFormClient({
                   onChange={(e) => setDotCount(Number(e.target.value))}
                   min={DOT_VOTING_DEFAULTS.min}
                   max={DOT_VOTING_DEFAULTS.max}
-                  className="w-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-24 rounded-md border border-neutral-300 px-3 py-2 text-sm"
                 />
               </div>
             )}
 
             <div className="flex gap-3">
               <div>
-                <label htmlFor="decision-edit-quorum-type" className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-edit-quorum-type" className="mb-1 block text-sm font-medium text-neutral-700">
                   Quorum Typ
                 </label>
                 <select
@@ -387,14 +387,14 @@ export default function DecisionEditFormClient({
                   onChange={(e) =>
                     setQuorumType(e.target.value as 'percentage' | 'absolute')
                   }
-                  className="rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="rounded-md border border-neutral-300 px-3 py-2 text-sm"
                 >
                   <option value="percentage">Prozent</option>
                   <option value="absolute">Absolut</option>
                 </select>
               </div>
               <div>
-                <label htmlFor="decision-edit-quorum-value" className="mb-1 block text-sm font-medium text-gray-700">
+                <label htmlFor="decision-edit-quorum-value" className="mb-1 block text-sm font-medium text-neutral-700">
                   Wert
                 </label>
                 <input
@@ -403,12 +403,12 @@ export default function DecisionEditFormClient({
                   value={quorumValue}
                   onChange={(e) => setQuorumValue(Number(e.target.value))}
                   min={1}
-                  className="w-24 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  className="w-24 rounded-md border border-neutral-300 px-3 py-2 text-sm"
                 />
               </div>
             </div>
 
-            <label className="flex items-center gap-2 text-sm text-gray-700">
+            <label className="flex items-center gap-2 text-sm text-neutral-700">
               <input
                 type="checkbox"
                 checked={blindVoting}
@@ -432,7 +432,7 @@ export default function DecisionEditFormClient({
         </button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+          className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
         >
           Abbrechen
         </Link>

@@ -30,15 +30,15 @@ export default function SubmissionsAdminPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content"
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
               Blog-Einreichungen
             </Heading>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
               Von Benutzern eingereichte Inhalte prüfen und veröffentlichen
             </p>
           </div>
@@ -48,7 +48,7 @@ export default function SubmissionsAdminPage() {
             <div className="text-2xl font-bold">{s.counts.pending}</div>
             <div className="text-xs">Ausstehend</div>
           </div>
-          <div className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-4 py-2 rounded-lg text-center">
+          <div className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 py-2 rounded-lg text-center">
             <div className="text-2xl font-bold">{s.counts.published}</div>
             <div className="text-xs">Veröffentlicht</div>
           </div>
@@ -62,7 +62,7 @@ export default function SubmissionsAdminPage() {
         </div>
       )}
       {s.success && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg">
           {s.success}
         </div>
       )}
@@ -76,9 +76,9 @@ export default function SubmissionsAdminPage() {
           <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
         </div>
       ) : s.filteredSubmissions.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-12 text-center">
-          <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 dark:text-gray-400">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-12 text-center">
+          <FileText className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+          <p className="text-neutral-600 dark:text-neutral-400">
             Keine Einreichungen gefunden.
           </p>
         </div>

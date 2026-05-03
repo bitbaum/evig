@@ -152,7 +152,7 @@ export function VoteAIAdvisor({
 
           {/* AI response */}
           {analysis && (
-            <div className="bg-white border border-indigo-200 rounded-lg px-4 py-3 text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
+            <div className="bg-white border border-indigo-200 rounded-lg px-4 py-3 text-sm text-neutral-800 whitespace-pre-wrap leading-relaxed">
               <div className="flex items-center gap-1.5 text-xs text-indigo-600 font-medium mb-2">
                 <Sparkles className="w-3 h-3" />
                 KI-Antwort

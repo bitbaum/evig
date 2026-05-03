@@ -34,7 +34,7 @@ export function StarRating({ value, onChange, label, size = 'md' }: StarRatingPr
     const starEl = (
       <Star
         className={`${sizeClass} transition-colors ${
-          filled ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+          filled ? 'fill-yellow-400 text-yellow-400' : 'text-neutral-300'
         }`}
       />
     )
@@ -60,7 +60,7 @@ export function StarRating({ value, onChange, label, size = 'md' }: StarRatingPr
   if (label) {
     return (
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+        <label className="block text-sm font-medium text-neutral-700 mb-1">{label}</label>
         <div className="flex gap-1">{stars}</div>
       </div>
     )

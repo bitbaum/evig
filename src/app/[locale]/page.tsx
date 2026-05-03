@@ -203,21 +203,21 @@ export default async function Home() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
           <Link
             href="/marketplace"
-            className="w-full sm:w-auto rounded-md bg-green-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 text-center"
+            className="w-full sm:w-auto rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 text-center"
           >
             {t('hero.ctaDiscover')}
           </Link>
-          <Link href="/about" className="text-base font-semibold leading-6 text-gray-900">
+          <Link href="/about" className="text-base font-semibold leading-6 text-neutral-900">
             {t('hero.ctaAbout')} <span aria-hidden="true">→</span>
           </Link>
         </div>
       </PageHero>
 
       {/* Section 2: Three Action Cards */}
-      <div id="actions" className="bg-gradient-to-b from-white to-gray-50 py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
+      <div id="actions" className="bg-gradient-to-b from-white to-neutral-50 py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-gray-900">
+            <Heading level={2} variant="site" className="tracking-tight text-neutral-900">
               {t('actions.heading')}
             </Heading>
           </div>
@@ -229,12 +229,12 @@ export default async function Home() {
               const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
               const focusOutline = DESIGN_TOKENS.focusOutline[card.theme]
               return (
-                <div key={card.title} className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div key={card.title} className="bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
                     <card.icon className={`h-6 w-6 ${badge.text}`} />
                   </div>
-                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-gray-900">{card.title}</Heading>
-                  <p className="mt-2 text-base text-gray-600 flex-1">
+                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-neutral-900">{card.title}</Heading>
+                  <p className="mt-2 text-base text-neutral-600 flex-1">
                     {card.subtitle}
                   </p>
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -261,10 +261,10 @@ export default async function Home() {
       {/* Section 2b: Professional Services (brief mention) */}
       <div className="bg-white py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-base text-gray-600">
+          <p className="text-base text-neutral-600">
             {t.rich('proServices.text', {
               link: (chunks) => (
-                <Link href="/services" className="font-semibold text-green-600 hover:text-green-700 underline underline-offset-2">
+                <Link href="/services" className="font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2">
                   {chunks}
                 </Link>
               ),
@@ -274,13 +274,13 @@ export default async function Home() {
       </div>
 
       {/* Section 3: Social Proof */}
-      <div className="bg-gray-50 py-8 sm:py-12">
+      <div className="bg-neutral-50 py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <Heading level={2} variant="site" className="tracking-tight text-gray-900">
+            <Heading level={2} variant="site" className="tracking-tight text-neutral-900">
               {t('impact.title')}
             </Heading>
-            <p className="mt-2 text-base text-gray-600">{t('impact.subtitle')}</p>
+            <p className="mt-2 text-base text-neutral-600">{t('impact.subtitle')}</p>
           </div>
           {/* Media Logos */}
           <AsSeenInLogos />
@@ -289,19 +289,19 @@ export default async function Home() {
           <CommunityStats className="mt-6" />
 
           {/* Impact Metrics (compact) */}
-          <div className="mt-8 pt-8 border-t border-gray-200">
+          <div className="mt-8 pt-8 border-t border-neutral-200">
             <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3">
               {compactMetrics.map((metric, index) => (
                 <div key={index} className="text-center">
-                  <dd className="text-2xl sm:text-3xl font-bold text-green-600">{metric.value}</dd>
-                  <dt className="mt-1 text-xs sm:text-sm text-gray-600">{metric.label}</dt>
+                  <dd className="text-2xl sm:text-3xl font-bold text-primary-600">{metric.value}</dd>
+                  <dt className="mt-1 text-xs sm:text-sm text-neutral-600">{metric.label}</dt>
                 </div>
               ))}
             </dl>
             <div className="mt-6 text-center">
               <Link
                 href="/about/impact"
-                className="text-sm font-semibold text-green-600 hover:text-green-700 underline underline-offset-2"
+                className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
               >
                 {t('impact.moreLink')} <span aria-hidden="true">→</span>
               </Link>
@@ -311,13 +311,13 @@ export default async function Home() {
       </div>
 
       {/* Section 4: How to Get Involved */}
-      <div className="bg-green-50 py-12 sm:py-16 lg:py-20">
+      <div className="bg-primary-50 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-gray-900">
+            <Heading level={2} variant="site" className="tracking-tight text-neutral-900">
               {t('community.heading')}
             </Heading>
-            <p className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="mt-4 text-base sm:text-lg text-neutral-600 max-w-2xl mx-auto">
               {t('community.subtitle')}
             </p>
           </div>
@@ -332,8 +332,8 @@ export default async function Home() {
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
                   <item.icon className={`h-5 w-5 ${item.badge.text}`} />
                 </div>
-                <Heading level={3} className={`text-lg font-bold text-gray-900 ${item.hoverColor} transition-colors`}>{item.title}</Heading>
-                <p className="mt-2 text-sm text-gray-600">{item.desc}</p>
+                <Heading level={3} className={`text-lg font-bold text-neutral-900 ${item.hoverColor} transition-colors`}>{item.title}</Heading>
+                <p className="mt-2 text-sm text-neutral-600">{item.desc}</p>
               </Link>
             ))}
           </div>

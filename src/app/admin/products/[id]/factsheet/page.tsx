@@ -103,18 +103,18 @@ export default function FactSheetPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-green-600 border-t-transparent"></div>
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent"></div>
       </div>
     )
   }
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-100">
         <div className="text-center">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <Heading level={2} className="text-xl font-semibold text-gray-900">
+          <Package className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+          <Heading level={2} className="text-xl font-semibold text-neutral-900">
             {error || 'Produkt nicht gefunden'}
           </Heading>
         </div>
@@ -135,22 +135,22 @@ export default function FactSheetPage() {
   return (
     <>
       {/* Print Controls - Hidden in print */}
-      <div className="print:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 px-4 py-3">
+      <div className="print:hidden fixed top-0 left-0 right-0 bg-white border-b border-neutral-200 z-50 px-4 py-3">
         <div className="max-w-[210mm] mx-auto flex items-center justify-between">
           <Link
             href="/admin/products"
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900"
           >
             <ArrowLeft className="w-5 h-5" />
             Zurück
           </Link>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-neutral-500">
               A4 Factsheet - {product.brand} {product.product_name}
             </span>
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Printer className="w-5 h-5" />
               Drucken
@@ -160,23 +160,23 @@ export default function FactSheetPage() {
       </div>
 
       {/* A4 Fact Sheet */}
-      <div className="bg-gray-100 min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-white">
+      <div className="bg-neutral-100 min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-white">
         <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-white shadow-lg print:shadow-none">
 
           {/* Green Header Bar */}
-          <div className="bg-green-600 text-white px-8 py-4">
+          <div className="bg-primary-600 text-white px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-white rounded-xl flex items-center justify-center">
-                  <span className="text-green-600 font-bold text-2xl">R</span>
+                  <span className="text-primary-600 font-bold text-2xl">R</span>
                 </div>
                 <div>
                   <Heading level={1} className="text-2xl font-bold tracking-tight">{ORG.name}</Heading>
-                  <p className="text-green-100 text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
+                  <p className="text-primary-100 text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-green-200 text-xs uppercase tracking-wider">Artikel-Nr.</div>
+                <div className="text-primary-200 text-xs uppercase tracking-wider">Artikel-Nr.</div>
                 <div className="text-xl font-mono font-bold">{product.item_uuid}</div>
               </div>
             </div>
@@ -188,7 +188,7 @@ export default function FactSheetPage() {
             {/* Product Hero Section */}
             <div className="flex gap-6 mb-6">
               {/* Product Image */}
-              <div className="w-48 h-48 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0 border-2 border-gray-200 overflow-hidden">
+              <div className="w-48 h-48 bg-neutral-50 rounded-xl flex items-center justify-center flex-shrink-0 border-2 border-neutral-200 overflow-hidden">
                 {product.image_url ? (
                   <img
                     src={product.image_url}
@@ -196,18 +196,18 @@ export default function FactSheetPage() {
                     className="w-full h-full object-contain"
                   />
                 ) : (
-                  <Package className="w-20 h-20 text-gray-300" />
+                  <Package className="w-20 h-20 text-neutral-300" />
                 )}
               </div>
 
               {/* Product Info */}
               <div className="flex-1">
-                <div className="text-gray-500 text-sm font-medium mb-1">{product.brand}</div>
-                <Heading level={2} className="text-3xl font-bold text-gray-900 mb-2 leading-tight">
+                <div className="text-neutral-500 text-sm font-medium mb-1">{product.brand}</div>
+                <Heading level={2} className="text-3xl font-bold text-neutral-900 mb-2 leading-tight">
                   {product.product_name}
                 </Heading>
                 {product.short_description && (
-                  <p className="text-gray-600 text-base mb-4 leading-relaxed">
+                  <p className="text-neutral-600 text-base mb-4 leading-relaxed">
                     {product.short_description}
                   </p>
                 )}
@@ -224,12 +224,12 @@ export default function FactSheetPage() {
 
               {/* Price Box */}
               <div className="w-44 flex-shrink-0">
-                <div className="bg-green-50 border-2 border-green-500 rounded-xl p-4 text-center">
-                  <div className="text-green-700 text-sm font-medium mb-1">Ihr Preis</div>
-                  <div className="text-4xl font-bold text-green-600 mb-1">
+                <div className="bg-primary-50 border-2 border-primary-500 rounded-xl p-4 text-center">
+                  <div className="text-primary-700 text-sm font-medium mb-1">Ihr Preis</div>
+                  <div className="text-4xl font-bold text-primary-600 mb-1">
                     {Number(product.estimated_price_chf).toFixed(0)}.-
                   </div>
-                  <div className="text-green-600 text-sm">CHF inkl. MwSt.</div>
+                  <div className="text-primary-600 text-sm">CHF inkl. MwSt.</div>
                 </div>
                 {product.quantity_available > 0 && product.quantity_available <= 3 && (
                   <div className="mt-2 text-center text-orange-600 text-sm font-medium">
@@ -242,14 +242,14 @@ export default function FactSheetPage() {
             {/* Technical Specs */}
             {specEntries.length > 0 && (
               <div className="mb-6">
-                <Heading level={3} className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                <Heading level={3} className="text-lg font-bold text-neutral-900 mb-3 pb-2 border-b-2 border-neutral-200">
                   Technische Daten
                 </Heading>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2">
                   {specEntries.map(([key, value]) => (
-                    <div key={key} className="flex justify-between py-2 border-b border-gray-100">
-                      <span className="text-gray-600 font-medium">{key}</span>
-                      <span className="text-gray-900 font-semibold text-right">{value}</span>
+                    <div key={key} className="flex justify-between py-2 border-b border-neutral-100">
+                      <span className="text-neutral-600 font-medium">{key}</span>
+                      <span className="text-neutral-900 font-semibold text-right">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -259,7 +259,7 @@ export default function FactSheetPage() {
             {/* Who is this for? */}
             {product.customer_profiles && product.customer_profiles.length > 0 && (
               <div className="mb-6">
-                <Heading level={3} className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                <Heading level={3} className="text-lg font-bold text-neutral-900 mb-3 pb-2 border-b-2 border-neutral-200">
                   Perfekt geeignet für
                 </Heading>
                 <div className="flex flex-wrap gap-3">
@@ -285,26 +285,26 @@ export default function FactSheetPage() {
             <div className="flex gap-6 mt-auto">
               {/* Trust Badges */}
               <div className="flex-1">
-                <Heading level={3} className="text-lg font-bold text-gray-900 mb-3 pb-2 border-b-2 border-gray-200">
+                <Heading level={3} className="text-lg font-bold text-neutral-900 mb-3 pb-2 border-b-2 border-neutral-200">
                   Ihre Vorteile
                 </Heading>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Shield className="w-5 h-5 text-green-600" />
+                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-5 h-5 text-primary-600" />
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-900">Geprüfte Qualität</div>
-                      <div className="text-sm text-gray-600">Jedes Gerät wird getestet</div>
+                      <div className="font-semibold text-neutral-900">Geprüfte Qualität</div>
+                      <div className="text-sm text-neutral-600">Jedes Gerät wird getestet</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Leaf className="w-5 h-5 text-green-600" />
+                    <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Leaf className="w-5 h-5 text-primary-600" />
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-900">Nachhaltig</div>
-                      <div className="text-sm text-gray-600">IT ein zweites Leben geben</div>
+                      <div className="font-semibold text-neutral-900">Nachhaltig</div>
+                      <div className="text-sm text-neutral-600">IT ein zweites Leben geben</div>
                     </div>
                   </div>
                 </div>
@@ -312,14 +312,14 @@ export default function FactSheetPage() {
 
               {/* QR Code */}
               <div className="w-48 flex-shrink-0 text-center">
-                <div className="bg-white border-2 border-gray-200 rounded-xl p-3 inline-block">
+                <div className="bg-white border-2 border-neutral-200 rounded-xl p-3 inline-block">
                   <img
                     src={qrCodeUrl}
                     alt="QR Code zum Online-Shop"
                     className="w-32 h-32 mx-auto"
                   />
                 </div>
-                <div className="mt-2 flex items-center justify-center gap-1 text-gray-600 text-sm">
+                <div className="mt-2 flex items-center justify-center gap-1 text-neutral-600 text-sm">
                   <Smartphone className="w-4 h-4" />
                   Online ansehen & kaufen
                 </div>
@@ -329,12 +329,12 @@ export default function FactSheetPage() {
           </div>
 
           {/* Footer */}
-          <div className="mt-auto px-8 py-4 bg-gray-50 border-t border-gray-200">
+          <div className="mt-auto px-8 py-4 bg-neutral-50 border-t border-neutral-200">
             <div className="flex items-center justify-between text-sm">
-              <div className="text-gray-600">
+              <div className="text-neutral-600">
                 <span className="font-medium">{ORG.name}</span> | {ORG.legalForm}
               </div>
-              <div className="text-gray-500">
+              <div className="text-neutral-500">
                 {ORG.emailDomain} | {LOCATIONS.store.city}
               </div>
             </div>

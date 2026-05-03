@@ -57,10 +57,10 @@ export default function AsSeenInLogos() {
   const t = useTranslations('home.asSeenIn')
 
   return (
-    <section className="py-12 sm:py-16 bg-white border-y border-gray-100">
+    <section className="py-12 sm:py-16 bg-white border-y border-neutral-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <p className="text-center text-sm font-medium text-gray-500 mb-8">
+        <p className="text-center text-sm font-medium text-neutral-500 mb-8">
           {t('heading')}
         </p>
 
@@ -99,7 +99,7 @@ export default function AsSeenInLogos() {
         <div className="mt-8 text-center">
           <Link
             href="/about/press"
-            className="text-sm text-gray-500 hover:text-green-600 transition-colors"
+            className="text-sm text-neutral-500 hover:text-primary-600 transition-colors"
           >
             {t('allCoverage')} →
           </Link>
@@ -117,9 +117,9 @@ export function AsSeenInLogosMinimal() {
   const t = useTranslations('home.asSeenIn')
 
   return (
-    <div className="py-8 bg-gray-50">
+    <div className="py-8 bg-neutral-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <p className="text-center text-xs font-medium text-gray-500 uppercase tracking-wider mb-6">
+        <p className="text-center text-xs font-medium text-neutral-500 uppercase tracking-wider mb-6">
           {t('heading')}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
@@ -133,7 +133,7 @@ export function AsSeenInLogosMinimal() {
               title={logo.fullName}
             >
               <span
-                className="text-lg font-semibold text-gray-500 group-hover:text-gray-900 transition-colors duration-300"
+                className="text-lg font-semibold text-neutral-500 group-hover:text-neutral-900 transition-colors duration-300"
               >
                 {logo.name}
               </span>

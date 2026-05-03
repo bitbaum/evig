@@ -49,7 +49,7 @@ export function AdminLayoutClient({
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* Sidebar */}
       <AdminSidebar
         sidebarCollapsed={sidebarCollapsed}
@@ -75,22 +75,22 @@ export function AdminLayoutClient({
         }`}
       >
         {/* Top Bar */}
-        <div className="sticky top-0 z-40 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+        <div className="sticky top-0 z-40 bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center justify-between h-14 px-4 lg:px-6">
             <div className="flex items-center gap-3 min-w-0">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
+                className="lg:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex-shrink-0"
               >
                 <Menu className="w-5 h-5" />
               </button>
 
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden lg:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 flex-shrink-0"
+                className="hidden lg:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex-shrink-0"
                 title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
               >
-                <Menu className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                <Menu className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
               </button>
 
               {/* Breadcrumbs in top bar — saves a full content line */}
@@ -100,7 +100,7 @@ export function AdminLayoutClient({
             <div className="flex items-center gap-3 flex-shrink-0">
               <Link
                 href="/"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium text-sm"
+                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium text-sm"
               >
                 <Globe className="w-3.5 h-3.5" />
                 Website

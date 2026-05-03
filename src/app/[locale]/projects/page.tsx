@@ -57,7 +57,7 @@ export default function ProjectsPage() {
     : t('resultsFiltered', { count: filteredItems.length, total: items.length, category: selectedCategory })
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-neutral-50">
       <PageHero
         theme="projects"
         icon={Rocket}
@@ -69,13 +69,13 @@ export default function ProjectsPage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-12">
             <Heading level={2} className="text-2xl sm:text-3xl mb-4 sm:mb-6">{t('section.title')}</Heading>
-            <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8">
+            <p className="text-base sm:text-lg text-neutral-600 mb-6 sm:mb-8">
               {t('section.subtitle')}
             </p>
 
             {/* Project Filter */}
             <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-8 sm:mb-12">
-              <div className="flex items-center text-gray-500 mr-2 sm:mr-4 mb-2 w-full sm:w-auto justify-center sm:justify-start">
+              <div className="flex items-center text-neutral-500 mr-2 sm:mr-4 mb-2 w-full sm:w-auto justify-center sm:justify-start">
                 <Filter className="w-4 h-4 mr-2" />
                 <span className="text-xs sm:text-sm font-medium">{t('filter.label')}</span>
               </div>
@@ -83,8 +83,8 @@ export default function ProjectsPage() {
                 onClick={() => setSelectedCategory(allLabel)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === allLabel
-                    ? 'bg-green-600 text-white shadow-lg transform scale-105'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                    ? 'bg-primary-600 text-white shadow-lg transform scale-105'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
                 }`}
               >
                 {allLabel}
@@ -97,8 +97,8 @@ export default function ProjectsPage() {
                     onClick={() => handleToggle(label)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                       selectedCategory === label
-                        ? 'bg-green-600 text-white shadow-lg transform scale-105'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+                        ? 'bg-primary-600 text-white shadow-lg transform scale-105'
+                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
                     }`}
                   >
                     {label}
@@ -121,36 +121,36 @@ export default function ProjectsPage() {
                 >
                   <div className="p-6 sm:p-8 flex flex-col h-full">
                     <div className="flex items-start mb-4 sm:mb-6">
-                      <div className="p-2 sm:p-3 bg-green-100 rounded-lg text-green-600 mr-3 sm:mr-4 transition-colors duration-300 group-hover:bg-green-600 group-hover:text-white flex-shrink-0">
+                      <div className="p-2 sm:p-3 bg-primary-100 rounded-lg text-primary-600 mr-3 sm:mr-4 transition-colors duration-300 group-hover:bg-primary-600 group-hover:text-white flex-shrink-0">
                         <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                           <Heading level={3} className="text-xl sm:text-2xl">{project.title}</Heading>
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
                             {t(`status.${project.status}`)}
                           </span>
                         </div>
-                        <div className="flex items-center text-gray-500 mb-3 sm:mb-4">
+                        <div className="flex items-center text-neutral-500 mb-3 sm:mb-4">
                           <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
                           <span className="text-xs sm:text-sm">{t('since', { year: PROJECT_YEARS[originalIndex] })}</span>
                         </div>
                       </div>
                     </div>
-                    <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 flex-grow">{project.description}</p>
+                    <p className="text-sm sm:text-base text-neutral-600 mb-4 sm:mb-6 flex-grow">{project.description}</p>
                     <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
                       {project.features.map((feature, i) => (
-                        <div key={i} className="flex items-start text-gray-600">
-                          <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0 text-green-500 mt-0.5" />
+                        <div key={i} className="flex items-start text-neutral-600">
+                          <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0 text-primary-500 mt-0.5" />
                           <span className="text-xs sm:text-sm">{feature}</span>
                         </div>
                       ))}
                     </div>
-                    <div className="mt-auto pt-6 border-t border-gray-200 flex items-center justify-between">
-                      <span className="text-sm text-gray-500">{categoryLabels[project.category]}</span>
+                    <div className="mt-auto pt-6 border-t border-neutral-200 flex items-center justify-between">
+                      <span className="text-sm text-neutral-500">{categoryLabels[project.category]}</span>
                       <Link
                         href={PROJECT_LINKS[originalIndex] ?? '/projects'}
-                        className="inline-flex items-center text-green-600 hover:text-green-700 font-medium transition-colors duration-300 group"
+                        className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium transition-colors duration-300 group"
                       >
                         <span>{t('learnMore')}</span>
                         <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
@@ -164,7 +164,7 @@ export default function ProjectsPage() {
 
           {/* Results count */}
           <div className="text-center mt-8">
-            <p className="text-gray-500 text-sm">{resultText}</p>
+            <p className="text-neutral-500 text-sm">{resultText}</p>
           </div>
         </div>
       </section>

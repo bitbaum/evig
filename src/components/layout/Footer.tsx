@@ -26,20 +26,20 @@ export default function Footer() {
   const tNav = useTranslations('nav')
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-neutral-900 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div>
             <Logo className="mb-4" showText={true} />
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-neutral-300">
               {tFooter('mission')}
             </p>
           </div>
 
           {/* Navigation Section */}
           <nav aria-label={tFooter('navigation')}>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-300 mb-4">
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-neutral-300 mb-4">
               {tFooter('navigation')}
             </Heading>
             <ul className="space-y-2">
@@ -48,7 +48,7 @@ export default function Footer() {
                   {item.external ? (
                     <a
                       href={item.href}
-                      className="text-sm text-gray-300 hover:text-white transition-colors"
+                      className="text-sm text-neutral-300 hover:text-white transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -57,7 +57,7 @@ export default function Footer() {
                   ) : (
                     <Link
                       href={item.href}
-                      className="text-sm text-gray-300 hover:text-white transition-colors"
+                      className="text-sm text-neutral-300 hover:text-white transition-colors"
                     >
                       {item.nameKey ? tNav(item.nameKey as never) : item.name}
                     </Link>
@@ -69,33 +69,33 @@ export default function Footer() {
 
           {/* Contact Section */}
           <div>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-300 mb-4">
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-neutral-300 mb-4">
               {tNav('contact')}
             </Heading>
             <address className="space-y-4 not-italic">
               {footerLocations.map((location) => (
                 <div className="flex items-start" key={location.name}>
-                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-gray-300" />
+                  <MapPin className="w-4 h-4 mt-0.5 mr-3 flex-shrink-0 text-neutral-300" />
                   <div>
-                    <p className="text-sm font-medium text-gray-200">{location.name}</p>
+                    <p className="text-sm font-medium text-neutral-200">{location.name}</p>
                     {location.addressLines.map((line) => (
-                      <p className="text-sm text-gray-300" key={line}>{line}</p>
+                      <p className="text-sm text-neutral-300" key={line}>{line}</p>
                     ))}
                     {'extra' in location && location.extra && (
-                      <p className="text-xs text-gray-300 mt-0.5">{location.extra}</p>
+                      <p className="text-xs text-neutral-300 mt-0.5">{location.extra}</p>
                     )}
                   </div>
                 </div>
               ))}
               <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-gray-300 flex-shrink-0" />
-                <a href={`tel:${CONTACT.phone}`} className="text-sm text-gray-300 hover:text-white transition-colors">
+                <Phone className="w-4 h-4 text-neutral-300 flex-shrink-0" />
+                <a href={`tel:${CONTACT.phone}`} className="text-sm text-neutral-300 hover:text-white transition-colors">
                   {CONTACT.phone}
                 </a>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gray-300 flex-shrink-0" />
-                <a href={`mailto:${CONTACT.email}`} className="text-sm text-gray-300 hover:text-white transition-colors">
+                <Mail className="w-4 h-4 text-neutral-300 flex-shrink-0" />
+                <a href={`mailto:${CONTACT.email}`} className="text-sm text-neutral-300 hover:text-white transition-colors">
                   {CONTACT.email}
                 </a>
               </div>
@@ -104,11 +104,11 @@ export default function Footer() {
 
           {/* Opening Hours */}
           <div>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-gray-300 mb-4">
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-neutral-300 mb-4">
               <Clock className="inline w-4 h-4 mr-1.5 mb-0.5" />
               {tFooter('openingHours')}
             </Heading>
-            <div className="space-y-1 text-sm text-gray-300">
+            <div className="space-y-1 text-sm text-neutral-300">
               <p>{tFooter('openingHoursMonday', { hours: OPENING_HOURS.monday })}</p>
               <p>{tFooter('openingHoursTueFri', { hours: OPENING_HOURS.tuesdayToFriday })}</p>
             </div>
@@ -116,7 +116,7 @@ export default function Footer() {
         </div>
 
         {/* Newsletter */}
-        <div className="mt-10 pt-8 border-t border-gray-800">
+        <div className="mt-10 pt-8 border-t border-neutral-800">
           <NewsletterSignup
             source="footer"
             variant="dark"
@@ -124,12 +124,12 @@ export default function Footer() {
         </div>
 
         {/* Social Links */}
-        <div className="mt-8 pt-6 border-t border-gray-800 flex justify-center gap-4">
+        <div className="mt-8 pt-6 border-t border-neutral-800 flex justify-center gap-4">
           {socialLinks.map((social) => (
             <a
               key={social.name}
               href={social.href}
-              className="p-2 text-gray-300 hover:text-white transition-colors rounded-md hover:bg-gray-800"
+              className="p-2 text-neutral-300 hover:text-white transition-colors rounded-md hover:bg-neutral-800"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -140,8 +140,8 @@ export default function Footer() {
         </div>
 
         {/* Legal Links */}
-        <div className="mt-6 pt-6 border-t border-gray-800">
-          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-gray-300">
+        <div className="mt-6 pt-6 border-t border-neutral-800">
+          <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-neutral-300">
             <Link href="/impressum" className="hover:text-white transition-colors">
               {tFooter('impressum')}
             </Link>
@@ -161,7 +161,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-6 text-center text-xs text-gray-300">
+        <div className="mt-6 text-center text-xs text-neutral-300">
           &copy; {new Date().getFullYear()} {ORG.name}. {tFooter('allRightsReserved')}
         </div>
       </div>

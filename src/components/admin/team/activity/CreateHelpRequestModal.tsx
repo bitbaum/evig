@@ -80,7 +80,7 @@ export function CreateHelpRequestModal({
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             Wobei brauchst du Hilfe? <span className="text-red-500">*</span>
           </label>
           <input
@@ -93,13 +93,13 @@ export function CreateHelpRequestModal({
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'help-request-error' : undefined}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             Details
           </label>
           <textarea
@@ -108,13 +108,13 @@ export function CreateHelpRequestModal({
             placeholder="Beschreibe das Problem genauer (optional)"
             maxLength={2000}
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
           />
         </div>
 
         {/* Target type */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
             An wen richtet sich die Anfrage?
           </label>
           <div className="flex gap-3">
@@ -124,7 +124,7 @@ export function CreateHelpRequestModal({
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 isBroadcast
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
+                  : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
               <Users className="w-5 h-5" />
@@ -136,7 +136,7 @@ export function CreateHelpRequestModal({
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 !isBroadcast
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
-                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300'
+                  : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
               <User className="w-5 h-5" />
@@ -148,13 +148,13 @@ export function CreateHelpRequestModal({
         {/* Target user (if not broadcast) */}
         {!isBroadcast && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Person auswählen
             </label>
             <select
               value={targetUserId}
               onChange={(e) => setTargetUserId(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Wähle eine Person...</option>
               {teamMembers.map((member) => (
@@ -168,13 +168,13 @@ export function CreateHelpRequestModal({
 
         {/* Urgency */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             Dringlichkeit
           </label>
           <select
             value={urgency}
             onChange={(e) => setUrgency(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
               <option key={urg} value={urg}>
@@ -186,13 +186,13 @@ export function CreateHelpRequestModal({
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             Kategorie
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="">Keine Kategorie</option>
             {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
@@ -204,11 +204,11 @@ export function CreateHelpRequestModal({
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
           >
             Abbrechen
           </button>

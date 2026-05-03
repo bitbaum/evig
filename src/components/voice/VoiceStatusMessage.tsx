@@ -24,7 +24,7 @@ export function VoiceStatusMessage({
   return (
     <>
       {/* Status hint */}
-      <div className="text-center mt-4 text-sm text-gray-600 dark:text-gray-400">
+      <div className="text-center mt-4 text-sm text-neutral-600 dark:text-neutral-400">
         {state === 'idle' && t('idle')}
         {state === 'recording' && (
           <span className="text-red-600">
@@ -39,7 +39,7 @@ export function VoiceStatusMessage({
 
       {/* Transcription result */}
       {transcribedText && state === 'success' && (
-        <div className="text-sm text-green-700 bg-green-50 dark:bg-green-900/20 dark:text-green-300 px-4 py-3 rounded-lg mt-4">
+        <div className="text-sm text-primary-700 bg-primary-50 dark:bg-primary-900/20 dark:text-primary-300 px-4 py-3 rounded-lg mt-4">
           <span className="font-medium">{t('recognized')}</span> {transcribedText}
         </div>
       )}

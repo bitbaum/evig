@@ -191,7 +191,7 @@ export default function EditRequestPage() {
 
   if (authStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
       </div>
     )
@@ -199,7 +199,7 @@ export default function EditRequestPage() {
 
   if (error && !formData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center gap-4">
         <p className="text-red-600">{error}</p>
         <Link href={`/it-hilfe/${id}`} className="text-blue-600 hover:underline">
           {t('backToRequest')}
@@ -210,11 +210,11 @@ export default function EditRequestPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
-          <Heading level={2} className="text-2xl text-gray-900 mb-2">{t('savedTitle')}</Heading>
-          <p className="text-gray-600">{t('savedRedirect')}</p>
+          <Heading level={2} className="text-2xl text-neutral-900 mb-2">{t('savedTitle')}</Heading>
+          <p className="text-neutral-600">{t('savedRedirect')}</p>
         </div>
       </div>
     )
@@ -223,24 +223,24 @@ export default function EditRequestPage() {
   if (!formData) return null
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
         <Link
           href={`/it-hilfe/${id}`}
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+          className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           {t('backToRequest')}
         </Link>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-emerald-100 rounded-lg">
               <Wrench className="w-6 h-6 text-emerald-600" />
             </div>
-            <Heading level={1} className="text-2xl text-gray-900">{t('title')}</Heading>
+            <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
           </div>
-          <p className="text-gray-600">
+          <p className="text-neutral-600">
             {t('description')}
           </p>
         </div>
@@ -251,8 +251,8 @@ export default function EditRequestPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Device Category */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <Heading level={2} className="text-lg text-gray-900 mb-4">{t('sectionCategory')}</Heading>
+          <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+            <Heading level={2} className="text-lg text-neutral-900 mb-4">{t('sectionCategory')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
                 const Icon = cat.icon
@@ -264,13 +264,13 @@ export default function EditRequestPage() {
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
                         ? 'border-emerald-500 bg-emerald-50'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-neutral-200 hover:border-neutral-300'
                     }`}
                   >
                     <div className={`w-10 h-10 mx-auto mb-2 rounded-lg ${cat.color} flex items-center justify-center`}>
                       <Icon className="w-5 h-5 text-white" />
                     </div>
-                    <span className="text-sm font-medium text-gray-900">{cat.name}</span>
+                    <span className="text-sm font-medium text-neutral-900">{cat.name}</span>
                   </button>
                 )
               })}
@@ -306,13 +306,13 @@ export default function EditRequestPage() {
               />
 
               {/* Budget */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <Heading level={2} className="text-lg text-gray-900 mb-2">{t('sectionBudget')}</Heading>
-                <p className="text-sm text-gray-600 mb-4">
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+                <Heading level={2} className="text-lg text-neutral-900 mb-2">{t('sectionBudget')}</Heading>
+                <p className="text-sm text-neutral-600 mb-4">
                   {t('budgetDescription')}
                 </p>
                 <div className="flex items-center gap-3">
-                  <span className="text-gray-500">CHF</span>
+                  <span className="text-neutral-500">CHF</span>
                   <input
                     type="number"
                     value={formData.maxBudget}
@@ -320,26 +320,26 @@ export default function EditRequestPage() {
                     {...{placeholder: t('budgetPlaceholder')}}
                     min="0"
                     step="5"
-                    className="w-32 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-32 px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                   />
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-neutral-500">
                     {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
                   </span>
                 </div>
               </div>
 
               {/* Service Type & Urgency */}
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <Heading level={2} className="text-lg text-gray-900 mb-4">{t('sectionOptions')}</Heading>
+              <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+                <Heading level={2} className="text-lg text-neutral-900 mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {t('serviceTypeLabel')}
                     </label>
                     <select
                       value={formData.serviceType}
                       onChange={(e) => updateField('serviceType', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                       {SERVICE_TYPES.map((s) => (
                         <option key={s.id} value={s.id}>{s.name}</option>
@@ -347,13 +347,13 @@ export default function EditRequestPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">
                       {t('urgencyLabel')}
                     </label>
                     <select
                       value={formData.urgency}
                       onChange={(e) => updateField('urgency', e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                       {URGENCY_LEVELS.map((u) => (
                         <option key={u.id} value={u.id}>{u.name}</option>
@@ -372,7 +372,7 @@ export default function EditRequestPage() {
               <div className="flex justify-end gap-4">
                 <Link
                   href={`/it-hilfe/${id}`}
-                  className="px-6 py-3 text-gray-700 bg-gray-100 rounded-lg font-medium hover:bg-gray-200 transition-colors"
+                  className="px-6 py-3 text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors"
                 >
                   {t('cancelButton')}
                 </Link>

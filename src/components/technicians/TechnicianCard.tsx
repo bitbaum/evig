@@ -19,9 +19,9 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
   const remainingSkillsCount = technician.skills.length - 5
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 hover:shadow-md transition-shadow">
       {/* Header */}
-      <div className="p-6 border-b border-gray-100">
+      <div className="p-6 border-b border-neutral-100">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -29,20 +29,20 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             </div>
             <div>
               <Link href={`/techniker/${technician.id}`} className="hover:underline">
-                <Heading level={3} className="font-semibold text-gray-900">
+                <Heading level={3} className="font-semibold text-neutral-900">
                   {isProfessional
                     ? (technician.businessName ?? technician.name)
                     : technician.name}
                 </Heading>
               </Link>
               {isProfessional && technician.businessName && (
-                <p className="text-sm text-gray-500">{technician.name}</p>
+                <p className="text-sm text-neutral-500">{technician.name}</p>
               )}
             </div>
           </div>
 
           {technician.isVerified && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 flex-shrink-0">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 flex-shrink-0">
               <CheckCircle className="w-3 h-3" />
               {t('verified')}
             </span>
@@ -53,11 +53,11 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {technician.averageRating !== null && (
           <div className="flex items-center gap-2 mb-3">
             <StarRating value={technician.averageRating} size="sm" />
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-neutral-600">
               {technician.averageRating.toFixed(1)}
             </span>
             {technician.totalJobsCompleted > 0 && (
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-neutral-500">
                 ({t('jobsCompleted', { count: technician.totalJobsCompleted })})
               </span>
             )}
@@ -66,7 +66,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
 
         {/* Bio */}
         {technician.bio && (
-          <p className="text-gray-600 text-sm mb-3 line-clamp-2">{technician.bio}</p>
+          <p className="text-neutral-600 text-sm mb-3 line-clamp-2">{technician.bio}</p>
         )}
 
         {/* Professional: services offered */}
@@ -81,7 +81,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
               </span>
             ))}
             {technician.servicesOffered.length > 3 && (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-800">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-neutral-100 text-neutral-800">
                 +{technician.servicesOffered.length - 3}
               </span>
             )}
@@ -100,7 +100,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
               </span>
             ))}
             {remainingSkillsCount > 0 && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">
                 +{remainingSkillsCount}
               </span>
             )}
@@ -112,7 +112,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
       <div className="p-6">
         {/* Location */}
         {(technician.city || technician.postalCode) && (
-          <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+          <div className="flex items-center gap-2 text-sm text-neutral-600 mb-3">
             <MapPin className="w-4 h-4 flex-shrink-0" />
             <span>
               {[technician.postalCode, technician.city].filter(Boolean).join(' ')}
@@ -135,13 +135,13 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             </span>
           )}
           {technician.hourlyRateCents && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
               <Euro className="w-3 h-3" />
               CHF {(technician.hourlyRateCents / 100).toFixed(0)}/h
             </span>
           )}
           {!technician.hourlyRateCents && !technician.acceptsGratis && (
-            <span className="text-sm text-gray-500">{t('priceOnRequest')}</span>
+            <span className="text-sm text-neutral-500">{t('priceOnRequest')}</span>
           )}
         </div>
 

@@ -29,17 +29,17 @@ export interface DocumentStatusBadge {
 }
 
 export const DOCUMENT_STATUS_BADGES: Record<string, DocumentStatusBadge> = {
-  [DOCUMENT_STATUS.APPROVED]: { label: DOCUMENT_STATUS_LABELS.approved, bg: 'bg-green-100', color: 'text-green-800' },
+  [DOCUMENT_STATUS.APPROVED]: { label: DOCUMENT_STATUS_LABELS.approved, bg: 'bg-primary-100', color: 'text-primary-800' },
   [DOCUMENT_STATUS.IN_REVIEW]: { label: DOCUMENT_STATUS_LABELS.in_review, bg: 'bg-blue-100', color: 'text-blue-800' },
   [DOCUMENT_STATUS.INCOMPLETE]: { label: DOCUMENT_STATUS_LABELS.incomplete, bg: 'bg-red-100', color: 'text-red-800' },
   [DOCUMENT_STATUS.REJECTED]: { label: DOCUMENT_STATUS_LABELS.rejected, bg: 'bg-red-100', color: 'text-red-800' },
-  [DOCUMENT_STATUS.PENDING]: { label: DOCUMENT_STATUS_LABELS.pending, bg: 'bg-gray-100', color: 'text-gray-800' },
+  [DOCUMENT_STATUS.PENDING]: { label: DOCUMENT_STATUS_LABELS.pending, bg: 'bg-neutral-100', color: 'text-neutral-800' },
 };
 
 export function getDocumentStatusBadge(status: string): DocumentStatusBadge {
   return DOCUMENT_STATUS_BADGES[status] ?? {
     label: status,
-    bg: 'bg-gray-100',
-    color: 'text-gray-800',
+    bg: 'bg-neutral-100',
+    color: 'text-neutral-800',
   };
 }

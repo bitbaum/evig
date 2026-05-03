@@ -146,20 +146,20 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
 
       {/* Loading State */}
       {loading && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-8 text-center">
-          <RefreshCw className="w-8 h-8 text-gray-500 mx-auto animate-spin mb-4" />
-          <p className="text-gray-500">Lade Benutzer...</p>
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-100 dark:border-neutral-700 p-8 text-center">
+          <RefreshCw className="w-8 h-8 text-neutral-500 mx-auto animate-spin mb-4" />
+          <p className="text-neutral-500">Lade Benutzer...</p>
         </div>
       )}
 
       {/* Empty State */}
       {!loading && !error && users.length === 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 p-12 text-center">
-          <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-100 dark:border-neutral-700 p-12 text-center">
+          <Users className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
             Keine Benutzer gefunden
           </Heading>
-          <p className="text-gray-500 dark:text-gray-400 mb-4">
+          <p className="text-neutral-500 dark:text-neutral-400 mb-4">
             {filters.search || filters.type !== 'all' || filters.verified !== 'all'
               ? 'Keine Benutzer entsprechen Ihren Filterkriterien.'
               : 'Keine Benutzer vorhanden.'}
@@ -179,12 +179,12 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       {!loading && !error && users.length > 0 && (
         <>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">
               {pagination.total} {pagination.total === 1 ? 'Benutzer' : 'Benutzer'} gefunden
             </p>
             <button
               onClick={fetchUsers}
-              className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
             >
               <RefreshCw className="w-4 h-4" />
               Aktualisieren

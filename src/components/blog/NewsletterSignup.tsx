@@ -39,42 +39,42 @@ export default function NewsletterSignup() {
 
   return (
     <div className="max-w-[680px] mx-auto px-6 py-12">
-      <div className="border-t border-b border-gray-200 py-12">
+      <div className="border-t border-b border-neutral-200 py-12">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
-          <Heading level={3} className="text-2xl font-bold text-gray-900 mb-3">
+          <Heading level={3} className="text-2xl font-bold text-neutral-900 mb-3">
             {t('title')}
           </Heading>
-          <p className="text-lg text-gray-600 leading-relaxed">
+          <p className="text-lg text-neutral-600 leading-relaxed">
             {t('subtitle')}
           </p>
         </div>
 
         {/* Newsletter Promise */}
-        <div className="bg-gray-50 rounded-lg p-6 mb-8">
+        <div className="bg-neutral-50 rounded-lg p-6 mb-8">
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
             <div className="flex items-start gap-2">
               <Check className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-gray-900">{t('free')}</p>
-                <p className="text-gray-600">{t('freeDesc')}</p>
+                <p className="font-semibold text-neutral-900">{t('free')}</p>
+                <p className="text-neutral-600">{t('freeDesc')}</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Check className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-gray-900">{t('noAds')}</p>
-                <p className="text-gray-600">{t('noAdsDesc')}</p>
+                <p className="font-semibold text-neutral-900">{t('noAds')}</p>
+                <p className="text-neutral-600">{t('noAdsDesc')}</p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <Check className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-semibold text-gray-900">{t('unsubscribe')}</p>
-                <p className="text-gray-600">{t('unsubscribeDesc')}</p>
+                <p className="font-semibold text-neutral-900">{t('unsubscribe')}</p>
+                <p className="text-neutral-600">{t('unsubscribeDesc')}</p>
               </div>
             </div>
           </div>
@@ -104,12 +104,12 @@ export default function NewsletterSignup() {
                 aria-invalid={status === 'error'}
                 aria-describedby={status === 'error' ? 'newsletter-error' : undefined}
                 disabled={status === 'loading'}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed text-base"
+                className="flex-1 px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-neutral-100 disabled:cursor-not-allowed text-base"
               />
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold whitespace-nowrap"
+                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors font-semibold whitespace-nowrap"
               >
                 {status === 'loading' ? t('sending') : t('subscribe')}
               </button>
@@ -119,24 +119,24 @@ export default function NewsletterSignup() {
               <p id="newsletter-error" className="text-red-600 text-sm">{message}</p>
             )}
 
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-neutral-500 text-center">
               {t('privacy')}
             </p>
           </form>
         )}
 
         {/* Community Support */}
-        <div className="mt-8 pt-8 border-t border-gray-200 text-center">
-          <div className="flex items-center justify-center gap-2 text-gray-600 mb-2">
+        <div className="mt-8 pt-8 border-t border-neutral-200 text-center">
+          <div className="flex items-center justify-center gap-2 text-neutral-600 mb-2">
             <Heart className="w-5 h-5 text-red-500" />
             <p className="text-sm">{t('communityTitle')}</p>
           </div>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-neutral-600 mb-4">
             {t('communityDesc')}
           </p>
           <Link
             href="/support"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
           >
             <Heart className="w-4 h-4" />
             {t('supportButton')}

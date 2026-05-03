@@ -14,7 +14,7 @@ interface Props {
 export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode, onSet }: Props) {
   return (
     <div className="space-y-3">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-neutral-500">
         Verteile {maxDots} Punkte auf die Optionen ({maxDots - usedDots} verbleibend):
       </p>
       {isGalleryMode ? (
@@ -29,7 +29,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                     onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1));
                   }}
                   disabled={(allocations[opt.id] || 0) <= 0}
-                  className="h-7 w-7 rounded-full border bg-white text-sm font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
+                  className="h-7 w-7 rounded-full border bg-white text-sm font-bold text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
                 >
                   -
                 </button>
@@ -43,7 +43,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                     onSet(opt.id, (allocations[opt.id] || 0) + 1);
                   }}
                   disabled={usedDots >= maxDots}
-                  className="h-7 w-7 rounded-full border bg-white text-sm font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
+                  className="h-7 w-7 rounded-full border bg-white text-sm font-bold text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
                 >
                   +
                 </button>
@@ -55,17 +55,17 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
         options.map((opt) => (
           <div
             key={opt.id}
-            className="flex items-center gap-3 rounded-md border border-gray-200 p-3"
+            className="flex items-center gap-3 rounded-md border border-neutral-200 p-3"
           >
             <div className="flex-1">
-              <span className="font-medium text-gray-800">{opt.label}</span>
+              <span className="font-medium text-neutral-800">{opt.label}</span>
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => onSet(opt.id, Math.max(0, (allocations[opt.id] || 0) - 1))}
                 disabled={(allocations[opt.id] || 0) <= 0}
-                className="h-8 w-8 rounded-md border text-lg font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
+                className="h-8 w-8 rounded-md border text-lg font-bold text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
               >
                 -
               </button>
@@ -76,7 +76,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                 type="button"
                 onClick={() => onSet(opt.id, (allocations[opt.id] || 0) + 1)}
                 disabled={usedDots >= maxDots}
-                className="h-8 w-8 rounded-md border text-lg font-bold text-gray-600 hover:bg-gray-100 disabled:opacity-30"
+                className="h-8 w-8 rounded-md border text-lg font-bold text-neutral-600 hover:bg-neutral-100 disabled:opacity-30"
               >
                 +
               </button>

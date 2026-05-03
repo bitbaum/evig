@@ -266,7 +266,7 @@ export function WorkshopProposalForm() {
           id={submitResult.success ? undefined : 'workshop-propose-error'}
           className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
-              ? 'bg-green-50 border-green-200 text-green-800'
+              ? 'bg-primary-50 border-primary-200 text-primary-800'
               : 'bg-red-50 border-red-200 text-red-800'
           }`}
         >
@@ -281,7 +281,7 @@ export function WorkshopProposalForm() {
               <p className="mb-4">{t('form.successMessage')}</p>
               <Link
                 href="/workshops"
-                className="inline-flex items-center text-green-700 underline hover:text-green-900 font-medium"
+                className="inline-flex items-center text-primary-700 underline hover:text-primary-900 font-medium"
               >
                 {t('form.backToWorkshops')}
               </Link>
@@ -300,7 +300,7 @@ export function WorkshopProposalForm() {
         <button
           type="submit"
           disabled={isSubmitting || !formData.title.trim() || !formData.description.trim() || !formData.category || !formData.termsAccepted}
-          className={`${responsiveButtons.primary} inline-flex items-center bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+          className={`${responsiveButtons.primary} inline-flex items-center bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
         >
           {isSubmitting ? (
             <>
@@ -312,7 +312,7 @@ export function WorkshopProposalForm() {
           )}
         </button>
 
-        <p className="text-sm text-gray-600 mt-4">
+        <p className="text-sm text-neutral-600 mt-4">
           {t('form.reviewNote')}
         </p>
       </div>

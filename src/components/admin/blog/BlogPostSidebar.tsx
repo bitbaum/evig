@@ -24,8 +24,8 @@ export function BlogPostSidebar({
   return (
     <div className="space-y-6">
       {/* Status */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4">Status</Heading>
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Status</Heading>
         <div className="flex items-center gap-3">
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -34,21 +34,21 @@ export function BlogPostSidebar({
               onChange={(e) => onFormDataChange({ ...formData, isPublished: e.target.checked })}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 rounded-full peer dark:bg-gray-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-500 peer-checked:bg-green-600"></div>
+            <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 dark:peer-focus:ring-primary-800 rounded-full peer dark:bg-neutral-600 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-neutral-500 peer-checked:bg-primary-600"></div>
           </label>
-          <span className="text-sm text-gray-700 dark:text-gray-300">
+          <span className="text-sm text-neutral-700 dark:text-neutral-300">
             {formData.isPublished ? 'Veröffentlicht' : 'Entwurf'}
           </span>
         </div>
       </div>
 
       {/* Category */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4">Kategorie</Heading>
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Kategorie</Heading>
         <select
           value={formData.categoryId}
           onChange={(e) => onFormDataChange({ ...formData, categoryId: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          className="w-full px-4 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
         >
           <option value="">Keine Kategorie</option>
           {categories.map((cat) => (
@@ -58,8 +58,8 @@ export function BlogPostSidebar({
       </div>
 
       {/* Featured Image */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
           <ImageIcon className="w-4 h-4" />
           Beitragsbild
         </Heading>
@@ -67,7 +67,7 @@ export function BlogPostSidebar({
           type="text"
           value={formData.featuredImage}
           onChange={(e) => onFormDataChange({ ...formData, featuredImage: e.target.value })}
-          className="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          className="w-full px-4 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           placeholder="https://..."
         />
         {formData.featuredImage && (
@@ -80,8 +80,8 @@ export function BlogPostSidebar({
       </div>
 
       {/* Tags */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
           <Tag className="w-4 h-4" />
           Tags
         </Heading>
@@ -91,13 +91,13 @@ export function BlogPostSidebar({
             value={tagInput}
             onChange={(e) => onTagInputChange(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), onAddTag())}
-            className="flex-1 px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="Tag hinzufügen"
           />
           <button
             type="button"
             onClick={onAddTag}
-            className="px-3 py-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500"
+            className="px-3 py-2 bg-neutral-100 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-500"
           >
             +
           </button>
@@ -106,13 +106,13 @@ export function BlogPostSidebar({
           {formData.tags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded text-sm"
+              className="inline-flex items-center gap-1 px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded text-sm"
             >
               {tag}
               <button
                 type="button"
                 onClick={() => onRemoveTag(tag)}
-                className="hover:text-green-900 dark:hover:text-green-100"
+                className="hover:text-primary-900 dark:hover:text-primary-100"
               >
                 ×
               </button>
@@ -122,26 +122,26 @@ export function BlogPostSidebar({
       </div>
 
       {/* SEO */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
-        <Heading level={3} className="font-medium text-gray-900 dark:text-white mb-4">SEO</Heading>
+      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">SEO</Heading>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Meta-Titel</label>
+            <label className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">Meta-Titel</label>
             <input
               type="text"
               value={formData.seoTitle}
               onChange={(e) => onFormDataChange({ ...formData, seoTitle: e.target.value })}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={formData.title || 'SEO Titel'}
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Meta-Beschreibung</label>
+            <label className="block text-sm text-neutral-600 dark:text-neutral-400 mb-1">Meta-Beschreibung</label>
             <textarea
               value={formData.seoDescription}
               onChange={(e) => onFormDataChange({ ...formData, seoDescription: e.target.value })}
               rows={2}
-              className="w-full px-3 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={formData.excerpt || 'SEO Beschreibung'}
             />
           </div>

@@ -168,8 +168,8 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (status === 'loading' || registrationStatus === 'checking') {
     return (
       <div className="text-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-green-600 mx-auto mb-3" />
-        <p className="text-gray-600">{t('loading')}</p>
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-3" />
+        <p className="text-neutral-600">{t('loading')}</p>
       </div>
     )
   }
@@ -194,7 +194,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (isFull) {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('fullHeading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('fullHeading')}</Heading>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div className="flex items-center text-red-800 mb-2">
@@ -208,7 +208,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           disabled
-          className="w-full px-4 py-3 bg-gray-300 text-gray-500 rounded-lg cursor-not-allowed"
+          className="w-full px-4 py-3 bg-neutral-300 text-neutral-500 rounded-lg cursor-not-allowed"
         >
           {t('fullButton')}
         </button>
@@ -220,7 +220,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'error') {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('errorHeading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('errorHeading')}</Heading>
 
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
           <div className="flex items-center text-red-800 mb-2">
@@ -232,7 +232,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+          className="w-full px-4 py-3 bg-neutral-600 text-white rounded-lg hover:bg-neutral-700 transition-colors"
         >
           {t('retryButton')}
         </button>
@@ -244,18 +244,18 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'payment' && paymentData) {
     return (
       <div>
-        <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('paymentHeading')}</Heading>
+        <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('paymentHeading')}</Heading>
 
         {/* Payment Summary */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-4">
+        <div className="bg-neutral-50 rounded-lg p-4 mb-4">
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">{t('paymentWorkshopLabel')}</span>
+              <span className="text-neutral-600">{t('paymentWorkshopLabel')}</span>
               <span className="font-medium">{workshop.title}</span>
             </div>
             <div className="flex justify-between border-t pt-2">
               <span className="font-semibold">{t('paymentAmountLabel')}</span>
-              <span className="font-semibold text-green-600">CHF {paymentData.amount}</span>
+              <span className="font-semibold text-primary-600">CHF {paymentData.amount}</span>
             </div>
           </div>
         </div>
@@ -268,7 +268,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
 
         <button
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full mt-3 px-4 py-2 text-gray-600 text-sm hover:text-gray-800 transition-colors"
+          className="w-full mt-3 px-4 py-2 text-neutral-600 text-sm hover:text-neutral-800 transition-colors"
         >
           {t('cancelButton')}
         </button>
@@ -280,8 +280,8 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   if (registrationStatus === 'processing' || registrationStatus === 'registering') {
     return (
       <div className="text-center py-8">
-        <Loader2 className="w-8 h-8 animate-spin text-green-600 mx-auto mb-3" />
-        <p className="text-gray-600">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600 mx-auto mb-3" />
+        <p className="text-neutral-600">
           {registrationStatus === 'processing'
             ? t('preparingPayment')
             : t('registering')
@@ -294,7 +294,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
   // Default: Registration form
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('registerHeading')}</Heading>
+      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('registerHeading')}</Heading>
 
       <WorkshopInstanceCard
         instance={instance}
@@ -305,7 +305,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       {/* Registration Button */}
       <button
         onClick={requiresPayment ? handlePaidRegistration : handleFreeRegistration}
-        className="w-full inline-flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+        className="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
       >
         {requiresPayment ? (
           <>
@@ -318,7 +318,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       </button>
 
       {/* Info */}
-      <p className="text-xs text-gray-500 mt-3 text-center">
+      <p className="text-xs text-neutral-500 mt-3 text-center">
         {requiresPayment
           ? t('paymentNote')
           : t('confirmationNote')

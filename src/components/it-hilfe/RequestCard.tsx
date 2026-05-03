@@ -78,12 +78,12 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
   return (
     <Link
       href={IT_HILFE.routes.detail(request.id)}
-      className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow group ${className}`}
+      className={`bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow group ${className}`}
     >
       {/* Card Header */}
-      <div className="p-5 border-b border-gray-100 dark:border-gray-700">
+      <div className="p-5 border-b border-neutral-100 dark:border-neutral-700">
         <div className="flex items-start justify-between mb-3">
-          <div className={`p-2.5 ${categoryConfig?.color || 'bg-gray-500'} rounded-lg`}>
+          <div className={`p-2.5 ${categoryConfig?.color || 'bg-neutral-500'} rounded-lg`}>
             <CategoryIcon className="w-5 h-5 text-white" />
           </div>
           <div className="flex items-center gap-2">
@@ -93,29 +93,29 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
                 {expiryLabel}
               </span>
             )}
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-gray-100 text-gray-700'}`}>
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
               {urgencyConfig?.name || request.urgency}
             </span>
           </div>
         </div>
 
-        <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
+        <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
           {request.title}
         </Heading>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2 mb-3">
           {request.description}
         </p>
 
         {/* Device info */}
         {(request.deviceBrand || request.deviceModel) && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
             {[request.deviceBrand, request.deviceModel].filter(Boolean).join(' ')}
           </p>
         )}
 
         {/* Meta info */}
-        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+        <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
           <div className="flex items-center gap-1">
             <MapPin className="w-4 h-4" />
             <span>{request.city}</span>
@@ -128,11 +128,11 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
       </div>
 
       {/* Card Footer */}
-      <div className="px-5 py-3 bg-gray-50 dark:bg-gray-800 flex items-center justify-between">
+      <div className="px-5 py-3 bg-neutral-50 dark:bg-neutral-800 flex items-center justify-between">
         <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
           {formatBudget(request.budgetAmountCents)}
         </span>
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-neutral-500">
           {formatDateShort(request.createdAt)}
         </span>
       </div>

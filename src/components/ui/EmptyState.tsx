@@ -4,9 +4,9 @@ import Heading from './Heading'
 
 interface EmptyStateProps {
   icon: LucideIcon
-  /** Tailwind bg classes for the icon circle, e.g. "bg-green-50 dark:bg-green-900/20" */
+  /** Tailwind bg classes for the icon circle, e.g. "bg-primary-50 dark:bg-primary-900/20" */
   iconBg?: string
-  /** Tailwind text classes for the icon, e.g. "text-green-600 dark:text-green-400" */
+  /** Tailwind text classes for the icon, e.g. "text-primary-600 dark:text-primary-400" */
   iconColor?: string
   title: string
   description?: string
@@ -16,8 +16,8 @@ interface EmptyStateProps {
 
 export function EmptyState({
   icon: Icon,
-  iconBg = 'bg-gray-100 dark:bg-gray-700',
-  iconColor = 'text-gray-500 dark:text-gray-400',
+  iconBg = 'bg-neutral-100 dark:bg-neutral-700',
+  iconColor = 'text-neutral-500 dark:text-neutral-400',
   title,
   description,
   action,
@@ -26,7 +26,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center',
+        'bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center',
         className
       )}
     >
@@ -38,11 +38,11 @@ export function EmptyState({
       >
         <Icon className={cn('w-7 h-7', iconColor)} aria-hidden="true" />
       </div>
-      <Heading level={3} className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+      <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white mb-2">
         {title}
       </Heading>
       {description && (
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 max-w-sm mx-auto">
           {description}
         </p>
       )}

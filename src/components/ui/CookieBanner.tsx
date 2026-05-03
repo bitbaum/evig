@@ -54,14 +54,14 @@ export function CookieBanner() {
         <div className="flex flex-shrink-0 flex-col gap-2 sm:flex-row sm:items-center">
           <Link
             href="/datenschutz"
-            className="text-center text-sm font-medium text-green-700 underline hover:text-green-800 dark:text-green-400 dark:hover:text-green-300"
+            className="text-center text-sm font-medium text-primary-700 underline hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300"
           >
             {t('learnMore')}
           </Link>
           <button
             type="button"
             onClick={handleAccept}
-            className="inline-flex items-center justify-center rounded-lg bg-green-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             {t('accept')}
           </button>

@@ -53,16 +53,16 @@ export default function SettingsPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {labels.pageTitle}
               </Heading>
-              <p className="mt-1 text-sm sm:text-base text-gray-600 dark:text-neutral-400">
+              <p className="mt-1 text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
                 {labels.pageDescription}
               </p>
             </div>
             <Link
               href="/dashboard/profile"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-gray-700 dark:text-gray-200 rounded-lg transition-colors text-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-neutral-200 rounded-lg transition-colors text-sm"
             >
               <User className="w-4 h-4" />
               <span className="hidden sm:inline">{t('editProfile')}</span>
@@ -83,7 +83,7 @@ export default function SettingsPage() {
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-blue-600 text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/10'
-                    : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-neutral-700/50'
+                    : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
                 }`}
               >
                 <tab.icon className="w-5 h-5" />
@@ -97,9 +97,9 @@ export default function SettingsPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Success Message */}
           {saveSuccess && (
-            <div className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 rounded-lg p-4 flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
-              <p className="text-green-700 dark:text-green-300">
+            <div className="bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-200 dark:border-primary-800 rounded-lg p-4 flex items-center gap-3">
+              <CheckCircle2 className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+              <p className="text-primary-700 dark:text-primary-300">
                 {labels.saveSuccess}
               </p>
             </div>

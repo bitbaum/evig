@@ -107,10 +107,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
       {/* Navigation */}
       <Suspense fallback={
-        <nav className="border-b border-gray-200 bg-white sticky top-0 z-40">
+        <nav className="border-b border-neutral-200 bg-white sticky top-0 z-40">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-14 sm:h-16">
-              <span className="text-xl sm:text-2xl font-bold text-gray-900">{t('hero.title')}</span>
+              <span className="text-xl sm:text-2xl font-bold text-neutral-900">{t('hero.title')}</span>
             </div>
           </div>
         </nav>
@@ -125,15 +125,15 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         {filteredPosts.length === 0 ? (
           <div className="text-center py-12 sm:py-16 md:py-20">
-            <Heading level={2} className="text-gray-900 mb-4">
+            <Heading level={2} className="text-neutral-900 mb-4">
               {t('empty.title')}
             </Heading>
-            <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
+            <p className="text-sm sm:text-base text-neutral-600 mb-6 sm:mb-8">
               {t('empty.description')}
             </p>
             <Link
               href="/blog/submit"
-              className="inline-flex items-center px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold text-sm sm:text-base"
+              className="inline-flex items-center px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold text-sm sm:text-base"
             >
               {t('empty.submitButton')}
             </Link>
@@ -149,17 +149,17 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
             {/* Featured Stories */}
             {featuredPosts.length > 0 && (
-              <div className="py-6 sm:py-8 border-t border-gray-200">
-                <Heading level={2} className="text-gray-900 mb-4 sm:mb-6">{t('sections.featured')}</Heading>
+              <div className="py-6 sm:py-8 border-t border-neutral-200">
+                <Heading level={2} className="text-neutral-900 mb-4 sm:mb-6">{t('sections.featured')}</Heading>
                 <BlogFeaturedGrid posts={featuredPosts} />
               </div>
             )}
 
             {/* Latest Posts */}
             {latestPosts.length > 0 && (
-              <div className="py-6 sm:py-8 border-t border-gray-200">
+              <div className="py-6 sm:py-8 border-t border-neutral-200">
                 <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <Heading level={2} className="text-gray-900">{t('sections.latest')}</Heading>
+                  <Heading level={2} className="text-neutral-900">{t('sections.latest')}</Heading>
                 </div>
                 <BlogLatestList posts={latestPosts} />
               </div>
@@ -169,20 +169,20 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       </div>
 
       {/* Footer CTA */}
-      <div className="bg-gray-50 border-t border-gray-200 mt-12 sm:mt-16 py-8 sm:py-12">
+      <div className="bg-neutral-50 border-t border-neutral-200 mt-12 sm:mt-16 py-8 sm:py-12">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div>
-              <Heading level={3} className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+              <Heading level={3} className="text-lg sm:text-xl font-bold text-neutral-900 mb-2">
                 {t('footerCta.title')}
               </Heading>
-              <p className="text-sm sm:text-base text-gray-600">
+              <p className="text-sm sm:text-base text-neutral-600">
                 {t('footerCta.description')}
               </p>
             </div>
             <Link
               href="/blog/submit"
-              className="px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold whitespace-nowrap text-sm sm:text-base"
+              className="px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold whitespace-nowrap text-sm sm:text-base"
             >
               {t('footerCta.button')}
             </Link>

@@ -13,11 +13,11 @@ export function WorkflowSection() {
           So funktioniert das System
         </h2>
         <div className="relative">
-          <div className="hidden md:block absolute left-8 top-8 bottom-8 w-px bg-green-200" />
+          <div className="hidden md:block absolute left-8 top-8 bottom-8 w-px bg-primary-200" />
           <div className="space-y-8">
             {steps.map((s) => (
               <div key={s.step} className="flex gap-6">
-                <div className="flex-shrink-0 w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold z-10">
+                <div className="flex-shrink-0 w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold z-10">
                   {s.step}
                 </div>
                 <div className="pt-3">

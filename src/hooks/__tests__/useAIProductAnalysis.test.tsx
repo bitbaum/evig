@@ -466,9 +466,9 @@ describe('handleFileSelect', () => {
 
 describe('getConfidenceColor', () => {
   it('high confidence (>=0.9) → green', () => {
-    expect(getConfidenceColor(0.95)).toBe('text-green-600')
-    expect(getConfidenceColor(0.9)).toBe('text-green-600') // boundary inclusive
-    expect(getConfidenceColor(1)).toBe('text-green-600')
+    expect(getConfidenceColor(0.95)).toBe('text-primary-600')
+    expect(getConfidenceColor(0.9)).toBe('text-primary-600') // boundary inclusive
+    expect(getConfidenceColor(1)).toBe('text-primary-600')
   })
 
   it('medium confidence (0.7 to 0.9) → yellow', () => {

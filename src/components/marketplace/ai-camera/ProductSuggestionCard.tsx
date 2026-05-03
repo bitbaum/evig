@@ -25,16 +25,16 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
   return (
     <div
       onClick={() => onSelect(suggestion)}
-      className="p-4 border border-gray-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-colors"
+      className="p-4 border border-neutral-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-colors"
     >
       <div className="flex items-start gap-4">
         <CategoryIcon category={suggestion.category} className="w-8 h-8 text-purple-600 mt-1" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <Heading level={4} className="font-medium text-gray-900">{suggestion.name}</Heading>
+            <Heading level={4} className="font-medium text-neutral-900">{suggestion.name}</Heading>
             <ConfidenceBadge confidence={suggestion.confidence} />
           </div>
-          <p className="text-sm text-gray-600 mb-2">
+          <p className="text-sm text-neutral-600 mb-2">
             {suggestion.brand} • {getConditionLabel(suggestion.condition)} • CHF {suggestion.estimatedPrice}
           </p>
           <FeatureTags features={suggestion.features} />
@@ -49,7 +49,7 @@ function ConfidenceBadge({ confidence }: { confidence: number }) {
   return (
     <span className={cn(
       "px-2 py-1 text-xs rounded-full",
-      confidence > 0.8 ? "bg-green-100 text-green-800" :
+      confidence > 0.8 ? "bg-primary-100 text-primary-800" :
       confidence > 0.6 ? "bg-yellow-100 text-yellow-800" :
       "bg-red-100 text-red-800"
     )}>
@@ -62,7 +62,7 @@ function FeatureTags({ features }: { features: string[] }) {
   return (
     <div className="flex flex-wrap gap-1">
       {features.slice(0, 3).map((feature, index) => (
-        <span key={index} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
+        <span key={index} className="text-xs bg-neutral-100 text-neutral-700 px-2 py-1 rounded">
           {feature}
         </span>
       ))}

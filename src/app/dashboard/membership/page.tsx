@@ -65,10 +65,10 @@ export default async function MembershipPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
           {t('pageTitle')}
         </Heading>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
           {t('pageSubtitle', { orgName: ORG.legalName })}
         </p>
       </div>
@@ -76,20 +76,20 @@ export default async function MembershipPage() {
       {isMember ? (
         <div className="space-y-4">
           {/* Status card */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
-                <BadgeCheck className="w-6 h-6 text-green-600 dark:text-green-400" aria-hidden="true" />
+              <div className="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0">
+                <BadgeCheck className="w-6 h-6 text-primary-600 dark:text-primary-400" aria-hidden="true" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <Heading level={2} className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
                     {membership?.member_type
                       ? (MEMBERSHIP_TYPE_LABELS[membership.member_type as keyof typeof MEMBERSHIP_TYPE_LABELS] ?? t('memberLabel'))
                       : t('memberLabel')}
                   </Heading>
                   {paid ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 rounded-full text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs font-medium">
                       <CheckCircle className="w-3 h-3" aria-hidden="true" />
                       {t('paidBadge')}
                     </span>
@@ -101,7 +101,7 @@ export default async function MembershipPage() {
                   )}
                 </div>
                 {membership?.member_since && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1.5">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
                     {t('memberSince', { date: formatDate(membership.member_since) })}
                   </p>
@@ -111,22 +111,22 @@ export default async function MembershipPage() {
           </div>
 
           {/* Payment details */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-            <Heading level={3} className="text-base font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-gray-500" aria-hidden="true" />
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+            <Heading level={3} className="text-base font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+              <CreditCard className="w-4 h-4 text-neutral-500" aria-hidden="true" />
               {t('annualFee')}
             </Heading>
             <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                <span className="text-gray-600 dark:text-gray-400">{t('amountLabel')}</span>
-                <span className="font-semibold text-gray-900 dark:text-white">
+              <div className="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-700">
+                <span className="text-neutral-600 dark:text-neutral-400">{t('amountLabel')}</span>
+                <span className="font-semibold text-neutral-900 dark:text-white">
                   {t('amountValue', { currency: MEMBERSHIP.currency, fee })}
                 </span>
               </div>
               {membership?.member_paid_until && (
-                <div className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                  <span className="text-gray-600 dark:text-gray-400">{t('paidUntilLabel')}</span>
-                  <span className={`font-medium ${paid ? 'text-green-700 dark:text-green-400' : 'text-orange-700 dark:text-orange-400'}`}>
+                <div className="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-700">
+                  <span className="text-neutral-600 dark:text-neutral-400">{t('paidUntilLabel')}</span>
+                  <span className={`font-medium ${paid ? 'text-primary-700 dark:text-primary-400' : 'text-orange-700 dark:text-orange-400'}`}>
                     {formatDate(membership.member_paid_until)}
                   </span>
                 </div>
@@ -149,21 +149,21 @@ export default async function MembershipPage() {
           </div>
 
           {/* What membership means */}
-          <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
-            <Heading level={3} className="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3">
+          <div className="bg-neutral-50 dark:bg-neutral-900/50 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
+            <Heading level={3} className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wide mb-3">
               {t('benefitsTitle')}
             </Heading>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <ul className="space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit1')}
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit2')}
               </li>
               <li className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                <CheckCircle className="w-4 h-4 text-primary-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                 {t('benefit3')}
               </li>
             </ul>
@@ -172,14 +172,14 @@ export default async function MembershipPage() {
       ) : (
         <EmptyState
           icon={BadgeCheck}
-          iconBg="bg-green-50 dark:bg-green-900/20"
-          iconColor="text-green-600 dark:text-green-400"
+          iconBg="bg-primary-50 dark:bg-primary-900/20"
+          iconColor="text-primary-600 dark:text-primary-400"
           title={t('notMemberTitle')}
           description={t('notMemberDesc', { orgName: ORG.legalName, currency: MEMBERSHIP.currency, fee: MEMBERSHIP.fees.regular })}
           action={
             <Link
               href="/mitglied-werden"
-              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               {t('becomeMember')}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />

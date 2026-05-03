@@ -18,7 +18,7 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
 
   return (
     <div className="mt-6">
-      <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4">{t('similarListings')}</Heading>
+      <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('similarListings')}</Heading>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {listings.map((sim) => {
           const simCondition = getConditionBadge(sim.condition)
@@ -26,7 +26,7 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
             <Link
               key={sim.id}
               href={`/marketplace/${sim.id}`}
-              className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              className="group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
               <div className="relative aspect-[4/3]">
                 <ListingImage src={sim.thumbnail} alt={sim.title} fallbackIconSize="w-10 h-10" />
@@ -37,10 +37,10 @@ export function SimilarListings({ listings }: SimilarListingsProps) {
                 </div>
               </div>
               <div className="p-3">
-                <Heading level={3} className="text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                <Heading level={3} className="text-neutral-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
                   {sim.title}
                 </Heading>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">
+                <p className="text-lg font-bold text-neutral-900 dark:text-white">
                   {formatCHF(Number(sim.price_chf))}
                 </p>
               </div>

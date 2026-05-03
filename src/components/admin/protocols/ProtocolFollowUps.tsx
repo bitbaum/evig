@@ -11,7 +11,7 @@ export function ProtocolFollowUps({ followUps }: Props) {
 
   return (
     <div className="bg-white rounded-lg border p-6">
-      <Heading level={2} className="text-lg text-gray-900 mb-3">
+      <Heading level={2} className="text-lg text-neutral-900 mb-3">
         Offene Punkte aus früheren Sitzungen
       </Heading>
       <ul className="space-y-2">
@@ -20,7 +20,7 @@ export function ProtocolFollowUps({ followUps }: Props) {
             <span className={`inline-flex px-2 py-0.5 text-xs rounded-full mt-0.5 ${getFollowUpStatusColor(fu.status)}`}>
               {fu.status || 'offen'}
             </span>
-            <span className="text-gray-700 text-sm">{fu.description}</span>
+            <span className="text-neutral-700 text-sm">{fu.description}</span>
           </li>
         ))}
       </ul>

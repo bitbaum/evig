@@ -23,7 +23,7 @@ export function ConsentVote({ response, rationale, onResponseChange, onRationale
               className={`rounded-md border-2 px-4 py-3 text-sm font-medium transition min-h-[44px] touch-manipulation ${
                 response === r
                   ? `border-current ${conf.color}`
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                  : 'border-neutral-200 text-neutral-600 hover:border-neutral-300'
               }`}
             >
               {conf.label}
@@ -40,7 +40,7 @@ export function ConsentVote({ response, rationale, onResponseChange, onRationale
             : 'Begründung (optional)'
         }
         rows={3}
-        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+        className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
       />
     </div>
   );

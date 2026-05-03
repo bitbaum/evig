@@ -71,14 +71,14 @@ export function HelpRequestCard({
 
   return (
     <div
-      className={`bg-white dark:bg-gray-800 rounded-xl border p-4 ${
+      className={`bg-white dark:bg-neutral-800 rounded-xl border p-4 ${
         isResolved
-          ? 'border-gray-200 dark:border-gray-700 opacity-75'
+          ? 'border-neutral-200 dark:border-neutral-700 opacity-75'
           : request.urgency === URGENCY.URGENT
             ? 'border-red-300 dark:border-red-700'
             : request.urgency === URGENCY.HIGH
               ? 'border-orange-300 dark:border-orange-700'
-              : 'border-gray-200 dark:border-gray-700'
+              : 'border-neutral-200 dark:border-neutral-700'
       }`}
     >
       {/* Header */}
@@ -103,11 +103,11 @@ export function HelpRequestCard({
           {/* Title with urgency */}
           <div className="flex items-center gap-2 flex-wrap">
             {getUrgencyIcon(request.urgency)}
-            <Heading level={4} className="text-gray-900 dark:text-gray-100">{request.title}</Heading>
+            <Heading level={4} className="text-neutral-900 dark:text-neutral-100">{request.title}</Heading>
           </div>
 
           {/* Requester */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
             Von{' '}
             <span className="font-medium">
               {isOwnRequest ? 'dir' : requesterDisplayName}
@@ -124,7 +124,7 @@ export function HelpRequestCard({
 
           {/* Description */}
           {request.description && (
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
               {request.description}
             </p>
           )}
@@ -138,7 +138,7 @@ export function HelpRequestCard({
               {getHelpRequestUrgencyLabel(request.urgency)}
             </span>
             {request.category && (
-              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+              <span className="px-2 py-0.5 text-xs rounded-full bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
                 {getActivityCategoryLabel(request.category)}
               </span>
             )}
@@ -146,13 +146,13 @@ export function HelpRequestCard({
 
           {/* Resolution info */}
           {isResolved && request.resolved_by_name && (
-            <div className="mt-3 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <p className="text-sm text-green-700 dark:text-green-300 flex items-center gap-1">
+            <div className="mt-3 p-2 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
+              <p className="text-sm text-primary-700 dark:text-primary-300 flex items-center gap-1">
                 <CheckCircle className="w-4 h-4" />
                 Gelöst von {request.resolved_by_name}
               </p>
               {request.resolution_notes && (
-                <p className="mt-1 text-xs text-green-600 dark:text-green-400">
+                <p className="mt-1 text-xs text-primary-600 dark:text-primary-400">
                   {request.resolution_notes}
                 </p>
               )}
@@ -160,7 +160,7 @@ export function HelpRequestCard({
           )}
 
           {/* Timestamp */}
-          <div className="flex items-center gap-1 mt-3 text-xs text-gray-400 dark:text-gray-500">
+          <div className="flex items-center gap-1 mt-3 text-xs text-neutral-400 dark:text-neutral-500">
             <Clock className="w-3 h-3" />
             {formatRelativeTime(request.created_at)}
           </div>
@@ -169,7 +169,7 @@ export function HelpRequestCard({
 
       {/* Actions */}
       {showActions && (canResolve || canTakeOn) && (
-        <div className="flex gap-2 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
           {canTakeOn && (
             <button
               onClick={() => onTakeOn?.(request.id)}
@@ -188,7 +188,7 @@ export function HelpRequestCard({
             <button
               onClick={() => onResolve?.(request.id)}
               disabled={isResolving}
-              className="flex-1 px-3 py-2 text-sm text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-3 py-2 text-sm text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 hover:bg-primary-100 dark:hover:bg-primary-900/50 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isResolving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

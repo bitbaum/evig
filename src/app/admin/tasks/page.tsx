@@ -225,14 +225,14 @@ export default async function TasksAdminPage({
         <>
           <Link
             href="/admin/tasks/analytics"
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-200 hover:border-gray-300 rounded-lg transition-colors flex items-center gap-2"
+            className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
           >
             <BarChart3 className="w-4 h-4" />
             Statistiken
           </Link>
           <Link
             href="/admin/tasks/new"
-            className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Neue Aufgabe
@@ -268,7 +268,7 @@ export default async function TasksAdminPage({
           color: 'green',
           label: 'Heute erledigt',
           value: stats.completedToday,
-          valueColor: 'text-green-600',
+          valueColor: 'text-primary-600',
         },
       ] satisfies StatCardItem[]} />
 
@@ -282,10 +282,10 @@ export default async function TasksAdminPage({
         {listError ? (
           <div className="p-12 text-center">
             <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.tasks.errorMessage}
             </Heading>
-            <p className="text-gray-600 mb-4">
+            <p className="text-neutral-600 mb-4">
               Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
             </p>
             <Link
@@ -297,16 +297,16 @@ export default async function TasksAdminPage({
           </div>
         ) : tasks.length === 0 ? (
           <div className="p-12 text-center">
-            <ClipboardList className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+            <ClipboardList className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.tasks.emptyTitle}
             </Heading>
-            <p className="text-gray-600 mb-4">
+            <p className="text-neutral-600 mb-4">
               {ADMIN_CONTENT.tasks.emptyDescription}
             </p>
             <Link
               href="/admin/tasks/new"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
               Neue Aufgabe
@@ -314,62 +314,62 @@ export default async function TasksAdminPage({
           </div>
         ) : (
           <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-neutral-50 border-b">
               <tr>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Aufgabe
                 </th>
                 {/* Kategorie hidden on mobile */}
-                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Kategorie
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Status
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Priorität
                 </th>
                 {/* Typ hidden on mobile and tablet */}
-                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Typ
                 </th>
                 {/* Zugewiesen hidden on mobile and tablet */}
-                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Zugewiesen
                 </th>
-                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
+                <th className="hidden sm:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide whitespace-nowrap">
                   Fällig
                 </th>
-                <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap">
+                <th className="hidden sm:table-cell text-right px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide whitespace-nowrap">
                   Erledigungen
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {tasks.map((task) => (
-                <tr key={task.id} className="hover:bg-gray-50">
+                <tr key={task.id} className="hover:bg-neutral-50">
                   <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
                     <Link
                       href={`/admin/tasks/${task.id}`}
-                      className="font-medium text-gray-900 hover:text-blue-600 truncate block focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                      className="font-medium text-neutral-900 hover:text-blue-600 truncate block focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
                     >
                       {task.title}
                     </Link>
                     {task.description && (
-                      <p className="text-sm text-gray-500 truncate max-w-full">
+                      <p className="text-sm text-neutral-500 truncate max-w-full">
                         {task.description}
                       </p>
                     )}
                   </td>
                   <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-neutral-600">
                       {TASK_CATEGORY_LABELS[task.category]}
                     </span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        TASK_STATUS_COLORS[task.current_status] || 'bg-gray-100 text-gray-800'
+                        TASK_STATUS_COLORS[task.current_status] || 'bg-neutral-100 text-neutral-800'
                       }`}
                     >
                       {TASK_STATUS_LABELS[task.current_status]}
@@ -378,39 +378,39 @@ export default async function TasksAdminPage({
                   <td className="px-4 py-3 whitespace-nowrap">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        TASK_PRIORITY_COLORS[task.priority] || 'bg-gray-100 text-gray-800'
+                        TASK_PRIORITY_COLORS[task.priority] || 'bg-neutral-100 text-neutral-800'
                       }`}
                     >
                       {TASK_PRIORITY_LABELS[task.priority]}
                     </span>
                   </td>
                   <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-neutral-600">
                       {TASK_TYPE_LABELS[task.task_type]}
                     </span>
                   </td>
                   <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
                     {task.assigned_to_name ? (
-                      <span className="text-sm text-gray-600">{task.assigned_to_name}</span>
+                      <span className="text-sm text-neutral-600">{task.assigned_to_name}</span>
                     ) : (
-                      <span className="text-sm text-gray-400">&mdash;</span>
+                      <span className="text-sm text-neutral-400">&mdash;</span>
                     )}
                   </td>
                   <td className="hidden sm:table-cell px-4 py-3 whitespace-nowrap">
                     {task.due_date ? (() => {
                       const isOverdue = !task.is_completed && new Date(task.due_date) < new Date(new Date().toDateString())
                       return (
-                        <span className={`text-sm ${isOverdue ? 'text-red-600 font-medium' : 'text-gray-600'}`}>
+                        <span className={`text-sm ${isOverdue ? 'text-red-600 font-medium' : 'text-neutral-600'}`}>
                           {formatDateShort(task.due_date)}
                           {isOverdue && ' (überfällig)'}
                         </span>
                       )
                     })() : (
-                      <span className="text-sm text-gray-400">—</span>
+                      <span className="text-sm text-neutral-400">—</span>
                     )}
                   </td>
                   <td className="hidden sm:table-cell px-4 py-3 text-right whitespace-nowrap">
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-neutral-600">
                       {task.completion_count}
                     </span>
                   </td>

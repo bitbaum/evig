@@ -150,10 +150,10 @@ export default function AdminReviewsPage() {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+          className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-neutral-300'}`}
         />
       ))}
-      <span className="ml-2 text-sm text-gray-600">{rating}/5</span>
+      <span className="ml-2 text-sm text-neutral-600">{rating}/5</span>
     </div>
   )
 
@@ -169,7 +169,7 @@ export default function AdminReviewsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
     )
   }
@@ -203,8 +203,8 @@ export default function AdminReviewsPage() {
       >
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Status:</span>
+            <Filter className="w-5 h-5 text-neutral-500" />
+            <span className="text-sm font-medium text-neutral-700">Status:</span>
           </div>
           <div className="flex gap-2">
             {(Object.values(REVIEW_STATUS) as ReviewStatus[]).map((status) => (
@@ -213,8 +213,8 @@ export default function AdminReviewsPage() {
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-primary-100 text-primary-800'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}
               >
                 {getReviewFilterLabel(status)}
@@ -225,7 +225,7 @@ export default function AdminReviewsPage() {
         <div className="flex items-end">
           <button
             onClick={loadReviews}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
+            className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 flex items-center gap-2"
           >
             <RefreshCw className="w-4 h-4" />
             Aktualisieren
@@ -243,12 +243,12 @@ export default function AdminReviewsPage() {
       {/* Reviews List */}
       <div className="space-y-4">
         {filteredReviews.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-            <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+          <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-12 text-center">
+            <MessageSquare className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+            <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.reviews.emptyTitle}
             </Heading>
-            <p className="text-gray-600">
+            <p className="text-neutral-600">
               {searchQuery
                 ? 'Keine Bewertungen entsprechen Ihrer Suchanfrage.'
                 : `Keine Bewertungen mit Status "${getReviewFilterLabel(selectedStatus)}".`
@@ -257,13 +257,13 @@ export default function AdminReviewsPage() {
           </div>
         ) : (
           filteredReviews.map((review) => (
-            <div key={review.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div key={review.id} className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
               {/* Review Header */}
-              <div className="p-6 border-b border-gray-200">
+              <div className="p-6 border-b border-neutral-200">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <Heading level={3} className="text-lg font-semibold text-gray-900">
+                      <Heading level={3} className="text-lg font-semibold text-neutral-900">
                         Bewertung für {review.targetName}
                       </Heading>
                       <AdminStatusBadge status={review.status} config={REVIEW_STATUS_CONFIG} />
@@ -273,7 +273,7 @@ export default function AdminReviewsPage() {
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                    <div className="flex items-center gap-4 text-sm text-neutral-600 mb-2">
                       {renderStars(review.overallRating)}
                       <span>•</span>
                       <span>{review.reviewerName}</span>
@@ -281,9 +281,9 @@ export default function AdminReviewsPage() {
                       <span>{formatDateShort(review.createdAt)}</span>
                     </div>
                     {review.title && (
-                      <Heading level={4} className="font-medium text-gray-900 mb-2">{review.title}</Heading>
+                      <Heading level={4} className="font-medium text-neutral-900 mb-2">{review.title}</Heading>
                     )}
-                    <p className="text-gray-700 text-sm leading-relaxed">{review.content}</p>
+                    <p className="text-neutral-700 text-sm leading-relaxed">{review.content}</p>
 
                     {review.response && (
                       <div className="mt-4 p-4 bg-blue-50 rounded-lg">
@@ -308,7 +308,7 @@ export default function AdminReviewsPage() {
                         <button
                           onClick={() => startModeration(review.id, 'approve')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-primary-600 text-white rounded text-xs hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <CheckCircle className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Freigeben'}
@@ -329,7 +329,7 @@ export default function AdminReviewsPage() {
                         <button
                           onClick={() => startModeration(review.id, 'restore')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-green-600 text-white rounded text-xs hover:bg-green-700 disabled:opacity-50 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-primary-600 text-white rounded text-xs hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <RefreshCw className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Wiederherstellen'}
@@ -369,7 +369,7 @@ export default function AdminReviewsPage() {
                 </div>
 
                 {/* Review Stats */}
-                <div className="flex items-center gap-4 mt-4 text-sm text-gray-500">
+                <div className="flex items-center gap-4 mt-4 text-sm text-neutral-500">
                   <span>{review.helpfulVotes} hilfreiche Stimmen</span>
                   {review.moderationReason && (
                     <span className="text-red-600">Moderationsgrund: {review.moderationReason}</span>
@@ -397,13 +397,13 @@ export default function AdminReviewsPage() {
             onChange={(e) => setModerationReason(e.target.value)}
             placeholder="Bitte gib einen Grund an..."
             rows={4}
-            className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-neutral-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             autoFocus
           />
           <div className="flex justify-end gap-3">
             <button
               onClick={cancelModeration}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+              className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
             >
               Abbrechen
             </button>

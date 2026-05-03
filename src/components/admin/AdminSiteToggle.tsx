@@ -46,8 +46,8 @@ export function AdminSiteToggle({
         className={`
           inline-flex items-center gap-2
           px-4 py-2 rounded-lg
-          bg-green-600 text-white
-          hover:bg-green-700
+          bg-primary-600 text-white
+          hover:bg-primary-700
           transition-colors
           font-medium text-sm
           ${className}
@@ -67,8 +67,8 @@ export function AdminSiteToggle({
       className={`
         inline-flex items-center gap-2
         px-4 py-2 rounded-lg
-        bg-gray-800 text-white
-        hover:bg-gray-900
+        bg-neutral-800 text-white
+        hover:bg-neutral-900
         transition-colors
         font-medium text-sm
         ${className}
@@ -105,9 +105,9 @@ export function FloatingAdminToggle({
         fixed bottom-6 right-6 z-50
         flex items-center gap-2
         px-4 py-3 rounded-full
-        bg-gray-900 text-white
+        bg-neutral-900 text-white
         shadow-lg hover:shadow-xl
-        hover:bg-gray-800
+        hover:bg-neutral-800
         transition-all
         font-medium
       "

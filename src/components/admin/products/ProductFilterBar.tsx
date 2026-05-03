@@ -28,18 +28,18 @@ export function ProductFilterBar({
   activeTab,
 }: ProductFilterBarProps) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 md:p-6">
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-4 md:p-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div className="flex flex-col sm:flex-row gap-4 flex-1">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
-            <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+            <Search className="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             <input
               type="text"
               placeholder="Produkte suchen..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
           </div>
 
@@ -49,7 +49,7 @@ export function ProductFilterBar({
               <select
                 value={filterStatus}
                 onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
-                className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="all">Alle Status</option>
                 <option value="published">Veröffentlicht</option>
@@ -60,7 +60,7 @@ export function ProductFilterBar({
             <select
               value={filterCategory}
               onChange={(e) => onFilterCategoryChange(e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="all">Alle Kategorien</option>
               <option value="Laptops">Laptops</option>
@@ -84,7 +84,7 @@ export function ProductFilterBar({
           {activeTab === 'inventory' && (
             <Link
               href="/admin/erfassung"
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4 inline mr-2" />
               Produkt erfassen

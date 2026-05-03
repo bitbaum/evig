@@ -39,22 +39,22 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
       {/* Toggle header — same structure as card headers, but interactive */}
       <button
         onClick={toggle}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors rounded-xl"
+        className="w-full flex items-center justify-between p-4 text-left hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors rounded-xl"
         aria-expanded={open}
         aria-controls="monatsueberblick-content"
       >
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-green-500 flex-shrink-0" aria-hidden="true" />
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white">
+          <TrendingUp className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
             Monatsüberblick
           </Heading>
         </div>
         <ChevronDown
-          className={`w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
           aria-hidden="true"
         />
       </button>
@@ -63,7 +63,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       {hydrated && open && (
         <div
           id="monatsueberblick-content"
-          className="border-t border-gray-100 dark:border-gray-700 p-4 space-y-4"
+          className="border-t border-neutral-100 dark:border-neutral-700 p-4 space-y-4"
         >
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />

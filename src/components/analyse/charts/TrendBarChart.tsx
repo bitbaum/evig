@@ -43,7 +43,7 @@ function CustomTooltip({ active, payload, label }: {
     : 'N/A'
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-3 border rounded-lg shadow-lg">
+    <div className="bg-white dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
       <p className="font-semibold mb-2">{label}</p>
       <div className="space-y-1 text-sm">
         <div className="flex justify-between gap-4">
@@ -51,13 +51,13 @@ function CustomTooltip({ active, payload, label }: {
           <span className="font-medium">{formatCHF(current)}</span>
         </div>
         <div className="flex justify-between gap-4">
-          <span className="text-gray-500">Vorjahr</span>
+          <span className="text-neutral-500">Vorjahr</span>
           <span className="font-medium">{formatCHF(previous)}</span>
         </div>
         <div className="border-t pt-1 flex justify-between gap-4">
           <span>Veränderung</span>
           <span className={`font-semibold ${
-            Number(percentChange) > 0 ? 'text-green-500' :
+            Number(percentChange) > 0 ? 'text-primary-500' :
             Number(percentChange) < 0 ? 'text-red-500' : ''
           }`}>
             {percentChange !== 'N/A' ? `${percentChange}%` : percentChange}
@@ -83,7 +83,7 @@ export function TrendBarChart({ data, currentYear, previousYear, source }: Trend
         data={data}
         margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
       >
-        <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-gray-700" />
+        <CartesianGrid strokeDasharray="3 3" className="stroke-neutral-200 dark:stroke-neutral-700" />
         <XAxis
           dataKey="category"
           tick={{ fontSize: 11 }}

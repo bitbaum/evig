@@ -28,13 +28,13 @@ export function StatsCard({ label, value, icon: Icon, color }: {
 
 export function UrgencyBadge({ urgency }: { urgency: string }) {
   const config = getUrgencyById(urgency)
-  if (!config) return <span className="text-xs text-gray-500">{urgency}</span>
+  if (!config) return <span className="text-xs text-neutral-500">{urgency}</span>
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.badgeClass}`}>{config.name}</span>
 }
 
 export function RequestStatusBadge({ status }: { status: string }) {
   const config = getRequestStatusById(status)
-  if (!config) return <span className="text-xs text-gray-500">{status}</span>
+  if (!config) return <span className="text-xs text-neutral-500">{status}</span>
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${config.badgeClass}`}>{config.name}</span>
 }
 
@@ -42,7 +42,7 @@ export function CategoryIcon({ categoryId }: { categoryId: string }) {
   const cat = getCategoryById(categoryId)
   if (!cat) return null
   const Icon = cat.icon
-  return <Icon className="w-4 h-4 text-gray-500" />
+  return <Icon className="w-4 h-4 text-neutral-500" />
 }
 
 export function SkillTag({ skillId }: { skillId: string }) {

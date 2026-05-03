@@ -25,7 +25,7 @@ interface ActivityCardProps {
 function getSourceIcon(sourceType: string): JSX.Element | null {
   switch (sourceType) {
     case 'task_completion':
-      return <CheckCircle className="w-5 h-5 text-green-500" />
+      return <CheckCircle className="w-5 h-5 text-primary-500" />
     case 'activity_update':
       return null // handled separately via getActivityUpdateIcon
     case 'help_request':
@@ -33,22 +33,22 @@ function getSourceIcon(sourceType: string): JSX.Element | null {
     case 'focus_update':
       return <Clock className="w-5 h-5 text-blue-500" />
     default:
-      return <FileText className="w-5 h-5 text-gray-500" />
+      return <FileText className="w-5 h-5 text-neutral-500" />
   }
 }
 
 function getActivityUpdateIcon(updateType: string): JSX.Element {
   switch (updateType) {
     case 'accomplishment':
-      return <CheckCircle className="w-5 h-5 text-green-500" />
+      return <CheckCircle className="w-5 h-5 text-primary-500" />
     case 'milestone':
       return <Flag className="w-5 h-5 text-purple-500" />
     case 'note':
-      return <FileText className="w-5 h-5 text-gray-500" />
+      return <FileText className="w-5 h-5 text-neutral-500" />
     case 'announcement':
       return <Megaphone className="w-5 h-5 text-blue-500" />
     default:
-      return <FileText className="w-5 h-5 text-gray-500" />
+      return <FileText className="w-5 h-5 text-neutral-500" />
   }
 }
 
@@ -79,17 +79,17 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   }
 
   // Get badge color
-  let badgeColor = 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+  let badgeColor = 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
   if (activity.source_type === 'activity_update') {
     badgeColor = getActivityUpdateTypeColor(updateType)
   } else if (activity.source_type === 'help_request') {
     badgeColor = getHelpRequestUrgencyColor(urgency)
   } else if (activity.source_type === 'task_completion') {
-    badgeColor = 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+    badgeColor = 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 hover:shadow-md transition-shadow">
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
@@ -102,45 +102,45 @@ export function ActivityCard({ activity }: ActivityCardProps) {
         <div className="flex-1 min-w-0">
           {/* Header */}
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-medium text-gray-900 dark:text-gray-100">{displayName}</span>
+            <span className="font-medium text-neutral-900 dark:text-neutral-100">{displayName}</span>
             <span className={`px-2 py-0.5 text-xs rounded-full ${badgeColor}`}>
               {ACTIVITY_SOURCE_LABELS[activity.source_type as keyof typeof ACTIVITY_SOURCE_LABELS]}
             </span>
             {activity.category && (
-              <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400">
+              <span className="px-2 py-0.5 text-xs rounded-full bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400">
                 {getActivityCategoryLabel(activity.category)}
               </span>
             )}
           </div>
 
           {/* Title */}
-          <Heading level={4} className="mt-1 text-gray-800 dark:text-gray-200 flex items-center gap-2">
+          <Heading level={4} className="mt-1 text-neutral-800 dark:text-neutral-200 flex items-center gap-2">
             {icon}
             {activity.title}
           </Heading>
 
           {/* Description */}
           {activity.description && (
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+            <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
               {activity.description}
             </p>
           )}
 
           {/* Metadata */}
           {activity.source_type === 'task_completion' && durationMinutes && (
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-500">
+            <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-500">
               Dauer: {durationMinutes} Min.
             </p>
           )}
 
           {activity.source_type === 'help_request' && action === 'resolved' && (
-            <p className="mt-1 text-xs text-green-600 dark:text-green-400">
+            <p className="mt-1 text-xs text-primary-600 dark:text-primary-400">
               Anfrage gelöst
             </p>
           )}
 
           {/* Timestamp */}
-          <p className="mt-2 text-xs text-gray-400 dark:text-gray-500">
+          <p className="mt-2 text-xs text-neutral-400 dark:text-neutral-500">
             {formatRelativeTime(activity.occurred_at)}
           </p>
         </div>

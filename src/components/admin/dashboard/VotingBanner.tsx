@@ -97,7 +97,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
           <p className="text-xs font-semibold text-teal-700 dark:text-teal-300 uppercase tracking-wide mb-0.5">
             Deine Stimme fehlt
           </p>
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white leading-snug">
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white leading-snug">
             {first.title}
           </Heading>
           {deadline && (

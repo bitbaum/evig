@@ -89,7 +89,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={config.type === 'textarea' ? 4 : undefined}
             maxLength={'maxLength' in config ? config.maxLength : undefined}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -102,7 +102,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             onChange={(e) => handleFieldChange(field, e.target.value)}
             min={'min' in config ? config.min : undefined}
             max={'max' in config ? config.max : undefined}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -113,7 +113,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             <select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Wählen...</option>
               {WORKSHOP_CATEGORIES.map((cat) => (
@@ -128,7 +128,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             <select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Wählen...</option>
               {WORKSHOP_LEVELS.map((level) => (
@@ -149,7 +149,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             value={arrayValue}
             onChange={(e) => handleArrayFieldChange(field, e.target.value)}
             rows={5}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Ein Eintrag pro Zeile"
           />
         );
@@ -161,7 +161,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             maxLength={'maxLength' in config ? config.maxLength : undefined}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -176,7 +176,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
           <Heading level={2} className="text-2xl">Vorschlag bearbeiten</Heading>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-600 transition-colors"
+            className="text-neutral-500 hover:text-neutral-600 transition-colors"
           >
             <X className="w-6 h-6" />
           </button>
@@ -195,13 +195,13 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
               const config = WORKSHOP_PROPOSAL_EDITABLE_FIELDS[field];
               return (
                 <div key={field}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">
                     {config.label}
                     {('required' in config && config.required) && <span className="text-red-500 ml-1">*</span>}
                   </label>
                   {renderField(field)}
                   {('help' in config && config.help) && (
-                    <p className="mt-1 text-xs text-gray-500">{config.help}</p>
+                    <p className="mt-1 text-xs text-neutral-500">{config.help}</p>
                   )}
                 </div>
               );
@@ -210,17 +210,17 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-gray-50 border-t px-6 py-4 flex justify-end gap-3">
+        <div className="sticky bottom-0 bg-neutral-50 border-t px-6 py-4 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
             disabled={isSaving}
           >
             Abbrechen
           </button>
           <button
             onClick={handleSave}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
             disabled={isSaving}
           >
             {isSaving ? (

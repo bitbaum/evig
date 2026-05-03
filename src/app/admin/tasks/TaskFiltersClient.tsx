@@ -54,7 +54,7 @@ export default function TaskFiltersClient() {
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
         {/* Search */}
         <div className="relative flex-1 w-full md:w-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
           <input
             type="text"
             value={searchValue}
@@ -65,9 +65,9 @@ export default function TaskFiltersClient() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Filter className="w-5 h-5 text-gray-500" />
+          <Filter className="w-5 h-5 text-neutral-500" />
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600">Kategorie:</label>
+            <label className="text-sm text-neutral-600">Kategorie:</label>
             <select
               className="text-sm border rounded px-2 py-1"
               value={searchParams.get('category') || ''}
@@ -82,7 +82,7 @@ export default function TaskFiltersClient() {
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600">Status:</label>
+            <label className="text-sm text-neutral-600">Status:</label>
             <select
               className="text-sm border rounded px-2 py-1"
               value={searchParams.get('status') || ''}
@@ -97,7 +97,7 @@ export default function TaskFiltersClient() {
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600">Priorität:</label>
+            <label className="text-sm text-neutral-600">Priorität:</label>
             <select
               className="text-sm border rounded px-2 py-1"
               value={searchParams.get('priority') || ''}

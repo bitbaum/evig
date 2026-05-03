@@ -42,9 +42,9 @@ export default function ConversationList({ conversations, selectedId, onSelect }
   if (conversations.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <MessageSquare className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" aria-hidden="true" />
-        <p className="text-gray-500 dark:text-gray-400 font-medium">{t('emptyTitle')}</p>
-        <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
+        <MessageSquare className="w-12 h-12 text-neutral-300 dark:text-neutral-600 mb-3" aria-hidden="true" />
+        <p className="text-neutral-500 dark:text-neutral-400 font-medium">{t('emptyTitle')}</p>
+        <p className="text-sm text-neutral-400 dark:text-neutral-500 mt-1">
           {t('emptyDesc')}
         </p>
       </div>
@@ -52,50 +52,50 @@ export default function ConversationList({ conversations, selectedId, onSelect }
   }
 
   return (
-    <div className="divide-y divide-gray-100 dark:divide-gray-700">
+    <div className="divide-y divide-neutral-100 dark:divide-neutral-700">
       {conversations.map(conv => (
         <button
           key={conv.id}
           onClick={() => onSelect(conv.id)}
-          className={`w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-green-500 ${
+          className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 ${
             selectedId === conv.id
-              ? 'bg-green-50 dark:bg-green-900/20 border-l-2 border-green-500'
+              ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-primary-500'
               : ''
           }`}
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-gray-400" aria-hidden="true" />
+            <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-5 h-5 text-neutral-400" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className={`text-sm truncate ${
                   conv.unread_count > 0
-                    ? 'font-bold text-gray-900 dark:text-white'
-                    : 'font-medium text-gray-700 dark:text-gray-300'
+                    ? 'font-bold text-neutral-900 dark:text-white'
+                    : 'font-medium text-neutral-700 dark:text-neutral-300'
                 }`}>
                   {conv.other_user_name || t('unknownUser')}
                 </span>
-                <span className="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0 ml-2">
+                <span className="text-xs text-neutral-400 dark:text-neutral-500 flex-shrink-0 ml-2">
                   {timeAgo(conv.last_message_at)}
                 </span>
               </div>
               <div className="flex items-center justify-between mt-0.5">
                 <p className={`text-sm truncate ${
                   conv.unread_count > 0
-                    ? 'text-gray-800 dark:text-gray-200'
-                    : 'text-gray-500 dark:text-gray-400'
+                    ? 'text-neutral-800 dark:text-neutral-200'
+                    : 'text-neutral-500 dark:text-neutral-400'
                 }`}>
                   {conv.last_message_preview || t('noMessage')}
                 </p>
                 {conv.unread_count > 0 && (
-                  <span className="ml-2 flex-shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-green-500 rounded-full">
+                  <span className="ml-2 flex-shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-primary-500 rounded-full">
                     {conv.unread_count}
                   </span>
                 )}
               </div>
               {conv.type === 'marketplace' && (
-                <span className="text-xs text-green-600 dark:text-green-400 mt-0.5 inline-block">
+                <span className="text-xs text-primary-600 dark:text-primary-400 mt-0.5 inline-block">
                   Marketplace
                 </span>
               )}

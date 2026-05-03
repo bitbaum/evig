@@ -97,8 +97,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-green-600 animate-spin" />
-        <span className="ml-3 text-gray-600 dark:text-gray-400">{t('seller.loadingProfile')}</span>
+        <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
+        <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('seller.loadingProfile')}</span>
       </div>
     )
   }
@@ -106,11 +106,11 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   if (error || !seller) {
     return (
       <div className="max-w-4xl mx-auto py-12 text-center">
-        <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <Heading level={2} className="text-xl text-gray-900 dark:text-white mb-2">
+        <AlertCircle className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+        <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
           {error || t('seller.sellerNotFound')}
         </Heading>
-        <Link href="/marketplace" className="text-green-600 hover:text-green-700 font-medium">
+        <Link href="/marketplace" className="text-primary-600 hover:text-primary-700 font-medium">
           {t('seller.backToMarketplace')}
         </Link>
       </div>
@@ -125,25 +125,25 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     <div className="max-w-6xl mx-auto">
       <Link
         href="/marketplace"
-        className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 mb-6 transition-colors"
+        className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         {t('seller.backToMarketplace')}
       </Link>
 
       {/* Seller Header */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-6">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 mb-6">
         <div className="flex items-start gap-4">
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+          <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center flex-shrink-0">
             {seller.avatar_url ? (
               <Image src={seller.avatar_url} alt={displayName} width={64} height={64} className="w-16 h-16 rounded-full object-cover" />
             ) : (
-              <User className="w-8 h-8 text-green-600" />
+              <User className="w-8 h-8 text-primary-600" />
             )}
           </div>
           <div className="flex-1">
-            <Heading level={1} className="text-2xl text-gray-900 dark:text-white">{displayName}</Heading>
-            <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">{displayName}</Heading>
+            <div className="flex items-center gap-4 mt-2 text-sm text-neutral-500 dark:text-neutral-400">
               {seller.city && (
                 <span className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
@@ -156,37 +156,37 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               </span>
             </div>
             {seller.bio && (
-              <p className="mt-3 text-gray-600 dark:text-gray-300 text-sm">{seller.bio}</p>
+              <p className="mt-3 text-neutral-600 dark:text-neutral-300 text-sm">{seller.bio}</p>
             )}
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-neutral-100 dark:border-neutral-700">
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-2xl font-bold text-neutral-900 dark:text-white">
               {seller.total_listings}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">{t('seller.listings')}</div>
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">{t('seller.listings')}</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-gray-900 dark:text-white">
+            <div className="text-2xl font-bold text-neutral-900 dark:text-white">
               {seller.total_sold}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">{t('seller.sold')}</div>
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">{t('seller.sold')}</div>
           </div>
           <div className="text-center">
             {rating && Number(rating) > 0 ? (
               <div className="flex items-center justify-center gap-1">
                 <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-                <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                <span className="text-2xl font-bold text-neutral-900 dark:text-white">
                   {Number(rating).toFixed(1)}
                 </span>
               </div>
             ) : (
-              <div className="text-2xl font-bold text-gray-400">—</div>
+              <div className="text-2xl font-bold text-neutral-400">—</div>
             )}
-            <div className="text-xs text-gray-500 dark:text-gray-400">
+            <div className="text-xs text-neutral-500 dark:text-neutral-400">
               {reviewCount > 0 ? t('seller.ratingsCount', { count: reviewCount }) : t('seller.noRatings')}
             </div>
           </div>
@@ -195,7 +195,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
 
       {/* Active Listings */}
       <div>
-        <Heading level={2} className="text-lg text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
           <ShoppingBag className="w-5 h-5" />
           {t('seller.activeListings', { count: seller.listings.length })}
         </Heading>
@@ -214,7 +214,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 <Link
                   key={listing.id}
                   href={`/marketplace/${listing.id}`}
-                  className="group bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
+                  className="group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow"
                 >
                   <div className="relative aspect-[4/3]">
                     {listing.thumbnail ? (
@@ -224,8 +224,8 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                        <Package className="w-12 h-12 text-gray-300 dark:text-gray-500" />
+                      <div className="w-full h-full bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center">
+                        <Package className="w-12 h-12 text-neutral-300 dark:text-neutral-500" />
                       </div>
                     )}
                     <div className="absolute top-2 left-2">
@@ -235,10 +235,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                     </div>
                   </div>
                   <div className="p-3">
-                    <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-green-600 transition-colors">
+                    <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2 text-sm group-hover:text-primary-600 transition-colors">
                       {listing.title}
                     </Heading>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">
+                    <p className="text-lg font-bold text-neutral-900 dark:text-white">
                       {formatCHF(Number(listing.price_chf))}
                     </p>
                   </div>

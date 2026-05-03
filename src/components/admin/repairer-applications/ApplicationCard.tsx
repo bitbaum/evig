@@ -14,7 +14,7 @@ interface Props {
 
 function getStatusIcon(status: string) {
   switch (status) {
-    case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-green-500" />
+    case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-primary-500" />
     case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-red-500" />
     case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-orange-500" />
     default: return <Clock className="w-5 h-5 text-blue-500" />
@@ -33,11 +33,11 @@ function getStatusBadge(status: string) {
 
 export function ApplicationCard({ application, isPending, actionLoading, onOpenDialog }: Props) {
   return (
-    <div className="p-6 border-b border-gray-200">
+    <div className="p-6 border-b border-neutral-200">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <Heading level={3} className="text-lg text-gray-900">
+            <Heading level={3} className="text-lg text-neutral-900">
               {application.businessName || application.applicantName}
             </Heading>
             {getStatusBadge(application.status)}
@@ -50,7 +50,7 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
               )
             })()}
           </div>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+          <div className="flex items-center gap-4 text-sm text-neutral-600">
             <span className="flex items-center gap-1">
               <Mail className="w-4 h-4" />
               {application.applicantEmail}
@@ -64,14 +64,14 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
                 href={application.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-green-600 hover:text-green-700"
+                className="flex items-center gap-1 text-primary-600 hover:text-primary-700"
               >
                 <ExternalLink className="w-4 h-4" />
                 Website
               </a>
             )}
           </div>
-          <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+          <div className="flex items-center gap-4 text-sm text-neutral-500 mt-1">
             <span>Bewerbung vom {formatDateShort(application.createdAt)}</span>
             <span>{application.yearsExperience} Jahre Erfahrung</span>
             <span className="flex items-center gap-1">
@@ -100,7 +100,7 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
             <button
               onClick={() => onOpenDialog('approve_app', application.id)}
               disabled={actionLoading === application.id}
-              className="px-3 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 text-sm font-medium"
+              className="px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
             >
               {actionLoading === application.id ? '...' : 'Genehmigen'}
             </button>

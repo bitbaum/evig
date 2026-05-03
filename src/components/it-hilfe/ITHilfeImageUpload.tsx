@@ -82,19 +82,19 @@ export function ITHilfeImageUpload({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <Heading level={2} className="text-lg font-semibold text-gray-900 mb-4">{t('heading')}</Heading>
+    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+      <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
 
       {error && (
         <p className="text-sm text-red-600 mb-3">{error}</p>
       )}
 
       {imageUrls.length < maxImages && (
-        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-4">
+        <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 text-center mb-4">
           {uploading ? (
-            <Loader2 className="w-10 h-10 text-gray-400 mx-auto mb-2 animate-spin" />
+            <Loader2 className="w-10 h-10 text-neutral-400 mx-auto mb-2 animate-spin" />
           ) : (
-            <Camera className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+            <Camera className="w-10 h-10 text-neutral-400 mx-auto mb-2" />
           )}
           <label htmlFor="it-hilfe-image-upload" className="cursor-pointer">
             <span className="text-sm font-medium text-emerald-600 hover:text-emerald-500">
@@ -110,7 +110,7 @@ export function ITHilfeImageUpload({
             disabled={uploading}
             className="hidden"
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-neutral-500 mt-1">
             PNG, JPG, GIF bis 10MB ({imageUrls.length}/{maxImages})
           </p>
         </div>

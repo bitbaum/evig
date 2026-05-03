@@ -60,10 +60,10 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Title */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label htmlFor="listing-title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="listing-title" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
             {t('title')} <span className="text-red-500">*</span>
           </label>
-          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-red-500' : 'text-gray-400'}`}>
+          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-red-500' : 'text-neutral-400'}`}>
             {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           </span>
         </div>
@@ -74,17 +74,17 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           onChange={(e) => update('title', e.target.value)}
           maxLength={MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           placeholder={t('titlePlaceholder')}
-          className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
       {/* Description */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label htmlFor="listing-description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="listing-description" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
             {t('description')} <span className="text-red-500">*</span>
           </label>
-          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-gray-400'}`}>
+          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-neutral-400'}`}>
             {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           </span>
         </div>
@@ -95,14 +95,14 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           maxLength={MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           rows={5}
           placeholder={t('descriptionPlaceholder')}
-          className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-y"
+          className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white resize-y"
         />
       </div>
 
       {/* Price + Category + Condition */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label htmlFor="listing-price" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="listing-price" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('price')}
           </label>
           <input
@@ -113,21 +113,21 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             value={formData.price}
             onChange={(e) => update('price', e.target.value)}
             placeholder={t('pricePlaceholder')}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
           {formData.price === '0' && (
             <p className="text-xs text-teal-600 mt-1">{t('freeNotice')}</p>
           )}
         </div>
         <div>
-          <label htmlFor="listing-category" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="listing-category" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('category')} <span className="text-red-500">*</span>
           </label>
           <select
             id="listing-category"
             value={formData.category}
             onChange={(e) => handleCategoryChange(e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             <option value="">{t('selectPlaceholder')}</option>
             {MARKETPLACE_CATEGORY_VALUES.map(val => (
@@ -138,14 +138,14 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </select>
         </div>
         <div>
-          <label htmlFor="listing-condition" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label htmlFor="listing-condition" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('condition')}
           </label>
           <select
             id="listing-condition"
             value={formData.condition}
             onChange={(e) => handleConditionChange(e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             <option value="">{t('selectPlaceholder')}</option>
             {ZUSTAND_OPTIONS.map(opt => (
@@ -168,9 +168,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
                   type="checkbox"
                   checked={check.checked}
                   onChange={() => handleConditionCheckToggle(check.key)}
-                  className="mt-0.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="mt-0.5 rounded border-neutral-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700 dark:text-gray-300">{check.label}</span>
+                <span className="text-sm text-neutral-700 dark:text-neutral-300">{check.label}</span>
               </label>
             ))}
           </div>
@@ -180,27 +180,27 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Brand + Model */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {t('brand')} <span className="text-xs text-gray-500">({tCommon('optional')})</span>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+            {t('brand')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
           </label>
           <input
             type="text"
             value={formData.brand}
             onChange={(e) => update('brand', e.target.value)}
             placeholder={t('brandPlaceholder')}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            {t('model')} <span className="text-xs text-gray-500">({tCommon('optional')})</span>
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+            {t('model')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
           </label>
           <input
             type="text"
             value={formData.model}
             onChange={(e) => update('model', e.target.value)}
             placeholder={t('modelPlaceholder')}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
         </div>
       </div>
@@ -217,13 +217,13 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Delivery + Payment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('delivery')}
           </label>
           <select
             value={formData.deliveryOptions}
             onChange={(e) => update('deliveryOptions', e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             {DELIVERY_OPTIONS.map(opt => (
               <option key={opt} value={opt}>{DELIVERY_LABELS[opt]}</option>
@@ -231,13 +231,13 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('payment')}
           </label>
           <select
             value={formData.paymentMode}
             onChange={(e) => update('paymentMode', e.target.value)}
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             {PAYMENT_MODES.map(opt => (
               <option key={opt} value={opt}>{PAYMENT_MODE_LABELS[opt]}</option>
@@ -249,7 +249,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Shipping cost (conditional) */}
       {formData.deliveryOptions !== 'pickup' && (
         <div className="max-w-xs">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
             {t('shippingCost')}
           </label>
           <input
@@ -259,22 +259,22 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             value={formData.shippingCost}
             onChange={(e) => update('shippingCost', e.target.value)}
             placeholder="0.00"
-            className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
         </div>
       )}
 
       {/* Pickup location */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          {t('pickupLocation')} <span className="text-xs text-gray-500">({tCommon('optional')})</span>
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+          {t('pickupLocation')} <span className="text-xs text-neutral-500">({tCommon('optional')})</span>
         </label>
         <input
           type="text"
           value={formData.pickupLocation}
           onChange={(e) => update('pickupLocation', e.target.value)}
           placeholder={t('locationPlaceholder')}
-          className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
     </>

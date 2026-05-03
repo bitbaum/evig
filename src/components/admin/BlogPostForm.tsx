@@ -49,15 +49,15 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content/blog"
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
           <div>
-            <Heading level={1} className="text-2xl text-gray-900 dark:text-white">
+            <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
               {isEdit ? 'Artikel bearbeiten' : 'Neuer Artikel'}
             </Heading>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">
+            <p className="text-neutral-600 dark:text-neutral-400 mt-1">
               {isEdit ? 'Änderungen am Artikel vornehmen' : 'Erstelle einen neuen Blog-Artikel'}
             </p>
           </div>
@@ -69,7 +69,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               <Link
                 href={`/blog/${formData.slug}`}
                 target="_blank"
-                className="inline-flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
                 title="Veröffentlichten Artikel ansehen"
               >
                 <Eye className="w-4 h-4" />
@@ -77,7 +77,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               </Link>
             ) : (
               <span
-                className="inline-flex items-center gap-2 px-4 py-2 text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-4 py-2 text-neutral-400 dark:text-neutral-500 cursor-not-allowed"
                 title="Artikel muss zuerst veröffentlicht werden"
               >
                 <Eye className="w-4 h-4" />
@@ -88,7 +88,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
           <Button
             onClick={() => handleSubmit(false)}
             disabled={saving || !formData.title || !formData.content}
-            className="gap-2 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400"
+            className="gap-2 bg-neutral-600 hover:bg-neutral-700 disabled:bg-neutral-400"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Speichern
@@ -111,7 +111,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         </div>
       )}
       {success && (
-        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300 px-4 py-3 rounded-lg">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 text-primary-700 dark:text-primary-300 px-4 py-3 rounded-lg">
           {success}
         </div>
       )}

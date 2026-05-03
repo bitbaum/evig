@@ -16,7 +16,7 @@ export function QuickSuggestions({ feedbackScope, selectedElements, onSuggestion
 
   return (
     <div className="space-y-1">
-      <label className="block text-xs font-medium text-gray-700">
+      <label className="block text-xs font-medium text-neutral-700">
         Schnellvorschläge
       </label>
       <div className="grid grid-cols-2 gap-1">

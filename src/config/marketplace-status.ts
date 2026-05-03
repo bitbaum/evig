@@ -19,7 +19,7 @@ export const MARKETPLACE_STATUS_LABELS: Record<string, string> = {
 }
 
 export const MARKETPLACE_STATUS_BADGES: Record<string, string> = {
-  [MARKETPLACE_STATUS.PUBLISHED]: 'bg-green-100 text-green-800',
+  [MARKETPLACE_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
   [MARKETPLACE_STATUS.DRAFT]: 'bg-yellow-100 text-yellow-800',
 }
 
@@ -67,7 +67,7 @@ export function getMarketplaceStatusLabel(status: string): string {
 }
 
 export function getMarketplaceStatusBadgeColor(status: string): string {
-  return MARKETPLACE_STATUS_BADGES[status] ?? 'bg-gray-100 text-gray-800'
+  return MARKETPLACE_STATUS_BADGES[status] ?? 'bg-neutral-100 text-neutral-800'
 }
 
 export function getProductStatusLabel(status: string): string {
@@ -75,5 +75,5 @@ export function getProductStatusLabel(status: string): string {
 }
 
 export function getProductStatusBadgeColor(status: string): string {
-  return PRODUCT_STATUS_BADGES[status] ?? 'bg-gray-100 text-gray-800'
+  return PRODUCT_STATUS_BADGES[status] ?? 'bg-neutral-100 text-neutral-800'
 }

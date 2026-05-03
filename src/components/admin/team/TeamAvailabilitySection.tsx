@@ -16,7 +16,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
   return (
     <div className="grid md:grid-cols-2 gap-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Arbeitszeiten
         </label>
         <input
@@ -24,18 +24,18 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
           value={form.working_hours}
           onChange={(e) => onChange('working_hours', e.target.value)}
           placeholder="z.B. Mo-Fr 9-17 Uhr"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Bevorzugte Kontaktart
         </label>
         <select
           value={form.preferred_contact}
           onChange={(e) => onChange('preferred_contact', e.target.value)}
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         >
           {CONTACT_METHOD_OPTIONS.map(method => (
             <option key={method} value={method}>
@@ -46,7 +46,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Telefon
         </label>
         <input
@@ -54,12 +54,12 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
           value={form.phone}
           onChange={(e) => onChange('phone', e.target.value)}
           placeholder="+41 79 123 45 67"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
 
       <div className="md:col-span-2">
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
           Allgemeine Verfügbarkeit
         </label>
         <textarea
@@ -67,7 +67,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
           onChange={(e) => onChange('availability', e.target.value)}
           rows={2}
           placeholder="z.B. Dienstags und Donnerstags ganztags, ansonsten nach Absprache"
-          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
       </div>
     </div>

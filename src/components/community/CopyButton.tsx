@@ -20,7 +20,7 @@ export function CopyButton({ value, label = 'Kopieren' }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-1 rounded px-3 py-2 min-h-[44px] text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+      className="inline-flex items-center gap-1 rounded px-3 py-2 min-h-[44px] text-xs font-medium bg-neutral-100 hover:bg-neutral-200 text-neutral-700 transition-colors"
     >
       {copied ? 'Kopiert!' : label}
     </button>

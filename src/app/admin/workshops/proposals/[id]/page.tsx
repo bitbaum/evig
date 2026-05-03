@@ -64,13 +64,13 @@ export default function WorkshopProposalDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8">
             <div className="animate-pulse space-y-4">
-              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-              <div className="h-4 bg-gray-200 rounded w-full"></div>
-              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+              <div className="h-8 bg-neutral-200 rounded w-1/3"></div>
+              <div className="h-4 bg-neutral-200 rounded w-full"></div>
+              <div className="h-4 bg-neutral-200 rounded w-2/3"></div>
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function WorkshopProposalDetailPage() {
 
   if (error || !proposal) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6">
             <p className="text-red-800">{error || 'Vorschlag nicht gefunden'}</p>
@@ -100,7 +100,7 @@ export default function WorkshopProposalDetailPage() {
   const fieldLabels = getEditableFieldLabels('workshop');
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-neutral-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -113,8 +113,8 @@ export default function WorkshopProposalDetailPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <Heading level={1} className="text-3xl font-bold text-gray-900">{proposal.title}</Heading>
-              <p className="mt-2 text-sm text-gray-600">
+              <Heading level={1} className="text-3xl font-bold text-neutral-900">{proposal.title}</Heading>
+              <p className="mt-2 text-sm text-neutral-600">
                 Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) •{' '}
                 {formatDateShort(proposal.created_at)}
               </p>
@@ -152,14 +152,14 @@ export default function WorkshopProposalDetailPage() {
             {/* Description */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
               <Heading level={2} className="text-xl font-semibold mb-4">Beschreibung</Heading>
-              <p className="text-gray-700 whitespace-pre-wrap">{proposal.description}</p>
+              <p className="text-neutral-700 whitespace-pre-wrap">{proposal.description}</p>
             </section>
 
             {/* Short Description */}
             {proposal.short_description && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Kurzbeschreibung</Heading>
-                <p className="text-gray-700">{proposal.short_description}</p>
+                <p className="text-neutral-700">{proposal.short_description}</p>
               </section>
             )}
 
@@ -169,7 +169,7 @@ export default function WorkshopProposalDetailPage() {
                 <Heading level={2} className="text-xl font-semibold mb-4">Lernziele</Heading>
                 <ul className="list-disc list-inside space-y-2">
                   {proposal.learning_objectives.map((obj: string, idx: number) => (
-                    <li key={idx} className="text-gray-700">
+                    <li key={idx} className="text-neutral-700">
                       {obj}
                     </li>
                   ))}
@@ -181,7 +181,7 @@ export default function WorkshopProposalDetailPage() {
             {proposal.prerequisites && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Voraussetzungen</Heading>
-                <p className="text-gray-700">{proposal.prerequisites}</p>
+                <p className="text-neutral-700">{proposal.prerequisites}</p>
               </section>
             )}
 
@@ -191,18 +191,18 @@ export default function WorkshopProposalDetailPage() {
                 <Heading level={2} className="text-xl font-semibold mb-4">Materialien</Heading>
                 {proposal.materials_provided && (
                   <div className="mb-4">
-                    <Heading level={3} className="text-sm font-semibold text-gray-700 mb-2">
+                    <Heading level={3} className="text-sm font-semibold text-neutral-700 mb-2">
                       Bereitgestellte Materialien:
                     </Heading>
-                    <p className="text-gray-700">{proposal.materials_provided}</p>
+                    <p className="text-neutral-700">{proposal.materials_provided}</p>
                   </div>
                 )}
                 {proposal.materials_required && (
                   <div>
-                    <Heading level={3} className="text-sm font-semibold text-gray-700 mb-2">
+                    <Heading level={3} className="text-sm font-semibold text-neutral-700 mb-2">
                       Benötigte Materialien:
                     </Heading>
-                    <p className="text-gray-700">{proposal.materials_required}</p>
+                    <p className="text-neutral-700">{proposal.materials_required}</p>
                   </div>
                 )}
               </section>
@@ -224,7 +224,7 @@ export default function WorkshopProposalDetailPage() {
               <Heading level={3} className="font-semibold mb-4">Status</Heading>
               <div className="flex items-center gap-2">
                 {proposal.status === APPROVAL_STATUS.APPROVED && (
-                  <Check className="w-5 h-5 text-green-600" />
+                  <Check className="w-5 h-5 text-primary-600" />
                 )}
                 {proposal.status === APPROVAL_STATUS.PENDING && <Clock className="w-5 h-5 text-yellow-600" />}
                 {proposal.status === APPROVAL_STATUS.REJECTED && <X className="w-5 h-5 text-red-600" />}
@@ -240,25 +240,25 @@ export default function WorkshopProposalDetailPage() {
               <Heading level={3} className="font-semibold mb-4">Details</Heading>
               <dl className="space-y-3 text-sm">
                 <div>
-                  <dt className="text-gray-600 flex items-center gap-2">
+                  <dt className="text-neutral-600 flex items-center gap-2">
                     <BookOpen className="w-4 h-4" />
                     Kategorie
                   </dt>
                   <dd className="font-medium mt-1">{proposal.category}</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-600">Level</dt>
+                  <dt className="text-neutral-600">Level</dt>
                   <dd className="font-medium mt-1 capitalize">{proposal.level}</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-600 flex items-center gap-2">
+                  <dt className="text-neutral-600 flex items-center gap-2">
                     <Clock className="w-4 h-4" />
                     Dauer
                   </dt>
                   <dd className="font-medium mt-1">{proposal.duration_minutes} Minuten</dd>
                 </div>
                 <div>
-                  <dt className="text-gray-600 flex items-center gap-2">
+                  <dt className="text-neutral-600 flex items-center gap-2">
                     <Users className="w-4 h-4" />
                     Teilnehmer
                   </dt>
@@ -267,7 +267,7 @@ export default function WorkshopProposalDetailPage() {
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-gray-600 flex items-center gap-2">
+                  <dt className="text-neutral-600 flex items-center gap-2">
                     <DollarSign className="w-4 h-4" />
                     Preis
                   </dt>
@@ -277,7 +277,7 @@ export default function WorkshopProposalDetailPage() {
                 </div>
                 {proposal.target_audience && (
                   <div>
-                    <dt className="text-gray-600">Zielgruppe</dt>
+                    <dt className="text-neutral-600">Zielgruppe</dt>
                     <dd className="font-medium mt-1">{proposal.target_audience}</dd>
                   </div>
                 )}
@@ -290,7 +290,7 @@ export default function WorkshopProposalDetailPage() {
                 <MapPin className="w-4 h-4" />
                 Standort
               </Heading>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-neutral-700">
                 {proposal.location_type === 'online'
                   ? 'Online'
                   : proposal.location_type === 'home'
@@ -303,19 +303,19 @@ export default function WorkshopProposalDetailPage() {
             {proposal.reviewed_by && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={3} className="font-semibold mb-4">Reviewer</Heading>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-neutral-700">
                   {proposal.reviewer_name || 'Admin'}
                   <br />
                   {proposal.reviewed_at && (
-                    <span className="text-gray-500">
+                    <span className="text-neutral-500">
                       {formatDateTime(proposal.reviewed_at)}
                     </span>
                   )}
                 </p>
                 {proposal.admin_notes && (
                   <div className="mt-3 pt-3 border-t">
-                    <p className="text-xs text-gray-600">Notizen:</p>
-                    <p className="text-sm text-gray-700 mt-1">{proposal.admin_notes}</p>
+                    <p className="text-xs text-neutral-600">Notizen:</p>
+                    <p className="text-sm text-neutral-700 mt-1">{proposal.admin_notes}</p>
                   </div>
                 )}
               </section>

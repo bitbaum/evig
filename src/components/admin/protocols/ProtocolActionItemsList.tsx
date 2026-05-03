@@ -71,9 +71,9 @@ export function ProtocolActionItemsList({
 
   return (
     <div id="protocol-step-tasks" className="bg-white rounded-lg border overflow-hidden">
-      <div className="p-4 border-b bg-gray-50 flex items-center justify-between gap-3">
-        <Heading level={2} className="text-lg text-gray-900">
-          <ListChecks className="w-5 h-5 inline mr-2 text-gray-400" />
+      <div className="p-4 border-b bg-neutral-50 flex items-center justify-between gap-3">
+        <Heading level={2} className="text-lg text-neutral-900">
+          <ListChecks className="w-5 h-5 inline mr-2 text-neutral-400" />
           Aktionen ({notes.action_items.length})
         </Heading>
         {unlinkedTaskItems.length > 0 && (isReview || isFinalized) && (
@@ -109,19 +109,19 @@ export function ProtocolActionItemsList({
                   <div className="flex items-center gap-2 mb-1">
                     <span
                       className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                        ACTION_ITEM_TYPE_COLORS[item.item_type] || 'bg-gray-100 text-gray-800'
+                        ACTION_ITEM_TYPE_COLORS[item.item_type] || 'bg-neutral-100 text-neutral-800'
                       }`}
                     >
                       {ACTION_ITEM_TYPE_LABELS[item.item_type]}
                     </span>
                     {item.priority_hint && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-neutral-500">
                         {PRIORITY_HINT_LABELS[item.priority_hint] || item.priority_hint}
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-900">{item.description}</p>
-                  <div className="flex items-center gap-4 mt-1 text-sm text-gray-500">
+                  <p className="text-neutral-900">{item.description}</p>
+                  <div className="flex items-center gap-4 mt-1 text-sm text-neutral-500">
                     {item.assigned_to_name && (
                       <span>Zuständig: {item.assigned_to_name}</span>
                     )}
@@ -134,7 +134,7 @@ export function ProtocolActionItemsList({
                   {isLinked && link ? (
                     <Link
                       href={`/admin/tasks/${link.linked_task_id}`}
-                      className="flex items-center gap-1 text-sm text-green-600 hover:text-green-800"
+                      className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-800"
                     >
                       <CheckCircle2 className="w-4 h-4" />
                       Verknüpft

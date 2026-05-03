@@ -31,30 +31,30 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 text-center"
         onClick={(e) => e.stopPropagation()}
       >
-        <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-        <Heading level={2} className="text-2xl font-bold text-gray-900 mb-2">
+        <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+        <Heading level={2} className="text-2xl font-bold text-neutral-900 mb-2">
           {t('title')}
         </Heading>
-        <p className="text-gray-600 mb-6">
+        <p className="text-neutral-600 mb-6">
           {t('identified', { name: suggestion.name })}
         </p>
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <div className="bg-neutral-50 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
             {IconComponent ? (
               <IconComponent className="w-6 h-6 text-blue-600" />
             ) : (
               <CheckCircle className="w-6 h-6 text-blue-600" />
             )}
-            <span className="font-medium text-gray-900">{suggestion.name}</span>
+            <span className="font-medium text-neutral-900">{suggestion.name}</span>
           </div>
-          <p className="text-sm text-gray-600">CHF {suggestion.estimatedPrice}</p>
-          <p className="text-xs text-green-600 mt-1">
+          <p className="text-sm text-neutral-600">CHF {suggestion.estimatedPrice}</p>
+          <p className="text-xs text-primary-600 mt-1">
             {t('confidence', { percent: Math.round(suggestion.confidence * 100) })}
           </p>
         </div>
         <button
           onClick={onClose}
-          className="w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-colors font-medium"
+          className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors font-medium"
         >
           {t('editForm')}
         </button>

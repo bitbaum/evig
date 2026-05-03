@@ -43,7 +43,7 @@ interface Location {
 const PAGE_SIZE = 20
 
 const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = {
-  [LOCATION_STATUS.APPROVED]: { label: getLocationStatusLabel(LOCATION_STATUS.APPROVED), color: 'bg-green-100 text-green-800' },
+  [LOCATION_STATUS.APPROVED]: { label: getLocationStatusLabel(LOCATION_STATUS.APPROVED), color: 'bg-primary-100 text-primary-800' },
   [LOCATION_STATUS.PENDING]: { label: getLocationStatusLabel(LOCATION_STATUS.PENDING), color: 'bg-yellow-100 text-yellow-800' },
   [LOCATION_STATUS.REJECTED]: { label: getLocationStatusLabel(LOCATION_STATUS.REJECTED), color: 'bg-red-100 text-red-800' },
   [LOCATION_STATUS.SUSPENDED]: { label: getLocationStatusLabel(LOCATION_STATUS.SUSPENDED), color: 'bg-orange-100 text-orange-800' },
@@ -132,10 +132,10 @@ export default function AdminLocationsPage() {
   if (status === 'loading' || loading) {
     return (
       <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+        <div className="h-8 bg-neutral-200 rounded w-1/4"></div>
         <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
-            <div key={i} className="h-16 bg-gray-200 rounded"></div>
+            <div key={i} className="h-16 bg-neutral-200 rounded"></div>
           ))}
         </div>
       </div>
@@ -164,7 +164,7 @@ export default function AdminLocationsPage() {
       actions={
         <Link
           href="/admin/locations/new"
-          className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors gap-2"
+          className="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors gap-2"
         >
           <Plus className="w-4 h-4" />
           Neuer Ort
@@ -205,13 +205,13 @@ export default function AdminLocationsPage() {
         ]}
       >
         <div className="flex-1 min-w-48">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Stadt</label>
+          <label className="block text-sm font-medium text-neutral-700 mb-1">Stadt</label>
           <input
             type="text"
             value={filters.city}
             onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
             placeholder="Stadt suchen..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </AdminFilterBar>
@@ -225,20 +225,20 @@ export default function AdminLocationsPage() {
 
       {/* Locations List */}
       <div className="bg-white rounded-xl shadow-sm border">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <Heading level={2} className="text-lg font-semibold text-gray-900">
+        <div className="px-6 py-4 border-b border-neutral-200">
+          <Heading level={2} className="text-lg font-semibold text-neutral-900">
             Orte ({filteredLocations.length})
           </Heading>
         </div>
 
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-neutral-200">
           {filteredLocations.map((location) => (
-            <div key={location.id} className="p-6 hover:bg-gray-50">
+            <div key={location.id} className="p-6 hover:bg-neutral-50">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     {getTypeIcon(location.type)}
-                    <Heading level={3} className="text-lg font-semibold text-gray-900 truncate">
+                    <Heading level={3} className="text-lg font-semibold text-neutral-900 truncate">
                       {location.name}
                     </Heading>
                     <AdminStatusBadge
@@ -247,7 +247,7 @@ export default function AdminLocationsPage() {
                     />
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-3">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
                     <div className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
                       {location.city}, {location.canton}
@@ -266,7 +266,7 @@ export default function AdminLocationsPage() {
                     </div>
                   </div>
 
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-neutral-500">
                     {location.createdAt && formatDateShort(location.createdAt)}
                   </div>
                 </div>
@@ -274,7 +274,7 @@ export default function AdminLocationsPage() {
                 <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
                   <Link
                     href={`/admin/locations/${location.id}`}
-                    className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                   >
                     <Eye className="w-4 h-4 mr-1" />
                     Details
@@ -285,7 +285,7 @@ export default function AdminLocationsPage() {
                       <button
                         onClick={() => setConfirmTarget({ id: location.id, action: 'approve', name: location.name })}
                         disabled={actionLoading}
-                        className="inline-flex items-center px-3 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center px-3 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {actionLoading ? (
                           <Loader2 className="w-4 h-4 mr-1 animate-spin" />
@@ -315,11 +315,11 @@ export default function AdminLocationsPage() {
 
           {filteredLocations.length === 0 && (
             <div className="px-6 py-12 text-center">
-              <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+              <MapPin className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+              <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
                 {ADMIN_CONTENT.locations.emptyTitle}
               </Heading>
-              <p className="text-gray-600 mb-4">
+              <p className="text-neutral-600 mb-4">
                 {searchName.trim()
                   ? `Keine Orte für "${searchName}" gefunden.`
                   : filters.status !== 'all'
@@ -328,7 +328,7 @@ export default function AdminLocationsPage() {
               </p>
               <Link
                 href="/admin/locations/new"
-                className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Ersten Ort erstellen

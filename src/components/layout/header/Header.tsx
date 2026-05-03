@@ -63,7 +63,7 @@ export function Header() {
           "fixed top-0 left-0 right-0 z-50",
           "transition-all duration-300",
           isScrolled || anyDropdownOpen
-            ? "bg-white/95 backdrop-blur-xl shadow-sm shadow-gray-200/50 border-b border-gray-100"
+            ? "bg-white/95 backdrop-blur-xl shadow-sm shadow-neutral-200/50 border-b border-neutral-100"
             : "bg-white/80 backdrop-blur-md"
         )}
       >
@@ -95,8 +95,8 @@ export function Header() {
                 <Link
                   href={contactItem.href}
                   className={cn(
-                    "px-4 py-2 text-sm font-medium text-gray-600",
-                    "hover:text-gray-900 transition-colors duration-200",
+                    "px-4 py-2 text-sm font-medium text-neutral-600",
+                    "hover:text-neutral-900 transition-colors duration-200",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
                   )}
                 >
@@ -108,7 +108,7 @@ export function Header() {
               <LocaleSwitcher />
 
               {/* Divider */}
-              <div className="w-px h-5 bg-gray-200" />
+              <div className="w-px h-5 bg-neutral-200" />
 
               {/* User Menu / Auth */}
               <UserMenu />
@@ -124,7 +124,7 @@ export function Header() {
                 type="button"
                 className={cn(
                   "relative p-2 rounded-lg",
-                  "text-gray-600 hover:text-gray-900 hover:bg-gray-100",
+                  "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100",
                   "transition-colors duration-200",
                   "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 )}

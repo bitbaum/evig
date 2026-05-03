@@ -18,18 +18,18 @@ export async function ProcessSection() {
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-neutral-600">
             {t('subtitle')}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {processSteps.map((phase, index) => (
             <div key={index} className="text-center">
-              <div className="w-16 h-16 bg-green-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+              <div className="w-16 h-16 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 {phase.step}
               </div>
               <Heading level={3} className="mb-3">{phase.title}</Heading>
-              <p className="text-gray-600">{phase.description}</p>
+              <p className="text-neutral-600">{phase.description}</p>
             </div>
           ))}
         </div>

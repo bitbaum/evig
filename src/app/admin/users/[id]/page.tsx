@@ -124,7 +124,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       <div className="flex items-center justify-between">
         <Link
           href="/admin/users"
-          className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           Zurück zur Übersicht
@@ -132,15 +132,15 @@ export default async function UserDetailPage({ params }: PageProps) {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
             userIsSuperAdmin
               ? 'bg-gradient-to-r from-purple-500 to-pink-600'
               : userIsStaff
-                ? 'bg-gradient-to-r from-blue-500 to-green-600'
-                : 'bg-gradient-to-r from-gray-400 to-gray-500'
+                ? 'bg-gradient-to-r from-blue-500 to-primary-600'
+                : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
           </div>
@@ -148,7 +148,7 @@ export default async function UserDetailPage({ params }: PageProps) {
           {/* Info */}
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+              <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
                 {user.name || 'Kein Name'}
               </Heading>
               {userIsSuperAdmin && (
@@ -164,7 +164,7 @@ export default async function UserDetailPage({ params }: PageProps) {
                 </span>
               )}
               {user.email_verified && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                   <UserCheck className="w-3 h-3" />
                   Verifiziert
                 </span>
@@ -172,25 +172,25 @@ export default async function UserDetailPage({ params }: PageProps) {
             </div>
 
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                 <Mail className="w-4 h-4" />
                 <span>{user.email}</span>
               </div>
 
               {user.phone && (
-                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                   <Phone className="w-4 h-4" />
                   <span>{user.phone}</span>
                 </div>
               )}
 
-              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                 <Calendar className="w-4 h-4" />
                 <span>Registriert: {formatDateShort(user.created_at)}</span>
               </div>
 
               {user.address && (
-                <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                   <MapPin className="w-4 h-4" />
                   <span>{user.address}</span>
                 </div>
@@ -202,15 +202,15 @@ export default async function UserDetailPage({ params }: PageProps) {
 
       {/* Team Profile Link */}
       {userIsStaff && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
             <User className="w-5 h-5" />
             Team-Profil
           </Heading>
 
           {user.team_profile_id ? (
             <div className="flex items-center justify-between">
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-neutral-600 dark:text-neutral-400">
                 Dieses Mitglied hat ein Team-Profil.
               </p>
               <Link
@@ -223,12 +223,12 @@ export default async function UserDetailPage({ params }: PageProps) {
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-neutral-600 dark:text-neutral-400">
                 Noch kein Team-Profil vorhanden.
               </p>
               <Link
                 href={`/admin/team/new?user_id=${user.id}`}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
               >
                 <User className="w-4 h-4" />
                 Profil erstellen
@@ -240,8 +240,8 @@ export default async function UserDetailPage({ params }: PageProps) {
 
       {/* Permissions */}
       {userIsStaff && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-          <Heading level={2} className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+          <Heading level={2} className="font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             Berechtigungen
           </Heading>
@@ -259,14 +259,14 @@ export default async function UserDetailPage({ params }: PageProps) {
               {permissions.map(p => (
                 <span
                   key={p}
-                  className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full"
+                  className="px-3 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-sm rounded-full"
                 >
                   {p}
                 </span>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-neutral-500 dark:text-neutral-400">
               Keine speziellen Berechtigungen zugewiesen
             </p>
           )}
@@ -274,7 +274,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       )}
 
       {/* Meta */}
-      <div className="text-xs text-gray-500 flex gap-4">
+      <div className="text-xs text-neutral-500 flex gap-4">
         <span>Benutzer-ID: {user.id}</span>
         {user.email_verified && (
           <span>E-Mail verifiziert: {formatDateShort(user.email_verified)}</span>

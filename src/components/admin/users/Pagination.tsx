@@ -53,9 +53,9 @@ export function Pagination({
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl">
+    <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl">
       {/* Info */}
-      <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="text-sm text-neutral-700 dark:text-neutral-300">
         <span className="font-medium">{start}</span> bis{' '}
         <span className="font-medium">{end}</span> von{' '}
         <span className="font-medium">{total}</span> Einträgen
@@ -67,7 +67,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -81,13 +81,13 @@ export function Pagination({
               className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium transition-colors ${
                 page === p
                   ? 'bg-blue-600 text-white'
-                  : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
+                  : 'hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300'
               }`}
             >
               {p}
             </button>
           ) : (
-            <span key={i} className="px-2 text-gray-400">
+            <span key={i} className="px-2 text-neutral-400">
               {p}
             </span>
           )
@@ -97,7 +97,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronRight className="w-5 h-5" />
         </button>

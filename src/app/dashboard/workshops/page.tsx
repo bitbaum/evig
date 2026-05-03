@@ -202,12 +202,12 @@ export default function WorkshopsDashboard() {
 
                 {/* Status specific content */}
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <div className="flex items-center text-green-800">
+                  <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
+                    <div className="flex items-center text-primary-800">
                       <CheckCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">Ihre Anmeldung wurde bestätigt!</span>
                     </div>
-                    <p className="text-green-700 text-sm mt-1">
+                    <p className="text-primary-700 text-sm mt-1">
                       Sie erhalten in Kürze weitere Informationen zu Datum und Ort.
                     </p>
                   </div>
@@ -260,7 +260,7 @@ export default function WorkshopsDashboard() {
                           alert('Netzwerkfehler bei der Stornierung')
                         }
                       }}
-                      className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+                      className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       Anmeldung stornieren
                     </button>
@@ -277,16 +277,16 @@ export default function WorkshopsDashboard() {
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Calendar className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-neutral-900 mb-2">
               Noch keine Workshop-Anmeldungen
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-neutral-600 mb-6">
               Sie haben sich noch für keine Workshops angemeldet.
             </p>
             <Link
               href="/workshops"
-              className="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
             >
               Workshops entdecken
             </Link>
@@ -296,32 +296,32 @@ export default function WorkshopsDashboard() {
 
       <Modal open={!!editingId} onClose={() => setEditingId(null)}>
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Feedback bearbeiten</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Feedback bearbeiten</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Bewertung (1-5)</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">Bewertung (1-5)</label>
               <input
                 type="number"
                 min={1}
                 max={5}
                 value={editRating}
                 onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
-                className="w-24 px-3 py-2 border border-gray-300 rounded-lg"
+                className="w-24 px-3 py-2 border border-neutral-300 rounded-lg"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Feedback</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">Feedback</label>
               <textarea
                 value={editFeedback}
                 onChange={(e) => setEditFeedback(e.target.value)}
                 rows={4}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                 placeholder="Wie war Ihre Erfahrung?"
               />
             </div>
           </div>
           <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-gray-300">Abbrechen</button>
+            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">Abbrechen</button>
             <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
               {saving ? 'Speichern…' : 'Speichern'}
             </button>

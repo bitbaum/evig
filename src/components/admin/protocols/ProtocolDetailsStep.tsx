@@ -19,12 +19,12 @@ interface Props {
 export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: Props) {
   if (isComplete) {
     return (
-      <div className="bg-gray-50 rounded-lg border px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-sm text-gray-700">
+      <div className="bg-neutral-50 rounded-lg border px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sm text-neutral-700">
           <span className="font-medium">{values.title}</span>
-          <span className="text-gray-400">·</span>
+          <span className="text-neutral-400">·</span>
           <span>{formatDateShort(values.meeting_date)}</span>
-          <span className="text-gray-400">·</span>
+          <span className="text-neutral-400">·</span>
           <span>{PROTOCOL_VISIBILITY_LABELS[values.visibility]}</span>
         </div>
         <button onClick={onReset} className="text-sm text-blue-600 hover:text-blue-800">
@@ -36,10 +36,10 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
 
   return (
     <div className="bg-white rounded-lg border p-6 space-y-6">
-      <Heading level={2} className="text-lg text-gray-900">Details</Heading>
+      <Heading level={2} className="text-lg text-neutral-900">Details</Heading>
 
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
           Titel <span className="text-red-500">*</span>
         </label>
         <input
@@ -56,7 +56,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
       </div>
 
       <div>
-        <label htmlFor="meeting_date" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="meeting_date" className="block text-sm font-medium text-neutral-700 mb-1">
           Datum <span className="text-red-500">*</span>
         </label>
         <input
@@ -71,7 +71,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
       </div>
 
       <div>
-        <label htmlFor="visibility" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="visibility" className="block text-sm font-medium text-neutral-700 mb-1">
           Sichtbarkeit
         </label>
         <select

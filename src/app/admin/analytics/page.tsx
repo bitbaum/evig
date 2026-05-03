@@ -230,10 +230,10 @@ export default async function AnalyticsPage() {
           <BarChart3 className="w-6 h-6 text-indigo-600" />
         </div>
         <div>
-          <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">
+          <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
             Analytics
           </Heading>
-          <p className="text-gray-600 dark:text-gray-400">
+          <p className="text-neutral-600 dark:text-neutral-400">
             Statistiken und Auswertungen für RevampIT
           </p>
         </div>
@@ -241,57 +241,57 @@ export default async function AnalyticsPage() {
 
       {/* Quick Stats */}
       <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-blue-600" />
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalUsers}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Benutzer</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalUsers}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Benutzer</p>
             </div>
           </div>
           {stats.usersThisMonth > 0 && (
-            <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+            <p className="text-xs text-primary-600 mt-2 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" /> +{stats.usersThisMonth} diesen Monat
             </p>
           )}
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Calendar className="w-8 h-8 text-purple-600" />
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalWorkshops}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Workshops</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalWorkshops}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Workshops</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <Wrench className="w-8 h-8 text-green-600" />
+            <Wrench className="w-8 h-8 text-primary-600" />
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalTechnicians}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Techniker</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalTechnicians}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Techniker</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
             <Package className="w-8 h-8 text-orange-600" />
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalSellers}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Verkäufer</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalSellers}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Verkäufer</p>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 col-span-2">
+        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 col-span-2">
           <div className="flex items-center gap-3">
             <BarChart3 className="w-8 h-8 text-yellow-600" />
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{stats.pendingApprovals}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Ausstehende Freigaben</p>
+              <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.pendingApprovals}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">Ausstehende Freigaben</p>
             </div>
           </div>
           {stats.pendingApprovals > 0 && (
@@ -308,17 +308,17 @@ export default async function AnalyticsPage() {
       {/* Content Sections */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* User Growth */}
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-4">Benutzer-Wachstum</Heading>
+        <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-4">Benutzer-Wachstum</Heading>
           {userGrowth.length === 0 ? (
-            <p className="text-sm text-gray-500 dark:text-gray-400">Keine Daten vorhanden</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">Keine Daten vorhanden</p>
           ) : (
             <div className="space-y-3">
               {userGrowth.map((item) => (
                 <div key={item.month} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">{formatMonth(item.month)}</span>
+                  <span className="text-sm text-neutral-600 dark:text-neutral-400">{formatMonth(item.month)}</span>
                   <div className="flex items-center gap-3">
-                    <div className="w-32 bg-gray-100 dark:bg-gray-700 rounded-full h-2">
+                    <div className="w-32 bg-neutral-100 dark:bg-neutral-700 rounded-full h-2">
                       <div
                         className="h-2 rounded-full bg-blue-500"
                         style={{
@@ -326,48 +326,48 @@ export default async function AnalyticsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white w-8 text-right">
+                    <span className="text-sm font-medium text-neutral-900 dark:text-white w-8 text-right">
                       {item.count}
                     </span>
                   </div>
                 </div>
               ))}
-              <p className="text-xs text-gray-500 mt-2">Registrierungen pro Monat (letzte 6 Monate)</p>
+              <p className="text-xs text-neutral-500 mt-2">Registrierungen pro Monat (letzte 6 Monate)</p>
             </div>
           )}
         </div>
 
         {/* Activity Overview */}
-        <div className="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-          <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-4">Aktivitäts-Übersicht</Heading>
+        <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-4">Aktivitäts-Übersicht</Heading>
           <div className="space-y-4">
-            <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
               <div className="flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-green-600" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Aufgaben erledigt (diese Woche)</span>
+                <ClipboardList className="w-5 h-5 text-primary-600" />
+                <span className="text-sm text-neutral-700 dark:text-neutral-300">Aufgaben erledigt (diese Woche)</span>
               </div>
-              <span className="text-lg font-bold text-green-600">{activity.taskCompletionsThisWeek}</span>
+              <span className="text-lg font-bold text-primary-600">{activity.taskCompletionsThisWeek}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-blue-600" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Aufgaben erledigt (diesen Monat)</span>
+                <span className="text-sm text-neutral-700 dark:text-neutral-300">Aufgaben erledigt (diesen Monat)</span>
               </div>
               <span className="text-lg font-bold text-blue-600">{activity.taskCompletionsThisMonth}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
               <div className="flex items-center gap-2">
                 <Package className="w-5 h-5 text-purple-600" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Neue Einreichungen (diesen Monat)</span>
+                <span className="text-sm text-neutral-700 dark:text-neutral-300">Neue Einreichungen (diesen Monat)</span>
               </div>
               <span className="text-lg font-bold text-purple-600">{activity.contentSubmissionsThisMonth}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg">
               <div className="flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-gray-600" />
-                <span className="text-sm text-gray-700 dark:text-gray-300">Aktive Aufgaben</span>
+                <ClipboardList className="w-5 h-5 text-neutral-600" />
+                <span className="text-sm text-neutral-700 dark:text-neutral-300">Aktive Aufgaben</span>
               </div>
-              <span className="text-lg font-bold text-gray-900 dark:text-white">{activity.activeTasksCount}</span>
+              <span className="text-lg font-bold text-neutral-900 dark:text-white">{activity.activeTasksCount}</span>
             </div>
           </div>
         </div>
@@ -377,34 +377,34 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-2 gap-4">
         <Link
           href="/admin/analyse/finanzen"
-          className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-emerald-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Finanz-Analyse</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Detaillierte Finanz-Statistiken und Diagramme</p>
+              <p className="font-medium text-neutral-900 dark:text-white">Finanz-Analyse</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">Detaillierte Finanz-Statistiken und Diagramme</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-blue-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-blue-600 transition-colors" />
         </Link>
 
         <Link
           href="/admin/tasks/analytics"
-          className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
               <ClipboardList className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="font-medium text-gray-900 dark:text-white">Aufgaben-Analyse</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Beiträge, Kategorien und Verlauf</p>
+              <p className="font-medium text-neutral-900 dark:text-white">Aufgaben-Analyse</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">Beiträge, Kategorien und Verlauf</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-gray-500 group-hover:text-blue-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-blue-600 transition-colors" />
         </Link>
       </div>
 

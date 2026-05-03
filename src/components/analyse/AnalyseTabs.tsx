@@ -33,7 +33,7 @@ export function AnalyseTabs() {
                 'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                 isActive
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-gray-300'
+                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-neutral-300'
               )}
             >
               <Icon className="w-4 h-4" />

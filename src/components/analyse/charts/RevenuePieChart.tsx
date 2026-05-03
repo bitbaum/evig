@@ -45,7 +45,7 @@ function CustomTooltip({ active, payload }: {
 
   const data = payload[0].payload
   return (
-    <div className="bg-white dark:bg-gray-800 p-3 border rounded-lg shadow-lg">
+    <div className="bg-white dark:bg-neutral-800 p-3 border rounded-lg shadow-lg">
       <p className="font-semibold" style={{ color: data.color }}>{data.name}</p>
       <p className="text-lg font-bold">{formatCHF(data.value)}</p>
     </div>

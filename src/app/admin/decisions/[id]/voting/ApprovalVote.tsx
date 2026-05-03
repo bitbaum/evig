@@ -14,7 +14,7 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
     <div className="space-y-3">
       {isGalleryMode ? (
         <>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-neutral-500">
             Wähle alle Optionen, die du unterstützt ({approvedOptions.size} ausgewählt):
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -30,11 +30,11 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
         </>
       ) : (
         <>
-          <p className="text-sm text-gray-500">Wähle alle Optionen, die du unterstützt:</p>
+          <p className="text-sm text-neutral-500">Wähle alle Optionen, die du unterstützt:</p>
           {options.map((opt) => (
             <label
               key={opt.id}
-              className="flex items-center gap-3 rounded-md border border-gray-200 p-3 hover:bg-gray-50 cursor-pointer"
+              className="flex items-center gap-3 rounded-md border border-neutral-200 p-3 hover:bg-neutral-50 cursor-pointer"
             >
               <input
                 type="checkbox"
@@ -46,9 +46,9 @@ export function ApprovalVote({ options, approvedOptions, isGalleryMode, onToggle
                 className="rounded"
               />
               <div>
-                <span className="font-medium text-gray-800">{opt.label}</span>
+                <span className="font-medium text-neutral-800">{opt.label}</span>
                 {opt.description && (
-                  <span className="ml-2 text-sm text-gray-500">{opt.description}</span>
+                  <span className="ml-2 text-sm text-neutral-500">{opt.description}</span>
                 )}
               </div>
             </label>

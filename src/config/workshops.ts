@@ -66,7 +66,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Betriebssysteme, Terminal, Server-Administration und Open-Source-Tools.",
     icon: BookOpen,
-    color: "bg-green-500",
+    color: "bg-primary-500",
   },
   {
     id: "hardware",
@@ -141,7 +141,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "beginner",
     name: "Anfänger",
-    badgeClass: "bg-green-100 text-green-800",
+    badgeClass: "bg-primary-100 text-primary-800",
   },
   {
     id: "intermediate",
@@ -156,7 +156,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "all",
     name: "Alle Stufen",
-    badgeClass: "bg-gray-100 text-gray-800",
+    badgeClass: "bg-neutral-100 text-neutral-800",
   },
 ];
 
@@ -245,12 +245,12 @@ export function getCategoryIcon(categoryName: string | null | undefined): Lucide
  * Get level badge class by level name
  */
 export function getLevelBadgeClass(levelName: string | null | undefined): string {
-  if (!levelName) return "bg-gray-100 text-gray-800";
+  if (!levelName) return "bg-neutral-100 text-neutral-800";
   const normalizedName = levelName.toLowerCase();
   const level = WORKSHOP_LEVELS.find(
     (l) => l.id === normalizedName || l.name.toLowerCase() === normalizedName
   );
-  return level?.badgeClass || "bg-gray-100 text-gray-800";
+  return level?.badgeClass || "bg-neutral-100 text-neutral-800";
 }
 
 /**

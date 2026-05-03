@@ -82,7 +82,7 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
+      <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700">
         {/* Header */}
         <div className="text-center mb-8">
           <Heading level={1} className={cn('text-2xl font-bold mb-2', getTextColor('white', 'primary'), 'dark:text-white')}>
@@ -236,10 +236,10 @@ export function LoginForm() {
         {/* Divider */}
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
+            <div className="w-full border-t border-neutral-200 dark:border-neutral-700"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white dark:bg-gray-800 text-gray-500">
+            <span className="px-4 bg-white dark:bg-neutral-800 text-neutral-500">
               {t('newHere', { orgName: ORG.name })}
             </span>
           </div>
@@ -248,7 +248,7 @@ export function LoginForm() {
         {/* Register Link */}
         <Link
           href="/auth/register"
-          className="w-full flex items-center justify-center gap-2 border-2 border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20 font-semibold py-3 px-4 rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-2 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-semibold py-3 px-4 rounded-lg transition-colors"
         >
           {t('createAccount')}
         </Link>
@@ -256,10 +256,10 @@ export function LoginForm() {
 
       {/* Benefits */}
       <div className="mt-8 text-center">
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
           {t('benefits')}
         </p>
-        <ul className="text-sm text-gray-600 dark:text-gray-500 space-y-1">
+        <ul className="text-sm text-neutral-600 dark:text-neutral-500 space-y-1">
           <li>✓ {t('benefit1')}</li>
           <li>✓ {t('benefit2')}</li>
           <li>✓ {t('benefit3')}</li>

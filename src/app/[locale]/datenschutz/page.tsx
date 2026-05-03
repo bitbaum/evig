@@ -69,11 +69,11 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
         </ul>
         <p>
           {t('section7.downloadText')}{' '}
-          <Link href="/dashboard/settings" className="text-green-700 underline">
+          <Link href="/dashboard/settings" className="text-primary-700 underline">
             {t('section7.settingsLinkLabel')}
           </Link>
           . {t('section7.contactText')}{' '}
-          <a href={`mailto:${CONTACT.email}`} className="text-green-700 underline">{CONTACT.email}</a>
+          <a href={`mailto:${CONTACT.email}`} className="text-primary-700 underline">{CONTACT.email}</a>
         </p>
 
         <Heading level={2}>{t('section8.title')}</Heading>
@@ -85,7 +85,7 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
         <Heading level={2}>{t('section10.title')}</Heading>
         <p>
           {t('section10.body')}{' '}
-          <Link href="/impressum" className="text-green-700 underline">{t('section10.impressumLinkLabel')}</Link>.
+          <Link href="/impressum" className="text-primary-700 underline">{t('section10.impressumLinkLabel')}</Link>.
         </p>
 
         <p className="mt-12 text-sm text-neutral-500">{t('asOf')}</p>

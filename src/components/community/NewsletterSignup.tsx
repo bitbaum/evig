@@ -58,7 +58,7 @@ export function NewsletterSignup({
 
   if (status === 'success') {
     return (
-      <div className={`rounded-lg p-4 text-sm ${isDark ? 'bg-green-900/40 text-green-300' : 'bg-green-50 text-green-700'}`}>
+      <div className={`rounded-lg p-4 text-sm ${isDark ? 'bg-primary-900/40 text-primary-300' : 'bg-primary-50 text-primary-700'}`}>
         {t('successMessage')}
       </div>
     )
@@ -69,12 +69,12 @@ export function NewsletterSignup({
       {(resolvedTitle || resolvedDescription) && (
         <div className="mb-3">
           {resolvedTitle && (
-            <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-neutral-900'}`}>
               {resolvedTitle}
             </p>
           )}
           {resolvedDescription && (
-            <p className={`text-sm mt-0.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className={`text-sm mt-0.5 ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
               {resolvedDescription}
             </p>
           )}
@@ -89,10 +89,10 @@ export function NewsletterSignup({
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
+          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
             isDark
-              ? 'border-gray-600 bg-gray-800 text-white'
-              : 'border-gray-300 bg-white text-gray-900'
+              ? 'border-neutral-600 bg-neutral-800 text-white'
+              : 'border-neutral-300 bg-white text-neutral-900'
           } sm:max-w-[140px]`}
         />
         <label htmlFor="newsletter-email" className="sr-only">{t('emailPlaceholder')}</label>
@@ -103,16 +103,16 @@ export function NewsletterSignup({
           onChange={e => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
           required
-          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-500 ${
+          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
             isDark
-              ? 'border-gray-600 bg-gray-800 text-white'
-              : 'border-gray-300 bg-white text-gray-900'
+              ? 'border-neutral-600 bg-neutral-800 text-white'
+              : 'border-neutral-300 bg-white text-neutral-900'
           }`}
         />
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="h-10 rounded-md bg-green-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:opacity-60 whitespace-nowrap"
+          className="h-10 rounded-md bg-primary-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:opacity-60 whitespace-nowrap"
         >
           {status === 'loading' ? t('submitting') : t('submit')}
         </button>

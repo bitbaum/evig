@@ -7,7 +7,7 @@
  * helper (lib/blog-utils.ts).
  *
  * lib/blog.ts reads markdown files from content/posts/ and parses them
- * with gray-matter. Two exports:
+ * with neutral-matter. Two exports:
  *   getAllPosts() — directory scan, .md filter, frontmatter parse,
  *     published-only filter, date-sort newest-first, defaults for
  *     missing fields, dir-not-exist guard

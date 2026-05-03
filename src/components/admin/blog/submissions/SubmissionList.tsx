@@ -25,10 +25,10 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
         <div
           key={submission.id}
           onClick={() => onSelect(submission)}
-          className={`bg-white dark:bg-gray-800 rounded-xl shadow-sm border p-5 cursor-pointer transition-all ${
+          className={`bg-white dark:bg-neutral-800 rounded-xl shadow-sm border p-5 cursor-pointer transition-all ${
             selectedId === submission.id
               ? 'border-teal-500 ring-2 ring-teal-500/20'
-              : 'border-gray-100 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+              : 'border-neutral-100 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
           }`}
         >
           <div className="flex items-start justify-between mb-3">
@@ -64,10 +64,10 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                   </span>
                 )}
               </div>
-              <Heading level={3} className="font-semibold text-gray-900 dark:text-white mb-1 line-clamp-2">
+              <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-1 line-clamp-2">
                 {submission.title}
               </Heading>
-              <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
                 <span className="flex items-center gap-1">
                   <User className="w-3 h-3" />
                   {submission.submitter_name}
@@ -80,7 +80,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
             </div>
           </div>
           {(submission.category_label || submission.category_name) && (
-            <span className="inline-flex items-center px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">
+            <span className="inline-flex items-center px-2 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs rounded">
               <Folder className="w-3 h-3 mr-1" />
               {submission.category_label || submission.category_name}
             </span>

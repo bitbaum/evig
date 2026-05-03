@@ -54,7 +54,7 @@ export default function CurrencySelector({
     <Card className={className}>
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
-          <Heading level={3} className="text-sm font-semibold text-gray-700">{t('selectCurrency')}</Heading>
+          <Heading level={3} className="text-sm font-semibold text-neutral-700">{t('selectCurrency')}</Heading>
           <Badge variant="outline" className="text-xs">
             {t('multilingual')}
           </Badge>
@@ -78,7 +78,7 @@ export default function CurrencySelector({
                 >
                   <div className="text-left">
                     <div className="font-semibold">{config.symbol} {currency}</div>
-                    <div className="text-xs text-gray-500">{config.name}</div>
+                    <div className="text-xs text-neutral-500">{config.name}</div>
                   </div>
                   {isSelected && <Check className="w-4 h-4" />}
                 </Button>
@@ -87,16 +87,16 @@ export default function CurrencySelector({
           </div>
 
           {/* Pricing Breakdown */}
-          <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+          <div className="bg-neutral-50 rounded-lg p-3 space-y-2">
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">{t('basePrice')}</span>
+              <span className="text-neutral-600">{t('basePrice')}</span>
               <span className="font-medium">
                 {formatCurrency(pricing.convertedPrice, selectedCurrency)}
               </span>
             </div>
 
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">
+              <span className="text-neutral-600">
                 {t('vat', { rate: (getCurrencyConfig(selectedCurrency).taxRate * 100).toFixed(1) })}
               </span>
               <span className="font-medium">
@@ -105,13 +105,13 @@ export default function CurrencySelector({
             </div>
 
             <div className="flex justify-between items-center text-sm">
-              <span className="text-gray-600">{t('fees')}</span>
+              <span className="text-neutral-600">{t('fees')}</span>
               <span className="font-medium">
                 {formatCurrency(pricing.total * 0.029 + 0.30, selectedCurrency)}
               </span>
             </div>
 
-            <hr className="border-gray-300" />
+            <hr className="border-neutral-300" />
 
             <div className="flex justify-between items-center font-semibold">
               <span>{t('total')}</span>
@@ -122,7 +122,7 @@ export default function CurrencySelector({
           </div>
 
           {/* Currency Notes */}
-          <div className="text-xs text-gray-500 space-y-1">
+          <div className="text-xs text-neutral-500 space-y-1">
             {selectedCurrency === 'EUR' && (
               <div className="flex items-start space-x-1">
                 <span className="text-blue-500">ℹ️</span>
@@ -131,7 +131,7 @@ export default function CurrencySelector({
             )}
             {selectedCurrency === 'CHF' && (
               <div className="flex items-start space-x-1">
-                <span className="text-green-500">🇨🇭</span>
+                <span className="text-primary-500">🇨🇭</span>
                 <span>{t('chfNote')}</span>
               </div>
             )}

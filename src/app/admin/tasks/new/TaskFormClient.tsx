@@ -168,7 +168,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Titel <span className="text-red-500">*</span>
           </label>
@@ -192,7 +192,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="task_type"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Aufgabentyp <span className="text-red-500">*</span>
           </label>
@@ -209,7 +209,7 @@ export default function TaskFormClient() {
               </option>
             ))}
           </select>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-neutral-500">
             {formData.task_type === 'one_time' && 'Wird nach Erledigung als abgeschlossen markiert'}
             {formData.task_type === 'recurring_scheduled' && 'Wiederholt sich nach einem festen Zeitplan'}
             {formData.task_type === 'recurring_as_needed' && 'Wird bei Bedarf erledigt, kein fester Zeitplan'}
@@ -220,7 +220,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="category"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Kategorie <span className="text-red-500">*</span>
           </label>
@@ -243,7 +243,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="priority"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Priorität
           </label>
@@ -267,7 +267,7 @@ export default function TaskFormClient() {
           <div>
             <label
               htmlFor="assigned_to"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-neutral-700 mb-1"
             >
               Zuweisen an
             </label>
@@ -292,7 +292,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="description"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Beschreibung
           </label>
@@ -312,7 +312,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="instructions"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Anleitung
           </label>
@@ -333,7 +333,7 @@ export default function TaskFormClient() {
           <div>
             <label
               htmlFor="schedule_human"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-neutral-700 mb-1"
             >
               Zeitplan
             </label>
@@ -353,7 +353,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="estimated_minutes"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Geschätzte Dauer (Minuten)
           </label>
@@ -374,7 +374,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="due_date"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Fälligkeitsdatum (optional)
           </label>
@@ -392,7 +392,7 @@ export default function TaskFormClient() {
         <div>
           <label
             htmlFor="tags"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-sm font-medium text-neutral-700 mb-1"
           >
             Tags
           </label>
@@ -405,7 +405,7 @@ export default function TaskFormClient() {
             placeholder="Komma-getrennt, z.B. küche, hygiene, täglich"
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-neutral-500">
             Mehrere Tags mit Komma trennen
           </p>
         </div>
@@ -415,7 +415,7 @@ export default function TaskFormClient() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-4 py-2 text-gray-600 hover:text-gray-900"
+            className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
           >
             Abbrechen
           </button>

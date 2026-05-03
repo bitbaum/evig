@@ -66,7 +66,7 @@ export default function DecisionFormClient() {
 
       {/* Title */}
       <div>
-        <label htmlFor="title" className="mb-1 block text-sm font-medium text-gray-700">Titel</label>
+        <label htmlFor="title" className="mb-1 block text-sm font-medium text-neutral-700">Titel</label>
         <input
           id="title"
           type="text"
@@ -74,14 +74,14 @@ export default function DecisionFormClient() {
           onChange={(e) => form.setTitle(e.target.value)}
           required
           maxLength={200}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Worum geht es?"
         />
       </div>
 
       {/* Description */}
       <div>
-        <label htmlFor="description" className="mb-1 block text-sm font-medium text-gray-700">
+        <label htmlFor="description" className="mb-1 block text-sm font-medium text-neutral-700">
           Was wird entschieden?
         </label>
         <textarea
@@ -90,23 +90,23 @@ export default function DecisionFormClient() {
           onChange={(e) => form.setDescription(e.target.value)}
           required
           rows={3}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Die konkrete Frage oder Entscheidung, über die abgestimmt wird."
         />
       </div>
 
       {/* Background / Rationale */}
       <div>
-        <label htmlFor="background" className="mb-1 block text-sm font-medium text-gray-700">
+        <label htmlFor="background" className="mb-1 block text-sm font-medium text-neutral-700">
           Begründung & Hintergrund
-          <span className="ml-1.5 font-normal text-gray-400">(optional)</span>
+          <span className="ml-1.5 font-normal text-neutral-400">(optional)</span>
         </label>
         <textarea
           id="background"
           value={form.background}
           onChange={(e) => form.setBackground(e.target.value)}
           rows={4}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
           placeholder="Warum ist diese Entscheidung nötig? Welche Alternativen wurden erwogen? Welche Risiken oder Vorteile gibt es? Abstimmungsberechtigte sehen diesen Text vor dem Abstimmen."
         />
       </div>
@@ -123,18 +123,18 @@ export default function DecisionFormClient() {
       )}
 
       {/* Fristen & Kategorie */}
-      <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 space-y-4">
-        <Heading level={3} className="text-sm font-medium text-gray-900">Fristen &amp; Kategorie</Heading>
+      <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-4">
+        <Heading level={3} className="text-sm font-medium text-neutral-900">Fristen &amp; Kategorie</Heading>
 
         <div>
-          <label htmlFor="decision-category" className="mb-1 block text-sm font-medium text-gray-700">
+          <label htmlFor="decision-category" className="mb-1 block text-sm font-medium text-neutral-700">
             Kategorie
           </label>
           <select
             id="decision-category"
             value={form.category}
             onChange={(e) => form.setCategory(e.target.value as DecisionCategory)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
           >
             {Object.values(DECISION_CATEGORIES).map((cat) => (
               <option key={cat} value={cat}>{DECISION_CATEGORY_LABELS[cat]}</option>
@@ -143,7 +143,7 @@ export default function DecisionFormClient() {
         </div>
 
         <div>
-          <label htmlFor="discussion-deadline" className="mb-1 block text-sm font-medium text-gray-700">
+          <label htmlFor="discussion-deadline" className="mb-1 block text-sm font-medium text-neutral-700">
             Diskussionsfrist
           </label>
           <input
@@ -151,12 +151,12 @@ export default function DecisionFormClient() {
             type="datetime-local"
             value={form.discussionDeadline}
             onChange={(e) => form.setDiscussionDeadline(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
           />
         </div>
 
         <div>
-          <label htmlFor="voting-deadline" className="mb-1 block text-sm font-medium text-gray-700">
+          <label htmlFor="voting-deadline" className="mb-1 block text-sm font-medium text-neutral-700">
             Abstimmungsfrist
           </label>
           <input
@@ -164,11 +164,11 @@ export default function DecisionFormClient() {
             type="datetime-local"
             value={form.votingDeadline}
             onChange={(e) => form.setVotingDeadline(e.target.value)}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
           />
         </div>
 
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-neutral-500">
           Entscheidungen werden automatisch geschlossen wenn die Abstimmungsfrist abläuft
         </p>
       </div>
@@ -205,7 +205,7 @@ export default function DecisionFormClient() {
           type="submit"
           disabled={form.submitting}
           onClick={() => { form.setInitialStatus(DECISION_STATUS.DRAFT); }}
-          className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          className="rounded-lg bg-neutral-600 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
         >
           Als Entwurf speichern
         </button>

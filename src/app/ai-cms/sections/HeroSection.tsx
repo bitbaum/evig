@@ -2,9 +2,9 @@ import Link from 'next/link'
 
 export function HeroSection() {
   return (
-    <section className="bg-gradient-to-b from-green-50 to-white py-20 px-4">
+    <section className="bg-gradient-to-b from-primary-50 to-white py-20 px-4">
       <div className="max-w-4xl mx-auto text-center">
-        <span className="inline-block bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full mb-6">
+        <span className="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full mb-6">
           Kontextuelles Feedback-System
         </span>
         <h1 className="text-4xl sm:text-5xl font-bold text-neutral-900 mb-6">
@@ -17,7 +17,7 @@ export function HeroSection() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/auth/register"
-            className="inline-flex items-center justify-center px-6 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+            className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
           >
             Jetzt mitmachen
           </Link>

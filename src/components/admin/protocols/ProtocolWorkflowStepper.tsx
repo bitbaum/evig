@@ -15,8 +15,8 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
   return (
     <div className="bg-white rounded-lg border p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between gap-3">
-        <Heading level={2} className="text-sm text-gray-900">Workflow</Heading>
-        <span className="text-xs text-gray-500">
+        <Heading level={2} className="text-sm text-neutral-900">Workflow</Heading>
+        <span className="text-xs text-neutral-500">
           Schritt {currentStepIndex + 1} von {PROTOCOL_WORKFLOW_STEPS.length}
         </span>
       </div>
@@ -33,8 +33,8 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
                 isCurrent
                   ? 'border-blue-300 bg-blue-50 text-blue-800'
                   : isDone
-                  ? 'border-green-200 bg-green-50 text-green-700 hover:bg-green-100'
-                  : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'
+                  ? 'border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100'
+                  : 'border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100'
               }`}
             >
               <p className="font-semibold">{index + 1}. {step.label}</p>

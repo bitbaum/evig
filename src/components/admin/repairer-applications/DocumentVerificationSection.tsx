@@ -22,9 +22,9 @@ export function DocumentVerificationSection({
   onOpenDialog,
 }: Props) {
   return (
-    <div className="mt-6 pt-6 border-t border-gray-200">
+    <div className="mt-6 pt-6 border-t border-neutral-200">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={4} className="text-gray-900">Dokumentenverifizierung</Heading>
+        <Heading level={4} className="text-neutral-900">Dokumentenverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
           className="text-sm text-blue-600 hover:text-blue-700 font-medium"
@@ -37,21 +37,21 @@ export function DocumentVerificationSection({
         <div className="space-y-4">
           {documents.length > 0 && (
             <div>
-              <h5 className="text-sm font-medium text-gray-700 mb-2">Hochgeladene Dokumente</h5>
+              <h5 className="text-sm font-medium text-neutral-700 mb-2">Hochgeladene Dokumente</h5>
               <div className="space-y-2">
                 {documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={doc.id} className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
-                        doc.status === APPROVAL_STATUS.APPROVED ? 'bg-green-500' :
+                        doc.status === APPROVAL_STATUS.APPROVED ? 'bg-primary-500' :
                         doc.status === APPROVAL_STATUS.REJECTED ? 'bg-red-500' :
                         'bg-yellow-500'
                       }`} />
                       <div>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-neutral-900">
                           {doc.documentTypeName || doc.originalFilename}
                         </p>
-                        <p className="text-xs text-gray-600">
+                        <p className="text-xs text-neutral-600">
                           {doc.originalFilename} • {
                             doc.fileSizeBytes
                               ? `${Math.round(doc.fileSizeBytes / 1024)} KB`
@@ -74,7 +74,7 @@ export function DocumentVerificationSection({
                           <button
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-green-100 text-green-700 rounded text-xs hover:bg-green-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs hover:bg-primary-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
                           </button>
@@ -88,7 +88,7 @@ export function DocumentVerificationSection({
                         </>
                       )}
                       {doc.status === APPROVAL_STATUS.APPROVED && (
-                        <span className="text-xs text-green-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.APPROVED)}</span>
+                        <span className="text-xs text-primary-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.APPROVED)}</span>
                       )}
                       {doc.status === APPROVAL_STATUS.REJECTED && (
                         <span className="text-xs text-red-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.REJECTED)}</span>
@@ -118,7 +118,7 @@ export function DocumentVerificationSection({
           )}
 
           {documents.length === 0 && missingRequiredDocuments.length === 0 && (
-            <p className="text-sm text-gray-600">Keine Dokumente verfügbar</p>
+            <p className="text-sm text-neutral-600">Keine Dokumente verfügbar</p>
           )}
         </div>
       )}

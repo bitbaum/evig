@@ -74,10 +74,10 @@ export const MARKETPLACE_SELLER_TYPE = {
 export type MarketplaceSellerType = typeof MARKETPLACE_SELLER_TYPE[keyof typeof MARKETPLACE_SELLER_TYPE];
 
 export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color: string }> = {
-  active:   { label: 'Aktiv',      color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' },
+  active:   { label: 'Aktiv',      color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' },
   sold:     { label: 'Verkauft',   color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
   reserved: { label: 'Reserviert', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' },
-  draft:    { label: 'Entwurf',    color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' },
+  draft:    { label: 'Entwurf',    color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300' },
   removed:  { label: 'Entfernt',   color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' },
 };
 
@@ -170,8 +170,8 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: st
   paid:            { label: 'Bezahlt',            color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
   shipped:         { label: 'Versendet',          color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' },
   delivered:       { label: 'Geliefert',          color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300' },
-  completed:       { label: 'Abgeschlossen',      color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' },
-  cancelled:       { label: 'Storniert',          color: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' },
+  completed:       { label: 'Abgeschlossen',      color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' },
+  cancelled:       { label: 'Storniert',          color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300' },
   refunded:        { label: 'Erstattet',          color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' },
 };
 
@@ -193,8 +193,8 @@ export const VERIFICATION_CONFIG = {
   badge: {
     label: 'Geprüft von Revamp-IT',
     shortLabel: 'Geprüft',
-    color: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-    borderColor: 'border-green-200 dark:border-green-800',
+    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    borderColor: 'border-primary-200 dark:border-primary-800',
   },
 } as const;
 

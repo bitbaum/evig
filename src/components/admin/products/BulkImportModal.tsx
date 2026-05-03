@@ -27,14 +27,14 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
             className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6 border-b border-neutral-200">
               <div className="flex items-center justify-between">
-                <Heading level={2} className="text-xl text-gray-900">
+                <Heading level={2} className="text-xl text-neutral-900">
                   Bulk-Import von Produkten
                 </Heading>
                 <button
                   onClick={onClose}
-                  className="text-gray-500 hover:text-gray-600"
+                  className="text-neutral-500 hover:text-neutral-600"
                 >
                   <XCircle className="w-6 h-6" />
                 </button>
@@ -43,12 +43,12 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
 
             <div className="p-6 space-y-6">
               {/* File Upload */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <Heading level={3} className="text-lg font-medium text-gray-900 mb-2">
+              <div className="border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center">
+                <Upload className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
+                <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
                   CSV-Datei auswählen
                 </Heading>
-                <p className="text-gray-600 mb-4">
+                <p className="text-neutral-600 mb-4">
                   Lade eine CSV-Datei mit deinen Produkten hoch
                 </p>
                 <input
@@ -83,10 +83,10 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
+              <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="px-4 py-2 text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50"
                 >
                   Abbrechen
                 </button>

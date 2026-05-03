@@ -27,13 +27,13 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
   const displayName = member.user_name || member.user_email.split('@')[0]
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start gap-4">
         {/* Avatar */}
         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
           member.is_active
             ? 'bg-gradient-to-r from-blue-500 to-purple-600'
-            : 'bg-gray-400'
+            : 'bg-neutral-400'
         }`}>
           <span className="text-white font-medium text-sm">{initials}</span>
         </div>
@@ -41,23 +41,23 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <Heading level={3} className="text-gray-900 dark:text-white truncate">
+            <Heading level={3} className="text-neutral-900 dark:text-white truncate">
               {displayName}
             </Heading>
             {!member.is_active && (
-              <span className="px-2 py-0.5 text-xs rounded bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400">
+              <span className="px-2 py-0.5 text-xs rounded bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
                 Inaktiv
               </span>
             )}
           </div>
 
           {member.position && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">
               {member.position}
             </p>
           )}
 
-          <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center gap-2 mt-1 text-xs text-neutral-500 dark:text-neutral-400">
             <Mail className="w-3 h-3" />
             <span className="truncate">{member.user_email}</span>
           </div>
@@ -82,13 +82,13 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
               {member.skills.slice(0, 3).map((skill) => (
                 <span
                   key={skill}
-                  className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded"
+                  className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 text-xs rounded"
                 >
                   {skill}
                 </span>
               ))}
               {member.skills.length > 3 && (
-                <span className="px-2 py-0.5 text-gray-500 text-xs">
+                <span className="px-2 py-0.5 text-neutral-500 text-xs">
                   +{member.skills.length - 3}
                 </span>
               )}
@@ -97,7 +97,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
 
           {/* Start date */}
           {member.start_date && (
-            <div className="flex items-center gap-1 mt-2 text-xs text-gray-400">
+            <div className="flex items-center gap-1 mt-2 text-xs text-neutral-400">
               <Calendar className="w-3 h-3" />
               <span>
                 Seit {formatDateShort(member.start_date)}
@@ -108,10 +108,10 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+      <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-700">
         <Link
           href={`/admin/team/${member.id}`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"
           onClick={() => onView?.(member.id)}
         >
           <Eye className="w-4 h-4" />

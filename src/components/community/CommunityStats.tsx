@@ -37,10 +37,10 @@ export function CommunityStats({ className = '' }: CommunityStatsProps) {
   if (!stats) return null
 
   return (
-    <div className={`flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-gray-600 ${className}`}>
+    <div className={`flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-neutral-600 ${className}`}>
       {STAT_KEYS.map((key) => (
         <span key={key} className="flex items-center gap-1.5">
-          <span className="font-semibold text-gray-900">{formatCount(stats[key])}</span>
+          <span className="font-semibold text-neutral-900">{formatCount(stats[key])}</span>
           {t(key)}
         </span>
       ))}

@@ -21,7 +21,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
 
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-gray-900 mb-4">{t('title')}</Heading>
+      <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('title')}</Heading>
       <div className="flex flex-wrap gap-3">
         {/* Mastodon */}
         <a
@@ -42,7 +42,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           href={shareLinks.x}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-neutral-800 transition-colors text-sm font-medium"
           title={t('shareX')}
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -79,7 +79,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           Facebook
         </a>
       </div>
-      <p className="text-xs text-gray-500 mt-3">
+      <p className="text-xs text-neutral-500 mt-3">
         💡 {t('mastodonHint')}
       </p>
     </div>
