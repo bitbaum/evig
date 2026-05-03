@@ -38,7 +38,7 @@ export const POST = withAuth<{ id: string }>(async (
     ])
 
     if (reviewRows.length === 0) {
-      return apiNotFound('Bewertung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REVIEW_NOT_FOUND)
     }
 
     const review = reviewRows[0]
