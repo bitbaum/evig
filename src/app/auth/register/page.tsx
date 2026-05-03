@@ -3,12 +3,13 @@
 import { RegistrationWizard } from '@/components/auth/RegistrationWizard'
 import Link from 'next/link'
 import { useEffect } from 'react'
+import { ORG } from '@/config/org'
 
 // Client-side only page to avoid server-side session checks blocking the page
 export default function RegisterPage() {
   // Set page title on client side
   useEffect(() => {
-    document.title = 'Registrieren | RevampIT'
+    document.title = `Registrieren | ${ORG.name}`
   }, [])
   return (
     <main className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4 sm:px-6 lg:px-8">

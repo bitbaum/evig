@@ -1,5 +1,7 @@
 'use client';
 
+import { ORG } from '@/config/org'
+
 export interface DecisionForExport {
   id: string;
   title: string;
@@ -95,7 +97,7 @@ function generateBeschlussText(decision: DecisionForExport): string {
   }
 
   lines.push('---');
-  lines.push(`Erstellt am ${date} · RevampIT Entscheidungssystem`);
+  lines.push(`Erstellt am ${date} · ${ORG.name} Entscheidungssystem`);
 
   return lines.join('\n');
 }

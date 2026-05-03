@@ -5,6 +5,7 @@ import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } fro
 import Heading from '@/components/admin/AdminHeading'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { ORG } from '@/config/org'
 
 interface HirnActionCard {
   id: string
@@ -201,7 +202,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             <Sparkles className="w-12 h-12 mb-4 text-purple-500" />
             <Heading level={3} className="text-lg font-medium">Willkommen bei Hirn</Heading>
             <p className="text-sm max-w-md mt-2">
-              Stelle Fragen zu RevampIT — ich kenne unsere Mission, Geschichte, Zahlen,
+              Stelle Fragen zu {ORG.name} — ich kenne unsere Mission, Geschichte, Zahlen,
               Dienstleistungen und Preise und helfe dir gerne weiter.
             </p>
           </div>

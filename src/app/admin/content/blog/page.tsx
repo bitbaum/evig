@@ -8,6 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
+import { ORG } from '@/config/org'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -205,7 +206,7 @@ export default async function AdminBlogPage() {
             </Heading>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
               Blog-Artikel sind ein wichtiger Kommunikationskanal. Teile
-              News über RevampIT, schreibe Tutorials zur
+              News über {ORG.name}, schreibe Tutorials zur
               Computeraufarbeitung oder kündige Workshops und Events an.
             </p>
             <div className="flex gap-3">

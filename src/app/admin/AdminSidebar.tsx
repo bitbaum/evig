@@ -88,7 +88,7 @@ export function AdminSidebar({
               className="w-7 h-7 object-contain flex-shrink-0"
             />
             <span className="text-sm font-bold text-gray-900 dark:text-white tracking-tight">
-              RevampIT Admin
+              {ORG.name} Admin
             </span>
           </Link>
         )}

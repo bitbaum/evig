@@ -5,6 +5,7 @@ import { X, Brain, Maximize2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Link } from '@/i18n/navigation'
 import { HirnChat } from './HirnChat'
+import { ORG } from '@/config/org'
 
 interface HirnSlideOverProps {
   isOpen: boolean
@@ -68,7 +69,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
             </div>
             <div>
               <Heading level={2} className="font-semibold text-white">Hirn AI</Heading>
-              <p className="text-xs text-white/70">RevampIT Assistent</p>
+              <p className="text-xs text-white/70">{ORG.name} Assistent</p>
             </div>
           </div>
 

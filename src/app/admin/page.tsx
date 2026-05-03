@@ -19,6 +19,7 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
 import { auth } from '@/auth'
+import { ORG } from '@/config/org'
 import { getAccessibleSections, isSuperAdmin, canAccessSection } from '@/lib/permissions'
 import { ADMIN_SECTIONS } from '@/lib/permissions'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
@@ -46,7 +47,7 @@ type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
-  description: 'Verwalte das RevampIT-System.',
+  description: `Verwalte das ${ORG.name}-System.`,
 }
 
 // ---------------------------------------------------------------------------

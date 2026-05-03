@@ -14,6 +14,7 @@ import { HirnChat } from '@/components/admin/HirnChat'
 import { HirnSidebar } from '@/components/admin/HirnSidebar'
 import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector'
 import Heading from '@/components/admin/AdminHeading'
+import { ORG } from '@/config/org'
 
 function generateSessionId(): string {
   return crypto.randomUUID()
@@ -46,7 +47,7 @@ export default function HirnPage() {
           <div>
             <Heading level={1} className="text-2xl font-bold text-gray-900 dark:text-white">Hirn AI</Heading>
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              KI-Assistent mit RevampIT Dokumentation und Code-Kontext
+              KI-Assistent mit {ORG.name} Dokumentation und Code-Kontext
             </p>
           </div>
         </div>
