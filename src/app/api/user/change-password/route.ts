@@ -6,6 +6,7 @@
 import { NextRequest } from 'next/server'
 import { verifyPassword, hashPassword } from '@/lib/auth/password'
 import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { withAuth } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { users } from '@/db/schema'
@@ -26,7 +27,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       .where(eq(users.id, session.user.id))
 
     if (!user) {
-      return apiBadRequest('Benutzer nicht gefunden')
+      return apiBadRequest(ERROR_MESSAGES.USER_NOT_FOUND)
     }
 
     if (!user.passwordHash) {

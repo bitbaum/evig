@@ -33,7 +33,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     `)
 
     if (certificationResult.rows.length === 0) {
-      return apiNotFound('Zertifizierung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.CERTIFICATION_NOT_FOUND)
     }
 
     const certification = certificationResult.rows[0] as unknown as CertificationRow

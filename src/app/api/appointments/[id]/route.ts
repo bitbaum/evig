@@ -79,7 +79,7 @@ export const GET = withAuth<{ id: string }>(async (
       .where(eq(serviceAppointments.id, appointmentId))
 
     if (!appointment) {
-      return apiNotFound('Termin nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.APPOINTMENT_NOT_FOUND)
     }
 
     // Check access - must be customer or repairer
@@ -127,7 +127,7 @@ export const PATCH = withAuth<{ id: string }>(async (
       .where(eq(serviceAppointments.id, appointmentId))
 
     if (!appointment) {
-      return apiNotFound('Termin nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.APPOINTMENT_NOT_FOUND)
     }
 
     // Validate action and build update set

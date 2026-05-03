@@ -52,7 +52,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
     `)
 
     if (documentResult.rows.length === 0) {
-      return apiNotFound('Dokument nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.DOCUMENT_NOT_FOUND)
     }
 
     const document = documentResult.rows[0] as unknown as DocumentRow

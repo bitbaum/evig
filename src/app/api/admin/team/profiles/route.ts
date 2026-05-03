@@ -138,7 +138,7 @@ export const POST = withAdmin('team', async (request, session) => {
       .where(eq(users.id, data.user_id))
 
     if (!user) {
-      return apiBadRequest('Benutzer nicht gefunden')
+      return apiBadRequest(ERROR_MESSAGES.USER_NOT_FOUND)
     }
 
     // Check if profile already exists for this user
