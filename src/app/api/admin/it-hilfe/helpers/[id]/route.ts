@@ -12,7 +12,7 @@ import { logger } from '@/lib/logger'
 export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request, session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const body = await request.json()
     const validation = validateBody(AdminHelperActionSchema, body)

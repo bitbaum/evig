@@ -10,6 +10,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 import { getDbUserId } from '@/lib/api/task-helpers';
 import { db } from '@/db';
 import { tasks, taskCompletions, users } from '@/db/schema';
@@ -126,7 +127,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
     const result = createTaskSchema.safeParse(body);
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors);
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors);
     }
 
     const data = result.data;

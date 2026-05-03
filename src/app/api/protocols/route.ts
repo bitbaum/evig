@@ -10,6 +10,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { isSuperAdmin } from '@/lib/permissions'
 import { createProtocolSchema } from '@/lib/schemas/protocols'
@@ -54,7 +55,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
     const result = createProtocolSchema.safeParse(body)
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors)
     }
 
     const userLookup = await getDbUserId(session)

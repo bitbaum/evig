@@ -30,7 +30,7 @@ export const POST = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const body = await request.json()
     const result = processNotesSchema.safeParse(body)

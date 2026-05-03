@@ -9,6 +9,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 import { db } from '@/db';
 import { taskRequests, tasks, users } from '@/db/schema';
 import { eq, and, ne, sql } from 'drizzle-orm';
@@ -42,7 +43,7 @@ export const PATCH = withAdmin<RouteParams>(async (
     const result = requestResponseSchema.safeParse(body);
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors);
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors);
     }
 
     const data = result.data;

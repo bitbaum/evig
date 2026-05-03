@@ -24,13 +24,13 @@ export const POST = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const body = await request.json()
     const result = closeDecisionSchema.safeParse(body)
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors)
     }
 
     const { action_item_id } = result.data

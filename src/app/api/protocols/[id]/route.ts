@@ -30,7 +30,7 @@ export const GET = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error
@@ -61,13 +61,13 @@ export const PATCH = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const body = await request.json()
     const result = updateProtocolSchema.safeParse(body)
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors)
     }
 
     const userLookup = await getDbUserId(session)
@@ -106,7 +106,7 @@ export const DELETE = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const userLookup = await getDbUserId(session)
     if ('error' in userLookup) return userLookup.error

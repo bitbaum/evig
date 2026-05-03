@@ -40,6 +40,9 @@ export const ERROR_MESSAGES = {
   INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
 
   // Validation
+  VALIDATION_FAILED: 'Validierung fehlgeschlagen',
+  PROTOCOL_ID_REQUIRED: 'Protokoll-ID erforderlich',
+  ID_REQUIRED: 'ID erforderlich',
   EMAIL_REQUIRED: 'E-Mail erforderlich',
   PASSWORD_REQUIRED: 'Passwort erforderlich',
   EMAIL_PASSWORD_REQUIRED: 'E-Mail und Passwort sind erforderlich',

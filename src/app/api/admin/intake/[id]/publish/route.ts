@@ -36,7 +36,7 @@ interface PublishRow {
 export const POST = withAdmin<{ id: string }>('intake', async (request, session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const body = await request.json()
     const validation = validateBody(IntakePublishSchema, body)

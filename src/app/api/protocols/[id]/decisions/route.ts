@@ -9,6 +9,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { getDecisionData } from '@/lib/services/protocols'
 import { logger } from '@/lib/logger'
 
@@ -21,7 +22,7 @@ export const GET = withAuth<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const data = await getDecisionData(protocolId)
 

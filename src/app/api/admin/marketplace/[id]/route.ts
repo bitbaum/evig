@@ -16,7 +16,7 @@ import { getClientIdentifier } from '@/lib/security/rate-limit'
 export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     // Fetch listing with seller info
     const [listing] = await db
@@ -76,7 +76,7 @@ export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _se
 export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const body = await request.json()
     const validation = validateBody(AdminEditListingSchema, body)
@@ -136,7 +136,7 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
 export const DELETE = withAdmin<{ id: string }>('marketplace', async (request, session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const [removed] = await db
       .update(listings)

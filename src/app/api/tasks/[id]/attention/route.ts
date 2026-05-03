@@ -9,6 +9,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 import { getDbUserId, getActiveTask } from '@/lib/api/task-helpers';
 import { notifyAllStaff } from '@/lib/services/notifications';
 import { db } from '@/db';
@@ -42,7 +43,7 @@ export const POST = withAdmin<RouteParams>(async (
     const result = attentionFlagSchema.safeParse(body);
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors);
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors);
     }
 
     const data = result.data;

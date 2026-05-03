@@ -10,6 +10,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { linkActionSchema } from '@/lib/schemas/protocols'
 import { getActionLinks, linkActionItemToTask, linkActionItemToDecision } from '@/lib/services/protocols'
@@ -27,7 +28,7 @@ export const GET = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const links = await getActionLinks(protocolId)
 
@@ -49,13 +50,13 @@ export const POST = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const body = await request.json()
     const result = linkActionSchema.safeParse(body)
 
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors)
     }
 
     const { action_item_id, link_type, task_data, decision_data } = result.data

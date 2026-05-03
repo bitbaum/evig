@@ -14,7 +14,7 @@ import { logActivity } from '@/lib/activity'
 export const GET = withAdmin<{ id: string }>('it-hilfe-admin', async (_request, _session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const [request] = await db
       .select({
@@ -83,7 +83,7 @@ export const GET = withAdmin<{ id: string }>('it-hilfe-admin', async (_request, 
 export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request, session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const body = await request.json()
     const validation = validateBody(AdminEditRequestSchema, body)
@@ -159,7 +159,7 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
 export const DELETE = withAdmin<{ id: string }>('it-hilfe-admin', async (_request, session, context) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('ID erforderlich')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
     const [cancelled] = await db
       .update(itHilfeRequests)

@@ -8,6 +8,7 @@
 import { NextRequest } from 'next/server'
 import { registerUser } from '@/auth'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { RegisterSchema } from '@/lib/schemas'
@@ -32,7 +33,7 @@ export async function POST(request: NextRequest) {
     // Validate input with Zod schema
     const validationResult = RegisterSchema.safeParse(body)
     if (!validationResult.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', validationResult.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, validationResult.error.flatten().fieldErrors)
     }
 
     const { email, password, name, role } = validationResult.data

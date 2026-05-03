@@ -9,6 +9,7 @@
 import { NextRequest } from 'next/server'
 import { withAdmin, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { finalizeProtocol } from '@/lib/services/protocols'
 import { notifyAllStaff } from '@/lib/services/notifications'
 import { RELATED_TYPES } from '@/config/notifications'
@@ -26,7 +27,7 @@ export const POST = withAdmin<RouteParams>(async (
 ) => {
   try {
     const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest('Protokoll-ID erforderlich')
+    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
 
     const success = await finalizeProtocol(protocolId)
 
