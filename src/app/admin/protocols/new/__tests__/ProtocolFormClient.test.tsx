@@ -1,17 +1,21 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { apiFetch } from '@/lib/api/client'
 import ProtocolFormClient from '../ProtocolFormClient'
 
+jest.mock('@/lib/api/client')
+
+// AIFormAssist uses useTranslations which requires IntlProvider — mock it out in unit tests
+jest.mock('@/components/ai/AIFormAssist', () => ({
+  AIFormAssist: () => null,
+}))
+
+const mockedApiFetch = jest.mocked(apiFetch)
 const pushMock = jest.fn()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: pushMock,
   }),
-}))
-
-// AIFormAssist uses useTranslations which requires IntlProvider — mock it out in unit tests
-jest.mock('@/components/ai/AIFormAssist', () => ({
-  AIFormAssist: () => null,
 }))
 
 const teamMembers = [
@@ -22,9 +26,13 @@ const teamMembers = [
 describe('ProtocolFormClient', () => {
   beforeEach(() => {
     pushMock.mockReset()
-    global.fetch = jest.fn()
-      .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, data: { id: 'p-100' } }) })
-      .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true, data: { processed: true } }) }) as jest.Mock
+    jest.clearAllMocks()
+    mockedApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'p-100' } })
+    // Process call uses native fetch — keep global.fetch mock for it
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ success: true, data: { processed: true } }),
+    }) as jest.Mock
   })
 
   it('creates protocol with transcript in 2-step flow', async () => {
@@ -44,13 +52,11 @@ describe('ProtocolFormClient', () => {
     fireEvent.click(screen.getByRole('button', { name: /Protokoll erstellen/i }))
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenNthCalledWith(
-        1,
+      expect(mockedApiFetch).toHaveBeenCalledWith(
         '/api/protocols',
         expect.objectContaining({ method: 'POST' })
       )
-      expect(global.fetch).toHaveBeenNthCalledWith(
-        2,
+      expect(global.fetch).toHaveBeenCalledWith(
         '/api/protocols/p-100/process',
         expect.objectContaining({ method: 'POST' })
       )
