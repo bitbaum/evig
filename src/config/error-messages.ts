@@ -76,6 +76,7 @@ export const ERROR_MESSAGES = {
 
   // Server Errors
   INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
+  DB_CONNECTION_FAILED: 'Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.',
   REGISTRATION_FAILED: 'Ein unerwarteter Fehler ist aufgetreten',
   UNEXPECTED_ERROR: 'Ein unerwarteter Fehler ist aufgetreten',
   EXTRACTION_FAILED: 'Extraktionsfehler',

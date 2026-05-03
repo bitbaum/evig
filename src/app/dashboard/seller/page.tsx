@@ -20,6 +20,7 @@ import {
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import type { ListingStatus } from '@/config/marketplace'
 
 interface Product {
@@ -100,7 +101,7 @@ export default function SellerDashboard() {
         throw new Error(result.error || 'Fehler beim Laden des Dashboards')
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
+      setError(err instanceof Error ? err.message : ERROR_MESSAGES.UNEXPECTED_ERROR)
     } finally {
       setIsLoading(false)
     }

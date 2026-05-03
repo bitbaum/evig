@@ -30,7 +30,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
 
     // Validate required inputs
     if (!rejectionReason || typeof rejectionReason !== 'string') {
-      return apiBadRequest('Ein Ablehnungsgrund ist erforderlich')
+      return apiBadRequest(ERROR_MESSAGES.REJECTION_REASON_REQUIRED)
     }
 
     if (adminNotes && typeof adminNotes !== 'string') {

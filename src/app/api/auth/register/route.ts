@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         logger.error('Database connection failed during registration', { error: dbError })
         return apiError(
           new Error('Database connection failed'),
-          'Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.',
+          ERROR_MESSAGES.DB_CONNECTION_FAILED,
           503
         )
       }

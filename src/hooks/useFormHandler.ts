@@ -28,6 +28,7 @@
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 export interface UseFormHandlerOptions<T> {
   /** Initial form data */
@@ -132,7 +133,7 @@ export function useFormHandler<T extends object>(
 
       return true
     } catch {
-      setError('Ein unerwarteter Fehler ist aufgetreten')
+      setError(ERROR_MESSAGES.UNEXPECTED_ERROR)
       return false
     } finally {
       setIsSubmitting(false)

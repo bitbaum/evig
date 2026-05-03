@@ -16,6 +16,7 @@ import { recordFailedAttempt, isAccountLocked, recordFailedAttemptDb, clearLocko
 import { updateUser } from '@/lib/auth/db'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 // Database pool: uses the shared pool from @/lib/auth/db (single pool for the entire app)
 // The Auth.js adapter is currently disabled (JWT strategy doesn't need it).
@@ -191,7 +192,7 @@ export const authConfig = {
               provider: 'credentials',
               reason: errorMessage,
             })
-            throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.')
+            throw new Error(ERROR_MESSAGES.DB_CONNECTION_FAILED)
           }
 
           logger.warn('AUTH_LOGIN_REJECTED', {
