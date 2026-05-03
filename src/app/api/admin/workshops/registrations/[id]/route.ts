@@ -4,6 +4,7 @@ import { workshopRegistrations, workshopInstances, workshops, users } from '@/db
 import { eq, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, AdminWorkshopRegistrationUpdateSchema } from '@/lib/schemas'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS, type WorkshopRegistrationStatus } from '@/config/workshop-registration-status'
@@ -46,7 +47,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
     if (notes !== undefined) update.notes = notes
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('No fields to update')
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
     }
 
     await db

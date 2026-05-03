@@ -4,6 +4,7 @@ import { workshopInstances, workshops, workshopRegistrations, users } from '@/db
 import { eq, sql, desc } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
 // GET /api/admin/workshops/instances/[id] - Get instance details
@@ -108,7 +109,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
     if (status !== undefined) update.status = status
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest('No fields to update')
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
     }
 
     update.updatedAt = sql`NOW()`

@@ -17,6 +17,7 @@ import {
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import {
   approveSubmission,
   rejectSubmission,
@@ -147,7 +148,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       }
 
       default:
-        return apiBadRequest('Ungültige Aktion')
+        return apiBadRequest(ERROR_MESSAGES.INVALID_ACTION)
     }
   } catch (error) {
     if (error instanceof EditNotAllowedError || error instanceof NoFieldsError) {

@@ -6,6 +6,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { apiSuccessCached, apiSuccess, apiError, apiNotFound, apiForbidden, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
@@ -70,7 +71,7 @@ export const DELETE = withAuth(async (
 ) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('Pool-ID fehlt')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.POOL_ID_REQUIRED)
 
     const [pool] = await db
       .select({ ownerId: subscriptionPools.ownerId })

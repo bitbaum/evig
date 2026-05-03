@@ -5,6 +5,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships } from '@/db/schema'
 import { eq, and } from 'drizzle-orm'
@@ -20,7 +21,7 @@ export const POST = withAuth(async (
 ) => {
   try {
     const id = context?.params?.id
-    if (!id) return apiBadRequest('Pool-ID fehlt')
+    if (!id) return apiBadRequest(ERROR_MESSAGES.POOL_ID_REQUIRED)
 
     const [membership] = await db
       .select({ id: poolMemberships.id, role: poolMemberships.role })

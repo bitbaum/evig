@@ -19,7 +19,7 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
 
     // Validate action
     if (!['approve', 'reject', 'require_changes'].includes(action)) {
-      return apiBadRequest('Ungültige Aktion')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_ACTION)
     }
 
     // Check if proposal exists
@@ -71,7 +71,7 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
         newStatus = APPROVAL_STATUS.REQUIRES_CHANGES
         break
       default:
-        return apiBadRequest('Ungültige Aktion')
+        return apiBadRequest(ERROR_MESSAGES.INVALID_ACTION)
     }
 
     // Use Drizzle transaction

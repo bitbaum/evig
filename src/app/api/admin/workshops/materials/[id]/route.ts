@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { workshopMaterials } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status'
 
@@ -62,7 +63,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
     if (isActive !== undefined) updateSet.isActive = isActive
 
     if (Object.keys(updateSet).length === 0) {
-      return apiBadRequest('No fields to update')
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
     }
 
     updateSet.updatedAt = sql`NOW()`

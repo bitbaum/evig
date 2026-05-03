@@ -6,6 +6,7 @@
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db';
 import { listings, listingImages, marketplaceOrders, sellerProfiles, users } from '@/db/schema';
 import { eq, and, sql } from 'drizzle-orm';
@@ -88,7 +89,7 @@ export const GET = withAuth<{ id: string }>(async (
 ) => {
   try {
     const orderId = context?.params?.id;
-    if (!orderId) return apiBadRequest('Bestell-ID fehlt');
+    if (!orderId) return apiBadRequest(ERROR_MESSAGES.ORDER_ID_REQUIRED);
 
     const order = await fetchOrderWithDetails(orderId);
     if (!order) return apiNotFound('Bestellung');
@@ -121,7 +122,7 @@ export const PATCH = withAuth<{ id: string }>(async (
 ) => {
   try {
     const orderId = context?.params?.id;
-    if (!orderId) return apiBadRequest('Bestell-ID fehlt');
+    if (!orderId) return apiBadRequest(ERROR_MESSAGES.ORDER_ID_REQUIRED);
 
     const body = await request.json();
     const validation = validateBody(UpdateOrderStatusSchema, body);

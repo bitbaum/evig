@@ -62,7 +62,7 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
         break
 
       default:
-        return apiBadRequest('Ungültige Aktion')
+        return apiBadRequest(ERROR_MESSAGES.INVALID_ACTION)
     }
 
     const [updated] = await db

@@ -29,7 +29,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     }
 
     if (adminNotes && typeof adminNotes !== 'string') {
-      return apiBadRequest('Admin-Notizen müssen ein Text sein')
+      return apiBadRequest(ERROR_MESSAGES.ADMIN_NOTES_MUST_BE_STRING)
     }
 
     // Get application details

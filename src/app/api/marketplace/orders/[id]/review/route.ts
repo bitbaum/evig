@@ -10,6 +10,7 @@ import { NextRequest } from 'next/server'
 import { z } from 'zod'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiForbidden, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
 import { listings, marketplaceOrders, reviews, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
@@ -37,7 +38,7 @@ export const POST = withAuth<{ id: string }>(async (
 ) => {
   try {
     const orderId = context?.params?.id
-    if (!orderId) return apiBadRequest('Bestell-ID fehlt')
+    if (!orderId) return apiBadRequest(ERROR_MESSAGES.ORDER_ID_REQUIRED)
 
     const body = await request.json()
     const validation = validateBody(ReviewSchema, body)

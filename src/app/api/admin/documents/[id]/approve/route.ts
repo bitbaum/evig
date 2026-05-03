@@ -34,7 +34,7 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
 
     // Validate inputs
     if (adminNotes && typeof adminNotes !== 'string') {
-      return apiBadRequest('Admin-Notizen müssen ein Text sein')
+      return apiBadRequest(ERROR_MESSAGES.ADMIN_NOTES_MUST_BE_STRING)
     }
 
     if (expiresAt && isNaN(Date.parse(expiresAt))) {
