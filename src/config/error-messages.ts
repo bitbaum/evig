@@ -43,6 +43,8 @@ export const ERROR_MESSAGES = {
   VALIDATION_FAILED: 'Validierung fehlgeschlagen',
   PROTOCOL_ID_REQUIRED: 'Protokoll-ID erforderlich',
   ID_REQUIRED: 'ID erforderlich',
+  PROJECT_ID_REQUIRED: 'Projekt-ID erforderlich',
+  NO_FIELDS_TO_UPDATE: 'Keine Felder zum Aktualisieren',
   EMAIL_REQUIRED: 'E-Mail erforderlich',
   PASSWORD_REQUIRED: 'Passwort erforderlich',
   EMAIL_PASSWORD_REQUIRED: 'E-Mail und Passwort sind erforderlich',

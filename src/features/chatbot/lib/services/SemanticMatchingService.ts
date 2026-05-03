@@ -7,6 +7,7 @@
  */
 
 import { Language, UserIntent, SemanticPattern, ChatbotResponse, NavigationSuggestion } from '../types'
+import { LOCATIONS } from '@/config/org'
 
 export class SemanticMatchingService {
   private patterns: Map<string, SemanticPattern[]>
@@ -299,7 +300,7 @@ export class SemanticMatchingService {
           conditions: { language: 'en' }
         },
         {
-          template: 'Sie können uns in unserem Standort in Zürich erreichen oder uns direkt per Telefon oder E-Mail kontaktieren. Wir helfen gerne!',
+          template: `Sie können uns in unserem Standort in ${LOCATIONS.store.city} erreichen oder uns direkt per Telefon oder E-Mail kontaktieren. Wir helfen gerne!`,
           confidence: 0.9,
           conditions: { language: 'de' }
         }

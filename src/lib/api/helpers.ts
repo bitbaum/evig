@@ -85,11 +85,15 @@ export function apiError(
 
 /**
  * Not found response helper
- * @param resource - Resource name (e.g., "Product", "User")
+ * @param resource - Resource name (e.g., "Produkt") or full message (e.g., "Produkt nicht gefunden").
+ *                   If the string already contains "nicht gefunden" / "not found", it is used as-is
+ *                   to avoid producing "Produkt nicht gefunden nicht gefunden".
  */
 export function apiNotFound(resource: string): NextResponse {
+  const alreadyFull = /nicht gefunden|not found/i.test(resource);
+  const message = alreadyFull ? resource : `${resource} ${ERROR_MESSAGES.NOT_FOUND}`;
   return NextResponse.json(
-    { success: false, error: `${resource} ${ERROR_MESSAGES.NOT_FOUND}` },
+    { success: false, error: message },
     { status: 404 }
   );
 }

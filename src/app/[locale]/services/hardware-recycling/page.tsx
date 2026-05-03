@@ -66,7 +66,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
             'serviceType': 'IT Equipment Recycling',
             'areaServed': {
               '@type': 'City',
-              'name': 'Zürich'
+              'name': LOCATIONS.store.city
             },
             'offers': {
               '@type': 'Offer',

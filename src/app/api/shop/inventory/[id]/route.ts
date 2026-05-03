@@ -68,11 +68,11 @@ export async function GET(
     ])
 
     if (!product) {
-      return apiNotFound('Produkt nicht gefunden')
+      return apiNotFound('Produkt')
     }
 
     if (product.marketplace_status !== MARKETPLACE_STATUS.PUBLISHED || product.status !== PRODUCT_STATUS.APPROVED) {
-      return apiNotFound('Produkt nicht verfügbar')
+      return apiNotFound('Produkt')
     }
 
     const quantityAvailable = Number(product.quantity_available ?? 0)

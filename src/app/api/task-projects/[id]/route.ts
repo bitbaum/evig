@@ -33,7 +33,7 @@ export const GET = withAdmin<RouteParams>(async (
     const projectId = context?.params?.id;
 
     if (!projectId) {
-      return apiBadRequest('Project ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.PROJECT_ID_REQUIRED);
     }
 
     // Get project with creator info
@@ -126,7 +126,7 @@ export const PATCH = withAdmin<RouteParams>(async (
     const projectId = context?.params?.id;
 
     if (!projectId) {
-      return apiBadRequest('Project ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.PROJECT_ID_REQUIRED);
     }
 
     const body = await request.json();
@@ -156,7 +156,7 @@ export const PATCH = withAdmin<RouteParams>(async (
     if ('target_date' in data) updateSet.targetDate = data.target_date ?? null;
 
     if (Object.keys(updateSet).length === 0) {
-      return apiBadRequest('Keine Felder zum Aktualisieren');
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE);
     }
 
     updateSet.updatedAt = sql`NOW()`;
@@ -193,7 +193,7 @@ export const DELETE = withAdmin<RouteParams>(async (
     const projectId = context?.params?.id;
 
     if (!projectId) {
-      return apiBadRequest('Project ID erforderlich');
+      return apiBadRequest(ERROR_MESSAGES.PROJECT_ID_REQUIRED);
     }
 
     const [result] = await db

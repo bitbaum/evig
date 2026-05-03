@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import { Providers } from "@/components/providers/providers";
 import ConditionalMainLayout from "@/components/layout/ConditionalMainLayout";
 import { CSRF_SCRIPT } from "@/lib/auth/csrf";
+import { ORG } from "@/config/org";
 import "./globals.css";
 
 // Use system fonts to avoid build-time network fetches
 const interClassName = "";
 
 export const metadata: Metadata = {
-  title: "RevampIT",
-  description: "RevampIT - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.",
+  title: ORG.name,
+  description: `${ORG.name} - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.`,
   keywords: ["Elektroschrott", "Recycling", "Aufarbeitung", "nachhaltige Technologie", "Workshops", "Freiwilligenarbeit"],
 };
 
