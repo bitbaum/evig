@@ -69,6 +69,9 @@ export const ERROR_MESSAGES = {
   // Server Errors
   INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
   REGISTRATION_FAILED: 'Ein unerwarteter Fehler ist aufgetreten',
+  UNEXPECTED_ERROR: 'Ein unerwarteter Fehler ist aufgetreten',
+  EXTRACTION_FAILED: 'Extraktionsfehler',
+  INVALID_INPUT: 'Ungültige Eingabe',
   STATUS_CHECK_FAILED: 'Statusprüfung fehlgeschlagen',
 
   // Business Logic

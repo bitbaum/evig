@@ -6,6 +6,7 @@
 
 import { NextRequest } from 'next/server'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { CONTACT, ORG } from '@/config/org'
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const result = SuggestionSchema.safeParse(body)
     if (!result.success) {
-      return apiBadRequest('Ungültige Eingabe')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_INPUT)
     }
 
     const data = result.data

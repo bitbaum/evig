@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { z } from 'zod'
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const result = InquirySchema.safeParse(body)
     if (!result.success) {
-      return apiBadRequest('Ungültige Eingabe', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_INPUT, result.error.flatten().fieldErrors)
     }
 
     const { name, email, message, topic } = result.data

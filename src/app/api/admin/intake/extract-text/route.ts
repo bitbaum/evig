@@ -9,6 +9,7 @@
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 
 export const POST = withAdmin('intake', async (request, session) => {
@@ -32,7 +33,7 @@ export const POST = withAdmin('intake', async (request, session) => {
     const result = await extractProductFromText(text, 'text')
 
     if (!result.success) {
-      return apiError(result.error, result.error || 'Extraktionsfehler')
+      return apiError(result.error, result.error || ERROR_MESSAGES.EXTRACTION_FAILED)
     }
 
     logger.info('Intake text extraction complete', {
@@ -47,6 +48,6 @@ export const POST = withAdmin('intake', async (request, session) => {
       sourceType: result.sourceType,
     })
   } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })

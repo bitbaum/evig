@@ -6,6 +6,7 @@
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
 import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships, users } from '@/db/schema'
 import { eq, sql, desc } from 'drizzle-orm'
@@ -76,7 +77,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
     const body = await request.json()
     const parsed = CreatePoolSchema.safeParse(body)
     if (!parsed.success) {
-      return apiBadRequest(parsed.error.issues[0]?.message ?? 'Ungültige Eingabe')
+      return apiBadRequest(parsed.error.issues[0]?.message ?? ERROR_MESSAGES.INVALID_INPUT)
     }
 
     const { serviceName, serviceCategory, maxMembers, monthlyCostChf, description, rules } = parsed.data

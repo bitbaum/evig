@@ -64,6 +64,6 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     logger.error('Registration error', { error })
-    return apiError(error, 'Ein unerwarteter Fehler ist aufgetreten')
+    return apiError(error, ERROR_MESSAGES.UNEXPECTED_ERROR)
   }
 }

@@ -10,6 +10,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { db } from '@/db'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, BulkSaveSchema } from '@/lib/schemas'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { BULK_LIMITS } from '@/config/erfassung'
@@ -134,6 +135,6 @@ export const POST = withAdmin('products', async (request, session) => {
 
     return apiSuccess(response)
   } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })

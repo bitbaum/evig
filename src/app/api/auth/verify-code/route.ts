@@ -7,6 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { verifyEmailCode } from '@/lib/auth/db'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
@@ -66,6 +67,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Verification error', { error })
-    return apiError(error, 'Ein unerwarteter Fehler ist aufgetreten')
+    return apiError(error, ERROR_MESSAGES.UNEXPECTED_ERROR)
   }
 }

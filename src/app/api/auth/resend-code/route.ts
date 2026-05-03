@@ -7,6 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { getUserByEmail, createVerificationCode } from '@/lib/auth/db'
 import { sendEmail } from '@/lib/email'
@@ -67,6 +68,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     logger.error('Resend code error', { error })
-    return apiError(error, 'Ein unerwarteter Fehler ist aufgetreten')
+    return apiError(error, ERROR_MESSAGES.UNEXPECTED_ERROR)
   }
 }

@@ -61,7 +61,7 @@ export const POST = withAdmin('intake', async (request, session) => {
     const extractionResult = await extractProductFromText(transcribedText, 'voice')
 
     if (!extractionResult.success) {
-      return apiError(extractionResult.error, extractionResult.error || 'Extraktionsfehler')
+      return apiError(extractionResult.error, extractionResult.error || ERROR_MESSAGES.EXTRACTION_FAILED)
     }
 
     logger.info('Intake voice extraction complete', {
@@ -77,6 +77,6 @@ export const POST = withAdmin('intake', async (request, session) => {
       sourceType: extractionResult.sourceType,
     })
   } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })

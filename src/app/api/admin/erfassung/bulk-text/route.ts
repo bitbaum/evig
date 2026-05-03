@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, BulkTextSchema } from '@/lib/schemas'
 import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
 
@@ -36,6 +37,6 @@ export const POST = withAdmin('products', async (request: NextRequest, session) 
       products,
     })
   } catch (error) {
-    return apiError(error, 'Interner Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 })
