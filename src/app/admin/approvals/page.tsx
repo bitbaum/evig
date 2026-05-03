@@ -12,6 +12,8 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { CheckSquare, Clock, CheckCircle, XCircle, FileText, Shield, ExternalLink } from 'lucide-react'
 import { APPROVAL_STATUS, SUBMISSION_CONTENT_TYPE, SUBMISSION_CONTENT_TYPE_LABELS } from '@/config/approval-status'
+
+const APPROVAL_CONTENT_TYPES = [SUBMISSION_CONTENT_TYPE.WORKSHOP, SUBMISSION_CONTENT_TYPE.BLOG_POST]
 import { formatDateShort } from '@/lib/date-formats'
 import { isSuperAdmin } from '@/lib/permissions'
 import { ApprovalActions } from './ApprovalActions'
@@ -90,7 +92,7 @@ async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
 
 async function getApprovalStats(): Promise<ApprovalStats> {
   try {
-    const allowedTypes = ['workshop', 'blog_post']
+    const allowedTypes = APPROVAL_CONTENT_TYPES
 
     // Get pending count (workshops and blog posts only)
     const pendingResult = await query<{ count: string }>(
@@ -129,7 +131,7 @@ async function getApprovalStats(): Promise<ApprovalStats> {
 
 async function getPendingSubmissions(): Promise<ContentSubmission[]> {
   try {
-    const allowedTypes = ['workshop', 'blog_post']
+    const allowedTypes = APPROVAL_CONTENT_TYPES
     const result = await query<ContentSubmission>(
       `SELECT
         s.id,
