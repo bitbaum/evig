@@ -7,6 +7,7 @@ import { X, ChevronDown, ExternalLink, ArrowRight } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { NavigationItem } from '@/config/navigation'
+import { ORG } from '@/config/org'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { useSession } from 'next-auth/react'
@@ -144,7 +145,7 @@ export function MobileMenu({
             <span>
               {t('experimentalBanner')} –
               <a
-                href="https://revampit.org"
+                href={ORG.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-amber-800 hover:text-amber-900 underline ml-1"

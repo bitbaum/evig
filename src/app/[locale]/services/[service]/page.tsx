@@ -7,7 +7,7 @@ import ServiceProcessSection from '@/components/services/ServiceProcess'
 import ServiceCTA from '@/components/services/ServiceCTA'
 import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
-import { ORG } from '@/config/org'
+import { ORG, ORG_IMAGES, LOCATIONS } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
         title: `Data Recovery & Transfer Services Zurich | ${ORG.name}`,
         description: 'Professional data recovery and transfer services in Zurich. Recover data from old computers, transfer files between devices, access legacy media.',
         type: 'website',
-        url: 'https://revampit.org/services/data-recovery-transfer',
+        url: `${ORG.website}/services/data-recovery-transfer`,
       },
     }
   }
@@ -93,10 +93,10 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                 '@type': 'Organization',
                 'name': ORG.name,
                 'url': ORG.website,
-                'logo': `${ORG.website}/logo.png`,
+                'logo': `${ORG.website}${ORG_IMAGES.logo}`,
                 'address': {
                   '@type': 'PostalAddress',
-                  'addressLocality': 'Zurich',
+                  'addressLocality': LOCATIONS.store.city,
                   'addressRegion': 'ZH',
                   'addressCountry': 'CH'
                 }
@@ -109,7 +109,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               ],
               'areaServed': {
                 '@type': 'City',
-                'name': 'Zurich'
+                'name': LOCATIONS.store.city,
               },
               'hasOfferCatalog': {
                 '@type': 'OfferCatalog',

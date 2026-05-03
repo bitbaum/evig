@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title: `${t('title')} | ${ORG.name}`,
       description: t('description'),
       type: 'website',
-      url: 'https://revampit.org/services/web-design-development',
+      url: `${ORG.website}/services/web-design-development`,
     },
   }
 }

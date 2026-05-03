@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: `AI-Powered Sustainable Computer Builds | ${ORG.name}`,
     description: 'Revolutionary AI system that builds custom computers using primarily used and refurbished components from our global network. Try our interactive build tool demo.',
     type: 'website',
-    url: 'https://revampit.org/services/build-your-computer',
+    url: `${ORG.website}/services/build-your-computer`,
   },
   twitter: {
     card: 'summary_large_image',
