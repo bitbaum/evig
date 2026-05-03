@@ -11,6 +11,7 @@ export const ERROR_MESSAGES = {
   FORBIDDEN: 'Keine Berechtigung',
   ADMIN_REQUIRED: 'Nur Administratoren haben Zugriff',
   STAFF_ONLY: 'Nur Mitarbeiter können diese Aktion ausführen',
+  AUTHENTICATION_REQUIRED: 'Authentifizierung erforderlich',
 
   // Section-specific access (repeated 3+ times across routes)
   NO_ACCESS_TEAM: 'Kein Zugriff auf Team-Bereich',
@@ -43,6 +44,7 @@ export const ERROR_MESSAGES = {
 
   // Validation
   VALIDATION_FAILED: 'Validierung fehlgeschlagen',
+  VALIDATION_ERROR: 'Validierungsfehler',
   PROTOCOL_ID_REQUIRED: 'Protokoll-ID erforderlich',
   ID_REQUIRED: 'ID erforderlich',
   PROJECT_ID_REQUIRED: 'Projekt-ID erforderlich',

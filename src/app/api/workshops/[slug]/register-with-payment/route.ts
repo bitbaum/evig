@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { sql, eq, and, getTableName } from 'drizzle-orm'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema/workshops'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentifizierung erforderlich')
+      return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED)
     }
 
     const workshopSlug = request.nextUrl.pathname.split('/')[3] // Extract slug from URL

@@ -73,7 +73,7 @@ export const PUT = withAdmin<{ id: string }>('team', async (request, session, co
     const validation = validateUpdateActivityUpdate(body)
     if (!validation.success) {
       return apiBadRequest(
-        'Validierungsfehler',
+        ERROR_MESSAGES.VALIDATION_ERROR,
         validation.error.flatten().fieldErrors as Record<string, string[]>
       )
     }

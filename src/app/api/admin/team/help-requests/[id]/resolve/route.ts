@@ -18,6 +18,7 @@ import {
   apiNotFound,
   apiBadRequest,
 } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import { validateResolveHelpRequest } from '@/lib/schemas/activity'
 import { getDbUserId } from '@/lib/api/task-helpers'
@@ -35,7 +36,7 @@ export const POST = withAdmin<{ id: string }>('team', async (request, session, c
     const validation = validateResolveHelpRequest(body)
     if (!validation.success) {
       return apiBadRequest(
-        'Validierungsfehler',
+        ERROR_MESSAGES.VALIDATION_ERROR,
         validation.error.flatten().fieldErrors as Record<string, string[]>
       )
     }

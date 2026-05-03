@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { serviceAppointments, serviceTypes, users, paymentTransactions } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import {
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiUnauthorized('Authentifizierung erforderlich')
+      return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED)
     }
 
     const appointmentId = request.nextUrl.pathname.split('/')[3] // Extract ID from URL

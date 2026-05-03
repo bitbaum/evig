@@ -118,7 +118,7 @@ export const POST = withAdmin('team', async (request, session) => {
     const validation = validateCreateTeamProfile(body)
     if (!validation.success) {
       return apiBadRequest(
-        'Validierungsfehler',
+        ERROR_MESSAGES.VALIDATION_ERROR,
         validation.error.flatten().fieldErrors as Record<string, string[]>
       )
     }

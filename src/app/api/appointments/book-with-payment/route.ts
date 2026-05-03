@@ -4,6 +4,7 @@ import { db } from '@/db'
 import { serviceTypes, serviceAppointments } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import {
   processPayment,
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await auth()
     if (!session?.user?.id) {
-      return apiError(null, 'Authentifizierung erforderlich', 401)
+      return apiError(null, ERROR_MESSAGES.AUTHENTICATION_REQUIRED, 401)
     }
 
     const body = await request.json()
