@@ -75,7 +75,7 @@ export const MATURITY_CONFIG: Record<Maturity, { label: string; color: string }>
 export const MIGRATION_DIFFICULTY_CONFIG: Record<MigrationDifficulty, { label: string; color: string; description: string }> = {
   easy: { label: 'Einfach', color: 'bg-primary-100 text-primary-800', description: 'Direkter Umstieg, kaum Einarbeitung nötig' },
   medium: { label: 'Mittel', color: 'bg-warning-100 text-warning-800', description: 'Etwas Einarbeitung nötig, aber machbar' },
-  advanced: { label: 'Anspruchsvoll', color: 'bg-red-100 text-red-800', description: 'Deutliche Unterschiede, Einarbeitung erforderlich' },
+  advanced: { label: 'Anspruchsvoll', color: 'bg-error-100 text-error-800', description: 'Deutliche Unterschiede, Einarbeitung erforderlich' },
 }
 
 export const PLATFORM_CONFIG: Record<Platform, { label: string; icon: string }> = {

@@ -194,13 +194,13 @@ export function UserPermissionsEditor({
                       </div>
                       <span className={`font-medium ${
                         section.sensitive
-                          ? 'text-red-700 dark:text-red-400'
+                          ? 'text-error-700 dark:text-error-400'
                           : 'text-neutral-900 dark:text-white'
                       }`}>
                         {section.label}
                       </span>
                       {section.sensitive && (
-                        <span className="text-xs text-red-500">Sensibel</span>
+                        <span className="text-xs text-error-500">Sensibel</span>
                       )}
                     </div>
                   </button>
@@ -211,8 +211,8 @@ export function UserPermissionsEditor({
 
           {/* Error */}
           {error && (
-            <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+            <div className="mt-4 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
+              <p className="text-sm text-error-700 dark:text-error-300">{error}</p>
             </div>
           )}
         </div>

@@ -183,7 +183,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           )}
 
           {bookingStatus === 'error' && errorMessage && (
-            <div className="mt-2 text-xs text-red-600 bg-red-50 p-2 rounded">
+            <div className="mt-2 text-xs text-error-600 bg-error-50 p-2 rounded">
               {errorMessage}
             </div>
           )}

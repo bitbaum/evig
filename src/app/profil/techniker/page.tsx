@@ -172,7 +172,7 @@ export default function TechnikerProfilPage() {
 
         {/* Error/Success Messages */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
             {error}
           </div>
         )}

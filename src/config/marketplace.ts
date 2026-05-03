@@ -78,7 +78,7 @@ export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color
   sold:     { label: 'Verkauft',   color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300' },
   reserved: { label: 'Reserviert', color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300' },
   draft:    { label: 'Entwurf',    color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300' },
-  removed:  { label: 'Entfernt',   color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' },
+  removed:  { label: 'Entfernt',   color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300' },
 };
 
 // ============================================================================
@@ -172,7 +172,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: st
   delivered:       { label: 'Geliefert',          color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300' },
   completed:       { label: 'Abgeschlossen',      color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' },
   cancelled:       { label: 'Storniert',          color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300' },
-  refunded:        { label: 'Erstattet',          color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' },
+  refunded:        { label: 'Erstattet',          color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300' },
 };
 
 // ============================================================================

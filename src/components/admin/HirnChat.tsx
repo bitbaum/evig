@@ -186,7 +186,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
           {messages.length > 0 && (
             <button
               onClick={clearSession}
-              className="flex items-center gap-1 px-2 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded"
+              className="flex items-center gap-1 px-2 py-1 text-sm text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 rounded"
             >
               <Trash2 className="w-4 h-4" />
               Löschen
@@ -283,8 +283,8 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
         )}
 
         {error && (
-          <div id="hirn-chat-error" className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+          <div id="hirn-chat-error" className="p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
+            <p className="text-sm text-error-700 dark:text-error-300">{error}</p>
           </div>
         )}
 

@@ -26,7 +26,7 @@ export function VoiceWaveform({ recordingTime, maxDuration, state }: VoiceWavefo
           className={`w-2 h-2 rounded-full transition-all duration-150 ${
             i < activeDots
               ? state === 'recording'
-                ? 'bg-red-500 animate-pulse'
+                ? 'bg-error-500 animate-pulse'
                 : state === 'paused'
                   ? 'bg-yellow-500'
                   : 'bg-primary-500'

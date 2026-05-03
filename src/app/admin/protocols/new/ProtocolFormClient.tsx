@@ -226,7 +226,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
       />
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">{error}</div>
+        <div className="p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">{error}</div>
       )}
 
       {/* Step 1: Setup */}

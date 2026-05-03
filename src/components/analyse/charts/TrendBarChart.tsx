@@ -58,7 +58,7 @@ function CustomTooltip({ active, payload, label }: {
           <span>Veränderung</span>
           <span className={`font-semibold ${
             Number(percentChange) > 0 ? 'text-primary-500' :
-            Number(percentChange) < 0 ? 'text-red-500' : ''
+            Number(percentChange) < 0 ? 'text-error-500' : ''
           }`}>
             {percentChange !== 'N/A' ? `${percentChange}%` : percentChange}
           </span>

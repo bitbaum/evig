@@ -120,7 +120,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
         <div className={`${padding} pb-4 space-y-3`}>
           {/* Error feedback */}
           {error && (
-            <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-lg text-sm">
+            <div className="flex items-start gap-2 bg-error-50 border border-error-200 text-error-700 px-3 py-2 rounded-lg text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>

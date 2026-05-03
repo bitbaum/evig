@@ -60,7 +60,7 @@ export default function ContactForm() {
         </div>
       )}
       {status === 'error' && (
-        <div id="contact-error" className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-red-700 text-sm">
+        <div id="contact-error" className="mb-6 rounded-lg border border-error-200 bg-error-50 px-4 py-3 text-error-700 text-sm">
           {error}
         </div>
       )}

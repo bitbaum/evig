@@ -51,7 +51,7 @@ function ConfidenceBadge({ confidence }: { confidence: number }) {
       "px-2 py-1 text-xs rounded-full",
       confidence > 0.8 ? "bg-primary-100 text-primary-800" :
       confidence > 0.6 ? "bg-yellow-100 text-yellow-800" :
-      "bg-red-100 text-red-800"
+      "bg-error-100 text-error-800"
     )}>
       {Math.round(confidence * 100)}%
     </span>

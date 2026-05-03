@@ -128,7 +128,7 @@ export function RequestSidebar({
                 {formatDate(request.expiresAt)}
               </p>
               {timeRemaining && (
-                <p className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-red-600 font-medium' : 'text-warning-600'}`}>
+                <p className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-error-600 font-medium' : 'text-warning-600'}`}>
                   {timeRemaining}
                 </p>
               )}
@@ -187,7 +187,7 @@ export function RequestSidebar({
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION || request.status === REQUEST_STATUS.MATCHED) && (
               <button
                 onClick={() => onStatusChange(REQUEST_STATUS.CANCELLED)}
-                className="block w-full py-3 px-4 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-center font-medium hover:bg-red-100 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                className="block w-full py-3 px-4 min-h-[44px] bg-error-50 text-error-700 rounded-lg text-center font-medium hover:bg-error-100 transition-colors focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
               >
                 <XCircle className="w-4 h-4 inline-block mr-2" />
                 {t('cancelRequest')}

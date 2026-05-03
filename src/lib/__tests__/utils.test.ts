@@ -22,11 +22,11 @@ afterAll(() => jest.useRealTimers())
 
 describe('cn', () => {
   it('returns a single class unchanged', () => {
-    expect(cn('text-red-500')).toBe('text-red-500')
+    expect(cn('text-error-500')).toBe('text-error-500')
   })
 
   it('joins multiple classes with a space', () => {
-    expect(cn('text-red-500', 'bg-white')).toBe('text-red-500 bg-white')
+    expect(cn('text-error-500', 'bg-white')).toBe('text-error-500 bg-white')
   })
 
   it('deduplicates conflicting Tailwind classes (last wins)', () => {
@@ -35,7 +35,7 @@ describe('cn', () => {
   })
 
   it('deduplicates conflicting background classes', () => {
-    expect(cn('bg-red-500', 'bg-blue-500')).toBe('bg-blue-500')
+    expect(cn('bg-error-500', 'bg-blue-500')).toBe('bg-blue-500')
   })
 
   it('handles conditional classes (false/null/undefined filtered out)', () => {

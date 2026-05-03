@@ -45,7 +45,7 @@ const PAGE_SIZE = 20
 const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = {
   [LOCATION_STATUS.APPROVED]: { label: getLocationStatusLabel(LOCATION_STATUS.APPROVED), color: 'bg-primary-100 text-primary-800' },
   [LOCATION_STATUS.PENDING]: { label: getLocationStatusLabel(LOCATION_STATUS.PENDING), color: 'bg-yellow-100 text-yellow-800' },
-  [LOCATION_STATUS.REJECTED]: { label: getLocationStatusLabel(LOCATION_STATUS.REJECTED), color: 'bg-red-100 text-red-800' },
+  [LOCATION_STATUS.REJECTED]: { label: getLocationStatusLabel(LOCATION_STATUS.REJECTED), color: 'bg-error-100 text-error-800' },
   [LOCATION_STATUS.SUSPENDED]: { label: getLocationStatusLabel(LOCATION_STATUS.SUSPENDED), color: 'bg-orange-100 text-orange-800' },
 }
 
@@ -218,8 +218,8 @@ export default function AdminLocationsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+          <p className="text-error-800">{error}</p>
         </div>
       )}
 
@@ -297,7 +297,7 @@ export default function AdminLocationsPage() {
                       <button
                         onClick={() => setConfirmTarget({ id: location.id, action: 'reject', name: location.name })}
                         disabled={actionLoading}
-                        className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center px-3 py-2 bg-error-600 text-white rounded-lg text-sm font-medium hover:bg-error-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {actionLoading ? (
                           <Loader2 className="w-4 h-4 mr-1 animate-spin" />

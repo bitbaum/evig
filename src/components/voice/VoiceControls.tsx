@@ -53,7 +53,7 @@ export function VoiceControls({
           type="button"
           onClick={onStart}
           disabled={disabled}
-          className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white"
+          className="w-16 h-16 rounded-full bg-error-500 hover:bg-error-600 text-white"
         >
           <Mic className="w-8 h-8" />
         </Button>
@@ -73,7 +73,7 @@ export function VoiceControls({
           <Button
             type="button"
             onClick={onStop}
-            className="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white animate-pulse"
+            className="w-16 h-16 rounded-full bg-error-500 hover:bg-error-600 text-white animate-pulse"
           >
             <Square className="w-6 h-6" />
           </Button>
@@ -110,7 +110,7 @@ export function VoiceControls({
             type="button"
             onClick={onDiscard}
             variant="outline"
-            className="w-12 h-12 rounded-full text-red-600 border-red-300 hover:bg-red-50"
+            className="w-12 h-12 rounded-full text-error-600 border-error-300 hover:bg-error-50"
           >
             <RotateCcw className="w-5 h-5" />
           </Button>
@@ -169,8 +169,8 @@ export function VoiceControls({
           >
             <RotateCcw className="w-5 h-5" />
           </Button>
-          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
-            <AlertCircle className="w-8 h-8 text-red-600" />
+          <div className="w-16 h-16 rounded-full bg-error-100 flex items-center justify-center">
+            <AlertCircle className="w-8 h-8 text-error-600" />
           </div>
         </>
       )}

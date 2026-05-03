@@ -250,7 +250,7 @@ export function ImageCapture({
                   type="button"
                   onClick={clearImage}
                   disabled={state === 'analyzing'}
-                  className="absolute -top-2 -right-2 w-8 h-8 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-full flex items-center justify-center shadow-lg"
+                  className="absolute -top-2 -right-2 w-8 h-8 bg-error-600 hover:bg-error-700 disabled:bg-error-400 text-white rounded-full flex items-center justify-center shadow-lg"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -309,10 +309,10 @@ export function ImageCapture({
         {/* Error state */}
         {state === 'error' && (
           <div className="text-center py-8">
-            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <AlertCircle className="w-8 h-8 text-red-600" />
+            <div className="w-16 h-16 bg-error-100 dark:bg-error-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-8 h-8 text-error-600" />
             </div>
-            <p className="text-red-600 dark:text-red-400 mb-4">
+            <p className="text-error-600 dark:text-error-400 mb-4">
               {errorMessage || t('errorGeneric')}
             </p>
             <Button type="button" variant="outline" onClick={clearImage}>

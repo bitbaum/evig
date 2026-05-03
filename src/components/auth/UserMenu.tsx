@@ -261,11 +261,11 @@ export function UserMenu() {
               }}
               className={cn(
                 "group flex items-center gap-3 w-full px-5 py-2.5",
-                "text-sm text-neutral-600 hover:text-red-600",
-                "hover:bg-red-50 transition-colors duration-150"
+                "text-sm text-neutral-600 hover:text-error-600",
+                "hover:bg-error-50 transition-colors duration-150"
               )}
             >
-              <LogOut className="w-4 h-4 text-neutral-500 group-hover:text-red-500 transition-colors" />
+              <LogOut className="w-4 h-4 text-neutral-500 group-hover:text-error-500 transition-colors" />
               {t('logout')}
             </button>
           </div>

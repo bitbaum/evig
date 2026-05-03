@@ -348,7 +348,7 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     name: 'Speicher',
     description: 'Externe Festplatten, SSDs, NAS, USB-Sticks',
     icon: HardDrive,
-    color: 'bg-red-500',
+    color: 'bg-error-500',
     suggestedSkills: ['hardware_diagnosis', 'data_recovery', 'ssd_upgrade', 'backup_setup'],
     defaultTitle: 'Speicher-Hilfe / Datenrettung',
     defaultDescription: 'Problem mit meinem Speichermedium:\n\n- \n\nGerät: \nKapazität: ',
@@ -401,7 +401,7 @@ export const URGENCY_LEVELS: UrgencyLevel[] = [
   { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-neutral-100 text-neutral-700' },
   { id: URGENCY.NORMAL, name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-blue-100 text-blue-700' },
   { id: URGENCY.HIGH, name: 'Hoch', description: 'Möglichst bald benötigt', badgeClass: 'bg-orange-100 text-orange-700' },
-  { id: URGENCY.URGENT, name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-red-100 text-red-700' },
+  { id: URGENCY.URGENT, name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-error-100 text-error-700' },
 ]
 
 // ============================================================================
@@ -511,7 +511,7 @@ export type OfferStatusId = typeof OFFER_STATUS[keyof typeof OFFER_STATUS];
 export const OFFER_STATUSES: OfferStatus[] = [
   { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-yellow-100 text-yellow-700' },
   { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-primary-100 text-primary-700' },
-  { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-red-100 text-red-700' },
+  { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-error-100 text-error-700' },
   { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]
 

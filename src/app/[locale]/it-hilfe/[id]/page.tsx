@@ -39,7 +39,7 @@ export default function ITHilfeDetailPage() {
     return (
       <div className="min-h-screen bg-neutral-50 py-12">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" aria-hidden="true" />
+          <AlertCircle className="w-16 h-16 text-error-500 mx-auto mb-4" aria-hidden="true" />
           <Heading level={1} className="text-2xl text-neutral-900 mb-2">{t('error')}</Heading>
           <p className="text-neutral-600 mb-6">{detail.error || t('requestNotFound')}</p>
           <Link

@@ -123,7 +123,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
         <div className="mb-4">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              data.passed ? 'bg-primary-100 text-primary-700' : 'bg-red-100 text-red-700'
+              data.passed ? 'bg-primary-100 text-primary-700' : 'bg-error-100 text-error-700'
             }`}
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
@@ -143,17 +143,17 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               max={data.totalVotes || 0}
               color={
                 key === 'agree' ? 'bg-primary-400'
-                  : key === 'block' ? 'bg-red-400'
+                  : key === 'block' ? 'bg-error-400'
                   : key === 'disagree' ? 'bg-orange-400'
                   : 'bg-neutral-300'
               }
             />
           ))}
           {data.blocks && data.blocks.length > 0 && (
-            <div className="mt-3 rounded-md bg-red-50 p-3">
-              <p className="text-sm font-medium text-red-700">Blockierungen:</p>
+            <div className="mt-3 rounded-md bg-error-50 p-3">
+              <p className="text-sm font-medium text-error-700">Blockierungen:</p>
               {data.blocks.map((b, i) => (
-                <p key={i} className="mt-1 text-sm text-red-600">
+                <p key={i} className="mt-1 text-sm text-error-600">
                   &bull; {b.rationale || '(Keine Begründung)'}
                 </p>
               ))}
@@ -240,7 +240,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               label={SIMPLE_MAJORITY_RESPONSE_CONFIG[key]?.label || key}
               value={count}
               max={data.totalVotes || 0}
-              color={key === 'yes' ? 'bg-primary-400' : key === 'no' ? 'bg-red-400' : 'bg-neutral-300'}
+              color={key === 'yes' ? 'bg-primary-400' : key === 'no' ? 'bg-error-400' : 'bg-neutral-300'}
             />
           ))}
         </div>

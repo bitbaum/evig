@@ -115,7 +115,7 @@ export function CurrentFocusInput({
       </div>
 
       {error && (
-        <div className="mb-3 p-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/30 dark:text-red-400 rounded-lg">
+        <div className="mb-3 p-2 text-sm text-error-600 bg-error-50 dark:bg-error-900/30 dark:text-error-400 rounded-lg">
           {error}
         </div>
       )}
@@ -148,7 +148,7 @@ export function CurrentFocusInput({
                 <button
                   onClick={handleClear}
                   disabled={saving}
-                  className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg disabled:opacity-50"
+                  className="px-3 py-1.5 text-sm text-error-600 hover:bg-error-50 dark:hover:bg-error-900/30 rounded-lg disabled:opacity-50"
                 >
                   Löschen
                 </button>

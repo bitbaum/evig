@@ -114,7 +114,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Online-Sicherheit, Verschlüsselung, Passwort-Management und Privatsphäre.",
     icon: Shield,
-    color: "bg-red-500",
+    color: "bg-error-500",
   },
   {
     id: "sustainability",

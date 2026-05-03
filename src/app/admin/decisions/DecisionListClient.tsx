@@ -129,7 +129,7 @@ export default function DecisionListClient({
           { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
           { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-blue-600 dark:text-blue-400' },
           { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
-          { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-red-600 dark:text-red-400' },
+          { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-error-600 dark:text-error-400' },
         ]}
       />
 
@@ -163,8 +163,8 @@ export default function DecisionListClient({
           Laden...
         </div>
       ) : errorMessage ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 p-6 text-center">
-          <p className="text-sm font-medium text-red-700 dark:text-red-400">{errorMessage}</p>
+        <div className="rounded-lg border border-error-200 bg-error-50 dark:bg-error-900/20 dark:border-error-800 p-6 text-center">
+          <p className="text-sm font-medium text-error-700 dark:text-error-400">{errorMessage}</p>
           <AdminButton
             variant="danger"
             className="mt-3"
@@ -242,7 +242,7 @@ export default function DecisionListClient({
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
                         <button
                           onClick={() => setDeleteTarget(d)}
-                          className="text-neutral-400 hover:text-red-600 dark:hover:text-red-400 transition-colors p-1 rounded"
+                          className="text-neutral-400 hover:text-error-600 dark:hover:text-error-400 transition-colors p-1 rounded"
                           title="Löschen"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -270,7 +270,7 @@ export default function DecisionListClient({
       )}
 
       {deleteError && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
+        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-400">
           {deleteError}
         </div>
       )}

@@ -32,7 +32,7 @@ function StatusIcon({ status }: { status: BulkProductStatus }) {
     case 'warning':
       return <AlertTriangle className="w-4 h-4 text-yellow-500" />
     case 'error':
-      return <AlertCircle className="w-4 h-4 text-red-500" />
+      return <AlertCircle className="w-4 h-4 text-error-500" />
     case 'processing':
       return <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
     default:
@@ -117,7 +117,7 @@ export function BulkTable({
                 <tr
                   key={product._tempId}
                   className={`border-b border-neutral-100 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/30 transition-colors cursor-pointer ${
-                    product._status === 'error' ? 'bg-red-50/50 dark:bg-red-900/10' :
+                    product._status === 'error' ? 'bg-error-50/50 dark:bg-error-900/10' :
                     product._status === 'saved' ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''
                   }`}
                   onClick={() => onProductClick(product._tempId)}

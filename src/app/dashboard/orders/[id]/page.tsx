@@ -200,7 +200,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Error */}
       {error && (
-        <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
+        <div className="mb-6 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4 text-error-700 dark:text-error-300">
           {error}
         </div>
       )}
@@ -425,7 +425,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                 }
               }}
               disabled={updatingStatus}
-              className="w-full flex items-center justify-center gap-2 border border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 py-3 px-6 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 transition-colors"
+              className="w-full flex items-center justify-center gap-2 border border-error-300 dark:border-error-800 text-error-600 dark:text-error-400 py-3 px-6 rounded-lg font-medium hover:bg-error-50 dark:hover:bg-error-900/20 disabled:opacity-50 transition-colors"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
               {t('cancelButton')}

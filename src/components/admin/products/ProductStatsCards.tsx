@@ -81,8 +81,8 @@ export function ProductStatsCards({
       <StatCard
         label="Niedriger Bestand"
         value={shopStats.lowStock}
-        valueColor={shopStats.lowStock > 0 ? "text-red-600" : "text-neutral-600"}
-        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-red-500' : 'text-neutral-400'}`} />}
+        valueColor={shopStats.lowStock > 0 ? "text-error-600" : "text-neutral-600"}
+        icon={<AlertTriangle className={`w-6 h-6 ${shopStats.lowStock > 0 ? 'text-error-500' : 'text-neutral-400'}`} />}
       />
     </div>
   )

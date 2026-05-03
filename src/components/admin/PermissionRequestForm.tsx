@@ -150,8 +150,8 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
       {/* Error */}
       {form.error && (
-        <div id="permission-form-error" className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-sm text-red-700 dark:text-red-300">{form.error}</p>
+        <div id="permission-form-error" className="p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
+          <p className="text-sm text-error-700 dark:text-error-300">{form.error}</p>
         </div>
       )}
 

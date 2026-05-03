@@ -172,7 +172,7 @@ export function InventoryProductsTable({
                   <span
                     className={cn(
                       "font-medium",
-                      product.quantity_available < 3 ? "text-red-600" : "text-neutral-900"
+                      product.quantity_available < 3 ? "text-error-600" : "text-neutral-900"
                     )}
                   >
                     {product.quantity_available}
@@ -221,7 +221,7 @@ export function InventoryProductsTable({
                     </button>
                     <button
                       onClick={() => onDelete?.(product)}
-                      className="p-1 text-red-400 hover:text-red-600"
+                      className="p-1 text-error-400 hover:text-error-600"
                       title="Löschen"
                     >
                       <Trash2 className="w-4 h-4" />

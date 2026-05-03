@@ -67,8 +67,8 @@ export default function AdminWorkshopInstancesPage() {
         />
 
         {hook.error && !hook.showCreateModal && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-red-800">{hook.error}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
+            <p className="text-error-800">{hook.error}</p>
           </div>
         )}
 

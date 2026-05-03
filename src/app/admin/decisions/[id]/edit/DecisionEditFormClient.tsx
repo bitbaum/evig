@@ -152,7 +152,7 @@ export default function DecisionEditFormClient({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">
+        <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">
           {error}
         </div>
       )}
@@ -290,7 +290,7 @@ export default function DecisionEditFormClient({
                     type="button"
                     onClick={() => removeOption(opt.id)}
                     disabled={options.length <= 2}
-                    className="rounded-md px-2 text-neutral-500 hover:text-red-500 disabled:opacity-30"
+                    className="rounded-md px-2 text-neutral-500 hover:text-error-500 disabled:opacity-30"
                   >
                     &times;
                   </button>

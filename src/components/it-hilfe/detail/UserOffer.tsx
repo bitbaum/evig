@@ -39,7 +39,7 @@ export function UserOffer({ offer, withdrawing, onWithdraw }: UserOfferProps) {
       <button
         onClick={onWithdraw}
         disabled={withdrawing}
-        className="px-4 py-2.5 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+        className="px-4 py-2.5 min-h-[44px] bg-error-50 text-error-700 rounded-lg text-sm font-medium hover:bg-error-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
       >
         {withdrawing ? t('withdrawing') : t('withdrawButton')}
       </button>

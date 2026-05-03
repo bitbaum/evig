@@ -5,7 +5,7 @@
 
 export const DESIGN_TOKENS = {
   gradients: {
-    marketplace: 'from-orange-50 to-red-50',
+    marketplace: 'from-orange-50 to-error-50',
     itHilfe: 'from-emerald-50 to-primary-50',
     services: 'from-blue-50 to-indigo-50',
     about: 'from-primary-50 to-teal-50',

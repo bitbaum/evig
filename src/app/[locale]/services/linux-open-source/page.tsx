@@ -247,8 +247,8 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           <ul className="space-y-2">
                             {distro.cons.map((con, i) => (
                               <li key={i} className="flex items-start">
-                                <div className="p-1 bg-red-100 rounded-full mr-3 mt-0.5">
-                                  <XCircle className="w-4 h-4 text-red-600" />
+                                <div className="p-1 bg-error-100 rounded-full mr-3 mt-0.5">
+                                  <XCircle className="w-4 h-4 text-error-600" />
                                 </div>
                                 <span className="text-neutral-600">{con}</span>
                               </li>

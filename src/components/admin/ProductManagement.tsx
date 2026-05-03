@@ -43,7 +43,7 @@ export default function ProductManagement() {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-8">
         <div className="text-center">
-          <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <AlertTriangle className="w-12 h-12 text-error-500 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-neutral-900 mb-2">
             Fehler beim Laden der Produkte
           </h3>

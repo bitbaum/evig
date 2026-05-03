@@ -40,7 +40,7 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
               type="button"
               onClick={() => onImageChange(null)}
               aria-label={t('remove')}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center"
+              className="absolute -top-2 -right-2 w-6 h-6 bg-error-600 text-white rounded-full flex items-center justify-center"
             >
               <X className="w-3 h-3" />
             </button>

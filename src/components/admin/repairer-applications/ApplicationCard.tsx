@@ -15,7 +15,7 @@ interface Props {
 function getStatusIcon(status: string) {
   switch (status) {
     case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-primary-500" />
-    case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-red-500" />
+    case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-error-500" />
     case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-orange-500" />
     default: return <Clock className="w-5 h-5 text-blue-500" />
   }
@@ -93,7 +93,7 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
             <button
               onClick={() => onOpenDialog('reject_app', application.id)}
               disabled={actionLoading === application.id}
-              className="px-3 py-1.5 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 disabled:opacity-50 text-sm font-medium"
+              className="px-3 py-1.5 bg-error-100 text-error-700 rounded-lg hover:bg-error-200 disabled:opacity-50 text-sm font-medium"
             >
               {actionLoading === application.id ? '...' : 'Ablehnen'}
             </button>

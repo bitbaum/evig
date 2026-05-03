@@ -20,8 +20,8 @@ export function ErrorView({ error, onRetry }: ErrorViewProps) {
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="text-center">
-        <AlertCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-        <CardTitle className="text-red-800">{t('errorTitle')}</CardTitle>
+        <AlertCircle className="w-16 h-16 text-error-600 mx-auto mb-4" />
+        <CardTitle className="text-error-800">{t('errorTitle')}</CardTitle>
         <CardDescription>
           {t('errorDescription')}
         </CardDescription>

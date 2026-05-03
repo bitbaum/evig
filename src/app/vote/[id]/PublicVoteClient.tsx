@@ -244,7 +244,7 @@ export default function PublicVoteClient({
       </div>
 
       {error && (
-        <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+        <div className="rounded-lg bg-error-50 border border-error-200 p-3 text-sm text-error-700">
           {error}
         </div>
       )}

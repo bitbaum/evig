@@ -75,7 +75,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.REJECTED]: {
     label: 'Abgelehnt',
-    color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+    color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300',
     description: 'Reparateur hat abgelehnt',
   },
   [BOOKING_STATUS.CANCELLED]: {
@@ -111,7 +111,7 @@ export function getBookingStatusLabel(status: string): string {
 export const URGENCY_BADGES: Record<string, { label: string; color: string }> = {
   urgent: {
     label: 'Dringend',
-    color: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+    color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300',
   },
   high: {
     label: 'Hoch',

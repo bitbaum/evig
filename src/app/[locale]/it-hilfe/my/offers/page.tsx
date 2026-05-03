@@ -183,8 +183,8 @@ export default function MyOffersPage() {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-red-800">{error}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-error-800">{error}</p>
           </div>
         )}
 
@@ -279,7 +279,7 @@ export default function MyOffersPage() {
                       <button
                         onClick={() => handleWithdraw(offer)}
                         disabled={withdrawingId === offer.id}
-                        className="px-4 py-2 min-h-[44px] bg-red-50 text-red-700 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="px-4 py-2 min-h-[44px] bg-error-50 text-error-700 rounded-lg text-sm font-medium hover:bg-error-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
                       >
                         {withdrawingId === offer.id ? t('withdrawingButton') : t('withdrawButton')}
                       </button>

@@ -102,7 +102,7 @@ export default function AdminWorkshopInstanceDetailPage({
       case WORKSHOP_REGISTRATION_STATUS.PENDING:
         return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
       case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-        return <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">Abgesagt</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-error-100 text-error-800 rounded-full">Abgesagt</span>
       case WORKSHOP_REGISTRATION_STATUS.ATTENDED:
         return <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Teilgenommen</span>
       case WORKSHOP_REGISTRATION_STATUS.NO_SHOW:
@@ -144,11 +144,11 @@ export default function AdminWorkshopInstanceDetailPage({
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
-            <p className="text-red-800">{error || 'Termin nicht gefunden'}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-8 text-center">
+            <p className="text-error-800">{error || 'Termin nicht gefunden'}</p>
             <Link
               href="/admin/workshops/instances"
-              className="mt-4 inline-flex items-center text-red-600 hover:text-red-800"
+              className="mt-4 inline-flex items-center text-error-600 hover:text-error-800"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Zurück zur Übersicht
@@ -210,8 +210,8 @@ export default function AdminWorkshopInstanceDetailPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-red-800">{error}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-error-800">{error}</p>
           </div>
         )}
 
@@ -247,8 +247,8 @@ export default function AdminWorkshopInstanceDetailPage({
 
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <XCircle className="w-5 h-5 text-red-600" />
+              <div className="p-2 bg-error-100 rounded-lg">
+                <XCircle className="w-5 h-5 text-error-600" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-neutral-900">
@@ -365,7 +365,7 @@ export default function AdminWorkshopInstanceDetailPage({
                               </button>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CANCELLED)}
-                                className="text-red-600 hover:text-red-800 text-sm"
+                                className="text-error-600 hover:text-error-800 text-sm"
                               >
                                 Absagen
                               </button>

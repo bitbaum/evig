@@ -156,7 +156,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             onClick={() => setRecommend(false)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               !recommend
-                ? 'bg-red-600 text-white'
+                ? 'bg-error-600 text-white'
                 : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200'
             }`}
           >
@@ -166,7 +166,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
       </div>
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-700 dark:text-red-300">
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-3 text-sm text-error-700 dark:text-error-300">
           {error}
         </div>
       )}

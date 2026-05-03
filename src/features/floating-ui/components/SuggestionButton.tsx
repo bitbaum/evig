@@ -228,7 +228,7 @@ export default function SuggestionButton() {
                         className={cn(
                           "w-full px-2 py-1.5 border rounded focus:outline-none focus:ring-1 focus:border-transparent resize-none text-xs transition-colors",
                           config.focusRing,
-                          submitError ? "border-red-500" : "border-neutral-300"
+                          submitError ? "border-error-500" : "border-neutral-300"
                         )}
                         rows={3}
                         maxLength={500}
@@ -254,7 +254,7 @@ export default function SuggestionButton() {
                         </p>
                       </div>
                       {submitError && (
-                        <div className="text-red-600 text-xs mt-1">
+                        <div className="text-error-600 text-xs mt-1">
                           {submitError}
                         </div>
                       )}

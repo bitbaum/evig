@@ -28,9 +28,9 @@ interface ConfirmDialogProps {
 
 const VARIANT_STYLES = {
   danger: {
-    title: 'text-red-600 dark:text-red-400',
-    button: 'bg-red-600 hover:bg-red-700',
-    icon: 'text-red-500',
+    title: 'text-error-600 dark:text-error-400',
+    button: 'bg-error-600 hover:bg-error-700',
+    icon: 'text-error-500',
   },
   warning: {
     title: 'text-orange-600 dark:text-orange-400',
@@ -84,7 +84,7 @@ export function ConfirmDialog({
 
       {/* Error */}
       {error && (
-        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+        <div className="mb-4 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm">
           {error}
         </div>
       )}
@@ -102,7 +102,7 @@ export function ConfirmDialog({
           </div>
         )}
         {variant === 'danger' && (
-          <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+          <p className="mt-3 text-sm text-error-600 dark:text-error-400">
             {tErrors('irreversible')}
           </p>
         )}

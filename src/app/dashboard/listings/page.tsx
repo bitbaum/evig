@@ -192,9 +192,9 @@ export default function MyListingsPage() {
 
       {/* Error */}
       {error && !isLoading && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
+          <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
+          <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
           <Button onClick={() => fetchListings(page)} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             {t('retry')}
@@ -295,7 +295,7 @@ export default function MyListingsPage() {
                   <button
                     onClick={() => handleDelete(listing.id)}
                     disabled={deletingId === listing.id}
-                    className="p-2 rounded-lg text-neutral-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+                    className="p-2 rounded-lg text-neutral-500 hover:text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
                     title={t('actionDelete')}
                   >
                     {deletingId === listing.id ? (

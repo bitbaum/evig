@@ -53,7 +53,7 @@ export function WorkshopImageUpload({ imagePreviews, onImageUpload, onRemoveImag
                 <button
                   type="button"
                   onClick={() => onRemoveImage(index)}
-                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute -top-2 -right-2 w-6 h-6 bg-error-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 >
                   <X className="w-3 h-3" />
                 </button>

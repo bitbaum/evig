@@ -53,7 +53,7 @@ export function TeamTalentSection({
               className="flex items-center gap-1 px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full"
             >
               {skill}
-              <button type="button" onClick={() => onRemoveSkill(skill)} className="hover:text-red-500">
+              <button type="button" onClick={() => onRemoveSkill(skill)} className="hover:text-error-500">
                 <X className="w-3 h-3" />
               </button>
             </span>
@@ -107,7 +107,7 @@ export function TeamTalentSection({
               className="flex items-center gap-1 px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm rounded-full"
             >
               {interest}
-              <button type="button" onClick={() => onRemoveInterest(interest)} className="hover:text-red-500">
+              <button type="button" onClick={() => onRemoveInterest(interest)} className="hover:text-error-500">
                 <X className="w-3 h-3" />
               </button>
             </span>

@@ -86,7 +86,7 @@ export function ITHilfeImageUpload({
       <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
 
       {error && (
-        <p className="text-sm text-red-600 mb-3">{error}</p>
+        <p className="text-sm text-error-600 mb-3">{error}</p>
       )}
 
       {imageUrls.length < maxImages && (
@@ -128,7 +128,7 @@ export function ITHilfeImageUpload({
               <button
                 type="button"
                 onClick={() => handleRemove(index)}
-                className="absolute -top-2 -right-2 w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                className="absolute -top-2 -right-2 w-6 h-6 bg-error-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <X className="w-3 h-3" />
               </button>

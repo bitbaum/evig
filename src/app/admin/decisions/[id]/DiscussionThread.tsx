@@ -195,7 +195,7 @@ export default function DiscussionThread({
                               </button>
                               <button
                                 onClick={() => setDeleteId(c.id)}
-                                className="p-2 text-neutral-500 hover:text-red-600 rounded"
+                                className="p-2 text-neutral-500 hover:text-error-600 rounded"
                                 title="Löschen"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -246,7 +246,7 @@ export default function DiscussionThread({
       {!readOnly && (
         <form onSubmit={handleSubmit} className="mt-4 border-t pt-4">
           {error && (
-            <div className="mb-2 text-sm text-red-600">{error}</div>
+            <div className="mb-2 text-sm text-error-600">{error}</div>
           )}
           <div className="mb-2 flex gap-2">
             {COMMENT_POSITIONS.map((pos) => {

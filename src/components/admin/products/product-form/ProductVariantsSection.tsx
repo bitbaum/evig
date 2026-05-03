@@ -34,7 +34,7 @@ export function ProductVariantsSection({ variants, onVariantChange, onAdd, onRem
             <div className="flex items-center justify-between mb-4">
               <Heading level={3} className="text-neutral-900 dark:text-white">Variante {index + 1}</Heading>
               {variants.length > 1 && (
-                <button type="button" onClick={() => onRemove(index)} className="text-red-600 hover:text-red-700">
+                <button type="button" onClick={() => onRemove(index)} className="text-error-600 hover:text-error-700">
                   <Minus className="w-4 h-4" />
                 </button>
               )}

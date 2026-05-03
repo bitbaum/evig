@@ -39,7 +39,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
 
   if (isDown) {
     return (
-      <div className="flex items-center gap-1 text-red-600">
+      <div className="flex items-center gap-1 text-error-600">
         <TrendingDown className="w-4 h-4" />
         <span className="text-sm font-medium">{percentChange.toFixed(1)}%</span>
       </div>

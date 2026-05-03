@@ -85,7 +85,7 @@ export const adminIconColor = {
   blue:   'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
   green:  'bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400',
   amber:  'bg-warning-100 text-warning-600 dark:bg-warning-900/30 dark:text-warning-400',
-  red:    'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400',
+  red:    'bg-error-100 text-error-600 dark:bg-error-900/30 dark:text-error-400',
   purple: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
   indigo: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400',
   teal:   'bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400',
@@ -102,7 +102,7 @@ export type AdminIconColorKey = keyof typeof adminIconColor
 export const adminStatus = {
   success: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
   warning: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
-  danger:  'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
+  danger:  'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300',
   info:    'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
   neutral: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300',
   purple:  'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
@@ -134,10 +134,10 @@ export const adminBtn = {
     'inline-flex items-center gap-2 px-3 py-1.5 bg-warning-500 hover:bg-warning-600 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   /** Destructive confirm (inside modals only): permanently delete */
   danger:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    'inline-flex items-center gap-2 px-3 py-1.5 bg-error-600 hover:bg-error-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
   /** Destructive inline (table rows): delete, remove — outline not filled */
   dangerOutline:
-    'inline-flex items-center gap-2 px-3 py-1.5 border border-red-300 hover:bg-red-50 text-red-600 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:border-red-800 dark:hover:bg-red-900/20 dark:text-red-400',
+    'inline-flex items-center gap-2 px-3 py-1.5 border border-error-300 hover:bg-error-50 text-error-600 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:border-error-800 dark:hover:bg-error-900/20 dark:text-error-400',
   /** Ghost: low-emphasis, tertiary actions */
   ghost:
     'inline-flex items-center gap-2 px-3 py-1.5 text-neutral-600 hover:bg-neutral-100 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-400 dark:hover:bg-neutral-700',
@@ -183,5 +183,5 @@ export const adminForm = {
     'mt-1 text-xs text-neutral-500 dark:text-neutral-400',
   /** Error message below a field */
   error:
-    'mt-1 text-xs text-red-600 dark:text-red-400',
+    'mt-1 text-xs text-error-600 dark:text-error-400',
 } as const

@@ -50,12 +50,12 @@ export default function RepairerApplicationsAdmin() {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div className="bg-error-50 border border-error-200 rounded-lg p-4">
         <div className="flex">
-          <XCircle className="w-5 h-5 text-red-400" />
+          <XCircle className="w-5 h-5 text-error-400" />
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-red-800">Fehler beim Laden</Heading>
-            <p className="text-sm text-red-700 mt-1">{error}</p>
+            <Heading level={3} className="text-sm font-medium text-error-800">Fehler beim Laden</Heading>
+            <p className="text-sm text-error-700 mt-1">{error}</p>
           </div>
         </div>
       </div>

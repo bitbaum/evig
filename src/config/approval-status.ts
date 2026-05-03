@@ -44,8 +44,8 @@ export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   },
   [APPROVAL_STATUS.REJECTED]: {
     label: 'Abgelehnt',
-    color: 'text-red-800 dark:text-red-300',
-    bg: 'bg-red-100 dark:bg-red-900/30',
+    color: 'text-error-800 dark:text-error-300',
+    bg: 'bg-error-100 dark:bg-error-900/30',
   },
   [APPROVAL_STATUS.REQUIRES_CHANGES]: {
     label: 'Änderungen erforderlich',

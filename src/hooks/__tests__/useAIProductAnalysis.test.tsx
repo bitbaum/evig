@@ -478,8 +478,8 @@ describe('getConfidenceColor', () => {
   })
 
   it('low confidence (< 0.7) → red', () => {
-    expect(getConfidenceColor(0.69)).toBe('text-red-600')
-    expect(getConfidenceColor(0.5)).toBe('text-red-600')
-    expect(getConfidenceColor(0)).toBe('text-red-600')
+    expect(getConfidenceColor(0.69)).toBe('text-error-600')
+    expect(getConfidenceColor(0.5)).toBe('text-error-600')
+    expect(getConfidenceColor(0)).toBe('text-error-600')
   })
 })

@@ -153,7 +153,7 @@ export default function DecisionDetailClient({
 
   if (!decision) {
     return (
-      <div className="py-12 text-center text-red-500 text-sm">
+      <div className="py-12 text-center text-error-500 text-sm">
         Entscheidung nicht gefunden
       </div>
     );
@@ -167,7 +167,7 @@ export default function DecisionDetailClient({
   return (
     <div className="space-y-6">
       {actionError && (
-        <div className="rounded-md bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
+        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-400">
           {actionError}
         </div>
       )}
@@ -293,7 +293,7 @@ export default function DecisionDetailClient({
 
         {/* Cancel confirmation */}
         {showCancelInput && (
-          <div className="mt-3 rounded-md border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3">
+          <div className="mt-3 rounded-md border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3">
             <label className={cn('mb-1 block', adminType.subTitle)}>
               Grund für Abbruch
             </label>
@@ -397,7 +397,7 @@ export default function DecisionDetailClient({
 
         {/* Cancel Reason */}
         {decision.status === DECISION_STATUS.CANCELLED && decision.cancelReason && (
-          <div className="mt-4 rounded-md bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
+          <div className="mt-4 rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-400">
             <strong>Abbruchgrund:</strong> {decision.cancelReason}
           </div>
         )}

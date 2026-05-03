@@ -202,8 +202,8 @@ export default function BlogSubmissionsClient() {
 
         {/* Error */}
         {error && (
-          <div className="rounded-lg p-4 mb-6 border-2 border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800">
-            <p className="text-sm text-red-800 dark:text-red-300">{error}</p>
+          <div className="rounded-lg p-4 mb-6 border-2 border-error-200 bg-error-50 dark:bg-error-900/20 dark:border-error-800">
+            <p className="text-sm text-error-800 dark:text-error-300">{error}</p>
           </div>
         )}
 
@@ -295,7 +295,7 @@ export default function BlogSubmissionsClient() {
                       <div className="mt-2">
                         <button
                           onClick={() => toggleFeedback(submission.id)}
-                          className="text-sm text-red-700 dark:text-red-400 hover:underline inline-flex items-center"
+                          className="text-sm text-error-700 dark:text-error-400 hover:underline inline-flex items-center"
                         >
                           <AlertCircle className="w-4 h-4 mr-1" />
                           {feedbackShown
@@ -303,7 +303,7 @@ export default function BlogSubmissionsClient() {
                             : t('showRejection')}
                         </button>
                         {feedbackShown && (
-                          <div className="mt-2 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-800 dark:text-red-300 whitespace-pre-wrap">
+                          <div className="mt-2 rounded-lg border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-800 dark:text-error-300 whitespace-pre-wrap">
                             {submission.adminFeedback}
                           </div>
                         )}
@@ -403,7 +403,7 @@ function StatCard({
     blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800',
     orange:
       'bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800',
-    red: 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-300 border-red-200 dark:border-red-800',
+    red: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-300 border-error-200 dark:border-error-800',
   }
   return (
     <div

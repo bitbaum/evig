@@ -102,7 +102,7 @@ const CONDITION_BADGE_COLORS: Record<string, string> = {
   like_new: 'bg-blue-100 text-blue-800',
   good: 'bg-yellow-100 text-yellow-800',
   fair: 'bg-orange-100 text-orange-800',
-  poor: 'bg-red-100 text-red-800',
+  poor: 'bg-error-100 text-error-800',
   defect: 'bg-neutral-100 text-neutral-800',
 }
 

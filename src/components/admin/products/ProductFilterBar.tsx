@@ -76,7 +76,7 @@ export function ProductFilterBar({
           {selectedCount > 0 && (
             <button
               onClick={onBulkDelete}
-              className="px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+              className="px-4 py-2 text-error-600 border border-error-200 rounded-lg hover:bg-error-50 transition-colors"
             >
               {selectedCount} löschen
             </button>

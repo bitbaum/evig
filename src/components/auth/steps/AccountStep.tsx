@@ -74,8 +74,8 @@ export function AccountStep({
 
       {/* Error Messages */}
       {errors.length > 0 && (
-        <div id="account-errors" className="p-4 rounded-lg border-2 bg-red-50 border-red-200">
-          <ul className="text-sm text-red-700 space-y-1">
+        <div id="account-errors" className="p-4 rounded-lg border-2 bg-error-50 border-error-200">
+          <ul className="text-sm text-error-700 space-y-1">
             {errors.map((error, index) => (
               <li key={index}>{error}</li>
             ))}
@@ -194,7 +194,7 @@ export function AccountStep({
             aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
             className={cn(
               'w-full pl-11 pr-12 py-3 border-2 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              confirmPassword && !passwordsMatch ? 'border-red-500' : 'border-neutral-300 dark:border-neutral-600'
+              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-neutral-300 dark:border-neutral-600'
             )}
           />
           <button
@@ -207,7 +207,7 @@ export function AccountStep({
           </button>
         </div>
         {confirmPassword && !passwordsMatch && (
-          <p id="confirmPassword-error" className="mt-1 text-xs text-red-500">{t('passwordMismatch')}</p>
+          <p id="confirmPassword-error" className="mt-1 text-xs text-error-500">{t('passwordMismatch')}</p>
         )}
       </div>
 

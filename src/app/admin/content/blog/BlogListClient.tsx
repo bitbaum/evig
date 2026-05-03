@@ -159,7 +159,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                         <Edit className="w-4 h-4" />
                       </Link>
                       <button
-                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                        className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300"
                         title="Artikel löschen"
                       >
                         <Trash2 className="w-4 h-4" />

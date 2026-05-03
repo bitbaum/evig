@@ -67,7 +67,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
       {/* Star Rating */}
       <div>
         <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
-          {t('ratingLabel')} <span className="text-red-500">*</span>
+          {t('ratingLabel')} <span className="text-error-500">*</span>
         </label>
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }, (_, i) => (
@@ -111,7 +111,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
       {/* Content */}
       <div>
         <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
-          {t('contentLabel')} <span className="text-red-500">*</span>
+          {t('contentLabel')} <span className="text-error-500">*</span>
         </label>
         <textarea
           value={content}
@@ -124,7 +124,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 text-sm text-red-600">
+        <div className="flex items-center gap-2 text-sm text-error-600">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           {error}
         </div>

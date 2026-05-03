@@ -128,7 +128,7 @@ export default async function AnalysePage() {
               {comparison && (
                 <div className={`text-sm mt-2 ${
                   comparison.totalChange.direction === 'up' ? 'text-primary-600' :
-                  comparison.totalChange.direction === 'down' ? 'text-red-600' : 'text-neutral-500'
+                  comparison.totalChange.direction === 'down' ? 'text-error-600' : 'text-neutral-500'
                 }`}>
                   {comparison.totalChange.direction === 'up' ? '+' : ''}
                   {comparison.totalChange.percentChange.toFixed(1)}% vs. {previousYear}
@@ -214,9 +214,9 @@ export default async function AnalysePage() {
       <div className="grid md:grid-cols-2 gap-6">
         {/* High Priority Insights */}
         {highPriorityInsights.length > 0 && (
-          <Card className="border-red-200">
+          <Card className="border-error-200">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-red-700">
+              <CardTitle className="text-lg flex items-center gap-2 text-error-700">
                 <AlertCircle className="w-5 h-5" />
                 Handlungsbedarf
               </CardTitle>
@@ -224,11 +224,11 @@ export default async function AnalysePage() {
             <CardContent>
               <ul className="space-y-3">
                 {highPriorityInsights.map(insight => (
-                  <li key={insight.id} className="border-l-4 border-red-400 pl-3">
+                  <li key={insight.id} className="border-l-4 border-error-400 pl-3">
                     <div className="font-medium">{insight.title}</div>
                     <div className="text-sm text-muted-foreground">{insight.description}</div>
                     {insight.recommendation && (
-                      <div className="text-sm text-red-700 mt-1">
+                      <div className="text-sm text-error-700 mt-1">
                         → {insight.recommendation}
                       </div>
                     )}

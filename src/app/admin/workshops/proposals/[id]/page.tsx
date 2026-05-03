@@ -82,8 +82,8 @@ export default function WorkshopProposalDetailPage() {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-            <p className="text-red-800">{error || 'Vorschlag nicht gefunden'}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-6">
+            <p className="text-error-800">{error || 'Vorschlag nicht gefunden'}</p>
             <Link
               href="/admin/workshops"
               className="inline-flex items-center mt-4 text-blue-600 hover:text-blue-700"
@@ -227,7 +227,7 @@ export default function WorkshopProposalDetailPage() {
                   <Check className="w-5 h-5 text-primary-600" />
                 )}
                 {proposal.status === APPROVAL_STATUS.PENDING && <Clock className="w-5 h-5 text-yellow-600" />}
-                {proposal.status === APPROVAL_STATUS.REJECTED && <X className="w-5 h-5 text-red-600" />}
+                {proposal.status === APPROVAL_STATUS.REJECTED && <X className="w-5 h-5 text-error-600" />}
                 {proposal.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
                   <AlertCircle className="w-5 h-5 text-orange-600" />
                 )}

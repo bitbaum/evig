@@ -60,7 +60,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
     <Modal isOpen onClose={onClose} title="Aktivität hinzufügen">
       {/* Error */}
       {error && (
-        <div id="activity-modal-error" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+        <div id="activity-modal-error" className="mb-4 p-3 bg-error-50 dark:bg-error-900/30 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm">
           {error}
         </div>
       )}
@@ -89,7 +89,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
         {/* Title */}
         <div>
           <label htmlFor="activity-title" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Titel <span className="text-red-500">*</span>
+            Titel <span className="text-error-500">*</span>
           </label>
           <input
             id="activity-title"

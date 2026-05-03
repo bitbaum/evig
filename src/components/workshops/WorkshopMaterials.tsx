@@ -100,7 +100,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
   if (error) {
     return (
       <div className="text-center py-4">
-        <p className="text-red-500 text-sm">{error}</p>
+        <p className="text-error-500 text-sm">{error}</p>
       </div>
     )
   }
@@ -142,7 +142,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           className="flex items-start gap-3 p-3 bg-neutral-50 rounded-lg hover:bg-neutral-100 transition-colors group"
         >
           <div className={`p-2 rounded-lg ${
-            material.material_type === 'pdf' ? 'bg-red-100 text-red-600' :
+            material.material_type === 'pdf' ? 'bg-error-100 text-error-600' :
             material.material_type === 'video' ? 'bg-purple-100 text-purple-600' :
             material.material_type === 'archive' ? 'bg-yellow-100 text-yellow-600' :
             'bg-blue-100 text-blue-600'

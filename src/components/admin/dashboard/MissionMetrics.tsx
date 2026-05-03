@@ -14,7 +14,7 @@ function DeltaBadge({ value }: { value: number }) {
   )
   const positive = value > 0
   return (
-    <span className={`text-xs font-semibold ${positive ? 'text-primary-600 dark:text-primary-400' : 'text-red-600 dark:text-red-400'}`}>
+    <span className={`text-xs font-semibold ${positive ? 'text-primary-600 dark:text-primary-400' : 'text-error-600 dark:text-error-400'}`}>
       {positive ? '+' : ''}{value}
     </span>
   )

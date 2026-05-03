@@ -24,7 +24,7 @@ export const DECISION_STATUS_CONFIG: Record<
   discussion: { label: 'Diskussion', color: 'bg-blue-100 text-blue-700' },
   voting: { label: 'Abstimmung', color: 'bg-warning-100 text-warning-700' },
   closed: { label: 'Abgeschlossen', color: 'bg-primary-100 text-primary-700' },
-  cancelled: { label: 'Abgebrochen', color: 'bg-red-100 text-red-700' },
+  cancelled: { label: 'Abgebrochen', color: 'bg-error-100 text-error-700' },
 };
 
 // Valid status transitions
@@ -354,7 +354,7 @@ export const CONSENT_RESPONSE_CONFIG: Record<
   agree: { label: 'Zustimmen', color: 'bg-primary-100 text-primary-700' },
   abstain: { label: 'Enthalten', color: 'bg-neutral-100 text-neutral-700' },
   disagree: { label: 'Ablehnen', color: 'bg-orange-100 text-orange-700' },
-  block: { label: 'Blockieren', color: 'bg-red-100 text-red-700' },
+  block: { label: 'Blockieren', color: 'bg-error-100 text-error-700' },
 };
 
 // ─── Simple Majority Responses ────────────────────────────────────────────
@@ -389,7 +389,7 @@ export const COMMENT_POSITION_CONFIG: Record<
   { label: string; color: string }
 > = {
   for: { label: 'Dafür', color: 'bg-primary-100 text-primary-700' },
-  against: { label: 'Dagegen', color: 'bg-red-100 text-red-700' },
+  against: { label: 'Dagegen', color: 'bg-error-100 text-error-700' },
   question: { label: 'Frage', color: 'bg-blue-100 text-blue-700' },
   info: { label: 'Information', color: 'bg-purple-100 text-purple-700' },
 };

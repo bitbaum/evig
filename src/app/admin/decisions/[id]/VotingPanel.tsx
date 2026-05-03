@@ -177,7 +177,7 @@ export default function VotingPanel({
       </Heading>
 
       {error && (
-        <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</div>
+        <div className="mb-4 rounded-md bg-error-50 p-3 text-sm text-error-700">{error}</div>
       )}
 
       {votingMethod === 'consent' && (

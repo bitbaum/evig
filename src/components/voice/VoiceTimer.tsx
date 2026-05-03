@@ -42,7 +42,7 @@ export function VoiceTimer({ currentTime, maxDuration, state }: VoiceTimerProps)
         <div
           className={`h-2 rounded-full transition-all duration-100 ${
             state === 'recording'
-              ? 'bg-red-500'
+              ? 'bg-error-500'
               : state === 'paused'
                 ? 'bg-yellow-500'
                 : 'bg-primary-500'

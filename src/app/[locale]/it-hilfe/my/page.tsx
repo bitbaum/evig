@@ -143,8 +143,8 @@ export default function MyRequestsPage() {
 
         {/* Fetch Error */}
         {fetchError && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-red-800">{t('fetchError')}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-error-800">{t('fetchError')}</p>
           </div>
         )}
 

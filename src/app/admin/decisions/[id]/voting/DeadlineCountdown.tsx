@@ -16,7 +16,7 @@ export function DeadlineCountdown({ deadline }: { deadline: string }) {
 
   if (diffMs <= 0) {
     return (
-      <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+      <div className="rounded-md bg-error-50 px-3 py-2 text-sm text-error-700">
         Abstimmungsfrist abgelaufen
       </div>
     );
@@ -28,7 +28,7 @@ export function DeadlineCountdown({ deadline }: { deadline: string }) {
 
   let colorClass = 'text-neutral-600';
   if (hours < 24) {
-    colorClass = 'text-red-600 font-medium';
+    colorClass = 'text-error-600 font-medium';
   } else if (hours < 72) {
     colorClass = 'text-warning-600 font-medium';
   }

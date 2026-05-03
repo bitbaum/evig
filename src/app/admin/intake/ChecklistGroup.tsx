@@ -75,7 +75,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                       {item.label}
                     </span>
                     {item.required && (
-                      <span className="text-xs text-red-500" title="Pflichtpunkt">*</span>
+                      <span className="text-xs text-error-500" title="Pflichtpunkt">*</span>
                     )}
                   </div>
 

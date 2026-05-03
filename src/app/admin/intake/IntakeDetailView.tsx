@@ -163,7 +163,7 @@ export function IntakeDetailView({
           <div
             className={`h-full rounded-full transition-all ${
               progress.percentage === 100 ? 'bg-primary-500' :
-              progress.percentage > 50 ? 'bg-yellow-500' : 'bg-red-400'
+              progress.percentage > 50 ? 'bg-yellow-500' : 'bg-error-400'
             }`}
             style={{ width: `${progress.percentage}%` }}
           />

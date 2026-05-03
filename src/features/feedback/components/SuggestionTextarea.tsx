@@ -32,7 +32,7 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
             "min-h-[80px] text-sm",
             isDisabled && "bg-neutral-100 cursor-not-allowed opacity-50",
             error
-              ? "border-red-300 focus:ring-red-500 focus:border-red-500"
+              ? "border-error-300 focus:ring-error-500 focus:border-error-500"
               : "border-neutral-300 focus:ring-primary-500 focus:border-primary-500"
           )}
           placeholder={
@@ -47,7 +47,7 @@ export const SuggestionTextarea = forwardRef<HTMLTextAreaElement, SuggestionText
           maxLength={1000}
         />
         {error && (
-          <p className="text-red-600 text-xs">{error}</p>
+          <p className="text-error-600 text-xs">{error}</p>
         )}
         <div className="flex justify-between text-xs text-neutral-500">
           <span>{value.length}/1000 Zeichen</span>

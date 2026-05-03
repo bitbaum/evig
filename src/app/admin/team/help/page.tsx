@@ -173,8 +173,8 @@ export default async function HelpRequestsPage() {
 
         <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
+            <div className="w-10 h-10 bg-error-100 rounded-lg flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-error-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.urgent_open}</p>

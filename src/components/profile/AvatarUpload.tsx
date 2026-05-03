@@ -199,7 +199,7 @@ export function AvatarUpload({
               type="button"
               onClick={handleRemove}
               disabled={isUploading}
-              className="px-4 py-2 bg-white text-red-600 border border-red-600 rounded-md hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 bg-white text-error-600 border border-error-600 rounded-md hover:bg-error-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {t('remove')}
             </button>
@@ -209,7 +209,7 @@ export function AvatarUpload({
 
       {/* Error Message */}
       {error && (
-        <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md p-3">
+        <div className="text-sm text-error-600 bg-error-50 border border-error-200 rounded-md p-3">
           {error}
         </div>
       )}

@@ -216,17 +216,17 @@ export default async function TaskDetailPage({
 
       {/* Active Alerts */}
       {activeFlags.length > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-error-600 mt-0.5" />
             <div>
-              <Heading level={3} className="font-medium text-red-800">
+              <Heading level={3} className="font-medium text-error-800">
                 Aufgabe braucht Aufmerksamkeit
               </Heading>
               {activeFlags.map((flag) => (
-                <p key={flag.id} className="text-sm text-red-700 mt-1">
+                <p key={flag.id} className="text-sm text-error-700 mt-1">
                   {flag.flagged_by_name || 'Jemand'}: {flag.message || 'Keine Nachricht'}
-                  <span className="text-red-500 ml-2">
+                  <span className="text-error-500 ml-2">
                     ({formatDateTimeNumeric(flag.created_at)})
                   </span>
                 </p>
@@ -376,8 +376,8 @@ export default async function TaskDetailPage({
                   <div>
                     <dt className="text-sm text-neutral-500">Fälligkeitsdatum</dt>
                     <dd className="flex items-center gap-2 mt-1">
-                      <Calendar className={`w-4 h-4 ${isOverdue ? 'text-red-500' : 'text-neutral-400'}`} />
-                      <span className={isOverdue ? 'text-red-600 font-medium' : 'text-neutral-900'}>
+                      <Calendar className={`w-4 h-4 ${isOverdue ? 'text-error-500' : 'text-neutral-400'}`} />
+                      <span className={isOverdue ? 'text-error-600 font-medium' : 'text-neutral-900'}>
                         {formatDateShort(task.due_date)}
                         {isOverdue && ' (überfällig)'}
                       </span>

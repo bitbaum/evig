@@ -136,7 +136,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
       {error && (
-        <div id="task-edit-error" className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div id="task-edit-error" className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
           {error}
         </div>
       )}
@@ -148,7 +148,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
             htmlFor="title"
             className="block text-sm font-medium text-neutral-700 mb-1"
           >
-            Titel <span className="text-red-500">*</span>
+            Titel <span className="text-error-500">*</span>
           </label>
           <input
             type="text"
@@ -172,7 +172,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
             htmlFor="task_type"
             className="block text-sm font-medium text-neutral-700 mb-1"
           >
-            Aufgabentyp <span className="text-red-500">*</span>
+            Aufgabentyp <span className="text-error-500">*</span>
           </label>
           <select
             id="task_type"
@@ -200,7 +200,7 @@ export default function TaskEditFormClient({ task }: TaskEditFormClientProps) {
             htmlFor="category"
             className="block text-sm font-medium text-neutral-700 mb-1"
           >
-            Kategorie <span className="text-red-500">*</span>
+            Kategorie <span className="text-error-500">*</span>
           </label>
           <select
             id="category"

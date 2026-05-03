@@ -144,10 +144,10 @@ export default function CustomerBookings() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-red-700">
+          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg flex items-center gap-2 text-error-700">
             <AlertCircle className="h-5 w-5" />
             {error}
-            <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">×</button>
+            <button onClick={() => setError(null)} className="ml-auto text-error-500 hover:text-error-700">×</button>
           </div>
         )}
 
@@ -292,7 +292,7 @@ export default function CustomerBookings() {
                     <button
                       onClick={() => handleAction(apt.id, 'cancel')}
                       disabled={actionLoading === apt.id}
-                      className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 flex items-center gap-2"
+                      className="px-4 py-2 bg-error-100 text-error-700 rounded-lg hover:bg-error-200 flex items-center gap-2"
                     >
                       <XCircle className="h-4 w-4" />
                       {t('cancelAction')}

@@ -96,8 +96,8 @@ function VerifyEmailContent() {
 
             {status === 'error' && (
               <div className="flex flex-col items-center">
-                <XCircle className="w-12 h-12 text-red-500 mb-4" />
-                <Heading level={3} className="text-lg text-red-900 mb-2">
+                <XCircle className="w-12 h-12 text-error-500 mb-4" />
+                <Heading level={3} className="text-lg text-error-900 mb-2">
                   {t('errorHeading')}
                 </Heading>
                 <p className="text-neutral-600 mb-4">{message}</p>

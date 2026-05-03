@@ -85,7 +85,7 @@ export function HelpersTab({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {h.suspended_at ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">Gesperrt</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-error-100 text-error-700">Gesperrt</span>
                     ) : h.is_verified ? (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">Verifiziert</span>
                     ) : h.is_active ? (
@@ -113,7 +113,7 @@ export function HelpersTab({
                         className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
                         title="Sperren"
                       >
-                        <Ban className="w-4 h-4 text-red-500" />
+                        <Ban className="w-4 h-4 text-error-500" />
                       </button>
                     )}
                     {h.suspended_at && (

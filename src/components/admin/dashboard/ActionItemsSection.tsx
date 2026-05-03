@@ -10,9 +10,9 @@ interface ActionItemsSectionProps {
 
 const URGENCY_CONFIG = {
   urgent: {
-    dot: 'bg-red-500',
+    dot: 'bg-error-500',
     label: 'Dringend',
-    text: 'text-red-700 dark:text-red-400',
+    text: 'text-error-700 dark:text-error-400',
   },
   warning: {
     dot: 'bg-warning-500',

@@ -135,7 +135,7 @@ export default function EditStaticPagePage() {
           <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">Seite bearbeiten</Heading>
         </div>
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border p-8 text-center">
-          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+          <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
           <Heading level={2} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">{error}</Heading>
           <Link
             href="/admin/content/pages"
@@ -183,9 +183,9 @@ export default function EditStaticPagePage() {
 
       {/* Messages */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
-          <p className="text-red-800">{error}</p>
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4 flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 text-error-600 flex-shrink-0" />
+          <p className="text-error-800">{error}</p>
         </div>
       )}
       {success && (

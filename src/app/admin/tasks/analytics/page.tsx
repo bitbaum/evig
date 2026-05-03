@@ -201,9 +201,9 @@ export default async function TaskAnalyticsPage() {
       </div>
 
       {loadError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
-          <p className="text-red-700">
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-error-500 shrink-0" />
+          <p className="text-error-700">
             Statistiken konnten nicht geladen werden. Bitte versuche es später erneut.
           </p>
         </div>

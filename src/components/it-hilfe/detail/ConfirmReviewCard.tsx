@@ -63,7 +63,7 @@ export function ConfirmReviewCard({
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">
+        <div className="bg-error-50 border border-error-200 rounded-lg p-3 mb-4 text-sm text-error-700">
           {error}
         </div>
       )}
@@ -134,10 +134,10 @@ export function ConfirmReviewCard({
             <button
               type="button"
               onClick={() => setRecommended(false)}
-              className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 ${
+              className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2 ${
                 recommended === false
-                  ? 'bg-red-600 text-white border-red-600'
-                  : 'bg-white text-neutral-700 border-neutral-300 hover:border-red-400'
+                  ? 'bg-error-600 text-white border-error-600'
+                  : 'bg-white text-neutral-700 border-neutral-300 hover:border-error-400'
               }`}
             >
               {t('recommendNo')}

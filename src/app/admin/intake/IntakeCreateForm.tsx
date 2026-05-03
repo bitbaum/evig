@@ -165,7 +165,7 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStopVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 bg-red-50 border-2 border-red-300 rounded-lg w-full justify-center text-sm text-red-700 animate-pulse"
+                    className="flex items-center gap-2 px-4 py-3 bg-error-50 border-2 border-error-300 rounded-lg w-full justify-center text-sm text-error-700 animate-pulse"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme stoppen
@@ -193,7 +193,7 @@ export function IntakeCreateForm({
 
             {/* Error */}
             {aiError && (
-              <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 p-2 rounded">
+              <div className="flex items-center gap-2 text-sm text-error-600 bg-error-50 p-2 rounded">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 {aiError}
               </div>

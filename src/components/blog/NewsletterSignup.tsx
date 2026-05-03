@@ -116,7 +116,7 @@ export default function NewsletterSignup() {
             </div>
 
             {status === 'error' && (
-              <p id="newsletter-error" className="text-red-600 text-sm">{message}</p>
+              <p id="newsletter-error" className="text-error-600 text-sm">{message}</p>
             )}
 
             <p className="text-xs text-neutral-500 text-center">
@@ -128,7 +128,7 @@ export default function NewsletterSignup() {
         {/* Community Support */}
         <div className="mt-8 pt-8 border-t border-neutral-200 text-center">
           <div className="flex items-center justify-center gap-2 text-neutral-600 mb-2">
-            <Heart className="w-5 h-5 text-red-500" />
+            <Heart className="w-5 h-5 text-error-500" />
             <p className="text-sm">{t('communityTitle')}</p>
           </div>
           <p className="text-sm text-neutral-600 mb-4">

@@ -118,7 +118,7 @@ export type RequestStatus = (typeof REQUEST_STATUSES)[keyof typeof REQUEST_STATU
 // Color maps for UI badges (SSOT for status/priority colors)
 export const TASK_STATUS_COLORS: Record<TaskStatus, string> = {
   idle: 'bg-primary-100 text-primary-800',
-  needs_attention: 'bg-red-100 text-red-800',
+  needs_attention: 'bg-error-100 text-error-800',
   requested: 'bg-yellow-100 text-yellow-800',
   in_progress: 'bg-blue-100 text-blue-800',
 };
@@ -127,7 +127,7 @@ export const TASK_PRIORITY_COLORS: Record<TaskPriority, string> = {
   low: 'bg-neutral-100 text-neutral-800',
   normal: 'bg-blue-100 text-blue-800',
   high: 'bg-orange-100 text-orange-800',
-  urgent: 'bg-red-100 text-red-800',
+  urgent: 'bg-error-100 text-error-800',
 };
 
 /**

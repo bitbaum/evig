@@ -55,7 +55,7 @@ export function OfferForm({
           <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
 
           {error && (
-            <div id="offer-error" className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-sm text-red-700">
+            <div id="offer-error" className="bg-error-50 border border-error-200 rounded-lg p-3 mb-4 text-sm text-error-700">
               {error}
             </div>
           )}
@@ -63,7 +63,7 @@ export function OfferForm({
           <div className="space-y-4">
             <div>
               <label htmlFor="offer-message" className="block text-sm font-medium text-neutral-700 mb-1">
-                {t('messageLabel')} <span className="text-red-500">*</span>
+                {t('messageLabel')} <span className="text-error-500">*</span>
               </label>
               <textarea
                 id="offer-message"

@@ -119,7 +119,7 @@ export function NewsletterSignup({
       </form>
 
       {status === 'error' && (
-        <p className={`mt-2 text-sm ${isDark ? 'text-red-400' : 'text-red-600'}`}>
+        <p className={`mt-2 text-sm ${isDark ? 'text-error-400' : 'text-error-600'}`}>
           {errorMsg}
         </p>
       )}

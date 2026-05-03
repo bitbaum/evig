@@ -92,8 +92,8 @@ export default function LogoutPage() {
               </>
             ) : (
               <>
-                <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <AlertCircle className="w-8 h-8 text-red-600" />
+                <div className="w-16 h-16 bg-error-100 dark:bg-error-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <AlertCircle className="w-8 h-8 text-error-600" />
                 </div>
                 <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
                   {t('errorHeading')}

@@ -186,7 +186,7 @@ export default async function ProtocolsAdminPage({
       <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
         {listError ? (
           <div className="p-12 text-center">
-            <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.protocols.errorMessage}
             </Heading>

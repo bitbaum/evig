@@ -20,7 +20,7 @@ export default function DecisionFormClient() {
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       {form.error && (
-        <div className="rounded-md bg-red-50 p-3 text-sm text-red-700">{form.error}</div>
+        <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">{form.error}</div>
       )}
 
       {/* Template Selector */}

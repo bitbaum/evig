@@ -27,7 +27,7 @@ export function DeleteUserModal({
   return (
     <Modal isOpen onClose={onClose} title="Benutzer löschen" size="sm">
       {error && (
-        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+        <div className="mb-4 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm">
           {error}
         </div>
       )}
@@ -44,7 +44,7 @@ export function DeleteUserModal({
             {user.email}
           </p>
         </div>
-        <p className="mt-3 text-sm text-red-600 dark:text-red-400">
+        <p className="mt-3 text-sm text-error-600 dark:text-error-400">
           Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten des Benutzers werden permanent gelöscht.
         </p>
       </div>

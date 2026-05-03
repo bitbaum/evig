@@ -71,7 +71,7 @@ export function CreateHelpRequestModal({
     <Modal isOpen onClose={onClose} title="Hilfe anfordern">
       {/* Error */}
       {error && (
-        <div id="help-request-error" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-300 text-sm">
+        <div id="help-request-error" className="mb-4 p-3 bg-error-50 dark:bg-error-900/30 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm">
           {error}
         </div>
       )}
@@ -81,7 +81,7 @@ export function CreateHelpRequestModal({
         {/* Title */}
         <div>
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Wobei brauchst du Hilfe? <span className="text-red-500">*</span>
+            Wobei brauchst du Hilfe? <span className="text-error-500">*</span>
           </label>
           <input
             type="text"

@@ -70,7 +70,7 @@ export function ProductSpecFields({
             <button
               type="button"
               onClick={() => onSpecRemove(index)}
-              className="p-2.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg touch-manipulation min-w-[44px] flex items-center justify-center"
+              className="p-2.5 text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 rounded-lg touch-manipulation min-w-[44px] flex items-center justify-center"
               disabled={specs.length <= 1}
             >
               <Trash2 className="w-4 h-4" />

@@ -294,7 +294,7 @@ function ErfassungContent() {
 
           <form onSubmit={(e) => form.handleSubmit(e, 'draft')} className="space-y-6">
             {form.saveError && (
-              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg text-sm">
+              <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg text-sm">
                 {form.saveError}
               </div>
             )}

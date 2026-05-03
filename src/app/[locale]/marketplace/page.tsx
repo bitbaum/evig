@@ -265,7 +265,7 @@ export default function MarketplacePage() {
                       aria-label={t('filters.priceMinAriaLabel')}
                       aria-invalid={!!filters.priceError}
                       className={`w-1/2 px-3 py-2 border rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        filters.priceError ? 'border-red-500' : 'border-neutral-300'
+                        filters.priceError ? 'border-error-500' : 'border-neutral-300'
                       }`}
                     />
                     <input
@@ -286,12 +286,12 @@ export default function MarketplacePage() {
                       aria-label={t('filters.priceMaxAriaLabel')}
                       aria-invalid={!!filters.priceError}
                       className={`w-1/2 px-3 py-2 border rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        filters.priceError ? 'border-red-500' : 'border-neutral-300'
+                        filters.priceError ? 'border-error-500' : 'border-neutral-300'
                       }`}
                     />
                   </div>
                   {filters.priceError && (
-                    <p className="text-xs text-red-600 mt-1">{filters.priceError}</p>
+                    <p className="text-xs text-error-600 mt-1">{filters.priceError}</p>
                   )}
                 </div>
               </div>

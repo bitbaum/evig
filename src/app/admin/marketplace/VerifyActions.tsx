@@ -61,7 +61,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
     return (
       <button
         onClick={handleUnverify}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
         title="Verifizierung entfernen"
       >
         <ShieldOff className="w-4 h-4" />

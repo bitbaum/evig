@@ -155,15 +155,15 @@ export default function SellerDashboard() {
 
   if (error) {
     return (
-      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
-        <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">
+      <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
+        <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-error-800 dark:text-error-200 mb-2">
           Fehler beim Laden
         </h3>
-        <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
+        <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
         <button
           onClick={fetchDashboardData}
-          className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+          className="inline-flex items-center gap-2 bg-error-600 hover:bg-error-700 text-white px-4 py-2 rounded-lg"
         >
           <RefreshCw className="w-4 h-4" />
           Erneut versuchen

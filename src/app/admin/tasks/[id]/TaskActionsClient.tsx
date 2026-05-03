@@ -160,7 +160,7 @@ export default function TaskActionsClient({
       <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Aktionen</Heading>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        <div className="mb-4 p-3 bg-error-50 border border-error-200 rounded-lg text-error-700 text-sm">
           {error}
         </div>
       )}
@@ -178,7 +178,7 @@ export default function TaskActionsClient({
         {/* Flag for Attention Button */}
         <button
           onClick={() => setShowAttentionForm(!showAttentionForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors"
         >
           <AlertTriangle className="w-4 h-4" />
           Aufmerksamkeit nötig
@@ -249,8 +249,8 @@ export default function TaskActionsClient({
 
       {/* Attention Form */}
       {showAttentionForm && (
-        <div className="mt-4 p-4 bg-red-50 rounded-lg border border-red-200">
-          <Heading level={3} className="font-medium text-red-800 mb-3">
+        <div className="mt-4 p-4 bg-error-50 rounded-lg border border-error-200">
+          <Heading level={3} className="font-medium text-error-800 mb-3">
             Aufgabe braucht Aufmerksamkeit
           </Heading>
           <div className="space-y-3">
@@ -263,14 +263,14 @@ export default function TaskActionsClient({
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Was ist das Problem?"
                 rows={3}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-error-500"
               />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={handleFlagAttention}
                 disabled={loading === 'attention'}
-                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors disabled:opacity-50"
               >
                 {loading === 'attention' && (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -350,21 +350,21 @@ export default function TaskActionsClient({
           {!showArchiveConfirm ? (
             <button
               onClick={() => setShowArchiveConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2 text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-error-600 border border-error-200 rounded-lg hover:bg-error-50 transition-colors"
             >
               <Archive className="w-4 h-4" />
               Aufgabe archivieren
             </button>
           ) : (
-            <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-              <p className="text-sm text-red-700 mb-3">
+            <div className="p-4 bg-error-50 rounded-lg border border-error-200">
+              <p className="text-sm text-error-700 mb-3">
                 Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Diese wird aus der Liste entfernt.
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={handleArchive}
                   disabled={loading === 'archive'}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors disabled:opacity-50"
                 >
                   {loading === 'archive' && (
                     <Loader2 className="w-4 h-4 animate-spin" />

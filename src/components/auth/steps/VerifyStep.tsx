@@ -151,8 +151,8 @@ export function VerifyStep({
 
       {/* Error Message */}
       {error && (
-        <div className="p-4 rounded-lg bg-red-50 border border-red-200">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="p-4 rounded-lg bg-error-50 border border-error-200">
+          <p className="text-sm text-error-700">{error}</p>
         </div>
       )}
 

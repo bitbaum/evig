@@ -110,9 +110,9 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
         </div>
       )}
       {error && (
-        <div className="mt-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-          <p className="text-red-800 dark:text-red-200">{error}</p>
+        <div className="mt-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-4 flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-error-500 flex-shrink-0" />
+          <p className="text-error-800 dark:text-error-200">{error}</p>
         </div>
       )}
     </div>

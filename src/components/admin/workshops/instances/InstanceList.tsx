@@ -65,7 +65,7 @@ export function InstanceList({
 
                     <div className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
-                      <span className={instance.current_participants >= (instance.max_participants || 10) ? 'text-red-600 font-medium' : ''}>
+                      <span className={instance.current_participants >= (instance.max_participants || 10) ? 'text-error-600 font-medium' : ''}>
                         {instance.current_participants}/{instance.max_participants || '\u221E'}
                       </span>
                       {instance.pending_count > 0 && (
@@ -112,7 +112,7 @@ export function InstanceList({
                   {instance.current_participants === 0 && (
                     <button
                       onClick={() => onDelete(instance.id)}
-                      className="inline-flex items-center px-3 py-2 border border-red-300 rounded-lg text-sm font-medium text-red-700 hover:bg-red-50"
+                      className="inline-flex items-center px-3 py-2 border border-error-300 rounded-lg text-sm font-medium text-error-700 hover:bg-error-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

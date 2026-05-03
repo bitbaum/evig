@@ -87,7 +87,7 @@ export function ProtocolActionItemsList({
         )}
       </div>
       {bulkTaskErrors.length > 0 && (
-        <div className="mx-4 mt-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div className="mx-4 mt-3 rounded-lg border border-error-200 bg-error-50 p-3 text-sm text-error-700">
           <p className="font-medium">Nicht erstellte Aufgaben:</p>
           <ul className="list-disc list-inside mt-1">
             {bulkTaskErrors.slice(0, 5).map((item) => (

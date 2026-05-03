@@ -146,7 +146,7 @@ export default function LocationDetailPage() {
     const configs: Record<string, { icon: typeof CheckCircle; label: string; className: string }> = {
       [LOCATION_STATUS.APPROVED]: { icon: CheckCircle, label: getApprovalStatusLabel(LOCATION_STATUS.APPROVED), className: 'bg-primary-100 text-primary-800' },
       [LOCATION_STATUS.PENDING]: { icon: Clock, label: getApprovalStatusLabel(LOCATION_STATUS.PENDING), className: 'bg-yellow-100 text-yellow-800' },
-      [LOCATION_STATUS.REJECTED]: { icon: XCircle, label: getApprovalStatusLabel(LOCATION_STATUS.REJECTED), className: 'bg-red-100 text-red-800' },
+      [LOCATION_STATUS.REJECTED]: { icon: XCircle, label: getApprovalStatusLabel(LOCATION_STATUS.REJECTED), className: 'bg-error-100 text-error-800' },
       [LOCATION_STATUS.SUSPENDED]: { icon: AlertCircle, label: 'Suspendiert', className: 'bg-orange-100 text-orange-800' },
     }
     const config = configs[status] || { icon: AlertCircle, label: status, className: 'bg-neutral-100 text-neutral-800' }
@@ -207,7 +207,7 @@ export default function LocationDetailPage() {
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
             <Heading level={2} className="text-lg font-medium text-neutral-900 mb-2">{error}</Heading>
             <Link
               href="/admin/locations"
@@ -268,7 +268,7 @@ export default function LocationDetailPage() {
                 <button
                   onClick={() => handleApproval('reject')}
                   disabled={actionLoading}
-                  className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+                  className="inline-flex items-center px-4 py-2 bg-error-600 text-white rounded-lg text-sm font-medium hover:bg-error-700 disabled:opacity-50"
                 >
                   {actionLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <XCircle className="w-4 h-4 mr-1" />}
                   Ablehnen
@@ -282,8 +282,8 @@ export default function LocationDetailPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800">{error}</p>
+          <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+            <p className="text-error-800">{error}</p>
           </div>
         )}
 

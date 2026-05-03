@@ -37,8 +37,8 @@ export function PasswordChangeSection({
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-          <Shield className="w-5 h-5 text-red-600" />
+        <div className="w-10 h-10 bg-error-100 dark:bg-error-900/30 rounded-lg flex items-center justify-center">
+          <Shield className="w-5 h-5 text-error-600" />
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -58,8 +58,8 @@ export function PasswordChangeSection({
 
       {/* Password Change Error */}
       {passwordError && (
-        <div id="password-change-error" className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-          <p className="text-red-700 dark:text-red-300">{passwordError}</p>
+        <div id="password-change-error" className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
+          <p className="text-error-700 dark:text-error-300">{passwordError}</p>
         </div>
       )}
 

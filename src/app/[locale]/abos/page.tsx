@@ -111,7 +111,7 @@ function PoolCard({
         </div>
         <div className={`text-xs px-2 py-0.5 rounded-full font-medium ${
           isFull
-            ? 'bg-red-50 text-red-600'
+            ? 'bg-error-50 text-error-600'
             : pool.spotsLeft <= 2
             ? 'bg-warning-50 text-warning-700'
             : 'bg-emerald-50 text-emerald-700'
@@ -128,7 +128,7 @@ function PoolCard({
             disabled={loading || (isFull && !isMember)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               isMember
-                ? 'bg-red-50 text-red-600 hover:bg-red-100'
+                ? 'bg-error-50 text-error-600 hover:bg-error-100'
                 : 'bg-emerald-600 text-white hover:bg-emerald-700'
             }`}
           >
@@ -208,7 +208,7 @@ function CreatePoolModal({ onClose, onCreate }: {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-xl text-sm">{error}</div>
+          <div className="mb-4 p-3 bg-error-50 text-error-700 rounded-xl text-sm">{error}</div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">

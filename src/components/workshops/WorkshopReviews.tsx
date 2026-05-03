@@ -79,7 +79,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
   if (error) {
     return (
       <div className="text-center py-4">
-        <p className="text-red-500 text-sm">{error}</p>
+        <p className="text-error-500 text-sm">{error}</p>
       </div>
     )
   }

@@ -99,7 +99,7 @@ export default function CategoryForm({
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="inline-flex items-center gap-2 bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-2 bg-error-100 text-error-700 hover:bg-error-200 dark:bg-error-900/30 dark:text-error-400 dark:hover:bg-error-900/50 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
             >
               <Trash2 className="w-4 h-4" />
               {deleting ? 'Löschen...' : 'Löschen'}
@@ -118,7 +118,7 @@ export default function CategoryForm({
 
       {/* Status Messages */}
       {error && (
-        <div id="category-form-error" className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
+        <div id="category-form-error" className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg">
           {error}
         </div>
       )}

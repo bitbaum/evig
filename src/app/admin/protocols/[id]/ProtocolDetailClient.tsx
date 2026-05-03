@@ -108,10 +108,10 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   return (
     <div className="space-y-6">
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+        <div className="p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
           <p>{error}</p>
           {initialProcessingError?.retryable && (
-            <p className="text-sm mt-1 text-red-600">Sie können das Transkript unten direkt erneut verarbeiten.</p>
+            <p className="text-sm mt-1 text-error-600">Sie können das Transkript unten direkt erneut verarbeiten.</p>
           )}
         </div>
       )}
@@ -185,7 +185,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           </div>
 
           {attendeeError && (
-            <p className="mt-2 text-sm text-red-600">{attendeeError}</p>
+            <p className="mt-2 text-sm text-error-600">{attendeeError}</p>
           )}
 
           {editingAttendees && (
@@ -319,7 +319,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                 {(isProtocolCreator || isSuperAdmin) && (
                   <button
                     onClick={() => setShowDeleteDialog(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-error-600 border border-error-300 rounded-lg hover:bg-error-50 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                     Löschen

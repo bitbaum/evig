@@ -93,7 +93,7 @@ export default function FavoritesPage() {
     <div className="space-y-6">
       <div>
         <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
-          <Heart className="w-6 h-6 text-red-500" />
+          <Heart className="w-6 h-6 text-error-500" />
           {t('pageTitle')}
         </Heading>
         <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
@@ -109,9 +109,9 @@ export default function FavoritesPage() {
       )}
 
       {error && !isLoading && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-6 text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <p className="text-red-600 dark:text-red-300 mb-4">{error}</p>
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
+          <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
+          <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
           <Button onClick={fetchFavorites} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             {t('retry')}
@@ -185,12 +185,12 @@ export default function FavoritesPage() {
                   <button
                     onClick={() => removeFavorite(listing.id)}
                     disabled={removingId === listing.id}
-                    className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
                   >
                     {removingId === listing.id ? (
                       <Loader2 className="w-3 h-3 animate-spin" />
                     ) : (
-                      <Heart className="w-3 h-3 fill-red-500" />
+                      <Heart className="w-3 h-3 fill-error-500" />
                     )}
                     {t('removeButton')}
                   </button>

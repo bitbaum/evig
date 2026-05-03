@@ -34,7 +34,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
   const isPositive = pctChange >= 0
 
   return (
-    <span className={`inline-flex items-center text-xs font-medium ${isPositive ? 'text-primary-600' : 'text-red-500'}`}>
+    <span className={`inline-flex items-center text-xs font-medium ${isPositive ? 'text-primary-600' : 'text-error-500'}`}>
       {isPositive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
       {Math.abs(pctChange).toFixed(0)}%
     </span>
@@ -93,7 +93,7 @@ export default function FinancesContent() {
           </div>
         ) : error ? (
           <div className="text-center py-12">
-            <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
             <p className="text-neutral-600">{t('errorMessage')}</p>
           </div>
         ) : data.length === 0 ? (

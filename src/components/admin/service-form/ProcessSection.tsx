@@ -32,7 +32,7 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
               <button
                 type="button"
                 onClick={() => onRemove(index)}
-                className="p-1 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30 rounded"
+                className="p-1 text-error-500 hover:bg-error-100 dark:hover:bg-error-900/30 rounded"
               >
                 <Trash2 className="w-4 h-4" />
               </button>

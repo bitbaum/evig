@@ -128,7 +128,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                       className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors group"
                     >
                       {overdue ? (
-                        <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                        <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       ) : (
                         <Calendar className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       )}
@@ -137,7 +137,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                           {task.title}
                         </p>
                         {dueDateText && (
-                          <p className={`text-sm mt-0.5 ${overdue ? 'text-red-600 dark:text-red-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
+                          <p className={`text-sm mt-0.5 ${overdue ? 'text-error-600 dark:text-error-400' : 'text-neutral-500 dark:text-neutral-400'}`}>
                             {dueDateText}
                           </p>
                         )}

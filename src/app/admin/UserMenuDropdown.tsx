@@ -135,7 +135,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
                 setUserMenuOpen(false)
                 signOut({ callbackUrl: '/' })
               }}
-              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-error-50 dark:hover:bg-error-900/20 hover:text-error-600 dark:hover:text-error-400 transition-colors"
             >
               <LogOut className="w-4 h-4" />
               Abmelden

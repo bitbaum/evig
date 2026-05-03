@@ -259,7 +259,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           {t('registerNow')}
                         </Link>
                       ) : nextInstance && spotsLeft !== null && spotsLeft <= 0 ? (
-                        <span className="flex-1 bg-red-100 text-red-700 px-4 py-2 rounded-lg text-center text-sm font-medium">
+                        <span className="flex-1 bg-error-100 text-error-700 px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('soldOut')}
                         </span>
                       ) : (

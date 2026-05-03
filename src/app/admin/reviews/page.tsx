@@ -176,12 +176,12 @@ export default function AdminReviewsPage() {
 
   if (error && reviews.length === 0) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div className="bg-error-50 border border-error-200 rounded-lg p-4">
         <div className="flex">
-          <XCircle className="w-5 h-5 text-red-400" />
+          <XCircle className="w-5 h-5 text-error-400" />
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-red-800">Fehler beim Laden</Heading>
-            <p className="text-sm text-red-700 mt-1">{error}</p>
+            <Heading level={3} className="text-sm font-medium text-error-800">Fehler beim Laden</Heading>
+            <p className="text-sm text-error-700 mt-1">{error}</p>
           </div>
         </div>
       </div>
@@ -235,8 +235,8 @@ export default function AdminReviewsPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+          <p className="text-error-800">{error}</p>
         </div>
       )}
 
@@ -316,7 +316,7 @@ export default function AdminReviewsPage() {
                         <button
                           onClick={() => startModeration(review.id, 'hide')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-error-600 text-white rounded text-xs hover:bg-error-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <EyeOff className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Ausblenden'}
@@ -337,7 +337,7 @@ export default function AdminReviewsPage() {
                         <button
                           onClick={() => startModeration(review.id, 'delete')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50 flex items-center gap-1"
+                          className="px-3 py-1.5 bg-error-600 text-white rounded text-xs hover:bg-error-700 disabled:opacity-50 flex items-center gap-1"
                         >
                           <Trash2 className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Löschen'}
@@ -372,7 +372,7 @@ export default function AdminReviewsPage() {
                 <div className="flex items-center gap-4 mt-4 text-sm text-neutral-500">
                   <span>{review.helpfulVotes} hilfreiche Stimmen</span>
                   {review.moderationReason && (
-                    <span className="text-red-600">Moderationsgrund: {review.moderationReason}</span>
+                    <span className="text-error-600">Moderationsgrund: {review.moderationReason}</span>
                   )}
                   {review.moderatedAt && (
                     <span>Moderiert am {formatDateShort(review.moderatedAt)}</span>

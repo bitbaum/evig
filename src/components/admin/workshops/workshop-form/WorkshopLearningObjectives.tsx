@@ -46,7 +46,7 @@ export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAd
               <button
                 type="button"
                 onClick={() => onRemove(index)}
-                className="p-2 text-red-600 hover:text-red-700 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                className="p-2 text-error-600 hover:text-error-700 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20"
               >
                 <Minus className="w-4 h-4" />
               </button>

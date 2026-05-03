@@ -118,7 +118,7 @@ export function SubmissionDetail({
             </div>
           )}
           {submission.rejection_reason && (
-            <div className="mt-2 text-red-600 dark:text-red-400">
+            <div className="mt-2 text-error-600 dark:text-error-400">
               Grund: {submission.rejection_reason}
             </div>
           )}
@@ -186,7 +186,7 @@ export function SubmissionDetail({
             <button
               onClick={onShowRejectModal}
               disabled={actionLoading !== null}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-50 transition-colors"
+              className="flex items-center justify-center gap-2 px-4 py-2 bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300 rounded-lg hover:bg-error-200 dark:hover:bg-error-900/50 disabled:opacity-50 transition-colors"
             >
               <X className="w-4 h-4" />
               Ablehnen
@@ -232,7 +232,7 @@ export function SubmissionDetail({
             }
           }}
           disabled={actionLoading !== null}
-          className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 disabled:opacity-50"
+          className="flex items-center gap-2 text-sm text-error-600 dark:text-error-400 hover:text-error-800 dark:hover:text-error-300 disabled:opacity-50"
         >
           <Trash2 className="w-4 h-4" />
           Einreichung löschen

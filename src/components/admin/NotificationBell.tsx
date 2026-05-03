@@ -130,7 +130,7 @@ export function NotificationBell() {
       >
         <Bell className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
         {unreadCount > 0 && (
-          <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-4 px-0.5 rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+          <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-4 px-0.5 rounded-full bg-error-500 text-white text-[10px] font-bold leading-none">
             {unreadCount > 99 ? '99+' : unreadCount}
           </span>
         )}
@@ -143,7 +143,7 @@ export function NotificationBell() {
             <span className="font-semibold text-sm text-neutral-900 dark:text-white">
               Benachrichtigungen
               {unreadCount > 0 && (
-                <span className="ml-2 px-1.5 py-0.5 text-xs bg-red-100 text-red-600 rounded-full">
+                <span className="ml-2 px-1.5 py-0.5 text-xs bg-error-100 text-error-600 rounded-full">
                   {unreadCount}
                 </span>
               )}
@@ -173,7 +173,7 @@ export function NotificationBell() {
           <div className="max-h-[400px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700">
             {error && notifications.length === 0 ? (
               <div className="py-8 text-center">
-                <p className="text-sm text-red-500 dark:text-red-400 mb-2">{error}</p>
+                <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
                 <button
                   onClick={() => void fetchNotifications()}
                   className="text-xs text-blue-500 hover:text-blue-700 dark:hover:text-blue-400"

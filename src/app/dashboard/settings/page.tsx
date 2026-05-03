@@ -107,8 +107,8 @@ export default function SettingsPage() {
 
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 rounded-lg p-4">
-              <p className="text-red-700 dark:text-red-300">{error}</p>
+            <div className="bg-error-50 dark:bg-error-900/20 border-2 border-error-200 dark:border-error-800 rounded-lg p-4">
+              <p className="text-error-700 dark:text-error-300">{error}</p>
             </div>
           )}
 

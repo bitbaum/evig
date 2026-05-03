@@ -61,9 +61,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div>
         <div className="flex items-center justify-between mb-1">
           <label htmlFor="listing-title" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            {t('title')} <span className="text-red-500">*</span>
+            {t('title')} <span className="text-error-500">*</span>
           </label>
-          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-red-500' : 'text-neutral-400'}`}>
+          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-error-500' : 'text-neutral-400'}`}>
             {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           </span>
         </div>
@@ -82,9 +82,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       <div>
         <div className="flex items-center justify-between mb-1">
           <label htmlFor="listing-description" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
-            {t('description')} <span className="text-red-500">*</span>
+            {t('description')} <span className="text-error-500">*</span>
           </label>
-          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-red-500' : 'text-neutral-400'}`}>
+          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-error-500' : 'text-neutral-400'}`}>
             {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           </span>
         </div>
@@ -121,7 +121,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         </div>
         <div>
           <label htmlFor="listing-category" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            {t('category')} <span className="text-red-500">*</span>
+            {t('category')} <span className="text-error-500">*</span>
           </label>
           <select
             id="listing-category"

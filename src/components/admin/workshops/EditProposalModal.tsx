@@ -185,8 +185,8 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
         {/* Form */}
         <div className="p-6 space-y-6">
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-800">{error}</p>
+            <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+              <p className="text-error-800">{error}</p>
             </div>
           )}
 
@@ -197,7 +197,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
                 <div key={field}>
                   <label className="block text-sm font-medium text-neutral-700 mb-2">
                     {config.label}
-                    {('required' in config && config.required) && <span className="text-red-500 ml-1">*</span>}
+                    {('required' in config && config.required) && <span className="text-error-500 ml-1">*</span>}
                   </label>
                   {renderField(field)}
                   {('help' in config && config.help) && (

@@ -106,11 +106,11 @@ export function PermissionRequestsManager() {
 
   if (error) {
     return (
-      <div className="p-6 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800">
-        <p className="text-red-700 dark:text-red-300">{error}</p>
+      <div className="p-6 bg-error-50 dark:bg-error-900/20 rounded-xl border border-error-200 dark:border-error-800">
+        <p className="text-error-700 dark:text-error-300">{error}</p>
         <button
           onClick={fetchRequests}
-          className="mt-2 text-sm text-red-600 hover:text-red-700 flex items-center gap-1"
+          className="mt-2 text-sm text-error-600 hover:text-error-700 flex items-center gap-1"
         >
           <RefreshCw className="w-4 h-4" />
           Erneut versuchen
@@ -207,8 +207,8 @@ export function PermissionRequestsManager() {
             </div>
 
             {rejectingId === request.id && (
-              <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                <label htmlFor={`rejection-notes-${request.id}`} className="block text-sm font-medium text-red-800 dark:text-red-300 mb-1">
+              <div className="mt-3 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
+                <label htmlFor={`rejection-notes-${request.id}`} className="block text-sm font-medium text-error-800 dark:text-error-300 mb-1">
                   Grund für Ablehnung (optional):
                 </label>
                 <textarea
@@ -217,7 +217,7 @@ export function PermissionRequestsManager() {
                   onChange={(e) => setRejectionNotes(e.target.value)}
                   placeholder="Optionaler Ablehnungsgrund..."
                   rows={2}
-                  className="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
+                  className="w-full px-3 py-2 border border-error-300 rounded-lg focus:ring-2 focus:ring-error-500 text-sm"
                   autoFocus
                 />
                 <div className="flex gap-2 mt-2">

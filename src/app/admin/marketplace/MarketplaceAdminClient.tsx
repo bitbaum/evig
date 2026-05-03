@@ -21,7 +21,7 @@ export default function MarketplaceAdminClient() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatsCard label="Aktive Inserate" value={m.stats.byStatus.active ?? 0} icon={Package} color="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200" />
           <StatsCard label="Ungeprüft" value={m.stats.unverified} icon={Clock} color="bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200" />
-          <StatsCard label="Offene Meldungen" value={m.stats.openReports} icon={AlertTriangle} color="bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200" />
+          <StatsCard label="Offene Meldungen" value={m.stats.openReports} icon={AlertTriangle} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
           <StatsCard label={ORG.name} value={m.stats.revampit} icon={Store} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
         </div>
       )}
@@ -41,7 +41,7 @@ export default function MarketplaceAdminClient() {
             <t.icon className="w-4 h-4" />
             {t.label}
             {t.id === 'reports' && m.stats && m.stats.openReports > 0 && (
-              <span className="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">
+              <span className="ml-1 px-1.5 py-0.5 text-xs rounded-full bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
                 {m.stats.openReports}
               </span>
             )}

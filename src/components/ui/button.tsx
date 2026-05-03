@@ -22,7 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900': variant === 'outline-light',
             'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600': variant === 'secondary',
             'bg-transparent hover:bg-white/10 text-inherit': variant === 'ghost',
-            'bg-red-600 text-white hover:bg-red-700': variant === 'destructive',
+            'bg-error-600 text-white hover:bg-error-700': variant === 'destructive',
             'h-10 px-4 py-2': size === 'default',
             'h-9 rounded-md px-3': size === 'sm',
             'h-11 rounded-md px-8': size === 'lg',

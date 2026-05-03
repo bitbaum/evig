@@ -267,7 +267,7 @@ export function WorkshopProposalForm() {
           className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
               ? 'bg-primary-50 border-primary-200 text-primary-800'
-              : 'bg-red-50 border-red-200 text-red-800'
+              : 'bg-error-50 border-error-200 text-error-800'
           }`}
         >
           {submitResult.success ? (

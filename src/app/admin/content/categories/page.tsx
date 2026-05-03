@@ -276,7 +276,7 @@ export default async function AdminCategoriesPage() {
                           <Edit className="w-4 h-4" />
                         </Link>
                         <button
-                          className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 disabled:opacity-50"
+                          className="text-error-600 hover:text-error-900 dark:text-error-400 dark:hover:text-error-300 disabled:opacity-50"
                           disabled={category.post_count > 0}
                           title={
                             category.post_count > 0

@@ -339,7 +339,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
 
                           <div className="text-right">
                             {isFull ? (
-                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-100 text-error-800">
                                 {t('detail.soldOut')}
                               </span>
                             ) : (

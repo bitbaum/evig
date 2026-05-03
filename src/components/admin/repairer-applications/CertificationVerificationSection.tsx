@@ -52,7 +52,7 @@ export function CertificationVerificationSection({
                             </span>
                           )}
                           {cert.isExpired && (
-                            <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs">
+                            <span className="px-2 py-1 bg-error-100 text-error-800 rounded-full text-xs">
                               {CERTIFICATION_STATUS_LABELS.expired}
                             </span>
                           )}
@@ -110,7 +110,7 @@ export function CertificationVerificationSection({
                             <button
                               onClick={() => onOpenDialog('reject_cert', cert.id)}
                               disabled={certificationActionLoading === cert.id}
-                              className="px-3 py-1.5 bg-red-600 text-white rounded text-xs hover:bg-red-700 disabled:opacity-50"
+                              className="px-3 py-1.5 bg-error-600 text-white rounded text-xs hover:bg-error-700 disabled:opacity-50"
                             >
                               {certificationActionLoading === cert.id ? '...' : 'Ablehnen'}
                             </button>

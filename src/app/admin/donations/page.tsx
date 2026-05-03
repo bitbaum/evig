@@ -70,8 +70,8 @@ export default function AdminDonationsPage() {
       <DonationFilters filters={filters} onFiltersChange={setFilters} />
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-700">{error}</p>
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+          <p className="text-error-700">{error}</p>
         </div>
       )}
 

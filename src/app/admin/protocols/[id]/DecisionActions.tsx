@@ -222,7 +222,7 @@ export default function DecisionActions({
   return (
     <div className="space-y-2">
       {error && (
-        <p className="text-xs text-red-600">{error}</p>
+        <p className="text-xs text-error-600">{error}</p>
       )}
 
       {/* Stage 1: Open voting */}
@@ -250,8 +250,8 @@ export default function DecisionActions({
               disabled={loading === 'vote'}
               className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'down'
-                  ? 'bg-red-100 border-red-300 text-red-800'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-red-50 hover:border-red-200'
+                  ? 'bg-error-100 border-error-300 text-error-800'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-error-50 hover:border-error-200'
               } disabled:opacity-50`}
             >
               <ThumbsDown className="w-3.5 h-3.5" />

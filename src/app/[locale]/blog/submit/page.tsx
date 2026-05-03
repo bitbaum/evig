@@ -405,9 +405,9 @@ export default function SubmitPostPage() {
 
           {/* Error Message */}
           {submitStatus === 'error' && (
-            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800 font-medium">{t('errorTitle')}</p>
-              <p className="text-red-700 text-sm mt-1">
+            <div className="mt-6 p-4 bg-error-50 border border-error-200 rounded-lg">
+              <p className="text-error-800 font-medium">{t('errorTitle')}</p>
+              <p className="text-error-700 text-sm mt-1">
                 {t('errorMessage')}
               </p>
             </div>

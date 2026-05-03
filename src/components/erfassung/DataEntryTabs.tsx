@@ -355,7 +355,7 @@ export function DataEntryTabs({
               </div>
             )}
             {quickEntryState === 'error' && quickEntryError && (
-              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-red-50 dark:bg-red-900/20 rounded-lg text-red-700 dark:text-red-400">
+              <div className="flex items-center justify-center gap-2 py-2 px-4 bg-error-50 dark:bg-error-900/20 rounded-lg text-error-700 dark:text-error-400">
                 <AlertCircle className="w-5 h-5" />
                 <span>{quickEntryError}</span>
               </div>

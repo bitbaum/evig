@@ -54,7 +54,7 @@ export default async function EWasteProblemSection() {
   const t = await getTranslations('components.eWasteProblem')
 
   return (
-    <section className="py-20 bg-gradient-to-br from-red-700 via-red-600 to-red-800 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-error-700 via-error-600 to-error-800 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-10 left-10 w-40 h-40 border-2 border-white rounded-full" />

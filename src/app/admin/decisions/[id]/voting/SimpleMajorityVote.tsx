@@ -20,7 +20,7 @@ export function SimpleMajorityVote({ response, onChange }: Props) {
               ? r === 'yes'
                 ? 'border-primary-500 bg-primary-50 text-primary-700'
                 : r === 'no'
-                  ? 'border-red-500 bg-red-50 text-red-700'
+                  ? 'border-error-500 bg-error-50 text-error-700'
                   : 'border-neutral-500 bg-neutral-50 text-neutral-700'
               : 'border-neutral-200 text-neutral-600 hover:border-neutral-300'
           }`}

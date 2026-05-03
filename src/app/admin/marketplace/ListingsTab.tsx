@@ -82,7 +82,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                     {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-primary-600" />}
                     {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">RIT</span>}
                     {parseInt(l.report_count) > 0 && (
-                      <span className="px-1.5 py-0.5 text-[10px] rounded bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">
+                      <span className="px-1.5 py-0.5 text-[10px] rounded bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
                         {l.report_count} Meldung{parseInt(l.report_count) > 1 ? 'en' : ''}
                       </span>
                     )}
@@ -107,7 +107,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
                       <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Entfernen">
-                        <Trash2 className="w-4 h-4 text-red-500" />
+                        <Trash2 className="w-4 h-4 text-error-500" />
                       </button>
                     )}
                   </div>

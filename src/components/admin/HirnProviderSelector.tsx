@@ -283,7 +283,7 @@ export function HirnProviderSelector() {
 
             {/* Footer */}
             {error && (
-              <div className="p-3 mx-3 mb-3 bg-red-50 dark:bg-red-900/20 text-red-600 text-sm rounded-xl">
+              <div className="p-3 mx-3 mb-3 bg-error-50 dark:bg-error-900/20 text-error-600 text-sm rounded-xl">
                 {error}
               </div>
             )}

@@ -218,7 +218,7 @@ export const DECISION_RESULT_LABELS: Record<DecisionResult, string> = {
 
 export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
   approved: 'bg-primary-100 text-primary-800',
-  rejected: 'bg-red-100 text-red-800',
+  rejected: 'bg-error-100 text-error-800',
   pending: 'bg-yellow-100 text-yellow-800',
 };
 

@@ -27,7 +27,7 @@ export function ImageUploadGrid({ images, isUploading, onUpload, onRemove }: Pro
             <button
               onClick={() => onRemove(idx)}
               aria-label={t('removeImageLabel', { index: idx + 1 })}
-              className="absolute top-1 right-1 p-2 bg-red-500 text-white rounded-full hover:bg-red-600"
+              className="absolute top-1 right-1 p-2 bg-error-500 text-white rounded-full hover:bg-error-600"
             >
               <X className="w-4 h-4" />
             </button>

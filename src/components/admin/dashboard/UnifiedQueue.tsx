@@ -11,10 +11,10 @@ interface UnifiedQueueProps {
 
 const URGENCY_CONFIG = {
   urgent: {
-    dot: 'bg-red-500',
+    dot: 'bg-error-500',
     label: 'Dringend',
-    ageText: 'text-red-600 dark:text-red-400',
-    badge: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+    ageText: 'text-error-600 dark:text-error-400',
+    badge: 'bg-error-100 text-error-700 dark:bg-error-900/40 dark:text-error-300',
   },
   warning: {
     dot: 'bg-warning-500',

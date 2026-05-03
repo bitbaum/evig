@@ -198,5 +198,5 @@ export function useAIProductAnalysis(options: UseAIProductAnalysisOptions = {}) 
 export function getConfidenceColor(confidence: number): string {
   if (confidence >= 0.9) return 'text-primary-600'
   if (confidence >= 0.7) return 'text-yellow-600'
-  return 'text-red-600'
+  return 'text-error-600'
 }

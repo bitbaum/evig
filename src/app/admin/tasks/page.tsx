@@ -253,7 +253,7 @@ export default async function TasksAdminPage({
           color: 'red',
           label: 'Braucht Aufmerksamkeit',
           value: stats.needsAttention,
-          valueColor: 'text-red-600',
+          valueColor: 'text-error-600',
         },
         {
           icon: Clock,
@@ -281,7 +281,7 @@ export default async function TasksAdminPage({
       <div className="bg-white rounded-lg border overflow-hidden overflow-x-auto">
         {listError ? (
           <div className="p-12 text-center">
-            <AlertTriangle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+            <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
             <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
               {ADMIN_CONTENT.tasks.errorMessage}
             </Heading>
@@ -400,7 +400,7 @@ export default async function TasksAdminPage({
                     {task.due_date ? (() => {
                       const isOverdue = !task.is_completed && new Date(task.due_date) < new Date(new Date().toDateString())
                       return (
-                        <span className={`text-sm ${isOverdue ? 'text-red-600 font-medium' : 'text-neutral-600'}`}>
+                        <span className={`text-sm ${isOverdue ? 'text-error-600 font-medium' : 'text-neutral-600'}`}>
                           {formatDateShort(task.due_date)}
                           {isOverdue && ' (überfällig)'}
                         </span>

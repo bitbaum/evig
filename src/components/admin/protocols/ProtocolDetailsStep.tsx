@@ -40,7 +40,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
 
       <div>
         <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
-          Titel <span className="text-red-500">*</span>
+          Titel <span className="text-error-500">*</span>
         </label>
         <input
           type="text"
@@ -57,7 +57,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
 
       <div>
         <label htmlFor="meeting_date" className="block text-sm font-medium text-neutral-700 mb-1">
-          Datum <span className="text-red-500">*</span>
+          Datum <span className="text-error-500">*</span>
         </label>
         <input
           type="date"

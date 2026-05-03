@@ -49,7 +49,7 @@ export function WorkshopTagsSection({ tags, onAddTag, onRemoveTag }: Props) {
                 <button
                   type="button"
                   onClick={() => onRemoveTag(tag)}
-                  className="hover:text-red-600"
+                  className="hover:text-error-600"
                 >
                   <X className="w-3 h-3" />
                 </button>

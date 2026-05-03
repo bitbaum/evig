@@ -23,5 +23,5 @@ export const textColors = {
   accent: 'text-revamp-blue',
   success: 'text-revamp-green',
   warning: 'text-revamp-orange',
-  danger: 'text-red-600',
+  danger: 'text-error-600',
 } as const;

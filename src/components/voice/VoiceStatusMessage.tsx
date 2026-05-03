@@ -27,7 +27,7 @@ export function VoiceStatusMessage({
       <div className="text-center mt-4 text-sm text-neutral-600 dark:text-neutral-400">
         {state === 'idle' && t('idle')}
         {state === 'recording' && (
-          <span className="text-red-600">
+          <span className="text-error-600">
             {t('recording')}
           </span>
         )}
@@ -46,7 +46,7 @@ export function VoiceStatusMessage({
 
       {/* Error message */}
       {errorMessage && state === 'error' && (
-        <div className="text-sm text-red-700 bg-red-50 dark:bg-red-900/20 dark:text-red-300 px-4 py-3 rounded-lg mt-4">
+        <div className="text-sm text-error-700 bg-error-50 dark:bg-error-900/20 dark:text-error-300 px-4 py-3 rounded-lg mt-4">
           {errorMessage}
         </div>
       )}

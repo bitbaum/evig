@@ -91,7 +91,7 @@ export function EmailVerificationBanner({ email, className }: EmailVerificationB
                   {t('resend')}
                 </button>
                 {error && (
-                  <span className="text-sm text-red-600 dark:text-red-400">{error}</span>
+                  <span className="text-sm text-error-600 dark:text-error-400">{error}</span>
                 )}
               </div>
             )}

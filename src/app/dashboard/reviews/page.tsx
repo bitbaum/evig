@@ -23,7 +23,7 @@ import { REVIEW_STATUS } from '@/config/review-status'
 const STATUS_STYLES: Record<string, string> = {
   [REVIEW_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
   [REVIEW_STATUS.PENDING_MODERATION]: 'bg-orange-100 text-orange-800',
-  [REVIEW_STATUS.HIDDEN]: 'bg-red-100 text-red-800',
+  [REVIEW_STATUS.HIDDEN]: 'bg-error-100 text-error-800',
   [REVIEW_STATUS.DELETED]: 'bg-neutral-100 text-neutral-800'
 }
 
@@ -200,7 +200,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               )}
               <button
                 onClick={() => onDelete(review.id)}
-                className="px-3 py-1.5 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200 flex items-center gap-1"
+                className="px-3 py-1.5 bg-error-100 text-error-700 rounded text-sm hover:bg-error-200 flex items-center gap-1"
               >
                 <Trash2 className="w-3 h-3" />
                 {t('delete')}
@@ -237,7 +237,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 onClick={() => onVote(review.id, 'unhelpful')}
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'unhelpful'
-                    ? 'bg-red-100 text-red-700'
+                    ? 'bg-error-100 text-error-700'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}
               >
@@ -281,12 +281,12 @@ export default function UserReviewsPage() {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+      <div className="bg-error-50 border border-error-200 rounded-lg p-4">
         <div className="flex">
-          <div className="text-red-400">⚠️</div>
+          <div className="text-error-400">⚠️</div>
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-red-800">{t('loadError')}</Heading>
-            <p className="text-sm text-red-700 mt-1">{error}</p>
+            <Heading level={3} className="text-sm font-medium text-error-800">{t('loadError')}</Heading>
+            <p className="text-sm text-error-700 mt-1">{error}</p>
           </div>
         </div>
       </div>

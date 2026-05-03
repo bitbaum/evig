@@ -291,13 +291,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                       maxLength={4}
                       className={`w-full rounded-lg border bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
                         shippingAddress.postal_code && !postalCodeValid
-                          ? 'border-red-500'
+                          ? 'border-error-500'
                           : 'border-neutral-300 dark:border-neutral-600'
                       }`}
                       placeholder="8000"
                     />
                     {shippingAddress.postal_code && !postalCodeValid && (
-                      <p className="text-xs text-red-500 mt-1">{t('address.postalCodeError')}</p>
+                      <p className="text-xs text-error-500 mt-1">{t('address.postalCodeError')}</p>
                     )}
                   </div>
                   <div className="col-span-2">
@@ -317,7 +317,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
           {/* Error message */}
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 text-red-700 dark:text-red-300">
+            <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4 text-error-700 dark:text-error-300">
               {error}
             </div>
           )}

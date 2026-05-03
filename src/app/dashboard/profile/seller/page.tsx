@@ -200,7 +200,7 @@ export default function SellerProfileEditPage() {
                   <button
                     type="button"
                     onClick={() => setAvatarUrl('')}
-                    className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600"
+                    className="absolute -top-1 -right-1 w-5 h-5 bg-error-500 text-white rounded-full flex items-center justify-center hover:bg-error-600"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -265,9 +265,9 @@ export default function SellerProfileEditPage() {
 
         <div className="p-6 border-t border-neutral-100 dark:border-neutral-700">
           {error && (
-            <div className="mb-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-              <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
+            <div className="mb-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-3 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0" />
+              <p className="text-sm text-error-800 dark:text-error-200">{error}</p>
             </div>
           )}
           {success && (

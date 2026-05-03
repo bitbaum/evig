@@ -44,7 +44,7 @@ export function DocumentVerificationSection({
                     <div className="flex items-center gap-3">
                       <div className={`w-3 h-3 rounded-full ${
                         doc.status === APPROVAL_STATUS.APPROVED ? 'bg-primary-500' :
-                        doc.status === APPROVAL_STATUS.REJECTED ? 'bg-red-500' :
+                        doc.status === APPROVAL_STATUS.REJECTED ? 'bg-error-500' :
                         'bg-yellow-500'
                       }`} />
                       <div>
@@ -81,7 +81,7 @@ export function DocumentVerificationSection({
                           <button
                             onClick={() => onOpenDialog('reject_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-red-100 text-red-700 rounded text-xs hover:bg-red-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-error-100 text-error-700 rounded text-xs hover:bg-error-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Ablehnen'}
                           </button>
@@ -91,7 +91,7 @@ export function DocumentVerificationSection({
                         <span className="text-xs text-primary-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.APPROVED)}</span>
                       )}
                       {doc.status === APPROVAL_STATUS.REJECTED && (
-                        <span className="text-xs text-red-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.REJECTED)}</span>
+                        <span className="text-xs text-error-600 font-medium">{getApprovalStatusLabel(APPROVAL_STATUS.REJECTED)}</span>
                       )}
                     </div>
                   </div>
@@ -102,14 +102,14 @@ export function DocumentVerificationSection({
 
           {missingRequiredDocuments.length > 0 && (
             <div>
-              <h5 className="text-sm font-medium text-red-700 mb-2">Fehlende erforderliche Dokumente</h5>
+              <h5 className="text-sm font-medium text-error-700 mb-2">Fehlende erforderliche Dokumente</h5>
               <div className="space-y-2">
                 {missingRequiredDocuments.map((docType) => (
-                  <div key={docType.id} className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div key={docType.id} className="flex items-center gap-3 p-3 bg-error-50 rounded-lg">
+                    <div className="w-3 h-3 rounded-full bg-error-500" />
                     <div>
-                      <p className="text-sm font-medium text-red-800">{docType.name}</p>
-                      <p className="text-xs text-red-600">{docType.description}</p>
+                      <p className="text-sm font-medium text-error-800">{docType.name}</p>
+                      <p className="text-xs text-error-600">{docType.description}</p>
                     </div>
                   </div>
                 ))}

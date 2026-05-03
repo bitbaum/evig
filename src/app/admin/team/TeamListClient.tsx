@@ -40,12 +40,12 @@ export function TeamListClient() {
 
       {/* Error State */}
       {error && (
-        <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+        <div className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl">
           <div className="flex items-center justify-between">
-            <p className="text-red-700 dark:text-red-300">{error}</p>
+            <p className="text-error-700 dark:text-error-300">{error}</p>
             <button
               onClick={refetch}
-              className="flex items-center gap-2 text-red-600 hover:text-red-700"
+              className="flex items-center gap-2 text-error-600 hover:text-error-700"
             >
               <RefreshCw className="w-4 h-4" />
               Erneut versuchen

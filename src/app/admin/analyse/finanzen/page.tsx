@@ -218,7 +218,7 @@ export default async function FinanzenPage() {
                 <li
                   key={insight.id}
                   className={`border-l-4 pl-4 ${
-                    insight.priority === 'high' ? 'border-red-400' :
+                    insight.priority === 'high' ? 'border-error-400' :
                     insight.priority === 'medium' ? 'border-warning-400' : 'border-primary-400'
                   }`}
                 >

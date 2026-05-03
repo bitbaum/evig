@@ -33,7 +33,7 @@ interface HelpRequestCardProps {
 function getUrgencyIcon(urgency: string) {
   switch (urgency) {
     case 'urgent':
-      return <AlertTriangle className="w-4 h-4 text-red-500" />
+      return <AlertTriangle className="w-4 h-4 text-error-500" />
     case 'high':
       return <AlertTriangle className="w-4 h-4 text-orange-500" />
     default:
@@ -75,7 +75,7 @@ export function HelpRequestCard({
         isResolved
           ? 'border-neutral-200 dark:border-neutral-700 opacity-75'
           : request.urgency === URGENCY.URGENT
-            ? 'border-red-300 dark:border-red-700'
+            ? 'border-error-300 dark:border-error-700'
             : request.urgency === URGENCY.HIGH
               ? 'border-orange-300 dark:border-orange-700'
               : 'border-neutral-200 dark:border-neutral-700'

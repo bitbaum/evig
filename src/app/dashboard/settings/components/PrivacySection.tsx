@@ -194,8 +194,8 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
         </p>
 
         {exportError && (
-          <div className="mb-4 rounded-lg border-2 border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20">
-            <p className="text-sm text-red-700 dark:text-red-300">{exportError}</p>
+          <div className="mb-4 rounded-lg border-2 border-error-200 bg-error-50 p-3 dark:border-error-800 dark:bg-error-900/20">
+            <p className="text-sm text-error-700 dark:text-error-300">{exportError}</p>
           </div>
         )}
 

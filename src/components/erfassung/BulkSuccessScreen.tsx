@@ -81,7 +81,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
           </div>
           {hasFailures && (
             <div className="text-center">
-              <div className="text-3xl font-bold text-red-600 dark:text-red-400">{result.failed}</div>
+              <div className="text-3xl font-bold text-error-600 dark:text-error-400">{result.failed}</div>
               <div className="text-sm text-neutral-600 dark:text-neutral-400">{t('failedLabel')}</div>
             </div>
           )}

@@ -140,13 +140,13 @@ export function VoiceProductInput({
   const getButtonStyle = () => {
     switch (state) {
       case 'recording':
-        return 'bg-red-500 hover:bg-red-600 text-white animate-pulse'
+        return 'bg-error-500 hover:bg-error-600 text-white animate-pulse'
       case 'processing':
         return 'bg-yellow-500 text-white cursor-wait'
       case 'success':
         return 'bg-primary-500 hover:bg-primary-600 text-white'
       case 'error':
-        return 'bg-red-100 hover:bg-red-200 text-red-700 border-red-300'
+        return 'bg-error-100 hover:bg-error-200 text-error-700 border-error-300'
       default:
         return 'bg-purple-100 hover:bg-purple-200 text-purple-700 border-purple-300'
     }
@@ -205,7 +205,7 @@ export function VoiceProductInput({
 
       {/* Error message */}
       {errorMessage && state === 'error' && (
-        <div className="text-sm text-red-700 bg-red-50 px-3 py-2 rounded-md">
+        <div className="text-sm text-error-700 bg-error-50 px-3 py-2 rounded-md">
           {errorMessage}
         </div>
       )}

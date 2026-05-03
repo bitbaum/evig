@@ -50,7 +50,7 @@ export function DecisionOptionsEditor({
                 type="button"
                 onClick={() => onRemove(opt.id)}
                 disabled={options.length <= 2}
-                className="rounded-md px-2 text-neutral-500 hover:text-red-500 disabled:opacity-30"
+                className="rounded-md px-2 text-neutral-500 hover:text-error-500 disabled:opacity-30"
               >
                 &times;
               </button>

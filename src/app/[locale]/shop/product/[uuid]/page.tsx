@@ -177,8 +177,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* Availability */}
             <div className="flex items-center gap-2 text-sm">
-              <div className={`w-2 h-2 rounded-full ${product.quantity > 0 ? 'bg-emerald-500' : 'bg-red-400'}`} />
-              <span className={product.quantity > 0 ? 'text-emerald-700 font-medium' : 'text-red-600'}>
+              <div className={`w-2 h-2 rounded-full ${product.quantity > 0 ? 'bg-emerald-500' : 'bg-error-400'}`} />
+              <span className={product.quantity > 0 ? 'text-emerald-700 font-medium' : 'text-error-600'}>
                 {product.quantity > 1
                   ? t('product.stockMany', { count: product.quantity })
                   : product.quantity === 1

@@ -44,7 +44,7 @@ const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
     icon: <Clock className="w-5 h-5 text-yellow-600" />,
   },
   [PROPOSAL_STATUS.REJECTED]: {
-    icon: <XCircle className="w-5 h-5 text-red-600" />,
+    icon: <XCircle className="w-5 h-5 text-error-600" />,
   },
   [PROPOSAL_STATUS.REQUIRES_CHANGES]: {
     icon: <AlertCircle className="w-5 h-5 text-orange-600" />,
@@ -244,8 +244,8 @@ export default function AdminWorkshopsPage() {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-800">{error}</p>
+        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+          <p className="text-error-800">{error}</p>
         </div>
       )}
 
@@ -334,7 +334,7 @@ export default function AdminWorkshopsPage() {
                         </button>
                         <button
                           onClick={() => { setRejectingId(proposal.id); setRejectionReason(''); setRejectError(null) }}
-                          className="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700"
+                          className="inline-flex items-center px-3 py-2 bg-error-600 text-white rounded-lg text-sm font-medium hover:bg-error-700"
                         >
                           <XCircle className="w-4 h-4 mr-1" />
                           Ablehnen
@@ -345,8 +345,8 @@ export default function AdminWorkshopsPage() {
                 </div>
 
                 {rejectingId === proposal.id && (
-                  <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                    <label className="block text-sm font-medium text-red-800 mb-2">
+                  <div className="mt-4 p-4 bg-error-50 border border-error-200 rounded-lg">
+                    <label className="block text-sm font-medium text-error-800 mb-2">
                       Ablehnungsgrund:
                     </label>
                     <textarea
@@ -354,17 +354,17 @@ export default function AdminWorkshopsPage() {
                       onChange={(e) => { setRejectionReason(e.target.value); setRejectError(null) }}
                       placeholder="Bitte gib einen Ablehnungsgrund an..."
                       rows={3}
-                      className="w-full px-3 py-2 border border-red-300 rounded-lg focus:ring-2 focus:ring-red-500 text-sm"
+                      className="w-full px-3 py-2 border border-error-300 rounded-lg focus:ring-2 focus:ring-error-500 text-sm"
                       autoFocus
                     />
                     {rejectError && (
-                      <p className="mt-1 text-sm text-red-700">{rejectError}</p>
+                      <p className="mt-1 text-sm text-error-700">{rejectError}</p>
                     )}
                     <div className="flex gap-2 mt-2">
                       <button
                         onClick={() => handleReject(proposal.id)}
                         disabled={rejectLoading}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-error-600 text-white rounded-lg text-sm font-medium hover:bg-error-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {rejectLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                         Ablehnung bestätigen

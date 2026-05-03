@@ -77,7 +77,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
 
       <div>
         <label htmlFor="inquiry-name" className="block text-sm font-medium text-neutral-700 mb-1">
-          {t('nameLabel')} <span className="text-red-500">*</span>
+          {t('nameLabel')} <span className="text-error-500">*</span>
         </label>
         <input
           id="inquiry-name"
@@ -93,7 +93,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
 
       <div>
         <label htmlFor="inquiry-email" className="block text-sm font-medium text-neutral-700 mb-1">
-          {t('emailLabel')} <span className="text-red-500">*</span>
+          {t('emailLabel')} <span className="text-error-500">*</span>
         </label>
         <input
           id="inquiry-email"
@@ -108,7 +108,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
 
       <div>
         <label htmlFor="inquiry-message" className="block text-sm font-medium text-neutral-700 mb-1">
-          {t('messageLabel')} <span className="text-red-500">*</span>
+          {t('messageLabel')} <span className="text-error-500">*</span>
         </label>
         <textarea
           id="inquiry-message"
@@ -124,7 +124,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 text-red-700 text-sm">
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-error-50 text-error-700 text-sm">
           <AlertCircle className="w-4 h-4 shrink-0" />
           {error}
         </div>
