@@ -27,7 +27,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             type="text"
             value={formData.address_line1}
             onChange={(e) => onFieldChange('address_line1', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. Musterstrasse 123"
             required
             aria-required="true"
@@ -42,7 +42,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             type="text"
             value={formData.address_line2}
             onChange={(e) => onFieldChange('address_line2', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. c/o Mustermann, 3. Stock"
           />
         </div>
@@ -55,7 +55,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             type="text"
             value={formData.postal_code}
             onChange={(e) => onFieldChange('postal_code', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="8000"
             maxLength={4}
             required
@@ -71,7 +71,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             type="text"
             value={formData.city}
             onChange={(e) => onFieldChange('city', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="Zürich"
             required
             aria-required="true"
@@ -85,7 +85,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
           <select
             value={formData.canton}
             onChange={(e) => onFieldChange('canton', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Kanton wählen</option>
             {SWISS_CANTONS.map(canton => (
@@ -102,7 +102,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             type="text"
             value={formData.country}
             onChange={(e) => onFieldChange('country', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
         </div>
 
@@ -117,7 +117,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             max="90"
             value={formData.latitude}
             onChange={(e) => onFieldChange('latitude', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="47.3769"
           />
         </div>
@@ -133,7 +133,7 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             max="180"
             value={formData.longitude}
             onChange={(e) => onFieldChange('longitude', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="8.5417"
           />
         </div>

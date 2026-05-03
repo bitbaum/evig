@@ -49,7 +49,7 @@ export function HelperActionModal({
             disabled={actionLoading}
             size="sm"
             variant={helperAction === 'suspend' ? 'destructive' : 'default'}
-            className={helperAction === 'suspend' ? '' : 'bg-blue-600 hover:bg-blue-700'}
+            className={helperAction === 'suspend' ? '' : 'bg-info-600 hover:bg-info-700'}
           >
             {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Bestätigen'}
           </Button>

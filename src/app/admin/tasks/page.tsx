@@ -290,7 +290,7 @@ export default async function TasksAdminPage({
             </p>
             <Link
               href="/admin/tasks"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
             >
               Seite neu laden
             </Link>
@@ -351,7 +351,7 @@ export default async function TasksAdminPage({
                   <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
                     <Link
                       href={`/admin/tasks/${task.id}`}
-                      className="font-medium text-neutral-900 hover:text-blue-600 truncate block focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                      className="font-medium text-neutral-900 hover:text-info-600 truncate block focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-1 rounded"
                     >
                       {task.title}
                     </Link>

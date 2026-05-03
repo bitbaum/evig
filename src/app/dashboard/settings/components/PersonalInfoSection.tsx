@@ -50,7 +50,7 @@ export function PersonalInfoSection({
             value={profile.company_name || ''}
             onChange={(e) => handleChange('company_name', e.target.value)}
             placeholder={labels.companyNamePlaceholder}
-            className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -75,7 +75,7 @@ export function PersonalInfoSection({
               value={profile.phone || ''}
               onChange={(e) => handleChange('phone', e.target.value)}
               placeholder={labels.phonePlaceholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
 
@@ -89,7 +89,7 @@ export function PersonalInfoSection({
               value={profile.mobile || ''}
               onChange={(e) => handleChange('mobile', e.target.value)}
               placeholder={labels.mobilePlaceholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -116,7 +116,7 @@ export function PersonalInfoSection({
               value={profile.address_line1 || ''}
               onChange={(e) => handleChange('address_line1', e.target.value)}
               placeholder={labels.addressLine1Placeholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
 
@@ -131,7 +131,7 @@ export function PersonalInfoSection({
               value={profile.address_line2 || ''}
               onChange={(e) => handleChange('address_line2', e.target.value)}
               placeholder={labels.addressLine2Placeholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
 
@@ -148,7 +148,7 @@ export function PersonalInfoSection({
                 onChange={(e) => handlePostalCodeChange?.(e.target.value) || handleChange('postal_code', e.target.value)}
                 placeholder={labels.postalCodePlaceholder}
                 maxLength={4}
-                className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
               />
             </div>
 
@@ -162,7 +162,7 @@ export function PersonalInfoSection({
                 value={profile.city || ''}
                 onChange={(e) => handleCitySearch?.(e.target.value) || handleChange('city', e.target.value)}
                 placeholder={labels.cityPlaceholder}
-                className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
               />
 
               {/* Postal Code Suggestions */}
@@ -192,7 +192,7 @@ export function PersonalInfoSection({
               id="canton"
               value={profile.canton || ''}
               onChange={(e) => handleChange('canton', e.target.value)}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             >
               <option value="">{t('cantonDefault')}</option>
               {SWISS_CANTONS.map((canton) => (
@@ -213,7 +213,7 @@ export function PersonalInfoSection({
               id="country"
               value={profile.country || 'Schweiz'}
               onChange={(e) => handleChange('country', e.target.value)}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
         </div>

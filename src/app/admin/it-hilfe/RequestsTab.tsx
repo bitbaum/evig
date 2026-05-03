@@ -77,7 +77,7 @@ export function RequestsTab({
             {requests?.items.map(r => (
               <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
                 <td className="px-4 py-3">
-                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-neutral-900 dark:text-white hover:text-blue-600 flex items-center gap-1">
+                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-neutral-900 dark:text-white hover:text-info-600 flex items-center gap-1">
                     {r.title} <ExternalLink className="w-3 h-3 flex-shrink-0" />
                   </a>
                 </td>
@@ -93,7 +93,7 @@ export function RequestsTab({
                 <td className="px-4 py-3 text-neutral-500">{r.canton}</td>
                 <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{formatBudget(r.budget_amount_cents, r.budget_type)}</td>
                 <td className="px-4 py-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-blue-100 text-blue-700' : 'bg-neutral-100 text-neutral-500'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-info-100 text-info-700' : 'bg-neutral-100 text-neutral-500'}`}>
                     {r.offer_count}
                   </span>
                 </td>
@@ -104,7 +104,7 @@ export function RequestsTab({
                     className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
                     title="Bearbeiten"
                   >
-                    <Edit3 className="w-4 h-4 text-blue-500" />
+                    <Edit3 className="w-4 h-4 text-info-500" />
                   </button>
                 </td>
               </tr>

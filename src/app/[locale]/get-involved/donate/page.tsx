@@ -105,22 +105,22 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 <div
                   key={index}
                   className={`relative rounded-xl border-2 p-6 ${
-                    highlight ? 'border-blue-400 bg-blue-50' : 'border-neutral-200 bg-neutral-50'
+                    highlight ? 'border-info-400 bg-info-50' : 'border-neutral-200 bg-neutral-50'
                   }`}
                 >
                   {highlight && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-3 py-0.5 text-xs font-semibold text-white">
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-info-600 px-3 py-0.5 text-xs font-semibold text-white">
                       {t('tiers.recommended')}
                     </span>
                   )}
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
                       color === 'green' ? 'bg-primary-100' :
-                      color === 'blue' ? 'bg-blue-100' : 'bg-purple-100'
+                      color === 'blue' ? 'bg-info-100' : 'bg-purple-100'
                     }`}>
                       <Icon className={`h-5 w-5 ${
                         color === 'green' ? 'text-primary-600' :
-                        color === 'blue' ? 'text-blue-600' : 'text-purple-600'
+                        color === 'blue' ? 'text-info-600' : 'text-purple-600'
                       }`} />
                     </div>
                     <span className="text-2xl font-bold text-neutral-900">CHF {TIER_AMOUNTS[index]}</span>

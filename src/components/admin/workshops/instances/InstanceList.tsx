@@ -48,7 +48,7 @@ export function InstanceList({
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <GraduationCap className="w-5 h-5 text-blue-600" />
+                    <GraduationCap className="w-5 h-5 text-info-600" />
                     <Heading level={3} className="text-lg text-neutral-900 truncate">
                       {instance.workshop_title}
                     </Heading>
@@ -132,7 +132,7 @@ export function InstanceList({
             </p>
             <button
               onClick={onCreateNew}
-              className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700"
             >
               <Plus className="w-4 h-4 mr-2" />
               Neuer Termin

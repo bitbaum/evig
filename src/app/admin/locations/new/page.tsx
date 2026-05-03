@@ -37,8 +37,8 @@ export default function NewLocationPage() {
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-6">
-              <MapPin className="w-8 h-8 text-blue-600" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-info-100 rounded-full mb-6">
+              <MapPin className="w-8 h-8 text-info-600" />
             </div>
             <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">
               Neuen Ort erstellen
@@ -85,7 +85,7 @@ export default function NewLocationPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center px-8 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center px-8 py-3 bg-info-600 text-white text-lg font-semibold rounded-lg hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? (
                 <>

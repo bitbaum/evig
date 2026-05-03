@@ -36,7 +36,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <span className="font-medium text-neutral-900 dark:text-white">{sellerName}</span>
-            {listing.is_revampit && <Shield className="w-4 h-4 text-blue-500" aria-hidden="true" />}
+            {listing.is_revampit && <Shield className="w-4 h-4 text-info-500" aria-hidden="true" />}
           </div>
           <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
             {listing.seller_rating && Number(listing.seller_rating) > 0 && (

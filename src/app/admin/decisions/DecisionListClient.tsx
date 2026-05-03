@@ -127,7 +127,7 @@ export default function DecisionListClient({
         columns={4}
         items={[
           { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
-          { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-blue-600 dark:text-blue-400' },
+          { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-info-600 dark:text-info-400' },
           { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
           { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-error-600 dark:text-error-400' },
         ]}
@@ -207,7 +207,7 @@ export default function DecisionListClient({
                     <td className={adminTable.td}>
                       <Link
                         href={`/admin/decisions/${d.id}`}
-                        className="font-medium text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        className="font-medium text-neutral-900 dark:text-white hover:text-info-600 dark:hover:text-info-400 transition-colors"
                       >
                         {d.title}
                       </Link>

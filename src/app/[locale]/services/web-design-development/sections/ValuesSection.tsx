@@ -15,7 +15,7 @@ const VALUE_ICONS = [Code, Globe, Shield, Database, Heart, Zap, Users, Monitor]
 
 const VALUE_STYLES = [
   { borderColor: 'border-primary-500', bgColor: 'bg-primary-100', iconColor: 'text-primary-600', titleColor: 'text-primary-800' },
-  { borderColor: 'border-blue-500', bgColor: 'bg-blue-100', iconColor: 'text-blue-600', titleColor: 'text-blue-800' },
+  { borderColor: 'border-info-500', bgColor: 'bg-info-100', iconColor: 'text-info-600', titleColor: 'text-info-800' },
   { borderColor: 'border-purple-500', bgColor: 'bg-purple-100', iconColor: 'text-purple-600', titleColor: 'text-purple-800' },
   { borderColor: 'border-orange-500', bgColor: 'bg-orange-100', iconColor: 'text-orange-600', titleColor: 'text-orange-800' },
   { borderColor: 'border-teal-500', bgColor: 'bg-teal-100', iconColor: 'text-teal-600', titleColor: 'text-teal-800' },
@@ -37,7 +37,7 @@ export async function ValuesSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-primary-50 to-blue-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-primary-50 to-info-50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6 text-neutral-800">{t('title')}</Heading>

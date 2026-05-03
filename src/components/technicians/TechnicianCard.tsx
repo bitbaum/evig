@@ -24,8 +24,8 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
       <div className="p-6 border-b border-neutral-100">
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <User className="w-6 h-6 text-blue-600" />
+            <div className="w-12 h-12 bg-info-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-6 h-6 text-info-600" />
             </div>
             <div>
               <Link href={`/techniker/${technician.id}`} className="hover:underline">
@@ -75,7 +75,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             {technician.servicesOffered.slice(0, 3).map((service) => (
               <span
                 key={service}
-                className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800"
+                className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-info-100 text-info-800"
               >
                 {service}
               </span>
@@ -94,7 +94,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             {displayedSkills.map((skill) => (
               <span
                 key={skill}
-                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700"
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-info-50 text-info-700"
               >
                 {skill}
               </span>
@@ -148,7 +148,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {/* CTA */}
         <Link
           href={`/techniker/${technician.id}`}
-          className="block w-full bg-blue-600 text-white px-4 py-2.5 rounded-lg hover:bg-blue-700 transition-colors text-center text-sm font-medium"
+          className="block w-full bg-info-600 text-white px-4 py-2.5 rounded-lg hover:bg-info-700 transition-colors text-center text-sm font-medium"
         >
           {t('viewProfile')}
         </Link>

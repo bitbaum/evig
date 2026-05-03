@@ -351,7 +351,7 @@ describe('getHelpRequestUrgencyLabel', () => {
 
 describe('getHelpRequestUrgencyColor', () => {
   it('returns blue (normal) for null', () => {
-    expect(getHelpRequestUrgencyColor(null)).toBe('bg-blue-100 text-blue-800')
+    expect(getHelpRequestUrgencyColor(null)).toBe('bg-info-100 text-info-800')
   })
 
   it('returns CSS class string for all known urgencies', () => {
@@ -362,7 +362,7 @@ describe('getHelpRequestUrgencyColor', () => {
   })
 
   it('returns blue default for unknown urgency', () => {
-    expect(getHelpRequestUrgencyColor('catastrophic')).toBe('bg-blue-100 text-blue-800')
+    expect(getHelpRequestUrgencyColor('catastrophic')).toBe('bg-info-100 text-info-800')
   })
 })
 

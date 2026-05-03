@@ -37,7 +37,7 @@ export function UserFilters({
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Benutzer suchen..."
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -47,7 +47,7 @@ export function UserFilters({
           <select
             value={type}
             onChange={(e) => onTypeChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="all">Alle Typen</option>
             <option value="staff">Staff</option>
@@ -60,7 +60,7 @@ export function UserFilters({
           <select
             value={verified}
             onChange={(e) => onVerifiedChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="all">Alle Status</option>
             <option value="yes">Verifiziert</option>

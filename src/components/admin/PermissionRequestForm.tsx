@@ -81,8 +81,8 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
-          <Shield className="w-5 h-5 text-blue-600" />
+        <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-full flex items-center justify-center">
+          <Shield className="w-5 h-5 text-info-600" />
         </div>
         <div>
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
@@ -116,7 +116,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               onClick={() => toggleSection(section.id)}
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  ? 'border-info-500 bg-info-50 dark:bg-info-900/20'
                   : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
               }`}
             >
@@ -144,7 +144,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           aria-required="true"
           aria-invalid={!!form.error}
           aria-describedby={form.error ? 'permission-form-error' : undefined}
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
         />
       </div>
 

@@ -93,7 +93,7 @@ export function CreateHelpRequestModal({
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'help-request-error' : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
         </div>
 
@@ -108,7 +108,7 @@ export function CreateHelpRequestModal({
             placeholder="Beschreibe das Problem genauer (optional)"
             maxLength={2000}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent resize-none"
           />
         </div>
 
@@ -123,7 +123,7 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(true)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 isBroadcast
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  ? 'border-info-500 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300'
                   : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
@@ -135,7 +135,7 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(false)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 !isBroadcast
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                  ? 'border-info-500 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300'
                   : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
@@ -154,7 +154,7 @@ export function CreateHelpRequestModal({
             <select
               value={targetUserId}
               onChange={(e) => setTargetUserId(e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
             >
               <option value="">Wähle eine Person...</option>
               {teamMembers.map((member) => (
@@ -174,7 +174,7 @@ export function CreateHelpRequestModal({
           <select
             value={urgency}
             onChange={(e) => setUrgency(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
               <option key={urg} value={urg}>
@@ -192,7 +192,7 @@ export function CreateHelpRequestModal({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Keine Kategorie</option>
             {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (

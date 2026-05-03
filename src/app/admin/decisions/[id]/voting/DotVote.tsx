@@ -33,7 +33,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
                 >
                   -
                 </button>
-                <span className="w-5 text-center text-sm font-bold text-blue-600">
+                <span className="w-5 text-center text-sm font-bold text-info-600">
                   {allocations[opt.id] || 0}
                 </span>
                 <button

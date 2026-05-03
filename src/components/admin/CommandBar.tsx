@@ -333,11 +333,11 @@ export function CommandBar() {
                       onMouseEnter={() => setActiveIdx(currentFlatIdx)}
                       className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
                         isCurrent
-                          ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                          ? 'bg-info-50 dark:bg-info-900/20 text-info-700 dark:text-info-300'
                           : 'text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
                       }`}
                     >
-                      <span className={`flex-shrink-0 ${isCurrent ? 'text-blue-500' : 'text-neutral-400 dark:text-neutral-500'}`}>
+                      <span className={`flex-shrink-0 ${isCurrent ? 'text-info-500' : 'text-neutral-400 dark:text-neutral-500'}`}>
                         {item.icon}
                       </span>
                       <span className="flex-1 min-w-0">
@@ -351,7 +351,7 @@ export function CommandBar() {
                         )}
                       </span>
                       {isCurrent && (
-                        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-blue-400" aria-hidden="true" />
+                        <ChevronRight className="w-3.5 h-3.5 flex-shrink-0 text-info-400" aria-hidden="true" />
                       )}
                     </button>
                   )

@@ -101,7 +101,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
                             <p className="mt-2">
                               <Link
                                 href={item.link.href}
-                                className="text-blue-600 hover:text-blue-800 underline"
+                                className="text-info-600 hover:text-info-800 underline"
                               >
                                 {item.link.label}
                               </Link>
@@ -115,7 +115,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-blue-50 border border-primary-100 text-xs sm:text-sm">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-info-50 border border-primary-100 text-xs sm:text-sm">
               <p className="text-neutral-800">
                 {t('notListed')}
                 <span className="ml-2">

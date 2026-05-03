@@ -89,7 +89,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={config.type === 'textarea' ? 4 : undefined}
             maxLength={'maxLength' in config ? config.maxLength : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -102,7 +102,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             onChange={(e) => handleFieldChange(field, e.target.value)}
             min={'min' in config ? config.min : undefined}
             max={'max' in config ? config.max : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -113,7 +113,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             <select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             >
               <option value="">Wählen...</option>
               {WORKSHOP_CATEGORIES.map((cat) => (
@@ -128,7 +128,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             <select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             >
               <option value="">Wählen...</option>
               {WORKSHOP_LEVELS.map((level) => (
@@ -149,7 +149,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             value={arrayValue}
             onChange={(e) => handleArrayFieldChange(field, e.target.value)}
             rows={5}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             placeholder="Ein Eintrag pro Zeile"
           />
         );
@@ -161,7 +161,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             maxLength={'maxLength' in config ? config.maxLength : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -220,7 +220,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
           </button>
           <button
             onClick={handleSave}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
             disabled={isSaving}
           >
             {isSaving ? (

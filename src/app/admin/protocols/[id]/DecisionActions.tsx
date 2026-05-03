@@ -340,7 +340,7 @@ export default function DecisionActions({
                 <button
                   onClick={handleCreateTasks}
                   disabled={loading === 'create'}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+                  className="inline-flex items-center gap-1 px-3 py-1.5 text-xs bg-info-600 text-white rounded-md hover:bg-info-700 disabled:opacity-50"
                 >
                   {loading === 'create' ? (
                     <Loader2 className="w-3 h-3 animate-spin" />

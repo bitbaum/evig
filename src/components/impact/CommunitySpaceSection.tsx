@@ -49,7 +49,7 @@ export default function CommunitySpaceSection() {
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-info-500 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -100,9 +100,9 @@ export default function CommunitySpaceSection() {
           </div>
 
           {/* Workshops */}
-          <div className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-2xl p-8 border border-blue-700/50">
+          <div className="bg-gradient-to-br from-info-900/50 to-purple-900/50 rounded-2xl p-8 border border-info-700/50">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
+              <div className="p-2 bg-info-500/20 rounded-lg text-info-400">
                 <GraduationCap className="h-6 w-6" />
               </div>
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</Heading>
@@ -115,13 +115,13 @@ export default function CommunitySpaceSection() {
             <ul className="space-y-2 mb-6">
               {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
                 <li key={index} className="flex items-center gap-2 text-neutral-300">
-                  <ArrowRight className="h-4 w-4 text-blue-400 flex-shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-info-400 flex-shrink-0" />
                   {topic}
                 </li>
               ))}
             </ul>
 
-            <Button variant="outline-light" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white w-full sm:w-auto">
+            <Button variant="outline-light" className="border-info-400 text-info-400 hover:bg-info-400 hover:text-white w-full sm:w-auto">
               {t('workshopLink')}
             </Button>
           </div>

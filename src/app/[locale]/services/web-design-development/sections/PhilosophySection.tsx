@@ -2,7 +2,7 @@ import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
-const RATING_COLORS = ['bg-primary-500', 'bg-blue-500', 'bg-purple-500', 'bg-orange-500', 'bg-teal-500', 'bg-rose-500', 'bg-indigo-500', 'bg-cyan-500']
+const RATING_COLORS = ['bg-primary-500', 'bg-info-500', 'bg-purple-500', 'bg-orange-500', 'bg-teal-500', 'bg-rose-500', 'bg-indigo-500', 'bg-cyan-500']
 
 export async function PhilosophySection() {
   const t = await getTranslations('services.webDesign.philosophy')
@@ -36,8 +36,8 @@ export async function PhilosophySection() {
                   <p dangerouslySetInnerHTML={{ __html: t.raw('freedomPrinciple.text') as string }} />
                 </div>
 
-                <div className="border-l-4 border-blue-500 pl-4">
-                  <p className="font-semibold text-blue-800 mb-2">{t('automationLiberation.label')}</p>
+                <div className="border-l-4 border-info-500 pl-4">
+                  <p className="font-semibold text-info-800 mb-2">{t('automationLiberation.label')}</p>
                   <p>{t('automationLiberation.text')}</p>
                 </div>
 
@@ -52,7 +52,7 @@ export async function PhilosophySection() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-primary-50 to-blue-50 rounded-xl p-8">
+            <div className="bg-gradient-to-br from-primary-50 to-info-50 rounded-xl p-8">
               <Heading level={4} className="mb-4 text-neutral-800">{t('ratingTitle')}</Heading>
               <p className="text-neutral-600 mb-4">
                 {t('ratingIntro')}

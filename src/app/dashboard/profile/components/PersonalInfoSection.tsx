@@ -17,8 +17,8 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-          <User className="w-5 h-5 text-blue-600" />
+        <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center">
+          <User className="w-5 h-5 text-info-600" />
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">

@@ -17,7 +17,7 @@ function getStatusIcon(status: string) {
     case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-primary-500" />
     case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-error-500" />
     case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-orange-500" />
-    default: return <Clock className="w-5 h-5 text-blue-500" />
+    default: return <Clock className="w-5 h-5 text-info-500" />
   }
 }
 

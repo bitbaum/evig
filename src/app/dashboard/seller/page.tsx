@@ -120,7 +120,7 @@ export default function SellerDashboard() {
       description: 'Alle Ihre Produkte verwalten',
       href: '/dashboard/listings',
       icon: Package,
-      color: 'bg-blue-500',
+      color: 'bg-info-500',
     },
     {
       title: 'Verkäufe',
@@ -216,7 +216,7 @@ export default function SellerDashboard() {
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalProducts}</p>
               <p className="text-sm text-primary-600">{stats.activeProducts} aktiv</p>
             </div>
-            <Package className="w-8 h-8 text-blue-600" />
+            <Package className="w-8 h-8 text-info-600" />
           </div>
         </div>
 
@@ -241,9 +241,9 @@ export default function SellerDashboard() {
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Produkt-Aufrufe</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-blue-600">{stats.totalFavorites} Favoriten</p>
+              <p className="text-sm text-info-600">{stats.totalFavorites} Favoriten</p>
             </div>
-            <Eye className="w-8 h-8 text-blue-600" />
+            <Eye className="w-8 h-8 text-info-600" />
           </div>
         </div>
 
@@ -366,16 +366,16 @@ export default function SellerDashboard() {
       </div>
 
       {/* Marketplace Info */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Package className="w-5 h-5 text-blue-600" />
+          <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Package className="w-5 h-5 text-info-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <h3 className="font-medium text-info-900 dark:text-info-200">
               RevampIT Marketplace
             </h3>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+            <p className="text-sm text-info-700 dark:text-info-300 mt-1">
               Als Seller können Sie Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
               Ihre Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,
               die Kreislaufwirtschaft zu fördern.
@@ -383,7 +383,7 @@ export default function SellerDashboard() {
             <div className="mt-3 flex gap-3">
               <Link
                 href="/marketplace"
-                className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+                className="text-sm bg-info-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
               >
                 Marketplace ansehen
               </Link>

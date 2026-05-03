@@ -37,14 +37,14 @@ export function DecisionOptionsEditor({
                 value={opt.label}
                 onChange={(e) => onUpdate(opt.id, 'label', e.target.value)}
                 placeholder={`Option ${i + 1}`}
-                className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
               />
               <input
                 type="text"
                 value={opt.description}
                 onChange={(e) => onUpdate(opt.id, 'description', e.target.value)}
                 placeholder="Beschreibung (optional)"
-                className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
               />
               <button
                 type="button"
@@ -62,7 +62,7 @@ export function DecisionOptionsEditor({
                   value={opt.imageUrl}
                   onChange={(e) => onUpdate(opt.id, 'imageUrl', e.target.value)}
                   placeholder="Bild-URL (https://...)"
-                  className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-xs focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
                 />
                 {opt.imageUrl && (
                    
@@ -81,7 +81,7 @@ export function DecisionOptionsEditor({
       <button
         type="button"
         onClick={onAdd}
-        className="mt-2 text-sm text-blue-600 hover:underline"
+        className="mt-2 text-sm text-info-600 hover:underline"
       >
         + Option hinzufügen
       </button>

@@ -214,10 +214,10 @@ function ErfassungContent() {
 
       {/* Intake cross-link banner */}
       {!form.isEditMode && (
-        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-sm">
-          <span className="text-blue-800">
+        <div className="flex items-center gap-3 bg-info-50 border border-info-200 rounded-lg px-4 py-3 text-sm">
+          <span className="text-info-800">
             Für Geräte-Eingang mit Checkliste und Spenden-Erfassung →{' '}
-            <Link href="/admin/intake" className="font-medium underline hover:text-blue-900">
+            <Link href="/admin/intake" className="font-medium underline hover:text-info-900">
               Geräte-Eingang verwenden
             </Link>
           </span>

@@ -112,7 +112,7 @@ export default function CustomerBookings() {
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-info-600" />
       </div>
     )
   }
@@ -135,7 +135,7 @@ export default function CustomerBookings() {
             </button>
             <Link
               href="/techniker"
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm md:text-base"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 text-sm md:text-base"
             >
               <Wrench className="h-4 w-4" />
               {t('newOrder')}
@@ -163,12 +163,12 @@ export default function CustomerBookings() {
           <button
             onClick={() => setActiveTab('active')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'active' ? 'bg-blue-100 text-blue-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
+              (activeTab === 'active' ? 'bg-info-100 text-info-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
           >
             <Clock className="h-4 w-4" />
             {t('tabActive')}
             {activeCount > 0 && (
-              <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
+              <span className="bg-info-500 text-white text-xs px-2 py-0.5 rounded-full">{activeCount}</span>
             )}
           </button>
           <button
@@ -186,13 +186,13 @@ export default function CustomerBookings() {
           {filteredAppointments.length === 0 ? (
             <EmptyState
               icon={Wrench}
-              iconBg="bg-blue-50 dark:bg-blue-900/20"
-              iconColor="text-blue-500 dark:text-blue-400"
+              iconBg="bg-info-50 dark:bg-info-900/20"
+              iconColor="text-info-500 dark:text-info-400"
               title={t('emptyTitle')}
               action={
                 <Link
                   href="/techniker"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-info-600 text-white rounded-lg hover:bg-info-700 font-medium transition-colors"
                 >
                   {t('findTechnician')}
                 </Link>
@@ -215,8 +215,8 @@ export default function CustomerBookings() {
                 </div>
 
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Wrench className="h-5 w-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-info-100 rounded-full flex items-center justify-center">
+                    <Wrench className="h-5 w-5 text-info-600" />
                   </div>
                   <div>
                     <Heading level={3} className="font-semibold text-neutral-900">{apt.business_name || apt.repairer_name}</Heading>

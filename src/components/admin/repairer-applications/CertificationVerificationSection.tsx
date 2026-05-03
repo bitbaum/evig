@@ -26,7 +26,7 @@ export function CertificationVerificationSection({
         <Heading level={4} className="text-neutral-900">Zertifizierungsverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
-          className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          className="text-sm text-info-600 hover:text-info-700 font-medium"
         >
           Zertifizierungen prüfen
         </button>
@@ -47,7 +47,7 @@ export function CertificationVerificationSection({
                             {cert.certificationTypeName || cert.customName}
                           </h6>
                           {cert.category && (
-                            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+                            <span className="px-2 py-1 bg-info-100 text-info-800 rounded-full text-xs">
                               {cert.category}
                             </span>
                           )}
@@ -91,7 +91,7 @@ export function CertificationVerificationSection({
                         </div>
 
                         {cert.adminNotes && (
-                          <div className="mt-2 p-2 bg-blue-50 rounded text-sm text-blue-800">
+                          <div className="mt-2 p-2 bg-info-50 rounded text-sm text-info-800">
                             <strong>Admin-Notiz:</strong> {cert.adminNotes}
                           </div>
                         )}

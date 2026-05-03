@@ -153,7 +153,7 @@ export function useWorkshopInstances() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case WORKSHOP_INSTANCE_STATUS.SCHEDULED:
-        return { label: 'Geplant', className: 'bg-blue-100 text-blue-800' }
+        return { label: 'Geplant', className: 'bg-info-100 text-info-800' }
       case WORKSHOP_INSTANCE_STATUS.CANCELLED:
         return { label: 'Abgesagt', className: 'bg-error-100 text-error-800' }
       case WORKSHOP_INSTANCE_STATUS.COMPLETED:

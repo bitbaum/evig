@@ -39,8 +39,8 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'Geräte erfasst',
       sublabel: MONTH_LABEL,
       icon: Monitor,
-      iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-      iconColor: 'text-blue-600 dark:text-blue-400',
+      iconBg: 'bg-info-100 dark:bg-info-900/30',
+      iconColor: 'text-info-600 dark:text-info-400',
       href: '/admin/erfassung',
     },
     {

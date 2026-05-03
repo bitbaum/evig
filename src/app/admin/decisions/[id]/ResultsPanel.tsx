@@ -108,8 +108,8 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
 
       {/* AI Outcome Narrative — Beschluss hero */}
       {aiOutcomeNarrative && (
-        <div className="mb-6 rounded-lg border-2 border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800 p-4">
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+        <div className="mb-6 rounded-lg border-2 border-info-200 bg-info-50 dark:bg-info-900/20 dark:border-info-800 p-4">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-info-600 dark:text-info-400">
             Beschluss
           </p>
           <p className="text-sm font-medium leading-relaxed text-neutral-900 dark:text-white">
@@ -177,7 +177,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               label={opt.label}
               value={opt.votes || 0}
               max={data.totalVotes || 0}
-              color={i === 0 ? 'bg-blue-500' : 'bg-blue-300'}
+              color={i === 0 ? 'bg-info-500' : 'bg-info-300'}
               imageUrl={opt.imageUrl}
               isWinner={i === 0}
             />
@@ -279,9 +279,9 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
 
       {/* Outcome Summary */}
       {outcomeSummary && (
-        <div className="mt-4 rounded-md bg-blue-50 p-3">
-          <p className="text-sm font-medium text-blue-700">Zusammenfassung</p>
-          <p className="mt-1 text-sm text-blue-600">{outcomeSummary}</p>
+        <div className="mt-4 rounded-md bg-info-50 p-3">
+          <p className="text-sm font-medium text-info-700">Zusammenfassung</p>
+          <p className="mt-1 text-sm text-info-600">{outcomeSummary}</p>
         </div>
       )}
     </div>

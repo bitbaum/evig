@@ -201,7 +201,7 @@ export default function EditRequestPage() {
     return (
       <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center gap-4">
         <p className="text-error-600">{error}</p>
-        <Link href={`/it-hilfe/${id}`} className="text-blue-600 hover:underline">
+        <Link href={`/it-hilfe/${id}`} className="text-info-600 hover:underline">
           {t('backToRequest')}
         </Link>
       </div>

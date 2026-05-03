@@ -70,8 +70,8 @@ export default function ContentPage() {
         </Link>
       </div>
 
-      <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
-        <p className="text-sm text-blue-700 dark:text-blue-300">
+      <div className="p-6 bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl">
+        <p className="text-sm text-info-700 dark:text-info-300">
           <strong>In Entwicklung:</strong> Die Inhaltsverwaltung wird mit dem AI-CMS verbunden.
         </p>
       </div>

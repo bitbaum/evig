@@ -153,7 +153,7 @@ export default async function AdminServicesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <Wrench className="w-8 h-8 text-blue-600" />
+            <Wrench className="w-8 h-8 text-info-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Gesamt Services</p>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalServices}</p>
@@ -257,7 +257,7 @@ export default async function AdminServicesPage() {
                           </span>
                         )}
                         {service.is_bookable && (
-                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                          <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300">
                             <Calendar className="w-3 h-3" />
                           </span>
                         )}
@@ -269,7 +269,7 @@ export default async function AdminServicesPage() {
                           <Link
                             href={`/services/${service.slug}`}
                             target="_blank"
-                            className="p-2.5 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded"
+                            className="p-2.5 text-info-600 hover:text-info-900 dark:text-info-400 dark:hover:text-info-300 hover:bg-info-50 dark:hover:bg-info-900/20 rounded"
                             title="Auf Website ansehen"
                           >
                             <Eye className="w-4 h-4" />
@@ -310,23 +310,23 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Wrench className="w-5 h-5 text-blue-600" />
+          <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Wrench className="w-5 h-5 text-info-600" />
           </div>
           <div>
-            <h3 className="font-medium text-blue-900 dark:text-blue-200">
+            <h3 className="font-medium text-info-900 dark:text-info-200">
               Dienstleistungs-Verwaltung
             </h3>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1 mb-3">
+            <p className="text-sm text-info-700 dark:text-info-300 mt-1 mb-3">
               Dienstleistungen sind die Kernkompetenz von RevampIT. Bieten Sie Reparaturen, Installationen,
               Beratungen und andere technische Services an. Kunden können online Termine buchen.
             </p>
             <div className="flex gap-3">
               <Link
                 href="/admin/services/new"
-                className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded hover:bg-blue-700 transition-colors"
+                className="text-sm bg-info-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
               >
                 Dienstleistung erstellen
               </Link>

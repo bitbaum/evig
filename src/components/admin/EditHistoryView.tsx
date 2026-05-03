@@ -72,7 +72,7 @@ function EditHistoryEntryView({
   );
 
   return (
-    <div className="border-l-2 border-blue-500 pl-4 py-2 bg-blue-50/30">
+    <div className="border-l-2 border-info-500 pl-4 py-2 bg-info-50/30">
       {/* Header: Editor name and timestamp */}
       <div className="flex items-center justify-between mb-2">
         <span className="font-medium text-neutral-900">{entry.editor_name}</span>
@@ -89,7 +89,7 @@ function EditHistoryEntryView({
 
       {/* Expandable details showing before/after values */}
       <details className="mt-2">
-        <summary className="text-xs text-blue-600 cursor-pointer hover:text-blue-700">
+        <summary className="text-xs text-info-600 cursor-pointer hover:text-info-700">
           Änderungen anzeigen
         </summary>
         <div className="mt-2 text-xs bg-white p-3 rounded border border-neutral-200">

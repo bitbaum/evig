@@ -193,8 +193,8 @@ export default async function SpacePage({ params }: SpacePageProps) {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <Clock className="w-6 h-6 text-blue-700" />
+              <div className="w-12 h-12 rounded-full bg-info-100 flex items-center justify-center">
+                <Clock className="w-6 h-6 text-info-700" />
               </div>
               <div>
                 <p className="font-semibold text-neutral-900">{t('currentLocation.hoursLabel')}</p>

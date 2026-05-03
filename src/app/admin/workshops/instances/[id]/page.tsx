@@ -104,7 +104,7 @@ export default function AdminWorkshopInstanceDetailPage({
       case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
         return <span className="px-2 py-1 text-xs font-medium bg-error-100 text-error-800 rounded-full">Abgesagt</span>
       case WORKSHOP_REGISTRATION_STATUS.ATTENDED:
-        return <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">Teilgenommen</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-info-100 text-info-800 rounded-full">Teilgenommen</span>
       case WORKSHOP_REGISTRATION_STATUS.NO_SHOW:
         return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">Nicht erschienen</span>
       default:
@@ -130,7 +130,7 @@ export default function AdminWorkshopInstanceDetailPage({
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-info-600" />
       </div>
     )
   }
@@ -177,7 +177,7 @@ export default function AdminWorkshopInstanceDetailPage({
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <GraduationCap className="w-8 h-8 text-blue-600" />
+                <GraduationCap className="w-8 h-8 text-info-600" />
                 <Heading level={1} className="text-2xl font-bold text-neutral-900">{instance.workshop_title}</Heading>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-neutral-600">
@@ -261,8 +261,8 @@ export default function AdminWorkshopInstanceDetailPage({
 
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <DollarSign className="w-5 h-5 text-blue-600" />
+              <div className="p-2 bg-info-100 rounded-lg">
+                <DollarSign className="w-5 h-5 text-info-600" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-neutral-900">
@@ -375,7 +375,7 @@ export default function AdminWorkshopInstanceDetailPage({
                             <>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.ATTENDED)}
-                                className="text-blue-600 hover:text-blue-800 text-sm"
+                                className="text-info-600 hover:text-info-800 text-sm"
                               >
                                 Teilgenommen
                               </button>

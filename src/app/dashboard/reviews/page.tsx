@@ -146,7 +146,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               </Heading>
               <StatusBadge status={review.status} />
               {review.isVerifiedPurchase && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 gap-1">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-info-100 text-info-800 gap-1">
                   <CheckCircle className="w-3 h-3" />
                   {t('verifiedPurchase')}
                 </span>
@@ -172,14 +172,14 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 <p className="text-neutral-700 mb-3 leading-relaxed">{review.content}</p>
 
                 {review.response && (
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <div className="mt-4 p-4 bg-info-50 rounded-lg">
                     <div className="flex items-center gap-2 mb-2">
-                      <MessageSquare className="w-4 h-4 text-blue-600" />
-                      <span className="text-sm font-medium text-blue-900">
+                      <MessageSquare className="w-4 h-4 text-info-600" />
+                      <span className="text-sm font-medium text-info-900">
                         {t('responseFrom', { name: review.response.responderName })}
                       </span>
                     </div>
-                    <p className="text-blue-800 text-sm">{review.response.content}</p>
+                    <p className="text-info-800 text-sm">{review.response.content}</p>
                   </div>
                 )}
               </>
@@ -192,7 +192,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               {canEdit(review.createdAt) && review.status === REVIEW_STATUS.PUBLISHED && (
                 <button
                   onClick={() => onEdit(review)}
-                  className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-info-100 text-info-700 rounded text-sm hover:bg-info-200 flex items-center gap-1"
                 >
                   <Edit3 className="w-3 h-3" />
                   {t('edit')}

@@ -115,7 +115,7 @@ export function EditSubmissionModal({
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={15}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500 font-mono text-sm"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -126,7 +126,7 @@ export function EditSubmissionModal({
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -137,7 +137,7 @@ export function EditSubmissionModal({
             <select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value || null)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             >
               <option value="">Keine Kategorie</option>
               {categories.map((cat) => (
@@ -158,7 +158,7 @@ export function EditSubmissionModal({
             type="text"
             value={tagsValue}
             onChange={(e) => handleTagsChange(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             placeholder="tag1, tag2, tag3"
           />
         );
@@ -169,7 +169,7 @@ export function EditSubmissionModal({
             type="text"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -228,7 +228,7 @@ export function EditSubmissionModal({
           </button>
           <button
             onClick={handleSave}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
             disabled={isSaving}
           >
             {isSaving ? (

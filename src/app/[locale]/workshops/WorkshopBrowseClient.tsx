@@ -301,7 +301,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         )}
 
         {/* Call to Action */}
-        <div className="mt-16 bg-gradient-to-r from-primary-600 to-blue-600 rounded-xl p-8 text-white text-center">
+        <div className="mt-16 bg-gradient-to-r from-primary-600 to-info-600 rounded-xl p-8 text-white text-center">
           <Sparkles className="w-12 h-12 mx-auto mb-4" />
           <Heading level={2} className="mb-4">
             {t('cta.title')}

@@ -122,7 +122,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           isFinalized ? 'bg-primary-100 text-primary-800' :
           protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'bg-yellow-100 text-yellow-800' :
           isDraft ? 'bg-neutral-100 text-neutral-800' :
-          'bg-blue-100 text-blue-800'
+          'bg-info-100 text-info-800'
         }`}>
           {isFinalized ? 'Abgeschlossen' :
            protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'Wird verarbeitet...' :
@@ -153,7 +153,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                   setAttendeeSearch('')
                   setEditingAttendees(true)
                 }}
-                className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800"
+                className="flex items-center gap-1 text-sm text-info-600 hover:text-info-800"
               >
                 <Pencil className="w-3.5 h-3.5" />
                 Teilnehmer bearbeiten
@@ -171,7 +171,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                   onClick={handleSaveAttendees}
                   disabled={savingAttendees}
                   size="sm"
-                  className="gap-1 bg-blue-600 hover:bg-blue-700"
+                  className="gap-1 bg-info-600 hover:bg-info-700"
                 >
                   {savingAttendees ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -195,7 +195,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                 value={attendeeSearch}
                 onChange={(e) => setAttendeeSearch(e.target.value)}
                 placeholder="Teilnehmer suchen..."
-                className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-info-500"
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto">
                 {filteredTeamMembersForEdit.map((member) => (
@@ -213,7 +213,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                             : [...prev, member.id]
                         )
                       }}
-                      className="rounded border-neutral-300 text-blue-600 focus:ring-blue-500"
+                      className="rounded border-neutral-300 text-info-600 focus:ring-info-500"
                     />
                     {member.name}
                   </label>

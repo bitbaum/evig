@@ -34,7 +34,7 @@ export function ProtocolDraftInput({
       </p>
 
       {inputMethod === 'audio' ? (
-        <label className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-sm text-info-600 hover:text-info-800 cursor-pointer">
           <Upload className="w-3.5 h-3.5" />
           Audiodatei wählen
           <input
@@ -48,7 +48,7 @@ export function ProtocolDraftInput({
         <>
           <div className="flex items-center justify-between">
             <label className="text-sm text-neutral-600">Transkript</label>
-            <label className="flex items-center gap-1.5 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+            <label className="flex items-center gap-1.5 text-sm text-info-600 hover:text-info-800 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
               .txt hochladen
               <input
@@ -65,7 +65,7 @@ export function ProtocolDraftInput({
             rows={10}
             maxLength={100000}
             placeholder="Transkript hier einfügen..."
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 font-mono text-sm"
           />
         </>
       )}
@@ -74,7 +74,7 @@ export function ProtocolDraftInput({
         <button
           onClick={onProcess}
           disabled={processing || (inputMethod === 'audio' ? !audioFile : transcript.length < 50)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50"
         >
           {processing ? (
             <>

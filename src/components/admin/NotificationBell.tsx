@@ -176,7 +176,7 @@ export function NotificationBell() {
                 <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
                 <button
                   onClick={() => void fetchNotifications()}
-                  className="text-xs text-blue-500 hover:text-blue-700 dark:hover:text-blue-400"
+                  className="text-xs text-info-500 hover:text-info-700 dark:hover:text-info-400"
                 >
                   Erneut versuchen
                 </button>
@@ -198,12 +198,12 @@ export function NotificationBell() {
                     key={n.id}
                     onClick={() => void markOneRead(n)}
                     className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors ${
-                      !n.is_read ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''
+                      !n.is_read ? 'bg-info-50/50 dark:bg-info-900/10' : ''
                     }`}
                   >
                     <div className="flex items-start gap-2">
                       {!n.is_read && (
-                        <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-blue-500" />
+                        <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-info-500" />
                       )}
                       <div className={!n.is_read ? '' : 'pl-4'}>
                         <p className={`text-sm leading-snug ${
@@ -221,7 +221,7 @@ export function NotificationBell() {
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (
-                            <span className="text-xs text-blue-500">Öffnen →</span>
+                            <span className="text-xs text-info-500">Öffnen →</span>
                           )}
                         </div>
                       </div>

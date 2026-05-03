@@ -31,7 +31,7 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
               onClick={() => onScrollToStep(step.id)}
               className={`rounded-lg border px-3 py-2 text-xs text-left transition-colors ${
                 isCurrent
-                  ? 'border-blue-300 bg-blue-50 text-blue-800'
+                  ? 'border-info-300 bg-info-50 text-info-800'
                   : isDone
                   ? 'border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100'
                   : 'border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100'

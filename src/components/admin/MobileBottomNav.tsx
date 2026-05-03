@@ -30,7 +30,7 @@ export function MobileBottomNav({ onMenuClick }: MobileBottomNavProps) {
             href={href}
             className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs transition-colors ${
               active
-                ? 'text-blue-600 dark:text-blue-400'
+                ? 'text-info-600 dark:text-info-400'
                 : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
             aria-current={active ? 'page' : undefined}

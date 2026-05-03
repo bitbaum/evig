@@ -21,7 +21,7 @@ const btnClass = (active: boolean, disabled = false) =>
     disabled
       ? 'text-neutral-300 dark:text-neutral-600 cursor-not-allowed'
       : active
-      ? 'bg-blue-600 text-white font-medium'
+      ? 'bg-info-600 text-white font-medium'
       : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'
   }`
 

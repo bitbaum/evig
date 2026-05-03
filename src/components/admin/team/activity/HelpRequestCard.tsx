@@ -88,13 +88,13 @@ export function HelpRequestCard({
           className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
             request.is_broadcast
               ? 'bg-yellow-100 dark:bg-yellow-900/30'
-              : 'bg-blue-100 dark:bg-blue-900/30'
+              : 'bg-info-100 dark:bg-info-900/30'
           }`}
         >
           {request.is_broadcast ? (
             <Users className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
           ) : (
-            <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <User className="w-5 h-5 text-info-600 dark:text-info-400" />
           )}
         </div>
 
@@ -174,7 +174,7 @@ export function HelpRequestCard({
             <button
               onClick={() => onTakeOn?.(request.id)}
               disabled={isTakingOn}
-              className="flex-1 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 hover:bg-blue-100 dark:hover:bg-blue-900/50 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex-1 px-3 py-2 text-sm text-info-600 dark:text-info-400 bg-info-50 dark:bg-info-900/30 hover:bg-info-100 dark:hover:bg-info-900/50 rounded-lg disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {isTakingOn ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

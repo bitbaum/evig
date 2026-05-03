@@ -37,7 +37,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                 <span
                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full font-medium ${
                     submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
-                      ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                      ? 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300'
                       : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
                   }`}
                 >
@@ -59,7 +59,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                     submission.status}
                 </span>
                 {submission.last_edited_at && (
-                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 rounded">
+                  <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300 rounded">
                     Von Admin bearbeitet
                   </span>
                 )}

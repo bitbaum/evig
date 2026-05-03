@@ -60,9 +60,9 @@ export function ProtocolActionItemsList({
 }: Props) {
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
-      <div id="protocol-step-tasks" className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <Heading level={3} className="text-sm text-blue-900 mb-1">Keine Aktionen erkannt</Heading>
-        <p className="text-sm text-blue-800">
+      <div id="protocol-step-tasks" className="bg-info-50 border border-info-200 rounded-lg p-4">
+        <Heading level={3} className="text-sm text-info-900 mb-1">Keine Aktionen erkannt</Heading>
+        <p className="text-sm text-info-800">
           Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
         </p>
       </div>
@@ -80,7 +80,7 @@ export function ProtocolActionItemsList({
           <button
             onClick={onCreateAllTasks}
             disabled={bulkCreatingTasks}
-            className="text-sm px-3 py-1.5 rounded-lg border border-blue-300 text-blue-700 hover:bg-blue-50 disabled:opacity-50"
+            className="text-sm px-3 py-1.5 rounded-lg border border-info-300 text-info-700 hover:bg-info-50 disabled:opacity-50"
           >
             {bulkCreatingTasks ? 'Erstellt...' : `Schritt 4: ${unlinkedTaskItems.length} Aufgaben erstellen`}
           </button>
@@ -144,7 +144,7 @@ export function ProtocolActionItemsList({
                     <button
                       onClick={() => onCreateTask(item)}
                       disabled={creatingTask === item.id}
-                      className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-800 disabled:opacity-50"
+                      className="flex items-center gap-1 text-sm text-info-600 hover:text-info-800 disabled:opacity-50"
                     >
                       {creatingTask === item.id ? (
                         <Loader2 className="w-4 h-4 animate-spin" />

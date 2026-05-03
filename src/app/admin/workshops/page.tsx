@@ -205,7 +205,7 @@ export default function AdminWorkshopsPage() {
       actions={
         <Link
           href="/admin/workshops/instances"
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
         >
           <Calendar className="w-4 h-4 mr-2" />
           Termine verwalten
@@ -267,14 +267,14 @@ export default function AdminWorkshopsPage() {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <GraduationCap className="w-5 h-5 text-blue-600" />
+                      <GraduationCap className="w-5 h-5 text-info-600" />
                       <Heading level={3} className="text-lg font-semibold text-neutral-900 truncate">
                         {proposal.title}
                       </Heading>
                       {statusIcon}
                       <span className="text-sm text-neutral-600">{statusLabel}</span>
                       {proposal.last_edited_at && (
-                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
+                        <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-info-100 text-info-800 rounded">
                           Von Admin bearbeitet
                         </span>
                       )}

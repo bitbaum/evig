@@ -30,7 +30,7 @@ export const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
 }
 
 export const EMPLOYMENT_TYPE_COLORS: Record<EmploymentType, string> = {
-  employee: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+  employee: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
   volunteer: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
   intern: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
   contractor: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',

@@ -18,7 +18,7 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
           <select
             value={filters.workshopId}
             onChange={(e) => setFilters(prev => ({ ...prev, workshopId: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
           >
             <option value="">Alle Workshops</option>
             {workshops.map(w => (
@@ -32,7 +32,7 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
           <select
             value={filters.status}
             onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
           >
             <option value="all">Alle</option>
             <option value={WORKSHOP_INSTANCE_STATUS.SCHEDULED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.SCHEDULED]}</option>

@@ -400,7 +400,7 @@ function StatCard({
   const tones: Record<string, string> = {
     yellow:
       'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800',
-    blue: 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+    blue: 'bg-info-50 dark:bg-info-900/20 text-info-800 dark:text-info-300 border-info-200 dark:border-info-800',
     orange:
       'bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800',
     red: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-300 border-error-200 dark:border-error-800',

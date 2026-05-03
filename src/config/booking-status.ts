@@ -45,7 +45,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.ACCEPTED]: {
     label: 'Angenommen',
-    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+    color: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
     description: 'Reparateur hat angenommen',
   },
   [BOOKING_STATUS.QUOTED]: {
@@ -65,7 +65,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.IN_PROGRESS]: {
     label: 'In Bearbeitung',
-    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+    color: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
     description: 'Wird repariert',
   },
   [BOOKING_STATUS.COMPLETED]: {
@@ -90,7 +90,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.CONFIRMED]: {
     label: 'Bestätigt',
-    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+    color: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
   },
 }
 
@@ -119,7 +119,7 @@ export const URGENCY_BADGES: Record<string, { label: string; color: string }> = 
   },
   normal: {
     label: 'Normal',
-    color: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+    color: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
   },
 }
 

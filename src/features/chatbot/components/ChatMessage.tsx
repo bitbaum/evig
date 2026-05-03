@@ -27,7 +27,7 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
       <div className={cn(
         "max-w-[85%] p-3 rounded-2xl shadow-sm",
         message.type === 'user'
-          ? "bg-gradient-to-r from-primary-600 to-blue-600 text-white rounded-br-md"
+          ? "bg-gradient-to-r from-primary-600 to-info-600 text-white rounded-br-md"
           : "bg-white text-neutral-800 rounded-bl-md border border-neutral-100"
       )}>
         <p className="text-sm leading-relaxed">{message.content}</p>
@@ -39,7 +39,7 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
               <button
                 key={idx}
                 onClick={() => onSuggestionClick(suggestion)}
-                className="flex items-center justify-between w-full text-left p-2.5 text-xs bg-gradient-to-r from-neutral-50 to-blue-50/30 hover:from-primary-50 hover:to-blue-50 rounded-lg border border-neutral-200/50 hover:border-primary-300/50 text-neutral-700 hover:text-neutral-900 transition-all duration-200 group"
+                className="flex items-center justify-between w-full text-left p-2.5 text-xs bg-gradient-to-r from-neutral-50 to-info-50/30 hover:from-primary-50 hover:to-info-50 rounded-lg border border-neutral-200/50 hover:border-primary-300/50 text-neutral-700 hover:text-neutral-900 transition-all duration-200 group"
               >
                 <div className="flex-1">
                   <div className="font-medium flex items-center">

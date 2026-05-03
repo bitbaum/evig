@@ -55,7 +55,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               placeholder="Titel suchen..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-info-500"
             />
           </div>
           <select
@@ -137,7 +137,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                       {post.is_published && post.published_at && new Date(post.published_at) <= new Date() ? (
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                          className="text-info-600 hover:text-info-900 dark:text-info-400 dark:hover:text-info-300"
                           target="_blank"
                           title="Artikel ansehen"
                         >

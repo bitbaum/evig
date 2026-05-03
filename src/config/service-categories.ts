@@ -36,16 +36,16 @@ export interface CategoryStyle {
  */
 export const CATEGORY_STYLES: Record<ServiceCategory, CategoryStyle> = {
   repair: {
-    primary: 'blue-600',
-    bgLight: 'blue-50',
-    bgDark: 'blue-900/20',
+    primary: 'info-600',
+    bgLight: 'info-50',
+    bgDark: 'info-900/20',
     textOnPrimary: 'white',
-    gradient: 'from-blue-600 to-blue-800',
+    gradient: 'from-info-600 to-info-800',
     badge: {
-      bg: 'bg-blue-100',
-      text: 'text-blue-800',
-      bgDark: 'dark:bg-blue-900/30',
-      textDark: 'dark:text-blue-300',
+      bg: 'bg-info-100',
+      text: 'text-info-800',
+      bgDark: 'dark:bg-info-900/30',
+      textDark: 'dark:text-info-300',
     },
   },
   data: {

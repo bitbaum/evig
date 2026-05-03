@@ -106,7 +106,7 @@ export function HelpRequestsPageClient({
             onClick={() => setShowFilters(!showFilters)}
             className={`p-2 rounded-lg ${
               hasActiveFilters
-                ? 'text-blue-600 bg-blue-50 dark:bg-blue-900/30'
+                ? 'text-info-600 bg-info-50 dark:bg-info-900/30'
                 : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
             }`}
             title="Filter"
@@ -244,7 +244,7 @@ export function HelpRequestsPageClient({
           {!hasActiveFilters && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-lg inline-flex items-center gap-2"
+              className="px-4 py-2 text-sm text-white bg-info-600 hover:bg-info-700 rounded-lg inline-flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Erste Anfrage erstellen

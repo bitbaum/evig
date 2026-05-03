@@ -40,7 +40,7 @@ export function TeamFilters({
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Name oder Position suchen..."
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -50,7 +50,7 @@ export function TeamFilters({
           <select
             value={department}
             onChange={(e) => onDepartmentChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Alle Abteilungen</option>
             {DEPARTMENT_OPTIONS.map((dept) => (
@@ -66,7 +66,7 @@ export function TeamFilters({
           <select
             value={employmentType}
             onChange={(e) => onEmploymentTypeChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Alle Typen</option>
             {EMPLOYMENT_TYPE_OPTIONS.map((type) => (
@@ -82,7 +82,7 @@ export function TeamFilters({
           <select
             value={isActive}
             onChange={(e) => onIsActiveChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="all">Alle Status</option>
             <option value="true">Aktiv</option>

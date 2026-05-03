@@ -132,7 +132,7 @@ export default async function AdminPagesPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <Globe className="w-8 h-8 text-blue-600" />
+            <Globe className="w-8 h-8 text-info-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Gesamt Seiten
@@ -233,7 +233,7 @@ export default async function AdminPagesPage() {
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/${page.slug}`}
-                          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                          className="text-info-600 hover:text-info-900 dark:text-info-400 dark:hover:text-info-300"
                           target="_blank"
                         >
                           <Eye className="w-4 h-4" />
@@ -304,16 +304,16 @@ export default async function AdminPagesPage() {
       )}
 
       {/* Info Banner */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
+      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Globe className="w-5 h-5 text-blue-600" />
+          <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Globe className="w-5 h-5 text-info-600" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-blue-900 dark:text-blue-200">
+            <Heading level={3} className="font-medium text-info-900 dark:text-info-200">
               Statische Seiten
             </Heading>
-            <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
+            <p className="text-sm text-info-700 dark:text-info-300 mt-1">
               Statische Seiten enthalten wichtige Informationen über Ihre
               Organisation. Diese erscheinen in der Navigation und im Footer der
               Website. Vergiss nicht, rechtlich erforderliche Seiten wie

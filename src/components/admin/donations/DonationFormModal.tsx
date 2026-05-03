@@ -72,7 +72,7 @@ export function DonationFormModal({
               onClick={() => onFormTypeChange(DONATION_TYPES.DEVICE)}
               className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 ${
                 formType === DONATION_TYPES.DEVICE
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-info-600 text-white'
                   : 'bg-neutral-100 text-neutral-700'
               }`}
             >

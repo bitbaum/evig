@@ -62,8 +62,8 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
             className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600"
           >
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                <option.icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center">
+                <option.icon className="w-5 h-5 text-info-600 dark:text-info-400" />
               </div>
             </div>
 
@@ -75,8 +75,8 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                 <button
                   type="button"
                   onClick={() => handleChange(option.id, !option.value)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-                    option.value ? 'bg-blue-600' : 'bg-neutral-200 dark:bg-neutral-600'
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-2 ${
+                    option.value ? 'bg-info-600' : 'bg-neutral-200 dark:bg-neutral-600'
                   }`}
                 >
                   <span

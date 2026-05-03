@@ -27,7 +27,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
           <span className="text-neutral-400">·</span>
           <span>{PROTOCOL_VISIBILITY_LABELS[values.visibility]}</span>
         </div>
-        <button onClick={onReset} className="text-sm text-blue-600 hover:text-blue-800">
+        <button onClick={onReset} className="text-sm text-info-600 hover:text-info-800">
           Ändern
         </button>
       </div>
@@ -51,7 +51,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
           required
           maxLength={200}
           placeholder="z.B. Teamsitzung 10. Februar 2026"
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
         />
       </div>
 
@@ -66,7 +66,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
           value={values.meeting_date}
           onChange={onChange}
           required
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
         />
       </div>
 
@@ -79,7 +79,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
           name="visibility"
           value={values.visibility}
           onChange={onChange}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
         >
           {Object.entries(PROTOCOL_VISIBILITY_LABELS).map(([key, label]) => (
             <option key={key} value={key}>{label}</option>

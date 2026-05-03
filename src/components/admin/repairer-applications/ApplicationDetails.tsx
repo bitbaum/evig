@@ -20,7 +20,7 @@ export function ApplicationDetails({ application }: Props) {
           <Heading level={4} className="text-neutral-900 mb-2">Dienstleistungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.servicesOffered.map((service, index) => (
-              <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
+              <span key={index} className="px-2 py-1 bg-info-100 text-info-800 rounded-full text-xs">
                 {service}
               </span>
             ))}
@@ -89,7 +89,7 @@ export function ApplicationDetails({ application }: Props) {
                   href={doc}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700"
+                  className="flex items-center gap-2 text-sm text-info-600 hover:text-info-700"
                 >
                   <FileText className="w-4 h-4" />
                   Dokument {index + 1}

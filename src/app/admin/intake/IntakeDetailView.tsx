@@ -93,7 +93,7 @@ export function IntakeDetailView({
         <div>
           <button
             onClick={onBack}
-            className="text-sm text-blue-600 hover:underline mb-2 flex items-center gap-1"
+            className="text-sm text-info-600 hover:underline mb-2 flex items-center gap-1"
           >
             ← Zurück zur Pipeline
           </button>

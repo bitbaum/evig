@@ -188,7 +188,7 @@ export default function DiscussionThread({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => startEdit(c)}
-                                className="p-2 text-neutral-500 hover:text-blue-600 rounded"
+                                className="p-2 text-neutral-500 hover:text-info-600 rounded"
                                 title="Bearbeiten"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
@@ -209,13 +209,13 @@ export default function DiscussionThread({
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
                               rows={2}
-                              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
                             />
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleEditSave(c.id)}
                                 disabled={editSaving || !editContent.trim()}
-                                className="flex items-center gap-1 rounded-md bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700 disabled:opacity-50"
+                                className="flex items-center gap-1 rounded-md bg-info-600 px-3 py-1 text-xs text-white hover:bg-info-700 disabled:opacity-50"
                               >
                                 <Check className="w-3 h-3" />
                                 Speichern
@@ -273,12 +273,12 @@ export default function DiscussionThread({
               onChange={(e) => setContent(e.target.value)}
               placeholder="Kommentar schreiben..."
               rows={2}
-              className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+              className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
             />
             <button
               type="submit"
               disabled={submitting || !content.trim()}
-              className="self-end rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+              className="self-end rounded-md bg-info-600 px-4 py-2 text-sm font-medium text-white hover:bg-info-700 disabled:opacity-50"
             >
               Senden
             </button>

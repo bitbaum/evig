@@ -268,7 +268,7 @@ export default function AdminReviewsPage() {
                       </Heading>
                       <AdminStatusBadge status={review.status} config={REVIEW_STATUS_CONFIG} />
                       {review.isVerifiedPurchase && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-100 text-info-800">
                           Verifizierter Kauf
                         </span>
                       )}
@@ -286,17 +286,17 @@ export default function AdminReviewsPage() {
                     <p className="text-neutral-700 text-sm leading-relaxed">{review.content}</p>
 
                     {review.response && (
-                      <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                      <div className="mt-4 p-4 bg-info-50 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
-                          <MessageSquare className="w-4 h-4 text-blue-600" />
-                          <span className="text-sm font-medium text-blue-900">
+                          <MessageSquare className="w-4 h-4 text-info-600" />
+                          <span className="text-sm font-medium text-info-900">
                             Antwort von {review.response.responderName}
                           </span>
-                          <span className="text-xs text-blue-600">
+                          <span className="text-xs text-info-600">
                             {formatDateShort(review.response.createdAt)}
                           </span>
                         </div>
-                        <p className="text-blue-800 text-sm">{review.response.content}</p>
+                        <p className="text-info-800 text-sm">{review.response.content}</p>
                       </div>
                     )}
                   </div>
@@ -397,7 +397,7 @@ export default function AdminReviewsPage() {
             onChange={(e) => setModerationReason(e.target.value)}
             placeholder="Bitte gib einen Grund an..."
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-neutral-400 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500 text-sm"
             autoFocus
           />
           <div className="flex justify-end gap-3">
@@ -410,7 +410,7 @@ export default function AdminReviewsPage() {
             <button
               onClick={handleModerate}
               disabled={!moderationReason.trim() || !!actionInProgress}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg text-sm font-medium hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {actionInProgress && <Loader2 className="w-4 h-4 animate-spin" />}
               Bestätigen

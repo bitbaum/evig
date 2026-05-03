@@ -18,7 +18,7 @@ export function buildQuickActions(
       label: 'Neuer Blogartikel',
       href: '/admin/content/blog/new',
       icon: FileText,
-      color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 hover:bg-blue-200 dark:hover:bg-blue-900/50',
+      color: 'bg-info-100 dark:bg-info-900/30 text-info-600 hover:bg-info-200 dark:hover:bg-info-900/50',
     })
   }
 

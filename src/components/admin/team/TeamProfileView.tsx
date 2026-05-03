@@ -80,7 +80,7 @@ export function TeamProfileView({
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
             profile.is_active
-              ? 'bg-gradient-to-r from-blue-500 to-purple-600'
+              ? 'bg-gradient-to-r from-info-500 to-purple-600'
               : 'bg-neutral-400'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
@@ -158,7 +158,7 @@ export function TeamProfileView({
             </div>
             <Link
               href="/admin/team/activity"
-              className="px-3 py-1.5 text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg"
+              className="px-3 py-1.5 text-sm text-info-600 dark:text-info-400 hover:bg-info-50 dark:hover:bg-info-900/30 rounded-lg"
             >
               Team-Aktivitäten ansehen
             </Link>
@@ -189,7 +189,7 @@ export function TeamProfileView({
                   {profile.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full"
+                      className="px-3 py-1 bg-info-100 dark:bg-info-900/30 text-info-700 dark:text-info-300 text-sm rounded-full"
                     >
                       {skill}
                     </span>
@@ -270,7 +270,7 @@ export function TeamProfileView({
           {/* Availability */}
           <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
             <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-blue-500" />
+              <Clock className="w-5 h-5 text-info-500" />
               Verfügbarkeit
             </Heading>
 

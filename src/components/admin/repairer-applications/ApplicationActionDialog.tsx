@@ -24,7 +24,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
   const needsReason = REASON_REQUIRED_TYPES.includes(dialog.type)
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border-2 border-blue-300 p-6">
+    <div className="bg-white rounded-lg shadow-lg border-2 border-info-300 p-6">
       <Heading level={3} className="text-lg text-neutral-900 mb-4">
         {DIALOG_TITLES[dialog.type]}
       </Heading>
@@ -38,7 +38,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
             value={dialog.reason}
             onChange={(e) => onDialogChange({ ...dialog, reason: e.target.value })}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 text-sm"
             autoFocus
           />
         </div>
@@ -53,7 +53,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
             type="date"
             value={dialog.expiresAt}
             onChange={(e) => onDialogChange({ ...dialog, expiresAt: e.target.value })}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 text-sm"
           />
         </div>
       )}
@@ -67,7 +67,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
           onChange={(e) => onDialogChange({ ...dialog, notes: e.target.value })}
           rows={2}
           placeholder="Optionale Notizen..."
-          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 text-sm"
         />
       </div>
 
@@ -75,7 +75,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
         <button
           onClick={onSubmit}
           disabled={needsReason && !dialog.reason.trim()}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2 bg-info-600 text-white rounded-lg text-sm font-medium hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Bestätigen
         </button>

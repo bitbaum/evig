@@ -68,7 +68,7 @@ export default async function DashboardDecisionsPage() {
               <Link
                 key={d.id}
                 href={`/dashboard/decisions/${d.id}`}
-                className="block rounded-lg border border-neutral-200 bg-white p-4 hover:border-blue-400 hover:shadow-sm transition-all"
+                className="block rounded-lg border border-neutral-200 bg-white p-4 hover:border-info-400 hover:shadow-sm transition-all"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
@@ -95,7 +95,7 @@ export default async function DashboardDecisionsPage() {
                           {t('voted')}
                         </span>
                       ) : (
-                        <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-700 font-medium">
+                        <span className="rounded-full bg-info-100 px-2 py-0.5 text-xs text-info-700 font-medium">
                           {t('votePending')}
                         </span>
                       )}

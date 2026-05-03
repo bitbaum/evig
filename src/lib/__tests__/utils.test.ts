@@ -35,7 +35,7 @@ describe('cn', () => {
   })
 
   it('deduplicates conflicting background classes', () => {
-    expect(cn('bg-error-500', 'bg-blue-500')).toBe('bg-blue-500')
+    expect(cn('bg-error-500', 'bg-info-500')).toBe('bg-info-500')
   })
 
   it('handles conditional classes (false/null/undefined filtered out)', () => {

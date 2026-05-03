@@ -167,7 +167,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
           {(filters.search || filters.type !== 'all' || filters.verified !== 'all') && (
             <button
               onClick={() => setFilters({ search: '', type: 'all', verified: 'all' })}
-              className="text-blue-600 hover:text-blue-700 text-sm"
+              className="text-info-600 hover:text-info-700 text-sm"
             >
               Filter zurücksetzen
             </button>

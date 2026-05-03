@@ -54,7 +54,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             className={cn(
               'w-full pl-12 pr-10 py-3 sm:py-4 rounded-xl border-2 border-neutral-200',
               'bg-white text-neutral-900 placeholder-neutral-400',
-              'focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100',
+              'focus:outline-none focus:border-info-400 focus:ring-2 focus:ring-info-100',
               'text-sm sm:text-base transition-colors'
             )}
           />
@@ -77,7 +77,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           className={cn(
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
-              ? 'bg-blue-600 text-white'
+              ? 'bg-info-600 text-white'
               : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
           )}
         >
@@ -90,7 +90,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             className={cn(
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
-                ? 'bg-blue-600 text-white'
+                ? 'bg-info-600 text-white'
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             )}
           >

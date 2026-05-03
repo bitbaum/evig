@@ -12,7 +12,7 @@ export function DonationStatsCards({ stats }: Props) {
         <div className="text-2xl font-bold text-neutral-900">{stats.total}</div>
         <div className="text-sm text-neutral-600">Total Spenden</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
+      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-info-500">
         <div className="text-2xl font-bold text-neutral-900">{stats.monetary}</div>
         <div className="text-sm text-neutral-600">Geldspenden</div>
       </div>

@@ -90,7 +90,7 @@ export default function BuildYourComputerPage() {
 
   const getConditionClass = (condition: string) => {
     if (condition === 'used') return 'bg-primary-100 text-primary-800'
-    if (condition === 'refurbished') return 'bg-blue-100 text-blue-800'
+    if (condition === 'refurbished') return 'bg-info-100 text-info-800'
     return 'bg-orange-100 text-orange-800'
   }
 
@@ -108,15 +108,15 @@ export default function BuildYourComputerPage() {
           <strong>{t('hero.strong')}</strong>
         </p>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-info-100 text-info-700 px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-info-100 text-info-700 px-4 py-2 rounded-full">
             <Globe className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-blue-100 text-blue-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-info-100 text-info-700 px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -303,7 +303,7 @@ export default function BuildYourComputerPage() {
                         {buildResult.sustainabilityScore}{t('buildTool.sustainableLabel')}
                       </div>
                       <div className="flex items-center">
-                        <TrendingUp className="w-4 h-4 text-blue-500 mr-1" />
+                        <TrendingUp className="w-4 h-4 text-info-500 mr-1" />
                         {buildResult.performance}{t('buildTool.performanceMatchLabel')}
                       </div>
                       <div className="flex items-center">
@@ -420,7 +420,7 @@ export default function BuildYourComputerPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-primary-50 to-blue-50 rounded-2xl p-8 md:p-12 text-center">
+            <div className="bg-gradient-to-br from-primary-50 to-info-50 rounded-2xl p-8 md:p-12 text-center">
               <div className="inline-flex items-center bg-primary-100 px-6 py-3 rounded-full mb-6">
                 <Award className="w-8 h-8 text-primary-600 mr-3" />
                 <span className="text-2xl font-bold text-primary-800">Revamped</span>

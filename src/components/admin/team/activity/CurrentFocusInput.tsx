@@ -61,7 +61,7 @@ export function CurrentFocusInput({
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <Target className="w-4 h-4 text-blue-500 flex-shrink-0" />
+        <Target className="w-4 h-4 text-info-500 flex-shrink-0" />
         {isEditing ? (
           <div className="flex items-center gap-2 flex-1">
             <input
@@ -70,7 +70,7 @@ export function CurrentFocusInput({
               onChange={(e) => setFocus(e.target.value)}
               placeholder="Woran arbeitest du?"
               maxLength={200}
-              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave()
@@ -110,7 +110,7 @@ export function CurrentFocusInput({
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
       <div className="flex items-center gap-2 mb-3">
-        <Target className="w-5 h-5 text-blue-500" />
+        <Target className="w-5 h-5 text-info-500" />
         <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktueller Fokus</Heading>
       </div>
 
@@ -131,7 +131,7 @@ export function CurrentFocusInput({
             }}
             placeholder="Woran arbeitest du gerade?"
             maxLength={200}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
             {focus.length}/200
@@ -163,7 +163,7 @@ export function CurrentFocusInput({
                 onClick={handleSave}
                 disabled={saving || !hasChanges}
                 size="sm"
-                className="gap-2 bg-blue-600 hover:bg-blue-700"
+                className="gap-2 bg-info-600 hover:bg-info-700"
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 Speichern

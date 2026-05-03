@@ -173,13 +173,13 @@ export default function DecisionEditFormClient({
                 onClick={() => setDecisionType(type)}
                 className={`rounded-lg border-2 p-3 text-left transition-all ${
                   selected
-                    ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-200'
+                    ? 'border-info-500 bg-info-50 ring-1 ring-info-200'
                     : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                    selected ? 'bg-blue-500 text-white' : 'bg-neutral-100 text-neutral-500'
+                    selected ? 'bg-info-500 text-white' : 'bg-neutral-100 text-neutral-500'
                   }`}>
                     {conf.icon}
                   </span>
@@ -187,7 +187,7 @@ export default function DecisionEditFormClient({
                 </div>
                 <p className="mt-1.5 text-xs text-neutral-500">{conf.description}</p>
                 {selected && (
-                  <p className="mt-1.5 rounded bg-blue-100 px-2 py-1 text-xs text-blue-700">
+                  <p className="mt-1.5 rounded bg-info-100 px-2 py-1 text-xs text-info-700">
                     {conf.mechanic}
                   </p>
                 )}
@@ -212,7 +212,7 @@ export default function DecisionEditFormClient({
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={200}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
         />
       </div>
 
@@ -230,7 +230,7 @@ export default function DecisionEditFormClient({
           onChange={(e) => setDescription(e.target.value)}
           required
           rows={3}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
         />
       </div>
 
@@ -248,7 +248,7 @@ export default function DecisionEditFormClient({
           value={background}
           onChange={(e) => setBackground(e.target.value)}
           rows={4}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
           placeholder="Begründung, Alternativen, Risiken — sichtbar für Abstimmungsberechtigte vor dem Abstimmen."
         />
       </div>
@@ -277,14 +277,14 @@ export default function DecisionEditFormClient({
                     value={opt.label}
                     onChange={(e) => updateOption(opt.id, 'label', e.target.value)}
                     placeholder={`Option ${i + 1}`}
-                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
                   />
                   <input
                     type="text"
                     value={opt.description}
                     onChange={(e) => updateOption(opt.id, 'description', e.target.value)}
                     placeholder="Beschreibung (optional)"
-                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
                   />
                   <button
                     type="button"
@@ -302,7 +302,7 @@ export default function DecisionEditFormClient({
                       value={opt.imageUrl}
                       onChange={(e) => updateOption(opt.id, 'imageUrl', e.target.value)}
                       placeholder="Bild-URL (https://...)"
-                      className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-xs focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
                     />
                     {opt.imageUrl && (
                       <img
@@ -320,7 +320,7 @@ export default function DecisionEditFormClient({
           <button
             type="button"
             onClick={addOption}
-            className="mt-2 text-sm text-blue-600 hover:underline"
+            className="mt-2 text-sm text-info-600 hover:underline"
           >
             + Option hinzufügen
           </button>
@@ -426,7 +426,7 @@ export default function DecisionEditFormClient({
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-lg bg-info-600 px-4 py-2 text-sm font-medium text-white hover:bg-info-700 disabled:opacity-50"
         >
           {submitting ? 'Wird gespeichert...' : 'Änderungen speichern'}
         </button>

@@ -154,7 +154,7 @@ export default async function KennzahlenPage() {
 
       {/* Year Context */}
       {latestYear && (
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-sm text-blue-700 dark:text-blue-300">
+        <div className="p-3 bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-lg text-sm text-info-700 dark:text-info-300">
           Finanzielle Kennzahlen für <strong>{latestYear}</strong>
           {previousYear && (
             <span> (Vergleich mit {previousYear})</span>
@@ -242,7 +242,7 @@ export default async function KennzahlenPage() {
               </div>
             </div>
             <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
-              <div className="font-medium text-blue-600">Berechnet</div>
+              <div className="font-medium text-info-600">Berechnet</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Abgeleitet aus anderen Metriken
               </div>

@@ -75,7 +75,7 @@ export function IntakeCreateForm({
               onClick={() => setFormData(f => ({ ...f, intake_tier: opt.value }))}
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
-                  ? 'border-blue-500 bg-blue-50'
+                  ? 'border-info-500 bg-info-50'
                   : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
@@ -346,7 +346,7 @@ export function IntakeCreateForm({
         <button
           onClick={onCreate}
           disabled={saving || !formData.hersteller || !formData.produktname}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
+          className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50 text-sm font-medium"
         >
           {saving ? 'Speichern...' : 'Gerät erfassen'}
         </button>

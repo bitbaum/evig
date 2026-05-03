@@ -54,7 +54,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 type="button"
                 onClick={(e) => onSubmit(e, 'erfassen')}
                 disabled={isLoading}
-                variant="primary" className="gap-2 px-5 py-3 disabled:bg-blue-400"
+                variant="primary" className="gap-2 px-5 py-3 disabled:bg-info-400"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -121,7 +121,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               type="button"
               onClick={(e) => onSubmit(e, 'erfassen')}
               disabled={isLoading}
-              variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-blue-400"
+              variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-info-400"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

@@ -89,7 +89,7 @@ export async function AlternativeDetail({ alternative, locale }: AlternativeDeta
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-neutral-900">{app.name}</span>
                             <ArrowRight className="w-4 h-4 text-neutral-400" />
-                            <span className="font-semibold text-blue-700">{alternative.name}</span>
+                            <span className="font-semibold text-info-700">{alternative.name}</span>
                           </div>
                           <MigrationDifficultyBadge difficulty={r.migrationDifficulty} />
                         </div>
@@ -109,7 +109,7 @@ export async function AlternativeDetail({ alternative, locale }: AlternativeDeta
                             <ul className="space-y-1">
                               {r.migrationTips.map((tip, i) => (
                                 <li key={i} className="flex items-start gap-2 text-sm text-neutral-600">
-                                  <span className="text-blue-500 mt-0.5">•</span>
+                                  <span className="text-info-500 mt-0.5">•</span>
                                   {tip}
                                 </li>
                               ))}
@@ -165,8 +165,8 @@ export async function AlternativeDetail({ alternative, locale }: AlternativeDeta
                   rel="noopener noreferrer"
                   className={cn(
                     'flex items-center gap-3 px-4 py-3 rounded-lg',
-                    'bg-blue-600 text-white font-medium text-sm',
-                    'hover:bg-blue-700 transition-colors'
+                    'bg-info-600 text-white font-medium text-sm',
+                    'hover:bg-info-700 transition-colors'
                   )}
                 >
                   <ExternalLink className="w-4 h-4" />

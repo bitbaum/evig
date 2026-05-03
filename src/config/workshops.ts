@@ -74,7 +74,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Vintage-Restauration.",
     icon: HardDrive,
-    color: "bg-blue-500",
+    color: "bg-info-500",
   },
   {
     id: "development",
@@ -146,7 +146,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "intermediate",
     name: "Fortgeschrittene",
-    badgeClass: "bg-blue-100 text-blue-800",
+    badgeClass: "bg-info-100 text-info-800",
   },
   {
     id: "advanced",

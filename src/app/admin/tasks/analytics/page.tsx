@@ -131,7 +131,7 @@ async function getRecentCompletions(): Promise<RecentCompletion[]> {
 
 function getProgressBarColor(index: number): string {
   const colors = [
-    'bg-blue-500',
+    'bg-info-500',
     'bg-primary-500',
     'bg-purple-500',
     'bg-orange-500',
@@ -213,8 +213,8 @@ export default async function TaskAnalyticsPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <CheckCircle2 className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
+              <CheckCircle2 className="w-5 h-5 text-info-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">{stats.total_tasks}</p>

@@ -33,8 +33,8 @@ export function CameraCapture({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Camera className="w-8 h-8 text-blue-600" />
+        <div className="w-16 h-16 bg-info-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Camera className="w-8 h-8 text-info-600" />
         </div>
         <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
           {t('title')}
@@ -92,7 +92,7 @@ function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePho
       <div className="flex gap-3">
         <button
           onClick={onCapture}
-          className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+          className="flex-1 bg-info-600 text-white py-3 px-6 rounded-lg hover:bg-info-700 transition-colors font-medium flex items-center justify-center gap-2"
         >
           <Camera className="w-5 h-5" />
           {labelTakePhoto}
@@ -123,9 +123,9 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <button
         onClick={onStartCamera}
-        className="p-6 border-2 border-dashed border-blue-300 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors text-center"
+        className="p-6 border-2 border-dashed border-info-300 rounded-lg hover:border-info-400 hover:bg-info-50 transition-colors text-center"
       >
-        <Camera className="w-12 h-12 text-blue-600 mx-auto mb-3" />
+        <Camera className="w-12 h-12 text-info-600 mx-auto mb-3" />
         <div className="font-medium text-neutral-900">{labelOpenCamera}</div>
         <div className="text-sm text-neutral-600 mt-1">{labelLivePhoto}</div>
       </button>

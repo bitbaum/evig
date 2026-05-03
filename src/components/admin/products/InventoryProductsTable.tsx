@@ -200,7 +200,7 @@ export function InventoryProductsTable({
                     )}
                     <Link
                       href={`/admin/products/${product.id}/factsheet`}
-                      className="p-1 text-blue-500 hover:text-blue-700"
+                      className="p-1 text-info-500 hover:text-info-700"
                       title="Factsheet drucken"
                     >
                       <Printer className="w-4 h-4" />

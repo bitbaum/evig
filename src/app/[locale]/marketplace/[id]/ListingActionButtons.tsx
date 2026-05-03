@@ -104,7 +104,7 @@ export function ListingActionButtons({
                 <button
                   onClick={onSendMessage}
                   disabled={sendingMessage || !contactMessage.trim()}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-4 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  className="flex-1 flex items-center justify-center gap-2 bg-info-600 text-white py-3 px-4 min-h-[44px] rounded-lg font-semibold hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 >
                   {sendingMessage ? (
                     <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -133,7 +133,7 @@ export function ListingActionButtons({
                 }
                 onShowMessageForm(true)
               }}
-              className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              className="w-full flex items-center justify-center gap-2 bg-info-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-info-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
               <MessageSquare className="w-5 h-5" aria-hidden="true" />
               {t('contactSeller')}

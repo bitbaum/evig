@@ -19,10 +19,10 @@ export function ChatHeader({
   onClose
 }: ChatHeaderProps) {
   return (
-    <div className="flex items-center justify-between p-4 border-b border-neutral-100 bg-gradient-to-r from-primary-50 to-blue-50 rounded-t-2xl">
+    <div className="flex items-center justify-between p-4 border-b border-neutral-100 bg-gradient-to-r from-primary-50 to-info-50 rounded-t-2xl">
       <div className="flex items-center space-x-3">
         <div className="relative">
-          <div className="w-8 h-8 bg-gradient-to-r from-primary-600 to-blue-600 rounded-full flex items-center justify-center">
+          <div className="w-8 h-8 bg-gradient-to-r from-primary-600 to-info-600 rounded-full flex items-center justify-center">
             <Bot className="w-4 h-4 text-white" />
           </div>
           <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-primary-500 rounded-full border-2 border-white">

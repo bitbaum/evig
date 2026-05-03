@@ -41,9 +41,9 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         <div className="bg-neutral-50 rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
             {IconComponent ? (
-              <IconComponent className="w-6 h-6 text-blue-600" />
+              <IconComponent className="w-6 h-6 text-info-600" />
             ) : (
-              <CheckCircle className="w-6 h-6 text-blue-600" />
+              <CheckCircle className="w-6 h-6 text-info-600" />
             )}
             <span className="font-medium text-neutral-900">{suggestion.name}</span>
           </div>

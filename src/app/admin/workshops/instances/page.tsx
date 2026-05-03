@@ -18,7 +18,7 @@ export default function AdminWorkshopInstancesPage() {
   if (hook.loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-info-600" />
       </div>
     )
   }
@@ -49,7 +49,7 @@ export default function AdminWorkshopInstancesPage() {
               </Link>
               <button
                 onClick={() => hook.setShowCreateModal(true)}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Neuer Termin

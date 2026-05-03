@@ -30,7 +30,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
             type="text"
             value={formData.name}
             onChange={(e) => onFieldChange('name', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. Gemeinschaftszentrum Zürich-West"
             required
             aria-required="true"
@@ -55,11 +55,11 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
                 />
                 <div className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.type === type.id
-                    ? 'border-blue-500 bg-blue-50'
+                    ? 'border-info-500 bg-info-50'
                     : 'border-neutral-200 hover:border-neutral-300'
                 }`}>
                   <type.icon className={`w-6 h-6 mb-2 ${
-                    formData.type === type.id ? 'text-blue-600' : 'text-neutral-400'
+                    formData.type === type.id ? 'text-info-600' : 'text-neutral-400'
                   }`} />
                   <div className="font-medium text-neutral-900">{type.label}</div>
                   <div className="text-sm text-neutral-600">{type.description}</div>
@@ -77,7 +77,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
             value={formData.description}
             onChange={(e) => onFieldChange('description', e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="Beschreibe den Ort, seine Ausstattung und besondere Merkmale..."
           />
         </div>

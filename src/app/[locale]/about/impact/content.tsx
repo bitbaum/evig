@@ -152,7 +152,7 @@ export default function ImpactPageContent() {
   const getCategoryIcon = (category: ImpactMetric['category']) => {
     switch (category) {
       case 'environmental': return <Leaf className="h-5 w-5 text-primary-600" />
-      case 'social': return <Users className="h-5 w-5 text-blue-600" />
+      case 'social': return <Users className="h-5 w-5 text-info-600" />
       case 'economic': return <TrendingUp className="h-5 w-5 text-purple-600" />
     }
   }
@@ -160,7 +160,7 @@ export default function ImpactPageContent() {
   const getCategoryColor = (category: ImpactMetric['category']) => {
     switch (category) {
       case 'environmental': return 'bg-primary-50 border-primary-200'
-      case 'social': return 'bg-blue-50 border-blue-200'
+      case 'social': return 'bg-info-50 border-info-200'
       case 'economic': return 'bg-purple-50 border-purple-200'
     }
   }
@@ -281,15 +281,15 @@ export default function ImpactPageContent() {
                       <Heading level={4} className="mb-3">{t('social.title')}</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-info-600 mt-0.5 flex-shrink-0" />
                           <span>{t('social.internshipSuccess', { value: Math.round(socialSummary.internshipSuccessRate * 100) })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-info-600 mt-0.5 flex-shrink-0" />
                           <span>{t('social.careerReentries', { value: socialSummary.careerReentries })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-info-600 mt-0.5 flex-shrink-0" />
                           <span>{t('social.peopleHelped', { value: getDefaultValue('people_helped_total') })}</span>
                         </li>
                       </ul>

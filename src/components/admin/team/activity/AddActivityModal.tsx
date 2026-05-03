@@ -76,7 +76,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
             id="activity-type"
             value={updateType}
             onChange={(e) => setUpdateType(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             {ACTIVITY_UPDATE_TYPE_OPTIONS.map((type) => (
               <option key={type} value={type}>
@@ -102,7 +102,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'activity-modal-error' : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
         </div>
 
@@ -118,7 +118,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
             placeholder="Weitere Details (optional)"
             maxLength={2000}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent resize-none"
           />
         </div>
 
@@ -131,7 +131,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
             id="activity-category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Keine Kategorie</option>
             {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
@@ -151,7 +151,7 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
             id="activity-visibility"
             value={visibility}
             onChange={(e) => setVisibility(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             {VISIBILITY_OPTIONS.map((vis) => (
               <option key={vis} value={vis}>

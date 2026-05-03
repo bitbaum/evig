@@ -18,14 +18,14 @@ function AlternativeCardComponent({ alternative }: AlternativeCardProps) {
       href={`/services/open-source-solutions/${alternative.id}`}
       className={cn(
         'group block bg-white rounded-xl border-2 border-neutral-200',
-        'hover:border-blue-300 hover:shadow-lg transition-all duration-200',
+        'hover:border-info-300 hover:shadow-lg transition-all duration-200',
         'p-5 sm:p-6'
       )}
     >
       {/* Header: Name + Category */}
       <div className="flex items-start justify-between mb-3">
         <div className="min-w-0 flex-1">
-          <Heading level={3} className="text-lg font-bold text-neutral-900 group-hover:text-blue-700 transition-colors truncate">
+          <Heading level={3} className="text-lg font-bold text-neutral-900 group-hover:text-info-700 transition-colors truncate">
             {alternative.name}
           </Heading>
           {category && (

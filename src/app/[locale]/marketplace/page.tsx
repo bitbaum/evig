@@ -124,7 +124,7 @@ export default function MarketplacePage() {
           <button
             onClick={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.COMMUNITY); resetOffset(); }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY ? 'bg-blue-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+              filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY ? 'bg-info-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             }`}
             aria-pressed={filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY}
           >

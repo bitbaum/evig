@@ -69,7 +69,7 @@ function UserInfoCell({
   const avatarClass = userIsSuperAdmin
     ? 'bg-gradient-to-r from-purple-500 to-pink-600'
     : userIsStaff
-      ? 'bg-gradient-to-r from-blue-500 to-primary-600'
+      ? 'bg-gradient-to-r from-info-500 to-primary-600'
       : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
 
   const initials = user.name
@@ -117,7 +117,7 @@ function StatusCell({
           </span>
         )}
         {userIsStaff && !userIsSuperAdmin && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300">
             <Shield className="w-3 h-3" />
             Staff
           </span>
@@ -221,7 +221,7 @@ function ActionsCell({
       <div className="flex items-center gap-2">
         <button
           onClick={() => onEditProfile(user)}
-          className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+          className="text-info-600 hover:text-info-900 dark:text-info-400 dark:hover:text-info-300"
           title="Profil bearbeiten"
         >
           <Pencil className="w-4 h-4" />

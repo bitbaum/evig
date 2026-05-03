@@ -139,7 +139,7 @@ export default async function UserDetailPage({ params }: PageProps) {
             userIsSuperAdmin
               ? 'bg-gradient-to-r from-purple-500 to-pink-600'
               : userIsStaff
-                ? 'bg-gradient-to-r from-blue-500 to-primary-600'
+                ? 'bg-gradient-to-r from-info-500 to-primary-600'
                 : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
@@ -158,7 +158,7 @@ export default async function UserDetailPage({ params }: PageProps) {
                 </span>
               )}
               {userIsStaff && !userIsSuperAdmin && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300">
                   <Shield className="w-3 h-3" />
                   Staff
                 </span>
@@ -215,7 +215,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               </p>
               <Link
                 href={`/admin/team/${user.team_profile_id}`}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-info-600 hover:bg-info-700 text-white rounded-lg transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
                 Profil ansehen
@@ -251,7 +251,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               Super Admin - Voller Zugriff auf alle Bereiche
             </p>
           ) : hasFullAccess ? (
-            <p className="text-blue-600 dark:text-blue-400 font-medium">
+            <p className="text-info-600 dark:text-info-400 font-medium">
               Voller Zugriff auf alle Bereiche
             </p>
           ) : permissions.length > 0 ? (

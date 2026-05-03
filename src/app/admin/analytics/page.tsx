@@ -243,7 +243,7 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-blue-600" />
+            <Users className="w-8 h-8 text-info-600" />
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalUsers}</p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">Benutzer</p>
@@ -297,7 +297,7 @@ export default async function AnalyticsPage() {
           {stats.pendingApprovals > 0 && (
             <Link
               href="/admin/approvals"
-              className="text-xs text-blue-600 hover:underline mt-2 inline-block"
+              className="text-xs text-info-600 hover:underline mt-2 inline-block"
             >
               Freigaben anzeigen →
             </Link>
@@ -320,7 +320,7 @@ export default async function AnalyticsPage() {
                   <div className="flex items-center gap-3">
                     <div className="w-32 bg-neutral-100 dark:bg-neutral-700 rounded-full h-2">
                       <div
-                        className="h-2 rounded-full bg-blue-500"
+                        className="h-2 rounded-full bg-info-500"
                         style={{
                           width: `${Math.min(100, (item.count / Math.max(...userGrowth.map(g => g.count))) * 100)}%`,
                         }}
@@ -348,12 +348,12 @@ export default async function AnalyticsPage() {
               </div>
               <span className="text-lg font-bold text-primary-600">{activity.taskCompletionsThisWeek}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-info-50 dark:bg-info-900/20 rounded-lg">
               <div className="flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-blue-600" />
+                <ClipboardList className="w-5 h-5 text-info-600" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">Aufgaben erledigt (diesen Monat)</span>
               </div>
-              <span className="text-lg font-bold text-blue-600">{activity.taskCompletionsThisMonth}</span>
+              <span className="text-lg font-bold text-info-600">{activity.taskCompletionsThisMonth}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
               <div className="flex items-center gap-2">
@@ -377,7 +377,7 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-2 gap-4">
         <Link
           href="/admin/analyse/finanzen"
-          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-info-300 dark:hover:border-info-600 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -388,12 +388,12 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-neutral-500 dark:text-neutral-400">Detaillierte Finanz-Statistiken und Diagramme</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-blue-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-info-600 transition-colors" />
         </Link>
 
         <Link
           href="/admin/tasks/analytics"
-          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-info-300 dark:hover:border-info-600 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -404,15 +404,15 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-neutral-500 dark:text-neutral-400">Beiträge, Kategorien und Verlauf</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-blue-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-info-600 transition-colors" />
         </Link>
       </div>
 
-      <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl">
-        <p className="text-sm text-blue-700 dark:text-blue-300">
+      <div className="p-6 bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl">
+        <p className="text-sm text-info-700 dark:text-info-300">
           <strong>Hinweis:</strong> Die Statistiken werden in Echtzeit aus der Datenbank berechnet.
           Für detaillierte Finanz-Analytics, siehe{' '}
-          <Link href="/admin/analyse/finanzen" className="underline hover:text-blue-800">
+          <Link href="/admin/analyse/finanzen" className="underline hover:text-info-800">
             Finanzen-Analyse
           </Link>.
         </p>

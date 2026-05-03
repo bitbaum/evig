@@ -27,7 +27,7 @@ export function DocumentVerificationSection({
         <Heading level={4} className="text-neutral-900">Dokumentenverifizierung</Heading>
         <button
           onClick={() => onSelect(application)}
-          className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          className="text-sm text-info-600 hover:text-info-700 font-medium"
         >
           Dokumente prüfen
         </button>
@@ -65,7 +65,7 @@ export function DocumentVerificationSection({
                         href={doc.filePath}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-700 text-sm"
+                        className="text-info-600 hover:text-info-700 text-sm"
                       >
                         Anzeigen
                       </a>

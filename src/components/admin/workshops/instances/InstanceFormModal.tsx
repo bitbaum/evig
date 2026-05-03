@@ -52,7 +52,7 @@ export function InstanceFormModal({
             <select
               value={formData.workshopId}
               onChange={(e) => setFormData(prev => ({ ...prev, workshopId: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               disabled={!!editingInstance}
             >
               <option value="">Workshop auswählen...</option>
@@ -71,7 +71,7 @@ export function InstanceFormModal({
                 type="datetime-local"
                 value={formData.startDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
             </div>
 
@@ -83,7 +83,7 @@ export function InstanceFormModal({
                 type="datetime-local"
                 value={formData.endDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
             </div>
           </div>
@@ -97,7 +97,7 @@ export function InstanceFormModal({
               value={formData.location}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
               placeholder={`z.B. RevampIT, ${LOCATIONS.store.full}`}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
             />
           </div>
 
@@ -111,7 +111,7 @@ export function InstanceFormModal({
                 value={formData.instructor}
                 onChange={(e) => setFormData(prev => ({ ...prev, instructor: e.target.value }))}
                 placeholder="Name des Kursleiters"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
             </div>
 
@@ -124,7 +124,7 @@ export function InstanceFormModal({
                 value={formData.maxParticipants}
                 onChange={(e) => setFormData(prev => ({ ...prev, maxParticipants: e.target.value }))}
                 placeholder="Standard vom Workshop"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
             </div>
           </div>
@@ -136,7 +136,7 @@ export function InstanceFormModal({
             <select
               value={formData.status}
               onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
             >
               <option value="scheduled">Geplant</option>
               <option value="cancelled">Abgesagt</option>
@@ -153,7 +153,7 @@ export function InstanceFormModal({
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Interne Notizen..."
               rows={3}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
             />
           </div>
         </div>
@@ -168,7 +168,7 @@ export function InstanceFormModal({
           <button
             onClick={onSubmit}
             disabled={submitting || !formData.workshopId || !formData.startDate}
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {submitting ? (
               <>

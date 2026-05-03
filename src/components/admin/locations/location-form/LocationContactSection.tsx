@@ -26,7 +26,7 @@ export function LocationContactSection({ formData, onFieldChange }: Props) {
             type="text"
             value={formData.contact_name}
             onChange={(e) => onFieldChange('contact_name', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="Max Mustermann"
           />
         </div>
@@ -39,7 +39,7 @@ export function LocationContactSection({ formData, onFieldChange }: Props) {
             type="tel"
             value={formData.contact_phone}
             onChange={(e) => onFieldChange('contact_phone', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="+41 79 123 45 67"
           />
         </div>
@@ -52,7 +52,7 @@ export function LocationContactSection({ formData, onFieldChange }: Props) {
             type="email"
             value={formData.contact_email}
             onChange={(e) => onFieldChange('contact_email', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="kontakt@ort.ch"
           />
         </div>

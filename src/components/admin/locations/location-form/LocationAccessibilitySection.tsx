@@ -24,7 +24,7 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             id="wheelchair"
             checked={formData.accessibility_info.wheelchairAccessible}
             onChange={() => onAccessibilityChange('wheelchairAccessible', !formData.accessibility_info.wheelchairAccessible)}
-            className="mr-3 text-blue-600 focus:ring-blue-500"
+            className="mr-3 text-info-600 focus:ring-info-500"
           />
           <label htmlFor="wheelchair" className="text-sm font-medium text-neutral-700">
             Rollstuhlgerecht
@@ -37,7 +37,7 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             id="parking"
             checked={formData.accessibility_info.parkingAvailable}
             onChange={() => onAccessibilityChange('parkingAvailable', !formData.accessibility_info.parkingAvailable)}
-            className="mr-3 text-blue-600 focus:ring-blue-500"
+            className="mr-3 text-info-600 focus:ring-info-500"
           />
           <label htmlFor="parking" className="text-sm font-medium text-neutral-700">
             Parkplatz verfügbar
@@ -52,7 +52,7 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             type="text"
             value={formData.accessibility_info.publicTransport}
             onChange={(e) => onAccessibilityChange('publicTransport', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. 5 Min. zu Fuss zur Tramhaltestelle"
           />
         </div>
@@ -65,7 +65,7 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             value={formData.accessibility_info.additionalInfo}
             onChange={(e) => onAccessibilityChange('additionalInfo', e.target.value)}
             rows={2}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. Rampe vorhanden, Aufzug verfügbar, etc."
           />
         </div>

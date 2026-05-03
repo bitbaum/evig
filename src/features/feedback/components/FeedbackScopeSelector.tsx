@@ -74,7 +74,7 @@ export function FeedbackScopeSelector({
                   ? "bg-primary-100 border-primary-300 text-primary-800"
                   : scope.id === 'site'
                   ? "bg-purple-100 border-purple-300 text-purple-800"
-                  : "bg-blue-100 border-blue-300 text-blue-800"
+                  : "bg-info-100 border-info-300 text-info-800"
                 : "bg-white border-neutral-300 text-neutral-600 hover:bg-neutral-50"
             )}
           >
@@ -85,7 +85,7 @@ export function FeedbackScopeSelector({
       </div>
 
       {feedbackScope === 'element' && (
-        <div className="text-xs text-neutral-600 bg-blue-50 p-2 rounded">
+        <div className="text-xs text-neutral-600 bg-info-50 p-2 rounded">
           {isElementSelectionMode ? (
             <div className="flex items-center justify-between">
               <span>Element-Auswahl aktiv - klicken Sie auf Elemente</span>

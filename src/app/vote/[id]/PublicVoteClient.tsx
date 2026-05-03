@@ -172,8 +172,8 @@ export default function PublicVoteClient({
       />
 
       {/* Email identification */}
-      <div className="rounded-xl bg-blue-50 border border-blue-200 p-5">
-        <label className="block text-sm font-semibold text-blue-900 mb-2">
+      <div className="rounded-xl bg-info-50 border border-info-200 p-5">
+        <label className="block text-sm font-semibold text-info-900 mb-2">
           {t('emailLabel')}
         </label>
         <input
@@ -182,9 +182,9 @@ export default function PublicVoteClient({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full rounded-lg border border-info-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500"
         />
-        <p className="mt-1.5 text-xs text-blue-700">
+        <p className="mt-1.5 text-xs text-info-700">
           {t('emailHint')}
         </p>
       </div>

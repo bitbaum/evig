@@ -102,7 +102,7 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     name: 'Reparaturen',
     description: 'Hardware-Reparaturen und Ersatzteile',
     icon: Wrench,
-    color: 'bg-blue-500',
+    color: 'bg-info-500',
   },
   {
     id: 'setup',
@@ -235,7 +235,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
     icon: '💳',
     requiresAmount: true,
     multiplier: 0.5,
-    badgeClass: 'bg-blue-100 text-blue-700',
+    badgeClass: 'bg-info-100 text-info-700',
   },
   {
     id: 'normal',
@@ -278,7 +278,7 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     name: 'Laptop',
     description: 'Notebooks, MacBooks, Ultrabooks',
     icon: Laptop,
-    color: 'bg-blue-500',
+    color: 'bg-info-500',
     suggestedSkills: ['hardware_diagnosis', 'screen_repair', 'battery_replacement', 'keyboard_repair', 'ssd_upgrade', 'os_installation'],
     defaultTitle: 'Laptop-Hilfe benötigt',
     defaultDescription: 'Mein Laptop hat folgendes Problem:\n\n- \n\nMarke/Modell: \nAlter: ca. ',
@@ -399,7 +399,7 @@ export const URGENCY_VALUES = Object.values(URGENCY) as [UrgencyValue, ...Urgenc
 
 export const URGENCY_LEVELS: UrgencyLevel[] = [
   { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-neutral-100 text-neutral-700' },
-  { id: URGENCY.NORMAL, name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-blue-100 text-blue-700' },
+  { id: URGENCY.NORMAL, name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-info-100 text-info-700' },
   { id: URGENCY.HIGH, name: 'Hoch', description: 'Möglichst bald benötigt', badgeClass: 'bg-orange-100 text-orange-700' },
   { id: URGENCY.URGENT, name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-error-100 text-error-700' },
 ]
@@ -484,7 +484,7 @@ export function deriveBudgetType(amountCents: number | null | undefined): 'free'
 export const REQUEST_STATUSES: RequestStatus[] = [
   { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-primary-100 text-primary-700' },
   { id: REQUEST_STATUS.IN_DISCUSSION, name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-yellow-100 text-yellow-700' },
-  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-blue-100 text-blue-700' },
+  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-info-100 text-info-700' },
   { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-emerald-100 text-emerald-700' },
   { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]

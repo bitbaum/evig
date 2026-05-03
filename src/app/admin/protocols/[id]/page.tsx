@@ -107,8 +107,8 @@ export default async function ProtocolDetailPage({
           </Link>
           <div className="w-px h-6 bg-neutral-300" />
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <MeetingIcon className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
+              <MeetingIcon className="w-5 h-5 text-info-600" />
             </div>
             <div>
               <Heading level={1} className="text-2xl font-bold text-neutral-900">{protocol.title}</Heading>

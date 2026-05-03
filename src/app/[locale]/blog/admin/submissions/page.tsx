@@ -195,7 +195,7 @@ ${submission.content}
                         <span
                           className={`px-2 py-1 text-xs rounded-full font-medium ${
                             submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA
-                              ? 'bg-blue-100 text-blue-800'
+                              ? 'bg-info-100 text-info-800'
                               : 'bg-purple-100 text-purple-800'
                           }`}
                         >
@@ -297,7 +297,7 @@ ${submission.content}
                     </button>
                   </div>
 
-                  <p className="mt-4 text-xs text-neutral-500 bg-blue-50 border border-blue-200 rounded p-3">
+                  <p className="mt-4 text-xs text-neutral-500 bg-info-50 border border-info-200 rounded p-3">
                     💡 {t.rich('tipText', {
                       strong: (chunks) => <strong>{chunks}</strong>,
                       code: (chunks) => <code>{chunks}</code>,

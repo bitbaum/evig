@@ -42,13 +42,13 @@ export default async function WebDesignDevelopmentPage() {
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-info-600 text-white hover:bg-info-700 transition-colors"
           >
             {t('ctaStart')}
           </Link>
           <Link
             href="#services"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-blue-600 hover:bg-neutral-50 border-2 border-blue-600 transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-info-600 hover:bg-neutral-50 border-2 border-info-600 transition-colors"
           >
             {t('ctaDiscover')}
           </Link>

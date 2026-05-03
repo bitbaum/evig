@@ -29,7 +29,7 @@ export function HelpersTab({
       {stats && (
         <div className="grid grid-cols-3 gap-4">
           <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
-          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200" />
+          <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-info-50 dark:bg-info-900/20 border-info-200 dark:border-info-800 text-info-800 dark:text-info-200" />
           <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
         </div>
       )}
@@ -69,7 +69,7 @@ export function HelpersTab({
                   <div>
                     <span className="font-medium text-neutral-900 dark:text-white">{h.helper_name || h.helper_email}</span>
                     {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-purple-100 text-purple-700">Gratis</span>}
-                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-blue-100 text-blue-700">KulturLegi</span>}
+                    {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-info-100 text-info-700">KulturLegi</span>}
                   </div>
                 </td>
                 <td className="px-4 py-3">
@@ -89,7 +89,7 @@ export function HelpersTab({
                     ) : h.is_verified ? (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">Verifiziert</span>
                     ) : h.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">Aktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-info-100 text-info-700">Aktiv</span>
                     ) : (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">Inaktiv</span>
                     )}
@@ -122,7 +122,7 @@ export function HelpersTab({
                         className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
                         title="Reaktivieren"
                       >
-                        <UserCheck className="w-4 h-4 text-blue-500" />
+                        <UserCheck className="w-4 h-4 text-info-500" />
                       </button>
                     )}
                   </div>

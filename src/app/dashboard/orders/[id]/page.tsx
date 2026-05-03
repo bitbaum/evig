@@ -274,8 +274,8 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
           {/* Tracking info */}
           {order.shippingAddress?.tracking_number && (
-            <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
+            <div className="mt-4 p-3 bg-info-50 dark:bg-info-900/20 rounded-lg">
+              <p className="text-sm font-medium text-info-800 dark:text-info-300">
                 {t('trackingNumber', { number: order.shippingAddress.tracking_number })}
               </p>
               {order.shippingAddress.tracking_url && (
@@ -283,7 +283,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   href={order.shippingAddress.tracking_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mt-1"
+                  className="text-sm text-info-600 hover:text-info-700 flex items-center gap-1 mt-1"
                 >
                   {t('trackShipment')} <ExternalLink className="w-3 h-3" />
                 </a>

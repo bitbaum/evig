@@ -184,7 +184,7 @@ export default function TaskFormClient() {
             aria-describedby={error ? 'task-form-error' : undefined}
             maxLength={200}
             placeholder="z.B. Kaffeemaschine reinigen"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
         </div>
 
@@ -201,7 +201,7 @@ export default function TaskFormClient() {
             name="task_type"
             value={formData.task_type}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           >
             {Object.entries(TASK_TYPES).map(([key, value]) => (
               <option key={value} value={value}>
@@ -229,7 +229,7 @@ export default function TaskFormClient() {
             name="category"
             value={formData.category}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           >
             {Object.entries(TASK_CATEGORIES).map(([key, value]) => (
               <option key={value} value={value}>
@@ -252,7 +252,7 @@ export default function TaskFormClient() {
             name="priority"
             value={formData.priority}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           >
             {Object.entries(TASK_PRIORITIES).map(([key, value]) => (
               <option key={value} value={value}>
@@ -276,7 +276,7 @@ export default function TaskFormClient() {
               name="assigned_to"
               value={formData.assigned_to}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               <option value="">Nicht zugewiesen</option>
               {teamMembers.map((member) => (
@@ -304,7 +304,7 @@ export default function TaskFormClient() {
             rows={3}
             maxLength={2000}
             placeholder="Was ist diese Aufgabe?"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
         </div>
 
@@ -324,7 +324,7 @@ export default function TaskFormClient() {
             rows={5}
             maxLength={5000}
             placeholder="Schritt-für-Schritt Anleitung zur Erledigung..."
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
         </div>
 
@@ -344,7 +344,7 @@ export default function TaskFormClient() {
               value={formData.schedule_human}
               onChange={handleChange}
               placeholder="z.B. Jeden Montag, Täglich um 9 Uhr"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             />
           </div>
         )}
@@ -366,7 +366,7 @@ export default function TaskFormClient() {
             min={1}
             max={480}
             placeholder="z.B. 30"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
         </div>
 
@@ -384,7 +384,7 @@ export default function TaskFormClient() {
             name="due_date"
             value={formData.due_date}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
         </div>
 
@@ -403,7 +403,7 @@ export default function TaskFormClient() {
             value={formData.tags}
             onChange={handleChange}
             placeholder="Komma-getrennt, z.B. küche, hygiene, täglich"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
           <p className="mt-1 text-sm text-neutral-500">
             Mehrere Tags mit Komma trennen
@@ -422,7 +422,7 @@ export default function TaskFormClient() {
           <button
             type="submit"
             disabled={loading || !formData.title}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:opacity-50"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
