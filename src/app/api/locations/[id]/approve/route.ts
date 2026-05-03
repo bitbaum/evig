@@ -44,7 +44,7 @@ export async function POST(
       .where(eq(locations.id, locationId))
 
     if (!locationRow) {
-      return apiNotFound('Ort nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.LOCATION_NOT_FOUND)
     }
 
     // Valid status transitions

@@ -30,6 +30,8 @@ export const ERROR_MESSAGES = {
   APPLICATION_NOT_FOUND: 'Bewerbung nicht gefunden',
   WORKSHOP_NOT_FOUND: 'Workshop nicht gefunden',
   LOCATION_NOT_FOUND: 'Ort nicht gefunden',
+  REPAIRER_NOT_FOUND: 'Reparateur nicht gefunden',
+  REVIEW_NOT_FOUND: 'Bewertung nicht gefunden',
   LISTING_NOT_FOUND: 'Inserat nicht gefunden',
   REPORT_NOT_FOUND: 'Meldung nicht gefunden',
   IT_HILFE_REQUEST_NOT_FOUND: 'IT-Hilfe-Anfrage nicht gefunden',

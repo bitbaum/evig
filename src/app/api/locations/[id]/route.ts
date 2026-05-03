@@ -57,7 +57,7 @@ export async function GET(
       )
 
     if (locationRows.length === 0) {
-      return apiNotFound('Ort nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.LOCATION_NOT_FOUND)
     }
 
     const row = locationRows[0]
@@ -130,7 +130,7 @@ export async function PUT(
       .where(eq(locations.id, locationId))
 
     if (!locationRow) {
-      return apiNotFound('Ort nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.LOCATION_NOT_FOUND)
     }
 
     const isOwner = locationRow.createdBy === session.user.id
@@ -218,7 +218,7 @@ export async function DELETE(
       .where(eq(locations.id, locationId))
 
     if (!locationRow) {
-      return apiNotFound('Ort nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.LOCATION_NOT_FOUND)
     }
 
     const isOwner = locationRow.createdBy === session.user.id

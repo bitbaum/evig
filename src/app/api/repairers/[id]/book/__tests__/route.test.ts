@@ -113,7 +113,8 @@ jest.mock('@/lib/logger', () => ({
 }))
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
+  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error',
+    REPAIRER_NOT_FOUND: 'Reparateur nicht gefunden', },
 }))
 
 jest.mock('@/config/booking-status', () => ({

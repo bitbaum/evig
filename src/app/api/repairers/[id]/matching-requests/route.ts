@@ -36,7 +36,7 @@ export async function GET(
       ))
 
     if (!repairer) {
-      return apiNotFound('Reparateur nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_NOT_FOUND)
     }
 
     const limit = Math.min(

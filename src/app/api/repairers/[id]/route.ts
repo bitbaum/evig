@@ -66,7 +66,7 @@ export async function GET(
       ))
 
     if (!profile) {
-      return apiNotFound('Reparateur nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_NOT_FOUND)
     }
 
     // Get services offered by this repairer

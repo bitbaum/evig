@@ -137,7 +137,8 @@ jest.mock('@/lib/api/helpers', () => {
 })
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
+  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
+    REPAIRER_NOT_FOUND: 'Reparateur nicht gefunden', },
 }))
 
 jest.mock('@/lib/logger', () => ({

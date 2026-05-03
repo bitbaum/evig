@@ -115,7 +115,8 @@ jest.mock('@/lib/logger', () => ({
 }))
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Internal Server Error' },
+  ERROR_MESSAGES: { UNAUTHORIZED: 'Unauthorized', INTERNAL_SERVER_ERROR: 'Internal Server Error',
+    REVIEW_NOT_FOUND: 'Bewertung nicht gefunden', },
 }))
 
 jest.mock('@/lib/schemas', () => {

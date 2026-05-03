@@ -17,7 +17,7 @@ export const POST = withAdmin<{ id: string }>('services', async (request, sessio
       .where(eq(repairerProfiles.id, repairerId))
 
     if (!repairer) {
-      return apiNotFound('Reparateur nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_NOT_FOUND)
     }
 
     // Manually call the rating update function

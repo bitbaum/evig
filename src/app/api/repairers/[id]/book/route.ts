@@ -65,7 +65,7 @@ export const POST = withAuth<{ id: string }>(async (
       .where(eq(repairerProfiles.id, repairerId))
 
     if (repairerRows.length === 0) {
-      return apiNotFound('Reparateur nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_NOT_FOUND)
     }
 
     const repairer = repairerRows[0]

@@ -88,14 +88,14 @@ export async function GET(
       .where(eq(reviews.id, reviewId))
 
     if (rows.length === 0) {
-      return apiNotFound('Bewertung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REVIEW_NOT_FOUND)
     }
 
     const review = rows[0]
 
     // Non-published reviews require admin
     if (review.status !== REVIEW_STATUS.PUBLISHED && !isAdmin) {
-      return apiNotFound('Bewertung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REVIEW_NOT_FOUND)
     }
 
     // Get attachments
@@ -200,7 +200,7 @@ export const PUT = withAuth<{ id: string }>(async (
       .where(eq(reviews.id, reviewId))
 
     if (existingRows.length === 0) {
-      return apiNotFound('Bewertung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REVIEW_NOT_FOUND)
     }
 
     const review = existingRows[0]
@@ -268,7 +268,7 @@ export const DELETE = withAuth<{ id: string }>(async (
       .where(eq(reviews.id, reviewId))
 
     if (existingRows.length === 0) {
-      return apiNotFound('Bewertung nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REVIEW_NOT_FOUND)
     }
 
     const review = existingRows[0]

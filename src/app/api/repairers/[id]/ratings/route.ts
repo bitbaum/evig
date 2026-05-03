@@ -32,7 +32,7 @@ export async function GET(
       ))
 
     if (profileRows.length === 0) {
-      return apiNotFound('Reparateur nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_NOT_FOUND)
     }
 
     const profile = profileRows[0]

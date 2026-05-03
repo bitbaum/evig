@@ -49,7 +49,7 @@ export async function GET(
       .where(eq(repairerProfiles.id, id))
 
     if (!repairer) {
-      return apiNotFound('Reparateur nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.REPAIRER_NOT_FOUND)
     }
 
     if (!repairer.isActive || repairer.status !== REPAIRER_STATUS.ACTIVE) {
