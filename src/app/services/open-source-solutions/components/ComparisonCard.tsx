@@ -9,17 +9,10 @@
  */
 
 import React from 'react'
-import { FileCheck, FileX, LucideIcon } from 'lucide-react'
+import { FileCheck, FileX } from 'lucide-react'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
-
-interface ComparisonItem {
-  name: string
-  icon: LucideIcon
-  cost: string
-  comparisons: string[]
-  examples?: string[]
-}
+import type { ComparisonItem } from '../data'
 
 interface ComparisonCardProps {
   item: ComparisonItem

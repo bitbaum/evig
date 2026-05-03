@@ -7,6 +7,7 @@ import ServiceProcessSection from '@/components/services/ServiceProcess'
 import ServiceCTA from '@/components/services/ServiceCTA'
 import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
+import { ORG, ORG_IMAGES, LOCATIONS } from '@/config/org'
 
 /**
  * Generate static paths for all featured services
@@ -29,9 +30,10 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   // Special SEO metadata for data recovery
   if (slug === 'data-recovery-transfer') {
+    const city = LOCATIONS.store.city
     return {
-      title: 'Data Recovery & Transfer Services Zurich | RevampIT',
-      description: 'Professional data recovery and transfer services in Zurich. Recover data from old computers, transfer files between devices, access legacy media (floppy disks, ZIP drives, MO drives). Base fee CHF 30.',
+      title: `Data Recovery & Transfer Services ${city} | ${ORG.name}`,
+      description: `Professional data recovery and transfer services in ${city}. Recover data from old computers, transfer files between devices, access legacy media (floppy disks, ZIP drives, MO drives). Base fee CHF 30.`,
       keywords: [
         'data recovery zurich',
         'data transfer service',
@@ -45,10 +47,10 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
         'SCSI IDE data recovery'
       ],
       openGraph: {
-        title: 'Data Recovery & Transfer Services Zurich | RevampIT',
-        description: 'Professional data recovery and transfer services in Zurich. Recover data from old computers, transfer files between devices, access legacy media.',
+        title: `Data Recovery & Transfer Services ${city} | ${ORG.name}`,
+        description: `Professional data recovery and transfer services in ${city}. Recover data from old computers, transfer files between devices, access legacy media.`,
         type: 'website',
-        url: 'https://revampit.org/services/data-recovery-transfer',
+        url: `${ORG.website}/services/data-recovery-transfer`,
       },
     }
   }
@@ -87,12 +89,12 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               'description': 'Professional data recovery and transfer services for all types of storage media.',
               'provider': {
                 '@type': 'Organization',
-                'name': 'RevampIT',
-                'url': 'https://revampit.org',
-                'logo': 'https://revampit.org/logo.png',
+                'name': ORG.name,
+                'url': ORG.website,
+                'logo': `${ORG.website}${ORG_IMAGES.logo}`,
                 'address': {
                   '@type': 'PostalAddress',
-                  'addressLocality': 'Zurich',
+                  'addressLocality': LOCATIONS.store.city,
                   'addressRegion': 'ZH',
                   'addressCountry': 'CH'
                 }
@@ -105,7 +107,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               ],
               'areaServed': {
                 '@type': 'City',
-                'name': 'Zurich'
+                'name': LOCATIONS.store.city,
               },
               'hasOfferCatalog': {
                 '@type': 'OfferCatalog',
