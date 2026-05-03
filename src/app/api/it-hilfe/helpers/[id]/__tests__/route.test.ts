@@ -33,7 +33,7 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  helperProfiles: { userId: 'hp_userId', bio: 'hp_bio', isActive: 'hp_isActive', hourlyRateCents: 'hp_hourlyRateCents', acceptsGratis: 'hp_acceptsGratis', acceptsKulturlegi: 'hp_acceptsKulturlegi', serviceTypes: 'hp_serviceTypes', locationCity: 'hp_locationCity', locationCanton: 'hp_locationCanton', maxTravelKm: 'hp_maxTravelKm', isVerified: 'hp_isVerified', averageRating: 'hp_averageRating', totalHelpsCompleted: 'hp_totalHelpsCompleted', createdAt: 'hp_createdAt' },
+  repairerProfiles: { userId: 'rp_userId', description: 'rp_description', isActive: 'rp_isActive', profileTier: 'rp_profileTier', hourlyRateCents: 'rp_hourlyRateCents', acceptsGratis: 'rp_acceptsGratis', acceptsKulturlegi: 'rp_acceptsKulturlegi', serviceDeliveryTypes: 'rp_serviceDeliveryTypes', city: 'rp_city', canton: 'rp_canton', maxTravelKm: 'rp_maxTravelKm', isVerified: 'rp_isVerified', averageRating: 'rp_averageRating', totalJobsCompleted: 'rp_totalJobsCompleted', createdAt: 'rp_createdAt' },
   userSkills: { skillId: 'us_skillId', userId: 'us_userId' },
   users: { id: 'u_id', name: 'u_name' },
 }))

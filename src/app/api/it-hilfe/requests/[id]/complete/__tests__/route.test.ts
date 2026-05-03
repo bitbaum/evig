@@ -43,7 +43,7 @@ jest.mock('@/db', () => ({
 jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', status: 'ihr_status', title: 'ihr_title', matchedOfferId: 'ihr_matchedOfferId', completedAt: 'ihr_completedAt', completedBy: 'ihr_completedBy' },
   itHilfeOffers: { id: 'iho_id', helperId: 'iho_helperId', status: 'iho_status' },
-  helperProfiles: { id: 'hp_id', userId: 'hp_userId', totalHelpsCompleted: 'hp_totalHelpsCompleted' },
+  repairerProfiles: { id: 'rp_id', userId: 'rp_userId', totalJobsCompleted: 'rp_totalJobsCompleted' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
 }))
 

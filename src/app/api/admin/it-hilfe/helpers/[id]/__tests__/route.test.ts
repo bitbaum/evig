@@ -57,10 +57,9 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  helperProfiles: {
-    id: 'hp_id', isVerified: 'hp_isVerified', verifiedAt: 'hp_verifiedAt',
-    verifiedBy: 'hp_verifiedBy', suspendedAt: 'hp_suspendedAt', isActive: 'hp_isActive',
-    adminNotes: 'hp_adminNotes', updatedAt: 'hp_updatedAt',
+  repairerProfiles: {
+    id: 'rp_id', isVerified: 'rp_isVerified', verificationDate: 'rp_verificationDate',
+    status: 'rp_status', isActive: 'rp_isActive', updatedAt: 'rp_updatedAt',
   },
 }))
 

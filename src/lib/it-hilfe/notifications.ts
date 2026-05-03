@@ -8,8 +8,9 @@
  */
 
 import { db } from '@/db'
-import { helperProfiles, userSkills } from '@/db/schema/itHilfe'
+import { userSkills } from '@/db/schema/itHilfe'
 import { users } from '@/db/schema/auth'
+import { repairerProfiles } from '@/db/schema/services'
 import { eq, and, ne, sql, inArray } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
@@ -85,22 +86,23 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
     // Find active helpers with matching skills (excluding requester)
     db
       .select({
-        userId: helperProfiles.userId,
+        userId: repairerProfiles.userId,
         name: users.name,
         email: users.email,
         matchingSkills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} = ANY(${params.skillsNeeded}::text[]))`,
       })
-      .from(helperProfiles)
-      .innerJoin(users, eq(helperProfiles.userId, users.id))
-      .innerJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .from(repairerProfiles)
+      .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .innerJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(
         and(
-          eq(helperProfiles.isActive, true),
-          ne(helperProfiles.userId, params.requesterId),
+          eq(repairerProfiles.isActive, true),
+          eq(repairerProfiles.profileTier, 'community'),
+          ne(repairerProfiles.userId, params.requesterId),
           inArray(userSkills.skillId, params.skillsNeeded),
         )
       )
-      .groupBy(helperProfiles.userId, users.name, users.email)
+      .groupBy(repairerProfiles.userId, users.name, users.email)
       .then(helpersResult => {
         for (const helper of helpersResult) {
           const matchingSkillNames = (helper.matchingSkills || [])

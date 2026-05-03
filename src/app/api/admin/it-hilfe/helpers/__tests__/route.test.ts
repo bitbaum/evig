@@ -49,13 +49,13 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  helperProfiles: {
-    id: 'hp_id', userId: 'hp_userId', bio: 'hp_bio', hourlyRateCents: 'hp_rate',
-    acceptsGratis: 'hp_gratis', acceptsKulturlegi: 'hp_kulturlegi', serviceTypes: 'hp_services',
-    locationCity: 'hp_city', locationCanton: 'hp_canton', isActive: 'hp_isActive',
-    isVerified: 'hp_isVerified', verifiedAt: 'hp_verifiedAt', suspendedAt: 'hp_suspendedAt',
-    adminNotes: 'hp_adminNotes', totalHelpsCompleted: 'hp_totalHelps',
-    averageRating: 'hp_avgRating', createdAt: 'hp_createdAt',
+  repairerProfiles: {
+    id: 'rp_id', userId: 'rp_userId', description: 'rp_description', hourlyRateCents: 'rp_rate',
+    acceptsGratis: 'rp_gratis', acceptsKulturlegi: 'rp_kulturlegi', serviceDeliveryTypes: 'rp_services',
+    city: 'rp_city', canton: 'rp_canton', isActive: 'rp_isActive', profileTier: 'rp_profileTier',
+    isVerified: 'rp_isVerified', verificationDate: 'rp_verifiedAt', status: 'rp_status',
+    updatedAt: 'rp_updatedAt', totalJobsCompleted: 'rp_totalHelps',
+    averageRating: 'rp_avgRating', createdAt: 'rp_createdAt',
   },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
@@ -64,8 +64,7 @@ jest.mock('@/db/schema', () => ({
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
-  isNull: (col: unknown) => ({ __isNull: col }),
-  isNotNull: (col: unknown) => ({ __isNotNull: col }),
+  ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
   desc: (col: unknown) => ({ __desc: col }),
   sql: Object.assign(
     (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),

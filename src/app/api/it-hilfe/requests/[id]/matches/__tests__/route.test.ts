@@ -21,7 +21,7 @@ jest.mock('@/db', () => ({
 
 jest.mock('@/db/schema', () => ({
   itHilfeRequests: { id: 'ihr_id', requesterId: 'ihr_requesterId', categoryId: 'ihr_categoryId', skillsNeeded: 'ihr_skillsNeeded', canton: 'ihr_canton', budgetAmountCents: 'ihr_budgetAmountCents', budgetType: 'ihr_budgetType', budgetTier: 'ihr_budgetTier', serviceType: 'ihr_serviceType' },
-  helperProfiles: { id: 'hp_id', userId: 'hp_userId', isActive: 'hp_isActive', bio: 'hp_bio', hourlyRateCents: 'hp_hourlyRateCents', acceptsGratis: 'hp_acceptsGratis', acceptsKulturlegi: 'hp_acceptsKulturlegi', serviceTypes: 'hp_serviceTypes', locationCanton: 'hp_locationCanton', locationCity: 'hp_locationCity', averageRating: 'hp_averageRating', totalHelpsCompleted: 'hp_totalHelpsCompleted' },
+  repairerProfiles: { id: 'rp_id', userId: 'rp_userId', isActive: 'rp_isActive', profileTier: 'rp_profileTier', description: 'rp_description', hourlyRateCents: 'rp_hourlyRateCents', acceptsGratis: 'rp_acceptsGratis', acceptsKulturlegi: 'rp_acceptsKulturlegi', serviceDeliveryTypes: 'rp_serviceDeliveryTypes', canton: 'rp_canton', city: 'rp_city', averageRating: 'rp_averageRating', totalJobsCompleted: 'rp_totalJobsCompleted' },
   userSkills: { userId: 'us_userId', skillId: 'us_skillId' },
   users: { id: 'u_id', name: 'u_name' },
 }))

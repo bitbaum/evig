@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/db'
 import { eq, sql } from 'drizzle-orm'
-import { itHilfeRequests, itHilfeOffers, users, helperProfiles } from '@/db/schema'
+import { itHilfeRequests, itHilfeOffers, users, repairerProfiles } from '@/db/schema'
 import { withAuth, type ValidSession } from '@/lib/api/middleware'
 import {
   apiError,
@@ -96,9 +96,9 @@ export const POST = withAuth<{ id: string }>(async (
         .where(eq(itHilfeRequests.id, id))
 
       await tx
-        .update(helperProfiles)
-        .set({ totalHelpsCompleted: sql`${helperProfiles.totalHelpsCompleted} + 1` })
-        .where(eq(helperProfiles.userId, session.user.id))
+        .update(repairerProfiles)
+        .set({ totalJobsCompleted: sql`${repairerProfiles.totalJobsCompleted} + 1` })
+        .where(eq(repairerProfiles.userId, session.user.id))
     })
 
     logger.info('IT-Hilfe request marked completed by helper', {

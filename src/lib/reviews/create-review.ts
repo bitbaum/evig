@@ -7,7 +7,6 @@
 
 import { db } from '@/db'
 import { reviews } from '@/db/schema/reviews'
-import { helperProfiles } from '@/db/schema'
 import { sellerProfiles } from '@/db/schema/marketplace'
 import { eq, and, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'

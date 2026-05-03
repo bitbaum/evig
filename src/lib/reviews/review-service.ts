@@ -10,7 +10,7 @@
 import { db } from '@/db'
 import {
   repairerProfiles, listings, workshops, reviews,
-  itHilfeRequests, itHilfeOffers, helperProfiles, users,
+  itHilfeRequests, itHilfeOffers, users,
 } from '@/db/schema'
 import { eq, and, sql, getTableName } from 'drizzle-orm'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -105,9 +105,9 @@ export async function updateHelperAverageRating(targetId: string): Promise<void>
     const avgRating = (avgResult.rows as unknown as { avg_rating: string | null }[])[0]?.avg_rating
     if (avgRating) {
       await db
-        .update(helperProfiles)
+        .update(repairerProfiles)
         .set({ averageRating: String(parseFloat(avgRating)) })
-        .where(eq(helperProfiles.userId, helperId))
+        .where(eq(repairerProfiles.userId, helperId))
     }
   } catch (error) {
     logger.error('Error updating helper average rating', { error, targetId })

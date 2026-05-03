@@ -1,6 +1,6 @@
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { helperProfiles } from '@/db/schema'
+import { repairerProfiles } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -22,9 +22,9 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
 
     // Check helper exists
     const [existing] = await db
-      .select({ id: helperProfiles.id })
-      .from(helperProfiles)
-      .where(eq(helperProfiles.id, id))
+      .select({ id: repairerProfiles.id })
+      .from(repairerProfiles)
+      .where(eq(repairerProfiles.id, id))
 
     if (!existing) {
       return apiNotFound(ERROR_MESSAGES.HELPER_NOT_FOUND)
@@ -36,27 +36,24 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
       case 'verify':
         update = {
           isVerified: true,
-          verifiedAt: sql`NOW()`,
-          verifiedBy: session.user.id,
-          adminNotes: admin_notes || null,
+          verificationDate: sql`NOW()`,
+          status: 'active',
           updatedAt: sql`NOW()`,
         }
         break
 
       case 'suspend':
         update = {
-          suspendedAt: sql`NOW()`,
+          status: 'suspended',
           isActive: false,
-          adminNotes: admin_notes || null,
           updatedAt: sql`NOW()`,
         }
         break
 
       case 'reactivate':
         update = {
-          suspendedAt: null,
+          status: 'active',
           isActive: true,
-          adminNotes: admin_notes || null,
           updatedAt: sql`NOW()`,
         }
         break
@@ -66,9 +63,9 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
     }
 
     const [updated] = await db
-      .update(helperProfiles)
+      .update(repairerProfiles)
       .set(update)
-      .where(eq(helperProfiles.id, id))
+      .where(eq(repairerProfiles.id, id))
       .returning()
 
     logger.info('Admin performed helper action', {

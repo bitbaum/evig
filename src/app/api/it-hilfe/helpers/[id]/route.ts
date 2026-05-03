@@ -5,7 +5,8 @@
 
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { helperProfiles, userSkills, users } from '@/db/schema'
+import { repairerProfiles } from '@/db/schema'
+import { userSkills, users } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -27,44 +28,45 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Get helper profile with user info and skills
     const [helper] = await db
       .select({
-        userId: helperProfiles.userId,
+        userId: repairerProfiles.userId,
         name: users.name,
-        bio: helperProfiles.bio,
-        hourlyRateCents: helperProfiles.hourlyRateCents,
-        acceptsGratis: helperProfiles.acceptsGratis,
-        acceptsKulturlegi: helperProfiles.acceptsKulturlegi,
-        serviceTypes: helperProfiles.serviceTypes,
-        locationCity: helperProfiles.locationCity,
-        locationCanton: helperProfiles.locationCanton,
-        maxTravelKm: helperProfiles.maxTravelKm,
-        isVerified: helperProfiles.isVerified,
-        averageRating: helperProfiles.averageRating,
-        totalHelpsCompleted: helperProfiles.totalHelpsCompleted,
-        createdAt: helperProfiles.createdAt,
+        bio: repairerProfiles.description,
+        hourlyRateCents: repairerProfiles.hourlyRateCents,
+        acceptsGratis: repairerProfiles.acceptsGratis,
+        acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
+        serviceTypes: repairerProfiles.serviceDeliveryTypes,
+        locationCity: repairerProfiles.city,
+        locationCanton: repairerProfiles.canton,
+        maxTravelKm: repairerProfiles.maxTravelKm,
+        isVerified: repairerProfiles.isVerified,
+        averageRating: repairerProfiles.averageRating,
+        totalHelpsCompleted: repairerProfiles.totalJobsCompleted,
+        createdAt: repairerProfiles.createdAt,
         skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
       })
-      .from(helperProfiles)
-      .innerJoin(users, eq(helperProfiles.userId, users.id))
-      .leftJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .from(repairerProfiles)
+      .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(and(
-        eq(helperProfiles.userId, id),
-        eq(helperProfiles.isActive, true),
+        eq(repairerProfiles.userId, id),
+        eq(repairerProfiles.isActive, true),
+        eq(repairerProfiles.profileTier, 'community'),
       ))
       .groupBy(
-        helperProfiles.userId,
+        repairerProfiles.userId,
         users.name,
-        helperProfiles.bio,
-        helperProfiles.hourlyRateCents,
-        helperProfiles.acceptsGratis,
-        helperProfiles.acceptsKulturlegi,
-        helperProfiles.serviceTypes,
-        helperProfiles.locationCity,
-        helperProfiles.locationCanton,
-        helperProfiles.maxTravelKm,
-        helperProfiles.isVerified,
-        helperProfiles.averageRating,
-        helperProfiles.totalHelpsCompleted,
-        helperProfiles.createdAt,
+        repairerProfiles.description,
+        repairerProfiles.hourlyRateCents,
+        repairerProfiles.acceptsGratis,
+        repairerProfiles.acceptsKulturlegi,
+        repairerProfiles.serviceDeliveryTypes,
+        repairerProfiles.city,
+        repairerProfiles.canton,
+        repairerProfiles.maxTravelKm,
+        repairerProfiles.isVerified,
+        repairerProfiles.averageRating,
+        repairerProfiles.totalJobsCompleted,
+        repairerProfiles.createdAt,
       )
 
     if (!helper) {

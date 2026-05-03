@@ -2,7 +2,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import {
   users, userContentSubmissions, staffPermissionRequests,
-  serviceAppointments, helperProfiles, listings,
+  serviceAppointments, repairerProfiles, listings,
   tasks, decisions, itHilfeRequests, repairerApplications,
   inventoryItems, workshopRegistrations,
 } from '@/db/schema'
@@ -22,7 +22,7 @@ const usersTable = getTableName(users)
 const ucsTable = getTableName(userContentSubmissions)
 const sprTable = getTableName(staffPermissionRequests)
 const saTable = getTableName(serviceAppointments)
-const hpTable = getTableName(helperProfiles)
+const rpTable = getTableName(repairerProfiles)
 const blogTable = getTableName(blogPosts)
 const listingsTable = getTableName(listings)
 const blogSubTable = getTableName(blogSubmissions)
@@ -109,7 +109,7 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)} WHERE is_staff = true`),
-    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(hpTable)} WHERE is_active = true`),
+    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(rpTable)} WHERE is_active = true AND profile_tier = 'community'`),
 
     // Action items — count + oldest unresolved
     db.execute(sql`

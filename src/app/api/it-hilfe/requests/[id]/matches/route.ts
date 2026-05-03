@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
-import { itHilfeRequests, helperProfiles, userSkills, users } from '@/db/schema'
+import { itHilfeRequests, repairerProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, ne, sql } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -150,44 +150,45 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Find potential helpers with at least one matching skill
     const helpersResult = await db
       .select({
-        userId: helperProfiles.userId,
+        userId: repairerProfiles.userId,
         userName: users.name,
-        bio: helperProfiles.bio,
-        hourlyRateCents: helperProfiles.hourlyRateCents,
-        acceptsGratis: helperProfiles.acceptsGratis,
-        acceptsKulturlegi: helperProfiles.acceptsKulturlegi,
-        serviceTypes: helperProfiles.serviceTypes,
-        locationCanton: helperProfiles.locationCanton,
-        locationCity: helperProfiles.locationCity,
-        averageRating: helperProfiles.averageRating,
-        totalHelpsCompleted: helperProfiles.totalHelpsCompleted,
+        bio: repairerProfiles.description,
+        hourlyRateCents: repairerProfiles.hourlyRateCents,
+        acceptsGratis: repairerProfiles.acceptsGratis,
+        acceptsKulturlegi: repairerProfiles.acceptsKulturlegi,
+        serviceTypes: repairerProfiles.serviceDeliveryTypes,
+        locationCanton: repairerProfiles.canton,
+        locationCity: repairerProfiles.city,
+        averageRating: repairerProfiles.averageRating,
+        totalHelpsCompleted: repairerProfiles.totalJobsCompleted,
         skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
         skillCount: sql<number>`COUNT(${userSkills.skillId})`,
       })
-      .from(helperProfiles)
-      .innerJoin(users, eq(helperProfiles.userId, users.id))
-      .leftJoin(userSkills, eq(helperProfiles.userId, userSkills.userId))
+      .from(repairerProfiles)
+      .innerJoin(users, eq(repairerProfiles.userId, users.id))
+      .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
       .where(and(
-        eq(helperProfiles.isActive, true),
-        ne(helperProfiles.userId, requestData.requesterId),
+        eq(repairerProfiles.isActive, true),
+        eq(repairerProfiles.profileTier, 'community'),
+        ne(repairerProfiles.userId, requestData.requesterId),
         sql`EXISTS (
           SELECT 1 FROM ${userSkills} us2
-          WHERE us2.user_id = ${helperProfiles.userId}
+          WHERE us2.user_id = ${repairerProfiles.userId}
           AND us2.skill_id = ANY(${requestData.skillsNeeded || []}::text[])
         )`
       ))
       .groupBy(
-        helperProfiles.userId,
+        repairerProfiles.userId,
         users.name,
-        helperProfiles.bio,
-        helperProfiles.hourlyRateCents,
-        helperProfiles.acceptsGratis,
-        helperProfiles.acceptsKulturlegi,
-        helperProfiles.serviceTypes,
-        helperProfiles.locationCanton,
-        helperProfiles.locationCity,
-        helperProfiles.averageRating,
-        helperProfiles.totalHelpsCompleted,
+        repairerProfiles.description,
+        repairerProfiles.hourlyRateCents,
+        repairerProfiles.acceptsGratis,
+        repairerProfiles.acceptsKulturlegi,
+        repairerProfiles.serviceDeliveryTypes,
+        repairerProfiles.canton,
+        repairerProfiles.city,
+        repairerProfiles.averageRating,
+        repairerProfiles.totalJobsCompleted,
       )
 
     // Calculate match scores and sort

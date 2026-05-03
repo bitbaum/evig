@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { db } from '@/db'
-import { itHilfeRequests, helperProfiles, itHilfeOffers, users } from '@/db/schema'
+import { itHilfeRequests, repairerProfiles, itHilfeOffers, users } from '@/db/schema'
 import { alias } from 'drizzle-orm/pg-core'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
@@ -192,9 +192,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       if (status === REQUEST_STATUS.COMPLETED) {
         try {
           await db
-            .update(helperProfiles)
-            .set({ totalHelpsCompleted: sql`${helperProfiles.totalHelpsCompleted} + 1` })
-            .where(sql`${helperProfiles.userId} IN (
+            .update(repairerProfiles)
+            .set({ totalJobsCompleted: sql`${repairerProfiles.totalJobsCompleted} + 1` })
+            .where(sql`${repairerProfiles.userId} IN (
               SELECT o.helper_id FROM ${itHilfeOffers} o
               JOIN ${itHilfeRequests} r ON r.matched_offer_id = o.id
               WHERE r.id = ${id}
