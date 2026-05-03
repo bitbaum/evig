@@ -24,6 +24,7 @@ import {
   validateCreateHelpRequest,
   validateHelpRequestFilter,
 } from '@/lib/schemas/activity'
+import { getDbUserId } from '@/lib/api/task-helpers'
 
 const targetUser = alias(users, 'target_user')
 const resolverUser = alias(users, 'resolver_user')
@@ -136,15 +137,8 @@ export const POST = withAdmin('team', async (request, session) => {
 
     const data = validation.data
 
-    // Look up requester user ID from session email
-    const [requester] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.email, session.user.email.toLowerCase()))
-
-    if (!requester) {
-      return apiBadRequest('Benutzer nicht gefunden')
-    }
+    const userLookup = await getDbUserId(session)
+    if ('error' in userLookup) return userLookup.error
 
     // If targeted request, verify target user exists
     if (data.requested_user_id) {
@@ -162,7 +156,7 @@ export const POST = withAdmin('team', async (request, session) => {
     const [created] = await db
       .insert(helpRequests)
       .values({
-        requesterId: requester.id,
+        requesterId: userLookup.dbUserId,
         title: data.title,
         description: data.description || null,
         category: data.category || null,
@@ -173,7 +167,7 @@ export const POST = withAdmin('team', async (request, session) => {
 
     logger.info('Help request created', {
       requestId: created.id,
-      requesterId: requester.id,
+      requesterId: userLookup.dbUserId,
       urgency: data.urgency,
       isBroadcast: !data.requested_user_id,
       title: data.title.substring(0, 50),

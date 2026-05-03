@@ -23,6 +23,7 @@ import {
   validateCreateActivityUpdate,
   activityStreamFilterSchema,
 } from '@/lib/schemas/activity'
+import { getDbUserId } from '@/lib/api/task-helpers'
 
 /**
  * GET /api/admin/team/activity/updates
@@ -113,21 +114,14 @@ export const POST = withAdmin('team', async (request, session) => {
 
     const data = validation.data
 
-    // Look up user ID from session email
-    const [user] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.email, session.user.email.toLowerCase()))
-
-    if (!user) {
-      return apiBadRequest('Benutzer nicht gefunden')
-    }
+    const userLookup = await getDbUserId(session)
+    if ('error' in userLookup) return userLookup.error
 
     // Insert activity update
     const [created] = await db
       .insert(activityUpdates)
       .values({
-        userId: user.id,
+        userId: userLookup.dbUserId,
         updateType: data.update_type,
         title: data.title,
         description: data.description || null,
@@ -139,7 +133,7 @@ export const POST = withAdmin('team', async (request, session) => {
 
     logger.info('Activity update created', {
       updateId: created.id,
-      userId: user.id,
+      userId: userLookup.dbUserId,
       type: data.update_type,
       title: data.title.substring(0, 50),
     })

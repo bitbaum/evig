@@ -20,6 +20,7 @@ import {
 } from '@/lib/api/helpers'
 import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import { validateResolveHelpRequest } from '@/lib/schemas/activity'
+import { getDbUserId } from '@/lib/api/task-helpers'
 
 /**
  * POST /api/admin/team/help-requests/[id]/resolve
@@ -64,22 +65,15 @@ export const POST = withAdmin<{ id: string }>('team', async (request, session, c
       return apiBadRequest('Hilfsanfrage wurde abgebrochen')
     }
 
-    // Look up resolver user ID from session email
-    const [resolver] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.email, session.user.email.toLowerCase()))
-
-    if (!resolver) {
-      return apiBadRequest('Benutzer nicht gefunden')
-    }
+    const userLookup = await getDbUserId(session)
+    if ('error' in userLookup) return userLookup.error
 
     // Update request as resolved
     await db
       .update(helpRequests)
       .set({
         status: HELP_REQUEST_STATUS.RESOLVED,
-        resolvedBy: resolver.id,
+        resolvedBy: userLookup.dbUserId,
         resolvedAt: sql`NOW()`,
         resolutionNotes: resolution_notes || null,
         updatedAt: sql`NOW()`,

@@ -15,6 +15,7 @@ import { taskProjects, tasks, users } from '@/db/schema';
 import { eq, sql, and, not } from 'drizzle-orm';
 import { createProjectSchema } from '@/lib/schemas/tasks';
 import { PROJECT_STATUSES } from '@/config/tasks';
+import { getDbUserId } from '@/lib/api/task-helpers';
 import { logger } from '@/lib/logger';
 
 /**
@@ -90,16 +91,8 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
 
     const data = result.data;
 
-    // Look up the actual user ID from the database by email
-    // (Auth.js session ID may not match the database user ID)
-    const [userRow] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.email, session.user.email))
-
-    if (!userRow) {
-      return apiBadRequest('Benutzer nicht gefunden');
-    }
+    const userLookup = await getDbUserId(session);
+    if ('error' in userLookup) return userLookup.error;
 
     const [project] = await db
       .insert(taskProjects)
@@ -108,7 +101,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         description: data.description || undefined,
         status: data.status,
         targetDate: data.target_date || undefined,
-        createdBy: userRow.id,
+        createdBy: userLookup.dbUserId,
       })
       .returning()
 

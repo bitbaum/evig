@@ -40,6 +40,12 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }))
 
+const mockGetDbUserId = jest.fn()
+
+jest.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+}))
+
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
 const mockInnerJoin = jest.fn()
@@ -134,11 +140,12 @@ beforeEach(() => {
 
   mockValidateResolveHelpRequest.mockReturnValue({ success: true, data: { resolution_notes: 'Fixed it' } })
 
+  // getDbUserId default: user found
+  mockGetDbUserId.mockResolvedValue({ dbUserId: 'u-1' })
+
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
   mockInnerJoin.mockReturnValue({ where: mockWhere })
-  mockWhere
-    .mockResolvedValueOnce([MOCK_EXISTING])   // existence check
-    .mockResolvedValueOnce([{ id: 'u-1' }])   // resolver lookup
+  mockWhere.mockResolvedValueOnce([MOCK_EXISTING])   // existence check
 
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockResolvedValue(undefined)

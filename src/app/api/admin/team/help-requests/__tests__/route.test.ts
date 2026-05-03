@@ -40,6 +40,12 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }))
 
+const mockGetDbUserId = jest.fn()
+
+jest.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId.apply(null, args),
+}))
+
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
 const mockInnerJoin = jest.fn()
@@ -117,7 +123,7 @@ jest.mock('@/lib/logger', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { GET, POST } from '../route'
 
 // ---------------------------------------------------------------------------
@@ -155,6 +161,9 @@ beforeEach(() => {
 
   mockValidateHelpRequestFilter.mockReturnValue({ success: true, data: { limit: 50, offset: 0 } })
   mockValidateCreateHelpRequest.mockReturnValue({ success: true, data: VALID_POST_BODY })
+
+  // getDbUserId default: user found
+  mockGetDbUserId.mockResolvedValue({ dbUserId: 'u-1' })
 
   // GET chain: from → innerJoin → leftJoin(x2) → where → orderBy → limit → offset
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin })
@@ -223,9 +232,9 @@ describe('POST /api/admin/team/help-requests — validation', () => {
   })
 
   it('returns 400 when session user not found in DB', async () => {
-    // Override the GET chain to support .where() returning empty for user lookup
-    mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
-    mockWhere.mockResolvedValueOnce([])
+    mockGetDbUserId.mockResolvedValueOnce({
+      error: NextResponse.json({ success: false, error: 'Benutzer nicht gefunden' }, { status: 400 }),
+    })
     const response = await POST(makeRequest('POST', VALID_POST_BODY))
     expect(response.status).toBe(400)
   })
@@ -233,8 +242,6 @@ describe('POST /api/admin/team/help-requests — validation', () => {
 
 describe('POST /api/admin/team/help-requests — success', () => {
   it('returns 201 on success', async () => {
-    mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
-    mockWhere.mockResolvedValueOnce([{ id: 'u-1' }])
     const response = await POST(makeRequest('POST', VALID_POST_BODY))
     expect(response.status).toBe(201)
     const body = await response.json()
