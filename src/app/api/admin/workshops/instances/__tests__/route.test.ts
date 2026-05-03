@@ -81,6 +81,7 @@ jest.mock('@/config/workshops', () => ({
 }))
 
 jest.mock('@/config/org', () => ({
+  ORG: { name: 'Revamp-IT' },
   LOCATIONS: { store: { full: 'Bahnhofstrasse 1, Zürich' } },
 }))
 

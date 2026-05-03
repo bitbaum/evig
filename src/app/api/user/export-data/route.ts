@@ -9,6 +9,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { apiRateLimited, apiError } from '@/lib/api/helpers'
+import { ORG } from '@/config/org'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -129,7 +130,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
         legalBasis:
           'Schweizer Datenschutzgesetz (DSG) Art. 25, EU-DSGVO Art. 15 und Art. 20',
         note:
-          'Diese Datei enthält alle personenbezogenen Daten, die Revamp-IT zu deinem Konto gespeichert hat.',
+          `Diese Datei enthält alle personenbezogenen Daten, die ${ORG.name} zu deinem Konto gespeichert hat.`,
       },
       profile: profile[0] ?? null,
       listings,

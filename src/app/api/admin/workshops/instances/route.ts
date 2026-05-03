@@ -7,7 +7,7 @@ import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
-import { LOCATIONS } from '@/config/org'
+import { ORG, LOCATIONS } from '@/config/org'
 
 // GET /api/admin/workshops/instances - List all workshop instances
 export const GET = withAdmin('workshops-admin', async (request, session) => {
@@ -120,7 +120,7 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
         workshopId,
         startDate: new Date(startDate).toISOString(),
         endDate: endDate ? new Date(endDate).toISOString() : undefined,
-        location: location || `RevampIT, ${LOCATIONS.store.full}`,
+        location: location || `${ORG.name}, ${LOCATIONS.store.full}`,
         instructor: instructor || undefined,
         maxParticipants: maxParticipants || workshop.maxParticipants,
         notes: notes || undefined,

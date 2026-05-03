@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { IMPACT_METRICS, getEnvironmentalSummary, getSocialSummary, type ImpactMetric } from '@/data/impact-metrics'
 import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
+import { ORG } from '@/config/org'
 // Simple Badge component replacement
 const Badge = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
   <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${className}`}>
@@ -166,7 +167,7 @@ export default function ImpactPageContent() {
       {/* Hero Section */}
       <ResponsiveHero
         title="Unsere messbare Wirkung"
-        description="Entdecken Sie, wie RevampIT seit 2003 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam."
+        description={`Entdecken Sie, wie ${ORG.name} seit 2003 die Schweizer IT-Landschaft nachhaltig verändert – transparent, messbar und wirksam.`}
       />
 
       {/* Sub Navigation */}
@@ -294,7 +295,7 @@ export default function ImpactPageContent() {
                     <div className="bg-white p-6 rounded-lg">
                       <h5 className="font-semibold mb-3">Erfolgsgeschichten</h5>
                       <div className="space-y-3 text-sm">
-                        <p>"Dank RevampIT habe ich nach 3 Jahren Arbeitslosigkeit wieder Fuss gefasst in der IT-Branche."</p>
+                        <p>{`"Dank ${ORG.name} habe ich nach 3 Jahren Arbeitslosigkeit wieder Fuss gefasst in der IT-Branche."`}</p>
                         <p className="text-gray-500">- Sarah M., ehemalige Praktikantin</p>
                       </div>
                     </div>

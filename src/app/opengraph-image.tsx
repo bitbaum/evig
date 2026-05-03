@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import { ORG } from '@/config/org'
 
 export const runtime = 'edge'
-export const alt = 'Revamp-IT — Alte Hardware. Neues Leben.'
+export const alt = `${ORG.name} — ${ORG.motto}`
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 

@@ -10,6 +10,7 @@ import { db } from '@/db';
 import { listings, listingImages, marketplaceOrders, users } from '@/db/schema';
 import { eq, and, sql, desc, count } from 'drizzle-orm';
 import { COMMISSION_RATE, LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace';
+import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, CreateOrderSchema, OrdersQuerySchema } from '@/lib/schemas';
 import { createGateway } from '@/lib/payments/payrexx-client';
@@ -126,7 +127,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         amount: Math.round(totalChf * 100), // CHF Rappen
         currency: 'CHF',
         referenceId: orderId,
-        purpose: `RevampIT: ${listing.title}`,
+        purpose: `${ORG.name}: ${listing.title}`,
         successRedirectUrl: `${APP_URL}/marketplace/checkout/success?orderId=${orderId}`,
         failedRedirectUrl: `${APP_URL}/marketplace/checkout/${listing.id}?error=payment_failed`,
         cancelRedirectUrl: `${APP_URL}/marketplace/checkout/${listing.id}?error=cancelled`,

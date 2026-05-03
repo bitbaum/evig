@@ -7,6 +7,8 @@
  * Last updated: 2026-02-02
  */
 
+import { ORG } from '@/config/org'
+
 export interface MediaMention {
   id: string
   source: string
@@ -42,7 +44,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     date: '2014-09',
     type: 'feature',
     tier: 1,
-    description: 'Reportage über die Arbeit von RevampIT und wie wir 70 Tonnen Computer vor der Entsorgung gerettet haben.',
+    description: `Reportage über die Arbeit von ${ORG.name} und wie wir 70 Tonnen Computer vor der Entsorgung gerettet haben.`,
     quote: 'Computer halten locker 10 bis 15 Jahre.'
   },
   {
@@ -66,7 +68,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     date: '2013-09',
     type: 'article',
     tier: 1,
-    description: 'Kulturbeitrag über die Reparatur-Bewegung mit Erwähnung von RevampIT.'
+    description: `Kulturbeitrag über die Reparatur-Bewegung mit Erwähnung von ${ORG.name}.`
   },
   {
     id: 'beobachter',
@@ -127,7 +129,7 @@ export const MEDIA_COVERAGE: MediaMention[] = [
     id: 'kulturlegi',
     source: 'KulturLegi / Caritas Zürich',
     sourceShort: 'KulturLegi',
-    title: 'RevampIT Partner',
+    title: `${ORG.name} Partner`,
     url: 'https://www.kulturlegi.ch/en/all-of-switzerland/angebot-detail/angebot/revamp-it',
     date: '2024',
     type: 'partnership',

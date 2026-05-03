@@ -8,6 +8,7 @@
  */
 
 import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
+import { ORG } from '@/config/org'
 
 export interface AboutMetric {
   value: string
@@ -92,7 +93,7 @@ export const aboutConfig: AboutPageConfig = {
       cards: [
         {
           title: '10 Jahre sind das Minimum',
-          description: 'Bei RevampIT glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.',
+          description: `Bei ${ORG.name} glauben wir an das Motto "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!" Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar: Die Lebensdauer von IT-Geräten verlängern und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.`,
           features: [
             'Gemeinnütziger Verein seit 2003',
             'Nachhaltige IT-Lösungen für alle',
@@ -206,7 +207,7 @@ export const aboutConfig: AboutPageConfig = {
   ],
   image: {
     src: '/images/Article Pics/storefront.png',
-    alt: 'RevampIT Schaufenster mit Computern und Geräten'
+    alt: `${ORG.name} Schaufenster mit Computern und Geräten`
   },
   cta: {
     title: 'Werde Teil unserer Mission',

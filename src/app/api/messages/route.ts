@@ -5,6 +5,7 @@ import { eq, and, or, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { ORG } from '@/config/org'
 import { logger } from '@/lib/logger'
 import { validateBody, SendMessageSchema } from '@/lib/schemas'
 import { rateLimiters } from '@/lib/security/rate-limit'
@@ -116,7 +117,7 @@ export const POST = withAuth(async (
         sendCustomEmail(recipient.email, newMarketplaceMessage({
           recipientName: recipient.name || 'Nutzer',
           senderName: session.user.name || 'Jemand',
-          listingTitle: context_id ? 'deiner Anfrage' : 'RevampIT',
+          listingTitle: context_id ? 'deiner Anfrage' : ORG.name,
           messagePreview: preview,
           conversationUrl,
         })).catch(err => logger.error('Failed to send new message notification email', { err, conversationId: result.conversationId }))
