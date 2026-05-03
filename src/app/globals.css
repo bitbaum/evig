@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}
+
 /* Custom utilities for multi-column dropdowns */
 @layer utilities {
   /* Smooth dropdown animations */
@@ -52,16 +59,9 @@
   /* Fix text rendering issues */
   .fix-text-rendering {
     font-kerning: normal;
-    text-rendering: optimizeSpeed;
-    -webkit-font-smoothing: subpixel-antialiased;
-    -moz-osx-font-smoothing: auto;
-    letter-spacing: 0;
-    word-spacing: 0;
-    font-feature-settings: normal;
-    font-variant-ligatures: normal;
-    font-variant-caps: normal;
-    font-variant-numeric: normal;
-    font-variant-east-asian: normal;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* High contrast mode support */

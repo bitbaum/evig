@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
 import ConditionalMainLayout from "@/components/layout/ConditionalMainLayout";
 import { CSRF_SCRIPT } from "@/lib/auth/csrf";
 import { ORG } from "@/config/org";
 import "./globals.css";
 
-// Use system fonts to avoid build-time network fetches
-const interClassName = "";
+// Inter is downloaded at build time and served locally — no runtime network call
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" suppressHydrationWarning>
-      <body className={`${interClassName} fix-text-rendering`}>
+      <body className={`${inter.className} fix-text-rendering antialiased`}>
         <script dangerouslySetInnerHTML={{ __html: CSRF_SCRIPT }} />
         <Providers>
           <ConditionalMainLayout>
