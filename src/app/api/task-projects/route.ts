@@ -14,6 +14,7 @@ import { db } from '@/db';
 import { taskProjects, tasks, users } from '@/db/schema';
 import { eq, sql, and, not } from 'drizzle-orm';
 import { createProjectSchema } from '@/lib/schemas/tasks';
+import { PROJECT_STATUSES } from '@/config/tasks';
 import { logger } from '@/lib/logger';
 
 /**
@@ -53,11 +54,11 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
       .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(
         sql`CASE ${taskProjects.status}
-          WHEN 'active' THEN 0
-          WHEN 'planning' THEN 1
-          WHEN 'on_hold' THEN 2
-          WHEN 'completed' THEN 3
-          WHEN 'cancelled' THEN 4
+          WHEN ${PROJECT_STATUSES.ACTIVE} THEN 0
+          WHEN ${PROJECT_STATUSES.PLANNING} THEN 1
+          WHEN ${PROJECT_STATUSES.ON_HOLD} THEN 2
+          WHEN ${PROJECT_STATUSES.COMPLETED} THEN 3
+          WHEN ${PROJECT_STATUSES.CANCELLED} THEN 4
         END`,
         sql`${taskProjects.createdAt} DESC`
       )
