@@ -15,6 +15,7 @@ import { submitVote, getPublicDecision } from '@/lib/services/decisions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 type RouteParams = { params: Promise<{ id: string }> }
 
@@ -49,7 +50,7 @@ export async function GET(
       votingDeadline: decision.votingDeadline,
     })
   } catch (error) {
-    return apiError(error, 'Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
 
@@ -103,6 +104,6 @@ export async function POST(
     logger.info('Public vote submitted', { decisionId, userId })
     return apiSuccess(result.vote)
   } catch (error) {
-    return apiError(error, 'Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

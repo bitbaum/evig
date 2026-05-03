@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server'
 import { logger } from '@/lib/logger'
 import { apiSuccessCached, apiBadRequest, apiError } from '@/lib/api/helpers'
 import { getOrgNumbers, ORG_NUMBERS_DEFAULTS, type OrgNumberCategory } from '@/lib/org-numbers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 const VALID_CATEGORIES: OrgNumberCategory[] = ['impact', 'social', 'economic', 'operations']
 
@@ -45,6 +46,6 @@ export async function GET(request: NextRequest) {
       meta: { source: 'database', count: numbers.length }
     }, 300, 60)
   } catch (error) {
-    return apiError(error, 'Serverfehler')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }
