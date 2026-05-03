@@ -76,7 +76,10 @@ jest.mock('@/lib/api/helpers', () => {
   return {
     apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
-    apiNotFound: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 404 }),
+    apiNotFound: (msg: string) => {
+      const error = /nicht gefunden|not found/i.test(msg) ? msg : `${msg} nicht gefunden`
+      return NextResponse.json({ success: false, error }, { status: 404 })
+    },
   }
 })
 
@@ -191,7 +194,7 @@ describe('GET /api/shop/inventory/[id]', () => {
     const res = await GET(makeRequest(), makeContext())
     expect(res.status).toBe(404)
     const body = await res.json()
-    expect(body.error).toBe('Produkt nicht verfügbar')
+    expect(body.error).toBe('Produkt nicht gefunden')
   })
 
   it('returns 404 when product status is not approved', async () => {
