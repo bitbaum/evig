@@ -91,7 +91,7 @@ jest.mock('@/lib/logger', () => ({
 const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data }))
 
 jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody(...args),
+  validateBody: (schema: unknown, data: unknown) => mockValidateBody(schema, data),
   AppointmentActionSchema: {},
 }))
 

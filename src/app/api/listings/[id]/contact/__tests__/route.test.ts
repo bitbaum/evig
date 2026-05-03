@@ -148,7 +148,7 @@ beforeEach(() => {
   mockValidateBody.mockReturnValue({ success: true, data: { message: 'Ist das Gerät noch verfügbar?' } })
   mockSendMessageInConversation.mockResolvedValue({ conversationId: 'conv-1', messageId: 'msg-1' })
   // sendCustomEmail is fire-and-forget (.catch chained), must return a Promise
-  mockSendCustomEmail.mockResolvedValue(undefined)
+  mockSendCustomEmail.mockResolvedValue(undefined as never)
 
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
   mockInnerJoin.mockReturnValue({ where: mockWhere })

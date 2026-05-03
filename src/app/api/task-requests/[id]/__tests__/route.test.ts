@@ -53,7 +53,7 @@ jest.mock('@/lib/api/helpers', () => {
     apiError: (_err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string, errors?: unknown) =>
-      NextResponse.json({ success: false, error: msg, ...(errors && { errors }) }, { status: 400 }),
+      NextResponse.json({ success: false, error: msg, ...(errors ? { errors } : {}) }, { status: 400 }),
     apiNotFound: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 404 }),
   }
@@ -192,12 +192,10 @@ function makeContext(id = 'req-1') {
 }
 
 function makePatchRequest(id = 'req-1', body?: Record<string, unknown>) {
-  const opts: RequestInit = { method: 'PATCH' }
-  if (body !== undefined) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest(`http://localhost/api/task-requests/${id}`, opts)
+  return new NextRequest(`http://localhost/api/task-requests/${id}`, body !== undefined
+    ? { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: 'PATCH' }
+  )
 }
 
 // ---------------------------------------------------------------------------

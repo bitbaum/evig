@@ -194,7 +194,7 @@ beforeEach(() => {
   })
 
   // Re-setup payrexx-client mock after resetAllMocks clears implementations
-  mockRefundTransaction.mockResolvedValue({ id: 'payrexx-refund-1' })
+  mockRefundTransaction.mockResolvedValue({ id: 'payrexx-refund-1' } as never)
 })
 
 // ============================================================================

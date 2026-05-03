@@ -79,9 +79,9 @@ describe('getEnhancedSuggestion', () => {
 
   it('merges options into the result', () => {
     const result = getEnhancedSuggestion('shop', '/shop', 'de', {
-      category: 'products',
+      category: 'product',
     })
-    expect(result.category).toBe('products')
+    expect(result.category).toBe('product')
   })
 
   it('description comes from the template', () => {

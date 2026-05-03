@@ -139,12 +139,10 @@ const MOCK_IMPORT_RESULT = {
 const VALID_CONTENT = 'Task 1\nTask 2\nTask 3'
 
 function makeRequest(body?: Record<string, unknown>) {
-  const opts: RequestInit = { method: 'POST' }
-  if (body !== undefined) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/protocols/proto-1/import-tasks', opts)
+  return new NextRequest('http://localhost/api/protocols/proto-1/import-tasks', body !== undefined
+    ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: 'POST' }
+  )
 }
 
 function makeContext(id = 'proto-1') {

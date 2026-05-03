@@ -49,7 +49,7 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  workshopMaterials: { id: 'wm_id', workshopId: 'wm_workshopId', instanceId: 'wm_instanceId', title: 'wm_title', description: 'wm_desc', materialType: 'wm_type', url: 'wm_url', accessType: 'wm_accessType', instanceId: 'wm_instanceId', displayOrder: 'wm_displayOrder', isActive: 'wm_isActive', updatedAt: 'wm_updatedAt' },
+  workshopMaterials: { id: 'wm_id', workshopId: 'wm_workshopId', instanceId: 'wm_instanceId', title: 'wm_title', description: 'wm_desc', materialType: 'wm_type', url: 'wm_url', accessType: 'wm_accessType', displayOrder: 'wm_displayOrder', isActive: 'wm_isActive', updatedAt: 'wm_updatedAt' },
 }))
 
 jest.mock('drizzle-orm', () => ({

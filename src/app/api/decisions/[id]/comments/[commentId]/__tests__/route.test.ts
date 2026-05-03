@@ -118,12 +118,10 @@ const MOCK_SESSION = {
 const MOCK_COMMENT = { id: 'cmt-1', content: 'Updated text', userId: 'admin-1', createdAt: '2026-05-01' }
 
 function makeRequest(method: string, body?: Record<string, unknown>) {
-  const opts: RequestInit = { method }
-  if (body) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/decisions/dec-1/comments/cmt-1', opts)
+  return new NextRequest('http://localhost/api/decisions/dec-1/comments/cmt-1', body
+    ? { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: method }
+  )
 }
 
 function makeContext(commentId = 'cmt-1') {

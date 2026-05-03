@@ -46,7 +46,7 @@ jest.mock('@/lib/api/helpers', () => {
     apiError: (_err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string, errors?: unknown) =>
-      NextResponse.json({ success: false, error: msg, ...(errors && { errors }) }, { status: 400 }),
+      NextResponse.json({ success: false, error: msg, ...(errors ? { errors } : {}) }, { status: 400 }),
     apiNotFound: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 404 }),
   }
@@ -151,12 +151,10 @@ function makeGetRequest(params: Record<string, string> = {}) {
 }
 
 function makePostRequest(body?: Record<string, unknown>) {
-  const opts: RequestInit = { method: 'POST' }
-  if (body) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/task-projects', opts)
+  return new NextRequest('http://localhost/api/task-projects', body
+    ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: 'POST' }
+  )
 }
 
 // ---------------------------------------------------------------------------

@@ -131,7 +131,7 @@ jest.mock('@/lib/api/helpers', () => {
     apiNotFound: (entity: string) =>
       NextResponse.json({ success: false, error: `${entity} nicht gefunden` }, { status: 404 }),
     apiBadRequest: (msg: string, errors?: unknown) =>
-      NextResponse.json({ success: false, error: msg, ...(errors && { errors }) }, { status: 400 }),
+      NextResponse.json({ success: false, error: msg, ...(errors ? { errors } : {}) }, { status: 400 }),
   }
 })
 
@@ -195,12 +195,10 @@ const MOCK_TASK = {
 }
 
 function makeRequest(method = 'GET', body?: Record<string, unknown>) {
-  const opts: RequestInit = { method }
-  if (body) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/tasks/task-1', opts)
+  return new NextRequest('http://localhost/api/tasks/task-1', body
+    ? { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method }
+  )
 }
 
 function makeContext(id = 'task-1') {

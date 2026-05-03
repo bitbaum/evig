@@ -91,7 +91,7 @@ jest.mock('@/lib/api/helpers', () => {
     apiError: (_err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string, errors?: unknown) =>
-      NextResponse.json({ success: false, error: msg, ...(errors && { errors }) }, { status: 400 }),
+      NextResponse.json({ success: false, error: msg, ...(errors ? { errors } : {}) }, { status: 400 }),
   }
 })
 

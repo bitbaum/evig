@@ -143,12 +143,10 @@ const MOCK_SESSION = {
 const MOCK_DECISION = { id: 'dec-1', title: 'Neue Entscheidung', status: 'discussion', description: 'test' }
 
 function makeRequest(method = 'GET', body?: Record<string, unknown>) {
-  const opts: RequestInit = { method }
-  if (body) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/decisions/dec-1', opts)
+  return new NextRequest('http://localhost/api/decisions/dec-1', body
+    ? { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: method }
+  )
 }
 
 function makeContext(id = 'dec-1') {

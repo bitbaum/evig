@@ -123,7 +123,7 @@ jest.mock('@/lib/api/helpers', () => {
     apiError: (err: unknown, msg: string, status = 500) =>
       NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string, errors?: unknown) =>
-      NextResponse.json({ success: false, error: msg, ...(errors && { errors }) }, { status: 400 }),
+      NextResponse.json({ success: false, error: msg, ...(errors ? { errors } : {}) }, { status: 400 }),
   }
 })
 
@@ -179,12 +179,10 @@ function makeGetRequest(params: Record<string, string> = {}) {
 }
 
 function makePostRequest(body?: Record<string, unknown>) {
-  const opts: RequestInit = { method: 'POST' }
-  if (body) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/tasks', opts)
+  return new NextRequest('http://localhost/api/tasks', body
+    ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: 'POST' }
+  )
 }
 
 // Build a Drizzle select chain where the given terminal method resolves with value

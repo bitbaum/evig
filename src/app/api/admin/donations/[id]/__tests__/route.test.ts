@@ -149,12 +149,10 @@ const MOCK_DONATION = {
 const MOCK_EXISTING = { id: 'don-1' }
 
 function makeRequest(method = 'GET', body?: Record<string, unknown>) {
-  const opts: RequestInit = { method }
-  if (body) {
-    opts.headers = { 'Content-Type': 'application/json' }
-    opts.body = JSON.stringify(body)
-  }
-  return new NextRequest('http://localhost/api/admin/donations/don-1', opts)
+  return new NextRequest('http://localhost/api/admin/donations/don-1', body
+    ? { method: method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
+    : { method: method }
+  )
 }
 
 function makeContext(id = 'don-1') {

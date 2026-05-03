@@ -97,8 +97,8 @@ const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success
 const mockValidateQuery = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data: { limit: 20, offset: 0, ...(data as object) } }))
 
 jest.mock('@/lib/schemas', () => ({
-  validateBody: (...args: unknown[]) => mockValidateBody(...args),
-  validateQuery: (...args: unknown[]) => mockValidateQuery(...args),
+  validateBody: (schema: unknown, data: unknown) => mockValidateBody(schema, data),
+  validateQuery: (schema: unknown, data: unknown) => mockValidateQuery(schema, data),
   CreateAppointmentSchema: {},
   GetAppointmentsQuerySchema: {},
 }))

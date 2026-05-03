@@ -113,7 +113,7 @@ beforeEach(() => {
 describe('GET /api/pools — public', () => {
   it('returns 200 with pool list', async () => {
     const req = new NextRequest('http://localhost/api/pools')
-    const response = await GET(req)
+    const response = await GET()
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(Array.isArray(body.data)).toBe(true)
@@ -123,7 +123,7 @@ describe('GET /api/pools — public', () => {
   it('returns 200 with empty list', async () => {
     mockOrderBy.mockResolvedValueOnce([])
     const req = new NextRequest('http://localhost/api/pools')
-    const response = await GET(req)
+    const response = await GET()
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.data).toEqual([])

@@ -57,7 +57,7 @@ function makeWebhookRequest(body: unknown, headers: Record<string, string> = {})
 beforeEach(() => {
   jest.resetAllMocks()
   // Dev mode: skip signature verification
-  process.env.NODE_ENV = 'development'
+  ;(process.env as { NODE_ENV: string }).NODE_ENV = 'development'
   delete process.env.PAYREXX_INSTANCE
   delete process.env.PAYREXX_WEBHOOK_SECRET
 })
@@ -69,7 +69,7 @@ beforeEach(() => {
 describe('POST /api/payments/payrexx-webhook — signature verification', () => {
   it('returns 401 when signature is missing in production mode', async () => {
     // Simulate production: set PAYREXX_INSTANCE so signature check runs
-    process.env.NODE_ENV = 'production'
+    ;(process.env as { NODE_ENV: string }).NODE_ENV = 'production'
     process.env.PAYREXX_INSTANCE = 'myshop'
     process.env.PAYREXX_WEBHOOK_SECRET = 'secret'
 
@@ -119,7 +119,7 @@ describe('POST /api/payments/payrexx-webhook — validation (dev mode)', () => {
 
 describe('POST /api/payments/payrexx-webhook — not found', () => {
   it('returns 404 when no matching payment record exists', async () => {
-    mockLookup.mockResolvedValue({ type: 'none' } as ReturnType<typeof lookupPaymentByReferenceId> extends Promise<infer T> ? T : never)
+    mockLookup.mockResolvedValue({ type: 'none' } as never)
     const req = makeWebhookRequest({ transaction: { id: 1, status: 'reserved', referenceId: 'ref-unknown' } })
     const response = await POST(req)
     expect(response.status).toBe(404)
