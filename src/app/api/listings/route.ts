@@ -5,7 +5,7 @@
 
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { apiSuccess, apiSuccessCached, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
 import { db } from '@/db';
 import { listings, listingImages, listingSpecs, users, sellerProfiles } from '@/db/schema';
 import { eq, and, sql, gte, lte, desc, asc, inArray, type SQL } from 'drizzle-orm';
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     // SECURITY: Rate limiting — 200 requests per 15 minutes per IP
     const clientIp = getClientIdentifier(request);
     if (!rateLimiters.listingBrowse(clientIp)) {
-      return apiBadRequest('Zu viele Anfragen. Bitte versuche es später erneut.');
+      return apiRateLimited();
     }
 
     const { searchParams } = new URL(request.url);

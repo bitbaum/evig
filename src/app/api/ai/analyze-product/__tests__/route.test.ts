@@ -47,6 +47,8 @@ jest.mock('@/lib/api/helpers', () => {
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string, details?: unknown) => NextResponse.json({ success: false, error: msg, details }, { status: 400 }),
     apiUnauthorized: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 401 }),
+    apiRateLimited: (msg = 'Zu viele Anfragen. Bitte versuche es später erneut.') =>
+      NextResponse.json({ success: false, error: msg }, { status: 429 }),
   }
 })
 

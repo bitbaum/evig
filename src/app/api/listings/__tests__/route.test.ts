@@ -109,6 +109,8 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
     apiForbidden: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 403 }),
+    apiRateLimited: (msg = 'Zu viele Anfragen. Bitte versuche es später erneut.') =>
+      NextResponse.json({ success: false, error: msg }, { status: 429 }),
     parsePagination: () => ({ limit: 20, offset: 0, page: 1 }),
   }
 })
@@ -379,11 +381,11 @@ beforeEach(() => {
 // ============================================================================
 
 describe('GET /api/listings — rate limiting', () => {
-  it('returns 400 when rate limiter returns false', async () => {
+  it('returns 429 when rate limiter returns false', async () => {
     const rl = require('@/lib/security/rate-limit')
     rl.rateLimiters.listingBrowse.mockReturnValueOnce(false)
     const response = await GET(makeGetRequest())
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(429)
     const body = await response.json()
     expect(body.success).toBe(false)
     expect(body.error).toMatch(/viele Anfragen/i)

@@ -174,7 +174,7 @@ export async function PUT(
     }
 
     if (Object.keys(updateSet).length === 0) {
-      return apiBadRequest('Keine gültigen Felder zum Aktualisieren')
+      return apiBadRequest(ERROR_MESSAGES.NO_VALID_FIELDS)
     }
 
     updateSet.updatedAt = sql`CURRENT_TIMESTAMP`

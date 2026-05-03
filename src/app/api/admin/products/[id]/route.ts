@@ -17,7 +17,7 @@ export const GET = withAdmin<{ id: string }>('products', async (
   try {
     const params = context?.params
     if (!params?.id) {
-      return apiError(new Error("Product ID required"), "Product ID required", 400)
+      return apiError(new Error(ERROR_MESSAGES.PRODUCT_ID_REQUIRED), ERROR_MESSAGES.PRODUCT_ID_REQUIRED, 400)
     }
 
     const rows = await db
@@ -51,7 +51,7 @@ export const GET = withAdmin<{ id: string }>('products', async (
     return apiSuccess({ product: rows[0] })
   } catch (error) {
     logger.error("Failed to fetch product", { error, productId: context?.params?.id })
-    return apiError(error, "Fehler beim Laden des Produkts")
+    return apiError(error, ERROR_MESSAGES.PRODUCT_LOAD_FAILED)
   }
 })
 
@@ -64,7 +64,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (
   try {
     const params = context?.params
     if (!params?.id) {
-      return apiError(new Error("Product ID required"), "Product ID required", 400)
+      return apiError(new Error(ERROR_MESSAGES.PRODUCT_ID_REQUIRED), ERROR_MESSAGES.PRODUCT_ID_REQUIRED, 400)
     }
 
     const body = await request.json()
@@ -114,7 +114,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (
     return apiSuccess({ productId: params.id })
   } catch (error) {
     logger.error("Failed to update product", { error, productId: context?.params?.id })
-    return apiError(error, "Fehler beim Aktualisieren des Produkts")
+    return apiError(error, ERROR_MESSAGES.PRODUCT_UPDATE_FAILED)
   }
 })
 
@@ -127,7 +127,7 @@ export const DELETE = withAdmin<{ id: string }>('products', async (
   try {
     const params = context?.params
     if (!params?.id) {
-      return apiError(new Error("Product ID required"), "Product ID required", 400)
+      return apiError(new Error(ERROR_MESSAGES.PRODUCT_ID_REQUIRED), ERROR_MESSAGES.PRODUCT_ID_REQUIRED, 400)
     }
 
     // Delete inventory item first (foreign key)

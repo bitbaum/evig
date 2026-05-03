@@ -5,7 +5,7 @@
  */
 
 import { NextRequest } from 'next/server'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     // Rate limit: 5 submissions per hour per IP
     const clientIp = getClientIdentifier(request)
     if (!rateLimiters.apiGeneral(clientIp)) {
-      return apiBadRequest('Zu viele Anfragen. Bitte versuche es später erneut.')
+      return apiRateLimited()
     }
 
     const body = await request.json()

@@ -18,7 +18,7 @@ import {
 } from '@/db/schema'
 import { eq, sql, inArray, and } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
+import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -83,7 +83,7 @@ export const GET = withAdmin<{ id: string }>('products', async (request, session
     })
   } catch (error) {
     logger.error('Failed to fetch inventory product', { error })
-    return apiError(error, 'Fehler beim Laden des Produkts')
+    return apiError(error, ERROR_MESSAGES.PRODUCT_LOAD_FAILED)
   }
 })
 
@@ -152,7 +152,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
     if (body.status !== undefined) productUpdate.status = body.status
 
     if (Object.keys(productUpdate).length === 0) {
-      return apiError(new Error('No valid fields to update'), 'Keine gültigen Felder zum Aktualisieren', 400)
+      return apiBadRequest(ERROR_MESSAGES.NO_VALID_FIELDS)
     }
 
     productUpdate.updatedAt = sql`NOW()`
@@ -202,7 +202,7 @@ export const PUT = withAdmin<{ id: string }>('products', async (request, session
     return apiSuccess({ product: result[0], image_url: imageUrl })
   } catch (error) {
     logger.error('Failed to update inventory product', { error })
-    return apiError(error, 'Fehler beim Aktualisieren des Produkts')
+    return apiError(error, ERROR_MESSAGES.PRODUCT_UPDATE_FAILED)
   }
 })
 
@@ -247,6 +247,6 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
     })
   } catch (error) {
     logger.error('Failed to patch inventory product', { error })
-    return apiError(error, 'Fehler beim Aktualisieren des Produkts')
+    return apiError(error, ERROR_MESSAGES.PRODUCT_UPDATE_FAILED)
   }
 })

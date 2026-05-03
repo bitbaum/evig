@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   try {
     const clientId = getClientIdentifier(req)
     if (!loginStatusLimiter(clientId)) {
-      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.')
+      return apiRateLimited()
     }
 
     const { email } = await req.json()

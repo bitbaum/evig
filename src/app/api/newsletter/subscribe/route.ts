@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { randomBytes } from 'crypto'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { sendEmail } from '@/lib/email'
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Newsletter subscription rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
+      return apiRateLimited(ERROR_MESSAGES.RATE_LIMITED, {
         retryAfter: rateLimitResult.retryAfter,
         remaining: rateLimitResult.remaining,
         resetAt: rateLimitResult.resetAt,

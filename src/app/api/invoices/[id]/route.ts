@@ -7,6 +7,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } fro
 import { logger } from '@/lib/logger'
 import { validateBody, UpdateInvoiceSchema } from '@/lib/schemas'
 import { INVOICE_STATUS } from '@/config/invoice-status'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 // GET /api/invoices/[id] - Get invoice details
 export const GET = withAuth<{ id: string }>(async (request, session, context) => {
@@ -121,7 +122,7 @@ export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session
     }
 
     if (!hasUpdates) {
-      return apiBadRequest('Keine gültigen Felder zum Aktualisieren')
+      return apiBadRequest(ERROR_MESSAGES.NO_VALID_FIELDS)
     }
 
     // Execute update

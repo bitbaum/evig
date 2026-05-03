@@ -132,6 +132,8 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status }),
     apiNotFound: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 404 }),
+    apiBadRequest: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 400 }),
   }
 })
 

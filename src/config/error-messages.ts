@@ -46,6 +46,7 @@ export const ERROR_MESSAGES = {
   TASK_ID_REQUIRED: 'Task-ID erforderlich',
   INVALID_REQUEST_ID: 'Ungültige Anfrage-ID',
   NO_FIELDS_TO_UPDATE: 'Keine Felder zum Aktualisieren',
+  NO_VALID_FIELDS: 'Keine gültigen Felder zum Aktualisieren',
   NO_CHANGES_SPECIFIED: 'Keine Änderungen angegeben',
   INVALID_FILTER_PARAMS: 'Ungültige Filterparameter',
   INVALID_ACTION: 'Ungültige Aktion',
@@ -59,11 +60,15 @@ export const ERROR_MESSAGES = {
   ALL_FIELDS_REQUIRED: 'Alle erforderlichen Felder müssen ausgefüllt sein',
   ADMIN_NOTES_MUST_BE_STRING: 'Admin-Notizen müssen ein Text sein',
   REJECTION_REASON_REQUIRED: 'Ein Ablehnungsgrund ist erforderlich',
+  PRODUCT_ID_REQUIRED: 'Produkt-ID erforderlich',
 
   // Server Errors
   INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
   DB_CONNECTION_FAILED: 'Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.',
   UNEXPECTED_ERROR: 'Ein unerwarteter Fehler ist aufgetreten',
+  RATE_LIMITED: 'Zu viele Anfragen. Bitte versuche es später erneut.',
+  PRODUCT_LOAD_FAILED: 'Fehler beim Laden des Produkts',
+  PRODUCT_UPDATE_FAILED: 'Fehler beim Aktualisieren des Produkts',
   EXTRACTION_FAILED: 'Extraktionsfehler',
   INVALID_INPUT: 'Ungültige Eingabe',
   STATUS_CHECK_FAILED: 'Statusprüfung fehlgeschlagen',

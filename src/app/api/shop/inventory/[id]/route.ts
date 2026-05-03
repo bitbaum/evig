@@ -7,6 +7,7 @@
 
 import { NextRequest } from 'next/server'
 import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
 import { aiExtractedProducts, inventoryItems, productCustomerProfiles, customerProfiles, productImages } from '@/db/schema'
 import { eq, desc } from 'drizzle-orm'
@@ -111,6 +112,6 @@ export async function GET(
     return apiSuccessCached({ product: result }, 30, 15)
   } catch (error) {
     logger.error('Failed to fetch shop inventory product', { error })
-    return apiError(error, 'Fehler beim Laden des Produkts')
+    return apiError(error, ERROR_MESSAGES.PRODUCT_LOAD_FAILED)
   }
 }

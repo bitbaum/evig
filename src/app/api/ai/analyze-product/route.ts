@@ -18,7 +18,7 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { aiExtractedProducts, sustainabilityScores, aiProcessingLogs } from '@/db/schema'
 import { auth } from '@/auth'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiUnauthorized, apiRateLimited } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
 import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
 import { validateBody, AnalyzeProductSchema } from '@/lib/schemas'
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
 
     // Rate limit — 5 AI analyses per hour per user
     if (!rateLimiters.aiAnalyze(session.user.id + ':ai-analyze')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Anfragen. Bitte versuche es später erneut.', 429)
+      return apiRateLimited()
     }
 
     const body = await request.json()

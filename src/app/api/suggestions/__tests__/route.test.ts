@@ -65,6 +65,10 @@ jest.mock('@/lib/api/helpers', () => ({
     const { NextResponse } = jest.requireActual('next/server')
     return NextResponse.json({ success: false, error: msg }, { status })
   },
+  apiRateLimited: (msg = 'Zu viele Anfragen. Bitte versuche es später erneut.') => {
+    const { NextResponse } = jest.requireActual('next/server')
+    return NextResponse.json({ success: false, error: msg }, { status: 429 })
+  },
 }))
 
 // ---------------------------------------------------------------------------
@@ -168,10 +172,10 @@ describe('POST /api/suggestions — validation errors', () => {
 })
 
 describe('POST /api/suggestions — rate limiting', () => {
-  it('returns 400 when rate limit exceeded', async () => {
+  it('returns 429 when rate limit exceeded', async () => {
     mockApiGeneral.mockReturnValueOnce(false)
     const response = await POST(makeRequest(VALID_BODY))
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(429)
   })
 
   it('does not send any emails when rate limited', async () => {

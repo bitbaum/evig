@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const clientIp = getClientIp(request.headers)
     const rateLimit = checkRateLimit(clientIp, 'newsletter')
     if (!rateLimit.allowed) {
-      return apiRateLimited('Zu viele Anfragen. Bitte versuche es später erneut.', {
+      return apiRateLimited(ERROR_MESSAGES.RATE_LIMITED, {
         retryAfter: rateLimit.retryAfter,
         remaining: rateLimit.remaining,
         resetAt: rateLimit.resetAt,
