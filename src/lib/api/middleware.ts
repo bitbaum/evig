@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { apiUnauthorized, apiForbidden } from './helpers';
 import { canAccessSection, toStaffUser, ADMIN_SECTIONS } from '@/lib/permissions';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 export type AuthSession = Awaited<ReturnType<typeof auth>>;
 
@@ -55,7 +56,7 @@ export function withAuth<TParams = Record<string, never>>(
     const session = await auth();
 
     if (!session?.user?.id) {
-      return apiUnauthorized('Nicht authentifiziert');
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     // Session is guaranteed non-null after the check above
@@ -114,7 +115,7 @@ export function withAdmin<TParams = Record<string, never>>(
     const session = await auth();
 
     if (!session?.user?.id) {
-      return apiUnauthorized('Nicht authentifiziert');
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     // Session is guaranteed non-null after the check above
@@ -122,7 +123,7 @@ export function withAdmin<TParams = Record<string, never>>(
 
     // Check staff access from session (set in JWT callback in src/auth.ts)
     if (!validSession.user.isStaff) {
-      return apiForbidden('Nur Administratoren haben Zugriff');
+      return apiForbidden(ERROR_MESSAGES.ADMIN_REQUIRED);
     }
 
     // Section-level permission check (when section is specified)

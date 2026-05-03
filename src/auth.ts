@@ -113,7 +113,7 @@ export const authConfig = {
         })
 
         if (!creds?.email || !creds?.password) {
-          throw new Error('E-Mail und Passwort sind erforderlich')
+          throw new Error(ERROR_MESSAGES.EMAIL_PASSWORD_REQUIRED)
         }
 
         const email = creds.email as string

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 interface CategoryFormData {
   id?: string
@@ -62,7 +63,7 @@ export function useBlogCategories(): UseBlogCategoriesResult {
         return false
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
       return false
     } finally {
       setSaving(false)
@@ -85,7 +86,7 @@ export function useBlogCategories(): UseBlogCategoriesResult {
         return false
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
       return false
     } finally {
       setDeleting(false)

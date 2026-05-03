@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
+import { SUCCESS_MESSAGES } from '@/config/error-messages'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -59,7 +60,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
       if (result.success) {
         setSubmitResult({
           success: true,
-          message: result.message || 'Termin erfolgreich gebucht!'
+          message: result.message || SUCCESS_MESSAGES.APPOINTMENT_BOOKED
         })
         // Reset form
         setFormData({

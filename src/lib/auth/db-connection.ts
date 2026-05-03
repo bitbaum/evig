@@ -10,6 +10,7 @@ import { Pool, PoolClient } from 'pg'
 import { logger } from '@/lib/logger'
 import { getDbConfig } from './config'
 import type { QueryParams } from '@/types/common'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 // Get database configuration from centralized config
 const dbConfig = {
@@ -95,7 +96,7 @@ export async function query<T = unknown>(
     attempts: MAX_RETRIES + 1,
     query: text.substring(0, 100),
   })
-  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.')
+  throw new Error(ERROR_MESSAGES.DB_CONNECTION_FAILED)
 }
 
 /**
@@ -131,7 +132,7 @@ export async function getClient(): Promise<PoolClient> {
   logger.error('Database client connection failed after retries', {
     attempts: MAX_RETRIES + 1,
   })
-  throw new Error('Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.')
+  throw new Error(ERROR_MESSAGES.DB_CONNECTION_FAILED)
 }
 
 // Cache user columns to keep queries schema-safe across migrations (5-minute TTL)

@@ -7,6 +7,7 @@ import { sql, getTableName } from 'drizzle-orm'
 import { meetingProtocols } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { MEETING_TYPE_LABELS, MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import { PROTOCOL_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { processProtocolTranscript, processProtocolNotes, processTaskList } from '@/lib/ai/protocol-processing'
@@ -60,7 +61,7 @@ export async function processTranscript(
 
     if (protocolResult.rows.length === 0) {
       await resetToDraft()
-      return { success: false, code: 'PROTOCOL_NOT_FOUND', retryable: false, error: 'Protokoll nicht gefunden' }
+      return { success: false, code: 'PROTOCOL_NOT_FOUND', retryable: false, error: ERROR_MESSAGES.PROTOCOL_NOT_FOUND }
     }
 
     const { meeting_type } = protocolResult.rows[0] as unknown as { meeting_type: MeetingType }
@@ -174,7 +175,7 @@ export async function processNotes(
   `)
 
   if (protocolResult.rows.length === 0) {
-    return { success: false, error: 'Protokoll nicht gefunden' }
+    return { success: false, error: ERROR_MESSAGES.PROTOCOL_NOT_FOUND }
   }
 
   const { meeting_type } = protocolResult.rows[0] as unknown as { meeting_type: MeetingType }

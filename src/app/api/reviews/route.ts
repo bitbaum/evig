@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     // Non-published reviews require admin
     if (status !== REVIEW_STATUS.PUBLISHED) {
       if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-      if (!session.user.isStaff) return apiForbidden('Nur Administratoren haben Zugriff')
+      if (!session.user.isStaff) return apiForbidden(ERROR_MESSAGES.ADMIN_REQUIRED)
     }
 
     // Build sort clause

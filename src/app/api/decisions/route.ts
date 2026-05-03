@@ -11,7 +11,7 @@ import { apiSuccess, apiError, apiBadRequest, parsePagination } from '@/lib/api/
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { createDecisionSchema } from '@/lib/schemas/decisions'
 import { getDecisions, createDecision } from '@/lib/services/decisions'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import type { DecisionStatus } from '@/config/decisions'
 

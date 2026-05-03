@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     `)
 
     if (workshopResult.rows.length === 0) {
-      return apiNotFound('Workshop nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.WORKSHOP_NOT_FOUND)
     }
 
     const workshop = workshopResult.rows[0] as unknown as WorkshopRow

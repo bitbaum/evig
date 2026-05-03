@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData, InstanceFiltersState } from './types'
 import { initialFormData } from './types'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
@@ -54,7 +55,7 @@ export function useWorkshopInstances() {
         setError(result.error || 'Fehler beim Laden der Workshop-Termine')
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
     } finally {
       setLoading(false)
     }
@@ -100,7 +101,7 @@ export function useWorkshopInstances() {
         setError(result.error || 'Fehler beim Speichern')
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
     } finally {
       setSubmitting(false)
     }
@@ -123,7 +124,7 @@ export function useWorkshopInstances() {
       }
     } catch (err) {
       logger.warn('Failed to delete workshop instance', { error: err, instanceId })
-      toast.error('Netzwerkfehler')
+      toast.error(ERROR_MESSAGES.NETWORK_ERROR)
     }
   }
 

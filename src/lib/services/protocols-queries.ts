@@ -7,6 +7,7 @@ import { sql, getTableName } from 'drizzle-orm'
 import { meetingProtocols, protocolActionLinks, protocolDecisionVotes, protocolDecisionOutcomes } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
+import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { notifyUsers, fireNotification } from '@/lib/services/notifications'
 import { RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
@@ -352,7 +353,7 @@ export async function finalizeProtocol(
     fireNotification(
       () => notifyUsers(attendees, {
         type: 'protocol_finalized',
-        title: 'Protokoll abgeschlossen',
+        title: SUCCESS_MESSAGES.PROTOCOL_FINALIZED,
         content: `Das Protokoll "${title}" ist jetzt verfügbar.`,
         related_type: RELATED_TYPES.PROTOCOL,
         related_id: id,

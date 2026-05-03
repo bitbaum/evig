@@ -16,7 +16,7 @@ export const GET = withAuth<{ conversationId: string }>(async (
   try {
     const conversationId = context?.params?.conversationId
     if (!conversationId) {
-      return apiNotFound('Konversation nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.CONVERSATION_NOT_FOUND)
     }
 
     // Verify user is participant
@@ -31,7 +31,7 @@ export const GET = withAuth<{ conversationId: string }>(async (
       .where(eq(conversations.id, conversationId))
 
     if (!conv) {
-      return apiNotFound('Konversation nicht gefunden')
+      return apiNotFound(ERROR_MESSAGES.CONVERSATION_NOT_FOUND)
     }
 
     if (conv.participant1 !== session.user.id && conv.participant2 !== session.user.id) {

@@ -10,7 +10,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { getDbUserId } from '@/lib/api/task-helpers'
 import { getVotes, submitVote } from '@/lib/services/decisions'
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 
 type RouteParams = { id: string }

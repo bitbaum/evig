@@ -1,6 +1,6 @@
 /**
  * Error message constants
- * 
+ *
  * Single Source of Truth for all user-facing error messages
  * Following dev guide: docs/development/DEV_GUIDE.md
  */
@@ -8,27 +8,17 @@
 export const ERROR_MESSAGES = {
   // Authentication & Authorization
   UNAUTHORIZED: 'Nicht authentifiziert',
-  FORBIDDEN: 'Keine Berechtigung',
   ADMIN_REQUIRED: 'Nur Administratoren haben Zugriff',
-  STAFF_ONLY: 'Nur Mitarbeiter können diese Aktion ausführen',
   AUTHENTICATION_REQUIRED: 'Authentifizierung erforderlich',
-
-  // Section-specific access (repeated 3+ times across routes)
-  NO_ACCESS_TEAM: 'Kein Zugriff auf Team-Bereich',
-  NO_ACCESS_HIRN: 'Keine Berechtigung für Hirn',
-  NO_ACCESS_ERFASSUNG: 'Keine Berechtigung für Produkterfassung',
-  NO_ACCESS_CONTENT: 'Keine Berechtigung für diesen Bereich',
 
   // Not Found
   NOT_FOUND: 'nicht gefunden',
   CONVERSATION_NOT_FOUND: 'Unterhaltung nicht gefunden',
-  SERVICE_NOT_FOUND: 'Service nicht gefunden',
   PRODUCT_NOT_FOUND: 'Produkt nicht gefunden',
   USER_NOT_FOUND: 'Benutzer nicht gefunden',
   APPOINTMENT_NOT_FOUND: 'Termin nicht gefunden',
   DOCUMENT_NOT_FOUND: 'Dokument nicht gefunden',
   CERTIFICATION_NOT_FOUND: 'Zertifizierung nicht gefunden',
-  APPLICATION_NOT_FOUND: 'Bewerbung nicht gefunden',
   WORKSHOP_NOT_FOUND: 'Workshop nicht gefunden',
   LOCATION_NOT_FOUND: 'Ort nicht gefunden',
   REPAIRER_NOT_FOUND: 'Reparateur nicht gefunden',
@@ -65,44 +55,25 @@ export const ERROR_MESSAGES = {
   POOL_ID_REQUIRED: 'Pool-ID fehlt',
   NO_AUDIO_RECEIVED: 'Keine Audiodatei empfangen',
   EMAIL_REQUIRED: 'E-Mail erforderlich',
-  PASSWORD_REQUIRED: 'Passwort erforderlich',
   EMAIL_PASSWORD_REQUIRED: 'E-Mail und Passwort sind erforderlich',
-  MESSAGE_REQUIRED: 'Nachricht erforderlich',
-  SERVICE_SLUG_REQUIRED: 'Service-Slug erforderlich',
   ALL_FIELDS_REQUIRED: 'Alle erforderlichen Felder müssen ausgefüllt sein',
-  IMAGE_REQUIRED: 'Bilddaten oder URL erforderlich',
   ADMIN_NOTES_MUST_BE_STRING: 'Admin-Notizen müssen ein Text sein',
   REJECTION_REASON_REQUIRED: 'Ein Ablehnungsgrund ist erforderlich',
 
   // Server Errors
   INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
   DB_CONNECTION_FAILED: 'Datenbankverbindung fehlgeschlagen. Bitte versuche es später erneut.',
-  REGISTRATION_FAILED: 'Ein unerwarteter Fehler ist aufgetreten',
   UNEXPECTED_ERROR: 'Ein unerwarteter Fehler ist aufgetreten',
   EXTRACTION_FAILED: 'Extraktionsfehler',
   INVALID_INPUT: 'Ungültige Eingabe',
   STATUS_CHECK_FAILED: 'Statusprüfung fehlgeschlagen',
 
-  // Business Logic
-  SELLER_ONLY: 'Nur Verkäufer können Produkte erstellen',
-  REPAIRER_ONLY: 'Nur Techniker können diesen Bereich nutzen',
-
   // Workshops
   WORKSHOP_PROPOSALS_LOAD_FAILED: 'Fehler beim Laden der Workshop-Vorschläge',
-  WORKSHOP_APPROVAL_FAILED: 'Fehler bei der Workshop-Genehmigung',
   ALREADY_REGISTERED_WORKSHOP: 'Bereits für diesen Workshop angemeldet',
   NO_WORKSHOP_INSTANCES: 'Aktuell sind keine Termine für diesen Workshop verfügbar',
   NETWORK_ERROR: 'Netzwerkfehler',
-  ALREADY_APPROVED: 'Sie sind bereits als Verkäufer zugelassen',
   PENDING_APPLICATION: 'Du hast bereits eine ausstehende Bewerbung',
-  CANNOT_CANCEL_COMPLETED: 'Abgeschlossene Termine können nicht storniert werden',
-  CAN_ONLY_EDIT_REQUESTED: 'Nur angefragte Termine können bearbeitet werden',
-
-  // External Services (internal, not user-facing)
-  AI_ANALYSIS_FAILED: 'KI-Bildanalyse fehlgeschlagen',
-
-  // Configuration
-  CONFIGURATION_MISSING: 'Erforderliche Konfiguration fehlt',
 
   // Protocols
   PROTOCOL_NOT_FOUND: 'Protokoll nicht gefunden',
@@ -112,7 +83,6 @@ export const ERROR_MESSAGES = {
   PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung des Transkripts',
   NOTES_PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung der Notizen',
   TASKS_PROCESSING_FAILED: 'Fehler bei der KI-Verarbeitung der Aufgabenliste',
-  INVALID_JSON_FORMAT: 'Ungültiges JSON-Format',
 
   // Decisions
   DECISION_NOT_FOUND: 'Entscheidung nicht gefunden',
@@ -124,7 +94,6 @@ export const ERROR_MESSAGES = {
   VOTE_NOT_PARTICIPANT: 'Nicht zur Teilnahme an dieser Abstimmung berechtigt',
   VOTE_INVALID_DATA: 'Ungültige Abstimmungsdaten',
   VOTE_SUBMIT_FAILED: 'Fehler beim Abgeben der Stimme',
-  COMMENT_NOT_FOUND: 'Kommentar nicht gefunden',
   COMMENT_NOT_AUTHOR: 'Nur der Autor kann diesen Kommentar bearbeiten',
   COMMENT_CREATE_FAILED: 'Fehler beim Erstellen des Kommentars',
 
@@ -140,37 +109,12 @@ export const ERROR_MESSAGES = {
  * Success messages
  */
 export const SUCCESS_MESSAGES = {
-  ACCOUNT_CREATED: 'Konto erfolgreich erstellt',
-  REGISTRATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht',
-  SELLER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht. Du erhältst in Kürze eine Bestätigung per E-Mail.',
   REPAIRER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht! Du erhältst in Kürze eine E-Mail mit weiteren Informationen.',
-  APPOINTMENT_REQUESTED: 'Terminanfrage eingereicht. Wir kontaktieren dich bald für die Terminbestätigung.',
   APPOINTMENT_BOOKED: 'Termin erfolgreich gebucht!',
-  APPOINTMENT_CANCELLED: 'Termin erfolgreich storniert',
 
   // Protocols
-  PROTOCOL_CREATED: 'Protokoll erfolgreich erstellt',
   PROTOCOL_FINALIZED: 'Protokoll abgeschlossen',
-  ACTION_LINKED: 'Aufgabe erfolgreich verknüpft',
-  NOTES_PROCESSED: 'Notizen erfolgreich verarbeitet',
-  TASKS_IMPORTED: 'Aufgaben erfolgreich importiert',
-
-  // Decisions
-  DECISION_CREATED: 'Entscheidung erfolgreich erstellt',
-  DECISION_UPDATED: 'Entscheidung erfolgreich aktualisiert',
-  DECISION_TRANSITIONED: 'Status erfolgreich geändert',
-  VOTE_SUBMITTED: 'Stimme erfolgreich abgegeben',
-  COMMENT_CREATED: 'Kommentar erfolgreich erstellt',
-  COMMENT_UPDATED: 'Kommentar erfolgreich aktualisiert',
-  COMMENT_DELETED: 'Kommentar erfolgreich gelöscht',
 
   // Workshops
   WORKSHOP_REGISTERED: 'Erfolgreich für Workshop angemeldet',
-
-  // Decision Voting (Protocol)
-  VOTE_RECORDED: 'Stimme abgegeben',
-  VOTE_REMOVED: 'Stimme zurückgezogen',
-  DECISION_CLOSED: 'Abstimmung geschlossen',
-  TASKS_PROPOSED: 'Aufgabenvorschläge generiert',
-  TASKS_BULK_CREATED: 'Aufgaben erstellt',
 } as const;

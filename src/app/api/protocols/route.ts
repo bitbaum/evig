@@ -73,6 +73,6 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
     return apiSuccess(protocol, 201)
   } catch (error) {
     logger.error('Error creating protocol', { error, email: session.user.email })
-    return apiError(error, 'Fehler beim Erstellen des Protokolls')
+    return apiError(error, ERROR_MESSAGES.PROTOCOL_CREATE_FAILED)
   }
 })

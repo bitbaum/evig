@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import type { Submission, FilterStatus, SubmissionAction, StatusCounts } from './types'
 
@@ -82,7 +83,7 @@ export function useSubmissions() {
         }
       }
     } catch {
-      setError('Netzwerkfehler')
+      setError(ERROR_MESSAGES.NETWORK_ERROR)
     } finally {
       setActionLoading(null)
     }
