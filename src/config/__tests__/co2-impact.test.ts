@@ -7,7 +7,7 @@
  * category → weight (kg) × CO2_PER_KG (57) = kg CO2 saved.
  */
 
-import { estimateCO2Savings, CO2_PER_KG, CATEGORY_WEIGHT_KG } from '../co2-impact'
+import { estimateCO2Savings, CO2_PER_KG, CATEGORY_WEIGHT_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '../co2-impact'
 
 // ============================================================================
 // Known categories — exact values
@@ -112,5 +112,17 @@ describe('estimateCO2Savings — math', () => {
 
   it('CO2_PER_KG is 57 (Fraunhofer IZM 2023)', () => {
     expect(CO2_PER_KG).toBe(57)
+  })
+
+  it('AVG_DEVICE_WEIGHT_KG is 2.5 (used for shop sales + e-waste totals)', () => {
+    expect(AVG_DEVICE_WEIGHT_KG).toBe(2.5)
+  })
+
+  it('FALLBACK_DEVICE_WEIGHT_KG is 2.0 (avg laptop, used when category unknown)', () => {
+    expect(FALLBACK_DEVICE_WEIGHT_KG).toBe(2.0)
+  })
+
+  it('FALLBACK_DEVICE_WEIGHT_KG matches laptop category weight', () => {
+    expect(FALLBACK_DEVICE_WEIGHT_KG).toBe(CATEGORY_WEIGHT_KG['10'])
   })
 })

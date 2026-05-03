@@ -1,6 +1,6 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_WEIGHT_KG, CO2_PER_KG } from '@/config/co2-impact'
+import { CATEGORY_WEIGHT_KG, CO2_PER_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
 import { logger } from '@/lib/logger'
 import { apiSuccessCached, apiError } from '@/lib/api/helpers'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -49,16 +49,15 @@ export async function GET() {
 
       if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
-        // Fallback to avg laptop weight (2 kg) for unknown categories
-        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? 2.0
+        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? FALLBACK_DEVICE_WEIGHT_KG
         co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
       }
     }
 
-    // Add RevampIT direct shop sales; use avg 2.5 kg (no category breakdown available)
+    // RevampIT shop sales have no category breakdown — use average device weight
     const shopSold = Number(shopRows.rows[0]?.count || 0)
     soldDevices += shopSold
-    co2SavedKg += Math.round(shopSold * 2.5 * CO2_PER_KG)
+    co2SavedKg += Math.round(shopSold * AVG_DEVICE_WEIGHT_KG * CO2_PER_KG)
 
     const co2SavedTons = Math.round((co2SavedKg / 1000) * 10) / 10
 

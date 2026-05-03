@@ -14,6 +14,18 @@
 export const CO2_PER_KG = 57
 
 /**
+ * Average weight (kg) for a generic IT device when no category data is available.
+ * Used for shop sales without category breakdown and for total e-waste estimation.
+ */
+export const AVG_DEVICE_WEIGHT_KG = 2.5
+
+/**
+ * Fallback weight (kg) for P2P listings where the category is unknown.
+ * Matches average laptop weight (category '10').
+ */
+export const FALLBACK_DEVICE_WEIGHT_KG = 2.0
+
+/**
  * Default weight estimates (kg) by main category.
  * Category values from KATEGORIEN in config/erfassung/categories.ts
  */

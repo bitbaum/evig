@@ -11,7 +11,7 @@ import { getTranslations } from 'next-intl/server'
 import Heading from '@/components/ui/Heading'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_WEIGHT_KG, CO2_PER_KG } from '@/config/co2-impact'
+import { CATEGORY_WEIGHT_KG, CO2_PER_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { logger } from '@/lib/logger'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -42,7 +42,7 @@ async function fetchImpactStats() {
       totalDevices += count
       if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
-        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? 2.0
+        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? FALLBACK_DEVICE_WEIGHT_KG
         co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
       }
     }
@@ -84,7 +84,7 @@ export default async function ImpactStatsSection() {
       description: t('co2Saved'),
     },
     {
-      value: `${Math.round((stats.totalDevices * 2.5) / 1000 * 10) / 10} t`,
+      value: `${Math.round((stats.totalDevices * AVG_DEVICE_WEIGHT_KG) / 1000 * 10) / 10} t`,
       description: t('ewasteReduced'),
     },
   ]
