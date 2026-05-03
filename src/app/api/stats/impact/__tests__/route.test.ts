@@ -29,6 +29,8 @@ jest.mock('@/lib/auth/db', () => ({
 jest.mock('@/config/co2-impact', () => ({
   CATEGORY_WEIGHT_KG: { laptop: 2.0, desktop: 5.0 },
   CO2_PER_KG: 10,
+  AVG_DEVICE_WEIGHT_KG: 2.5,
+  FALLBACK_DEVICE_WEIGHT_KG: 2.0,
 }))
 
 jest.mock('@/config/marketplace', () => ({
