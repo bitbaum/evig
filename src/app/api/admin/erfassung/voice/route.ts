@@ -15,6 +15,7 @@ import { NextRequest } from 'next/server'
 import { withAdmin } from '@/lib/api/middleware'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
 import { SERVICE_URLS } from '@/config/services'
 
@@ -25,7 +26,7 @@ export const POST = withAdmin('products', async (request, session) => {
     const audioFile = formData.get('audio') as File | null
 
     if (!audioFile) {
-      return apiBadRequest('Keine Audiodatei empfangen')
+      return apiBadRequest(ERROR_MESSAGES.NO_AUDIO_RECEIVED)
     }
 
     logger.info('Voice erfassung started', {

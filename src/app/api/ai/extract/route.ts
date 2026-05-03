@@ -11,6 +11,7 @@ import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { z } from 'zod'
 import { logger } from '@/lib/logger'
 import { apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
 import { isStaffEmail } from '@/lib/permissions'
@@ -40,7 +41,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const result = extractRequestSchema.safeParse(body)
 
     if (!result.success) {
-      return apiBadRequest('Ungültige Anfrage', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, result.error.flatten().fieldErrors)
     }
 
     const { formType, text, mode, currentData, instruction, quickAction } = result.data

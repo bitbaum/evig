@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
 import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { z } from 'zod'
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const result = MembershipSchema.safeParse(body)
     if (!result.success) {
-      return apiBadRequest('Ungültige Anfrage', result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, result.error.flatten().fieldErrors)
     }
 
     const session = await auth()

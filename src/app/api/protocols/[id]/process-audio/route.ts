@@ -26,7 +26,7 @@ export const POST = withAdmin<RouteParams>(async (
     const audioFile = formData.get('audio') as File | null
 
     if (!audioFile) {
-      return apiBadRequest('Keine Audiodatei empfangen')
+      return apiBadRequest(ERROR_MESSAGES.NO_AUDIO_RECEIVED)
     }
 
     const validationError = validateAudioUpload(audioFile)

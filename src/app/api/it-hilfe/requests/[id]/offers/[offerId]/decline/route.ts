@@ -33,7 +33,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Validate UUID formats
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
     if (!uuidRegex.test(id) || !uuidRegex.test(offerId)) {
-      return apiBadRequest('Ungültige ID')
+      return apiBadRequest(ERROR_MESSAGES.INVALID_ID)
     }
 
     // Verify request ownership

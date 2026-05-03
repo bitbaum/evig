@@ -66,6 +66,7 @@ jest.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: {
     PROTOCOL_NOT_EDITABLE: 'Nicht bearbeitbar',
     PROCESSING_FAILED: 'Verarbeitung fehlgeschlagen',
+    NO_AUDIO_RECEIVED: 'Keine Audiodatei empfangen',
   },
 }))
 

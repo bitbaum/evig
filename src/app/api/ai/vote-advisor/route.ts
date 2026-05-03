@@ -15,6 +15,7 @@ import { z } from 'zod'
 import { logger } from '@/lib/logger'
 import { callWithFallback } from '@/lib/ai/providers'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 import {
   VOTING_ADVISOR_PROMPTS,
   VOTING_METHOD_LABELS,
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     const parsed = requestSchema.safeParse(body)
     if (!parsed.success) {
-      return apiBadRequest('Ungültige Anfrage', parsed.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, parsed.error.flatten().fieldErrors)
     }
 
     const { title, description, background, votingMethod, options, question } = parsed.data
