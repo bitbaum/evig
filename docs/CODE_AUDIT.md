@@ -1,12 +1,12 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-05-02
-last_modified_summary: Shop product pages gained JSON-LD Product schema + openGraph. Fixed item_uuid alias bug in getInventoryProductByUuid (product detail pages were 404ing). Fixed sitemap shop product URLs to use itemUuid + join inventory_items for valid-only URLs.
+last_modified_date: 2026-05-03
+last_modified_summary: Updated test coverage to 7353 tests / 497 suites. Resolved all TypeScript errors in test files (26 files, 5 error categories).
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-05-02
+**Last Audit Date**: 2026-05-03
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
 
@@ -147,50 +147,41 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 - `ImageUploadGrid.tsx` and `ProductImageUpload.tsx` use raw `<img>` for blob URL previews — this is **correct** (`next/image` cannot optimize blob: URLs)
 
 ### Testing Coverage
-**Current Coverage**: 2581 tests across 92 test suites (updated 2026-05-01)
+**Current Coverage**: 7353 tests across 497 test suites (updated 2026-05-03)
+
+**API routes** (src/app/api/**/__tests__/): 251/251 routes covered
+- All non-framework routes have dedicated test files
+- auth/[...nextauth] excluded (NextAuth boilerplate with no testable logic)
 
 **Config utilities** (src/config/__tests__/):
-- it-hilfe: deriveBudgetType, formatBudget, isRequestAcceptingOffers, skill/category/status lookups
-- marketplace-status, invoice-status, location-status: label/badge functions
-- donations: label lookups, getEstimatedValue, formatAmountCHF, options generators
-- activity: null-safe label/color functions for activity stream
-- document-status, certification-status, appointment-status: badge/label functions
-- dashboard: getDashboardCardsForRole, groupCardsByCategory, getAllDashboardCards
-- build-computer, editable-fields: getMockRecommendation, getFieldLabel
-- open-source-registry: category/alternative/app lookups, searchAlternatives
-- protocols: getFollowUpStatusColor (null safety, fallback)
-- report-status: getReportStatusLabel (umlauts verified)
-- status-config: isStatusEditable/Commentable, approval/urgency badges, canton coords
-- co2-impact: estimateCO2Savings, CO2_PER_KG constant
-- erfassung/categories: getCategoryByValue, getParentCategory, getAllCategoriesFlat, getCategoryDetails
-- erfassung/conditions: getConditionLabel, normalizeConditionValue, getConditionBadge, parseConditionFromText
-- remaining: marketplace/team/urls/review/workshop/refund/service/shop utilities
+- it-hilfe, marketplace-status, invoice-status, location-status, donations, activity
+- document-status, certification-status, appointment-status, booking-status, lifecycle-status
+- dashboard, build-computer, editable-fields, open-source-registry, protocols, report-status
+- status-config, co2-impact, erfassung/categories, erfassung/conditions
+- marketplace, team, urls, review-status, workshop-registration-status, refund, service-categories, shop, workshops
+- analyse-metrics, approval-status, canton-coordinates, intake-checklist, misc-config
+- oss-protocols-config, registration-and-profile, remaining-config, sections, service-icons
+- status-helpers, status-misc, system-constants, tasks
 
-**Lib utilities** (src/lib/__tests__/):
-- utils: cn (Tailwind class merge), formatRelativeTime (German timestamps)
-- pricing: VAT rates (CHF 7.7% vs EUR 19%), payment fee formula, calculateTotalWithFees
-- detect-multi: detectMultipleProducts (numbered lists, bullets, brands, CSV, prices)
-- api-helpers: parsePagination (clamping, NaN fallback, page→offset derivation)
-- suggestion-utils: getSuggestionIcon (keyword/href/category lookup), ensureIconInLabel
+**Lib utilities** (src/lib/__tests__/ and subdirectories):
+- utils, pricing, detect-multi, api-helpers, suggestion-utils, suggestion-enhancer
 - chatbot-language, date-formats, design-system, org-numbers, permissions, swiss-postal-codes
-- utils/date, utils/error, utils/slug
-
-**Email templates** (src/lib/email/__tests__/):
-- auth: verificationCode, emailVerification, welcome, staffVerificationCode, staffWelcome, passwordReset, passwordChangeConfirmation
-- it-hilfe: itHilfeRequestConfirmation, helperNewMatchingRequest, adminNewITHilfeRequest, itHilfeOfferAccepted, itHilfeNewOfferReceived, itHilfeCompleted, itHilfeReviewReceived, itHilfeOfferRejected
-- marketplace: listingPublishedConfirmation, newMarketplaceMessage, orderConfirmationBuyer, newOrderNotificationSeller, orderStatusUpdate, orderReceiptConfirmed, orderReviewPrompt, orderReviewReceived, listingReviewNotification
-- workshop: workshopRegistrationConfirmation, workshopRegistrationStatusUpdate, workshopReminder, workshopCancellation, workshopFeedbackRequest, workshopProposalSubmitted, workshopProposalApproved, workshopProposalRejected, workshopProposalChangesRequested
-- admin: adminNewRepairerApplication, adminNewWorkshopProposal, adminNewBlogSubmission, adminNewSellerApplication
-- blog: blogSubmissionReceived, blogSubmissionApproved, blogSubmissionRejected, blogSubmissionPublished, blogSubmissionChangesRequested
-- appointments: appointmentNewBooking, appointmentQuoteReceived, appointmentStatusUpdate, appointmentUnassignedAlert
-- decisions: decisionVotingOpened, decisionDeadlineReminder, decisionClosed
-- locations: locationApprovalNotification, locationSubmissionConfirmation
-- repairer: repairerApplicationSubmitted, repairerApplicationApproved, repairerApplicationRejected, repairerApplicationChangesRequested
-- misc: contentSubmissionApproved, contentSubmissionRejected, inquiryNotification, inquiryConfirmation, notificationEmail, newsletterConfirmation, newReviewNotification, sellerApplicationSubmitted
+- utils/date, utils/error, utils/slug, utils/escape-html, utils/safe-redirect
+- activity, blog, blog-db, blog-utils, logger, uiEvents
+- auth: audit, config, csrf, db-connection, db-roles, db-services, db-users, db-verification, db-workshops, password, permissions, rate-limiter
+- ai: callWithFallback, decisions-narrative, extract, fill-prompt-template, prompt-helpers, protocol-processing, provider-config, providers-pure, schema-to-prompt
+- api: client, helpers, middleware, response-helpers, task-helpers
+- email templates: auth, it-hilfe, marketplace, workshop, admin, blog, appointments, decisions, locations, repairer, misc (content/inquiry/notification/newsletter/reviews/sellers)
+- erfassung: ai-classification, ai-extraction, ai-field-mapping, bulk-extraction, create-product, detect-multi, file-parser
+- hirn: action-cockpit, action-executor-contracts, action-executor, chat, chunking, format, ingestion, provider-impls, providers, retrieval; data: analysis, financial-loader, methodology-ssot
+- services: appointment-actions, blog-submission, db, decisions-comments, decisions-crud, decisions-helpers, decisions-transitions, decisions-voting, index, inventory-service, notifications, order-service, payment-webhook, presentation, protocols-*, seller-service, technician-service
+- payments: currency, payment-flow, payments-escrow, payments-fees, payments-gateway, payments-invoice, payrexx-client, security, security-misc, tax-compliance
+- others: admin/edit-utils, admin/inventory-actions, dashboard/techniker, domain/it-hilfe, domain/marketplace, intake/timeline, inventory/csv-analysis, it-hilfe/notifications, it-hilfe/request-mapper, kivvi/client, marketplace/listing-helpers, marketplace/spec-utils, messaging/send-message, middleware/pci-compliance, pricing/index, protocols/audio-validation, protocols/workflow, reviews/create-review, reviews/review-service, schemas/* (30 schema files), search/meilisearch, security/rate-limit, security/sanitize, seo/json-ld, storage/image-upload, suggestion-utils/iconMapping, suggestion-utils/suggestionEnhancer
 
 **Untestable** (env-dependent or React component returns):
 - sections.ts, service-icons.ts: return LucideIcon components
 - email.ts, redis.ts: require environment variables (Brevo SMTP, Redis)
+- hirn/providers/groq, openrouter, ollama: require API keys
 - Integration tests: require live Neon DB connection
 
 ---
@@ -205,4 +196,4 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 
 ---
 
-**Last Updated**: 2026-05-02
+**Last Updated**: 2026-05-03
