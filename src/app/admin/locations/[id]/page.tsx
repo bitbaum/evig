@@ -10,11 +10,9 @@ import Heading from '@/components/admin/AdminHeading'
 import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
 import { getBookingStatusBadge } from '@/config/booking-status'
 import { apiFetch } from '@/lib/api/client'
+import { LOCATION_TYPES } from '@/components/admin/locations/location-form'
 import {
   MapPin,
-  Building2,
-  Home,
-  Monitor,
   Users,
   Calendar,
   CheckCircle,
@@ -160,19 +158,13 @@ export default function LocationDetailPage() {
   }
 
   const getTypeLabel = (type: string) => {
-    const labels: Record<string, { icon: typeof Building2; label: string }> = {
-      venue: { icon: Building2, label: 'Veranstaltungsort' },
-      home: { icon: Home, label: 'Zu Hause' },
-      online: { icon: Monitor, label: 'Online' },
-      community_center: { icon: Building2, label: 'Gemeinschaftszentrum' },
-      business: { icon: Building2, label: 'Geschäft' },
-    }
-    const config = labels[type] || { icon: MapPin, label: type }
-    const Icon = config.icon
+    const found = LOCATION_TYPES.find(t => t.id === type)
+    const Icon = found?.icon ?? MapPin
+    const label = found?.label ?? type
     return (
       <span className="inline-flex items-center gap-1.5 text-sm text-neutral-600">
         <Icon className="w-4 h-4" />
-        {config.label}
+        {label}
       </span>
     )
   }
