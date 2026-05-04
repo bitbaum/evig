@@ -7,8 +7,7 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
-import { getApprovalStatusLabel } from '@/config/approval-status'
-import { LOCATION_STATUS } from '@/config/location-status'
+import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { apiFetch } from '@/lib/api/client'
 import {
@@ -142,19 +141,20 @@ export default function LocationDetailPage() {
     }
   }
 
+  const STATUS_ICONS: Record<string, typeof CheckCircle> = {
+    [LOCATION_STATUS.APPROVED]: CheckCircle,
+    [LOCATION_STATUS.PENDING]: Clock,
+    [LOCATION_STATUS.REJECTED]: XCircle,
+    [LOCATION_STATUS.SUSPENDED]: AlertCircle,
+  }
+
   const getStatusBadge = (status: string) => {
-    const configs: Record<string, { icon: typeof CheckCircle; label: string; className: string }> = {
-      [LOCATION_STATUS.APPROVED]: { icon: CheckCircle, label: getApprovalStatusLabel(LOCATION_STATUS.APPROVED), className: 'bg-primary-100 text-primary-800' },
-      [LOCATION_STATUS.PENDING]: { icon: Clock, label: getApprovalStatusLabel(LOCATION_STATUS.PENDING), className: 'bg-warning-100 text-warning-800' },
-      [LOCATION_STATUS.REJECTED]: { icon: XCircle, label: getApprovalStatusLabel(LOCATION_STATUS.REJECTED), className: 'bg-error-100 text-error-800' },
-      [LOCATION_STATUS.SUSPENDED]: { icon: AlertCircle, label: 'Suspendiert', className: 'bg-orange-100 text-orange-800' },
-    }
-    const config = configs[status] || { icon: AlertCircle, label: status, className: 'bg-neutral-100 text-neutral-800' }
-    const Icon = config.icon
+    const Icon = STATUS_ICONS[status] ?? AlertCircle
+    const className = LOCATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'
     return (
-      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${config.className}`}>
+      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}>
         <Icon className="w-4 h-4" />
-        {config.label}
+        {getLocationStatusLabel(status)}
       </span>
     )
   }

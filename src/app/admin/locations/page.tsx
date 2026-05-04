@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
-import { LOCATION_STATUS, getLocationStatusLabel } from '@/config/location-status'
+import { LOCATION_STATUS, getLocationStatusLabel, LOCATION_STATUS_COLORS } from '@/config/location-status'
 import { apiFetch } from '@/lib/api/client'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
@@ -42,12 +42,12 @@ interface Location {
 
 const PAGE_SIZE = 20
 
-const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = {
-  [LOCATION_STATUS.APPROVED]: { label: getLocationStatusLabel(LOCATION_STATUS.APPROVED), color: 'bg-primary-100 text-primary-800' },
-  [LOCATION_STATUS.PENDING]: { label: getLocationStatusLabel(LOCATION_STATUS.PENDING), color: 'bg-warning-100 text-warning-800' },
-  [LOCATION_STATUS.REJECTED]: { label: getLocationStatusLabel(LOCATION_STATUS.REJECTED), color: 'bg-error-100 text-error-800' },
-  [LOCATION_STATUS.SUSPENDED]: { label: getLocationStatusLabel(LOCATION_STATUS.SUSPENDED), color: 'bg-orange-100 text-orange-800' },
-}
+const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = Object.fromEntries(
+  Object.keys(LOCATION_STATUS_COLORS).map(status => [
+    status,
+    { label: getLocationStatusLabel(status), color: LOCATION_STATUS_COLORS[status] },
+  ])
+)
 
 function getTypeIcon(type: string) {
   switch (type) {
