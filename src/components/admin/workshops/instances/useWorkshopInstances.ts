@@ -8,7 +8,7 @@ import { apiFetch } from '@/lib/api/client'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData, InstanceFiltersState } from './types'
 import { initialFormData } from './types'
-import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
+import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS, WORKSHOP_INSTANCE_STATUS_COLORS } from '@/config/workshops'
 
 export function useWorkshopInstances() {
   const { data: session, status: sessionStatus } = useSession()
@@ -150,18 +150,10 @@ export function useWorkshopInstances() {
     setError('')
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case WORKSHOP_INSTANCE_STATUS.SCHEDULED:
-        return { label: 'Geplant', className: 'bg-info-100 text-info-800' }
-      case WORKSHOP_INSTANCE_STATUS.CANCELLED:
-        return { label: 'Abgesagt', className: 'bg-error-100 text-error-800' }
-      case WORKSHOP_INSTANCE_STATUS.COMPLETED:
-        return { label: 'Abgeschlossen', className: 'bg-primary-100 text-primary-800' }
-      default:
-        return { label: status, className: 'bg-neutral-100 text-neutral-800' }
-    }
-  }
+  const getStatusBadge = (status: string) => ({
+    label: WORKSHOP_INSTANCE_STATUS_LABELS[status as keyof typeof WORKSHOP_INSTANCE_STATUS_LABELS] ?? status,
+    className: WORKSHOP_INSTANCE_STATUS_COLORS[status as keyof typeof WORKSHOP_INSTANCE_STATUS_COLORS] ?? 'bg-neutral-100 text-neutral-800',
+  })
 
   return {
     // Auth

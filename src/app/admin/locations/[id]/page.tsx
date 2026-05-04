@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
-import { BOOKING_STATUS } from '@/config/booking-status'
+import { getBookingStatusBadge } from '@/config/booking-status'
 import { apiFetch } from '@/lib/api/client'
 import {
   MapPin,
@@ -475,14 +475,11 @@ export default function LocationDetailPage() {
                       <p className="text-xs text-neutral-500">{booking.booked_by_name}</p>
                     )}
                   </div>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    booking.status === BOOKING_STATUS.CONFIRMED ? 'bg-primary-100 text-primary-800' :
-                    booking.status === BOOKING_STATUS.PENDING ? 'bg-warning-100 text-warning-800' :
-                    'bg-neutral-100 text-neutral-800'
-                  }`}>
-                    {booking.status === BOOKING_STATUS.CONFIRMED ? 'Bestätigt' :
-                     booking.status === BOOKING_STATUS.PENDING ? 'Ausstehend' : booking.status}
-                  </span>
+                  {(() => { const badge = getBookingStatusBadge(booking.status); return (
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
+                      {badge.label}
+                    </span>
+                  ) })()}
                 </div>
               ))}
             </div>

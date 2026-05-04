@@ -178,6 +178,12 @@ export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, str
   [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'Abgeschlossen',
 };
 
+export const WORKSHOP_INSTANCE_STATUS_COLORS: Record<WorkshopInstanceStatus, string> = {
+  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-info-100 text-info-800',
+  [WORKSHOP_INSTANCE_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
+  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-primary-100 text-primary-800',
+};
+
 /**
  * Workshop proposal statuses
  * Used in workshop_proposals table and admin UI
