@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
+import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_REGISTRATION_STATUS_LABELS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
@@ -98,18 +98,7 @@ export default function WorkshopsDashboard() {
     }
   }
 
-  const getStatusText = (status: string) => {
-    switch (status) {
-      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-        return 'Bestätigt'
-      case WORKSHOP_REGISTRATION_STATUS.PENDING:
-        return 'Ausstehend'
-      case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-        return 'Storniert'
-      default:
-        return status
-    }
-  }
+  const getStatusText = (status: string) => WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status
 
 
   if (status === 'loading' || loading) {
