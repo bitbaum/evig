@@ -1,3 +1,7 @@
+// Force runtime rendering — lucide imports land in the shared SSR bundle where
+// Next.js 16 Turbopack leaves React null during parallel static-generation workers.
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { Search, Home, ArrowLeft } from 'lucide-react'
 import Heading from '@/components/ui/Heading'

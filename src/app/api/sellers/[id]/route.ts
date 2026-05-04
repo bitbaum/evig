@@ -19,11 +19,10 @@ import { sellerProfileCoreFields } from '@/lib/services/seller-service';
 
 export async function GET(
   request: NextRequest,
-  context: { params?: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = context.params ? await context.params : undefined;
-    const id = resolvedParams?.id;
+    const { id } = await params;
     if (!id) return apiNotFound('Verkäuferprofil');
 
     // Fetch seller profile joined with user data

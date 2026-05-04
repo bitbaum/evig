@@ -37,10 +37,13 @@ export interface ValidSession {
  * - withAuth((req, session) => handler(req, session))
  * - withAuth((req, session, { params }) => handler(req, session, params))
  */
-type RouteHandler<TParams> = (
-  request: NextRequest,
-  context?: { params?: Promise<TParams> }
-) => Promise<NextResponse>;
+// Two-overload type: tests call with 1 arg (first overload); Next.js route validator
+// uses the last overload for SecondArg inference, getting { params: Promise<TParams> }
+// which satisfies RouteContext. TypeScript always infers from the last call signature.
+interface RouteHandler<TParams> {
+  (request: NextRequest): Promise<NextResponse>;
+  (request: NextRequest, context: { params: Promise<TParams> }): Promise<NextResponse>;
+}
 
 export function withAuth<TParams = Record<string, never>>(
   handler: (
@@ -49,7 +52,7 @@ export function withAuth<TParams = Record<string, never>>(
     context?: { params?: TParams }
   ) => Promise<NextResponse>
 ): RouteHandler<TParams> {
-  return async (
+  const routeHandler = async (
     request: NextRequest,
     context?: { params?: Promise<TParams> }
   ): Promise<NextResponse> => {
@@ -59,16 +62,15 @@ export function withAuth<TParams = Record<string, never>>(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    // Session is guaranteed non-null after the check above
     const validSession = session as unknown as ValidSession;
 
-    // Await params if they exist (Next.js 15+ async params)
     const resolvedContext = context?.params
       ? { params: await context.params }
       : undefined;
 
     return handler(request, validSession, resolvedContext);
   };
+  return routeHandler as unknown as RouteHandler<TParams>;
 }
 
 /**
@@ -108,7 +110,7 @@ export function withAdmin<TParams = Record<string, never>>(
   const section = typeof sectionOrHandler === 'string' ? sectionOrHandler : undefined;
   const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler!;
 
-  return async (
+  const routeHandler = async (
     request: NextRequest,
     context?: { params?: Promise<TParams> }
   ): Promise<NextResponse> => {
@@ -118,15 +120,12 @@ export function withAdmin<TParams = Record<string, never>>(
       return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    // Session is guaranteed non-null after the check above
     const validSession = session as unknown as ValidSession;
 
-    // Check staff access from session (set in JWT callback in src/auth.ts)
     if (!validSession.user.isStaff) {
       return apiForbidden(ERROR_MESSAGES.ADMIN_REQUIRED);
     }
 
-    // Section-level permission check (when section is specified)
     if (section) {
       const staffUser = toStaffUser(validSession.user);
       if (!canAccessSection(staffUser, section)) {
@@ -135,11 +134,11 @@ export function withAdmin<TParams = Record<string, never>>(
       }
     }
 
-    // Await params if they exist (Next.js 15+ async params)
     const resolvedContext = context?.params
       ? { params: await context.params }
       : undefined;
 
     return handler(request, validSession, resolvedContext);
   };
+  return routeHandler as unknown as RouteHandler<TParams>;
 }

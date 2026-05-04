@@ -141,20 +141,20 @@ describe('getApprovalStatusBadge', () => {
   it('returns badge object for approved (green)', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.APPROVED)
     expect(badge.label).toBe('Genehmigt')
-    expect(badge.color).toContain('green')
+    expect(badge.color).toContain('primary')
   })
 
   it('returns badge object for rejected (red)', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.REJECTED)
     expect(badge.label).toBe('Abgelehnt')
-    expect(badge.color).toContain('red')
+    expect(badge.color).toContain('error')
   })
 
   it('returns fallback badge for unknown status (uses raw status as label)', () => {
     const badge = getApprovalStatusBadge('totally_unknown')
     expect(badge.label).toBe('totally_unknown')
-    expect(badge.color).toContain('gray')
-    expect(badge.bg).toContain('gray')
+    expect(badge.color).toContain('neutral')
+    expect(badge.bg).toContain('neutral')
   })
 
   it('each known status badge has label, color, bg', () => {
@@ -220,7 +220,7 @@ describe('getBookingStatusBadge', () => {
   it('returns fallback badge for unknown status', () => {
     const badge = getBookingStatusBadge('xyz_unknown')
     expect(badge.label).toBe('xyz_unknown')
-    expect(badge.color).toContain('gray')
+    expect(badge.color).toContain('neutral')
   })
 
   it('each known status badge has label and color', () => {
@@ -236,7 +236,7 @@ describe('getUrgencyBadge', () => {
   it('returns "Dringend" (red) for urgent', () => {
     const badge = getUrgencyBadge('urgent')
     expect(badge.label).toBe('Dringend')
-    expect(badge.color).toContain('red')
+    expect(badge.color).toContain('error')
   })
 
   it('returns "Hoch" (orange) for high', () => {
@@ -248,13 +248,13 @@ describe('getUrgencyBadge', () => {
   it('returns "Normal" (blue) for normal', () => {
     const badge = getUrgencyBadge('normal')
     expect(badge.label).toBe('Normal')
-    expect(badge.color).toContain('blue')
+    expect(badge.color).toContain('info')
   })
 
   it('falls back to normal badge for unknown urgency', () => {
     const badge = getUrgencyBadge('unknown_urgency')
     expect(badge.label).toBe('Normal')
-    expect(badge.color).toContain('blue')
+    expect(badge.color).toContain('info')
   })
 })
 

@@ -42,13 +42,13 @@ describe('getBookingStatusBadge', () => {
   it('returns badge for "completed"', () => {
     const badge = getBookingStatusBadge(BOOKING_STATUS.COMPLETED)
     expect(badge.label).toBe('Abgeschlossen')
-    expect(badge.color).toContain('green')
+    expect(badge.color).toContain('primary')
   })
 
   it('returns badge for "cancelled"', () => {
     const badge = getBookingStatusBadge(BOOKING_STATUS.CANCELLED)
     expect(badge.label).toBe('Storniert')
-    expect(badge.color).toContain('gray')
+    expect(badge.color).toContain('neutral')
   })
 
   it('returns badge for "in_progress"', () => {
@@ -59,7 +59,7 @@ describe('getBookingStatusBadge', () => {
   it('returns raw status as label with gray color for unknown status', () => {
     const badge = getBookingStatusBadge('unknown_status')
     expect(badge.label).toBe('unknown_status')
-    expect(badge.color).toContain('gray')
+    expect(badge.color).toContain('neutral')
   })
 
   it('badge has label and color properties', () => {
@@ -99,7 +99,7 @@ describe('getUrgencyBadge', () => {
   it('returns red badge for "urgent"', () => {
     const badge = getUrgencyBadge('urgent')
     expect(badge.label).toBe('Dringend')
-    expect(badge.color).toContain('red')
+    expect(badge.color).toContain('error')
   })
 
   it('returns orange badge for "high"', () => {
@@ -109,7 +109,7 @@ describe('getUrgencyBadge', () => {
 
   it('returns blue badge for "normal"', () => {
     const badge = getUrgencyBadge('normal')
-    expect(badge.color).toContain('blue')
+    expect(badge.color).toContain('info')
   })
 
   it('falls back to normal badge for unknown urgency', () => {

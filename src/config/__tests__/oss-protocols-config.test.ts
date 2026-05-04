@@ -26,12 +26,12 @@ describe('getFollowUpStatusColor', () => {
 
   it('"erledigt" → green classes', () => {
     const color = getFollowUpStatusColor('erledigt')
-    expect(color).toContain('green')
+    expect(color).toContain('primary')
   })
 
   it('"in Arbeit" → blue classes', () => {
     const color = getFollowUpStatusColor('in Arbeit')
-    expect(color).toContain('blue')
+    expect(color).toContain('info')
   })
 
   it('"offen" → yellow classes', () => {

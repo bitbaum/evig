@@ -40,6 +40,7 @@ import {
   apiRateLimited,
   apiBadRequest,
 } from '../helpers'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 const mockJson = NextResponse.json as jest.Mock
 const mockLoggerError = logger.error as jest.Mock
@@ -217,20 +218,20 @@ describe('apiRateLimited', () => {
   })
 
   it('honours custom retryAfter (header + body)', () => {
-    apiRateLimited('Slow down', { retryAfter: 120 })
+    apiRateLimited(ERROR_MESSAGES.RATE_LIMITED,{ retryAfter: 120 })
     const { body, init } = lastCall()
     expect(init.headers?.['Retry-After']).toBe('120')
     expect(body.retryAfter).toBe(120)
   })
 
   it('adds X-RateLimit-Remaining when provided', () => {
-    apiRateLimited('Slow down', { remaining: 5 })
+    apiRateLimited(ERROR_MESSAGES.RATE_LIMITED,{ remaining: 5 })
     const { init } = lastCall()
     expect(init.headers?.['X-RateLimit-Remaining']).toBe('5')
   })
 
   it('adds X-RateLimit-Reset when provided', () => {
-    apiRateLimited('Slow down', { resetAt: 1700000000 })
+    apiRateLimited(ERROR_MESSAGES.RATE_LIMITED,{ resetAt: 1700000000 })
     const { init } = lastCall()
     expect(init.headers?.['X-RateLimit-Reset']).toBe('1700000000')
   })

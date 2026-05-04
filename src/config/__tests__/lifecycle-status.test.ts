@@ -270,20 +270,20 @@ describe('DOCUMENT_STATUS', () => {
 describe('getDocumentStatusBadge', () => {
   it('returns green badge for APPROVED', () => {
     const badge = getDocumentStatusBadge(DOCUMENT_STATUS.APPROVED)
-    expect(badge.bg).toContain('green')
-    expect(badge.color).toContain('green')
+    expect(badge.bg).toContain('primary')
+    expect(badge.color).toContain('primary')
   })
 
   it('returns red badge for REJECTED', () => {
     const badge = getDocumentStatusBadge(DOCUMENT_STATUS.REJECTED)
-    expect(badge.bg).toContain('red')
+    expect(badge.bg).toContain('error')
   })
 
   it('returns gray fallback badge for unknown status', () => {
     const badge = getDocumentStatusBadge('mystery')
     expect(badge.label).toBe('mystery')
-    expect(badge.bg).toContain('gray')
-    expect(badge.color).toContain('gray')
+    expect(badge.bg).toContain('neutral')
+    expect(badge.color).toContain('neutral')
   })
 
   it('every known status has a badge entry', () => {
@@ -344,7 +344,7 @@ describe('CERTIFICATION_STATUS', () => {
 describe('getCertificationStatusBadge', () => {
   it('returns green badge for VERIFIED', () => {
     const badge = getCertificationStatusBadge(CERTIFICATION_STATUS.VERIFIED)
-    expect(badge.bg).toContain('green')
+    expect(badge.bg).toContain('primary')
     expect(badge.label).toBe('Verifiziert')
   })
 
@@ -357,7 +357,7 @@ describe('getCertificationStatusBadge', () => {
   it('returns gray fallback for unknown status', () => {
     const badge = getCertificationStatusBadge('suspended')
     expect(badge.label).toBe('suspended')
-    expect(badge.bg).toContain('gray')
+    expect(badge.bg).toContain('neutral')
   })
 
   it('every known status has a badge entry', () => {

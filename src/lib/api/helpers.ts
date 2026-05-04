@@ -124,7 +124,7 @@ export function apiForbidden(message = 'Forbidden'): NextResponse {
  * @param options - Rate limit details (retryAfter, remaining, resetAt)
  */
 export function apiRateLimited(
-  message = ERROR_MESSAGES.RATE_LIMITED,
+  message: string = ERROR_MESSAGES.RATE_LIMITED,
   options?: { retryAfter?: number; remaining?: number; resetAt?: number }
 ): NextResponse {
   const retryAfter = options?.retryAfter || 60

@@ -1,15 +1,16 @@
+'use client'
+
 import { type OSSAlternative, getAlternativesByCategory } from '@/config/open-source-registry'
 import { AlternativeCard } from './AlternativeCard'
 import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 interface RelatedAlternativesProps {
   current: OSSAlternative
-  locale: string
 }
 
-export async function RelatedAlternatives({ current, locale }: RelatedAlternativesProps) {
-  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
+export function RelatedAlternatives({ current }: RelatedAlternativesProps) {
+  const t = useTranslations('services.openSourceSolutions')
   const related = getAlternativesByCategory(current.categoryId)
     .filter(a => a.id !== current.id)
     .slice(0, 3)

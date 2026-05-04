@@ -1,4 +1,8 @@
 import { Metadata } from "next";
+
+// Force runtime rendering — same React-null SSR bundle issue as OSS detail pages
+// (lucide icons in a server component alongside next-auth v5 beta SSR bundles).
+export const dynamic = 'force-dynamic'
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";

@@ -1,3 +1,5 @@
+'use client'
+
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -13,15 +15,14 @@ import { MigrationDifficultyBadge } from './MigrationDifficultyBadge'
 import { PlatformIcons } from './PlatformIcons'
 import { RevampITServicesCTA } from './RevampITServicesCTA'
 import { RelatedAlternatives } from './RelatedAlternatives'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 interface AlternativeDetailProps {
   alternative: OSSAlternative
-  locale: string
 }
 
-export async function AlternativeDetail({ alternative, locale }: AlternativeDetailProps) {
-  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
+export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
+  const t = useTranslations('services.openSourceSolutions')
   const category = getCategoryById(alternative.categoryId)
 
   return (
@@ -150,7 +151,7 @@ export async function AlternativeDetail({ alternative, locale }: AlternativeDeta
             </section>
 
             {/* Related */}
-            <RelatedAlternatives current={alternative} locale={locale} />
+            <RelatedAlternatives current={alternative} />
           </div>
 
           {/* Sidebar (1/3) */}

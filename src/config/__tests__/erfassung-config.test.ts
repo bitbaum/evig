@@ -334,7 +334,7 @@ describe('getConditionBadge', () => {
 
   it('unknown condition → gray fallback badge', () => {
     const badge = getConditionBadge('mystery')
-    expect(badge.color).toContain('gray')
+    expect(badge.color).toContain('neutral')
   })
 
   it('returns badge for all canonical conditions', () => {

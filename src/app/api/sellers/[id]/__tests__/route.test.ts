@@ -237,7 +237,7 @@ describe('GET /api/sellers/[id] — success', () => {
 describe('GET /api/sellers/[id] — missing id', () => {
   it('returns 404 when no id in params', async () => {
     const req = new NextRequest('http://localhost/api/sellers/')
-    const response = await GET(req, { params: undefined })
+    const response = await GET(req, { params: Promise.resolve({ id: '' }) })
     expect(response.status).toBe(404)
   })
 })

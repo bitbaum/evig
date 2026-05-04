@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     if (!rateLimitResult.allowed) {
       logger.warn('Registration rate limit exceeded', { ip: clientIp })
-      return apiRateLimited('Zu viele Registrierungsversuche. Bitte versuche es später erneut.', {
+      return apiRateLimited(ERROR_MESSAGES.RATE_LIMITED_REGISTRATION, {
         retryAfter: rateLimitResult.retryAfter,
         remaining: rateLimitResult.remaining,
         resetAt: rateLimitResult.resetAt,

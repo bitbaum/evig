@@ -43,12 +43,12 @@ describe('getCategoryStyle', () => {
   it('returns repair style for "repair"', () => {
     const style = getCategoryStyle('repair')
     expect(style).toBe(CATEGORY_STYLES.repair)
-    expect(style.primary).toContain('blue')
+    expect(style.primary).toContain('info')
   })
 
   it('returns data style for "data"', () => {
     const style = getCategoryStyle('data')
-    expect(style.primary).toContain('green')
+    expect(style.primary).toContain('primary')
   })
 
   it('returns recycling style for "recycling"', () => {

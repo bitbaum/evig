@@ -1,3 +1,6 @@
+// SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
+export const dynamic = 'force-dynamic'
+
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Suspense } from 'react'
@@ -29,11 +32,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export const revalidate = 60
 
 interface BlogPageProps {
-  searchParams: { categories?: string }
+  searchParams: Promise<{ categories?: string }>
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const t = await getTranslations('blog')
+  const { categories } = await searchParams
 
   // Try database first, fall back to file system if no posts in DB
   let allPosts = await getAllPosts()
@@ -79,8 +83,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   // Sort alphabetically
   allCategories.sort((a, b) => a.name.localeCompare(b.name))
 
-  const selectedCategorySlugs = searchParams.categories
-    ? searchParams.categories.split(',').filter(Boolean)
+  const selectedCategorySlugs = categories
+    ? categories.split(',').filter(Boolean)
     : []
 
   // Map slugs back to names for filtering

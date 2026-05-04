@@ -105,15 +105,15 @@ describe('getApprovalStatusBadge', () => {
   it('returns badge for APPROVED with green styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.APPROVED)
     expect(badge.label).toBe('Genehmigt')
-    expect(badge.color).toContain('green')
-    expect(badge.bg).toContain('green')
+    expect(badge.color).toContain('primary')
+    expect(badge.bg).toContain('primary')
   })
 
   it('returns badge for REJECTED with red styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.REJECTED)
     expect(badge.label).toBe('Abgelehnt')
-    expect(badge.color).toContain('red')
-    expect(badge.bg).toContain('red')
+    expect(badge.color).toContain('error')
+    expect(badge.bg).toContain('error')
   })
 
   it('returns badge for REQUIRES_CHANGES with orange styling', () => {
@@ -126,15 +126,15 @@ describe('getApprovalStatusBadge', () => {
   it('returns badge for PUBLISHED with blue styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.PUBLISHED)
     expect(badge.label).toBe('Veröffentlicht')
-    expect(badge.color).toContain('blue')
-    expect(badge.bg).toContain('blue')
+    expect(badge.color).toContain('info')
+    expect(badge.bg).toContain('info')
   })
 
   it('returns gray fallback badge for unknown status', () => {
     const badge = getApprovalStatusBadge('mystery_status')
     expect(badge.label).toBe('mystery_status')
-    expect(badge.color).toContain('gray')
-    expect(badge.bg).toContain('gray')
+    expect(badge.color).toContain('neutral')
+    expect(badge.bg).toContain('neutral')
   })
 
   it('fallback badge label is the unknown status string', () => {

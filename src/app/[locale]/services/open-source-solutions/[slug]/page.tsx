@@ -1,5 +1,10 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+
+// Force runtime rendering — the lucide-icon imports in AlternativeDetail land in
+// an SSR bundle where Next.js 16 + next-auth v5 leave the vendored React module
+// null during parallel static generation workers, causing hooks to throw.
+export const dynamic = 'force-dynamic'
 import {
   getAllAlternatives,
   getAlternativeById,
@@ -57,5 +62,5 @@ export default async function AlternativeDetailPage({
     notFound()
   }
 
-  return <AlternativeDetail alternative={alternative} locale={locale} />
+  return <AlternativeDetail alternative={alternative} />
 }

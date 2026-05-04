@@ -139,25 +139,25 @@ describe('getConditionBadge', () => {
   it('returns label "Neu" and green color for "new"', () => {
     const badge = getConditionBadge('new')
     expect(badge.label).toBe('Neu')
-    expect(badge.color).toContain('green')
+    expect(badge.color).toContain('primary')
   })
 
   it('returns label "Defekt" and gray color for "defect"', () => {
     const badge = getConditionBadge('defect')
     expect(badge.label).toBe('Defekt')
-    expect(badge.color).toContain('gray')
+    expect(badge.color).toContain('neutral')
   })
 
   it('resolves alias "excellent" → label "Sehr gut" with "like_new" color (blue)', () => {
     const badge = getConditionBadge('excellent')
     expect(badge.label).toBe('Sehr gut')
-    expect(badge.color).toContain('blue')
+    expect(badge.color).toContain('info')
   })
 
   it('returns raw value as label and gray for completely unknown input', () => {
     const badge = getConditionBadge('mystery_grade')
     expect(badge.label).toBe('mystery_grade')
-    expect(badge.color).toContain('gray')
+    expect(badge.color).toContain('neutral')
   })
 })
 

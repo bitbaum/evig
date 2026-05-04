@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { type OSSAlternative, getProprietaryAppById, getCategoryById } from '@/config/open-source-registry'
@@ -10,7 +11,7 @@ interface AlternativeCardProps {
   alternative: OSSAlternative
 }
 
-function AlternativeCardComponent({ alternative }: AlternativeCardProps) {
+export function AlternativeCard({ alternative }: AlternativeCardProps) {
   const category = getCategoryById(alternative.categoryId)
 
   return (
@@ -71,4 +72,3 @@ function AlternativeCardComponent({ alternative }: AlternativeCardProps) {
   )
 }
 
-export const AlternativeCard = React.memo(AlternativeCardComponent)

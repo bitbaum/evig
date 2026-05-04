@@ -229,7 +229,7 @@ export async function getInventoryProducts(
         i.quantity_available,
         (SELECT file_path FROM ${sql.raw(piTable)} pi WHERE pi.product_id = p.id AND pi.is_primary = true LIMIT 1) as image_url,
         p.created_at,
-        COUNT(DISTINCT p.id) OVER() AS _total_count
+        COUNT(*) OVER() AS _total_count
       FROM ${sql.raw(aepTable)} p
       JOIN ${sql.raw(iiTable)} i ON i.ai_product_id = p.id
       ${profileJoinFragment}

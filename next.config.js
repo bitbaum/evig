@@ -102,18 +102,6 @@ const nextConfig = {
     ];
   },
   webpack: (config, { isServer, dev }) => {
-    // Font loader configuration
-    config.module.rules.push({
-      test: /\.(woff|woff2|eot|ttf|otf)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]',
-          outputPath: 'static/fonts/',
-        },
-      },
-    });
-
     // Handle fs module for client-side
     if (!isServer) {
       config.resolve.fallback = {
@@ -126,7 +114,6 @@ const nextConfig = {
     if (dev) {
       config.watchOptions = {
         ...(config.watchOptions || {}),
-        // Large/irrelevant directories to ignore in watch
         ignored: [
           '**/.git/**',
           '**/.next/**',
@@ -150,13 +137,6 @@ const nextConfig = {
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: process.env.NODE_ENV === 'production',
-  },
-  // Turbopack configuration (moved from experimental.turbo in Next.js 16)
-  turbopack: {
-    resolveAlias: {
-      // Ensure CSS modules are handled correctly
-      styles: './src/styles',
-    },
   },
   // Add specific CSS handling
   sassOptions: {

@@ -104,7 +104,6 @@ describe('CANTON_COORDINATES', () => {
     for (const [name, coords] of Object.entries(CANTON_COORDINATES)) {
       expect(coords.lat).toBeGreaterThan(45)
       expect(coords.lat).toBeLessThan(48)
-      // eslint-disable-next-line no-console
       if (coords.lat <= 45 || coords.lat >= 48) console.warn(`Out-of-range lat for ${name}: ${coords.lat}`)
     }
   })

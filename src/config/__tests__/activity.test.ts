@@ -78,15 +78,15 @@ describe('getActivityUpdateTypeLabel', () => {
 
 describe('getActivityUpdateTypeColor', () => {
   it('returns green class for accomplishment', () => {
-    expect(getActivityUpdateTypeColor(ACTIVITY_UPDATE_TYPES.ACCOMPLISHMENT)).toContain('green')
+    expect(getActivityUpdateTypeColor(ACTIVITY_UPDATE_TYPES.ACCOMPLISHMENT)).toContain('primary')
   })
 
   it('returns gray fallback for null', () => {
-    expect(getActivityUpdateTypeColor(null)).toContain('gray')
+    expect(getActivityUpdateTypeColor(null)).toContain('neutral')
   })
 
   it('returns gray fallback for unknown type', () => {
-    expect(getActivityUpdateTypeColor('unknown')).toContain('gray')
+    expect(getActivityUpdateTypeColor('unknown')).toContain('neutral')
   })
 })
 
@@ -132,11 +132,11 @@ describe('getHelpRequestUrgencyLabel', () => {
 
 describe('getHelpRequestUrgencyColor', () => {
   it('returns red class for urgent', () => {
-    expect(getHelpRequestUrgencyColor(HELP_REQUEST_URGENCY.URGENT)).toContain('red')
+    expect(getHelpRequestUrgencyColor(HELP_REQUEST_URGENCY.URGENT)).toContain('error')
   })
 
   it('returns blue (normal) for null', () => {
-    expect(getHelpRequestUrgencyColor(null)).toContain('blue')
+    expect(getHelpRequestUrgencyColor(null)).toContain('info')
   })
 })
 
@@ -164,7 +164,7 @@ describe('getHelpRequestStatusLabel', () => {
 
 describe('getHelpRequestStatusColor', () => {
   it('returns green class for resolved', () => {
-    expect(getHelpRequestStatusColor(HELP_REQUEST_STATUSES.RESOLVED)).toContain('green')
+    expect(getHelpRequestStatusColor(HELP_REQUEST_STATUSES.RESOLVED)).toContain('primary')
   })
 
   it('returns yellow (open) for null', () => {

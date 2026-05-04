@@ -129,12 +129,12 @@ describe('getLevelBadgeClass', () => {
 
   it('returns green badge class for "beginner"', () => {
     const cls = getLevelBadgeClass('beginner')
-    expect(cls).toContain('green')
+    expect(cls).toContain('primary')
   })
 
   it('returns blue badge class for "intermediate"', () => {
     const cls = getLevelBadgeClass('intermediate')
-    expect(cls).toContain('blue')
+    expect(cls).toContain('info')
   })
 
   it('returns purple badge class for "advanced"', () => {
@@ -149,7 +149,7 @@ describe('getLevelBadgeClass', () => {
   it('matches by level name (case-insensitive)', () => {
     // WORKSHOP_LEVELS entry has name "Anfänger" → id "beginner"
     const cls = getLevelBadgeClass('anfänger')
-    expect(cls).toContain('green')
+    expect(cls).toContain('primary')
   })
 })
 

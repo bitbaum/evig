@@ -63,7 +63,7 @@ describe('getMarketplaceStatusLabel', () => {
 describe('getMarketplaceStatusBadgeColor', () => {
   it('returns green badge for published', () => {
     const color = getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)
-    expect(color).toContain('green')
+    expect(color).toContain('primary')
   })
 
   it('returns yellow badge for draft', () => {
@@ -73,7 +73,7 @@ describe('getMarketplaceStatusBadgeColor', () => {
 
   it('falls back to gray for unknown status', () => {
     const color = getMarketplaceStatusBadgeColor('unknown_status')
-    expect(color).toContain('gray')
+    expect(color).toContain('neutral')
   })
 })
 
@@ -106,7 +106,7 @@ describe('getProductStatusLabel', () => {
 describe('getProductStatusBadgeColor', () => {
   it('returns blue badge for approved', () => {
     const color = getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)
-    expect(color).toContain('blue')
+    expect(color).toContain('info')
   })
 
   it('returns orange badge for pending_review', () => {
@@ -116,11 +116,11 @@ describe('getProductStatusBadgeColor', () => {
 
   it('returns red badge for rejected', () => {
     const color = getProductStatusBadgeColor(PRODUCT_STATUS.REJECTED)
-    expect(color).toContain('red')
+    expect(color).toContain('error')
   })
 
   it('falls back to gray for unknown status', () => {
     const color = getProductStatusBadgeColor('unknown_status')
-    expect(color).toContain('gray')
+    expect(color).toContain('neutral')
   })
 })

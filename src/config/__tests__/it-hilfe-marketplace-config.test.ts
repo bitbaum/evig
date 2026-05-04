@@ -323,7 +323,7 @@ describe('getMarketplaceStatusLabel', () => {
 
 describe('getMarketplaceStatusBadgeColor', () => {
   it('published → green CSS classes', () => {
-    expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)).toContain('green')
+    expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)).toContain('primary')
   })
 
   it('draft → yellow CSS classes', () => {
@@ -331,7 +331,7 @@ describe('getMarketplaceStatusBadgeColor', () => {
   })
 
   it('unknown → gray fallback', () => {
-    expect(getMarketplaceStatusBadgeColor('unknown')).toContain('gray')
+    expect(getMarketplaceStatusBadgeColor('unknown')).toContain('neutral')
   })
 })
 
@@ -352,11 +352,11 @@ describe('getProductStatusLabel', () => {
 
 describe('getProductStatusBadgeColor', () => {
   it('approved → blue CSS classes', () => {
-    expect(getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)).toContain('blue')
+    expect(getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)).toContain('info')
   })
 
   it('unknown → gray fallback', () => {
-    expect(getProductStatusBadgeColor('xyz')).toContain('gray')
+    expect(getProductStatusBadgeColor('xyz')).toContain('neutral')
   })
 })
 

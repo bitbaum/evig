@@ -2,14 +2,14 @@ import { Link } from '@/i18n/navigation'
 import { Wrench, GraduationCap } from 'lucide-react'
 import { type OSSAlternative } from '@/config/open-source-registry'
 import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 
 interface RevampITServicesCTAProps {
   alternative: OSSAlternative
 }
 
-export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
-  const t = useTranslations('services.openSourceSolutions.cta')
+export async function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
+  const t = await getTranslations('services.openSourceSolutions.cta')
   const services = alternative.revampitServices
   if (!services) return null
 

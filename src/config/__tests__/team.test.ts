@@ -105,19 +105,19 @@ describe('getDepartmentLabel', () => {
 
 describe('getEmploymentTypeColor', () => {
   it('returns blue class for employee', () => {
-    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.EMPLOYEE)).toContain('blue')
+    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.EMPLOYEE)).toContain('info')
   })
 
   it('returns green class for volunteer', () => {
-    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.VOLUNTEER)).toContain('green')
+    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.VOLUNTEER)).toContain('primary')
   })
 
   it('returns gray fallback for null', () => {
-    expect(getEmploymentTypeColor(null)).toContain('gray')
+    expect(getEmploymentTypeColor(null)).toContain('neutral')
   })
 
   it('returns gray fallback for unknown type', () => {
-    expect(getEmploymentTypeColor('unknown_type')).toContain('gray')
+    expect(getEmploymentTypeColor('unknown_type')).toContain('neutral')
   })
 })
 
@@ -131,14 +131,14 @@ describe('getDepartmentColor', () => {
   })
 
   it('returns amber class for Werkstatt', () => {
-    expect(getDepartmentColor(DEPARTMENTS.WERKSTATT)).toContain('amber')
+    expect(getDepartmentColor(DEPARTMENTS.WERKSTATT)).toContain('warning')
   })
 
   it('returns gray fallback for null', () => {
-    expect(getDepartmentColor(null)).toContain('gray')
+    expect(getDepartmentColor(null)).toContain('neutral')
   })
 
   it('returns gray fallback for unknown department', () => {
-    expect(getDepartmentColor('unknown_dept')).toContain('gray')
+    expect(getDepartmentColor('unknown_dept')).toContain('neutral')
   })
 })

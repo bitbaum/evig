@@ -64,7 +64,7 @@ describe('getReviewStatusLabel', () => {
 
 describe('getReviewStatusBadgeColor', () => {
   it('returns green badge for published', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('green')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('primary')
   })
 
   it('returns orange badge for pending_moderation', () => {
@@ -72,11 +72,11 @@ describe('getReviewStatusBadgeColor', () => {
   })
 
   it('returns red badge for hidden', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.HIDDEN)).toContain('red')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.HIDDEN)).toContain('error')
   })
 
   it('returns gray badge for deleted', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.DELETED)).toContain('gray')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.DELETED)).toContain('neutral')
   })
 
   it('falls back to pending_moderation badge (orange) for unknown status', () => {

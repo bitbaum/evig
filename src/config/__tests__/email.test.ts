@@ -65,7 +65,6 @@ describe('getEmailProvider', () => {
     // Import fresh in each test to avoid cross-contamination
     jest.resetModules()
     withEnv({ LISTMONK_ENABLED: undefined }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { getEmailProvider } = require('../email')
       expect(getEmailProvider()).toBe('smtp')
     })
@@ -74,7 +73,6 @@ describe('getEmailProvider', () => {
   it('returns "listmonk" when LISTMONK_ENABLED=true', () => {
     jest.resetModules()
     withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { getEmailProvider } = require('../email')
       expect(getEmailProvider()).toBe('listmonk')
     })
@@ -83,7 +81,6 @@ describe('getEmailProvider', () => {
   it('returns "smtp" when LISTMONK_ENABLED=false', () => {
     jest.resetModules()
     withEnv({ LISTMONK_ENABLED: 'false' }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { getEmailProvider } = require('../email')
       expect(getEmailProvider()).toBe('smtp')
     })
@@ -94,7 +91,6 @@ describe('isEmailConfigured', () => {
   it('returns true when LISTMONK_ENABLED=true', () => {
     jest.resetModules()
     withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { isEmailConfigured } = require('../email')
       expect(isEmailConfigured()).toBe(true)
     })
@@ -107,7 +103,6 @@ describe('isEmailConfigured', () => {
       EMAIL_USER: 'test@example.com',
       EMAIL_PASS: 'secret',
     }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { isEmailConfigured } = require('../email')
       expect(isEmailConfigured()).toBe(true)
     })
@@ -120,7 +115,6 @@ describe('isEmailConfigured', () => {
       EMAIL_USER: undefined,
       EMAIL_PASS: undefined,
     }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { isEmailConfigured } = require('../email')
       expect(isEmailConfigured()).toBe(false)
     })
@@ -135,7 +129,6 @@ describe('validateEmailConfig', () => {
       EMAIL_USER: undefined,
       EMAIL_PASS: 'secret',
     }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { validateEmailConfig } = require('../email')
       expect(() => validateEmailConfig()).toThrow(/EMAIL_USER/)
     })
@@ -148,7 +141,6 @@ describe('validateEmailConfig', () => {
       EMAIL_USER: 'test@example.com',
       EMAIL_PASS: undefined,
     }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { validateEmailConfig } = require('../email')
       expect(() => validateEmailConfig()).toThrow(/EMAIL_PASS/)
     })
@@ -157,7 +149,6 @@ describe('validateEmailConfig', () => {
   it('does not throw when LISTMONK_ENABLED=true', () => {
     jest.resetModules()
     withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { validateEmailConfig } = require('../email')
       expect(() => validateEmailConfig()).not.toThrow()
     })

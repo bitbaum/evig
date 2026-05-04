@@ -1,3 +1,6 @@
+// SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
+export const dynamic = 'force-dynamic'
+
 import { Metadata } from 'next'
 import Heading from '@/components/ui/Heading'
 import {

@@ -19,19 +19,16 @@ import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/sea
 import { buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
 import type { NewListing } from '@/db/schema/marketplace';
 
-type RouteContext = { params?: { id: string } };
-
 // ============================================================================
 // GET — Public detail
 // ============================================================================
 
 export async function GET(
   request: NextRequest,
-  context: { params?: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = context.params ? await context.params : undefined;
-    const id = resolvedParams?.id;
+    const { id } = await params;
     if (!id) return apiNotFound('Inserat');
 
     // Increment view count (fire and forget)
@@ -156,7 +153,7 @@ const FIELD_MAP: Record<string, keyof NewListing> = {
 export const PATCH = withAuth<{ id: string }>(async (
   request: NextRequest,
   session: ValidSession,
-  context?: RouteContext
+  context?: { params?: { id: string } }
 ) => {
   try {
     const id = context?.params?.id;
@@ -324,7 +321,7 @@ export const PATCH = withAuth<{ id: string }>(async (
 export const DELETE = withAuth<{ id: string }>(async (
   request: NextRequest,
   session: ValidSession,
-  context?: RouteContext
+  context?: { params?: { id: string } }
 ) => {
   try {
     const id = context?.params?.id;

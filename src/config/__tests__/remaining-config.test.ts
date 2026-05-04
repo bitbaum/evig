@@ -128,27 +128,27 @@ describe('getDepartmentLabel', () => {
 describe('getEmploymentTypeColor', () => {
   it('null → gray CSS class', () => {
     const color = getEmploymentTypeColor(null)
-    expect(color).toContain('gray')
+    expect(color).toContain('neutral')
   })
 
   it('volunteer → green CSS class', () => {
     const color = getEmploymentTypeColor('volunteer')
-    expect(color).toContain('green')
+    expect(color).toContain('primary')
   })
 
   it('unknown → gray CSS class (default)', () => {
     const color = getEmploymentTypeColor('unknown_type')
-    expect(color).toContain('gray')
+    expect(color).toContain('neutral')
   })
 })
 
 describe('getDepartmentColor', () => {
   it('null → gray CSS class', () => {
-    expect(getDepartmentColor(null)).toContain('gray')
+    expect(getDepartmentColor(null)).toContain('neutral')
   })
 
   it('unknown → gray CSS class', () => {
-    expect(getDepartmentColor('mystery_dept')).toContain('gray')
+    expect(getDepartmentColor('mystery_dept')).toContain('neutral')
   })
 })
 
@@ -227,11 +227,11 @@ describe('getReviewStatusLabel', () => {
 
 describe('getReviewStatusBadgeColor', () => {
   it('published → green classes', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('green')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('primary')
   })
 
   it('hidden → red classes', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.HIDDEN)).toContain('red')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.HIDDEN)).toContain('error')
   })
 
   it('unknown → falls back to pending_moderation badge (orange)', () => {
