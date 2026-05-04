@@ -21,7 +21,7 @@ import {
   ProtocolFollowUps,
 } from '@/components/admin/protocols'
 import type { ProtocolDetailProps } from '@/components/admin/protocols'
-import { PROTOCOL_STATUSES } from '@/config/protocols'
+import { PROTOCOL_STATUSES, PROTOCOL_STATUS_COLORS, PROTOCOL_STATUS_LABELS } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
@@ -118,16 +118,8 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
       {/* Status Badge */}
       <div className="flex items-center gap-3">
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-          isFinalized ? 'bg-primary-100 text-primary-800' :
-          protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'bg-warning-100 text-warning-800' :
-          isDraft ? 'bg-neutral-100 text-neutral-800' :
-          'bg-info-100 text-info-800'
-        }`}>
-          {isFinalized ? 'Abgeschlossen' :
-           protocol.status === PROTOCOL_STATUSES.PROCESSING ? 'Wird verarbeitet...' :
-           isDraft ? 'Entwurf' :
-           'Zur Überprüfung'}
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${PROTOCOL_STATUS_COLORS[protocol.status as keyof typeof PROTOCOL_STATUS_COLORS] ?? 'bg-neutral-100 text-neutral-800'}`}>
+          {PROTOCOL_STATUS_LABELS[protocol.status as keyof typeof PROTOCOL_STATUS_LABELS] ?? protocol.status}
         </span>
         {unlinkedTaskItems.length > 0 && isReview && (
           <span className="text-sm text-warning-600 font-medium">
