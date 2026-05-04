@@ -5,7 +5,8 @@ import { CheckCircle, Vote, UserPlus } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
-import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions'
+import { type VotingMethod } from '@/config/decisions'
+import { useVoteState } from '@/hooks/useVoteState'
 import { ConsentVote } from '@/app/admin/decisions/[id]/voting/ConsentVote'
 import { ApprovalVote } from '@/app/admin/decisions/[id]/voting/ApprovalVote'
 import { DotVote } from '@/app/admin/decisions/[id]/voting/DotVote'
@@ -57,55 +58,7 @@ export default function PublicVoteClient({
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
-  // Per-method vote state
-  const [consentResponse, setConsentResponse] = useState<ConsentResponse>('agree')
-  const [rationale, setRationale] = useState('')
-  const [approvedOptions, setApprovedOptions] = useState<Set<string>>(new Set())
-  const maxDots = dotCount || 5
-  const [allocations, setAllocations] = useState<Record<string, number>>(
-    Object.fromEntries(options.map((o) => [o.id, 0]))
-  )
-  const usedDots = Object.values(allocations).reduce((a, b) => a + b, 0)
-  const [scores, setScores] = useState<Record<string, number>>(
-    Object.fromEntries(options.map((o) => [o.id, 0]))
-  )
-  const [majorityResponse, setMajorityResponse] = useState<SimpleMajorityResponse>('yes')
-  const [ranking, setRanking] = useState<string[]>(() => options.map((o) => o.id))
-
-  function toggleApproval(optId: string) {
-    setApprovedOptions((prev) => {
-      const next = new Set(prev)
-      if (next.has(optId)) next.delete(optId)
-      else next.add(optId)
-      return next
-    })
-  }
-
-  function setAllocation(optId: string, value: number) {
-    setAllocations((prev) => ({ ...prev, [optId]: value }))
-  }
-
-  function setScore(optId: string, score: number) {
-    setScores((prev) => ({ ...prev, [optId]: score }))
-  }
-
-  function moveRankingUp(index: number) {
-    if (index === 0) return
-    setRanking((prev) => {
-      const next = [...prev]
-      ;[next[index - 1], next[index]] = [next[index], next[index - 1]]
-      return next
-    })
-  }
-
-  function moveRankingDown(index: number) {
-    if (index === ranking.length - 1) return
-    setRanking((prev) => {
-      const next = [...prev]
-      ;[next[index], next[index + 1]] = [next[index + 1], next[index]]
-      return next
-    })
-  }
+  const vote = useVoteState({ votingMethod, options, dotCount })
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -117,15 +70,7 @@ export default function PublicVoteClient({
     setError('')
     setSubmitting(true)
 
-    let voteData: unknown
-    switch (votingMethod) {
-      case 'consent':         voteData = { response: consentResponse, rationale: rationale || undefined }; break
-      case 'approval':        voteData = { approved_options: Array.from(approvedOptions) }; break
-      case 'dot':             voteData = { allocations }; break
-      case 'score':           voteData = { scores }; break
-      case 'simple_majority': voteData = { response: majorityResponse }; break
-      case 'ranked_choice':   voteData = { ranking }; break
-    }
+    const voteData = vote.buildVoteData()
 
     const result = await apiFetch<unknown>(`/api/vote/${decisionId}`, {
       method: 'POST',
@@ -225,50 +170,50 @@ export default function PublicVoteClient({
 
         {votingMethod === 'consent' && (
           <ConsentVote
-            response={consentResponse}
-            rationale={rationale}
-            onResponseChange={setConsentResponse}
-            onRationaleChange={setRationale}
+            response={vote.consentResponse}
+            rationale={vote.rationale}
+            onResponseChange={vote.setConsentResponse}
+            onRationaleChange={vote.setRationale}
           />
         )}
         {votingMethod === 'approval' && (
           <ApprovalVote
             options={options}
-            approvedOptions={approvedOptions}
+            approvedOptions={vote.approvedOptions}
             isGalleryMode={false}
-            onToggle={toggleApproval}
+            onToggle={vote.toggleApproval}
           />
         )}
         {votingMethod === 'dot' && (
           <DotVote
             options={options}
-            allocations={allocations}
-            maxDots={maxDots}
-            usedDots={usedDots}
+            allocations={vote.allocations}
+            maxDots={vote.maxDots}
+            usedDots={vote.usedDots}
             isGalleryMode={false}
-            onSet={setAllocation}
+            onSet={vote.setAllocation}
           />
         )}
         {votingMethod === 'score' && (
           <ScoreVote
             options={options}
-            scores={scores}
+            scores={vote.scores}
             isGalleryMode={false}
-            onSet={setScore}
+            onSet={vote.setScore}
           />
         )}
         {votingMethod === 'simple_majority' && (
           <SimpleMajorityVote
-            response={majorityResponse}
-            onChange={setMajorityResponse}
+            response={vote.majorityResponse}
+            onChange={vote.setMajorityResponse}
           />
         )}
         {votingMethod === 'ranked_choice' && (
           <RankedChoiceVote
             options={options}
-            ranking={ranking}
-            onMoveUp={moveRankingUp}
-            onMoveDown={moveRankingDown}
+            ranking={vote.ranking}
+            onMoveUp={vote.moveRankingUp}
+            onMoveDown={vote.moveRankingDown}
           />
         )}
       </div>
