@@ -1,12 +1,5 @@
 'use client'
 
-/**
- * Task Form Client Component
- *
- * Form for creating/editing tasks.
- * Created: 2026-02-05
- */
-
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import {
@@ -17,6 +10,7 @@ import {
   TASK_PRIORITIES,
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
+import type { TaskEditItem } from '@/lib/schemas/tasks'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Loader2, Save } from 'lucide-react'
@@ -42,23 +36,28 @@ interface TaskFormData {
   assigned_to: string
 }
 
-export default function TaskFormClient() {
+interface Props {
+  task?: TaskEditItem
+}
+
+export default function TaskFormClient({ task }: Props) {
   const router = useRouter()
+  const isEdit = !!task
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [formData, setFormData] = useState<TaskFormData>({
-    title: '',
-    description: '',
-    instructions: '',
-    task_type: 'recurring_as_needed',
-    category: 'other',
-    priority: TASK_PRIORITIES.NORMAL,
-    schedule_human: '',
-    estimated_minutes: '',
-    due_date: '',
-    tags: '',
-    assigned_to: '',
+    title: task?.title ?? '',
+    description: task?.description ?? '',
+    instructions: task?.instructions ?? '',
+    task_type: task?.task_type ?? 'recurring_as_needed',
+    category: task?.category ?? 'other',
+    priority: task?.priority ?? TASK_PRIORITIES.NORMAL,
+    schedule_human: task?.schedule_human ?? '',
+    estimated_minutes: task?.estimated_minutes?.toString() ?? '',
+    due_date: task?.due_date ?? '',
+    tags: task?.tags?.join(', ') ?? '',
+    assigned_to: task?.assigned_to ?? '',
   })
 
   useEffect(() => {
@@ -76,7 +75,6 @@ export default function TaskFormClient() {
             }))
         )
       }
-      // team members optional on failure
     })
   }, [])
 
@@ -129,16 +127,16 @@ export default function TaskFormClient() {
           : [],
       }
 
-      const result = await apiFetch<{ id: string }>('/api/tasks', {
-        method: 'POST',
-        body: payload,
-      })
-
-      if (!result.success || !result.data) {
-        throw new Error(result.error || 'Fehler beim Erstellen')
+      if (isEdit) {
+        const result = await apiFetch<unknown>(`/api/tasks/${task.id}`, { method: 'PATCH', body: payload })
+        if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
+        router.push(`/admin/tasks/${task.id}`)
+        router.refresh()
+      } else {
+        const result = await apiFetch<{ id: string }>('/api/tasks', { method: 'POST', body: payload })
+        if (!result.success || !result.data) throw new Error(result.error || 'Fehler beim Erstellen')
+        router.push(`/admin/tasks/${result.data.id}`)
       }
-
-      router.push(`/admin/tasks/${result.data.id}`)
     } catch (err) {
       setError(getErrorMessage(err))
     } finally {
@@ -146,30 +144,30 @@ export default function TaskFormClient() {
     }
   }
 
+  const errorId = isEdit ? 'task-edit-error' : 'task-form-error'
+
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
       {error && (
-        <div id="task-form-error" className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
+        <div id={errorId} className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
           {error}
         </div>
       )}
 
       <div className="bg-white rounded-lg border p-6 space-y-6">
-        {/* AI Assistant */}
-        <AIFormAssist
-          formType="task"
-          placeholder="Beschreibe die Aufgabe in 1-2 Sätzen..."
-          defaultExpanded={true}
-          onFieldsFilled={handleAIFieldsFilled}
-          currentData={formData as unknown as Record<string, unknown>}
-        />
+        {!isEdit && (
+          <AIFormAssist
+            formType="task"
+            placeholder="Beschreibe die Aufgabe in 1-2 Sätzen..."
+            defaultExpanded={true}
+            onFieldsFilled={handleAIFieldsFilled}
+            currentData={formData as unknown as Record<string, unknown>}
+          />
+        )}
 
         {/* Title */}
         <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
             Titel <span className="text-error-500">*</span>
           </label>
           <input
@@ -181,7 +179,7 @@ export default function TaskFormClient() {
             required
             aria-required="true"
             aria-invalid={!!error}
-            aria-describedby={error ? 'task-form-error' : undefined}
+            aria-describedby={error ? errorId : undefined}
             maxLength={200}
             placeholder="z.B. Kaffeemaschine reinigen"
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
@@ -190,10 +188,7 @@ export default function TaskFormClient() {
 
         {/* Task Type */}
         <div>
-          <label
-            htmlFor="task_type"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="task_type" className="block text-sm font-medium text-neutral-700 mb-1">
             Aufgabentyp <span className="text-error-500">*</span>
           </label>
           <select
@@ -218,10 +213,7 @@ export default function TaskFormClient() {
 
         {/* Category */}
         <div>
-          <label
-            htmlFor="category"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-1">
             Kategorie <span className="text-error-500">*</span>
           </label>
           <select
@@ -241,10 +233,7 @@ export default function TaskFormClient() {
 
         {/* Priority */}
         <div>
-          <label
-            htmlFor="priority"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="priority" className="block text-sm font-medium text-neutral-700 mb-1">
             Priorität
           </label>
           <select
@@ -265,10 +254,7 @@ export default function TaskFormClient() {
         {/* Assign To */}
         {teamMembers.length > 0 && (
           <div>
-            <label
-              htmlFor="assigned_to"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
+            <label htmlFor="assigned_to" className="block text-sm font-medium text-neutral-700 mb-1">
               Zuweisen an
             </label>
             <select
@@ -290,10 +276,7 @@ export default function TaskFormClient() {
 
         {/* Description */}
         <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="description" className="block text-sm font-medium text-neutral-700 mb-1">
             Beschreibung
           </label>
           <textarea
@@ -310,10 +293,7 @@ export default function TaskFormClient() {
 
         {/* Instructions */}
         <div>
-          <label
-            htmlFor="instructions"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="instructions" className="block text-sm font-medium text-neutral-700 mb-1">
             Anleitung
           </label>
           <textarea
@@ -331,10 +311,7 @@ export default function TaskFormClient() {
         {/* Schedule (for recurring) */}
         {formData.task_type === 'recurring_scheduled' && (
           <div>
-            <label
-              htmlFor="schedule_human"
-              className="block text-sm font-medium text-neutral-700 mb-1"
-            >
+            <label htmlFor="schedule_human" className="block text-sm font-medium text-neutral-700 mb-1">
               Zeitplan
             </label>
             <input
@@ -351,10 +328,7 @@ export default function TaskFormClient() {
 
         {/* Estimated Duration */}
         <div>
-          <label
-            htmlFor="estimated_minutes"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="estimated_minutes" className="block text-sm font-medium text-neutral-700 mb-1">
             Geschätzte Dauer (Minuten)
           </label>
           <input
@@ -372,10 +346,7 @@ export default function TaskFormClient() {
 
         {/* Due Date */}
         <div>
-          <label
-            htmlFor="due_date"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="due_date" className="block text-sm font-medium text-neutral-700 mb-1">
             Fälligkeitsdatum (optional)
           </label>
           <input
@@ -390,10 +361,7 @@ export default function TaskFormClient() {
 
         {/* Tags */}
         <div>
-          <label
-            htmlFor="tags"
-            className="block text-sm font-medium text-neutral-700 mb-1"
-          >
+          <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-1">
             Tags
           </label>
           <input
@@ -405,9 +373,7 @@ export default function TaskFormClient() {
             placeholder="Komma-getrennt, z.B. küche, hygiene, täglich"
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-          <p className="mt-1 text-sm text-neutral-500">
-            Mehrere Tags mit Komma trennen
-          </p>
+          <p className="mt-1 text-sm text-neutral-500">Mehrere Tags mit Komma trennen</p>
         </div>
 
         {/* Submit */}
@@ -424,12 +390,8 @@ export default function TaskFormClient() {
             disabled={loading || !formData.title}
             className="flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:opacity-50"
           >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            Aufgabe erstellen
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {isEdit ? 'Speichern' : 'Aufgabe erstellen'}
           </button>
         </div>
       </div>

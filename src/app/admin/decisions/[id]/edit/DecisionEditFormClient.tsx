@@ -5,22 +5,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiFetch } from '@/lib/api/client';
 import {
-  DECISION_TYPES,
-  DECISION_TYPE_CONFIG,
-  VOTING_METHODS,
-  VOTING_METHOD_CONFIG,
   METHODS_REQUIRING_OPTIONS,
   DOT_VOTING_DEFAULTS,
   type DecisionType,
   type VotingMethod,
 } from '@/config/decisions';
-
-interface OptionItem {
-  id: string;
-  label: string;
-  description: string;
-  imageUrl: string;
-}
+import { type OptionItem } from '../../new/useDecisionForm';
+import { DecisionTypeSelector } from '../../new/DecisionTypeSelector';
+import { DecisionOptionsEditor } from '../../new/DecisionOptionsEditor';
+import { AdvancedSettings } from '../../new/AdvancedSettings';
 
 interface DecisionData {
   id: string;
@@ -33,21 +26,17 @@ interface DecisionData {
   quorum: { type: 'percentage' | 'absolute'; value: number };
   blindVoting: boolean;
   dotCount: number | null;
+  allowPublicVoting: boolean;
   status: string;
 }
 
-export default function DecisionEditFormClient({
-  decisionId,
-}: {
-  decisionId: string;
-}) {
+export default function DecisionEditFormClient({ decisionId }: { decisionId: string }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [showAdvanced, setShowAdvanced] = useState(false);
 
-  // Form state
   const [decisionType, setDecisionType] = useState<DecisionType>('sense_check');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -56,6 +45,7 @@ export default function DecisionEditFormClient({
   const [options, setOptions] = useState<OptionItem[]>([]);
   const [showImageUrls, setShowImageUrls] = useState(false);
   const [blindVoting, setBlindVoting] = useState(true);
+  const [allowPublicVoting, setAllowPublicVoting] = useState(false);
   const [dotCount, setDotCount] = useState(DOT_VOTING_DEFAULTS.default);
   const [quorumType, setQuorumType] = useState<'percentage' | 'absolute'>('percentage');
   const [quorumValue, setQuorumValue] = useState(50);
@@ -70,12 +60,7 @@ export default function DecisionEditFormClient({
         setBackground(d.background ?? '');
         setVotingMethod(d.votingMethod);
         const loadedOptions: OptionItem[] = d.options.length > 0
-          ? d.options.map((o) => ({
-              id: o.id,
-              label: o.label,
-              description: o.description || '',
-              imageUrl: o.imageUrl || '',
-            }))
+          ? d.options.map((o) => ({ id: o.id, label: o.label, description: o.description || '', imageUrl: o.imageUrl || '' }))
           : [
               { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
               { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
@@ -83,6 +68,7 @@ export default function DecisionEditFormClient({
         setOptions(loadedOptions);
         if (loadedOptions.some((o) => o.imageUrl)) setShowImageUrls(true);
         setBlindVoting(d.blindVoting);
+        setAllowPublicVoting(d.allowPublicVoting ?? false);
         setDotCount(d.dotCount || DOT_VOTING_DEFAULTS.default);
         setQuorumType(d.quorum.type);
         setQuorumValue(d.quorum.value);
@@ -92,19 +78,14 @@ export default function DecisionEditFormClient({
   }, [decisionId]);
 
   function addOption() {
-    setOptions([
-      ...options,
-      { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
-    ]);
+    setOptions((prev) => [...prev, { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' }]);
   }
-
   function removeOption(id: string) {
     if (options.length <= 2) return;
-    setOptions(options.filter((o) => o.id !== id));
+    setOptions((prev) => prev.filter((o) => o.id !== id));
   }
-
   function updateOption(id: string, field: 'label' | 'description' | 'imageUrl', value: string) {
-    setOptions(options.map((o) => (o.id === id ? { ...o, [field]: value } : o)));
+    setOptions((prev) => prev.map((o) => (o.id === id ? { ...o, [field]: value } : o)));
   }
 
   const needsOptions = METHODS_REQUIRING_OPTIONS.includes(votingMethod);
@@ -114,30 +95,23 @@ export default function DecisionEditFormClient({
     setError('');
     setSubmitting(true);
 
-    const payload = {
-      title,
-      description,
-      background: background.trim() || null,
-      decisionType,
-      votingMethod,
-      options: needsOptions
-        ? options.filter((o) => o.label.trim()).map((o) => ({
-            ...o,
-            imageUrl: o.imageUrl.trim() || undefined,
-          }))
-        : [],
-      quorum: { type: quorumType, value: quorumValue },
-      blindVoting,
-      dotCount: votingMethod === 'dot' ? dotCount : null,
-    };
-
     const result = await apiFetch<unknown>(`/api/decisions/${decisionId}`, {
       method: 'PATCH',
-      body: payload,
+      body: {
+        title, description,
+        background: background.trim() || null,
+        decisionType, votingMethod,
+        options: needsOptions
+          ? options.filter((o) => o.label.trim()).map((o) => ({ ...o, imageUrl: o.imageUrl.trim() || undefined }))
+          : [],
+        quorum: { type: quorumType, value: quorumValue },
+        blindVoting, allowPublicVoting,
+        dotCount: votingMethod === 'dot' ? dotCount : null,
+      },
     });
 
     if (!result.success) {
-      setError(result.error || 'Fehler beim Speichern');
+      setError((result as { error?: string }).error || 'Fehler beim Speichern');
       setSubmitting(false);
       return;
     }
@@ -152,61 +126,17 @@ export default function DecisionEditFormClient({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">
-          {error}
-        </div>
+        <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">{error}</div>
       )}
 
-      {/* Decision Type */}
-      <div>
-        <span className="mb-2 block text-sm font-medium text-neutral-700">
-          Entscheidungstyp
-        </span>
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {DECISION_TYPES.map((type) => {
-            const conf = DECISION_TYPE_CONFIG[type];
-            const selected = decisionType === type;
-            return (
-              <button
-                key={type}
-                type="button"
-                onClick={() => setDecisionType(type)}
-                className={`rounded-lg border-2 p-3 text-left transition-all ${
-                  selected
-                    ? 'border-info-500 bg-info-50 ring-1 ring-info-200'
-                    : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                    selected ? 'bg-info-500 text-white' : 'bg-neutral-100 text-neutral-500'
-                  }`}>
-                    {conf.icon}
-                  </span>
-                  <span className="font-medium text-neutral-900">{conf.label}</span>
-                </div>
-                <p className="mt-1.5 text-xs text-neutral-500">{conf.description}</p>
-                {selected && (
-                  <p className="mt-1.5 rounded bg-info-100 px-2 py-1 text-xs text-info-700">
-                    {conf.mechanic}
-                  </p>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <DecisionTypeSelector selected={decisionType} onChange={setDecisionType} />
 
-      {/* Title */}
       <div>
-        <label
-          htmlFor="title"
-          className="mb-1 block text-sm font-medium text-neutral-700"
-        >
+        <label htmlFor="edit-title" className="mb-1 block text-sm font-medium text-neutral-700">
           Titel
         </label>
         <input
-          id="title"
+          id="edit-title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -216,16 +146,12 @@ export default function DecisionEditFormClient({
         />
       </div>
 
-      {/* Description */}
       <div>
-        <label
-          htmlFor="description"
-          className="mb-1 block text-sm font-medium text-neutral-700"
-        >
+        <label htmlFor="edit-description" className="mb-1 block text-sm font-medium text-neutral-700">
           Was wird entschieden?
         </label>
         <textarea
-          id="description"
+          id="edit-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
@@ -234,17 +160,13 @@ export default function DecisionEditFormClient({
         />
       </div>
 
-      {/* Background / rationale */}
       <div>
-        <label
-          htmlFor="background"
-          className="mb-1 block text-sm font-medium text-neutral-700"
-        >
+        <label htmlFor="edit-background" className="mb-1 block text-sm font-medium text-neutral-700">
           Begründung & Hintergrund
           <span className="ml-1.5 font-normal text-neutral-400">(optional)</span>
         </label>
         <textarea
-          id="background"
+          id="edit-background"
           value={background}
           onChange={(e) => setBackground(e.target.value)}
           rows={4}
@@ -253,175 +175,34 @@ export default function DecisionEditFormClient({
         />
       </div>
 
-      {/* Options */}
       {needsOptions && (
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <span className="text-sm font-medium text-neutral-700">Optionen</span>
-            <label className="flex cursor-pointer items-center gap-1.5 text-xs text-neutral-500">
-              <input
-                type="checkbox"
-                checked={showImageUrls}
-                onChange={(e) => setShowImageUrls(e.target.checked)}
-                className="rounded"
-              />
-              Bild-URLs (für visuelle Abstimmung)
-            </label>
-          </div>
-          <div className="space-y-2">
-            {options.map((opt, i) => (
-              <div key={opt.id} className="rounded-md border border-neutral-200 p-2">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={opt.label}
-                    onChange={(e) => updateOption(opt.id, 'label', e.target.value)}
-                    placeholder={`Option ${i + 1}`}
-                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
-                  />
-                  <input
-                    type="text"
-                    value={opt.description}
-                    onChange={(e) => updateOption(opt.id, 'description', e.target.value)}
-                    placeholder="Beschreibung (optional)"
-                    className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeOption(opt.id)}
-                    disabled={options.length <= 2}
-                    className="rounded-md px-2 text-neutral-500 hover:text-error-500 disabled:opacity-30"
-                  >
-                    &times;
-                  </button>
-                </div>
-                {showImageUrls && (
-                  <div className="mt-1.5 flex gap-2">
-                    <input
-                      type="url"
-                      value={opt.imageUrl}
-                      onChange={(e) => updateOption(opt.id, 'imageUrl', e.target.value)}
-                      placeholder="Bild-URL (https://...)"
-                      className="flex-1 rounded-md border border-neutral-300 px-3 py-1.5 text-xs focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
-                    />
-                    {opt.imageUrl && (
-                      <img
-                        src={opt.imageUrl}
-                        alt=""
-                        className="h-8 w-8 rounded object-contain border border-neutral-200"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            onClick={addOption}
-            className="mt-2 text-sm text-info-600 hover:underline"
-          >
-            + Option hinzufügen
-          </button>
-        </div>
+        <DecisionOptionsEditor
+          options={options}
+          showImageUrls={showImageUrls}
+          onShowImageUrlsChange={setShowImageUrls}
+          onAdd={addOption}
+          onRemove={removeOption}
+          onUpdate={updateOption}
+        />
       )}
 
-      {/* Advanced */}
-      <div>
-        <button
-          type="button"
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="text-sm text-neutral-500 hover:text-neutral-700"
-        >
-          {showAdvanced ? '▼' : '▶'} Erweiterte Einstellungen
-        </button>
+      <AdvancedSettings
+        show={showAdvanced}
+        onToggle={() => setShowAdvanced(!showAdvanced)}
+        votingMethod={votingMethod}
+        onMethodChange={setVotingMethod}
+        dotCount={dotCount}
+        onDotCountChange={setDotCount}
+        quorumType={quorumType}
+        onQuorumTypeChange={setQuorumType}
+        quorumValue={quorumValue}
+        onQuorumValueChange={setQuorumValue}
+        blindVoting={blindVoting}
+        onBlindVotingChange={setBlindVoting}
+        allowPublicVoting={allowPublicVoting}
+        onAllowPublicVotingChange={setAllowPublicVoting}
+      />
 
-        {showAdvanced && (
-          <div className="mt-3 space-y-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
-            <div>
-              <label htmlFor="decision-edit-voting-method" className="mb-1 block text-sm font-medium text-neutral-700">
-                Abstimmungsmethode
-              </label>
-              <select
-                id="decision-edit-voting-method"
-                value={votingMethod}
-                onChange={(e) =>
-                  setVotingMethod(e.target.value as VotingMethod)
-                }
-                className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-              >
-                {VOTING_METHODS.map((m) => (
-                  <option key={m} value={m}>
-                    {VOTING_METHOD_CONFIG[m].label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {votingMethod === 'dot' && (
-              <div>
-                <label htmlFor="decision-edit-dot-count" className="mb-1 block text-sm font-medium text-neutral-700">
-                  Punkte pro Person
-                </label>
-                <input
-                  id="decision-edit-dot-count"
-                  type="number"
-                  value={dotCount}
-                  onChange={(e) => setDotCount(Number(e.target.value))}
-                  min={DOT_VOTING_DEFAULTS.min}
-                  max={DOT_VOTING_DEFAULTS.max}
-                  className="w-24 rounded-md border border-neutral-300 px-3 py-2 text-sm"
-                />
-              </div>
-            )}
-
-            <div className="flex gap-3">
-              <div>
-                <label htmlFor="decision-edit-quorum-type" className="mb-1 block text-sm font-medium text-neutral-700">
-                  Quorum Typ
-                </label>
-                <select
-                  id="decision-edit-quorum-type"
-                  value={quorumType}
-                  onChange={(e) =>
-                    setQuorumType(e.target.value as 'percentage' | 'absolute')
-                  }
-                  className="rounded-md border border-neutral-300 px-3 py-2 text-sm"
-                >
-                  <option value="percentage">Prozent</option>
-                  <option value="absolute">Absolut</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="decision-edit-quorum-value" className="mb-1 block text-sm font-medium text-neutral-700">
-                  Wert
-                </label>
-                <input
-                  id="decision-edit-quorum-value"
-                  type="number"
-                  value={quorumValue}
-                  onChange={(e) => setQuorumValue(Number(e.target.value))}
-                  min={1}
-                  className="w-24 rounded-md border border-neutral-300 px-3 py-2 text-sm"
-                />
-              </div>
-            </div>
-
-            <label className="flex items-center gap-2 text-sm text-neutral-700">
-              <input
-                type="checkbox"
-                checked={blindVoting}
-                onChange={(e) => setBlindVoting(e.target.checked)}
-                className="rounded"
-              />
-              Geheime Abstimmung
-            </label>
-          </div>
-        )}
-      </div>
-
-      {/* Submit */}
       <div className="flex gap-3">
         <button
           type="submit"
