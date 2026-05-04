@@ -30,7 +30,9 @@ ALTER TABLE decision_votes
 
 -- 5. Replace the old unique index with two partial indexes
 --    (partial indexes can't be expressed as a single unique constraint)
-DROP INDEX IF EXISTS decision_votes_decision_id_user_id_key;
+--    The old unique index backs a constraint — must drop the constraint, not the index.
+ALTER TABLE decision_votes
+  DROP CONSTRAINT IF EXISTS decision_votes_decision_id_user_id_key;
 
 CREATE UNIQUE INDEX IF NOT EXISTS decision_votes_decision_id_user_unique
   ON decision_votes (decision_id, user_id)
