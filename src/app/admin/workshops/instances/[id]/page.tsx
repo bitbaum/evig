@@ -24,8 +24,10 @@ import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import {
+  WORKSHOP_REGISTRATION_STATUS,
   WORKSHOP_REGISTRATION_STATUS_LABELS,
   WORKSHOP_REGISTRATION_STATUS_COLORS,
+  WORKSHOP_PAYMENT_STATUS,
   WORKSHOP_PAYMENT_STATUS_LABELS,
   WORKSHOP_PAYMENT_STATUS_COLORS,
 } from '@/config/workshop-registration-status'
