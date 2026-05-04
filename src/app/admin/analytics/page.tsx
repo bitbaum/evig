@@ -26,6 +26,7 @@ import {
   DollarSign,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { formatDateMonth } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
   title: 'Analytics',
@@ -199,15 +200,8 @@ async function getActivitySummary(): Promise<ActivitySummary> {
   }
 }
 
-const MONTH_NAMES: Record<string, string> = {
-  '01': 'Januar', '02': 'Februar', '03': 'März', '04': 'April',
-  '05': 'Mai', '06': 'Juni', '07': 'Juli', '08': 'August',
-  '09': 'September', '10': 'Oktober', '11': 'November', '12': 'Dezember',
-}
-
 function formatMonth(monthStr: string): string {
-  const parts = monthStr.split('-')
-  return `${MONTH_NAMES[parts[1]] || parts[1]} ${parts[0]}`
+  return formatDateMonth(`${monthStr}-01`)
 }
 
 export default async function AnalyticsPage() {
