@@ -1,6 +1,11 @@
 /**
- * Location Approval Status Constants (SSOT)
+ * Location Constants (SSOT)
  */
+
+export type LocationType = 'venue' | 'home' | 'online' | 'community_center' | 'business'
+export const LOCATION_TYPE_VALUES: LocationType[] = ['venue', 'home', 'online', 'community_center', 'business']
+
+
 
 export const LOCATION_STATUS = {
   PENDING: 'pending',

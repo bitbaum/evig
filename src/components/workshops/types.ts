@@ -14,13 +14,13 @@
 
 import type { WorkshopRegistrationStatus, WorkshopPaymentStatus } from '@/config/workshop-registration-status'
 import type { ProposalStatus as _ProposalStatus, WorkshopInstanceStatus as _WorkshopInstanceStatus } from '@/config/workshops'
+import type { LocationType as _LocationType } from '@/config/location-status'
 
 export type RegistrationStatus = WorkshopRegistrationStatus
 export type PaymentStatus = WorkshopPaymentStatus
 export type ProposalStatus = _ProposalStatus
 export type WorkshopInstanceStatus = _WorkshopInstanceStatus
-
-export type LocationType = 'venue' | 'online' | 'home' | 'community_center' | 'business'
+export type LocationType = _LocationType
 
 export type WorkshopLevel = 'beginner' | 'intermediate' | 'advanced' | 'all'
 

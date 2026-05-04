@@ -1,5 +1,8 @@
 import { Building2, Home, Monitor, Users } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import type { LocationType } from '@/config/location-status'
+
+export type { LocationType }
 
 export interface AccessibilityInfo {
   wheelchairAccessible: boolean
@@ -7,8 +10,6 @@ export interface AccessibilityInfo {
   publicTransport: string
   additionalInfo: string
 }
-
-export type LocationType = 'venue' | 'home' | 'online' | 'community_center' | 'business'
 
 export interface LocationFormData {
   name: string
