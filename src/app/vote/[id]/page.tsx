@@ -51,6 +51,9 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
   }
 
   const isVotingPhase = decision.status === DECISION_STATUS.VOTING
+  const voteCallbackUrl = `/vote/${decision.id}`
+  const registerUrl = `/auth/register?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`
+  const loginUrl = `/auth/login?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white py-12 px-4">
@@ -124,6 +127,9 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
           dotCount={decision.dotCount}
           votingDeadline={decision.votingDeadline}
           isVotingPhase={isVotingPhase}
+          allowPublicVoting={decision.allowPublicVoting}
+          registerUrl={registerUrl}
+          loginUrl={loginUrl}
         />
 
         <p className="mt-6 text-center text-xs text-neutral-400">

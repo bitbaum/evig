@@ -6,7 +6,7 @@
  *
  * This endpoint is intentionally public so decisions can be shared via
  * link (email, phone, etc.) without requiring an admin account.
- * Voter identity is established by email lookup → existing user account.
+ * Voter identity: registered account if email matches, anonymous otherwise (when allow_public_voting=true).
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -31,9 +31,8 @@ export async function GET(
     const decision = await getPublicDecision(decisionId)
 
     if (!decision) {
-      // Custom 404 message — null means either missing OR not in voting phase
       return NextResponse.json(
-        { success: false, error: 'Entscheidung nicht gefunden oder nicht aktiv' },
+        { success: false, error: ERROR_MESSAGES.DECISION_NOT_ACTIVE },
         { status: 404 }
       )
     }
@@ -48,6 +47,7 @@ export async function GET(
       options: decision.options,
       dotCount: decision.dotCount,
       votingDeadline: decision.votingDeadline,
+      allowPublicVoting: decision.allowPublicVoting,
     })
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
@@ -66,42 +66,38 @@ export async function POST(
     const { email, voteData } = body as { email?: string; voteData?: unknown }
 
     if (!email || typeof email !== 'string') {
-      return apiBadRequest('E-Mail-Adresse erforderlich')
+      return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
     }
     if (!voteData) {
-      return apiBadRequest('Stimmdaten erforderlich')
+      return apiBadRequest(ERROR_MESSAGES.VOTE_DATA_REQUIRED)
     }
 
-    // Look up user by email
+    const normalizedEmail = email.toLowerCase().trim()
+
+    // Try to match to a registered account — anonymous fallback otherwise
     const userResult = await query<{ id: string }>(
       `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-      [email.toLowerCase().trim()]
+      [normalizedEmail]
     )
 
-    if (userResult.rows.length === 0) {
-      // Custom 404 with sign-in CTA
-      return NextResponse.json(
-        { success: false, error: 'Keine Benutzer:in mit dieser E-Mail-Adresse gefunden. Bitte melde dich erst an.' },
-        { status: 404 }
-      )
-    }
+    const voterIdentity = userResult.rows.length > 0
+      ? { userId: userResult.rows[0].id }
+      : { voterEmail: normalizedEmail }
 
-    const userId = userResult.rows[0].id
-
-    // Delegate to the standard submitVote service — it handles eligibility checks
-    const result = await submitVote(decisionId, userId, voteData as Parameters<typeof submitVote>[2])
+    // Delegate to submitVote — it enforces allow_public_voting for anonymous voters
+    const result = await submitVote(decisionId, voterIdentity, voteData as Parameters<typeof submitVote>[2])
 
     if ('error' in result) {
       const messages: Record<string, string> = {
-        not_found: 'Entscheidung nicht gefunden',
-        not_voting_phase: 'Diese Abstimmung läuft gerade nicht',
-        not_participant: 'Du bist nicht zur Abstimmung berechtigt',
-        invalid_data: 'Ungültige Stimmdaten',
+        not_found: ERROR_MESSAGES.DECISION_NOT_FOUND,
+        not_voting_phase: ERROR_MESSAGES.VOTE_NOT_IN_VOTING_PHASE_PUBLIC,
+        not_participant: ERROR_MESSAGES.VOTE_NOT_PUBLIC,
+        invalid_data: ERROR_MESSAGES.VOTE_INVALID_DATA,
       }
-      return apiBadRequest(messages[result.error as string] || 'Fehler beim Abstimmen')
+      return apiBadRequest(messages[result.error as string] || ERROR_MESSAGES.VOTE_SUBMIT_FAILED)
     }
 
-    logger.info('Public vote submitted', { decisionId, userId })
+    logger.info('Public vote submitted', { decisionId, voterIdentity: 'voterEmail' in voterIdentity ? 'anonymous' : 'registered' })
     return apiSuccess(result.vote)
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)

@@ -50,6 +50,9 @@ export const decisions = pgTable('decisions', {
   closedBy: uuid('closed_by'),
   cancelReason: text('cancel_reason'),
 
+  // Public voting — when true, anyone with the link can vote (no account needed)
+  allowPublicVoting: boolean('allow_public_voting').notNull().default(false),
+
   // Creator
   createdBy: uuid('created_by').notNull().references(() => users.id, { onDelete: 'cascade' }),
 
@@ -71,13 +74,15 @@ export type NewDecision = typeof decisions.$inferInsert
 export const decisionVotes = pgTable('decision_votes', {
   id: uuid('id').primaryKey().defaultRandom(),
   decisionId: uuid('decision_id').notNull().references(() => decisions.id, { onDelete: 'cascade' }),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  // Registered voter — null for anonymous votes
+  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  // Anonymous voter email — null for registered voters; uniqueness enforced via partial index
+  voterEmail: text('voter_email'),
   voteData: jsonb('vote_data').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
 }, (table) => [
-  uniqueIndex('decision_votes_decision_id_user_id_key')
-    .on(table.decisionId, table.userId),
+  // Partial unique indexes (see migration 066): one per identity type
   index('idx_decision_votes_decision_id').on(table.decisionId),
   index('idx_decision_votes_user_id').on(table.userId),
 ])

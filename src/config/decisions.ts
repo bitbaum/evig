@@ -190,6 +190,8 @@ export const PARTICIPANT_SCOPE = {
 
 export const PARTICIPANT_SCOPE_DEFAULT = PARTICIPANT_SCOPE.ALL_STAFF;
 
+export const DEFAULT_QUORUM: { type: 'percentage' | 'absolute'; value: number } = { type: 'percentage', value: 50 };
+
 export const PARTICIPANT_SCOPES = [
   PARTICIPANT_SCOPE.ALL_STAFF,
   PARTICIPANT_SCOPE.BOARD_ONLY,

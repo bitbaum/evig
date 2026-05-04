@@ -63,6 +63,7 @@ interface DecisionDetail {
   hasUserVoted: boolean;
   creator: { id: string; email: string };
   createdAt: string;
+  allowPublicVoting: boolean;
 }
 
 export default function DecisionDetailClient({
@@ -201,24 +202,22 @@ export default function DecisionDetailClient({
                 Bearbeiten
               </AdminButton>
             )}
-            {/* Share link — visible for discussion and voting phases */}
-            {([DECISION_STATUS.DISCUSSION, DECISION_STATUS.VOTING] as string[]).includes(decision.status) && (
-              <button
-                onClick={handleCopyLink}
-                className={cn(
-                  'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-                  linkCopied
-                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
-                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
-                )}
-              >
-                {linkCopied ? (
-                  <><Check className="h-3.5 w-3.5" /> Link kopiert</>
-                ) : (
-                  <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
-                )}
-              </button>
-            )}
+            {/* Share link — always visible so it can be copied at any stage */}
+            <button
+              onClick={handleCopyLink}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                linkCopied
+                  ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
+                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600'
+              )}
+            >
+              {linkCopied ? (
+                <><Check className="h-3.5 w-3.5" /> Link kopiert</>
+              ) : (
+                <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
+              )}
+            </button>
             {validTargets.includes(DECISION_STATUS.DISCUSSION) && (
               <AdminButton variant="action" onClick={() => handleTransition(DECISION_STATUS.DISCUSSION)}>
                 Zur Diskussion

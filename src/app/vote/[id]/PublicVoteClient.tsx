@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle, Vote } from 'lucide-react'
+import { CheckCircle, Vote, UserPlus } from 'lucide-react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { type VotingMethod, type ConsentResponse, type SimpleMajorityResponse } from '@/config/decisions'
@@ -31,6 +32,9 @@ interface Props {
   dotCount: number | null
   votingDeadline: string | null
   isVotingPhase: boolean
+  allowPublicVoting: boolean
+  registerUrl: string
+  loginUrl: string
 }
 
 export default function PublicVoteClient({
@@ -43,6 +47,9 @@ export default function PublicVoteClient({
   dotCount,
   votingDeadline,
   isVotingPhase,
+  allowPublicVoting,
+  registerUrl,
+  loginUrl,
 }: Props) {
   const t = useTranslations('vote')
   const [email, setEmail] = useState('')
@@ -135,12 +142,35 @@ export default function PublicVoteClient({
 
   if (success) {
     return (
-      <div className="rounded-xl bg-primary-50 border border-primary-200 p-8 text-center">
-        <CheckCircle className="mx-auto h-12 w-12 text-primary-500 mb-3" />
-        <p className="text-lg font-semibold text-primary-800">{t('successHeading')}</p>
-        <p className="mt-1 text-sm text-primary-700">
-          {t('successDesc')}
-        </p>
+      <div className="space-y-4">
+        <div className="rounded-xl bg-primary-50 border border-primary-200 p-6 text-center">
+          <CheckCircle className="mx-auto h-10 w-10 text-primary-500 mb-3" />
+          <p className="text-lg font-semibold text-primary-800">{t('successHeading')}</p>
+          <p className="mt-1 text-sm text-primary-700">{t('successDesc')}</p>
+        </div>
+
+        {/* Registration gate — results require an account */}
+        <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="flex items-start gap-3">
+            <UserPlus className="h-5 w-5 text-info-500 mt-0.5 shrink-0" />
+            <div className="flex-1">
+              <p className="font-semibold text-neutral-900">{t('successRegisterHeading')}</p>
+              <p className="mt-1 text-sm text-neutral-600">{t('successRegisterDesc')}</p>
+              <Link
+                href={registerUrl}
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+              >
+                {t('successRegisterCta')}
+              </Link>
+              <p className="mt-3 text-xs text-neutral-500">
+                {t('successOrLogin')}{' '}
+                <Link href={loginUrl} className="text-primary-600 hover:underline">
+                  {t('successLoginCta')}
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -185,7 +215,7 @@ export default function PublicVoteClient({
           className="w-full rounded-lg border border-info-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500"
         />
         <p className="mt-1.5 text-xs text-info-700">
-          {t('emailHint')}
+          {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}
         </p>
       </div>
 

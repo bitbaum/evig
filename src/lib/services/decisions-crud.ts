@@ -14,6 +14,7 @@ import {
   EDITABLE_STATUSES,
   DECISION_STATUS,
   PARTICIPANT_SCOPE_DEFAULT,
+  DEFAULT_QUORUM,
   type DecisionStatus,
   type VotingMethod,
 } from '@/config/decisions';
@@ -76,6 +77,37 @@ export function asArray<T>(value: unknown, fallback: T[]): T[] {
 export function asObject<T>(value: unknown, fallback: T): T {
   if (value && typeof value === 'object' && !Array.isArray(value)) return value as T;
   return fallback;
+}
+
+// ---- Row Mapper ----
+
+function mapDecisionBase(d: DbDecisionRow & { vote_count: string; comment_count: string }) {
+  return {
+    id: d.id,
+    title: d.title,
+    description: d.description,
+    background: d.background,
+    category: d.category || 'operativ',
+    decisionType: d.decision_type,
+    votingMethod: d.voting_method,
+    options: asArray<DecisionOption>(d.options, []),
+    quorum: asObject<QuorumConfig>(d.quorum, DEFAULT_QUORUM),
+    blindVoting: d.blind_voting,
+    dotCount: d.dot_count,
+    invitedParticipants: asArray<string>(d.invited_participants, []),
+    status: d.status,
+    discussionDeadline: d.discussion_deadline,
+    votingDeadline: d.voting_deadline,
+    outcome: d.outcome,
+    outcomeSummary: d.outcome_summary,
+    aiOutcomeNarrative: d.ai_outcome_narrative,
+    cancelReason: d.cancel_reason,
+    participantScope: d.participant_scope || PARTICIPANT_SCOPE_DEFAULT,
+    creator: { id: d.creator_id!, email: d.creator_email!, name: d.creator_name },
+    createdAt: d.created_at,
+    voteCount: parseInt(d.vote_count || '0', 10),
+    commentCount: parseInt(d.comment_count || '0', 10),
+  };
 }
 
 // ---- Decisions CRUD ----
@@ -173,30 +205,7 @@ export async function getDecisions(
 
   return {
     decisions: (decisionsResult.rows as unknown as (DbDecisionRow & { vote_count: string; comment_count: string })[]).map(d => ({
-      id: d.id,
-      title: d.title,
-      description: d.description,
-      background: d.background,
-      category: d.category || 'operativ',
-      decisionType: d.decision_type,
-      votingMethod: d.voting_method,
-      options: asArray<DecisionOption>(d.options, []),
-      quorum: asObject<QuorumConfig>(d.quorum, { type: 'percentage', value: 50 }),
-      blindVoting: d.blind_voting,
-      dotCount: d.dot_count,
-      invitedParticipants: asArray<string>(d.invited_participants, []),
-      status: d.status,
-      discussionDeadline: d.discussion_deadline,
-      votingDeadline: d.voting_deadline,
-      outcome: d.outcome,
-      outcomeSummary: d.outcome_summary,
-      aiOutcomeNarrative: d.ai_outcome_narrative,
-      cancelReason: d.cancel_reason,
-      participantScope: d.participant_scope || PARTICIPANT_SCOPE_DEFAULT,
-      creator: { id: d.creator_id!, email: d.creator_email!, name: d.creator_name },
-      createdAt: d.created_at,
-      voteCount: parseInt(d.vote_count || '0', 10),
-      commentCount: parseInt(d.comment_count || '0', 10),
+      ...mapDecisionBase(d),
       hasUserVoted: votedSet.has(d.id),
     })),
     total,
@@ -226,33 +235,11 @@ export async function getDecisionById(id: string, requestingUserId: string) {
   `);
 
   return {
-    id: d.id,
-    title: d.title,
-    description: d.description,
-    background: d.background,
-    category: d.category || 'operativ',
-    decisionType: d.decision_type,
-    votingMethod: d.voting_method,
-    options: asArray<DecisionOption>(d.options, []),
-    quorum: asObject<QuorumConfig>(d.quorum, { type: 'percentage', value: 50 }),
-    blindVoting: d.blind_voting,
-    dotCount: d.dot_count,
-    invitedParticipants: asArray<string>(d.invited_participants, []),
-    status: d.status,
-    discussionDeadline: d.discussion_deadline,
-    votingDeadline: d.voting_deadline,
-    outcome: d.outcome,
-    outcomeSummary: d.outcome_summary,
-    aiOutcomeNarrative: d.ai_outcome_narrative,
-    cancelReason: d.cancel_reason,
-    participantScope: d.participant_scope || PARTICIPANT_SCOPE_DEFAULT,
+    ...mapDecisionBase(d),
+    allowPublicVoting: (d as unknown as { allow_public_voting?: boolean }).allow_public_voting ?? false,
     revealedAt: d.revealed_at,
     closedAt: d.closed_at,
     closedBy: d.closed_by,
-    creator: { id: d.creator_id!, email: d.creator_email!, name: d.creator_name },
-    createdAt: d.created_at,
-    voteCount: parseInt(d.vote_count || '0', 10),
-    commentCount: parseInt(d.comment_count || '0', 10),
     hasUserVoted: voteCheck.rows.length > 0,
   };
 }
@@ -267,6 +254,7 @@ interface CreateDecisionData {
   options?: DecisionOption[];
   quorum?: QuorumConfig;
   blindVoting?: boolean;
+  allowPublicVoting?: boolean;
   dotCount?: number | null;
   invitedParticipants?: string[];
   participantScope?: string;
@@ -289,7 +277,7 @@ export async function createDecision(
     WITH inserted AS (
       INSERT INTO ${sql.raw(dTable)}
         (title, description, background, category, decision_type, voting_method, options, quorum,
-         blind_voting, dot_count, invited_participants, participant_scope,
+         blind_voting, allow_public_voting, dot_count, invited_participants, participant_scope,
          discussion_deadline, voting_deadline, status, created_by)
       VALUES (
         ${data.title},
@@ -301,6 +289,7 @@ export async function createDecision(
         ${JSON.stringify(options)}::jsonb,
         ${JSON.stringify(data.quorum || { type: 'percentage', value: 50 })}::jsonb,
         ${data.blindVoting ?? true},
+        ${data.allowPublicVoting ?? false},
         ${data.dotCount ?? null},
         ${JSON.stringify(data.invitedParticipants || [])}::jsonb,
         ${data.participantScope || PARTICIPANT_SCOPE_DEFAULT},
@@ -499,6 +488,7 @@ export interface PublicDecision {
   options: PublicDecisionOption[];
   dotCount: number | null;
   votingDeadline: string | null;
+  allowPublicVoting: boolean;
 }
 
 /**
@@ -508,7 +498,7 @@ export interface PublicDecision {
  */
 export async function getPublicDecision(id: string): Promise<PublicDecision | null> {
   const result = await db.execute(sql`
-    SELECT id, title, description, background, status, voting_method, options, dot_count, voting_deadline
+    SELECT id, title, description, background, status, voting_method, options, dot_count, voting_deadline, allow_public_voting
     FROM ${sql.raw(dTable)}
     WHERE id = ${id}
   `);
@@ -525,6 +515,7 @@ export async function getPublicDecision(id: string): Promise<PublicDecision | nu
     options: unknown;
     dot_count: number | null;
     voting_deadline: string | null;
+    allow_public_voting: boolean;
   };
 
   if (!([DECISION_STATUS.VOTING, DECISION_STATUS.DISCUSSION] as string[]).includes(d.status)) {
@@ -547,5 +538,6 @@ export async function getPublicDecision(id: string): Promise<PublicDecision | nu
     options,
     dotCount: d.dot_count,
     votingDeadline: d.voting_deadline,
+    allowPublicVoting: d.allow_public_voting ?? false,
   };
 }

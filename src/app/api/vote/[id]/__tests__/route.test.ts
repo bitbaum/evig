@@ -134,8 +134,8 @@ describe('POST /api/vote/[id] — missing voteData', () => {
 // POST — user not found
 // ============================================================================
 
-describe('POST /api/vote/[id] — user not found', () => {
-  it('returns 404 when no user with given email', async () => {
+describe('POST /api/vote/[id] — anonymous voter', () => {
+  it('submits anonymously when email is not registered', async () => {
     mockQuery.mockResolvedValueOnce({ rows: [] })
 
     const req = new NextRequest('http://localhost/api/vote/decision-1', {
@@ -144,9 +144,12 @@ describe('POST /api/vote/[id] — user not found', () => {
       headers: { 'Content-Type': 'application/json' },
     })
     const response = await POST(req, { params: Promise.resolve({ id: 'decision-1' }) })
-    expect(response.status).toBe(404)
-    const body = await response.json()
-    expect(body.success).toBe(false)
+    expect(response.status).toBe(200)
+    expect(mockSubmitVote).toHaveBeenCalledWith(
+      'decision-1',
+      { voterEmail: 'unknown@example.com' },
+      { optionId: 'opt-1' }
+    )
   })
 })
 
@@ -181,7 +184,7 @@ describe('POST /api/vote/[id] — submitVote error', () => {
     const response = await POST(req, { params: Promise.resolve({ id: 'decision-1' }) })
     expect(response.status).toBe(400)
     const body = await response.json()
-    expect(body.error).toMatch(/Fehler beim Abstimmen/i)
+    expect(body.error).toMatch(/Fehler beim Abgeben/i)
   })
 })
 
@@ -205,6 +208,6 @@ describe('POST /api/vote/[id] — success', () => {
       expect.stringContaining('SELECT id FROM'),
       ['voter@example.com']
     )
-    expect(mockSubmitVote).toHaveBeenCalledWith('decision-1', 'user-1', { optionId: 'opt-1' })
+    expect(mockSubmitVote).toHaveBeenCalledWith('decision-1', { userId: 'user-1' }, { optionId: 'opt-1' })
   })
 })

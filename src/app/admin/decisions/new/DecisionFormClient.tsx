@@ -197,6 +197,8 @@ export default function DecisionFormClient() {
         onQuorumValueChange={form.setQuorumValue}
         blindVoting={form.blindVoting}
         onBlindVotingChange={form.setBlindVoting}
+        allowPublicVoting={form.allowPublicVoting}
+        onAllowPublicVotingChange={form.setAllowPublicVoting}
       />
 
       {/* Submit */}

@@ -52,7 +52,7 @@ export const POST = withAuth<RouteParams>(async (
     const { dbUserId } = userLookup
 
     const body = await request.json()
-    const result = await submitVote(decisionId, dbUserId, body)
+    const result = await submitVote(decisionId, { userId: dbUserId }, body)
 
     if ('error' in result) {
       if (result.error === 'not_found') return apiNotFound('Entscheidung')

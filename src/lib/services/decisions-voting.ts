@@ -50,6 +50,17 @@ interface DbVoteRow {
   user_name?: string | null;
 }
 
+// ---- Helpers ----
+
+function parseSchema<T>(
+  schema: { safeParse(data: unknown): { success: true; data: T } | { success: false; error: { issues: Array<{ message: string }> } } },
+  data: unknown
+): { success: true; data: T } | { success: false; error: string } {
+  const result = schema.safeParse(data);
+  if (!result.success) return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
+  return { success: true, data: result.data };
+}
+
 // ---- Eligible Participant Resolution ----
 
 /**
@@ -97,63 +108,38 @@ export function validateVoteData(
   decision: { options: unknown; dot_count: number | null }
 ): { success: true; data: VoteData } | { success: false; error: string } {
   switch (method) {
-    case 'consent': {
-      const result = consentVoteSchema.safeParse(data);
-      if (!result.success)
-        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
-      return { success: true, data: result.data };
-    }
+    case 'consent':
+      return parseSchema(consentVoteSchema, data);
     case 'approval': {
-      const result = approvalVoteSchema.safeParse(data);
-      if (!result.success)
-        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
+      const parsed = parseSchema(approvalVoteSchema, data);
+      if (!parsed.success) return parsed;
       const options = asArray<DecisionOption>(decision.options, []);
       const optionIds = new Set(options.map((o) => o.id));
-      const invalid = result.data.approved_options.filter(
-        (optId) => !optionIds.has(optId)
-      );
-      if (invalid.length > 0)
-        return { success: false, error: 'Ungültige Option(en) ausgewählt' };
-      return { success: true, data: result.data };
+      const invalid = parsed.data.approved_options.filter((optId) => !optionIds.has(optId));
+      if (invalid.length > 0) return { success: false, error: 'Ungültige Option(en) ausgewählt' };
+      return parsed;
     }
     case 'dot': {
-      const result = dotVoteSchema.safeParse(data);
-      if (!result.success)
-        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
-      const totalDots = Object.values(result.data.allocations).reduce(
-        (sum, n) => sum + n,
-        0
-      );
+      const parsed = parseSchema(dotVoteSchema, data);
+      if (!parsed.success) return parsed;
+      const totalDots = Object.values(parsed.data.allocations).reduce((sum, n) => sum + n, 0);
       const maxDots = decision.dot_count || 5;
       if (totalDots > maxDots)
-        return {
-          success: false,
-          error: `Maximal ${maxDots} Punkte erlaubt (${totalDots} vergeben)`,
-        };
-      return { success: true, data: result.data };
+        return { success: false, error: `Maximal ${maxDots} Punkte erlaubt (${totalDots} vergeben)` };
+      return parsed;
     }
-    case 'score': {
-      const result = scoreVoteSchema.safeParse(data);
-      if (!result.success)
-        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
-      return { success: true, data: result.data };
-    }
-    case 'simple_majority': {
-      const result = simpleMajorityVoteSchema.safeParse(data);
-      if (!result.success)
-        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
-      return { success: true, data: result.data };
-    }
+    case 'score':
+      return parseSchema(scoreVoteSchema, data);
+    case 'simple_majority':
+      return parseSchema(simpleMajorityVoteSchema, data);
     case 'ranked_choice': {
-      const result = rankedChoiceVoteSchema.safeParse(data);
-      if (!result.success)
-        return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
+      const parsed = parseSchema(rankedChoiceVoteSchema, data);
+      if (!parsed.success) return parsed;
       const options = asArray<DecisionOption>(decision.options, []);
       const optionIds = new Set(options.map((o) => o.id));
-      const invalid = result.data.ranking.filter((id) => !optionIds.has(id));
-      if (invalid.length > 0)
-        return { success: false, error: 'Ungültige Kandidaten in der Rangfolge' };
-      return { success: true, data: result.data };
+      const invalid = parsed.data.ranking.filter((id) => !optionIds.has(id));
+      if (invalid.length > 0) return { success: false, error: 'Ungültige Kandidaten in der Rangfolge' };
+      return parsed;
     }
     default:
       return { success: false, error: 'Unbekannte Abstimmungsmethode' };
@@ -162,25 +148,34 @@ export function validateVoteData(
 
 export async function submitVote(
   decisionId: string,
-  userId: string,
+  voterIdentity: { userId: string; voterEmail?: never } | { userId?: never; voterEmail: string },
   voteData: VoteData
 ) {
+  const { userId, voterEmail } = voterIdentity as { userId?: string; voterEmail?: string };
+
   const existing = await db.execute(sql`
-    SELECT id, status, voting_method, options, dot_count, invited_participants, participant_scope
+    SELECT id, status, voting_method, options, dot_count, invited_participants, participant_scope, allow_public_voting
     FROM ${sql.raw(dTable)} WHERE id = ${decisionId}
   `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0] as unknown as DbDecisionRow;
+  const decision = existing.rows[0] as unknown as DbDecisionRow & { allow_public_voting: boolean };
   if (decision.status !== DECISION_STATUS.VOTING)
     return { error: 'not_voting_phase' as const };
 
-  // Check participant eligibility via scope
-  const participantScope = (decision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
-  const invited = asArray<string>(decision.invited_participants, []);
-  const eligibleIds = await resolveEligibleUserIds(participantScope, invited);
-  if (!eligibleIds.includes(userId)) {
-    return { error: 'not_participant' as const };
+  if (userId) {
+    // Registered voter: check participant eligibility via scope
+    const participantScope = (decision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
+    const invited = asArray<string>(decision.invited_participants, []);
+    const eligibleIds = await resolveEligibleUserIds(participantScope, invited);
+    if (!eligibleIds.includes(userId)) {
+      return { error: 'not_participant' as const };
+    }
+  } else {
+    // Anonymous voter: only allowed when decision has public voting enabled
+    if (!decision.allow_public_voting) {
+      return { error: 'not_participant' as const };
+    }
   }
 
   // Validate vote data
@@ -191,24 +186,33 @@ export async function submitVote(
   );
   if (!validation.success) return { error: 'invalid_data' as const, message: validation.error };
 
-  // Upsert vote (INSERT ... ON CONFLICT DO UPDATE)
-  const voteResult = await db.execute(sql`
-    INSERT INTO ${sql.raw(dvTable)} (decision_id, user_id, vote_data)
-    VALUES (${decisionId}, ${userId}, ${JSON.stringify(validation.data)}::jsonb)
-    ON CONFLICT (decision_id, user_id)
-    DO UPDATE SET vote_data = ${JSON.stringify(validation.data)}::jsonb, updated_at = now()
-    RETURNING *,
-      (SELECT email FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_email,
-      (SELECT name FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_name
-  `);
+  const voteJson = JSON.stringify(validation.data);
 
-  const vote = voteResult.rows[0] as unknown as DbVoteRow & { user_email: string; user_name: string | null };
-  return {
-    vote: {
-      ...vote,
-      user: { id: userId, email: vote.user_email, name: vote.user_name },
-    },
-  };
+  let voteResult;
+  if (userId) {
+    voteResult = await db.execute(sql`
+      INSERT INTO ${sql.raw(dvTable)} (decision_id, user_id, vote_data)
+      VALUES (${decisionId}, ${userId}, ${voteJson}::jsonb)
+      ON CONFLICT (decision_id, user_id) WHERE user_id IS NOT NULL
+      DO UPDATE SET vote_data = ${voteJson}::jsonb, updated_at = now()
+      RETURNING *,
+        (SELECT email FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_email,
+        (SELECT name FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_name
+    `);
+    const vote = voteResult.rows[0] as unknown as DbVoteRow & { user_email: string; user_name: string | null };
+    return { vote: { ...vote, user: { id: userId, email: vote.user_email, name: vote.user_name } } };
+  } else {
+    const email = voterEmail!;
+    voteResult = await db.execute(sql`
+      INSERT INTO ${sql.raw(dvTable)} (decision_id, voter_email, vote_data)
+      VALUES (${decisionId}, ${email}, ${voteJson}::jsonb)
+      ON CONFLICT (decision_id, voter_email) WHERE voter_email IS NOT NULL
+      DO UPDATE SET vote_data = ${voteJson}::jsonb, updated_at = now()
+      RETURNING *
+    `);
+    const vote = voteResult.rows[0] as unknown as DbVoteRow;
+    return { vote: { ...vote, user: { id: null, email, name: null } } };
+  }
 }
 
 export async function getVotes(decisionId: string, requestingUserId: string) {

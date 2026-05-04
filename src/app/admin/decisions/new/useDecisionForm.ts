@@ -57,6 +57,7 @@ export function useDecisionForm() {
   ]);
   const [showImageUrls, setShowImageUrls] = useState(false);
   const [blindVoting, setBlindVoting] = useState(true);
+  const [allowPublicVoting, setAllowPublicVoting] = useState(false);
   const [dotCount, setDotCount] = useState(DOT_VOTING_DEFAULTS.default);
   const [quorumType, setQuorumType] = useState<'percentage' | 'absolute'>('percentage');
   const [quorumValue, setQuorumValue] = useState(50);
@@ -200,6 +201,7 @@ export function useDecisionForm() {
         : [],
       quorum: { type: quorumType, value: quorumValue },
       blindVoting,
+      allowPublicVoting,
       dotCount: votingMethod === 'dot' ? dotCount : null,
       participantScope,
       invitedParticipants: participantScope === PARTICIPANT_SCOPE.INVITED ? Array.from(selectedParticipants) : [],
@@ -254,6 +256,7 @@ export function useDecisionForm() {
     quorumType, setQuorumType,
     quorumValue, setQuorumValue,
     blindVoting, setBlindVoting,
+    allowPublicVoting, setAllowPublicVoting,
     // Template
     handleTemplateSelect,
   };
