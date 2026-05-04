@@ -19,7 +19,7 @@ import {
   type DecisionCategory,
   type VotingMethod,
 } from '@/config/decisions';
-import { Link2, Check } from 'lucide-react';
+import { Link2, Check, Mail } from 'lucide-react';
 import { UI_FEEDBACK_MS } from '@/config/limits';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
@@ -85,6 +85,8 @@ export default function DecisionDetailClient({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [sendingInvitations, setSendingInvitations] = useState(false);
+  const [invitationsResult, setInvitationsResult] = useState<{ sent: number; skipped: number } | null>(null);
   const router = useRouter();
 
   function handleCopyLink() {
@@ -127,6 +129,22 @@ export default function DecisionDetailClient({
       return;
     }
     fetchDecision();
+  }
+
+  async function handleSendInvitations() {
+    setSendingInvitations(true);
+    setInvitationsResult(null);
+    const result = await apiFetch<{ sent: number; skipped: number }>(
+      `/api/decisions/${decisionId}/send-invitations`,
+      { method: 'POST' }
+    );
+    setSendingInvitations(false);
+    if (result.success && result.data) {
+      setInvitationsResult(result.data);
+      setTimeout(() => setInvitationsResult(null), 6000);
+    } else {
+      setActionError(result.error || 'Fehler beim Senden der Einladungen');
+    }
   }
 
   async function handleDelete() {
@@ -218,6 +236,26 @@ export default function DecisionDetailClient({
                 <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
               )}
             </button>
+            {/* Resend invitations — only during active voting, email-only (no duplicate in-app notifications) */}
+            {decision.status === DECISION_STATUS.VOTING && (
+              <button
+                onClick={handleSendInvitations}
+                disabled={sendingInvitations}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+                  invitationsResult
+                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-600 disabled:opacity-50'
+                )}
+              >
+                <Mail className="h-3.5 w-3.5" />
+                {sendingInvitations
+                  ? 'Sende...'
+                  : invitationsResult
+                    ? `${invitationsResult.sent} gesendet`
+                    : 'Einladungen senden'}
+              </button>
+            )}
             {validTargets.includes(DECISION_STATUS.DISCUSSION) && (
               <AdminButton variant="action" onClick={() => handleTransition(DECISION_STATUS.DISCUSSION)}>
                 Zur Diskussion
