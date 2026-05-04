@@ -110,8 +110,8 @@ import {
   createDecision,
   updateDecision,
   deleteDecision,
-  getPublicDecision,
 } from '../decisions-crud'
+import { getPublicDecision } from '../decisions-public'
 import { DECISION_STATUS } from '@/config/decisions'
 
 // ---------------------------------------------------------------------------

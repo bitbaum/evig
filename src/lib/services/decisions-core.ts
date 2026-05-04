@@ -6,18 +6,21 @@
  */
 
 // CRUD operations + shared types/helpers
-export type { DbDecisionRow, DecisionStats, PublicDecision, PublicDecisionOption } from './decisions-crud';
+export type { DbDecisionRow, DecisionStats } from './decisions-crud';
 export {
   asArray,
   asObject,
   getDecisionStats,
   getDecisions,
   getDecisionById,
-  getPublicDecision,
   createDecision,
   updateDecision,
   deleteDecision,
 } from './decisions-crud';
+
+// Public vote page data access
+export type { PublicDecision, PublicDecisionOption } from './decisions-public';
+export { getPublicDecision } from './decisions-public';
 
 // State transitions
 export { transitionDecision } from './decisions-transitions';
