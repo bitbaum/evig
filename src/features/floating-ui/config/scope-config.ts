@@ -32,12 +32,12 @@ export const SCOPE_CONFIG = {
     emoji: '\uD83C\uDFAF',
     name: 'Spezifisches Element',
     color: '#2563eb',
-    focusRing: 'focus:ring-blue-500',
-    buttonBg: 'bg-blue-600 hover:bg-blue-700',
-    borderColor: 'border-blue-500',
-    bgColor: 'bg-blue-50',
-    textColor: 'text-blue-900',
-    hoverBg: 'hover:bg-blue-50 hover:border-blue-300'
+    focusRing: 'focus:ring-info-500',
+    buttonBg: 'bg-info-600 hover:bg-info-700',
+    borderColor: 'border-info-500',
+    bgColor: 'bg-info-50',
+    textColor: 'text-info-900',
+    hoverBg: 'hover:bg-info-50 hover:border-info-300'
   }
 } as const
 

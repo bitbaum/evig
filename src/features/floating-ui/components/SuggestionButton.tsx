@@ -102,7 +102,7 @@ export default function SuggestionButton() {
               pointerEvents: 'none'
             }}
           >
-            <div className="absolute top-20 left-4 sm:left-4 right-4 sm:right-auto bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-xs sm:max-w-xs">
+            <div className="absolute top-20 left-4 sm:left-4 right-4 sm:right-auto bg-info-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium max-w-xs sm:max-w-xs">
               <div className="flex items-center space-x-2">
                 <span>{'\uD83C\uDFAF'}</span>
                 <div>
@@ -118,7 +118,7 @@ export default function SuggestionButton() {
                       <div className="font-medium mb-1">Ausgewählte Elemente:</div>
                       <div className="space-y-1 max-h-20 overflow-y-auto">
                         {selectedElements.slice(0, 3).map((el, index) => (
-                          <div key={index} className="bg-blue-500 bg-opacity-30 rounded px-2 py-1 text-xs truncate">
+                          <div key={index} className="bg-info-500 bg-opacity-30 rounded px-2 py-1 text-xs truncate">
                             {el.elementType}: {el.elementText.substring(0, 30)}...
                           </div>
                         ))}
@@ -168,12 +168,12 @@ export default function SuggestionButton() {
             className={cn(
               "bg-white shadow-2xl border border-neutral-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
               "w-[calc(100%-2rem)] max-w-sm sm:w-80 md:w-96",
-              isElementSelectionMode && "ring-2 ring-blue-500 ring-opacity-50 pointer-events-auto"
+              isElementSelectionMode && "ring-2 ring-info-500 ring-opacity-50 pointer-events-auto"
             )}
             style={{ pointerEvents: 'auto' }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-primary-50 to-blue-50 border-b border-neutral-200 px-4 py-3 flex-shrink-0">
+            <div className="bg-gradient-to-r from-primary-50 to-info-50 border-b border-neutral-200 px-4 py-3 flex-shrink-0">
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                   <Edit3 className="w-4 h-4 text-primary-600" />
@@ -245,7 +245,7 @@ export default function SuggestionButton() {
                       />
                       <div className="flex justify-between items-center mt-0.5">
                         {feedbackScope === 'element' && selectedElements.length > 0 && (
-                          <p className="text-xs text-blue-600">
+                          <p className="text-xs text-info-600">
                             {'\uD83C\uDFAF'} {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt
                           </p>
                         )}
