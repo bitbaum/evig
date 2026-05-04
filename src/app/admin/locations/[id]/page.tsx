@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -84,19 +84,7 @@ export default function LocationDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
-
-  const loadLocation = useCallback(async () => {
-    setLoading(true)
-    const result = await apiFetch<{ location: LocationDetail; recentBookings?: Booking[] }>(`/api/locations/${locationId}`)
-    setLoading(false)
-
-    if (result.success && result.data) {
-      setLocation(result.data.location)
-      setBookings(result.data.recentBookings || [])
-    } else {
-      setError(result.error || 'Ort nicht gefunden')
-    }
-  }, [locationId])
+  const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     if (sessionStatus !== 'authenticated' || !locationId) return
@@ -115,7 +103,7 @@ export default function LocationDetailPage() {
     }
     load()
     return () => { cancelled = true }
-  }, [sessionStatus, locationId])
+  }, [sessionStatus, locationId, refreshKey])
 
   async function handleApproval(action: 'approve' | 'reject') {
     if (!confirm(`Möchtest du diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
@@ -133,7 +121,7 @@ export default function LocationDetailPage() {
     setActionLoading(false)
 
     if (result.success) {
-      loadLocation()
+      setRefreshKey(k => k + 1)
     } else {
       setError(result.error || 'Fehler bei der Genehmigung')
     }

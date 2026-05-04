@@ -12,6 +12,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import type { CategoryFormData } from '@/hooks/useBlogCategories'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 import { generateSlug } from '@/lib/utils/slug'
@@ -29,6 +30,7 @@ export default function CategoryForm({
 }: CategoryFormProps) {
   const router = useRouter()
   const { saving, deleting, error, success, saveCategory, deleteCategory } = useBlogCategories()
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const [formData, setFormData] = useState<CategoryFormData>({
     name: initialData?.name || '',
     slug: initialData?.slug || '',
@@ -56,8 +58,8 @@ export default function CategoryForm({
     }
   }
 
-  const handleDelete = async () => {
-    if (!confirm('Kategorie wirklich löschen?')) return
+  const doDelete = async () => {
+    setConfirmDelete(false)
     const deleted = await deleteCategory(initialData?.id || '')
     if (deleted) {
       router.push('/admin/content/categories')
@@ -97,7 +99,7 @@ export default function CategoryForm({
         <div className="flex items-center gap-3">
           {isEdit && (
             <button
-              onClick={handleDelete}
+              onClick={() => setConfirmDelete(true)}
               disabled={deleting}
               className="inline-flex items-center gap-2 bg-error-100 text-error-700 hover:bg-error-200 dark:bg-error-900/30 dark:text-error-400 dark:hover:bg-error-900/50 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
             >
@@ -308,6 +310,16 @@ export default function CategoryForm({
           </div>
         </div>
       </form>
+
+      <ConfirmDialog
+        isOpen={confirmDelete}
+        title="Kategorie löschen"
+        message="Kategorie wirklich löschen?"
+        itemName={formData.name}
+        isLoading={deleting}
+        onConfirm={doDelete}
+        onClose={() => setConfirmDelete(false)}
+      />
     </div>
   )
 }

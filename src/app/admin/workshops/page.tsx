@@ -21,6 +21,7 @@ import {
 import { apiFetch } from '@/lib/api/client'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { formatDateShort } from '@/lib/date-formats'
+import { formatPriceCents } from '@/config/marketplace'
 import {
   PROPOSAL_STATUS,
   PROPOSAL_STATUS_LABELS,
@@ -295,7 +296,7 @@ export default function AdminWorkshopsPage() {
                       </div>
                       <div className="flex items-center gap-1">
                         <DollarSign className="w-4 h-4" />
-                        CHF {(proposal.price_cents / 100).toFixed(2)}
+                        {formatPriceCents(proposal.price_cents)}
                       </div>
                       <div className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />

@@ -25,16 +25,12 @@ import {
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import type { BuildResult } from '@/config/build-computer'
-import { getMockRecommendation } from '@/config/build-computer'
+import { getMockRecommendation, USE_CASE_OPTIONS, PERFORMANCE_OPTIONS, BUDGET_OPTIONS } from '@/config/build-computer'
 import { getDefaultValue } from '@/lib/org-numbers.defaults'
 
-const USE_CASE_IDS = ['office', 'creative', 'gaming', 'development', 'server', 'ai'] as const
-const PERFORMANCE_IDS = ['basic', 'moderate', 'high', 'extreme'] as const
-const BUDGET_VALUES = ['300-500', '500-800', '800-1200', '1200+'] as const
-
-type UseCaseId = typeof USE_CASE_IDS[number]
-type PerformanceId = typeof PERFORMANCE_IDS[number]
-type BudgetValue = typeof BUDGET_VALUES[number]
+type UseCaseId = typeof USE_CASE_OPTIONS[number]['id']
+type PerformanceId = typeof PERFORMANCE_OPTIONS[number]['id']
+type BudgetValue = typeof BUDGET_OPTIONS[number]['value']
 
 export default function BuildYourComputerPage() {
   const t = useTranslations('services.buildComputer')
@@ -58,19 +54,19 @@ export default function BuildYourComputerPage() {
     setStep(3)
   }
 
-  const useCaseOptions = USE_CASE_IDS.map(id => ({
+  const useCaseOptions = USE_CASE_OPTIONS.map(({ id }) => ({
     id,
     name: t(`useCaseOptions.${id}.name`),
     description: t(`useCaseOptions.${id}.description`),
   }))
 
-  const performanceOptions = PERFORMANCE_IDS.map(id => ({
+  const performanceOptions = PERFORMANCE_OPTIONS.map(({ id }) => ({
     id,
     name: t(`performanceOptions.${id}.name`),
     description: t(`performanceOptions.${id}.description`),
   }))
 
-  const budgetOptions = BUDGET_VALUES.map(value => ({
+  const budgetOptions = BUDGET_OPTIONS.map(({ value }) => ({
     value,
     label: t(`budgetOptions.${value}`),
   }))

@@ -1,6 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { formatDateTime } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { Link } from '@/i18n/navigation'
@@ -39,6 +41,8 @@ export function SubmissionDetail({
   onShowChangesModal,
   onShowEditModal,
 }: SubmissionDetailProps) {
+  const [confirmDelete, setConfirmDelete] = useState(false)
+
   if (!submission) {
     return (
       <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-12 text-center">
@@ -226,17 +230,21 @@ export function SubmissionDetail({
       {/* Delete */}
       <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
         <button
-          onClick={() => {
-            if (confirm('Einreichung wirklich löschen?')) {
-              onAction('delete', submission.id)
-            }
-          }}
+          onClick={() => setConfirmDelete(true)}
           disabled={actionLoading !== null}
           className="flex items-center gap-2 text-sm text-error-600 dark:text-error-400 hover:text-error-800 dark:hover:text-error-300 disabled:opacity-50"
         >
           <Trash2 className="w-4 h-4" />
           Einreichung löschen
         </button>
+        <ConfirmDialog
+          isOpen={confirmDelete}
+          title="Einreichung löschen"
+          message="Einreichung wirklich löschen?"
+          itemName={submission.title}
+          onConfirm={() => { setConfirmDelete(false); onAction('delete', submission.id) }}
+          onClose={() => setConfirmDelete(false)}
+        />
       </div>
     </div>
   )

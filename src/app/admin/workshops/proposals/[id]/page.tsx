@@ -20,6 +20,7 @@ import { EditProposalModal } from '@/components/admin/workshops/EditProposalModa
 import { getEditableFieldLabels } from '@/config/editable-fields';
 import { formatDateTime, formatDateShort } from '@/lib/date-formats';
 import { apiFetch } from '@/lib/api/client';
+import { formatPriceCents } from '@/config/marketplace';
 import { logger } from '@/lib/logger';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
@@ -272,7 +273,7 @@ export default function WorkshopProposalDetailPage() {
                     Preis
                   </dt>
                   <dd className="font-medium mt-1">
-                    CHF {(proposal.price_cents / 100).toFixed(2)}
+                    {formatPriceCents(proposal.price_cents)}
                   </dd>
                 </div>
                 {proposal.target_audience && (

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ShieldCheck, ShieldOff, Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 interface VerifyActionsProps {
   listingId: string
@@ -15,6 +16,7 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   const [loading, setLoading] = useState(false)
   const [showNotes, setShowNotes] = useState(false)
   const [notes, setNotes] = useState('')
+  const [confirmUnverify, setConfirmUnverify] = useState(false)
   const router = useRouter()
 
   async function handleVerify() {
@@ -34,8 +36,8 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
     }
   }
 
-  async function handleUnverify() {
-    if (!confirm(`Verifizierung von "${title}" entfernen?`)) return
+  async function doUnverify() {
+    setConfirmUnverify(false)
     setLoading(true)
     try {
       const result = await apiFetch<unknown>(`/api/admin/listings/${listingId}/verify`, {
@@ -59,14 +61,24 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
 
   if (isVerified) {
     return (
-      <button
-        onClick={handleUnverify}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
-        title="Verifizierung entfernen"
-      >
-        <ShieldOff className="w-4 h-4" />
-        <span className="hidden sm:inline">Entfernen</span>
-      </button>
+      <>
+        <button
+          onClick={() => setConfirmUnverify(true)}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
+          title="Verifizierung entfernen"
+        >
+          <ShieldOff className="w-4 h-4" />
+          <span className="hidden sm:inline">Entfernen</span>
+        </button>
+        <ConfirmDialog
+          isOpen={confirmUnverify}
+          title="Verifizierung entfernen"
+          message="Verifizierung wirklich entfernen?"
+          itemName={title}
+          onConfirm={doUnverify}
+          onClose={() => setConfirmUnverify(false)}
+        />
+      </>
     )
   }
 
