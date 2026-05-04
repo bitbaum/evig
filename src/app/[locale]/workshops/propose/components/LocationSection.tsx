@@ -120,7 +120,7 @@ export function LocationSection({
                   ))}
                 </select>
               ) : (
-                <div className="text-sm text-neutral-500 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <div className="text-sm text-neutral-500 bg-warning-50 border border-warning-200 rounded-lg p-3">
                   <p>{t('sections.location.noVenues')}</p>
                   <p className="mt-1">{t('sections.location.noVenuesSuggestion')}</p>
                 </div>

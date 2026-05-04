@@ -36,7 +36,7 @@ describe('getBookingStatusBadge', () => {
   it('returns badge for "requested"', () => {
     const badge = getBookingStatusBadge(BOOKING_STATUS.REQUESTED)
     expect(badge.label).toBe('Angefragt')
-    expect(badge.color).toContain('yellow')
+    expect(badge.color).toContain('warning')
   })
 
   it('returns badge for "completed"', () => {

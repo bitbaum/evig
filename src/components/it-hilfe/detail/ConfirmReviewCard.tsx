@@ -88,7 +88,7 @@ export function ConfirmReviewCard({
                 <Star
                   className={`w-8 h-8 transition-colors ${
                     star <= (hover || rating)
-                      ? 'fill-yellow-400 text-yellow-400'
+                      ? 'fill-warning-400 text-warning-400'
                       : 'text-neutral-300'
                   }`}
                 />

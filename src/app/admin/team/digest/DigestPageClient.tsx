@@ -148,8 +148,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                  <HelpCircle className="w-5 h-5 text-yellow-600" />
+                <div className="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center">
+                  <HelpCircle className="w-5 h-5 text-warning-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -194,7 +194,7 @@ export function DigestPageClient() {
             {/* Top Contributors */}
             <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Trophy className="w-5 h-5 text-yellow-500" />
+                <Trophy className="w-5 h-5 text-warning-500" />
                 <Heading level={3} className="font-semibold text-neutral-900 dark:text-neutral-100">Top Beiträger</Heading>
               </div>
 
@@ -212,7 +212,7 @@ export function DigestPageClient() {
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                           index === 0
-                            ? 'bg-yellow-100 text-yellow-700'
+                            ? 'bg-warning-100 text-warning-700'
                             : index === 1
                               ? 'bg-neutral-200 text-neutral-600'
                               : index === 2

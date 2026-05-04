@@ -59,7 +59,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
         key={i}
         className={`w-4 h-4 ${
           i < rating
-            ? 'text-yellow-400 fill-yellow-400'
+            ? 'text-warning-400 fill-warning-400'
             : 'text-neutral-300'
         }`}
       />

@@ -137,7 +137,7 @@ export async function ListingCard({ listing, variant = 'default', className = ''
           <span className="truncate">{sellerName}</span>
           {listing.seller_rating && Number(listing.seller_rating) > 0 && (
             <span className="inline-flex items-center gap-0.5 flex-shrink-0">
-              <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+              <Star className="w-3 h-3 text-warning-400 fill-warning-400" />
               {Number(listing.seller_rating).toFixed(1)}
             </span>
           )}

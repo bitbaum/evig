@@ -45,7 +45,7 @@ export function DocumentVerificationSection({
                       <div className={`w-3 h-3 rounded-full ${
                         doc.status === APPROVAL_STATUS.APPROVED ? 'bg-primary-500' :
                         doc.status === APPROVAL_STATUS.REJECTED ? 'bg-error-500' :
-                        'bg-yellow-500'
+                        'bg-warning-500'
                       }`} />
                       <div>
                         <p className="text-sm font-medium text-neutral-900">

@@ -44,7 +44,7 @@ export default function SubmissionsAdminPage() {
           </div>
         </div>
         <div className="flex gap-3">
-          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 px-4 py-2 rounded-lg text-center">
+          <div className="bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300 px-4 py-2 rounded-lg text-center">
             <div className="text-2xl font-bold">{s.counts.pending}</div>
             <div className="text-xs">Ausstehend</div>
           </div>

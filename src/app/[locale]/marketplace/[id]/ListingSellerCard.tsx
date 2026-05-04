@@ -41,7 +41,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
           <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
             {listing.seller_rating && Number(listing.seller_rating) > 0 && (
               <span className="flex items-center gap-1">
-                <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" aria-hidden="true" />
+                <Star className="w-3 h-3 text-warning-500 fill-warning-500" aria-hidden="true" />
                 {Number(listing.seller_rating).toFixed(1)}
                 {listing.seller_total_reviews && ` (${listing.seller_total_reviews})`}
               </span>

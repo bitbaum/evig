@@ -142,7 +142,7 @@ export function VoiceProductInput({
       case 'recording':
         return 'bg-error-500 hover:bg-error-600 text-white animate-pulse'
       case 'processing':
-        return 'bg-yellow-500 text-white cursor-wait'
+        return 'bg-warning-500 text-white cursor-wait'
       case 'success':
         return 'bg-primary-500 hover:bg-primary-600 text-white'
       case 'error':

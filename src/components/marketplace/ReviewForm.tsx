@@ -81,7 +81,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
               <Star
                 className={`w-6 h-6 transition-colors ${
                   i < (hoverRating || rating)
-                    ? 'text-yellow-400 fill-yellow-400'
+                    ? 'text-warning-400 fill-warning-400'
                     : 'text-neutral-300 dark:text-neutral-600'
                 }`}
               />

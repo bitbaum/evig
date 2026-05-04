@@ -20,7 +20,7 @@ export function DonationStatsCards({ stats }: Props) {
         <div className="text-2xl font-bold text-neutral-900">{stats.device}</div>
         <div className="text-sm text-neutral-600">Sachspenden</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-yellow-500">
+      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-warning-500">
         <div className="text-2xl font-bold text-neutral-900">{stats.pendingThanks}</div>
         <div className="text-sm text-neutral-600">Dank ausstehend</div>
       </div>

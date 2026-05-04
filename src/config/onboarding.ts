@@ -128,7 +128,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     },
     {
       icon: Star,
-      iconColor: 'text-yellow-600',
+      iconColor: 'text-warning-600',
       title: 'Bewertungssystem',
       description: 'Sammle Bewertungen und baue eine Reputation auf. Hervorragende Bewertungen helfen dir, mehr Kunden zu gewinnen.'
     },
@@ -180,7 +180,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     },
     {
       icon: Star,
-      iconColor: 'text-yellow-600',
+      iconColor: 'text-warning-600',
       title: 'Bewertet',
       subtitle: 'Kundenfeedback'
     },

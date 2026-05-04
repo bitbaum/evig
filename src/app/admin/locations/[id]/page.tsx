@@ -145,7 +145,7 @@ export default function LocationDetailPage() {
   const getStatusBadge = (status: string) => {
     const configs: Record<string, { icon: typeof CheckCircle; label: string; className: string }> = {
       [LOCATION_STATUS.APPROVED]: { icon: CheckCircle, label: getApprovalStatusLabel(LOCATION_STATUS.APPROVED), className: 'bg-primary-100 text-primary-800' },
-      [LOCATION_STATUS.PENDING]: { icon: Clock, label: getApprovalStatusLabel(LOCATION_STATUS.PENDING), className: 'bg-yellow-100 text-yellow-800' },
+      [LOCATION_STATUS.PENDING]: { icon: Clock, label: getApprovalStatusLabel(LOCATION_STATUS.PENDING), className: 'bg-warning-100 text-warning-800' },
       [LOCATION_STATUS.REJECTED]: { icon: XCircle, label: getApprovalStatusLabel(LOCATION_STATUS.REJECTED), className: 'bg-error-100 text-error-800' },
       [LOCATION_STATUS.SUSPENDED]: { icon: AlertCircle, label: 'Suspendiert', className: 'bg-orange-100 text-orange-800' },
     }
@@ -477,7 +477,7 @@ export default function LocationDetailPage() {
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                     booking.status === BOOKING_STATUS.CONFIRMED ? 'bg-primary-100 text-primary-800' :
-                    booking.status === BOOKING_STATUS.PENDING ? 'bg-yellow-100 text-yellow-800' :
+                    booking.status === BOOKING_STATUS.PENDING ? 'bg-warning-100 text-warning-800' :
                     'bg-neutral-100 text-neutral-800'
                   }`}>
                     {booking.status === BOOKING_STATUS.CONFIRMED ? 'Bestätigt' :

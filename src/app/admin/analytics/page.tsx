@@ -288,7 +288,7 @@ export default async function AnalyticsPage() {
 
         <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 col-span-2">
           <div className="flex items-center gap-3">
-            <BarChart3 className="w-8 h-8 text-yellow-600" />
+            <BarChart3 className="w-8 h-8 text-warning-600" />
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.pendingApprovals}</p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">Ausstehende Freigaben</p>

@@ -176,7 +176,7 @@ export function TeamProfileView({
           {/* Skills & Interests */}
           <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
             <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              <Star className="w-5 h-5 text-yellow-500" />
+              <Star className="w-5 h-5 text-warning-500" />
               Fähigkeiten & Interessen
             </Heading>
 
@@ -355,12 +355,12 @@ export function TeamProfileView({
 
           {/* HR Notes - Super Admin Only */}
           {isSuperAdmin && profile.hr_notes && (
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800 p-6">
-              <Heading level={2} className="text-yellow-900 dark:text-yellow-200 mb-4 flex items-center gap-2">
+            <div className="bg-warning-50 dark:bg-warning-900/20 rounded-xl border border-warning-200 dark:border-warning-800 p-6">
+              <Heading level={2} className="text-warning-900 dark:text-warning-200 mb-4 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
                 HR-Notizen (Vertraulich)
               </Heading>
-              <p className="text-yellow-800 dark:text-yellow-300 text-sm whitespace-pre-wrap">
+              <p className="text-warning-800 dark:text-warning-300 text-sm whitespace-pre-wrap">
                 {profile.hr_notes}
               </p>
             </div>

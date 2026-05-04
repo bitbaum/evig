@@ -20,13 +20,13 @@ export default function ContentPage() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
           href="/admin/content/submissions"
-          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-yellow-500 transition-colors relative group"
+          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-warning-500 transition-colors relative group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">Einreichungen</Heading>
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Benutzer-Einreichungen prüfen und veröffentlichen
           </p>
-          <span className="absolute top-4 right-4 w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+          <span className="absolute top-4 right-4 w-2 h-2 bg-warning-500 rounded-full animate-pulse" />
         </Link>
 
         <Link

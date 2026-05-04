@@ -29,7 +29,7 @@ function getSourceIcon(sourceType: string): JSX.Element | null {
     case 'activity_update':
       return null // handled separately via getActivityUpdateIcon
     case 'help_request':
-      return <HelpCircle className="w-5 h-5 text-yellow-500" />
+      return <HelpCircle className="w-5 h-5 text-warning-500" />
     case 'focus_update':
       return <Clock className="w-5 h-5 text-info-500" />
     default:

@@ -119,7 +119,7 @@ export type RequestStatus = (typeof REQUEST_STATUSES)[keyof typeof REQUEST_STATU
 export const TASK_STATUS_COLORS: Record<TaskStatus, string> = {
   idle: 'bg-primary-100 text-primary-800',
   needs_attention: 'bg-error-100 text-error-800',
-  requested: 'bg-yellow-100 text-yellow-800',
+  requested: 'bg-warning-100 text-warning-800',
   in_progress: 'bg-info-100 text-info-800',
 };
 

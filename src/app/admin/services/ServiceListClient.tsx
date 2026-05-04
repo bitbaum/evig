@@ -154,7 +154,7 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
                         {service.is_active ? 'Aktiv' : 'Inaktiv'}
                       </span>
                       {service.is_featured && (
-                        <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                        <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300">
                           <Star className="w-3 h-3" />
                         </span>
                       )}

@@ -101,7 +101,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
         <div className="flex items-center gap-3 text-sm text-neutral-600 mb-3">
           {helper.averageRating && (
             <span className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <Star className="w-4 h-4 fill-warning-400 text-warning-400" />
               {helper.averageRating.toFixed(1)}
             </span>
           )}

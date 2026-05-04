@@ -27,7 +27,7 @@
  *
  *   getHelpRequestStatusLabel / getHelpRequestStatusColor
  *   - return label/color for known status
- *   - return 'Offen'/'yellow' default for null
+ *   - return 'Offen'/'warning' default for null
  *
  *   getActivityCategoryLabel
  *   - returns German label for known category
@@ -167,8 +167,8 @@ describe('getHelpRequestStatusColor', () => {
     expect(getHelpRequestStatusColor(HELP_REQUEST_STATUSES.RESOLVED)).toContain('primary')
   })
 
-  it('returns yellow (open) for null', () => {
-    expect(getHelpRequestStatusColor(null)).toContain('yellow')
+  it('returns warning (open) for null', () => {
+    expect(getHelpRequestStatusColor(null)).toContain('warning')
   })
 })
 

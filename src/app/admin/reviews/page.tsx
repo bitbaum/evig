@@ -150,7 +150,7 @@ export default function AdminReviewsPage() {
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-current' : 'text-neutral-300'}`}
+          className={`w-4 h-4 ${star <= rating ? 'text-warning-400 fill-current' : 'text-neutral-300'}`}
         />
       ))}
       <span className="ml-2 text-sm text-neutral-600">{rating}/5</span>
@@ -350,7 +350,7 @@ export default function AdminReviewsPage() {
                         onClick={() => startModeration(review.id, 'flag_spam')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als Spam markieren"
-                        className="min-h-[2.75rem] px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs hover:bg-yellow-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="min-h-[2.75rem] px-2 py-1 bg-warning-100 text-warning-700 rounded text-xs hover:bg-warning-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <Flag className="w-3 h-3" />
                         Spam

@@ -35,7 +35,7 @@ describe('getTextColor', () => {
     expect(getTextColor('secondary')).toBe('text-white')
   })
 
-  it('returns dark text on warning (yellow) background — better contrast', () => {
+  it('returns dark text on warning (warning) background — better contrast', () => {
     expect(getTextColor('warning')).toBe('text-neutral-900')
   })
 

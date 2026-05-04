@@ -44,7 +44,7 @@ export function ApplicationDetails({ application }: Props) {
             <div className="space-y-1">
               {application.certifications.map((cert, index) => (
                 <div key={index} className="flex items-center gap-2 text-sm">
-                  <Star className="w-4 h-4 text-yellow-500" />
+                  <Star className="w-4 h-4 text-warning-500" />
                   <span>{typeof cert === 'string' ? cert : cert.name}</span>
                 </div>
               ))}

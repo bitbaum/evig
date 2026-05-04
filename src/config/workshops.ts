@@ -106,7 +106,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Kryptowährungen, dezentrale Anwendungen und Blockchain-Technologie.",
     icon: Bitcoin,
-    color: "bg-yellow-500",
+    color: "bg-warning-500",
   },
   {
     id: "privacy",

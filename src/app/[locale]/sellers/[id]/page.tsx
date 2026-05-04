@@ -178,7 +178,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
           <div className="text-center">
             {rating && Number(rating) > 0 ? (
               <div className="flex items-center justify-center gap-1">
-                <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+                <Star className="w-5 h-5 text-warning-400 fill-warning-400" />
                 <span className="text-2xl font-bold text-neutral-900 dark:text-white">
                   {Number(rating).toFixed(1)}
                 </span>

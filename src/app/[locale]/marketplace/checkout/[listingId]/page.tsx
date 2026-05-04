@@ -159,7 +159,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
   if (isOwnListing) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
-        <AlertCircle className="w-16 h-16 text-yellow-400 mx-auto mb-4" />
+        <AlertCircle className="w-16 h-16 text-warning-400 mx-auto mb-4" />
         <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
           {t('ownListing.title')}
         </Heading>

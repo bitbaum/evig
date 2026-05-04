@@ -209,7 +209,7 @@ export function ShopProductsTable({
                     </button>
                     <button
                       onClick={() => onUnpublish?.(product)}
-                      className="p-1 text-yellow-400 hover:text-yellow-600"
+                      className="p-1 text-warning-400 hover:text-warning-600"
                       title="Aus Shop entfernen"
                     >
                       <EyeOff className="w-4 h-4" />

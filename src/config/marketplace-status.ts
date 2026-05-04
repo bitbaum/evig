@@ -20,7 +20,7 @@ export const MARKETPLACE_STATUS_LABELS: Record<string, string> = {
 
 export const MARKETPLACE_STATUS_BADGES: Record<string, string> = {
   [MARKETPLACE_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
-  [MARKETPLACE_STATUS.DRAFT]: 'bg-yellow-100 text-yellow-800',
+  [MARKETPLACE_STATUS.DRAFT]: 'bg-warning-100 text-warning-800',
 }
 
 /**

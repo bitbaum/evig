@@ -32,7 +32,7 @@ export function VoiceStatusMessage({
           </span>
         )}
         {state === 'paused' && (
-          <span className="text-yellow-600">{t('paused')}</span>
+          <span className="text-warning-600">{t('paused')}</span>
         )}
         {state === 'stopped' && t('stopped')}
       </div>

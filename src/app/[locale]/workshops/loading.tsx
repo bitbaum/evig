@@ -2,13 +2,13 @@ export default function WorkshopsLoading() {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Hero skeleton */}
-      <div className="bg-gradient-to-br from-yellow-50 to-orange-50 py-12 sm:py-16 lg:py-20">
+      <div className="bg-gradient-to-br from-warning-50 to-orange-50 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center mb-6">
-            <div className="h-16 w-16 rounded-2xl bg-yellow-200 animate-pulse" />
+            <div className="h-16 w-16 rounded-2xl bg-warning-200 animate-pulse" />
           </div>
-          <div className="h-10 bg-yellow-200 rounded w-64 mx-auto mb-6 animate-pulse" />
-          <div className="h-5 bg-yellow-100 rounded w-96 mx-auto animate-pulse" />
+          <div className="h-10 bg-warning-200 rounded w-64 mx-auto mb-6 animate-pulse" />
+          <div className="h-5 bg-warning-100 rounded w-96 mx-auto animate-pulse" />
         </div>
       </div>
 

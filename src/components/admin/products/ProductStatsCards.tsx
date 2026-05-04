@@ -38,8 +38,8 @@ export function ProductStatsCards({
         <StatCard
           label="Entwürfe"
           value={inventoryStats.draft}
-          valueColor="text-yellow-600"
-          icon={<XCircle className="w-6 h-6 text-yellow-500" />}
+          valueColor="text-warning-600"
+          icon={<XCircle className="w-6 h-6 text-warning-500" />}
         />
         <StatCard
           label="Freigegeben"

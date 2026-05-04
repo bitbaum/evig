@@ -7,8 +7,8 @@ export function StatusSection() {
         <h2 className="text-3xl font-bold text-neutral-900 mb-6">
           Aktueller Status
         </h2>
-        <div className="inline-flex items-center gap-2 bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-2 rounded-full text-sm font-medium mb-8">
-          <span className="w-2 h-2 bg-yellow-500 rounded-full" />
+        <div className="inline-flex items-center gap-2 bg-warning-50 border border-warning-200 text-warning-800 px-4 py-2 rounded-full text-sm font-medium mb-8">
+          <span className="w-2 h-2 bg-warning-500 rounded-full" />
           In Entwicklung — Beta
         </div>
         <p className="text-neutral-600 mb-8">

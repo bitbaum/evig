@@ -401,7 +401,7 @@ export function DataEntryTabs({
             </label>
 
             {unmappedColumns.length > 0 && (
-              <div className="flex items-start gap-2 py-2 px-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg text-yellow-700 dark:text-yellow-400 text-sm">
+              <div className="flex items-start gap-2 py-2 px-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg text-warning-700 dark:text-warning-400 text-sm">
                 <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
                 <div>
                   <span className="font-medium">{t('unmappedColumns')}</span>{' '}

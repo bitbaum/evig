@@ -87,7 +87,7 @@ export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
 };
 
 export const HELP_REQUEST_STATUS_COLORS: Record<HelpRequestStatus, string> = {
-  open: 'bg-yellow-100 text-yellow-800',
+  open: 'bg-warning-100 text-warning-800',
   in_progress: 'bg-info-100 text-info-800',
   resolved: 'bg-primary-100 text-primary-800',
   cancelled: 'bg-neutral-100 text-neutral-800',
@@ -180,8 +180,8 @@ export function getHelpRequestStatusLabel(status: string | null): string {
 }
 
 export function getHelpRequestStatusColor(status: string | null): string {
-  if (!status) return 'bg-yellow-100 text-yellow-800';
-  return HELP_REQUEST_STATUS_COLORS[status as HelpRequestStatus] || 'bg-yellow-100 text-yellow-800';
+  if (!status) return 'bg-warning-100 text-warning-800';
+  return HELP_REQUEST_STATUS_COLORS[status as HelpRequestStatus] || 'bg-warning-100 text-warning-800';
 }
 
 export function getActivityCategoryLabel(category: string | null): string {

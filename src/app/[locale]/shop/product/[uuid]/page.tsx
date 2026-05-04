@@ -55,7 +55,7 @@ const CONDITION_COLORS: Record<string, string> = {
   'wie neu':    'bg-emerald-100 text-emerald-800',
   'sehr gut':   'bg-primary-100 text-primary-800',
   'gut':        'bg-info-100 text-info-800',
-  'akzeptabel': 'bg-yellow-100 text-yellow-800',
+  'akzeptabel': 'bg-warning-100 text-warning-800',
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {

@@ -170,8 +170,8 @@ export default async function TeamPage() {
 
       {/* Staff without profiles warning */}
       {staffWithoutProfiles.length > 0 && (
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
-          <Heading level={3} className="font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+        <div className="p-4 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl">
+          <Heading level={3} className="font-medium text-warning-900 dark:text-warning-200 mb-2">
             {staffWithoutProfiles.length} Staff-Mitglieder ohne Profil
           </Heading>
           <div className="flex flex-wrap gap-2">
@@ -179,13 +179,13 @@ export default async function TeamPage() {
               <Link
                 key={user.id}
                 href={`/admin/team/new?user_id=${user.id}`}
-                className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 text-sm rounded-full hover:bg-yellow-200 dark:hover:bg-yellow-900/60 transition-colors"
+                className="px-3 py-1 bg-warning-100 dark:bg-warning-900/40 text-warning-800 dark:text-warning-300 text-sm rounded-full hover:bg-warning-200 dark:hover:bg-warning-900/60 transition-colors"
               >
                 {user.name || user.email}
               </Link>
             ))}
             {staffWithoutProfiles.length > 5 && (
-              <span className="px-3 py-1 text-yellow-700 dark:text-yellow-400 text-sm">
+              <span className="px-3 py-1 text-warning-700 dark:text-warning-400 text-sm">
                 +{staffWithoutProfiles.length - 5} weitere
               </span>
             )}
@@ -198,8 +198,8 @@ export default async function TeamPage() {
 
       {/* Info Boxes */}
       <div className="grid md:grid-cols-2 gap-4">
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl">
-          <p className="text-sm text-yellow-700 dark:text-yellow-300">
+        <div className="p-4 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl">
+          <p className="text-sm text-warning-700 dark:text-warning-300">
             <strong>Sensible Daten:</strong> Diese Seite enthält vertrauliche Team-Informationen und ist nur für autorisierte Mitarbeiter zugänglich.
           </p>
         </div>

@@ -100,7 +100,7 @@ export default function AdminWorkshopInstanceDetailPage({
       case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
         return <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full">Bestätigt</span>
       case WORKSHOP_REGISTRATION_STATUS.PENDING:
-        return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-warning-100 text-warning-800 rounded-full">Ausstehend</span>
       case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
         return <span className="px-2 py-1 text-xs font-medium bg-error-100 text-error-800 rounded-full">Abgesagt</span>
       case WORKSHOP_REGISTRATION_STATUS.ATTENDED:
@@ -117,7 +117,7 @@ export default function AdminWorkshopInstanceDetailPage({
       case WORKSHOP_PAYMENT_STATUS.PAID:
         return <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full">Bezahlt</span>
       case WORKSHOP_PAYMENT_STATUS.PENDING:
-        return <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Ausstehend</span>
+        return <span className="px-2 py-1 text-xs font-medium bg-warning-100 text-warning-800 rounded-full">Ausstehend</span>
       case WORKSHOP_PAYMENT_STATUS.REFUNDED:
         return <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">Erstattet</span>
       case WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED:
@@ -233,8 +233,8 @@ export default function AdminWorkshopInstanceDetailPage({
 
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <Clock className="w-5 h-5 text-yellow-600" />
+              <div className="p-2 bg-warning-100 rounded-lg">
+                <Clock className="w-5 h-5 text-warning-600" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-neutral-900">
@@ -342,7 +342,7 @@ export default function AdminWorkshopInstanceDetailPage({
                       <td className="px-6 py-4">
                         {reg.rating && (
                           <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                            <Star className="w-4 h-4 text-warning-400 fill-warning-400" />
                             <span className="text-sm font-medium">{reg.rating}/5</span>
                           </div>
                         )}

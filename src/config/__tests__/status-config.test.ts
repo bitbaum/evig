@@ -134,8 +134,8 @@ describe('getApprovalStatusBadge', () => {
   it('returns badge object with label, color, bg for pending', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.PENDING)
     expect(badge.label).toBe('Ausstehend')
-    expect(badge.color).toContain('yellow')
-    expect(badge.bg).toContain('yellow')
+    expect(badge.color).toContain('warning')
+    expect(badge.bg).toContain('warning')
   })
 
   it('returns badge object for approved (green)', () => {
@@ -204,7 +204,7 @@ describe('getBookingStatusBadge', () => {
   it('returns badge with label and color for requested', () => {
     const badge = getBookingStatusBadge(BOOKING_STATUS.REQUESTED)
     expect(badge.label).toBe('Angefragt')
-    expect(badge.color).toContain('yellow')
+    expect(badge.color).toContain('warning')
   })
 
   it('returns badge for in_progress', () => {

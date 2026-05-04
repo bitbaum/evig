@@ -281,7 +281,7 @@ export default function CustomerBookings() {
                   {apt.status === BOOKING_STATUS.COMPLETED && !apt.customer_rating && (
                     <button
                       onClick={() => setRatingModal({ appointmentId: apt.id, open: true })}
-                      className="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 flex items-center gap-2"
+                      className="px-4 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 flex items-center gap-2"
                     >
                       <Star className="h-4 w-4" />
                       {t('rateService')}
@@ -325,7 +325,7 @@ export default function CustomerBookings() {
                     className="p-1"
                   >
                     <Star
-                      className={'h-8 w-8 ' + (star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-neutral-300')}
+                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300')}
                     />
                   </button>
                 ))}
@@ -355,7 +355,7 @@ export default function CustomerBookings() {
                 customer_review: review || undefined
               })}
               disabled={actionLoading !== null}
-              className="flex-1 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 disabled:opacity-50"
+              className="flex-1 px-4 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 disabled:opacity-50"
             >
               {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : t('submitRating')}
             </button>

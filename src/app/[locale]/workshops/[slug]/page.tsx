@@ -393,8 +393,8 @@ export default async function WorkshopDetailPage({ params }: Props) {
             ) : (
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <Heading level={3} className="text-lg text-neutral-900 mb-4">{t('detail.registration')}</Heading>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <p className="text-yellow-800 text-sm">
+                <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
+                  <p className="text-warning-800 text-sm">
                     {t('detail.noDates')}
                   </p>
                 </div>

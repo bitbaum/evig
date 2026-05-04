@@ -30,7 +30,7 @@ function StatusIcon({ status }: { status: BulkProductStatus }) {
     case 'saved':
       return <CheckCircle2 className="w-4 h-4 text-primary-500" />
     case 'warning':
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />
+      return <AlertTriangle className="w-4 h-4 text-warning-500" />
     case 'error':
       return <AlertCircle className="w-4 h-4 text-error-500" />
     case 'processing':

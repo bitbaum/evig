@@ -144,7 +144,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           <div className={`p-2 rounded-lg ${
             material.material_type === 'pdf' ? 'bg-error-100 text-error-600' :
             material.material_type === 'video' ? 'bg-purple-100 text-purple-600' :
-            material.material_type === 'archive' ? 'bg-yellow-100 text-yellow-600' :
+            material.material_type === 'archive' ? 'bg-warning-100 text-warning-600' :
             'bg-info-100 text-info-600'
           }`}>
             {getMaterialIcon(material.material_type)}

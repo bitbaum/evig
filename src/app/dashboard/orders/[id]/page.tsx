@@ -207,19 +207,19 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
       {/* Pending payment info banner */}
       {order.status === ORDER_STATUS.PENDING_PAYMENT && (
-        <div className="mb-6 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4 flex items-start gap-3">
-          <Clock className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+        <div className="mb-6 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl p-4 flex items-start gap-3">
+          <Clock className="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <Heading level={3} className="font-medium text-yellow-800 dark:text-yellow-200">
+            <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">
               {t('pendingPaymentTitle')}
             </Heading>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+            <p className="text-sm text-warning-700 dark:text-warning-300 mt-1">
               {order.role === 'buyer' ? t('pendingPaymentBuyer') : t('pendingPaymentSeller')}
             </p>
             {order.role === 'buyer' && (
               <Link
                 href={`/marketplace/checkout/${order.listingId}`}
-                className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-warning-600 hover:bg-warning-700 text-white text-sm font-medium rounded-lg transition-colors"
               >
                 <Shield className="w-4 h-4" />
                 {t('retryPayment')}

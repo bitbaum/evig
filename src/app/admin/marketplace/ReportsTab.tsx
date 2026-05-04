@@ -59,7 +59,7 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
                 <td className="px-4 py-3 text-neutral-500 whitespace-nowrap">{formatDateShort(r.created_at)}</td>
                 <td className="px-4 py-3">
                   {r.status === REPORT_STATUS.PENDING ? (
-                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">Offen</span>
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-warning-100 text-warning-700">Offen</span>
                   ) : (
                     <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-600">{r.resolution_action ?? 'Bearbeitet'}</span>
                   )}

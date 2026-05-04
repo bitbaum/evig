@@ -95,7 +95,7 @@ export function VoiceControls({
           <Button
             type="button"
             onClick={onStop}
-            className="w-16 h-16 rounded-full bg-yellow-500 hover:bg-yellow-600 text-white"
+            className="w-16 h-16 rounded-full bg-warning-500 hover:bg-warning-600 text-white"
           >
             <Square className="w-6 h-6" />
           </Button>
@@ -139,7 +139,7 @@ export function VoiceControls({
       {/* Processing state */}
       {state === 'processing' && (
         <div className="flex flex-col items-center gap-2">
-          <div className="w-16 h-16 rounded-full bg-yellow-500 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-warning-500 flex items-center justify-center">
             <Loader2 className="w-8 h-8 text-white animate-spin" />
           </div>
           <span className="text-sm text-neutral-600 dark:text-neutral-400">

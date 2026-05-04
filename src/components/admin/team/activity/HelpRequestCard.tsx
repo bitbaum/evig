@@ -87,12 +87,12 @@ export function HelpRequestCard({
         <div
           className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
             request.is_broadcast
-              ? 'bg-yellow-100 dark:bg-yellow-900/30'
+              ? 'bg-warning-100 dark:bg-warning-900/30'
               : 'bg-info-100 dark:bg-info-900/30'
           }`}
         >
           {request.is_broadcast ? (
-            <Users className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+            <Users className="w-5 h-5 text-warning-600 dark:text-warning-400" />
           ) : (
             <User className="w-5 h-5 text-info-600 dark:text-info-400" />
           )}
@@ -113,7 +113,7 @@ export function HelpRequestCard({
               {isOwnRequest ? 'dir' : requesterDisplayName}
             </span>
             {request.is_broadcast ? (
-              <span className="ml-1 text-yellow-600 dark:text-yellow-400">an alle</span>
+              <span className="ml-1 text-warning-600 dark:text-warning-400">an alle</span>
             ) : request.requested_user_name ? (
               <span className="ml-1">
                 an{' '}

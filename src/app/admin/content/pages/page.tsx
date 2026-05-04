@@ -218,7 +218,7 @@ export default async function AdminPagesPage() {
                         className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                           page.is_published
                             ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
-                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                            : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
                         }`}
                       >
                         {page.is_published ? 'Veröffentlicht' : 'Entwurf'}

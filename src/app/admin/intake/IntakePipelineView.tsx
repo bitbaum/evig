@@ -55,7 +55,7 @@ export function IntakePipelineView({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total', value: statusCounts.total, color: 'bg-neutral-100 text-neutral-800' },
-          { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-yellow-100 text-yellow-800' },
+          { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 text-warning-800' },
           { label: 'Bereit', value: statusCounts.ready, color: 'bg-primary-100 text-primary-800' },
           { label: 'Publiziert', value: statusCounts.published, color: 'bg-info-100 text-info-800' },
         ].map((stat) => (
@@ -180,7 +180,7 @@ export function IntakePipelineView({
                             <div
                               className={`h-full rounded-full ${
                                 progress.percentage === 100 ? 'bg-primary-500' :
-                                progress.percentage > 50 ? 'bg-yellow-500' : 'bg-error-400'
+                                progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
                               }`}
                               style={{ width: `${progress.percentage}%` }}
                             />
@@ -200,7 +200,7 @@ export function IntakePipelineView({
                             Bereit
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-yellow-100 text-yellow-800">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-warning-100 text-warning-800">
                             In Bearbeitung
                           </span>
                         )}

@@ -387,8 +387,8 @@ describe('getHelpRequestStatusLabel', () => {
 // ─── getHelpRequestStatusColor ───────────────────────────────────────────────
 
 describe('getHelpRequestStatusColor', () => {
-  it('returns yellow default for null', () => {
-    expect(getHelpRequestStatusColor(null)).toBe('bg-yellow-100 text-yellow-800')
+  it('returns warning default for null', () => {
+    expect(getHelpRequestStatusColor(null)).toBe('bg-warning-100 text-warning-800')
   })
 
   it('returns CSS class string for all known statuses', () => {
@@ -398,8 +398,8 @@ describe('getHelpRequestStatusColor', () => {
     }
   })
 
-  it('returns yellow default for unknown status', () => {
-    expect(getHelpRequestStatusColor('unknown_state')).toBe('bg-yellow-100 text-yellow-800')
+  it('returns warning default for unknown status', () => {
+    expect(getHelpRequestStatusColor('unknown_state')).toBe('bg-warning-100 text-warning-800')
   })
 })
 

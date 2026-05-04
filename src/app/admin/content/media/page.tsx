@@ -236,16 +236,16 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Development Notice */}
-      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6">
+      <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <FolderOpen className="w-5 h-5 text-yellow-600" />
+          <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+            <FolderOpen className="w-5 h-5 text-warning-600" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-yellow-900 dark:text-yellow-200">
+            <Heading level={3} className="font-medium text-warning-900 dark:text-warning-200">
               In Entwicklung
             </Heading>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
+            <p className="text-sm text-warning-700 dark:text-warning-300 mt-1">
               Die Medienbibliothek wird gerade entwickelt. Bald kannst du hier
               Bilder und Dokumente hochladen, organisieren und in deinen Inhalten
               verwenden. Für Produktbilder nutze bitte weiterhin die

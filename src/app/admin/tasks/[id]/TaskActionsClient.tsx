@@ -187,7 +187,7 @@ export default function TaskActionsClient({
         {/* Request Help Button */}
         <button
           onClick={() => setShowRequestForm(!showRequestForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors"
         >
           <Send className="w-4 h-4" />
           Um Hilfe bitten
@@ -290,8 +290,8 @@ export default function TaskActionsClient({
 
       {/* Request Form */}
       {showRequestForm && (
-        <div className="mt-4 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-          <Heading level={3} className="font-medium text-yellow-800 mb-3">Um Hilfe bitten</Heading>
+        <div className="mt-4 p-4 bg-warning-50 rounded-lg border border-warning-200">
+          <Heading level={3} className="font-medium text-warning-800 mb-3">Um Hilfe bitten</Heading>
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1">
@@ -300,7 +300,7 @@ export default function TaskActionsClient({
               <select
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-warning-500"
               >
                 <option value="">Alle Teammitglieder</option>
                 {staffMembers.map((member) => (
@@ -319,14 +319,14 @@ export default function TaskActionsClient({
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Was wird benötigt?"
                 rows={3}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-warning-500"
               />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={handleRequest}
                 disabled={loading === 'request'}
-                className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors disabled:opacity-50"
               >
                 {loading === 'request' && (
                   <Loader2 className="w-4 h-4 animate-spin" />

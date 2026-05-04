@@ -326,8 +326,8 @@ describe('getMarketplaceStatusBadgeColor', () => {
     expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)).toContain('primary')
   })
 
-  it('draft → yellow CSS classes', () => {
-    expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.DRAFT)).toContain('yellow')
+  it('draft → warning CSS classes', () => {
+    expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.DRAFT)).toContain('warning')
   })
 
   it('unknown → gray fallback', () => {

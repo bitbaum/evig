@@ -94,7 +94,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
         {stats.average_rating && Number(stats.average_rating) > 0 && (
           <div className="flex items-center gap-1">
-            <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+            <Star className="w-5 h-5 text-warning-400 fill-warning-400" />
             <span className="font-bold text-neutral-900 dark:text-white">
               {Number(stats.average_rating).toFixed(1)}
             </span>
@@ -125,7 +125,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
                         key={i}
                         className={`w-3 h-3 ${
                           i < review.overallRating
-                            ? 'text-yellow-400 fill-yellow-400'
+                            ? 'text-warning-400 fill-warning-400'
                             : 'text-neutral-300 dark:text-neutral-600'
                         }`}
                       />

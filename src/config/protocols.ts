@@ -103,7 +103,7 @@ export const PROTOCOL_STATUS_LABELS: Record<ProtocolStatus, string> = {
 
 export const PROTOCOL_STATUS_COLORS: Record<ProtocolStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800',
-  processing: 'bg-yellow-100 text-yellow-800',
+  processing: 'bg-warning-100 text-warning-800',
   review: 'bg-info-100 text-info-800',
   finalized: 'bg-primary-100 text-primary-800',
 };
@@ -147,7 +147,7 @@ export const ACTION_ITEM_BORDER_COLORS: Record<ActionItemType, string> = {
 export const FOLLOW_UP_STATUS_COLORS: Record<string, string> = {
   erledigt: 'bg-primary-100 text-primary-800',
   'in Arbeit': 'bg-info-100 text-info-800',
-  offen: 'bg-yellow-100 text-yellow-800',
+  offen: 'bg-warning-100 text-warning-800',
 };
 
 export function getFollowUpStatusColor(status: string | null | undefined): string {
@@ -219,7 +219,7 @@ export const DECISION_RESULT_LABELS: Record<DecisionResult, string> = {
 export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
   approved: 'bg-primary-100 text-primary-800',
   rejected: 'bg-error-100 text-error-800',
-  pending: 'bg-yellow-100 text-yellow-800',
+  pending: 'bg-warning-100 text-warning-800',
 };
 
 // Types derived from constants

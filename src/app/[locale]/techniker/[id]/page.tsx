@@ -105,7 +105,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 <div className="flex items-center gap-4 text-sm text-neutral-600 mb-3">
                   {technician.averageRating && (
                     <span className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <Star className="w-4 h-4 fill-warning-400 text-warning-400" />
                       <span className="font-medium">{technician.averageRating.toFixed(1)}</span>
                       {technician.totalReviews > 0 && (
                         <span className="text-neutral-400">{t('detail.reviews', { count: technician.totalReviews })}</span>

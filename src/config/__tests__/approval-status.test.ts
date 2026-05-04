@@ -95,11 +95,11 @@ describe('getApprovalStatusLabel', () => {
 // ============================================================================
 
 describe('getApprovalStatusBadge', () => {
-  it('returns badge for PENDING with yellow styling', () => {
+  it('returns badge for PENDING with warning styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.PENDING)
     expect(badge.label).toBe('Ausstehend')
-    expect(badge.color).toContain('yellow')
-    expect(badge.bg).toContain('yellow')
+    expect(badge.color).toContain('warning')
+    expect(badge.bg).toContain('warning')
   })
 
   it('returns badge for APPROVED with green styling', () => {

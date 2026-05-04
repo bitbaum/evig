@@ -16,12 +16,12 @@
 import { getFollowUpStatusColor } from '../protocols'
 
 describe('getFollowUpStatusColor', () => {
-  it('null → offen (yellow) fallback', () => {
-    expect(getFollowUpStatusColor(null)).toContain('yellow')
+  it('null → offen (warning) fallback', () => {
+    expect(getFollowUpStatusColor(null)).toContain('warning')
   })
 
-  it('undefined → offen (yellow) fallback', () => {
-    expect(getFollowUpStatusColor(undefined)).toContain('yellow')
+  it('undefined → offen (warning) fallback', () => {
+    expect(getFollowUpStatusColor(undefined)).toContain('warning')
   })
 
   it('"erledigt" → green classes', () => {
@@ -34,13 +34,13 @@ describe('getFollowUpStatusColor', () => {
     expect(color).toContain('info')
   })
 
-  it('"offen" → yellow classes', () => {
+  it('"offen" → warning classes', () => {
     const color = getFollowUpStatusColor('offen')
-    expect(color).toContain('yellow')
+    expect(color).toContain('warning')
   })
 
-  it('unknown status → falls back to offen (yellow)', () => {
-    expect(getFollowUpStatusColor('mystery_status')).toContain('yellow')
+  it('unknown status → falls back to offen (warning)', () => {
+    expect(getFollowUpStatusColor('mystery_status')).toContain('warning')
   })
 
   it('returns a non-empty string for all known statuses', () => {

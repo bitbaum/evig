@@ -68,9 +68,9 @@ export default async function FinanzenPage() {
           </Link>
           <Heading level={1} className="text-3xl font-bold">Finanzen</Heading>
         </div>
-        <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <Heading level={3} className="font-semibold text-yellow-800">Keine Daten verfügbar</Heading>
-          <p className="text-sm text-yellow-700 mt-2">
+        <div className="p-6 bg-warning-50 border border-warning-200 rounded-lg">
+          <Heading level={3} className="font-semibold text-warning-800">Keine Daten verfügbar</Heading>
+          <p className="text-sm text-warning-700 mt-2">
             Die Finanzdaten konnten nicht geladen werden.
           </p>
         </div>
@@ -277,7 +277,7 @@ export default async function FinanzenPage() {
                     <span className={`text-sm px-2 py-1 rounded ${
                       selfFinancingPct >= 50
                         ? 'bg-primary-100 text-primary-700'
-                        : 'bg-yellow-100 text-yellow-700'
+                        : 'bg-warning-100 text-warning-700'
                     }`}>
                       {selfFinancingPct.toFixed(1)}% Eigenfinanzierung
                     </span>

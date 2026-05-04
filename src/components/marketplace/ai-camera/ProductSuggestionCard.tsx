@@ -50,7 +50,7 @@ function ConfidenceBadge({ confidence }: { confidence: number }) {
     <span className={cn(
       "px-2 py-1 text-xs rounded-full",
       confidence > 0.8 ? "bg-primary-100 text-primary-800" :
-      confidence > 0.6 ? "bg-yellow-100 text-yellow-800" :
+      confidence > 0.6 ? "bg-warning-100 text-warning-800" :
       "bg-error-100 text-error-800"
     )}>
       {Math.round(confidence * 100)}%

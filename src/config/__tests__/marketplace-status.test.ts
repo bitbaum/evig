@@ -66,9 +66,9 @@ describe('getMarketplaceStatusBadgeColor', () => {
     expect(color).toContain('primary')
   })
 
-  it('returns yellow badge for draft', () => {
+  it('returns warning badge for draft', () => {
     const color = getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.DRAFT)
-    expect(color).toContain('yellow')
+    expect(color).toContain('warning')
   })
 
   it('falls back to gray for unknown status', () => {

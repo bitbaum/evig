@@ -69,7 +69,7 @@ export function InstanceList({
                         {instance.current_participants}/{instance.max_participants || '\u221E'}
                       </span>
                       {instance.pending_count > 0 && (
-                        <span className="text-yellow-600">({instance.pending_count} ausstehend)</span>
+                        <span className="text-warning-600">({instance.pending_count} ausstehend)</span>
                       )}
                     </div>
 

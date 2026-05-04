@@ -101,7 +101,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
                 <Star
                   className={`w-8 h-8 ${
                     filled
-                      ? 'fill-yellow-400 text-yellow-400'
+                      ? 'fill-warning-400 text-warning-400'
                       : 'text-neutral-300 dark:text-neutral-600'
                   }`}
                 />

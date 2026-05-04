@@ -40,7 +40,7 @@ export interface BookingStatusBadge {
 export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   [BOOKING_STATUS.REQUESTED]: {
     label: 'Angefragt',
-    color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+    color: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
     description: 'Wartet auf Bestätigung',
   },
   [BOOKING_STATUS.ACCEPTED]: {
@@ -86,7 +86,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   // Repairer-view aliases
   [BOOKING_STATUS.PENDING]: {
     label: 'Ausstehend',
-    color: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+    color: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
   },
   [BOOKING_STATUS.CONFIRMED]: {
     label: 'Bestätigt',

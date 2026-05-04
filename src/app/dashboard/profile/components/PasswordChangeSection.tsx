@@ -116,9 +116,9 @@ export function PasswordChangeSection({
           </div>
         </div>
 
-        <div className="flex items-start gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-          <div className="text-sm text-yellow-700 dark:text-yellow-300">
+        <div className="flex items-start gap-3 p-3 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg">
+          <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-warning-700 dark:text-warning-300">
             <p className="font-medium">{t('requirementTitle')}</p>
             <p className="mt-1">{t('requirementText')}</p>
           </div>

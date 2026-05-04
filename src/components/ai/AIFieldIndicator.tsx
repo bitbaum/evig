@@ -36,7 +36,7 @@ const SOURCE_LABELS = {
 
 function getConfidenceColor(confidence: number): string {
   if (confidence >= 0.85) return 'bg-primary-100 text-primary-700 border-primary-300'
-  if (confidence >= 0.7) return 'bg-yellow-100 text-yellow-700 border-yellow-300'
+  if (confidence >= 0.7) return 'bg-warning-100 text-warning-700 border-warning-300'
   if (confidence >= 0.5) return 'bg-orange-100 text-orange-700 border-orange-300'
   return 'bg-error-100 text-error-700 border-error-300'
 }

@@ -44,7 +44,7 @@ export function VoiceTimer({ currentTime, maxDuration, state }: VoiceTimerProps)
             state === 'recording'
               ? 'bg-error-500'
               : state === 'paused'
-                ? 'bg-yellow-500'
+                ? 'bg-warning-500'
                 : 'bg-primary-500'
           }`}
           style={{ width: `${progressPercent}%` }}

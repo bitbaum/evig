@@ -633,8 +633,8 @@ export const CONFIDENCE_LEVELS: Record<ConfidenceLevel, ConfidenceLevelDefinitio
     level: 'medium',
     name: 'Mittel',
     description: 'Berechnet aus verlässlichen Quellen mit dokumentierten Annahmen',
-    color: 'text-yellow-800',
-    bgColor: 'bg-yellow-100',
+    color: 'text-warning-800',
+    bgColor: 'bg-warning-100',
     requirements: [
       'Formel und Annahmen dokumentiert',
       'Eingangsdaten haben hohe Konfidenz',

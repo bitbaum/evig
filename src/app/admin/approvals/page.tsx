@@ -184,12 +184,12 @@ export default async function ApprovalsPage() {
     >
       {/* Stats */}
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+        <div className="p-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200 dark:border-warning-800">
           <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-yellow-600" />
+            <Clock className="w-5 h-5 text-warning-600" />
             <div>
-              <p className="text-2xl font-bold text-yellow-800 dark:text-yellow-200">{totalPendingAllSources}</p>
-              <p className="text-sm text-yellow-600 dark:text-yellow-400">Ausstehend (gesamt)</p>
+              <p className="text-2xl font-bold text-warning-800 dark:text-warning-200">{totalPendingAllSources}</p>
+              <p className="text-sm text-warning-600 dark:text-warning-400">Ausstehend (gesamt)</p>
             </div>
           </div>
         </div>
@@ -227,7 +227,7 @@ export default async function ApprovalsPage() {
             >
               <span className="text-neutral-900 dark:text-white">{source.label}</span>
               <span className="flex items-center gap-2">
-                <span className={`text-sm font-medium ${source.count > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
+                <span className={`text-sm font-medium ${source.count > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
                   {source.count} ausstehend
                 </span>
                 <ExternalLink className="w-4 h-4 text-neutral-400" />
@@ -237,7 +237,7 @@ export default async function ApprovalsPage() {
           {/* Inline submissions count */}
           <div className="p-4 flex items-center justify-between">
             <span className="text-neutral-900 dark:text-white">Allgemeine Einreichungen</span>
-            <span className={`text-sm font-medium ${stats.pending > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
+            <span className={`text-sm font-medium ${stats.pending > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
               {stats.pending} ausstehend
             </span>
           </div>

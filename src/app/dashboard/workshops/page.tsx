@@ -214,12 +214,12 @@ export default function WorkshopsDashboard() {
                 )}
 
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <div className="flex items-center text-yellow-800">
+                  <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
+                    <div className="flex items-center text-warning-800">
                       <AlertCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">Anmeldung ausstehend</span>
                     </div>
-                    <p className="text-yellow-700 text-sm mt-1">
+                    <p className="text-warning-700 text-sm mt-1">
                       Ihre Anmeldung wird von unserem Team geprüft. Sie erhalten eine Bestätigung per E-Mail.
                     </p>
                   </div>

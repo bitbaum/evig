@@ -471,10 +471,10 @@ describe('getConfidenceColor', () => {
     expect(getConfidenceColor(1)).toBe('text-primary-600')
   })
 
-  it('medium confidence (0.7 to 0.9) → yellow', () => {
-    expect(getConfidenceColor(0.7)).toBe('text-yellow-600') // boundary inclusive
-    expect(getConfidenceColor(0.75)).toBe('text-yellow-600')
-    expect(getConfidenceColor(0.89)).toBe('text-yellow-600')
+  it('medium confidence (0.7 to 0.9) → warning', () => {
+    expect(getConfidenceColor(0.7)).toBe('text-warning-600') // boundary inclusive
+    expect(getConfidenceColor(0.75)).toBe('text-warning-600')
+    expect(getConfidenceColor(0.89)).toBe('text-warning-600')
   })
 
   it('low confidence (< 0.7) → red', () => {

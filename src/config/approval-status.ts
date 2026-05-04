@@ -34,8 +34,8 @@ export interface ApprovalBadge {
 export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   [APPROVAL_STATUS.PENDING]: {
     label: 'Ausstehend',
-    color: 'text-yellow-800 dark:text-yellow-300',
-    bg: 'bg-yellow-100 dark:bg-yellow-900/30',
+    color: 'text-warning-800 dark:text-warning-300',
+    bg: 'bg-warning-100 dark:bg-warning-900/30',
   },
   [APPROVAL_STATUS.APPROVED]: {
     label: 'Genehmigt',

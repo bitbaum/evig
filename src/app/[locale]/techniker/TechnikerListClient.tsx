@@ -86,7 +86,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         <div className="flex items-center gap-3 text-sm text-neutral-600 mb-3">
           {technician.averageRating && (
             <span className="flex items-center gap-1">
-              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              <Star className="w-3.5 h-3.5 fill-warning-400 text-warning-400" />
               {technician.averageRating.toFixed(1)}
             </span>
           )}

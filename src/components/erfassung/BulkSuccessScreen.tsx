@@ -52,8 +52,8 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         {/* Icon */}
         <div className="flex justify-center">
           {hasFailures ? (
-            <div className="w-20 h-20 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
-              <AlertCircle className="w-10 h-10 text-yellow-600 dark:text-yellow-400" />
+            <div className="w-20 h-20 rounded-full bg-warning-100 dark:bg-warning-900/30 flex items-center justify-center">
+              <AlertCircle className="w-10 h-10 text-warning-600 dark:text-warning-400" />
             </div>
           ) : (
             <div className="w-20 h-20 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
@@ -113,7 +113,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
             <button
               type="button"
               onClick={onRetryFailed}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-medium transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-warning-600 hover:bg-warning-700 text-white rounded-lg font-medium transition-colors"
             >
               <RotateCcw className="w-4 h-4" />
               {t('retryFailed')}

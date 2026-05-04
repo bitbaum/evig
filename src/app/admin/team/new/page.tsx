@@ -83,11 +83,11 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
       </div>
 
       {availableUsers.length === 0 ? (
-        <div className="p-8 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl text-center">
-          <Heading level={2} className="text-lg font-medium text-yellow-900 dark:text-yellow-200 mb-2">
+        <div className="p-8 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl text-center">
+          <Heading level={2} className="text-lg font-medium text-warning-900 dark:text-warning-200 mb-2">
             Alle Staff-Mitglieder haben bereits ein Profil
           </Heading>
-          <p className="text-yellow-700 dark:text-yellow-300">
+          <p className="text-warning-700 dark:text-warning-300">
             Es gibt keine Staff-Mitglieder ohne Team-Profil.
           </p>
         </div>

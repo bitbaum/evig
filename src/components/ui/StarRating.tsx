@@ -34,7 +34,7 @@ export function StarRating({ value, onChange, label, size = 'md' }: StarRatingPr
     const starEl = (
       <Star
         className={`${sizeClass} transition-colors ${
-          filled ? 'fill-yellow-400 text-yellow-400' : 'text-neutral-300'
+          filled ? 'fill-warning-400 text-warning-400' : 'text-neutral-300'
         }`}
       />
     )

@@ -138,7 +138,7 @@ function getProgressBarColor(index: number): string {
     'bg-pink-500',
     'bg-teal-500',
     'bg-indigo-500',
-    'bg-yellow-500',
+    'bg-warning-500',
   ]
   return colors[index % colors.length]
 }
