@@ -13,6 +13,7 @@ import { APPOINTMENT_STATUS } from '@/config/appointment-status'
 import { BOOKING_STATUS } from '@/config/booking-status'
 import { URGENCY } from '@/config/it-hilfe'
 import { Modal } from '@/components/ui/Modal'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import Heading from '@/components/ui/Heading'
 
 interface ServiceAppointment {
@@ -42,6 +43,7 @@ export default function AppointmentsDashboard() {
     () => searchParams.get('payment') === 'success'
   )
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
   const [editDescription, setEditDescription] = useState<string>('')
   const [editPreferredDate, setEditPreferredDate] = useState<string>('')
   const [saving, setSaving] = useState(false)
@@ -82,6 +84,21 @@ export default function AppointmentsDashboard() {
       setError(result.error || t('loadError'))
     }
     setLoading(false)
+  }
+
+  const doCancel = async () => {
+    if (!pendingCancelId) return
+    const id = pendingCancelId
+    setPendingCancelId(null)
+    const result = await apiFetch<void>(`/api/appointments/${id}`, {
+      method: 'PATCH',
+      body: { action: 'cancel' }
+    })
+    if (result.success) {
+      fetchAppointments()
+    } else {
+      setError(result.error || t('cancelFailed'))
+    }
   }
 
   const openEdit = (apt: ServiceAppointment) => {
@@ -307,18 +324,7 @@ export default function AppointmentsDashboard() {
                 {appointment.status !== APPOINTMENT_STATUS.CANCELLED && (
                   <div className="mt-4 flex gap-3">
                     <button
-                      onClick={async () => {
-                        if (!confirm(t('confirmCancel'))) return
-                        const result = await apiFetch<void>(`/api/appointments/${appointment.id}`, {
-                          method: 'PATCH',
-                          body: { action: 'cancel' }
-                        })
-                        if (result.success) {
-                          fetchAppointments()
-                        } else {
-                          setError(result.error || t('cancelFailed'))
-                        }
-                      }}
+                      onClick={() => setPendingCancelId(appointment.id)}
                       className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       {t('cancelButton')}
@@ -383,6 +389,15 @@ export default function AppointmentsDashboard() {
           </button>
         </div>
       </Modal>
+
+      <ConfirmDialog
+        isOpen={!!pendingCancelId}
+        title={t('cancelButton')}
+        message={t('confirmCancel')}
+        itemName={appointments.find(a => a.id === pendingCancelId)?.service_name}
+        onConfirm={doCancel}
+        onClose={() => setPendingCancelId(null)}
+      />
     </div>
   )
 }

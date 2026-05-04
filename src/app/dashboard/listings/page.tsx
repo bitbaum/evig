@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
@@ -59,6 +60,7 @@ export default function MyListingsPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [total, setTotal] = useState(0)
@@ -118,8 +120,10 @@ export default function MyListingsPage() {
     setPage(1)
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm(t('confirmDelete'))) return
+  const doDelete = async () => {
+    if (!pendingDeleteId) return
+    const id = pendingDeleteId
+    setPendingDeleteId(null)
     setDeletingId(id)
     const result = await apiFetch<void>(`/api/listings/${id}`, { method: 'DELETE' })
     if (result.success) {
@@ -293,7 +297,7 @@ export default function MyListingsPage() {
                     )}
                   </button>
                   <button
-                    onClick={() => handleDelete(listing.id)}
+                    onClick={() => setPendingDeleteId(listing.id)}
                     disabled={deletingId === listing.id}
                     className="p-2 rounded-lg text-neutral-500 hover:text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
                     title={t('actionDelete')}
@@ -340,6 +344,15 @@ export default function MyListingsPage() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={!!pendingDeleteId}
+        title={t('actionDelete')}
+        message={t('confirmDelete')}
+        itemName={listings.find(l => l.id === pendingDeleteId)?.title}
+        onConfirm={doDelete}
+        onClose={() => setPendingDeleteId(null)}
+      />
     </div>
   )
 }

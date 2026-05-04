@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   getCategoryById,
   getOfferStatusById,
@@ -55,6 +56,7 @@ export default function MyOffersPage() {
   const [total, setTotal] = useState(0)
   const [statusFilter, setStatusFilter] = useState('')
   const [withdrawingId, setWithdrawingId] = useState<string | null>(null)
+  const [pendingWithdraw, setPendingWithdraw] = useState<OfferWithRequest | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Redirect if not authenticated
@@ -92,9 +94,10 @@ export default function MyOffersPage() {
     }
   }, [session?.user, fetchOffers])
 
-  const handleWithdraw = async (offer: OfferWithRequest) => {
-    if (!confirm(t('withdrawConfirm'))) return
-
+  const doWithdraw = async () => {
+    const offer = pendingWithdraw
+    if (!offer) return
+    setPendingWithdraw(null)
     setWithdrawingId(offer.id)
     try {
       const result = await apiFetch<unknown>(
@@ -276,7 +279,7 @@ export default function MyOffersPage() {
                   {offer.status === OFFER_STATUS.PENDING && (
                     <div className="px-6 pb-4">
                       <button
-                        onClick={() => handleWithdraw(offer)}
+                        onClick={() => setPendingWithdraw(offer)}
                         disabled={withdrawingId === offer.id}
                         className="px-4 py-2 min-h-[44px] bg-error-50 text-error-700 rounded-lg text-sm font-medium hover:bg-error-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
                       >
@@ -290,6 +293,15 @@ export default function MyOffersPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={!!pendingWithdraw}
+        title={t('withdrawButton')}
+        message={t('withdrawConfirm')}
+        itemName={pendingWithdraw?.request.title}
+        onConfirm={doWithdraw}
+        onClose={() => setPendingWithdraw(null)}
+      />
     </div>
   )
 }

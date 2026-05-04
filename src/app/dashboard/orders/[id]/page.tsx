@@ -27,6 +27,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { OrderStatusTimeline } from '@/components/marketplace/OrderStatusTimeline'
 import { OrderReviewForm } from '@/components/marketplace/OrderReviewForm'
 import Heading from '@/components/ui/Heading'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 interface OrderDetail {
   id: string
@@ -70,6 +71,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [updatingStatus, setUpdatingStatus] = useState(false)
+  const [confirmCancel, setConfirmCancel] = useState(false)
   const [trackingNumber, setTrackingNumber] = useState('')
 
   useEffect(() => {
@@ -419,11 +421,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           {/* Cancel (buyer: pending_payment or paid) */}
           {order.role === 'buyer' && (order.status === ORDER_STATUS.PENDING_PAYMENT || order.status === ORDER_STATUS.PAID) && (
             <button
-              onClick={() => {
-                if (window.confirm(t('confirmCancel'))) {
-                  updateStatus(ORDER_STATUS.CANCELLED)
-                }
-              }}
+              onClick={() => setConfirmCancel(true)}
               disabled={updatingStatus}
               className="w-full flex items-center justify-center gap-2 border border-error-300 dark:border-error-800 text-error-600 dark:text-error-400 py-3 px-6 rounded-lg font-medium hover:bg-error-50 dark:hover:bg-error-900/20 disabled:opacity-50 transition-colors"
             >
@@ -469,6 +467,14 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
           )}
         </div>
       )}
+    <ConfirmDialog
+      isOpen={confirmCancel}
+      title={t('cancelButton')}
+      message={t('confirmCancel')}
+      itemName={order?.listingTitle}
+      onConfirm={() => { setConfirmCancel(false); updateStatus(ORDER_STATUS.CANCELLED) }}
+      onClose={() => setConfirmCancel(false)}
+    />
     </div>
   )
 }

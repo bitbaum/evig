@@ -8,6 +8,8 @@ import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
+import { apiFetch } from '@/lib/api/client'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 interface WorkshopRegistration {
   id: string
@@ -34,6 +36,7 @@ export default function WorkshopsDashboard() {
   const [editRating, setEditRating] = useState<number>(5)
   const [editFeedback, setEditFeedback] = useState<string>('')
   const [saving, setSaving] = useState(false)
+  const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
 
   useEffect(() => {
     if (session?.user) {
@@ -42,19 +45,13 @@ export default function WorkshopsDashboard() {
   }, [session])
 
   const fetchRegistrations = async () => {
-    try {
-      const response = await fetch('/api/user/workshop-registrations')
-      if (response.ok) {
-        const data = await response.json()
-        setRegistrations(data.data?.registrations || [])
-      } else {
-        setError('Fehler beim Laden der Workshop-Anmeldungen')
-      }
-    } catch (error) {
-      setError('Netzwerkfehler beim Laden der Daten')
-    } finally {
-      setLoading(false)
+    const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
+    if (result.success && result.data) {
+      setRegistrations(result.data.registrations || [])
+    } else {
+      setError(result.error || 'Fehler beim Laden der Workshop-Anmeldungen')
     }
+    setLoading(false)
   }
 
   const openEdit = (reg: WorkshopRegistration) => {
@@ -66,22 +63,31 @@ export default function WorkshopsDashboard() {
   const saveEdit = async () => {
     if (!editingId) return
     setSaving(true)
-    try {
-      const resp = await fetch(`/api/workshops/registrations/${editingId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rating: editRating, feedback: editFeedback })
-      })
-      if (resp.ok) {
-        setEditingId(null)
-        fetchRegistrations()
-      } else {
-        alert('Speichern fehlgeschlagen')
-      }
-    } catch {
-      alert('Netzwerkfehler beim Speichern')
-    } finally {
-      setSaving(false)
+    const result = await apiFetch<void>(`/api/workshops/registrations/${editingId}`, {
+      method: 'PATCH',
+      body: { rating: editRating, feedback: editFeedback }
+    })
+    if (result.success) {
+      setEditingId(null)
+      fetchRegistrations()
+    } else {
+      setError(result.error || 'Speichern fehlgeschlagen')
+    }
+    setSaving(false)
+  }
+
+  const doCancel = async () => {
+    if (!pendingCancelId) return
+    const id = pendingCancelId
+    setPendingCancelId(null)
+    const result = await apiFetch<void>(`/api/workshops/registrations/${id}`, {
+      method: 'PATCH',
+      body: { action: 'cancel' }
+    })
+    if (result.success) {
+      fetchRegistrations()
+    } else {
+      setError(result.error || 'Stornierung fehlgeschlagen')
     }
   }
 
@@ -232,23 +238,7 @@ export default function WorkshopsDashboard() {
                 {registration.status !== WORKSHOP_REGISTRATION_STATUS.CANCELLED && (
                   <div className="mt-4 flex gap-3">
                     <button
-                      onClick={async () => {
-                        if (!confirm('Möchten Sie diese Anmeldung wirklich stornieren?')) return
-                        try {
-                          const resp = await fetch(`/api/workshops/registrations/${registration.id}`, {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ action: 'cancel' })
-                          })
-                          if (resp.ok) {
-                            fetchRegistrations()
-                          } else {
-                            alert('Stornierung fehlgeschlagen')
-                          }
-                        } catch {
-                          alert('Netzwerkfehler bei der Stornierung')
-                        }
-                      }}
+                      onClick={() => setPendingCancelId(registration.id)}
                       className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       Anmeldung stornieren
@@ -282,6 +272,15 @@ export default function WorkshopsDashboard() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={!!pendingCancelId}
+        title="Anmeldung stornieren"
+        message="Möchten Sie diese Anmeldung wirklich stornieren?"
+        itemName={registrations.find(r => r.id === pendingCancelId)?.workshop_title}
+        onConfirm={doCancel}
+        onClose={() => setPendingCancelId(null)}
+      />
 
       <Modal open={!!editingId} onClose={() => setEditingId(null)}>
         <div className="p-6">
