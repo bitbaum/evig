@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { ROLES } from '@/lib/constants'
-import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
+import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { ORG } from '@/config/org'
 import type { ListingStatus } from '@/config/marketplace'
@@ -226,7 +226,7 @@ export default function SellerDashboard() {
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Umsatz</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">
-                CHF {stats.totalRevenue.toLocaleString('de-CH')}
+                {formatCHF(stats.totalRevenue)}
               </p>
               <p className="text-sm text-primary-600 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
