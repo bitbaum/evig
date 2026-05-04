@@ -13,6 +13,7 @@ import { compareYears, generateYearInsights } from '@/lib/hirn/data/analysis'
 import Link from 'next/link'
 import { ArrowLeft, PiggyBank, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
+import { formatCHF } from '@/lib/hirn/format'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs, RevenueAreaChart, RevenuePieChart, TrendBarChart } from '@/components/analyse'
@@ -287,25 +288,25 @@ export default async function FinanzenPage() {
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Gesamteinnahmen</span>
                     <span className="font-semibold">
-                      CHF {Math.round(yearData.totals.total.value).toLocaleString('de-CH')}
+                      {formatCHF(Math.round(yearData.totals.total.value))}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Warenverkauf</span>
                     <span>
-                      CHF {Math.round(yearData.totals.warenverkauf.value).toLocaleString('de-CH')}
+                      {formatCHF(Math.round(yearData.totals.warenverkauf.value))}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Dienstleistungen</span>
                     <span>
-                      CHF {Math.round(yearData.totals.dienstleistungen.value).toLocaleString('de-CH')}
+                      {formatCHF(Math.round(yearData.totals.dienstleistungen.value))}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Spenden</span>
                     <span>
-                      CHF {Math.round(yearData.totals.spenden.value).toLocaleString('de-CH')}
+                      {formatCHF(Math.round(yearData.totals.spenden.value))}
                     </span>
                   </div>
                   <div className="pt-2 border-t text-xs text-muted-foreground">
