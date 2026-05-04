@@ -18,6 +18,7 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
+import { apiFetch } from '@/lib/api/client'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -91,21 +92,13 @@ export default function SellerDashboard() {
   const fetchDashboardData = async () => {
     setIsLoading(true)
     setError(null)
-
-    try {
-      const response = await fetch('/api/seller/dashboard')
-      const result = await response.json()
-
-      if (result.success && result.data) {
-        setData(result.data)
-      } else {
-        throw new Error(result.error || 'Fehler beim Laden des Dashboards')
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : ERROR_MESSAGES.UNEXPECTED_ERROR)
-    } finally {
-      setIsLoading(false)
+    const result = await apiFetch<DashboardData>('/api/seller/dashboard')
+    if (result.success && result.data) {
+      setData(result.data)
+    } else {
+      setError(result.error || ERROR_MESSAGES.UNEXPECTED_ERROR)
     }
+    setIsLoading(false)
   }
 
   const quickActions = [

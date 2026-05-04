@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
 import { SUCCESS_MESSAGES } from '@/config/error-messages'
+import { apiFetch } from '@/lib/api/client'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -39,57 +40,36 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
     setIsSubmitting(true)
     setSubmitResult(null)
 
-    try {
-      const response = await fetch('/api/appointments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          serviceSlug,
-          description: formData.description,
-          urgency: formData.urgency,
-          preferredDate: formData.preferredDate && formData.preferredTime
-            ? `${formData.preferredDate}T${formData.preferredTime}`
-            : null
-        })
-      })
-
-      const result = await response.json()
-
-      if (result.success) {
-        setSubmitResult({
-          success: true,
-          message: result.message || SUCCESS_MESSAGES.APPOINTMENT_BOOKED
-        })
-        // Reset form
-        setFormData({
-          description: '',
-          urgency: 'normal',
-          preferredDate: '',
-          preferredTime: ''
-        })
-        // Close modal after success
-        setTimeout(() => {
-          setIsOpen(false)
-          setSubmitResult(null)
-          // Redirect to dashboard to see the appointment
-          router.push('/dashboard/appointments')
-        }, 2000)
-      } else {
-        setSubmitResult({
-          success: false,
-          message: result.error || 'Fehler beim Buchen des Termins'
-        })
+    const result = await apiFetch<{ message?: string }>('/api/appointments', {
+      method: 'POST',
+      body: {
+        serviceSlug,
+        description: formData.description,
+        urgency: formData.urgency,
+        preferredDate: formData.preferredDate && formData.preferredTime
+          ? `${formData.preferredDate}T${formData.preferredTime}`
+          : null
       }
-    } catch (error) {
+    })
+
+    if (result.success) {
+      setSubmitResult({
+        success: true,
+        message: result.data?.message || SUCCESS_MESSAGES.APPOINTMENT_BOOKED
+      })
+      setFormData({ description: '', urgency: 'normal', preferredDate: '', preferredTime: '' })
+      setTimeout(() => {
+        setIsOpen(false)
+        setSubmitResult(null)
+        router.push('/dashboard/appointments')
+      }, 2000)
+    } else {
       setSubmitResult({
         success: false,
-        message: 'Netzwerkfehler. Bitte versuchen Sie es erneut.'
+        message: result.error || 'Fehler beim Buchen des Termins'
       })
-    } finally {
-      setIsSubmitting(false)
     }
+    setIsSubmitting(false)
   }
 
   if (!isOpen) {

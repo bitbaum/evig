@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { apiFetch } from '@/lib/api/client'
 
 interface SearchResult {
   id: string
@@ -30,15 +31,11 @@ export function useAISearch(): UseAISearchReturn {
   const search = useCallback(async () => {
     if (!searchQuery.trim()) return
     setIsSearching(true)
-    try {
-      const res = await fetch(`/api/ai/search-products?q=${encodeURIComponent(searchQuery)}`)
-      if (res.ok) {
-        const data = await res.json()
-        setSearchResults(data.results ?? [])
-      }
-    } finally {
-      setIsSearching(false)
+    const result = await apiFetch<{ results: SearchResult[] }>(`/api/ai/search-products?q=${encodeURIComponent(searchQuery)}`)
+    if (result.success && result.data) {
+      setSearchResults(result.data.results ?? [])
     }
+    setIsSearching(false)
   }, [searchQuery])
 
   const clearResults = useCallback(() => {

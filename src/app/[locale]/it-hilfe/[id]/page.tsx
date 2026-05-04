@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { formatDate } from '@/lib/date-formats'
 import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
@@ -205,6 +206,14 @@ export default function ITHilfeDetailPage() {
         isOpen={detail.showMessages}
         onClose={() => detail.setShowMessages(false)}
         initialConversationId={detail.conversationId}
+      />
+
+      <ConfirmDialog
+        isOpen={!!detail.pendingConfirm}
+        title={detail.pendingConfirmTitle}
+        message={detail.pendingConfirmMessage}
+        onConfirm={detail.executePendingConfirm}
+        onClose={detail.cancelPendingConfirm}
       />
     </div>
   )

@@ -50,6 +50,16 @@ export function useITHilfeDetail(id: string) {
   // Confirm+review state
   const [confirmingReview, setConfirmingReview] = useState(false)
 
+  // Pending confirm dialog state
+  type PendingConfirm =
+    | { type: 'withdrawOffer' }
+    | { type: 'acceptOffer'; offerId: string }
+    | { type: 'declineOffer'; offerId: string }
+    | { type: 'statusChange'; status: string }
+    | { type: 'markCompleted' }
+  const [pendingConfirm, setPendingConfirm] = useState<PendingConfirm | null>(null)
+  const cancelPendingConfirm = () => setPendingConfirm(null)
+
   const fetchRequest = useCallback(async () => {
     try {
       setLoading(true)
@@ -197,10 +207,13 @@ export function useITHilfeDetail(id: string) {
     }
   }
 
-  const handleWithdrawOffer = async () => {
+  const handleWithdrawOffer = () => {
     if (!userOffer) return
-    if (!confirm(t('confirmWithdraw'))) return
+    setPendingConfirm({ type: 'withdrawOffer' })
+  }
 
+  const doWithdrawOffer = async () => {
+    if (!userOffer) return
     setWithdrawing(true)
     try {
       const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers/${userOffer.id}`, {
@@ -220,24 +233,20 @@ export function useITHilfeDetail(id: string) {
     }
   }
 
-  const handleAcceptOffer = async (offerId: string) => {
-    if (!confirm(t('confirmAccept'))) {
-      return
-    }
+  const handleAcceptOffer = (offerId: string) => {
+    setPendingConfirm({ type: 'acceptOffer', offerId })
+  }
 
+  const doAcceptOffer = async (offerId: string) => {
     setAcceptingOfferId(offerId)
-
     try {
       const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers/${offerId}/accept`, {
         method: 'POST',
       })
-
       if (!result.success) {
         toast.error(result.error || t('errorAccept'))
         return
       }
-
-      // Refresh both request and offers
       fetchRequest()
       fetchOffers()
     } catch (err) {
@@ -248,9 +257,11 @@ export function useITHilfeDetail(id: string) {
     }
   }
 
-  const handleDeclineOffer = async (offerId: string) => {
-    if (!confirm(t('confirmDecline'))) return
+  const handleDeclineOffer = (offerId: string) => {
+    setPendingConfirm({ type: 'declineOffer', offerId })
+  }
 
+  const doDeclineOffer = async (offerId: string) => {
     setDecliningOfferId(offerId)
     try {
       const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}/offers/${offerId}/decline`, {
@@ -270,13 +281,13 @@ export function useITHilfeDetail(id: string) {
     }
   }
 
-  const handleStatusChange = async (status: string) => {
+  const handleStatusChange = (status: string) => {
     if (!request) return
-    const confirmMsg = status === REQUEST_STATUS.COMPLETED
-      ? t('confirmMarkCompleted')
-      : t('confirmCancelRequest')
-    if (!confirm(confirmMsg)) return
+    setPendingConfirm({ type: 'statusChange', status })
+  }
 
+  const doStatusChange = async (status: string) => {
+    if (!request) return
     try {
       const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${request.id}`, {
         method: 'PUT',
@@ -316,10 +327,13 @@ export function useITHilfeDetail(id: string) {
     !reviewSubmitted
   )
 
-  const handleMarkCompleted = async () => {
+  const handleMarkCompleted = () => {
     if (!request) return
-    if (!confirm(t('confirmComplete'))) return
+    setPendingConfirm({ type: 'markCompleted' })
+  }
 
+  const doMarkCompleted = async () => {
+    if (!request) return
     setMarkingCompleted(true)
     try {
       const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${request.id}/complete`, {
@@ -368,6 +382,35 @@ export function useITHilfeDetail(id: string) {
       setConfirmingReview(false)
     }
   }
+
+  const executePendingConfirm = async () => {
+    if (!pendingConfirm) return
+    const action = pendingConfirm
+    setPendingConfirm(null)
+    if (action.type === 'withdrawOffer') await doWithdrawOffer()
+    else if (action.type === 'acceptOffer') await doAcceptOffer(action.offerId)
+    else if (action.type === 'declineOffer') await doDeclineOffer(action.offerId)
+    else if (action.type === 'statusChange') await doStatusChange(action.status)
+    else if (action.type === 'markCompleted') await doMarkCompleted()
+  }
+
+  const pendingConfirmTitle = pendingConfirm
+    ? pendingConfirm.type === 'acceptOffer' ? t('accept')
+    : pendingConfirm.type === 'declineOffer' ? t('decline')
+    : pendingConfirm.type === 'markCompleted' ? t('markCompletedTitle')
+    : pendingConfirm.type === 'statusChange' && pendingConfirm.status === REQUEST_STATUS.COMPLETED ? t('markCompletedButton')
+    : pendingConfirm.type === 'statusChange' ? t('cancelRequest')
+    : t('confirmWithdraw')
+    : ''
+
+  const pendingConfirmMessage = pendingConfirm
+    ? pendingConfirm.type === 'withdrawOffer' ? ''
+    : pendingConfirm.type === 'acceptOffer' ? t('confirmAccept')
+    : pendingConfirm.type === 'declineOffer' ? t('confirmDecline')
+    : pendingConfirm.type === 'markCompleted' ? t('confirmComplete')
+    : pendingConfirm.type === 'statusChange' && pendingConfirm.status === REQUEST_STATUS.COMPLETED ? t('confirmMarkCompleted')
+    : t('confirmCancelRequest')
+    : ''
 
   return {
     session,
@@ -427,6 +470,13 @@ export function useITHilfeDetail(id: string) {
     needsConfirmation,
     confirmingReview,
     handleConfirmReview,
+
+    // Confirm dialog
+    pendingConfirm,
+    pendingConfirmTitle,
+    pendingConfirmMessage,
+    executePendingConfirm,
+    cancelPendingConfirm,
 
     // Refresh
     fetchRequest,
