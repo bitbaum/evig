@@ -4,6 +4,7 @@
  * Templates for workshop registration, reminders, cancellations, proposals, and feedback.
  */
 
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -21,7 +22,7 @@ export const workshopRegistrationConfirmation = (
   priceCents: number,
   workshopUrl: string
 ): EmailContent => ({
-  subject: 'Workshop-Anmeldung bestätigt - RevampIT',
+  subject: 'Workshop-Anmeldung bestätigt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -85,7 +86,7 @@ export const workshopRegistrationStatusUpdate = (
   newStatus: typeof WORKSHOP_REGISTRATION_STATUS.CONFIRMED | typeof WORKSHOP_REGISTRATION_STATUS.CANCELLED | typeof WORKSHOP_REGISTRATION_STATUS.WAITLIST,
   reason?: string
 ): EmailContent => ({
-  subject: `Workshop-Anmeldung ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'storniert' : 'Warteliste'} - RevampIT`,
+  subject: `Workshop-Anmeldung ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'storniert' : 'Warteliste'} - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -145,7 +146,7 @@ export const workshopReminder = (
   instructor: string | null,
   workshopUrl: string
 ): EmailContent => ({
-  subject: `Erinnerung: Workshop morgen - ${workshopTitle} - RevampIT`,
+  subject: `Erinnerung: Workshop morgen - ${workshopTitle} - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -219,7 +220,7 @@ export const workshopCancellation = (
   reason: string | null,
   refundInfo: string | null
 ): EmailContent => ({
-  subject: `Workshop abgesagt: ${workshopTitle} - RevampIT`,
+  subject: `Workshop abgesagt: ${workshopTitle} - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -280,7 +281,7 @@ export const workshopFeedbackRequest = (
   workshopDate: string,
   feedbackUrl: string
 ): EmailContent => ({
-  subject: 'Wie war der Workshop? Ihr Feedback zählt! - RevampIT',
+  subject: 'Wie war der Workshop? Ihr Feedback zählt! - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -332,7 +333,7 @@ export const workshopProposalSubmitted = (
   workshopTitle: string,
   proposalId: string
 ): EmailContent => ({
-  subject: 'Workshop-Vorschlag eingereicht - RevampIT',
+  subject: 'Workshop-Vorschlag eingereicht - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -349,7 +350,7 @@ export const workshopProposalSubmitted = (
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Vielen Dank für deinen Workshop-Vorschlag bei RevampIT! Wir haben deine Einreichung erhalten.</p>
+          <p>Vielen Dank für deinen Workshop-Vorschlag bei ${ORG.name}! Wir haben deine Einreichung erhalten.</p>
           <p><strong>Workshop-Titel:</strong> ${escapeHtml(workshopTitle)}</p>
           <p><strong>Vorschlags-ID:</strong> ${escapeHtml(proposalId)}</p>
           <p>Unser Team wird deinen Vorschlag zeitnah prüfen. Der Prüfungsprozess umfasst:</p>
@@ -371,7 +372,7 @@ export const workshopProposalSubmitted = (
   text: `
 Hallo ${name},
 
-Vielen Dank für deinen Workshop-Vorschlag bei RevampIT! Wir haben deine Einreichung erhalten.
+Vielen Dank für deinen Workshop-Vorschlag bei ${ORG.name}! Wir haben deine Einreichung erhalten.
 
 Workshop-Titel: ${workshopTitle}
 Vorschlags-ID: ${proposalId}
@@ -390,7 +391,7 @@ export const workshopProposalApproved = (
   name: string,
   workshopTitle: string
 ): EmailContent => ({
-  subject: 'Workshop-Vorschlag genehmigt - RevampIT',
+  subject: 'Workshop-Vorschlag genehmigt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -410,7 +411,7 @@ export const workshopProposalApproved = (
           <p>Gute Nachrichten! Dein Workshop-Vorschlag wurde genehmigt.</p>
           <p><strong>Workshop:</strong> ${escapeHtml(workshopTitle)}</p>
           <p>Unser Team wird deinen Workshop nun für die Planung vorbereiten. Du erhältst weitere Informationen zu Terminen und Details.</p>
-          <p>Vielen Dank für deinen Beitrag zur RevampIT Community!</p>
+          <p>Vielen Dank für deinen Beitrag zur ${ORG.name} Community!</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -429,7 +430,7 @@ Workshop: ${workshopTitle}
 
 Unser Team wird deinen Workshop nun für die Planung vorbereiten. Du erhältst weitere Informationen zu Terminen und Details.
 
-Vielen Dank für deinen Beitrag zur RevampIT Community!
+Vielen Dank für deinen Beitrag zur ${ORG.name} Community!
 ${createTextFooter()}
   `.trim(),
 });
@@ -439,7 +440,7 @@ export const workshopProposalRejected = (
   workshopTitle: string,
   reason: string
 ): EmailContent => ({
-  subject: 'Workshop-Vorschlag abgelehnt - RevampIT',
+  subject: 'Workshop-Vorschlag abgelehnt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -487,7 +488,7 @@ export const workshopProposalChangesRequested = (
   workshopTitle: string,
   notes: string
 ): EmailContent => ({
-  subject: 'Änderungen für Workshop-Vorschlag angefragt - RevampIT',
+  subject: 'Änderungen für Workshop-Vorschlag angefragt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">

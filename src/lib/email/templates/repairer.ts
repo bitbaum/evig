@@ -4,6 +4,7 @@
  * Templates for repairer application workflow - submission, approval, rejection, changes requested.
  */
 
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -12,7 +13,7 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 // user/admin-entered free text — escape before HTML interpolation.
 
 export const repairerApplicationSubmitted = (name: string, applicationId: string): EmailContent => ({
-  subject: 'Techniker-Bewerbung erhalten - RevampIT',
+  subject: 'Techniker-Bewerbung erhalten - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -29,7 +30,7 @@ export const repairerApplicationSubmitted = (name: string, applicationId: string
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Vielen Dank für deine Bewerbung als Techniker bei RevampIT! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.</p>
+          <p>Vielen Dank für deine Bewerbung als Techniker bei ${ORG.name}! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.</p>
           <p><strong>Bewerbungs-ID:</strong> ${escapeHtml(applicationId)}</p>
           <p>Der Prüfungsprozess umfasst:</p>
           <ul>
@@ -51,7 +52,7 @@ export const repairerApplicationSubmitted = (name: string, applicationId: string
   text: `
 Hallo ${name},
 
-Vielen Dank für deine Bewerbung als Techniker bei RevampIT! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.
+Vielen Dank für deine Bewerbung als Techniker bei ${ORG.name}! Wir haben deine Unterlagen erhalten und werden diese zeitnah prüfen.
 
 Bewerbungs-ID: ${applicationId}
 
@@ -68,7 +69,7 @@ ${createTextFooter()}
 });
 
 export const repairerApplicationApproved = (name: string, dashboardUrl: string): EmailContent => ({
-  subject: 'Techniker-Bewerbung genehmigt - RevampIT',
+  subject: 'Techniker-Bewerbung genehmigt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -85,7 +86,7 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Wir freuen uns, dir mitteilen zu können, dass deine Bewerbung als Techniker bei RevampIT <strong>genehmigt</strong> wurde!</p>
+          <p>Wir freuen uns, dir mitteilen zu können, dass deine Bewerbung als Techniker bei ${ORG.name} <strong>genehmigt</strong> wurde!</p>
           <p>Du hast jetzt Zugriff auf:</p>
           <ul>
             <li>Techniker-Dashboard mit Service-Verwaltung</li>
@@ -95,7 +96,7 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
           </ul>
           <a href="${dashboardUrl}" class="button button-green">Zum Techniker-Dashboard</a>
           <p>Bitte aktualisiere deine Verfügbarkeit und Dienstleistungen in deinem Profil, um sofort mit Kunden in Kontakt zu treten.</p>
-          <p>Willkommen im RevampIT Techniker-Netzwerk!</p>
+          <p>Willkommen im ${ORG.name} Techniker-Netzwerk!</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -108,7 +109,7 @@ export const repairerApplicationApproved = (name: string, dashboardUrl: string):
   text: `
 Hallo ${name},
 
-Herzlichen Glückwunsch! Deine Bewerbung als Techniker bei RevampIT wurde genehmigt!
+Herzlichen Glückwunsch! Deine Bewerbung als Techniker bei ${ORG.name} wurde genehmigt!
 
 Du hast jetzt Zugriff auf:
 - Techniker-Dashboard mit Service-Verwaltung
@@ -119,7 +120,7 @@ Du hast jetzt Zugriff auf:
 Bitte aktualisiere deine Verfügbarkeit und Dienstleistungen in deinem Profil:
 ${dashboardUrl}
 
-Willkommen im RevampIT Techniker-Netzwerk!
+Willkommen im ${ORG.name} Techniker-Netzwerk!
 ${createTextFooter()}
   `.trim(),
 });
@@ -129,7 +130,7 @@ export const repairerApplicationRejected = (
   rejectionReason: string,
   supportEmail: string
 ): EmailContent => ({
-  subject: 'Techniker-Bewerbung - RevampIT',
+  subject: 'Techniker-Bewerbung - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -146,7 +147,7 @@ export const repairerApplicationRejected = (
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei RevampIT müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.</p>
+          <p>Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei ${ORG.name} müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.</p>
           <p><strong>Grund:</strong></p>
           <p>${escapeHtml(rejectionReason)}</p>
           <p>Du kannst dich jederzeit erneut bewerben, nachdem du die genannten Punkte behoben hast. Bei Fragen stehen wir dir gerne zur Verfügung.</p>
@@ -163,7 +164,7 @@ export const repairerApplicationRejected = (
   text: `
 Hallo ${name},
 
-Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei RevampIT müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.
+Nach sorgfältiger Prüfung deiner Bewerbung als Techniker bei ${ORG.name} müssen wir dir mitteilen, dass wir deine Bewerbung derzeit nicht genehmigen können.
 
 Grund:
 ${rejectionReason}
@@ -180,7 +181,7 @@ export const repairerApplicationChangesRequested = (
   requestedChanges: string,
   dashboardUrl: string
 ): EmailContent => ({
-  subject: 'Techniker-Bewerbung - Änderungen erforderlich - RevampIT',
+  subject: 'Techniker-Bewerbung - Änderungen erforderlich - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -197,7 +198,7 @@ export const repairerApplicationChangesRequested = (
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Wir haben deine Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
+          <p>Wir haben deine Bewerbung als Techniker bei ${ORG.name} geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.</p>
           <p><strong>Erforderliche Änderungen:</strong></p>
           <div class="highlight-box">
             ${escapeHtml(requestedChanges).replace(/\n/g, '<br>')}
@@ -217,7 +218,7 @@ export const repairerApplicationChangesRequested = (
   text: `
 Hallo ${name},
 
-Wir haben deine Bewerbung als Techniker bei RevampIT geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.
+Wir haben deine Bewerbung als Techniker bei ${ORG.name} geprüft und benötigen einige zusätzliche Informationen oder Korrekturen.
 
 Erforderliche Änderungen:
 ${requestedChanges}

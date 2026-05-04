@@ -46,6 +46,7 @@ import {
   Lightbulb,
   MessageSquare,
 } from 'lucide-react'
+import { ORG } from '@/config/org'
 
 // =============================================================================
 // SECTION TYPES
@@ -325,7 +326,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     id: 'seller-onboarding',
     path: '/dashboard/seller',
     ui: {
-      label: 'Auf RevampIT verkaufen',
+      label: `Auf ${ORG.name} verkaufen`,
       description: 'Eigene Produkte anbieten – Versand direkt an Käufer',
       icon: Store,
       emoji: '🏬',
@@ -864,7 +865,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     path: '/admin/hirn',
     ui: {
       label: 'Hirn AI',
-      description: 'KI-Assistent für RevampIT',
+      description: `KI-Assistent für ${ORG.name}`,
       icon: Brain,
       emoji: '🧠',
       color: 'error',

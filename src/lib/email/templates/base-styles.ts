@@ -4,6 +4,8 @@
  * Shared CSS styles and HTML structure for all email templates.
  */
 
+import { ORG } from '@/config/org';
+
 export const BASE_STYLES = `
   body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
   .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -24,7 +26,7 @@ export const BASE_STYLES = `
   .highlight-box { background-color: #fef3c7; padding: 15px; border-radius: 5px; margin: 15px 0; }
 `;
 
-export const COPYRIGHT_TEXT = '© 2025 RevampIT - Die Zukunft der IT durch nachhaltige Aufarbeitung';
+export const COPYRIGHT_TEXT = `© ${new Date().getFullYear()} ${ORG.name} - Die Zukunft der IT durch nachhaltige Aufarbeitung`;
 export const AUTO_GENERATED_TEXT = 'Diese E-Mail wurde automatisch generiert. Bitte antworte nicht darauf.';
 
 export const createEmailLayout = (
@@ -59,5 +61,5 @@ export const createEmailLayout = (
 
 export const createTextFooter = (): string => `
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
 `;

@@ -3,8 +3,9 @@
 import { LoginForm } from '@/components/auth/LoginForm'
 import Link from 'next/link'
 import { Suspense, useEffect } from 'react'
-import { Loader2 } from 'lucide-react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Logo } from '@/components/ui/Logo'
 
 function LoginFormFallback() {
   return (
@@ -35,25 +36,14 @@ export default function LoginPage() {
             href="/"
             className="inline-flex items-center text-primary-600 hover:text-primary-700 dark:text-primary-400 transition-colors"
           >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <ArrowLeft className="w-5 h-5 mr-2" />
             {t('backHome')}
           </Link>
         </div>
 
         {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block">
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">R</span>
-              </div>
-              <span className="text-2xl font-bold text-neutral-900 dark:text-white">
-                Revamp<span className="text-primary-600">IT</span>
-              </span>
-            </div>
-          </Link>
+        <div className="flex justify-center mb-8">
+          <Logo showText={true} />
         </div>
 
         {/* Login Form with Suspense for useSearchParams */}

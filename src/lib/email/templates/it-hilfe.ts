@@ -6,7 +6,7 @@
 
 import type { EmailContent } from '../types'
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
-import { LOCATIONS } from '@/config/org'
+import { ORG, LOCATIONS } from '@/config/org'
 import { escapeHtml } from '@/lib/utils/escape-html'
 
 // Every `${data}` interpolated into an html: body that comes from a user
@@ -24,7 +24,7 @@ export const itHilfeRequestConfirmation = (
   aiDiagnosis: string | null,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Deine IT-Hilfe Anfrage wurde erstellt - RevampIT',
+  subject: 'Deine IT-Hilfe Anfrage wurde erstellt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -57,10 +57,10 @@ export const itHilfeRequestConfirmation = (
           ` : ''}
 
           <div style="background-color: #f0fdf4; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            <p><strong>Über RevampIT</strong></p>
+            <p><strong>Über ${ORG.name}</strong></p>
             <p>Wir sind ein Schweizer Non-Profit-Verein für nachhaltige IT. Reparieren statt Wegwerfen ist unser Motto.</p>
             <p>Du kannst dein Gerät auch direkt in unsere Werkstatt bringen:</p>
-            <p><strong>RevampIT Werkstatt</strong><br>
+            <p><strong>${ORG.name} Werkstatt</strong><br>
             ${LOCATIONS.store.full}</p>
           </div>
 
@@ -95,7 +95,7 @@ ${aiDiagnosis}
 (Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose.)
 ` : ''}
 Du kannst dein Gerät auch direkt vorbeibringen:
-RevampIT Werkstatt - ${LOCATIONS.store.full}
+${ORG.name} Werkstatt - ${LOCATIONS.store.full}
 
 Was passiert als Nächstes?
 - Techniker aus der Community werden deine Anfrage sehen
@@ -105,7 +105,7 @@ Was passiert als Nächstes?
 Anfrage ansehen: ${requestUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -122,7 +122,7 @@ export const helperNewMatchingRequest = (
   matchingSkillNames: string[],
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Neue passende Anfrage für dich - RevampIT IT-Hilfe',
+  subject: 'Neue passende Anfrage für dich - ${ORG.name} IT-Hilfe',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -197,7 +197,7 @@ Anfrage ansehen & Angebot machen: ${requestUrl}
 Du erhältst diese E-Mail, weil deine Fähigkeiten zu dieser Anfrage passen.
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -212,7 +212,7 @@ export const adminNewITHilfeRequest = (
   urgencyName: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Neue IT-Hilfe Anfrage - RevampIT',
+  subject: 'Neue IT-Hilfe Anfrage - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -275,7 +275,7 @@ Dringlichkeit: ${urgencyName}
 Anfrage ansehen: ${requestUrl}
 
 Mit freundlichen Grüssen,
-RevampIT System
+${ORG.name} System
   `.trim(),
 })
 
@@ -288,7 +288,7 @@ export const itHilfeOfferAccepted = (
   requesterName: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Dein Angebot wurde angenommen! - RevampIT IT-Hilfe',
+  subject: 'Dein Angebot wurde angenommen! - ${ORG.name} IT-Hilfe',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -345,7 +345,7 @@ Anfrage ansehen: ${requestUrl}
 Vielen Dank, dass du der Community hilfst!
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -363,7 +363,7 @@ export const itHilfeNewOfferReceived = (
   offerMessage: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Neues Angebot für deine Anfrage - RevampIT IT-Hilfe',
+  subject: 'Neues Angebot für deine Anfrage - ${ORG.name} IT-Hilfe',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -414,7 +414,7 @@ ${offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage}
 Angebot ansehen: ${requestUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -427,7 +427,7 @@ export const itHilfeCompleted = (
   requestTitle: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Hilfe abgeschlossen - bitte bestätigen und bewerten - RevampIT',
+  subject: 'Hilfe abgeschlossen - bitte bestätigen und bewerten - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -455,7 +455,7 @@ export const itHilfeCompleted = (
           <a href="${requestUrl}" class="button button-green">Bestätigen &amp; bewerten</a>
         </div>
         <div class="footer">
-          <p>Vielen Dank, dass du Teil der RevampIT-Community bist!</p>
+          <p>Vielen Dank, dass du Teil der ${ORG.name}-Community bist!</p>
           <p>${COPYRIGHT_TEXT}</p>
         </div>
       </div>
@@ -475,7 +475,7 @@ Dein Feedback hilft der Community, gute Techniker zu finden.
 Bestätigen & bewerten: ${requestUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -489,7 +489,7 @@ export const itHilfeReviewReceived = (
   reviewText: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Du hast eine neue Bewertung erhalten - RevampIT IT-Hilfe',
+  subject: 'Du hast eine neue Bewertung erhalten - ${ORG.name} IT-Hilfe',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -542,7 +542,7 @@ Dank dir wird Technik wieder nutzbar gemacht - herzlichen Dank für dein Engagem
 Bewertung ansehen: ${requestUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -551,7 +551,7 @@ export const itHilfeOfferRejected = (
   requestTitle: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Anfrage vergeben - RevampIT IT-Hilfe',
+  subject: 'Anfrage vergeben - ${ORG.name} IT-Hilfe',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -596,6 +596,6 @@ Die folgende Anfrage wurde an einen anderen Techniker vergeben:
 Vielen Dank für dein Angebot! Es gibt bestimmt bald wieder passende Anfragen für dich.
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })

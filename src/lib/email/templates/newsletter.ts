@@ -1,8 +1,9 @@
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 
 export const newsletterConfirmation = (confirmUrl: string): EmailContent => ({
-  subject: 'Newsletter-Anmeldung bestätigen - RevampIT',
+  subject: 'Newsletter-Anmeldung bestätigen - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -18,7 +19,7 @@ export const newsletterConfirmation = (confirmUrl: string): EmailContent => ({
           <h1>Newsletter-Anmeldung bestätigen</h1>
         </div>
         <div class="content">
-          <p>Vielen Dank für dein Interesse am RevampIT Newsletter!</p>
+          <p>Vielen Dank für dein Interesse am ${ORG.name} Newsletter!</p>
           <p>Um deine Anmeldung abzuschliessen, klicke bitte auf den folgenden Button:</p>
           <a href="${confirmUrl}" class="button button-green">Anmeldung bestätigen</a>
           <p>Was dich erwartet:</p>
@@ -41,7 +42,7 @@ export const newsletterConfirmation = (confirmUrl: string): EmailContent => ({
     </html>
   `,
   text: `
-Vielen Dank für dein Interesse am RevampIT Newsletter!
+Vielen Dank für dein Interesse am ${ORG.name} Newsletter!
 
 Um deine Anmeldung abzuschliessen, öffne bitte folgenden Link:
 ${confirmUrl}

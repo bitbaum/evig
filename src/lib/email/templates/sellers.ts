@@ -1,3 +1,4 @@
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -9,7 +10,7 @@ export const sellerApplicationSubmitted = (
   const eName = escapeHtml(name);
   const eId = escapeHtml(applicationId);
   return {
-    subject: 'Verkäufer-Bewerbung eingereicht - RevampIT',
+    subject: 'Verkäufer-Bewerbung eingereicht - ${ORG.name}',
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -26,7 +27,7 @@ export const sellerApplicationSubmitted = (
         </div>
         <div class="content">
           <h2>Hallo ${eName},</h2>
-          <p>Vielen Dank für deine Bewerbung als Verkäufer auf dem RevampIT Marktplatz! Wir haben deine Unterlagen erhalten.</p>
+          <p>Vielen Dank für deine Bewerbung als Verkäufer auf dem ${ORG.name} Marktplatz! Wir haben deine Unterlagen erhalten.</p>
           <p><strong>Bewerbungs-ID:</strong> ${eId}</p>
           <p>Der Prüfungsprozess umfasst:</p>
           <ul>
@@ -48,7 +49,7 @@ export const sellerApplicationSubmitted = (
     text: `
 Hallo ${name},
 
-Vielen Dank für deine Bewerbung als Verkäufer auf dem RevampIT Marktplatz! Wir haben deine Unterlagen erhalten.
+Vielen Dank für deine Bewerbung als Verkäufer auf dem ${ORG.name} Marktplatz! Wir haben deine Unterlagen erhalten.
 
 Bewerbungs-ID: ${applicationId}
 

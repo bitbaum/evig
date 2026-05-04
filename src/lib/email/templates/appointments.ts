@@ -4,6 +4,7 @@
  * Templates for the repair booking system: new bookings, quotes, status updates, admin alerts.
  */
 
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types'
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
 import { escapeHtml } from '@/lib/utils/escape-html'
@@ -22,7 +23,7 @@ export const appointmentNewBooking = (
   description: string,
   appointmentUrl: string
 ): EmailContent => ({
-  subject: 'Neuer Reparaturauftrag - RevampIT',
+  subject: 'Neuer Reparaturauftrag - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -82,7 +83,7 @@ Bitte bestätige oder lehne den Auftrag innerhalb von 24 Stunden ab.
 Auftrag ansehen: ${appointmentUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -96,7 +97,7 @@ export const appointmentQuoteReceived = (
   diagnosisNotes: string | null,
   appointmentUrl: string
 ): EmailContent => ({
-  subject: 'Neues Angebot für deine Reparatur - RevampIT',
+  subject: 'Neues Angebot für deine Reparatur - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -151,7 +152,7 @@ Bitte bestätige oder lehne das Angebot ab.
 Angebot ansehen: ${appointmentUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -165,7 +166,7 @@ export const appointmentStatusUpdate = (
   serviceName: string,
   appointmentUrl: string
 ): EmailContent => ({
-  subject: `Reparaturstatus: ${newStatusLabel} - RevampIT`,
+  subject: `Reparaturstatus: ${newStatusLabel} - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -221,7 +222,7 @@ Andere Partei: ${otherPartyName}
 Details ansehen: ${appointmentUrl}
 
 Mit freundlichen Grüssen,
-Das RevampIT Team
+Das ${ORG.name} Team
   `.trim(),
 })
 
@@ -236,7 +237,7 @@ export const appointmentUnassignedAlert = (
   urgency: string,
   adminUrl: string
 ): EmailContent => ({
-  subject: 'Unzugewiesener Reparaturauftrag - RevampIT',
+  subject: 'Unzugewiesener Reparaturauftrag - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -297,6 +298,6 @@ Dringlichkeit: ${urgency}
 Auftrag zuweisen: ${adminUrl}
 
 Mit freundlichen Grüssen,
-RevampIT System
+${ORG.name} System
   `.trim(),
 })

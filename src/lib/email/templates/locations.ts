@@ -1,3 +1,4 @@
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -20,7 +21,7 @@ export const locationApprovalNotification = (
   const eReviewNotes = reviewNotes ? escapeHtml(reviewNotes) : null;
 
   return {
-    subject: `Ort ${statusText.toLowerCase()} - RevampIT`,
+    subject: `Ort ${statusText.toLowerCase()} - ${ORG.name}`,
     html: `
       <!DOCTYPE html>
       <html lang="de">
@@ -75,7 +76,7 @@ export const locationSubmissionConfirmation = (
   const eLocationName = escapeHtml(locationName);
   const eCity = escapeHtml(city);
   return {
-    subject: 'Ort eingereicht - RevampIT',
+    subject: 'Ort eingereicht - ${ORG.name}',
     html: `
     <!DOCTYPE html>
     <html lang="de">

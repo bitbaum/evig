@@ -1,3 +1,4 @@
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -9,7 +10,7 @@ export const newReviewNotification = (
   reviewContent: string,
   reviewUrl: string
 ): EmailContent => ({
-  subject: 'Neue Bewertung erhalten - RevampIT',
+  subject: 'Neue Bewertung erhalten - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">

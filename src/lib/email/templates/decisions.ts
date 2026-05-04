@@ -4,6 +4,7 @@
  * Templates for voting opened, deadline reminders, outcome notifications, etc.
  */
 
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types'
 import { createEmailLayout, createTextFooter } from './base-styles'
 import { APP_URL } from '@/config/urls'
@@ -54,7 +55,7 @@ export const decisionVotingOpened = (
   const text = `Abstimmung geöffnet\n\nEine neue Abstimmung wartet auf deine Stimme:\n${title}\n${deadlinePlain}\nZur Abstimmung: ${link}\n${createTextFooter()}`
 
   return {
-    subject: `Abstimmung geöffnet: ${title} - RevampIT`,
+    subject: `Abstimmung geöffnet: ${title} - ${ORG.name}`,
     html,
     text,
   }
@@ -95,7 +96,7 @@ export const decisionDeadlineReminder = (
   const text = `Erinnerung: Abstimmung endet bald\n\nDie folgende Abstimmung endet morgen:\n${title}\nFrist: ${deadlineFormatted}\n\nFalls du noch nicht abgestimmt hast, gib bitte noch deine Stimme ab.\n\nJetzt abstimmen: ${link}\n${createTextFooter()}`
 
   return {
-    subject: `Abstimmung endet morgen: ${title} - RevampIT`,
+    subject: `Abstimmung endet morgen: ${title} - ${ORG.name}`,
     html,
     text,
   }
@@ -126,7 +127,7 @@ export const decisionClosed = (
   const text = `Abstimmung abgeschlossen\n\nDie folgende Abstimmung wurde abgeschlossen:\n${title}\n\nDas Ergebnis steht jetzt fest.\n\nErgebnis ansehen: ${link}\n${createTextFooter()}`
 
   return {
-    subject: `Abstimmung abgeschlossen: ${title} - RevampIT`,
+    subject: `Abstimmung abgeschlossen: ${title} - ${ORG.name}`,
     html,
     text,
   }

@@ -8,7 +8,7 @@
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import { SUPPORT_EMAIL } from '@/lib/constants'
-import { BANK } from '@/config/org'
+import { ORG, BANK } from '@/config/org'
 import type { InvoiceStatus } from '@/config/invoice-status'
 
 // ─── Types ──────────────────────────────────────────────────────────
@@ -183,7 +183,7 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
     <body>
       <div class="header">
         <div class="company-info">
-          <h1>RevampIT</h1>
+          <h1>${ORG.name}</h1>
           <p>Digitale Reparaturplattform<br>
           Schweiz</p>
         </div>
@@ -262,7 +262,7 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
           Zahlungsbedingungen: ${invoice.payment_terms || 'Zahlbar innerhalb von 30 Tagen ab Rechnungsdatum'}
         </p>
         <p>
-          Vielen Dank für dein Vertrauen in RevampIT.<br>
+          Vielen Dank für dein Vertrauen in ${ORG.name}.<br>
           Bei Fragen: ${SUPPORT_EMAIL}
         </p>
       </div>

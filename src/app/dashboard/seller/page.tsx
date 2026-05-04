@@ -21,6 +21,7 @@ import { ListingImage } from '@/components/marketplace/ListingImage'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG } from '@/config/marketplace'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { ORG } from '@/config/org'
 import type { ListingStatus } from '@/config/marketplace'
 
 interface Product {
@@ -60,7 +61,7 @@ export default function SellerDashboard() {
 
   useEffect(() => {
     // Set page title
-    document.title = 'Seller Dashboard | RevampIT'
+    document.title = `Seller Dashboard | ${ORG.name}`
   }, [])
 
   useEffect(() => {
@@ -194,7 +195,7 @@ export default function SellerDashboard() {
               Seller Dashboard
             </h1>
             <p className="text-primary-100">
-              Verwalten Sie Ihre Produkte im RevampIT Marketplace und verfolgen Sie Ihre Verkäufe.
+              Verwalten Sie Ihre Produkte im {ORG.name} Marketplace und verfolgen Sie Ihre Verkäufe.
             </p>
           </div>
           <button
@@ -373,11 +374,11 @@ export default function SellerDashboard() {
           </div>
           <div>
             <h3 className="font-medium text-info-900 dark:text-info-200">
-              RevampIT Marketplace
+              {ORG.name} Marketplace
             </h3>
             <p className="text-sm text-info-700 dark:text-info-300 mt-1">
-              Als Seller können Sie Ihre eigenen refurbished Produkte im RevampIT Marketplace verkaufen.
-              Ihre Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei,
+              Als Seller können Sie Ihre eigenen refurbished Produkte im {ORG.name} Marketplace verkaufen.
+              Ihre Produkte erscheinen neben den offiziellen {ORG.name} Produkten und helfen dabei,
               die Kreislaufwirtschaft zu fördern.
             </p>
             <div className="mt-3 flex gap-3">

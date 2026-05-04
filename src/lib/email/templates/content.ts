@@ -1,3 +1,4 @@
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -7,7 +8,7 @@ export const contentSubmissionApproved = (
   title: string,
   contentType: string
 ): EmailContent => ({
-  subject: 'Einreichung genehmigt - RevampIT',
+  subject: 'Einreichung genehmigt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -27,7 +28,7 @@ export const contentSubmissionApproved = (
           <p>Gute Nachrichten! Deine Einreichung wurde genehmigt.</p>
           <p><strong>Titel:</strong> ${escapeHtml(title)}</p>
           <p><strong>Typ:</strong> ${escapeHtml(contentType)}</p>
-          <p>Vielen Dank für deinen Beitrag zur RevampIT Community!</p>
+          <p>Vielen Dank für deinen Beitrag zur ${ORG.name} Community!</p>
         </div>
         <div class="footer">
           <p>${AUTO_GENERATED_TEXT}</p>
@@ -45,7 +46,7 @@ Gute Nachrichten! Deine Einreichung wurde genehmigt.
 Titel: ${title}
 Typ: ${contentType}
 
-Vielen Dank für deinen Beitrag zur RevampIT Community!
+Vielen Dank für deinen Beitrag zur ${ORG.name} Community!
 ${createTextFooter()}
   `.trim(),
 });
@@ -55,7 +56,7 @@ export const contentSubmissionRejected = (
   title: string,
   contentType: string
 ): EmailContent => ({
-  subject: 'Einreichung abgelehnt - RevampIT',
+  subject: 'Einreichung abgelehnt - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">

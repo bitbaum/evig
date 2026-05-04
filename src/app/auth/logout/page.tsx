@@ -7,6 +7,7 @@ import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { Logo } from '@/components/ui/Logo'
 
 const LOGOUT_CALLBACK = '/auth/login?logout=1'
 
@@ -64,17 +65,8 @@ export default function LogoutPage() {
     <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-block">
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">R</span>
-              </div>
-              <span className="text-2xl font-bold text-neutral-900 dark:text-white">
-                Revamp<span className="text-primary-600">IT</span>
-              </span>
-            </div>
-          </Link>
+        <div className="flex justify-center mb-8">
+          <Logo showText={true} />
         </div>
 
         {/* Logout Card */}

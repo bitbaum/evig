@@ -10,6 +10,7 @@
  * because mail clients render those as plain text.
  */
 
+import { ORG } from '@/config/org';
 import { escapeHtml } from '@/lib/utils/escape-html';
 
 export interface MarketplaceEmailData {
@@ -54,7 +55,7 @@ export function listingPublishedConfirmation(data: ListingPublishedData): { subj
         </p>
         <p style="color: #6b7280; font-size: 14px;">Du erhältst eine Benachrichtigung, wenn jemand dein Inserat kontaktiert.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -81,7 +82,7 @@ export function newMarketplaceMessage(data: NewMarketplaceMessageData): { subjec
           </a>
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -147,7 +148,7 @@ export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): { subj
         </p>
         <p style="color: #6b7280; font-size: 14px;">Der Verkäufer wurde benachrichtigt und wird sich um den Versand kümmern.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -178,7 +179,7 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
         </p>
         <p style="color: #6b7280; font-size: 14px;">Bitte versende den Artikel so schnell wie möglich.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -206,7 +207,7 @@ export function orderStatusUpdate(data: OrderStatusUpdateData): { subject: strin
           </a>
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -253,7 +254,7 @@ export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subjec
           </a>
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -278,7 +279,7 @@ export function orderReviewPrompt(data: OrderReviewPromptData): { subject: strin
         </p>
         <p style="color: #6b7280; font-size: 14px;">Es dauert nur einen kurzen Moment.</p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -310,7 +311,7 @@ export function orderReviewReceived(data: OrderReviewReceivedData): { subject: s
           </a>
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };
@@ -336,7 +337,7 @@ export function listingReviewNotification(data: ListingReviewData): { subject: s
           </a>
         </p>
         <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-        <p style="color: #9ca3af; font-size: 12px;">RevampIT Marketplace</p>
+        <p style="color: #9ca3af; font-size: 12px;">${ORG.name} Marketplace</p>
       </div>
     `,
   };

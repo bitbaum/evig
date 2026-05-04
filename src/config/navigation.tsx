@@ -1,5 +1,5 @@
 import React from 'react'
-import { EXTERNAL_LINKS } from '@/config/org'
+import { ORG, EXTERNAL_LINKS } from '@/config/org'
 
 /**
  * Navigation Configuration - SSOT for all navigation data
@@ -163,7 +163,7 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'communityListingsDesc',
       },
       {
-        name: 'RevampIT Shop',
+        name: `${ORG.name} Shop`,
         nameKey: 'shopRevampIT',
         href: '/shop',
         descriptionKey: 'orgShopDesc',

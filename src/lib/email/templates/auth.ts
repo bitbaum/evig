@@ -14,7 +14,7 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 // need escaping but the name does — escape before HTML interpolation.
 
 export const verificationCode = (name: string, code: string): EmailContent => ({
-  subject: 'Dein Bestätigungscode - RevampIT',
+  subject: 'Dein Bestätigungscode - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -31,7 +31,7 @@ export const verificationCode = (name: string, code: string): EmailContent => ({
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name || 'Benutzer')},</h2>
-          <p>Vielen Dank für deine Registrierung bei RevampIT! Gib den folgenden Code ein, um deine E-Mail-Adresse zu bestätigen:</p>
+          <p>Vielen Dank für deine Registrierung bei ${ORG.name}! Gib den folgenden Code ein, um deine E-Mail-Adresse zu bestätigen:</p>
           <div class="code">${code}</div>
           <p><strong>Sicherheitshinweis:</strong> Dieser Code ist 15 Minuten gültig. Teile diesen Code mit niemandem.</p>
           <p>Wenn du diese E-Mail nicht angefordert hast, ignoriere sie bitte.</p>
@@ -47,7 +47,7 @@ export const verificationCode = (name: string, code: string): EmailContent => ({
   text: `
 Hallo ${name || 'Benutzer'},
 
-Vielen Dank für deine Registrierung bei RevampIT!
+Vielen Dank für deine Registrierung bei ${ORG.name}!
 
 Dein Bestätigungscode lautet: ${code}
 
@@ -59,7 +59,7 @@ ${createTextFooter()}
 });
 
 export const emailVerification = (name: string, verificationUrl: string): EmailContent => ({
-  subject: 'E-Mail-Adresse bestätigen - RevampIT',
+  subject: 'E-Mail-Adresse bestätigen - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -72,11 +72,11 @@ export const emailVerification = (name: string, verificationUrl: string): EmailC
     <body>
       <div class="container">
         <div class="header header-green">
-          <h1>Willkommen bei RevampIT!</h1>
+          <h1>Willkommen bei ${ORG.name}!</h1>
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Vielen Dank für deine Registrierung bei RevampIT! Um dein Konto zu aktivieren, bestätige bitte deine E-Mail-Adresse.</p>
+          <p>Vielen Dank für deine Registrierung bei ${ORG.name}! Um dein Konto zu aktivieren, bestätige bitte deine E-Mail-Adresse.</p>
           <p>Klicke auf den folgenden Button, um deine E-Mail-Adresse zu bestätigen:</p>
           <a href="${verificationUrl}" class="button button-green">E-Mail-Adresse bestätigen</a>
           <p><strong>Sicherheitshinweis:</strong> Dieser Link ist 24 Stunden gültig. Wenn du diese E-Mail nicht angefordert hast, ignoriere sie bitte.</p>
@@ -94,7 +94,7 @@ export const emailVerification = (name: string, verificationUrl: string): EmailC
   text: `
 Hallo ${name},
 
-Vielen Dank für deine Registrierung bei RevampIT!
+Vielen Dank für deine Registrierung bei ${ORG.name}!
 
 Um dein Konto zu aktivieren, bestätige bitte deine E-Mail-Adresse, indem du auf diesen Link klickst:
 
@@ -108,24 +108,24 @@ ${createTextFooter()}
 });
 
 export const welcome = (name: string): EmailContent => ({
-  subject: 'Willkommen bei RevampIT!',
+  subject: 'Willkommen bei ${ORG.name}!',
   html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Willkommen bei RevampIT</title>
+      <title>Willkommen bei ${ORG.name}</title>
       <style>${BASE_STYLES}</style>
     </head>
     <body>
       <div class="container">
         <div class="header header-green">
-          <h1>Willkommen bei RevampIT!</h1>
+          <h1>Willkommen bei ${ORG.name}!</h1>
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Herzlich willkommen bei RevampIT! Dein Konto wurde erfolgreich aktiviert.</p>
+          <p>Herzlich willkommen bei ${ORG.name}! Dein Konto wurde erfolgreich aktiviert.</p>
           <p>Du kannst jetzt:</p>
           <ul>
             <li>Workshops und Kurse buchen</li>
@@ -145,7 +145,7 @@ export const welcome = (name: string): EmailContent => ({
   text: `
 Hallo ${name},
 
-Herzlich willkommen bei RevampIT! Dein Konto wurde erfolgreich aktiviert.
+Herzlich willkommen bei ${ORG.name}! Dein Konto wurde erfolgreich aktiviert.
 
 Du kannst jetzt Workshops und Kurse buchen, Service-Termine vereinbaren, unseren Shop durchsuchen und deine Bestellungen und Termine verwalten.
 
@@ -159,7 +159,7 @@ ${createTextFooter()}
  * Uses a warmer, team-focused tone
  */
 export const staffVerificationCode = (name: string, code: string): EmailContent => ({
-  subject: 'Willkommen im RevampIT Team - Dein Bestätigungscode',
+  subject: 'Willkommen im ${ORG.name} Team - Dein Bestätigungscode',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -176,7 +176,7 @@ export const staffVerificationCode = (name: string, code: string): EmailContent 
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name || 'Teammitglied')},</h2>
-          <p>Schön, dass du dabei bist! Als Mitglied des RevampIT Teams erhältst du Zugang zum Admin-Dashboard und kannst aktiv an unserer Mission mitwirken.</p>
+          <p>Schön, dass du dabei bist! Als Mitglied des ${ORG.name} Teams erhältst du Zugang zum Admin-Dashboard und kannst aktiv an unserer Mission mitwirken.</p>
           <p>Dein Bestätigungscode:</p>
           <div class="code">${code}</div>
           <p><strong>Was dich erwartet:</strong></p>
@@ -200,7 +200,7 @@ export const staffVerificationCode = (name: string, code: string): EmailContent 
   text: `
 Hallo ${name || 'Teammitglied'},
 
-Schön, dass du dabei bist! Als Mitglied des RevampIT Teams erhältst du Zugang zum Admin-Dashboard.
+Schön, dass du dabei bist! Als Mitglied des ${ORG.name} Teams erhältst du Zugang zum Admin-Dashboard.
 
 Dein Bestätigungscode: ${code}
 
@@ -222,24 +222,24 @@ ${createTextFooter()}
  * Provides onboarding info for new team members
  */
 export const staffWelcome = (name: string): EmailContent => ({
-  subject: 'Willkommen im RevampIT Team!',
+  subject: 'Willkommen im ${ORG.name} Team!',
   html: `
     <!DOCTYPE html>
     <html lang="de">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Willkommen im RevampIT Team</title>
+      <title>Willkommen im ${ORG.name} Team</title>
       <style>${BASE_STYLES}</style>
     </head>
     <body>
       <div class="container">
         <div class="header header-green">
-          <h1>Willkommen im RevampIT Team!</h1>
+          <h1>Willkommen im ${ORG.name} Team!</h1>
         </div>
         <div class="content">
           <h2>Hallo ${escapeHtml(name)},</h2>
-          <p>Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des RevampIT Teams!</p>
+          <p>Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des ${ORG.name} Teams!</p>
           <h3>Deine ersten Schritte:</h3>
           <ol>
             <li><strong>Admin-Dashboard erkunden:</strong> Unter <a href="https://revampit.vercel.app/admin">/admin</a> findest du alle Verwaltungsfunktionen.</li>
@@ -265,7 +265,7 @@ export const staffWelcome = (name: string): EmailContent => ({
   text: `
 Hallo ${name},
 
-Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des RevampIT Teams!
+Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des ${ORG.name} Teams!
 
 Deine ersten Schritte:
 1. Admin-Dashboard erkunden: Unter /admin findest du alle Verwaltungsfunktionen
@@ -285,7 +285,7 @@ ${createTextFooter()}
 });
 
 export const passwordReset = (name: string, resetUrl: string): EmailContent => ({
-  subject: 'Passwort zurücksetzen - RevampIT',
+  subject: 'Passwort zurücksetzen - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -338,7 +338,7 @@ ${createTextFooter()}
  * Sent after a user successfully resets their password
  */
 export const passwordChangeConfirmation = (name: string): EmailContent => ({
-  subject: 'Passwort erfolgreich geändert - RevampIT',
+  subject: 'Passwort erfolgreich geändert - ${ORG.name}',
   html: `
     <!DOCTYPE html>
     <html lang="de">

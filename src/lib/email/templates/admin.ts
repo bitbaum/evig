@@ -4,6 +4,7 @@
  * Templates for admin notifications about new applications, proposals, and submissions.
  */
 
+import { ORG } from '@\/config\/org';
 import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
@@ -21,7 +22,7 @@ export const adminNewRepairerApplication = (
   const eName = escapeHtml(applicantName);
   const eEmail = escapeHtml(applicantEmail);
   return {
-    subject: 'Neue Techniker-Bewerbung wartet auf Prüfung - RevampIT',
+    subject: 'Neue Techniker-Bewerbung wartet auf Prüfung - ${ORG.name}',
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -61,7 +62,7 @@ Bitte prüfe die Bewerbung zeitnah:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
-RevampIT System
+${ORG.name} System
   `.trim(),
   };
 };
@@ -76,7 +77,7 @@ export const adminNewWorkshopProposal = (
   const eEmail = escapeHtml(proposerEmail);
   const eTitle = escapeHtml(workshopTitle);
   return {
-    subject: 'Neuer Workshop-Vorschlag wartet auf Prüfung - RevampIT',
+    subject: 'Neuer Workshop-Vorschlag wartet auf Prüfung - ${ORG.name}',
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -118,7 +119,7 @@ Bitte prüfe den Vorschlag zeitnah:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
-RevampIT System
+${ORG.name} System
   `.trim(),
   };
 };
@@ -133,7 +134,7 @@ export const adminNewBlogSubmission = (
   const eEmail = escapeHtml(submitterEmail);
   const eTitle = escapeHtml(articleTitle);
   return {
-    subject: 'Neuer Blog-Beitrag wartet auf Prüfung - RevampIT',
+    subject: 'Neuer Blog-Beitrag wartet auf Prüfung - ${ORG.name}',
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -175,7 +176,7 @@ Bitte prüfe den Beitrag:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
-RevampIT System
+${ORG.name} System
   `.trim(),
   };
 };
@@ -188,7 +189,7 @@ export const adminNewSellerApplication = (
   const eName = escapeHtml(applicantName);
   const eEmail = escapeHtml(applicantEmail);
   return {
-    subject: 'Neue Verkäufer-Bewerbung wartet auf Prüfung - RevampIT',
+    subject: 'Neue Verkäufer-Bewerbung wartet auf Prüfung - ${ORG.name}',
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -228,7 +229,7 @@ Bitte prüfe die Bewerbung zeitnah:
 ${adminDashboardUrl}
 
 Mit freundlichen Grüssen,
-RevampIT System
+${ORG.name} System
   `.trim(),
   };
 };

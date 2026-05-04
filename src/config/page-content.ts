@@ -5,6 +5,8 @@
  * Eliminates hardcoded strings across marketplace and IT-Hilfe pages.
  */
 
+import { ORG } from '@/config/org';
+
 export const MARKETPLACE_CONTENT = {
   page: {
     title: 'Marketplace',
@@ -12,7 +14,7 @@ export const MARKETPLACE_CONTENT = {
   },
   sellerTypes: {
     all: 'Alle',
-    revampit: 'RevampIT Geräte',
+    revampit: `${ORG.name} Geräte`,
     community: 'Community Inserate',
   },
   filters: {
