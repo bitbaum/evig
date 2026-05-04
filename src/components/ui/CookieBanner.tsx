@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
@@ -18,16 +18,17 @@ const CONSENT_VALUE = 'accepted'
 export function CookieBanner() {
   const t = useTranslations('cookies')
 
-  // Lazy initializer: read localStorage once on mount (client-only).
-  // Falls back to true (show banner) when localStorage is unavailable (SSR, private mode).
-  const [visible, setVisible] = useState(() => {
-    if (typeof window === 'undefined') return false
+  // Start hidden (matches SSR output). After hydration, read localStorage to
+  // decide whether to show — avoids SSR/client mismatch that breaks hydration.
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
     try {
-      return localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE
+      setVisible(localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE)
     } catch {
-      return true
+      setVisible(true)
     }
-  })
+  }, [])
 
   if (!visible) return null
 
