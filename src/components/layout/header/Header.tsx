@@ -14,11 +14,14 @@ import { useState, useRef, useEffect } from 'react'
 import { Menu } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
+import dynamic from 'next/dynamic'
 import { Logo } from '@/components/ui/Logo'
-import { MobileMenu } from '../MobileMenu'
-import { UserMenu } from '@/components/auth/UserMenu'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { cn } from '@/lib/utils'
+
+// Skip SSR — both use useSession which requires SessionProvider (lazy-loaded client-side only)
+const UserMenu = dynamic(() => import('@/components/auth/UserMenu').then(m => ({ default: m.UserMenu })), { ssr: false })
+const MobileMenu = dynamic(() => import('../MobileMenu').then(m => ({ default: m.MobileMenu })), { ssr: false })
 import { mainNavigation } from '@/config/navigation'
 import { NavItem } from './NavItem'
 

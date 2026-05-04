@@ -6,7 +6,6 @@
 import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
-import { Providers } from '@/components/providers/providers'
 import ConditionalMainLayout from '@/components/layout/ConditionalMainLayout'
 import { CookieBanner } from '@/components/ui/CookieBanner'
 import { ORG } from '@/config/org'
@@ -61,12 +60,10 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      <Providers>
-        <ConditionalMainLayout>
-          {children}
-        </ConditionalMainLayout>
-        <CookieBanner />
-      </Providers>
+      <ConditionalMainLayout>
+        {children}
+      </ConditionalMainLayout>
+      <CookieBanner />
     </NextIntlClientProvider>
   )
 }
