@@ -23,7 +23,12 @@ import {
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
-import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
+import {
+  WORKSHOP_REGISTRATION_STATUS_LABELS,
+  WORKSHOP_REGISTRATION_STATUS_COLORS,
+  WORKSHOP_PAYMENT_STATUS_LABELS,
+  WORKSHOP_PAYMENT_STATUS_COLORS,
+} from '@/config/workshop-registration-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import Heading from '@/components/admin/AdminHeading'
 import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
@@ -95,37 +100,17 @@ export default function AdminWorkshopInstanceDetailPage({
     }
   }
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-        return <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full">Bestätigt</span>
-      case WORKSHOP_REGISTRATION_STATUS.PENDING:
-        return <span className="px-2 py-1 text-xs font-medium bg-warning-100 text-warning-800 rounded-full">Ausstehend</span>
-      case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-        return <span className="px-2 py-1 text-xs font-medium bg-error-100 text-error-800 rounded-full">Abgesagt</span>
-      case WORKSHOP_REGISTRATION_STATUS.ATTENDED:
-        return <span className="px-2 py-1 text-xs font-medium bg-info-100 text-info-800 rounded-full">Teilgenommen</span>
-      case WORKSHOP_REGISTRATION_STATUS.NO_SHOW:
-        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">Nicht erschienen</span>
-      default:
-        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">{status}</span>
-    }
-  }
+  const getStatusBadge = (status: string) => (
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'}`}>
+      {WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status}
+    </span>
+  )
 
-  const getPaymentBadge = (paymentStatus: string) => {
-    switch (paymentStatus) {
-      case WORKSHOP_PAYMENT_STATUS.PAID:
-        return <span className="px-2 py-1 text-xs font-medium bg-primary-100 text-primary-800 rounded-full">Bezahlt</span>
-      case WORKSHOP_PAYMENT_STATUS.PENDING:
-        return <span className="px-2 py-1 text-xs font-medium bg-warning-100 text-warning-800 rounded-full">Ausstehend</span>
-      case WORKSHOP_PAYMENT_STATUS.REFUNDED:
-        return <span className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 rounded-full">Erstattet</span>
-      case WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED:
-        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-600 rounded-full">Kostenlos</span>
-      default:
-        return <span className="px-2 py-1 text-xs font-medium bg-neutral-100 text-neutral-800 rounded-full">{paymentStatus}</span>
-    }
-  }
+  const getPaymentBadge = (paymentStatus: string) => (
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-neutral-100 text-neutral-800'}`}>
+      {WORKSHOP_PAYMENT_STATUS_LABELS[paymentStatus] ?? paymentStatus}
+    </span>
+  )
 
   if (status === 'loading' || loading) {
     return (
