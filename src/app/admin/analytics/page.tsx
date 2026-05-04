@@ -220,8 +220,8 @@ export default async function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-          <BarChart3 className="w-6 h-6 text-indigo-600" />
+        <div className="w-12 h-12 bg-info-100 rounded-lg flex items-center justify-center">
+          <BarChart3 className="w-6 h-6 text-info-600" />
         </div>
         <div>
           <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">

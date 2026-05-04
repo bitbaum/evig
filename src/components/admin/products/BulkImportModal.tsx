@@ -59,7 +59,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 />
                 <label
                   htmlFor="csv-upload"
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 cursor-pointer inline-block"
+                  className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 cursor-pointer inline-block"
                 >
                   Datei auswählen
                 </label>
@@ -90,7 +90,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 >
                   Abbrechen
                 </button>
-                <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                <button className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700">
                   Produkte importieren
                 </button>
               </div>

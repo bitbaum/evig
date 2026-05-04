@@ -44,7 +44,7 @@ const VARIANT_STYLES = {
   },
   default: {
     title: 'text-neutral-900 dark:text-white',
-    button: 'bg-indigo-600 hover:bg-indigo-700',
+    button: 'bg-info-600 hover:bg-info-700',
     icon: 'text-neutral-600',
   },
 }

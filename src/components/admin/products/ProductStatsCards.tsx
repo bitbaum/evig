@@ -67,7 +67,7 @@ export function ProductStatsCards({
       <StatCard
         label="Im Shop"
         value={shopStats.total}
-        icon={<Package className="w-6 h-6 text-indigo-500" />}
+        icon={<Package className="w-6 h-6 text-info-500" />}
       />
       {conditionEntries.map(([condition, count]) => (
         <StatCard

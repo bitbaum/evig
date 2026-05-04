@@ -69,7 +69,7 @@ export function ShopProductsTable({
                     type="checkbox"
                     checked={allSelected}
                     onChange={() => onSelectAll?.(filteredIds)}
-                    className="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
+                    className="h-4 w-4 rounded border-neutral-300 text-info-600 focus:ring-info-500"
                   />
                 </th>
               )}
@@ -99,7 +99,7 @@ export function ShopProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-indigo-50")}
+                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-info-50")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">
@@ -107,7 +107,7 @@ export function ShopProductsTable({
                       type="checkbox"
                       checked={selectedIds.has(product.id)}
                       onChange={() => onToggleSelect(product.id)}
-                      className="h-4 w-4 rounded border-neutral-300 text-indigo-600 focus:ring-indigo-500"
+                      className="h-4 w-4 rounded border-neutral-300 text-info-600 focus:ring-info-500"
                     />
                   </td>
                 )}

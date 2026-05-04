@@ -397,7 +397,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <button
               onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}
               disabled={updatingStatus}
-              className="w-full flex items-center justify-center gap-2 bg-indigo-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-info-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-info-700 disabled:opacity-50 transition-colors"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Package className="w-4 h-4" />}
               {t('markDelivered')}

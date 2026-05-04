@@ -39,7 +39,7 @@ export function ProductFilterBar({
               placeholder="Produkte suchen..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
             />
           </div>
 
@@ -49,7 +49,7 @@ export function ProductFilterBar({
               <select
                 value={filterStatus}
                 onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
-                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-info-500"
               >
                 <option value="all">Alle Status</option>
                 <option value="published">Veröffentlicht</option>
@@ -60,7 +60,7 @@ export function ProductFilterBar({
             <select
               value={filterCategory}
               onChange={(e) => onFilterCategoryChange(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               <option value="all">Alle Kategorien</option>
               <option value="Laptops">Laptops</option>

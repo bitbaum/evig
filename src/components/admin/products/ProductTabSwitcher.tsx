@@ -41,14 +41,14 @@ export function ProductTabSwitcher({
         className={cn(
           "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-colors",
           activeTab === 'shop'
-            ? "border-indigo-600 text-indigo-600"
+            ? "border-info-600 text-info-600"
             : "border-transparent text-neutral-500 hover:text-neutral-700"
         )}
       >
         <Store className="w-4 h-4" />
         Shop Produkte
         {shopStats.total > 0 && (
-          <span className="bg-indigo-100 text-indigo-800 text-xs px-2 py-0.5 rounded-full">
+          <span className="bg-info-100 text-info-800 text-xs px-2 py-0.5 rounded-full">
             {shopStats.total}
           </span>
         )}

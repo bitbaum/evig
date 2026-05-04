@@ -255,7 +255,7 @@ export default function WorkshopsDashboard() {
                     </button>
                     <button
                       onClick={() => openEdit(registration)}
-                      className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50"
+                      className="px-4 py-2 rounded-lg border border-info-300 text-info-700 hover:bg-info-50"
                     >
                       {registration.feedback || registration.rating ? 'Feedback bearbeiten' : 'Feedback hinzufügen'}
                     </button>
@@ -311,7 +311,7 @@ export default function WorkshopsDashboard() {
           </div>
           <div className="mt-6 flex justify-end gap-3">
             <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">Abbrechen</button>
-            <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-indigo-600 text-white disabled:opacity-50">
+            <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-info-600 text-white disabled:opacity-50">
               {saving ? 'Speichern…' : 'Speichern'}
             </button>
           </div>
