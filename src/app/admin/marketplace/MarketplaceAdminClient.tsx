@@ -10,6 +10,7 @@ import { ReportsTab } from './ReportsTab'
 import { OrdersTab } from './OrdersTab'
 import { EditListingModal } from './EditListingModal'
 import { HandleReportModal } from './HandleReportModal'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 export default function MarketplaceAdminClient() {
   const m = useMarketplaceAdmin()
@@ -113,6 +114,14 @@ export default function MarketplaceAdminClient() {
           onClose={m.closeReportModal}
         />
       )}
+
+      <ConfirmDialog
+        isOpen={!!m.pendingRemove}
+        title="Inserat entfernen"
+        message={`Inserat "${m.pendingRemove?.title}" wirklich entfernen?`}
+        onConfirm={m.doRemove}
+        onClose={m.cancelRemove}
+      />
     </div>
   )
 }

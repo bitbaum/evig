@@ -6,6 +6,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { ORG } from '@/config/org'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 interface HirnActionCard {
   id: string
@@ -40,6 +41,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
   const [loading, setLoading] = useState(false)
   const [loadingHistory, setLoadingHistory] = useState(true)
   const [error, setError] = useState('')
+  const [pendingClear, setPendingClear] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Load chat history on mount or session change
@@ -119,9 +121,9 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     }
   }
 
-  const clearSession = async () => {
-    if (!confirm('Möchtest du dieses Gespräch wirklich löschen?')) return
+  const clearSession = () => setPendingClear(true)
 
+  const doClearSession = async () => {
     try {
       await apiFetch<void>(`/api/admin/hirn/history?sessionId=${sessionId}`, {
         method: 'DELETE',
@@ -318,6 +320,14 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
           </button>
         </div>
       </form>
+
+      <ConfirmDialog
+        isOpen={pendingClear}
+        title="Gespräch löschen"
+        message="Möchtest du dieses Gespräch wirklich löschen?"
+        onConfirm={() => { setPendingClear(false); doClearSession() }}
+        onClose={() => setPendingClear(false)}
+      />
     </div>
   )
 }

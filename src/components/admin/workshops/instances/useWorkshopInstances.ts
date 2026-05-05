@@ -28,6 +28,7 @@ export function useWorkshopInstances() {
   const [editingInstance, setEditingInstance] = useState<WorkshopInstanceWithDetails | null>(null)
   const [formData, setFormData] = useState<InstanceFormData>(initialFormData)
   const [submitting, setSubmitting] = useState(false)
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
   const loadWorkshops = useCallback(async () => {
     try {
@@ -107,16 +108,18 @@ export function useWorkshopInstances() {
     }
   }
 
-  const handleDelete = async (instanceId: string) => {
-    if (!confirm('Möchtest du diesen Termin wirklich löschen?')) {
-      return
-    }
+  const handleDelete = (instanceId: string) => {
+    setPendingDeleteId(instanceId)
+  }
 
+  const doDelete = async () => {
+    if (!pendingDeleteId) return
+    const instanceId = pendingDeleteId
+    setPendingDeleteId(null)
     try {
       const result = await apiFetch<void>(`/api/admin/workshops/instances/${instanceId}`, {
         method: 'DELETE',
       })
-
       if (result.success) {
         loadInstances()
       } else {
@@ -177,6 +180,9 @@ export function useWorkshopInstances() {
     // Actions
     handleCreateOrUpdate,
     handleDelete,
+    pendingDeleteId,
+    doDelete,
+    cancelDelete: () => setPendingDeleteId(null),
     openEditModal,
     closeModal,
     getStatusBadge,

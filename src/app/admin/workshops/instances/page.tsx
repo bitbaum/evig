@@ -10,6 +10,7 @@ import {
   InstanceFormModal,
 } from '@/components/admin/workshops/instances'
 import Heading from '@/components/admin/AdminHeading'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 
 export default function AdminWorkshopInstancesPage() {
   const router = useRouter()
@@ -94,6 +95,14 @@ export default function AdminWorkshopInstancesPage() {
           onClose={hook.closeModal}
         />
       )}
+
+      <ConfirmDialog
+        isOpen={!!hook.pendingDeleteId}
+        title="Termin löschen"
+        message="Möchtest du diesen Termin wirklich löschen?"
+        onConfirm={hook.doDelete}
+        onClose={hook.cancelDelete}
+      />
     </div>
   )
 }

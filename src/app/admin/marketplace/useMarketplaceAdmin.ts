@@ -37,6 +37,7 @@ export function useMarketplaceAdmin() {
   const [reportAction, setReportAction] = useState<string>('dismiss')
   const [reportNotes, setReportNotes] = useState('')
   const [reportLoading, setReportLoading] = useState(false)
+  const [pendingRemove, setPendingRemove] = useState<{ id: string; title: string } | null>(null)
 
   const [loading, setLoading] = useState(true)
 
@@ -137,8 +138,14 @@ export function useMarketplaceAdmin() {
     refreshStats()
   }
 
-  async function handleRemove(id: string, title: string) {
-    if (!confirm(`Inserat "${title}" entfernen?`)) return
+  function handleRemove(id: string, title: string) {
+    setPendingRemove({ id, title })
+  }
+
+  async function doRemove() {
+    if (!pendingRemove) return
+    const { id } = pendingRemove
+    setPendingRemove(null)
     await apiFetch<void>(`/api/admin/marketplace/${id}`, { method: 'DELETE' })
     fetchListings()
     refreshStats()
@@ -202,6 +209,9 @@ export function useMarketplaceAdmin() {
     listingsOffset,
     setListingsOffset,
     handleRemove,
+    pendingRemove,
+    doRemove,
+    cancelRemove: () => setPendingRemove(null),
 
     // Reports
     reports,

@@ -11,6 +11,7 @@ import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from 
 import { getBookingStatusBadge } from '@/config/booking-status'
 import { apiFetch } from '@/lib/api/client'
 import { LOCATION_TYPES } from '@/components/admin/locations/location-form'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   MapPin,
   Users,
@@ -85,6 +86,7 @@ export default function LocationDetailPage() {
   const [error, setError] = useState('')
   const [actionLoading, setActionLoading] = useState(false)
   const [refreshKey, setRefreshKey] = useState(0)
+  const [pendingApprovalAction, setPendingApprovalAction] = useState<'approve' | 'reject' | null>(null)
 
   useEffect(() => {
     if (sessionStatus !== 'authenticated' || !locationId) return
@@ -105,11 +107,11 @@ export default function LocationDetailPage() {
     return () => { cancelled = true }
   }, [sessionStatus, locationId, refreshKey])
 
-  async function handleApproval(action: 'approve' | 'reject') {
-    if (!confirm(`Möchtest du diesen Ort wirklich ${action === 'approve' ? 'genehmigen' : 'ablehnen'}?`)) {
-      return
-    }
+  function handleApproval(action: 'approve' | 'reject') {
+    setPendingApprovalAction(action)
+  }
 
+  async function doApproval(action: 'approve' | 'reject') {
     setActionLoading(true)
     const result = await apiFetch<void>(`/api/locations/${locationId}/approve`, {
       method: 'POST',
@@ -119,7 +121,6 @@ export default function LocationDetailPage() {
       }
     })
     setActionLoading(false)
-
     if (result.success) {
       setRefreshKey(k => k + 1)
     } else {
@@ -466,6 +467,16 @@ export default function LocationDetailPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={!!pendingApprovalAction}
+        title={pendingApprovalAction === 'approve' ? 'Ort genehmigen' : 'Ort ablehnen'}
+        message={`Möchtest du diesen Ort wirklich ${pendingApprovalAction === 'approve' ? 'genehmigen' : 'ablehnen'}?`}
+        itemName={location?.name}
+        variant={pendingApprovalAction === 'approve' ? 'success' : 'danger'}
+        onConfirm={() => { const a = pendingApprovalAction!; setPendingApprovalAction(null); doApproval(a) }}
+        onClose={() => setPendingApprovalAction(null)}
+      />
     </div>
   )
 }
