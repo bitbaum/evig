@@ -14,7 +14,7 @@ import { query } from '@/lib/auth/db'
 import { submitVote, getPublicDecision } from '@/lib/services/decisions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 
@@ -38,7 +38,7 @@ export async function GET(
       )
     }
 
-    return apiSuccess({
+    return apiSuccessCached({
       id: decision.id,
       title: decision.title,
       description: decision.description,
@@ -49,7 +49,7 @@ export async function GET(
       dotCount: decision.dotCount,
       votingDeadline: decision.votingDeadline,
       allowPublicVoting: decision.allowPublicVoting,
-    })
+    }, 30)
   } catch (error) {
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }

@@ -31,6 +31,7 @@ jest.mock('@/lib/api/helpers', () => {
   const { NextResponse } = jest.requireActual('next/server')
   return {
     apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
+    apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }, { status: 200 }),
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
     apiBadRequest: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 400 }),
   }
