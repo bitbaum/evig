@@ -23,11 +23,11 @@ export default function DecisionFormClient() {
         <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">{form.error}</div>
       )}
 
-      {/* AI Assistant */}
+      {/* AI Assistant — open by default, reduces blank-page anxiety */}
       <AIFormAssist
         formType="decision"
         placeholder="Beschreibe was entschieden werden soll – z.B. 'Wir möchten eine Solaranlage aufs Dach installieren lassen und brauchen eine Entscheidung ob wir das Budget von 8000 CHF dafür freigeben.' Die KI strukturiert den Vorschlag und empfiehlt die passende Abstimmungsmethode."
-        defaultExpanded={false}
+        defaultExpanded={true}
         onFieldsFilled={form.handleAIFieldsFilled}
         currentData={{ title: form.title, description: form.description, background: form.background, options: form.options }}
       />
@@ -61,8 +61,6 @@ export default function DecisionFormClient() {
           </button>
         </div>
       )}
-
-      <DecisionTypeSelector selected={form.decisionType} onChange={form.handleTypeChange} />
 
       {/* Title */}
       <div>
@@ -121,6 +119,9 @@ export default function DecisionFormClient() {
           onUpdate={form.updateOption}
         />
       )}
+
+      {/* Decision Type — shown after user has context from title/description/options */}
+      <DecisionTypeSelector selected={form.decisionType} onChange={form.handleTypeChange} />
 
       {/* Weitere Einstellungen (Fristen, Abstimmungsberechtigt, Methode) */}
       <div>
@@ -221,30 +222,22 @@ export default function DecisionFormClient() {
       </div>
 
       {/* Submit */}
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="submit"
-          disabled={form.submitting}
-          onClick={() => { form.setInitialStatus(DECISION_STATUS.DRAFT); }}
-          className="rounded-lg bg-neutral-600 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
-        >
-          Als Entwurf speichern
-        </button>
-        <button
-          type="submit"
-          disabled={form.submitting}
-          onClick={() => { form.setInitialStatus(DECISION_STATUS.DISCUSSION); }}
-          className="rounded-lg bg-info-600 px-4 py-2 text-sm font-medium text-white hover:bg-info-700 disabled:opacity-50"
-        >
-          Zur Diskussion freigeben
-        </button>
+      <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
           disabled={form.submitting}
           onClick={() => { form.setInitialStatus(DECISION_STATUS.VOTING); }}
-          className="rounded-lg bg-warning-600 px-4 py-2 text-sm font-medium text-white hover:bg-warning-700 disabled:opacity-50"
+          className="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
         >
-          Direkt zur Abstimmung
+          {form.submitting ? 'Wird erstellt…' : 'Abstimmung starten →'}
+        </button>
+        <button
+          type="submit"
+          disabled={form.submitting}
+          onClick={() => { form.setInitialStatus(DECISION_STATUS.DRAFT); }}
+          className="text-sm text-neutral-500 hover:text-neutral-700 disabled:opacity-50"
+        >
+          Als Entwurf speichern
         </button>
       </div>
     </form>

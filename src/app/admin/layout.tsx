@@ -7,8 +7,10 @@
 
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 import { auth } from '@/auth'
-import { getAccessibleSections, isSuperAdmin, type AdminSection } from '@/lib/permissions'
+import { getAccessibleSections } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
 import { ORG } from '@/config/org'
 
@@ -24,42 +26,41 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  // Get session
   const session = await auth()
 
-  // Check if user is authenticated
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/admin')
   }
 
-  // Check if user is staff
   if (!session.user.isStaff) {
     redirect('/?error=not_staff')
   }
 
-  // Get accessible sections for this user
   const accessibleSections = getAccessibleSections({
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
   })
 
-  // If user has no permissions at all, redirect
   if (accessibleSections.length === 0) {
     redirect('/?error=no_admin_access')
   }
 
+  const messages = await getMessages()
+
   return (
-    <AdminLayoutClient
-      user={{
-        name: session.user.name ?? null,
-        email: session.user.email,
-        isStaff: session.user.isStaff,
-        staffPermissions: session.user.staffPermissions,
-      }}
-      accessibleSections={accessibleSections}
-    >
-      {children}
-    </AdminLayoutClient>
+    <NextIntlClientProvider messages={messages}>
+      <AdminLayoutClient
+        user={{
+          name: session.user.name ?? null,
+          email: session.user.email,
+          isStaff: session.user.isStaff,
+          staffPermissions: session.user.staffPermissions,
+        }}
+        accessibleSections={accessibleSections}
+      >
+        {children}
+      </AdminLayoutClient>
+    </NextIntlClientProvider>
   )
 }
