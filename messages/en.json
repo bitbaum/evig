@@ -5729,6 +5729,7 @@
       "unexpectedError": "An unexpected error occurred"
     },
     "seller": {
+      "pageTitle": "Seller Dashboard",
       "loading": "Loading dashboard...",
       "loadErrorTitle": "Error loading",
       "loadErrorGeneric": "Error loading dashboard",

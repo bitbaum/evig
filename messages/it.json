@@ -5767,6 +5767,7 @@
       "unexpectedError": "Si è verificato un errore imprevisto"
     },
     "seller": {
+      "pageTitle": "Dashboard venditore",
       "loading": "Caricamento dashboard...",
       "loadErrorTitle": "Errore di caricamento",
       "loadErrorGeneric": "Errore nel caricamento della dashboard",

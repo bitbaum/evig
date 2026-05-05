@@ -1,6 +1,7 @@
-import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { ROLES, type UserRole } from '@/lib/constants'
 import { isSuperAdmin } from '@/lib/permissions'
 import { getAllDashboardCards } from '@/config/dashboard'
@@ -9,10 +10,14 @@ import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
 import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
+import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Dashboard',
-  description: 'Verwalten Sie Ihr RevampIT-Konto, Workshops, Bestellungen und mehr.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('dashboard.meta')
+  return {
+    title: t('dashboardTitle'),
+    description: t('dashboardDesc'),
+  }
 }
 
 export default async function DashboardPage() {
@@ -21,6 +26,8 @@ export default async function DashboardPage() {
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/dashboard')
   }
+
+  const t = await getTranslations('dashboard.home')
 
   const cards = getAllDashboardCards({
     role: session.user.role,
@@ -43,10 +50,10 @@ export default async function DashboardPage() {
 
         <div className="mb-8">
           <h1 className={cn('text-3xl font-bold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
-            Willkommen zurück, {session.user.name || session.user.email}!
+            {t('welcomeBack', { name: session.user.name || session.user.email || t('unknownUser') })}
           </h1>
           <p className={cn('mt-2 text-sm sm:text-base', getTextColor('neutral', 'muted'), 'dark:text-neutral-400')}>
-            Verwalten Sie Ihr Konto und entdecken Sie alle verfügbaren Funktionen.
+            {t('subtitle')}
           </p>
         </div>
 

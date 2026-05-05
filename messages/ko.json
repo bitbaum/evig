@@ -5767,6 +5767,7 @@
       "unexpectedError": "예상치 못한 오류가 발생했습니다"
     },
     "seller": {
+      "pageTitle": "판매자 대시보드",
       "loading": "대시보드 불러오는 중...",
       "loadErrorTitle": "불러오기 오류",
       "loadErrorGeneric": "대시보드 불러오기 오류",

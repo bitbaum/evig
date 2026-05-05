@@ -5767,6 +5767,7 @@
       "unexpectedError": "予期しないエラーが発生しました"
     },
     "seller": {
+      "pageTitle": "セラーダッシュボード",
       "loading": "ダッシュボードを読み込み中...",
       "loadErrorTitle": "読み込みエラー",
       "loadErrorGeneric": "ダッシュボードの読み込みエラー",

@@ -5780,6 +5780,7 @@
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
     },
     "seller": {
+      "pageTitle": "Seller Dashboard",
       "loading": "Dashboard wird geladen...",
       "loadErrorTitle": "Fehler beim Laden",
       "loadErrorGeneric": "Fehler beim Laden des Dashboards",

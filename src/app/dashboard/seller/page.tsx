@@ -21,8 +21,7 @@ import { ListingImage } from '@/components/marketplace/ListingImage'
 import { apiFetch } from '@/lib/api/client'
 import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { ORG } from '@/config/org'
+import { useTranslations } from 'next-intl'
 import type { ListingStatus } from '@/config/marketplace'
 
 interface Product {
@@ -54,16 +53,12 @@ interface DashboardData {
 }
 
 export default function SellerDashboard() {
+  const t = useTranslations('dashboard.seller')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [data, setData] = useState<DashboardData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    // Set page title
-    document.title = `Seller Dashboard | ${ORG.name}`
-  }, [])
 
   useEffect(() => {
     if (status === 'loading') return
@@ -96,40 +91,16 @@ export default function SellerDashboard() {
     if (result.success && result.data) {
       setData(result.data)
     } else {
-      setError(result.error || ERROR_MESSAGES.UNEXPECTED_ERROR)
+      setError(result.error || t('unexpectedError'))
     }
     setIsLoading(false)
   }
 
   const quickActions = [
-    {
-      title: 'Neues Produkt',
-      description: 'Produkt zum Marketplace hinzufügen',
-      href: '/marketplace/sell',
-      icon: Plus,
-      color: 'bg-primary-500',
-    },
-    {
-      title: 'Meine Produkte',
-      description: 'Alle Ihre Produkte verwalten',
-      href: '/dashboard/listings',
-      icon: Package,
-      color: 'bg-info-500',
-    },
-    {
-      title: 'Verkäufe',
-      description: 'Bestellungen und Verkäufe anzeigen',
-      href: '/dashboard/orders',
-      icon: TrendingUp,
-      color: 'bg-purple-500',
-    },
-    {
-      title: 'Marketplace',
-      description: 'Marketplace ansehen',
-      href: '/marketplace',
-      icon: BarChart3,
-      color: 'bg-orange-500',
-    },
+    { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: '/marketplace/sell', icon: Plus, color: 'bg-primary-500' },
+    { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-info-500' },
+    { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-purple-500' },
+    { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: '/marketplace', icon: BarChart3, color: 'bg-orange-500' },
   ]
 
   const getStatusLabel = (status: string) => {
@@ -142,7 +113,7 @@ export default function SellerDashboard() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
-        <span className="ml-3 text-neutral-600 dark:text-neutral-400">Dashboard wird geladen...</span>
+        <span className="ml-3 text-neutral-600 dark:text-neutral-400">{t('loading')}</span>
       </div>
     )
   }
@@ -152,7 +123,7 @@ export default function SellerDashboard() {
       <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-error-800 dark:text-error-200 mb-2">
-          Fehler beim Laden
+          {t('loadErrorTitle')}
         </h3>
         <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
         <button
@@ -160,7 +131,7 @@ export default function SellerDashboard() {
           className="inline-flex items-center gap-2 bg-error-600 hover:bg-error-700 text-white px-4 py-2 rounded-lg"
         >
           <RefreshCw className="w-4 h-4" />
-          Erneut versuchen
+          {t('retry')}
         </button>
       </div>
     )
@@ -185,16 +156,16 @@ export default function SellerDashboard() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold mb-2">
-              Seller Dashboard
+              {t('pageTitle')}
             </h1>
             <p className="text-primary-100">
-              Verwalten Sie Ihre Produkte im {ORG.name} Marketplace und verfolgen Sie Ihre Verkäufe.
+              {t('pageSubtitle')}
             </p>
           </div>
           <button
             onClick={fetchDashboardData}
             className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-            title="Aktualisieren"
+            title={t('refresh')}
           >
             <RefreshCw className="w-5 h-5" />
           </button>
@@ -206,9 +177,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Meine Produkte</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsProducts')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalProducts}</p>
-              <p className="text-sm text-primary-600">{stats.activeProducts} aktiv</p>
+              <p className="text-sm text-primary-600">{t('statsActive', { count: stats.activeProducts })}</p>
             </div>
             <Package className="w-8 h-8 text-info-600" />
           </div>
@@ -217,13 +188,13 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Umsatz</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsRevenue')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">
                 {formatCHF(stats.totalRevenue)}
               </p>
               <p className="text-sm text-primary-600 flex items-center gap-1">
                 <TrendingUp className="w-4 h-4" />
-                Gesamtumsatz
+                {t('statsTotalRevenue')}
               </p>
             </div>
             <DollarSign className="w-8 h-8 text-primary-600" />
@@ -233,9 +204,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Produkt-Aufrufe</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsViews')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-info-600">{stats.totalFavorites} Favoriten</p>
+              <p className="text-sm text-info-600">{t('statsFavorites', { count: stats.totalFavorites })}</p>
             </div>
             <Eye className="w-8 h-8 text-info-600" />
           </div>
@@ -244,9 +215,9 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bestellungen</p>
+              <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsOrders')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalOrders}</p>
-              <p className="text-sm text-purple-600">ausstehend: {stats.pendingOrders}</p>
+              <p className="text-sm text-purple-600">{t('statsPending', { count: stats.pendingOrders })}</p>
             </div>
             <Users className="w-8 h-8 text-purple-600" />
           </div>
@@ -258,10 +229,10 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
-              Meine Produkte
+              {t('recentTitle')}
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-              Übersicht Ihrer Produkte
+              {t('recentSubtitle')}
             </p>
           </div>
 
@@ -270,14 +241,14 @@ export default function SellerDashboard() {
               <div className="text-center py-8">
                 <Package className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
                 <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-                  Sie haben noch keine Produkte erstellt.
+                  {t('noProducts')}
                 </p>
                 <Link
                   href="/marketplace/sell"
                   className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg"
                 >
                   <Plus className="w-4 h-4" />
-                  Erstes Produkt erstellen
+                  {t('createFirst')}
                 </Link>
               </div>
             ) : (
@@ -294,7 +265,7 @@ export default function SellerDashboard() {
                           {product.title}
                         </h3>
                         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-                          CHF {product.price} • {product.viewsCount} Aufrufe
+                          CHF {product.price} • {t('viewCount', { count: product.viewsCount })}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -314,7 +285,7 @@ export default function SellerDashboard() {
                   href="/dashboard/listings"
                   className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 font-medium flex items-center gap-1"
                 >
-                  Alle Produkte verwalten
+                  {t('manageAll')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -326,10 +297,10 @@ export default function SellerDashboard() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
           <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
             <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
-              Schnellzugriff
+              {t('quickActionsTitle')}
             </h2>
             <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-              Häufig verwendete Seller-Funktionen
+              {t('quickActionsSubtitle')}
             </p>
           </div>
 
@@ -367,25 +338,23 @@ export default function SellerDashboard() {
           </div>
           <div>
             <h3 className="font-medium text-info-900 dark:text-info-200">
-              {ORG.name} Marketplace
+              {t('infoTitle')}
             </h3>
             <p className="text-sm text-info-700 dark:text-info-300 mt-1">
-              Als Seller können Sie Ihre eigenen refurbished Produkte im {ORG.name} Marketplace verkaufen.
-              Ihre Produkte erscheinen neben den offiziellen {ORG.name} Produkten und helfen dabei,
-              die Kreislaufwirtschaft zu fördern.
+              {t('infoDesc')}
             </p>
             <div className="mt-3 flex gap-3">
               <Link
                 href="/marketplace"
                 className="text-sm bg-info-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
               >
-                Marketplace ansehen
+                {t('viewMarketplace')}
               </Link>
               <Link
                 href="/marketplace/sell"
                 className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
-                Produkt hinzufügen
+                {t('addProduct')}
               </Link>
             </div>
           </div>

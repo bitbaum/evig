@@ -5731,6 +5731,7 @@
       "unexpectedError": "Une erreur inattendue s'est produite"
     },
     "seller": {
+      "pageTitle": "Tableau de bord vendeur",
       "loading": "Chargement du tableau de bord...",
       "loadErrorTitle": "Erreur de chargement",
       "loadErrorGeneric": "Erreur lors du chargement du tableau de bord",

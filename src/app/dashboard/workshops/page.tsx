@@ -2,14 +2,15 @@
 
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import { Calendar, Clock, MapPin, Users, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
-import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_REGISTRATION_STATUS_LABELS } from '@/config/workshop-registration-status'
+import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { useTranslations } from 'next-intl'
 
 interface WorkshopRegistration {
   id: string
@@ -28,6 +29,8 @@ interface WorkshopRegistration {
 }
 
 export default function WorkshopsDashboard() {
+  const t = useTranslations('dashboard.workshops')
+  const tDates = useTranslations('dashboard.dates')
   const { data: session, status } = useSession()
   const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,7 +52,7 @@ export default function WorkshopsDashboard() {
     if (result.success && result.data) {
       setRegistrations(result.data.registrations || [])
     } else {
-      setError(result.error || 'Fehler beim Laden der Workshop-Anmeldungen')
+      setError(result.error || t('loadError'))
     }
     setLoading(false)
   }
@@ -71,7 +74,7 @@ export default function WorkshopsDashboard() {
       setEditingId(null)
       fetchRegistrations()
     } else {
-      setError(result.error || 'Speichern fehlgeschlagen')
+      setError(result.error || t('saveFailed'))
     }
     setSaving(false)
   }
@@ -87,7 +90,7 @@ export default function WorkshopsDashboard() {
     if (result.success) {
       fetchRegistrations()
     } else {
-      setError(result.error || 'Stornierung fehlgeschlagen')
+      setError(result.error || t('cancelFailed'))
     }
   }
 
@@ -104,7 +107,14 @@ export default function WorkshopsDashboard() {
     }
   }
 
-  const getStatusText = (status: string) => WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED: return t('statusConfirmed')
+      case WORKSHOP_REGISTRATION_STATUS.PENDING: return t('statusPending')
+      case WORKSHOP_REGISTRATION_STATUS.CANCELLED: return t('statusCancelled')
+      default: return status
+    }
+  }
 
 
   if (status === 'loading' || loading) {
@@ -131,15 +141,15 @@ export default function WorkshopsDashboard() {
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>Anmeldung erforderlich</h1>
+            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>{t('loginRequired')}</h1>
             <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              Bitte melden Sie sich an, um Ihre Workshop-Anmeldungen zu sehen.
+              {t('loginDesc')}
             </p>
             <Link
               href="/auth/login"
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
             >
-              Anmelden
+              {t('login')}
             </Link>
           </div>
         </div>
@@ -157,11 +167,11 @@ export default function WorkshopsDashboard() {
             className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Zurück zum Dashboard
+            {t('backToDashboard')}
           </Link>
-          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>Meine Workshops</h1>
+          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>{t('pageTitle')}</h1>
           <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            Übersicht Ihrer Workshop-Anmeldungen und Teilnahmen
+            {t('pageSubtitle')}
           </p>
         </div>
 
@@ -189,7 +199,7 @@ export default function WorkshopsDashboard() {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>Angemeldet am {formatDate(registration.created_at)}</span>
+                        <span>{tDates('registeredOn', { date: formatDate(registration.created_at) })}</span>
                       </div>
                     </div>
                   </div>
@@ -200,10 +210,10 @@ export default function WorkshopsDashboard() {
                   <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
                     <div className="flex items-center text-primary-800">
                       <CheckCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Ihre Anmeldung wurde bestätigt!</span>
+                      <span className="font-medium">{t('confirmedTitle')}</span>
                     </div>
                     <p className="text-primary-700 text-sm mt-1">
-                      Sie erhalten in Kürze weitere Informationen zu Datum und Ort.
+                      {t('confirmedDesc')}
                     </p>
                   </div>
                 )}
@@ -212,10 +222,10 @@ export default function WorkshopsDashboard() {
                   <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
                     <div className="flex items-center text-warning-800">
                       <AlertCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Anmeldung ausstehend</span>
+                      <span className="font-medium">{t('pendingTitle')}</span>
                     </div>
                     <p className="text-warning-700 text-sm mt-1">
-                      Ihre Anmeldung wird von unserem Team geprüft. Sie erhalten eine Bestätigung per E-Mail.
+                      {t('pendingDesc')}
                     </p>
                   </div>
                 )}
@@ -224,11 +234,11 @@ export default function WorkshopsDashboard() {
                   <div className="bg-error-50 border border-error-200 rounded-lg p-4">
                     <div className="flex items-center text-error-800">
                       <XCircle className="w-5 h-5 mr-2" />
-                      <span className="font-medium">Anmeldung storniert</span>
+                      <span className="font-medium">{t('cancelledTitle')}</span>
                     </div>
                     {registration.cancelled_at && (
                       <p className="text-error-700 text-sm mt-1">
-                        Storniert am {formatDate(registration.cancelled_at)}
+                        {t('cancelledOn', { date: formatDate(registration.cancelled_at) })}
                       </p>
                     )}
                   </div>
@@ -241,13 +251,13 @@ export default function WorkshopsDashboard() {
                       onClick={() => setPendingCancelId(registration.id)}
                       className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
-                      Anmeldung stornieren
+                      {t('cancelButton')}
                     </button>
                     <button
                       onClick={() => openEdit(registration)}
                       className="px-4 py-2 rounded-lg border border-info-300 text-info-700 hover:bg-info-50"
                     >
-                      {registration.feedback || registration.rating ? 'Feedback bearbeiten' : 'Feedback hinzufügen'}
+                      {registration.feedback || registration.rating ? t('feedbackEdit') : t('feedbackAdd')}
                     </button>
                   </div>
                 )}
@@ -258,16 +268,16 @@ export default function WorkshopsDashboard() {
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <Calendar className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-              Noch keine Workshop-Anmeldungen
+              {t('emptyTitle')}
             </h3>
             <p className="text-neutral-600 mb-6">
-              Sie haben sich noch für keine Workshops angemeldet.
+              {t('emptyDesc')}
             </p>
             <Link
               href="/workshops"
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
             >
-              Workshops entdecken
+              {t('discoverWorkshops')}
             </Link>
           </div>
         )}
@@ -275,8 +285,8 @@ export default function WorkshopsDashboard() {
 
       <ConfirmDialog
         isOpen={!!pendingCancelId}
-        title="Anmeldung stornieren"
-        message="Möchten Sie diese Anmeldung wirklich stornieren?"
+        title={t('cancelButton')}
+        message={t('confirmCancel')}
         itemName={registrations.find(r => r.id === pendingCancelId)?.workshop_title}
         onConfirm={doCancel}
         onClose={() => setPendingCancelId(null)}
@@ -284,10 +294,10 @@ export default function WorkshopsDashboard() {
 
       <Modal open={!!editingId} onClose={() => setEditingId(null)}>
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">Feedback bearbeiten</h3>
+          <h3 className="text-lg font-semibold text-neutral-900 mb-4">{t('modalTitle')}</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Bewertung (1-5)</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('ratingLabel')}</label>
               <input
                 type="number"
                 min={1}
@@ -298,20 +308,20 @@ export default function WorkshopsDashboard() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Feedback</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('feedbackLabel')}</label>
               <textarea
                 value={editFeedback}
                 onChange={(e) => setEditFeedback(e.target.value)}
                 rows={4}
                 className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
-                placeholder="Wie war Ihre Erfahrung?"
+                placeholder={t('feedbackPlaceholder')}
               />
             </div>
           </div>
           <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">Abbrechen</button>
+            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">{t('cancel')}</button>
             <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-info-600 text-white disabled:opacity-50">
-              {saving ? 'Speichern…' : 'Speichern'}
+              {saving ? t('saving') : t('save')}
             </button>
           </div>
         </div>

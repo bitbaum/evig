@@ -5767,6 +5767,7 @@
       "unexpectedError": "Ocurrió un error inesperado"
     },
     "seller": {
+      "pageTitle": "Panel de vendedor",
       "loading": "Cargando panel...",
       "loadErrorTitle": "Error al cargar",
       "loadErrorGeneric": "Error al cargar el panel",
