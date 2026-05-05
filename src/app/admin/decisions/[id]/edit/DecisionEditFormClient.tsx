@@ -196,7 +196,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
           Erweiterte Einstellungen
         </button>
         {showAdvanced && (
-          <div className="mt-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+          <div className="mt-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-4">
             <AdvancedSettings
               votingMethod={votingMethod}
               onMethodChange={setVotingMethod}
@@ -208,9 +208,22 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
               onQuorumValueChange={setQuorumValue}
               blindVoting={blindVoting}
               onBlindVotingChange={setBlindVoting}
-              allowPublicVoting={allowPublicVoting}
-              onAllowPublicVotingChange={setAllowPublicVoting}
             />
+            {/* Public voting toggle */}
+            <label className="flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={allowPublicVoting}
+                onChange={(e) => setAllowPublicVoting(e.target.checked)}
+                className="mt-0.5 rounded border-primary-400 text-primary-600 focus:ring-primary-500"
+              />
+              <div>
+                <span className="text-sm font-medium text-primary-900">Mit Link teilen — kein Konto nötig</span>
+                <p className="text-xs text-primary-700 mt-0.5">
+                  Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
+                </p>
+              </div>
+            </label>
           </div>
         )}
       </div>

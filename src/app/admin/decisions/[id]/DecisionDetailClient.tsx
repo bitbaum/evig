@@ -39,16 +39,8 @@ export default function DecisionDetailClient({
   }, [decisionId]);
 
   useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      const result = await apiFetch<DecisionDetail>(`/api/decisions/${decisionId}`);
-      if (cancelled) return;
-      if (result.success && result.data) setDecision(result.data);
-      setLoading(false);
-    }
-    load();
-    return () => { cancelled = true; };
-  }, [decisionId]);
+    fetchDecision();
+  }, [fetchDecision]);
 
   async function handleTransition(
     newStatus: DecisionStatus,

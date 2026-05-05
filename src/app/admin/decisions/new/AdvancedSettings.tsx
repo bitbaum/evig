@@ -13,8 +13,6 @@ interface Props {
   onQuorumValueChange: (n: number) => void;
   blindVoting: boolean;
   onBlindVotingChange: (v: boolean) => void;
-  allowPublicVoting: boolean;
-  onAllowPublicVotingChange: (v: boolean) => void;
 }
 
 export function AdvancedSettings({
@@ -23,7 +21,6 @@ export function AdvancedSettings({
   quorumType, onQuorumTypeChange,
   quorumValue, onQuorumValueChange,
   blindVoting, onBlindVotingChange,
-  allowPublicVoting, onAllowPublicVotingChange,
 }: Props) {
   return (
     <div className="space-y-4">
@@ -31,6 +28,7 @@ export function AdvancedSettings({
       <div>
         <label htmlFor="decision-voting-method" className="mb-1 block text-sm font-medium text-neutral-700">
           Abstimmungsmethode
+          <span className="ml-1.5 font-normal text-neutral-400">(wird durch Entscheidungstyp gesetzt)</span>
         </label>
         <select
           id="decision-voting-method"
@@ -109,21 +107,6 @@ export function AdvancedSettings({
         Geheime Abstimmung (Stimmen erst nach eigener Abgabe sichtbar)
       </label>
 
-      {/* Public Voting */}
-      <div className="rounded-lg border border-primary-200 bg-primary-50 p-3">
-        <label className="flex items-center gap-2 text-sm font-medium text-primary-900">
-          <input
-            type="checkbox"
-            checked={allowPublicVoting}
-            onChange={(e) => onAllowPublicVotingChange(e.target.checked)}
-            className="rounded border-primary-400 text-primary-600 focus:ring-primary-500"
-          />
-          Öffentliche Abstimmung (Link teilbar — kein Konto nötig)
-        </label>
-        <p className="mt-1 text-xs text-primary-700 ml-5">
-          Wenn aktiviert, kann jede Person mit dem Link über ihre E-Mail-Adresse abstimmen — auch ohne Konto.
-        </p>
-      </div>
     </div>
   );
 }

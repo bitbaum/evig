@@ -213,13 +213,27 @@ export default function DecisionFormClient() {
                 onQuorumValueChange={form.setQuorumValue}
                 blindVoting={form.blindVoting}
                 onBlindVotingChange={form.setBlindVoting}
-                allowPublicVoting={form.allowPublicVoting}
-                onAllowPublicVotingChange={form.setAllowPublicVoting}
               />
             </div>
           </div>
         )}
       </div>
+
+      {/* Public voting — surfaced prominently so sharing is easy */}
+      <label className="flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={form.allowPublicVoting}
+          onChange={(e) => form.setAllowPublicVoting(e.target.checked)}
+          className="mt-0.5 rounded border-primary-400 text-primary-600 focus:ring-primary-500"
+        />
+        <div>
+          <span className="text-sm font-medium text-primary-900">Mit Link teilen — kein Konto nötig</span>
+          <p className="text-xs text-primary-700 mt-0.5">
+            Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
+          </p>
+        </div>
+      </label>
 
       {/* Submit */}
       <div className="flex flex-wrap items-center gap-4">
