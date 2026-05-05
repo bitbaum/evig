@@ -12,7 +12,7 @@ import { ParticipantSelector } from './ParticipantSelector';
 import { AdvancedSettings } from './AdvancedSettings';
 
 export default function DecisionFormClient() {
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showMore, setShowMore] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
 
   const form = useDecisionForm();
@@ -22,6 +22,15 @@ export default function DecisionFormClient() {
       {form.error && (
         <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">{form.error}</div>
       )}
+
+      {/* AI Assistant */}
+      <AIFormAssist
+        formType="decision"
+        placeholder="Beschreibe was entschieden werden soll – z.B. 'Wir möchten eine Solaranlage aufs Dach installieren lassen und brauchen eine Entscheidung ob wir das Budget von 8000 CHF dafür freigeben.' Die KI strukturiert den Vorschlag und empfiehlt die passende Abstimmungsmethode."
+        defaultExpanded={false}
+        onFieldsFilled={form.handleAIFieldsFilled}
+        currentData={{ title: form.title, description: form.description, background: form.background, options: form.options }}
+      />
 
       {/* Template Selector */}
       <div>
@@ -38,15 +47,6 @@ export default function DecisionFormClient() {
           </div>
         )}
       </div>
-
-      {/* AI Assistant */}
-      <AIFormAssist
-        formType="decision"
-        placeholder="Beschreibe was entschieden werden soll – z.B. 'Wir möchten eine Solaranlage aufs Dach installieren lassen und brauchen eine Entscheidung ob wir das Budget von 8000 CHF dafür freigeben.' Die KI strukturiert den Vorschlag und empfiehlt die passende Abstimmungsmethode."
-        defaultExpanded={true}
-        onFieldsFilled={form.handleAIFieldsFilled}
-        currentData={{ title: form.title, description: form.description, background: form.background, options: form.options }}
-      />
 
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
@@ -122,87 +122,106 @@ export default function DecisionFormClient() {
         />
       )}
 
-      {/* Fristen & Kategorie */}
-      <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-4">
-        <Heading level={3} className="text-sm font-medium text-neutral-900">Fristen &amp; Kategorie</Heading>
+      {/* Weitere Einstellungen (Fristen, Abstimmungsberechtigt, Methode) */}
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowMore((v) => !v)}
+          className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700"
+        >
+          <span className="text-xs">{showMore ? '▼' : '▶'}</span>
+          Weitere Einstellungen
+          <span className="text-xs text-neutral-400">(Fristen, Kategorie, Abstimmungsmethode…)</span>
+        </button>
 
-        <div>
-          <label htmlFor="decision-category" className="mb-1 block text-sm font-medium text-neutral-700">
-            Kategorie
-          </label>
-          <select
-            id="decision-category"
-            value={form.category}
-            onChange={(e) => form.setCategory(e.target.value as DecisionCategory)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          >
-            {Object.values(DECISION_CATEGORIES).map((cat) => (
-              <option key={cat} value={cat}>{DECISION_CATEGORY_LABELS[cat]}</option>
-            ))}
-          </select>
-        </div>
+        {showMore && (
+          <div className="mt-4 space-y-6">
+            {/* Fristen & Kategorie */}
+            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 space-y-4">
+              <Heading level={3} className="text-sm font-medium text-neutral-900">Fristen &amp; Kategorie</Heading>
 
-        <div>
-          <label htmlFor="discussion-deadline" className="mb-1 block text-sm font-medium text-neutral-700">
-            Diskussionsfrist
-          </label>
-          <input
-            id="discussion-deadline"
-            type="datetime-local"
-            value={form.discussionDeadline}
-            onChange={(e) => form.setDiscussionDeadline(e.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          />
-        </div>
+              <div>
+                <label htmlFor="decision-category" className="mb-1 block text-sm font-medium text-neutral-700">
+                  Kategorie
+                </label>
+                <select
+                  id="decision-category"
+                  value={form.category}
+                  onChange={(e) => form.setCategory(e.target.value as DecisionCategory)}
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                >
+                  {Object.values(DECISION_CATEGORIES).map((cat) => (
+                    <option key={cat} value={cat}>{DECISION_CATEGORY_LABELS[cat]}</option>
+                  ))}
+                </select>
+              </div>
 
-        <div>
-          <label htmlFor="voting-deadline" className="mb-1 block text-sm font-medium text-neutral-700">
-            Abstimmungsfrist
-          </label>
-          <input
-            id="voting-deadline"
-            type="datetime-local"
-            value={form.votingDeadline}
-            onChange={(e) => form.setVotingDeadline(e.target.value)}
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
-          />
-        </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="discussion-deadline" className="mb-1 block text-sm font-medium text-neutral-700">
+                    Diskussionsfrist
+                  </label>
+                  <input
+                    id="discussion-deadline"
+                    type="datetime-local"
+                    value={form.discussionDeadline}
+                    onChange={(e) => form.setDiscussionDeadline(e.target.value)}
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="voting-deadline" className="mb-1 block text-sm font-medium text-neutral-700">
+                    Abstimmungsfrist
+                  </label>
+                  <input
+                    id="voting-deadline"
+                    type="datetime-local"
+                    value={form.votingDeadline}
+                    onChange={(e) => form.setVotingDeadline(e.target.value)}
+                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
+                  />
+                </div>
+              </div>
 
-        <p className="text-xs text-neutral-500">
-          Entscheidungen werden automatisch geschlossen wenn die Abstimmungsfrist abläuft
-        </p>
+              <p className="text-xs text-neutral-500">
+                Entscheidungen werden automatisch geschlossen wenn die Abstimmungsfrist abläuft
+              </p>
+            </div>
+
+            <ParticipantSelector
+              participantScope={form.participantScope}
+              onScopeChange={form.setParticipantScope}
+              teamMembers={form.teamMembers}
+              selectedParticipants={form.selectedParticipants}
+              onToggle={form.toggleParticipant}
+              participantSearch={form.participantSearch}
+              onSearchChange={form.setParticipantSearch}
+              filteredMembers={form.filteredMembers}
+            />
+
+            <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+              <Heading level={3} className="text-sm font-medium text-neutral-900 mb-4">Abstimmungseinstellungen</Heading>
+              <AdvancedSettings
+                votingMethod={form.votingMethod}
+                onMethodChange={form.setVotingMethod}
+                dotCount={form.dotCount}
+                onDotCountChange={form.setDotCount}
+                quorumType={form.quorumType}
+                onQuorumTypeChange={form.setQuorumType}
+                quorumValue={form.quorumValue}
+                onQuorumValueChange={form.setQuorumValue}
+                blindVoting={form.blindVoting}
+                onBlindVotingChange={form.setBlindVoting}
+                allowPublicVoting={form.allowPublicVoting}
+                onAllowPublicVotingChange={form.setAllowPublicVoting}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
-      <ParticipantSelector
-        participantScope={form.participantScope}
-        onScopeChange={form.setParticipantScope}
-        teamMembers={form.teamMembers}
-        selectedParticipants={form.selectedParticipants}
-        onToggle={form.toggleParticipant}
-        participantSearch={form.participantSearch}
-        onSearchChange={form.setParticipantSearch}
-        filteredMembers={form.filteredMembers}
-      />
-
-      <AdvancedSettings
-        show={showAdvanced}
-        onToggle={() => setShowAdvanced((v) => !v)}
-        votingMethod={form.votingMethod}
-        onMethodChange={form.setVotingMethod}
-        dotCount={form.dotCount}
-        onDotCountChange={form.setDotCount}
-        quorumType={form.quorumType}
-        onQuorumTypeChange={form.setQuorumType}
-        quorumValue={form.quorumValue}
-        onQuorumValueChange={form.setQuorumValue}
-        blindVoting={form.blindVoting}
-        onBlindVotingChange={form.setBlindVoting}
-        allowPublicVoting={form.allowPublicVoting}
-        onAllowPublicVotingChange={form.setAllowPublicVoting}
-      />
-
       {/* Submit */}
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <button
           type="submit"
           disabled={form.submitting}

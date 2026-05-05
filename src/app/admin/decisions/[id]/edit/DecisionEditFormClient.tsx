@@ -186,22 +186,34 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         />
       )}
 
-      <AdvancedSettings
-        show={showAdvanced}
-        onToggle={() => setShowAdvanced(!showAdvanced)}
-        votingMethod={votingMethod}
-        onMethodChange={setVotingMethod}
-        dotCount={dotCount}
-        onDotCountChange={setDotCount}
-        quorumType={quorumType}
-        onQuorumTypeChange={setQuorumType}
-        quorumValue={quorumValue}
-        onQuorumValueChange={setQuorumValue}
-        blindVoting={blindVoting}
-        onBlindVotingChange={setBlindVoting}
-        allowPublicVoting={allowPublicVoting}
-        onAllowPublicVotingChange={setAllowPublicVoting}
-      />
+      <div>
+        <button
+          type="button"
+          onClick={() => setShowAdvanced((v) => !v)}
+          className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-700"
+        >
+          <span className="text-xs">{showAdvanced ? '▼' : '▶'}</span>
+          Erweiterte Einstellungen
+        </button>
+        {showAdvanced && (
+          <div className="mt-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+            <AdvancedSettings
+              votingMethod={votingMethod}
+              onMethodChange={setVotingMethod}
+              dotCount={dotCount}
+              onDotCountChange={setDotCount}
+              quorumType={quorumType}
+              onQuorumTypeChange={setQuorumType}
+              quorumValue={quorumValue}
+              onQuorumValueChange={setQuorumValue}
+              blindVoting={blindVoting}
+              onBlindVotingChange={setBlindVoting}
+              allowPublicVoting={allowPublicVoting}
+              onAllowPublicVotingChange={setAllowPublicVoting}
+            />
+          </div>
+        )}
+      </div>
 
       <div className="flex gap-3">
         <button
