@@ -1,6 +1,7 @@
 import { Star, FileText } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import type { RepairerApplication } from './types'
+import { formatCentsToChf } from '@/lib/pricing'
 
 interface Props {
   application: RepairerApplication
@@ -60,7 +61,7 @@ export function ApplicationDetails({ application }: Props) {
             <Heading level={4} className="text-neutral-900 mb-1">Stundensatz</Heading>
             <p className="text-neutral-600 text-sm">
               {application.hourlyRateCents
-                ? `CHF ${(application.hourlyRateCents / 100).toFixed(0)}/Std`
+                ? `${formatCentsToChf(application.hourlyRateCents)}/Std`
                 : 'Nicht angegeben'
               }
             </p>

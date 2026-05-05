@@ -55,6 +55,14 @@ export function calculateTotalWithFees(subtotal: number, currency: string = 'CHF
 }
 
 /**
+ * Format an integer cents value as CHF with no decimal places (e.g. 1200 → "CHF 12").
+ * Use for hourly rates and workshop prices where fractional cents don't apply.
+ */
+export function formatCentsToChf(cents: number): string {
+  return `CHF ${Math.round(cents / 100)}`
+}
+
+/**
  * Calculate display pricing from a service price in cents.
  */
 export function calculateServicePricing(priceCents: number, currency: string = 'CHF') {

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Package, Tag } from 'lucide-react'
 import type { InventoryProduct } from '@/lib/services/inventory-service'
+import { formatCHF } from '@/config/marketplace'
 
 interface Props {
   product: InventoryProduct
@@ -47,7 +48,7 @@ export function ProductCard({ product, stockOneLabel }: Props) {
         <div className="mt-auto flex items-center justify-between pt-2">
           <div className="flex items-center gap-1.5">
             <Tag className="w-3.5 h-3.5 text-emerald-600" />
-            <span className="font-bold text-emerald-700">CHF {product.price.toFixed(2)}</span>
+            <span className="font-bold text-emerald-700">{formatCHF(product.price)}</span>
           </div>
           <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded-full capitalize">
             {product.condition}

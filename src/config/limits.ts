@@ -17,8 +17,12 @@ export const TIME_DURATIONS = {
 export const UI_FEEDBACK_MS = {
   /** "Saved" / "Success" confirmation banners */
   SUCCESS: 3000,
+  /** Delay before redirecting after a successful form save (long enough to read the banner) */
+  REDIRECT: 1500,
   /** "Copied to clipboard" confirmation */
   COPY: 2000,
   /** Link-copied indicator (slightly longer — gives time to paste) */
   LINK_COPY: 2500,
+  /** Notification / result banners that auto-dismiss */
+  NOTIFICATION: 6000,
 } as const

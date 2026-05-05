@@ -1,45 +1,51 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useSyncExternalStore, useCallback } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 const CONSENT_KEY = 'cookie_consent'
 const CONSENT_VALUE = 'accepted'
 
+function subscribe(callback: () => void) {
+  window.addEventListener('storage', callback)
+  return () => window.removeEventListener('storage', callback)
+}
+
+function getSnapshot() {
+  try {
+    return localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE
+  } catch {
+    return true
+  }
+}
+
+// SSR snapshot: hide banner until hydration to avoid flash
+function getServerSnapshot() {
+  return false
+}
+
 /**
  * Cookie consent banner (Swiss DSG compliant).
  *
  * RevampIT uses only essential cookies (session, CSRF) — no tracking cookies.
  * Under Swiss DSG, a simple acknowledgment is sufficient; no granular consent needed.
- *
- * Hidden until hydration completes to prevent flash of banner on accepted state.
  */
 export function CookieBanner() {
   const t = useTranslations('cookies')
+  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
-  // Start hidden (matches SSR output). After hydration, read localStorage to
-  // decide whether to show — avoids SSR/client mismatch that breaks hydration.
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
+  const handleAccept = useCallback(() => {
     try {
-      setVisible(localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE)
+      localStorage.setItem(CONSENT_KEY, CONSENT_VALUE)
+      // Dispatch storage event so useSyncExternalStore re-evaluates getSnapshot
+      window.dispatchEvent(new StorageEvent('storage'))
     } catch {
-      setVisible(true)
+      // Ignore storage errors — banner will disappear on next page load
     }
   }, [])
 
   if (!visible) return null
-
-  const handleAccept = () => {
-    try {
-      localStorage.setItem(CONSENT_KEY, CONSENT_VALUE)
-    } catch {
-      // Ignore storage errors — user still gets UX of dismissal
-    }
-    setVisible(false)
-  }
 
   return (
     <div

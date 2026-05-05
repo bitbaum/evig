@@ -24,6 +24,7 @@ import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
+import { formatCentsToChf } from '@/lib/pricing'
 
 interface Technician {
   id: string
@@ -147,7 +148,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         {technician.hourlyRateCents && (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
             <Euro className="w-3 h-3" />
-            CHF {(technician.hourlyRateCents / 100).toFixed(0)}/h
+            {formatCentsToChf(technician.hourlyRateCents)}/h
           </span>
         )}
       </div>

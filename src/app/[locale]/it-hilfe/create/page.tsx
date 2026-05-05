@@ -30,6 +30,7 @@ import Heading from '@/components/ui/Heading'
 import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
 import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
 import { INITIAL_IT_HILFE_FORM } from '@/components/it-hilfe-create/types'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 
 /** Subset of fields the AI form assist can fill. */
 interface AIFormFields {
@@ -172,7 +173,7 @@ export default function CreatePeerRepairPage() {
       setSuccess(true)
       setTimeout(() => {
         router.push(`/it-hilfe/${result.data!.requestId}`)
-      }, 1500)
+      }, UI_FEEDBACK_MS.REDIRECT)
     } catch (err) {
       const message = err instanceof Error ? err.message : t('errorGeneric')
       setError(message)

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { formatCentsToChf } from '@/lib/pricing'
 import { CONVERSATION_TYPES } from '@/config/database'
 
 interface Helper {
@@ -163,7 +164,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
         {helper.hourlyRateCents && (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
             <Euro className="w-3 h-3" />
-            CHF {(helper.hourlyRateCents / 100).toFixed(0)}/h
+            {formatCentsToChf(helper.hourlyRateCents)}/h
           </span>
         )}
       </div>

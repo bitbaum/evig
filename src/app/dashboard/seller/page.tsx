@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -60,6 +60,18 @@ export default function SellerDashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  const fetchDashboardData = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    const result = await apiFetch<DashboardData>('/api/seller/dashboard')
+    if (result.success && result.data) {
+      setData(result.data)
+    } else {
+      setError(result.error || t('unexpectedError'))
+    }
+    setIsLoading(false)
+  }, [t])
+
   useEffect(() => {
     if (status === 'loading') return
 
@@ -81,20 +93,9 @@ export default function SellerDashboard() {
       return
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchDashboardData()
-  }, [session, status, router])
-
-  const fetchDashboardData = async () => {
-    setIsLoading(true)
-    setError(null)
-    const result = await apiFetch<DashboardData>('/api/seller/dashboard')
-    if (result.success && result.data) {
-      setData(result.data)
-    } else {
-      setError(result.error || t('unexpectedError'))
-    }
-    setIsLoading(false)
-  }
+  }, [session, status, router, fetchDashboardData])
 
   const quickActions = [
     { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: '/marketplace/sell', icon: Plus, color: 'bg-primary-500' },

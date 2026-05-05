@@ -77,7 +77,7 @@ export default function DecisionHeaderCard({
     setSendingInvitations(false);
     if (result.success && result.data) {
       setInvitationsResult(result.data);
-      setTimeout(() => setInvitationsResult(null), 6000);
+      setTimeout(() => setInvitationsResult(null), UI_FEEDBACK_MS.NOTIFICATION);
     } else {
       onError(result.error || 'Fehler beim Senden der Einladungen');
     }

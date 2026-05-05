@@ -179,7 +179,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
             {technician.hourlyRateCents && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-primary-50 text-primary-700">
                 <Euro className="w-3.5 h-3.5" />
-                {t('detail.hourlyRate', { rate: (technician.hourlyRateCents / 100).toFixed(0) })}
+                {t('detail.hourlyRate', { rate: Math.round(technician.hourlyRateCents / 100) })}
               </span>
             )}
           </div>
@@ -240,12 +240,12 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   <div className="text-right flex-shrink-0">
                     {service.basePriceCents && (
                       <p className="font-semibold text-neutral-900">
-                        {t('detail.priceFrom', { price: (service.basePriceCents / 100).toFixed(0) })}
+                        {t('detail.priceFrom', { price: Math.round(service.basePriceCents / 100) })}
                       </p>
                     )}
                     {service.hourlyRateCents && (
                       <p className="text-sm text-neutral-600">
-                        {t('detail.hourlyRate', { rate: (service.hourlyRateCents / 100).toFixed(0) })}
+                        {t('detail.hourlyRate', { rate: Math.round(service.hourlyRateCents / 100) })}
                       </p>
                     )}
                   </div>

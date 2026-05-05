@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import Heading from '@/components/admin/AdminHeading'
 import { getConditionBadge } from '@/config/erfassung/conditions'
+import { formatCHF } from '@/config/marketplace'
 import {
   Package,
   Eye,
@@ -143,7 +144,7 @@ export function ShopProductsTable({
                 </td>
                 <td className="px-6 py-4">
                   <span className="font-medium text-neutral-900">
-                    CHF {product.price.toFixed(2)}
+                    {formatCHF(product.price)}
                   </span>
                 </td>
                 <td className="px-6 py-4">

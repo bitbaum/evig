@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * ListingCard Component
  *
@@ -12,7 +14,7 @@ import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketpl
 import { ListingImage } from './ListingImage'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
-import { getTranslations } from 'next-intl/server'
+import { useTranslations } from 'next-intl'
 
 export interface ListingCardData {
   id: string
@@ -53,8 +55,8 @@ function getSpecTags(specs?: Array<{ key: string; value: string; unit: string | 
   return tags
 }
 
-export async function ListingCard({ listing, variant = 'default', className = '' }: ListingCardProps) {
-  const t = await getTranslations('components.listingCard')
+export function ListingCard({ listing, variant = 'default', className = '' }: ListingCardProps) {
+  const t = useTranslations('components.listingCard')
   const conditionInfo = getConditionBadge(listing.condition)
   const sellerName = listing.seller_display_name || listing.seller_name
   const isCompact = variant === 'compact'

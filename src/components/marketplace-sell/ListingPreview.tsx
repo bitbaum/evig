@@ -5,7 +5,7 @@ import { ArrowLeft, Eye, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
-import { formatCHF, DELIVERY_LABELS, PAYMENT_MODE_LABELS } from '@/config/marketplace'
+import { formatCHF, DELIVERY_LABELS, PAYMENT_MODE_LABELS, CATEGORY_LABELS } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import type { ListingFormData } from './types'
@@ -60,7 +60,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
               <Heading level={2} className="text-2xl font-bold text-neutral-900 dark:text-white">{formData.title}</Heading>
               <p className="text-3xl font-bold text-primary-600 mt-2">{formatCHF(parseFloat(formData.price) || 0)}</p>
               <div className="flex gap-2 mt-3">
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">{formData.category}</span>
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">{CATEGORY_LABELS[formData.category] || formData.category}</span>
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-info-100 text-info-800">{conditionLabel}</span>
               </div>
             </div>

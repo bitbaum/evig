@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
@@ -41,13 +41,7 @@ export default function WorkshopsDashboard() {
   const [saving, setSaving] = useState(false)
   const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (session?.user) {
-      fetchRegistrations()
-    }
-  }, [session])
-
-  const fetchRegistrations = async () => {
+  const fetchRegistrations = useCallback(async () => {
     const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
     if (result.success && result.data) {
       setRegistrations(result.data.registrations || [])
@@ -55,7 +49,13 @@ export default function WorkshopsDashboard() {
       setError(result.error || t('loadError'))
     }
     setLoading(false)
-  }
+  }, [t])
+
+  useEffect(() => {
+    if (!session?.user) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchRegistrations()
+  }, [session, fetchRegistrations])
 
   const openEdit = (reg: WorkshopRegistration) => {
     setEditingId(reg.id)

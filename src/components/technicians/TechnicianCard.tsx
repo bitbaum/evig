@@ -7,6 +7,7 @@ import Heading from '@/components/ui/Heading'
 import { StarRating } from '@/components/ui/StarRating'
 import { type TechnicianProfile } from './types'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
+import { formatCentsToChf } from '@/lib/pricing'
 
 interface TechnicianCardProps {
   technician: TechnicianProfile
@@ -137,7 +138,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
           {technician.hourlyRateCents && (
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
               <Euro className="w-3 h-3" />
-              CHF {(technician.hourlyRateCents / 100).toFixed(0)}/h
+              {formatCentsToChf(technician.hourlyRateCents)}/h
             </span>
           )}
           {!technician.hourlyRateCents && !technician.acceptsGratis && (

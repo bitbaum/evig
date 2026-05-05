@@ -57,6 +57,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
 
   return (
     <>
+      {/* Section header: Basic info */}
+      <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest">{t('sectionBasicInfo')}</h2>
+
       {/* Title */}
       <div>
         <div className="flex items-center justify-between mb-1">
@@ -98,6 +101,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white resize-y"
         />
       </div>
+
+      {/* Section header: Category & condition */}
+      <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest pt-2">{t('sectionCategoryCondition')}</h2>
 
       {/* Price + Category + Condition */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -213,6 +219,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           onSpecsChange={handleSpecsChange}
         />
       )}
+
+      {/* Section header: Delivery & payment */}
+      <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest pt-2">{t('sectionDelivery')}</h2>
 
       {/* Delivery + Payment */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

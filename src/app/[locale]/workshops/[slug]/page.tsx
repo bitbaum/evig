@@ -246,7 +246,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
                   <Award className="w-8 h-8 text-orange-600 mx-auto mb-2" />
                   <div className="text-sm font-medium text-neutral-900">{t('detail.price')}</div>
                   <div className="text-sm text-neutral-600">
-                    {workshop.price_cents === 0 ? t('detail.free') : t('detail.priceChf', { amount: (workshop.price_cents / 100).toFixed(0) })}
+                    {workshop.price_cents === 0 ? t('detail.free') : t('detail.priceChf', { amount: Math.round(workshop.price_cents / 100) })}
                   </div>
                 </div>
               </div>

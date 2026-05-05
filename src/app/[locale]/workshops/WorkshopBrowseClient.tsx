@@ -25,6 +25,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 import { ORG } from '@/config/org'
 import { useTranslations } from 'next-intl'
+import { formatCentsToChf } from '@/lib/pricing'
 
 interface WorkshopBrowseClientProps {
   workshops: WorkshopWithInstances[]
@@ -225,7 +226,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                       <span className="text-2xl font-bold text-primary-600">
                         {workshop.price_cents === 0
                           ? t('free')
-                          : `CHF ${(workshop.price_cents / 100).toFixed(0)}`}
+                          : formatCentsToChf(workshop.price_cents)}
                       </span>
                       {workshop.user_registered && (
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800">

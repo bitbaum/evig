@@ -17,6 +17,7 @@ import {
 import { SHOPWARE_URL } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { formatCHF } from '@/config/marketplace'
 
 interface ProductPageProps {
   params: Promise<{ locale: string; uuid: string }>
@@ -170,7 +171,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <div className="flex items-center gap-2">
                 <Tag className="w-5 h-5 text-emerald-600" />
                 <span className="text-3xl font-bold text-emerald-700">
-                  CHF {product.price.toFixed(2)}
+                  {formatCHF(product.price)}
                 </span>
               </div>
               <span className={`px-3 py-1 rounded-full text-sm font-medium ${conditionColor}`}>

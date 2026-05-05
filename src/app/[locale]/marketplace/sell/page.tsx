@@ -11,6 +11,7 @@ import {
   Camera,
 } from 'lucide-react'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
@@ -221,7 +222,7 @@ function SellPageContent() {
 
       if (result.success && result.data?.id) {
         setSuccess(editId ? t('saveSuccess') : t('createSuccess'))
-        setTimeout(() => router.push(`/marketplace/${result.data!.id}`), 1500)
+        setTimeout(() => router.push(`/marketplace/${result.data!.id}`), UI_FEEDBACK_MS.REDIRECT)
       } else {
         setError(result.error || (editId ? t('saveError') : t('createError')))
         setStep('form')
@@ -274,6 +275,51 @@ function SellPageContent() {
         {t('backToMarketplace')}
       </Link>
 
+      {/* Step indicator */}
+      <div className="flex items-center gap-0 mb-6">
+        <div className="flex items-center gap-2">
+          <span className="w-7 h-7 rounded-full bg-primary-600 text-white text-xs font-bold flex items-center justify-center">1</span>
+          <span className="text-sm font-semibold text-primary-700 dark:text-primary-400">{t('stepDetails')}</span>
+        </div>
+        <div className="flex-1 h-px bg-neutral-300 dark:bg-neutral-600 mx-3" />
+        <div className="flex items-center gap-2">
+          <span className="w-7 h-7 rounded-full bg-neutral-200 dark:bg-neutral-600 text-neutral-500 text-xs font-bold flex items-center justify-center">2</span>
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">{t('stepPreview')}</span>
+        </div>
+      </div>
+
+      {/* AI Camera overlay */}
+      {showCamera && (
+        <AICameraProductListing
+          onProductDetected={handleCameraProductDetected}
+          onClose={() => setShowCamera(false)}
+        />
+      )}
+
+      {/* AI assist + camera — outside main card so they don't crowd the form */}
+      {!showCamera && (
+        <div className="space-y-3 mb-6">
+          <AIFormAssist
+            formType="marketplace"
+            currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
+            onFieldsFilled={handleAIFieldsFilled}
+            placeholder={t('aiPlaceholder')}
+            defaultExpanded={false}
+            variant="section"
+          />
+          {!editId && (
+            <button
+              type="button"
+              onClick={() => setShowCamera(true)}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg border border-dashed border-neutral-300 dark:border-neutral-600 text-neutral-500 dark:text-neutral-400 hover:border-primary-400 hover:text-primary-600 transition-colors text-sm"
+            >
+              <Camera className="w-4 h-4" />
+              {t('cameraButton')}
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
         <div className="p-4 md:p-6 border-b border-neutral-100 dark:border-neutral-700">
           <Heading level={1} className="text-xl text-neutral-900 dark:text-white flex items-center gap-2">
@@ -285,47 +331,19 @@ function SellPageContent() {
           </p>
         </div>
 
-        <div className="p-4 md:p-6 space-y-6">
-          {/* AI Camera overlay */}
-          {showCamera && (
-            <AICameraProductListing
-              onProductDetected={handleCameraProductDetected}
-              onClose={() => setShowCamera(false)}
+        <div className="p-4 md:p-6 space-y-8">
+          {/* Section: Photos */}
+          <div>
+            <h2 className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-3">{t('sectionPhotos')}</h2>
+            <ImageUploadGrid
+              images={formData.images}
+              isUploading={isUploading}
+              onUpload={handleImageUpload}
+              onRemove={removeImage}
             />
-          )}
+          </div>
 
-          {/* === AI ASSISTANT === */}
-          {!showCamera && (
-            <>
-              <AIFormAssist
-                formType="marketplace"
-                currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
-                onFieldsFilled={handleAIFieldsFilled}
-                placeholder={t('aiPlaceholder')}
-                defaultExpanded={true}
-                variant="section"
-              />
-              {/* Camera trigger (creation mode only, when no form data yet) */}
-              {!editId && !formData.title && !formData.description && (
-                <button
-                  type="button"
-                  onClick={() => setShowCamera(true)}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 border-dashed border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
-                >
-                  <Camera className="w-5 h-5" />
-                  {t('cameraButton')}
-                </button>
-              )}
-            </>
-          )}
-
-          {/* Images */}
-          <ImageUploadGrid
-            images={formData.images}
-            isUploading={isUploading}
-            onUpload={handleImageUpload}
-            onRemove={removeImage}
-          />
+          <div className="border-t border-neutral-100 dark:border-neutral-700" />
 
           {/* Form fields */}
           <ListingFormFields formData={formData} setFormData={setFormData} />

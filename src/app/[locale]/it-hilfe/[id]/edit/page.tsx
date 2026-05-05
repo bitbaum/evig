@@ -28,6 +28,7 @@ import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
 
 export default function EditRequestPage() {
@@ -178,7 +179,7 @@ export default function EditRequestPage() {
       }
 
       setSuccess(true)
-      setTimeout(() => router.push(`/it-hilfe/${id}`), 1500)
+      setTimeout(() => router.push(`/it-hilfe/${id}`), UI_FEEDBACK_MS.REDIRECT)
     } catch (err) {
       const message = err instanceof Error ? err.message : t('errorGeneric')
       setError(message)

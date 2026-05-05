@@ -16,6 +16,7 @@ import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import type { CategoryFormData } from '@/hooks/useBlogCategories'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 import { generateSlug } from '@/lib/utils/slug'
+import { UI_FEEDBACK_MS } from '@/config/limits'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
@@ -54,7 +55,7 @@ export default function CategoryForm({
     e.preventDefault()
     const saved = await saveCategory(formData, { isEdit, id: initialData?.id })
     if (saved) {
-      setTimeout(() => router.push('/admin/content/categories'), 1000)
+      setTimeout(() => router.push('/admin/content/categories'), UI_FEEDBACK_MS.REDIRECT)
     }
   }
 

@@ -4,6 +4,7 @@ import { Calendar, MapPin, Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 import type { WorkshopInstance } from './types'
+import { formatCentsToChf } from '@/lib/pricing'
 
 interface WorkshopInstanceCardProps {
   instance: WorkshopInstance
@@ -42,7 +43,7 @@ export function WorkshopInstanceCard({
       {/* Price */}
       <div className="text-center mb-4">
         <div className="text-2xl font-bold text-primary-600">
-          {priceCents === 0 ? t('free') : `CHF ${(priceCents / 100).toFixed(0)}`}
+          {priceCents === 0 ? t('free') : formatCentsToChf(priceCents)}
         </div>
         {priceCents > 0 && (
           <div className="text-sm text-neutral-500">{t('vatIncluded')}</div>
