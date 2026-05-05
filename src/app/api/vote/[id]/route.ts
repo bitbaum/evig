@@ -16,6 +16,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 
 type RouteParams = { params: Promise<{ id: string }> }
 
@@ -62,6 +63,11 @@ export async function POST(
 ) {
   try {
     const { id: decisionId } = await params
+
+    if (!rateLimiters.voteSubmit(getClientIdentifier(request))) {
+      return NextResponse.json({ success: false, error: ERROR_MESSAGES.RATE_LIMITED }, { status: 429 })
+    }
+
     const body = await request.json()
     const { email, voteData } = body as { email?: string; voteData?: unknown }
 

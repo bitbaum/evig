@@ -66,6 +66,9 @@ export const rateLimiters = {
   // Contact seller: 10 per hour per user
   contactSeller: createRateLimiter(60 * 60 * 1000, 10),
 
+  // Public vote submit: 10 per hour per IP (unauthenticated, prevents vote spam)
+  voteSubmit: createRateLimiter(60 * 60 * 1000, 10),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(15 * 60 * 1000, 100)
 };

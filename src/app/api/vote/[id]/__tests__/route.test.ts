@@ -40,8 +40,14 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
+jest.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: { voteSubmit: jest.fn(() => true) },
+  getClientIdentifier: jest.fn(() => '127.0.0.1'),
+}))
+
 import { NextRequest } from 'next/server'
 import { GET, POST } from '../route'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 const MOCK_DECISION = {
   id: 'decision-1',
@@ -58,6 +64,7 @@ const MOCK_DECISION = {
 beforeEach(() => {
   jest.resetAllMocks()
 
+  ;(rateLimiters.voteSubmit as jest.Mock).mockReturnValue(true)
   mockGetPublicDecision.mockResolvedValue(MOCK_DECISION)
   mockQuery.mockResolvedValue({ rows: [{ id: 'user-1' }] })
   mockSubmitVote.mockResolvedValue({ vote: { id: 'vote-1', optionId: 'opt-1' } })
@@ -95,6 +102,26 @@ describe('GET /api/vote/[id] — success', () => {
     expect(body.data.title).toBe('Test Decision')
     expect(body.data.options).toHaveLength(2)
     expect(mockGetPublicDecision).toHaveBeenCalledWith('decision-1')
+  })
+})
+
+// ============================================================================
+// POST — rate limiting
+// ============================================================================
+
+describe('POST /api/vote/[id] — rate limited', () => {
+  it('returns 429 when rate limit is exceeded', async () => {
+    ;(rateLimiters.voteSubmit as jest.Mock).mockReturnValue(false)
+
+    const req = new NextRequest('http://localhost/api/vote/decision-1', {
+      method: 'POST',
+      body: JSON.stringify({ email: 'voter@example.com', voteData: { optionId: 'opt-1' } }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await POST(req, { params: Promise.resolve({ id: 'decision-1' }) })
+    expect(response.status).toBe(429)
+    const body = await response.json()
+    expect(body.success).toBe(false)
   })
 })
 
