@@ -39,7 +39,9 @@ export default function DecisionDetailClient({
   }, [decisionId]);
 
   useEffect(() => {
-    fetchDecision();
+    queueMicrotask(() => {
+      void fetchDecision();
+    });
   }, [fetchDecision]);
 
   async function handleTransition(
