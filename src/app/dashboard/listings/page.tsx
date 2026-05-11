@@ -1,8 +1,5 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Package,
@@ -18,7 +15,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import Heading from '@/components/ui/Heading'
@@ -28,119 +24,37 @@ import { ListingImage } from '@/components/marketplace/ListingImage'
 import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marketplace'
 import type { ListingStatus } from '@/config/marketplace'
 import { getConditionBadge } from '@/config/erfassung/conditions'
-
-interface MyListing {
-  id: string
-  title: string
-  price_chf: number
-  category: string
-  condition: string
-  status: string
-  view_count: number
-  favorite_count: number
-  created_at: string
-  thumbnail: string | null
-}
+import { useMyListings } from '@/hooks/useMyListings'
 
 export default function MyListingsPage() {
   const t = useTranslations('dashboard.listings')
-  const { data: session, status: sessionStatus } = useSession()
 
-  const STATUS_TABS: { value: string; label: string }[] = [
+  const {
+    sessionStatus,
+    listings,
+    isLoading,
+    error,
+    statusFilter,
+    deletingId,
+    duplicatingId,
+    pendingDeleteId,
+    page,
+    totalPages,
+    total,
+    fetchListings,
+    handleStatusFilterChange,
+    doDelete,
+    handleDuplicate,
+    setPendingDeleteId,
+  } = useMyListings({ loadError: t('loadError') })
+
+  const STATUS_TABS = [
     { value: '', label: t('tabAll') },
     { value: LISTING_STATUS.ACTIVE, label: t('tabActive') },
     { value: LISTING_STATUS.SOLD, label: t('tabSold') },
     { value: LISTING_STATUS.DRAFT, label: t('tabDraft') },
     { value: LISTING_STATUS.RESERVED, label: t('tabReserved') },
   ]
-  const router = useRouter()
-  const [listings, setListings] = useState<MyListing[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState('')
-  const [deletingId, setDeletingId] = useState<string | null>(null)
-  const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
-  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
-
-  const fetchListings = useCallback(async (fetchPage = 1) => {
-    setIsLoading(true)
-    setError(null)
-
-    const params = new URLSearchParams()
-    if (statusFilter) params.set('status', statusFilter)
-    params.set('page', String(fetchPage))
-
-    const result = await apiFetch<{ items: MyListing[]; page: number; totalPages: number; total: number }>(`/api/listings/mine?${params.toString()}`)
-
-    if (result.success && result.data) {
-      setListings(result.data.items)
-      setPage(result.data.page)
-      setTotalPages(result.data.totalPages)
-      setTotal(result.data.total)
-    } else {
-      setError(result.error || t('loadError'))
-    }
-    setIsLoading(false)
-  }, [statusFilter, t])
-
-  useEffect(() => {
-    if (sessionStatus === 'loading') return
-    if (!session?.user) {
-      router.push('/auth/login')
-      return
-    }
-    let cancelled = false
-    async function load() {
-      setIsLoading(true)
-      setError(null)
-      const params = new URLSearchParams()
-      if (statusFilter) params.set('status', statusFilter)
-      params.set('page', '1')
-      const result = await apiFetch<{ items: MyListing[]; page: number; totalPages: number; total: number }>(`/api/listings/mine?${params.toString()}`)
-      if (cancelled) return
-      if (result.success && result.data) {
-        setListings(result.data.items)
-        setPage(result.data.page)
-        setTotalPages(result.data.totalPages)
-        setTotal(result.data.total)
-      } else {
-        setError(result.error || t('loadError'))
-      }
-      setIsLoading(false)
-    }
-    load()
-    return () => { cancelled = true }
-  }, [session, sessionStatus, router, statusFilter, t])
-
-  const handleStatusFilterChange = (value: string) => {
-    setStatusFilter(value)
-    setPage(1)
-  }
-
-  const doDelete = async () => {
-    if (!pendingDeleteId) return
-    const id = pendingDeleteId
-    setPendingDeleteId(null)
-    setDeletingId(id)
-    const result = await apiFetch<void>(`/api/listings/${id}`, { method: 'DELETE' })
-    if (result.success) {
-      setListings(prev => prev.filter(l => l.id !== id))
-      setTotal(prev => prev - 1)
-    }
-    setDeletingId(null)
-  }
-
-  const handleDuplicate = async (id: string) => {
-    setDuplicatingId(id)
-    const result = await apiFetch<{ id: string }>(`/api/listings/${id}/duplicate`, { method: 'POST' })
-    if (result.success && result.data?.id) {
-      router.push(`/marketplace/sell?edit=${result.data.id}`)
-    }
-    setDuplicatingId(null)
-  }
 
   if (sessionStatus === 'loading') {
     return (
@@ -152,13 +66,10 @@ export default function MyListingsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-            {t('pageSubtitle')}
-          </p>
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t('pageSubtitle')}</p>
         </div>
         <Link
           href="/marketplace/sell"
@@ -169,7 +80,6 @@ export default function MyListingsPage() {
         </Link>
       </div>
 
-      {/* Status Tabs */}
       <div className="flex gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">
         {STATUS_TABS.map(tab => (
           <button
@@ -186,7 +96,6 @@ export default function MyListingsPage() {
         ))}
       </div>
 
-      {/* Loading */}
       {isLoading && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
@@ -194,19 +103,17 @@ export default function MyListingsPage() {
         </div>
       )}
 
-      {/* Error */}
       {error && !isLoading && (
         <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
           <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
           <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
-          <Button onClick={() => fetchListings(page)} variant="destructive" className="gap-2">
+          <Button onClick={() => fetchListings(page, statusFilter)} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             {t('retry')}
           </Button>
         </div>
       )}
 
-      {/* Empty State */}
       {!isLoading && !error && listings.length === 0 && (
         <EmptyState
           icon={Package}
@@ -226,7 +133,6 @@ export default function MyListingsPage() {
         />
       )}
 
-      {/* Listings List */}
       {!isLoading && !error && listings.length > 0 && (
         <div className="space-y-3">
           {listings.map((listing) => {
@@ -237,12 +143,10 @@ export default function MyListingsPage() {
                 key={listing.id}
                 className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 flex items-center gap-4"
               >
-                {/* Thumbnail */}
                 <Link href={`/marketplace/${listing.id}`} className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
                   <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
                 </Link>
 
-                {/* Info */}
                 <div className="flex-1 min-w-0">
                   <Link href={`/marketplace/${listing.id}`} className="hover:text-primary-600 transition-colors">
                     <Heading level={3} className="font-medium text-neutral-900 dark:text-white truncate">{listing.title}</Heading>
@@ -268,14 +172,12 @@ export default function MyListingsPage() {
                   </div>
                 </div>
 
-                {/* Status Badge */}
                 {statusConfig && (
                   <span className={`inline-flex px-2.5 py-1 text-xs font-semibold rounded-full ${statusConfig.color}`}>
                     {statusConfig.label}
                   </span>
                 )}
 
-                {/* Actions */}
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Link
                     href={`/marketplace/sell?edit=${listing.id}`}
@@ -315,7 +217,6 @@ export default function MyListingsPage() {
         </div>
       )}
 
-      {/* Pagination */}
       {!isLoading && !error && totalPages > 1 && (
         <div className="flex items-center justify-between pt-4">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
@@ -323,7 +224,7 @@ export default function MyListingsPage() {
           </p>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => fetchListings(page - 1)}
+              onClick={() => fetchListings(page - 1, statusFilter)}
               disabled={page <= 1}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
@@ -334,7 +235,7 @@ export default function MyListingsPage() {
               {t('paginationPage', { page, total: totalPages })}
             </span>
             <button
-              onClick={() => fetchListings(page + 1)}
+              onClick={() => fetchListings(page + 1, statusFilter)}
               disabled={page >= totalPages}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >

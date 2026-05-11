@@ -1,113 +1,70 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useState } from 'react'
 import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
-import { apiFetch } from '@/lib/api/client'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { useTranslations } from 'next-intl'
+import { useWorkshopRegistrations } from '@/hooks/useWorkshopRegistrations'
+import type { WorkshopRegistration } from '@/hooks/useWorkshopRegistrations'
+import React from 'react'
 
-interface WorkshopRegistration {
-  id: string
-  workshop_title: string
-  workshop_slug: string
-  status: string
-  payment_status: string
-  payment_amount_cents: number | null
-  attended: boolean
-  rating: number | null
-  feedback: string | null
-  confirmed_at: string | null
-  cancelled_at: string | null
-  created_at: string
-  updated_at: string
+function getStatusIcon(status: string) {
+  switch (status) {
+    case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
+      return <CheckCircle className="w-5 h-5 text-success-500" />
+    case WORKSHOP_REGISTRATION_STATUS.PENDING:
+      return <AlertCircle className="w-5 h-5 text-warning-500" />
+    case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
+      return <XCircle className="w-5 h-5 text-error-500" />
+    default:
+      return <AlertCircle className="w-5 h-5 text-neutral-500" />
+  }
+}
+
+function Modal({ open, onClose, children }: { open: boolean; onClose: () => void; children: React.ReactNode }) {
+  if (!open) return null
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
+        {children}
+      </div>
+    </div>
+  )
 }
 
 export default function WorkshopsDashboard() {
   const t = useTranslations('dashboard.workshops')
   const tDates = useTranslations('dashboard.dates')
-  const { data: session, status } = useSession()
-  const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string>('')
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editRating, setEditRating] = useState<number>(5)
-  const [editFeedback, setEditFeedback] = useState<string>('')
-  const [saving, setSaving] = useState(false)
-  const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
 
-  const fetchRegistrations = useCallback(async () => {
-    const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
-    if (result.success && result.data) {
-      setRegistrations(result.data.registrations || [])
-    } else {
-      setError(result.error || t('loadError'))
-    }
-    setLoading(false)
-  }, [t])
+  const {
+    session,
+    sessionStatus,
+    registrations,
+    loading,
+    error,
+    editingId,
+    editRating,
+    editFeedback,
+    saving,
+    pendingCancelId,
+    setEditingId,
+    setEditRating,
+    setEditFeedback,
+    setPendingCancelId,
+    openEdit,
+    saveEdit,
+    doCancel,
+  } = useWorkshopRegistrations({
+    loadError: t('loadError'),
+    saveFailed: t('saveFailed'),
+    cancelFailed: t('cancelFailed'),
+  })
 
-  useEffect(() => {
-    if (!session?.user) return
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchRegistrations()
-  }, [session, fetchRegistrations])
-
-  const openEdit = (reg: WorkshopRegistration) => {
-    setEditingId(reg.id)
-    setEditRating(reg.rating || 5)
-    setEditFeedback(reg.feedback || '')
-  }
-
-  const saveEdit = async () => {
-    if (!editingId) return
-    setSaving(true)
-    const result = await apiFetch<void>(`/api/workshops/registrations/${editingId}`, {
-      method: 'PATCH',
-      body: { rating: editRating, feedback: editFeedback }
-    })
-    if (result.success) {
-      setEditingId(null)
-      fetchRegistrations()
-    } else {
-      setError(result.error || t('saveFailed'))
-    }
-    setSaving(false)
-  }
-
-  const doCancel = async () => {
-    if (!pendingCancelId) return
-    const id = pendingCancelId
-    setPendingCancelId(null)
-    const result = await apiFetch<void>(`/api/workshops/registrations/${id}`, {
-      method: 'PATCH',
-      body: { action: 'cancel' }
-    })
-    if (result.success) {
-      fetchRegistrations()
-    } else {
-      setError(result.error || t('cancelFailed'))
-    }
-  }
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-        return <CheckCircle className="w-5 h-5 text-success-500" />
-      case WORKSHOP_REGISTRATION_STATUS.PENDING:
-        return <AlertCircle className="w-5 h-5 text-warning-500" />
-      case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-        return <XCircle className="w-5 h-5 text-error-500" />
-      default:
-        return <AlertCircle className="w-5 h-5 text-neutral-500" />
-    }
-  }
-
-  const getStatusText = (status: string) => {
+  function getStatusText(status: string) {
     switch (status) {
       case WORKSHOP_REGISTRATION_STATUS.CONFIRMED: return t('statusConfirmed')
       case WORKSHOP_REGISTRATION_STATUS.PENDING: return t('statusPending')
@@ -116,8 +73,7 @@ export default function WorkshopsDashboard() {
     }
   }
 
-
-  if (status === 'loading' || loading) {
+  if (sessionStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-4xl mx-auto px-4">
@@ -142,9 +98,7 @@ export default function WorkshopsDashboard() {
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
             <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>{t('loginRequired')}</h1>
-            <p className={cn('mb-6', getTextColor('white', 'muted'))}>
-              {t('loginDesc')}
-            </p>
+            <p className={cn('mb-6', getTextColor('white', 'muted'))}>{t('loginDesc')}</p>
             <Link
               href="/auth/login"
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
@@ -160,7 +114,6 @@ export default function WorkshopsDashboard() {
   return (
     <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
-        {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
@@ -170,22 +123,18 @@ export default function WorkshopsDashboard() {
             {t('backToDashboard')}
           </Link>
           <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>{t('pageTitle')}</h1>
-          <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
-            {t('pageSubtitle')}
-          </p>
+          <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>{t('pageSubtitle')}</p>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className={cn('rounded-lg p-4 mb-6 border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
             <p className={cn('text-sm', getStatusColors('error').text)}>{error}</p>
           </div>
         )}
 
-        {/* Registrations */}
         {registrations.length > 0 ? (
           <div className="space-y-6">
-            {registrations.map((registration) => (
+            {registrations.map((registration: WorkshopRegistration) => (
               <div key={registration.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-neutral-200">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
@@ -205,16 +154,13 @@ export default function WorkshopsDashboard() {
                   </div>
                 </div>
 
-                {/* Status specific content */}
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED && (
                   <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
                     <div className="flex items-center text-primary-800">
                       <CheckCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('confirmedTitle')}</span>
                     </div>
-                    <p className="text-primary-700 text-sm mt-1">
-                      {t('confirmedDesc')}
-                    </p>
+                    <p className="text-primary-700 text-sm mt-1">{t('confirmedDesc')}</p>
                   </div>
                 )}
 
@@ -224,9 +170,7 @@ export default function WorkshopsDashboard() {
                       <AlertCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('pendingTitle')}</span>
                     </div>
-                    <p className="text-warning-700 text-sm mt-1">
-                      {t('pendingDesc')}
-                    </p>
+                    <p className="text-warning-700 text-sm mt-1">{t('pendingDesc')}</p>
                   </div>
                 )}
 
@@ -244,7 +188,6 @@ export default function WorkshopsDashboard() {
                   </div>
                 )}
 
-                {/* Actions */}
                 {registration.status !== WORKSHOP_REGISTRATION_STATUS.CANCELLED && (
                   <div className="mt-4 flex gap-3">
                     <button
@@ -267,12 +210,8 @@ export default function WorkshopsDashboard() {
         ) : (
           <div className="bg-white rounded-xl shadow-lg p-8 text-center">
             <Calendar className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-900 mb-2">
-              {t('emptyTitle')}
-            </h3>
-            <p className="text-neutral-600 mb-6">
-              {t('emptyDesc')}
-            </p>
+            <h3 className="text-xl font-semibold text-neutral-900 mb-2">{t('emptyTitle')}</h3>
+            <p className="text-neutral-600 mb-6">{t('emptyDesc')}</p>
             <Link
               href="/workshops"
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
@@ -319,8 +258,14 @@ export default function WorkshopsDashboard() {
             </div>
           </div>
           <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">{t('cancel')}</button>
-            <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-info-600 text-white disabled:opacity-50">
+            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">
+              {t('cancel')}
+            </button>
+            <button
+              onClick={saveEdit}
+              disabled={saving}
+              className="px-4 py-2 rounded-lg bg-info-600 text-white disabled:opacity-50"
+            >
               {saving ? t('saving') : t('save')}
             </button>
           </div>
@@ -329,20 +274,3 @@ export default function WorkshopsDashboard() {
     </div>
   )
 }
-
-// Simple modal
-function Modal({ open, onClose, children }: { open: boolean, onClose: () => void, children: React.ReactNode }) {
-  if (!open) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-
-
-
-
