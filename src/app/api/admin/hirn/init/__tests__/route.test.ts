@@ -7,7 +7,8 @@
  *   POST /api/admin/hirn/init
  *   - returns 401 when not authenticated
  *   - returns 200 with success message when initialized
- *   - returns 500 when db.execute throws
+ *   - does not run runtime DDL; schema ownership lives in migrations
+ *   - returns 500 when seed insertion fails
  */
 
 // ---------------------------------------------------------------------------
@@ -34,23 +35,14 @@ jest.mock('@/lib/api/middleware', () => ({
   },
 }))
 
-const mockExecute = jest.fn()
 const mockOnConflictDoNothing = jest.fn()
 const mockValues = jest.fn()
 const mockInsert = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    execute: (...args: unknown[]) => mockExecute.apply(null, args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
   },
-}))
-
-jest.mock('drizzle-orm', () => ({
-  sql: Object.assign(
-    (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
-    { raw: (str: string) => ({ __raw: str }) }
-  ),
 }))
 
 jest.mock('@/db/schema/hirn', () => ({
@@ -59,10 +51,6 @@ jest.mock('@/db/schema/hirn', () => ({
 
 jest.mock('@/config/urls', () => ({
   OLLAMA_URL: 'http://localhost:11434',
-}))
-
-jest.mock('@/config/database', () => ({
-  TABLE_NAMES: { USERS: 'users' },
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -101,7 +89,6 @@ function makeRequest() {
 beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
-  mockExecute.mockResolvedValue(undefined)
   mockValues.mockReturnValue({ onConflictDoNothing: mockOnConflictDoNothing })
   mockOnConflictDoNothing.mockResolvedValue(undefined)
 })
@@ -126,16 +113,17 @@ describe('POST /api/admin/hirn/init — success', () => {
     expect(body.data.message).toMatch(/initialisiert/i)
   })
 
-  it('calls db.execute 3 times for DDL and db.insert 3 times for seed data', async () => {
+  it('does not run runtime DDL and inserts 3 default providers', async () => {
     await POST(makeRequest())
-    expect(mockExecute).toHaveBeenCalledTimes(3)
     expect(mockInsert).toHaveBeenCalledTimes(3)
+    expect(mockValues).toHaveBeenCalledTimes(3)
+    expect(mockOnConflictDoNothing).toHaveBeenCalledTimes(3)
   })
 })
 
 describe('POST /api/admin/hirn/init — errors', () => {
-  it('returns 500 when db.execute throws', async () => {
-    mockExecute.mockRejectedValueOnce(new Error('DB error'))
+  it('returns 500 when seed insertion fails', async () => {
+    mockOnConflictDoNothing.mockRejectedValueOnce(new Error('DB error'))
     const response = await POST(makeRequest())
     expect(response.status).toBe(500)
   })
