@@ -1,113 +1,35 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Clock, CheckCircle, XCircle, AlertCircle, Wrench,
-  Calendar, MapPin, Star, Euro, MessageSquare,
-  ChevronRight, Loader2, RefreshCw, Home, Phone
+  Calendar, Star, Euro,
+  ChevronRight, Loader2, RefreshCw, Home
 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { BOOKING_STATUS, BOOKING_STATUS_BADGES, type BookingStatus } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
-import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { useTranslations } from 'next-intl'
-
-interface Appointment {
-  id: string
-  repairer_id: string
-  description: string
-  device_info: string | null
-  preferred_date: string | null
-  confirmed_date: string | null
-  urgency: string
-  status: BookingStatus
-  is_home_visit: boolean
-  visit_address: string | null
-  visit_city: string | null
-  quoted_price_chf: number | null
-  diagnosis_notes: string | null
-  completion_notes: string | null
-  customer_rating: number | null
-  created_at: string
-  repairer_name: string
-  business_name: string | null
-  service_name: string
-}
+import { useCustomerBookings } from '@/hooks/useCustomerBookings'
 
 const STATUS_CONFIG = BOOKING_STATUS_BADGES
 
 export default function CustomerBookings() {
   const t = useTranslations('dashboard.bookings')
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
-  const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<'active' | 'completed'>('active')
-  const [actionLoading, setActionLoading] = useState<string | null>(null)
-  const [ratingModal, setRatingModal] = useState<{ appointmentId: string; open: boolean } | null>(null)
-  const [rating, setRating] = useState(5)
-  const [review, setReview] = useState('')
 
-  const fetchAppointments = useCallback(async () => {
-    try {
-      setLoading(true)
-      const result = await apiFetch<{ appointments: Appointment[] }>('/api/appointments?role=customer')
-      if (result.success) {
-        setAppointments(result.data!.appointments)
-      } else {
-        setError(result.error || t('loadError'))
-      }
-    } catch {
-      setError(t('networkError'))
-    } finally {
-      setLoading(false)
-    }
-  }, [t])
-
-  useEffect(() => {
-    if (sessionStatus === 'unauthenticated') {
-      router.push('/auth/login')
-    } else if (sessionStatus === 'authenticated') {
-      fetchAppointments()
-    }
-  }, [sessionStatus, router, fetchAppointments])
-
-  const handleAction = async (appointmentId: string, action: string, extraData?: Record<string, unknown>) => {
-    setActionLoading(appointmentId)
-    try {
-      const result = await apiFetch<void>('/api/appointments/' + appointmentId, {
-        method: 'PATCH',
-        body: { action, ...extraData }
-      })
-      if (result.success) {
-        fetchAppointments()
-        setRatingModal(null)
-        setRating(5)
-        setReview('')
-      } else {
-        setError(result.error || t('actionError'))
-      }
-    } catch {
-      setError(t('networkError'))
-    } finally {
-      setActionLoading(null)
-    }
-  }
-
-  const doneStatuses: BookingStatus[] = [BOOKING_STATUS.COMPLETED, BOOKING_STATUS.REJECTED, BOOKING_STATUS.CANCELLED]
-  const filteredAppointments = appointments.filter(apt => {
-    if (activeTab === 'active') return !doneStatuses.includes(apt.status)
-    return doneStatuses.includes(apt.status)
+  const {
+    filteredAppointments, activeCount, needsAction,
+    loading, error, activeTab, actionLoading, ratingModal, rating, review,
+    sessionStatus,
+    setError, setActiveTab, setRatingModal, setRating, setReview,
+    fetchAppointments, handleAction,
+  } = useCustomerBookings({
+    loadError: t('loadError'),
+    actionError: t('actionError'),
+    networkError: t('networkError'),
   })
-
-  const activeCount = appointments.filter(a => !doneStatuses.includes(a.status)).length
-  const needsAction = appointments.filter(a => a.status === BOOKING_STATUS.QUOTED).length
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -158,7 +80,6 @@ export default function CustomerBookings() {
           </div>
         )}
 
-        {/* Tabs */}
         <div className="flex gap-2 mb-6">
           <button
             onClick={() => setActiveTab('active')}
@@ -181,7 +102,6 @@ export default function CustomerBookings() {
           </button>
         </div>
 
-        {/* Appointments List */}
         <div className="space-y-4">
           {filteredAppointments.length === 0 ? (
             <EmptyState
@@ -255,7 +175,6 @@ export default function CustomerBookings() {
                   )}
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex flex-wrap gap-2 pt-4 border-t">
                   {apt.status === BOOKING_STATUS.QUOTED && (
                     <>
@@ -312,7 +231,6 @@ export default function CustomerBookings() {
           )}
         </div>
 
-        {/* Rating Modal */}
         <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title={t('ratingModalTitle')} size="sm">
           <div className="space-y-4">
             <div>

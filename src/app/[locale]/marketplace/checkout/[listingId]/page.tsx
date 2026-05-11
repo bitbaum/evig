@@ -1,7 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,120 +14,35 @@ import { ListingImage } from '@/components/marketplace/ListingImage'
 import Heading from '@/components/ui/Heading'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-
-interface ListingForCheckout {
-  id: string
-  title: string
-  price_chf: number
-  delivery_options: string
-  shipping_cost_chf: number | null
-  payment_mode: string
-  pickup_location: string | null
-  thumbnail: string | null
-  seller_name: string
-  seller_id: string
-}
+import { useCheckout } from '@/hooks/useCheckout'
 
 export default function CheckoutPage({ params }: { params: Promise<{ listingId: string }> }) {
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
   const t = useTranslations('marketplace.checkout')
-  const [listing, setListing] = useState<ListingForCheckout | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>('pickup')
-  const [shippingAddress, setShippingAddress] = useState({
-    name: '',
-    street: '',
-    city: '',
-    postal_code: '',
-    country: 'CH',
+
+  const {
+    session,
+    sessionStatus,
+    listing,
+    isLoading,
+    error,
+    deliveryMethod,
+    shippingAddress,
+    creatingOrder,
+    shippingCost,
+    totalAmount,
+    commission,
+    canSelectDelivery,
+    postalCodeValid,
+    shippingFormValid,
+    setDeliveryMethod,
+    setShippingAddress,
+    handleCreateOrder,
+  } = useCheckout(params, {
+    notFound: t('notFound'),
+    loadError: t('loadError'),
+    orderError: t('orderError'),
+    networkError: t('networkError'),
   })
-  const [creatingOrder, setCreatingOrder] = useState(false)
-
-  useEffect(() => {
-    if (sessionStatus === 'unauthenticated') {
-      router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
-      return
-    }
-
-    const fetchListing = async () => {
-      try {
-        const { listingId } = await params
-        const result = await apiFetch<{
-          id: string
-          title: string
-          price_chf: number | string
-          delivery_options: string
-          shipping_cost_chf: number | string | null
-          payment_mode: string
-          pickup_location: string | null
-          images?: Array<{ url: string }>
-          seller_name: string
-          seller_display_name: string | null
-          seller_id: string
-        }>(`/api/listings/${listingId}`)
-
-        if (result.success && result.data) {
-          const l = result.data
-          setListing({
-            id: l.id,
-            title: l.title,
-            price_chf: Number(l.price_chf),
-            delivery_options: l.delivery_options,
-            shipping_cost_chf: l.shipping_cost_chf ? Number(l.shipping_cost_chf) : null,
-            payment_mode: l.payment_mode,
-            pickup_location: l.pickup_location,
-            thumbnail: l.images?.[0]?.url || null,
-            seller_name: l.seller_display_name || l.seller_name,
-            seller_id: l.seller_id,
-          })
-          // Set default delivery method
-          if (l.delivery_options === 'shipping') setDeliveryMethod('shipping')
-          else setDeliveryMethod('pickup')
-        } else {
-          setError(result.error || t('notFound'))
-        }
-      } catch (err) {
-        logger.warn('Failed to load checkout listing', { error: err })
-        setError(t('loadError'))
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchListing()
-  }, [params, sessionStatus, router, t])
-
-  const handleCreateOrder = async () => {
-    if (!listing || creatingOrder) return
-    setCreatingOrder(true)
-    setError(null)
-
-    try {
-      const result = await apiFetch<{ paymentUrl?: string }>('/api/marketplace/orders', {
-        method: 'POST',
-        body: {
-          listing_id: listing.id,
-          delivery_method: deliveryMethod,
-          shipping_address: deliveryMethod === 'shipping' ? shippingAddress : null,
-        },
-      })
-
-      if (result.success && result.data?.paymentUrl) {
-        // Redirect to Payrexx hosted payment page
-        window.location.href = result.data.paymentUrl
-      } else {
-        setError(result.error || t('orderError'))
-        setCreatingOrder(false)
-      }
-    } catch (err) {
-      logger.warn('Failed to create checkout order', { error: err })
-      setError(t('networkError'))
-      setCreatingOrder(false)
-    }
-  }
 
   if (isLoading || sessionStatus === 'loading') {
     return (
@@ -154,9 +67,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
   if (!listing) return null
 
-  // Guard: prevent self-purchase
-  const isOwnListing = session?.user?.id === listing.seller_id
-  if (isOwnListing) {
+  if (session?.user?.id === listing.seller_id) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-warning-400 mx-auto mb-4" />
@@ -173,19 +84,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
     )
   }
 
-  const shippingCost = deliveryMethod === 'shipping' && listing.shipping_cost_chf
-    ? listing.shipping_cost_chf : 0
-  const totalAmount = listing.price_chf + shippingCost
-  const commission = Math.round(totalAmount * COMMISSION_RATE * 100) / 100
-  const canSelectDelivery = listing.delivery_options === 'both'
-  const postalCodeValid = /^\d{4}$/.test(shippingAddress.postal_code)
-  const shippingFormValid = deliveryMethod !== 'shipping' || (
-    shippingAddress.name.trim() &&
-    shippingAddress.street.trim() &&
-    shippingAddress.city.trim() &&
-    postalCodeValid
-  )
-
   return (
     <div className="max-w-3xl mx-auto">
       <Link
@@ -201,7 +99,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left: Form */}
         <div className="lg:col-span-3 space-y-6">
-          {/* Delivery method selection */}
           {canSelectDelivery && (
             <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
               <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('delivery.title')}</Heading>
@@ -255,7 +152,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             </div>
           )}
 
-          {/* Shipping address form */}
           {deliveryMethod === 'shipping' && (
             <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
               <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('address.title')}</Heading>
@@ -314,14 +210,12 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
             </div>
           )}
 
-          {/* Error message */}
           {error && (
             <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4 text-error-700 dark:text-error-300">
               {error}
             </div>
           )}
 
-          {/* Proceed button */}
           <Button
             onClick={handleCreateOrder}
             disabled={creatingOrder || !shippingFormValid}
@@ -346,7 +240,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm sticky top-6">
             <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('summary.title')}</Heading>
 
-            {/* Listing preview */}
             <div className="flex gap-3 mb-4">
               <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100 dark:bg-neutral-700">
                 <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
@@ -361,7 +254,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
             <hr className="border-neutral-200 dark:border-neutral-700 mb-4" />
 
-            {/* Price breakdown */}
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-neutral-500 dark:text-neutral-400">{t('summary.itemPrice')}</span>
@@ -392,7 +284,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               <span className="text-primary-600">{formatCHF(totalAmount)}</span>
             </div>
 
-            {/* Delivery info */}
             <div className="mt-4 p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg text-xs text-neutral-500 dark:text-neutral-400">
               <p className="flex items-center gap-1.5">
                 {deliveryMethod === 'shipping' ? (
@@ -403,7 +294,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
               </p>
             </div>
 
-            {/* Trust badges */}
             <div className="mt-4 space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
               <p className="flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5 text-primary-600" />

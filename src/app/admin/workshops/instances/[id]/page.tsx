@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, use } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { use } from 'react'
 import Link from 'next/link'
 import {
   Calendar,
@@ -20,8 +18,6 @@ import {
   Star,
   MessageSquare
 } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
 import {
   WORKSHOP_REGISTRATION_STATUS,
@@ -33,21 +29,22 @@ import {
 } from '@/config/workshop-registration-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import Heading from '@/components/admin/AdminHeading'
-import type { WorkshopInstanceWithDetails } from '@/components/workshops/types'
+import { useAdminWorkshopInstance } from '@/hooks/useAdminWorkshopInstance'
 
-// Admin-specific registration view with user details
-interface Registration {
-  id: string
-  user_id: string
-  user_name: string
-  user_email: string
-  status: string
-  payment_status: string
-  payment_amount_cents: number | null
-  registered_at: string
-  attended: boolean
-  rating: number | null
-  feedback: string | null
+function getStatusBadge(status: string) {
+  return (
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'}`}>
+      {WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status}
+    </span>
+  )
+}
+
+function getPaymentBadge(paymentStatus: string) {
+  return (
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-neutral-100 text-neutral-800'}`}>
+      {WORKSHOP_PAYMENT_STATUS_LABELS[paymentStatus] ?? paymentStatus}
+    </span>
+  )
 }
 
 export default function AdminWorkshopInstanceDetailPage({
@@ -56,75 +53,19 @@ export default function AdminWorkshopInstanceDetailPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = use(params)
-  const { data: session, status } = useSession()
-  const router = useRouter()
 
-  const [instance, setInstance] = useState<WorkshopInstanceWithDetails | null>(null)
-  const [registrations, setRegistrations] = useState<Registration[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const {
+    sessionStatus, instance, registrations,
+    loading, error, isPast,
+    updateRegistrationStatus,
+  } = useAdminWorkshopInstance(id)
 
-  const loadInstanceDetails = useCallback(async () => {
-    try {
-      setLoading(true)
-      const result = await apiFetch<{ instance: WorkshopInstanceWithDetails; registrations: Registration[] }>(
-        `/api/admin/workshops/instances/${id}`,
-      )
-
-      if (result.success && result.data) {
-        setInstance(result.data.instance)
-        setRegistrations(result.data.registrations)
-      } else {
-        if (result.error) logger.warn('Error loading instance details', { error: result.error })
-        setError(result.error || 'Termin nicht gefunden')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [id])
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      loadInstanceDetails()
-    }
-  }, [status, loadInstanceDetails])
-
-  const updateRegistrationStatus = async (registrationId: string, newStatus: string) => {
-    const result = await apiFetch<unknown>(`/api/admin/workshops/registrations/${registrationId}`, {
-      method: 'PUT',
-      body: { status: newStatus },
-    })
-
-    if (result.success) {
-      loadInstanceDetails()
-    } else {
-      setError(result.error || 'Fehler beim Aktualisieren')
-    }
-  }
-
-  const getStatusBadge = (status: string) => (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'}`}>
-      {WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status}
-    </span>
-  )
-
-  const getPaymentBadge = (paymentStatus: string) => (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-neutral-100 text-neutral-800'}`}>
-      {WORKSHOP_PAYMENT_STATUS_LABELS[paymentStatus] ?? paymentStatus}
-    </span>
-  )
-
-  if (status === 'loading' || loading) {
+  if (sessionStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-info-600" />
       </div>
     )
-  }
-
-  if (!session?.user) {
-    router.push('/auth/login')
-    return null
   }
 
   if (error || !instance) {
@@ -146,11 +87,23 @@ export default function AdminWorkshopInstanceDetailPage({
     )
   }
 
-  const isPast = new Date(instance.start_date) < new Date()
+  const confirmedCount = registrations.filter(
+    r => r.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || r.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED
+  ).length
+  const pendingCount = registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.PENDING).length
+  const cancelledCount = registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED).length
+  const revenueChf = (
+    registrations
+      .filter(r => r.payment_status === WORKSHOP_PAYMENT_STATUS.PAID && r.payment_amount_cents)
+      .reduce((sum, r) => sum + (r.payment_amount_cents || 0), 0) / 100
+  ).toFixed(0)
+
+  const displayStatus = instance.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED
+    ? (isPast ? WORKSHOP_INSTANCE_STATUS.COMPLETED : WORKSHOP_INSTANCE_STATUS.SCHEDULED)
+    : instance.status
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
@@ -188,21 +141,19 @@ export default function AdminWorkshopInstanceDetailPage({
                 </div>
                 <div className="text-sm text-neutral-600">Teilnehmer</div>
               </div>
-              {getStatusBadge(instance.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED ? (isPast ? WORKSHOP_INSTANCE_STATUS.COMPLETED : WORKSHOP_INSTANCE_STATUS.SCHEDULED) : instance.status)}
+              {getStatusBadge(displayStatus)}
             </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Error Message */}
         {error && (
           <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-error-800">{error}</p>
           </div>
         )}
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
@@ -210,9 +161,7 @@ export default function AdminWorkshopInstanceDetailPage({
                 <CheckCircle className="w-5 h-5 text-primary-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-neutral-900">
-                  {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || r.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED).length}
-                </div>
+                <div className="text-2xl font-bold text-neutral-900">{confirmedCount}</div>
                 <div className="text-sm text-neutral-600">Bestätigt</div>
               </div>
             </div>
@@ -224,9 +173,7 @@ export default function AdminWorkshopInstanceDetailPage({
                 <Clock className="w-5 h-5 text-warning-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-neutral-900">
-                  {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.PENDING).length}
-                </div>
+                <div className="text-2xl font-bold text-neutral-900">{pendingCount}</div>
                 <div className="text-sm text-neutral-600">Ausstehend</div>
               </div>
             </div>
@@ -238,9 +185,7 @@ export default function AdminWorkshopInstanceDetailPage({
                 <XCircle className="w-5 h-5 text-error-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-neutral-900">
-                  {registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED).length}
-                </div>
+                <div className="text-2xl font-bold text-neutral-900">{cancelledCount}</div>
                 <div className="text-sm text-neutral-600">Abgesagt</div>
               </div>
             </div>
@@ -252,19 +197,13 @@ export default function AdminWorkshopInstanceDetailPage({
                 <DollarSign className="w-5 h-5 text-info-600" />
               </div>
               <div>
-                <div className="text-2xl font-bold text-neutral-900">
-                  CHF {(registrations
-                    .filter(r => r.payment_status === WORKSHOP_PAYMENT_STATUS.PAID && r.payment_amount_cents)
-                    .reduce((sum, r) => sum + (r.payment_amount_cents || 0), 0) / 100
-                  ).toFixed(0)}
-                </div>
+                <div className="text-2xl font-bold text-neutral-900">CHF {revenueChf}</div>
                 <div className="text-sm text-neutral-600">Einnahmen</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Registrations Table */}
         <div className="bg-white rounded-xl shadow-sm border">
           <div className="px-6 py-4 border-b border-neutral-200">
             <Heading level={2} className="text-lg font-semibold text-neutral-900">
@@ -276,9 +215,7 @@ export default function AdminWorkshopInstanceDetailPage({
             <div className="px-6 py-12 text-center">
               <Users className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
               <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">Noch keine Anmeldungen</Heading>
-              <p className="text-neutral-600">
-                Sobald sich jemand anmeldet, erscheinen die Daten hier.
-              </p>
+              <p className="text-neutral-600">Sobald sich jemand anmeldet, erscheinen die Daten hier.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -310,9 +247,7 @@ export default function AdminWorkshopInstanceDetailPage({
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        {getStatusBadge(reg.status)}
-                      </td>
+                      <td className="px-6 py-4">{getStatusBadge(reg.status)}</td>
                       <td className="px-6 py-4">
                         <div className="flex flex-col gap-1">
                           {getPaymentBadge(reg.payment_status)}
@@ -384,7 +319,6 @@ export default function AdminWorkshopInstanceDetailPage({
           )}
         </div>
 
-        {/* Notes Section */}
         {instance.notes && (
           <div className="mt-8 bg-white rounded-xl shadow-sm border p-6">
             <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">Interne Notizen</Heading>
