@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import HardcodedAboutPage from './hardcoded-content'
+import AboutContent from './content'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
@@ -16,5 +16,5 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default function AboutPage() {
-  return <HardcodedAboutPage />;
+  return <AboutContent />;
 }

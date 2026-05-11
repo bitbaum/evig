@@ -10,6 +10,9 @@ import WorkshopBrowseClient from './WorkshopBrowseClient'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 import { type WorkshopInstanceStatus, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 
+// auth() reads request headers — prevent static generation so this page is SSR'd per-request
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'workshops.meta' })

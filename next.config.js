@@ -3,6 +3,11 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // next-auth v5 beta ships as ESM with an internal circular dependency that leaves
+  // React = null inside webpack's static-generation workers. Forcing transpilation
+  // makes webpack process it as CJS in the same pass as the app, which resolves the
+  // initialization order and prevents the React-null crash during build.
+  transpilePackages: ['next-auth', '@auth/core'],
   images: {
     unoptimized: false,
     remotePatterns: [
@@ -137,6 +142,10 @@ const nextConfig = {
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: process.env.NODE_ENV === 'production',
+    // Single static-generation worker eliminates the parallel-worker React
+    // initialization race that causes "Cannot read properties of null (reading
+    // 'useContext')" on /_global-error with next-auth v5 beta.
+    cpus: 1,
   },
   // Add specific CSS handling
   sassOptions: {

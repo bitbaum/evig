@@ -3,6 +3,10 @@ import TechnikerListClient from './TechnikerListClient'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
+// force-dynamic prevents static pre-rendering, which avoids the React-null/useState
+// crash during build-time SSR (next-auth v5 beta circular-dep issue)
+export const dynamic = 'force-dynamic'
+
 interface TechnikerPageProps {
   params: Promise<{ locale: string }>
 }

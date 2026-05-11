@@ -8,7 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { getTranslations } from 'next-intl/server'
 
-export default async function HardcodedAboutPage() {
+export default async function AboutContent() {
   const t = await getTranslations('about')
   const yearsActive = new Date().getFullYear() - getDefaultNumeric('founding_year')
 
