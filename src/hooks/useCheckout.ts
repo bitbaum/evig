@@ -18,6 +18,7 @@ export interface ListingForCheckout {
   thumbnail: string | null
   seller_name: string
   seller_id: string
+  is_revampit: boolean
 }
 
 export interface ShippingAddress {
@@ -74,6 +75,7 @@ export function useCheckout(params: Promise<{ listingId: string }>, errors: Chec
           seller_name: string
           seller_display_name: string | null
           seller_id: string
+          is_revampit: boolean
         }>(`/api/listings/${listingId}`)
 
         if (result.success && result.data) {
@@ -89,6 +91,7 @@ export function useCheckout(params: Promise<{ listingId: string }>, errors: Chec
             thumbnail: l.images?.[0]?.url || null,
             seller_name: l.seller_display_name || l.seller_name,
             seller_id: l.seller_id,
+            is_revampit: l.is_revampit ?? false,
           }
           setListing(mapped)
           setDeliveryMethod(l.delivery_options === 'shipping' ? 'shipping' : 'pickup')

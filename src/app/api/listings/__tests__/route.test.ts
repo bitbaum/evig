@@ -61,6 +61,11 @@ jest.mock('@/lib/schemas', () => ({
 jest.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
   MARKETPLACE_SELLER_TYPE: { REVAMPIT: 'revampit', COMMUNITY: 'community' },
+  SPEC_QUERY_PARAM_KEYS: {
+    spec_ram_min:     ['RAM'],
+    spec_storage_min: ['Speicher'],
+    spec_display_min: ['Display', 'Grösse'],
+  },
   normalizeSpecValue: jest.fn().mockReturnValue(null),
 }))
 

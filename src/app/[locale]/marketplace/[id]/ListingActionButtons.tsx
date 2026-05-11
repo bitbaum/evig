@@ -7,6 +7,7 @@ import {
   MessageSquare,
   Send,
   Shield,
+  ShoppingCart,
   Loader2,
   Share2,
   Check,
@@ -14,6 +15,7 @@ import {
 } from 'lucide-react'
 import type { ListingDetail } from './types'
 import { useTranslations } from 'next-intl'
+import { formatCHF } from '@/config/marketplace'
 
 interface ListingActionButtonsProps {
   listing: ListingDetail
@@ -63,10 +65,34 @@ export function ListingActionButtons({
   const router = useRouter()
   const t = useTranslations('marketplace.listing_actions')
 
+  const isRevampit = listing.is_revampit
+
   return (
     <div className="space-y-3">
+      {/* RevampIT direct purchase */}
+      {!isOwner && isRevampit && (
+        <>
+          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
+            <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
+              <Shield className="w-4 h-4" aria-hidden="true" />
+              {t('revampitTrustTitle')}
+            </div>
+            <p className="text-xs text-primary-700 dark:text-primary-400">
+              {t('revampitTrustDesc')}
+            </p>
+          </div>
+          <Link
+            href={`/marketplace/checkout/${listing.id}`}
+            className="w-full flex items-center justify-center gap-2 bg-secondary-500 hover:bg-secondary-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2"
+          >
+            <ShoppingCart className="w-5 h-5" aria-hidden="true" />
+            {t('buyNow')} — {formatCHF(Number(listing.price_chf))}
+          </Link>
+        </>
+      )}
+
       {/* P2P payment info */}
-      {!isOwner && (
+      {!isOwner && !isRevampit && (
         <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
           <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
             <Shield className="w-4 h-4" aria-hidden="true" />
@@ -77,7 +103,7 @@ export function ListingActionButtons({
           </p>
         </div>
       )}
-      {!isOwner && (
+      {!isOwner && !isRevampit && (
         <>
           {messageSent ? (
             <div className="w-full bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 text-center space-y-2">

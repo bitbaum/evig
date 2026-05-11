@@ -271,10 +271,12 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
                   <span className="text-primary-600">{t('delivery.free')}</span>
                 </div>
               )}
-              <div className="flex justify-between text-xs text-neutral-400 dark:text-neutral-500">
-                <span>{t('summary.serviceFee', { rate: COMMISSION_RATE * 100 })}</span>
-                <span>{t('summary.serviceIncl', { amount: formatCHF(commission) })}</span>
-              </div>
+              {!listing.is_revampit && (
+                <div className="flex justify-between text-xs text-neutral-400 dark:text-neutral-500">
+                  <span>{t('summary.serviceFee', { rate: COMMISSION_RATE * 100 })}</span>
+                  <span>{t('summary.serviceIncl', { amount: formatCHF(commission) })}</span>
+                </div>
+              )}
             </div>
 
             <hr className="border-neutral-200 dark:border-neutral-700 my-4" />

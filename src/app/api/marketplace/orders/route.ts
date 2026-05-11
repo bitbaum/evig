@@ -41,7 +41,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const result = await db.transaction(async (tx) => {
       // Lock the listing row to prevent concurrent purchases
       const lockedRows = await tx.execute(
-        sql`SELECT id, seller_id, title, price_chf, payment_mode, delivery_options, shipping_cost_chf, status
+        sql`SELECT id, seller_id, title, price_chf, payment_mode, delivery_options, shipping_cost_chf, status, is_revampit
             FROM ${listings}
             WHERE id = ${data.listing_id}
             FOR UPDATE`
@@ -49,7 +49,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
       const listing = lockedRows.rows[0] as {
         id: string; seller_id: string; title: string; price_chf: string;
-        payment_mode: string; delivery_options: string; shipping_cost_chf: string | null; status: string;
+        payment_mode: string; delivery_options: string; shipping_cost_chf: string | null;
+        status: string; is_revampit: boolean;
       } | undefined;
 
       if (!listing) {
@@ -60,7 +61,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         throw new OrderValidationError('Inserat ist nicht mehr verfügbar');
       }
 
-      if (listing.payment_mode === 'direct') {
+      // RevampIT items always support online payment — skip the direct-only check
+      if (!listing.is_revampit && listing.payment_mode === 'direct') {
         throw new OrderValidationError('Dieses Inserat unterstützt keine sichere Zahlung');
       }
 
@@ -79,13 +81,15 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         throw new OrderValidationError('Lieferadresse ist für Versand erforderlich');
       }
 
-      // Calculate amounts
+      // Calculate amounts — RevampIT items have no platform commission
       const priceChf = Number(listing.price_chf);
       const shippingChf = data.delivery_method === 'shipping' && listing.shipping_cost_chf
         ? Number(listing.shipping_cost_chf)
         : 0;
       const totalChf = priceChf + shippingChf;
-      const commissionChf = Math.round(totalChf * COMMISSION_RATE * 100) / 100;
+      const commissionChf = listing.is_revampit
+        ? 0
+        : Math.round(totalChf * COMMISSION_RATE * 100) / 100;
       const payoutChf = Math.round((totalChf - commissionChf) * 100) / 100;
 
       // Insert order
