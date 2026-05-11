@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Vote, MessageSquare, CheckCircle, AlertCircle, Trash2 } from 'lucide-react';
 import {
@@ -10,9 +9,6 @@ import {
   VOTING_METHOD_CONFIG,
   DECISION_STATUSES,
   DECISION_TYPES,
-  type DecisionStatus,
-  type DecisionType,
-  type VotingMethod,
 } from '@/config/decisions';
 import { formatDeadline } from '@/lib/utils/date';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -20,24 +16,9 @@ import { Pagination } from '@/components/ui/Pagination';
 import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { adminSurface, adminTable, adminForm, adminType } from '@/lib/admin-ui';
-import { apiFetch } from '@/lib/api/client';
 import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
-
-interface DecisionListItem {
-  id: string;
-  title: string;
-  decisionType: DecisionType;
-  votingMethod: VotingMethod;
-  status: DecisionStatus;
-  votingDeadline: string | null;
-  discussionDeadline: string | null;
-  voteCount: number;
-  commentCount: number;
-  hasUserVoted: boolean;
-  creator: { id: string; email: string };
-  createdAt: string;
-}
+import { useDecisionList } from '@/hooks/useDecisionList';
 
 export default function DecisionListClient({
   currentUserId,
@@ -48,77 +29,26 @@ export default function DecisionListClient({
   isSuperAdmin: boolean;
   stats: DecisionStats;
 }) {
-  const DECISIONS_PAGE_SIZE = 20;
-
-  const [decisions, setDecisions] = useState<DecisionListItem[]>([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<string>('');
-  const [typeFilter, setTypeFilter] = useState<string>('');
-  const [reloadToken, setReloadToken] = useState(0);
-  const [deleteTarget, setDeleteTarget] = useState<DecisionListItem | null>(null);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadDecisions() {
-      setLoading(true);
-      setErrorMessage(null);
-
-      try {
-        const urlParams = new URLSearchParams();
-        if (statusFilter) urlParams.set('status', statusFilter);
-        if (typeFilter) urlParams.set('decisionType', typeFilter);
-        urlParams.set('page', String(page));
-        urlParams.set('limit', String(DECISIONS_PAGE_SIZE));
-
-        const result = await apiFetch<{ decisions: DecisionListItem[]; total: number }>(
-          `/api/decisions?${urlParams.toString()}`,
-        );
-
-        if (!result.success || !result.data) {
-          throw new Error(result.error || 'Entscheidungen konnten nicht geladen werden.');
-        }
-
-        if (!cancelled) {
-          setDecisions(Array.isArray(result.data.decisions) ? result.data.decisions : []);
-          setTotal(typeof result.data.total === 'number' ? result.data.total : 0);
-        }
-      } catch (error) {
-        if (!cancelled) {
-          setDecisions([]);
-          setTotal(0);
-          setErrorMessage(
-            error instanceof Error ? error.message : 'Entscheidungen konnten nicht geladen werden.'
-          );
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    }
-
-    void loadDecisions();
-    return () => { cancelled = true; };
-  }, [statusFilter, typeFilter, page, reloadToken]);
-
-  async function handleDelete() {
-    if (!deleteTarget) return;
-    setDeleting(true);
-    setDeleteError(null);
-    const result = await apiFetch<unknown>(`/api/decisions/${deleteTarget.id}`, { method: 'DELETE' });
-    if (!result.success) {
-      setDeleteError(result.error || 'Fehler beim Löschen');
-      setDeleting(false);
-      return;
-    }
-    setDeleteTarget(null);
-    setReloadToken((prev) => prev + 1);
-    setDeleting(false);
-  }
+  const {
+    decisions,
+    total,
+    page,
+    setPage,
+    loading,
+    errorMessage,
+    statusFilter,
+    setStatusFilter,
+    typeFilter,
+    setTypeFilter,
+    deleteTarget,
+    setDeleteTarget,
+    deleting,
+    deleteError,
+    handleDelete,
+    retry,
+    closeDeleteDialog,
+    PAGE_SIZE,
+  } = useDecisionList()
 
   return (
     <div className="space-y-4">
@@ -126,30 +56,22 @@ export default function DecisionListClient({
       <AdminStatsGrid
         columns={4}
         items={[
-          { icon: Vote,         color: 'amber',  label: 'Aktive Abstimmungen',      value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
-          { icon: MessageSquare,color: 'blue',   label: 'Offene Diskussionen',       value: stats.discussion,   valueColor: 'text-info-600 dark:text-info-400' },
-          { icon: CheckCircle,  color: 'green',  label: 'Abgeschlossen',             value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
-          { icon: AlertCircle,  color: 'red',    label: 'Ausstehende Stimmen',       value: stats.pendingVotes, valueColor: 'text-error-600 dark:text-error-400' },
+          { icon: Vote,          color: 'amber', label: 'Aktive Abstimmungen',  value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
+          { icon: MessageSquare, color: 'blue',  label: 'Offene Diskussionen',  value: stats.discussion,   valueColor: 'text-info-600 dark:text-info-400' },
+          { icon: CheckCircle,   color: 'green', label: 'Abgeschlossen',        value: stats.closed,       valueColor: 'text-primary-600 dark:text-primary-400' },
+          { icon: AlertCircle,   color: 'red',   label: 'Ausstehende Stimmen',  value: stats.pendingVotes, valueColor: 'text-error-600 dark:text-error-400' },
         ]}
       />
 
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <select
-          value={statusFilter}
-          onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
-          className={adminForm.select}
-        >
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={adminForm.select}>
           <option value="">Alle Status</option>
           {DECISION_STATUSES.map((s) => (
             <option key={s} value={s}>{DECISION_STATUS_CONFIG[s].label}</option>
           ))}
         </select>
-        <select
-          value={typeFilter}
-          onChange={(e) => { setTypeFilter(e.target.value); setPage(1); }}
-          className={adminForm.select}
-        >
+        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className={adminForm.select}>
           <option value="">Alle Typen</option>
           {DECISION_TYPES.map((t) => (
             <option key={t} value={t}>{DECISION_TYPE_CONFIG[t].label}</option>
@@ -159,17 +81,11 @@ export default function DecisionListClient({
 
       {/* Content */}
       {loading ? (
-        <div className={cn(adminSurface.card, 'py-12 text-center', adminType.meta)}>
-          Laden...
-        </div>
+        <div className={cn(adminSurface.card, 'py-12 text-center', adminType.meta)}>Laden...</div>
       ) : errorMessage ? (
         <div className="rounded-lg border border-error-200 bg-error-50 dark:bg-error-900/20 dark:border-error-800 p-6 text-center">
           <p className="text-sm font-medium text-error-700 dark:text-error-400">{errorMessage}</p>
-          <AdminButton
-            variant="danger"
-            className="mt-3"
-            onClick={() => setReloadToken((prev) => prev + 1)}
-          >
+          <AdminButton variant="danger" className="mt-3" onClick={retry}>
             Erneut versuchen
           </AdminButton>
         </div>
@@ -198,10 +114,7 @@ export default function DecisionListClient({
             <tbody>
               {decisions.map((d) => {
                 const statusConf = DECISION_STATUS_CONFIG[d.status];
-                const deadline = d.status === DECISION_STATUS.VOTING
-                  ? d.votingDeadline
-                  : d.discussionDeadline;
-
+                const deadline = d.status === DECISION_STATUS.VOTING ? d.votingDeadline : d.discussionDeadline;
                 return (
                   <tr key={d.id} className={adminTable.tr}>
                     <td className={adminTable.td}>
@@ -222,22 +135,13 @@ export default function DecisionListClient({
                       {VOTING_METHOD_CONFIG[d.votingMethod]?.label || d.votingMethod}
                     </td>
                     <td className={adminTable.td}>
-                      <span className={cn(
-                        'inline-block rounded-full px-2 py-0.5 text-xs font-medium',
-                        statusConf?.color || ''
-                      )}>
+                      <span className={cn('inline-block rounded-full px-2 py-0.5 text-xs font-medium', statusConf?.color || '')}>
                         {statusConf?.label || d.status}
                       </span>
                     </td>
-                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>
-                      {formatDeadline(deadline)}
-                    </td>
-                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>
-                      {d.voteCount}
-                    </td>
-                    <td className={cn(adminTable.td, 'hidden lg:table-cell')}>
-                      {d.creator.email}
-                    </td>
+                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>{formatDeadline(deadline)}</td>
+                    <td className={cn(adminTable.td, 'hidden sm:table-cell')}>{d.voteCount}</td>
+                    <td className={cn(adminTable.td, 'hidden lg:table-cell')}>{d.creator.email}</td>
                     <td className={adminTable.td}>
                       {(d.creator.id === currentUserId || isSuperAdmin) && (
                         <button
@@ -257,13 +161,13 @@ export default function DecisionListClient({
         </div>
       )}
 
-      {!loading && !errorMessage && total > DECISIONS_PAGE_SIZE && (
+      {!loading && !errorMessage && total > PAGE_SIZE && (
         <div className={cn(adminSurface.card, 'overflow-hidden')}>
           <Pagination
             currentPage={page}
-            totalPages={Math.ceil(total / DECISIONS_PAGE_SIZE)}
+            totalPages={Math.ceil(total / PAGE_SIZE)}
             totalItems={total}
-            pageSize={DECISIONS_PAGE_SIZE}
+            pageSize={PAGE_SIZE}
             onPageChange={setPage}
           />
         </div>
@@ -285,7 +189,7 @@ export default function DecisionListClient({
         variant="danger"
         isLoading={deleting}
         onConfirm={handleDelete}
-        onClose={() => { setDeleteTarget(null); setDeleteError(null); }}
+        onClose={closeDeleteDialog}
       />
     </div>
   );

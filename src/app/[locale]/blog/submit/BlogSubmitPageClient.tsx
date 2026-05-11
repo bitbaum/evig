@@ -1,155 +1,61 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft, Send, Lightbulb, FileText, Edit, CheckCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
-import { BLOG_SUBMISSION_TYPE, type BlogSubmissionType } from '@/config/approval-status'
-
-interface Category {
-  id: string
-  slug: string
-  name: string
-  description: string | null
-  color: string | null
-}
+import { BLOG_SUBMISSION_TYPE } from '@/config/approval-status'
+import { useBlogSubmitForm } from '@/hooks/useBlogSubmitForm'
 
 export default function SubmitPostPage() {
-  const { data: session } = useSession()
   const t = useTranslations('blog.submit')
-  const [submissionType, setSubmissionType] = useState<BlogSubmissionType>(BLOG_SUBMISSION_TYPE.IDEA)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    title: '',
-    category: '',
-    tags: '',
-    content: '',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const {
+    submissionType,
+    setSubmissionType,
+    categories,
+    formData,
+    isSubmitting,
+    submitStatus,
+    isLoggedIn,
+    canSubmit,
+    handleAIFieldsFilled,
+    handleChange,
+    handleSubmit,
+    handleReset,
+  } = useBlogSubmitForm()
 
-  // Pre-fill name and email from session when user is logged in
-  useEffect(() => {
-    if (session?.user) {
-      setFormData(prev => ({
-        ...prev,
-        name: session.user.name ?? prev.name,
-        email: session.user.email ?? prev.email,
-      }))
-    }
-  }, [session])
+  const hero = (
+    <div className="relative">
+      <PageHero
+        theme="about"
+        icon={Edit}
+        title={t('pageTitle')}
+        subtitle={t('pageSubtitle')}
+      />
+      <div className="absolute top-4 left-4 sm:left-8">
+        <Link
+          href="/blog"
+          className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          {t('backToBlog')}
+        </Link>
+      </div>
+    </div>
+  )
 
-  // Fetch categories from database
-  useEffect(() => {
-    apiFetch<Category[]>('/api/blog/categories').then(result => {
-      if (result.success && result.data) {
-        setCategories(result.data)
-      } else if (result.error) {
-        logger.warn('Failed to load blog categories', { error: result.error })
-      }
-    })
-  }, [])
-
-  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
-    setFormData(prev => {
-      const updated = { ...prev }
-      if (data.title) updated.title = String(data.title)
-      if (data.content) updated.content = String(data.content)
-      if (data.category) updated.category = String(data.category)
-      if (Array.isArray(data.tags)) updated.tags = data.tags.join(', ')
-      else if (data.tags) updated.tags = String(data.tags)
-      return updated
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-
-    try {
-      const result = await apiFetch<unknown>('/api/public/blog/submit', {
-        method: 'POST',
-        body: {
-          ...formData,
-          submissionType,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
-          submittedAt: new Date().toISOString(),
-        },
-      })
-
-      if (!result.success) {
-        logger.warn('Failed to submit blog post', { error: result.error })
-        setSubmitStatus('error')
-      } else {
-        setSubmitStatus('success')
-      }
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handleReset = () => {
-    setFormData({
-      name: session?.user?.name ?? '',
-      email: session?.user?.email ?? '',
-      title: '',
-      category: '',
-      tags: '',
-      content: '',
-    })
-    setSubmitStatus('idle')
-  }
-
-  const isLoggedIn = !!session?.user
-  const canSubmit = !isSubmitting && formData.title.trim() !== '' && formData.content.trim() !== ''
-
-  // Success screen — shown instead of form after submission
   if (submitStatus === 'success') {
     return (
       <main className="min-h-screen bg-neutral-50">
-        <div className="relative">
-          <PageHero
-            theme="about"
-            icon={Edit}
-            title={t('pageTitle')}
-            subtitle={t('pageSubtitle')}
-          />
-          <div className="absolute top-4 left-4 sm:left-8">
-            <Link
-              href="/blog"
-              className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              {t('backToBlog')}
-            </Link>
-          </div>
-        </div>
-
+        {hero}
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="bg-white rounded-lg shadow-sm p-12">
             <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-6" />
             <Heading level={2} className="text-2xl text-neutral-900 mb-3">{t('successTitle')}</Heading>
-            <p className="text-neutral-700 text-lg mb-2">
-              {t('successMessage')}
-            </p>
-            <p className="text-neutral-500 text-sm mb-8">
-              {t('successEmailNote')}
-            </p>
+            <p className="text-neutral-700 text-lg mb-2">{t('successMessage')}</p>
+            <p className="text-neutral-500 text-sm mb-8">{t('successEmailNote')}</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={handleReset}
@@ -172,61 +78,36 @@ export default function SubmitPostPage() {
 
   return (
     <main className="min-h-screen bg-neutral-50">
-      <div className="relative">
-        <PageHero
-          theme="about"
-          icon={Edit}
-          title={t('pageTitle')}
-          subtitle={t('pageSubtitle')}
-        />
-        <div className="absolute top-4 left-4 sm:left-8">
-          <Link
-            href="/blog"
-            className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('backToBlog')}
-          </Link>
-        </div>
-      </div>
+      {hero}
 
-      {/* Form */}
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
         <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
           <Heading level={2} className="text-2xl text-neutral-900 mb-6">{t('whatToSubmit')}</Heading>
           <div className="grid md:grid-cols-2 gap-4">
-            <button
-              type="button"
-              onClick={() => setSubmissionType(BLOG_SUBMISSION_TYPE.IDEA)}
-              className={`p-6 rounded-lg border-2 transition-all ${
-                submissionType === BLOG_SUBMISSION_TYPE.IDEA
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-neutral-200 hover:border-primary-300'
-              }`}
-            >
-              <Lightbulb className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.IDEA ? 'text-primary-600' : 'text-neutral-400'}`} />
-              <Heading level={3} className="text-lg text-neutral-900 mb-2">{t('typeIdea')}</Heading>
-              <p className="text-sm text-neutral-600">
-                {t('typeIdeaDesc')}
-              </p>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setSubmissionType(BLOG_SUBMISSION_TYPE.DRAFT)}
-              className={`p-6 rounded-lg border-2 transition-all ${
-                submissionType === BLOG_SUBMISSION_TYPE.DRAFT
-                  ? 'border-primary-600 bg-primary-50'
-                  : 'border-neutral-200 hover:border-primary-300'
-              }`}
-            >
-              <FileText className={`w-8 h-8 mb-3 ${submissionType === BLOG_SUBMISSION_TYPE.DRAFT ? 'text-primary-600' : 'text-neutral-400'}`} />
-              <Heading level={3} className="text-lg text-neutral-900 mb-2">{t('typeDraft')}</Heading>
-              <p className="text-sm text-neutral-600">
-                {t('typeDraftDesc')}
-              </p>
-            </button>
+            {([BLOG_SUBMISSION_TYPE.IDEA, BLOG_SUBMISSION_TYPE.DRAFT] as const).map((type) => {
+              const isIdea = type === BLOG_SUBMISSION_TYPE.IDEA
+              const isActive = submissionType === type
+              return (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => setSubmissionType(type)}
+                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-primary-600 bg-primary-50' : 'border-neutral-200 hover:border-primary-300'}`}
+                >
+                  {isIdea
+                    ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-primary-600' : 'text-neutral-400'}`} />
+                    : <FileText className={`w-8 h-8 mb-3 ${isActive ? 'text-primary-600' : 'text-neutral-400'}`} />
+                  }
+                  <Heading level={3} className="text-lg text-neutral-900 mb-2">
+                    {isIdea ? t('typeIdea') : t('typeDraft')}
+                  </Heading>
+                  <p className="text-sm text-neutral-600">
+                    {isIdea ? t('typeIdeaDesc') : t('typeDraftDesc')}
+                  </p>
+                </button>
+              )
+            })}
           </div>
         </div>
 
@@ -236,57 +117,40 @@ export default function SubmitPostPage() {
             {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('formHeadingIdea') : t('formHeadingDraft')}
           </Heading>
 
-          {/* AI Assistant */}
           <AIFormAssist
             formType="blog-submit"
             variant="section"
             defaultExpanded={true}
             placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('aiPlaceholderIdea') : t('aiPlaceholderDraft')}
             onFieldsFilled={handleAIFieldsFilled}
-            currentData={formData}
+            currentData={formData as unknown as Record<string, unknown>}
             className="mb-6"
           />
 
           {/* Personal Info */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">
-                {t('labelName')}
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                aria-required="true"
-                readOnly={isLoggedIn}
-                className={`w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}`}
-                placeholder={t('placeholderName')}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-2">
-                {t('labelEmail')}
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                aria-required="true"
-                readOnly={isLoggedIn}
-                className={`w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}`}
-                placeholder={t('placeholderEmail')}
-              />
-            </div>
+            {(['name', 'email'] as const).map((field) => (
+              <div key={field}>
+                <label htmlFor={field} className="block text-sm font-medium text-neutral-700 mb-2">
+                  {field === 'name' ? t('labelName') : t('labelEmail')}
+                </label>
+                <input
+                  type={field === 'email' ? 'email' : 'text'}
+                  id={field}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                  readOnly={isLoggedIn}
+                  className={`w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${isLoggedIn ? 'bg-neutral-50 text-neutral-600 cursor-default' : ''}`}
+                  placeholder={field === 'name' ? t('placeholderName') : t('placeholderEmail')}
+                />
+              </div>
+            ))}
           </div>
 
-          {/* Post Info */}
+          {/* Title */}
           <div className="mb-6">
             <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelTitleIdea') : t('labelTitleDraft')}
@@ -304,6 +168,7 @@ export default function SubmitPostPage() {
             />
           </div>
 
+          {/* Category + Tags */}
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div>
               <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-2">
@@ -318,13 +183,10 @@ export default function SubmitPostPage() {
               >
                 <option value="">{t('categoryPlaceholder')}</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.name}>
-                    {cat.name}
-                  </option>
+                  <option key={cat.id} value={cat.name}>{cat.name}</option>
                 ))}
               </select>
             </div>
-
             <div>
               <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-2">
                 {t('labelTags')}
@@ -341,6 +203,7 @@ export default function SubmitPostPage() {
             </div>
           </div>
 
+          {/* Content */}
           <div className="mb-6">
             <label htmlFor="content" className="block text-sm font-medium text-neutral-700 mb-2">
               {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('labelContentIdea') : t('labelContentDraft')}
@@ -357,9 +220,7 @@ export default function SubmitPostPage() {
               placeholder={submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('placeholderContentIdea') : t('placeholderContentDraft')}
             />
             {submissionType === BLOG_SUBMISSION_TYPE.DRAFT && (
-              <p className="mt-2 text-sm text-neutral-500">
-                {t('markdownHint')}
-              </p>
+              <p className="mt-2 text-sm text-neutral-500">{t('markdownHint')}</p>
             )}
           </div>
 
@@ -375,11 +236,9 @@ export default function SubmitPostPage() {
             </ul>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <div className="flex items-center justify-between">
-            <div className="text-sm text-neutral-500">
-              {t('requiredFields')}
-            </div>
+            <div className="text-sm text-neutral-500">{t('requiredFields')}</div>
             <button
               type="submit"
               disabled={!canSubmit}
@@ -402,13 +261,10 @@ export default function SubmitPostPage() {
             </button>
           </div>
 
-          {/* Error Message */}
           {submitStatus === 'error' && (
             <div className="mt-6 p-4 bg-error-50 border border-error-200 rounded-lg">
               <p className="text-error-800 font-medium">{t('errorTitle')}</p>
-              <p className="text-error-700 text-sm mt-1">
-                {t('errorMessage')}
-              </p>
+              <p className="text-error-700 text-sm mt-1">{t('errorMessage')}</p>
             </div>
           )}
         </form>
