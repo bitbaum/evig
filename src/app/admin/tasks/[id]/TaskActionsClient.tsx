@@ -1,14 +1,5 @@
 'use client'
 
-/**
- * Task Actions Client Component
- *
- * Handles task actions: complete, flag for attention, request help.
- * Created: 2026-02-05
- */
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   CheckCircle2,
   AlertTriangle,
@@ -16,9 +7,8 @@ import {
   Loader2,
   Archive,
 } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { getErrorMessage } from '@/lib/utils/error'
 import Heading from '@/components/admin/AdminHeading'
+import { useTaskActions } from '@/hooks/useTaskActions'
 
 interface TaskActionsClientProps {
   taskId: string
@@ -31,129 +21,31 @@ export default function TaskActionsClient({
   taskTitle,
   isArchived = false,
 }: TaskActionsClientProps) {
-  const router = useRouter()
-  const [loading, setLoading] = useState<string | null>(null)
-  const [showCompleteForm, setShowCompleteForm] = useState(false)
-  const [showAttentionForm, setShowAttentionForm] = useState(false)
-  const [showRequestForm, setShowRequestForm] = useState(false)
-  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false)
-  const [notes, setNotes] = useState('')
-  const [duration, setDuration] = useState('')
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [staffMembers, setStaffMembers] = useState<{ id: string; name: string | null; email: string }[]>([])
-  const [selectedUserId, setSelectedUserId] = useState<string>('')
-
-  useEffect(() => {
-    apiFetch<{ profiles: { user_id: string; name: string | null; email: string }[] }>('/api/admin/team/profiles')
-      .then(res => {
-        if (res.success && res.data?.profiles) {
-          setStaffMembers(res.data.profiles.map(p => ({ id: p.user_id, name: p.name, email: p.email })))
-        }
-      })
-  }, [])
-
-  const handleComplete = async () => {
-    setLoading('complete')
-    setError(null)
-
-    try {
-      const result = await apiFetch<void>(`/api/tasks/${taskId}/complete`, {
-        method: 'POST',
-        body: {
-          notes: notes || null,
-          duration_minutes: duration ? parseInt(duration, 10) : null,
-        },
-      })
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Erledigen')
-      }
-
-      setShowCompleteForm(false)
-      setNotes('')
-      setDuration('')
-      router.refresh()
-    } catch (err) {
-      setError(getErrorMessage(err))
-    } finally {
-      setLoading(null)
-    }
-  }
-
-  const handleFlagAttention = async () => {
-    setLoading('attention')
-    setError(null)
-
-    try {
-      const result = await apiFetch<void>(`/api/tasks/${taskId}/attention`, {
-        method: 'POST',
-        body: {
-          message: message || null,
-        },
-      })
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Markieren')
-      }
-
-      setShowAttentionForm(false)
-      setMessage('')
-      router.refresh()
-    } catch (err) {
-      setError(getErrorMessage(err))
-    } finally {
-      setLoading(null)
-    }
-  }
-
-  const handleRequest = async () => {
-    setLoading('request')
-    setError(null)
-
-    try {
-      const result = await apiFetch<void>(`/api/tasks/${taskId}/request`, {
-        method: 'POST',
-        body: {
-          requested_user_id: selectedUserId || null,
-          message: message || null,
-        },
-      })
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Anfragen')
-      }
-
-      setShowRequestForm(false)
-      setMessage('')
-      router.refresh()
-    } catch (err) {
-      setError(getErrorMessage(err))
-    } finally {
-      setLoading(null)
-    }
-  }
-
-  const handleArchive = async () => {
-    setLoading('archive')
-    setError(null)
-
-    try {
-      const result = await apiFetch<void>(`/api/tasks/${taskId}`, {
-        method: 'DELETE',
-      })
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Archivieren')
-      }
-
-      router.push('/admin/tasks')
-    } catch (err) {
-      setError(getErrorMessage(err))
-    } finally {
-      setLoading(null)
-    }
-  }
+  const {
+    loading,
+    showCompleteForm,
+    showAttentionForm,
+    showRequestForm,
+    showArchiveConfirm,
+    notes,
+    duration,
+    message,
+    error,
+    staffMembers,
+    selectedUserId,
+    setShowCompleteForm,
+    setShowAttentionForm,
+    setShowRequestForm,
+    setShowArchiveConfirm,
+    setNotes,
+    setDuration,
+    setMessage,
+    setSelectedUserId,
+    handleComplete,
+    handleFlagAttention,
+    handleRequest,
+    handleArchive,
+  } = useTaskActions(taskId)
 
   return (
     <div className="bg-white rounded-lg border p-6">
@@ -166,7 +58,6 @@ export default function TaskActionsClient({
       )}
 
       <div className="flex flex-wrap gap-3">
-        {/* Complete Button */}
         <button
           onClick={() => setShowCompleteForm(!showCompleteForm)}
           className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
@@ -175,7 +66,6 @@ export default function TaskActionsClient({
           Als erledigt markieren
         </button>
 
-        {/* Flag for Attention Button */}
         <button
           onClick={() => setShowAttentionForm(!showAttentionForm)}
           className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors"
@@ -184,7 +74,6 @@ export default function TaskActionsClient({
           Aufmerksamkeit nötig
         </button>
 
-        {/* Request Help Button */}
         <button
           onClick={() => setShowRequestForm(!showRequestForm)}
           className="flex items-center gap-2 px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors"
@@ -231,9 +120,7 @@ export default function TaskActionsClient({
                 disabled={loading === 'complete'}
                 className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
               >
-                {loading === 'complete' && (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                )}
+                {loading === 'complete' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Bestätigen
               </button>
               <button
@@ -272,9 +159,7 @@ export default function TaskActionsClient({
                 disabled={loading === 'attention'}
                 className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors disabled:opacity-50"
               >
-                {loading === 'attention' && (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                )}
+                {loading === 'attention' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Markieren
               </button>
               <button
@@ -328,9 +213,7 @@ export default function TaskActionsClient({
                 disabled={loading === 'request'}
                 className="flex items-center gap-2 px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors disabled:opacity-50"
               >
-                {loading === 'request' && (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                )}
+                {loading === 'request' && <Loader2 className="w-4 h-4 animate-spin" />}
                 {selectedUserId ? 'Anfrage senden' : 'An alle senden'}
               </button>
               <button
@@ -366,9 +249,7 @@ export default function TaskActionsClient({
                   disabled={loading === 'archive'}
                   className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors disabled:opacity-50"
                 >
-                  {loading === 'archive' && (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  )}
+                  {loading === 'archive' && <Loader2 className="w-4 h-4 animate-spin" />}
                   Archivieren
                 </button>
                 <button
