@@ -1,4 +1,6 @@
 'use client'
+
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
 import {
@@ -10,33 +12,20 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
-import {
-  MARKETPLACE_CATEGORY_VALUES,
-  MARKETPLACE_CATEGORY_LABELS,
-  CATEGORY_ICONS,
-  DELIVERY_OPTIONS,
-  DELIVERY_LABELS,
-  PAYMENT_MODES,
-  PAYMENT_MODE_LABELS,
-  SORT_OPTIONS,
-  MARKETPLACE_LIMITS,
-  getSpecFiltersForCategory,
-  MARKETPLACE_SELLER_TYPE,
-} from '@/config/marketplace'
-import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
+import { SORT_OPTIONS } from '@/config/marketplace'
 import { ListingCard, ListingCardGrid } from '@/components/marketplace/ListingCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
+import { MarketplaceFilterSidebar } from '@/components/marketplace/MarketplaceFilterSidebar'
+import { ActiveFilterChips } from '@/components/marketplace/ActiveFilterChips'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
-import { useState } from 'react'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
-import { ORG } from '@/config/org'
 
 export default function MarketplacePage() {
   const { data: session, status } = useSession()
-  const [showFilters, setShowFilters] = useState(false)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const t = useTranslations('marketplace')
 
   const {
@@ -56,21 +45,50 @@ export default function MarketplacePage() {
     currentPage,
   } = useMarketplaceListings()
 
+  const activeFilterCount = [
+    filters.category,
+    filters.condition,
+    filters.delivery,
+    filters.payment,
+    filters.sellerType,
+    filters.priceMin,
+    filters.priceMax,
+    filters.gratisOnly ? 'gratis' : '',
+    filters.verifiedOnly ? 'verified' : '',
+    filters.specRamMin,
+    filters.specStorageMin,
+    filters.specDisplayMin,
+  ].filter(Boolean).length
+
+  const sharedSidebarProps = {
+    filters,
+    validatePrices,
+    resetOffset,
+    clearFilters,
+    hasActiveFilters,
+  }
+
   return (
     <div className="bg-white min-h-screen">
-      {/* Compact hero — products visible without scrolling */}
-      <div className="bg-gradient-to-br from-orange-50 to-warning-50 py-6 sm:py-8">
+      {/* Compact search hero */}
+      <div className="bg-gradient-to-br from-orange-50 to-warning-50 border-b border-orange-100 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900">{t('title')}</Heading>
-              <p className="text-sm text-neutral-600 mt-1">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900">
+                {t('title')}
+              </Heading>
+              <p className="text-sm text-neutral-600 mt-0.5">
                 {t('listingsAvailable', { count: pagination.total })}
               </p>
             </div>
             <Link
-              href={session?.user ? '/marketplace/sell' : '/auth/login?callbackUrl=/marketplace/sell'}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+              href={
+                session?.user
+                  ? '/marketplace/sell'
+                  : '/auth/login?callbackUrl=/marketplace/sell'
+              }
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm flex-shrink-0"
             >
               <Plus className="w-4 h-4" />
               {t('sell.label')}
@@ -78,18 +96,18 @@ export default function MarketplacePage() {
           </div>
           <form onSubmit={handleSearch} className="max-w-2xl">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
               <input
                 type="text"
                 value={filters.searchInput}
                 onChange={(e) => filters.setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm"
+                className="w-full pl-10 pr-24 py-2.5 rounded-lg border border-neutral-300 bg-white text-neutral-900 placeholder-neutral-400 text-sm focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm outline-none"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-orange-600 hover:bg-orange-500 text-white px-4 py-1.5 rounded-md transition-colors text-sm font-semibold"
               >
                 {t('searchButton')}
               </button>
@@ -98,334 +116,146 @@ export default function MarketplacePage() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Seller Type Toggle */}
-        <div className="mb-4 flex gap-2" role="group" aria-label={t('filters.sellerTypeAriaLabel')}>
+      {/* Main layout */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        {/* Mobile: filter bar */}
+        <div className="flex items-center justify-between gap-3 mb-4 lg:hidden">
           <button
-            onClick={() => { filters.setSellerType(''); resetOffset(); }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              !filters.sellerType ? 'bg-orange-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-            }`}
-            aria-pressed={!filters.sellerType}
+            type="button"
+            onClick={() => setMobileFiltersOpen(true)}
+            className="inline-flex items-center gap-2 px-3.5 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
+            aria-expanded={mobileFiltersOpen}
           >
-            {t('sellerTypes.all')}
+            <SlidersHorizontal className="w-4 h-4" />
+            {t('filters.label')}
+            {activeFilterCount > 0 && (
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-orange-600 text-white text-xs font-bold">
+                {activeFilterCount}
+              </span>
+            )}
           </button>
-          <button
-            onClick={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.REVAMPIT); resetOffset(); }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT ? 'bg-primary-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-            }`}
-            aria-pressed={filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT}
+          <select
+            value={filters.sort}
+            onChange={(e) => { filters.setSort(e.target.value); resetOffset() }}
+            className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+            aria-label={t('filters.sort')}
           >
-            {t('sellerTypes.revampit', { orgName: ORG.name })}
-          </button>
-          <button
-            onClick={() => { filters.setSellerType(MARKETPLACE_SELLER_TYPE.COMMUNITY); resetOffset(); }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY ? 'bg-info-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-            }`}
-            aria-pressed={filters.sellerType === MARKETPLACE_SELLER_TYPE.COMMUNITY}
-          >
-            {t('sellerTypes.community')}
-          </button>
-        </div>
-
-        {/* Category Pills */}
-        <div className="mb-8">
-          <div className="flex gap-2 overflow-x-auto pb-2" role="group" aria-label={t('filters.categoryAriaLabel')}>
-            <button
-              onClick={() => { filters.setCategory(''); resetOffset(); }}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                !filters.category ? 'bg-orange-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-              aria-pressed={!filters.category}
-            >
-              {t('categories.all')}
-            </button>
-            {MARKETPLACE_CATEGORY_VALUES.map((val) => (
-              <button
-                key={val}
-                onClick={() => { filters.setCategory(val); resetOffset(); }}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  filters.category === val ? 'bg-orange-600 text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-                }`}
-                aria-pressed={filters.category === val}
-              >
-                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{MARKETPLACE_CATEGORY_LABELS[val] || val}
-              </button>
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
-          </div>
+          </select>
         </div>
 
-        {/* Filter Bar */}
-        <div className="mb-6 bg-white rounded-2xl shadow-sm border border-neutral-100 p-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-neutral-300 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
-              aria-expanded={showFilters}
-              aria-controls="filter-panel"
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-              {t('filters.label')}
-              {hasActiveFilters && (
-                <span className="w-2 h-2 rounded-full bg-orange-500" aria-label={t('filters.activeFilters')} />
-              )}
-            </button>
+        {/* Active filter chips */}
+        <ActiveFilterChips
+          filters={filters}
+          resetOffset={resetOffset}
+          clearFilters={clearFilters}
+        />
 
-            <select
-              value={filters.sort}
-              onChange={(e) => { filters.setSort(e.target.value); resetOffset(); }}
-              className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              aria-label={t('filters.sort')}
-            >
-              {SORT_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
-              ))}
-            </select>
+        {/* 2-column layout: sidebar + results */}
+        <div className="flex gap-8 items-start">
+          {/* Sidebar — desktop only */}
+          <aside className="hidden lg:block w-52 flex-shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pb-4">
+            <MarketplaceFilterSidebar {...sharedSidebarProps} />
+          </aside>
 
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-orange-600 hover:text-orange-700 font-medium"
+          {/* Results area */}
+          <div className="flex-1 min-w-0">
+            {/* Results header: count + sort (desktop) */}
+            <div className="hidden lg:flex items-center justify-between mb-4">
+              <p className="text-sm text-neutral-600">
+                {t('listingsAvailable', { count: pagination.total })}
+              </p>
+              <select
+                value={filters.sort}
+                onChange={(e) => { filters.setSort(e.target.value); resetOffset() }}
+                className="px-3 py-1.5 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none"
+                aria-label={t('filters.sort')}
               >
-                <X className="w-4 h-4" />
-                {t('filters.clearFilters')}
-              </button>
+                {SORT_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Loading */}
+            {isLoading && <LoadingSkeleton count={pagination.limit} />}
+
+            {/* Error */}
+            {error && !isLoading && (
+              <ErrorAlert
+                title={t('error_states.loadFailed')}
+                message={error}
+                onRetry={fetchListings}
+                retryLabel={t('error_states.tryAgain')}
+              />
             )}
 
+            {/* Empty */}
+            {!isLoading && !error && listings.length === 0 && (
+              <EmptyState
+                icon={Package}
+                title={t('empty_states.noListings')}
+                message={
+                  hasActiveFilters
+                    ? t('empty_states.noListingsFiltered')
+                    : t('empty_states.noListingsEmpty')
+                }
+                action={
+                  hasActiveFilters
+                    ? { label: t('filters.clearFilters'), onClick: clearFilters }
+                    : session?.user
+                    ? { label: t('signInCta.firstListing'), href: '/marketplace/sell' }
+                    : undefined
+                }
+              />
+            )}
+
+            {/* Listings grid */}
+            {!isLoading && !error && listings.length > 0 && (
+              <ListingCardGrid>
+                {listings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </ListingCardGrid>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <nav
+                className="flex items-center justify-center gap-2 pt-8"
+                aria-label={t('pagination.navigation')}
+              >
+                <button
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage <= 1}
+                  className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+                  aria-label={t('pagination.previousPage')}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-sm text-neutral-600 px-4" aria-current="page">
+                  {t('pagination.pageOf', { current: currentPage, total: totalPages })}
+                </span>
+                <button
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage >= totalPages}
+                  className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+                  aria-label={t('pagination.nextPage')}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </nav>
+            )}
           </div>
-
-          {/* Expanded Filters */}
-          {showFilters && (
-            <div id="filter-panel" className="mt-4 pt-4 border-t border-neutral-200">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                  <label htmlFor="filter-condition" className="block text-xs font-medium text-neutral-700 mb-2">{t('filters.condition')}</label>
-                  <select
-                    id="filter-condition"
-                    value={filters.condition}
-                    onChange={(e) => { filters.setCondition(e.target.value); resetOffset(); }}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    <option value="">{t('filters.allConditions')}</option>
-                    {ZUSTAND_OPTIONS.map(opt => (
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="filter-delivery" className="block text-xs font-medium text-neutral-700 mb-2">{t('filters.delivery')}</label>
-                  <select
-                    id="filter-delivery"
-                    value={filters.delivery}
-                    onChange={(e) => { filters.setDelivery(e.target.value); resetOffset(); }}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    <option value="">{t('filters.allDelivery')}</option>
-                    {DELIVERY_OPTIONS.map(opt => (
-                      <option key={opt} value={opt}>{DELIVERY_LABELS[opt]}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="filter-payment" className="block text-xs font-medium text-neutral-700 mb-2">{t('filters.payment')}</label>
-                  <select
-                    id="filter-payment"
-                    value={filters.payment}
-                    onChange={(e) => { filters.setPayment(e.target.value); resetOffset(); }}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    <option value="">{t('filters.allPayment')}</option>
-                    {PAYMENT_MODES.map(opt => (
-                      <option key={opt} value={opt}>{PAYMENT_MODE_LABELS[opt]}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-neutral-700 mb-2">{t('filters.priceRange')}</label>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      min="0"
-                      max={MARKETPLACE_LIMITS.MAX_PRICE_CHF}
-                      step="1"
-                      placeholder={t('filters.priceMin')}
-                      value={filters.priceMin}
-                      onChange={(e) => {
-                        filters.setPriceMin(e.target.value)
-                        filters.setPriceError(null)
-                      }}
-                      onBlur={() => {
-                        validatePrices()
-                        resetOffset()
-                      }}
-                      aria-label={t('filters.priceMinAriaLabel')}
-                      aria-invalid={!!filters.priceError}
-                      className={`w-1/2 px-3 py-2 border rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        filters.priceError ? 'border-error-500' : 'border-neutral-300'
-                      }`}
-                    />
-                    <input
-                      type="number"
-                      min="0"
-                      max={MARKETPLACE_LIMITS.MAX_PRICE_CHF}
-                      step="1"
-                      placeholder={t('filters.priceMax')}
-                      value={filters.priceMax}
-                      onChange={(e) => {
-                        filters.setPriceMax(e.target.value)
-                        filters.setPriceError(null)
-                      }}
-                      onBlur={() => {
-                        validatePrices()
-                        resetOffset()
-                      }}
-                      aria-label={t('filters.priceMaxAriaLabel')}
-                      aria-invalid={!!filters.priceError}
-                      className={`w-1/2 px-3 py-2 border rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
-                        filters.priceError ? 'border-error-500' : 'border-neutral-300'
-                      }`}
-                    />
-                  </div>
-                  {filters.priceError && (
-                    <p className="text-xs text-error-600 mt-1">{filters.priceError}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Toggle Filters: Gratis + Verified */}
-              <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-neutral-100">
-                <label className="inline-flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={filters.gratisOnly}
-                    onChange={(e) => { filters.setGratisOnly(e.target.checked); resetOffset(); }}
-                    className="rounded border-neutral-300 text-teal-600 focus:ring-teal-500"
-                  />
-                  <span className="text-sm text-neutral-700">{t('filters.gratisOnly')}</span>
-                </label>
-                <label className="inline-flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={filters.verifiedOnly}
-                    onChange={(e) => { filters.setVerifiedOnly(e.target.checked); resetOffset(); }}
-                    className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
-                  />
-                  <span className="text-sm text-neutral-700">{t('filters.verifiedOnly')}</span>
-                </label>
-              </div>
-
-              {/* Spec Filters (shown when category is selected) */}
-              {filters.category && getSpecFiltersForCategory(filters.category).length > 0 && (
-                <div className="mt-4 pt-4 border-t border-neutral-100">
-                  <p className="text-xs font-medium text-neutral-700 mb-3">{t('filters.technicalFilters')}</p>
-                  <div className="flex flex-wrap gap-3">
-                    {getSpecFiltersForCategory(filters.category).map(spec => {
-                      const filterValue =
-                        spec.meiliField === 'spec_ram_gb' ? filters.specRamMin :
-                        spec.meiliField === 'spec_storage_gb' ? filters.specStorageMin :
-                        spec.meiliField === 'spec_display_inches' ? filters.specDisplayMin : ''
-                      const setFilter =
-                        spec.meiliField === 'spec_ram_gb' ? filters.setSpecRamMin :
-                        spec.meiliField === 'spec_storage_gb' ? filters.setSpecStorageMin :
-                        spec.meiliField === 'spec_display_inches' ? filters.setSpecDisplayMin : null
-
-                      if (!setFilter) return null
-                      return (
-                        <div key={spec.key}>
-                          <label className="block text-xs text-neutral-500 mb-1">{spec.label}</label>
-                          <select
-                            value={filterValue}
-                            onChange={(e) => { setFilter(e.target.value); resetOffset(); }}
-                            className="px-3 py-1.5 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                          >
-                            <option value="">{t('filters.all')}</option>
-                            {spec.options.map(opt => (
-                              <option key={opt.value} value={String(opt.value)}>{opt.label}</option>
-                            ))}
-                          </select>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
-        {/* Loading State */}
-        {isLoading && (
-          <LoadingSkeleton count={pagination.limit} />
-        )}
-
-        {/* Error State */}
-        {error && !isLoading && (
-          <ErrorAlert
-            title={t('error_states.loadFailed')}
-            message={error}
-            onRetry={fetchListings}
-            retryLabel={t('error_states.tryAgain')}
-          />
-        )}
-
-        {/* Empty State */}
-        {!isLoading && !error && listings.length === 0 && (
-          <EmptyState
-            icon={Package}
-            title={t('empty_states.noListings')}
-            message={
-              hasActiveFilters
-                ? t('empty_states.noListingsFiltered')
-                : t('empty_states.noListingsEmpty')
-            }
-            action={
-              hasActiveFilters
-                ? { label: t('filters.clearFilters'), onClick: clearFilters }
-                : session?.user
-                ? { label: t('signInCta.firstListing'), href: '/marketplace/sell' }
-                : undefined
-            }
-          />
-        )}
-
-        {/* Listings Grid */}
-        {!isLoading && !error && listings.length > 0 && (
-          <ListingCardGrid>
-            {listings.map((listing) => (
-              <ListingCard key={listing.id} listing={listing} />
-            ))}
-          </ListingCardGrid>
-        )}
-
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-2 pt-8" aria-label={t('pagination.navigation')}>
-            <button
-              onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage <= 1}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
-              aria-label={t('pagination.previousPage')}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <span className="text-sm text-neutral-600 px-4" aria-current="page">
-              {t('pagination.pageOf', { current: currentPage, total: totalPages })}
-            </span>
-            <button
-              onClick={() => goToPage(currentPage + 1)}
-              disabled={currentPage >= totalPages}
-              className="p-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
-              aria-label={t('pagination.nextPage')}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </nav>
-        )}
-
-        {/* Sign-in CTA for non-logged-in users */}
+        {/* Sign-in CTA */}
         {status === 'unauthenticated' && (
           <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
@@ -442,13 +272,13 @@ export default function MarketplacePage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/auth/login"
-                className="px-6 py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                className="px-6 py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-semibold shadow-sm transition-colors"
               >
                 {t('signInCta.login')}
               </Link>
               <Link
                 href="/auth/register"
-                className="px-6 py-2.5 bg-white hover:bg-orange-50 text-orange-600 border border-orange-600 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                className="px-6 py-2.5 bg-white hover:bg-orange-50 text-orange-600 border border-orange-600 rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.register')}
               </Link>
@@ -456,6 +286,46 @@ export default function MarketplacePage() {
           </div>
         )}
       </div>
+
+      {/* Mobile filter drawer */}
+      {mobileFiltersOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label={t('filters.label')}>
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setMobileFiltersOpen(false)}
+            aria-hidden="true"
+          />
+          <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-white shadow-xl overflow-y-auto flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-neutral-200 flex-shrink-0">
+              <span className="font-semibold text-neutral-900">{t('filters.label')}</span>
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="p-1.5 rounded-md hover:bg-neutral-100 transition-colors"
+                aria-label="Filter schliessen"
+              >
+                <X className="w-5 h-5 text-neutral-600" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              <MarketplaceFilterSidebar
+                {...sharedSidebarProps}
+                clearFilters={() => { clearFilters(); setMobileFiltersOpen(false) }}
+              />
+            </div>
+            <div className="p-4 border-t border-neutral-200 flex-shrink-0">
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="w-full py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-sm font-semibold transition-colors"
+              >
+                Ergebnisse anzeigen
+                {pagination.total > 0 && ` (${pagination.total})`}
+              </button>
+            </div>
+          </aside>
+        </div>
+      )}
     </div>
   )
 }
