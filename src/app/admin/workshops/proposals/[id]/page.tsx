@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -19,49 +18,17 @@ import { EditHistoryView } from '@/components/admin/EditHistoryView';
 import { EditProposalModal } from '@/components/admin/workshops/EditProposalModal';
 import { getEditableFieldLabels } from '@/config/editable-fields';
 import { formatDateTime, formatDateShort } from '@/lib/date-formats';
-import { apiFetch } from '@/lib/api/client';
 import { formatPriceCents } from '@/config/marketplace';
-import { logger } from '@/lib/logger';
 import { APPROVAL_STATUS } from '@/config/approval-status';
-import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
 import Heading from '@/components/admin/AdminHeading';
+import { useWorkshopProposalDetail } from '@/hooks/useWorkshopProposalDetail';
 
 export default function WorkshopProposalDetailPage() {
   const params = useParams();
-  const router = useRouter();
-  const [proposal, setProposal] = useState<WorkshopProposalWithProposer | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showEditModal, setShowEditModal] = useState(false);
-
   const proposalId = params.id as string;
 
-  const fetchProposal = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const result = await apiFetch<{ proposal: WorkshopProposalWithProposer }>(
-        `/api/admin/workshops/proposals/${proposalId}`,
-      );
-
-      if (result.success && result.data?.proposal) {
-        setProposal(result.data.proposal);
-      } else {
-        if (result.error) logger.warn('Error fetching proposal', { error: result.error });
-        setError(result.error || 'Fehler beim Laden des Vorschlags');
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, [proposalId]);
-
-  useEffect(() => {
-    fetchProposal();
-  }, [fetchProposal]);
-
-  const handleEditSaved = () => {
-    setShowEditModal(false);
-    fetchProposal(); // Refresh data
-  };
+  const { proposal, isLoading, error, showEditModal, setShowEditModal, handleEditSaved } =
+    useWorkshopProposalDetail(proposalId)
 
   if (isLoading) {
     return (
@@ -150,13 +117,11 @@ export default function WorkshopProposalDetailPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Description */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
               <Heading level={2} className="text-xl font-semibold mb-4">Beschreibung</Heading>
               <p className="text-neutral-700 whitespace-pre-wrap">{proposal.description}</p>
             </section>
 
-            {/* Short Description */}
             {proposal.short_description && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Kurzbeschreibung</Heading>
@@ -164,21 +129,17 @@ export default function WorkshopProposalDetailPage() {
               </section>
             )}
 
-            {/* Learning Objectives */}
             {proposal.learning_objectives && proposal.learning_objectives.length > 0 && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Lernziele</Heading>
                 <ul className="list-disc list-inside space-y-2">
                   {proposal.learning_objectives.map((obj: string, idx: number) => (
-                    <li key={idx} className="text-neutral-700">
-                      {obj}
-                    </li>
+                    <li key={idx} className="text-neutral-700">{obj}</li>
                   ))}
                 </ul>
               </section>
             )}
 
-            {/* Prerequisites */}
             {proposal.prerequisites && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Voraussetzungen</Heading>
@@ -186,7 +147,6 @@ export default function WorkshopProposalDetailPage() {
               </section>
             )}
 
-            {/* Materials */}
             {(proposal.materials_provided || proposal.materials_required) && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Materialien</Heading>
@@ -209,7 +169,6 @@ export default function WorkshopProposalDetailPage() {
               </section>
             )}
 
-            {/* Edit History */}
             {proposal.edit_history && proposal.edit_history.length > 0 && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={2} className="text-xl font-semibold mb-4">Bearbeitungsverlauf</Heading>
@@ -220,7 +179,6 @@ export default function WorkshopProposalDetailPage() {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Status */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
               <Heading level={3} className="font-semibold mb-4">Status</Heading>
               <div className="flex items-center gap-2">
@@ -236,7 +194,6 @@ export default function WorkshopProposalDetailPage() {
               </div>
             </section>
 
-            {/* Details */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
               <Heading level={3} className="font-semibold mb-4">Details</Heading>
               <dl className="space-y-3 text-sm">
@@ -272,9 +229,7 @@ export default function WorkshopProposalDetailPage() {
                     <DollarSign className="w-4 h-4" />
                     Preis
                   </dt>
-                  <dd className="font-medium mt-1">
-                    {formatPriceCents(proposal.price_cents)}
-                  </dd>
+                  <dd className="font-medium mt-1">{formatPriceCents(proposal.price_cents)}</dd>
                 </div>
                 {proposal.target_audience && (
                   <div>
@@ -285,7 +240,6 @@ export default function WorkshopProposalDetailPage() {
               </dl>
             </section>
 
-            {/* Location */}
             <section className="bg-white rounded-lg shadow-sm border p-6">
               <Heading level={3} className="font-semibold mb-4 flex items-center gap-2">
                 <MapPin className="w-4 h-4" />
@@ -300,7 +254,6 @@ export default function WorkshopProposalDetailPage() {
               </p>
             </section>
 
-            {/* Reviewer Info */}
             {proposal.reviewed_by && (
               <section className="bg-white rounded-lg shadow-sm border p-6">
                 <Heading level={3} className="font-semibold mb-4">Reviewer</Heading>
@@ -325,7 +278,6 @@ export default function WorkshopProposalDetailPage() {
         </div>
       </div>
 
-      {/* Edit Modal */}
       {showEditModal && (
         <EditProposalModal
           proposal={proposal}
