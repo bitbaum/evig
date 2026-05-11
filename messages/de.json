@@ -870,6 +870,9 @@
         "software": "Software-Lösungen",
         "soon": "Bald verfügbar"
       },
+      "badges": {
+        "soon": "Bald"
+      },
       "filterByCategory": "Nach Kategorie filtern"
     },
     "servicePage": {

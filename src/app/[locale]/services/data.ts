@@ -19,7 +19,7 @@ export interface ServiceConfig {
   href: string
   available: boolean
   categoryKey: ServiceCategoryKey
-  badge?: string
+  badgeKey?: 'soon'
 }
 
 /** Fully hydrated service with translated strings — built in page.tsx */
@@ -30,6 +30,7 @@ export type Service = ServiceConfig & {
   category: string
   highlight: string
   pricing?: string
+  badge?: string
 }
 
 export const SERVICE_CONFIGS: ServiceConfig[] = [
@@ -88,7 +89,7 @@ export const SERVICE_CONFIGS: ServiceConfig[] = [
     icon: Cpu,
     href: '/services/build-your-computer',
     available: false,
-    badge: 'Soon',
+    badgeKey: 'soon',
     categoryKey: 'soon',
   },
 ]
