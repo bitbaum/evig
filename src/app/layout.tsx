@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
 import { CSRF_SCRIPT } from "@/lib/auth/csrf";
 import { ORG } from "@/config/org";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -19,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" suppressHydrationWarning>
+    <html lang="de" suppressHydrationWarning className={inter.variable}>
       <body className="font-sans fix-text-rendering antialiased">
         <script dangerouslySetInnerHTML={{ __html: CSRF_SCRIPT }} />
         <Providers>

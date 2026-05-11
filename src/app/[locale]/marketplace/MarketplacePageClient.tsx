@@ -158,7 +158,7 @@ export default function MarketplacePage() {
         {/* 2-column layout: sidebar + results */}
         <div className="flex gap-8 items-start">
           {/* Sidebar — desktop only */}
-          <aside className="hidden lg:block w-52 flex-shrink-0 sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto pb-4">
+          <aside className="hidden lg:block w-56 flex-shrink-0 sticky top-20 pb-4">
             <MarketplaceFilterSidebar {...sharedSidebarProps} />
           </aside>
 
