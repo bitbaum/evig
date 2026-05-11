@@ -42,11 +42,12 @@ const uTable = getTableName(users);
 interface DbVoteRow {
   id: string;
   decision_id: string;
-  user_id: string;
+  user_id: string | null;
+  voter_email?: string | null;
   vote_data: VoteData;
   created_at: string;
   updated_at: string;
-  user_email?: string;
+  user_email?: string | null;
   user_name?: string | null;
 }
 
@@ -245,16 +246,20 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
   const allVotesResult = await db.execute(sql`
     SELECT dv.*, u.email AS user_email, u.name AS user_name
     FROM ${sql.raw(dvTable)} dv
-    JOIN ${sql.raw(uTable)} u ON u.id = dv.user_id
+    LEFT JOIN ${sql.raw(uTable)} u ON u.id = dv.user_id
     WHERE dv.decision_id = ${decisionId}
     ORDER BY dv.created_at ASC
   `);
 
   return {
-    votes: (allVotesResult.rows as unknown as (DbVoteRow & { user_email: string; user_name: string | null })[]).map(v => ({
+    votes: (allVotesResult.rows as unknown as (DbVoteRow & { user_email: string | null; user_name: string | null; voter_email?: string | null })[]).map(v => ({
       ...v,
       voteData: v.vote_data,
-      user: { id: v.user_id, email: v.user_email, name: v.user_name },
+      user: {
+        id: v.user_id ?? null,
+        email: v.user_email ?? v.voter_email ?? '',
+        name: v.user_name,
+      },
     })),
     blind: false,
   };
