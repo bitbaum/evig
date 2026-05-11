@@ -14,7 +14,7 @@ import { Link } from '@/i18n/navigation'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import type { CategoryFormData } from '@/hooks/useBlogCategories'
-import { UI_COLOR_PALETTE } from '@/config/ui-colors'
+import { DEFAULT_CATEGORY_COLOR, UI_COLOR_PALETTE } from '@/config/ui-colors'
 import { generateSlug } from '@/lib/utils/slug'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 
@@ -36,7 +36,7 @@ export default function CategoryForm({
     name: initialData?.name || '',
     slug: initialData?.slug || '',
     description: initialData?.description || '',
-    color: initialData?.color || '#22c55e',
+    color: initialData?.color || DEFAULT_CATEGORY_COLOR,
     sort_order: initialData?.sort_order || 0,
     is_active: initialData?.is_active ?? true,
   })
@@ -218,7 +218,7 @@ export default function CategoryForm({
                       setFormData((prev) => ({ ...prev, color: e.target.value }))
                     }
                     className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white font-mono text-sm"
-                    placeholder="#22c55e"
+                    placeholder={DEFAULT_CATEGORY_COLOR}
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">

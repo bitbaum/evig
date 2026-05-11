@@ -13,6 +13,7 @@ import { CONTACT, ORG } from '@/config/org'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { z } from 'zod'
 import { escapeHtml } from '@/lib/utils/escape-html'
+import { EMAIL_INLINE_COLORS } from '@/config/ui-colors'
 
 const SuggestionSchema = z.object({
   suggestion: z.string().min(1).max(5000),
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
           <p><strong>Seite:</strong> ${ePage}</p>
           <p><strong>Zeitpunkt:</strong> ${eTimestamp}</p>
           <hr />
-          <div style="white-space: pre-wrap; padding: 16px; background: #f9f9f9; border-radius: 8px;">
+          <div style="white-space: pre-wrap; padding: 16px; background: ${EMAIL_INLINE_COLORS.mutedBlockBg}; border-radius: 8px;">
 ${escapeHtml(data.suggestion)}
           </div>
         </div>

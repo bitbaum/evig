@@ -5,6 +5,7 @@ import { Edit3, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import { uiEvents } from '@/lib/ui/uiEvents'
+import { ELEMENT_SELECTION_COLORS } from '@/config/ui-colors'
 
 import type { FeedbackScope } from '../types'
 import { SCOPE_CONFIG } from '../config/scope-config'
@@ -98,7 +99,7 @@ export default function SuggestionButton() {
             data-element-selection-overlay
             className="fixed inset-0 z-[65]"
             style={{
-              background: 'rgba(59,130,246,0.06)',
+              background: ELEMENT_SELECTION_COLORS.overlay,
               pointerEvents: 'none'
             }}
           >

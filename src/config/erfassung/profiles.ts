@@ -1,3 +1,5 @@
+import { CUSTOMER_PROFILE_COLORS } from '@/config/ui-colors'
+
 /**
  * Customer Profiles Configuration
  *
@@ -56,7 +58,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'oma',
     name_de: 'Oma/Opa',
     icon: '❤️',
-    color: '#EC4899',
+    color: CUSTOMER_PROFILE_COLORS.oma,
     description: 'Einfache Bedienung, grosser Bildschirm, langsam ist OK',
     requirements: [
       'Grosser Bildschirm (mind. 15")',
@@ -69,7 +71,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'buero',
     name_de: 'Büro',
     icon: '💼',
-    color: '#3B82F6',
+    color: CUSTOMER_PROFILE_COLORS.buero,
     description: 'Office-Anwendungen, E-Mail, Browser, Zuverlässigkeit',
     requirements: [
       'Microsoft Office oder LibreOffice',
@@ -82,7 +84,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'chiller',
     name_de: 'Chiller',
     icon: '📺',
-    color: '#8B5CF6',
+    color: CUSTOMER_PROFILE_COLORS.chiller,
     description: 'Streaming, Social Media, leichte Nutzung',
     requirements: [
       'Guter Bildschirm für Videos',
@@ -95,7 +97,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'student',
     name_de: 'Student',
     icon: '🎓',
-    color: '#06B6D4',
+    color: CUSTOMER_PROFILE_COLORS.student,
     description: 'Preis-Leistung, mobil, Akkulaufzeit',
     requirements: [
       'Leicht und tragbar',
@@ -110,7 +112,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'gamer',
     name_de: 'Gamer',
     icon: '🎮',
-    color: '#EF4444',
+    color: CUSTOMER_PROFILE_COLORS.gamer,
     description: 'Gaming, leistungsstarke Grafik, schneller Prozessor',
     requirements: [
       'Dedizierte Grafikkarte (GTX 1060+ oder besser)',
@@ -123,7 +125,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'dev',
     name_de: 'Entwickler',
     icon: '💻',
-    color: '#10B981',
+    color: CUSTOMER_PROFILE_COLORS.dev,
     description: 'Programmierung, viel RAM, gute Tastatur',
     requirements: [
       'Mindestens 16GB RAM (32GB ideal)',
@@ -136,7 +138,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'kreativ',
     name_de: 'Kreativ-Kopf',
     icon: '🎨',
-    color: '#F59E0B',
+    color: CUSTOMER_PROFILE_COLORS.kreativ,
     description: 'Bildbearbeitung, Illustration, Design-Software',
     requirements: [
       'Farbgenauer Bildschirm (IPS)',
@@ -149,7 +151,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'musik',
     name_de: 'Musik-Producer',
     icon: '🎵',
-    color: '#7C3AED',
+    color: CUSTOMER_PROFILE_COLORS.musik,
     description: 'Audio-Produktion, DAW, niedrige Latenz',
     requirements: [
       'Leiser Betrieb (wichtig für Aufnahmen)',
@@ -165,7 +167,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'grafiker',
     name_de: 'Grafiker/Designer',
     icon: '🖌️',
-    color: '#D946EF',
+    color: CUSTOMER_PROFILE_COLORS.grafiker,
     description: 'Professionelle Grafik, Adobe Suite, farbkritisch',
     requirements: [
       'Farbkalibrierter Monitor (100% sRGB)',
@@ -178,7 +180,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     slug: 'video',
     name_de: 'Video-Editor',
     icon: '🎬',
-    color: '#DC2626',
+    color: CUSTOMER_PROFILE_COLORS.video,
     description: 'Videoschnitt, Rendering, grosse Dateien',
     requirements: [
       'Starke CPU (mind. 6 Kerne)',

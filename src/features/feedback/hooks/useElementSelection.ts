@@ -4,6 +4,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { ELEMENT_SELECTION_COLORS } from '@/config/ui-colors'
 import { SelectedElement } from '../types'
 
 interface UseElementSelectionProps {
@@ -76,7 +77,7 @@ export function useElementSelection({ panelRef }: UseElementSelectionProps): Use
 
     // Add hover styling
     if (target && !panelRef.current?.contains(target)) {
-      target.style.outline = '2px solid rgba(59, 130, 246, 0.5)'
+      target.style.outline = `2px solid ${ELEMENT_SELECTION_COLORS.outline}`
       target.style.cursor = 'pointer'
       lastHoverRef.current = target
     }
@@ -115,15 +116,15 @@ export function useElementSelection({ panelRef }: UseElementSelectionProps): Use
       style.textContent = `
         .suggestion-selected-element {
           position: relative;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important;
-          border: 2px solid #3b82f6 !important;
+          box-shadow: 0 0 0 3px ${ELEMENT_SELECTION_COLORS.outline} !important;
+          border: 2px solid ${ELEMENT_SELECTION_COLORS.border} !important;
         }
         .suggestion-selected-element::after {
           content: '✓';
           position: absolute;
           top: -8px;
           right: -8px;
-          background: #3b82f6;
+          background: ${ELEMENT_SELECTION_COLORS.badge};
           color: white;
           border-radius: 50%;
           width: 20px;
@@ -197,7 +198,6 @@ export function useElementSelection({ panelRef }: UseElementSelectionProps): Use
     setIsElementSelectionMode
   }
 }
-
 
 
 

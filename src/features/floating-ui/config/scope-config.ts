@@ -4,12 +4,13 @@
  */
 
 import type { FeedbackScope } from '../types'
+import { FEEDBACK_SCOPE_COLORS } from '@/config/ui-colors'
 
 export const SCOPE_CONFIG = {
   site: {
     emoji: '\uD83C\uDF10',
     name: 'Gesamte Website',
-    color: '#7c3aed',
+    color: FEEDBACK_SCOPE_COLORS.site,
     focusRing: 'focus:ring-purple-500',
     buttonBg: 'bg-purple-600 hover:bg-purple-700',
     borderColor: 'border-purple-500',
@@ -20,7 +21,7 @@ export const SCOPE_CONFIG = {
   page: {
     emoji: '\uD83D\uDCC4',
     name: 'Diese Seite',
-    color: '#16a34a',
+    color: FEEDBACK_SCOPE_COLORS.page,
     focusRing: 'focus:ring-primary-500',
     buttonBg: 'bg-primary-600 hover:bg-primary-700',
     borderColor: 'border-primary-500',
@@ -31,7 +32,7 @@ export const SCOPE_CONFIG = {
   element: {
     emoji: '\uD83C\uDFAF',
     name: 'Spezifisches Element',
-    color: '#2563eb',
+    color: FEEDBACK_SCOPE_COLORS.element,
     focusRing: 'focus:ring-info-500',
     buttonBg: 'bg-info-600 hover:bg-info-700',
     borderColor: 'border-info-500',

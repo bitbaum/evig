@@ -9,6 +9,7 @@ import { ProjectHero as ProjectHeroType } from './types'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { getTextColor, getButtonVariant } from '@/lib/design-system'
+import { HERO_PATTERN_BACKGROUND } from '@/config/ui-colors'
 
 interface ProjectHeroProps {
   hero: ProjectHeroType
@@ -27,7 +28,7 @@ export function ProjectHero({ hero }: ProjectHeroProps) {
       <div
         className="absolute inset-0 opacity-10"
         style={{
-          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+          backgroundImage: HERO_PATTERN_BACKGROUND,
           backgroundSize: '20px 20px',
         }}
       ></div>

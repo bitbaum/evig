@@ -14,6 +14,7 @@ import { responsiveSpacing, responsiveTypography, responsiveButtons } from '@/li
 import { cn } from '@/lib/utils'
 import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
 import Link from 'next/link'
+import { HERO_PATTERN_BACKGROUND } from '@/config/ui-colors'
 
 export interface ResponsiveHeroProps {
   title: string
@@ -93,8 +94,7 @@ export function ResponsiveHero({
           <div
             className="absolute inset-0 opacity-10"
             style={{
-              backgroundImage:
-                'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)',
+              backgroundImage: HERO_PATTERN_BACKGROUND,
               backgroundSize: '20px 20px',
             }}
           />
@@ -160,4 +160,3 @@ export function ResponsiveHero({
     </section>
   )
 }
-

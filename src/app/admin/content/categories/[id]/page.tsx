@@ -8,6 +8,7 @@ import { redirect, notFound } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import CategoryForm from '@/components/admin/CategoryForm'
+import { DEFAULT_CATEGORY_COLOR } from '@/config/ui-colors'
 
 export const metadata: Metadata = {
   title: 'Kategorie bearbeiten',
@@ -67,7 +68,7 @@ export default async function EditCategoryPage({
         name: category.name,
         slug: category.slug,
         description: category.description || '',
-        color: category.color || '#22c55e',
+        color: category.color || DEFAULT_CATEGORY_COLOR,
         sort_order: category.sort_order,
         is_active: category.is_active,
       }}

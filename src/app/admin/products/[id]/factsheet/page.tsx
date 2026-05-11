@@ -27,7 +27,7 @@ import {
 } from 'lucide-react'
 import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
 import { ORG, LOCATIONS } from '@/config/org'
-import { CONDITION_COLORS } from '@/config/ui-colors'
+import { CONDITION_COLORS, PRINT_PREVIEW_SHADOW, PRODUCT_CONDITION_FALLBACK_COLORS } from '@/config/ui-colors'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
 
@@ -124,8 +124,7 @@ export default function FactSheetPage() {
 
   const condition = CONDITION_CONFIG[product.condition] || {
     label: product.condition,
-    color: '#6B7280',
-    bgColor: '#F3F4F6'
+    ...PRODUCT_CONDITION_FALLBACK_COLORS,
   }
   const specs = product.specifications || {}
   const specEntries = Object.entries(specs).slice(0, 8) // Limit to 8 specs for layout
@@ -374,7 +373,7 @@ export default function FactSheetPage() {
         @media screen {
           .factsheet-page {
             /* Simulate A4 on screen */
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            box-shadow: ${PRINT_PREVIEW_SHADOW};
           }
         }
       `}</style>
