@@ -295,7 +295,7 @@ export default function MarketplacePage() {
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-white shadow-xl overflow-y-auto flex flex-col">
+          <aside className="absolute right-0 top-0 h-full w-80 max-w-full bg-white shadow-xl flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-neutral-200 flex-shrink-0">
               <span className="font-semibold text-neutral-900">{t('filters.label')}</span>
               <button
