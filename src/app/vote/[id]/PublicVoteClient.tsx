@@ -60,6 +60,11 @@ export default function PublicVoteClient({
 
   const vote = useVoteState({ votingMethod, options, dotCount })
 
+  const hasImages = options.some((o) => o.imageUrl)
+  const isGalleryMode = hasImages || (
+    options.length > 5 && (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot')
+  )
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!email.trim()) {
@@ -180,7 +185,7 @@ export default function PublicVoteClient({
           <ApprovalVote
             options={options}
             approvedOptions={vote.approvedOptions}
-            isGalleryMode={false}
+            isGalleryMode={isGalleryMode}
             onToggle={vote.toggleApproval}
           />
         )}
@@ -190,7 +195,7 @@ export default function PublicVoteClient({
             allocations={vote.allocations}
             maxDots={vote.maxDots}
             usedDots={vote.usedDots}
-            isGalleryMode={false}
+            isGalleryMode={isGalleryMode}
             onSet={vote.setAllocation}
           />
         )}
@@ -198,7 +203,7 @@ export default function PublicVoteClient({
           <ScoreVote
             options={options}
             scores={vote.scores}
-            isGalleryMode={false}
+            isGalleryMode={isGalleryMode}
             onSet={vote.setScore}
           />
         )}

@@ -8,6 +8,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ExternalLink } from 'lucide-react'
 import { DECISION_STATUS } from '@/config/decisions'
 import { getTranslations } from 'next-intl/server'
@@ -94,26 +95,50 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
             </details>
           )}
 
-          {decision.options.length > 0 && (
-            <div className="mt-5">
-              <p className="text-sm font-semibold text-neutral-500 mb-2">
-                {t('optionsCount', { count: decision.options.length })}
-              </p>
-              <div className="space-y-1.5">
-                {decision.options.map((opt) => (
-                  <div
-                    key={opt.id}
-                    className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm"
-                  >
-                    <span className="font-medium text-neutral-800">{opt.label}</span>
-                    {opt.description && (
-                      <span className="ml-2 text-neutral-500">— {opt.description}</span>
-                    )}
+          {decision.options.length > 0 && (() => {
+            const hasImages = decision.options.some((o) => o.imageUrl)
+            return (
+              <div className="mt-5">
+                <p className="text-sm font-semibold text-neutral-500 mb-2">
+                  {t('optionsCount', { count: decision.options.length })}
+                </p>
+                {hasImages ? (
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {decision.options.map((opt) => (
+                      <div key={opt.id} className="rounded-lg border border-neutral-200 bg-neutral-50 overflow-hidden">
+                        {opt.imageUrl && (
+                          <div className="relative aspect-square bg-white">
+                            <Image
+                              src={opt.imageUrl}
+                              alt={opt.label}
+                              fill
+                              className="object-contain p-2"
+                              unoptimized
+                            />
+                          </div>
+                        )}
+                        <p className="px-2 py-1.5 text-xs font-medium text-neutral-700 truncate">{opt.label}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  <div className="space-y-1.5">
+                    {decision.options.map((opt) => (
+                      <div
+                        key={opt.id}
+                        className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm"
+                      >
+                        <span className="font-medium text-neutral-800">{opt.label}</span>
+                        {opt.description && (
+                          <span className="ml-2 text-neutral-500">— {opt.description}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )
+          })()}
         </div>
 
         {/* Voting form (client component) */}
