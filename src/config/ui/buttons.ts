@@ -38,6 +38,24 @@ export const BUTTONS = {
     success: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
     neutral: 'bg-neutral-200 text-neutral-800 hover:bg-neutral-300 focus:ring-neutral-500',
   },
+
+  // Generic app button primitive variants
+  app: {
+    default: 'bg-primary-600 text-white hover:bg-primary-700',
+    primary: 'bg-info-600 text-white hover:bg-info-700',
+    outline: 'border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700',
+    outlineLight: 'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
+    secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600',
+    ghost: 'bg-transparent hover:bg-white/10 text-inherit',
+    destructive: 'bg-error-600 text-white hover:bg-error-700',
+  },
+
+  badges: {
+    default: 'border-transparent bg-primary-600 text-white hover:bg-primary-700',
+    secondary: 'border-transparent bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600',
+    destructive: 'border-transparent bg-error-600 text-white hover:bg-error-700',
+    outline: 'border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:text-neutral-300',
+  },
 } as const
 
 /**

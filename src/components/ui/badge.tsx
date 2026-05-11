@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { BUTTONS } from "@/config/ui"
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,12 +14,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
         ref={ref}
         className={cn(
           'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
-          {
-            'border-transparent bg-primary-600 text-white hover:bg-primary-700': variant === 'default',
-            'border-transparent bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600': variant === 'secondary',
-            'border-transparent bg-error-600 text-white hover:bg-error-700': variant === 'destructive',
-            'border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:text-neutral-300': variant === 'outline',
-          },
+          BUTTONS.badges[variant],
           className
         )}
         {...props}

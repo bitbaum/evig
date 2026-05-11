@@ -9,6 +9,7 @@
  */
 
 import { KATEGORIEN } from '@/config/erfassung/categories'
+import { UI_STATUS } from '@/config/ui/status'
 
 // ============================================================================
 // Categories — derived from KATEGORIEN SSOT
@@ -74,11 +75,11 @@ export const MARKETPLACE_SELLER_TYPE = {
 export type MarketplaceSellerType = typeof MARKETPLACE_SELLER_TYPE[keyof typeof MARKETPLACE_SELLER_TYPE];
 
 export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color: string }> = {
-  active:   { label: 'Aktiv',      color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' },
-  sold:     { label: 'Verkauft',   color: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300' },
-  reserved: { label: 'Reserviert', color: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300' },
-  draft:    { label: 'Entwurf',    color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300' },
-  removed:  { label: 'Entfernt',   color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300' },
+  active:   { label: 'Aktiv',      color: UI_STATUS.success },
+  sold:     { label: 'Verkauft',   color: UI_STATUS.info },
+  reserved: { label: 'Reserviert', color: UI_STATUS.warning },
+  draft:    { label: 'Entwurf',    color: UI_STATUS.neutral },
+  removed:  { label: 'Entfernt',   color: UI_STATUS.danger },
 };
 
 // ============================================================================
@@ -166,13 +167,13 @@ export const ORDER_STATUSES = Object.values(ORDER_STATUS);
 export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
 
 export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: string }> = {
-  pending_payment: { label: 'Zahlung ausstehend', color: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300' },
-  paid:            { label: 'Bezahlt',            color: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300' },
-  shipped:         { label: 'Versendet',          color: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300' },
-  delivered:       { label: 'Geliefert',          color: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300' },
-  completed:       { label: 'Abgeschlossen',      color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' },
-  cancelled:       { label: 'Storniert',          color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300' },
-  refunded:        { label: 'Erstattet',          color: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300' },
+  pending_payment: { label: 'Zahlung ausstehend', color: UI_STATUS.warning },
+  paid:            { label: 'Bezahlt',            color: UI_STATUS.info },
+  shipped:         { label: 'Versendet',          color: UI_STATUS.purple },
+  delivered:       { label: 'Geliefert',          color: UI_STATUS.teal },
+  completed:       { label: 'Abgeschlossen',      color: UI_STATUS.success },
+  cancelled:       { label: 'Storniert',          color: UI_STATUS.neutral },
+  refunded:        { label: 'Erstattet',          color: UI_STATUS.danger },
 };
 
 // ============================================================================
@@ -181,7 +182,7 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: st
 
 export const GRATIS_CONFIG = {
   label: 'Gratis',
-  color: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
+  color: UI_STATUS.teal,
   borderColor: 'border-teal-200 dark:border-teal-800',
 } as const;
 
@@ -193,7 +194,7 @@ export const VERIFICATION_CONFIG = {
   badge: {
     label: 'Geprüft von Revamp-IT',
     shortLabel: 'Geprüft',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    color: UI_STATUS.success,
     borderColor: 'border-primary-200 dark:border-primary-800',
   },
 } as const;
