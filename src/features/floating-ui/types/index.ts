@@ -2,7 +2,8 @@
  * Types for Floating UI Components
  */
 
-export type FeedbackScope = 'page' | 'element' | 'site'
+import type { FeedbackScope } from '@/config/feedback-scopes'
+export type { FeedbackScope }
 
 export interface SelectedElement {
   element: Element

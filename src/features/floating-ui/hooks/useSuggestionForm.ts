@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import type { FeedbackScope, SelectedElement } from '../types'
+import { submitSuggestionToAPI } from '@/lib/api/submit-suggestion'
 
 interface UseSuggestionFormParams {
   feedbackScope: FeedbackScope
@@ -68,35 +67,28 @@ export function useSuggestionForm({ feedbackScope, selectedElements, onSubmitSuc
     try {
       const currentPage = getCurrentPageInfo()
 
-      const submissionData = {
-        suggestion: actualSuggestion,
-        contact: actualContact || undefined,
-        page: currentPage.path,
-        url: window.location.href,
-        pageTitle: currentPage.title,
-        pageSection: currentPage.path.split('/')[1] || 'home',
-        feedbackScope,
-        selectedElements: selectedElements.map(el => ({
-          elementType: el.elementType,
-          elementText: el.elementText.substring(0, 100),
-          selector: el.selector
-        })),
-        timestamp: new Date().toISOString()
-      }
+      const ok = await submitSuggestionToAPI(
+        {
+          suggestion: actualSuggestion,
+          contact: actualContact || undefined,
+          scope: feedbackScope,
+          selectedElements: selectedElements.map(el => ({
+            elementType: el.elementType,
+            elementText: el.elementText.substring(0, 100),
+            selector: el.selector,
+          })),
+          page: currentPage.path,
+          url: window.location.href,
+          pageTitle: currentPage.title,
+          pageSection: currentPage.path.split('/')[1] || 'home',
+          timestamp: new Date().toISOString(),
+        },
+        setSubmitError
+      )
 
-      const result = await apiFetch<unknown>('/api/suggestions', {
-        method: 'POST',
-        body: submissionData,
-      })
-
-      if (!result.success) {
-        logger.error('Submission error', { error: result.error })
-        setSubmitError('Fehler beim Senden. Bitte versuche es erneut.')
-      } else {
+      if (ok) {
         setSubmitted(true)
-        setTimeout(() => {
-          onSubmitSuccessRef.current()
-        }, 2000)
+        setTimeout(() => { onSubmitSuccessRef.current() }, 2000)
       }
     } finally {
       setIsSubmitting(false)

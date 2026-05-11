@@ -1,10 +1,6 @@
-/**
- * QuickSuggestions Component
- * @fileoverview Component providing quick suggestion templates based on scope
- */
-
 import { Button } from '@/components/ui/button'
-import { FeedbackScope, SelectedElement } from '../types'
+import { getQuickSuggestions } from '@/config/feedback-scopes'
+import type { FeedbackScope, SelectedElement } from '../types'
 
 interface QuickSuggestionsProps {
   feedbackScope: FeedbackScope
@@ -17,41 +13,9 @@ export function QuickSuggestions({
   selectedElements,
   onQuickSuggestion
 }: QuickSuggestionsProps) {
-  const getSuggestions = () => {
-    switch (feedbackScope) {
-      case 'page':
-        return [
-          "Die Seite lädt zu langsam",
-          "Navigation ist unklar",
-          "Inhalt ist schwer zu finden",
-          "Mobile Ansicht könnte besser sein",
-          "Farben/Text sind schlecht lesbar"
-        ]
-      case 'site':
-        return [
-          "Suchfunktion fehlt",
-          "Mehrsprachigkeit wäre gut",
-          "Newsletter-Anmeldung hinzufügen",
-          "Soziale Medien Links fehlen",
-          "Datenschutz-Informationen verbessern"
-        ]
-      case 'element':
-        if (selectedElements.length === 0) return []
-        return [
-          "Dieses Element ist nicht klar",
-          "Text ist zu klein/gross",
-          "Farbe passt nicht zum Design",
-          "Funktionalität fehlt",
-          "Positionierung ist ungünstig"
-        ]
-      default:
-        return []
-    }
-  }
+  const suggestions = getQuickSuggestions(feedbackScope, selectedElements.length)
 
-  const suggestions = getSuggestions()
-
-  if (suggestions.length === 0) return null
+  if (suggestions.length === 0 || suggestions[0] === 'Element auswählen') return null
 
   return (
     <div className="space-y-2">
@@ -73,9 +37,3 @@ export function QuickSuggestions({
     </div>
   )
 }
-
-
-
-
-
-

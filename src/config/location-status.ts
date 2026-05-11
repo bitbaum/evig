@@ -33,3 +33,8 @@ export const LOCATION_STATUS_COLORS: Record<string, string> = {
   [LOCATION_STATUS.REJECTED]: 'bg-error-100 text-error-800',
   [LOCATION_STATUS.SUSPENDED]: 'bg-orange-100 text-orange-800',
 };
+
+/** Combined config for AdminStatusBadge — avoids rebuilding via Object.fromEntries in page files */
+export const LOCATION_STATUS_CONFIG: Record<string, { label: string; color: string }> = Object.fromEntries(
+  Object.values(LOCATION_STATUS).map(s => [s, { label: LOCATION_STATUS_LABELS[s], color: LOCATION_STATUS_COLORS[s] }])
+)

@@ -16,6 +16,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
 import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
 import { MEMBERSHIP } from '@/config/org'
+import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
 
 export const metadata: Metadata = {
   title: 'Mitgliedschaften',
@@ -54,12 +55,6 @@ async function getApplicationCount(): Promise<number> {
   } catch {
     return 0
   }
-}
-
-const MEMBER_TYPE_LABELS: Record<string, string> = {
-  regular: 'Ordentlich',
-  reduced: 'Ermässigt',
-  honorary: 'Ehrenmitglied',
 }
 
 function isPaid(member: MemberRow): boolean {
@@ -133,7 +128,7 @@ export default async function MembershipPage() {
                       </td>
                       <td className="px-4 py-3">
                         <span className="text-neutral-700 dark:text-neutral-300">
-                          {MEMBER_TYPE_LABELS[member.member_type || 'regular'] || member.member_type}
+                          {MEMBERSHIP_TYPE_LABELS[(member.member_type || 'regular') as keyof typeof MEMBERSHIP_TYPE_LABELS] || member.member_type}
                         </span>
                         <span className="text-neutral-400 ml-1 text-xs">CHF {fee}</span>
                       </td>

@@ -10,7 +10,7 @@ import {
   Calendar,
   Wrench,
 } from 'lucide-react'
-import { CATEGORY_LABELS } from '@/config/service-categories'
+import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
 import { formatPriceCents } from '@/config/marketplace'
 import Heading from '@/components/admin/AdminHeading'
 
@@ -42,7 +42,7 @@ function formatDuration(minutes: number | null): string {
   return `${hours} Std. ${mins} Min.`
 }
 
-const categoryOptions = Object.entries(CATEGORY_LABELS) as [string, string][]
+const categoryOptions = Object.entries(SERVICE_CATEGORY_LABELS) as [string, string][]
 
 export function ServiceListClient({ services }: ServiceListClientProps) {
   const [search, setSearch] = useState('')
@@ -133,7 +133,7 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="text-sm text-neutral-700 dark:text-neutral-300">
-                      {service.category ? CATEGORY_LABELS[service.category as keyof typeof CATEGORY_LABELS] || service.category : '-'}
+                      {service.category ? SERVICE_CATEGORY_LABELS[service.category as keyof typeof SERVICE_CATEGORY_LABELS] || service.category : '-'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

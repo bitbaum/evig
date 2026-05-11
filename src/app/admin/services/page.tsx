@@ -10,7 +10,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_LABELS } from '@/config/service-categories'
+import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
 import { formatPriceCents } from '@/config/marketplace'
 import {
   Plus,
@@ -231,7 +231,7 @@ export default async function AdminServicesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm text-neutral-700 dark:text-neutral-300">
-                        {service.category ? CATEGORY_LABELS[service.category as keyof typeof CATEGORY_LABELS] || service.category : '-'}
+                        {service.category ? SERVICE_CATEGORY_LABELS[service.category as keyof typeof SERVICE_CATEGORY_LABELS] || service.category : '-'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

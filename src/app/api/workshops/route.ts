@@ -3,10 +3,14 @@ import { auth } from '@/auth'
 import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
 import { eq, desc, asc, inArray, sql } from 'drizzle-orm'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 
 export async function GET(request: NextRequest) {
+  const clientIp = getClientIdentifier(request)
+  if (!rateLimiters.listingBrowse(clientIp)) return apiRateLimited()
+
   try {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')

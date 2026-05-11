@@ -57,27 +57,22 @@ export function LoginForm() {
 
   const getErrorMessage = (error: string | null) => {
     if (!error) return null
-    switch (error) {
-      case 'CredentialsSignin':
-      case 'Configuration':
-        return t('errorCredentials')
-      case 'AccessDenied':
-        return t('errorAccessDenied')
-      case 'OAuthAccountNotLinked':
-        return t('errorOAuthLinked')
-      case 'invalid_token':
-        return t('errorInvalidToken')
-      case 'verification_failed':
-        return t('errorVerificationFailed')
-      case 'verification_error':
-        return t('errorVerificationError')
-      default:
-        // Show database/connection errors in a user-friendly way
-        if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
-          return t('errorConnection')
-        }
-        return error
+    type AuthLoginKey = Parameters<typeof t>[0]
+    const AUTH_ERROR_I18N_KEY: Record<string, AuthLoginKey> = {
+      CredentialsSignin: 'errorCredentials',
+      Configuration: 'errorCredentials',
+      AccessDenied: 'errorAccessDenied',
+      OAuthAccountNotLinked: 'errorOAuthLinked',
+      invalid_token: 'errorInvalidToken',
+      verification_failed: 'errorVerificationFailed',
+      verification_error: 'errorVerificationError',
     }
+    const i18nKey = AUTH_ERROR_I18N_KEY[error]
+    if (i18nKey) return t(i18nKey)
+    if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
+      return t('errorConnection')
+    }
+    return error
   }
 
   return (

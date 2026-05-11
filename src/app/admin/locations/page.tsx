@@ -5,11 +5,10 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
-import { LOCATION_STATUS, getLocationStatusLabel, LOCATION_STATUS_COLORS } from '@/config/location-status'
+import { LOCATION_STATUS, LOCATION_STATUS_CONFIG } from '@/config/location-status'
 import { apiFetch } from '@/lib/api/client'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
-import type { StatusConfig } from '@/components/admin/AdminStatusBadge'
 import { Pagination } from '@/components/ui/Pagination'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -41,13 +40,6 @@ interface Location {
 }
 
 const PAGE_SIZE = 20
-
-const LOCATION_STATUS_CONFIG: Record<string, StatusConfig> = Object.fromEntries(
-  Object.keys(LOCATION_STATUS_COLORS).map(status => [
-    status,
-    { label: getLocationStatusLabel(status), color: LOCATION_STATUS_COLORS[status] },
-  ])
-)
 
 function getTypeIcon(type: string) {
   switch (type) {
@@ -183,10 +175,10 @@ export default function AdminLocationsPage() {
             value: filters.status,
             onChange: (value) => setFilters(prev => ({ ...prev, status: value })),
             options: [
-              { value: LOCATION_STATUS.PENDING, label: getLocationStatusLabel(LOCATION_STATUS.PENDING) },
-              { value: LOCATION_STATUS.APPROVED, label: getLocationStatusLabel(LOCATION_STATUS.APPROVED) },
-              { value: LOCATION_STATUS.REJECTED, label: getLocationStatusLabel(LOCATION_STATUS.REJECTED) },
-              { value: LOCATION_STATUS.SUSPENDED, label: getLocationStatusLabel(LOCATION_STATUS.SUSPENDED) },
+              { value: LOCATION_STATUS.PENDING, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.PENDING].label },
+              { value: LOCATION_STATUS.APPROVED, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.APPROVED].label },
+              { value: LOCATION_STATUS.REJECTED, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.REJECTED].label },
+              { value: LOCATION_STATUS.SUSPENDED, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.SUSPENDED].label },
             ],
           },
           {
@@ -323,7 +315,7 @@ export default function AdminLocationsPage() {
                 {searchName.trim()
                   ? `Keine Orte für "${searchName}" gefunden.`
                   : filters.status !== 'all'
-                  ? `Keine Orte mit Status "${getLocationStatusLabel(filters.status)}" gefunden.`
+                  ? `Keine Orte mit Status "${LOCATION_STATUS_CONFIG[filters.status as keyof typeof LOCATION_STATUS_CONFIG]?.label ?? filters.status}" gefunden.`
                   : ADMIN_CONTENT.locations.emptyDescription}
               </p>
               <Link

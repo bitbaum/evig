@@ -135,7 +135,7 @@ export function getCategoryBadgeClasses(category: string | null): string {
 /**
  * Category labels in German
  */
-export const CATEGORY_LABELS: Record<ServiceCategory, string> = {
+export const SERVICE_CATEGORY_LABELS: Record<ServiceCategory, string> = {
   repair: 'Reparatur',
   data: 'Daten',
   recycling: 'Recycling',
@@ -149,5 +149,5 @@ export const CATEGORY_LABELS: Record<ServiceCategory, string> = {
  */
 export function getCategoryLabel(category: string | null): string {
   if (!category) return 'Allgemein'
-  return CATEGORY_LABELS[category as ServiceCategory] ?? category
+  return SERVICE_CATEGORY_LABELS[category as ServiceCategory] ?? category
 }

@@ -1,13 +1,5 @@
 /**
- * Team Help Request Status Constants (SSOT)
- * Used for internal team help request management.
+ * @deprecated Import from '@/config/activity' instead.
+ * This file is a compatibility shim — SSOT is activity.ts.
  */
-
-export const HELP_REQUEST_STATUS = {
-  OPEN: 'open',
-  IN_PROGRESS: 'in_progress',
-  RESOLVED: 'resolved',
-  CANCELLED: 'cancelled',
-} as const;
-
-export type HelpRequestStatus = typeof HELP_REQUEST_STATUS[keyof typeof HELP_REQUEST_STATUS];
+export { HELP_REQUEST_STATUS, type HelpRequestStatus } from '@/config/activity'

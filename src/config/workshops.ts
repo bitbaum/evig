@@ -265,3 +265,9 @@ export function getLevelBadgeClass(levelName: string | null | undefined): string
 export function getCategoryNames(): string[] {
   return WORKSHOP_CATEGORIES.map((cat) => cat.name);
 }
+
+/** Valid max-participants options for workshop proposal form */
+export const WORKSHOP_MAX_PARTICIPANTS_OPTIONS = [5, 8, 10, 12, 15, 20, 25, 30] as const
+
+/** Valid duration options (hours) for workshop proposal form */
+export const WORKSHOP_DURATION_OPTIONS = [2, 3, 4, 5, 6, 8, 10] as const

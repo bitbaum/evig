@@ -7,8 +7,8 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { callAnalyzeProductAPI } from '@/lib/api/ai-product-analysis'
 
 // Full analysis response from the API
 export interface ProductAnalysis {
@@ -67,14 +67,7 @@ export function useAIProductAnalysis(options: UseAIProductAnalysisOptions = {}) 
     setSustainabilityScore(null)
 
     try {
-      const response = await apiFetch<{
-        analysis?: ProductAnalysis
-        sustainability_score?: SustainabilityScore
-        saved_product_id?: string
-      }>('/api/ai/analyze-product', {
-        method: 'POST',
-        body: { image: imageData, saveToDatabase },
-      })
+      const response = await callAnalyzeProductAPI(imageData, saveToDatabase)
 
       if (!response.success || !response.data) {
         setError(response.error || 'Analyse fehlgeschlagen')

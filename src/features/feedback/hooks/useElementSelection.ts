@@ -5,6 +5,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { ELEMENT_SELECTION_COLORS } from '@/config/ui-colors'
+import { generateSelector } from '@/lib/utils/element-selector'
 import { SelectedElement } from '../types'
 
 interface UseElementSelectionProps {
@@ -23,18 +24,6 @@ export function useElementSelection({ panelRef }: UseElementSelectionProps): Use
   const [selectedElements, setSelectedElements] = useState<SelectedElement[]>([])
   const [isElementSelectionMode, setIsElementSelectionMode] = useState(false)
   const lastHoverRef = useRef<HTMLElement | null>(null)
-
-  // Simple selector generator
-  const generateSelector = useCallback((element: Element): string => {
-    if (element.id) return `#${element.id}`
-    if (element.className) {
-      const classes = element.className.split(' ').filter(c => c && !c.startsWith('suggestion-'))
-      if (classes.length > 0) {
-        return `${element.tagName.toLowerCase()}.${classes.slice(0, 2).join('.')}`
-      }
-    }
-    return element.tagName.toLowerCase()
-  }, [])
 
   // Handle element click in selection mode
   const handleElementClick = useCallback((event: MouseEvent) => {

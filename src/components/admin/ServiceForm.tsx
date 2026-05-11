@@ -15,7 +15,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from './IconPicker'
 import { SERVICE_CATEGORIES } from '@/config/database'
-import { CATEGORY_LABELS } from '@/config/service-categories'
+import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
 import {
   CollapsibleSection,
   FeaturesSection,
@@ -205,7 +205,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
               className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             >
               {Object.values(SERVICE_CATEGORIES).map((cat) => (
-                <option key={cat} value={cat}>{CATEGORY_LABELS[cat as keyof typeof CATEGORY_LABELS]}</option>
+                <option key={cat} value={cat}>{SERVICE_CATEGORY_LABELS[cat as keyof typeof SERVICE_CATEGORY_LABELS]}</option>
               ))}
             </select>
           </div>

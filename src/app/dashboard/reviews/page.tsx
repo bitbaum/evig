@@ -18,14 +18,9 @@ import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { REVIEW_STATUS } from '@/config/review-status'
+import { REVIEW_STATUS, REVIEW_STATUS_BADGES } from '@/config/review-status'
 
-const STATUS_STYLES: Record<string, string> = {
-  [REVIEW_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
-  [REVIEW_STATUS.PENDING_MODERATION]: 'bg-orange-100 text-orange-800',
-  [REVIEW_STATUS.HIDDEN]: 'bg-error-100 text-error-800',
-  [REVIEW_STATUS.DELETED]: 'bg-neutral-100 text-neutral-800'
-}
+const STATUS_STYLES = REVIEW_STATUS_BADGES
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
   [REVIEW_STATUS.PUBLISHED]: <CheckCircle className="w-3 h-3" />,

@@ -63,3 +63,8 @@ export function getReviewFilterLabel(status: string): string {
 export function getReviewActionLabel(action: string): string {
   return REVIEW_ACTION_LABELS[action] ?? 'moderiert'
 }
+
+/** Combined config for AdminStatusBadge — avoids rebuilding via Object.fromEntries in page files */
+export const REVIEW_STATUS_CONFIG: Record<string, { label: string; color: string }> = Object.fromEntries(
+  Object.values(REVIEW_STATUS).map(s => [s, { label: REVIEW_STATUS_LABELS[s], color: REVIEW_STATUS_BADGES[s] }])
+)

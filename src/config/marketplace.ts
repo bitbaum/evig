@@ -29,7 +29,7 @@ export type MarketplaceCategoryValue = typeof MARKETPLACE_CATEGORY_VALUES[number
 /**
  * Category label lookup — derived from KATEGORIEN with Sonstiges fallback.
  */
-export const CATEGORY_LABELS: Record<string, string> = Object.fromEntries([
+export const MARKETPLACE_CATEGORY_LABELS: Record<string, string> = Object.fromEntries([
   ...KATEGORIEN.map(k => [k.value, k.label]),
   ['99', 'Sonstiges'],
 ])
@@ -45,7 +45,7 @@ export const CATEGORY_ICONS: Record<string, string> = Object.fromEntries(
  * Get category label by value. Falls back to the value itself if not found.
  */
 export function getCategoryLabel(value: string): string {
-  return CATEGORY_LABELS[value] || value
+  return MARKETPLACE_CATEGORY_LABELS[value] || value
 }
 
 // ============================================================================

@@ -8,7 +8,7 @@ import {
   PAYMENT_MODES,
   PAYMENT_MODE_LABELS,
   MARKETPLACE_CATEGORY_VALUES,
-  CATEGORY_LABELS,
+  MARKETPLACE_CATEGORY_LABELS,
   CATEGORY_ICONS,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
@@ -138,7 +138,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             <option value="">{t('selectPlaceholder')}</option>
             {MARKETPLACE_CATEGORY_VALUES.map(val => (
               <option key={val} value={val}>
-                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{CATEGORY_LABELS[val] || val}
+                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{MARKETPLACE_CATEGORY_LABELS[val] || val}
               </option>
             ))}
           </select>

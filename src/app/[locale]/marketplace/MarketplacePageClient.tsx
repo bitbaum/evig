@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import {
   MARKETPLACE_CATEGORY_VALUES,
-  CATEGORY_LABELS,
+  MARKETPLACE_CATEGORY_LABELS,
   CATEGORY_ICONS,
   DELIVERY_OPTIONS,
   DELIVERY_LABELS,
@@ -152,7 +152,7 @@ export default function MarketplacePage() {
                 }`}
                 aria-pressed={filters.category === val}
               >
-                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{CATEGORY_LABELS[val] || val}
+                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{MARKETPLACE_CATEGORY_LABELS[val] || val}
               </button>
             ))}
           </div>

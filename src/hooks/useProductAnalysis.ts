@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { callAnalyzeProductAPI } from '@/lib/api/ai-product-analysis'
 import type { ErfassungFormData } from '@/types/erfassung'
 
 interface AnalysisResult {
@@ -24,17 +24,7 @@ export function useProductAnalysis(): UseProductAnalysisResult {
     setError(null)
 
     try {
-      const result = await apiFetch<{
-        analysis?: {
-          brand?: string
-          product_name?: string
-          condition?: string
-          estimated_price_chf?: number
-        }
-      }>('/api/ai/analyze-product', {
-        method: 'POST',
-        body: { image: imageBase64, saveToDatabase: false },
-      })
+      const result = await callAnalyzeProductAPI(imageBase64, false)
 
       if (!result.success) {
         throw new Error(result.error || 'Analyse fehlgeschlagen')

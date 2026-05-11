@@ -79,6 +79,9 @@ export const HELP_REQUEST_STATUSES = {
   CANCELLED: 'cancelled',
 } as const;
 
+/** Alias for HELP_REQUEST_STATUSES — prefer this name for consistency with other *_STATUS constants */
+export const HELP_REQUEST_STATUS = HELP_REQUEST_STATUSES
+
 export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
   open: 'Offen',
   in_progress: 'In Bearbeitung',

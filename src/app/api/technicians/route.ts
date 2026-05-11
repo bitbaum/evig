@@ -10,12 +10,13 @@ import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { repairerProfiles, userSkills, users } from '@/db/schema'
 import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm'
-import { apiError, apiSuccessCached, parsePagination } from '@/lib/api/helpers'
+import { apiError, apiSuccessCached, apiRateLimited, parsePagination } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { getSkillIds } from '@/config/it-hilfe'
 import { REPAIRER_STATUS } from '@/config/repairer-status'
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 
 /**
  * GET /api/technicians
@@ -32,6 +33,9 @@ import { REPAIRER_STATUS } from '@/config/repairer-status'
  *   offset        — pagination offset
  */
 export async function GET(request: NextRequest) {
+  const clientIp = getClientIdentifier(request)
+  if (!rateLimiters.listingBrowse(clientIp)) return apiRateLimited()
+
   try {
     const { searchParams } = new URL(request.url)
 

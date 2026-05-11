@@ -5,14 +5,13 @@ import { formatDateShort } from '@/lib/date-formats'
 import {
   type ReviewStatus,
   REVIEW_STATUS,
-  REVIEW_STATUS_LABELS,
-  REVIEW_STATUS_BADGES,
+  REVIEW_STATUS_CONFIG,
   getReviewFilterLabel,
   getReviewActionLabel,
 } from '@/config/review-status'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { apiFetch } from '@/lib/api/client'
-import { AdminStatusBadge, type StatusConfig } from '@/components/admin/AdminStatusBadge'
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { Modal } from '@/components/ui/Modal'
 import { toast } from 'sonner'
@@ -58,13 +57,6 @@ interface Review {
     createdAt: string
   }
 }
-
-const REVIEW_STATUS_CONFIG: Record<string, StatusConfig> = Object.fromEntries(
-  Object.values(REVIEW_STATUS).map((status) => [
-    status,
-    { label: REVIEW_STATUS_LABELS[status], color: REVIEW_STATUS_BADGES[status] },
-  ])
-)
 
 export default function AdminReviewsPage() {
   const [reviews, setReviews] = useState<Review[]>([])

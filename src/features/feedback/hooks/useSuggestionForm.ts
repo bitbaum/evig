@@ -5,8 +5,7 @@
 
 import { useState, useCallback } from 'react'
 import { SuggestionFormData, FeedbackScope, SelectedElement } from '../types'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
+import { submitSuggestionToAPI } from '@/lib/api/submit-suggestion'
 
 interface UseSuggestionFormProps {
   onSuccess?: () => void
@@ -63,29 +62,19 @@ export function useSuggestionForm({ onSuccess }: UseSuggestionFormProps = {}): U
     setSubmitError(null)
 
     try {
-      const result = await apiFetch<unknown>('/api/suggestions', {
-        method: 'POST',
-        body: {
+      const ok = await submitSuggestionToAPI(
+        {
           suggestion: formData.suggestion,
           contact: formData.contact,
           scope,
-          selectedElements: selectedElements.map(el => ({
-            selector: el.selector,
-            text: el.text,
-          })),
+          selectedElements: selectedElements.map(el => ({ selector: el.selector, text: el.text })),
           pageUrl: window.location.href,
           timestamp: new Date().toISOString(),
         },
-      })
-
-      if (!result.success) {
-        logger.error('Error submitting suggestion', { error: result.error })
-        setSubmitError('Fehler beim Senden. Bitte versuche es später erneut.')
-        return false
-      }
-
-      onSuccess?.()
-      return true
+        setSubmitError
+      )
+      if (ok) onSuccess?.()
+      return ok
     } finally {
       setIsSubmitting(false)
     }

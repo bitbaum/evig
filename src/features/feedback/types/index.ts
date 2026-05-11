@@ -3,7 +3,7 @@
  * @fileoverview Type definitions for the feedback suggestion system
  */
 
-export type FeedbackScope = 'page' | 'site' | 'element'
+export type { FeedbackScope } from '@/config/feedback-scopes'
 
 export interface SelectedElement {
   element: Element

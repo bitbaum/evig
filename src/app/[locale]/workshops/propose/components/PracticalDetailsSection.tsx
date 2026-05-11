@@ -4,6 +4,7 @@ import { Clock } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { WORKSHOP_MAX_PARTICIPANTS_OPTIONS, WORKSHOP_DURATION_OPTIONS } from '@/config/workshops'
 
 interface PracticalDetailsSectionProps {
   durationHours: string
@@ -25,8 +26,6 @@ export function PracticalDetailsSection({
   onChange
 }: PracticalDetailsSectionProps) {
   const t = useTranslations('workshops.propose')
-  const maxParticipantsOptions = [5, 8, 10, 12, 15, 20, 25, 30]
-  const minParticipantsOptions = [2, 3, 4, 5, 6, 8, 10]
 
   return (
     <div className="mb-8">
@@ -80,7 +79,7 @@ export function PracticalDetailsSection({
             required
             aria-required="true"
           >
-            {maxParticipantsOptions.map(num => (
+            {WORKSHOP_MAX_PARTICIPANTS_OPTIONS.map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
           </select>
@@ -97,7 +96,7 @@ export function PracticalDetailsSection({
             required
             aria-required="true"
           >
-            {minParticipantsOptions.map(num => (
+            {WORKSHOP_DURATION_OPTIONS.map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
           </select>

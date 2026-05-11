@@ -2,24 +2,11 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import type { FeedbackScope, SelectedElement } from '../types'
+import { generateSelector } from '@/lib/utils/element-selector'
 
 interface UseElementSelectionParams {
   feedbackScope: FeedbackScope
   setFeedbackScope: (scope: FeedbackScope) => void
-}
-
-/**
- * Simple selector generator for identifying DOM elements.
- */
-function generateSelector(element: Element): string {
-  if (element.id) return `#${element.id}`
-  if (element.className) {
-    const classes = element.className.split(' ').filter(c => c && !c.startsWith('suggestion-'))
-    if (classes.length > 0) {
-      return `${element.tagName.toLowerCase()}.${classes.slice(0, 2).join('.')}`
-    }
-  }
-  return element.tagName.toLowerCase()
 }
 
 export function useElementSelection({ feedbackScope, setFeedbackScope }: UseElementSelectionParams) {
