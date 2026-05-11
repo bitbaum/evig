@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter, useParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import {
   ArrowLeft,
@@ -14,90 +12,25 @@ import {
   FileText,
 } from 'lucide-react'
 import { generateSlug } from '@/lib/utils/slug'
-import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
-import { UI_FEEDBACK_MS } from '@/config/limits'
-
-interface PageData {
-  id: string
-  slug: string
-  title: string
-  content: string
-  is_published: boolean
-  seo_title: string | null
-  seo_description: string | null
-}
+import { useEditStaticPage } from '@/hooks/useEditStaticPage'
 
 export default function EditStaticPagePage() {
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
   const params = useParams()
   const pageId = params.id as string
 
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-
-  const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    content: '',
-    is_published: false,
-    seo_title: '',
-    seo_description: '',
-  })
-
-  useEffect(() => {
-    if (sessionStatus !== 'authenticated' || !pageId) return
-    let cancelled = false
-    async function loadPage() {
-      setLoading(true)
-      const result = await apiFetch<PageData>(`/api/admin/pages/${pageId}`)
-      if (cancelled) return
-      setLoading(false)
-      if (result.success && result.data) {
-        const page = result.data
-        setFormData({
-          title: page.title || '',
-          slug: page.slug || '',
-          content: page.content || '',
-          is_published: page.is_published || false,
-          seo_title: page.seo_title || '',
-          seo_description: page.seo_description || '',
-        })
-      } else {
-        setError(result.error || 'Seite nicht gefunden')
-      }
-    }
-    loadPage()
-    return () => { cancelled = true }
-  }, [sessionStatus, pageId])
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError('')
-    setSuccess('')
-
-    if (!formData.title.trim() || !formData.slug.trim()) {
-      setError('Titel und URL-Slug sind erforderlich')
-      return
-    }
-
-    setSaving(true)
-    const result = await apiFetch<void>(`/api/admin/pages/${pageId}`, {
-      method: 'PUT',
-      body: formData,
-    })
-    setSaving(false)
-
-    if (result.success) {
-      setSuccess('Seite erfolgreich gespeichert')
-      setTimeout(() => setSuccess(''), UI_FEEDBACK_MS.SUCCESS)
-    } else {
-      setError(result.error || 'Fehler beim Speichern')
-    }
-  }
+  const {
+    session,
+    sessionStatus,
+    router,
+    loading,
+    saving,
+    error,
+    success,
+    formData,
+    setFormData,
+    handleSubmit,
+  } = useEditStaticPage(pageId)
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -198,7 +131,6 @@ export default function EditStaticPagePage() {
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
-          {/* Title */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Titel *
@@ -212,7 +144,6 @@ export default function EditStaticPagePage() {
             />
           </div>
 
-          {/* Slug */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               URL-Slug *
@@ -238,7 +169,6 @@ export default function EditStaticPagePage() {
             </div>
           </div>
 
-          {/* Content */}
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
               Inhalt
@@ -252,7 +182,6 @@ export default function EditStaticPagePage() {
             />
           </div>
 
-          {/* Published */}
           <div className="flex items-center gap-3">
             <input
               type="checkbox"
@@ -298,7 +227,6 @@ export default function EditStaticPagePage() {
           </div>
         </div>
 
-        {/* Submit */}
         <div className="flex justify-end gap-3">
           <Link
             href="/admin/content/pages"
