@@ -1,12 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
 import { LOCATION_STATUS, LOCATION_STATUS_CONFIG } from '@/config/location-status'
-import { apiFetch } from '@/lib/api/client'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
 import { Pagination } from '@/components/ui/Pagination'
@@ -25,103 +21,38 @@ import {
   Loader2,
 } from 'lucide-react'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
-
-interface Location {
-  id: string
-  name: string
-  type: string
-  city: string
-  canton: string
-  approvalStatus: string
-  maxCapacity: number | null
-  usageCount: number
-  createdAt: string
-  createdBy: string
-}
-
-const PAGE_SIZE = 20
+import { useAdminLocations } from '@/hooks/useAdminLocations'
 
 function getTypeIcon(type: string) {
   switch (type) {
-    case 'venue':
-      return <Building2 className="w-4 h-4" />
-    case 'online':
-      return <Eye className="w-4 h-4" />
-    default:
-      return <MapPin className="w-4 h-4" />
+    case 'venue': return <Building2 className="w-4 h-4" />
+    case 'online': return <Eye className="w-4 h-4" />
+    default: return <MapPin className="w-4 h-4" />
   }
 }
 
 export default function AdminLocationsPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const {
+    sessionStatus,
+    filteredLocations,
+    loading,
+    error,
+    totalItems,
+    totalPages,
+    searchName,
+    filters,
+    currentPage,
+    confirmTarget,
+    actionLoading,
+    pageSize,
+    setSearchName,
+    setFilters,
+    setCurrentPage,
+    setConfirmTarget,
+    doApproval,
+  } = useAdminLocations()
 
-  const [locations, setLocations] = useState<Location[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string>('')
-  const [totalItems, setTotalItems] = useState(0)
-
-  const [searchName, setSearchName] = useState('')
-  const [filters, setFilters] = useState({ status: 'all', type: 'all', city: '' })
-  const [currentPage, setCurrentPage] = useState(1)
-
-  const [confirmTarget, setConfirmTarget] = useState<{ id: string; action: 'approve' | 'reject'; name: string } | null>(null)
-  const [actionLoading, setActionLoading] = useState(false)
-
-  const totalPages = Math.ceil(totalItems / PAGE_SIZE)
-
-  useEffect(() => {
-    if (status !== 'authenticated') return
-    let cancelled = false
-
-    async function load() {
-      setLoading(true)
-      const params = new URLSearchParams({
-        status: filters.status,
-        limit: String(PAGE_SIZE),
-        offset: String((currentPage - 1) * PAGE_SIZE),
-      })
-      if (filters.type !== 'all') params.set('type', filters.type)
-      if (filters.city) params.set('city', filters.city)
-
-      const result = await apiFetch<{ locations: Location[]; pagination?: { total: number } }>(
-        `/api/locations?${params}`
-      )
-      if (cancelled) return
-      setLoading(false)
-      if (result.success && result.data) {
-        setLocations(result.data.locations ?? [])
-        setTotalItems(result.data.pagination?.total ?? 0)
-      } else {
-        setError(result.error || ADMIN_CONTENT.locations.errorMessage)
-      }
-    }
-
-    load()
-    return () => { cancelled = true }
-  }, [status, filters.status, filters.type, filters.city, currentPage])
-
-  const doApproval = async () => {
-    if (!confirmTarget) return
-    setActionLoading(true)
-    const result = await apiFetch<void>(`/api/locations/${confirmTarget.id}/approve`, {
-      method: 'POST',
-      body: {
-        action: confirmTarget.action,
-        review_notes: confirmTarget.action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt',
-      },
-    })
-    setActionLoading(false)
-    if (result.success) {
-      setConfirmTarget(null)
-      setFilters(prev => ({ ...prev }))
-    } else {
-      setError(result.error || 'Fehler bei der Genehmigung')
-      setConfirmTarget(null)
-    }
-  }
-
-  if (status === 'loading' || loading) {
+  if (sessionStatus === 'loading' || loading) {
     return (
       <div className="animate-pulse space-y-4">
         <div className="h-8 bg-neutral-200 rounded w-1/4"></div>
@@ -133,19 +64,6 @@ export default function AdminLocationsPage() {
       </div>
     )
   }
-
-  if (!session?.user) {
-    router.push('/auth/login')
-    return null
-  }
-
-  const filteredLocations = searchName.trim()
-    ? locations.filter(
-        l =>
-          l.name.toLowerCase().includes(searchName.toLowerCase()) ||
-          l.city.toLowerCase().includes(searchName.toLowerCase())
-      )
-    : locations
 
   return (
     <AdminPageWrapper
@@ -163,7 +81,6 @@ export default function AdminLocationsPage() {
         </Link>
       }
     >
-      {/* Filters */}
       <AdminFilterBar
         searchValue={searchName}
         onSearchChange={setSearchName}
@@ -208,14 +125,12 @@ export default function AdminLocationsPage() {
         </div>
       </AdminFilterBar>
 
-      {/* Error Message */}
       {error && (
         <div className="bg-error-50 border border-error-200 rounded-lg p-4">
           <p className="text-error-800">{error}</p>
         </div>
       )}
 
-      {/* Locations List */}
       <div className="bg-white rounded-xl shadow-sm border">
         <div className="px-6 py-4 border-b border-neutral-200">
           <Heading level={2} className="text-lg font-semibold text-neutral-900">
@@ -233,10 +148,7 @@ export default function AdminLocationsPage() {
                     <Heading level={3} className="text-lg font-semibold text-neutral-900 truncate">
                       {location.name}
                     </Heading>
-                    <AdminStatusBadge
-                      status={location.approvalStatus}
-                      config={LOCATION_STATUS_CONFIG}
-                    />
+                    <AdminStatusBadge status={location.approvalStatus} config={LOCATION_STATUS_CONFIG} />
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 text-sm text-neutral-600 mb-3">
@@ -244,14 +156,12 @@ export default function AdminLocationsPage() {
                       <MapPin className="w-4 h-4" />
                       {location.city}, {location.canton}
                     </div>
-
                     {location.maxCapacity && (
                       <div className="flex items-center gap-1">
                         <Users className="w-4 h-4" />
                         Max. {location.maxCapacity} Personen
                       </div>
                     )}
-
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
                       {location.usageCount} Buchungen
@@ -333,7 +243,7 @@ export default function AdminLocationsPage() {
           currentPage={currentPage}
           totalPages={totalPages}
           totalItems={totalItems}
-          pageSize={PAGE_SIZE}
+          pageSize={pageSize}
           onPageChange={setCurrentPage}
         />
       </div>

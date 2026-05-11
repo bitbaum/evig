@@ -1,10 +1,6 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+
 import { Link } from '@/i18n/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import {
   ArrowRight,
   MapPin,
@@ -23,101 +19,29 @@ import {
   OFFER_STATUSES,
   OFFER_STATUS,
 } from '@/config/it-hilfe'
-
-interface OfferWithRequest {
-  id: string
-  requestId: string
-  message: string
-  estimatedTime: string | null
-  proposedCompensation: string | null
-  relevantSkills: string[]
-  status: string
-  createdAt: string
-  request: {
-    id: string
-    title: string
-    categoryId: string
-    deviceBrand: string | null
-    deviceModel: string | null
-    status: string
-    city: string
-    canton: string
-    requesterName: string
-  }
-}
+import { useMyOffers } from '@/hooks/useMyOffers'
 
 export default function MyOffersPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
   const t = useTranslations('itHelp.myOffers')
 
-  const [offers, setOffers] = useState<OfferWithRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [total, setTotal] = useState(0)
-  const [statusFilter, setStatusFilter] = useState('')
-  const [withdrawingId, setWithdrawingId] = useState<string | null>(null)
-  const [pendingWithdraw, setPendingWithdraw] = useState<OfferWithRequest | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const {
+    sessionStatus,
+    offers,
+    loading,
+    total,
+    statusFilter,
+    withdrawingId,
+    pendingWithdraw,
+    error,
+    setStatusFilter,
+    setPendingWithdraw,
+    doWithdraw,
+  } = useMyOffers({
+    errorMessage: t('errorMessage'),
+    withdrawError: t('withdrawError'),
+  })
 
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/it-hilfe/my/offers')
-    }
-  }, [status, router])
-
-  const fetchOffers = useCallback(async () => {
-    try {
-      setLoading(true)
-      const params = new URLSearchParams()
-      if (statusFilter) params.set('status', statusFilter)
-
-      const result = await apiFetch<{ offers: OfferWithRequest[]; total: number }>(
-        `/api/it-hilfe/my-offers?${params}`,
-      )
-
-      if (result.success && result.data) {
-        setOffers(result.data.offers)
-        setTotal(result.data.total)
-      } else {
-        setError(result.error || t('errorMessage'))
-        logger.error('Error fetching my offers', { error: result.error })
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [statusFilter, t])
-
-  useEffect(() => {
-    if (session?.user) {
-      fetchOffers()
-    }
-  }, [session?.user, fetchOffers])
-
-  const doWithdraw = async () => {
-    const offer = pendingWithdraw
-    if (!offer) return
-    setPendingWithdraw(null)
-    setWithdrawingId(offer.id)
-    try {
-      const result = await apiFetch<unknown>(
-        `/api/it-hilfe/requests/${offer.requestId}/offers/${offer.id}`,
-        { method: 'DELETE' },
-      )
-      if (!result.success) {
-        throw new Error(result.error || t('withdrawError'))
-      }
-      fetchOffers()
-    } catch (err) {
-      const message = err instanceof Error ? err.message : t('withdrawError')
-      setError(message)
-      logger.error('Error withdrawing offer', { error: err })
-    } finally {
-      setWithdrawingId(null)
-    }
-  }
-
-  if (status === 'loading' || (status === 'authenticated' && loading)) {
+  if (sessionStatus === 'loading' || (sessionStatus === 'authenticated' && loading)) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
@@ -128,13 +52,10 @@ export default function MyOffersPage() {
   return (
     <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-5xl mx-auto px-4">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
-            <p className="text-neutral-600 mt-1">
-              {t('description')}
-            </p>
+            <p className="text-neutral-600 mt-1">{t('description')}</p>
           </div>
           <div className="flex gap-3">
             <Link
@@ -154,7 +75,6 @@ export default function MyOffersPage() {
           </div>
         </div>
 
-        {/* Status Filter */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <button
@@ -183,14 +103,12 @@ export default function MyOffersPage() {
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-error-800">{error}</p>
           </div>
         )}
 
-        {/* Offers List */}
         {offers.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center">
             <Heart className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
@@ -223,10 +141,7 @@ export default function MyOffersPage() {
                   key={offer.id}
                   className="bg-white rounded-xl shadow-sm border border-neutral-100 hover:shadow-md transition-shadow"
                 >
-                  <Link
-                    href={`/it-hilfe/${offer.requestId}`}
-                    className="block p-6 group"
-                  >
+                  <Link href={`/it-hilfe/${offer.requestId}`} className="block p-6 group">
                     <div className="flex items-start gap-4">
                       <div className={`p-3 ${categoryConfig?.color || 'bg-neutral-500'} rounded-xl`}>
                         <CategoryIcon className="w-6 h-6 text-white" />
@@ -247,7 +162,8 @@ export default function MyOffersPage() {
                         </Heading>
 
                         <p className="text-sm text-neutral-600 mb-3">
-                          <span className="font-medium">{t('yourOffer')}</span> {offer.message.slice(0, 150)}
+                          <span className="font-medium">{t('yourOffer')}</span>{' '}
+                          {offer.message.slice(0, 150)}
                           {offer.message.length > 150 && '...'}
                         </p>
 
@@ -276,6 +192,7 @@ export default function MyOffersPage() {
                       <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-emerald-600 transition-colors" />
                     </div>
                   </Link>
+
                   {offer.status === OFFER_STATUS.PENDING && (
                     <div className="px-6 pb-4">
                       <button
