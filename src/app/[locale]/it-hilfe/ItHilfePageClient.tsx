@@ -1,9 +1,8 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import { useTranslations } from 'next-intl'
 import {
   Search,
@@ -28,93 +27,33 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
-import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
+import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
 
 export default function ITHilfePage() {
   const { data: session } = useSession()
   const t = useTranslations('itHelp.page')
-  const [requests, setRequests] = useState<ITHilfeRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [total, setTotal] = useState(0)
   const [showFilters, setShowFilters] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
-  // Search and Sort
-  const [searchInput, setSearchInput] = useState('')
-  const [search, setSearch] = useState('')
-  const [sort, setSort] = useState('newest')
-
-  // Pagination
-  const [limit] = useState(20)
-  const [offset, setOffset] = useState(0)
-
-  // Filters
-  const [category, setCategory] = useState('')
-  const [canton, setCanton] = useState('')
-  const [urgency, setUrgency] = useState('')
-  const [budgetType, setBudgetType] = useState('')
-
-  const fetchRequests = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams()
-
-      if (category) params.set('category', category)
-      if (canton) params.set('canton', canton)
-      if (urgency) params.set('urgency', urgency)
-      if (budgetType) params.set('budgetType', budgetType)
-      if (search) params.set('search', search)
-      if (sort) params.set('sort', sort)
-      params.set('limit', String(limit))
-      params.set('offset', String(offset))
-
-      const result = await apiFetch<{ requests: ITHilfeRequest[]; total: number }>(
-        `/api/it-hilfe/requests?${params}`,
-      )
-
-      if (result.success && result.data) {
-        setRequests(result.data.requests)
-        setTotal(result.data.total)
-      } else {
-        logger.warn('Error fetching IT-Hilfe requests', { error: result.error })
-        setError(result.error ?? t('retryButton'))
-        setRequests([])
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [category, canton, urgency, budgetType, search, sort, limit, offset, t])
-
-  useEffect(() => {
-    fetchRequests()
-  }, [fetchRequests])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSearch(searchInput)
-    setOffset(0)
-  }
-
-  const clearFilters = () => {
-    setCategory('')
-    setCanton('')
-    setUrgency('')
-    setBudgetType('')
-    setSearch('')
-    setSearchInput('')
-    setSort('newest')
-    setOffset(0)
-  }
-
-  const hasActiveFilters = category || canton || urgency || budgetType || search
-
-  const totalPages = Math.ceil(total / limit)
-  const currentPage = Math.floor(offset / limit) + 1
-
-  const goToPage = (page: number) => {
-    setOffset((page - 1) * limit)
-  }
+  const {
+    requests,
+    loading,
+    total,
+    error,
+    searchInput,
+    setSearchInput,
+    sort,
+    setSort,
+    filters,
+    setFilter,
+    handleSearch,
+    clearFilters,
+    hasActiveFilters,
+    totalPages,
+    currentPage,
+    goToPage,
+    retry,
+    limit,
+  } = useITHilfeRequests()
 
   return (
     <div className="bg-white min-h-screen">
@@ -213,10 +152,7 @@ export default function ITHilfePage() {
 
             <select
               value={sort}
-              onChange={(e) => {
-                setSort(e.target.value)
-                setOffset(0)
-              }}
+              onChange={(e) => setSort(e.target.value)}
               className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
               aria-label={t('sortLabel')}
             >
@@ -248,11 +184,8 @@ export default function ITHilfePage() {
                   </label>
                   <select
                     id="filter-category"
-                    value={category}
-                    onChange={(e) => {
-                      setCategory(e.target.value)
-                      setOffset(0)
-                    }}
+                    value={filters.category}
+                    onChange={(e) => setFilter('category', e.target.value)}
                     className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCategoryAll')}</option>
@@ -270,11 +203,8 @@ export default function ITHilfePage() {
                   </label>
                   <select
                     id="filter-canton"
-                    value={canton}
-                    onChange={(e) => {
-                      setCanton(e.target.value)
-                      setOffset(0)
-                    }}
+                    value={filters.canton}
+                    onChange={(e) => setFilter('canton', e.target.value)}
                     className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCantonAll')}</option>
@@ -292,11 +222,8 @@ export default function ITHilfePage() {
                   </label>
                   <select
                     id="filter-urgency"
-                    value={urgency}
-                    onChange={(e) => {
-                      setUrgency(e.target.value)
-                      setOffset(0)
-                    }}
+                    value={filters.urgency}
+                    onChange={(e) => setFilter('urgency', e.target.value)}
                     className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterUrgencyAll')}</option>
@@ -314,11 +241,8 @@ export default function ITHilfePage() {
                   </label>
                   <select
                     id="filter-budget"
-                    value={budgetType}
-                    onChange={(e) => {
-                      setBudgetType(e.target.value)
-                      setOffset(0)
-                    }}
+                    value={filters.budgetType}
+                    onChange={(e) => setFilter('budgetType', e.target.value)}
                     className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   >
                     <option value="">{t('filterBudgetAll')}</option>
@@ -332,19 +256,14 @@ export default function ITHilfePage() {
         </div>
 
         {/* Loading State */}
-        {loading && (
-          <LoadingSkeleton count={limit} />
-        )}
+        {loading && <LoadingSkeleton count={limit} />}
 
         {/* Error State */}
         {error && !loading && (
           <ErrorAlert
             message={error}
             variant="card"
-            onRetry={() => {
-              setError(null)
-              fetchRequests()
-            }}
+            onRetry={() => retry()}
             retryLabel={t('retryButton')}
           />
         )}
@@ -354,17 +273,10 @@ export default function ITHilfePage() {
           <EmptyState
             icon={Wrench}
             title={t('emptyTitle')}
-            message={
-              hasActiveFilters
-                ? t('emptyMessageFiltered')
-                : t('emptyMessageEmpty')
-            }
+            message={hasActiveFilters ? t('emptyMessageFiltered') : t('emptyMessageEmpty')}
             action={
               session?.user
-                ? {
-                    label: t('createRequestButton'),
-                    href: IT_HILFE.routes.create,
-                  }
+                ? { label: t('createRequestButton'), href: IT_HILFE.routes.create }
                 : undefined
             }
           />
