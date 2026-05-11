@@ -1,10 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import {
   Search,
   Users,
@@ -25,31 +22,7 @@ import Heading from '@/components/ui/Heading'
 import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
 import { formatCentsToChf } from '@/lib/pricing'
-
-interface Technician {
-  id: string
-  userId: string
-  name: string
-  bio: string | null
-  hourlyRateCents: number | null
-  averageRating: number | null
-  totalJobsCompleted: number
-  profileTier: string
-  city: string | null
-  postalCode: string | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  isVerified: boolean
-  serviceDeliveryTypes: string[] | null
-  skills: string[]
-}
-
-interface Pagination {
-  total: number
-  limit: number
-  offset: number
-  hasMore: boolean
-}
+import { useTechnicianList, type Technician } from '@/hooks/useTechnicianList'
 
 function TechnicianCard({ technician }: { technician: Technician }) {
   const t = useTranslations('techniker')
@@ -159,71 +132,33 @@ function TechnicianCard({ technician }: { technician: Technician }) {
 export default function TechnikerListClient() {
   const t = useTranslations('techniker')
   const { data: session } = useSession()
-  const [technicians, setTechnicians] = useState<Technician[]>([])
-  const [pagination, setPagination] = useState<Pagination>({ total: 0, limit: 20, offset: 0, hasMore: false })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  // Filters
-  const [tier, setTier] = useState('')
-  const [searchInput, setSearchInput] = useState('')
-  const [search, setSearch] = useState('')
-  const [selectedSkill, setSelectedSkill] = useState('')
-  const [offset, setOffset] = useState(0)
-  const limit = 20
+  const {
+    technicians,
+    pagination,
+    loading,
+    error,
+    tier,
+    searchInput,
+    setSearchInput,
+    selectedSkill,
+    limit,
+    totalPages,
+    currentPage,
+    hasActiveFilters,
+    handleSearch,
+    setTierFilter,
+    setSkillFilter,
+    clearFilters,
+    goToPage,
+    retry,
+  } = useTechnicianList(t('list.loadingError'))
 
   const tierTabs = [
     { value: '', label: t('list.tierAll') },
     { value: REPAIRER_PROFILE_TIER.COMMUNITY, label: t('list.tierCommunity') },
     { value: REPAIRER_PROFILE_TIER.PROFESSIONAL, label: t('list.tierProfessional') },
   ]
-
-  const fetchTechnicians = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const params = new URLSearchParams()
-      if (tier) params.set('tier', tier)
-      if (search) params.set('q', search)
-      if (selectedSkill) params.set('skills', selectedSkill)
-      params.set('limit', String(limit))
-      params.set('offset', String(offset))
-
-      const result = await apiFetch<{ technicians: Technician[]; pagination: Pagination }>(
-        `/api/technicians?${params}`,
-      )
-
-      if (result.success && result.data) {
-        setTechnicians(result.data.technicians)
-        setPagination(result.data.pagination)
-      } else {
-        logger.warn('Error fetching technicians', { error: result.error })
-        setError(result.error || t('list.loadingError'))
-        setTechnicians([])
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [tier, search, selectedSkill, offset, limit, t])
-
-  useEffect(() => {
-    fetchTechnicians()
-  }, [fetchTechnicians])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSearch(searchInput)
-    setOffset(0)
-  }
-
-  const totalPages = Math.ceil(pagination.total / limit)
-  const currentPage = Math.floor(offset / limit) + 1
-
-  const goToPage = (page: number) => setOffset((page - 1) * limit)
-
-  // Flatten all skills for the filter dropdown
-  const allSkills: ITSkill[] = Object.values(IT_SKILLS).flat()
 
   return (
     <div className="bg-white min-h-screen">
@@ -280,7 +215,7 @@ export default function TechnikerListClient() {
           {tierTabs.map((tab) => (
             <button
               key={tab.value}
-              onClick={() => { setTier(tab.value); setOffset(0) }}
+              onClick={() => setTierFilter(tab.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
                   ? 'bg-info-600 text-white shadow-sm'
@@ -297,7 +232,7 @@ export default function TechnikerListClient() {
         <div className="mb-6">
           <select
             value={selectedSkill}
-            onChange={(e) => { setSelectedSkill(e.target.value); setOffset(0) }}
+            onChange={(e) => setSkillFilter(e.target.value)}
             className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-info-500 focus:border-transparent"
             aria-label={t('list.skillsFilterLabel')}
           >
@@ -313,9 +248,9 @@ export default function TechnikerListClient() {
             ))}
           </select>
 
-          {(selectedSkill || search || tier) && (
+          {hasActiveFilters && (
             <button
-              onClick={() => { setSelectedSkill(''); setSearch(''); setSearchInput(''); setTier(''); setOffset(0) }}
+              onClick={clearFilters}
               className="ml-3 text-sm text-info-600 hover:text-info-700 font-medium"
             >
               {t('list.resetFilters')}
@@ -331,7 +266,7 @@ export default function TechnikerListClient() {
           <ErrorAlert
             message={error}
             variant="card"
-            onRetry={() => { setError(null); fetchTechnicians() }}
+            onRetry={retry}
             retryLabel={t('list.retryButton')}
           />
         )}
@@ -342,13 +277,13 @@ export default function TechnikerListClient() {
             icon={Users}
             title={t('list.emptyTitle')}
             message={
-              selectedSkill || search || tier
+              hasActiveFilters
                 ? t('list.emptyMessageFiltered')
                 : t('list.emptyMessageEmpty')
             }
             action={
-              selectedSkill || search || tier
-                ? { label: t('list.emptyActionFiltered'), onClick: () => { setSelectedSkill(''); setSearch(''); setSearchInput(''); setTier(''); setOffset(0) } }
+              hasActiveFilters
+                ? { label: t('list.emptyActionFiltered'), onClick: clearFilters }
                 : { label: t('list.emptyActionEmpty'), href: '/profil/techniker' }
             }
           />

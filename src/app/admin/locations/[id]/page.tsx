@@ -1,7 +1,5 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -9,9 +7,9 @@ import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
 import { getBookingStatusBadge } from '@/config/booking-status'
-import { apiFetch } from '@/lib/api/client'
 import { LOCATION_TYPES } from '@/components/admin/locations/location-form'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { useLocationDetail } from '@/hooks/useLocationDetail'
 import {
   MapPin,
   Users,
@@ -21,142 +19,59 @@ import {
   Clock,
   AlertCircle,
   ArrowLeft,
-  Edit,
   Phone,
   Mail,
   User,
   Loader2,
 } from 'lucide-react'
 
-interface LocationDetail {
-  id: string
-  name: string
-  type: string
-  description: string | null
-  address_line1: string | null
-  address_line2: string | null
-  postal_code: string | null
-  city: string | null
-  canton: string | null
-  country: string | null
-  latitude: number | null
-  longitude: number | null
-  max_capacity: number | null
-  facilities: string[] | null
-  accessibility_info: {
-    wheelchairAccessible?: boolean
-    parkingAvailable?: boolean
-    publicTransport?: string
-    additionalInfo?: string
-  } | null
-  contact_name: string | null
-  contact_phone: string | null
-  contact_email: string | null
-  approval_status: string
-  created_at: string
-  updated_at: string
-  creator_name: string | null
-  creator_email: string | null
-  total_bookings: string
-  upcoming_bookings: string
-  last_approval_action: string | null
-  last_reviewed_at: string | null
-  last_review_notes: string | null
+const STATUS_ICONS: Record<string, typeof CheckCircle> = {
+  [LOCATION_STATUS.APPROVED]: CheckCircle,
+  [LOCATION_STATUS.PENDING]: Clock,
+  [LOCATION_STATUS.REJECTED]: XCircle,
+  [LOCATION_STATUS.SUSPENDED]: AlertCircle,
 }
 
-interface Booking {
-  id: string
-  start_time: string
-  end_time: string
-  purpose: string | null
-  status: string
-  booked_by_name: string | null
-  booked_by_email: string | null
+function getStatusBadge(status: string) {
+  const Icon = STATUS_ICONS[status] ?? AlertCircle
+  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'
+  return (
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}>
+      <Icon className="w-4 h-4" />
+      {getLocationStatusLabel(status)}
+    </span>
+  )
+}
+
+function getTypeLabel(type: string) {
+  const found = LOCATION_TYPES.find((t) => t.id === type)
+  const Icon = found?.icon ?? MapPin
+  const label = found?.label ?? type
+  return (
+    <span className="inline-flex items-center gap-1.5 text-sm text-neutral-600">
+      <Icon className="w-4 h-4" />
+      {label}
+    </span>
+  )
 }
 
 export default function LocationDetailPage() {
-  const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const params = useParams()
   const locationId = params.id as string
 
-  const [location, setLocation] = useState<LocationDetail | null>(null)
-  const [bookings, setBookings] = useState<Booking[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [actionLoading, setActionLoading] = useState(false)
-  const [refreshKey, setRefreshKey] = useState(0)
-  const [pendingApprovalAction, setPendingApprovalAction] = useState<'approve' | 'reject' | null>(null)
-
-  useEffect(() => {
-    if (sessionStatus !== 'authenticated' || !locationId) return
-    let cancelled = false
-    async function load() {
-      setLoading(true)
-      const result = await apiFetch<{ location: LocationDetail; recentBookings?: Booking[] }>(`/api/locations/${locationId}`)
-      if (cancelled) return
-      setLoading(false)
-      if (result.success && result.data) {
-        setLocation(result.data.location)
-        setBookings(result.data.recentBookings || [])
-      } else {
-        setError(result.error || 'Ort nicht gefunden')
-      }
-    }
-    load()
-    return () => { cancelled = true }
-  }, [sessionStatus, locationId, refreshKey])
-
-  function handleApproval(action: 'approve' | 'reject') {
-    setPendingApprovalAction(action)
-  }
-
-  async function doApproval(action: 'approve' | 'reject') {
-    setActionLoading(true)
-    const result = await apiFetch<void>(`/api/locations/${locationId}/approve`, {
-      method: 'POST',
-      body: {
-        action,
-        review_notes: action === 'reject' ? 'Administrative Prüfung' : 'Ort genehmigt'
-      }
-    })
-    setActionLoading(false)
-    if (result.success) {
-      setRefreshKey(k => k + 1)
-    } else {
-      setError(result.error || 'Fehler bei der Genehmigung')
-    }
-  }
-
-  const STATUS_ICONS: Record<string, typeof CheckCircle> = {
-    [LOCATION_STATUS.APPROVED]: CheckCircle,
-    [LOCATION_STATUS.PENDING]: Clock,
-    [LOCATION_STATUS.REJECTED]: XCircle,
-    [LOCATION_STATUS.SUSPENDED]: AlertCircle,
-  }
-
-  const getStatusBadge = (status: string) => {
-    const Icon = STATUS_ICONS[status] ?? AlertCircle
-    const className = LOCATION_STATUS_COLORS[status] ?? 'bg-neutral-100 text-neutral-800'
-    return (
-      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}>
-        <Icon className="w-4 h-4" />
-        {getLocationStatusLabel(status)}
-      </span>
-    )
-  }
-
-  const getTypeLabel = (type: string) => {
-    const found = LOCATION_TYPES.find(t => t.id === type)
-    const Icon = found?.icon ?? MapPin
-    const label = found?.label ?? type
-    return (
-      <span className="inline-flex items-center gap-1.5 text-sm text-neutral-600">
-        <Icon className="w-4 h-4" />
-        {label}
-      </span>
-    )
-  }
+  const {
+    location,
+    bookings,
+    loading,
+    error,
+    actionLoading,
+    sessionStatus,
+    pendingApprovalAction,
+    handleApproval,
+    confirmApproval,
+    cancelApproval,
+  } = useLocationDetail(locationId)
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -178,7 +93,7 @@ export default function LocationDetailPage() {
     )
   }
 
-  if (!session?.user) {
+  if (sessionStatus === 'unauthenticated') {
     router.push('/auth/login')
     return null
   }
@@ -456,11 +371,14 @@ export default function LocationDetailPage() {
                       <p className="text-xs text-neutral-500">{booking.booked_by_name}</p>
                     )}
                   </div>
-                  {(() => { const badge = getBookingStatusBadge(booking.status); return (
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
-                      {badge.label}
-                    </span>
-                  ) })()}
+                  {(() => {
+                    const badge = getBookingStatusBadge(booking.status)
+                    return (
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
+                        {badge.label}
+                      </span>
+                    )
+                  })()}
                 </div>
               ))}
             </div>
@@ -474,8 +392,8 @@ export default function LocationDetailPage() {
         message={`Möchtest du diesen Ort wirklich ${pendingApprovalAction === 'approve' ? 'genehmigen' : 'ablehnen'}?`}
         itemName={location?.name}
         variant={pendingApprovalAction === 'approve' ? 'success' : 'danger'}
-        onConfirm={() => { const a = pendingApprovalAction!; setPendingApprovalAction(null); doApproval(a) }}
-        onClose={() => setPendingApprovalAction(null)}
+        onConfirm={confirmApproval}
+        onClose={cancelApproval}
       />
     </div>
   )
