@@ -13,7 +13,7 @@ import { logger } from '@/lib/logger';
 import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
 import { normalizeSpecValue } from '@/config/marketplace';
 import { indexListingInSearch, listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
-import { LISTING_STATUS, MARKETPLACE_SELLER_TYPE } from '@/config/marketplace';
+import { LISTING_STATUS, MARKETPLACE_SELLER_TYPE, SPEC_QUERY_PARAM_KEYS } from '@/config/marketplace';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
@@ -82,21 +82,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Spec filters via subquery on listing_specs
-    if (filters.spec_ram_min !== undefined) {
-      conditions.push(
-        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND s.spec_key = 'RAM' AND s.normalized_value >= ${filters.spec_ram_min})`
-      );
+    // Spec filters via subquery on listing_specs — key names from SPEC_QUERY_PARAM_KEYS config
+    const specParamValues: Record<string, number | undefined> = {
+      spec_ram_min:     filters.spec_ram_min,
+      spec_storage_min: filters.spec_storage_min,
+      spec_display_min: filters.spec_display_min,
     }
-    if (filters.spec_storage_min !== undefined) {
+    for (const [param, specKeys] of Object.entries(SPEC_QUERY_PARAM_KEYS)) {
+      const value = specParamValues[param]
+      if (value === undefined) continue
+      // Build key condition — safe to use sql.raw because keys come from internal config, not user input
+      const keyClause = specKeys.length === 1
+        ? `s.spec_key = '${specKeys[0]}'`
+        : `(${specKeys.map(k => `s.spec_key = '${k}'`).join(' OR ')})`
       conditions.push(
-        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND s.spec_key = 'Speicher' AND s.normalized_value >= ${filters.spec_storage_min})`
-      );
-    }
-    if (filters.spec_display_min !== undefined) {
-      conditions.push(
-        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND (s.spec_key = 'Display' OR s.spec_key = 'Grösse') AND s.normalized_value >= ${filters.spec_display_min})`
-      );
+        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND ${sql.raw(keyClause)} AND s.normalized_value >= ${value})`
+      )
     }
 
     const whereCondition = and(...conditions);

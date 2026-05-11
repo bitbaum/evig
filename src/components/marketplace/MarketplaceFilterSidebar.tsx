@@ -13,6 +13,7 @@ import {
   PAYMENT_MODE_LABELS,
   MARKETPLACE_LIMITS,
   MARKETPLACE_SELLER_TYPE,
+  SPEC_FILTER_STATE_MAP,
   getSpecFiltersForCategory,
 } from '@/config/marketplace'
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
@@ -120,6 +121,18 @@ export function MarketplaceFilterSidebar({
   const t = useTranslations('marketplace')
   const specFilters = getSpecFiltersForCategory(filters.category)
 
+  // Build lookup maps from filter state for spec filter rendering — driven by SPEC_FILTER_STATE_MAP
+  const specValues: Record<string, string> = {
+    specRamMin:     filters.specRamMin,
+    specStorageMin: filters.specStorageMin,
+    specDisplayMin: filters.specDisplayMin,
+  }
+  const specSetters: Record<string, (v: string) => void> = {
+    specRamMin:     filters.setSpecRamMin,
+    specStorageMin: filters.setSpecStorageMin,
+    specDisplayMin: filters.setSpecDisplayMin,
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-1 pb-3 border-b border-neutral-200">
@@ -136,7 +149,7 @@ export function MarketplaceFilterSidebar({
       </div>
 
       {/* Category */}
-      <FilterSection title="Kategorie">
+      <FilterSection title={t('filters.categoryTitle')}>
         <RadioOption
           name="category"
           checked={!filters.category}
@@ -162,7 +175,7 @@ export function MarketplaceFilterSidebar({
       </FilterSection>
 
       {/* Seller type */}
-      <FilterSection title="Anbieter">
+      <FilterSection title={t('filters.sellerTypeTitle')}>
         <RadioOption
           name="seller-type"
           checked={!filters.sellerType}
@@ -297,7 +310,7 @@ export function MarketplaceFilterSidebar({
       </FilterSection>
 
       {/* Verified */}
-      <FilterSection title="Qualität" defaultOpen={false}>
+      <FilterSection title={t('filters.qualityTitle')} defaultOpen={false}>
         <CheckOption
           checked={filters.verifiedOnly}
           onChange={() => { filters.setVerifiedOnly(!filters.verifiedOnly); resetOffset() }}
@@ -309,22 +322,10 @@ export function MarketplaceFilterSidebar({
       {specFilters.length > 0 && (
         <FilterSection title={t('filters.technicalFilters')}>
           {specFilters.map((spec) => {
-            const filterValue =
-              spec.meiliField === 'spec_ram_gb'
-                ? filters.specRamMin
-                : spec.meiliField === 'spec_storage_gb'
-                ? filters.specStorageMin
-                : spec.meiliField === 'spec_display_inches'
-                ? filters.specDisplayMin
-                : ''
-            const setFilter =
-              spec.meiliField === 'spec_ram_gb'
-                ? filters.setSpecRamMin
-                : spec.meiliField === 'spec_storage_gb'
-                ? filters.setSpecStorageMin
-                : spec.meiliField === 'spec_display_inches'
-                ? filters.setSpecDisplayMin
-                : null
+            const filterKey = SPEC_FILTER_STATE_MAP[spec.meiliField]
+            if (!filterKey) return null
+            const filterValue = specValues[filterKey] ?? ''
+            const setFilter = specSetters[filterKey]
             if (!setFilter) return null
             return (
               <div key={spec.key} className="mb-3">

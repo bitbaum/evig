@@ -582,7 +582,12 @@
       "verifiedOnly": "Verified devices only",
       "technicalFilters": "Technical filters",
       "sellerTypeAriaLabel": "Seller type",
-      "categoryAriaLabel": "Category filter"
+      "categoryAriaLabel": "Category filter",
+      "categoryTitle": "Category",
+      "sellerTypeTitle": "Seller",
+      "qualityTitle": "Quality",
+      "showResults": "Show results",
+      "closeLabel": "Close"
     },
     "listing": {
       "contact": "Contact seller",

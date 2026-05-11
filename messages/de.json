@@ -640,7 +640,12 @@
       "verifiedOnly": "Nur geprüfte Geräte",
       "technicalFilters": "Technische Filter",
       "sellerTypeAriaLabel": "Verkäufertyp",
-      "categoryAriaLabel": "Kategoriefilter"
+      "categoryAriaLabel": "Kategoriefilter",
+      "categoryTitle": "Kategorie",
+      "sellerTypeTitle": "Anbieter",
+      "qualityTitle": "Qualität",
+      "showResults": "Ergebnisse anzeigen",
+      "closeLabel": "Schliessen"
     },
     "listing": {
       "contact": "Verkäufer kontaktieren",

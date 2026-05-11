@@ -302,7 +302,7 @@ export default function MarketplacePage() {
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
                 className="p-1.5 rounded-md hover:bg-neutral-100 transition-colors"
-                aria-label="Filter schliessen"
+                aria-label={t('filters.closeLabel')}
               >
                 <X className="w-5 h-5 text-neutral-600" />
               </button>
@@ -319,7 +319,7 @@ export default function MarketplacePage() {
                 onClick={() => setMobileFiltersOpen(false)}
                 className="w-full py-2.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-sm font-semibold transition-colors"
               >
-                Ergebnisse anzeigen
+                {t('filters.showResults')}
                 {pagination.total > 0 && ` (${pagination.total})`}
               </button>
             </div>

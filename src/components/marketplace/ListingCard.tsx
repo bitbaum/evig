@@ -10,7 +10,7 @@
 import { Link } from '@/i18n/navigation'
 import { Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
-import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
+import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG, SPEC_DISPLAY_PRIORITY } from '@/config/marketplace'
 import { ListingImage } from './ListingImage'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -43,9 +43,8 @@ interface ListingCardProps {
 /** Pick the most important specs to show as tags on the card (max 3) */
 function getSpecTags(specs?: Array<{ key: string; value: string; unit: string | null }>): string[] {
   if (!specs || specs.length === 0) return []
-  const priority = ['RAM', 'Speicher', 'Display', 'Grösse', 'CPU', 'Prozessor']
   const tags: string[] = []
-  for (const key of priority) {
+  for (const key of SPEC_DISPLAY_PRIORITY) {
     const spec = specs.find(s => s.key === key && s.value)
     if (spec) {
       tags.push(spec.value)

@@ -422,3 +422,28 @@ export const SPEC_MEILI_FIELD_MAP: Record<string, string> = {
   'Display': 'spec_display_inches',
   'Grösse': 'spec_display_inches',
 }
+
+/**
+ * Maps Meilisearch spec field names → filter state key in useMarketplaceListings.
+ * Used by MarketplaceFilterSidebar to avoid ternary chains.
+ */
+export const SPEC_FILTER_STATE_MAP: Readonly<Record<string, string>> = {
+  'spec_ram_gb':          'specRamMin',
+  'spec_storage_gb':      'specStorageMin',
+  'spec_display_inches':  'specDisplayMin',
+}
+
+/**
+ * Maps URL query param names → spec_key values stored in listing_specs.
+ * Used by the API route to build SQL WHERE clauses without hardcoding key names.
+ */
+export const SPEC_QUERY_PARAM_KEYS: Readonly<Record<string, string[]>> = {
+  'spec_ram_min':     ['RAM'],
+  'spec_storage_min': ['Speicher'],
+  'spec_display_min': ['Display', 'Grösse'],
+}
+
+/**
+ * Priority order for spec tags displayed on listing cards (most important first).
+ */
+export const SPEC_DISPLAY_PRIORITY = ['RAM', 'Speicher', 'Display', 'Grösse', 'CPU', 'Prozessor'] as const
