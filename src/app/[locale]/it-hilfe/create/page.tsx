@@ -1,38 +1,28 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+
 import { Link } from '@/i18n/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
 import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
   Wrench,
   CheckCircle,
 } from 'lucide-react'
-import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import {
   DEVICE_CATEGORIES,
   URGENCY_LEVELS,
   SERVICE_TYPES,
-  getCategoryById,
 } from '@/config/it-hilfe'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { ITHilfeImageUpload } from '@/components/it-hilfe/ITHilfeImageUpload'
-import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
 import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetailsSection'
 import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
-import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
-import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
-import { INITIAL_IT_HILFE_FORM } from '@/components/it-hilfe-create/types'
-import { UI_FEEDBACK_MS } from '@/config/limits'
+import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { useCreateITHilfeForm } from '@/hooks/useCreateITHilfeForm'
 
-/** Subset of fields the AI form assist can fill. */
 interface AIFormFields {
   categoryId: string
   deviceBrand: string
@@ -45,143 +35,21 @@ interface AIFormFields {
 }
 
 export default function CreatePeerRepairPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
   const t = useTranslations('itHelp.create')
 
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [formData, setFormData] = useState<ITHilfeCreateFormData>(INITIAL_IT_HILFE_FORM)
-
-  // AI assist state
-  const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
-
-  const updateField = <K extends keyof ITHilfeCreateFormData>(
-    key: K,
-    value: ITHilfeCreateFormData[K],
-  ) => setFormData(prev => ({ ...prev, [key]: value }))
-
-  const handleAIFieldsFilled = (data: Partial<AIFormFields>, metadata: Record<string, AIFieldMetadataEntry>) => {
-    setFormData(prev => {
-      const updated = { ...prev }
-      if (data.categoryId) {
-        updated.categoryId = data.categoryId
-        const category = getCategoryById(data.categoryId)
-        if (category && !data.skillsNeeded?.length) {
-          updated.skillsNeeded = category.suggestedSkills
-        }
-      }
-      if (data.deviceBrand) updated.deviceBrand = data.deviceBrand
-      if (data.deviceModel) updated.deviceModel = data.deviceModel
-      if (data.title) updated.title = data.title
-      if (data.description) updated.description = data.description
-      if (data.urgency) updated.urgency = data.urgency
-      if (data.skillsNeeded?.length) updated.skillsNeeded = data.skillsNeeded
-      if (data.diagnosis) updated.aiDiagnosis = data.diagnosis
-      return updated
-    })
-    setAiFieldMeta(metadata)
-  }
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/it-hilfe/create')
-    }
-  }, [status, router])
-
-  // Pre-fill location from user's technician profile
-  useEffect(() => {
-    if (status !== 'authenticated') return
-    apiFetch<{ profile: { postalCode?: string; city?: string; canton?: string } | null }>(
-      '/api/user/technician-profile',
-    ).then(result => {
-      if (result.success && result.data?.profile) {
-        const p = result.data.profile
-        setFormData(prev => ({
-          ...prev,
-          postalCode: prev.postalCode || p.postalCode || '',
-          city: prev.city || p.city || '',
-          canton: prev.canton || p.canton || '',
-        }))
-      }
-    })
-  }, [status])
-
-  // Auto-fill city and canton from postal code
-  useEffect(() => {
-    if (formData.postalCode.length === 4) {
-      const data = lookupSwissPostalCode(formData.postalCode)
-      if (data) {
-        setFormData(prev => ({ ...prev, city: data.city, canton: data.canton }))
-      }
-    }
-  }, [formData.postalCode])
-
-  const handleCategorySelect = (catId: string) => {
-    const category = getCategoryById(catId)
-    setFormData(prev => {
-      const updated = { ...prev, categoryId: catId }
-      if (category) {
-        const prevCategory = getCategoryById(prev.categoryId)
-        if (!prev.title || prev.title === prevCategory?.defaultTitle) {
-          updated.title = category.defaultTitle
-        }
-        if (!prev.description || prev.description === prevCategory?.defaultDescription) {
-          updated.description = category.defaultDescription
-        }
-        updated.skillsNeeded = category.suggestedSkills
-      }
-      return updated
-    })
-  }
-
-  const handleSkillToggle = (skillId: string) => {
-    setFormData(prev => ({
-      ...prev,
-      skillsNeeded: prev.skillsNeeded.includes(skillId)
-        ? prev.skillsNeeded.filter(s => s !== skillId)
-        : [...prev.skillsNeeded, skillId],
-    }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-
-    const validationError = validateITHilfeForm(formData)
-    if (validationError) {
-      setError(validationError)
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const payload = transformITHilfeFormToPayload(formData)
-
-      const result = await apiFetch<{ requestId: string }>('/api/it-hilfe/requests', {
-        method: 'POST',
-        body: payload,
-      })
-
-      if (!result.success || !result.data) {
-        throw new Error(result.error || t('errorCreateFailed'))
-      }
-
-      setSuccess(true)
-      setTimeout(() => {
-        router.push(`/it-hilfe/${result.data!.requestId}`)
-      }, UI_FEEDBACK_MS.REDIRECT)
-    } catch (err) {
-      const message = err instanceof Error ? err.message : t('errorGeneric')
-      setError(message)
-      logger.error('Error creating peer repair request', { error: err })
-    } finally {
-      setLoading(false)
-    }
-  }
+  const {
+    status,
+    loading,
+    error,
+    success,
+    formData,
+    aiFieldMeta,
+    updateField,
+    handleAIFieldsFilled,
+    handleCategorySelect,
+    handleSkillToggle,
+    handleSubmit,
+  } = useCreateITHilfeForm(t('errorCreateFailed'), t('errorGeneric'))
 
   if (status === 'loading') {
     return (
@@ -214,7 +82,6 @@ export default function CreatePeerRepairPage() {
           {t('backToList')}
         </Link>
 
-        {/* Header */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-emerald-100 rounded-lg">
@@ -222,21 +89,18 @@ export default function CreatePeerRepairPage() {
             </div>
             <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
           </div>
-          <p className="text-neutral-600">
-            {t('description')}
-          </p>
+          <p className="text-neutral-600">{t('description')}</p>
         </div>
 
-        {error && (
-          <ErrorAlert message={error} variant="inline" className="mb-6" />
-        )}
+        {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* AI Assist — uses shared AIFormAssist component */}
           <AIFormAssist<AIFormFields>
             formType="it-hilfe"
             placeholder={t('aiPlaceholder')}
-            onFieldsFilled={handleAIFieldsFilled}
+            onFieldsFilled={(data, meta) =>
+              handleAIFieldsFilled(data as Parameters<typeof handleAIFieldsFilled>[0], meta as Record<string, AIFieldMetadataEntry>)
+            }
             currentData={formData as unknown as Record<string, unknown>}
             variant="section"
             defaultExpanded
@@ -308,9 +172,7 @@ export default function CreatePeerRepairPage() {
               {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
                 <Heading level={2} className="text-lg text-neutral-900 mb-2">{t('sectionBudget')}</Heading>
-                <p className="text-sm text-neutral-600 mb-4">
-                  {t('budgetDescription')}
-                </p>
+                <p className="text-sm text-neutral-600 mb-4">{t('budgetDescription')}</p>
                 <div className="flex items-center gap-3">
                   <span className="text-neutral-500">CHF</span>
                   <input
@@ -342,9 +204,7 @@ export default function CreatePeerRepairPage() {
                       className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                       {SERVICE_TYPES.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.name}
-                        </option>
+                        <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
                     </select>
                   </div>
@@ -358,9 +218,7 @@ export default function CreatePeerRepairPage() {
                       className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
                       {URGENCY_LEVELS.map((u) => (
-                        <option key={u.id} value={u.id}>
-                          {u.name}
-                        </option>
+                        <option key={u.id} value={u.id}>{u.name}</option>
                       ))}
                     </select>
                   </div>
@@ -372,7 +230,6 @@ export default function CreatePeerRepairPage() {
                 onSkillToggle={handleSkillToggle}
               />
 
-              {/* Submit */}
               <div className="flex justify-end gap-4">
                 <Link
                   href="/it-hilfe"

@@ -1,10 +1,8 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter, useParams } from 'next/navigation'
+
+import { useParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
+import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
   Wrench,
@@ -13,181 +11,39 @@ import {
 } from 'lucide-react'
 import {
   DEVICE_CATEGORIES,
-  URGENCY,
   URGENCY_LEVELS,
   SERVICE_TYPES,
-  getCategoryById,
-  REQUEST_STATUS,
 } from '@/config/it-hilfe'
 import { ITHilfeImageUpload } from '@/components/it-hilfe/ITHilfeImageUpload'
-import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
 import { ProblemDetailsSection } from '@/components/it-hilfe-create/ProblemDetailsSection'
 import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
-import { UI_FEEDBACK_MS } from '@/config/limits'
-import type { ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
+import { useEditITHilfeForm } from '@/hooks/useEditITHilfeForm'
 
 export default function EditRequestPage() {
   const { id } = useParams<{ id: string }>()
   const t = useTranslations('itHelp.edit')
-  const { data: session, status: authStatus } = useSession()
-  const router = useRouter()
 
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [formData, setFormData] = useState<ITHilfeCreateFormData | null>(null)
-
-  // Fetch existing request data
-  useEffect(() => {
-    if (authStatus !== 'authenticated') return
-
-    apiFetch<{
-      request: {
-        isOwner: boolean
-        status: string
-        categoryId?: string
-        deviceBrand?: string
-        deviceModel?: string
-        title?: string
-        description?: string
-        urgency?: string
-        budgetAmountCents?: number
-        postalCode?: string
-        city?: string
-        canton?: string
-        serviceType?: string
-        skillsNeeded?: string[]
-        imageUrls?: string[]
-        aiDiagnosis?: string
-      }
-    }>(`/api/it-hilfe/requests/${id}`).then(result => {
-      if (!result.success || !result.data) {
-        setError(result.error || t('errorNotFound'))
-        setLoading(false)
-        return
-      }
-
-      const r = result.data.request
-
-      // Only owner can edit
-      if (!r.isOwner) {
-        setError(t('errorNotOwner'))
-        setLoading(false)
-        return
-      }
-
-      // Only open/in_discussion requests can be edited
-      if (r.status !== REQUEST_STATUS.OPEN && r.status !== REQUEST_STATUS.IN_DISCUSSION) {
-        setError(t('errorNotEditable'))
-        setLoading(false)
-        return
-      }
-
-      setFormData({
-        categoryId: r.categoryId || '',
-        deviceBrand: r.deviceBrand || '',
-        deviceModel: r.deviceModel || '',
-        title: r.title || '',
-        description: r.description || '',
-        urgency: r.urgency || URGENCY.NORMAL,
-        maxBudget: r.budgetAmountCents ? String(r.budgetAmountCents / 100) : '',
-        postalCode: r.postalCode || '',
-        city: r.city || '',
-        canton: r.canton || '',
-        serviceType: r.serviceType || 'flexible',
-        skillsNeeded: r.skillsNeeded || [],
-        imageUrls: r.imageUrls || [],
-        aiDiagnosis: r.aiDiagnosis || '',
-      })
-      setLoading(false)
-    })
-  }, [id, authStatus, t])
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (authStatus === 'unauthenticated') {
-      router.push(`/auth/login?callbackUrl=/it-hilfe/${id}/edit`)
-    }
-  }, [authStatus, router, id])
-
-  // Auto-fill city and canton from postal code
-  useEffect(() => {
-    if (formData?.postalCode?.length === 4) {
-      const data = lookupSwissPostalCode(formData.postalCode)
-      if (data) {
-        setFormData(prev => prev ? { ...prev, city: data.city, canton: data.canton } : prev)
-      }
-    }
-  }, [formData?.postalCode])
-
-  const updateField = <K extends keyof ITHilfeCreateFormData>(
-    key: K,
-    value: ITHilfeCreateFormData[K],
-  ) => setFormData(prev => prev ? { ...prev, [key]: value } : prev)
-
-  const handleCategorySelect = (catId: string) => {
-    const category = getCategoryById(catId)
-    setFormData(prev => {
-      if (!prev) return prev
-      const updated = { ...prev, categoryId: catId }
-      if (category) {
-        updated.skillsNeeded = category.suggestedSkills
-      }
-      return updated
-    })
-  }
-
-  const handleSkillToggle = (skillId: string) => {
-    setFormData(prev => {
-      if (!prev) return prev
-      return {
-        ...prev,
-        skillsNeeded: prev.skillsNeeded.includes(skillId)
-          ? prev.skillsNeeded.filter(s => s !== skillId)
-          : [...prev.skillsNeeded, skillId],
-      }
-    })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData) return
-    setError('')
-
-    const validationError = validateITHilfeForm(formData)
-    if (validationError) {
-      setError(validationError)
-      return
-    }
-
-    setSaving(true)
-    try {
-      const payload = transformITHilfeFormToPayload(formData)
-      const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}`, {
-        method: 'PUT',
-        body: payload,
-      })
-
-      if (!result.success) {
-        throw new Error(result.error || t('errorSaveFailed'))
-      }
-
-      setSuccess(true)
-      setTimeout(() => router.push(`/it-hilfe/${id}`), UI_FEEDBACK_MS.REDIRECT)
-    } catch (err) {
-      const message = err instanceof Error ? err.message : t('errorGeneric')
-      setError(message)
-      logger.error('Error updating request', { error: err })
-    } finally {
-      setSaving(false)
-    }
-  }
+  const {
+    authStatus,
+    loading,
+    saving,
+    error,
+    success,
+    formData,
+    updateField,
+    handleCategorySelect,
+    handleSkillToggle,
+    handleSubmit,
+  } = useEditITHilfeForm(id, {
+    errorNotFound: t('errorNotFound'),
+    errorNotOwner: t('errorNotOwner'),
+    errorNotEditable: t('errorNotEditable'),
+    errorSaveFailed: t('errorSaveFailed'),
+    errorGeneric: t('errorGeneric'),
+  })
 
   if (authStatus === 'loading' || loading) {
     return (
@@ -240,14 +96,10 @@ export default function EditRequestPage() {
             </div>
             <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
           </div>
-          <p className="text-neutral-600">
-            {t('description')}
-          </p>
+          <p className="text-neutral-600">{t('description')}</p>
         </div>
 
-        {error && (
-          <ErrorAlert message={error} variant="inline" className="mb-6" />
-        )}
+        {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Device Category */}
@@ -308,16 +160,14 @@ export default function EditRequestPage() {
               {/* Budget */}
               <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
                 <Heading level={2} className="text-lg text-neutral-900 mb-2">{t('sectionBudget')}</Heading>
-                <p className="text-sm text-neutral-600 mb-4">
-                  {t('budgetDescription')}
-                </p>
+                <p className="text-sm text-neutral-600 mb-4">{t('budgetDescription')}</p>
                 <div className="flex items-center gap-3">
                   <span className="text-neutral-500">CHF</span>
                   <input
                     type="number"
                     value={formData.maxBudget}
                     onChange={(e) => updateField('maxBudget', e.target.value)}
-                    {...{placeholder: t('budgetPlaceholder')}}
+                    placeholder={t('budgetPlaceholder')}
                     min="0"
                     step="5"
                     className="w-32 px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
@@ -368,7 +218,6 @@ export default function EditRequestPage() {
                 onSkillToggle={handleSkillToggle}
               />
 
-              {/* Submit */}
               <div className="flex justify-end gap-4">
                 <Link
                   href={`/it-hilfe/${id}`}
