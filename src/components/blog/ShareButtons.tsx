@@ -28,7 +28,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           href={shareLinks.mastodon}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#6364FF] text-white rounded-lg hover:bg-[#563ACC] transition-colors text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-mastodon text-white rounded-lg hover:bg-brand-mastodon-hover transition-colors text-sm font-medium"
           title={t('shareMastodon')}
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -56,7 +56,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           href={shareLinks.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#0A66C2] text-white rounded-lg hover:bg-[#004182] transition-colors text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-linkedin text-white rounded-lg hover:bg-brand-linkedin-hover transition-colors text-sm font-medium"
           title={t('shareLinkedin')}
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -70,7 +70,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
           href={shareLinks.facebook}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-[#1877F2] text-white rounded-lg hover:bg-[#0C63D4] transition-colors text-sm font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-brand-facebook text-white rounded-lg hover:bg-brand-facebook-hover transition-colors text-sm font-medium"
           title={t('shareFacebook')}
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

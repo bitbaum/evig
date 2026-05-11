@@ -105,6 +105,15 @@ const config: Config = {
           900: '#1e3a8a',
           950: '#172554',
         },
+        // Third-party brand colors — used only in share/social components
+        brand: {
+          mastodon: '#6364FF',
+          'mastodon-hover': '#563ACC',
+          linkedin: '#0A66C2',
+          'linkedin-hover': '#004182',
+          facebook: '#1877F2',
+          'facebook-hover': '#0C63D4',
+        },
       },
       // Mobile-first spacing and sizing
       spacing: {
