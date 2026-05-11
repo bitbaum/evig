@@ -410,16 +410,15 @@
         "mapsInfoBody": "OpenStreetMap ist community-getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live-Verkehr und POIs. Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig."
       },
       "online": {
-        "title": "Online-Shops",
-        "tagline": "Wähle zwischen unserem Online-Shop und dem Shopware-Kanal.",
-        "benefit1": "Geprüfte Qualität und Garantie in allen Kanälen",
+        "title": "Online-Shop",
+        "tagline": "Kaufe direkt bei uns oder über unseren Shopware-Shop.",
+        "benefit1": "Geprüfte Qualität und Garantie",
         "benefit2": "Faire Preise, nachhaltige Auswahl",
         "benefit3": "Sichere Zahlung",
-        "currentShop": "Aktueller Online-Shop",
-        "shopwareShop": "Zum Shopware-Shop",
+        "shopwareShop": "Shopware-Shop (extern)",
         "onlineShop": "{orgName} Online-Shop",
-        "multiShopTitle": "Mehrere Shop-Kanäle?",
-        "multiShopBody": "Unser {orgName} Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System."
+        "multiShopTitle": "Zwei Shop-Kanäle",
+        "multiShopBody": "Unser {orgName} Online-Shop ist direkt in die Plattform integriert. Der externe Shopware-Shop öffnet sich in einem neuen Fenster."
       }
     },
     "search": {

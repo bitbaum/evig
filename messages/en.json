@@ -364,16 +364,15 @@
         "mapsInfoBody": "OpenStreetMap is community-driven and privacy-friendly. Google/Apple Maps often offer better navigation, live traffic, and points of interest. Choose what works best for you – transparency and freedom of choice matter to us."
       },
       "online": {
-        "title": "Online shops",
-        "tagline": "Choose between our online shop and the Shopware channel.",
-        "benefit1": "Verified quality and warranty across all channels",
+        "title": "Online shop",
+        "tagline": "Shop directly with us or through our Shopware store.",
+        "benefit1": "Verified quality and warranty",
         "benefit2": "Fair prices, sustainable selection",
         "benefit3": "Secure payment",
-        "currentShop": "Current online shop",
-        "shopwareShop": "Go to Shopware shop",
+        "shopwareShop": "Shopware shop (external)",
         "onlineShop": "{orgName} online shop",
-        "multiShopTitle": "Multiple shop channels?",
-        "multiShopBody": "Our {orgName} online shop offers you the best selection of refurbished IT hardware. You can also find our range in the Shopware shop and the legacy system."
+        "multiShopTitle": "Two shop channels",
+        "multiShopBody": "Our {orgName} online shop is directly integrated into the platform. The external Shopware shop opens in a new window."
       }
     },
     "search": {

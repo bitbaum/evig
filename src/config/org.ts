@@ -130,8 +130,8 @@ export const MEMBERSHIP = {
 // ============================================================================
 
 export const EXTERNAL_LINKS = {
-  shopOnline: 'https://revamp-it.ch/shop',
-  shopware: 'https://revamp-it.ch/shop-sw',
+  /** Shopware shop — the current externally-hosted storefront */
+  shopware: 'https://shop.revamp-it.ch/',
   /** Legacy WordPress shop — used in chatbot and external links */
   shopLegacy: 'https://www.revamp-it.ch/index.php/de/shop-de',
   wiki: 'https://revamp-it.ch/index.php/de/wiki-de',

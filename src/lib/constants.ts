@@ -59,7 +59,6 @@ import { CONTACT, LOCATIONS, EXTERNAL_LINKS } from '@/config/org'
 export const CONTACT_EMAIL = CONTACT.email
 export const SUPPORT_EMAIL = CONTACT.supportEmail
 
-export const SHOP_ONLINE_URL = EXTERNAL_LINKS.shopOnline
 export const SHOPWARE_URL = EXTERNAL_LINKS.shopware
 export const STORE_ADDRESS = LOCATIONS.store.full
 export const STORE_GOOGLE_MAPS_URL = LOCATIONS.store.googleMapsUrl
