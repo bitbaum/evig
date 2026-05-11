@@ -1,23 +1,7 @@
 'use client'
 
-/**
- * BlogSubmissionsClient
- *
- * Shows the authenticated user's blog submissions with per-status UX:
- *  - pending / approved: informational card
- *  - published: link to the live post
- *  - rejected: expandable rejection reason
- *  - requires_changes: inline editor + resubmit button
- *
- * Talks to:
- *  GET  /api/blog/my-submissions
- *  POST /api/blog/submissions/[id]/resubmit
- */
-
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
 import {
   APPROVAL_STATUS,
   APPROVAL_STATUS_BADGES,
@@ -34,136 +18,33 @@ import {
   PenSquare,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
-
-interface MySubmission {
-  id: string
-  title: string
-  slug: string | null
-  status: string
-  statusLabel: string
-  submissionType: string
-  reviewNotes: string | null
-  rejectionReason: string | null
-  adminFeedback: string | null
-  nextAction: string | null
-  publishedPostId: string | null
-  publishedPostSlug: string | null
-  publishedAt: string | null
-  submittedAt: string | null
-  createdAt: string | null
-  updatedAt: string | null
-}
-
-interface ApiResponse {
-  submissions: MySubmission[]
-}
+import { useBlogSubmissions, type MySubmission } from '@/hooks/useBlogSubmissions'
 
 export default function BlogSubmissionsClient() {
   const t = useTranslations('dashboard.blogSubmissions')
-  const [submissions, setSubmissions] = useState<MySubmission[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string>('')
 
-  // Inline resubmit editor state
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editTitle, setEditTitle] = useState('')
-  const [editContent, setEditContent] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [expandedFeedback, setExpandedFeedback] = useState<Set<string>>(new Set())
+  const {
+    submissions,
+    loading,
+    error,
+    editingId,
+    editTitle,
+    editContent,
+    saving,
+    expandedFeedback,
+    stats,
+    setEditTitle,
+    setEditContent,
+    toggleFeedback,
+    startEditing,
+    cancelEditing,
+    resubmit,
+  } = useBlogSubmissions({
+    loadError: t('loadError'),
+    emptyContent: t('emptyContent'),
+    resubmitError: t('resubmitError'),
+  })
 
-  const load = async () => {
-    setLoading(true)
-    const result = await apiFetch<ApiResponse>('/api/blog/my-submissions')
-    if (result.success && result.data) {
-      setSubmissions(result.data.submissions || [])
-      setError('')
-    } else {
-      setError(result.error || t('loadError'))
-    }
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    let cancelled = false
-    const fetchSubmissions = async () => {
-      setLoading(true)
-      const result = await apiFetch<ApiResponse>('/api/blog/my-submissions')
-      if (cancelled) return
-      if (result.success && result.data) {
-        setSubmissions(result.data.submissions || [])
-        setError('')
-      } else {
-        setError(result.error || t('loadError'))
-      }
-      setLoading(false)
-    }
-    fetchSubmissions()
-    return () => { cancelled = true }
-  }, [t])
-
-  const toggleFeedback = (id: string) => {
-    setExpandedFeedback((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) {
-        next.delete(id)
-      } else {
-        next.add(id)
-      }
-      return next
-    })
-  }
-
-  const startEditing = (submission: MySubmission) => {
-    setEditingId(submission.id)
-    setEditTitle(submission.title)
-    setEditContent('')
-  }
-
-  const cancelEditing = () => {
-    setEditingId(null)
-    setEditTitle('')
-    setEditContent('')
-  }
-
-  const resubmit = async (id: string) => {
-    if (!editContent.trim()) {
-      setError(t('emptyContent'))
-      return
-    }
-    setSaving(true)
-    const result = await apiFetch<{ id: string; status: string }>(
-      `/api/blog/submissions/${id}/resubmit`,
-      {
-        method: 'POST',
-        body: { title: editTitle, content: editContent },
-      },
-    )
-    setSaving(false)
-    if (result.success) {
-      cancelEditing()
-      await load()
-    } else {
-      setError(result.error || t('resubmitError'))
-    }
-  }
-
-  // ---- stats ---------------------------------------------------------------
-  const stats = {
-    pending: submissions.filter(
-      (s) =>
-        s.status === APPROVAL_STATUS.PENDING ||
-        s.status === APPROVAL_STATUS.APPROVED,
-    ).length,
-    published: submissions.filter((s) => s.status === APPROVAL_STATUS.PUBLISHED)
-      .length,
-    rejected: submissions.filter((s) => s.status === APPROVAL_STATUS.REJECTED)
-      .length,
-    requiresChanges: submissions.filter(
-      (s) => s.status === APPROVAL_STATUS.REQUIRES_CHANGES,
-    ).length,
-  }
-
-  // ---- render --------------------------------------------------------------
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-8">
@@ -210,30 +91,10 @@ export default function BlogSubmissionsClient() {
         {/* Stats */}
         {submissions.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
-            <StatCard
-              icon={<Clock className="w-5 h-5" />}
-              label={t('statPending')}
-              value={stats.pending}
-              tone="yellow"
-            />
-            <StatCard
-              icon={<CheckCircle2 className="w-5 h-5" />}
-              label={t('statPublished')}
-              value={stats.published}
-              tone="blue"
-            />
-            <StatCard
-              icon={<PenSquare className="w-5 h-5" />}
-              label={t('statRevise')}
-              value={stats.requiresChanges}
-              tone="orange"
-            />
-            <StatCard
-              icon={<XCircle className="w-5 h-5" />}
-              label={t('statRejected')}
-              value={stats.rejected}
-              tone="red"
-            />
+            <StatCard icon={<Clock className="w-5 h-5" />} label={t('statPending')} value={stats.pending} tone="yellow" />
+            <StatCard icon={<CheckCircle2 className="w-5 h-5" />} label={t('statPublished')} value={stats.published} tone="blue" />
+            <StatCard icon={<PenSquare className="w-5 h-5" />} label={t('statRevise')} value={stats.requiresChanges} tone="orange" />
+            <StatCard icon={<XCircle className="w-5 h-5" />} label={t('statRejected')} value={stats.rejected} tone="red" />
           </div>
         )}
 
@@ -250,131 +111,22 @@ export default function BlogSubmissionsClient() {
               const feedbackShown = expandedFeedback.has(submission.id)
 
               return (
-                <div
+                <SubmissionCard
                   key={submission.id}
-                  className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-4 sm:p-6 border-2 border-neutral-200 dark:border-neutral-700"
-                >
-                  {/* Header row */}
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
-                    <div className="flex-1 min-w-0">
-                      <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-1 break-words">
-                        {submission.title}
-                      </Heading>
-                      <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
-                        {t('submittedOn', { date: formatDate(submission.submittedAt || submission.createdAt || '') })}
-                      </p>
-                    </div>
-                    <span
-                      className={`inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.color}`}
-                    >
-                      {badge.label}
-                    </span>
-                  </div>
-
-                  {/* Next action hint */}
-                  {submission.nextAction && (
-                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-3">
-                      {submission.nextAction}
-                    </p>
-                  )}
-
-                  {/* Status specific content */}
-                  {submission.status === APPROVAL_STATUS.PUBLISHED &&
-                    submission.publishedPostSlug && (
-                      <Link
-                        href={`/blog/${submission.publishedPostSlug}`}
-                        className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        {t('viewPublished')}
-                      </Link>
-                    )}
-
-                  {submission.status === APPROVAL_STATUS.REJECTED &&
-                    submission.adminFeedback && (
-                      <div className="mt-2">
-                        <button
-                          onClick={() => toggleFeedback(submission.id)}
-                          className="text-sm text-error-700 dark:text-error-400 hover:underline inline-flex items-center"
-                        >
-                          <AlertCircle className="w-4 h-4 mr-1" />
-                          {feedbackShown
-                            ? t('hideRejection')
-                            : t('showRejection')}
-                        </button>
-                        {feedbackShown && (
-                          <div className="mt-2 rounded-lg border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-800 dark:text-error-300 whitespace-pre-wrap">
-                            {submission.adminFeedback}
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                  {submission.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
-                    <div className="mt-2">
-                      {submission.adminFeedback && (
-                        <div className="rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 p-3 text-sm text-orange-900 dark:text-orange-200 whitespace-pre-wrap mb-3">
-                          <strong className="block mb-1">
-                            {t('editorialFeedback')}
-                          </strong>
-                          {submission.adminFeedback}
-                        </div>
-                      )}
-
-                      {!isEditing ? (
-                        <button
-                          onClick={() => startEditing(submission)}
-                          className="inline-flex items-center px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700 text-sm font-medium"
-                        >
-                          <PenSquare className="w-4 h-4 mr-2" />
-                          {t('reviseButton')}
-                        </button>
-                      ) : (
-                        <div className="space-y-3">
-                          <div>
-                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                              {t('titleLabel')}
-                            </label>
-                            <input
-                              type="text"
-                              value={editTitle}
-                              onChange={(e) => setEditTitle(e.target.value)}
-                              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                              {t('contentLabel')}
-                            </label>
-                            <textarea
-                              value={editContent}
-                              onChange={(e) => setEditContent(e.target.value)}
-                              rows={10}
-                              placeholder={t('contentPlaceholder')}
-                              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => resubmit(submission.id)}
-                              disabled={saving}
-                              className="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
-                            >
-                              {saving ? t('submitting') : t('resubmit')}
-                            </button>
-                            <button
-                              onClick={cancelEditing}
-                              disabled={saving}
-                              className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
-                            >
-                              {t('cancel')}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
+                  submission={submission}
+                  badge={badge}
+                  isEditing={isEditing}
+                  feedbackShown={feedbackShown}
+                  editTitle={editTitle}
+                  editContent={editContent}
+                  saving={saving}
+                  onToggleFeedback={() => toggleFeedback(submission.id)}
+                  onStartEditing={() => startEditing(submission)}
+                  onCancelEditing={cancelEditing}
+                  onResubmit={() => resubmit(submission.id)}
+                  onEditTitleChange={setEditTitle}
+                  onEditContentChange={setEditContent}
+                />
               )
             })}
           </div>
@@ -385,6 +137,156 @@ export default function BlogSubmissionsClient() {
 }
 
 // ---- sub components --------------------------------------------------------
+
+function SubmissionCard({
+  submission,
+  badge,
+  isEditing,
+  feedbackShown,
+  editTitle,
+  editContent,
+  saving,
+  onToggleFeedback,
+  onStartEditing,
+  onCancelEditing,
+  onResubmit,
+  onEditTitleChange,
+  onEditContentChange,
+}: {
+  submission: MySubmission
+  badge: { bg: string; color: string; label: string }
+  isEditing: boolean
+  feedbackShown: boolean
+  editTitle: string
+  editContent: string
+  saving: boolean
+  onToggleFeedback: () => void
+  onStartEditing: () => void
+  onCancelEditing: () => void
+  onResubmit: () => void
+  onEditTitleChange: (v: string) => void
+  onEditContentChange: (v: string) => void
+}) {
+  const t = useTranslations('dashboard.blogSubmissions')
+  return (
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm p-4 sm:p-6 border-2 border-neutral-200 dark:border-neutral-700">
+      {/* Header row */}
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+        <div className="flex-1 min-w-0">
+          <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 dark:text-white mb-1 break-words">
+            {submission.title}
+          </Heading>
+          <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
+            {t('submittedOn', { date: formatDate(submission.submittedAt || submission.createdAt || '') })}
+          </p>
+        </div>
+        <span className={`inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.color}`}>
+          {badge.label}
+        </span>
+      </div>
+
+      {/* Next action hint */}
+      {submission.nextAction && (
+        <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-3">
+          {submission.nextAction}
+        </p>
+      )}
+
+      {/* Published link */}
+      {submission.status === APPROVAL_STATUS.PUBLISHED && submission.publishedPostSlug && (
+        <Link
+          href={`/blog/${submission.publishedPostSlug}`}
+          className="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium text-sm"
+        >
+          <ExternalLink className="w-4 h-4 mr-2" />
+          {t('viewPublished')}
+        </Link>
+      )}
+
+      {/* Rejected feedback */}
+      {submission.status === APPROVAL_STATUS.REJECTED && submission.adminFeedback && (
+        <div className="mt-2">
+          <button
+            onClick={onToggleFeedback}
+            className="text-sm text-error-700 dark:text-error-400 hover:underline inline-flex items-center"
+          >
+            <AlertCircle className="w-4 h-4 mr-1" />
+            {feedbackShown ? t('hideRejection') : t('showRejection')}
+          </button>
+          {feedbackShown && (
+            <div className="mt-2 rounded-lg border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-800 dark:text-error-300 whitespace-pre-wrap">
+              {submission.adminFeedback}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Requires changes */}
+      {submission.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
+        <div className="mt-2">
+          {submission.adminFeedback && (
+            <div className="rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 p-3 text-sm text-orange-900 dark:text-orange-200 whitespace-pre-wrap mb-3">
+              <strong className="block mb-1">{t('editorialFeedback')}</strong>
+              {submission.adminFeedback}
+            </div>
+          )}
+
+          {!isEditing ? (
+            <button
+              onClick={onStartEditing}
+              className="inline-flex items-center px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700 text-sm font-medium"
+            >
+              <PenSquare className="w-4 h-4 mr-2" />
+              {t('reviseButton')}
+            </button>
+          ) : (
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  {t('titleLabel')}
+                </label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => onEditTitleChange(e.target.value)}
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                  {t('contentLabel')}
+                </label>
+                <textarea
+                  value={editContent}
+                  onChange={(e) => onEditContentChange(e.target.value)}
+                  rows={10}
+                  placeholder={t('contentPlaceholder')}
+                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={onResubmit}
+                  disabled={saving}
+                  className="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
+                >
+                  {saving ? t('submitting') : t('resubmit')}
+                </button>
+                <button
+                  onClick={onCancelEditing}
+                  disabled={saving}
+                  className="px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
+                >
+                  {t('cancel')}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 
 function StatCard({
   icon,
@@ -398,22 +300,16 @@ function StatCard({
   tone: 'yellow' | 'blue' | 'orange' | 'red'
 }) {
   const tones: Record<string, string> = {
-    yellow:
-      'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
+    yellow: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
     blue: 'bg-info-50 dark:bg-info-900/20 text-info-800 dark:text-info-300 border-info-200 dark:border-info-800',
-    orange:
-      'bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+    orange: 'bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800',
     red: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-300 border-error-200 dark:border-error-800',
   }
   return (
-    <div
-      className={`rounded-lg border-2 p-3 sm:p-4 ${tones[tone]}`}
-    >
+    <div className={`rounded-lg border-2 p-3 sm:p-4 ${tones[tone]}`}>
       <div className="flex items-center gap-2 mb-1">
         {icon}
-        <span className="text-xs font-medium uppercase tracking-wide">
-          {label}
-        </span>
+        <span className="text-xs font-medium uppercase tracking-wide">{label}</span>
       </div>
       <p className="text-2xl font-bold">{value}</p>
     </div>

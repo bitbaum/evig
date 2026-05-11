@@ -1,8 +1,5 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
   Package,
@@ -18,84 +15,22 @@ import {
   RefreshCw
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
-import { apiFetch } from '@/lib/api/client'
-import { ROLES } from '@/lib/constants'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import type { ListingStatus } from '@/config/marketplace'
+import { useSellerDashboard } from '@/hooks/useSellerDashboard'
 
-interface Product {
-  id: string
-  title: string
-  price: number
-  status: string
-  viewsCount: number
-  favoritesCount: number
-  condition: string
-  category: string
-  image: string | null
-  createdAt: string
-}
-
-interface Stats {
-  totalProducts: number
-  activeProducts: number
-  totalViews: number
-  totalFavorites: number
-  totalOrders: number
-  pendingOrders: number
-  totalRevenue: number
-}
-
-interface DashboardData {
-  stats: Stats
-  products: Product[]
+function getStatusLabel(status: string) {
+  const config = LISTING_STATUS_CONFIG[status as ListingStatus]
+  if (config) return { label: config.label, className: config.color }
+  return { label: status, className: 'bg-neutral-100 text-neutral-800' }
 }
 
 export default function SellerDashboard() {
   const t = useTranslations('dashboard.seller')
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const [data, setData] = useState<DashboardData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  const fetchDashboardData = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    const result = await apiFetch<DashboardData>('/api/seller/dashboard')
-    if (result.success && result.data) {
-      setData(result.data)
-    } else {
-      setError(result.error || t('unexpectedError'))
-    }
-    setIsLoading(false)
-  }, [t])
-
-  useEffect(() => {
-    if (status === 'loading') return
-
-    if (!session?.user) {
-      router.push('/auth/login')
-      return
-    }
-
-    const userRole = session.user.role as string
-    // UNIFIED: Check seller role OR admin access (old role OR new is_staff system)
-    const hasAdminAccess =
-      userRole === ROLES.REVAMPIT_ADMIN ||
-      session.user.isStaff === true ||
-      session.user.isSuperAdmin === true
-    const hasAccess = userRole === ROLES.SELLER || hasAdminAccess
-
-    if (!hasAccess) {
-      router.push('/dashboard')
-      return
-    }
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchDashboardData()
-  }, [session, status, router, fetchDashboardData])
+  const { sessionStatus, isLoading, error, stats, products, fetchDashboardData } =
+    useSellerDashboard(t('unexpectedError'))
 
   const quickActions = [
     { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: '/marketplace/sell', icon: Plus, color: 'bg-primary-500' },
@@ -104,13 +39,7 @@ export default function SellerDashboard() {
     { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: '/marketplace', icon: BarChart3, color: 'bg-orange-500' },
   ]
 
-  const getStatusLabel = (status: string) => {
-    const config = LISTING_STATUS_CONFIG[status as ListingStatus]
-    if (config) return { label: config.label, className: config.color }
-    return { label: status, className: 'bg-neutral-100 text-neutral-800' }
-  }
-
-  if (status === 'loading' || isLoading) {
+  if (sessionStatus === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
@@ -137,18 +66,6 @@ export default function SellerDashboard() {
       </div>
     )
   }
-
-  const stats = data?.stats || {
-    totalProducts: 0,
-    activeProducts: 0,
-    totalViews: 0,
-    totalFavorites: 0,
-    totalOrders: 0,
-    pendingOrders: 0,
-    totalRevenue: 0,
-  }
-
-  const products = data?.products || []
 
   return (
     <div className="space-y-8">
