@@ -1,8 +1,6 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
-import { apiFetch } from '@/lib/api/client';
 import {
   DECISION_STATUS,
   DECISION_STATUS_CONFIG,
@@ -14,7 +12,6 @@ import {
   type DecisionStatus,
 } from '@/config/decisions';
 import { Link2, Check, Mail } from 'lucide-react';
-import { UI_FEEDBACK_MS } from '@/config/limits';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { adminSurface, adminType, adminForm } from '@/lib/admin-ui';
@@ -22,6 +19,7 @@ import { cn } from '@/lib/utils';
 import { formatDateShort } from '@/lib/date-formats';
 import BeschlussPdfExport from '@/components/decisions/BeschlussPdfExport';
 import type { DecisionDetail } from './types';
+import { useDecisionHeaderCard } from '@/hooks/useDecisionHeaderCard';
 
 interface Props {
   decision: DecisionDetail;
@@ -43,57 +41,31 @@ export default function DecisionHeaderCard({
   onDeleteSuccess,
   onError,
 }: Props) {
-  const [showCloseInput, setShowCloseInput] = useState(false);
-  const [closeSummary, setCloseSummary] = useState('');
-  const [showCancelInput, setShowCancelInput] = useState(false);
-  const [cancelReason, setCancelReason] = useState('');
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
-  const [sendingInvitations, setSendingInvitations] = useState(false);
-  const [invitationsResult, setInvitationsResult] = useState<{ sent: number; skipped: number } | null>(null);
+  const {
+    showCloseInput,
+    closeSummary,
+    showCancelInput,
+    cancelReason,
+    showDeleteDialog,
+    deleting,
+    linkCopied,
+    sendingInvitations,
+    invitationsResult,
+    setShowCloseInput,
+    setCloseSummary,
+    setShowCancelInput,
+    setCancelReason,
+    setShowDeleteDialog,
+    handleCopyLink,
+    handleSendInvitations,
+    handleDelete,
+  } = useDecisionHeaderCard(decision.id, onDeleteSuccess, onError)
 
   const statusConf = DECISION_STATUS_CONFIG[decision.status];
   const typeConf = DECISION_TYPE_CONFIG[decision.decisionType];
   const methodConf = VOTING_METHOD_CONFIG[decision.votingMethod];
   const validTargets = VALID_TRANSITIONS[decision.status] || [];
   const canDelete = decision.creator.id === currentUserId || isSuperAdmin;
-
-  function handleCopyLink() {
-    const url = `${window.location.origin}/vote/${decision.id}`;
-    navigator.clipboard.writeText(url).then(() => {
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), UI_FEEDBACK_MS.LINK_COPY);
-    });
-  }
-
-  async function handleSendInvitations() {
-    setSendingInvitations(true);
-    setInvitationsResult(null);
-    const result = await apiFetch<{ sent: number; skipped: number }>(
-      `/api/decisions/${decision.id}/send-invitations`,
-      { method: 'POST' }
-    );
-    setSendingInvitations(false);
-    if (result.success && result.data) {
-      setInvitationsResult(result.data);
-      setTimeout(() => setInvitationsResult(null), UI_FEEDBACK_MS.NOTIFICATION);
-    } else {
-      onError(result.error || 'Fehler beim Senden der Einladungen');
-    }
-  }
-
-  async function handleDelete() {
-    setDeleting(true);
-    const result = await apiFetch<void>(`/api/decisions/${decision.id}`, { method: 'DELETE' });
-    if (!result.success) {
-      onError(result.error || 'Fehler beim Löschen');
-      setDeleting(false);
-      setShowDeleteDialog(false);
-      return;
-    }
-    onDeleteSuccess();
-  }
 
   return (
     <div className={cn(adminSurface.card, 'p-4 md:p-6')}>
@@ -124,7 +96,6 @@ export default function DecisionHeaderCard({
               Bearbeiten
             </AdminButton>
           )}
-          {/* Share link — always visible */}
           <button
             onClick={handleCopyLink}
             className={cn(
@@ -140,7 +111,6 @@ export default function DecisionHeaderCard({
               <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
             )}
           </button>
-          {/* Resend invitations — only during active voting */}
           {decision.status === DECISION_STATUS.VOTING && (
             <button
               onClick={handleSendInvitations}
