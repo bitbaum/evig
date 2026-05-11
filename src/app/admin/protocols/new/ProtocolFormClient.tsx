@@ -1,222 +1,44 @@
 'use client'
 
-/**
- * Protocol Form Client Component — Simplified 2-Step Form
- *
- * Step 1: Setup (type, title, date, visibility, attendees)
- * Step 2: Content (unified text/audio input with auto-detection)
- */
-
-import { useState, useMemo, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { Loader2, Upload, Mic, FileText, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
-import {
-  MEETING_TYPE_LABELS,
-  MEETING_TYPE_TEMPLATES,
-  PROTOCOL_VISIBILITY_LABELS,
-} from '@/config/protocols'
+import { MEETING_TYPE_LABELS, PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
 import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
-import { apiFetch } from '@/lib/api/client'
-import { getErrorMessage } from '@/lib/utils/error'
-import { validateAudioUpload } from '@/lib/protocols/audio-validation'
-import { DEFAULT_WHISPER_MODEL, WHISPER_MODELS } from '@/config/transcription'
-import { formatDateShort } from '@/lib/date-formats'
+import { WHISPER_MODELS } from '@/config/transcription'
 import Heading from '@/components/admin/AdminHeading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
-import { adminForm as af } from '@/lib/admin-ui'
+import { useProtocolForm } from '@/hooks/useProtocolForm'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
 }
 
 export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientProps) {
-  const router = useRouter()
-
-  // Form state
-  const [meetingType, setMeetingType] = useState<MeetingType | ''>('')
-  const [title, setTitle] = useState('')
-  const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0])
-  const [visibility, setVisibility] = useState<ProtocolVisibility>('team')
-  const [selectedAttendees, setSelectedAttendees] = useState<string[]>([])
-  const [showAttendees, setShowAttendees] = useState(true)
-  const [attendeeSearch, setAttendeeSearch] = useState('')
-
-  // Content state
-  const [content, setContent] = useState('')
-  const [audioFile, setAudioFile] = useState<File | null>(null)
-  const [whisperModel, setWhisperModel] = useState(DEFAULT_WHISPER_MODEL)
-
-  // UI state
-  const [loading, setLoading] = useState(false)
-  const [processing, setProcessing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>, _metadata: Record<string, AIFieldMetadataEntry>) => {
-    if (data.title) setTitle(String(data.title))
-    if (data.meeting_type && typeof data.meeting_type === 'string') {
-      setMeetingType(data.meeting_type as MeetingType)
-    }
-    if (data.meeting_date && typeof data.meeting_date === 'string') {
-      setMeetingDate(data.meeting_date)
-    }
-    if (data.visibility && typeof data.visibility === 'string') {
-      setVisibility(data.visibility as ProtocolVisibility)
-    }
-  }
-
-  // Step 1 complete when type + title + date filled
-  const setupComplete = meetingType !== '' && title.trim() !== '' && meetingDate !== ''
-
-  // Auto-detect content format
-  const contentFormat = useMemo(() => {
-    if (!content.trim()) return null
-    try { JSON.parse(content); return 'json' as const } catch { return 'text' as const }
-  }, [content])
-
-  // Determine input method from content
-  const detectedInputMethod = useMemo(() => {
-    if (audioFile) return 'audio'
-    if (contentFormat === 'json') return 'notes'
-    return 'transcript'
-  }, [audioFile, contentFormat])
-
-  // Can submit when setup is done and has content
-  const hasContent = audioFile !== null || content.trim().length >= 20
-  const canSubmit = setupComplete && hasContent && !loading && !processing
-
-  // Auto-generate title when meeting type changes
-  useEffect(() => {
-    if (meetingType) {
-      const template = MEETING_TYPE_TEMPLATES[meetingType]
-      setVisibility(template.default_visibility)
-      if (!title) {
-        setTitle(`${MEETING_TYPE_LABELS[meetingType]} — ${formatDateShort(meetingDate)}`)
-      }
-    }
-  }, [meetingType, meetingDate, title])
-
-  const filteredTeamMembers = useMemo(() => {
-    if (!attendeeSearch.trim()) return teamMembers
-    const search = attendeeSearch.toLowerCase()
-    return teamMembers.filter(m => m.name.toLowerCase().includes(search))
-  }, [teamMembers, attendeeSearch])
-
-  const toggleAttendee = (id: string) => {
-    setSelectedAttendees(prev =>
-      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
-    )
-  }
-
-  const selectAllAttendees = () => {
-    if (selectedAttendees.length === teamMembers.length) {
-      setSelectedAttendees([])
-    } else {
-      setSelectedAttendees(teamMembers.map(m => m.id))
-    }
-  }
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setError(null)
-
-    // Audio file
-    if (file.type.startsWith('audio/') || file.name.match(/\.(mp3|wav|m4a|webm|ogg|flac)$/i)) {
-      const validationError = validateAudioUpload(file)
-      if (validationError) { setError(validationError); return }
-      setAudioFile(file)
-      setContent('')
-      return
-    }
-
-    // Text file
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      const text = event.target?.result
-      if (typeof text === 'string') {
-        setContent(text)
-        setAudioFile(null)
-      }
-    }
-    reader.readAsText(file)
-  }
-
-  const handleSubmit = async () => {
-    if (!canSubmit || !meetingType) return
-    setLoading(true)
-    setError(null)
-
-    try {
-      // 1. Create protocol
-      const createResult = await apiFetch<{ id: string }>('/api/protocols', {
-        method: 'POST',
-        body: {
-          title,
-          meeting_date: meetingDate,
-          meeting_type: meetingType,
-          visibility,
-          input_method: detectedInputMethod,
-          attendees: selectedAttendees,
-        },
-      })
-      if (!createResult.success || !createResult.data) {
-        throw new Error(createResult.error || 'Fehler beim Erstellen')
-      }
-
-      const protocolId = createResult.data.id
-
-      // 2. Process content
-      setProcessing(true)
-
-      if (audioFile) {
-        const audioFormData = new FormData()
-        audioFormData.append('audio', audioFile)
-        audioFormData.append('model', whisperModel)
-
-        const processRes = await fetch(`/api/protocols/${protocolId}/process-audio`, {
-          method: 'POST',
-          body: audioFormData,
-        })
-        const processData = await processRes.json()
-        if (!processData.success) {
-          const params = new URLSearchParams({ processing: 'failed', retryable: String(processData.retryable ?? true) })
-          if (processData.error) params.set('error', String(processData.error).slice(0, 250))
-          router.push(`/admin/protocols/${protocolId}?${params}`)
-          return
-        }
-      } else if (content.trim()) {
-        const endpoint = detectedInputMethod === 'notes' ? 'process-notes' : 'process'
-        const body = detectedInputMethod === 'transcript'
-          ? { raw_transcript: content }
-          : { content }
-
-        const processRes = await fetch(`/api/protocols/${protocolId}/${endpoint}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(body),
-        })
-        const processData = await processRes.json()
-        if (!processData.success) {
-          const params = new URLSearchParams({ processing: 'failed', retryable: String(processData.retryable ?? true) })
-          if (processData.error) params.set('error', String(processData.error).slice(0, 250))
-          router.push(`/admin/protocols/${protocolId}?${params}`)
-          return
-        }
-      }
-
-      router.push(`/admin/protocols/${protocolId}`)
-    } catch (err) {
-      setError(getErrorMessage(err))
-    } finally {
-      setLoading(false)
-      setProcessing(false)
-    }
-  }
+  const {
+    meetingType, setMeetingType,
+    title, setTitle,
+    meetingDate, setMeetingDate,
+    visibility, setVisibility,
+    selectedAttendees,
+    showAttendees, setShowAttendees,
+    attendeeSearch, setAttendeeSearch,
+    content,
+    audioFile, setAudioFile,
+    whisperModel, setWhisperModel,
+    loading, processing, error,
+    setupComplete, canSubmit,
+    contentFormat,
+    filteredTeamMembers,
+    handleAIFieldsFilled,
+    handleContentChange,
+    toggleAttendee,
+    selectAllAttendees,
+    handleFileUpload,
+    handleSubmit,
+  } = useProtocolForm(teamMembers)
 
   return (
     <div className="max-w-3xl space-y-6">
-      {/* AI pre-fill for setup fields (text-based only, Whisper audio is separate) */}
+      {/* AI pre-fill for setup fields */}
       <AIFormAssist
         formType="protocol"
         variant="bar"
@@ -235,7 +57,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         <Heading level={2} className="text-lg font-semibold text-neutral-900">Sitzungsdetails</Heading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Meeting Type */}
           <div>
             <label htmlFor="meeting_type" className="block text-sm font-medium text-neutral-700 mb-1">
               Sitzungstyp
@@ -253,7 +74,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             </select>
           </div>
 
-          {/* Date */}
           <div>
             <label htmlFor="meeting_date" className="block text-sm font-medium text-neutral-700 mb-1">
               Datum
@@ -268,7 +88,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           </div>
         </div>
 
-        {/* Title */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
             Titel
@@ -284,7 +103,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Visibility */}
           <div>
             <label htmlFor="visibility" className="block text-sm font-medium text-neutral-700 mb-1">
               Sichtbarkeit
@@ -364,7 +182,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
           </p>
 
-          {/* Textarea */}
           <div>
             <label htmlFor="content" className="block text-sm font-medium text-neutral-700 mb-1">
               Transkript oder Notizen
@@ -372,7 +189,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             <textarea
               id="content"
               value={content}
-              onChange={(e) => { setContent(e.target.value); setAudioFile(null) }}
+              onChange={(e) => handleContentChange(e.target.value)}
               placeholder="Sitzungsnotizen hier einfügen..."
               rows={10}
               disabled={!!audioFile}
@@ -409,7 +226,6 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               <span className="text-xs text-neutral-500">.txt, .json, .mp3, .wav, .m4a, .webm</span>
             </div>
 
-            {/* Audio file selected */}
             {audioFile && (
               <div className="mt-3 p-3 bg-info-50 border border-info-200 rounded-lg">
                 <div className="flex items-center justify-between">
