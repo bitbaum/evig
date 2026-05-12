@@ -1,13 +1,9 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { apiFetch } from '@/lib/api/client';
 import {
   DECISION_STATUS,
   PARTICIPATABLE_STATUSES,
   READ_ONLY_STATUSES,
-  type DecisionStatus,
 } from '@/config/decisions';
 import { adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
@@ -16,7 +12,7 @@ import DiscussionThread from './DiscussionThread';
 import ParticipationCard from './ParticipationCard';
 import ResultsPanel from './ResultsPanel';
 import DecisionHeaderCard from './DecisionHeaderCard';
-import type { DecisionDetail } from './types';
+import { useDecisionDetailClient } from './useDecisionDetailClient';
 
 export default function DecisionDetailClient({
   decisionId,
@@ -27,38 +23,15 @@ export default function DecisionDetailClient({
   currentUserId: string;
   isSuperAdmin: boolean;
 }) {
-  const [decision, setDecision] = useState<DecisionDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [actionError, setActionError] = useState('');
-  const router = useRouter();
-
-  const fetchDecision = useCallback(async () => {
-    const result = await apiFetch<DecisionDetail>(`/api/decisions/${decisionId}`);
-    if (result.success && result.data) setDecision(result.data);
-    setLoading(false);
-  }, [decisionId]);
-
-  useEffect(() => {
-    queueMicrotask(() => {
-      void fetchDecision();
-    });
-  }, [fetchDecision]);
-
-  async function handleTransition(
-    newStatus: DecisionStatus,
-    extra?: { cancelReason?: string; outcomeSummary?: string }
-  ) {
-    setActionError('');
-    const result = await apiFetch<void>(`/api/decisions/${decisionId}/transition`, {
-      method: 'POST',
-      body: { status: newStatus, ...extra },
-    });
-    if (!result.success) {
-      setActionError(result.error || 'Fehler');
-      return;
-    }
-    fetchDecision();
-  }
+  const {
+    decision,
+    loading,
+    actionError,
+    setActionError,
+    fetchDecision,
+    handleTransition,
+    router,
+  } = useDecisionDetailClient(decisionId);
 
   if (loading) {
     return <div className={cn('py-12 text-center', adminType.meta)}>Laden...</div>;
