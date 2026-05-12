@@ -1,92 +1,28 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft, Eye, Edit, Calendar, User, Mail, Tag, Folder } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { APPROVAL_STATUS, BLOG_SUBMISSION_TYPE, getApprovalStatusBadge, type ApprovalStatus, type BlogSubmissionType } from '@/config/approval-status'
+import { APPROVAL_STATUS, BLOG_SUBMISSION_TYPE, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
-
-interface Submission {
-  id: string
-  status: ApprovalStatus
-  submissionType: BlogSubmissionType
-  name: string
-  email: string
-  title: string
-  category: string
-  tags: string[]
-  content: string
-  submittedAt: string
-  reviewedAt: string | null
-  reviewedBy: string | null
-  publishedAt: string | null
-}
+import { useSubmissionsAdmin } from './useSubmissionsAdmin'
 
 export default function SubmissionsAdminPage() {
   const t = useTranslations('blog.admin')
-  const [submissions, setSubmissions] = useState<Submission[]>([])
-  const [filter, setFilter] = useState<'all' | string>('all')
-  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    fetchSubmissions()
-  }, [])
-
-  const fetchSubmissions = async () => {
-    try {
-      const result = await apiFetch<{ submissions: Submission[] }>('/api/blog/submit')
-      if (result.success && result.data) {
-        setSubmissions(result.data.submissions || [])
-      } else {
-        logger.error('Error fetching submissions', { error: result.error })
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const filteredSubmissions = submissions.filter(sub =>
-    filter === 'all' || sub.status === filter
-  )
-
-  const pendingCount = submissions.filter(s => s.status === APPROVAL_STATUS.PENDING).length
-  const approvedCount = submissions.filter(s => s.status === APPROVAL_STATUS.APPROVED).length
-  const rejectedCount = submissions.filter(s => s.status === APPROVAL_STATUS.REJECTED).length
-
-  const handleConvertToPost = (submission: Submission) => {
-    const markdown = `---
-title: '${submission.title}'
-excerpt: ''
-author: '${submission.name}'
-category: '${submission.category}'
-tags:
-${submission.tags.map(tag => `  - ${tag}`).join('\n')}
-publishedAt: ''
-published: false
----
-
-${submission.content}
-
----
-
-*${t('submittedBy', { name: submission.name, email: submission.email })}*
-`
-
-    const blob = new Blob([markdown], { type: 'text/markdown' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `${submission.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.md`
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
-  }
+  const {
+    submissions,
+    filter,
+    setFilter,
+    selectedSubmission,
+    setSelectedSubmission,
+    isLoading,
+    filteredSubmissions,
+    pendingCount,
+    approvedCount,
+    rejectedCount,
+    handleConvertToPost,
+  } = useSubmissionsAdmin()
 
   return (
     <main className="min-h-screen bg-neutral-50">
@@ -123,46 +59,24 @@ ${submission.content}
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
           <div className="flex gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === 'all'
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              {t('filterAll', { count: submissions.length })}
-            </button>
-            <button
-              onClick={() => setFilter(APPROVAL_STATUS.PENDING)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === APPROVAL_STATUS.PENDING
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              {t('filterPending', { count: pendingCount })}
-            </button>
-            <button
-              onClick={() => setFilter(APPROVAL_STATUS.APPROVED)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === APPROVAL_STATUS.APPROVED
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              {t('filterApproved', { count: approvedCount })}
-            </button>
-            <button
-              onClick={() => setFilter(APPROVAL_STATUS.REJECTED)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filter === APPROVAL_STATUS.REJECTED
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-              }`}
-            >
-              {t('filterRejected', { count: rejectedCount })}
-            </button>
+            {[
+              { key: 'all', label: t('filterAll', { count: submissions.length }) },
+              { key: APPROVAL_STATUS.PENDING, label: t('filterPending', { count: pendingCount }) },
+              { key: APPROVAL_STATUS.APPROVED, label: t('filterApproved', { count: approvedCount }) },
+              { key: APPROVAL_STATUS.REJECTED, label: t('filterRejected', { count: rejectedCount }) },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setFilter(key)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filter === key
+                    ? 'bg-primary-600 text-white'
+                    : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -289,7 +203,10 @@ ${submission.content}
 
                   <div className="flex gap-3">
                     <button
-                      onClick={() => handleConvertToPost(selectedSubmission)}
+                      onClick={() => handleConvertToPost(
+                        selectedSubmission,
+                        t('submittedBy', { name: selectedSubmission.name, email: selectedSubmission.email })
+                      )}
                       className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
                     >
                       <Edit className="w-4 h-4 mr-2" />
