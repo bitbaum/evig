@@ -14,7 +14,7 @@ export interface BlogCategory {
   color: string | null
 }
 
-export interface BlogBlogFormData {
+export interface BlogFormData {
   name: string
   email: string
   title: string
@@ -23,7 +23,7 @@ export interface BlogBlogFormData {
   content: string
 }
 
-const EMPTY_FORM: BlogBlogFormData = {
+const EMPTY_FORM: BlogFormData = {
   name: '', email: '', title: '', category: '', tags: '', content: '',
 }
 
@@ -31,14 +31,13 @@ export function useBlogSubmitForm() {
   const { data: session } = useSession()
   const [submissionType, setSubmissionType] = useState<BlogSubmissionType>(BLOG_SUBMISSION_TYPE.IDEA)
   const [categories, setCategories] = useState<BlogCategory[]>([])
-  const [formData, setBlogFormData] = useState<BlogFormData>(EMPTY_FORM)
+  const [formData, setFormData] = useState<BlogFormData>(EMPTY_FORM)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
-  // Pre-fill from session
   useEffect(() => {
     if (session?.user) {
-      setBlogFormData(prev => ({
+      setFormData(prev => ({
         ...prev,
         name: session.user.name ?? prev.name,
         email: session.user.email ?? prev.email,
@@ -46,7 +45,6 @@ export function useBlogSubmitForm() {
     }
   }, [session])
 
-  // Fetch categories
   useEffect(() => {
     apiFetch<BlogCategory[]>('/api/blog/categories').then(result => {
       if (result.success && result.data) {
@@ -58,19 +56,19 @@ export function useBlogSubmitForm() {
   }, [])
 
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
-    setBlogFormData(prev => {
+    setFormData(prev => {
       const updated = { ...prev }
       if (data.title) updated.title = String(data.title)
       if (data.content) updated.content = String(data.content)
       if (data.category) updated.category = String(data.category)
-      if (Array.isArray(data.tags)) updated.tags = data.tags.join(', ')
+      if (Array.isArray(data.tags)) updated.tags = (data.tags as string[]).join(', ')
       else if (data.tags) updated.tags = String(data.tags)
       return updated
     })
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setBlogFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,7 +81,7 @@ export function useBlogSubmitForm() {
         body: {
           ...formData,
           submissionType,
-          tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+          tags: formData.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean),
           submittedAt: new Date().toISOString(),
         },
       })
@@ -95,7 +93,7 @@ export function useBlogSubmitForm() {
   }
 
   const handleReset = () => {
-    setBlogFormData({
+    setFormData({
       ...EMPTY_FORM,
       name: session?.user?.name ?? '',
       email: session?.user?.email ?? '',
