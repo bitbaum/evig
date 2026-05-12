@@ -1,120 +1,31 @@
 'use client'
 
-/**
- * Users List Client Component
- *
- * Handles search, filtering, pagination, and displays the users table.
- */
-
-import { useState, useEffect, useCallback } from 'react'
 import { RefreshCw, Users } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { isSuperAdmin } from '@/lib/permissions'
 import {
   UsersTableClient,
   UserFilters,
   Pagination,
-  type UserRow,
 } from '@/components/admin/users'
 import Heading from '@/components/admin/AdminHeading'
+import { useUsersList } from '@/hooks/useUsersList'
 
 interface UsersListClientProps {
   currentUserIsSuperAdmin: boolean
 }
 
-interface UsersApiData {
-  items: (UserRow & { is_super_admin_computed?: boolean })[]
-  pagination: {
-    total: number
-    page: number
-    limit: number
-    pages: number
-  }
-}
-
-interface FilterState {
-  search: string
-  type: string
-  verified: string
-}
-
 export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProps) {
-  const [users, setUsers] = useState<UserRow[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const [filters, setFilters] = useState<FilterState>({
-    search: '',
-    type: 'all',
-    verified: 'all',
-  })
-
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 25,
-    total: 0,
-    pages: 0,
-  })
-
-  // Debounced search
-  const [debouncedSearch, setDebouncedSearch] = useState(filters.search)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(filters.search)
-    }, 300)
-    return () => clearTimeout(timer)
-  }, [filters.search])
-
-  const fetchUsers = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      const params = new URLSearchParams()
-      if (debouncedSearch) params.set('search', debouncedSearch)
-      if (filters.type !== 'all') params.set('type', filters.type)
-      if (filters.verified !== 'all') params.set('verified', filters.verified)
-      params.set('page', pagination.page.toString())
-      params.set('limit', pagination.limit.toString())
-
-      const result = await apiFetch<UsersApiData>(`/api/admin/users?${params.toString()}`)
-
-      if (!result.success || !result.data) {
-        throw new Error(result.error || 'Fehler beim Laden der Benutzer')
-      }
-
-      setUsers(result.data.items)
-      setPagination(prev => ({
-        ...prev,
-        total: result.data!.pagination.total,
-        pages: result.data!.pagination.pages,
-      }))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-      setUsers([])
-    } finally {
-      setLoading(false)
-    }
-  }, [debouncedSearch, filters.type, filters.verified, pagination.page, pagination.limit])
-
-  useEffect(() => {
-    fetchUsers()
-  }, [fetchUsers])
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setPagination(prev => ({ ...prev, page: 1 }))
-  }, [debouncedSearch, filters.type, filters.verified])
-
-  const handleFilterChange = (field: keyof FilterState, value: string) => {
-    setFilters(prev => ({ ...prev, [field]: value }))
-  }
-
-  const handlePageChange = (newPage: number) => {
-    setPagination(prev => ({ ...prev, page: newPage }))
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+  const {
+    users,
+    loading,
+    error,
+    filters,
+    pagination,
+    fetchUsers,
+    handleFilterChange,
+    handlePageChange,
+    resetFilters,
+    hasActiveFilters,
+  } = useUsersList()
 
   return (
     <div className="space-y-6">
@@ -160,13 +71,13 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
             Keine Benutzer gefunden
           </Heading>
           <p className="text-neutral-500 dark:text-neutral-400 mb-4">
-            {filters.search || filters.type !== 'all' || filters.verified !== 'all'
+            {hasActiveFilters
               ? 'Keine Benutzer entsprechen Ihren Filterkriterien.'
               : 'Keine Benutzer vorhanden.'}
           </p>
-          {(filters.search || filters.type !== 'all' || filters.verified !== 'all') && (
+          {hasActiveFilters && (
             <button
-              onClick={() => setFilters({ search: '', type: 'all', verified: 'all' })}
+              onClick={resetFilters}
               className="text-info-600 hover:text-info-700 text-sm"
             >
               Filter zurücksetzen
@@ -180,7 +91,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
         <>
           <div className="flex items-center justify-between">
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              {pagination.total} {pagination.total === 1 ? 'Benutzer' : 'Benutzer'} gefunden
+              {pagination.total} Benutzer gefunden
             </p>
             <button
               onClick={fetchUsers}
