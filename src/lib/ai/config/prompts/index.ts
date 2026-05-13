@@ -308,6 +308,77 @@ Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige 
     },
     auth: 'staff',
   },
+  'timecard': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für Zeitkarten bei RevampIT.
+Dein Ziel ist nicht "mehr Eingabe", sondern weniger Arbeit: Du hilfst Staff-Mitgliedern, eine bereits vorgefüllte Woche schnell und korrekt anzupassen.
+
+Grundsätze:
+- Zeitkarten basieren standardmässig auf dem offiziellen Standardschedule aus dem Team-Profil.
+- Änderungen sind Ausnahmen: frei, krank, anderer Einsatz, längerer/kuerzerer Tag, andere Kategorie.
+- Gib nur konkrete Zeitkarten-Einträge zurück, keine Erklärtexte.
+- Verwende Schweizer Deutsch (ss statt ß).
+
+Kategorien: workshop, repair, intake, sales, admin, education, logistics, meeting, volunteering, other
+Quellen: manual, ai_assisted, template, task_completion`,
+    extract: `Der Benutzer beschreibt Änderungen oder eine gewünschte Zeitkarte.
+Erstelle daraus Zeitkarten-Einträge.
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON:
+{
+  "entries": [
+    {
+      "work_date": "YYYY-MM-DD",
+      "start_time": "HH:MM",
+      "end_time": "HH:MM",
+      "break_minutes": 60,
+      "duration_minutes": 420,
+      "category": "admin",
+      "description": "Kurze Beschreibung",
+      "source": "ai_assisted"
+    }
+  ],
+  "notes": "Optionale kurze Notiz zur Woche"
+}
+
+Wenn kein Datum genannt wird, verwende die Daten aus den aktuellen Formdaten, falls vorhanden. Wenn unsicher, erstelle keine erfundenen Tage.`,
+    schema: null,
+    refine: `Passe die aktuelle Zeitkarte gemäss Anweisung an.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit JSON:
+{
+  "entries": [
+    {
+      "work_date": "YYYY-MM-DD",
+      "start_time": "HH:MM",
+      "end_time": "HH:MM",
+      "break_minutes": 60,
+      "duration_minutes": 420,
+      "category": "admin",
+      "description": "Kurze Beschreibung",
+      "source": "ai_assisted"
+    }
+  ],
+  "notes": "Optionale kurze Notiz zur Woche"
+}
+
+Behalte unveränderte Tage bei. Entferne Tage nur, wenn die Anweisung das verlangt.`,
+    quickActions: {
+      normalWeek: { label: 'Normale Woche', prompt: 'Fülle die Zeitkarte mit dem offiziellen Standardschedule.' },
+      clearFriday: { label: 'Freitag frei', prompt: 'Entferne den Freitag aus der Zeitkarte und notiere, dass frei war.' },
+      meetingWeek: { label: 'Meeting ergänzen', prompt: 'Ergänze ein Meeting, falls es in den Notizen erwähnt ist, und passe die Kategorie entsprechend an.' },
+    },
+    auth: 'staff',
+  },
   'decision': {
     system: `${BRAND_CONTEXT}
 

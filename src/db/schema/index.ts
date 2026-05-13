@@ -20,5 +20,6 @@ export * from './locations'
 export * from './tasks'
 export * from './decisions'
 export * from './protocols'
+export * from './timecards'
 export * from './subscriptions'
 // misc is now a backward-compat re-export barrel; index owns the canonical exports above

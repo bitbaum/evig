@@ -6,6 +6,7 @@
  */
 
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
@@ -27,9 +28,11 @@ export default async function AdminLayout({
   children: React.ReactNode
 }) {
   const session = await auth()
+  const headerList = await headers()
+  const currentPath = headerList.get('x-current-path') || '/admin'
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin')
+    redirect(`/auth/login?callbackUrl=${encodeURIComponent(currentPath)}`)
   }
 
   if (!session.user.isStaff) {

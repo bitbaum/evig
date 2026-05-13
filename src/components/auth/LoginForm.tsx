@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Mail, Lock, Loader2, AlertCircle, CheckCircle2, ArrowRight, Eye, EyeOff } from 'lucide-react'
@@ -14,7 +14,6 @@ import { ORG } from '@/config/org'
 
 export function LoginForm() {
   const t = useTranslations('auth.login')
-  const router = useRouter()
   const searchParams = useSearchParams()
   // Prevent open redirect: only allow same-origin paths
   const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard')
@@ -37,17 +36,22 @@ export function LoginForm() {
       const result = await signIn('credentials', {
         email,
         password,
+        callbackUrl,
         redirect: false,
       })
 
       if (result?.error) {
-        // Use generic error to prevent user enumeration
-        // Don't reveal whether email exists or password is wrong
         setFormError(result.error)
-      } else if (result?.ok) {
-        router.push(callbackUrl)
-        router.refresh()
+        return
       }
+
+      if (result?.url) {
+        const url = new URL(result.url, window.location.origin)
+        window.location.assign(`${url.pathname}${url.search}${url.hash}`)
+        return
+      }
+
+      window.location.assign(callbackUrl)
     } catch (error) {
       setFormError(t('errorUnexpected'))
     } finally {

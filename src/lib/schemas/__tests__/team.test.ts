@@ -141,6 +141,18 @@ describe('teamProfileSchema', () => {
     expect(result.success).toBe(false)
   })
 
+  it('accepts structured working_hours schedules', () => {
+    const result = teamProfileSchema.safeParse({
+      working_hours: JSON.stringify({
+        version: 1,
+        days: {
+          monday: { enabled: true, start: '09:00', end: '17:00', break_minutes: 60, category: 'admin' },
+        },
+      }),
+    })
+    expect(result.success).toBe(true)
+  })
+
   it('accepts full valid profile', () => {
     const result = teamProfileSchema.safeParse({
       position: 'IT-Spezialist',

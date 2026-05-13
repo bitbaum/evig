@@ -21,7 +21,7 @@
     "listmonk:up": "docker compose up -d listmonk",
     "listmonk:down": "docker compose stop listmonk",
     "listmonk:logs": "docker compose logs -f listmonk",
-    "build": "next build --webpack && next-sitemap",
+    "build": "NODE_ENV=production next build --webpack && next-sitemap",
     "start": "next start",
     "lint": "eslint .",
     "lint:umlauts": "bash scripts/lint-umlauts.sh src",
@@ -51,7 +51,8 @@
     "hirn:stats": "npx tsx scripts/hirn-ingest.ts --stats",
     "transcription:start": "./services/transcription/start.sh",
     "transcription:bg": "[ -d services/transcription/.venv ] && (./services/transcription/start.sh &) || echo 'Transcription venv not found. Run: npm run transcription:setup'",
-    "transcription:setup": "python3 -m venv services/transcription/.venv && services/transcription/.venv/bin/pip install faster-whisper flask"
+    "transcription:setup": "python3 -m venv services/transcription/.venv && services/transcription/.venv/bin/pip install faster-whisper flask",
+    "transcribe:local": "node scripts/transcribe-local-audio.mjs"
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.1",

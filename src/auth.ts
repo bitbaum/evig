@@ -164,9 +164,11 @@ export const authConfig = {
           }
 
           // Determine staff status — DB flag is SSOT, email domain only for initial setup
-          const userIsStaff = user.is_staff ?? isStaffEmail(user.email)
-          const userPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email) : [])
-          const userIsSuperAdmin = user.is_super_admin ?? false
+          const userIsStaff = Boolean(user.is_staff) || isStaffEmail(user.email)
+          const userPermissions = user.staff_permissions?.length
+            ? user.staff_permissions
+            : (userIsStaff ? getInitialStaffPermissions(user.email) : [])
+          const userIsSuperAdmin = Boolean(user.is_super_admin) || isSuperAdmin(user.email)
 
           // Return user object with new simplified auth fields
           return {
@@ -234,13 +236,15 @@ export const authConfig = {
         // Staff get REVAMPIT_ADMIN, others get CUSTOMER
         // SECURITY: Only grant staff privileges if email is verified
         const emailVerified = !!user.emailVerified
-        const userIsStaff = emailVerified ? (user.is_staff ?? isStaffEmail(user.email ?? '')) : false
+        const userIsStaff = emailVerified ? (Boolean(user.is_staff) || isStaffEmail(user.email ?? '')) : false
         token.role = user.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER)
         token.emailVerified = emailVerified
         // New simplified auth fields
         token.isStaff = userIsStaff
-        token.staffPermissions = user.staff_permissions ?? (userIsStaff ? getInitialStaffPermissions(user.email ?? '') : [])
-        token.isSuperAdmin = emailVerified ? (user.is_super_admin ?? isSuperAdmin(user.email ?? '')) : false
+        token.staffPermissions = user.staff_permissions?.length
+          ? user.staff_permissions
+          : (userIsStaff ? getInitialStaffPermissions(user.email ?? '') : [])
+        token.isSuperAdmin = emailVerified ? (Boolean(user.is_super_admin) || isSuperAdmin(user.email ?? '')) : false
         token.dashboardMode = user.dashboard_mode ?? 'coordinator'
       }
       return token

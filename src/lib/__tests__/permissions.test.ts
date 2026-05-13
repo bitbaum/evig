@@ -53,6 +53,10 @@ describe('isStaffEmail', () => {
     expect(isStaffEmail('User@REVAMP-IT.CH')).toBe(true)
   })
 
+  it('accepts the legacy seed admin domain', () => {
+    expect(isStaffEmail('admin@revampit.ch')).toBe(true)
+  })
+
   it('does not match subdomain spoofing', () => {
     expect(isStaffEmail('user@fake.revamp-it.ch.evil.com')).toBe(false)
   })

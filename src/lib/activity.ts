@@ -16,6 +16,9 @@ export type ActivityAction =
   | 'captured_device'
   | 'approved_blog'
   | 'approved_repairer'
+  | 'submitted_timecard'
+  | 'approved_timecard'
+  | 'rejected_timecard'
 
 interface ActivityParams {
   actorId: string

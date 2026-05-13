@@ -50,6 +50,10 @@ describe('isStaffEmail', () => {
     expect(isStaffEmail('User@Revamp-It.Ch')).toBe(true)
   })
 
+  it('accepts the legacy seed admin domain', () => {
+    expect(isStaffEmail('admin@revampit.ch')).toBe(true)
+  })
+
   it('returns false for non-staff emails', () => {
     expect(isStaffEmail('user@gmail.com')).toBe(false)
     expect(isStaffEmail('user@revamp-it.com')).toBe(false)

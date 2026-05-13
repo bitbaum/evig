@@ -8,6 +8,7 @@
  */
 
 import { useState, useRef, useCallback } from 'react'
+import { withClientCsrfHeader } from '@/lib/api/csrf-client'
 
 export interface AIFieldMetadataEntry {
   confidence: number
@@ -63,7 +64,7 @@ export function useAIFormAssist<T>({
     try {
       const response = await fetch('/api/ai/extract', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: withClientCsrfHeader({ 'Content-Type': 'application/json' }, 'POST'),
         body: JSON.stringify({ formType, ...body }),
         signal: controller.signal,
       })

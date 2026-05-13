@@ -319,6 +319,7 @@ export async function importTasks(
         task_type: 'one_time',
         category: 'admin',
         priority: task.priority,
+        assigned_to: assignedToId,
       },
       createdBy,
     )

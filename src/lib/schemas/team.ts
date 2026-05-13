@@ -37,7 +37,7 @@ export const teamProfileSchema = z.object({
 
   // Availability & Contact
   availability: z.string().max(500).optional().nullable(),
-  working_hours: z.string().max(200).optional().nullable(),
+  working_hours: z.string().max(5000).optional().nullable(),
   preferred_contact: z.enum(CONTACT_METHOD_OPTIONS as [string, ...string[]]).optional().default('email'),
   phone: z.string().max(30).optional().nullable(),
 

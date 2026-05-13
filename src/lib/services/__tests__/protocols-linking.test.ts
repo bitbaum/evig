@@ -203,6 +203,25 @@ describe('linkActionItemToTask', () => {
     )
     expect(callsWithTitle.length).toBeGreaterThan(0)
   })
+
+  it('passes assigned_to to the task INSERT when provided', async () => {
+    mockTxExecute
+      .mockResolvedValueOnce({ rows: [{ id: 'task-1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] })
+
+    await linkActionItemToTask(
+      PROTOCOL_ID,
+      ACTION_ITEM_ID,
+      { title: 'Laptop reparieren', assigned_to: 'user-assigned' },
+      CREATOR_ID,
+    )
+
+    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls
+    const callsWithAssignee = sqlCalls.filter(
+      (call: unknown[]) => call.includes('user-assigned'),
+    )
+    expect(callsWithAssignee.length).toBeGreaterThan(0)
+  })
 })
 
 // ============================================================================

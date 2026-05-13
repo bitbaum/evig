@@ -14,6 +14,21 @@ npm run transcription:start
 
 The service runs on `http://localhost:5111` by default.
 
+## Local file workflow
+
+Use this for larger recordings or private meeting audio that should stay local.
+Start the service first, then transcribe the file to a text transcript that can
+be pasted or uploaded in the Admin Protocols flow.
+
+```bash
+npm run transcription:start
+
+npm run transcribe:local -- "/path/to/recording.m4a" --model small --language de
+```
+
+The helper writes `recording.transcript.txt` plus `recording.transcript.json`
+next to the audio file unless `--output` is provided.
+
 ## API Endpoints
 
 ### GET /health

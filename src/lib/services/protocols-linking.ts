@@ -51,6 +51,7 @@ export async function linkActionItemToTask(
     task_type?: string
     category?: string
     priority?: string
+    assigned_to?: string | null
   },
   createdBy: string,
 ): Promise<{ taskId: string; linkId: string }> {
@@ -58,14 +59,15 @@ export async function linkActionItemToTask(
     // Create the task
     const taskResult = await tx.execute(sql`
       INSERT INTO ${sql.raw(tTable)} (
-        title, description, task_type, category, priority, created_by
+        title, description, task_type, category, priority, created_by, assigned_to
       ) VALUES (
         ${taskData.title},
         ${taskData.description || null},
         ${taskData.task_type || 'one_time'},
         ${taskData.category || 'admin'},
         ${taskData.priority || 'normal'},
-        ${createdBy}
+        ${createdBy},
+        ${taskData.assigned_to || null}
       )
       RETURNING id
     `)
@@ -87,6 +89,7 @@ export async function linkActionItemToTask(
       actionItemId,
       taskId,
       linkId,
+      assignedTo: taskData.assigned_to || null,
     })
 
     return { taskId, linkId }

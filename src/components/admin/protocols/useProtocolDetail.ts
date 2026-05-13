@@ -218,6 +218,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
             task_type: 'one_time',
             category: 'admin',
             priority: actionItem.priority_hint || TASK_PRIORITIES.NORMAL,
+            assigned_to: actionItem.assigned_to_id,
           },
         },
       })
@@ -251,6 +252,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
               task_type: 'one_time',
               category: 'admin',
               priority: item.priority_hint || TASK_PRIORITIES.NORMAL,
+              assigned_to: item.assigned_to_id,
             },
           },
         })

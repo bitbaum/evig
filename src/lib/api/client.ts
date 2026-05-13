@@ -13,6 +13,7 @@
  */
 
 import type { ApiResponse } from './types'
+import { withClientCsrfHeader } from './csrf-client'
 
 interface ApiFetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
@@ -34,10 +35,10 @@ export async function apiFetch<T = unknown>(
 
   const fetchOptions: RequestInit = {
     method,
-    headers: {
+    headers: withClientCsrfHeader({
       ...(body !== undefined && !formData ? { 'Content-Type': 'application/json' } : {}),
       ...headers,
-    },
+    }, method),
     ...(body !== undefined ? { body: formData ? (body as BodyInit) : JSON.stringify(body) } : {}),
   }
 

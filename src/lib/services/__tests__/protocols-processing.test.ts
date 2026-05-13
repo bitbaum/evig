@@ -406,6 +406,12 @@ describe('importTasks', () => {
     expect(result.success).toBe(true)
     // The action item was created — verifying linkActionItemToTask was called
     expect(mockLinkActionItemToTask).toHaveBeenCalledTimes(1)
+    expect(mockLinkActionItemToTask).toHaveBeenCalledWith(
+      PROTOCOL_ID,
+      expect.any(String),
+      expect.objectContaining({ assigned_to: 'user-hans' }),
+      CREATOR_ID,
+    )
   })
 
   it('appends to existing action_items in structured_notes', async () => {

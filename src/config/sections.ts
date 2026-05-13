@@ -45,6 +45,7 @@ import {
   BadgeCheck,
   Lightbulb,
   MessageSquare,
+  Clock,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 
@@ -774,6 +775,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201,
     category: 'sensitive',
+    sidebarGroup: 'personen',
+  },
+
+  timecards: {
+    id: 'timecards',
+    path: '/admin/timecards',
+    ui: {
+      label: 'Zeitkarten',
+      description: 'Arbeitszeiten erfassen, einreichen und genehmigen',
+      icon: Clock,
+      emoji: '⏱️',
+      color: 'info',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 202,
+    category: 'management',
     sidebarGroup: 'personen',
   },
 

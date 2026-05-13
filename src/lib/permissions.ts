@@ -50,13 +50,18 @@ export type AdminSection = (typeof ADMIN_SECTION_IDS)[number]
 // =============================================================================
 
 export const STAFF_EMAIL_DOMAIN = 'revamp-it.ch'
+export const LEGACY_STAFF_EMAIL_DOMAINS = ['revampit.ch'] as const
 
 /**
  * Check if an email belongs to staff
  */
 export function isStaffEmail(email: string | null | undefined): boolean {
   if (!email) return false
-  return email.toLowerCase().endsWith(`@${STAFF_EMAIL_DOMAIN}`)
+  const normalized = email.toLowerCase()
+  return (
+    normalized.endsWith(`@${STAFF_EMAIL_DOMAIN}`) ||
+    LEGACY_STAFF_EMAIL_DOMAINS.some(domain => normalized.endsWith(`@${domain}`))
+  )
 }
 
 // =============================================================================

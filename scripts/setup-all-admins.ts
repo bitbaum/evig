@@ -1,108 +1,117 @@
-import { PrismaClient } from '@prisma/client'
+import fs from 'fs'
+import path from 'path'
+import { Client } from 'pg'
 import bcrypt from 'bcryptjs'
-import crypto from 'crypto'
 
-const prisma = new PrismaClient()
-
-/**
- * Generate a secure random password
- */
-function generateSecurePassword(length: number = 16): string {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'
-  const randomBytes = crypto.randomBytes(length)
-  let password = ''
-  for (let i = 0; i < length; i++) {
-    password += charset[randomBytes[i] % charset.length]
+function loadEnvFile(filePath: string) {
+  if (!fs.existsSync(filePath)) return
+  const lines = fs.readFileSync(filePath, 'utf8').split(/\r?\n/)
+  for (const line of lines) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) continue
+    const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/)
+    if (!match) continue
+    const [, key, rawValue] = match
+    if (process.env[key] !== undefined) continue
+    process.env[key] = rawValue.replace(/^['"]|['"]$/g, '')
   }
-  return password
 }
 
-/**
- * Get admin password from environment or generate a secure one
- * Never logs the password to console
- */
-function getAdminPassword(): string {
-  // Check for environment variable first (for CI/CD or manual setup)
-  const envPassword = process.env.ADMIN_PASSWORD || process.env.SETUP_ADMIN_PASSWORD
-  if (envPassword) {
-    return envPassword
+loadEnvFile(path.join(process.cwd(), '.env.local'))
+loadEnvFile(path.join(process.cwd(), '.env'))
+
+function getDbConfig() {
+  return {
+    host: process.env.AUTH_DB_HOST || process.env.DB_HOST || 'localhost',
+    port: Number(process.env.AUTH_DB_PORT || process.env.DB_PORT || 5432),
+    database: process.env.AUTH_DB_NAME || process.env.DB_NAME || 'revampit',
+    user: process.env.AUTH_DB_USER || process.env.DB_USER || 'postgres',
+    password: process.env.AUTH_DB_PASSWORD || process.env.DB_PASSWORD || 'postgres',
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   }
-  
-  // Generate a secure password if not provided
-  return generateSecurePassword(20)
+}
+
+function getAdminPassword() {
+  const password = process.env.ADMIN_PASSWORD || process.env.SETUP_ADMIN_PASSWORD
+  if (password) return password
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('Set ADMIN_PASSWORD or SETUP_ADMIN_PASSWORD when bootstrapping production admins.')
+  }
+  return 'Admin123!'
 }
 
 async function setupAllAdmins() {
-  console.log('🚀 Setting up admin users for RevampIT...')
+  const client = new Client(getDbConfig())
+  const email = process.env.ADMIN_EMAIL || 'admin@revampit.ch'
+  const password = getAdminPassword()
+  const passwordHash = await bcrypt.hash(password, 12)
+
+  await client.connect()
 
   try {
-    // Setup CMS Admin User
-    console.log('📝 Setting up CMS admin user...')
-    const existingAdmin = await prisma.user.findFirst({
-      where: {
-        roles: {
-          has: 'revampit_admin'
-        }
-      }
-    })
+    await client.query('BEGIN')
+    const result = await client.query<{ id: string }>(`
+      INSERT INTO users (
+        email,
+        name,
+        password_hash,
+        role,
+        "emailVerified",
+        is_staff,
+        staff_permissions,
+        is_super_admin,
+        dashboard_mode,
+        "createdAt",
+        "updatedAt"
+      )
+      VALUES (
+        $1,
+        $2,
+        $3,
+        'revampit_admin',
+        NOW(),
+        true,
+        ARRAY['*']::text[],
+        true,
+        'lead',
+        NOW(),
+        NOW()
+      )
+      ON CONFLICT (email) DO UPDATE SET
+        name = COALESCE(users.name, EXCLUDED.name),
+        password_hash = EXCLUDED.password_hash,
+        role = EXCLUDED.role,
+        "emailVerified" = COALESCE(users."emailVerified", NOW()),
+        is_staff = true,
+        staff_permissions = ARRAY['*']::text[],
+        is_super_admin = true,
+        dashboard_mode = COALESCE(users.dashboard_mode, 'lead'),
+        "updatedAt" = NOW()
+      RETURNING id
+    `, [email, 'Admin RevampIT', passwordHash])
 
-    if (existingAdmin) {
-      console.log('✅ CMS admin user already exists')
-      console.log(`   Email: admin@revampit.ch`)
-      console.log(`   Note: Password was set during initial setup. Use password reset if needed.`)
-    } else {
-      // Generate or get password from environment
-      const adminPassword = getAdminPassword()
-      const hashedPassword = await bcrypt.hash(adminPassword, 12)
+    await client.query(`
+      INSERT INTO user_profiles (user_id, display_name, preferred_language, created_at, updated_at)
+      VALUES ($1, 'Admin RevampIT', 'de', NOW(), NOW())
+      ON CONFLICT (user_id) DO NOTHING
+    `, [result.rows[0].id])
 
-      const adminUser = await prisma.user.create({
-        data: {
-          email: 'admin@revampit.ch',
-          password: hashedPassword,
-          firstName: 'Admin',
-          lastName: 'RevampIT',
-          roles: ['revampit_admin'],
-          emailVerified: new Date(),
-        }
-      })
+    await client.query('COMMIT')
 
-      console.log('✅ CMS admin user created successfully')
-      console.log(`   Email: admin@revampit.ch`)
-      console.log(`   Password: [SECURE - Check .env or script output file]`)
-      
-      // Write password to a secure file (not logged to console)
-      if (typeof process.env.ADMIN_PASSWORD_FILE === 'string') {
-        const fs = await import('fs/promises')
-        await fs.writeFile(process.env.ADMIN_PASSWORD_FILE, `CMS Admin Password: ${adminPassword}\n`, { mode: 0o600 })
-        console.log(`   Password saved to: ${process.env.ADMIN_PASSWORD_FILE}`)
-      } else if (!process.env.ADMIN_PASSWORD && !process.env.SETUP_ADMIN_PASSWORD) {
-        // Only warn if password was auto-generated
-        console.log(`   ⚠️  Auto-generated password. Set ADMIN_PASSWORD env var for reproducible setup.`)
-        console.log(`   ⚠️  Password not displayed for security. Use password reset if needed.`)
-      }
-    }
-
-    console.log('')
-    console.log('🎉 Admin setup complete!')
-    console.log('')
-    console.log('📋 Admin Access URLs:')
-    console.log(`   CMS Admin: http://localhost:3000/admin`)
-    console.log('')
-    console.log('🔐 Admin Credentials:')
-    console.log(`   Email: admin@revampit.ch`)
-    console.log(`   Password: [Not displayed for security]`)
-    console.log(`   Set ADMIN_PASSWORD env var for reproducible setup.`)
-    console.log(`   Or check ADMIN_PASSWORD_FILE if configured.`)
-
+    console.log('Admin user ready.')
+    console.log(`Email: ${email}`)
+    console.log(process.env.ADMIN_PASSWORD || process.env.SETUP_ADMIN_PASSWORD
+      ? 'Password: from ADMIN_PASSWORD/SETUP_ADMIN_PASSWORD'
+      : 'Password: Admin123! (development default)')
   } catch (error) {
-    console.error('❌ Failed to setup admin users:', error)
-    process.exit(1)
+    await client.query('ROLLBACK')
+    throw error
   } finally {
-    await prisma.$disconnect()
+    await client.end()
   }
 }
 
-setupAllAdmins()
-
-
-
+setupAllAdmins().catch((error) => {
+  console.error('Failed to setup admin user:', error)
+  process.exit(1)
+})

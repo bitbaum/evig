@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
-import { CSRF_SCRIPT } from "@/lib/auth/csrf";
 import { ORG } from "@/config/org";
 import "./globals.css";
 
@@ -28,7 +27,6 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning className={inter.variable}>
       <body className="font-sans fix-text-rendering antialiased">
-        <script dangerouslySetInnerHTML={{ __html: CSRF_SCRIPT }} />
         <Providers>
           {children}
         </Providers>

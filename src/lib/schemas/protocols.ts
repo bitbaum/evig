@@ -142,6 +142,7 @@ export const linkActionSchema = z.object({
     task_type: z.string().default('one_time'),
     category: z.string().default('admin'),
     priority: z.string().default('normal'),
+    assigned_to: z.string().uuid().optional().nullable(),
   }).optional(),
   decision_data: z.object({
     title: z.string().min(1).max(200),
