@@ -1,6 +1,7 @@
 'use client'
 
 import { FileText, Plus, Minus } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 
@@ -34,11 +35,10 @@ export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAd
         {objectives.map((objective, index) => (
           <div key={index} className="flex items-center gap-4">
             <div className="flex-1">
-              <input
+              <Input
                 type="text"
                 value={objective}
                 onChange={(e) => onObjectiveChange(index, e.target.value)}
-                className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="z.B. Grundlagen der Computer-Hardware verstehen"
               />
             </div>

@@ -3,6 +3,9 @@
 import { Calendar } from 'lucide-react'
 import type { WorkshopFormData } from './types'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 
 interface Props {
   formData: WorkshopFormData
@@ -18,89 +21,65 @@ export function WorkshopScheduleSection({ formData, onInputChange }: Props) {
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Datum *
-          </label>
-          <input
+        <FormField label="Datum" required>
+          <Input
             type="date"
             value={formData.date}
             onChange={(e) => onInputChange('date', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             required
             aria-required="true"
           />
-        </div>
+        </FormField>
 
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              Startzeit *
-            </label>
-            <input
+          <FormField label="Startzeit" required>
+            <Input
               type="time"
               value={formData.startTime}
               onChange={(e) => onInputChange('startTime', e.target.value)}
-              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               required
               aria-required="true"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              Endzeit *
-            </label>
-            <input
+          </FormField>
+          <FormField label="Endzeit" required>
+            <Input
               type="time"
               value={formData.endTime}
               onChange={(e) => onInputChange('endTime', e.target.value)}
-              className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               required
               aria-required="true"
             />
-          </div>
+          </FormField>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Ort *
-          </label>
-          <input
+        <FormField label="Ort" required>
+          <Input
             type="text"
             value={formData.location}
             onChange={(e) => onInputChange('location', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="z.B. Zürich, Werkstatt"
             required
             aria-required="true"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Dauer
-          </label>
-          <input
+        <FormField label="Dauer">
+          <Input
             type="text"
             value={formData.duration}
             onChange={(e) => onInputChange('duration', e.target.value)}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="z.B. 3 Stunden"
           />
-        </div>
+        </FormField>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Detaillierte Ortsbeschreibung
-          </label>
-          <textarea
+        <FormField label="Detaillierte Ortsbeschreibung" className="md:col-span-2">
+          <Textarea
             value={formData.locationDetails}
             onChange={(e) => onInputChange('locationDetails', e.target.value)}
             rows={2}
-            className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="Zusätzliche Informationen zur Anfahrt, Parkplatz, etc."
           />
-        </div>
+        </FormField>
       </div>
     </div>
   )
