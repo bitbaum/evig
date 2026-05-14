@@ -84,6 +84,10 @@ jest.mock('@/db/schema/auth', () => ({
   users: { id: 'users' },
 }))
 
+jest.mock('@/db/schema/tasks', () => ({
+  tasks: { id: 'tasks' },
+}))
+
 jest.mock('@/config/protocol-status', () => ({
   PROTOCOL_STATUS: {
     DRAFT: 'draft',
@@ -203,18 +207,19 @@ describe('getProtocolStats', () => {
 // ============================================================================
 
 describe('getTeamMembers', () => {
-  it('returns id+name rows from the DB', async () => {
+  it('returns id, name, and open_task_count rows from the DB', async () => {
     mockDbExecute.mockResolvedValueOnce({
       rows: [
-        { id: 'u1', name: 'Alice' },
-        { id: 'u2', name: 'Bob' },
+        { id: 'u1', name: 'Alice', open_task_count: 2 },
+        { id: 'u2', name: 'Bob', open_task_count: 0 },
       ],
     })
 
     const members = await getTeamMembers()
 
     expect(members).toHaveLength(2)
-    expect(members[0]).toEqual({ id: 'u1', name: 'Alice' })
+    expect(members[0]).toEqual({ id: 'u1', name: 'Alice', open_task_count: 2 })
+    expect(members[1]).toEqual({ id: 'u2', name: 'Bob', open_task_count: 0 })
   })
 
   it('returns empty array when no team members exist', async () => {

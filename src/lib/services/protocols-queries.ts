@@ -6,6 +6,7 @@ import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { meetingProtocols, protocolActionLinks, protocolDecisionVotes, protocolDecisionOutcomes } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
+import { tasks } from '@/db/schema/tasks'
 import { PROTOCOL_STATUS } from '@/config/protocol-status'
 import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { notifyUsers, fireNotification } from '@/lib/services/notifications'
@@ -24,6 +25,7 @@ const palTable = getTableName(protocolActionLinks)
 const pdvTable = getTableName(protocolDecisionVotes)
 const pdoTable = getTableName(protocolDecisionOutcomes)
 const uTable = getTableName(users)
+const tTable = getTableName(tasks)
 
 // =============================================================================
 // QUERIES
@@ -70,11 +72,19 @@ export async function getProtocolStats(
 /**
  * Get team members for attendee mapping
  */
-export async function getTeamMembers(): Promise<Array<{ id: string; name: string }>> {
+export async function getTeamMembers(): Promise<Array<{ id: string; name: string; open_task_count: number }>> {
   const result = await db.execute(sql`
-    SELECT id, name FROM ${sql.raw(uTable)} WHERE name IS NOT NULL ORDER BY name
+    SELECT
+      u.id,
+      u.name,
+      COUNT(t.id) FILTER (WHERE NOT t.is_archived) AS open_task_count
+    FROM ${sql.raw(uTable)} u
+    LEFT JOIN ${sql.raw(tTable)} t ON t.assigned_to = u.id
+    WHERE u.name IS NOT NULL
+    GROUP BY u.id, u.name
+    ORDER BY open_task_count ASC, u.name ASC
   `)
-  return result.rows as unknown as Array<{ id: string; name: string }>
+  return result.rows as unknown as Array<{ id: string; name: string; open_task_count: number }>
 }
 
 /**

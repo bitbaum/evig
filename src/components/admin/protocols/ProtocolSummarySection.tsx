@@ -5,7 +5,7 @@ import type { StructuredNotes } from '@/lib/schemas/protocols'
 interface Props {
   notes: StructuredNotes
   isReview: boolean
-  teamMembers: Array<{ id: string; name: string }>
+  teamMembers: Array<{ id: string; name: string; open_task_count: number }>
   attendeeMapping: Record<string, string>
   mappingDirty: boolean
   savingMapping: boolean
@@ -48,7 +48,9 @@ export function ProtocolSummarySection({
                   >
                     <option value="">— Nicht zugeordnet —</option>
                     {teamMembers.map(m => (
-                      <option key={m.id} value={m.id}>{m.name}</option>
+                      <option key={m.id} value={m.id}>
+                        {m.name}{m.open_task_count > 0 ? ` (${m.open_task_count} Aufgaben)` : ''}
+                      </option>
                     ))}
                   </select>
                 </div>

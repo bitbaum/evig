@@ -3,7 +3,7 @@ import type { ProtocolDetail, ActionLinkRecord, StructuredNotes, DecisionVoteRec
 export interface ProtocolDetailProps {
   protocol: ProtocolDetail
   actionLinks: ActionLinkRecord[]
-  teamMembers: Array<{ id: string; name: string }>
+  teamMembers: Array<{ id: string; name: string; open_task_count: number }>
   decisionVotes: DecisionVoteRecord[]
   decisionOutcomes: DecisionOutcomeRecord[]
   currentUserId: string
