@@ -90,7 +90,7 @@ export default function WorkshopProposalDetailPage() {
             {proposal.status === APPROVAL_STATUS.PENDING && (
               <button
                 onClick={() => setShowEditModal(true)}
-                className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
+                className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
               >
                 <Edit className="w-4 h-4 mr-2" />
                 Bearbeiten
@@ -103,7 +103,7 @@ export default function WorkshopProposalDetailPage() {
       {/* Edit Indicator */}
       {proposal.last_edited_at && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-          <div className="bg-info-50 border border-info-200 rounded-lg p-4">
+          <div className="bg-info-50 border border-primary-200 rounded-lg p-4">
             <div className="flex items-center text-sm text-info-800">
               <AlertCircle className="w-4 h-4 mr-2" />
               Bearbeitet durch Admin ({proposal.editor_name || 'Admin'}) am{' '}

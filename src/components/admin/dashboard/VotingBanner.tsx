@@ -85,11 +85,11 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
   const deadline = formatDeadline(first.voting_deadline)
 
   return (
-    <div className="bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-xl overflow-hidden">
+    <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl overflow-hidden">
       <div className="flex items-start gap-4 p-4">
         {/* Icon */}
-        <div className="w-10 h-10 bg-teal-100 dark:bg-teal-800/50 rounded-lg flex items-center justify-center flex-shrink-0">
-          <Vote className="w-5 h-5 text-teal-600 dark:text-teal-400" aria-hidden="true" />
+        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-800/50 rounded-lg flex items-center justify-center flex-shrink-0">
+          <Vote className="w-5 h-5 text-primary-600 dark:text-primary-400" aria-hidden="true" />
         </div>
 
         {/* Content */}
@@ -107,7 +107,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
             </p>
           )}
           {more > 0 && (
-            <p className="text-sm text-teal-600 dark:text-teal-400 mt-1">
+            <p className="text-sm text-primary-600 dark:text-primary-400 mt-1">
               +{more} weitere offene Abstimmung{more !== 1 ? 'en' : ''}
             </p>
           )}
@@ -116,7 +116,7 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
         {/* CTA — min-h-[44px] ensures touch target */}
         <Link
           href={`/admin/decisions/${first.id}`}
-          className="flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold rounded-lg transition-colors flex-shrink-0 self-center"
+          className="flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg transition-colors flex-shrink-0 self-center"
         >
           Abstimmen
           <ArrowRight className="w-4 h-4" aria-hidden="true" />

@@ -145,7 +145,7 @@ export function IntakeDetailView({
               <button
                 type="button"
                 onClick={onMarkAllRequired}
-                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-teal-600 hover:bg-teal-700 text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-primary-600 hover:bg-primary-700 text-white transition-colors"
                 title="Alle Pflichtpunkte auf 'erledigt' setzen"
               >
                 <CheckCheck className="w-3.5 h-3.5" />

@@ -121,7 +121,7 @@ export default async function AdminPagesPage() {
         </div>
         <Link
           href="/admin/content/pages/new"
-          className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
           Neue Seite
@@ -262,7 +262,7 @@ export default async function AdminPagesPage() {
             </p>
             <Link
               href="/admin/content/pages/new"
-              className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />
               Erste Seite erstellen

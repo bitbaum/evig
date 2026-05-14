@@ -382,7 +382,7 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-neutral-500 dark:text-neutral-400">Detaillierte Finanz-Statistiken und Diagramme</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-info-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-primary-600 transition-colors" />
         </Link>
 
         <Link
@@ -398,7 +398,7 @@ export default async function AnalyticsPage() {
               <p className="text-sm text-neutral-500 dark:text-neutral-400">Beiträge, Kategorien und Verlauf</p>
             </div>
           </div>
-          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-info-600 transition-colors" />
+          <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-primary-600 transition-colors" />
         </Link>
       </div>
 

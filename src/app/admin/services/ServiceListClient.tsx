@@ -71,7 +71,7 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
               placeholder="Dienstleistung suchen..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-info-500"
+              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <select

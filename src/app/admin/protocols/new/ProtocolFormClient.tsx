@@ -129,7 +129,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   value={attendeeSearch}
                   onChange={(e) => setAttendeeSearch(e.target.value)}
                   placeholder="Teilnehmer suchen..."
-                  className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-info-500"
+                  className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-primary-500"
                 />
                 <button
                   type="button"
@@ -149,7 +149,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded border-neutral-300 text-info-600 focus:ring-info-500"
+                      className="rounded border-neutral-300 text-info-600 focus:ring-primary-500"
                     />
                     {member.name}
                   </label>
@@ -213,7 +213,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             </div>
 
             {audioFile && (
-              <div className="mt-3 p-3 bg-info-50 border border-info-200 rounded-lg">
+              <div className="mt-3 p-3 bg-info-50 border border-primary-200 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Mic className="w-4 h-4 text-info-600" />
@@ -237,7 +237,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                     id="whisper_model"
                     value={whisperModel}
                     onChange={(e) => setWhisperModel(e.target.value)}
-                    className="w-full px-2 py-1 text-sm border border-info-200 rounded focus:outline-none focus:ring-1 focus:ring-info-500 bg-white"
+                    className="w-full px-2 py-1 text-sm border border-primary-200 rounded focus:outline-none focus:ring-1 focus:ring-primary-500 bg-white"
                   >
                     {WHISPER_MODELS.map((model) => (
                       <option key={model.id} value={model.id}>{model.label}</option>

@@ -70,7 +70,7 @@ export function IntakePipelineView({
       <div className="flex flex-wrap gap-2 items-center">
         <button
           onClick={onCreateNew}
-          className="flex items-center gap-1 px-3 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 text-sm font-medium"
+          className="flex items-center gap-1 px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-info-700 text-sm font-medium"
         >
           <Plus className="w-4 h-4" /> Neues Gerät
         </button>

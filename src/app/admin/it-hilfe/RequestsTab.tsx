@@ -77,7 +77,7 @@ export function RequestsTab({
             {requests?.items.map(r => (
               <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
                 <td className="px-4 py-3">
-                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-neutral-900 dark:text-white hover:text-info-600 flex items-center gap-1">
+                  <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-neutral-900 dark:text-white hover:text-primary-600 flex items-center gap-1">
                     {r.title} <ExternalLink className="w-3 h-3 flex-shrink-0" />
                   </a>
                 </td>

@@ -174,7 +174,7 @@ export default function VotingPanel({
       <button
         onClick={handleSubmit}
         disabled={submitting}
-        className="mt-6 w-full rounded-lg bg-info-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-info-700 disabled:opacity-50"
+        className="mt-6 w-full rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
       >
         {submitting ? 'Wird gesendet...' : 'Stimme abgeben'}
       </button>

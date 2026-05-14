@@ -310,7 +310,7 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
+      <div className="bg-info-50 dark:bg-info-900/20 border border-primary-200 dark:border-info-800 rounded-xl p-6">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
             <Wrench className="w-5 h-5 text-info-600" />
@@ -326,7 +326,7 @@ export default async function AdminServicesPage() {
             <div className="flex gap-3">
               <Link
                 href="/admin/services/new"
-                className="text-sm bg-info-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
+                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 Dienstleistung erstellen
               </Link>

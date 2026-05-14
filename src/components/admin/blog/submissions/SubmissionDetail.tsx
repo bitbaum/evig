@@ -73,7 +73,7 @@ export function SubmissionDetail({
             <Mail className="w-4 h-4" />
             <a
               href={`mailto:${submission.submitter_email}`}
-              className="text-teal-600 hover:underline"
+              className="text-primary-600 hover:underline"
             >
               {submission.submitter_email}
             </a>

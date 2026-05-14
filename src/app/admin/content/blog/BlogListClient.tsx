@@ -55,7 +55,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               placeholder="Titel suchen..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-info-500"
+              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <select
@@ -187,7 +187,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           {!search.trim() && !statusFilter && (
             <Link
               href="/admin/content/blog/new"
-              className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />
               Ersten Artikel erstellen

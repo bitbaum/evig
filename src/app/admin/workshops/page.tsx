@@ -99,7 +99,7 @@ export default function AdminWorkshopsPage() {
       actions={
         <Link
           href="/admin/workshops/instances"
-          className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
+          className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-info-700 transition-colors"
         >
           <Calendar className="w-4 h-4 mr-2" />
           Termine verwalten

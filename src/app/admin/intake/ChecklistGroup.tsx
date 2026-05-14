@@ -95,7 +95,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                           <button
                             type="button"
                             onClick={() => openNotes(item.id, item.state.notes)}
-                            className="text-xs text-neutral-400 hover:text-info-600 flex items-center gap-0.5 transition-colors"
+                            className="text-xs text-neutral-400 hover:text-primary-600 flex items-center gap-0.5 transition-colors"
                           >
                             <StickyNote className="w-3 h-3" />
                             {item.state.notes ? 'Notiz bearbeiten' : 'Notiz hinzufügen'}
@@ -120,13 +120,13 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         onChange={(e) => setNotesText(t => ({ ...t, [item.id]: e.target.value }))}
                         placeholder="z.B. CPU-Stresstest bestanden, max. 75 °C ..."
                         rows={2}
-                        className="w-full text-xs border border-neutral-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-info-400 focus:border-info-400 resize-none"
+                        className="w-full text-xs border border-neutral-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-primary-400 focus:border-primary-400 resize-none"
                       />
                       <div className="flex gap-2">
                         <button
                           type="button"
                           onClick={() => saveNotes(item.id, item.state.completed)}
-                          className="text-xs px-2.5 py-1 bg-info-600 text-white rounded hover:bg-info-700 transition-colors"
+                          className="text-xs px-2.5 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
                         >
                           Speichern
                         </button>

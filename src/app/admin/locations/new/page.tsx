@@ -85,7 +85,7 @@ export default function NewLocationPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center px-8 py-3 bg-info-600 text-white text-lg font-semibold rounded-lg hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="inline-flex items-center px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? (
                 <>

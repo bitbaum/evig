@@ -125,7 +125,7 @@ export default async function AdminBlogPage() {
       actions={
         <Link
           href="/admin/content/blog/new"
-          className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+          className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
           Neuer Artikel
@@ -212,7 +212,7 @@ export default async function AdminBlogPage() {
             <div className="flex gap-3">
               <Link
                 href="/admin/content/blog/new"
-                className="text-sm bg-info-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
+                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
               >
                 Artikel erstellen
               </Link>

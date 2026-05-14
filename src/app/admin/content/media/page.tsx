@@ -171,10 +171,10 @@ export default async function AdminMediaPage() {
 
           {/* Upload Area */}
           <div className="max-w-lg mx-auto">
-            <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-8 hover:border-teal-500 dark:hover:border-teal-400 transition-colors cursor-pointer">
+            <div className="border-2 border-dashed border-neutral-300 dark:border-neutral-600 rounded-xl p-8 hover:border-primary-500 dark:hover:border-primary-400 transition-colors cursor-pointer">
               <Upload className="w-8 h-8 text-neutral-400 mx-auto mb-3" />
               <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-2">
-                <span className="text-teal-600 dark:text-teal-400 font-medium">
+                <span className="text-primary-600 dark:text-primary-400 font-medium">
                   Klicken zum Hochladen
                 </span>{' '}
                 oder Dateien hierher ziehen

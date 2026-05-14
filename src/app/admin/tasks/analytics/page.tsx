@@ -136,7 +136,7 @@ function getProgressBarColor(index: number): string {
     'bg-purple-500',
     'bg-orange-500',
     'bg-pink-500',
-    'bg-teal-500',
+    'bg-primary-500',
     'bg-indigo-500',
     'bg-warning-500',
   ]
@@ -261,8 +261,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-teal-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <Clock className="w-5 h-5 text-primary-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">

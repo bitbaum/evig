@@ -63,7 +63,7 @@ export function buildQuickActions(
       label: 'Neuer Standort',
       href: '/admin/locations/new',
       icon: MapPin,
-      color: 'bg-teal-100 dark:bg-teal-900/30 text-teal-600 hover:bg-teal-200 dark:hover:bg-teal-900/50',
+      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
     })
   }
 

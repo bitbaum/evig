@@ -27,7 +27,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
           onClick={() => onSelect(submission)}
           className={`bg-white dark:bg-neutral-800 rounded-xl shadow-sm border p-5 cursor-pointer transition-all ${
             selectedId === submission.id
-              ? 'border-teal-500 ring-2 ring-teal-500/20'
+              ? 'border-primary-500 ring-2 ring-primary-500/20'
               : 'border-neutral-100 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'
           }`}
         >

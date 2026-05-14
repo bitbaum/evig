@@ -60,7 +60,7 @@ export default function TaskFiltersClient() {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Aufgaben suchen..."
-            className="w-full pl-9 pr-3 py-1.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
+            className="w-full pl-9 pr-3 py-1.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
 

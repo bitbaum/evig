@@ -201,7 +201,7 @@ export default async function ProtocolsAdminPage({
             </p>
             <Link
               href="/admin/protocols"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-info-700 transition-colors"
             >
               Seite neu laden
             </Link>
@@ -261,7 +261,7 @@ export default async function ProtocolsAdminPage({
                     <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
                         href={`/admin/protocols/${protocol.id}`}
-                        className="font-medium text-neutral-900 hover:text-info-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-1 rounded"
+                        className="font-medium text-neutral-900 hover:text-primary-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
                       >
                         {protocol.title}
                       </Link>
@@ -342,7 +342,7 @@ export default async function ProtocolsAdminPage({
                         )}
                         <Link
                           href={`/admin/protocols/${protocol.id}`}
-                          className="text-sm text-info-600 hover:text-info-800 underline focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-1 rounded"
+                          className="text-sm text-primary-600 hover:text-primary-800 underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
                         >
                           Öffnen
                         </Link>

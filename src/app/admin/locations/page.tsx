@@ -120,7 +120,7 @@ export default function AdminLocationsPage() {
             value={filters.city}
             onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
             placeholder="Stadt suchen..."
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </AdminFilterBar>

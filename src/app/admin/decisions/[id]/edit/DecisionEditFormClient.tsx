@@ -49,7 +49,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={200}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         />
       </div>
 
@@ -63,7 +63,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
           onChange={(e) => setDescription(e.target.value)}
           required
           rows={3}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         />
       </div>
 
@@ -77,7 +77,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
           value={background}
           onChange={(e) => setBackground(e.target.value)}
           rows={4}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
           placeholder="Begründung, Alternativen, Risiken — sichtbar für Abstimmungsberechtigte vor dem Abstimmen."
         />
       </div>
@@ -138,7 +138,7 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
         <button
           type="submit"
           disabled={submitting}
-          className="rounded-lg bg-info-600 px-4 py-2 text-sm font-medium text-white hover:bg-info-700 disabled:opacity-50"
+          className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
         >
           {submitting ? 'Wird gespeichert...' : 'Änderungen speichern'}
         </button>

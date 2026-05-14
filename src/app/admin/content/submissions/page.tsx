@@ -73,7 +73,7 @@ export default function SubmissionsAdminPage() {
       {/* Content */}
       {s.isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-teal-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
         </div>
       ) : s.filteredSubmissions.length === 0 ? (
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-12 text-center">

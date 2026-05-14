@@ -50,12 +50,12 @@ export default function DecisionFormClient() {
 
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
-        <div className="flex items-start justify-between gap-3 rounded-md border border-info-200 bg-info-50 px-4 py-3 text-sm text-info-700">
+        <div className="flex items-start justify-between gap-3 rounded-md border border-primary-200 bg-info-50 px-4 py-3 text-sm text-info-700">
           <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
           <button
             type="button"
             onClick={() => form.setAiRecommendationReason('')}
-            className="flex-shrink-0 text-info-400 hover:text-info-600"
+            className="flex-shrink-0 text-info-400 hover:text-primary-600"
           >
             ×
           </button>
@@ -72,7 +72,7 @@ export default function DecisionFormClient() {
           onChange={(e) => form.setTitle(e.target.value)}
           required
           maxLength={200}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
           placeholder="Worum geht es?"
         />
       </div>
@@ -88,7 +88,7 @@ export default function DecisionFormClient() {
           onChange={(e) => form.setDescription(e.target.value)}
           required
           rows={3}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
           placeholder="Die konkrete Frage oder Entscheidung, über die abgestimmt wird."
         />
       </div>
@@ -104,7 +104,7 @@ export default function DecisionFormClient() {
           value={form.background}
           onChange={(e) => form.setBackground(e.target.value)}
           rows={4}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-info-500 focus:outline-none focus:ring-1 focus:ring-info-500"
+          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
           placeholder="Warum ist diese Entscheidung nötig? Welche Alternativen wurden erwogen? Welche Risiken oder Vorteile gibt es? Abstimmungsberechtigte sehen diesen Text vor dem Abstimmen."
         />
       </div>
