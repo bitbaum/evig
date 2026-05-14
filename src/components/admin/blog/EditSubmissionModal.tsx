@@ -8,8 +8,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Save } from 'lucide-react';
+import { X, Save, Loader2 } from 'lucide-react';
 import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
 import { BLOG_SUBMISSION_EDITABLE_FIELDS } from '@/config/editable-fields';
 import { logger } from '@/lib/logger';
 import { apiFetch } from '@/lib/api/client';
@@ -111,22 +116,21 @@ export function EditSubmissionModal({
     switch (config.type) {
       case 'markdown':
         return (
-          <textarea
+          <Textarea
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={15}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500 font-mono text-sm"
+            className="font-mono text-sm"
             required={Boolean('required' in config && config.required)}
           />
         );
 
       case 'textarea':
         return (
-          <textarea
+          <Textarea
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -134,10 +138,9 @@ export function EditSubmissionModal({
       case 'select':
         if (field === 'category_id') {
           return (
-            <select
+            <Select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value || null)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             >
               <option value="">Keine Kategorie</option>
               {categories.map((cat) => (
@@ -145,31 +148,30 @@ export function EditSubmissionModal({
                   {cat.name}
                 </option>
               ))}
-            </select>
+            </Select>
           );
         }
         return null;
 
-      case 'tags':
+      case 'tags': {
         // Display as comma-separated input
         const tagsValue = Array.isArray(value) ? value.join(', ') : '';
         return (
-          <input
+          <Input
             type="text"
             value={tagsValue}
             onChange={(e) => handleTagsChange(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             placeholder="tag1, tag2, tag3"
           />
         );
+      }
 
       default: // text
         return (
-          <input
+          <Input
             type="text"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={Boolean('required' in config && config.required)}
           />
         );
@@ -205,44 +207,27 @@ export function EditSubmissionModal({
           ).map((field) => {
             const config = BLOG_SUBMISSION_EDITABLE_FIELDS[field];
             return (
-              <div key={field}>
-                <label className="block text-sm font-medium text-neutral-700 mb-2">
-                  {config.label}
-                  {('required' in config && config.required) && <span className="text-error-500 ml-1">*</span>}
-                </label>
+              <FormField
+                key={field}
+                label={config.label}
+                required={'required' in config ? Boolean(config.required) : false}
+                hint={'help' in config ? config.help : undefined}
+              >
                 {renderField(field)}
-                {('help' in config && config.help) && <p className="mt-1 text-xs text-neutral-500">{config.help}</p>}
-              </div>
+              </FormField>
             );
           })}
         </div>
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-neutral-50 border-t px-6 py-4 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
-            disabled={isSaving}
-          >
+          <Button onClick={onClose} variant="outline" disabled={isSaving}>
             Abbrechen
-          </button>
-          <button
-            onClick={handleSave}
-            className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
-            disabled={isSaving}
-          >
-            {isSaving ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Speichert...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                Speichern
-              </>
-            )}
-          </button>
+          </Button>
+          <Button onClick={handleSave} variant="primary" disabled={isSaving} className="gap-2">
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {isSaving ? 'Speichert...' : 'Speichern'}
+          </Button>
         </div>
       </div>
     </div>
