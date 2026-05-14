@@ -13,6 +13,11 @@ import type { TaskEditItem } from '@/lib/schemas/tasks'
 import { Loader2, Save } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useTaskForm } from '@/hooks/useTaskForm'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   task?: TaskEditItem
@@ -52,12 +57,12 @@ export default function TaskFormClient({ task }: Props) {
           />
         )}
 
-        {/* Title */}
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
-            Titel <span className="text-error-500">*</span>
-          </label>
-          <input
+        <FormField
+          label="Titel"
+          required
+          htmlFor="title"
+        >
+          <Input
             type="text"
             id="title"
             name="title"
@@ -69,104 +74,64 @@ export default function TaskFormClient({ task }: Props) {
             aria-describedby={error ? errorId : undefined}
             maxLength={200}
             placeholder="z.B. Kaffeemaschine reinigen"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-        </div>
+        </FormField>
 
-        {/* Task Type */}
-        <div>
-          <label htmlFor="task_type" className="block text-sm font-medium text-neutral-700 mb-1">
-            Aufgabentyp <span className="text-error-500">*</span>
-          </label>
-          <select
-            id="task_type"
-            name="task_type"
-            value={formData.task_type}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
-          >
-            {Object.entries(TASK_TYPES).map(([key, value]) => (
+        <FormField
+          label="Aufgabentyp"
+          required
+          htmlFor="task_type"
+          hint={
+            formData.task_type === 'one_time' ? 'Wird nach Erledigung als abgeschlossen markiert'
+            : formData.task_type === 'recurring_scheduled' ? 'Wiederholt sich nach einem festen Zeitplan'
+            : formData.task_type === 'recurring_as_needed' ? 'Wird bei Bedarf erledigt, kein fester Zeitplan'
+            : undefined
+          }
+        >
+          <Select id="task_type" name="task_type" value={formData.task_type} onChange={handleChange}>
+            {Object.entries(TASK_TYPES).map(([, value]) => (
               <option key={value} value={value}>
                 {TASK_TYPE_LABELS[value as keyof typeof TASK_TYPE_LABELS]}
               </option>
             ))}
-          </select>
-          <p className="mt-1 text-sm text-neutral-500">
-            {formData.task_type === 'one_time' && 'Wird nach Erledigung als abgeschlossen markiert'}
-            {formData.task_type === 'recurring_scheduled' && 'Wiederholt sich nach einem festen Zeitplan'}
-            {formData.task_type === 'recurring_as_needed' && 'Wird bei Bedarf erledigt, kein fester Zeitplan'}
-          </p>
-        </div>
+          </Select>
+        </FormField>
 
-        {/* Category */}
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-neutral-700 mb-1">
-            Kategorie <span className="text-error-500">*</span>
-          </label>
-          <select
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
-          >
-            {Object.entries(TASK_CATEGORIES).map(([key, value]) => (
+        <FormField label="Kategorie" required htmlFor="category">
+          <Select id="category" name="category" value={formData.category} onChange={handleChange}>
+            {Object.entries(TASK_CATEGORIES).map(([, value]) => (
               <option key={value} value={value}>
                 {TASK_CATEGORY_LABELS[value as keyof typeof TASK_CATEGORY_LABELS]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
-        {/* Priority */}
-        <div>
-          <label htmlFor="priority" className="block text-sm font-medium text-neutral-700 mb-1">
-            Priorität
-          </label>
-          <select
-            id="priority"
-            name="priority"
-            value={formData.priority}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
-          >
-            {Object.entries(TASK_PRIORITIES).map(([key, value]) => (
+        <FormField label="Priorität" htmlFor="priority">
+          <Select id="priority" name="priority" value={formData.priority} onChange={handleChange}>
+            {Object.entries(TASK_PRIORITIES).map(([, value]) => (
               <option key={value} value={value}>
                 {TASK_PRIORITY_LABELS[value as keyof typeof TASK_PRIORITY_LABELS]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
-        {/* Assign To */}
         {teamMembers.length > 0 && (
-          <div>
-            <label htmlFor="assigned_to" className="block text-sm font-medium text-neutral-700 mb-1">
-              Zuweisen an
-            </label>
-            <select
-              id="assigned_to"
-              name="assigned_to"
-              value={formData.assigned_to}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
-            >
+          <FormField label="Zuweisen an" htmlFor="assigned_to">
+            <Select id="assigned_to" name="assigned_to" value={formData.assigned_to} onChange={handleChange}>
               <option value="">Nicht zugewiesen</option>
               {teamMembers.map((member) => (
                 <option key={member.user_id} value={member.user_id}>
                   {member.name}{member.position ? ` (${member.position})` : ''}
                 </option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormField>
         )}
 
-        {/* Description */}
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-neutral-700 mb-1">
-            Beschreibung
-          </label>
-          <textarea
+        <FormField label="Beschreibung" htmlFor="description">
+          <Textarea
             id="description"
             name="description"
             value={formData.description}
@@ -174,16 +139,11 @@ export default function TaskFormClient({ task }: Props) {
             rows={3}
             maxLength={2000}
             placeholder="Was ist diese Aufgabe?"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-        </div>
+        </FormField>
 
-        {/* Instructions */}
-        <div>
-          <label htmlFor="instructions" className="block text-sm font-medium text-neutral-700 mb-1">
-            Anleitung
-          </label>
-          <textarea
+        <FormField label="Anleitung" htmlFor="instructions">
+          <Textarea
             id="instructions"
             name="instructions"
             value={formData.instructions}
@@ -191,34 +151,24 @@ export default function TaskFormClient({ task }: Props) {
             rows={5}
             maxLength={5000}
             placeholder="Schritt-für-Schritt Anleitung zur Erledigung..."
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-        </div>
+        </FormField>
 
-        {/* Schedule (for recurring) */}
         {formData.task_type === 'recurring_scheduled' && (
-          <div>
-            <label htmlFor="schedule_human" className="block text-sm font-medium text-neutral-700 mb-1">
-              Zeitplan
-            </label>
-            <input
+          <FormField label="Zeitplan" htmlFor="schedule_human">
+            <Input
               type="text"
               id="schedule_human"
               name="schedule_human"
               value={formData.schedule_human}
               onChange={handleChange}
               placeholder="z.B. Jeden Montag, Täglich um 9 Uhr"
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             />
-          </div>
+          </FormField>
         )}
 
-        {/* Estimated Duration */}
-        <div>
-          <label htmlFor="estimated_minutes" className="block text-sm font-medium text-neutral-700 mb-1">
-            Geschätzte Dauer (Minuten)
-          </label>
-          <input
+        <FormField label="Geschätzte Dauer (Minuten)" htmlFor="estimated_minutes">
+          <Input
             type="number"
             id="estimated_minutes"
             name="estimated_minutes"
@@ -227,59 +177,47 @@ export default function TaskFormClient({ task }: Props) {
             min={1}
             max={480}
             placeholder="z.B. 30"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-        </div>
+        </FormField>
 
-        {/* Due Date */}
-        <div>
-          <label htmlFor="due_date" className="block text-sm font-medium text-neutral-700 mb-1">
-            Fälligkeitsdatum (optional)
-          </label>
-          <input
+        <FormField label="Fälligkeitsdatum (optional)" htmlFor="due_date">
+          <Input
             type="date"
             id="due_date"
             name="due_date"
             value={formData.due_date}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-        </div>
+        </FormField>
 
-        {/* Tags */}
-        <div>
-          <label htmlFor="tags" className="block text-sm font-medium text-neutral-700 mb-1">
-            Tags
-          </label>
-          <input
+        <FormField
+          label="Tags"
+          htmlFor="tags"
+          hint="Mehrere Tags mit Komma trennen"
+        >
+          <Input
             type="text"
             id="tags"
             name="tags"
             value={formData.tags}
             onChange={handleChange}
             placeholder="Komma-getrennt, z.B. küche, hygiene, täglich"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-          <p className="mt-1 text-sm text-neutral-500">Mehrere Tags mit Komma trennen</p>
-        </div>
+        </FormField>
 
-        {/* Submit */}
         <div className="flex justify-end gap-3 pt-4 border-t">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
-          >
+          <Button type="button" variant="ghost" onClick={() => router.back()}>
             Abbrechen
-          </button>
-          <button
+          </Button>
+          <Button
             type="submit"
+            variant="primary"
             disabled={loading || !formData.title}
-            className="flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {isEdit ? 'Speichern' : 'Aufgabe erstellen'}
-          </button>
+          </Button>
         </div>
       </div>
     </form>
