@@ -224,16 +224,14 @@ export function SubmissionDetail({
 
       {/* Actions: published */}
       {submission.status === APPROVAL_STATUS.PUBLISHED && submission.slug && (
-        <Button
-          as={Link}
+        <Link
           href={`/blog/${submission.slug}`}
           target="_blank"
-          variant="primary"
-          className="w-full gap-2"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
           <ExternalLink className="w-4 h-4" />
           Beitrag ansehen
-        </Button>
+        </Link>
       )}
 
       {/* Delete */}
