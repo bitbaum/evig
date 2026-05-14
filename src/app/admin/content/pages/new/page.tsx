@@ -14,6 +14,10 @@ import {
 import { generateSlug } from '@/lib/utils/slug'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 function NewStaticPageContent() {
   const { data: session, status: sessionStatus } = useSession()
@@ -107,11 +111,9 @@ function NewStaticPageContent() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
           {/* Title */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              Titel *
-            </label>
-            <input
+          <FormField label="Titel" required htmlFor="page-title">
+            <Input
+              id="page-title"
               type="text"
               value={formData.title}
               onChange={(e) => {
@@ -122,27 +124,23 @@ function NewStaticPageContent() {
                   slug: prev.slug || generateSlug(title),
                 }))
               }}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
               placeholder="z.B. Über uns"
               required
               autoFocus
             />
-          </div>
+          </FormField>
 
           {/* Slug */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              URL-Slug *
-            </label>
+          <FormField label="URL-Slug" required>
             <div className="flex gap-2">
               <div className="flex items-center px-3 bg-neutral-50 dark:bg-neutral-700 border border-r-0 border-neutral-300 dark:border-neutral-600 rounded-l-lg text-sm text-neutral-500">
                 /
               </div>
-              <input
+              <Input
                 type="text"
                 value={formData.slug}
                 onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-r-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
+                className="flex-1 rounded-l-none"
                 placeholder="ueber-uns"
                 required
               />
@@ -154,21 +152,18 @@ function NewStaticPageContent() {
                 Generieren
               </button>
             </div>
-          </div>
+          </FormField>
 
           {/* Content */}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              Inhalt
-            </label>
-            <textarea
+          <FormField label="Inhalt">
+            <Textarea
               value={formData.content}
               onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
               rows={15}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white font-mono text-sm"
+              className="font-mono text-sm"
               placeholder="HTML oder Markdown Inhalt..."
             />
-          </div>
+          </FormField>
 
           {/* Published */}
           <div className="flex items-center gap-3">
@@ -177,7 +172,7 @@ function NewStaticPageContent() {
               id="is_published"
               checked={formData.is_published}
               onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
-              className="w-4 h-4 text-teal-600 border-neutral-300 rounded focus:ring-teal-500"
+              className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
             />
             <label htmlFor="is_published" className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Sofort veröffentlichen
@@ -189,31 +184,24 @@ function NewStaticPageContent() {
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
           <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">SEO</Heading>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              SEO Titel
-            </label>
-            <input
+          <FormField label="SEO Titel" htmlFor="seo-title">
+            <Input
+              id="seo-title"
               type="text"
               value={formData.seo_title}
               onChange={(e) => setFormData(prev => ({ ...prev, seo_title: e.target.value }))}
               placeholder={formData.title || 'Wird vom Titel übernommen'}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              SEO Beschreibung
-            </label>
-            <textarea
+          <FormField label="SEO Beschreibung">
+            <Textarea
               value={formData.seo_description}
               onChange={(e) => setFormData(prev => ({ ...prev, seo_description: e.target.value }))}
               rows={3}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-neutral-700 dark:text-white"
               placeholder="Kurze Beschreibung für Suchmaschinen..."
             />
-          </div>
+          </FormField>
         </div>
 
         {/* Submit */}
@@ -224,18 +212,10 @@ function NewStaticPageContent() {
           >
             Abbrechen
           </Link>
-          <button
-            type="submit"
-            disabled={saving}
-            className="inline-flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-medium hover:bg-teal-700 disabled:opacity-50 transition-colors"
-          >
-            {saving ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4 mr-2" />
-            )}
+          <Button type="submit" disabled={saving} variant="primary" className="gap-2">
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             Seite erstellen
-          </button>
+          </Button>
         </div>
       </form>
     </div>
