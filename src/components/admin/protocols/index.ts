@@ -15,6 +15,8 @@ export { ProtocolSummarySection } from './ProtocolSummarySection'
 export { ProtocolTopicsSection } from './ProtocolTopicsSection'
 export { ProtocolActionItemsList } from './ProtocolActionItemsList'
 export { ProtocolFollowUps } from './ProtocolFollowUps'
+export { ProtocolReviewChecklist } from './ProtocolReviewChecklist'
+export { ProtocolReviewQueue } from './ProtocolReviewQueue'
 export type { ProtocolDetailProps } from './types'
 
 // Form components

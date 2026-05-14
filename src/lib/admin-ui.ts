@@ -19,19 +19,19 @@ export const adminType = {
   /** h1: page title in AdminPageWrapper — 24px, bold, strong hierarchy anchor */
   pageTitle:    'text-2xl font-bold text-neutral-900 dark:text-white',
   /** h2: card/section header */
-  sectionTitle: 'text-sm font-semibold text-neutral-900 dark:text-white',
+  sectionTitle: 'text-base font-semibold text-neutral-900 dark:text-white',
   /** h3: sub-heading inside a card */
-  subTitle:     'text-sm font-medium text-neutral-700 dark:text-neutral-300',
+  subTitle:     'text-base font-medium text-neutral-700 dark:text-neutral-300',
   /** Table column headers, filter labels */
-  tableHeader:  'text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide',
+  tableHeader:  'text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide',
   /** Standard body text */
-  body:         'text-sm text-neutral-700 dark:text-neutral-300',
+  body:         'text-base text-neutral-700 dark:text-neutral-300',
   /** Secondary / meta text — 14px minimum for readability (WCAG) */
-  meta:         'text-sm text-neutral-500 dark:text-neutral-400',
+  meta:         'text-base text-neutral-500 dark:text-neutral-400',
   /** Large metric number in stat cards — font-mono ensures consistent digit widths */
   stat:         'text-2xl font-bold tabular-nums font-mono text-neutral-900 dark:text-white',
   /** Stat card label below the number */
-  statLabel:    'text-xs text-neutral-500 dark:text-neutral-400 mt-0.5',
+  statLabel:    'text-sm text-neutral-500 dark:text-neutral-400 mt-0.5',
 } as const
 
 // ─── Surfaces ────────────────────────────────────────────────────────────────
@@ -148,13 +148,13 @@ export const adminTable = {
   /** thead row */
   thead: 'border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900',
   /** th cell */
-  th:    'px-4 py-2.5 text-left text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide',
+  th:    'px-4 py-2.5 text-left text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide',
   /** tbody tr */
   tr:    'border-b border-neutral-100 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors',
   /** td cell */
-  td:    'px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300',
+  td:    'px-4 py-3 text-base text-neutral-700 dark:text-neutral-300',
   /** Empty state container */
-  empty: 'py-12 text-center text-sm text-neutral-500 dark:text-neutral-400',
+  empty: 'py-12 text-center text-base text-neutral-500 dark:text-neutral-400',
 } as const
 
 // ─── Form ─────────────────────────────────────────────────────────────────────

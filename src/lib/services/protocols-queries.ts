@@ -168,6 +168,24 @@ export async function getProtocols(
   return { protocols, total }
 }
 
+export async function getProtocolReviewQueue(
+  userId: string,
+  isSuperAdmin: boolean,
+  limit = 5,
+): Promise<ProtocolListItem[]> {
+  const { protocols } = await getProtocols(userId, isSuperAdmin, {
+    status: PROTOCOL_STATUS.REVIEW,
+    page: 1,
+    limit,
+  })
+
+  return protocols.sort((a, b) => {
+    const taskDelta = b.unlinked_action_item_count - a.unlinked_action_item_count
+    if (taskDelta !== 0) return taskDelta
+    return new Date(b.meeting_date).getTime() - new Date(a.meeting_date).getTime()
+  })
+}
+
 /**
  * Get single protocol with visibility check
  */

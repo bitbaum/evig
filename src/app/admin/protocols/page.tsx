@@ -14,7 +14,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
-import { getProtocols, getProtocolStats } from '@/lib/services/protocols'
+import { getProtocols, getProtocolReviewQueue, getProtocolStats } from '@/lib/services/protocols'
 import type { ProtocolListItem } from '@/lib/schemas/protocols'
 import {
   MEETING_TYPE_LABELS,
@@ -45,6 +45,7 @@ import ProtocolListClient from './ProtocolListClient'
 import { Pagination } from '@/components/ui/Pagination'
 import { getTeamMembers } from '@/lib/services/protocols'
 import { ADMIN_CONTENT } from '@/config/admin-content'
+import { ProtocolReviewQueue } from '@/components/admin/protocols/ProtocolReviewQueue'
 
 export const metadata: Metadata = {
   title: 'Protokolle',
@@ -86,11 +87,12 @@ export default async function ProtocolsAdminPage({
 
   let stats = { total: 0, draft: 0, review: 0, finalized: 0 }
   let protocols: ProtocolListItem[] = []
+  let reviewQueue: ProtocolListItem[] = []
   let totalProtocols = 0
   let teamMembers: Array<{ id: string; name: string }> = []
   let listError = false
   try {
-    const [fetchedStats, fetchedProtocols, fetchedTeamMembers] = await Promise.all([
+    const [fetchedStats, fetchedProtocols, fetchedReviewQueue, fetchedTeamMembers] = await Promise.all([
       getProtocolStats(dbUserId, isAdmin),
       getProtocols(dbUserId, isAdmin, {
         meeting_type: params.meeting_type,
@@ -100,10 +102,12 @@ export default async function ProtocolsAdminPage({
         page: currentPage,
         limit: pageLimit,
       }),
+      getProtocolReviewQueue(dbUserId, isAdmin),
       getTeamMembers(),
     ])
     stats = fetchedStats
     protocols = fetchedProtocols.protocols
+    reviewQueue = fetchedReviewQueue
     totalProtocols = fetchedProtocols.total
     teamMembers = fetchedTeamMembers
   } catch (error) {
@@ -176,6 +180,8 @@ export default async function ProtocolsAdminPage({
           valueColor: 'text-primary-600',
         },
       ] satisfies StatCardItem[]} />
+
+      <ProtocolReviewQueue protocols={reviewQueue} />
 
       {/* Filters */}
       <Suspense fallback={<div className="bg-white rounded-lg border p-4 h-14" />}>

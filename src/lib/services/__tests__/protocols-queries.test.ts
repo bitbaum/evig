@@ -124,6 +124,7 @@ import {
   getProtocolStats,
   getTeamMembers,
   getProtocols,
+  getProtocolReviewQueue,
   getProtocolById,
   createProtocol,
   updateProtocol,
@@ -264,6 +265,35 @@ describe('getProtocols', () => {
 
     expect(protocols[0].title).toBe('Teammeeting März 2026')
     expect(protocols[0].status).toBe(PROTOCOL_STATUS.DRAFT)
+  })
+})
+
+// ============================================================================
+// getProtocolReviewQueue
+// ============================================================================
+
+describe('getProtocolReviewQueue', () => {
+  it('returns review protocols sorted by open action count first', async () => {
+    mockDbExecute.mockResolvedValueOnce({
+      rows: [
+        makeProtocolRow({
+          id: 'proto-low',
+          status: PROTOCOL_STATUS.REVIEW,
+          meeting_date: '2026-03-20',
+          unlinked_action_item_count: 1,
+        }),
+        makeProtocolRow({
+          id: 'proto-high',
+          status: PROTOCOL_STATUS.REVIEW,
+          meeting_date: '2026-03-10',
+          unlinked_action_item_count: 4,
+        }),
+      ],
+    })
+
+    const queue = await getProtocolReviewQueue(USER_ID, false)
+
+    expect(queue.map((protocol) => protocol.id)).toEqual(['proto-high', 'proto-low'])
   })
 })
 

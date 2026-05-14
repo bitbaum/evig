@@ -19,6 +19,7 @@ import {
   ProtocolTopicsSection,
   ProtocolActionItemsList,
   ProtocolFollowUps,
+  ProtocolReviewChecklist,
 } from '@/components/admin/protocols'
 import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES, PROTOCOL_STATUS_COLORS, PROTOCOL_STATUS_LABELS } from '@/config/protocols'
@@ -26,6 +27,7 @@ import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import Heading from '@/components/admin/AdminHeading'
+import { getProtocolReviewChecklist } from '@/lib/protocols/review'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
@@ -105,6 +107,15 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     handleDelete,
   } = useProtocolDetail(props)
 
+  const reviewChecklist = useMemo(() => getProtocolReviewChecklist({
+    status: protocol.status,
+    hasRawInput: Boolean(protocol.raw_transcript),
+    notes,
+    actionLinks,
+    decisionVotes,
+    decisionOutcomes,
+  }), [protocol.status, protocol.raw_transcript, notes, actionLinks, decisionVotes, decisionOutcomes])
+
   return (
     <div className="space-y-6">
       {error && (
@@ -127,6 +138,10 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           </span>
         )}
       </div>
+
+      {(isReview || isFinalized) && (
+        <ProtocolReviewChecklist items={reviewChecklist} />
+      )}
 
       {/* Edit Attendees (review phase) */}
       {isReview && (

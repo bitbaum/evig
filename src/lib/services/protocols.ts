@@ -12,6 +12,7 @@ export {
   getProtocolStats,
   getTeamMembers,
   getProtocols,
+  getProtocolReviewQueue,
   getProtocolById,
   createProtocol,
   updateProtocol,
