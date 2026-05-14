@@ -1,6 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { BUTTONS } from "@/config/ui"
+import { designPrimitive } from "@/lib/design-system"
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -13,7 +14,8 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
       <div
         ref={ref}
         className={cn(
-          'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
+          designPrimitive.badgeBase,
+          designPrimitive.focus,
           BUTTONS.badges[variant],
           className
         )}

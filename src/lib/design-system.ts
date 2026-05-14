@@ -315,5 +315,90 @@ export const touchTarget = {
   lg: 'min-h-[48px] min-w-[48px]',
 } as const
 
+/**
+ * Semantic component primitives.
+ *
+ * These are the design adapter layer: public and admin components should
+ * consume these named primitives instead of hardcoding visual Tailwind classes.
+ * A future visual direction change should start here, then only move outward
+ * when a workflow needs a different information architecture.
+ */
+export const designPrimitive = {
+  focus:
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2',
+
+  type: {
+    pageTitle: 'text-2xl font-bold text-neutral-950 dark:text-white',
+    sectionTitle: 'text-base font-semibold text-neutral-950 dark:text-white',
+    subTitle: 'text-base font-medium text-neutral-800 dark:text-neutral-200',
+    body: 'text-base text-neutral-700 dark:text-neutral-300',
+    meta: 'text-base text-neutral-500 dark:text-neutral-400',
+    smallMeta: 'text-sm text-neutral-500 dark:text-neutral-400',
+    tableHeader: 'text-sm font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400',
+    stat: 'text-2xl font-bold tabular-nums font-mono text-neutral-950 dark:text-white',
+  },
+
+  surface: {
+    card: 'rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800',
+    cardElevated: 'rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800',
+    inset: 'rounded-lg border border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900',
+    table: 'overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800',
+  },
+
+  buttonBase:
+    'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
+
+  button: {
+    default: 'bg-primary-600 text-white hover:bg-primary-700',
+    primary: 'bg-info-600 text-white hover:bg-info-700',
+    outline: 'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700',
+    outlineLight: 'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
+    secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600',
+    ghost: 'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700',
+    destructive: 'bg-error-600 text-white hover:bg-error-700',
+    warning: 'bg-warning-500 text-neutral-950 hover:bg-warning-600',
+  },
+
+  buttonSize: {
+    default: 'min-h-[44px] px-4 py-2 text-base',
+    sm: 'min-h-[40px] px-3 py-1.5 text-sm',
+    lg: 'min-h-[48px] px-6 py-3 text-base',
+    icon: 'min-h-[44px] min-w-[44px] p-2',
+  },
+
+  badgeBase:
+    'inline-flex items-center rounded-full border px-2.5 py-0.5 text-sm font-medium transition-colors',
+
+  badge: {
+    default: 'border-transparent bg-primary-600 text-white',
+    secondary: 'border-transparent bg-neutral-100 text-neutral-900 dark:bg-neutral-700 dark:text-white',
+    destructive: 'border-transparent bg-error-600 text-white',
+    outline: 'border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:text-neutral-300',
+    success: 'border-primary-200 bg-primary-50 text-primary-800',
+    warning: 'border-warning-200 bg-warning-50 text-warning-800',
+    info: 'border-info-200 bg-info-50 text-info-800',
+  },
+
+  form: {
+    input: 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
+    textarea: 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
+    select: 'rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
+    label: 'block text-base font-medium text-neutral-700 dark:text-neutral-300',
+    hint: 'mt-1 text-sm text-neutral-500 dark:text-neutral-400',
+    error: 'mt-1 text-sm text-error-600 dark:text-error-400',
+  },
+
+  table: {
+    thead: 'border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900',
+    th: 'px-4 py-2.5 text-left text-sm font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400',
+    tr: 'border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-700/50',
+    td: 'px-4 py-3 text-base text-neutral-700 dark:text-neutral-300',
+    empty: 'py-12 text-center text-base text-neutral-500 dark:text-neutral-400',
+  },
+} as const
+
+export type DesignButtonVariant = keyof typeof designPrimitive.button
+export type DesignButtonSize = keyof typeof designPrimitive.buttonSize
+export type DesignBadgeVariant = keyof typeof designPrimitive.badge
 
 

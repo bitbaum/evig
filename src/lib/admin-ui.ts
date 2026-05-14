@@ -1,4 +1,5 @@
 import { UI_STATUS } from '@/config/ui/status'
+import { designPrimitive } from '@/lib/design-system'
 
 /**
  * Admin UI Design Tokens — SSOT
@@ -17,21 +18,21 @@ import { UI_STATUS } from '@/config/ui/status'
 
 export const adminType = {
   /** h1: page title in AdminPageWrapper — 24px, bold, strong hierarchy anchor */
-  pageTitle:    'text-2xl font-bold text-neutral-900 dark:text-white',
+  pageTitle:    designPrimitive.type.pageTitle,
   /** h2: card/section header */
-  sectionTitle: 'text-base font-semibold text-neutral-900 dark:text-white',
+  sectionTitle: designPrimitive.type.sectionTitle,
   /** h3: sub-heading inside a card */
-  subTitle:     'text-base font-medium text-neutral-700 dark:text-neutral-300',
+  subTitle:     designPrimitive.type.subTitle,
   /** Table column headers, filter labels */
-  tableHeader:  'text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide',
+  tableHeader:  designPrimitive.type.tableHeader,
   /** Standard body text */
-  body:         'text-base text-neutral-700 dark:text-neutral-300',
+  body:         designPrimitive.type.body,
   /** Secondary / meta text — 14px minimum for readability (WCAG) */
-  meta:         'text-base text-neutral-500 dark:text-neutral-400',
+  meta:         designPrimitive.type.meta,
   /** Large metric number in stat cards — font-mono ensures consistent digit widths */
-  stat:         'text-2xl font-bold tabular-nums font-mono text-neutral-900 dark:text-white',
+  stat:         designPrimitive.type.stat,
   /** Stat card label below the number */
-  statLabel:    'text-sm text-neutral-500 dark:text-neutral-400 mt-0.5',
+  statLabel:    `${designPrimitive.type.smallMeta} mt-0.5`,
 } as const
 
 // ─── Surfaces ────────────────────────────────────────────────────────────────
@@ -39,13 +40,13 @@ export const adminType = {
 
 export const adminSurface = {
   /** Standard white card */
-  card:    'bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700',
+  card:    designPrimitive.surface.card,
   /** Card with subtle shadow (for detail/focus pages) */
-  cardElevated: 'bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 shadow-sm',
+  cardElevated: designPrimitive.surface.cardElevated,
   /** Inset / secondary panel */
-  inset:   'bg-neutral-50 dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-700',
+  inset:   designPrimitive.surface.inset,
   /** Table wrapper — card with overflow-hidden for crisp border on table edges */
-  table:   'bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden',
+  table:   designPrimitive.surface.table,
 } as const
 
 // ─── Spacing ─────────────────────────────────────────────────────────────────
@@ -116,28 +117,28 @@ export type AdminStatusKey = keyof typeof adminStatus
 export const adminBtn = {
   /** Primary CTA: create, submit, save */
   primary:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.default} disabled:cursor-not-allowed`,
   /** Standard secondary: edit, configure */
   secondary:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-neutral-50 text-neutral-700 text-sm font-medium rounded-md border border-neutral-300 transition-colors dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.outline} disabled:cursor-not-allowed`,
   /** Status transition: approve, publish, activate */
   action:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-info-600 hover:bg-info-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.primary} disabled:cursor-not-allowed`,
   /** Warning state: suspend, pause */
   warning:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-warning-500 hover:bg-warning-600 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.warning} disabled:cursor-not-allowed`,
   /** Destructive confirm (inside modals only): permanently delete */
   danger:
-    'inline-flex items-center gap-2 px-3 py-1.5 bg-error-600 hover:bg-error-700 text-white text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.destructive} disabled:cursor-not-allowed`,
   /** Destructive inline (table rows): delete, remove — outline not filled */
   dangerOutline:
-    'inline-flex items-center gap-2 px-3 py-1.5 border border-error-300 hover:bg-error-50 text-error-600 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:border-error-800 dark:hover:bg-error-900/20 dark:text-error-400',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} border border-error-300 text-error-600 hover:bg-error-50 disabled:cursor-not-allowed dark:border-error-800 dark:text-error-400 dark:hover:bg-error-900/20`,
   /** Ghost: low-emphasis, tertiary actions */
   ghost:
-    'inline-flex items-center gap-2 px-3 py-1.5 text-neutral-600 hover:bg-neutral-100 text-sm font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed dark:text-neutral-400 dark:hover:bg-neutral-700',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.ghost} disabled:cursor-not-allowed`,
   /** Icon-only button — 44×44px touch target (WCAG 2.5.5) */
   icon:
-    'inline-flex items-center justify-center min-w-[2.75rem] min-h-[2.75rem] w-9 h-9 text-neutral-500 hover:bg-neutral-100 rounded-md transition-colors dark:text-neutral-400 dark:hover:bg-neutral-700',
+    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.icon} ${designPrimitive.button.ghost}`,
 } as const
 
 export type AdminBtnVariant = keyof typeof adminBtn
@@ -146,36 +147,30 @@ export type AdminBtnVariant = keyof typeof adminBtn
 
 export const adminTable = {
   /** thead row */
-  thead: 'border-b border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900',
+  thead: designPrimitive.table.thead,
   /** th cell */
-  th:    'px-4 py-2.5 text-left text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide',
+  th:    designPrimitive.table.th,
   /** tbody tr */
-  tr:    'border-b border-neutral-100 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors',
+  tr:    designPrimitive.table.tr,
   /** td cell */
-  td:    'px-4 py-3 text-base text-neutral-700 dark:text-neutral-300',
+  td:    designPrimitive.table.td,
   /** Empty state container */
-  empty: 'py-12 text-center text-base text-neutral-500 dark:text-neutral-400',
+  empty: designPrimitive.table.empty,
 } as const
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
 export const adminForm = {
   /** Standard text input */
-  input:
-    'w-full rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent disabled:opacity-50',
+  input: designPrimitive.form.input,
   /** Textarea */
-  textarea:
-    'w-full rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent resize-none',
+  textarea: `${designPrimitive.form.textarea} resize-none`,
   /** Select */
-  select:
-    'rounded-md border border-neutral-300 dark:border-neutral-600 px-3 py-2 text-sm bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent',
+  select: designPrimitive.form.select,
   /** Field label */
-  label:
-    'block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1',
+  label: `${designPrimitive.form.label} mb-1`,
   /** Helper text below a field */
-  hint:
-    'mt-1 text-xs text-neutral-500 dark:text-neutral-400',
+  hint: designPrimitive.form.hint,
   /** Error message below a field */
-  error:
-    'mt-1 text-xs text-error-600 dark:text-error-400',
+  error: designPrimitive.form.error,
 } as const

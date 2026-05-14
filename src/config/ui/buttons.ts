@@ -1,19 +1,14 @@
-/**
- * UI Button Configuration
- *
- * SSOT for button styles and variants.
- * Consistent button appearance across all pages.
- */
+import { designPrimitive } from '@/lib/design-system'
 
 export const BUTTONS = {
   // Base button styles (size + spacing)
-  base: 'inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2',
+  base: `${designPrimitive.buttonBase} ${designPrimitive.focus}`,
 
   // Sizes
   sizes: {
-    small: 'px-3 py-1.5 text-xs sm:text-sm',
-    medium: 'px-4 py-2 text-sm sm:text-base',
-    large: 'px-6 py-3 text-base sm:text-lg',
+    small: designPrimitive.buttonSize.sm,
+    medium: designPrimitive.buttonSize.default,
+    large: designPrimitive.buttonSize.lg,
   },
 
   // Variants (for marketplace)
@@ -41,20 +36,20 @@ export const BUTTONS = {
 
   // Generic app button primitive variants
   app: {
-    default: 'bg-primary-600 text-white hover:bg-primary-700',
-    primary: 'bg-info-600 text-white hover:bg-info-700',
-    outline: 'border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700',
-    outlineLight: 'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
-    secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600',
-    ghost: 'bg-transparent hover:bg-white/10 text-inherit',
-    destructive: 'bg-error-600 text-white hover:bg-error-700',
+    default: designPrimitive.button.default,
+    primary: designPrimitive.button.primary,
+    outline: designPrimitive.button.outline,
+    outlineLight: designPrimitive.button.outlineLight,
+    secondary: designPrimitive.button.secondary,
+    ghost: designPrimitive.button.ghost,
+    destructive: designPrimitive.button.destructive,
   },
 
   badges: {
-    default: 'border-transparent bg-primary-600 text-white hover:bg-primary-700',
-    secondary: 'border-transparent bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600',
-    destructive: 'border-transparent bg-error-600 text-white hover:bg-error-700',
-    outline: 'border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:text-neutral-300',
+    default: designPrimitive.badge.default,
+    secondary: designPrimitive.badge.secondary,
+    destructive: designPrimitive.badge.destructive,
+    outline: designPrimitive.badge.outline,
   },
 } as const
 

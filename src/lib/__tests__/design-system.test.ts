@@ -16,6 +16,7 @@ import {
   getBorderColor,
   getStatusColors,
   getButtonVariant,
+  designPrimitive,
 } from '../design-system'
 
 // ============================================================================
@@ -244,5 +245,30 @@ describe('getButtonVariant', () => {
       expect(result).toHaveProperty('text')
       expect(result).toHaveProperty('border')
     }
+  })
+})
+
+// ============================================================================
+// designPrimitive
+// ============================================================================
+
+describe('designPrimitive', () => {
+  it('exposes semantic primitive groups for app-wide styling', () => {
+    expect(designPrimitive).toHaveProperty('type')
+    expect(designPrimitive).toHaveProperty('surface')
+    expect(designPrimitive).toHaveProperty('button')
+    expect(designPrimitive).toHaveProperty('badge')
+    expect(designPrimitive).toHaveProperty('form')
+    expect(designPrimitive).toHaveProperty('table')
+  })
+
+  it('uses readable base text in shared body and form primitives', () => {
+    expect(designPrimitive.type.body).toContain('text-base')
+    expect(designPrimitive.form.input).toContain('text-base')
+    expect(designPrimitive.table.td).toContain('text-base')
+  })
+
+  it('keeps default button touch target at least 44px', () => {
+    expect(designPrimitive.buttonSize.default).toContain('min-h-[44px]')
   })
 })
