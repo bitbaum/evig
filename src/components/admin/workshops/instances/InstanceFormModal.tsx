@@ -2,6 +2,11 @@
 
 import { X, Loader2, Save } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData } from './types'
 import { LOCATIONS } from '@/config/org'
 
@@ -45,143 +50,107 @@ export function InstanceFormModal({
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
-              Workshop *
-            </label>
-            <select
+          <FormField label="Workshop" required htmlFor="instance-workshop">
+            <Select
+              id="instance-workshop"
               value={formData.workshopId}
               onChange={(e) => setFormData(prev => ({ ...prev, workshopId: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               disabled={!!editingInstance}
             >
               <option value="">Workshop auswählen...</option>
               {workshops.map(w => (
                 <option key={w.id} value={w.id}>{w.title}</option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormField>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Start *
-              </label>
-              <input
+            <FormField label="Start" required htmlFor="instance-start">
+              <Input
+                id="instance-start"
                 type="datetime-local"
                 value={formData.startDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, startDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Ende
-              </label>
-              <input
+            <FormField label="Ende" htmlFor="instance-end">
+              <Input
+                id="instance-end"
                 type="datetime-local"
                 value={formData.endDate}
                 onChange={(e) => setFormData(prev => ({ ...prev, endDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
-            </div>
+            </FormField>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
-              Ort
-            </label>
-            <input
+          <FormField label="Ort" htmlFor="instance-location">
+            <Input
+              id="instance-location"
               type="text"
               value={formData.location}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
               placeholder={`z.B. RevampIT, ${LOCATIONS.store.full}`}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
             />
-          </div>
+          </FormField>
 
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Leitung
-              </label>
-              <input
+            <FormField label="Leitung" htmlFor="instance-instructor">
+              <Input
+                id="instance-instructor"
                 type="text"
                 value={formData.instructor}
                 onChange={(e) => setFormData(prev => ({ ...prev, instructor: e.target.value }))}
                 placeholder="Name des Kursleiters"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
-            </div>
+            </FormField>
 
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Max. Teilnehmer
-              </label>
-              <input
+            <FormField label="Max. Teilnehmer" htmlFor="instance-max">
+              <Input
+                id="instance-max"
                 type="number"
                 value={formData.maxParticipants}
                 onChange={(e) => setFormData(prev => ({ ...prev, maxParticipants: e.target.value }))}
                 placeholder="Standard vom Workshop"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
               />
-            </div>
+            </FormField>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
-              Status
-            </label>
-            <select
+          <FormField label="Status" htmlFor="instance-status">
+            <Select
+              id="instance-status"
               value={formData.status}
               onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
             >
               <option value="scheduled">Geplant</option>
               <option value="cancelled">Abgesagt</option>
               <option value="completed">Abgeschlossen</option>
-            </select>
-          </div>
+            </Select>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">
-              Notizen
-            </label>
-            <textarea
+          <FormField label="Notizen">
+            <Textarea
               value={formData.notes}
               onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
               placeholder="Interne Notizen..."
               rows={3}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
             />
-          </div>
+          </FormField>
         </div>
 
         <div className="px-6 py-4 border-t border-neutral-200 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50"
-          >
+          <Button onClick={onClose} variant="outline">
             Abbrechen
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onSubmit}
             disabled={submitting || !formData.workshopId || !formData.startDate}
-            className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            variant="primary"
+            className="gap-2"
           >
-            {submitting ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Speichern...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                {editingInstance ? 'Speichern' : 'Erstellen'}
-              </>
-            )}
-          </button>
+            {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {submitting ? 'Speichern...' : (editingInstance ? 'Speichern' : 'Erstellen')}
+          </Button>
         </div>
       </div>
     </div>

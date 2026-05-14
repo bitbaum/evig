@@ -8,8 +8,13 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Save } from 'lucide-react';
+import { X, Save, Loader2 } from 'lucide-react';
 import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
 import {
   WORKSHOP_PROPOSAL_EDITABLE_FIELDS,
   type WorkshopProposalEditableField,
@@ -84,25 +89,23 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
     switch (config.type) {
       case 'textarea':
         return (
-          <textarea
+          <Textarea
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
-            rows={config.type === 'textarea' ? 4 : undefined}
+            rows={4}
             maxLength={'maxLength' in config ? config.maxLength : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
 
       case 'number':
         return (
-          <input
+          <Input
             type="number"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             min={'min' in config ? config.min : undefined}
             max={'max' in config ? config.max : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -110,10 +113,9 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
       case 'select':
         if (field === 'category') {
           return (
-            <select
+            <Select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             >
               <option value="">Wählen...</option>
               {WORKSHOP_CATEGORIES.map((cat) => (
@@ -121,14 +123,13 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
                   {cat.name}
                 </option>
               ))}
-            </select>
+            </Select>
           );
         } else if (field === 'level') {
           return (
-            <select
+            <Select
               value={value || ''}
               onChange={(e) => handleFieldChange(field, e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             >
               <option value="">Wählen...</option>
               {WORKSHOP_LEVELS.map((level) => (
@@ -136,32 +137,31 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
                   {level.name}
                 </option>
               ))}
-            </select>
+            </Select>
           );
         }
         return null;
 
-      case 'array':
+      case 'array': {
         // Display as multiline textarea, one item per line
         const arrayValue = Array.isArray(value) ? value.join('\n') : '';
         return (
-          <textarea
+          <Textarea
             value={arrayValue}
             onChange={(e) => handleArrayFieldChange(field, e.target.value)}
             rows={5}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             placeholder="Ein Eintrag pro Zeile"
           />
         );
+      }
 
       default: // text
         return (
-          <input
+          <Input
             type="text"
             value={value || ''}
             onChange={(e) => handleFieldChange(field, e.target.value)}
             maxLength={'maxLength' in config ? config.maxLength : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-info-500"
             required={'required' in config ? Boolean(config.required) : false}
           />
         );
@@ -194,16 +194,14 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
             (field) => {
               const config = WORKSHOP_PROPOSAL_EDITABLE_FIELDS[field];
               return (
-                <div key={field}>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
-                    {config.label}
-                    {('required' in config && config.required) && <span className="text-error-500 ml-1">*</span>}
-                  </label>
+                <FormField
+                  key={field}
+                  label={config.label}
+                  required={'required' in config ? Boolean(config.required) : false}
+                  hint={'help' in config ? config.help : undefined}
+                >
                   {renderField(field)}
-                  {('help' in config && config.help) && (
-                    <p className="mt-1 text-xs text-neutral-500">{config.help}</p>
-                  )}
-                </div>
+                </FormField>
               );
             }
           )}
@@ -211,30 +209,13 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-neutral-50 border-t px-6 py-4 flex justify-end gap-3">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
-            disabled={isSaving}
-          >
+          <Button onClick={onClose} variant="outline" disabled={isSaving}>
             Abbrechen
-          </button>
-          <button
-            onClick={handleSave}
-            className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:bg-neutral-400 disabled:cursor-not-allowed"
-            disabled={isSaving}
-          >
-            {isSaving ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                Speichert...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                Speichern
-              </>
-            )}
-          </button>
+          </Button>
+          <Button onClick={handleSave} variant="primary" disabled={isSaving} className="gap-2">
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+            {isSaving ? 'Speichert...' : 'Speichern'}
+          </Button>
         </div>
       </div>
     </div>
