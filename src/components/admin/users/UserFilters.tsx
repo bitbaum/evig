@@ -7,6 +7,8 @@
  */
 
 import { Search } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 
 interface UserFiltersProps {
   search: string
@@ -32,40 +34,32 @@ export function UserFilters({
         <div className="flex-1">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-            <input
+            <Input
               type="text"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Benutzer suchen..."
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
+              className="pl-10"
             />
           </div>
         </div>
 
         {/* Type Filter */}
         <div className="w-full sm:w-40">
-          <select
-            value={type}
-            onChange={(e) => onTypeChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
-          >
+          <Select value={type} onChange={(e) => onTypeChange(e.target.value)}>
             <option value="all">Alle Typen</option>
             <option value="staff">Staff</option>
             <option value="regular">Benutzer</option>
-          </select>
+          </Select>
         </div>
 
         {/* Verified Filter */}
         <div className="w-full sm:w-40">
-          <select
-            value={verified}
-            onChange={(e) => onVerifiedChange(e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
-          >
+          <Select value={verified} onChange={(e) => onVerifiedChange(e.target.value)}>
             <option value="all">Alle Status</option>
             <option value="yes">Verifiziert</option>
             <option value="no">Nicht verifiziert</option>
-          </select>
+          </Select>
         </div>
       </div>
     </div>

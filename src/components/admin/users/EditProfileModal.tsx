@@ -6,6 +6,8 @@
 
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Input } from '@/components/ui/input'
+import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
 import type { UserRow } from './types'
 
@@ -41,42 +43,31 @@ export function EditProfileModal({
       )}
 
       <div className="space-y-4">
-        <div>
-          <label htmlFor="edit-profile-name" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Name
-          </label>
-          <input
+        <FormField label="Name" htmlFor="edit-profile-name">
+          <Input
             id="edit-profile-name"
             type="text"
             value={editName}
             onChange={(e) => onNameChange(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500"
             placeholder="Name eingeben"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label htmlFor="edit-profile-email" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            E-Mail
-          </label>
-          <input
+        <FormField label="E-Mail" htmlFor="edit-profile-email">
+          <Input
             id="edit-profile-email"
             type="email"
             value={editEmail}
             onChange={(e) => onEmailChange(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500"
             placeholder="E-Mail eingeben"
           />
-        </div>
+        </FormField>
       </div>
 
       <div className="mt-6 flex justify-end gap-3">
-        <button
-          onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
-        >
+        <Button onClick={onClose} variant="outline" size="sm">
           Abbrechen
-        </button>
+        </Button>
         <Button
           onClick={onSave}
           disabled={isSaving}
