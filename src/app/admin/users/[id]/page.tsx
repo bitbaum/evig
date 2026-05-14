@@ -215,7 +215,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               </p>
               <Link
                 href={`/admin/team/${user.team_profile_id}`}
-                className="flex items-center gap-2 px-4 py-2 bg-info-600 hover:bg-info-700 text-white rounded-lg transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
               >
                 <ExternalLink className="w-4 h-4" />
                 Profil ansehen

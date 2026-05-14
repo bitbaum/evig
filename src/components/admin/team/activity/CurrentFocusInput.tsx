@@ -71,7 +71,7 @@ export function CurrentFocusInput({
               onChange={(e) => setFocus(e.target.value)}
               placeholder="Woran arbeitest du?"
               maxLength={200}
-              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
+              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave()

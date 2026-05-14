@@ -234,7 +234,7 @@ export function HelpRequestsPageClient({
           {!hasActiveFilters && (
             <button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 text-sm text-white bg-info-600 hover:bg-info-700 rounded-lg inline-flex items-center gap-2"
+              className="px-4 py-2 text-sm text-white bg-primary-600 hover:bg-primary-700 rounded-lg inline-flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
               Erste Anfrage erstellen

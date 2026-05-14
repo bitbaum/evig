@@ -21,7 +21,7 @@ export function SubmissionFilters({ filter, counts, onFilterChange }: Submission
             onClick={() => onFilterChange(status)}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               filter === status
-                ? 'bg-teal-600 text-white'
+                ? 'bg-primary-600 text-white'
                 : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-600'
             }`}
           >

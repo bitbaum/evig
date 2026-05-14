@@ -153,7 +153,7 @@ export function UserPermissionsEditor({
                   onClick={() => setGrantFullAccess(!grantFullAccess)}
                   className={`relative w-12 h-6 rounded-full transition-colors ${
                     grantFullAccess
-                      ? 'bg-info-600'
+                      ? 'bg-primary-600'
                       : 'bg-neutral-300 dark:bg-neutral-600'
                   }`}
                 >

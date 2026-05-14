@@ -91,7 +91,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
                     type="checkbox"
                     checked={daySchedule.enabled}
                     onChange={(e) => updateScheduleDay(day, 'enabled', e.target.checked)}
-                    className="h-4 w-4 rounded border-neutral-300 text-info-600 focus:ring-info-500"
+                    className="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                   />
                   {WEEKDAY_LABELS[day]}
                 </label>

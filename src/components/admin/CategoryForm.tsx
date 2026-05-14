@@ -265,7 +265,7 @@ export default function CategoryForm({
                       is_active: e.target.checked,
                     }))
                   }
-                  className="w-5 h-5 rounded border-neutral-300 text-teal-600 focus:ring-teal-500"
+                  className="w-5 h-5 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                 />
                 <label
                   htmlFor="is_active"

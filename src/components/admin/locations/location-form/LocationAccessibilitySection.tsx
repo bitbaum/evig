@@ -27,7 +27,7 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             id="wheelchair"
             checked={formData.accessibility_info.wheelchairAccessible}
             onChange={() => onAccessibilityChange('wheelchairAccessible', !formData.accessibility_info.wheelchairAccessible)}
-            className="mr-3 text-info-600 focus:ring-info-500"
+            className="mr-3 text-primary-600 focus:ring-primary-500"
           />
           <label htmlFor="wheelchair" className="text-sm font-medium text-neutral-700">
             Rollstuhlgerecht
@@ -40,7 +40,7 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             id="parking"
             checked={formData.accessibility_info.parkingAvailable}
             onChange={() => onAccessibilityChange('parkingAvailable', !formData.accessibility_info.parkingAvailable)}
-            className="mr-3 text-info-600 focus:ring-info-500"
+            className="mr-3 text-primary-600 focus:ring-primary-500"
           />
           <label htmlFor="parking" className="text-sm font-medium text-neutral-700">
             Parkplatz verfügbar
