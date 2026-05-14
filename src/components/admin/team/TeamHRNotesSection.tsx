@@ -1,6 +1,7 @@
 'use client'
 
 import { FileText, ChevronDown, ChevronRight } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
   hrNotes: string
@@ -32,12 +33,11 @@ export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Prop
 
       {isOpen && (
         <div className="p-6 pt-2 border-t border-warning-200 dark:border-warning-800">
-          <textarea
+          <Textarea
             value={hrNotes}
             onChange={(e) => onChange('hr_notes', e.target.value)}
             rows={4}
             placeholder="Vertrauliche HR-Notizen (nur für Super-Admins sichtbar)..."
-            className="w-full px-4 py-2 border border-warning-300 dark:border-warning-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
           />
           <p className="text-xs text-warning-700 dark:text-warning-400 mt-2">
             Diese Notizen sind nur für Super-Admins sichtbar.

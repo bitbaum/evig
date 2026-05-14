@@ -2,6 +2,9 @@
 
 import { Loader2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 interface RejectModalProps {
   rejectionReason: string
@@ -24,36 +27,30 @@ export function RejectModal({
         <Heading level={3} className="text-lg text-neutral-900 dark:text-white mb-4">
           Einreichung ablehnen
         </Heading>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-            Ablehnungsgrund *
-          </label>
-          <textarea
+        <FormField label="Ablehnungsgrund" required className="mb-4">
+          <Textarea
             value={rejectionReason}
             onChange={(e) => onReasonChange(e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             placeholder="Warum wird diese Einreichung abgelehnt?"
           />
-        </div>
+        </FormField>
         <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-          >
+          <Button onClick={onClose} variant="outline" className="flex-1">
             Abbrechen
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onConfirm}
             disabled={!rejectionReason || actionLoading !== null}
-            className="flex-1 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 disabled:opacity-50 transition-colors"
+            variant="destructive"
+            className="flex-1"
           >
             {actionLoading === 'reject' ? (
               <Loader2 className="w-4 h-4 animate-spin mx-auto" />
             ) : (
               'Ablehnen'
             )}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@
 
 import type { Workshop, InstanceFiltersState } from './types'
 import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 
 interface InstanceFiltersProps {
   filters: InstanceFiltersState
@@ -14,31 +16,31 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
     <div className="bg-white rounded-xl shadow-sm border p-6 mb-6">
       <div className="flex flex-wrap gap-4">
         <div className="flex-1 min-w-48">
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Workshop</label>
-          <select
-            value={filters.workshopId}
-            onChange={(e) => setFilters(prev => ({ ...prev, workshopId: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
-          >
-            <option value="">Alle Workshops</option>
-            {workshops.map(w => (
-              <option key={w.id} value={w.id}>{w.title}</option>
-            ))}
-          </select>
+          <FormField label="Workshop">
+            <Select
+              value={filters.workshopId}
+              onChange={(e) => setFilters(prev => ({ ...prev, workshopId: e.target.value }))}
+            >
+              <option value="">Alle Workshops</option>
+              {workshops.map(w => (
+                <option key={w.id} value={w.id}>{w.title}</option>
+              ))}
+            </Select>
+          </FormField>
         </div>
 
         <div className="flex-1 min-w-48">
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Status</label>
-          <select
-            value={filters.status}
-            onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500"
-          >
-            <option value="all">Alle</option>
-            <option value={WORKSHOP_INSTANCE_STATUS.SCHEDULED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.SCHEDULED]}</option>
-            <option value={WORKSHOP_INSTANCE_STATUS.CANCELLED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.CANCELLED]}</option>
-            <option value={WORKSHOP_INSTANCE_STATUS.COMPLETED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.COMPLETED]}</option>
-          </select>
+          <FormField label="Status">
+            <Select
+              value={filters.status}
+              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+            >
+              <option value="all">Alle</option>
+              <option value={WORKSHOP_INSTANCE_STATUS.SCHEDULED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.SCHEDULED]}</option>
+              <option value={WORKSHOP_INSTANCE_STATUS.CANCELLED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.CANCELLED]}</option>
+              <option value={WORKSHOP_INSTANCE_STATUS.COMPLETED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.COMPLETED]}</option>
+            </Select>
+          </FormField>
         </div>
 
         <div className="flex items-end">

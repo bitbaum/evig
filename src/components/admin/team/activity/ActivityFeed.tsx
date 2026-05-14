@@ -8,6 +8,8 @@
 
 import { useState } from 'react'
 import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import {
@@ -123,60 +125,54 @@ export function ActivityFeed({
           <div className="flex flex-col md:flex-row gap-4">
             {/* Source Type Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Typ
-              </label>
-              <select
-                value={filters.source_type || ''}
-                onChange={(e) => handleFilterChange('source_type', e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
-              >
-                <option value="">Alle Typen</option>
-                {Object.entries(ACTIVITY_SOURCE_LABELS).map(([key, label]) => (
-                  <option key={key} value={key}>
-                    {label}
-                  </option>
-                ))}
-              </select>
+              <FormField label="Typ">
+                <Select
+                  value={filters.source_type || ''}
+                  onChange={(e) => handleFilterChange('source_type', e.target.value)}
+                >
+                  <option value="">Alle Typen</option>
+                  {Object.entries(ACTIVITY_SOURCE_LABELS).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+              </FormField>
             </div>
 
             {/* Category Filter */}
             <div className="flex-1">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Kategorie
-              </label>
-              <select
-                value={filters.category || ''}
-                onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
-              >
-                <option value="">Alle Kategorien</option>
-                {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {ACTIVITY_CATEGORY_LABELS[cat as ActivityCategory]}
-                  </option>
-                ))}
-              </select>
+              <FormField label="Kategorie">
+                <Select
+                  value={filters.category || ''}
+                  onChange={(e) => handleFilterChange('category', e.target.value)}
+                >
+                  <option value="">Alle Kategorien</option>
+                  {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {ACTIVITY_CATEGORY_LABELS[cat as ActivityCategory]}
+                    </option>
+                  ))}
+                </Select>
+              </FormField>
             </div>
 
             {/* Person Filter */}
             {teamMembers.length > 0 && (
               <div className="flex-1">
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                  Person
-                </label>
-                <select
-                  value={filters.user_id || ''}
-                  onChange={(e) => handleFilterChange('user_id', e.target.value)}
-                  className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
-                >
-                  <option value="">Alle</option>
-                  {teamMembers.map((member) => (
-                    <option key={member.id} value={member.id}>
-                      {member.name || member.email}
-                    </option>
-                  ))}
-                </select>
+                <FormField label="Person">
+                  <Select
+                    value={filters.user_id || ''}
+                    onChange={(e) => handleFilterChange('user_id', e.target.value)}
+                  >
+                    <option value="">Alle</option>
+                    {teamMembers.map((member) => (
+                      <option key={member.id} value={member.id}>
+                        {member.name || member.email}
+                      </option>
+                    ))}
+                  </Select>
+                </FormField>
               </div>
             )}
 

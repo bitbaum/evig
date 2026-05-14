@@ -1,4 +1,5 @@
 import { Loader2, Wand2, Upload } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Props {
   inputMethod: string
@@ -70,7 +71,7 @@ export function ProtocolReprocessSection({
                 />
               </label>
             </div>
-            <textarea
+            <Textarea
               value={transcript}
               onChange={(e) => onTranscriptChange(e.target.value)}
               rows={6}
@@ -79,7 +80,7 @@ export function ProtocolReprocessSection({
                 : inputMethod === 'notes'
                 ? 'Überarbeitete Notizen einfügen...'
                 : 'Überarbeitetes Transkript einfügen...'}
-              className="w-full px-3 py-2 border border-warning-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-warning-500 font-mono text-sm"
+              className="font-mono text-sm"
             />
             <p className="text-xs text-warning-700">
               {transcript.length.toLocaleString()} Zeichen • mindestens {reprocessMinLength} Zeichen

@@ -2,6 +2,8 @@
 
 import { Users } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { FormField } from '@/components/ui/form-field'
 import type { LocationFormData } from './types'
 import { FACILITIES } from './types'
 
@@ -20,19 +22,15 @@ export function LocationFacilitiesSection({ formData, onFieldChange, onFacilityC
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Maximale Kapazität (Personen)
-          </label>
-          <input
+        <FormField label="Maximale Kapazität (Personen)">
+          <Input
             type="number"
             min="1"
             value={formData.max_capacity}
             onChange={(e) => onFieldChange('max_capacity', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="50"
           />
-        </div>
+        </FormField>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-neutral-700 mb-3">

@@ -8,6 +8,7 @@
 
 import { useState, useMemo } from 'react'
 import { Target, Loader2, Check, X } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import { useCurrentFocus } from './useActivityStream'
@@ -122,7 +123,7 @@ export function CurrentFocusInput({
 
       <div className="space-y-3">
         <div className="relative">
-          <input
+          <Input
             type="text"
             value={focus}
             onChange={(e) => {
@@ -131,7 +132,6 @@ export function CurrentFocusInput({
             }}
             placeholder="Woran arbeitest du gerade?"
             maxLength={200}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400">
             {focus.length}/200
@@ -162,8 +162,9 @@ export function CurrentFocusInput({
               <Button
                 onClick={handleSave}
                 disabled={saving || !hasChanges}
+                variant="primary"
                 size="sm"
-                className="gap-2 bg-info-600 hover:bg-info-700"
+                className="gap-2"
               >
                 {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                 Speichern

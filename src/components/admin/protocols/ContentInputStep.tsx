@@ -1,6 +1,10 @@
 import { useRef } from 'react'
 import { Loader2, Save, Wand2, Upload } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 import { MEETING_TYPE_TEMPLATES } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
 import { AUDIO_UPLOAD_LIMITS } from '@/lib/protocols/audio-validation'
@@ -66,23 +70,19 @@ export function ContentInputStep({
         </div>
 
         <div className="space-y-3">
-          <div>
-            <label htmlFor="whisper-model" className="block text-sm font-medium text-neutral-700 mb-1">
-              Whisper-Modell
-            </label>
-            <select
+          <FormField label="Whisper-Modell" htmlFor="whisper-model">
+            <Select
               id="whisper-model"
               value={whisperModel}
               onChange={(e) => onWhisperModelChange(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               {WHISPER_MODELS.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.label} ({m.size}) — {m.hint}
                 </option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormField>
 
           <label className="flex items-center gap-1.5 text-sm text-info-700 hover:text-info-900 cursor-pointer">
             <Upload className="w-3.5 h-3.5" />
@@ -183,7 +183,7 @@ export function ContentInputStep({
             className="hidden"
           />
         </div>
-        <textarea
+        <Textarea
           id="content"
           name="content"
           value={content}
@@ -191,7 +191,7 @@ export function ContentInputStep({
           rows={config.rows}
           maxLength={config.maxLength}
           placeholder={config.placeholder}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 font-mono text-sm"
+          className="font-mono text-sm"
         />
         <p className="mt-1 text-sm text-neutral-500">
           {content.length > 0
@@ -290,32 +290,32 @@ function SubmitFooter({
   return (
     <div className="flex justify-end gap-3 pt-4 border-t">
       {showCreateEmpty && onCreateEmpty ? (
-        <button
+        <Button
           type="button"
           onClick={onCreateEmpty}
           disabled={loading}
-          className="px-4 py-2 text-neutral-600 hover:text-neutral-900 border border-neutral-200 rounded-lg"
+          variant="outline"
+          size="sm"
+          className="gap-1"
         >
           {loading && !processing ? (
             <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
-            <><Save className="w-4 h-4 inline mr-1" /> Ohne Inhalt erstellen</>
+            <><Save className="w-4 h-4" /> Ohne Inhalt erstellen</>
           )}
-        </button>
+        </Button>
       ) : (
-        <button
-          type="button"
-          onClick={onBack}
-          className="px-4 py-2 text-neutral-600 hover:text-neutral-900 border border-neutral-200 rounded-lg"
-        >
+        <Button type="button" onClick={onBack} variant="outline" size="sm">
           Zurück
-        </button>
+        </Button>
       )}
-      <button
+      <Button
         type="button"
         onClick={onSubmit}
         disabled={loading || disabled}
-        className="flex items-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors disabled:opacity-50"
+        variant="primary"
+        size="sm"
+        className="gap-2"
       >
         {processing ? (
           <>
@@ -333,7 +333,7 @@ function SubmitFooter({
             {submitLabel}
           </>
         )}
-      </button>
+      </Button>
     </div>
   )
 }

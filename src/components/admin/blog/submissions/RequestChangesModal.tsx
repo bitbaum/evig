@@ -2,6 +2,9 @@
 
 import { Loader2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 interface RequestChangesModalProps {
   reviewNotes: string
@@ -24,36 +27,30 @@ export function RequestChangesModal({
         <Heading level={3} className="text-lg text-neutral-900 dark:text-white mb-4">
           Änderungen anfragen
         </Heading>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-            Welche Änderungen werden benötigt? *
-          </label>
-          <textarea
+        <FormField label="Welche Änderungen werden benötigt?" required className="mb-4">
+          <Textarea
             value={reviewNotes}
             onChange={(e) => onNotesChange(e.target.value)}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             placeholder="Beschreibe die gewünschten Änderungen..."
           />
-        </div>
+        </FormField>
         <div className="flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-          >
+          <Button onClick={onClose} variant="outline" className="flex-1">
             Abbrechen
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={onConfirm}
             disabled={!reviewNotes || actionLoading !== null}
-            className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 transition-colors"
+            variant="primary"
+            className="flex-1"
           >
             {actionLoading === 'request_changes' ? (
               <Loader2 className="w-4 h-4 animate-spin mx-auto" />
             ) : (
               'Senden'
             )}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

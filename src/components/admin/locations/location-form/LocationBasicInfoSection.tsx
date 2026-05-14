@@ -2,6 +2,9 @@
 
 import { MapPin } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import type { LocationFormData, SubmitResult } from './types'
 import { LOCATION_TYPES } from './types'
 
@@ -22,22 +25,18 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Name des Ortes *
-          </label>
-          <input
+        <FormField label="Name des Ortes" required className="md:col-span-2">
+          <Input
             type="text"
             value={formData.name}
             onChange={(e) => onFieldChange('name', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. Gemeinschaftszentrum Zürich-West"
             required
             aria-required="true"
             aria-invalid={hasError}
             aria-describedby={hasError ? 'location-form-error' : undefined}
           />
-        </div>
+        </FormField>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-neutral-700 mb-3">
@@ -69,18 +68,14 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
           </div>
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Beschreibung
-          </label>
-          <textarea
+        <FormField label="Beschreibung" className="md:col-span-2">
+          <Textarea
             value={formData.description}
             onChange={(e) => onFieldChange('description', e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="Beschreibe den Ort, seine Ausstattung und besondere Merkmale..."
           />
-        </div>
+        </FormField>
       </div>
     </div>
   )

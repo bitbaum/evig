@@ -2,6 +2,9 @@
 
 import { CheckCircle } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import type { LocationFormData } from './types'
 
 interface Props {
@@ -44,31 +47,23 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
           </label>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Öffentlicher Verkehr
-          </label>
-          <input
+        <FormField label="Öffentlicher Verkehr">
+          <Input
             type="text"
             value={formData.accessibility_info.publicTransport}
             onChange={(e) => onAccessibilityChange('publicTransport', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. 5 Min. zu Fuss zur Tramhaltestelle"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Zusätzliche Informationen
-          </label>
-          <textarea
+        <FormField label="Zusätzliche Informationen">
+          <Textarea
             value={formData.accessibility_info.additionalInfo}
             onChange={(e) => onAccessibilityChange('additionalInfo', e.target.value)}
             rows={2}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="z.B. Rampe vorhanden, Aufzug verfügbar, etc."
           />
-        </div>
+        </FormField>
       </div>
     </div>
   )
