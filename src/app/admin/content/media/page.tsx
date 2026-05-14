@@ -56,7 +56,7 @@ export default async function AdminMediaPage() {
             </p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
+        <button className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
           <Upload className="w-5 h-5" />
           Hochladen
         </button>
@@ -130,7 +130,7 @@ export default async function AdminMediaPage() {
             <input
               type="text"
               placeholder="Medien suchen..."
-              className="w-full pl-10 pr-4 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
 
@@ -144,7 +144,7 @@ export default async function AdminMediaPage() {
             </button>
 
             <div className="flex border border-neutral-200 dark:border-neutral-600 rounded-lg overflow-hidden">
-              <button className="p-2 bg-teal-50 dark:bg-teal-900/30 text-teal-600">
+              <button className="p-2 bg-primary-50 dark:bg-primary-900/30 text-primary-600">
                 <Grid className="w-4 h-4" />
               </button>
               <button className="p-2 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400">

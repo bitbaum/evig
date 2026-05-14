@@ -3,6 +3,8 @@
 import { Shield, Send, X, Check } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { useFormHandler } from '@/hooks/useFormHandler'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
 
 interface Section {
@@ -132,11 +134,8 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
       </div>
 
       {/* Reason */}
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-          Begründung
-        </label>
-        <textarea
+      <FormField label="Begründung">
+        <Textarea
           value={form.data.reason}
           onChange={e => form.updateField('reason', e.target.value)}
           placeholder="Warum benötigst du Zugriff auf diese Bereiche?"
@@ -144,9 +143,8 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           aria-required="true"
           aria-invalid={!!form.error}
           aria-describedby={form.error ? 'permission-form-error' : undefined}
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500 focus:border-transparent"
         />
-      </div>
+      </FormField>
 
       {/* Error */}
       {form.error && (
