@@ -22,6 +22,7 @@ import {
   Trash2,
   Edit,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { Submission, SubmissionAction } from './types'
 
 interface SubmissionDetailProps {
@@ -144,19 +145,21 @@ export function SubmissionDetail({
       {/* Actions: pending */}
       {submission.status === APPROVAL_STATUS.PENDING && (
         <div className="space-y-3">
-          <button
+          <Button
             onClick={onShowEditModal}
             disabled={actionLoading !== null}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50 transition-colors"
+            variant="primary"
+            className="w-full gap-2"
           >
             <Edit className="w-4 h-4" />
             Bearbeiten
-          </button>
+          </Button>
           <div className="grid grid-cols-2 gap-3">
-            <button
+            <Button
               onClick={() => onAction('publish', submission.id)}
               disabled={actionLoading !== null}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 transition-colors"
+              variant="primary"
+              className="gap-2"
             >
               {actionLoading === 'publish' ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -164,11 +167,12 @@ export function SubmissionDetail({
                 <Send className="w-4 h-4" />
               )}
               Veröffentlichen
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => onAction('approve', submission.id)}
               disabled={actionLoading !== null}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+              variant="primary"
+              className="gap-2"
             >
               {actionLoading === 'approve' ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -176,35 +180,38 @@ export function SubmissionDetail({
                 <Check className="w-4 h-4" />
               )}
               Genehmigen
-            </button>
+            </Button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <button
+            <Button
               onClick={onShowChangesModal}
               disabled={actionLoading !== null}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/50 disabled:opacity-50 transition-colors"
+              variant="secondary"
+              className="gap-2"
             >
               <MessageSquare className="w-4 h-4" />
               Änderungen anfragen
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={onShowRejectModal}
               disabled={actionLoading !== null}
-              className="flex items-center justify-center gap-2 px-4 py-2 bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300 rounded-lg hover:bg-error-200 dark:hover:bg-error-900/50 disabled:opacity-50 transition-colors"
+              variant="destructive"
+              className="gap-2"
             >
               <X className="w-4 h-4" />
               Ablehnen
-            </button>
+            </Button>
           </div>
         </div>
       )}
 
       {/* Actions: approved */}
       {submission.status === APPROVAL_STATUS.APPROVED && (
-        <button
+        <Button
           onClick={() => onAction('publish', submission.id)}
           disabled={actionLoading !== null}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 transition-colors"
+          variant="primary"
+          className="w-full gap-2"
         >
           {actionLoading === 'publish' ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -212,19 +219,21 @@ export function SubmissionDetail({
             <Send className="w-4 h-4" />
           )}
           Jetzt veröffentlichen
-        </button>
+        </Button>
       )}
 
       {/* Actions: published */}
       {submission.status === APPROVAL_STATUS.PUBLISHED && submission.slug && (
-        <Link
+        <Button
+          as={Link}
           href={`/blog/${submission.slug}`}
           target="_blank"
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
+          variant="primary"
+          className="w-full gap-2"
         >
           <ExternalLink className="w-4 h-4" />
           Beitrag ansehen
-        </Link>
+        </Button>
       )}
 
       {/* Delete */}
