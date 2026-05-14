@@ -10,6 +10,10 @@ import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 import {
   ACTIVITY_UPDATE_TYPE_OPTIONS,
   VISIBILITY_OPTIONS,
@@ -68,30 +72,23 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Type */}
-        <div>
-          <label htmlFor="activity-type" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Art der Aktivität
-          </label>
-          <select
+        <FormField label="Art der Aktivität" htmlFor="activity-type">
+          <Select
             id="activity-type"
             value={updateType}
             onChange={(e) => setUpdateType(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             {ACTIVITY_UPDATE_TYPE_OPTIONS.map((type) => (
               <option key={type} value={type}>
                 {ACTIVITY_UPDATE_TYPE_LABELS[type as ActivityUpdateType]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
         {/* Title */}
-        <div>
-          <label htmlFor="activity-title" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Titel <span className="text-error-500">*</span>
-          </label>
-          <input
+        <FormField label="Titel" required htmlFor="activity-title">
+          <Input
             id="activity-title"
             type="text"
             value={title}
@@ -102,36 +99,28 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'activity-modal-error' : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
-        </div>
+        </FormField>
 
         {/* Description */}
-        <div>
-          <label htmlFor="activity-description" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Beschreibung
-          </label>
-          <textarea
+        <FormField label="Beschreibung" htmlFor="activity-description">
+          <Textarea
             id="activity-description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Weitere Details (optional)"
             maxLength={2000}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent resize-none"
+            className="resize-none"
           />
-        </div>
+        </FormField>
 
         {/* Category */}
-        <div>
-          <label htmlFor="activity-category" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Kategorie
-          </label>
-          <select
+        <FormField label="Kategorie" htmlFor="activity-category">
+          <Select
             id="activity-category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Keine Kategorie</option>
             {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
@@ -139,27 +128,23 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
                 {ACTIVITY_CATEGORY_LABELS[cat as ActivityCategory]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
         {/* Visibility */}
-        <div>
-          <label htmlFor="activity-visibility" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Sichtbarkeit
-          </label>
-          <select
+        <FormField label="Sichtbarkeit" htmlFor="activity-visibility">
+          <Select
             id="activity-visibility"
             value={visibility}
             onChange={(e) => setVisibility(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             {VISIBILITY_OPTIONS.map((vis) => (
               <option key={vis} value={vis}>
                 {VISIBILITY_LABELS[vis as VisibilityLevel]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
         {/* Actions */}
         <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">

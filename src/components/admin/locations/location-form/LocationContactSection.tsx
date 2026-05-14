@@ -2,6 +2,8 @@
 
 import { Phone } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { FormField } from '@/components/ui/form-field'
 import type { LocationFormData } from './types'
 
 interface Props {
@@ -18,44 +20,35 @@ export function LocationContactSection({ formData, onFieldChange }: Props) {
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Kontaktperson
-          </label>
-          <input
+        <FormField label="Kontaktperson" htmlFor="contact-name">
+          <Input
+            id="contact-name"
             type="text"
             value={formData.contact_name}
             onChange={(e) => onFieldChange('contact_name', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="Max Mustermann"
           />
-        </div>
+        </FormField>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            Telefonnummer
-          </label>
-          <input
+        <FormField label="Telefonnummer" htmlFor="contact-phone">
+          <Input
+            id="contact-phone"
             type="tel"
             value={formData.contact_phone}
             onChange={(e) => onFieldChange('contact_phone', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="+41 79 123 45 67"
           />
-        </div>
+        </FormField>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 mb-2">
-            E-Mail-Adresse
-          </label>
-          <input
+        <FormField label="E-Mail-Adresse" htmlFor="contact-email" className="md:col-span-2">
+          <Input
+            id="contact-email"
             type="email"
             value={formData.contact_email}
             onChange={(e) => onFieldChange('contact_email', e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 focus:border-transparent"
             placeholder="kontakt@ort.ch"
           />
-        </div>
+        </FormField>
       </div>
     </div>
   )
