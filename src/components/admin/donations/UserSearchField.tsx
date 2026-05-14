@@ -1,4 +1,5 @@
 import { Search, User, X } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import type { UserResult } from './types'
 
 interface Props {
@@ -48,11 +49,11 @@ export function UserSearchField({
         <div className="relative">
           <div className="flex items-center">
             <Search className="absolute left-3 w-4 h-4 text-neutral-500" />
-            <input
+            <Input
               type="text"
               value={userSearch}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 border border-neutral-300 rounded-lg"
+              className="pl-9"
               placeholder="Benutzer suchen (Name oder E-Mail)..."
             />
             {searchingUsers && (

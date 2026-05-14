@@ -2,6 +2,9 @@
 
 import { Link } from '@/i18n/navigation'
 import { Search, Plus } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import type { TabType, FilterStatus } from './types'
 
 interface ProductFilterBarProps {
@@ -34,52 +37,47 @@ export function ProductFilterBar({
           {/* Search */}
           <div className="relative flex-1 max-w-md">
             <Search className="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-            <input
+            <Input
               type="text"
               placeholder="Produkte suchen..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
+              className="pl-10"
             />
           </div>
 
           {/* Filters - only show status filter for inventory tab */}
           <div className="flex gap-2">
             {activeTab === 'inventory' && (
-              <select
+              <Select
                 value={filterStatus}
                 onChange={(e) => onFilterStatusChange(e.target.value as FilterStatus)}
-                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-info-500"
               >
                 <option value="all">Alle Status</option>
                 <option value="published">Veröffentlicht</option>
                 <option value="draft">Entwurf</option>
-              </select>
+              </Select>
             )}
 
-            <select
+            <Select
               value={filterCategory}
               onChange={(e) => onFilterCategoryChange(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               <option value="all">Alle Kategorien</option>
               <option value="Laptops">Laptops</option>
               <option value="Desktops">Desktops</option>
               <option value="Monitore">Monitore</option>
               <option value="Zubehör">Zubehör</option>
-            </select>
+            </Select>
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex gap-2">
           {selectedCount > 0 && (
-            <button
-              onClick={onBulkDelete}
-              className="px-4 py-2 text-error-600 border border-error-200 rounded-lg hover:bg-error-50 transition-colors"
-            >
+            <Button onClick={onBulkDelete} variant="destructive" size="sm">
               {selectedCount} löschen
-            </button>
+            </Button>
           )}
           {activeTab === 'inventory' && (
             <Link

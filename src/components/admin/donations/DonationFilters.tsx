@@ -5,6 +5,7 @@ import {
   type DonationType,
   type DonationStatus,
 } from '@/config/donations'
+import { Select } from '@/components/ui/select'
 import type { DonationFiltersState } from './types'
 
 interface Props {
@@ -20,26 +21,24 @@ export function DonationFilters({ filters, onFiltersChange }: Props) {
           <Filter className="w-5 h-5 text-neutral-500" />
           <span className="text-sm font-medium text-neutral-700">Filter:</span>
         </div>
-        <select
+        <Select
           value={filters.donation_type}
           onChange={(e) => onFiltersChange({ ...filters, donation_type: e.target.value as DonationType | 'all' })}
-          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm"
         >
           <option value="all">Alle Typen</option>
           {getDonationTypeOptions().map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
-        </select>
-        <select
+        </Select>
+        <Select
           value={filters.status}
           onChange={(e) => onFiltersChange({ ...filters, status: e.target.value as DonationStatus | 'all' })}
-          className="px-3 py-2 border border-neutral-300 rounded-lg text-sm"
         >
           <option value="all">Alle Status</option>
           {getDonationStatusOptions().map(opt => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
           ))}
-        </select>
+        </Select>
       </div>
     </div>
   )

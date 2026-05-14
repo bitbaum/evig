@@ -1,5 +1,6 @@
 import { Filter, Search } from 'lucide-react'
 import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status'
+import { Input } from '@/components/ui/input'
 import type { ApplicationStatus } from './types'
 
 interface Props {
@@ -44,12 +45,12 @@ export function ApplicationFilters({ selectedStatus, searchQuery, onStatusChange
 
         <div className="relative">
           <Search className="w-5 h-5 text-neutral-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-          <input
+          <Input
             type="text"
             placeholder="Suchen nach Name, E-Mail oder Beschreibung..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            className="pl-10"
           />
         </div>
       </div>

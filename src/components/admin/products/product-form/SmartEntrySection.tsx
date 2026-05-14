@@ -1,6 +1,7 @@
 'use client'
 
 import { Sparkles, Loader2, Mic, Camera } from 'lucide-react'
+import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 
@@ -30,7 +31,7 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
 
       <div className="flex gap-3">
         <div className="flex-1 relative">
-          <input
+          <Input
             type="text"
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
@@ -41,7 +42,6 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
               }
             }}
             placeholder="z.B. Dell Latitude e7470, ThinkPad T480, MacBook Pro 2019..."
-            className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             disabled={isLoading}
           />
         </div>
