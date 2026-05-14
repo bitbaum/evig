@@ -11,6 +11,10 @@ import type { DonationFormData, UserResult } from './types'
 import { UserSearchField } from './UserSearchField'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 
 interface Props {
   formType: DonationType
@@ -85,49 +89,46 @@ export function DonationFormModal({
             {/* Monetary Fields */}
             {formType === DONATION_TYPES.MONETARY && (
               <>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Betrag (CHF) *</label>
-                  <input
+                <FormField label="Betrag (CHF)" required htmlFor="donation-amount">
+                  <Input
+                    id="donation-amount"
                     type="number"
                     step="0.01"
                     min="1"
                     value={formData.amount_chf}
                     onChange={(e) => updateField('amount_chf', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                     placeholder="100.00"
                     required
                     aria-required="true"
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Zahlungsmethode</label>
-                  <select
+                </FormField>
+                <FormField label="Zahlungsmethode" htmlFor="donation-payment-method">
+                  <Select
+                    id="donation-payment-method"
                     value={formData.payment_method}
                     onChange={(e) => updateField('payment_method', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                   >
                     <option value="">-- Wählen --</option>
                     {getPaymentMethodOptions().map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
-                  </select>
-                </div>
+                  </Select>
+                </FormField>
               </>
             )}
 
             {/* Device Fields */}
             {formType === DONATION_TYPES.DEVICE && (
               <>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Gerätekategorie *</label>
-                  <select
+                <FormField label="Gerätekategorie" required htmlFor="device-category">
+                  <Select
+                    id="device-category"
                     value={formData.device_category}
                     onChange={(e) => {
                       const cat = e.target.value
                       const estimated = cat ? (getEstimatedValue(cat) / 100).toFixed(2) : ''
                       onFormDataChange({ ...formData, device_category: cat, estimated_value_chf: estimated })
                     }}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                     required
                     aria-required="true"
                   >
@@ -135,65 +136,59 @@ export function DonationFormModal({
                     {getDeviceCategoryOptions().map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
-                  </select>
-                </div>
+                  </Select>
+                </FormField>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">Marke</label>
-                    <input
+                  <FormField label="Marke" htmlFor="device-brand">
+                    <Input
+                      id="device-brand"
                       type="text"
                       value={formData.device_brand}
                       onChange={(e) => updateField('device_brand', e.target.value)}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                       placeholder="z.B. Lenovo"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">Modell</label>
-                    <input
+                  </FormField>
+                  <FormField label="Modell" htmlFor="device-model">
+                    <Input
+                      id="device-model"
                       type="text"
                       value={formData.device_model}
                       onChange={(e) => updateField('device_model', e.target.value)}
-                      className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                       placeholder="z.B. ThinkPad T480"
                     />
-                  </div>
+                  </FormField>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Zustand</label>
-                  <select
+                <FormField label="Zustand" htmlFor="device-condition">
+                  <Select
+                    id="device-condition"
                     value={formData.device_condition}
                     onChange={(e) => updateField('device_condition', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                   >
                     <option value="">-- Wählen --</option>
                     {getDeviceConditionOptions().map(opt => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
                     ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Beschreibung</label>
-                  <textarea
+                  </Select>
+                </FormField>
+                <FormField label="Beschreibung">
+                  <Textarea
                     value={formData.device_description}
                     onChange={(e) => updateField('device_description', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                     rows={2}
                     placeholder="Details zum Gerät..."
                   />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1">Geschätzter Wert (CHF)</label>
-                  <input
+                </FormField>
+                <FormField label="Geschätzter Wert (CHF)" htmlFor="device-estimated-value">
+                  <Input
+                    id="device-estimated-value"
                     type="number"
                     step="0.01"
                     min="0"
                     value={formData.estimated_value_chf}
                     onChange={(e) => updateField('estimated_value_chf', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                     placeholder="50.00"
                   />
-                </div>
+                </FormField>
               </>
             )}
 
@@ -211,40 +206,32 @@ export function DonationFormModal({
             />
 
             {/* Manual Donor Info */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                Name des Spenders {selectedUser && <span className="text-neutral-400">(überschreibt Benutzer)</span>}
-              </label>
-              <input
+            <FormField label={<>Name des Spenders {selectedUser && <span className="text-neutral-400 font-normal">(überschreibt Benutzer)</span>}</>} htmlFor="donor-name">
+              <Input
+                id="donor-name"
                 type="text"
                 value={formData.donor_name}
                 onChange={(e) => updateField('donor_name', e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                 placeholder={selectedUser ? selectedUser.name || 'Kein Name' : 'Max Muster'}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">
-                E-Mail des Spenders {selectedUser && <span className="text-neutral-400">(überschreibt Benutzer)</span>}
-              </label>
-              <input
+            </FormField>
+            <FormField label={<>E-Mail des Spenders {selectedUser && <span className="text-neutral-400 font-normal">(überschreibt Benutzer)</span>}</>} htmlFor="donor-email">
+              <Input
+                id="donor-email"
                 type="email"
                 value={formData.donor_email}
                 onChange={(e) => updateField('donor_email', e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                 placeholder={selectedUser ? selectedUser.email : 'max@example.com'}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">Notizen</label>
-              <textarea
+            </FormField>
+            <FormField label="Notizen">
+              <Textarea
                 value={formData.notes}
                 onChange={(e) => updateField('notes', e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
                 rows={2}
                 placeholder="Interne Notizen..."
               />
-            </div>
+            </FormField>
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"

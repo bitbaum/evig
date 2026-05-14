@@ -10,6 +10,10 @@ import { useState } from 'react'
 import { Loader2, Users, User } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 import {
   HELP_REQUEST_URGENCY_OPTIONS,
   ACTIVITY_CATEGORY_OPTIONS,
@@ -79,11 +83,9 @@ export function CreateHelpRequestModal({
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Title */}
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Wobei brauchst du Hilfe? <span className="text-error-500">*</span>
-          </label>
-          <input
+        <FormField label="Wobei brauchst du Hilfe?" required htmlFor="help-request-title">
+          <Input
+            id="help-request-title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -93,24 +95,20 @@ export function CreateHelpRequestModal({
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'help-request-error' : undefined}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           />
-        </div>
+        </FormField>
 
         {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Details
-          </label>
-          <textarea
+        <FormField label="Details">
+          <Textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Beschreibe das Problem genauer (optional)"
             maxLength={2000}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent resize-none"
+            className="resize-none"
           />
-        </div>
+        </FormField>
 
         {/* Target type */}
         <div>
@@ -147,14 +145,11 @@ export function CreateHelpRequestModal({
 
         {/* Target user (if not broadcast) */}
         {!isBroadcast && (
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-              Person auswählen
-            </label>
-            <select
+          <FormField label="Person auswählen" htmlFor="help-request-target">
+            <Select
+              id="help-request-target"
               value={targetUserId}
               onChange={(e) => setTargetUserId(e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
             >
               <option value="">Wähle eine Person...</option>
               {teamMembers.map((member) => (
@@ -162,37 +157,31 @@ export function CreateHelpRequestModal({
                   {member.user_name || member.user_email}
                 </option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormField>
         )}
 
         {/* Urgency */}
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Dringlichkeit
-          </label>
-          <select
+        <FormField label="Dringlichkeit" htmlFor="help-request-urgency">
+          <Select
+            id="help-request-urgency"
             value={urgency}
             onChange={(e) => setUrgency(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
               <option key={urg} value={urg}>
                 {HELP_REQUEST_URGENCY_LABELS[urg as HelpRequestUrgency]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
         {/* Category */}
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Kategorie
-          </label>
-          <select
+        <FormField label="Kategorie" htmlFor="help-request-category">
+          <Select
+            id="help-request-category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-info-500 focus:border-transparent"
           >
             <option value="">Keine Kategorie</option>
             {ACTIVITY_CATEGORY_OPTIONS.map((cat) => (
@@ -200,8 +189,8 @@ export function CreateHelpRequestModal({
                 {ACTIVITY_CATEGORY_LABELS[cat as ActivityCategory]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
         {/* Actions */}
         <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">

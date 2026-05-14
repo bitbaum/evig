@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 
 export interface FormFieldProps {
-  label?: string
+  label?: ReactNode
   hint?: string
   error?: string
   required?: boolean
