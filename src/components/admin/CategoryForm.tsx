@@ -13,6 +13,10 @@ import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import type { CategoryFormData } from '@/hooks/useBlogCategories'
 import { DEFAULT_CATEGORY_COLOR, UI_COLOR_PALETTE } from '@/config/ui-colors'
 import { generateSlug } from '@/lib/utils/slug'
@@ -99,23 +103,25 @@ export default function CategoryForm({
         </div>
         <div className="flex items-center gap-3">
           {isEdit && (
-            <button
+            <Button
               onClick={() => setConfirmDelete(true)}
               disabled={deleting}
-              className="inline-flex items-center gap-2 bg-error-100 text-error-700 hover:bg-error-200 dark:bg-error-900/30 dark:text-error-400 dark:hover:bg-error-900/50 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              variant="destructive"
+              className="flex items-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
               {deleting ? 'Löschen...' : 'Löschen'}
-            </button>
+            </Button>
           )}
-          <button
+          <Button
             onClick={handleSubmit}
             disabled={saving || !formData.name || !formData.slug}
-            className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+            variant="primary"
+            className="flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
             {saving ? 'Speichern...' : 'Speichern'}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -136,29 +142,24 @@ export default function CategoryForm({
         <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* Name */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                Name *
-              </label>
-              <input
+            <FormField label="Name" required htmlFor="category-name">
+              <Input
+                id="category-name"
                 type="text"
                 value={formData.name}
                 onChange={(e) => updateName(e.target.value)}
                 placeholder="z.B. Nachhaltigkeit"
-                className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
                 required
                 aria-required="true"
                 aria-invalid={!!error}
                 aria-describedby={error ? 'category-form-error' : undefined}
               />
-            </div>
+            </FormField>
 
             {/* Slug */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                Slug *
-              </label>
-              <input
+            <FormField label="Slug" required htmlFor="category-slug" hint="URL-freundlicher Name (automatisch generiert)">
+              <Input
+                id="category-slug"
                 type="text"
                 value={formData.slug}
                 onChange={(e) => {
@@ -166,23 +167,17 @@ export default function CategoryForm({
                   setFormData((prev) => ({ ...prev, slug: e.target.value }))
                 }}
                 placeholder="z.B. nachhaltigkeit"
-                className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white font-mono text-sm"
+                className="font-mono text-sm"
                 required
                 aria-required="true"
                 aria-invalid={!!error}
                 aria-describedby={error ? 'category-form-error' : undefined}
               />
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                URL-freundlicher Name (automatisch generiert)
-              </p>
-            </div>
+            </FormField>
 
             {/* Description */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                Beschreibung
-              </label>
-              <textarea
+            <FormField label="Beschreibung" className="md:col-span-2">
+              <Textarea
                 value={formData.description}
                 onChange={(e) =>
                   setFormData((prev) => ({
@@ -192,9 +187,9 @@ export default function CategoryForm({
                 }
                 placeholder="Kurze Beschreibung der Kategorie..."
                 rows={3}
-                className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white resize-none"
+                className="resize-none"
               />
-            </div>
+            </FormField>
 
             {/* Color */}
             <div>
@@ -211,13 +206,13 @@ export default function CategoryForm({
                     }
                     className="w-10 h-10 rounded cursor-pointer border-0"
                   />
-                  <input
+                  <Input
                     type="text"
                     value={formData.color}
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, color: e.target.value }))
                     }
-                    className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white font-mono text-sm"
+                    className="flex-1 font-mono text-sm"
                     placeholder={DEFAULT_CATEGORY_COLOR}
                   />
                 </div>
@@ -244,11 +239,9 @@ export default function CategoryForm({
 
             {/* Sort Order & Active Status */}
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                  Sortierung
-                </label>
-                <input
+              <FormField label="Sortierung" htmlFor="sort-order" hint="Niedrigere Zahlen erscheinen zuerst">
+                <Input
+                  id="sort-order"
                   type="number"
                   value={formData.sort_order}
                   onChange={(e) =>
@@ -258,12 +251,8 @@ export default function CategoryForm({
                     }))
                   }
                   min={0}
-                  className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
                 />
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
-                  Niedrigere Zahlen erscheinen zuerst
-                </p>
-              </div>
+              </FormField>
 
               <div className="flex items-center gap-3">
                 <input
