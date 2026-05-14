@@ -9,6 +9,9 @@ import {
   type EmploymentType,
 } from '@/config/team'
 import type { TeamProfileFormState } from './useTeamProfileForm'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 
 interface Props {
   form: TeamProfileFormState
@@ -18,27 +21,21 @@ interface Props {
 export function TeamBasicInfoSection({ form, onChange }: Props) {
   return (
     <div className="grid md:grid-cols-2 gap-4">
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Position
-        </label>
-        <input
+      <FormField label="Position" htmlFor="position">
+        <Input
           type="text"
+          id="position"
           value={form.position}
           onChange={(e) => onChange('position', e.target.value)}
           placeholder="z.B. Techniker, Werkstattleiter"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Abteilung
-        </label>
-        <select
+      <FormField label="Abteilung" htmlFor="department">
+        <Select
+          id="department"
           value={form.department}
           onChange={(e) => onChange('department', e.target.value)}
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         >
           <option value="">Keine Abteilung</option>
           {DEPARTMENT_OPTIONS.map(dept => (
@@ -46,17 +43,14 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
               {DEPARTMENT_LABELS[dept as Department]}
             </option>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Beschäftigungsart
-        </label>
-        <select
+      <FormField label="Beschäftigungsart" htmlFor="employment_type">
+        <Select
+          id="employment_type"
           value={form.employment_type}
           onChange={(e) => onChange('employment_type', e.target.value)}
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         >
           <option value="">Auswählen...</option>
           {EMPLOYMENT_TYPE_OPTIONS.map(type => (
@@ -64,35 +58,29 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
               {EMPLOYMENT_TYPE_LABELS[type as EmploymentType]}
             </option>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Startdatum
-        </label>
-        <input
+      <FormField label="Startdatum" htmlFor="start_date">
+        <Input
           type="date"
+          id="start_date"
           value={form.start_date}
           onChange={(e) => onChange('start_date', e.target.value)}
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Vertragsstunden (pro Woche)
-        </label>
-        <input
+      <FormField label="Vertragsstunden (pro Woche)" htmlFor="contract_hours">
+        <Input
           type="number"
+          id="contract_hours"
           min="0"
           max="100"
           value={form.contract_hours}
           onChange={(e) => onChange('contract_hours', e.target.value)}
           placeholder="z.B. 20"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
       <div>
         <label className="flex items-center gap-2 text-sm font-medium text-neutral-700 dark:text-neutral-300">

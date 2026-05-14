@@ -3,6 +3,9 @@
 import { X, Plus } from 'lucide-react'
 import { ALL_SKILL_SUGGESTIONS } from '@/config/team'
 import type { TeamProfileFormState } from './useTeamProfileForm'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 
 interface Props {
   form: TeamProfileFormState
@@ -41,11 +44,8 @@ export function TeamTalentSection({
 
   return (
     <div className="space-y-4">
-      {/* Skills */}
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Fähigkeiten
-        </label>
+      {/* Skills — combobox with autocomplete overlay */}
+      <FormField label="Fähigkeiten">
         <div className="flex flex-wrap gap-2 mb-2">
           {form.skills.map(skill => (
             <span
@@ -60,7 +60,7 @@ export function TeamTalentSection({
           ))}
         </div>
         <div className="relative">
-          <input
+          <Input
             type="text"
             value={skillInput}
             onChange={(e) => {
@@ -76,7 +76,6 @@ export function TeamTalentSection({
               }
             }}
             placeholder="Fähigkeit hinzufügen..."
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
           {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
             <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg">
@@ -93,13 +92,10 @@ export function TeamTalentSection({
             </div>
           )}
         </div>
-      </div>
+      </FormField>
 
       {/* Interests */}
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Interessen
-        </label>
+      <FormField label="Interessen">
         <div className="flex flex-wrap gap-2 mb-2">
           {form.interests.map(interest => (
             <span
@@ -114,7 +110,7 @@ export function TeamTalentSection({
           ))}
         </div>
         <div className="flex gap-2">
-          <input
+          <Input
             type="text"
             value={interestInput}
             onChange={(e) => onSetInterestInput(e.target.value)}
@@ -125,7 +121,7 @@ export function TeamTalentSection({
               }
             }}
             placeholder="Interesse hinzufügen..."
-            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
+            className="flex-1"
           />
           <button
             type="button"
@@ -135,40 +131,37 @@ export function TeamTalentSection({
             <Plus className="w-5 h-5" />
           </button>
         </div>
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Ziele</label>
-        <textarea
+      <FormField label="Ziele" htmlFor="goals">
+        <Textarea
+          id="goals"
           value={form.goals}
           onChange={(e) => onChange('goals', e.target.value)}
           rows={3}
           placeholder="Was möchte die Person erreichen?"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Stärken</label>
-        <textarea
+      <FormField label="Stärken" htmlFor="strengths">
+        <Textarea
+          id="strengths"
           value={form.strengths}
           onChange={(e) => onChange('strengths', e.target.value)}
           rows={2}
           placeholder="Worin ist die Person besonders gut?"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Entwicklungsbereiche</label>
-        <textarea
+      <FormField label="Entwicklungsbereiche" htmlFor="development_areas">
+        <Textarea
+          id="development_areas"
           value={form.development_areas}
           onChange={(e) => onChange('development_areas', e.target.value)}
           rows={2}
           placeholder="In welchen Bereichen möchte sich die Person entwickeln?"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
     </div>
   )
 }

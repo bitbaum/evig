@@ -6,6 +6,9 @@ import {
   type EmergencyRelation,
 } from '@/config/team'
 import type { TeamProfileFormState } from './useTeamProfileForm'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 
 interface Props {
   form: TeamProfileFormState
@@ -15,40 +18,31 @@ interface Props {
 export function TeamEmergencySection({ form, onChange }: Props) {
   return (
     <div className="grid md:grid-cols-3 gap-4">
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Name
-        </label>
-        <input
+      <FormField label="Name" htmlFor="emergency_contact_name">
+        <Input
           type="text"
+          id="emergency_contact_name"
           value={form.emergency_contact_name}
           onChange={(e) => onChange('emergency_contact_name', e.target.value)}
           placeholder="Vor- und Nachname"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Telefon
-        </label>
-        <input
+      <FormField label="Telefon" htmlFor="emergency_contact_phone">
+        <Input
           type="tel"
+          id="emergency_contact_phone"
           value={form.emergency_contact_phone}
           onChange={(e) => onChange('emergency_contact_phone', e.target.value)}
           placeholder="+41 79 123 45 67"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Beziehung
-        </label>
-        <select
+      <FormField label="Beziehung" htmlFor="emergency_contact_relation">
+        <Select
+          id="emergency_contact_relation"
           value={form.emergency_contact_relation}
           onChange={(e) => onChange('emergency_contact_relation', e.target.value)}
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         >
           <option value="">Auswählen...</option>
           {EMERGENCY_RELATION_OPTIONS.map(relation => (
@@ -56,8 +50,8 @@ export function TeamEmergencySection({ form, onChange }: Props) {
               {EMERGENCY_RELATION_LABELS[relation as EmergencyRelation]}
             </option>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormField>
     </div>
   )
 }
