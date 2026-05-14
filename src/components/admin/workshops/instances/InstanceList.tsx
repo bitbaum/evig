@@ -12,6 +12,7 @@ import {
   MapPin,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import type { WorkshopInstanceWithDetails } from './types'
 import { formatDateTime } from '@/lib/date-formats'
 
@@ -130,13 +131,10 @@ export function InstanceList({
             <p className="text-neutral-600 mb-4">
               Erstelle einen neuen Termin für einen Workshop.
             </p>
-            <button
-              onClick={onCreateNew}
-              className="inline-flex items-center px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700"
-            >
-              <Plus className="w-4 h-4 mr-2" />
+            <Button onClick={onCreateNew} variant="primary" size="sm" className="gap-2">
+              <Plus className="w-4 h-4" />
               Neuer Termin
-            </button>
+            </Button>
           </div>
         )}
       </div>

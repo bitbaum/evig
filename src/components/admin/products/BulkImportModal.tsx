@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Upload, XCircle } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 
 interface BulkImportModalProps {
   isOpen: boolean
@@ -59,7 +60,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                 />
                 <label
                   htmlFor="csv-upload"
-                  className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 cursor-pointer inline-block"
+                  className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 cursor-pointer transition-colors"
                 >
                   Datei auswählen
                 </label>
@@ -84,15 +85,12 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
 
               {/* Actions */}
               <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200">
-                <button
-                  onClick={onClose}
-                  className="px-4 py-2 text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50"
-                >
+                <Button onClick={onClose} variant="outline" size="sm">
                   Abbrechen
-                </button>
-                <button className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700">
+                </Button>
+                <Button variant="primary" size="sm">
                   Produkte importieren
-                </button>
+                </Button>
               </div>
             </div>
           </motion.div>

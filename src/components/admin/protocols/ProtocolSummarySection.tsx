@@ -1,5 +1,6 @@
 import { Loader2, CheckCircle2, MessageSquare } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
 interface Props {
@@ -56,10 +57,12 @@ export function ProtocolSummarySection({
                 </div>
               ))}
               {mappingDirty && (
-                <button
+                <Button
                   onClick={onSaveMapping}
                   disabled={savingMapping}
-                  className="mt-2 flex items-center gap-2 px-3 py-1.5 text-sm bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50"
+                  variant="primary"
+                  size="sm"
+                  className="mt-2 gap-2"
                 >
                   {savingMapping ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -67,7 +70,7 @@ export function ProtocolSummarySection({
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   )}
                   Zuordnung speichern
-                </button>
+                </Button>
               )}
             </div>
           ) : (

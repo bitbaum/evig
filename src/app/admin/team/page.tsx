@@ -128,7 +128,7 @@ export default async function TeamPage() {
       actions={
         <Link
           href="/admin/team/new"
-          className="flex items-center gap-2 px-4 py-2 bg-info-600 hover:bg-info-700 text-white rounded-lg transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
         >
           <UserPlus className="w-5 h-5" />
           Profil erstellen

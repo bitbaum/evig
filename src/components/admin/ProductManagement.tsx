@@ -13,6 +13,7 @@
 
 import React from 'react'
 import { Loader2, AlertTriangle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   ProductTabSwitcher,
   ProductStatsCards,
@@ -50,12 +51,9 @@ export default function ProductManagement() {
           <p className="text-neutral-600 mb-4">
             {actions.error.message || 'Bitte versuchen Sie es später erneut.'}
           </p>
-          <button
-            onClick={() => actions.refetch()}
-            className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors"
-          >
+          <Button onClick={() => actions.refetch()} variant="primary" size="sm">
             Erneut versuchen
-          </button>
+          </Button>
         </div>
       </div>
     )

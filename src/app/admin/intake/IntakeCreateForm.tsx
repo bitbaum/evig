@@ -10,6 +10,7 @@ import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { ImageCapture } from '@/components/erfassung/ImageCapture'
 import type { CreateFormData } from './types'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 
 interface IntakeCreateFormProps {
   formData: CreateFormData
@@ -343,19 +344,17 @@ export function IntakeCreateForm({
 
       {/* Submit */}
       <div className="flex gap-3">
-        <button
+        <Button
           onClick={onCreate}
           disabled={saving || !formData.hersteller || !formData.produktname}
-          className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50 text-sm font-medium"
+          variant="primary"
+          size="sm"
         >
           {saving ? 'Speichern...' : 'Gerät erfassen'}
-        </button>
-        <button
-          onClick={onCancel}
-          className="px-4 py-2 border rounded-lg hover:bg-neutral-50 text-sm"
-        >
+        </Button>
+        <Button onClick={onCancel} variant="outline" size="sm">
           Abbrechen
-        </button>
+        </Button>
       </div>
     </div>
   )
