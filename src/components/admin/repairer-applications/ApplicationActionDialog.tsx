@@ -1,5 +1,9 @@
 import type { ActionDialogState } from './types'
 import Heading from '@/components/admin/AdminHeading'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 const DIALOG_TITLES: Record<ActionDialogState['type'], string> = {
   approve_app: 'Bewerbung genehmigen',
@@ -30,61 +34,50 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
       </Heading>
 
       {needsReason && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-neutral-700 mb-1">
-            {dialog.type === 'request_changes' ? 'Geforderte Änderungen (erforderlich):' : 'Grund (erforderlich):'}
-          </label>
-          <textarea
+        <FormField
+          label={dialog.type === 'request_changes' ? 'Geforderte Änderungen (erforderlich):' : 'Grund (erforderlich):'}
+          className="mb-4"
+        >
+          <Textarea
             value={dialog.reason}
             onChange={(e) => onDialogChange({ ...dialog, reason: e.target.value })}
             rows={3}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 text-sm"
             autoFocus
           />
-        </div>
+        </FormField>
       )}
 
       {dialog.type === 'approve_doc' && (
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-neutral-700 mb-1">
-            Ablaufdatum (YYYY-MM-DD, optional):
-          </label>
-          <input
+        <FormField label="Ablaufdatum (YYYY-MM-DD, optional):" className="mb-4">
+          <Input
             type="date"
             value={dialog.expiresAt}
             onChange={(e) => onDialogChange({ ...dialog, expiresAt: e.target.value })}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 text-sm"
           />
-        </div>
+        </FormField>
       )}
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-neutral-700 mb-1">
-          Admin-Notizen (optional):
-        </label>
-        <textarea
+      <FormField label="Admin-Notizen (optional):" className="mb-4">
+        <Textarea
           value={dialog.notes}
           onChange={(e) => onDialogChange({ ...dialog, notes: e.target.value })}
           rows={2}
           placeholder="Optionale Notizen..."
-          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-info-500 text-sm"
         />
-      </div>
+      </FormField>
 
       <div className="flex gap-3">
-        <button
+        <Button
           onClick={onSubmit}
           disabled={needsReason && !dialog.reason.trim()}
-          className="px-4 py-2 bg-info-600 text-white rounded-lg text-sm font-medium hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="primary"
+          size="sm"
         >
           Bestätigen
-        </button>
-        <button
-          onClick={onClose}
-          className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
-        >
+        </Button>
+        <Button onClick={onClose} variant="outline" size="sm">
           Abbrechen
-        </button>
+        </Button>
       </div>
     </div>
   )

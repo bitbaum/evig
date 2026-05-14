@@ -20,6 +20,10 @@ import {
   summarizeWeeklySchedule,
   type WeekdayId,
 } from '@/lib/team/schedule'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 import type { TeamProfileFormState } from './useTeamProfileForm'
 
 interface Props {
@@ -141,48 +145,38 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Bevorzugte Kontaktart
-          </label>
-          <select
+        <FormField label="Bevorzugte Kontaktart" htmlFor="preferred-contact">
+          <Select
+            id="preferred-contact"
             value={form.preferred_contact}
             onChange={(e) => onChange('preferred_contact', e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           >
             {CONTACT_METHOD_OPTIONS.map(method => (
               <option key={method} value={method}>
                 {CONTACT_METHOD_LABELS[method as ContactMethod]}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Telefon
-          </label>
-          <input
+        <FormField label="Telefon" htmlFor="phone">
+          <Input
+            id="phone"
             type="tel"
             value={form.phone}
             onChange={(e) => onChange('phone', e.target.value)}
             placeholder="+41 79 123 45 67"
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
-        </div>
+        </FormField>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-            Allgemeine Verfügbarkeit
-          </label>
-          <textarea
+        <FormField label="Allgemeine Verfügbarkeit" className="md:col-span-2">
+          <Textarea
             value={form.availability}
             onChange={(e) => onChange('availability', e.target.value)}
             rows={2}
             placeholder="z.B. Ferien, Ausnahmen oder flexible Einsätze"
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
-        </div>
+        </FormField>
       </div>
     </div>
   )
