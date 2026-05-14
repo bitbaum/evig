@@ -7,6 +7,11 @@ import { WHISPER_MODELS } from '@/config/transcription'
 import Heading from '@/components/admin/AdminHeading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useProtocolForm } from '@/hooks/useProtocolForm'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
+import { Button } from '@/components/ui/button'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
@@ -57,70 +62,54 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         <Heading level={2} className="text-lg font-semibold text-neutral-900">Sitzungsdetails</Heading>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="meeting_type" className="block text-sm font-medium text-neutral-700 mb-1">
-              Sitzungstyp
-            </label>
-            <select
+          <FormField label="Sitzungstyp" htmlFor="meeting_type">
+            <Select
               id="meeting_type"
               value={meetingType}
               onChange={(e) => setMeetingType(e.target.value as MeetingType)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               <option value="">Typ wählen...</option>
               {Object.entries(MEETING_TYPE_LABELS).map(([key, label]) => (
                 <option key={key} value={key}>{label}</option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormField>
 
-          <div>
-            <label htmlFor="meeting_date" className="block text-sm font-medium text-neutral-700 mb-1">
-              Datum
-            </label>
-            <input
+          <FormField label="Datum" htmlFor="meeting_date">
+            <Input
               id="meeting_date"
               type="date"
               value={meetingDate}
               onChange={(e) => setMeetingDate(e.target.value)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             />
-          </div>
+          </FormField>
         </div>
 
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
-            Titel
-          </label>
-          <input
+        <FormField label="Titel" htmlFor="title">
+          <Input
             id="title"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="z.B. Teamsitzung — 2. April 2026"
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
           />
-        </div>
+        </FormField>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label htmlFor="visibility" className="block text-sm font-medium text-neutral-700 mb-1">
-              Sichtbarkeit
-            </label>
-            <select
+          <FormField label="Sichtbarkeit" htmlFor="visibility">
+            <Select
               id="visibility"
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as ProtocolVisibility)}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
             >
               {Object.entries(PROTOCOL_VISIBILITY_LABELS).map(([key, label]) => (
                 <option key={key} value={key}>{label}</option>
               ))}
-            </select>
-          </div>
+            </Select>
+          </FormField>
         </div>
 
-        {/* Attendees */}
+        {/* Attendees — compact panel, uses inline styling intentionally */}
         <div>
           <button
             type="button"
@@ -182,18 +171,15 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             Transkript, Notizen einfügen oder Audio-Datei hochladen. Die KI strukturiert den Inhalt automatisch.
           </p>
 
-          <div>
-            <label htmlFor="content" className="block text-sm font-medium text-neutral-700 mb-1">
-              Transkript oder Notizen
-            </label>
-            <textarea
+          <FormField label="Transkript oder Notizen" htmlFor="content">
+            <Textarea
               id="content"
               value={content}
               onChange={(e) => handleContentChange(e.target.value)}
               placeholder="Sitzungsnotizen hier einfügen..."
               rows={10}
               disabled={!!audioFile}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 disabled:bg-neutral-100 disabled:text-neutral-500 font-mono text-sm"
+              className="font-mono text-sm disabled:!opacity-100 disabled:bg-neutral-100 disabled:text-neutral-500"
             />
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">
@@ -205,7 +191,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               </div>
               <span className="text-xs text-neutral-500">{content.length} Zeichen</span>
             </div>
-          </div>
+          </FormField>
 
           {/* File Upload */}
           <div className="border-t pt-4">
@@ -242,6 +228,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   </button>
                 </div>
 
+                {/* Whisper model selector — compact inline styling inside audio panel */}
                 <div className="mt-2">
                   <label htmlFor="whisper_model" className="block text-xs font-medium text-info-700 mb-1">
                     Whisper-Modell
@@ -272,10 +259,12 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 <span>Inhalt eingeben oder Datei hochladen</span>
               )}
             </div>
-            <button
+            <Button
               onClick={handleSubmit}
               disabled={!canSubmit}
-              className="flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              variant="primary"
+              size="lg"
+              className="flex items-center gap-2"
             >
               {(loading || processing) ? (
                 <>
@@ -288,7 +277,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   Protokoll erstellen
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       )}

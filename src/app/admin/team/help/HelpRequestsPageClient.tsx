@@ -9,6 +9,8 @@
 import { useState } from 'react'
 import { Plus, Filter, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 import {
   HELP_REQUEST_STATUS_OPTIONS,
   HELP_REQUEST_URGENCY_OPTIONS,
@@ -132,14 +134,10 @@ export function HelpRequestsPageClient({
         <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Status Filter */}
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Status
-              </label>
-              <select
+            <FormField label="Status" className="flex-1">
+              <Select
                 value={filters.status || ''}
                 onChange={(e) => handleFilterChange('status', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle Status</option>
                 {HELP_REQUEST_STATUS_OPTIONS.map((status) => (
@@ -147,18 +145,14 @@ export function HelpRequestsPageClient({
                     {HELP_REQUEST_STATUS_LABELS[status as HelpRequestStatus]}
                   </option>
                 ))}
-              </select>
-            </div>
+              </Select>
+            </FormField>
 
             {/* Urgency Filter */}
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Dringlichkeit
-              </label>
-              <select
+            <FormField label="Dringlichkeit" className="flex-1">
+              <Select
                 value={filters.urgency || ''}
                 onChange={(e) => handleFilterChange('urgency', e.target.value || undefined)}
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle</option>
                 {HELP_REQUEST_URGENCY_OPTIONS.map((urg) => (
@@ -166,15 +160,12 @@ export function HelpRequestsPageClient({
                     {HELP_REQUEST_URGENCY_LABELS[urg as HelpRequestUrgency]}
                   </option>
                 ))}
-              </select>
-            </div>
+              </Select>
+            </FormField>
 
             {/* Broadcast Filter */}
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-                Empfänger
-              </label>
-              <select
+            <FormField label="Empfänger" className="flex-1">
+              <Select
                 value={filters.is_broadcast === undefined ? '' : String(filters.is_broadcast)}
                 onChange={(e) =>
                   handleFilterChange(
@@ -182,13 +173,12 @@ export function HelpRequestsPageClient({
                     e.target.value === '' ? undefined : e.target.value === 'true'
                   )
                 }
-                className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-sm"
               >
                 <option value="">Alle</option>
                 <option value="true">An alle (Broadcast)</option>
                 <option value="false">Gezielt</option>
-              </select>
-            </div>
+              </Select>
+            </FormField>
 
             {/* Clear Filters */}
             {hasActiveFilters && (

@@ -6,6 +6,9 @@ import { Loader2 } from 'lucide-react'
 import { REQUEST_STATUSES, URGENCY_LEVELS } from '@/config/it-hilfe'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import type { EditData } from './types'
 
 interface EditRequestModalProps {
@@ -22,28 +25,27 @@ export function EditRequestModal({
   return (
     <Modal isOpen={true} onClose={onClose} title="Anfrage bearbeiten" size="sm">
       <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Status</label>
-          <select value={editData.status} onChange={e => setEditData(d => ({ ...d, status: e.target.value }))} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600">
+        <FormField label="Status">
+          <Select value={editData.status} onChange={e => setEditData(d => ({ ...d, status: e.target.value }))}>
             {REQUEST_STATUSES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Dringlichkeit</label>
-          <select value={editData.urgency} onChange={e => setEditData(d => ({ ...d, urgency: e.target.value }))} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600">
+          </Select>
+        </FormField>
+
+        <FormField label="Dringlichkeit">
+          <Select value={editData.urgency} onChange={e => setEditData(d => ({ ...d, urgency: e.target.value }))}>
             {URGENCY_LEVELS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Admin-Notizen</label>
-          <textarea
+          </Select>
+        </FormField>
+
+        <FormField label="Admin-Notizen">
+          <Textarea
             value={editData.admin_notes}
             onChange={e => setEditData(d => ({ ...d, admin_notes: e.target.value }))}
             rows={3}
-            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600"
             placeholder="Interne Notizen..."
           />
-        </div>
+        </FormField>
+
         <div className="flex justify-end gap-2">
           <Button onClick={onClose} variant="outline" size="sm">Abbrechen</Button>
           <Button onClick={onSave} disabled={editLoading} size="sm" variant="primary">

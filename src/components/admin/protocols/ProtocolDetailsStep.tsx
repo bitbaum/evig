@@ -2,6 +2,9 @@ import { PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
 import Heading from '@/components/admin/AdminHeading'
 import type { ProtocolVisibility } from '@/config/protocols'
 import { formatDateShort } from '@/lib/date-formats'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 
 interface FormValues {
   title: string
@@ -38,11 +41,8 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
     <div className="bg-white rounded-lg border p-6 space-y-6">
       <Heading level={2} className="text-lg text-neutral-900">Details</Heading>
 
-      <div>
-        <label htmlFor="title" className="block text-sm font-medium text-neutral-700 mb-1">
-          Titel <span className="text-error-500">*</span>
-        </label>
-        <input
+      <FormField label="Titel" required htmlFor="title">
+        <Input
           type="text"
           id="title"
           name="title"
@@ -51,41 +51,27 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
           required
           maxLength={200}
           placeholder="z.B. Teamsitzung 10. Februar 2026"
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="meeting_date" className="block text-sm font-medium text-neutral-700 mb-1">
-          Datum <span className="text-error-500">*</span>
-        </label>
-        <input
+      <FormField label="Datum" required htmlFor="meeting_date">
+        <Input
           type="date"
           id="meeting_date"
           name="meeting_date"
           value={values.meeting_date}
           onChange={onChange}
           required
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="visibility" className="block text-sm font-medium text-neutral-700 mb-1">
-          Sichtbarkeit
-        </label>
-        <select
-          id="visibility"
-          name="visibility"
-          value={values.visibility}
-          onChange={onChange}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500"
-        >
+      <FormField label="Sichtbarkeit" htmlFor="visibility">
+        <Select id="visibility" name="visibility" value={values.visibility} onChange={onChange}>
           {Object.entries(PROTOCOL_VISIBILITY_LABELS).map(([key, label]) => (
             <option key={key} value={key}>{label}</option>
           ))}
-        </select>
-      </div>
+        </Select>
+      </FormField>
     </div>
   )
 }
