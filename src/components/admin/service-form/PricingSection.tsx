@@ -2,6 +2,8 @@
 
 import { Plus, Trash2 } from 'lucide-react'
 import { CollapsibleSection } from './CollapsibleSection'
+import { Input } from '@/components/ui/input'
+import { FormField } from '@/components/ui/form-field'
 
 interface PricingSectionProps {
   pricingBase: string
@@ -30,19 +32,15 @@ export function PricingSection({
 }: PricingSectionProps) {
   return (
     <CollapsibleSection title="Preisanzeige" defaultOpen={false}>
-      <div>
-        <label htmlFor="pricing-base" className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
-          Basis-Preis (Anzeige)
-        </label>
-        <input
+      <FormField label="Basis-Preis (Anzeige)" htmlFor="pricing-base">
+        <Input
           id="pricing-base"
           type="text"
           value={pricingBase}
           onChange={(e) => onBaseChange(e.target.value)}
           placeholder="z.B. CHF 70/Stunde, Kostenlos, Auf Anfrage"
-          className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
         />
-      </div>
+      </FormField>
 
       <div>
         <span className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
@@ -51,12 +49,12 @@ export function PricingSection({
         <div className="space-y-2">
           {pricingDetails.map((detail, index) => (
             <div key={index} className="flex gap-2">
-              <input
+              <Input
                 type="text"
                 value={detail}
                 onChange={(e) => onDetailUpdate(index, e.target.value)}
                 placeholder="Detail-Zeile"
-                className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
+                className="flex-1"
               />
               <button
                 type="button"
@@ -85,12 +83,12 @@ export function PricingSection({
         <div className="space-y-2">
           {(pricingMediaPrices || []).map((price, index) => (
             <div key={index} className="flex gap-2">
-              <input
+              <Input
                 type="text"
                 value={price}
                 onChange={(e) => onMediaPriceUpdate(index, e.target.value)}
                 placeholder="z.B. Disketten: CHF 10 pro Stück"
-                className="flex-1 px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
+                className="flex-1"
               />
               <button
                 type="button"

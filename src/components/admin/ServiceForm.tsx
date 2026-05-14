@@ -13,6 +13,10 @@ import { Link } from '@/i18n/navigation'
 import { ArrowLeft, Save, Loader2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Select } from '@/components/ui/select'
+import { FormField } from '@/components/ui/form-field'
 import { IconPicker } from './IconPicker'
 import { SERVICE_CATEGORIES } from '@/config/database'
 import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
@@ -157,9 +161,9 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       {/* Basic Info */}
       <CollapsibleSection title="Grundinformationen" defaultOpen={true}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Name *</label>
-            <input
+          <FormField label="Name" required htmlFor="service-name">
+            <Input
+              id="service-name"
               type="text"
               required
               aria-required="true"
@@ -169,79 +173,73 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
               onChange={(e) => {
                 setFormData((prev) => ({ ...prev, name: e.target.value, slug: !isEdit ? generateSlug(e.target.value) : prev.slug }))
               }}
-              className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Slug *</label>
-            <input
+          </FormField>
+          <FormField label="Slug" required htmlFor="service-slug">
+            <Input
+              id="service-slug"
               type="text"
               required
               aria-required="true"
               pattern="[a-z0-9-]+"
               value={formData.slug}
               onChange={(e) => updateField('slug', e.target.value)}
-              className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white font-mono text-sm"
+              className="font-mono text-sm"
             />
-          </div>
+          </FormField>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Kurzbeschreibung</label>
-          <textarea
+        <FormField label="Kurzbeschreibung">
+          <Textarea
             value={formData.description}
             onChange={(e) => updateField('description', e.target.value)}
             rows={2}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
-        </div>
+        </FormField>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Kategorie</label>
-            <select
+          <FormField label="Kategorie" htmlFor="service-category">
+            <Select
+              id="service-category"
               value={formData.category}
               onChange={(e) => updateField('category', e.target.value)}
-              className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             >
               {Object.values(SERVICE_CATEGORIES).map((cat) => (
                 <option key={cat} value={cat}>{SERVICE_CATEGORY_LABELS[cat as keyof typeof SERVICE_CATEGORY_LABELS]}</option>
               ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Dauer (Minuten)</label>
-            <input
+            </Select>
+          </FormField>
+          <FormField label="Dauer (Minuten)" htmlFor="service-duration">
+            <Input
+              id="service-duration"
               type="number"
               min={0}
               value={formData.durationMinutes}
               onChange={(e) => updateField('durationMinutes', parseInt(e.target.value) || 0)}
-              className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Preis (Rappen)</label>
-            <input
+          </FormField>
+          <FormField label="Preis (Rappen)" htmlFor="service-price">
+            <Input
+              id="service-price"
               type="number"
               min={0}
               value={formData.priceCents ?? ''}
               onChange={(e) => updateField('priceCents', e.target.value ? parseInt(e.target.value) : null)}
               placeholder="Leer = Auf Anfrage"
-              className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
             />
-          </div>
+          </FormField>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Reihenfolge</label>
-          <input
+        <FormField label="Reihenfolge" htmlFor="service-order">
+          <Input
+            id="service-order"
             type="number"
             min={0}
             value={formData.displayOrder}
             onChange={(e) => updateField('displayOrder', parseInt(e.target.value) || 0)}
-            className="w-32 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
+            className="w-32"
           />
-        </div>
+        </FormField>
 
         <div className="flex flex-wrap gap-6">
           {[
@@ -265,40 +263,36 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
 
       {/* Hero */}
       <CollapsibleSection title="Hero-Bereich" defaultOpen={true}>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Icon</label>
+        <FormField label="Icon">
           <IconPicker value={formData.iconName} onChange={(iconName) => updateField('iconName', iconName)} />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Hero-Titel</label>
-          <input
+        </FormField>
+        <FormField label="Hero-Titel" htmlFor="hero-title">
+          <Input
+            id="hero-title"
             type="text"
             value={formData.heroTitle}
             onChange={(e) => updateField('heroTitle', e.target.value)}
             placeholder={formData.name || 'Wird als Anzeigename verwendet'}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Hero-Untertitel</label>
-          <input
+        </FormField>
+        <FormField label="Hero-Untertitel" htmlFor="hero-subtitle">
+          <Input
+            id="hero-subtitle"
             type="text"
             value={formData.heroSubtitle}
             onChange={(e) => updateField('heroSubtitle', e.target.value)}
             placeholder="Kurzer Slogan"
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Hero-Beschreibung</label>
-          <textarea
+        </FormField>
+        <FormField label="Hero-Beschreibung" htmlFor="hero-description">
+          <Textarea
+            id="hero-description"
             value={formData.heroDescription}
             onChange={(e) => updateField('heroDescription', e.target.value)}
             rows={4}
             placeholder="Ausführliche Beschreibung für die Service-Seite"
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white"
           />
-        </div>
+        </FormField>
       </CollapsibleSection>
 
       {/* Extracted Sections */}

@@ -2,6 +2,8 @@
 
 import { Plus, Trash2 } from 'lucide-react'
 import { CollapsibleSection } from './CollapsibleSection'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import type { ProcessStep } from './types'
 
 interface ProcessSectionProps {
@@ -37,19 +39,17 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
-            <input
+            <Input
               type="text"
               value={step.title}
               onChange={(e) => onUpdate(index, 'title', e.target.value)}
               placeholder="Titel des Schritts"
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
             />
-            <textarea
+            <Textarea
               value={step.description}
               onChange={(e) => onUpdate(index, 'description', e.target.value)}
               placeholder="Beschreibung"
               rows={2}
-              className="w-full px-3 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white"
             />
           </div>
         ))}
