@@ -26,6 +26,7 @@ import { TeamTalentSection } from './TeamTalentSection'
 import { TeamAvailabilitySection } from './TeamAvailabilitySection'
 import { TeamEmergencySection } from './TeamEmergencySection'
 import { TeamHRNotesSection } from './TeamHRNotesSection'
+import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 
@@ -108,10 +109,9 @@ export function TeamProfileForm({
             <User className="w-5 h-5 text-neutral-500" />
             <Heading level={2} className="text-neutral-900 dark:text-white">Benutzer auswählen</Heading>
           </div>
-          <select
+          <Select
             value={form.user_id}
             onChange={(e) => handleChange('user_id', e.target.value)}
-            className="w-full px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-info-500"
             required
             aria-required="true"
             aria-invalid={!!error}
@@ -123,7 +123,7 @@ export function TeamProfileForm({
                 {user.name || user.email} ({user.email})
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       )}
 
