@@ -15,6 +15,8 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { MEMBERSHIP_APPLICATION_STATUS } from '@/config/membership-status'
+import { notifyUsers } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 type RouteContext = { params?: { id: string } }
 
@@ -95,6 +97,14 @@ export const POST = withAdmin<{ id: string }>(async (
           [userId, id]
         )
       }
+
+      notifyUsers([userId], {
+        type: NOTIFICATION_TYPES.MEMBERSHIP_APPROVED,
+        title: 'Willkommen als Mitglied!',
+        content: 'Deine Mitgliedschaft bei Revamp-IT wurde bestätigt.',
+        related_type: RELATED_TYPES.MEMBERSHIP,
+        related_id: id,
+      }).catch(() => {})
     }
 
     logger.info('Membership application approved', {
