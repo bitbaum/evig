@@ -49,6 +49,7 @@ interface ApprovalSource {
   label: string
   count: number
   href: string
+  oldestPendingDays: number | null
 }
 
 async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
@@ -58,32 +59,37 @@ async function getApprovalSourceCounts(): Promise<ApprovalSource[]> {
     {
       label: 'Blog-Beiträge',
       href: '/admin/content/submissions',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
+      sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.BLOG_SUBMISSIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Workshop-Vorschläge',
       href: '/admin/workshops',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
+      sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.WORKSHOP_PROPOSALS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Techniker-Bewerbungen',
       href: '/admin/repairer-applications',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
+      sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.REPAIRER_APPLICATIONS} WHERE status = '${APPROVAL_STATUS.PENDING}'`,
     },
     {
       label: 'Standorte',
       href: '/admin/locations',
-      sql: `SELECT COUNT(*) as count FROM ${TABLE_NAMES.LOCATIONS} WHERE approval_status = '${APPROVAL_STATUS.PENDING}'`,
+      sql: `SELECT COUNT(*) as count, MIN(created_at) as oldest FROM ${TABLE_NAMES.LOCATIONS} WHERE approval_status = '${APPROVAL_STATUS.PENDING}'`,
     },
   ]
 
   for (const q of queries) {
     try {
-      const result = await query<{ count: string }>(q.sql)
-      sources.push({ label: q.label, count: parseInt(result.rows[0]?.count || '0'), href: q.href })
+      const result = await query<{ count: string; oldest: string | null }>(q.sql)
+      const count = parseInt(result.rows[0]?.count || '0')
+      const oldest = result.rows[0]?.oldest
+      const oldestPendingDays = oldest && count > 0
+        ? Math.floor((Date.now() - new Date(oldest).getTime()) / (1000 * 60 * 60 * 24))
+        : null
+      sources.push({ label: q.label, count, href: q.href, oldestPendingDays })
     } catch {
       // Table might not exist yet
-      sources.push({ label: q.label, count: 0, href: q.href })
+      sources.push({ label: q.label, count: 0, href: q.href, oldestPendingDays: null })
     }
   }
 
@@ -227,6 +233,16 @@ export default async function ApprovalsPage() {
             >
               <span className="text-neutral-900 dark:text-white">{source.label}</span>
               <span className="flex items-center gap-2">
+                {source.oldestPendingDays !== null && source.oldestPendingDays >= 7 && (
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-400">
+                    {source.oldestPendingDays}+ Tage
+                  </span>
+                )}
+                {source.oldestPendingDays !== null && source.oldestPendingDays >= 3 && source.oldestPendingDays < 7 && (
+                  <span className="px-2 py-0.5 text-xs font-medium rounded-full bg-warning-100 text-warning-700 dark:bg-warning-900/30 dark:text-warning-400">
+                    {source.oldestPendingDays}+ Tage
+                  </span>
+                )}
                 <span className={`text-sm font-medium ${source.count > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-neutral-400 dark:text-neutral-500'}`}>
                   {source.count} ausstehend
                 </span>
