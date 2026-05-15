@@ -30,6 +30,19 @@ export const NOTIFICATION_TYPES = {
   // Blog submissions
   BLOG_SUBMISSION_STATUS: 'blog_submission_status',
 
+  // Membership
+  MEMBERSHIP_APPROVED: 'membership_approved',
+
+  // Workshops
+  WORKSHOP_PROPOSAL_APPROVED: 'workshop_proposal_approved',
+
+  // Marketplace
+  LISTING_SOLD: 'listing_sold',
+
+  // Service appointments
+  SERVICE_APPOINTMENT_ASSIGNED: 'service_appointment_assigned',
+  SERVICE_APPOINTMENT_COMPLETED: 'service_appointment_completed',
+
   // Core
   MESSAGE: 'message',
   APPOINTMENT: 'appointment',
@@ -47,6 +60,10 @@ export const RELATED_TYPES = {
   CONVERSATION: 'conversation',
   APPOINTMENT: 'appointment',
   IT_HILFE: 'it_hilfe',
+  WORKSHOP: 'workshop',
+  WORKSHOP_PROPOSAL: 'workshop_proposal',
+  MEMBERSHIP: 'membership',
+  LISTING: 'listing',
 } as const
 
 export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
@@ -59,4 +76,8 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   [RELATED_TYPES.CONVERSATION]: '/messages/',
   [RELATED_TYPES.APPOINTMENT]: '/dashboard/appointments/',
   [RELATED_TYPES.IT_HILFE]: '/it-hilfe/',
+  [RELATED_TYPES.WORKSHOP]: '/admin/workshops/',
+  [RELATED_TYPES.WORKSHOP_PROPOSAL]: '/admin/workshops/proposals/',
+  [RELATED_TYPES.MEMBERSHIP]: '/admin/membership/',
+  [RELATED_TYPES.LISTING]: '/admin/marketplace/',
 }
