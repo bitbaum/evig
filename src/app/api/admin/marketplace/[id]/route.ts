@@ -11,6 +11,8 @@ import { removeListing } from '@/lib/search/meilisearch'
 import { logger } from '@/lib/logger'
 import { logAdminAction } from '@/lib/auth/audit'
 import { getClientIdentifier } from '@/lib/security/rate-limit'
+import { notifyAllStaff } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 // GET /api/admin/marketplace/[id] - Full listing detail
 export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _session, context) => {
@@ -78,6 +80,14 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
     const id = context?.params?.id
     if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
 
+    // Fetch current listing to detect status transitions
+    const [currentListing] = await db
+      .select({ status: listings.status, title: listings.title })
+      .from(listings)
+      .where(eq(listings.id, id))
+
+    if (!currentListing) return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+
     const body = await request.json()
     const validation = validateBody(AdminEditListingSchema, body)
     if (!validation.success) return validation.error
@@ -107,6 +117,17 @@ export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, se
 
     if (!updated) {
       return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+    }
+
+    // Notify staff when a listing is marked sold for the first time
+    if (data.status === LISTING_STATUS.SOLD && currentListing.status !== LISTING_STATUS.SOLD) {
+      notifyAllStaff({
+        type: NOTIFICATION_TYPES.LISTING_SOLD,
+        title: 'Inserat verkauft',
+        content: `«${updated.title}» wurde als verkauft markiert.`,
+        related_type: RELATED_TYPES.LISTING,
+        related_id: id,
+      }, session.user.id).catch(() => {})
     }
 
     logger.info('Admin edited listing', {
