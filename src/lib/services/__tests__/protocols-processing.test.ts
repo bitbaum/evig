@@ -198,8 +198,9 @@ describe('processTranscript', () => {
   it('resets status to DRAFT on AI failure', async () => {
     mockDbExecute
       .mockResolvedValueOnce({ rows: [] }) // UPDATE PROCESSING
-      .mockResolvedValueOnce({ rows: [{ meeting_type: 'weekly' }] })
-      .mockResolvedValueOnce({ rows: [] }) // resetToDraft ← the 3rd call
+      .mockResolvedValueOnce({ rows: [{ meeting_type: 'weekly' }] }) // SELECT meeting_type
+      .mockResolvedValueOnce({ rows: [] }) // getTeamRoster
+      .mockResolvedValueOnce({ rows: [] }) // resetToDraft ← the 4th call
 
     mockProcessTranscript.mockResolvedValueOnce({
       success: false,
@@ -208,14 +209,15 @@ describe('processTranscript', () => {
 
     await processTranscript(PROTOCOL_ID, 'text')
 
-    // 3 execute calls total — the 3rd is the DRAFT reset
-    expect(mockDbExecute).toHaveBeenCalledTimes(3)
+    // 4 execute calls: UPDATE PROCESSING → SELECT → getTeamRoster → resetToDraft
+    expect(mockDbExecute).toHaveBeenCalledTimes(4)
   })
 
   it('returns { success: true, model } and stores REVIEW status on success', async () => {
     mockDbExecute
       .mockResolvedValueOnce({ rows: [] })                                // UPDATE PROCESSING
       .mockResolvedValueOnce({ rows: [{ meeting_type: 'weekly' }] })      // SELECT meeting_type
+      .mockResolvedValueOnce({ rows: [] })                                // getTeamRoster
       .mockResolvedValueOnce({ rows: [] })                                // UPDATE REVIEW + store notes
 
     mockProcessTranscript.mockResolvedValueOnce({
@@ -227,8 +229,8 @@ describe('processTranscript', () => {
 
     expect(result.success).toBe(true)
     expect(result.model).toBe('claude-3-5-haiku')
-    // 3 execute calls: UPDATE PROCESSING → SELECT → UPDATE REVIEW
-    expect(mockDbExecute).toHaveBeenCalledTimes(3)
+    // 4 execute calls: UPDATE PROCESSING → SELECT → getTeamRoster → UPDATE REVIEW
+    expect(mockDbExecute).toHaveBeenCalledTimes(4)
   })
 
   it('resets to DRAFT and returns UNKNOWN/retryable on unexpected exception', async () => {
@@ -253,13 +255,15 @@ describe('processNotes', () => {
     const validNotes = makeValidNotes()
     mockStructuredNotesSafeParse.mockReturnValueOnce({ success: true, data: validNotes })
 
-    mockDbExecute.mockResolvedValueOnce({ rows: [] }) // UPDATE REVIEW
+    mockDbExecute
+      .mockResolvedValueOnce({ rows: [] }) // getTeamRoster
+      .mockResolvedValueOnce({ rows: [] }) // UPDATE REVIEW
 
     const result = await processNotes(PROTOCOL_ID, JSON.stringify(validNotes))
 
     expect(result.success).toBe(true)
     expect(result.source).toBe('json')
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
+    expect(mockDbExecute).toHaveBeenCalledTimes(2)
   })
 
   it('returns error without DB calls when valid JSON fails schema validation', async () => {
@@ -287,6 +291,7 @@ describe('processNotes', () => {
     mockDbExecute
       .mockResolvedValueOnce({ rows: [] })                                 // UPDATE PROCESSING
       .mockResolvedValueOnce({ rows: [{ meeting_type: 'weekly' }] })       // SELECT meeting_type
+      .mockResolvedValueOnce({ rows: [] })                                 // getTeamRoster
       .mockResolvedValueOnce({ rows: [] })                                 // UPDATE DRAFT
 
     mockProcessNotes.mockResolvedValueOnce(null)
@@ -295,7 +300,7 @@ describe('processNotes', () => {
 
     expect(result.success).toBe(false)
     expect(result.error).toContain('KI-Verarbeitung')
-    expect(mockDbExecute).toHaveBeenCalledTimes(3)
+    expect(mockDbExecute).toHaveBeenCalledTimes(4)
   })
 
   it('returns { success: true, source: "ai", model } on AI success', async () => {

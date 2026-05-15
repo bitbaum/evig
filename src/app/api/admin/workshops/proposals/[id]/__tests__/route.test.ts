@@ -65,6 +65,7 @@ jest.mock('@/db', () => ({
 jest.mock('@/db/schema', () => ({
   workshopProposals: { id: 'wp_id', userId: 'wp_userId', title: 'wp_title', status: 'wp_status', editHistory: 'wp_editHistory', lastEditedBy: 'wp_lastEditedBy', lastEditedAt: 'wp_lastEditedAt' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
+  workshops: { id: 'w_id', title: 'w_title', proposalId: 'w_proposalId' },
 }))
 
 jest.mock('drizzle-orm', () => ({
@@ -133,13 +134,24 @@ function makeContext(id = 'prop-1') {
   return { params: Promise.resolve({ id }) }
 }
 
+// Returns an object that is both awaitable and has .limit() for Drizzle query chaining
+function makeQueryResult(rows: unknown[]) {
+  return {
+    then: (resolve: (v: unknown) => unknown, reject?: (e: unknown) => unknown) =>
+      Promise.resolve(rows).then(resolve, reject),
+    catch: (reject: (e: unknown) => unknown) => Promise.resolve(rows).catch(reject),
+    finally: (fn: () => void) => Promise.resolve(rows).finally(fn),
+    limit: jest.fn(() => Promise.resolve(rows.slice(0, 1))),
+  }
+}
+
 beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
 
   mockFrom.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
   mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
-  mockWhere.mockResolvedValue([MOCK_PROPOSAL])
+  mockWhere.mockImplementation(() => makeQueryResult([MOCK_PROPOSAL]))
 
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockReturnValue({ returning: mockReturning })
