@@ -21,6 +21,7 @@ export interface RequestRow {
   offer_count: number
   admin_notes: string | null
   created_at: string
+  requester_id: string
   requester_name: string | null
   requester_email: string
 }

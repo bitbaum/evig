@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Search, ShieldCheck, Eye, Edit3, Trash2 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { formatPrice } from '@/config/marketplace'
@@ -93,7 +94,11 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                   {l.condition && <span className="text-xs ml-1">· {getConditionLabel(l.condition)}</span>}
                 </td>
                 <td className="px-4 py-3 text-neutral-900 dark:text-white font-medium">{formatPrice(Number(l.price_chf))}</td>
-                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">{l.seller_name || l.seller_email}</td>
+                <td className="px-4 py-3">
+                  <Link href={`/admin/users/${l.seller_id}`} className="text-primary-600 hover:underline text-sm">
+                    {l.seller_name || l.seller_email}
+                  </Link>
+                </td>
                 <td className="px-4 py-3"><StatusBadge status={l.status} config={LISTING_STATUS_CONFIG} /></td>
                 <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{formatDateShort(l.created_at)}</td>
                 <td className="px-4 py-3">

@@ -90,7 +90,11 @@ export function RequestsTab({
                 </td>
                 <td className="px-4 py-3"><UrgencyBadge urgency={r.urgency} /></td>
                 <td className="px-4 py-3"><RequestStatusBadge status={r.status} /></td>
-                <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">{r.requester_name || r.requester_email}</td>
+                <td className="px-4 py-3">
+                  <Link href={`/admin/users/${r.requester_id}`} className="text-primary-600 hover:underline text-sm">
+                    {r.requester_name || r.requester_email}
+                  </Link>
+                </td>
                 <td className="px-4 py-3 text-neutral-500">{r.canton}</td>
                 <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{formatBudget(r.budget_amount_cents, r.budget_type)}</td>
                 <td className="px-4 py-3 text-center">

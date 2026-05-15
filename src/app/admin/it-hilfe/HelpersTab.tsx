@@ -2,6 +2,7 @@
 // IT-Hilfe Admin — Helpers tab
 // ---------------------------------------------------------------------------
 
+import Link from 'next/link'
 import {
   HelpCircle, UserCheck, ShieldCheck, Ban,
 } from 'lucide-react'
@@ -67,7 +68,9 @@ export function HelpersTab({
               <tr key={h.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
                 <td className="px-4 py-3">
                   <div>
-                    <span className="font-medium text-neutral-900 dark:text-white">{h.helper_name || h.helper_email}</span>
+                    <Link href={`/admin/users/${h.user_id}`} className="font-medium text-primary-600 hover:underline">
+                      {h.helper_name || h.helper_email}
+                    </Link>
                     {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-purple-100 text-purple-700">Gratis</span>}
                     {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-info-100 text-info-700">KulturLegi</span>}
                   </div>

@@ -63,6 +63,7 @@ export const GET = withAdmin('it-hilfe-admin', async (request) => {
           admin_notes: itHilfeRequests.adminNotes,
           created_at: itHilfeRequests.createdAt,
           updated_at: itHilfeRequests.updatedAt,
+          requester_id: users.id,
           requester_name: users.name,
           requester_email: users.email,
         })

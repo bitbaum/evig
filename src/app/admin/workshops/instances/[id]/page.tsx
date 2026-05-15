@@ -239,7 +239,7 @@ export default function AdminWorkshopInstanceDetailPage({
                             <User className="w-5 h-5 text-neutral-600" />
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-neutral-900">{reg.user_name}</div>
+                            <Link href={`/admin/users/${reg.user_id}`} className="text-sm font-medium text-primary-600 hover:underline">{reg.user_name}</Link>
                             <div className="text-sm text-neutral-500 flex items-center gap-1">
                               <Mail className="w-3 h-3" />
                               {reg.user_email}

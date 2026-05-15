@@ -18,6 +18,7 @@ export interface ListingRow {
   verified_at: string | null
   admin_notes: string | null
   created_at: string
+  seller_id: string
   seller_name: string | null
   seller_email: string
   report_count: string

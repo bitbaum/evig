@@ -75,6 +75,7 @@ export const GET = withAdmin('marketplace', async (request) => {
           verified_at: listings.verifiedAt,
           admin_notes: listings.adminNotes,
           created_at: listings.createdAt,
+          seller_id: listings.sellerId,
           seller_name: seller.name,
           seller_email: seller.email,
           report_count: sql<number>`(SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.LISTING_REPORTS)} lr WHERE lr.listing_id = ${listings.id} AND lr.status = ${REPORT_STATUS.PENDING})`,
