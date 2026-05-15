@@ -14,6 +14,8 @@ import { BOOKING_STATUS } from '@/config/booking-status'
 import { ROLES } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 import { TABLE_NAMES } from '@/config/database'
+import { notifyUsers } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 const customer = alias(users, 'customer')
 const repairer = alias(users, 'repairer')
@@ -171,6 +173,15 @@ export const POST = withAuth(async (
       const createdAppointment = result.rows[0] as Record<string, unknown> | undefined
 
       notifyUnassigned(repairer_id, createdAppointment?.id as string | undefined, session, description, urgency)
+      if (repairer_id && createdAppointment?.id) {
+        notifyUsers([repairer_id], {
+          type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
+          title: 'Neuer Termin zugewiesen',
+          content: `Dir wurde ein neuer Reparaturtermin zugewiesen: ${description?.slice(0, 100)}`,
+          related_type: RELATED_TYPES.APPOINTMENT,
+          related_id: createdAppointment.id as string,
+        }).catch(() => {})
+      }
 
       return apiSuccess({ message: 'Termin erfolgreich erstellt', appointment: createdAppointment }, 201)
     }
@@ -200,6 +211,15 @@ export const POST = withAuth(async (
     })
 
     notifyUnassigned(repairer_id, createdAppointment?.id, session, description, urgency)
+    if (repairer_id && createdAppointment?.id) {
+      notifyUsers([repairer_id], {
+        type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_ASSIGNED,
+        title: 'Neuer Termin zugewiesen',
+        content: `Dir wurde ein neuer Reparaturtermin zugewiesen: ${description?.slice(0, 100)}`,
+        related_type: RELATED_TYPES.APPOINTMENT,
+        related_id: createdAppointment.id,
+      }).catch(() => {})
+    }
 
     return apiSuccess({
       message: 'Termin erfolgreich erstellt',

@@ -13,6 +13,8 @@ import {
   executeAppointmentUpdate,
   sendAppointmentNotification,
 } from '@/lib/services/appointment-actions'
+import { notifyAllStaff } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 const customerUser = alias(users, 'customer')
 const repairerUser = alias(users, 'repairer')
@@ -175,6 +177,17 @@ export const PATCH = withAuth<{ id: string }>(async (
       sendAppointmentNotification(appointmentId, action, newStatus, actionData).catch(err => {
         logger.warn('Failed to send appointment notification', { error: err, appointmentId })
       })
+    }
+
+    // In-app notification to all staff when appointment is completed
+    if (action === 'complete') {
+      notifyAllStaff({
+        type: NOTIFICATION_TYPES.SERVICE_APPOINTMENT_COMPLETED,
+        title: 'Reparaturtermin abgeschlossen',
+        content: 'Ein Reparaturtermin wurde als abgeschlossen markiert.',
+        related_type: RELATED_TYPES.APPOINTMENT,
+        related_id: appointmentId,
+      }, session.user.id).catch(() => {})
     }
 
     return apiSuccess({
