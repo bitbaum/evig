@@ -21,6 +21,37 @@ import { linkActionItemToTask } from './protocols-linking'
 const mpTable = getTableName(meetingProtocols)
 const uTable = getTableName(users)
 
+type UserRow = { id: string; name: string }
+
+/**
+ * Fetch all users with names for roster injection into AI prompts.
+ * Returns first names for the prompt string and full rows for post-processing.
+ */
+async function getTeamRoster(): Promise<{ promptString: string; userRows: UserRow[] }> {
+  try {
+    const result = await db.execute(sql`SELECT id, name FROM ${sql.raw(uTable)} WHERE name IS NOT NULL`)
+    const userRows = result.rows as unknown as UserRow[]
+    const firstNames = userRows.map(u => u.name.split(' ')[0]).filter(Boolean)
+    return { promptString: firstNames.join(', ') || 'Unbekannt', userRows }
+  } catch {
+    return { promptString: 'Unbekannt', userRows: [] }
+  }
+}
+
+/**
+ * Fuzzy-match an AI-extracted name against known users.
+ * Matches on: exact first name, one being a prefix of the other (≥3 chars).
+ */
+function fuzzyMatchUser(aiName: string, userRows: UserRow[]): UserRow | undefined {
+  const normalized = aiName.toLowerCase().trim()
+  return userRows.find(u => {
+    const firstName = u.name.split(' ')[0].toLowerCase()
+    return firstName === normalized ||
+      (normalized.length >= 3 && firstName.startsWith(normalized)) ||
+      (firstName.length >= 3 && normalized.startsWith(firstName))
+  })
+}
+
 // =============================================================================
 // AI PROCESSING
 // =============================================================================
@@ -68,11 +99,15 @@ export async function processTranscript(
     const template = MEETING_TYPE_TEMPLATES[meeting_type]
     const meetingTypeLabel = MEETING_TYPE_LABELS[meeting_type]
 
+    // Fetch team roster — grounds the LLM in real names so it doesn't hallucinate variants
+    const { promptString: knownAttendees, userRows } = await getTeamRoster()
+
     // Build prompt
     const prompt = fillPromptTemplate(PROTOCOL_PROMPTS.extract, {
       transcript: rawTranscript,
       meetingType: meetingTypeLabel,
       agendaHints: template.agenda_hints.join(', ') || 'Keine',
+      knownAttendees,
       schema: PROTOCOL_PROMPTS.schema,
     })
 
@@ -89,8 +124,8 @@ export async function processTranscript(
       }
     }
 
-    // Try to resolve attendee names
-    const resolvedNotes = await resolveAttendeeNames(aiResult.result.notes)
+    // Normalize attendee names + resolve action item assignments against real user DB
+    const resolvedNotes = resolveAttendeeNames(aiResult.result.notes, userRows)
 
     // Store results
     await db.execute(sql`
@@ -140,7 +175,8 @@ export async function processNotes(
 
     if (validated.success) {
       // Valid structured notes JSON — store directly
-      const resolvedNotes = await resolveAttendeeNames(validated.data)
+      const { userRows } = await getTeamRoster()
+      const resolvedNotes = resolveAttendeeNames(validated.data, userRows)
 
       await db.execute(sql`
         UPDATE ${sql.raw(mpTable)}
@@ -182,10 +218,13 @@ export async function processNotes(
   const template = MEETING_TYPE_TEMPLATES[meeting_type]
   const meetingTypeLabel = MEETING_TYPE_LABELS[meeting_type]
 
+  const { promptString: knownAttendees, userRows } = await getTeamRoster()
+
   const prompt = fillPromptTemplate(PROTOCOL_PROMPTS.structureNotes, {
     notes: content,
     meetingType: meetingTypeLabel,
     agendaHints: template.agenda_hints.join(', ') || 'Keine',
+    knownAttendees,
     schema: PROTOCOL_PROMPTS.schema,
   })
 
@@ -200,7 +239,7 @@ export async function processNotes(
     return { success: false, error: 'KI-Verarbeitung der Notizen fehlgeschlagen. Kein Provider erreichbar. Details im Server-Log.' }
   }
 
-  const resolvedNotes = await resolveAttendeeNames(aiResult.notes)
+  const resolvedNotes = resolveAttendeeNames(aiResult.notes, userRows)
 
   await db.execute(sql`
     UPDATE ${sql.raw(mpTable)}
@@ -364,44 +403,30 @@ export async function importTasks(
 // =============================================================================
 
 /**
- * Fuzzy match detected attendee names against users table
+ * Match AI-extracted attendee names against real users.
+ * Normalizes detected_attendees to canonical DB names and resolves action item assignments.
+ * Synchronous — caller passes userRows fetched during roster lookup.
  */
-async function resolveAttendeeNames(notes: StructuredNotes): Promise<StructuredNotes> {
-  if (!notes.detected_attendees || notes.detected_attendees.length === 0) {
-    return notes
-  }
+function resolveAttendeeNames(notes: StructuredNotes, userRows: UserRow[]): StructuredNotes {
+  if (userRows.length === 0) return notes
 
-  try {
-    // Get all staff users
-    const usersResult = await db.execute(sql`
-      SELECT id, name FROM ${sql.raw(uTable)} WHERE name IS NOT NULL
-    `)
+  // Normalize detected_attendees: snap AI-guessed names to canonical first names
+  const normalizedAttendees = (notes.detected_attendees ?? []).map(aiName => {
+    const match = fuzzyMatchUser(aiName, userRows)
+    return match ? match.name.split(' ')[0] : aiName
+  })
 
-    if (usersResult.rows.length === 0) return notes
+  // Resolve action item assignments: set assigned_to_id where we find a match
+  const resolvedActionItems = notes.action_items.map(item => {
+    if (!item.assigned_to_name || item.assigned_to_id) return item
+    const match = fuzzyMatchUser(item.assigned_to_name, userRows)
+    if (!match) return item
+    return {
+      ...item,
+      assigned_to_name: match.name.split(' ')[0],
+      assigned_to_id: match.id,
+    }
+  })
 
-    const userRows = usersResult.rows as unknown as Array<{ id: string; name: string }>
-
-    // For each action item with assigned_to_name, try to find matching user
-    const resolvedActionItems = notes.action_items.map(item => {
-      if (!item.assigned_to_name || item.assigned_to_id) return item
-
-      const match = userRows.find(u => {
-        const userName = u.name.toLowerCase()
-        const assignedName = item.assigned_to_name!.toLowerCase()
-        // Match on first name or full name
-        return userName.includes(assignedName) ||
-          assignedName.includes(userName.split(' ')[0])
-      })
-
-      if (match) {
-        return { ...item, assigned_to_id: match.id }
-      }
-      return item
-    })
-
-    return { ...notes, action_items: resolvedActionItems }
-  } catch (error) {
-    logger.warn('Error resolving attendee names', { error })
-    return notes
-  }
+  return { ...notes, detected_attendees: normalizedAttendees, action_items: resolvedActionItems }
 }

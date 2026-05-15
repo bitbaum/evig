@@ -177,6 +177,7 @@ Wichtige Regeln:
 
 Besprechungstyp: {meetingType}
 Agendahinweise: {agendaHints}
+Bekannte Teammitglieder: {knownAttendees}
 
 TRANSKRIPT:
 {transcript}
@@ -193,6 +194,7 @@ Wichtige Regeln:
 - Erkenne Zeithinweise wie "bis Freitag", "nächste Woche", "so schnell wie möglich"
 - Wenn mehrere Themen besprochen wurden, trenne sie in separate topic-Objekte
 - follow_ups nur wenn explizit auf frühere Sitzungen verwiesen wird
+- Nutze die bekannten Teammitglieder als Referenz: wenn ein Name im Gespräch nahe an einem bekannten Namen liegt, verwende den bekannten Namen
 
 Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
 
@@ -218,6 +220,7 @@ Wichtige Unterschiede zu Transkript-Verarbeitung:
 
 Besprechungstyp: {meetingType}
 Agendahinweise: {agendaHints}
+Bekannte Teammitglieder: {knownAttendees}
 
 NOTIZEN:
 {notes}
