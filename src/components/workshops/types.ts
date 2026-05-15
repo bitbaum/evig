@@ -203,6 +203,8 @@ export interface WorkshopProposalWithProposer extends WorkshopProposal {
   // Joined from users table for reviewer and editor
   reviewer_name?: string | null
   editor_name?: string | null
+  // Set when proposal was approved and a workshop was created
+  created_workshop?: { id: string; title: string } | null
 }
 
 // =============================================================================

@@ -13,6 +13,7 @@ import {
   MapPin,
   DollarSign,
   BookOpen,
+  ExternalLink,
 } from 'lucide-react';
 import { EditHistoryView } from '@/components/admin/EditHistoryView';
 import { EditProposalModal } from '@/components/admin/workshops/EditProposalModal';
@@ -253,6 +254,19 @@ export default function WorkshopProposalDetailPage() {
                   : proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'}
               </p>
             </section>
+
+            {proposal.created_workshop && (
+              <section className="bg-white rounded-lg shadow-sm border p-6">
+                <Heading level={3} className="font-semibold mb-3">Erstellter Workshop</Heading>
+                <Link
+                  href={`/admin/workshops/${proposal.created_workshop.id}`}
+                  className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  <ExternalLink className="w-4 h-4 flex-shrink-0" />
+                  {proposal.created_workshop.title}
+                </Link>
+              </section>
+            )}
 
             {proposal.reviewed_by && (
               <section className="bg-white rounded-lg shadow-sm border p-6">

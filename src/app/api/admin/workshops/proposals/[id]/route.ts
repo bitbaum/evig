@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { withAdmin } from '@/lib/api/middleware';
 import { db } from '@/db';
-import { workshopProposals, users } from '@/db/schema';
+import { workshopProposals, users, workshops } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 import {
@@ -76,12 +76,19 @@ export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, 
       return apiNotFound(ERROR_MESSAGES.WORKSHOP_PROPOSAL_NOT_FOUND);
     }
 
+    // Fetch linked workshop if proposal was approved
+    const createdWorkshopRows = await db
+      .select({ id: workshops.id, title: workshops.title })
+      .from(workshops)
+      .where(eq(workshops.proposalId, proposalId))
+      .limit(1)
+
     logger.info('Workshop proposal fetched', {
       proposalId,
       adminId: session.user.id,
     });
 
-    return apiSuccess({ proposal });
+    return apiSuccess({ proposal: { ...proposal, created_workshop: createdWorkshopRows[0] ?? null } });
   } catch (error) {
     logger.error('Error fetching workshop proposal', { error, proposalId });
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);

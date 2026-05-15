@@ -9,6 +9,8 @@ import { APPROVAL_STATUS } from '@/config/approval-status'
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import { logger } from '@/lib/logger'
 import { sendEmail } from '@/lib/email'
+import { notifyUsers } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 // POST /api/admin/workshops/proposals/[id]/approve - Approve or reject workshop proposal
 export const POST = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
@@ -113,6 +115,7 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
             instructorId: proposal.userId,
             createdBy: session.user.id,
             updatedBy: session.user.id,
+            proposalId: proposalId,
           })
           .returning({ id: workshops.id })
 
@@ -179,6 +182,17 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
       }
     } catch (emailError) {
       logger.warn('Failed to send workshop proposal email', { error: emailError, proposalId, action })
+    }
+
+    // In-app notification for the proposer
+    if (proposal.userId && action === 'approve') {
+      notifyUsers([proposal.userId], {
+        type: NOTIFICATION_TYPES.WORKSHOP_PROPOSAL_APPROVED,
+        title: 'Workshop-Vorschlag angenommen',
+        content: `Dein Vorschlag «${proposal.title}» wurde angenommen und als Workshop erstellt.`,
+        related_type: RELATED_TYPES.WORKSHOP_PROPOSAL,
+        related_id: proposalId,
+      }).catch(() => {})
     }
 
     logger.info('Workshop proposal processed', {
