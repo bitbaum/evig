@@ -27,19 +27,19 @@ export interface TaskFormData {
   assigned_to: string
 }
 
-export function useTaskForm(task?: TaskEditItem) {
+export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>) {
   const router = useRouter()
   const isEdit = !!task
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
   const [formData, setFormData] = useState<TaskFormData>({
-    title: task?.title ?? '',
-    description: task?.description ?? '',
-    instructions: task?.instructions ?? '',
+    title: task?.title ?? prefill?.title ?? '',
+    description: task?.description ?? prefill?.description ?? '',
+    instructions: task?.instructions ?? prefill?.instructions ?? '',
     task_type: task?.task_type ?? 'recurring_as_needed',
     category: task?.category ?? 'other',
-    priority: task?.priority ?? TASK_PRIORITIES.NORMAL,
+    priority: task?.priority ?? prefill?.priority ?? TASK_PRIORITIES.NORMAL,
     schedule_human: task?.schedule_human ?? '',
     estimated_minutes: task?.estimated_minutes?.toString() ?? '',
     due_date: task?.due_date ?? '',

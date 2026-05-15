@@ -2,7 +2,8 @@
 // IT-Hilfe Admin — Requests tab
 // ---------------------------------------------------------------------------
 
-import { Search, ExternalLink, Edit3 } from 'lucide-react'
+import { Search, ExternalLink, Edit3, ClipboardList } from 'lucide-react'
+import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
 import {
   DEVICE_CATEGORIES, URGENCY_LEVELS, REQUEST_STATUSES,
@@ -99,13 +100,22 @@ export function RequestsTab({
                 </td>
                 <td className="px-4 py-3 text-neutral-500 whitespace-nowrap">{formatDateShort(r.created_at)}</td>
                 <td className="px-4 py-3">
-                  <button
-                    onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
-                    className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                    title="Bearbeiten"
-                  >
-                    <Edit3 className="w-4 h-4 text-info-500" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
+                      className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                      title="Bearbeiten"
+                    >
+                      <Edit3 className="w-4 h-4 text-primary-600" />
+                    </button>
+                    <Link
+                      href={`/admin/tasks/new?source=it_hilfe&source_id=${r.id}&title=${encodeURIComponent(`IT-Hilfe: ${r.title}`)}&priority=${r.urgency === 'urgent' ? 'urgent' : 'normal'}`}
+                      className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                      title="Aufgabe erstellen"
+                    >
+                      <ClipboardList className="w-4 h-4 text-neutral-500" />
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   TASK_TYPES,
   TASK_TYPE_LABELS,
@@ -10,7 +10,7 @@ import {
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
 import type { TaskEditItem } from '@/lib/schemas/tasks'
-import { Loader2, Save } from 'lucide-react'
+import { Loader2, Save, Info } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useTaskForm } from '@/hooks/useTaskForm'
 import { Input } from '@/components/ui/input'
@@ -25,6 +25,15 @@ interface Props {
 
 export default function TaskFormClient({ task }: Props) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const source = searchParams.get('source')
+  const prefill = task ? undefined : {
+    title: searchParams.get('title') ?? undefined,
+    description: searchParams.get('description') ?? undefined,
+    priority: searchParams.get('priority') ?? undefined,
+  }
+
   const {
     isEdit,
     loading,
@@ -34,12 +43,18 @@ export default function TaskFormClient({ task }: Props) {
     handleChange,
     handleAIFieldsFilled,
     handleSubmit,
-  } = useTaskForm(task)
+  } = useTaskForm(task, prefill)
 
   const errorId = isEdit ? 'task-edit-error' : 'task-form-error'
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
+      {source === 'it_hilfe' && (
+        <div className="mb-4 p-3 bg-primary-50 border border-primary-200 rounded-lg flex items-center gap-2 text-sm text-primary-800">
+          <Info className="w-4 h-4 flex-shrink-0" />
+          Aus IT-Hilfe-Anfrage erstellt — Felder wurden vorausgefüllt.
+        </div>
+      )}
       {error && (
         <div id={errorId} className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
           {error}
