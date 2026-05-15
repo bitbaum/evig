@@ -20,11 +20,13 @@ import { OLLAMA_URL, APP_URL } from '@/config/urls'
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const GROQ_MODEL = 'llama-3.3-70b-versatile'
+// Fallback model for large prompts that exceed the primary model's free-tier TPM limit
+const GROQ_LARGE_CONTEXT_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
 
-const DEFAULT_TIMEOUT_MS = 30000
+const DEFAULT_TIMEOUT_MS = 60000
 
 interface ProviderRuntimeConfig {
   groqEnabled: boolean
@@ -165,6 +167,49 @@ export interface CallOptions {
 // PROVIDER IMPLEMENTATIONS
 // =============================================================================
 
+async function callGroqWithModel(
+  model: string,
+  opts: CallOptions,
+  cfg: ProviderRuntimeConfig,
+  signal: AbortSignal,
+): Promise<{ ok: true; text: string } | { ok: false; tooLarge: boolean; errorText: string; status: number }> {
+  const response = await fetch(GROQ_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${cfg.groqApiKey}`,
+    },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: opts.systemPrompt },
+        { role: 'user', content: opts.userPrompt },
+      ],
+      temperature: opts.temperature ?? 0.3,
+      max_tokens: opts.maxTokens ?? 4096,
+    }),
+    signal,
+  })
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => '')
+    // Groq returns 413 or 429 with "Request too large" when the prompt exceeds the model's rate limit
+    const tooLarge = (response.status === 413) ||
+      (response.status === 429 && errorText.includes('Request too large'))
+    return { ok: false, tooLarge, errorText, status: response.status }
+  }
+
+  let result: Record<string, unknown>
+  try {
+    result = await response.json()
+  } catch {
+    return { ok: false, tooLarge: false, errorText: 'Ungültige JSON-Antwort', status: 200 }
+  }
+
+  const text = (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || ''
+  return { ok: true, text }
+}
+
 async function callGroq(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<ProviderResult | ProviderError> {
   if (!cfg.groqEnabled) {
     return { provider: 'groq', reason: 'no_key', message: 'Groq ist deaktiviert' }
@@ -178,44 +223,32 @@ async function callGroq(opts: CallOptions, cfg: ProviderRuntimeConfig): Promise<
   const timeoutId = setTimeout(() => controller.abort(), opts.timeoutMs || DEFAULT_TIMEOUT_MS)
 
   try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${cfg.groqApiKey}`,
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          { role: 'system', content: opts.systemPrompt },
-          { role: 'user', content: opts.userPrompt },
-        ],
-        temperature: opts.temperature ?? 0.3,
-        max_tokens: opts.maxTokens ?? 4096,
-      }),
-      signal: controller.signal,
-    })
+    const primary = await callGroqWithModel(GROQ_MODEL, opts, cfg, controller.signal)
 
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => '')
-      if (response.status === 401 || response.status === 403) {
-        return { provider: 'groq', reason: 'auth', message: `API-Schlüssel ungültig oder abgelaufen (${response.status})` }
-      }
-      if (response.status === 429) {
-        return { provider: 'groq', reason: 'rate_limit', message: 'Rate-Limit erreicht' }
-      }
-      return { provider: 'groq', reason: 'unknown', message: `HTTP ${response.status}: ${errorText.substring(0, 200)}` }
+    if (primary.ok) {
+      return { text: primary.text, model: `groq:${GROQ_MODEL}`, provider: 'groq' }
     }
 
-    let result: Record<string, unknown>
-    try {
-      result = await response.json()
-    } catch {
-      return { provider: 'groq', reason: 'parse', message: 'Ungültige JSON-Antwort von Groq' }
+    // Primary model hit token limit → retry with large-context model transparently
+    if (primary.tooLarge) {
+      logger.info('Groq primary model token limit hit, retrying with large-context model', {
+        primaryModel: GROQ_MODEL,
+        fallbackModel: GROQ_LARGE_CONTEXT_MODEL,
+      })
+      const fallback = await callGroqWithModel(GROQ_LARGE_CONTEXT_MODEL, opts, cfg, controller.signal)
+      if (fallback.ok) {
+        return { text: fallback.text, model: `groq:${GROQ_LARGE_CONTEXT_MODEL}`, provider: 'groq' }
+      }
+      return { provider: 'groq', reason: 'rate_limit', message: `Anfrage zu gross für alle Groq-Modelle: ${fallback.errorText.substring(0, 200)}` }
     }
 
-    const text = (result.choices as Array<{ message?: { content?: string } }>)?.[0]?.message?.content || ''
-    return { text, model: `groq:${GROQ_MODEL}`, provider: 'groq' }
+    if (primary.status === 401 || primary.status === 403) {
+      return { provider: 'groq', reason: 'auth', message: `API-Schlüssel ungültig oder abgelaufen (${primary.status})` }
+    }
+    if (primary.status === 429) {
+      return { provider: 'groq', reason: 'rate_limit', message: 'Rate-Limit erreicht' }
+    }
+    return { provider: 'groq', reason: 'unknown', message: `HTTP ${primary.status}: ${primary.errorText.substring(0, 200)}` }
   } catch (error) {
     if (error instanceof Error && error.name === 'AbortError') {
       return { provider: 'groq', reason: 'timeout', message: `Zeitüberschreitung nach ${(opts.timeoutMs || DEFAULT_TIMEOUT_MS) / 1000}s` }
