@@ -12,6 +12,8 @@ import { logger } from '@/lib/logger'
 import { formatDateTimeWithWeekday } from '@/lib/date-formats'
 import { validateBody, WorkshopRegistrationSchema } from '@/lib/schemas'
 import { APP_URL } from '@/config/urls'
+import { notifyAllStaff } from '@/lib/services/notifications'
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
@@ -107,6 +109,14 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     } catch (emailError) {
       logger.error('Failed to send workshop registration email', { error: emailError })
     }
+
+    notifyAllStaff({
+      type: NOTIFICATION_TYPES.SYSTEM,
+      title: 'Neue Workshop-Anmeldung',
+      content: `${session.user.name || session.user.email} hat sich für «${workshop.title}» angemeldet.`,
+      related_type: RELATED_TYPES.WORKSHOP,
+      related_id: workshop.id,
+    }).catch(() => {})
 
     return apiSuccess({
       message: SUCCESS_MESSAGES.WORKSHOP_REGISTERED,
