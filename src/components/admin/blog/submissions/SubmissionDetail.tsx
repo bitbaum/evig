@@ -223,15 +223,28 @@ export function SubmissionDetail({
       )}
 
       {/* Actions: published */}
-      {submission.status === APPROVAL_STATUS.PUBLISHED && submission.slug && (
-        <Link
-          href={`/blog/${submission.slug}`}
-          target="_blank"
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
-          <ExternalLink className="w-4 h-4" />
-          Beitrag ansehen
-        </Link>
+      {submission.status === APPROVAL_STATUS.PUBLISHED && (
+        <div className="flex flex-col gap-2">
+          {submission.slug && (
+            <Link
+              href={`/blog/${submission.slug}`}
+              target="_blank"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Beitrag ansehen
+            </Link>
+          )}
+          {submission.published_post_id && (
+            <Link
+              href={`/admin/content/blog/${submission.published_post_id}`}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors text-sm"
+            >
+              <Edit className="w-4 h-4" />
+              Im Admin bearbeiten
+            </Link>
+          )}
+        </div>
       )}
 
       {/* Delete */}
