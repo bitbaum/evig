@@ -367,10 +367,10 @@ export const designPrimitive = {
   },
 
   buttonSize: {
-    default: 'min-h-[40px] px-4 py-2 text-sm',
+    default: 'min-h-[44px] px-4 py-2 text-sm',
     sm:      'min-h-[36px] px-3 py-1.5 text-sm',
     lg:      'min-h-[44px] px-6 py-2.5 text-sm',
-    icon:    'min-h-[40px] min-w-[40px] p-2',
+    icon:    'min-h-[44px] min-w-[44px] p-2',
   },
 
   // ── Badges ────────────────────────────────────────────────────────────────

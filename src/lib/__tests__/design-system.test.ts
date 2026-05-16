@@ -262,13 +262,13 @@ describe('designPrimitive', () => {
     expect(designPrimitive).toHaveProperty('table')
   })
 
-  it('uses readable base text in shared body and form primitives', () => {
-    expect(designPrimitive.type.body).toContain('text-base')
-    expect(designPrimitive.form.input).toContain('text-base')
-    expect(designPrimitive.table.td).toContain('text-base')
+  it('uses compact text-sm in shared body and form primitives (x.ai tight-tracking style)', () => {
+    expect(designPrimitive.type.body).toContain('text-sm')
+    expect(designPrimitive.form.input).toContain('text-sm')
+    expect(designPrimitive.table.td).toContain('text-sm')
   })
 
-  it('keeps default button touch target at least 44px', () => {
+  it('keeps default button touch target at least 44px (WCAG 2.1 SC 2.5.5)', () => {
     expect(designPrimitive.buttonSize.default).toContain('min-h-[44px]')
   })
 })
