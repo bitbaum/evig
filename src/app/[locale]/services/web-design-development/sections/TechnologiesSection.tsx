@@ -44,14 +44,13 @@ export async function TechnologiesSection() {
       technologies={technologies}
       categories={uniqueCategories}
       allLabel={allLabel}
+      totalCount={technologies.length}
       labels={{
         title: t('title'),
         subtitle: t('subtitle'),
         filterLabel: t('filterLabel'),
         visitWebsite: t('visitWebsite'),
         showing: t('showing', { count: technologies.length, total: technologies.length }),
-        showingFiltered: (count: number, category: string) =>
-          t('showingFiltered', { count, total: technologies.length, category }),
       }}
     />
   )

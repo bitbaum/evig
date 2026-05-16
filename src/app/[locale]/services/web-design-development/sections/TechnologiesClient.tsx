@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { CheckCircle2, ArrowRight, Filter, Globe, Code, Palette, Shield, Database, Cloud, Layers } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import type { TechItem } from './TechnologiesSection'
@@ -13,17 +14,18 @@ interface TechnologiesClientProps {
   technologies: TechItem[]
   categories: string[]
   allLabel: string
+  totalCount: number
   labels: {
     title: string
     subtitle: string
     filterLabel: string
     visitWebsite: string
     showing: string
-    showingFiltered: (count: number, category: string) => string
   }
 }
 
-export function TechnologiesClient({ technologies, categories, allLabel, labels }: TechnologiesClientProps) {
+export function TechnologiesClient({ technologies, categories, allLabel, totalCount, labels }: TechnologiesClientProps) {
+  const t = useTranslations('services.webDesign.technologies')
   const [selectedCategory, setSelectedCategory] = useState(allLabel)
 
   const filteredTechnologies = selectedCategory === allLabel
@@ -32,7 +34,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, labels 
 
   const showingText = selectedCategory === allLabel
     ? labels.showing
-    : labels.showingFiltered(filteredTechnologies.length, selectedCategory)
+    : t('showingFiltered', { count: filteredTechnologies.length, total: totalCount, category: selectedCategory })
 
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-white">
