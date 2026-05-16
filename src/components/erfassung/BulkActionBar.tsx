@@ -39,7 +39,7 @@ export function BulkActionBar({
           <button
             type="button"
             onClick={onSelectAll}
-            className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium"
+            className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium"
           >
             {allSelected ? t('deselectAll') : t('selectAll')}
           </button>

@@ -101,8 +101,8 @@ export default async function TransparenzPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-orange-100 rounded-lg">
-            <Eye className="w-6 h-6 text-orange-600" />
+          <div className="p-2 bg-secondary-100 rounded-lg">
+            <Eye className="w-6 h-6 text-secondary-600" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Transparenz</Heading>

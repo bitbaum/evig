@@ -246,11 +246,11 @@ export function IntakeDetailView({
 
       {/* Tier Change Dialog */}
       {showTierChange && (
-        <div className="border-2 border-orange-300 bg-orange-50 rounded-lg p-4 space-y-3">
-          <Heading level={3} className="font-medium flex items-center gap-2 text-orange-800">
+        <div className="border-2 border-warning-300 bg-warning-50 rounded-lg p-4 space-y-3">
+          <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800">
             <ArrowDownUp className="w-4 h-4" /> Stufe ändern
           </Heading>
-          <div className="flex items-start gap-2 text-sm text-orange-700 bg-orange-100 p-2 rounded">
+          <div className="flex items-start gap-2 text-sm text-warning-700 bg-warning-100 p-2 rounded">
             <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
             <span>Alle Checklisten-Fortschritte werden zurückgesetzt.</span>
           </div>
@@ -281,7 +281,7 @@ export function IntakeDetailView({
               type="button"
               onClick={onTierChange}
               disabled={tierChanging || !tierChangeReason.trim()}
-              className="px-3 py-1.5 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 text-sm"
+              className="px-3 py-1.5 bg-warning-600 text-white rounded-lg hover:bg-warning-700 disabled:opacity-50 text-sm"
             >
               {tierChanging ? 'Ändern...' : 'Stufe ändern'}
             </button>

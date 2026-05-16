@@ -94,8 +94,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
   // Styles
   const containerClass = variant === 'section'
-    ? 'bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl shadow-sm border border-purple-200 dark:border-purple-700'
-    : 'rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20'
+    ? 'bg-gradient-to-r from-primary-50 to-info-50 dark:from-primary-900/20 dark:to-info-900/20 rounded-xl shadow-sm border border-primary-200 dark:border-primary-700'
+    : 'rounded-lg border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20'
 
   const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4'
 
@@ -107,11 +107,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
         onClick={() => setIsExpanded(!isExpanded)}
         className={`w-full flex items-center justify-between ${padding} py-2.5 text-left`}
       >
-        <span className="text-sm font-semibold text-purple-900 dark:text-purple-100 flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+        <span className="text-sm font-semibold text-primary-900 dark:text-primary-100 flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-primary-600 dark:text-primary-400" />
           {t('heading')}
         </span>
-        <svg className={`w-4 h-4 text-purple-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className={`w-4 h-4 text-primary-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
@@ -150,13 +150,13 @@ export function AIFormAssist<T = Record<string, unknown>>({
               }
               rows={2}
               disabled={isExtracting}
-              className="flex-1 px-3 py-2 text-sm border border-purple-300 dark:border-purple-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+              className="flex-1 px-3 py-2 text-sm border border-primary-300 dark:border-primary-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
             />
             <button
               type="button"
               onClick={handleSubmit}
               disabled={isExtracting || !inputText.trim()}
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium rounded-lg transition-colors touch-manipulation self-end"
+              className="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium rounded-lg transition-colors touch-manipulation self-end"
               aria-label={isExtracting ? t('ariaProcessing') : t('ariaRun')}
             >
               {isExtracting
@@ -188,7 +188,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
                       onClick={() => handleQuickAction(action.key)}
                       disabled={isExtracting || !hasContent}
                       title={!hasContent ? t('quickActionDisabled') : undefined}
-                      className="px-2.5 py-1 bg-purple-100 dark:bg-purple-800/40 text-purple-700 dark:text-purple-300 rounded-md text-xs font-medium hover:bg-purple-200 dark:hover:bg-purple-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
+                      className="px-2.5 py-1 bg-primary-100 dark:bg-primary-800/40 text-primary-700 dark:text-primary-300 rounded-md text-xs font-medium hover:bg-primary-200 dark:hover:bg-primary-700/50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors touch-manipulation"
                     >
                       {action.label}
                     </button>

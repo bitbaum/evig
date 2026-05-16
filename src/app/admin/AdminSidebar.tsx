@@ -204,12 +204,12 @@ export function AdminSidebar({
                 sidebarCollapsed ? 'justify-center' : ''
               } ${
                 isActive(hirnSection.path)
-                  ? 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 text-purple-700 dark:text-purple-400 ring-1 ring-purple-500/30'
-                  : 'text-neutral-700 dark:text-neutral-300 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-pink-500/10'
+                  ? 'bg-gradient-to-r from-primary-500/10 to-primary-600/10 text-primary-700 dark:text-primary-400 ring-1 ring-primary-500/30'
+                  : 'text-neutral-700 dark:text-neutral-300 hover:bg-gradient-to-r hover:from-primary-500/10 hover:to-primary-600/10'
               }`}
               title={sidebarCollapsed ? 'Hirn AI' : undefined}
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center flex-shrink-0">
                 <Brain className="w-4 h-4 text-white" />
               </div>
               {!sidebarCollapsed && (

@@ -37,7 +37,7 @@ const SOURCE_LABELS = {
 function getConfidenceColor(confidence: number): string {
   if (confidence >= 0.85) return 'bg-primary-100 text-primary-700 border-primary-300'
   if (confidence >= 0.7) return 'bg-warning-100 text-warning-700 border-warning-300'
-  if (confidence >= 0.5) return 'bg-orange-100 text-orange-700 border-orange-300'
+  if (confidence >= 0.5) return 'bg-secondary-100 text-secondary-700 border-secondary-300'
   return 'bg-error-100 text-error-700 border-error-300'
 }
 
@@ -88,7 +88,7 @@ export function AIFieldIndicator({
             {/* Header */}
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-purple-600" />
+                <Sparkles className="w-4 h-4 text-primary-600" />
                 <span className="font-medium text-neutral-900 dark:text-white text-sm">
                   KI-Extraktion
                 </span>

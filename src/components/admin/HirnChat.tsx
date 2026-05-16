@@ -171,7 +171,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
   if (loadingHistory) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -182,7 +182,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       {!compact && (
         <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-purple-600" />
+            <Bot className="w-5 h-5 text-primary-600" />
             <span className="font-medium text-neutral-900 dark:text-white">Hirn Assistant</span>
           </div>
           {messages.length > 0 && (
@@ -201,7 +201,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       <div className={`flex-1 overflow-y-auto space-y-4 ${compact ? 'p-3' : 'p-4'}`}>
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center text-neutral-500 dark:text-neutral-400">
-            <Sparkles className="w-12 h-12 mb-4 text-purple-500" />
+            <Sparkles className="w-12 h-12 mb-4 text-primary-500" />
             <Heading level={3} className="text-lg font-medium">Willkommen bei Hirn</Heading>
             <p className="text-sm max-w-md mt-2">
               Stelle Fragen zu {ORG.name} — ich kenne unsere Mission, Geschichte, Zahlen,
@@ -215,15 +215,15 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
             >
               {message.role === 'assistant' && (
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-purple-600" />
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-primary-600" />
                 </div>
               )}
 
               <div
                 className={`max-w-[80%] ${
                   message.role === 'user'
-                    ? 'bg-purple-600 text-white rounded-2xl rounded-br-sm px-4 py-2'
+                    ? 'bg-primary-600 text-white rounded-2xl rounded-br-sm px-4 py-2'
                     : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-white rounded-2xl rounded-bl-sm px-4 py-3'
                 }`}
               >
@@ -232,7 +232,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                 {message.role === 'assistant' && message.actions && message.actions.length > 0 && (
                   <div className="mt-3 space-y-2">
                     {message.actions.map(action => (
-                      <div key={action.id} className="rounded-xl border border-purple-200 dark:border-purple-700 p-3 bg-white/70 dark:bg-neutral-900/40">
+                      <div key={action.id} className="rounded-xl border border-primary-200 dark:border-primary-700 p-3 bg-white/70 dark:bg-neutral-900/40">
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <p className="text-sm font-semibold">{action.title}</p>
@@ -243,7 +243,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                         <button
                           type="button"
                           onClick={() => executeAction(action)}
-                          className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-purple-600 hover:bg-purple-700 text-white"
+                          className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-primary-600 hover:bg-primary-700 text-white"
                         >
                           <Rocket className="w-3.5 h-3.5" />
                           {action.cta}
@@ -261,7 +261,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               </div>
 
               {message.role === 'user' && (
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
@@ -271,14 +271,14 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
         {loading && (
           <div className="flex gap-3">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
-              <Bot className="w-4 h-4 text-purple-600" />
+            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center">
+              <Bot className="w-4 h-4 text-primary-600" />
             </div>
             <div className="bg-neutral-100 dark:bg-neutral-900 rounded-2xl rounded-bl-sm px-4 py-3">
               <div className="flex gap-1">
-                <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                <span className="w-2 h-2 bg-primary-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </div>
           </div>
@@ -305,12 +305,12 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'hirn-chat-error' : undefined}
-            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-neutral-400 text-white rounded-xl transition-colors"
+            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-400 text-white rounded-xl transition-colors"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

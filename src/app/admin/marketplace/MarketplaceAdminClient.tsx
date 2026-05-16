@@ -23,7 +23,7 @@ export default function MarketplaceAdminClient() {
           <StatsCard label="Aktive Inserate" value={m.stats.byStatus.active ?? 0} icon={Package} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
           <StatsCard label="Ungeprüft" value={m.stats.unverified} icon={Clock} color="bg-warning-50 dark:bg-warning-900/20 border-warning-200 dark:border-warning-800 text-warning-800 dark:text-warning-200" />
           <StatsCard label="Offene Meldungen" value={m.stats.openReports} icon={AlertTriangle} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
-          <StatsCard label={ORG.name} value={m.stats.revampit} icon={Store} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
+          <StatsCard label={ORG.name} value={m.stats.revampit} icon={Store} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
         </div>
       )}
 

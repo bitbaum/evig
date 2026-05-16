@@ -97,13 +97,13 @@ export function IntakeCreateForm({
         <button
           type="button"
           onClick={() => setAiOpen(!aiOpen)}
-          className="w-full flex items-center justify-between p-3 bg-purple-50 hover:bg-purple-100 text-left"
+          className="w-full flex items-center justify-between p-3 bg-primary-50 hover:bg-primary-100 text-left"
         >
-          <span className="text-sm font-medium text-purple-800 flex items-center gap-2">
+          <span className="text-sm font-medium text-primary-800 flex items-center gap-2">
             <Loader2 className="w-4 h-4" />
             KI-Schnelleingabe
           </span>
-          {aiOpen ? <ChevronDown className="w-4 h-4 text-purple-600" /> : <ChevronRight className="w-4 h-4 text-purple-600" />}
+          {aiOpen ? <ChevronDown className="w-4 h-4 text-primary-600" /> : <ChevronRight className="w-4 h-4 text-primary-600" />}
         </button>
 
         {aiOpen && (
@@ -121,7 +121,7 @@ export function IntakeCreateForm({
                   onClick={() => setAiTab(tab.key)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-sm border-b-2 -mb-px transition-colors ${
                     aiTab === tab.key
-                      ? 'border-purple-600 text-purple-700 font-medium'
+                      ? 'border-primary-600 text-primary-700 font-medium'
                       : 'border-transparent text-neutral-500 hover:text-neutral-700'
                   }`}
                 >
@@ -144,7 +144,7 @@ export function IntakeCreateForm({
                   type="button"
                   onClick={onAiTextExtract}
                   disabled={aiLoading || aiText.trim().length < 3}
-                  className="px-3 py-1.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 text-sm flex items-center gap-1.5"
+                  className="px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 text-sm flex items-center gap-1.5"
                 >
                   {aiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Type className="w-3.5 h-3.5" />}
                   Analysieren
@@ -159,7 +159,7 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStartVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-purple-400 w-full justify-center text-sm text-neutral-600"
+                    className="flex items-center gap-2 px-4 py-3 border-2 border-dashed border-neutral-300 rounded-lg hover:border-primary-400 w-full justify-center text-sm text-neutral-600"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme starten
@@ -176,7 +176,7 @@ export function IntakeCreateForm({
                   </button>
                 )}
                 {voiceState === 'processing' && (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-purple-50 rounded-lg justify-center text-sm text-purple-700">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-primary-50 rounded-lg justify-center text-sm text-primary-700">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Verarbeite Sprache...
                   </div>

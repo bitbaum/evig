@@ -134,7 +134,7 @@ export function PermissionRequestsManager() {
     <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
       <div className="p-4 border-b border-neutral-200 dark:border-white/[0.06] flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Shield className="w-5 h-5 text-orange-500" />
+          <Shield className="w-5 h-5 text-secondary-500" />
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
             Berechtigungsanfragen ({requests.length})
           </Heading>

@@ -128,7 +128,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {donation.receipt_requested && !donation.receipt_sent && (
                     <button
                       onClick={() => onMarkReceiptSent(donation.id)}
-                      className="text-xs px-2 py-1 bg-orange-100 text-orange-700 rounded hover:bg-orange-200"
+                      className="text-xs px-2 py-1 bg-secondary-100 text-secondary-700 rounded hover:bg-secondary-200"
                       title="Quittung als gesendet markieren"
                     >
                       Quittung
@@ -137,7 +137,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {donation.donation_type === DONATION_TYPES.DEVICE && (
                     <Link
                       href={`/admin/intake?donation_id=${donation.id}&donor_name=${encodeURIComponent(donation.donor_name || '')}&donor_email=${encodeURIComponent(donation.donor_email || '')}`}
-                      className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 inline-flex items-center gap-1"
+                      className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded hover:bg-primary-200 inline-flex items-center gap-1"
                       title="Im Geräte-Eingang erfassen"
                     >
                       Eingang <ArrowRight className="w-3 h-3" />

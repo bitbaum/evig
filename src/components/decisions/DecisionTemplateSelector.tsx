@@ -38,7 +38,7 @@ export default function DecisionTemplateSelector({ onSelect }: Props) {
               <span className="rounded-full bg-primary-100 dark:bg-primary-900/40 px-2 py-0.5 text-xs text-primary-700 dark:text-primary-300">
                 {DECISION_TYPE_CONFIG[template.decisionType]?.label}
               </span>
-              <span className="rounded-full bg-purple-100 dark:bg-purple-900/40 px-2 py-0.5 text-xs text-purple-700 dark:text-purple-300">
+              <span className="rounded-full bg-primary-100 dark:bg-primary-900/40 px-2 py-0.5 text-xs text-primary-700 dark:text-primary-300">
                 {VOTING_METHOD_CONFIG[template.votingMethod]?.label}
               </span>
               <span className="rounded-full bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 text-xs text-neutral-600 dark:text-neutral-400">

@@ -306,7 +306,7 @@ export default function DecisionActions({
               <button
                 onClick={handlePropose}
                 disabled={loading === 'propose'}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-purple-50 text-purple-700 border border-purple-200 rounded-md hover:bg-purple-100 disabled:opacity-50"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-primary-50 text-primary-700 border border-primary-200 rounded-md hover:bg-primary-100 disabled:opacity-50"
               >
                 {loading === 'propose' ? (
                   <Loader2 className="w-3 h-3 animate-spin" />

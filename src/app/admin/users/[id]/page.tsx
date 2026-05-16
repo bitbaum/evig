@@ -137,7 +137,7 @@ export default async function UserDetailPage({ params }: PageProps) {
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
             userIsSuperAdmin
-              ? 'bg-gradient-to-r from-purple-500 to-pink-600'
+              ? 'bg-gradient-to-r from-primary-500 to-error-600'
               : userIsStaff
                 ? 'bg-gradient-to-r from-primary-500 to-primary-700'
                 : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
@@ -152,7 +152,7 @@ export default async function UserDetailPage({ params }: PageProps) {
                 {user.name || 'Kein Name'}
               </Heading>
               {userIsSuperAdmin && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                   <Crown className="w-3 h-3" />
                   Super Admin
                 </span>
@@ -247,7 +247,7 @@ export default async function UserDetailPage({ params }: PageProps) {
           </Heading>
 
           {userIsSuperAdmin ? (
-            <p className="text-purple-600 dark:text-purple-400 font-medium">
+            <p className="text-primary-600 dark:text-primary-400 font-medium">
               Super Admin - Voller Zugriff auf alle Bereiche
             </p>
           ) : hasFullAccess ? (

@@ -235,7 +235,7 @@ export default function AdminReviewsPage() {
                         onClick={() => startModeration(review.id, 'flag_inappropriate')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als unangemessen markieren"
-                        className="min-h-[2.75rem] px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs hover:bg-orange-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="min-h-[2.75rem] px-2 py-1 bg-secondary-100 text-secondary-700 rounded text-xs hover:bg-secondary-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <AlertTriangle className="w-3 h-3" /> Unangemessen
                       </button>

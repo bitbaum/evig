@@ -57,7 +57,7 @@ export function CertificationVerificationSection({
                             </span>
                           )}
                           {cert.daysUntilExpiry && cert.daysUntilExpiry <= 90 && cert.daysUntilExpiry > 0 && (
-                            <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded-full text-xs">
+                            <span className="px-2 py-1 bg-secondary-100 text-secondary-800 rounded-full text-xs">
                               Läuft ab in {cert.daysUntilExpiry} Tagen
                             </span>
                           )}

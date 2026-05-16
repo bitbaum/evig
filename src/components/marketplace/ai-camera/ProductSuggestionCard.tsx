@@ -25,10 +25,10 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
   return (
     <div
       onClick={() => onSelect(suggestion)}
-      className="p-4 border border-neutral-200 rounded-lg hover:border-purple-300 hover:bg-purple-50 cursor-pointer transition-colors"
+      className="p-4 border border-neutral-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 cursor-pointer transition-colors"
     >
       <div className="flex items-start gap-4">
-        <CategoryIcon category={suggestion.category} className="w-8 h-8 text-purple-600 mt-1" />
+        <CategoryIcon category={suggestion.category} className="w-8 h-8 text-primary-600 mt-1" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
             <Heading level={4} className="font-medium text-neutral-900">{suggestion.name}</Heading>
@@ -39,7 +39,7 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
           </p>
           <FeatureTags features={suggestion.features} />
         </div>
-        <CheckCircle className="w-5 h-5 text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+        <CheckCircle className="w-5 h-5 text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
     </div>
   )

@@ -82,7 +82,7 @@ export function VoteAIAdvisor({
   const quickQuestions = Object.values(VOTING_ADVISOR_PROMPTS.quickQuestions)
 
   return (
-    <div className="rounded-lg border border-indigo-200 bg-indigo-50">
+    <div className="rounded-lg border border-info-200 bg-info-50">
       {/* Header */}
       <button
         type="button"
@@ -90,13 +90,13 @@ export function VoteAIAdvisor({
         className="w-full flex items-center justify-between px-4 py-3 text-left"
         aria-expanded={expanded}
       >
-        <span className="flex items-center gap-2 text-sm font-semibold text-indigo-900">
-          <Sparkles className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+        <span className="flex items-center gap-2 text-sm font-semibold text-info-900">
+          <Sparkles className="w-4 h-4 text-info-600 flex-shrink-0" />
           KI-Beratung — Frag die KI zu dieser Abstimmung
         </span>
         {expanded
-          ? <ChevronUp className="w-4 h-4 text-indigo-500 flex-shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+          ? <ChevronUp className="w-4 h-4 text-info-500 flex-shrink-0" />
+          : <ChevronDown className="w-4 h-4 text-info-500 flex-shrink-0" />
         }
       </button>
 
@@ -110,7 +110,7 @@ export function VoteAIAdvisor({
                 type="button"
                 onClick={() => ask(q.question)}
                 disabled={loading}
-                className="px-2.5 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium hover:bg-indigo-200 disabled:opacity-50 transition-colors touch-manipulation"
+                className="px-2.5 py-1.5 rounded-full bg-info-100 text-info-700 text-xs font-medium hover:bg-info-200 disabled:opacity-50 transition-colors touch-manipulation"
               >
                 {q.label}
               </button>
@@ -126,13 +126,13 @@ export function VoteAIAdvisor({
               placeholder="Stelle eine eigene Frage zu dieser Abstimmung..."
               rows={2}
               disabled={loading}
-              className="flex-1 px-3 py-2 text-sm border border-indigo-300 rounded-lg bg-white resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
+              className="flex-1 px-3 py-2 text-sm border border-info-300 rounded-lg bg-white resize-none focus:outline-none focus:ring-2 focus:ring-info-500 disabled:opacity-50"
             />
             <button
               type="button"
               onClick={handleSubmit}
               disabled={loading || !question.trim()}
-              className="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white rounded-lg transition-colors self-end touch-manipulation"
+              className="px-3 py-2 bg-info-600 hover:bg-info-700 disabled:bg-info-300 text-white rounded-lg transition-colors self-end touch-manipulation"
               aria-label="Frage stellen"
             >
               {loading
@@ -152,8 +152,8 @@ export function VoteAIAdvisor({
 
           {/* AI response */}
           {analysis && (
-            <div className="bg-white border border-indigo-200 rounded-lg px-4 py-3 text-sm text-neutral-800 whitespace-pre-wrap leading-relaxed">
-              <div className="flex items-center gap-1.5 text-xs text-indigo-600 font-medium mb-2">
+            <div className="bg-white border border-info-200 rounded-lg px-4 py-3 text-sm text-neutral-800 whitespace-pre-wrap leading-relaxed">
+              <div className="flex items-center gap-1.5 text-xs text-info-600 font-medium mb-2">
                 <Sparkles className="w-3 h-3" />
                 KI-Antwort
               </div>
@@ -161,7 +161,7 @@ export function VoteAIAdvisor({
             </div>
           )}
 
-          <p className="text-xs text-indigo-500">
+          <p className="text-xs text-info-500">
             Die KI ist unparteiisch und empfiehlt keine Abstimmungsposition. Sie hilft dir, die Entscheidung besser zu verstehen.
           </p>
         </div>

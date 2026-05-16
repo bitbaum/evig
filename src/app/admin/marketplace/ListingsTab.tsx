@@ -81,7 +81,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-medium text-neutral-900 dark:text-white">{l.title}</span>
                     {l.verified_at && <ShieldCheck className="w-3.5 h-3.5 text-primary-600" />}
-                    {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300">RIT</span>}
+                    {l.is_revampit && <span className="px-1.5 py-0.5 text-[10px] rounded bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300">RIT</span>}
                     {parseInt(l.report_count) > 0 && (
                       <span className="px-1.5 py-0.5 text-[10px] rounded bg-error-100 text-error-700 dark:bg-error-900/30 dark:text-error-300">
                         {l.report_count} Meldung{parseInt(l.report_count) > 1 ? 'en' : ''}

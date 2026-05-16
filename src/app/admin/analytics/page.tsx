@@ -252,7 +252,7 @@ export default async function AnalyticsPage() {
 
         <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Calendar className="w-8 h-8 text-purple-600" />
+            <Calendar className="w-8 h-8 text-primary-600" />
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalWorkshops}</p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">Workshops</p>
@@ -272,7 +272,7 @@ export default async function AnalyticsPage() {
 
         <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Package className="w-8 h-8 text-orange-600" />
+            <Package className="w-8 h-8 text-secondary-600" />
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalSellers}</p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">Verkäufer</p>
@@ -349,12 +349,12 @@ export default async function AnalyticsPage() {
               </div>
               <span className="text-lg font-bold text-primary-600">{activity.taskCompletionsThisMonth}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
               <div className="flex items-center gap-2">
-                <Package className="w-5 h-5 text-purple-600" />
+                <Package className="w-5 h-5 text-primary-600" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">Neue Einreichungen (diesen Monat)</span>
               </div>
-              <span className="text-lg font-bold text-purple-600">{activity.contentSubmissionsThisMonth}</span>
+              <span className="text-lg font-bold text-primary-600">{activity.contentSubmissionsThisMonth}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg">
               <div className="flex items-center gap-2">
@@ -390,8 +390,8 @@ export default async function AnalyticsPage() {
           className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-400 transition-colors group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <ClipboardList className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <ClipboardList className="w-5 h-5 text-primary-600" />
             </div>
             <div>
               <p className="font-medium text-neutral-900 dark:text-white">Aufgaben-Analyse</p>

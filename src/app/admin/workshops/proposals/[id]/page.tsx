@@ -189,7 +189,7 @@ export default function WorkshopProposalDetailPage() {
                 {proposal.status === APPROVAL_STATUS.PENDING && <Clock className="w-5 h-5 text-warning-600" />}
                 {proposal.status === APPROVAL_STATUS.REJECTED && <X className="w-5 h-5 text-error-600" />}
                 {proposal.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
-                  <AlertCircle className="w-5 h-5 text-orange-600" />
+                  <AlertCircle className="w-5 h-5 text-secondary-600" />
                 )}
                 <span className="font-medium capitalize">{proposal.status}</span>
               </div>

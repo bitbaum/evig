@@ -155,7 +155,7 @@ export default async function WirkungPage() {
           const bgColor = {
             green: 'bg-primary-100 text-primary-600',
             blue: 'bg-neutral-100 text-neutral-600',
-            purple: 'bg-purple-100 text-purple-600',
+            purple: 'bg-primary-100 text-primary-600',
           }[area.color]
 
           const pendingCount = area.metrics.filter(m => m.status === 'needs_data').length

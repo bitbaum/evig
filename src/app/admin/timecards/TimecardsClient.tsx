@@ -696,7 +696,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
 
       <label className="block rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
         <span className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-white">
-          <Sparkles className="h-4 w-4 text-purple-600" />
+          <Sparkles className="h-4 w-4 text-primary-600" />
           Wochen- oder Monatskommentar
         </span>
         <textarea

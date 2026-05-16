@@ -144,7 +144,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               color={
                 key === 'agree' ? 'bg-primary-400'
                   : key === 'block' ? 'bg-error-400'
-                  : key === 'disagree' ? 'bg-orange-400'
+                  : key === 'disagree' ? 'bg-warning-400'
                   : 'bg-neutral-300'
               }
             />
@@ -200,7 +200,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               label={opt.label}
               value={opt.dots || 0}
               max={data.ranked?.[0]?.dots || 1}
-              color={i === 0 ? 'bg-purple-500' : 'bg-purple-300'}
+              color={i === 0 ? 'bg-primary-500' : 'bg-primary-300'}
               imageUrl={opt.imageUrl}
               isWinner={i === 0}
             />
@@ -265,7 +265,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
                 label={`${opt.label} — ${bp} Punkte (${sp}%)`}
                 value={bp}
                 max={maxBp > 0 ? maxBp : 1}
-                color={i === 0 ? 'bg-indigo-500' : 'bg-indigo-300'}
+                color={i === 0 ? 'bg-info-500' : 'bg-info-300'}
                 imageUrl={opt.imageUrl}
                 isWinner={i === 0}
               />

@@ -16,7 +16,7 @@ function getStatusIcon(status: string) {
   switch (status) {
     case APPROVAL_STATUS.APPROVED: return <CheckCircle className="w-5 h-5 text-primary-500" />
     case APPROVAL_STATUS.REJECTED: return <XCircle className="w-5 h-5 text-error-500" />
-    case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-orange-500" />
+    case APPROVAL_STATUS.REQUIRES_CHANGES: return <AlertCircle className="w-5 h-5 text-secondary-500" />
     default: return <Clock className="w-5 h-5 text-neutral-500" />
   }
 }
@@ -86,7 +86,7 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
             <button
               onClick={() => onOpenDialog('request_changes', application.id)}
               disabled={actionLoading === application.id}
-              className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 disabled:opacity-50 text-sm font-medium"
+              className="px-3 py-1.5 bg-secondary-100 text-secondary-700 rounded-lg hover:bg-secondary-200 disabled:opacity-50 text-sm font-medium"
             >
               {actionLoading === application.id ? '...' : 'Änderungen anfordern'}
             </button>

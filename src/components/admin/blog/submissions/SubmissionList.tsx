@@ -38,7 +38,7 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                   className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full font-medium ${
                     submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
                       ? 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300'
-                      : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
+                      : 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
                   }`}
                 >
                   {submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA ? (

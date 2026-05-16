@@ -38,7 +38,7 @@ const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
   [PROPOSAL_STATUS.APPROVED]: { icon: <CheckCircle className="w-5 h-5 text-primary-600" /> },
   [PROPOSAL_STATUS.PENDING]: { icon: <Clock className="w-5 h-5 text-warning-600" /> },
   [PROPOSAL_STATUS.REJECTED]: { icon: <XCircle className="w-5 h-5 text-error-600" /> },
-  [PROPOSAL_STATUS.REQUIRES_CHANGES]: { icon: <AlertCircle className="w-5 h-5 text-orange-600" /> },
+  [PROPOSAL_STATUS.REQUIRES_CHANGES]: { icon: <AlertCircle className="w-5 h-5 text-secondary-600" /> },
 }
 
 const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-neutral-400" />

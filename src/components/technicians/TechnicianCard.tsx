@@ -124,13 +124,13 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {/* Pricing badges */}
         <div className="flex flex-wrap gap-2 mb-4">
           {technician.acceptsGratis && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
               <Users className="w-3 h-3" />
               {t('gratis')}
             </span>
           )}
           {technician.acceptsKulturlegi && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-secondary-100 text-secondary-700">
               <Sparkles className="w-3 h-3" />
               KulturLegi
             </span>

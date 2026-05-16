@@ -133,11 +133,11 @@ function getProgressBarColor(index: number): string {
   const colors = [
     'bg-primary-500',
     'bg-primary-500',
-    'bg-purple-500',
-    'bg-orange-500',
-    'bg-pink-500',
     'bg-primary-500',
-    'bg-indigo-500',
+    'bg-secondary-500',
+    'bg-error-500',
+    'bg-primary-500',
+    'bg-info-500',
     'bg-warning-500',
   ]
   return colors[index % colors.length]
@@ -190,8 +190,8 @@ export default async function TaskAnalyticsPage() {
         </Link>
         <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-purple-600" />
+          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+            <BarChart3 className="w-5 h-5 text-primary-600" />
           </div>
           <div>
             <Heading level={1} className="text-2xl font-bold text-neutral-900">Aufgaben Analyse</Heading>
@@ -237,8 +237,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-purple-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-primary-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">{stats.completions_this_week}</p>
@@ -249,8 +249,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-orange-600" />
+            <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
+              <Users className="w-5 h-5 text-secondary-600" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">{stats.completions_this_month}</p>

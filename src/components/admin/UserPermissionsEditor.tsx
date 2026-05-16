@@ -100,15 +100,15 @@ export function UserPermissionsEditor({
         {/* Content */}
         <div className="overflow-y-auto max-h-[60vh]">
           {/* Super Admin Toggle */}
-          <div className="mb-6 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+          <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Crown className="w-5 h-5 text-purple-600" />
+                <Crown className="w-5 h-5 text-primary-600" />
                 <div>
-                  <p className="font-medium text-purple-900 dark:text-purple-200">
+                  <p className="font-medium text-primary-900 dark:text-primary-200">
                     Super Admin Status
                   </p>
-                  <p className="text-sm text-purple-700 dark:text-purple-300">
+                  <p className="text-sm text-primary-700 dark:text-primary-300">
                     Voller Zugriff auf alle Bereiche inkl. Benutzerverwaltung
                   </p>
                 </div>
@@ -118,7 +118,7 @@ export function UserPermissionsEditor({
                 disabled={isInHardcodedList && superAdminStatus}
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   superAdminStatus
-                    ? 'bg-purple-600'
+                    ? 'bg-primary-600'
                     : 'bg-neutral-300 dark:bg-neutral-600'
                 } ${isInHardcodedList && superAdminStatus ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
@@ -128,7 +128,7 @@ export function UserPermissionsEditor({
               </button>
             </div>
             {isInHardcodedList && (
-              <p className="mt-2 text-xs text-purple-600">
+              <p className="mt-2 text-xs text-primary-600">
                 Dieser Benutzer ist in der Kern-Super-Admin-Liste und kann nicht herabgestuft werden.
               </p>
             )}

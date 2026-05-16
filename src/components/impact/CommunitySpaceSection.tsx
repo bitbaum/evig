@@ -100,7 +100,7 @@ export default function CommunitySpaceSection() {
           </div>
 
           {/* Workshops */}
-          <div className="bg-gradient-to-br from-neutral-800/50 to-purple-900/50 rounded-2xl p-8 border border-neutral-700/50">
+          <div className="bg-gradient-to-br from-neutral-800/50 to-primary-900/50 rounded-2xl p-8 border border-neutral-700/50">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
                 <GraduationCap className="h-6 w-6" />

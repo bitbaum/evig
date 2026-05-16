@@ -302,7 +302,7 @@ export default async function ApprovalsPage() {
       {isSuper && (
         <div>
           <Heading level={2} className="font-semibold text-neutral-900 dark:text-white mb-3 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-orange-500" />
+            <Shield className="w-5 h-5 text-secondary-500" />
             Berechtigungsanfragen
           </Heading>
           <PermissionRequestsManager />

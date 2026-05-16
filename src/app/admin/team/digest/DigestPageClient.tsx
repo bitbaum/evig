@@ -162,8 +162,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-purple-600" />
+                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-primary-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -216,7 +216,7 @@ export function DigestPageClient() {
                             : index === 1
                               ? 'bg-neutral-200 text-neutral-600'
                               : index === 2
-                                ? 'bg-orange-100 text-orange-700'
+                                ? 'bg-secondary-100 text-secondary-700'
                                 : 'bg-neutral-100 text-neutral-500'
                         }`}
                       >
@@ -245,7 +245,7 @@ export function DigestPageClient() {
             {/* Recent Milestones */}
             <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Flag className="w-5 h-5 text-purple-500" />
+                <Flag className="w-5 h-5 text-primary-500" />
                 <Heading level={3} className="font-semibold text-neutral-900 dark:text-neutral-100">
                   Letzte Meilensteine
                 </Heading>
@@ -262,8 +262,8 @@ export function DigestPageClient() {
                       key={milestone.id}
                       className="flex items-start gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50"
                     >
-                      <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Flag className="w-4 h-4 text-purple-600" />
+                      <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Flag className="w-4 h-4 text-primary-600" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-neutral-900 dark:text-neutral-100">

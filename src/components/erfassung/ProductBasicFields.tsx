@@ -52,7 +52,7 @@ export function ProductBasicFields({
             value={formData.hersteller}
             onChange={(e) => onFieldChange('hersteller', e.target.value)}
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
-              aiMetadata.hersteller ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.hersteller ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
             placeholder={t('manufacturerPlaceholder')}
             required
@@ -71,7 +71,7 @@ export function ProductBasicFields({
             value={formData.zustand}
             onChange={(e) => onFieldChange('zustand', e.target.value)}
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
-              aiMetadata.zustand ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.zustand ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
             required
           >
@@ -94,7 +94,7 @@ export function ProductBasicFields({
             value={formData.produktname}
             onChange={(e) => onFieldChange('produktname', e.target.value)}
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
-              aiMetadata.produktname ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.produktname ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
             placeholder={t('productNamePlaceholder')}
             required
@@ -116,7 +116,7 @@ export function ProductBasicFields({
             value={formData.verkaufspreis}
             onChange={(e) => onFieldChange('verkaufspreis', e.target.value)}
             className={`w-full px-4 py-3 border rounded-xl bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation min-h-[48px] text-xl font-semibold ${
-              aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.verkaufspreis ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
             placeholder={t('pricePlaceholder')}
             required
@@ -136,7 +136,7 @@ export function ProductBasicFields({
             onChange={(e) => onFieldChange('kurzbeschreibung', e.target.value)}
             rows={2}
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation ${
-              aiMetadata.kurzbeschreibung ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.kurzbeschreibung ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
             placeholder={t('descriptionPlaceholder')}
           />
@@ -154,7 +154,7 @@ export function ProductBasicFields({
             value={formData.hauptkategorie}
             onChange={(e) => onCategoryChange(e.target.value)}
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
-              aiMetadata.hauptkategorie ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.hauptkategorie ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
           >
             <option value="">{t('categoryPlaceholder')}</option>
@@ -176,7 +176,7 @@ export function ProductBasicFields({
             value={formData.unterkategorie}
             onChange={(e) => onFieldChange('unterkategorie', e.target.value)}
             className={`w-full px-4 py-3 sm:px-3 sm:py-2 border rounded-xl sm:rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-base touch-manipulation min-h-[48px] sm:min-h-0 ${
-              aiMetadata.unterkategorie ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+              aiMetadata.unterkategorie ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
             }`}
             disabled={!formData.hauptkategorie}
           >

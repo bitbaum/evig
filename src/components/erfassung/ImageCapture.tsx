@@ -272,7 +272,7 @@ export function ImageCapture({
                     <Button
                       type="button"
                       onClick={analyzeWithAI}
-                      className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white"
+                      className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white"
                     >
                       <Zap className="w-4 h-4" />
                       {t('analyzeWithAI')}
@@ -281,7 +281,7 @@ export function ImageCapture({
                 )}
 
                 {state === 'analyzing' && (
-                  <div className="flex items-center gap-2 text-purple-600">
+                  <div className="flex items-center gap-2 text-primary-600">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     <span>{t('analyzing')}</span>
                   </div>

@@ -16,7 +16,7 @@ export function DonationStatsCards({ stats }: Props) {
         <div className="text-2xl font-bold text-neutral-900">{stats.monetary}</div>
         <div className="text-sm text-neutral-600">Geldspenden</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-purple-500">
+      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-primary-500">
         <div className="text-2xl font-bold text-neutral-900">{stats.device}</div>
         <div className="text-sm text-neutral-600">Sachspenden</div>
       </div>
@@ -24,7 +24,7 @@ export function DonationStatsCards({ stats }: Props) {
         <div className="text-2xl font-bold text-neutral-900">{stats.pendingThanks}</div>
         <div className="text-sm text-neutral-600">Dank ausstehend</div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-orange-500">
+      <div className="bg-white rounded-lg shadow p-4 border-l-4 border-secondary-500">
         <div className="text-2xl font-bold text-neutral-900">{formatAmountCHF(stats.totalValueCents)}</div>
         <div className="text-sm text-neutral-600">Gesamtwert</div>
       </div>

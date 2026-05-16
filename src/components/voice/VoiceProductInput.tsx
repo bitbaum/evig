@@ -148,7 +148,7 @@ export function VoiceProductInput({
       case 'error':
         return 'bg-error-100 hover:bg-error-200 text-error-700 border-error-300'
       default:
-        return 'bg-purple-100 hover:bg-purple-200 text-purple-700 border-purple-300'
+        return 'bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-300'
     }
   }
 

@@ -124,8 +124,8 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
     <div className="p-6 border-b border-neutral-200">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-            <Zap className="w-5 h-5 text-purple-600" />
+          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+            <Zap className="w-5 h-5 text-primary-600" />
           </div>
           <div>
             <Heading level={2} className="text-xl font-semibold text-neutral-900">

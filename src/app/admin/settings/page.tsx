@@ -68,8 +68,8 @@ export default async function SettingsPage() {
       blue: 'bg-neutral-100 text-neutral-600',
       green: 'bg-primary-100 text-primary-600',
       red: 'bg-error-100 text-error-600',
-      purple: 'bg-purple-100 text-purple-600',
-      orange: 'bg-orange-100 text-orange-600',
+      purple: 'bg-primary-100 text-primary-600',
+      orange: 'bg-secondary-100 text-secondary-600',
     }
     return colors[color] || colors.blue
   }

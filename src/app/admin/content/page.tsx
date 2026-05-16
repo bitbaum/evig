@@ -41,9 +41,9 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/categories"
-          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-purple-500 transition-colors group"
+          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Kategorien</Heading>
+          <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Kategorien</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             Blog-Kategorien verwalten
           </p>

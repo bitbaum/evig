@@ -67,7 +67,7 @@ function UserInfoCell({
   userIsStaff: boolean
 }) {
   const avatarClass = userIsSuperAdmin
-    ? 'bg-gradient-to-r from-purple-500 to-pink-600'
+    ? 'bg-gradient-to-r from-primary-500 to-error-600'
     : userIsStaff
       ? 'bg-gradient-to-r from-primary-500 to-primary-600'
       : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
@@ -111,7 +111,7 @@ function StatusCell({
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex flex-col gap-1">
         {userIsSuperAdmin && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
             <Crown className="w-3 h-3" />
             Super Admin
           </span>
@@ -158,7 +158,7 @@ function PermissionsCell({
   if (hasFullAccess) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">
+        <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">
           Voller Zugriff
         </span>
       </td>

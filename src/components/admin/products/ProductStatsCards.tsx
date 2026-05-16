@@ -50,8 +50,8 @@ export function ProductStatsCards({
         <StatCard
           label="Zur Prüfung"
           value={inventoryStats.pending}
-          valueColor="text-orange-600"
-          icon={<AlertTriangle className="w-6 h-6 text-orange-500" />}
+          valueColor="text-secondary-600"
+          icon={<AlertTriangle className="w-6 h-6 text-secondary-500" />}
         />
       </div>
     )

@@ -72,7 +72,7 @@ export function HirnSidebar({
       <div className="p-4">
         <button
           onClick={onNewSession}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Neues Gespräch
@@ -84,14 +84,14 @@ export function HirnSidebar({
         <div className="px-4 pb-4">
           <div className="grid grid-cols-2 gap-2">
             <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
-              <FileText className="w-4 h-4 text-purple-600" />
+              <FileText className="w-4 h-4 text-primary-600" />
               <div>
                 <p className="text-xs text-neutral-500">Dokumente</p>
                 <p className="font-medium text-neutral-900 dark:text-white">{stats.totalDocuments}</p>
               </div>
             </div>
             <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
-              <BarChart3 className="w-4 h-4 text-purple-600" />
+              <BarChart3 className="w-4 h-4 text-primary-600" />
               <div>
                 <p className="text-xs text-neutral-500">Chunks</p>
                 <p className="font-medium text-neutral-900 dark:text-white">{stats.totalChunks}</p>
@@ -123,7 +123,7 @@ export function HirnSidebar({
                 onClick={() => onSelectSession(session.sessionId)}
                 className={`w-full flex items-center gap-2 p-2 rounded-lg text-left transition-colors ${
                   currentSessionId === session.sessionId
-                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-100'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-900 dark:text-primary-100'
                     : 'hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
                 }`}
               >

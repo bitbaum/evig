@@ -237,31 +237,31 @@ export function DataEntryTabs({
 
   return (
     <div
-      className={`bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800 overflow-hidden ${className}`}
+      className={`bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-900/30 rounded-xl border border-primary-200 dark:border-primary-800 overflow-hidden ${className}`}
     >
       {/* Collapsible header */}
       <button
         type="button"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-purple-100/50 dark:hover:bg-purple-800/30 transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-primary-100/50 dark:hover:bg-primary-800/30 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <Zap className="w-5 h-5 text-primary-600 dark:text-primary-400" />
           <span className="font-semibold text-neutral-900 dark:text-white">{t('quickEntryTitle')}</span>
           {isCollapsed && quickEntryState === 'success' && (
             <span className="text-sm text-primary-600 dark:text-primary-400">{t('quickEntryFilled')}</span>
           )}
         </div>
         {isCollapsed ? (
-          <ChevronDown className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <ChevronDown className="w-5 h-5 text-primary-600 dark:text-primary-400" />
         ) : (
-          <ChevronUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+          <ChevronUp className="w-5 h-5 text-primary-600 dark:text-primary-400" />
         )}
       </button>
 
       {/* Tab headers */}
       {!isCollapsed && tabs.length > 1 && (
-        <div className="flex border-b border-t border-purple-200 dark:border-purple-800">
+        <div className="flex border-b border-t border-primary-200 dark:border-primary-800">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -269,8 +269,8 @@ export function DataEntryTabs({
               onClick={() => setActiveMode(tab.id)}
               className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
                 activeMode === tab.id
-                  ? 'bg-white dark:bg-neutral-800 text-purple-700 dark:text-purple-300 border-b-2 border-purple-600 -mb-px'
-                  : 'text-neutral-600 dark:text-neutral-400 hover:text-purple-600 dark:hover:text-purple-400 hover:bg-white/50 dark:hover:bg-neutral-800/50'
+                  ? 'bg-white dark:bg-neutral-800 text-primary-700 dark:text-primary-300 border-b-2 border-primary-600 -mb-px'
+                  : 'text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-white/50 dark:hover:bg-neutral-800/50'
               }`}
             >
               {tab.icon}
@@ -325,13 +325,13 @@ export function DataEntryTabs({
                 placeholder={"Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"}
                 disabled={quickEntryState === 'loading'}
                 rows={4}
-                className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 text-base resize-none"
+                className="w-full px-4 py-3 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 text-base resize-none"
               />
               <Button
                 type="button"
                 onClick={handleQuickTextSubmit}
                 disabled={!quickText.trim() || quickEntryState === 'loading'}
-                className="w-full sm:w-auto sm:self-end inline-flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium"
+                className="w-full sm:w-auto sm:self-end inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-medium"
               >
                 {quickEntryState === 'loading' ? (
                   <>
@@ -375,15 +375,15 @@ export function DataEntryTabs({
               </p>
             </div>
 
-            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-purple-300 dark:border-purple-600 rounded-xl cursor-pointer hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors">
+            <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-primary-300 dark:border-primary-600 rounded-xl cursor-pointer hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors">
               {isUploading ? (
                 <>
-                  <Loader2 className="w-10 h-10 text-purple-500 mb-2 animate-spin" />
-                  <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">{t('processing')}</span>
+                  <Loader2 className="w-10 h-10 text-primary-500 mb-2 animate-spin" />
+                  <span className="text-sm text-primary-600 dark:text-primary-400 font-medium">{t('processing')}</span>
                 </>
               ) : (
                 <>
-                  <FileUp className="w-10 h-10 text-purple-400 mb-2" />
+                  <FileUp className="w-10 h-10 text-primary-400 mb-2" />
                   <span className="text-sm text-neutral-600 dark:text-neutral-400 font-medium">{t('chooseFile')}</span>
                   <span className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">{t('fileHint')}</span>
                 </>

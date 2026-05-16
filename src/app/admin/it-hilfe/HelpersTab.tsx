@@ -31,7 +31,7 @@ export function HelpersTab({
         <div className="grid grid-cols-3 gap-4">
           <StatsCard label="Aktiv" value={stats.activeHelpers} icon={UserCheck} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
           <StatsCard label="Verifiziert" value={stats.verifiedHelpers} icon={ShieldCheck} color="bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-white/[0.06] text-neutral-800 dark:text-neutral-200" />
-          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
+          <StatsCard label="Total Angebote" value={stats.totalOffers} icon={HelpCircle} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
         </div>
       )}
 
@@ -71,7 +71,7 @@ export function HelpersTab({
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-primary-600 hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-purple-100 text-purple-700">Gratis</span>}
+                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-primary-100 text-primary-700">Gratis</span>}
                     {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-neutral-100 text-neutral-700">KulturLegi</span>}
                   </div>
                 </td>

@@ -79,7 +79,7 @@ export default async function MembershipPage() {
   const stats: StatCardItem[] = [
     { icon: Users, color: 'green', label: 'Mitglieder', value: members.length },
     { icon: CheckCircle, color: 'blue', label: 'Bezahlt', value: paidCount },
-    { icon: AlertCircle, color: 'orange', label: 'Offen', value: unpaidCount, valueColor: unpaidCount > 0 ? 'text-orange-600' : undefined },
+    { icon: AlertCircle, color: 'orange', label: 'Offen', value: unpaidCount, valueColor: unpaidCount > 0 ? 'text-secondary-600' : undefined },
   ]
 
   return (
@@ -145,7 +145,7 @@ export default async function MembershipPage() {
                             Bezahlt
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 text-orange-800 rounded-full text-xs font-medium">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-100 text-secondary-800 rounded-full text-xs font-medium">
                             <AlertCircle className="w-3 h-3" />
                             Offen
                           </span>

@@ -78,7 +78,7 @@ function RadioOption({
         name={name}
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 text-orange-600 border-neutral-300 focus:ring-orange-500 focus:ring-offset-0 flex-shrink-0"
+        className="h-3.5 w-3.5 text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 flex-shrink-0"
       />
       <span className="text-sm text-neutral-700 group-hover:text-neutral-900 leading-snug">
         {label}
@@ -102,7 +102,7 @@ function CheckOption({
         type="checkbox"
         checked={checked}
         onChange={onChange}
-        className="h-3.5 w-3.5 rounded text-orange-600 border-neutral-300 focus:ring-orange-500 focus:ring-offset-0 flex-shrink-0"
+        className="h-3.5 w-3.5 rounded text-secondary-600 border-neutral-300 focus:ring-secondary-500 focus:ring-offset-0 flex-shrink-0"
       />
       <span className="text-sm text-neutral-700 group-hover:text-neutral-900 leading-snug">
         {label}
@@ -141,7 +141,7 @@ export function MarketplaceFilterSidebar({
           <button
             type="button"
             onClick={clearFilters}
-            className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+            className="text-xs text-secondary-600 hover:text-secondary-700 font-medium"
           >
             {t('filters.clearFilters')}
           </button>
@@ -240,7 +240,7 @@ export function MarketplaceFilterSidebar({
             }}
             aria-label={t('filters.priceMinAriaLabel')}
             aria-invalid={!!filters.priceError}
-            className={`w-1/2 px-2.5 py-1.5 border rounded-md bg-white text-sm text-neutral-900 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none ${
+            className={`w-1/2 px-2.5 py-1.5 border rounded-md bg-white text-sm text-neutral-900 focus:ring-1 focus:ring-secondary-500 focus:border-secondary-500 outline-none ${
               filters.priceError ? 'border-red-400' : 'border-neutral-300'
             }`}
           />
@@ -261,7 +261,7 @@ export function MarketplaceFilterSidebar({
             }}
             aria-label={t('filters.priceMaxAriaLabel')}
             aria-invalid={!!filters.priceError}
-            className={`w-1/2 px-2.5 py-1.5 border rounded-md bg-white text-sm text-neutral-900 focus:ring-1 focus:ring-orange-500 focus:border-orange-500 outline-none ${
+            className={`w-1/2 px-2.5 py-1.5 border rounded-md bg-white text-sm text-neutral-900 focus:ring-1 focus:ring-secondary-500 focus:border-secondary-500 outline-none ${
               filters.priceError ? 'border-red-400' : 'border-neutral-300'
             }`}
           />

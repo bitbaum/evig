@@ -59,8 +59,8 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       label: 'IT-Hilfen abgeschlossen',
       sublabel: MONTH_LABEL,
       icon: Wrench,
-      iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-      iconColor: 'text-purple-600 dark:text-purple-400',
+      iconBg: 'bg-primary-100 dark:bg-primary-900/30',
+      iconColor: 'text-primary-600 dark:text-primary-400',
       href: '/admin/it-hilfe',
     },
     {

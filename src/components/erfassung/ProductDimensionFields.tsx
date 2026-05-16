@@ -103,7 +103,7 @@ export function ProductDimensionFields({
               value={formData.verkaufspreis}
               onChange={(e) => onFieldChange('verkaufspreis', e.target.value)}
               className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 ${
-                aiMetadata.verkaufspreis ? 'border-purple-300 dark:border-purple-600' : 'border-neutral-300 dark:border-neutral-600'
+                aiMetadata.verkaufspreis ? 'border-primary-300 dark:border-primary-600' : 'border-neutral-300 dark:border-neutral-600'
               }`}
               required
             />

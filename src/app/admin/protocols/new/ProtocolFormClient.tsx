@@ -184,7 +184,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">
                 {contentFormat && (
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-purple-100 text-purple-700' : 'bg-neutral-100 text-neutral-600'}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-primary-100 text-primary-700' : 'bg-neutral-100 text-neutral-600'}`}>
                     {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
                   </span>
                 )}

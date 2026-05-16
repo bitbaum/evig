@@ -42,7 +42,7 @@ function getActivityUpdateIcon(updateType: string): JSX.Element {
     case 'accomplishment':
       return <CheckCircle className="w-5 h-5 text-primary-500" />
     case 'milestone':
-      return <Flag className="w-5 h-5 text-purple-500" />
+      return <Flag className="w-5 h-5 text-primary-500" />
     case 'note':
       return <FileText className="w-5 h-5 text-neutral-500" />
     case 'announcement':
@@ -93,7 +93,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-purple-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center">
             <span className="text-white font-medium text-sm">{initials}</span>
           </div>
         </div>

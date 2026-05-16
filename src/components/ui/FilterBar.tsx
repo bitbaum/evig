@@ -21,11 +21,11 @@ const colorVariants = {
     inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
   },
   purple: {
-    active: 'bg-purple-600 text-white shadow-lg transform scale-105',
+    active: 'bg-primary-600 text-white shadow-lg transform scale-105',
     inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
   },
   orange: {
-    active: 'bg-orange-600 text-white shadow-lg transform scale-105',
+    active: 'bg-secondary-600 text-white shadow-lg transform scale-105',
     inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
   }
 }

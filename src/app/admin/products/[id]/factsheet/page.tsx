@@ -231,7 +231,7 @@ export default function FactSheetPage() {
                   <div className="text-primary-600 text-sm">CHF inkl. MwSt.</div>
                 </div>
                 {product.quantity_available > 0 && product.quantity_available <= 3 && (
-                  <div className="mt-2 text-center text-orange-600 text-sm font-medium">
+                  <div className="mt-2 text-center text-secondary-600 text-sm font-medium">
                     Nur noch {product.quantity_available} verfügbar!
                   </div>
                 )}

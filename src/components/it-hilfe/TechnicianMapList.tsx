@@ -218,7 +218,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                     onMouseLeave={() => setHighlightedHelperId(null)}
                   >
                     {index === 0 && (
-                      <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-warning-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                      <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-warning-400 to-secondary-400 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
                         <Award className="w-3 h-3" />
                         {t('topMatch')}
                       </div>

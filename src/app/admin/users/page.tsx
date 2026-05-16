@@ -115,7 +115,7 @@ export default async function AdminUsersPage() {
 
         <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Crown className="w-8 h-8 text-purple-600" />
+            <Crown className="w-8 h-8 text-primary-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Staff</p>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.staffCount}</p>

@@ -169,14 +169,14 @@ export function ActiveFilterChips({
       {chips.map((chip) => (
         <span
           key={chip.key}
-          className="inline-flex items-center gap-1 rounded-full bg-orange-50 border border-orange-200 pl-3 pr-2 py-1 text-sm text-orange-800 font-medium"
+          className="inline-flex items-center gap-1 rounded-full bg-secondary-50 border border-secondary-200 pl-3 pr-2 py-1 text-sm text-secondary-800 font-medium"
         >
           {chip.label}
           <button
             type="button"
             onClick={chip.onRemove}
             aria-label={`${chip.label} entfernen`}
-            className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full hover:bg-orange-200 text-orange-500 hover:text-orange-700 transition-colors"
+            className="ml-0.5 flex items-center justify-center w-4 h-4 rounded-full hover:bg-secondary-200 text-secondary-500 hover:text-secondary-700 transition-colors"
           >
             <X className="w-2.5 h-2.5" />
           </button>

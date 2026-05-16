@@ -35,7 +35,7 @@ function getUrgencyIcon(urgency: string) {
     case 'urgent':
       return <AlertTriangle className="w-4 h-4 text-error-500" />
     case 'high':
-      return <AlertTriangle className="w-4 h-4 text-orange-500" />
+      return <AlertTriangle className="w-4 h-4 text-secondary-500" />
     default:
       return null
   }
@@ -77,7 +77,7 @@ export function HelpRequestCard({
           : request.urgency === URGENCY.URGENT
             ? 'border-error-300 dark:border-error-700'
             : request.urgency === URGENCY.HIGH
-              ? 'border-orange-300 dark:border-orange-700'
+              ? 'border-secondary-300 dark:border-secondary-700'
               : 'border-neutral-200 dark:border-white/[0.06]'
       }`}
     >

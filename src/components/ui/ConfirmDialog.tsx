@@ -33,9 +33,9 @@ const VARIANT_STYLES = {
     icon: 'text-error-500',
   },
   warning: {
-    title: 'text-orange-600 dark:text-orange-400',
-    button: 'bg-orange-600 hover:bg-orange-700',
-    icon: 'text-orange-500',
+    title: 'text-secondary-600 dark:text-secondary-400',
+    button: 'bg-secondary-600 hover:bg-secondary-700',
+    icon: 'text-secondary-500',
   },
   success: {
     title: 'text-primary-600 dark:text-primary-400',

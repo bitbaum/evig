@@ -160,7 +160,7 @@ export default async function AdminPagesPage() {
 
         <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Clock className="w-8 h-8 text-orange-600" />
+            <Clock className="w-8 h-8 text-secondary-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Entwürfe
@@ -273,8 +273,8 @@ export default async function AdminPagesPage() {
 
       {/* Common Pages Suggestion */}
       {pages.length === 0 && (
-        <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-xl p-6">
-          <Heading level={3} className="font-medium text-purple-900 dark:text-purple-200 mb-3">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl p-6">
+          <Heading level={3} className="font-medium text-primary-900 dark:text-primary-200 mb-3">
             Empfohlene Seiten
           </Heading>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
@@ -291,9 +291,9 @@ export default async function AdminPagesPage() {
               <Link
                 key={suggestion.slug}
                 href={`/admin/content/pages/new?title=${encodeURIComponent(suggestion.title)}&slug=${suggestion.slug}`}
-                className="flex items-center gap-2 p-3 bg-white dark:bg-neutral-900 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                className="flex items-center gap-2 p-3 bg-white dark:bg-neutral-900 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
               >
-                <Plus className="w-4 h-4 text-purple-600" />
+                <Plus className="w-4 h-4 text-primary-600" />
                 <span className="text-sm font-medium text-neutral-900 dark:text-white">
                   {suggestion.title}
                 </span>
