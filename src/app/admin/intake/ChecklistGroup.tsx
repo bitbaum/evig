@@ -61,7 +61,7 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                   className={`mt-0.5 w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 transition-colors ${
                     item.state.completed
                       ? 'bg-primary-500 border-primary-500 text-white'
-                      : 'border-neutral-300 hover:border-info-400'
+                      : 'border-neutral-300 hover:border-primary-400'
                   }`}
                   aria-label={item.state.completed ? `${item.label} rückgängig machen` : `${item.label} abhaken`}
                 >

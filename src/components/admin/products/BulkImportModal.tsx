@@ -68,10 +68,10 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
 
               {/* CSV Format Info */}
               <div className="bg-primary-50 rounded-lg p-4">
-                <Heading level={4} className="font-medium text-info-900 mb-2">
+                <Heading level={4} className="font-medium text-neutral-900 mb-2">
                   Erforderliches CSV-Format:
                 </Heading>
-                <div className="text-sm text-info-800 font-mono bg-primary-100 p-3 rounded">
+                <div className="text-sm text-neutral-800 font-mono bg-neutral-100 p-3 rounded">
                   Titel,Beschreibung,Preis (CHF),Kategorie,Marke,Bild-URL
                   <br />
                   &quot;Dell Latitude E7470&quot;,&quot;Professioneller Laptop&quot;,599.00,&quot;Laptops&quot;,&quot;Dell&quot;,&quot;https://...&quot;

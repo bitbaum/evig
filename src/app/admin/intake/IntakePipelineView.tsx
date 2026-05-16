@@ -57,7 +57,7 @@ export function IntakePipelineView({
           { label: 'Total', value: statusCounts.total, color: 'bg-neutral-100 text-neutral-800' },
           { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 text-warning-800' },
           { label: 'Bereit', value: statusCounts.ready, color: 'bg-primary-100 text-primary-800' },
-          { label: 'Publiziert', value: statusCounts.published, color: 'bg-info-100 text-info-800' },
+          { label: 'Publiziert', value: statusCounts.published, color: 'bg-primary-100 text-primary-800' },
         ].map((stat) => (
           <div key={stat.label} className={`rounded-lg p-3 ${stat.color}`}>
             <div className="text-2xl font-bold">{stat.value}</div>
@@ -70,7 +70,7 @@ export function IntakePipelineView({
       <div className="flex flex-wrap gap-2 items-center">
         <button
           onClick={onCreateNew}
-          className="flex items-center gap-1 px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-info-700 text-sm font-medium"
+          className="flex items-center gap-1 px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium"
         >
           <Plus className="w-4 h-4" /> Neues Gerät
         </button>
@@ -133,7 +133,7 @@ export function IntakePipelineView({
           <p className="text-neutral-500 mb-2">Keine Geräte in der Pipeline</p>
           <button
             onClick={onCreateNew}
-            className="text-info-600 hover:underline text-sm"
+            className="text-primary-600 hover:underline text-sm"
           >
             Erstes Gerät erfassen
           </button>
@@ -196,7 +196,7 @@ export function IntakePipelineView({
                             <Check className="w-3 h-3" /> Publiziert
                           </span>
                         ) : item.checklist_complete ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-info-100 text-info-800">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 text-primary-800">
                             Bereit
                           </span>
                         ) : (

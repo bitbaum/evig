@@ -166,7 +166,7 @@ export function PermissionRequestsManager() {
                   {request.requested_sections.map(section => (
                     <span
                       key={section}
-                      className="px-2 py-0.5 bg-info-100 dark:bg-info-900/30 text-info-700 dark:text-info-300 text-xs rounded"
+                      className="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-xs rounded"
                     >
                       {getSectionLabel(section)}
                     </span>

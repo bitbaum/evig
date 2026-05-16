@@ -170,7 +170,7 @@ export default async function ProtocolsAdminPage({
           color: 'blue',
           label: 'Zur Überprüfung',
           value: stats.review,
-          valueColor: 'text-info-600',
+          valueColor: 'text-neutral-600',
         },
         {
           icon: CheckCircle2,
@@ -201,7 +201,7 @@ export default async function ProtocolsAdminPage({
             </p>
             <Link
               href="/admin/protocols"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-info-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Seite neu laden
             </Link>

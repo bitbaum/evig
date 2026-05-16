@@ -60,9 +60,9 @@ export function ProtocolActionItemsList({
 }: Props) {
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
-      <div id="protocol-step-tasks" className="bg-info-50 border border-info-200 rounded-lg p-4">
-        <Heading level={3} className="text-sm text-info-900 mb-1">Keine Aktionen erkannt</Heading>
-        <p className="text-sm text-info-800">
+      <div id="protocol-step-tasks" className="bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+        <Heading level={3} className="text-sm text-neutral-900 mb-1">Keine Aktionen erkannt</Heading>
+        <p className="text-sm text-neutral-800">
           Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
         </p>
       </div>

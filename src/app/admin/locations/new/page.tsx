@@ -37,8 +37,8 @@ export default function NewLocationPage() {
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-info-100 rounded-full mb-6">
-              <MapPin className="w-8 h-8 text-info-600" />
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-6">
+              <MapPin className="w-8 h-8 text-primary-600" />
             </div>
             <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">
               Neuen Ort erstellen

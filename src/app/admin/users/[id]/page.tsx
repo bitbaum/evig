@@ -139,7 +139,7 @@ export default async function UserDetailPage({ params }: PageProps) {
             userIsSuperAdmin
               ? 'bg-gradient-to-r from-purple-500 to-pink-600'
               : userIsStaff
-                ? 'bg-gradient-to-r from-info-500 to-primary-600'
+                ? 'bg-gradient-to-r from-primary-500 to-primary-700'
                 : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
@@ -158,7 +158,7 @@ export default async function UserDetailPage({ params }: PageProps) {
                 </span>
               )}
               {userIsStaff && !userIsSuperAdmin && (
-                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300">
+                <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                   <Shield className="w-3 h-3" />
                   Staff
                 </span>
@@ -251,7 +251,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               Super Admin - Voller Zugriff auf alle Bereiche
             </p>
           ) : hasFullAccess ? (
-            <p className="text-info-600 dark:text-info-400 font-medium">
+            <p className="text-primary-600 dark:text-primary-400 font-medium">
               Voller Zugriff auf alle Bereiche
             </p>
           ) : permissions.length > 0 ? (

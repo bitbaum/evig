@@ -154,7 +154,7 @@ export default async function WirkungPage() {
         {impactAreas.map(area => {
           const bgColor = {
             green: 'bg-primary-100 text-primary-600',
-            blue: 'bg-info-100 text-info-600',
+            blue: 'bg-neutral-100 text-neutral-600',
             purple: 'bg-purple-100 text-purple-600',
           }[area.color]
 

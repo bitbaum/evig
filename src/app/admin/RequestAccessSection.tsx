@@ -27,7 +27,7 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
     <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
       <div className="p-6 border-b border-neutral-100 dark:border-white/[0.06]">
         <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
-          <Shield className="w-5 h-5 text-info-500" />
+          <Shield className="w-5 h-5 text-neutral-500" />
           Weitere Bereiche verfügbar
         </Heading>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">

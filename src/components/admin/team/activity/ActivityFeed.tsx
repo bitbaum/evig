@@ -97,7 +97,7 @@ export function ActivityFeed({
               onClick={() => setShowFilterPanel(!showFilterPanel)}
               className={`p-2 rounded-lg ${
                 hasActiveFilters
-                  ? 'text-primary-600 bg-info-50 dark:bg-info-900/30'
+                  ? 'text-primary-600 bg-primary-50 dark:bg-primary-900/30'
                   : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
               }`}
               title="Filter"

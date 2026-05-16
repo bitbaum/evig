@@ -121,7 +121,7 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(true)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 isBroadcast
-                  ? 'border-info-500 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
                   : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >
@@ -133,7 +133,7 @@ export function CreateHelpRequestModal({
               onClick={() => setIsBroadcast(false)}
               className={`flex-1 p-3 rounded-lg border-2 flex items-center justify-center gap-2 transition-colors ${
                 !isBroadcast
-                  ? 'border-info-500 bg-info-50 dark:bg-info-900/30 text-info-700 dark:text-info-300'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
                   : 'border-neutral-200 dark:border-neutral-600 hover:border-neutral-300'
               }`}
             >

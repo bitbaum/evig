@@ -83,7 +83,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-primary-100 dark:bg-info-900/30 rounded-full flex items-center justify-center">
+        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
           <Shield className="w-5 h-5 text-primary-600" />
         </div>
         <div>
@@ -118,7 +118,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               onClick={() => toggleSection(section.id)}
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
-                  ? 'border-info-500 bg-primary-50 dark:bg-info-900/20'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
                   : 'border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300'
               }`}
             >

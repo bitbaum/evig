@@ -107,7 +107,7 @@ export default function LocationDetailPage() {
             <Heading level={2} className="text-lg font-medium text-neutral-900 mb-2">{error}</Heading>
             <Link
               href="/admin/locations"
-              className="inline-flex items-center text-info-600 hover:text-info-700 mt-4"
+              className="inline-flex items-center text-primary-600 hover:text-primary-700 mt-4"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
               Zurück zur Ortsverwaltung
@@ -246,7 +246,7 @@ export default function LocationDetailPage() {
             <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Ausstattung</Heading>
             <div className="flex flex-wrap gap-2">
               {location.facilities.map((facility, i) => (
-                <span key={i} className="px-3 py-1 bg-info-50 text-info-700 rounded-full text-sm">
+                <span key={i} className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-sm">
                   {facility}
                 </span>
               ))}

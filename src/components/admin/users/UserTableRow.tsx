@@ -117,7 +117,7 @@ function StatusCell({
           </span>
         )}
         {userIsStaff && !userIsSuperAdmin && (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-primary-300">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
             <Shield className="w-3 h-3" />
             Staff
           </span>

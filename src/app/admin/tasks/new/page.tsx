@@ -30,8 +30,8 @@ export default function NewTaskPage() {
         </Link>
         <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
-            <ClipboardList className="w-5 h-5 text-info-600" />
+          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+            <ClipboardList className="w-5 h-5 text-primary-600" />
           </div>
           <div>
             <Heading level={1} className="text-2xl font-bold text-neutral-900">Neue Aufgabe</Heading>

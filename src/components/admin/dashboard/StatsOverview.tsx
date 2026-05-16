@@ -10,7 +10,7 @@ const STAT_CARDS = [
   {
     href: '/admin/users',
     icon: Users,
-    iconBg: 'bg-primary-100 dark:bg-info-900/30',
+    iconBg: 'bg-primary-100 dark:bg-primary-900/30',
     iconColor: 'text-primary-600',
     valueKey: 'totalUsers' as const,
     label: 'Benutzer',

@@ -95,7 +95,7 @@ export default async function AdminUsersPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-info-600" />
+            <Users className="w-8 h-8 text-primary-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">Gesamt Benutzer</p>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalUsers}</p>
@@ -138,16 +138,16 @@ export default async function AdminUsersPage() {
       <UsersListClient currentUserIsSuperAdmin={currentUserIsSuperAdmin} />
 
       {/* Info Box */}
-      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
+      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Shield className="w-5 h-5 text-info-600" />
+          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-5 h-5 text-neutral-600" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-info-900 dark:text-info-200">
+            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
               Berechtigungssystem
             </Heading>
-            <p className="text-sm text-info-700 dark:text-info-300 mt-1">
+            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1">
               Benutzer mit @{ORG.emailDomain} E-Mail-Adressen werden automatisch als Staff erkannt.
               Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen erteilen.
             </p>

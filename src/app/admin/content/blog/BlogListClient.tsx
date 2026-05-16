@@ -137,7 +137,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                       {post.is_published && post.published_at && new Date(post.published_at) <= new Date() ? (
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="text-info-600 hover:text-info-900 dark:text-info-400 dark:hover:text-info-300"
+                          className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-300"
                           target="_blank"
                           title="Artikel ansehen"
                         >

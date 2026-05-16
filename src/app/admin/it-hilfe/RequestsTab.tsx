@@ -98,7 +98,7 @@ export function RequestsTab({
                 <td className="px-4 py-3 text-neutral-500">{r.canton}</td>
                 <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{formatBudget(r.budget_amount_cents, r.budget_type)}</td>
                 <td className="px-4 py-3 text-center">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-info-100 text-info-700' : 'bg-neutral-100 text-neutral-500'}`}>
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${Number(r.offer_count) > 0 ? 'bg-primary-100 text-primary-700' : 'bg-neutral-100 text-neutral-500'}`}>
                     {r.offer_count}
                   </span>
                 </td>

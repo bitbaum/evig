@@ -59,9 +59,9 @@ export function ContentInputStep({
           Lade eine Audiodatei hoch. Die Aufnahme wird automatisch transkribiert und danach in Aufgaben umgewandelt.
         </p>
 
-        <div className="rounded-lg border border-info-200 bg-info-50 p-4">
-          <p className="text-sm font-medium text-info-800 mb-1">Ablauf</p>
-          <ol className="list-decimal list-inside text-sm text-info-700 space-y-0.5">
+        <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+          <p className="text-sm font-medium text-neutral-800 mb-1">Ablauf</p>
+          <ol className="list-decimal list-inside text-sm text-neutral-700 space-y-0.5">
             <li>Audio hochladen</li>
             <li>Automatische Transkription</li>
             <li>KI strukturiert Protokoll und Aktionen</li>
@@ -84,7 +84,7 @@ export function ContentInputStep({
             </Select>
           </FormField>
 
-          <label className="flex items-center gap-1.5 text-sm text-info-700 hover:text-info-900 cursor-pointer">
+          <label className="flex items-center gap-1.5 text-sm text-neutral-700 hover:text-neutral-900 cursor-pointer">
             <Upload className="w-3.5 h-3.5" />
             Audiodatei wählen (.mp3, .m4a, .wav, .ogg, .webm)
             <input
@@ -130,9 +130,9 @@ export function ContentInputStep({
       <p className="text-sm text-neutral-600">{config.description}</p>
 
       {inputMethod === 'transcript' && MEETING_TYPE_TEMPLATES[meetingType].agenda_hints.length > 0 && (
-        <div className="bg-info-50 border border-info-200 rounded-lg p-3">
-          <p className="text-sm font-medium text-info-800 mb-1">Typische Agenda:</p>
-          <ul className="text-sm text-info-700 list-disc list-inside">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3">
+          <p className="text-sm font-medium text-neutral-800 mb-1">Typische Agenda:</p>
+          <ul className="text-sm text-neutral-700 list-disc list-inside">
             {MEETING_TYPE_TEMPLATES[meetingType].agenda_hints.map((hint, i) => (
               <li key={i}>{hint}</li>
             ))}
@@ -141,9 +141,9 @@ export function ContentInputStep({
       )}
 
       {inputMethod === 'tasks' && (
-        <div className="bg-info-50 border border-info-200 rounded-lg p-3">
-          <p className="text-sm font-medium text-info-800 mb-1">Formathinweise:</p>
-          <ul className="text-sm text-info-700 list-disc list-inside space-y-0.5">
+        <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3">
+          <p className="text-sm font-medium text-neutral-800 mb-1">Formathinweise:</p>
+          <ul className="text-sm text-neutral-700 list-disc list-inside space-y-0.5">
             <li>Max: Website aktualisieren (Zuweisung erkannt)</li>
             <li>Dringend: Server-Backup prüfen (Priorität erkannt)</li>
             <li>Dokumentation bis Freitag fertigstellen (Frist erkannt)</li>
@@ -161,7 +161,7 @@ export function ContentInputStep({
               <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
                 contentFormat === 'json'
                   ? 'bg-primary-100 text-primary-800'
-                  : 'bg-info-100 text-info-800'
+                  : 'bg-neutral-100 text-neutral-800'
               }`}>
                 {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext erkannt'}
               </span>

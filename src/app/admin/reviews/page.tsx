@@ -148,7 +148,7 @@ export default function AdminReviewsPage() {
                       </Heading>
                       <AdminStatusBadge status={review.status} config={REVIEW_STATUS_CONFIG} />
                       {review.isVerifiedPurchase && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-info-100 text-info-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
                           Verifizierter Kauf
                         </span>
                       )}
@@ -166,15 +166,15 @@ export default function AdminReviewsPage() {
                     <p className="text-neutral-700 text-sm leading-relaxed">{review.content}</p>
 
                     {review.response && (
-                      <div className="mt-4 p-4 bg-info-50 rounded-lg">
+                      <div className="mt-4 p-4 bg-neutral-50 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
-                          <MessageSquare className="w-4 h-4 text-info-600" />
-                          <span className="text-sm font-medium text-info-900">
+                          <MessageSquare className="w-4 h-4 text-neutral-600" />
+                          <span className="text-sm font-medium text-neutral-900">
                             Antwort von {review.response.responderName}
                           </span>
-                          <span className="text-xs text-info-600">{formatDateShort(review.response.createdAt)}</span>
+                          <span className="text-xs text-neutral-600">{formatDateShort(review.response.createdAt)}</span>
                         </div>
-                        <p className="text-info-800 text-sm">{review.response.content}</p>
+                        <p className="text-neutral-800 text-sm">{review.response.content}</p>
                       </div>
                     )}
                   </div>

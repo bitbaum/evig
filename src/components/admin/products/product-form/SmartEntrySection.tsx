@@ -16,7 +16,7 @@ interface Props {
 
 export function SmartEntrySection({ query, isLoading, error, success, onQueryChange, onSubmit }: Props) {
   return (
-    <div className="bg-gradient-to-r from-primary-50 to-emerald-50 dark:from-primary-900/20 dark:to-emerald-900/20 rounded-xl shadow-sm border border-primary-200 dark:border-primary-800 p-6">
+    <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-900/30 rounded-xl shadow-sm border border-primary-200 dark:border-primary-800 p-6">
       <div className="flex items-center gap-3 mb-4">
         <div className="p-2 bg-primary-600 rounded-lg">
           <Sparkles className="w-5 h-5 text-white" />

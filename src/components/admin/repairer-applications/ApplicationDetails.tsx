@@ -21,7 +21,7 @@ export function ApplicationDetails({ application }: Props) {
           <Heading level={4} className="text-neutral-900 mb-2">Dienstleistungen</Heading>
           <div className="flex flex-wrap gap-2">
             {application.servicesOffered.map((service, index) => (
-              <span key={index} className="px-2 py-1 bg-info-100 text-info-800 rounded-full text-xs">
+              <span key={index} className="px-2 py-1 bg-neutral-100 text-neutral-800 rounded-full text-xs">
                 {service}
               </span>
             ))}

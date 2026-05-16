@@ -107,7 +107,7 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                       <Eye className="w-4 h-4 text-neutral-500" />
                     </a>
                     <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]" title="Bearbeiten">
-                      <Edit3 className="w-4 h-4 text-info-500" />
+                      <Edit3 className="w-4 h-4 text-neutral-500" />
                     </button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (

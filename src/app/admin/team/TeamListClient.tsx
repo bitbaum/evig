@@ -103,7 +103,7 @@ export function TeamListClient() {
                   isActive: 'all',
                 })
               }
-              className="text-info-600 hover:text-info-700 text-sm"
+              className="text-primary-600 hover:text-primary-700 text-sm"
             >
               Filter zurücksetzen
             </button>

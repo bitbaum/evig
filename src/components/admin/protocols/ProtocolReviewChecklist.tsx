@@ -20,7 +20,7 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
   },
   active: {
     icon: LoaderCircle,
-    className: 'bg-info-50 text-info-800 border-info-200',
+    className: 'bg-neutral-50 text-neutral-800 border-neutral-200',
     label: 'Prüfen',
   },
   blocked: {

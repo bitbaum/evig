@@ -32,7 +32,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         {/* Avatar */}
         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
           member.is_active
-            ? 'bg-gradient-to-r from-info-500 to-purple-600'
+            ? 'bg-gradient-to-r from-primary-500 to-purple-600'
             : 'bg-neutral-400'
         }`}>
           <span className="text-white font-medium text-sm">{initials}</span>
@@ -119,7 +119,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         </Link>
         <Link
           href={`/admin/team/${member.id}/edit`}
-          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-info-700 dark:text-info-400 bg-info-50 dark:bg-info-900/20 hover:bg-info-100 dark:hover:bg-info-900/40 rounded-lg transition-colors"
+          className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/40 rounded-lg transition-colors"
           onClick={() => onEdit?.(member.id)}
         >
           <Edit2 className="w-4 h-4" />

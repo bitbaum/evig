@@ -63,7 +63,7 @@ export default function AdminWorkshopInstanceDetailPage({
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-info-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -117,7 +117,7 @@ export default function AdminWorkshopInstanceDetailPage({
           <div className="flex items-start justify-between">
             <div>
               <div className="flex items-center gap-3">
-                <GraduationCap className="w-8 h-8 text-info-600" />
+                <GraduationCap className="w-8 h-8 text-primary-600" />
                 <Heading level={1} className="text-2xl font-bold text-neutral-900">{instance.workshop_title}</Heading>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-neutral-600">
@@ -193,8 +193,8 @@ export default function AdminWorkshopInstanceDetailPage({
 
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-info-100 rounded-lg">
-                <DollarSign className="w-5 h-5 text-info-600" />
+              <div className="p-2 bg-neutral-100 rounded-lg">
+                <DollarSign className="w-5 h-5 text-neutral-600" />
               </div>
               <div>
                 <div className="text-2xl font-bold text-neutral-900">CHF {revenueChf}</div>
@@ -297,7 +297,7 @@ export default function AdminWorkshopInstanceDetailPage({
                             <>
                               <button
                                 onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.ATTENDED)}
-                                className="text-info-600 hover:text-info-800 text-sm"
+                                className="text-primary-600 hover:text-primary-800 text-sm"
                               >
                                 Teilgenommen
                               </button>

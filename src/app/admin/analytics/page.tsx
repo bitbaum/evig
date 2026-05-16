@@ -220,8 +220,8 @@ export default async function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-info-100 rounded-lg flex items-center justify-center">
-          <BarChart3 className="w-6 h-6 text-info-600" />
+        <div className="w-12 h-12 bg-neutral-100 rounded-lg flex items-center justify-center">
+          <BarChart3 className="w-6 h-6 text-primary-600" />
         </div>
         <div>
           <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -237,7 +237,7 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <Users className="w-8 h-8 text-info-600" />
+            <Users className="w-8 h-8 text-primary-600" />
             <div>
               <p className="text-2xl font-bold text-neutral-900 dark:text-white">{stats.totalUsers}</p>
               <p className="text-sm text-neutral-600 dark:text-neutral-400">Benutzer</p>
@@ -291,7 +291,7 @@ export default async function AnalyticsPage() {
           {stats.pendingApprovals > 0 && (
             <Link
               href="/admin/approvals"
-              className="text-xs text-info-600 hover:underline mt-2 inline-block"
+              className="text-xs text-primary-600 hover:underline mt-2 inline-block"
             >
               Freigaben anzeigen →
             </Link>
@@ -314,7 +314,7 @@ export default async function AnalyticsPage() {
                   <div className="flex items-center gap-3">
                     <div className="w-32 bg-neutral-100 dark:bg-neutral-700 rounded-full h-2">
                       <div
-                        className="h-2 rounded-full bg-info-500"
+                        className="h-2 rounded-full bg-primary-500"
                         style={{
                           width: `${Math.min(100, (item.count / Math.max(...userGrowth.map(g => g.count))) * 100)}%`,
                         }}
@@ -342,12 +342,12 @@ export default async function AnalyticsPage() {
               </div>
               <span className="text-lg font-bold text-primary-600">{activity.taskCompletionsThisWeek}</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-info-50 dark:bg-info-900/20 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
               <div className="flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-info-600" />
+                <ClipboardList className="w-5 h-5 text-primary-600" />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">Aufgaben erledigt (diesen Monat)</span>
               </div>
-              <span className="text-lg font-bold text-info-600">{activity.taskCompletionsThisMonth}</span>
+              <span className="text-lg font-bold text-primary-600">{activity.taskCompletionsThisMonth}</span>
             </div>
             <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
               <div className="flex items-center gap-2">
@@ -371,11 +371,11 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-2 gap-4">
         <Link
           href="/admin/analyse/finanzen"
-          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-info-300 dark:hover:border-info-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-400 transition-colors group"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+              <DollarSign className="w-5 h-5 text-primary-600" />
             </div>
             <div>
               <p className="font-medium text-neutral-900 dark:text-white">Finanz-Analyse</p>
@@ -387,7 +387,7 @@ export default async function AnalyticsPage() {
 
         <Link
           href="/admin/tasks/analytics"
-          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-info-300 dark:hover:border-info-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-400 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -402,11 +402,11 @@ export default async function AnalyticsPage() {
         </Link>
       </div>
 
-      <div className="p-6 bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl">
-        <p className="text-sm text-info-700 dark:text-info-300">
+      <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl">
+        <p className="text-sm text-neutral-700 dark:text-neutral-300">
           <strong>Hinweis:</strong> Die Statistiken werden in Echtzeit aus der Datenbank berechnet.
           Für detaillierte Finanz-Analytics, siehe{' '}
-          <Link href="/admin/analyse/finanzen" className="underline hover:text-info-800">
+          <Link href="/admin/analyse/finanzen" className="underline hover:text-neutral-900">
             Finanzen-Analyse
           </Link>.
         </p>

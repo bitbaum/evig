@@ -132,7 +132,7 @@ export default async function TransparenzPage() {
             Statt Probleme durch Analogie zu lösen (&quot;so haben wir es immer gemacht&quot;),
             zerlegen wir sie in ihre fundamentalen Bestandteile und bauen von dort neu auf.
           </p>
-          <div className="p-4 bg-info-50 dark:bg-info-900/20 border-l-4 border-info-500 rounded">
+          <div className="p-4 bg-neutral-50 dark:bg-neutral-800/50 border-l-4 border-neutral-400 rounded">
             <p className="text-sm italic">
               &quot;Vom Grundprinzip zur Lösung – für Menschen und AI.&quot;
             </p>

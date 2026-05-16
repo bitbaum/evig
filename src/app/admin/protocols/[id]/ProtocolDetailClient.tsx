@@ -161,7 +161,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                   setAttendeeSearch('')
                   setEditingAttendees(true)
                 }}
-                className="flex items-center gap-1 text-sm text-info-600 hover:text-info-800"
+                className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-800"
               >
                 <Pencil className="w-3.5 h-3.5" />
                 Teilnehmer bearbeiten
@@ -221,7 +221,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                             : [...prev, member.id]
                         )
                       }}
-                      className="rounded border-neutral-300 text-info-600 focus:ring-primary-500"
+                      className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                     />
                     {member.name}
                   </label>

@@ -151,8 +151,8 @@ export default async function FinanzenPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-info-100 rounded-lg">
-            <PiggyBank className="w-6 h-6 text-info-600" />
+          <div className="p-2 bg-primary-100 rounded-lg">
+            <PiggyBank className="w-6 h-6 text-primary-600" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Finanzen</Heading>
@@ -242,7 +242,7 @@ export default async function FinanzenPage() {
                         </div>
                       )}
                       {insight.recommendation && (
-                        <div className="text-sm font-medium mt-2 text-info-700 dark:text-info-400">
+                        <div className="text-sm font-medium mt-2 text-neutral-700 dark:text-neutral-300">
                           → {insight.recommendation}
                         </div>
                       )}

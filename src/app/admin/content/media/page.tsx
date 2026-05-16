@@ -66,7 +66,7 @@ export default async function AdminMediaPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <ImageIcon className="w-8 h-8 text-info-600" />
+            <ImageIcon className="w-8 h-8 text-neutral-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Bilder
@@ -189,17 +189,17 @@ export default async function AdminMediaPage() {
 
       {/* Supported Formats Info */}
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-5">
+        <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-5">
           <div className="flex items-center gap-3 mb-3">
-            <ImageIcon className="w-6 h-6 text-info-600" />
-            <Heading level={3} className="font-medium text-info-900 dark:text-info-200">
+            <ImageIcon className="w-6 h-6 text-neutral-600" />
+            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
               Bilder
             </Heading>
           </div>
-          <p className="text-sm text-info-700 dark:text-info-300">
+          <p className="text-sm text-neutral-700 dark:text-neutral-300">
             JPG, PNG, GIF, WebP, SVG
           </p>
-          <p className="text-xs text-info-600 dark:text-info-400 mt-1">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
             Max. 10 MB pro Datei
           </p>
         </div>

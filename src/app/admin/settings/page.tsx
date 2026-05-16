@@ -65,7 +65,7 @@ export default async function SettingsPage() {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
-      blue: 'bg-info-100 text-info-600',
+      blue: 'bg-neutral-100 text-neutral-600',
       green: 'bg-primary-100 text-primary-600',
       red: 'bg-error-100 text-error-600',
       purple: 'bg-purple-100 text-purple-600',
@@ -106,8 +106,8 @@ export default async function SettingsPage() {
         ))}
       </div>
 
-      <div className="p-6 bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl">
-        <p className="text-sm text-info-700 dark:text-info-300">
+      <div className="p-6 bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl">
+        <p className="text-sm text-neutral-700 dark:text-neutral-300">
           <strong>In Entwicklung:</strong> Die Einstellungsseiten werden schrittweise implementiert.
           Aktuell werden Konfigurationen über Code (<code>src/config/org.ts</code>) und Umgebungsvariablen verwaltet.
         </p>

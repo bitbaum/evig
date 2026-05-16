@@ -136,7 +136,7 @@ export default async function AdminBlogPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
-            <FileText className="w-8 h-8 text-info-600" />
+            <FileText className="w-8 h-8 text-primary-600" />
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">
                 Gesamt Artikel
@@ -195,16 +195,16 @@ export default async function AdminBlogPage() {
       <BlogListClient posts={posts} />
 
       {/* Info Banner */}
-      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
+      <div className="bg-neutral-50 dark:bg-neutral-800/50 border border-neutral-200 dark:border-white/[0.06] rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <FileText className="w-5 h-5 text-info-600" />
+          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <FileText className="w-5 h-5 text-neutral-600" />
           </div>
           <div>
-            <Heading level={3} className="font-medium text-info-900 dark:text-info-200">
+            <Heading level={3} className="font-medium text-neutral-900 dark:text-neutral-200">
               Blog-Verwaltung
             </Heading>
-            <p className="text-sm text-info-700 dark:text-info-300 mt-1 mb-3">
+            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1 mb-3">
               Blog-Artikel sind ein wichtiger Kommunikationskanal. Teile
               News über {ORG.name}, schreibe Tutorials zur
               Computeraufarbeitung oder kündige Workshops und Events an.
@@ -212,7 +212,7 @@ export default async function AdminBlogPage() {
             <div className="flex gap-3">
               <Link
                 href="/admin/content/blog/new"
-                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
+                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 Artikel erstellen
               </Link>

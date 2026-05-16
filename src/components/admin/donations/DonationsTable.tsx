@@ -105,7 +105,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   donation.status === DONATION_STATUSES.RECEIPT_SENT
                     ? 'bg-primary-100 text-primary-800'
                     : donation.status === DONATION_STATUSES.THANKED
-                    ? 'bg-primary-100 text-info-800'
+                    ? 'bg-primary-100 text-primary-800'
                     : 'bg-neutral-100 text-neutral-800'
                 }`}>
                   {donation.status === DONATION_STATUSES.RECEIPT_SENT && <Receipt className="w-3 h-3" />}

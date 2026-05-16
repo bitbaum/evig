@@ -50,7 +50,7 @@ export function TeamTalentSection({
           {form.skills.map(skill => (
             <span
               key={skill}
-              className="flex items-center gap-1 px-3 py-1 bg-info-100 dark:bg-info-900/30 text-info-700 dark:text-info-300 text-sm rounded-full"
+              className="flex items-center gap-1 px-3 py-1 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-sm rounded-full"
             >
               {skill}
               <button type="button" onClick={() => onRemoveSkill(skill)} className="hover:text-error-500">

@@ -36,7 +36,7 @@ export function buildQuickActions(
       label: 'Gerät erfassen',
       href: '/admin/erfassung',
       icon: ScanLine,
-      color: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 hover:bg-emerald-200 dark:hover:bg-emerald-900/50',
+      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
     })
   }
 

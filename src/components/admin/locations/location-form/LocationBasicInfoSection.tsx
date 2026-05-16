@@ -54,7 +54,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
                 />
                 <div className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   formData.type === type.id
-                    ? 'border-info-500 bg-primary-50'
+                    ? 'border-primary-500 bg-primary-50'
                     : 'border-neutral-200 hover:border-neutral-300'
                 }`}>
                   <type.icon className={`w-6 h-6 mb-2 ${

@@ -101,8 +101,8 @@ export default async function AnalysePage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-info-100 rounded-lg">
-            <BarChart3 className="w-6 h-6 text-info-600" />
+          <div className="p-2 bg-primary-100 rounded-lg">
+            <BarChart3 className="w-6 h-6 text-primary-600" />
           </div>
           <div>
             <Heading level={1} className="text-3xl font-bold">Analyse</Heading>

@@ -134,8 +134,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-5 h-5 text-info-600" />
+                <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-neutral-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -176,8 +176,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
-                  <Users className="w-5 h-5 text-info-600" />
+                <div className="w-10 h-10 bg-neutral-100 rounded-lg flex items-center justify-center">
+                  <Users className="w-5 h-5 text-neutral-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">

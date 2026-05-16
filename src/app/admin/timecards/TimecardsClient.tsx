@@ -506,7 +506,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Status</p>
           <p className="mt-2 flex items-center gap-2 text-2xl font-semibold text-neutral-900 dark:text-white">
-            {draft.status === TIMECARD_STATUSES.SUBMITTED ? <UserCheck className="h-5 w-5 text-success-600" /> : <Clock className="h-5 w-5 text-info-600" />}
+            {draft.status === TIMECARD_STATUSES.SUBMITTED ? <UserCheck className="h-5 w-5 text-success-600" /> : <Clock className="h-5 w-5 text-neutral-500" />}
             {draft.status === TIMECARD_STATUSES.SUBMITTED ? 'Bereit' : 'Entwurf'}
           </p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Einreichen heisst: von dir geprüft und bereit für Freigabe.</p>
@@ -574,7 +574,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
                   onClick={() => updateCurrentDraft(current => ({ ...current, selectedDate: date }))}
                   className={`min-h-28 rounded-lg border p-3 text-left transition-colors ${
                     active
-                      ? 'border-info-500 bg-info-50 ring-2 ring-info-200 dark:border-info-400 dark:bg-info-900/20'
+                      ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200 dark:border-primary-400 dark:bg-primary-900/20'
                       : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:bg-white dark:border-white/[0.06] dark:bg-neutral-900/40 dark:hover:bg-neutral-800'
                   }`}
                 >

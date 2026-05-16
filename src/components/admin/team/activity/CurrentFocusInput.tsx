@@ -62,7 +62,7 @@ export function CurrentFocusInput({
   if (compact) {
     return (
       <div className="flex items-center gap-2">
-        <Target className="w-4 h-4 text-info-500 flex-shrink-0" />
+        <Target className="w-4 h-4 text-neutral-500 flex-shrink-0" />
         {isEditing ? (
           <div className="flex items-center gap-2 flex-1">
             <input
@@ -111,7 +111,7 @@ export function CurrentFocusInput({
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
       <div className="flex items-center gap-2 mb-3">
-        <Target className="w-5 h-5 text-info-500" />
+        <Target className="w-5 h-5 text-neutral-500" />
         <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktueller Fokus</Heading>
       </div>
 

@@ -189,7 +189,7 @@ export function TeamProfileView({
                   {profile.skills.map((skill) => (
                     <span
                       key={skill}
-                      className="px-3 py-1 bg-primary-100 dark:bg-info-900/30 text-info-700 dark:text-info-300 text-sm rounded-full"
+                      className="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm rounded-full"
                     >
                       {skill}
                     </span>

@@ -131,7 +131,7 @@ export function TimecardApprovalQueue() {
                 <h3 className="font-semibold text-neutral-900 dark:text-white">
                   {item.user_name || item.user_email}
                 </h3>
-                <span className="rounded-full bg-info-100 px-2 py-0.5 text-xs font-medium text-info-800 dark:bg-info-900/30 dark:text-info-200">
+                <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-800 dark:bg-neutral-700 dark:text-neutral-200">
                   {getTimecardStatusLabel(item.status)}
                 </span>
               </div>

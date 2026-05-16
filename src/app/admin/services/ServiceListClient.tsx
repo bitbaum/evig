@@ -159,7 +159,7 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
                         </span>
                       )}
                       {service.is_bookable && (
-                        <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300">
+                        <span className="inline-flex items-center gap-0.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
                           <Calendar className="w-3 h-3" />
                         </span>
                       )}
@@ -171,7 +171,7 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
                         <Link
                           href={`/services/${service.slug}`}
                           target="_blank"
-                          className="p-2.5 text-info-600 hover:text-info-900 dark:text-info-400 dark:hover:text-info-300 hover:bg-info-50 dark:hover:bg-info-900/20 rounded"
+                          className="p-2.5 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded"
                           title="Auf Website ansehen"
                         >
                           <Eye className="w-4 h-4" />

@@ -134,7 +134,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                 <button
                   type="button"
                   onClick={selectAllAttendees}
-                  className="text-xs text-info-600 hover:text-info-800 font-medium whitespace-nowrap"
+                  className="text-xs text-primary-600 hover:text-primary-800 font-medium whitespace-nowrap"
                 >
                   {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
                 </button>
@@ -149,7 +149,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                       type="checkbox"
                       checked={selectedAttendees.includes(member.id)}
                       onChange={() => toggleAttendee(member.id)}
-                      className="rounded border-neutral-300 text-info-600 focus:ring-primary-500"
+                      className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                     />
                     {member.name}
                   </label>
@@ -213,16 +213,16 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             </div>
 
             {audioFile && (
-              <div className="mt-3 p-3 bg-info-50 border border-primary-200 rounded-lg">
+              <div className="mt-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Mic className="w-4 h-4 text-info-600" />
-                    <span className="text-sm font-medium text-info-800">{audioFile.name}</span>
-                    <span className="text-xs text-info-600">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
+                    <Mic className="w-4 h-4 text-primary-600" />
+                    <span className="text-sm font-medium text-neutral-800">{audioFile.name}</span>
+                    <span className="text-xs text-primary-600">({(audioFile.size / 1024 / 1024).toFixed(1)} MB)</span>
                   </div>
                   <button
                     onClick={() => setAudioFile(null)}
-                    className="text-xs text-info-600 hover:text-info-800"
+                    className="text-xs text-primary-600 hover:text-primary-800"
                   >
                     Entfernen
                   </button>
@@ -230,7 +230,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
 
                 {/* Whisper model selector — compact inline styling inside audio panel */}
                 <div className="mt-2">
-                  <label htmlFor="whisper_model" className="block text-xs font-medium text-info-700 mb-1">
+                  <label htmlFor="whisper_model" className="block text-xs font-medium text-neutral-700 mb-1">
                     Whisper-Modell
                   </label>
                   <Select

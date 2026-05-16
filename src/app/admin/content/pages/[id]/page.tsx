@@ -76,7 +76,7 @@ export default function EditStaticPagePage() {
           <Heading level={2} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">{error}</Heading>
           <Link
             href="/admin/content/pages"
-            className="inline-flex items-center text-info-600 hover:text-info-700 mt-4"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700 mt-4"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
             Zurück zu Statische Seiten

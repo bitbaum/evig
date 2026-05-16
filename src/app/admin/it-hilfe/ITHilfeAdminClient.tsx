@@ -27,7 +27,7 @@ export default function ITHilfeAdminClient() {
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatsCard label="Offene Anfragen" value={stats.byStatus.open ?? 0} icon={HelpCircle} color="bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800 text-primary-800 dark:text-primary-200" />
-          <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-info-50 dark:bg-info-900/20 border-info-200 dark:border-info-800 text-info-800 dark:text-info-200" />
+          <StatsCard label="Aktive Helfer" value={stats.activeHelpers} icon={Users} color="bg-neutral-50 dark:bg-neutral-800/50 border-neutral-200 dark:border-white/[0.06] text-neutral-800 dark:text-neutral-200" />
           <StatsCard label="Dringend" value={stats.byUrgency.urgent ?? 0} icon={Clock} color="bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-200" />
           <StatsCard label="Lösungsrate" value={`${stats.resolutionRate}%`} icon={ShieldCheck} color="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-800 dark:text-purple-200" />
         </div>
@@ -41,7 +41,7 @@ export default function ITHilfeAdminClient() {
             onClick={() => switchTab(t.id)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               tab === t.id
-                ? 'border-info-600 text-info-700 dark:text-info-400'
+                ? 'border-primary-600 text-primary-700 dark:text-primary-400'
                 : 'border-transparent text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300'
             }`}
           >
