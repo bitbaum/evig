@@ -160,7 +160,7 @@ export function RequestSidebar({
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
           <button
             onClick={onShowMessages}
-            className="w-full py-3 px-4 min-h-[44px] bg-info-600 text-white rounded-lg font-medium hover:bg-info-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-2"
+            className="w-full py-3 px-4 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <MessageSquare className="w-4 h-4" aria-hidden="true" />
             {t('sendMessage')}
@@ -178,7 +178,7 @@ export function RequestSidebar({
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
               <Link
                 href={`/it-hilfe/${request.id}/edit`}
-                className="block w-full py-3 px-4 min-h-[44px] bg-info-600 text-white rounded-lg text-center font-medium hover:bg-info-700 transition-colors focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-2"
+                className="block w-full py-3 px-4 min-h-[44px] bg-primary-600 text-white rounded-lg text-center font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               >
                 <Pencil className="w-4 h-4 inline-block mr-2" />
                 {t('editRequest')}

@@ -32,7 +32,7 @@ export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
           )}
           {stats.postsPublishedThisWeek > 0 && (
             <span className="text-neutral-700 dark:text-neutral-300">
-              <span className="font-semibold text-info-600">{stats.postsPublishedThisWeek}</span>{' '}
+              <span className="font-semibold text-primary-600">{stats.postsPublishedThisWeek}</span>{' '}
               Artikel veröffentlicht
             </span>
           )}

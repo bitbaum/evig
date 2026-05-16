@@ -185,7 +185,7 @@ export function AvatarUpload({
             type="button"
             onClick={handleClick}
             disabled={isUploading}
-            className="px-4 py-2 bg-info-600 text-white rounded-md hover:bg-info-700 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
           >
             {isUploading
               ? t('saving')

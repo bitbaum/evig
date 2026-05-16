@@ -90,7 +90,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         </div>
 
         {/* Pricing Info Box */}
-        <div className="bg-gradient-to-r from-info-50 to-info-100 rounded-lg p-6 border border-info-100 mb-8">
+        <div className="bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg p-6 border border-primary-100 mb-8">
           <div className="flex items-center space-x-3 mb-4">
             <config.pricing.icon className={`w-6 h-6 ${config.pricing.iconColor}`} />
             <Heading level={2} className="text-xl font-semibold text-neutral-900">
@@ -100,7 +100,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {config.pricing.items.map((item, index) => (
               <div key={index} className="flex items-baseline space-x-2">
-                <span className="font-bold text-info-600">{item.label}</span>
+                <span className="font-bold text-primary-600">{item.label}</span>
                 <span className="text-neutral-600 text-sm">{item.value}</span>
               </div>
             ))}
