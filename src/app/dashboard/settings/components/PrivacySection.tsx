@@ -111,9 +111,9 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           {/* Show Email */}
           <div className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
                 {profile.show_email ? (
-                  <Eye className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <Eye className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                 ) : (
                   <EyeOff className="w-5 h-5 text-neutral-400" />
                 )}
@@ -128,8 +128,8 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 <button
                   type="button"
                   onClick={() => handleChange('show_email', !profile.show_email)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                    profile.show_email ? 'bg-purple-600' : 'bg-neutral-200 dark:bg-neutral-600'
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                    profile.show_email ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-600'
                   }`}
                 >
                   <span
@@ -148,9 +148,9 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           {/* Show Phone */}
           <div className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-700/50 rounded-lg border-2 border-neutral-200 dark:border-neutral-600">
             <div className="flex-shrink-0">
-              <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
                 {profile.show_phone ? (
-                  <Eye className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                  <Eye className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                 ) : (
                   <EyeOff className="w-5 h-5 text-neutral-400" />
                 )}
@@ -165,8 +165,8 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 <button
                   type="button"
                   onClick={() => handleChange('show_phone', !profile.show_phone)}
-                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
-                    profile.show_phone ? 'bg-purple-600' : 'bg-neutral-200 dark:bg-neutral-600'
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                    profile.show_phone ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-600'
                   }`}
                 >
                   <span
@@ -203,7 +203,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           type="button"
           onClick={handleExportData}
           disabled={isExporting}
-          className="inline-flex items-center gap-2 rounded-lg border-2 border-purple-600 bg-white px-4 py-2 text-sm font-semibold text-purple-700 transition-colors hover:bg-purple-50 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-neutral-800 dark:text-purple-300 dark:hover:bg-purple-900/20"
+          className="inline-flex items-center gap-2 rounded-lg border-2 border-primary-600 bg-white px-4 py-2 text-sm font-semibold text-primary-700 transition-colors hover:bg-primary-50 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-neutral-800 dark:text-primary-300 dark:hover:bg-primary-900/20"
         >
           {isExporting ? (
             <>

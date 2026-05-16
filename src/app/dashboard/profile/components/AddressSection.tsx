@@ -30,8 +30,8 @@ export function AddressSection({
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
-          <MapPin className="w-5 h-5 text-orange-600" />
+        <div className="w-10 h-10 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg flex items-center justify-center">
+          <MapPin className="w-5 h-5 text-secondary-600" />
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">

@@ -225,7 +225,7 @@ function SubmissionCard({
       {submission.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
         <div className="mt-2">
           {submission.adminFeedback && (
-            <div className="rounded-lg border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 p-3 text-sm text-orange-900 dark:text-orange-200 whitespace-pre-wrap mb-3">
+            <div className="rounded-lg border border-warning-200 dark:border-warning-800 bg-warning-50 dark:bg-warning-900/20 p-3 text-sm text-warning-900 dark:text-warning-200 whitespace-pre-wrap mb-3">
               <strong className="block mb-1">{t('editorialFeedback')}</strong>
               {submission.adminFeedback}
             </div>
@@ -234,7 +234,7 @@ function SubmissionCard({
           {!isEditing ? (
             <button
               onClick={onStartEditing}
-              className="inline-flex items-center px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700 text-sm font-medium"
+              className="inline-flex items-center px-4 py-2 rounded-lg bg-warning-600 text-white hover:bg-warning-700 text-sm font-medium"
             >
               <PenSquare className="w-4 h-4 mr-2" />
               {t('reviseButton')}
@@ -302,7 +302,7 @@ function StatCard({
   const tones: Record<string, string> = {
     yellow: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
     blue: 'bg-primary-50 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 border-primary-200 dark:border-primary-800',
-    orange: 'bg-orange-50 dark:bg-orange-900/20 text-orange-800 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+    orange: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
     red: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-300 border-error-200 dark:border-error-800',
   }
   return (

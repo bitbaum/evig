@@ -15,8 +15,8 @@ export function PreferencesSection({ profile, handleChange }: PreferencesSection
   return (
     <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-          <Bell className="w-5 h-5 text-purple-600" />
+        <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+          <Bell className="w-5 h-5 text-primary-600" />
         </div>
         <div>
           <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">
