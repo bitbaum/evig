@@ -61,9 +61,9 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
       <Link
         href={item.href}
         className={cn(
-          "relative px-4 py-2 text-sm font-medium text-neutral-600",
-          "hover:text-neutral-900 transition-colors duration-200",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
+          "relative px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
+          "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
         )}
       >
         {label}
@@ -90,9 +90,9 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
           "group inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg",
           "transition-all duration-200",
           isOpen
-            ? "text-neutral-900 bg-neutral-50"
-            : "text-neutral-600 hover:text-neutral-900",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
+            ? "text-neutral-900 bg-neutral-50 dark:text-white dark:bg-white/[0.06]"
+            : "text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -101,7 +101,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         <ChevronDown
           className={cn(
             "w-3.5 h-3.5 text-neutral-500 transition-transform duration-200",
-            isOpen && "rotate-180 text-emerald-600"
+            isOpen && "rotate-180 text-primary-600 dark:text-primary-400"
           )}
         />
       </Link>
