@@ -5927,7 +5927,26 @@
       "submitRating": "Bewertung senden",
       "loadError": "Fehler beim Laden",
       "networkError": "Netzwerkfehler",
-      "actionError": "Aktion fehlgeschlagen"
+      "actionError": "Aktion fehlgeschlagen",
+      "detail": {
+        "backToBookings": "Zurück zu Buchungen",
+        "bookingId": "Auftrag #",
+        "sectionService": "Service & Problem",
+        "sectionTechnician": "Techniker",
+        "sectionDates": "Termine",
+        "sectionLocation": "Standort",
+        "service": "Service",
+        "problem": "Problembeschreibung",
+        "deviceInfo": "Geräteinformationen",
+        "partsNeeded": "Benötigte Teile",
+        "outcomeNotes": "Ergebnis",
+        "requestedOn": "Angefragt am",
+        "preferredDate": "Gewünschtes Datum",
+        "confirmedDate": "Bestätigtes Datum",
+        "completedAt": "Abgeschlossen am",
+        "yourRating": "Deine Bewertung",
+        "notFound": "Buchung nicht gefunden"
+      }
     },
     "membership": {
       "pageTitle": "Mitgliedschaft",

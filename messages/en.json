@@ -5876,7 +5876,26 @@
       "submitRating": "Submit review",
       "loadError": "Error loading",
       "networkError": "Network error",
-      "actionError": "Action failed"
+      "actionError": "Action failed",
+      "detail": {
+        "backToBookings": "Back to bookings",
+        "bookingId": "Booking #",
+        "sectionService": "Service & Issue",
+        "sectionTechnician": "Technician",
+        "sectionDates": "Dates",
+        "sectionLocation": "Location",
+        "service": "Service",
+        "problem": "Issue description",
+        "deviceInfo": "Device information",
+        "partsNeeded": "Parts needed",
+        "outcomeNotes": "Outcome",
+        "requestedOn": "Requested on",
+        "preferredDate": "Preferred date",
+        "confirmedDate": "Confirmed date",
+        "completedAt": "Completed on",
+        "yourRating": "Your rating",
+        "notFound": "Booking not found"
+      }
     },
     "membership": {
       "pageTitle": "Membership",

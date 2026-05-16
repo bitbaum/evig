@@ -5904,7 +5904,26 @@
       "submitRating": "Enviar reseña",
       "loadError": "Error al cargar",
       "networkError": "Error de red",
-      "actionError": "Acción fallida"
+      "actionError": "Acción fallida",
+      "detail": {
+        "backToBookings": "Volver a reservas",
+        "bookingId": "Reserva #",
+        "sectionService": "Servicio & Problema",
+        "sectionTechnician": "Técnico",
+        "sectionDates": "Fechas",
+        "sectionLocation": "Ubicación",
+        "service": "Servicio",
+        "problem": "Descripción del problema",
+        "deviceInfo": "Información del dispositivo",
+        "partsNeeded": "Piezas necesarias",
+        "outcomeNotes": "Resultado",
+        "requestedOn": "Solicitado el",
+        "preferredDate": "Fecha preferida",
+        "confirmedDate": "Fecha confirmada",
+        "completedAt": "Completado el",
+        "yourRating": "Tu valoración",
+        "notFound": "Reserva no encontrada"
+      }
     },
     "membership": {
       "pageTitle": "Membresía",

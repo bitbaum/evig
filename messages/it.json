@@ -5904,7 +5904,26 @@
       "submitRating": "Invia recensione",
       "loadError": "Errore di caricamento",
       "networkError": "Errore di rete",
-      "actionError": "Azione fallita"
+      "actionError": "Azione fallita",
+      "detail": {
+        "backToBookings": "Torna alle prenotazioni",
+        "bookingId": "Prenotazione #",
+        "sectionService": "Servizio & Problema",
+        "sectionTechnician": "Tecnico",
+        "sectionDates": "Date",
+        "sectionLocation": "Posizione",
+        "service": "Servizio",
+        "problem": "Descrizione del problema",
+        "deviceInfo": "Informazioni sul dispositivo",
+        "partsNeeded": "Parti necessarie",
+        "outcomeNotes": "Risultato",
+        "requestedOn": "Richiesto il",
+        "preferredDate": "Data preferita",
+        "confirmedDate": "Data confermata",
+        "completedAt": "Completato il",
+        "yourRating": "La tua valutazione",
+        "notFound": "Prenotazione non trovata"
+      }
     },
     "membership": {
       "pageTitle": "Membership",

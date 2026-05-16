@@ -5904,7 +5904,26 @@
       "submitRating": "レビューを送信",
       "loadError": "読み込みエラー",
       "networkError": "ネットワークエラー",
-      "actionError": "アクション失敗"
+      "actionError": "アクション失敗",
+      "detail": {
+        "backToBookings": "予約一覧に戻る",
+        "bookingId": "予約 #",
+        "sectionService": "サービス・問題",
+        "sectionTechnician": "技術者",
+        "sectionDates": "日程",
+        "sectionLocation": "場所",
+        "service": "サービス",
+        "problem": "問題の説明",
+        "deviceInfo": "デバイス情報",
+        "partsNeeded": "必要な部品",
+        "outcomeNotes": "結果",
+        "requestedOn": "依頼日",
+        "preferredDate": "希望日",
+        "confirmedDate": "確認日",
+        "completedAt": "完了日",
+        "yourRating": "あなたの評価",
+        "notFound": "予約が見つかりません"
+      }
     },
     "membership": {
       "pageTitle": "会員資格",

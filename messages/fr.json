@@ -5868,7 +5868,26 @@
       "submitRating": "Soumettre l'avis",
       "loadError": "Erreur de chargement",
       "networkError": "Erreur réseau",
-      "actionError": "Action échouée"
+      "actionError": "Action échouée",
+      "detail": {
+        "backToBookings": "Retour aux réservations",
+        "bookingId": "Réservation #",
+        "sectionService": "Service & Problème",
+        "sectionTechnician": "Technicien",
+        "sectionDates": "Dates",
+        "sectionLocation": "Lieu",
+        "service": "Service",
+        "problem": "Description du problème",
+        "deviceInfo": "Informations sur l'appareil",
+        "partsNeeded": "Pièces nécessaires",
+        "outcomeNotes": "Résultat",
+        "requestedOn": "Demandé le",
+        "preferredDate": "Date souhaitée",
+        "confirmedDate": "Date confirmée",
+        "completedAt": "Terminé le",
+        "yourRating": "Votre évaluation",
+        "notFound": "Réservation introuvable"
+      }
     },
     "membership": {
       "pageTitle": "Adhésion",
