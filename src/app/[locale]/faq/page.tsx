@@ -104,7 +104,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
                             <p className="mt-2">
                               <Link
                                 href={item.link.href}
-                                className="text-info-600 hover:text-info-800 underline"
+                                className="text-primary-600 hover:text-primary-800 underline"
                               >
                                 {item.link.label}
                               </Link>

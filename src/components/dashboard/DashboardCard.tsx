@@ -24,8 +24,8 @@ interface DashboardCardProps {
 
 const colorClasses = {
   info: {
-    bg: 'bg-info-100 dark:bg-info-900',
-    text: 'text-info-600 dark:text-info-400',
+    bg: 'bg-primary-100 dark:bg-info-900',
+    text: 'text-primary-600 dark:text-primary-400',
   },
   success: {
     bg: 'bg-primary-100 dark:bg-primary-900',

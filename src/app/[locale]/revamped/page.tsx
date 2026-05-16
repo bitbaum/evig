@@ -49,21 +49,21 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <div className="inline-flex items-center gap-2 bg-info-100 px-6 py-3 rounded-full mb-6 mt-6">
-          <Award className="w-6 h-6 text-info-600" />
-          <span className="text-xl font-bold text-info-800">REVAMPED</span>
-          <Sparkles className="w-5 h-5 text-info-600" />
+        <div className="inline-flex items-center gap-2 bg-primary-100 px-6 py-3 rounded-full mb-6 mt-6">
+          <Award className="w-6 h-6 text-primary-600" />
+          <span className="text-xl font-bold text-primary-800">REVAMPED</span>
+          <Sparkles className="w-5 h-5 text-primary-600" />
         </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-info-100 text-info-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 text-info-700 px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-info-100 text-info-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 text-info-700 px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-info-100 text-info-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 text-info-700 px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -158,8 +158,8 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-info-100 rounded-full mb-6">
-                  <Shield className="w-10 h-10 text-info-600" />
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-full mb-6">
+                  <Shield className="w-10 h-10 text-primary-600" />
                 </div>
                 <Heading level={3} className="text-2xl font-bold mb-4">{t('whatIs.quality.title')}</Heading>
                 <p className="text-neutral-600 leading-relaxed">

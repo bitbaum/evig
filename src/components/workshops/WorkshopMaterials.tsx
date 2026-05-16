@@ -145,7 +145,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
             material.material_type === 'pdf' ? 'bg-error-100 text-error-600' :
             material.material_type === 'video' ? 'bg-purple-100 text-purple-600' :
             material.material_type === 'archive' ? 'bg-warning-100 text-warning-600' :
-            'bg-info-100 text-info-600'
+            'bg-primary-100 text-primary-600'
           }`}>
             {getMaterialIcon(material.material_type)}
           </div>
@@ -159,7 +159,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
                 <span className={`text-xs px-1.5 py-0.5 rounded ${
                   material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
                     ? 'bg-purple-100 text-purple-700'
-                    : 'bg-info-100 text-info-700'
+                    : 'bg-primary-100 text-info-700'
                 }`}>
                   {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? t('badgeAttended') : t('badgeRegistered')}
                 </span>
