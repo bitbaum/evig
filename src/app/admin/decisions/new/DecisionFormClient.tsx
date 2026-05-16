@@ -37,7 +37,7 @@ export default function DecisionFormClient() {
         <button
           type="button"
           onClick={() => setShowTemplates(!showTemplates)}
-          className="text-sm text-info-600 hover:text-info-700 hover:underline"
+          className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
         >
           {showTemplates ? '▼' : '▶'} Vorlage wählen
         </button>
@@ -50,12 +50,12 @@ export default function DecisionFormClient() {
 
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
-        <div className="flex items-start justify-between gap-3 rounded-md border border-primary-200 bg-info-50 px-4 py-3 text-sm text-info-700">
+        <div className="flex items-start justify-between gap-3 rounded-md border border-primary-200 bg-primary-50 px-4 py-3 text-sm text-primary-700">
           <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
           <button
             type="button"
             onClick={() => form.setAiRecommendationReason('')}
-            className="flex-shrink-0 text-info-400 hover:text-primary-600"
+            className="flex-shrink-0 text-neutral-400 hover:text-primary-600"
           >
             ×
           </button>

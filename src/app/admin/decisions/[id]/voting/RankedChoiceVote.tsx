@@ -24,7 +24,7 @@ export function RankedChoiceVote({ options, ranking, onMoveUp, onMoveDown }: Pro
               key={optId}
               className="flex items-center gap-3 rounded-md border border-neutral-200 bg-white px-3 py-2.5"
             >
-              <span className="w-6 text-center text-sm font-bold text-info-600">
+              <span className="w-6 text-center text-sm font-bold text-primary-600">
                 {index + 1}.
               </span>
               <span className="flex-1 text-sm font-medium text-neutral-800">{opt.label}</span>

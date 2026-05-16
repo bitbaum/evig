@@ -81,7 +81,7 @@ export function DecisionOptionsEditor({
       <button
         type="button"
         onClick={onAdd}
-        className="mt-2 text-sm text-info-600 hover:underline"
+        className="mt-2 text-sm text-primary-600 hover:underline"
       >
         + Option hinzufügen
       </button>

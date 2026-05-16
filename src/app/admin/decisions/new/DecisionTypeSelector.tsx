@@ -22,13 +22,13 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               onClick={() => onChange(type)}
               className={`rounded-lg border-2 p-3 text-left transition-all ${
                 isSelected
-                  ? 'border-info-500 bg-info-50 ring-1 ring-info-200'
+                  ? 'border-primary-500 bg-primary-50 ring-1 ring-primary-200'
                   : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
               }`}
             >
               <div className="flex items-center gap-2">
                 <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                  isSelected ? 'bg-info-500 text-white' : 'bg-neutral-100 text-neutral-500'
+                  isSelected ? 'bg-primary-500 text-white' : 'bg-neutral-100 text-neutral-500'
                 }`}>
                   {conf.icon}
                 </span>
@@ -36,7 +36,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               </div>
               <p className="mt-1.5 text-xs text-neutral-500">{conf.description}</p>
               {isSelected && (
-                <p className="mt-1.5 rounded bg-info-100 px-2 py-1 text-xs text-info-700">
+                <p className="mt-1.5 rounded bg-primary-100 px-2 py-1 text-xs text-primary-700">
                   {conf.mechanic}
                 </p>
               )}
