@@ -29,13 +29,13 @@ export default function DecisionTemplateSelector({ onSelect }: Props) {
             onClick={() => onSelect(template)}
             className={cn(
               adminSurface.card,
-              'p-4 text-left hover:border-info-400 dark:hover:border-info-500 hover:shadow-sm transition-all cursor-pointer w-full'
+              'p-4 text-left hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-sm transition-all cursor-pointer w-full'
             )}
           >
             <p className={cn(adminType.sectionTitle, 'mb-1')}>{template.label}</p>
             <p className={cn(adminType.meta, 'mb-3 line-clamp-2')}>{template.description}</p>
             <div className="flex flex-wrap gap-1">
-              <span className="rounded-full bg-info-100 dark:bg-info-900/40 px-2 py-0.5 text-xs text-info-700 dark:text-info-300">
+              <span className="rounded-full bg-primary-100 dark:bg-primary-900/40 px-2 py-0.5 text-xs text-primary-700 dark:text-primary-300">
                 {DECISION_TYPE_CONFIG[template.decisionType]?.label}
               </span>
               <span className="rounded-full bg-purple-100 dark:bg-purple-900/40 px-2 py-0.5 text-xs text-purple-700 dark:text-purple-300">

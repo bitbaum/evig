@@ -162,7 +162,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-200">
             <div
-              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-primary-500' : 'bg-info-400'}`}
+              className={`h-2 rounded-full transition-all ${quorumMet ? 'bg-primary-500' : 'bg-neutral-400'}`}
               style={{ width: `${participationPct}%` }}
             />
           </div>
@@ -214,7 +214,7 @@ export default async function DashboardDecisionPage({ params }: Props) {
       )}
 
       {decisionStatus === DECISION_STATUS.DISCUSSION && (
-        <div className="rounded-lg border border-info-200 bg-info-50 p-4 text-sm text-info-700">
+        <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700">
           Diese Abstimmung befindet sich noch in der Diskussionsphase. Du wirst per E-Mail benachrichtigt, wenn die Abstimmung geöffnet wird.
         </div>
       )}

@@ -28,7 +28,7 @@ export const WORKSHOP_REGISTRATION_STATUS_COLORS: Record<string, string> = {
   [WORKSHOP_REGISTRATION_STATUS.CONFIRMED]: 'bg-primary-100 text-primary-800',
   [WORKSHOP_REGISTRATION_STATUS.PENDING]: 'bg-warning-100 text-warning-800',
   [WORKSHOP_REGISTRATION_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
-  [WORKSHOP_REGISTRATION_STATUS.ATTENDED]: 'bg-info-100 text-info-800',
+  [WORKSHOP_REGISTRATION_STATUS.ATTENDED]: 'bg-primary-100 text-primary-800',
   [WORKSHOP_REGISTRATION_STATUS.NO_SHOW]: 'bg-neutral-100 text-neutral-800',
   [WORKSHOP_REGISTRATION_STATUS.WAITLIST]: 'bg-neutral-100 text-neutral-600',
 };

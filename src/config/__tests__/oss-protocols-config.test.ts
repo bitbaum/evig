@@ -29,9 +29,9 @@ describe('getFollowUpStatusColor', () => {
     expect(color).toContain('primary')
   })
 
-  it('"in Arbeit" → blue classes', () => {
+  it('"in Arbeit" → primary classes', () => {
     const color = getFollowUpStatusColor('in Arbeit')
-    expect(color).toContain('info')
+    expect(color).toContain('primary')
   })
 
   it('"offen" → warning classes', () => {

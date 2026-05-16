@@ -27,7 +27,7 @@ export default function SubmissionsAdminPage() {
   return (
     <main className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary-600 to-emerald-700 text-white py-12">
+      <div className="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-12">
         <div className="container mx-auto px-4 max-w-7xl">
           <Link
             href="/blog"
@@ -109,7 +109,7 @@ export default function SubmissionsAdminPage() {
                         <span
                           className={`px-2 py-1 text-xs rounded-full font-medium ${
                             submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA
-                              ? 'bg-info-100 text-info-800'
+                              ? 'bg-primary-100 text-primary-800'
                               : 'bg-purple-100 text-purple-800'
                           }`}
                         >
@@ -214,7 +214,7 @@ export default function SubmissionsAdminPage() {
                     </button>
                   </div>
 
-                  <p className="mt-4 text-xs text-neutral-500 bg-info-50 border border-info-200 rounded p-3">
+                  <p className="mt-4 text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded p-3">
                     💡 {t.rich('tipText', {
                       strong: (chunks) => <strong>{chunks}</strong>,
                       code: (chunks) => <code>{chunks}</code>,

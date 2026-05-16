@@ -104,8 +104,8 @@ describe('getDepartmentLabel', () => {
 // ============================================================================
 
 describe('getEmploymentTypeColor', () => {
-  it('returns blue class for employee', () => {
-    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.EMPLOYEE)).toContain('info')
+  it('returns neutral class for employee', () => {
+    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.EMPLOYEE)).toContain('neutral')
   })
 
   it('returns green class for volunteer', () => {

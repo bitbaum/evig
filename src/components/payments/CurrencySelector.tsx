@@ -125,7 +125,7 @@ export default function CurrencySelector({
           <div className="text-xs text-neutral-500 space-y-1">
             {selectedCurrency === 'EUR' && (
               <div className="flex items-start space-x-1">
-                <span className="text-info-500">ℹ️</span>
+                <span className="text-neutral-500">ℹ️</span>
                 <span>{t('eurNote')}</span>
               </div>
             )}

@@ -16,7 +16,7 @@ import { useAppointments, type ServiceAppointment } from '@/hooks/useAppointment
 function getStatusIcon(status: string) {
   switch (status) {
     case APPOINTMENT_STATUS.CONFIRMED: return <CheckCircle className="w-5 h-5 text-success-600" />
-    case APPOINTMENT_STATUS.COMPLETED: return <CheckCircle className="w-5 h-5 text-info-600" />
+    case APPOINTMENT_STATUS.COMPLETED: return <CheckCircle className="w-5 h-5 text-primary-600" />
     case APPOINTMENT_STATUS.REQUESTED: return <AlertCircle className="w-5 h-5 text-warning-600" />
     case APPOINTMENT_STATUS.CANCELLED: return <XCircle className="w-5 h-5 text-error-600" />
     default: return <AlertCircle className="w-5 h-5 text-neutral-500" />
@@ -101,14 +101,14 @@ export default function AppointmentsDashboard() {
         </div>
 
         {paymentSuccess && (
-          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-              <p className="text-emerald-800 font-medium">{t('paymentSuccess')}</p>
+              <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
+              <p className="text-primary-800 font-medium">{t('paymentSuccess')}</p>
             </div>
             <button
               onClick={() => setPaymentSuccess(false)}
-              className="text-emerald-600 hover:text-emerald-800 text-lg leading-none"
+              className="text-primary-600 hover:text-primary-800 text-lg leading-none"
               aria-label="Schliessen"
             >
               ×
@@ -128,8 +128,8 @@ export default function AppointmentsDashboard() {
               <div key={appointment.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 sm:gap-4 flex-1">
-                    <div className="p-2 sm:p-3 bg-info-100 rounded-lg flex-shrink-0">
-                      <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-info-600" />
+                    <div className="p-2 sm:p-3 bg-neutral-100 rounded-lg flex-shrink-0">
+                      <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-600" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
@@ -177,13 +177,13 @@ export default function AppointmentsDashboard() {
                 )}
 
                 {appointment.status === APPOINTMENT_STATUS.COMPLETED && (
-                  <div className="bg-info-50 border-2 border-info-200 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center text-info-800">
+                  <div className="bg-primary-50 border-2 border-primary-200 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-primary-800">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('completedTitle')}</span>
                     </div>
                     {appointment.outcome_notes && (
-                      <p className="text-info-700 text-xs sm:text-sm mt-1 ml-7">{appointment.outcome_notes}</p>
+                      <p className="text-primary-700 text-xs sm:text-sm mt-1 ml-7">{appointment.outcome_notes}</p>
                     )}
                   </div>
                 )}

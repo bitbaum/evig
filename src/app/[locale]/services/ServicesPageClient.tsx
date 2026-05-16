@@ -279,7 +279,7 @@ export default function ServicesPage() {
               </Link>
               <Link
                 href="/shop"
-                className="inline-block border-2 border-info-300 text-info-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-info-50 transition-colors duration-300 text-base sm:text-lg"
+                className="inline-block border-2 border-neutral-300 text-neutral-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}
               </Link>

@@ -153,8 +153,8 @@ function ResetPasswordContent() {
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-info-100 rounded-full flex items-center justify-center">
-            <Lock className="w-8 h-8 text-info-600" />
+          <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+            <Lock className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
         <Heading level={2} className="mt-6 text-center text-3xl text-neutral-900">
@@ -270,15 +270,15 @@ function ResetPasswordFallback() {
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-info-100 rounded-full flex items-center justify-center">
-            <Lock className="w-8 h-8 text-info-600" />
+          <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+            <Lock className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
           <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-12 h-12 text-info-500 animate-spin" />
+            <Loader2 className="w-12 h-12 text-primary-500 animate-spin" />
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ export function UserOffer({ offer, withdrawing, onWithdraw }: UserOfferProps) {
   const t = useTranslations('itHelp.offer')
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-emerald-200 p-6">
+    <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
       <div className="flex items-center justify-between mb-3">
         <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('heading')}</Heading>
         <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-700">

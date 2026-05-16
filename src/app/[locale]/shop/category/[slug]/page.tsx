@@ -113,7 +113,7 @@ function Breadcrumbs({
         <li>
           <Link
             href="/"
-            className="hover:text-emerald-600 transition-colors flex items-center gap-1"
+            className="hover:text-primary-600 transition-colors flex items-center gap-1"
           >
             <Home className="w-4 h-4" />
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
@@ -121,7 +121,7 @@ function Breadcrumbs({
         </li>
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <Link href="/shop" className="hover:text-emerald-600 transition-colors">
+          <Link href="/shop" className="hover:text-primary-600 transition-colors">
             {shopLabel}
           </Link>
         </li>
@@ -131,7 +131,7 @@ function Breadcrumbs({
             <li>
               <Link
                 href={getCategoryUrl(parent.slug)}
-                className="hover:text-emerald-600 transition-colors"
+                className="hover:text-primary-600 transition-colors"
               >
                 {parent.name}
               </Link>
@@ -160,14 +160,14 @@ function SubcategoryCard({
   return (
     <Link
       href={getCategoryUrl(category.slug)}
-      className="group block p-4 bg-white rounded-xl border border-neutral-200 hover:border-emerald-300 hover:shadow-md transition-all"
+      className="group block p-4 bg-white rounded-xl border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all"
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+        <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
           <Package className="w-5 h-5" />
         </div>
         <div>
-          <Heading level={3} className="font-medium text-neutral-900 group-hover:text-emerald-600 transition-colors">
+          <Heading level={3} className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors">
             {category.name}
           </Heading>
           {category.count !== undefined && (
@@ -202,7 +202,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white py-12 sm:py-16">
+      <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Breadcrumbs
             category={category}
@@ -213,11 +213,11 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
           <Heading level={1} className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             {category.name}
           </Heading>
-          <p className="text-lg text-emerald-100 max-w-2xl">
+          <p className="text-lg text-primary-100 max-w-2xl">
             {t("category.heroSubtitle", { categoryNameLower: category.name.toLowerCase() })}
           </p>
           {category.count !== undefined && (
-            <p className="mt-4 text-emerald-200">
+            <p className="mt-4 text-primary-200">
               {t("category.productCount", { count: category.count })}
             </p>
           )}
@@ -253,7 +253,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </Heading>
               <Link
                 href="/shop"
-                className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"
+                className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
               >
                 {t("category.allShopOptions")}
                 <ChevronRight className="w-4 h-4" />
@@ -268,7 +268,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="text-center mt-8">
                 <Link
                   href={`/shop?category=${encodeURIComponent(category.name)}`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
                 >
                   <ShoppingCart className="w-4 h-4" />
                   {t('category.showAllProducts', { count: inventoryResult.total })}
@@ -279,7 +279,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         ) : (
           <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
             <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />
               </div>
               <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-2">
@@ -291,7 +291,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
                   href="/marketplace"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
                 >
                   {t("category.goToShop")}
                 </Link>

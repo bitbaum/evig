@@ -45,7 +45,7 @@ export function OfferForm({
       {!showForm ? (
         <button
           onClick={onShowForm}
-          className="w-full py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="w-full py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           <Send className="w-5 h-5" aria-hidden="true" />
           {t('offerButton')}
@@ -77,7 +77,7 @@ export function OfferForm({
                 minLength={20}
                 maxLength={2000}
                 rows={4}
-                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
               />
             </div>
 
@@ -92,7 +92,7 @@ export function OfferForm({
                   value={offerEstimatedTime}
                   onChange={(e) => onEstimatedTimeChange(e.target.value)}
                   placeholder={t('estimatedTimePlaceholder')}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 />
               </div>
               <div>
@@ -105,7 +105,7 @@ export function OfferForm({
                   value={offerCompensation}
                   onChange={(e) => onCompensationChange(e.target.value)}
                   placeholder={t('compensationPlaceholder')}
-                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                 />
               </div>
             </div>
@@ -120,9 +120,9 @@ export function OfferForm({
                     key={skill.id}
                     type="button"
                     onClick={() => onSkillToggle(skill.id)}
-                    className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
+                    className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                       offerSkills.includes(skill.id)
-                        ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
+                        ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
                         : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                     }`}
                   >
@@ -137,14 +137,14 @@ export function OfferForm({
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-3 min-h-[44px] text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="px-4 py-3 min-h-[44px] text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
               {t('cancelButton')}
             </button>
             <button
               type="submit"
               disabled={submitting || offerMessage.length < 20}
-              className="px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
             >
               {submitting ? t('submittingButton') : t('sendButton')}
             </button>

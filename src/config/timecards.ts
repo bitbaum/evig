@@ -25,7 +25,7 @@ export const TIMECARD_STATUS_LABELS: Record<TimecardStatus, string> = {
 
 export const TIMECARD_STATUS_COLORS: Record<TimecardStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300',
-  submitted: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
+  submitted: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
   approved: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
   rejected: 'bg-error-100 text-error-800 dark:bg-error-900/30 dark:text-error-300',
 }

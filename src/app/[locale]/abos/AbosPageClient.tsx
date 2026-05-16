@@ -34,8 +34,8 @@ export default function AbosPageClient() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Tag className="w-5 h-5 text-emerald-600" />
-                <span className="text-sm font-medium text-emerald-600 uppercase tracking-wide">{t('tagline')}</span>
+                <Tag className="w-5 h-5 text-primary-600" />
+                <span className="text-sm font-medium text-primary-600 uppercase tracking-wide">{t('tagline')}</span>
               </div>
               <h1 className="text-3xl font-bold text-neutral-900">{t('title')}</h1>
               <p className="mt-2 text-neutral-500 max-w-lg">{t('subtitle')}</p>
@@ -43,7 +43,7 @@ export default function AbosPageClient() {
             {session?.user && (
               <button
                 onClick={() => setShowCreate(true)}
-                className="flex items-center gap-2 px-5 py-3 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 transition-colors shrink-0"
+                className="flex items-center gap-2 px-5 py-3 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-colors shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 {t('createPool')}
@@ -60,7 +60,7 @@ export default function AbosPageClient() {
             <button
               onClick={() => setActiveCategory(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                !activeCategory ? 'bg-emerald-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+                !activeCategory ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
               }`}
             >
               {t('filterAll')}
@@ -72,7 +72,7 @@ export default function AbosPageClient() {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === cat ? 'bg-emerald-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
+                    activeCategory === cat ? 'bg-primary-600 text-white' : 'bg-white text-neutral-600 hover:bg-neutral-100 border border-neutral-200'
                   }`}
                 >
                   {/* @ts-expect-error — dynamic category key */}

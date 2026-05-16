@@ -198,7 +198,7 @@ export default function WorkshopsDashboard() {
                     </button>
                     <button
                       onClick={() => openEdit(registration)}
-                      className="px-4 py-2 rounded-lg border border-info-300 text-info-700 hover:bg-info-50"
+                      className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       {registration.feedback || registration.rating ? t('feedbackEdit') : t('feedbackAdd')}
                     </button>
@@ -264,7 +264,7 @@ export default function WorkshopsDashboard() {
             <button
               onClick={saveEdit}
               disabled={saving}
-              className="px-4 py-2 rounded-lg bg-info-600 text-white disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-primary-600 text-white disabled:opacity-50"
             >
               {saving ? t('saving') : t('save')}
             </button>

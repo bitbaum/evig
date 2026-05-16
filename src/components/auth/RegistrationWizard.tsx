@@ -198,8 +198,8 @@ export function RegistrationWizard() {
               href="/profil/techniker"
               className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
-              <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-emerald-600" />
+              <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-primary-600" />
               </div>
               <div className="flex-1">
                 <div className="font-medium text-neutral-900 dark:text-white">

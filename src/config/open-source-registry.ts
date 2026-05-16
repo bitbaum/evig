@@ -68,7 +68,7 @@ export interface OSSAlternative {
 
 export const MATURITY_CONFIG: Record<Maturity, { label: string; color: string }> = {
   established: { label: 'Etabliert', color: 'bg-primary-100 text-primary-800' },
-  growing: { label: 'Wachsend', color: 'bg-info-100 text-info-800' },
+  growing: { label: 'Wachsend', color: 'bg-neutral-100 text-neutral-800' },
   emerging: { label: 'Aufkommend', color: 'bg-warning-100 text-warning-800' },
 }
 

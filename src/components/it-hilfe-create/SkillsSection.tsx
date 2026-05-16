@@ -34,7 +34,7 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
                   onClick={() => onSkillToggle(skill.id)}
                   className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                     skillsNeeded.includes(skill.id)
-                      ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
+                      ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
                       : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                   }`}
                 >

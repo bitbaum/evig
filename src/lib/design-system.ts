@@ -109,16 +109,16 @@ export const contrastSafeColors = {
     border: 'border-error-700',
   },
   
-  // Info blue backgrounds
+  // Info blue backgrounds (mapped to neutral)
   info: {
     text: {
       primary: 'text-white',
-      secondary: 'text-info-50',
-      muted: 'text-info-100',
+      secondary: 'text-neutral-200',
+      muted: 'text-neutral-300',
       inverse: 'text-white',
     },
-    bg: 'bg-info-600',
-    border: 'border-info-700',
+    bg: 'bg-neutral-600',
+    border: 'border-neutral-700',
   },
   
   // Dark backgrounds
@@ -185,10 +185,10 @@ export const statusColors = {
     icon: 'text-error-600',
   },
   info: {
-    bg: 'bg-info-50',
-    text: 'text-info-800',
-    border: 'border-info-200',
-    icon: 'text-info-600',
+    bg: 'bg-neutral-50',
+    text: 'text-neutral-800',
+    border: 'border-neutral-200',
+    icon: 'text-neutral-600',
   },
   neutral: {
     bg: 'bg-neutral-50',
@@ -384,7 +384,7 @@ export const designPrimitive = {
     outline:     'border-neutral-300 text-neutral-700 dark:border-white/[0.12] dark:text-neutral-400',
     success:     'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/10 dark:text-primary-400',
     warning:     'border-warning-200 bg-warning-50 text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-400',
-    info:        'border-info-200 bg-info-50 text-info-800 dark:border-info-500/30 dark:bg-info-500/10 dark:text-info-400',
+    info:        'border-neutral-200 bg-neutral-50 text-neutral-800 dark:border-neutral-500/30 dark:bg-neutral-500/10 dark:text-neutral-400',
   },
 
   // ── Forms ─────────────────────────────────────────────────────────────────

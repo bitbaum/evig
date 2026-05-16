@@ -16,9 +16,9 @@ interface MarkCompletedCardProps {
 export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompletedCardProps) {
   const t = useTranslations('itHelp.detail')
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-emerald-200 p-6">
+    <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
       <div className="flex items-start gap-3">
-        <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">
           <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-1">
             {t('markCompletedTitle')}
@@ -30,7 +30,7 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
             type="button"
             onClick={onMarkCompleted}
             disabled={submitting}
-            className="inline-flex items-center gap-2 px-5 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="inline-flex items-center gap-2 px-5 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             {submitting ? (
               <>

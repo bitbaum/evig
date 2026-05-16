@@ -55,15 +55,15 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
           <Sparkles className="w-5 h-5 text-primary-600" />
         </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-primary-100 text-info-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 text-primary-700 px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-primary-100 text-info-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 text-primary-700 px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-primary-100 text-info-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 text-primary-700 px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -199,7 +199,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   ))}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-primary-50 to-info-50 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl">
+              <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl">
                 <div className="text-center">
                   <div className="inline-flex items-center justify-center w-32 h-32 bg-white rounded-full shadow-lg mb-6">
                     <div className="text-center">
@@ -258,7 +258,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 <p className="text-neutral-600">{t('stickers.sticker2.body')}</p>
               </div>
               <div className="text-center">
-                <div className="bg-gradient-to-br from-primary-100 to-info-100 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl shadow-lg mb-6 relative">
+                <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl shadow-lg mb-6 relative">
                   <div className="w-40 h-40 mx-auto flex items-center justify-center bg-white rounded-xl shadow-sm">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-primary-600 mx-auto mb-2" />
@@ -266,7 +266,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                       <div className="text-xs text-neutral-600">CERTIFIED</div>
                     </div>
                   </div>
-                  <div className="absolute top-3 right-3 bg-info-500 text-white text-xs px-3 py-1 rounded-full">NEW</div>
+                  <div className="absolute top-3 right-3 bg-primary-600 text-white text-xs px-3 py-1 rounded-full">NEW</div>
                 </div>
                 <Heading level={3} className="text-xl font-bold mb-2">{t('stickers.sticker3.title')}</Heading>
                 <p className="text-neutral-600">{t('stickers.sticker3.body')}</p>

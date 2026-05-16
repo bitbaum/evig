@@ -305,7 +305,7 @@ export const CATEGORY_LABELS: Record<MetricCategory, string> = {
 
 // Category colors for display
 export const CATEGORY_COLORS: Record<MetricCategory, { bg: string; text: string; icon: string }> = {
-  financial: { bg: 'bg-info-100', text: 'text-info-700', icon: 'text-info-600' },
+  financial: { bg: 'bg-neutral-100', text: 'text-neutral-700', icon: 'text-neutral-600' },
   environmental: { bg: 'bg-primary-100', text: 'text-primary-700', icon: 'text-primary-600' },
   social: { bg: 'bg-purple-100', text: 'text-purple-700', icon: 'text-purple-600' },
   digital: { bg: 'bg-orange-100', text: 'text-orange-700', icon: 'text-orange-600' },

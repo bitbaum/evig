@@ -159,7 +159,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
                 <span className={`text-xs px-1.5 py-0.5 rounded ${
                   material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
                     ? 'bg-purple-100 text-purple-700'
-                    : 'bg-primary-100 text-info-700'
+                    : 'bg-primary-100 text-primary-700'
                 }`}>
                   {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? t('badgeAttended') : t('badgeRegistered')}
                 </span>

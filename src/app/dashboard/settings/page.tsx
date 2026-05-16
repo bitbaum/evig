@@ -46,7 +46,7 @@ export default function SettingsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
             href="/dashboard"
-            className="inline-flex items-center text-info-600 hover:text-info-700 dark:text-info-400 dark:hover:text-info-300 mb-4 transition-colors"
+            className="inline-flex items-center text-neutral-600 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300 mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
@@ -82,7 +82,7 @@ export default function SettingsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'border-info-600 text-info-600 dark:text-info-400 bg-info-50/50 dark:bg-info-900/10'
+                    ? 'border-primary-600 text-primary-600 dark:text-primary-400 bg-primary-50/50 dark:bg-primary-900/10'
                     : 'border-transparent text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700/50'
                 }`}
               >

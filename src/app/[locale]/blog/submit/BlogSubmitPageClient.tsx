@@ -225,9 +225,9 @@ export default function SubmitPostPage() {
           </div>
 
           {/* Guidelines */}
-          <div className="bg-info-50 border border-info-200 rounded-lg p-4 mb-6">
-            <Heading level={3} className="text-sm font-semibold text-info-900 mb-2">📋 {t('guidelinesTitle')}</Heading>
-            <ul className="text-sm text-info-800 space-y-1">
+          <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-4 mb-6">
+            <Heading level={3} className="text-sm font-semibold text-neutral-900 mb-2">📋 {t('guidelinesTitle')}</Heading>
+            <ul className="text-sm text-neutral-800 space-y-1">
               <li>• {t('guidelineOriginal')}</li>
               <li>• {t('guidelineLanguage')}</li>
               <li>• {t('guidelineExamples')}</li>

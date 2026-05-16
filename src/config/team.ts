@@ -30,7 +30,7 @@ export const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
 }
 
 export const EMPLOYMENT_TYPE_COLORS: Record<EmploymentType, string> = {
-  employee: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
+  employee: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300',
   volunteer: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
   intern: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
   contractor: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300',
@@ -69,7 +69,7 @@ export const DEPARTMENT_COLORS: Record<Department, string> = {
   Werkstatt: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',
   Verwaltung: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300',
   Marketing: 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
-  Verkauf: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300',
+  Verkauf: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
   Bildung: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300',
   Logistik: 'bg-rose-100 text-rose-800 dark:bg-rose-900/30 dark:text-rose-300',
 }

@@ -49,9 +49,9 @@ export function ConfirmReviewCard({
   }
 
   return (
-    <div className="bg-emerald-50 rounded-xl shadow-sm border-2 border-emerald-300 p-6">
+    <div className="bg-primary-50 rounded-xl shadow-sm border-2 border-primary-300 p-6">
       <div className="flex items-start gap-3 mb-4">
-        <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div>
           <Heading level={3} className="text-lg font-semibold text-neutral-900">
             {t('confirmHeading')}
@@ -82,7 +82,7 @@ export function ConfirmReviewCard({
                 onClick={() => setRating(star)}
                 onMouseEnter={() => setHover(star)}
                 onMouseLeave={() => setHover(0)}
-                className="p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 rounded"
+                className="p-2 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded"
                 aria-label={t('starAriaLabel', { count: star })}
               >
                 <Star
@@ -109,7 +109,7 @@ export function ConfirmReviewCard({
             placeholder={t('reviewTextOptionalPlaceholder')}
             rows={4}
             maxLength={5000}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white"
           />
           <p className="text-xs text-neutral-500 mt-1">{reviewText.length}/5000</p>
         </div>
@@ -123,10 +123,10 @@ export function ConfirmReviewCard({
             <button
               type="button"
               onClick={() => setRecommended(true)}
-              className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 ${
+              className={`flex-1 py-3 px-4 min-h-[44px] rounded-lg font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                 recommended === true
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-neutral-700 border-neutral-300 hover:border-emerald-400'
+                  ? 'bg-primary-600 text-white border-primary-600'
+                  : 'bg-white text-neutral-700 border-neutral-300 hover:border-primary-400'
               }`}
             >
               {t('recommendYes')}
@@ -148,7 +148,7 @@ export function ConfirmReviewCard({
         <button
           type="submit"
           disabled={submitting || rating < 1 || recommended === null}
-          className="w-full py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="w-full py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           {submitting ? (
             <>

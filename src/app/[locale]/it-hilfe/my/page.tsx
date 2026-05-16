@@ -77,7 +77,7 @@ export default function MyRequestsPage() {
   if (status === 'loading' || (status === 'authenticated' && loading)) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
@@ -103,7 +103,7 @@ export default function MyRequestsPage() {
             </Link>
             <Link
               href="/it-hilfe/create"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
               {t('newRequestButton')}
@@ -118,7 +118,7 @@ export default function MyRequestsPage() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
-                  ? 'bg-emerald-100 text-emerald-700'
+                  ? 'bg-primary-100 text-primary-700'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
             >
@@ -130,7 +130,7 @@ export default function MyRequestsPage() {
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
-                    ? 'bg-emerald-100 text-emerald-700'
+                    ? 'bg-primary-100 text-primary-700'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
               >
@@ -160,7 +160,7 @@ export default function MyRequestsPage() {
             {!statusFilter && (
               <Link
                 href="/it-hilfe/create"
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 <Plus className="w-5 h-5" />
                 {t('createButton')}
@@ -196,7 +196,7 @@ export default function MyRequestsPage() {
                         </span>
                       </div>
 
-                      <Heading level={3} className="font-semibold text-neutral-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                      <Heading level={3} className="font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
                         {req.title}
                       </Heading>
 
@@ -211,7 +211,7 @@ export default function MyRequestsPage() {
                         </div>
                         <div className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
-                          <span className={req.offerCount > 0 ? 'text-emerald-600 font-medium' : ''}>
+                          <span className={req.offerCount > 0 ? 'text-primary-600 font-medium' : ''}>
                             {t('offerCount', { count: req.offerCount })}
                           </span>
                         </div>
@@ -219,13 +219,13 @@ export default function MyRequestsPage() {
                           <Clock className="w-4 h-4" />
                           <span>{formatDateShort(req.createdAt)}</span>
                         </div>
-                        <span className="text-emerald-600 font-medium">
+                        <span className="text-primary-600 font-medium">
                           {formatBudget(req.budgetAmountCents)}
                         </span>
                       </div>
                     </div>
 
-                    <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-emerald-600 transition-colors" />
+                    <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-primary-600 transition-colors" />
                   </div>
                 </Link>
               )

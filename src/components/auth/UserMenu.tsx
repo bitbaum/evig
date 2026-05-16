@@ -73,7 +73,7 @@ export function UserMenu() {
           className={cn(
             "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
             "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
           )}
         >
           {t('login')}
@@ -192,7 +192,7 @@ export function UserMenu() {
                   unoptimized
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-sm font-semibold">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-sm font-semibold">
                   {initials}
                 </div>
               )}
@@ -231,7 +231,7 @@ export function UserMenu() {
                       "w-4 h-4 transition-colors",
                       'highlight' in item && item.highlight
                         ? "text-warning-600"
-                        : "text-neutral-400 group-hover:text-emerald-600"
+                        : "text-neutral-400 group-hover:text-primary-600"
                     )} />
                     {item.label}
                   </Link>
@@ -251,7 +251,7 @@ export function UserMenu() {
                 "hover:bg-neutral-50 transition-colors duration-150"
               )}
             >
-              <Settings className="w-4 h-4 text-neutral-500 group-hover:text-emerald-600 transition-colors" />
+              <Settings className="w-4 h-4 text-neutral-500 group-hover:text-primary-600 transition-colors" />
               {t('settings')}
             </Link>
             <button

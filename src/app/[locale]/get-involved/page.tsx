@@ -210,7 +210,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* CTA Section */}
-      <section className={`${responsiveSpacing.section} bg-gradient-to-br from-primary-600 to-emerald-700 text-white`}>
+      <section className={`${responsiveSpacing.section} bg-gradient-to-br from-primary-600 to-primary-800 text-white`}>
         <div className={`${responsiveSpacing.container} mx-auto text-center`}>
           <Heading level={2} className={`${responsiveTypography.section} ${responsiveSpacing.mbSmall}`}>
             {t('cta.heading')}

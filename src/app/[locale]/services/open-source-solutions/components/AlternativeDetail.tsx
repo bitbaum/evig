@@ -90,7 +90,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                           <div className="flex items-center gap-2">
                             <span className="font-semibold text-neutral-900">{app.name}</span>
                             <ArrowRight className="w-4 h-4 text-neutral-400" />
-                            <span className="font-semibold text-info-700">{alternative.name}</span>
+                            <span className="font-semibold text-primary-700">{alternative.name}</span>
                           </div>
                           <MigrationDifficultyBadge difficulty={r.migrationDifficulty} />
                         </div>
@@ -110,7 +110,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                             <ul className="space-y-1">
                               {r.migrationTips.map((tip, i) => (
                                 <li key={i} className="flex items-start gap-2 text-sm text-neutral-600">
-                                  <span className="text-info-500 mt-0.5">•</span>
+                                  <span className="text-primary-500 mt-0.5">•</span>
                                   {tip}
                                 </li>
                               ))}
@@ -166,8 +166,8 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   rel="noopener noreferrer"
                   className={cn(
                     'flex items-center gap-3 px-4 py-3 rounded-lg',
-                    'bg-info-600 text-white font-medium text-sm',
-                    'hover:bg-info-700 transition-colors'
+                    'bg-primary-600 text-white font-medium text-sm',
+                    'hover:bg-primary-700 transition-colors'
                   )}
                 >
                   <ExternalLink className="w-4 h-4" />

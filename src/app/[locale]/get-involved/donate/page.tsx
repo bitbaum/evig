@@ -108,7 +108,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 <div
                   key={index}
                   className={`relative rounded-xl border-2 p-6 ${
-                    highlight ? 'border-info-400 bg-info-50' : 'border-neutral-200 bg-neutral-50'
+                    highlight ? 'border-primary-400 bg-primary-50' : 'border-neutral-200 bg-neutral-50'
                   }`}
                 >
                   {highlight && (

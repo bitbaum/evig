@@ -26,7 +26,7 @@ export const ACTIVITY_UPDATE_TYPE_COLORS: Record<ActivityUpdateType, string> = {
   accomplishment: 'bg-primary-100 text-primary-800',
   milestone: 'bg-purple-100 text-purple-800',
   note: 'bg-neutral-100 text-neutral-800',
-  announcement: 'bg-info-100 text-info-800',
+  announcement: 'bg-primary-100 text-primary-800',
 };
 
 export const ACTIVITY_UPDATE_TYPE_ICONS: Record<ActivityUpdateType, string> = {
@@ -66,7 +66,7 @@ export const HELP_REQUEST_URGENCY_LABELS: Record<HelpRequestUrgency, string> = {
 
 export const HELP_REQUEST_URGENCY_COLORS: Record<HelpRequestUrgency, string> = {
   low: 'bg-neutral-100 text-neutral-800',
-  normal: 'bg-info-100 text-info-800',
+  normal: 'bg-neutral-100 text-neutral-800',
   high: 'bg-orange-100 text-orange-800',
   urgent: 'bg-error-100 text-error-800',
 };
@@ -91,7 +91,7 @@ export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
 
 export const HELP_REQUEST_STATUS_COLORS: Record<HelpRequestStatus, string> = {
   open: 'bg-warning-100 text-warning-800',
-  in_progress: 'bg-info-100 text-info-800',
+  in_progress: 'bg-primary-100 text-primary-800',
   resolved: 'bg-primary-100 text-primary-800',
   cancelled: 'bg-neutral-100 text-neutral-800',
 };
@@ -173,8 +173,8 @@ export function getHelpRequestUrgencyLabel(urgency: string | null): string {
 }
 
 export function getHelpRequestUrgencyColor(urgency: string | null): string {
-  if (!urgency) return 'bg-info-100 text-info-800';
-  return HELP_REQUEST_URGENCY_COLORS[urgency as HelpRequestUrgency] || 'bg-info-100 text-info-800';
+  if (!urgency) return 'bg-neutral-100 text-neutral-800';
+  return HELP_REQUEST_URGENCY_COLORS[urgency as HelpRequestUrgency] || 'bg-neutral-100 text-neutral-800';
 }
 
 export function getHelpRequestStatusLabel(status: string | null): string {

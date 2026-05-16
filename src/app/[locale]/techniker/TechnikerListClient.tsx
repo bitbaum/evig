@@ -42,8 +42,8 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         <span
           className={`flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
             technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
-              ? 'bg-emerald-100 text-emerald-700'
-              : 'bg-info-100 text-info-700'
+              ? 'bg-primary-100 text-primary-700'
+              : 'bg-neutral-100 text-neutral-700'
           }`}
         >
           {technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL ? t('list.professional') : t('list.community')}
@@ -68,7 +68,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
             <span>{t('list.jobs', { count: technician.totalJobsCompleted })}</span>
           )}
           {technician.isVerified && (
-            <span className="text-emerald-600 font-medium">✓ {t('list.verified')}</span>
+            <span className="text-primary-600 font-medium">✓ {t('list.verified')}</span>
           )}
         </div>
       )}
@@ -163,7 +163,7 @@ export default function TechnikerListClient() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact header */}
-      <div className="bg-gradient-to-br from-info-50 to-cyan-50 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -177,7 +177,7 @@ export default function TechnikerListClient() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-info-600 hover:bg-info-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
               >
                 <Wrench className="w-4 h-4" />
                 {t('list.becomeTechnician')}
@@ -195,11 +195,11 @@ export default function TechnikerListClient() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('list.searchPlaceholder')}
                 aria-label={t('list.searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-info-500 focus:border-transparent shadow-sm"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-info-600 hover:bg-info-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
               >
                 {t('list.searchButton')}
               </button>
@@ -218,7 +218,7 @@ export default function TechnikerListClient() {
               onClick={() => setTierFilter(tab.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
-                  ? 'bg-info-600 text-white shadow-sm'
+                  ? 'bg-primary-600 text-white shadow-sm'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
               aria-pressed={tier === tab.value}
@@ -233,7 +233,7 @@ export default function TechnikerListClient() {
           <select
             value={selectedSkill}
             onChange={(e) => setSkillFilter(e.target.value)}
-            className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-info-500 focus:border-transparent"
+            className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             aria-label={t('list.skillsFilterLabel')}
           >
             <option value="">{t('list.skillsFilterAll')}</option>
@@ -251,7 +251,7 @@ export default function TechnikerListClient() {
           {hasActiveFilters && (
             <button
               onClick={clearFilters}
-              className="ml-3 text-sm text-info-600 hover:text-info-700 font-medium"
+              className="ml-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
             >
               {t('list.resetFilters')}
             </button>
@@ -327,8 +327,8 @@ export default function TechnikerListClient() {
         {!session?.user && (
           <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-info-100">
-                <Wrench className="h-6 w-6 text-info-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100">
+                <Wrench className="h-6 w-6 text-primary-600" />
               </div>
             </div>
             <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2">
@@ -340,13 +340,13 @@ export default function TechnikerListClient() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/auth/login?callbackUrl=/profil/techniker"
-                className="px-6 py-2.5 bg-info-600 hover:bg-info-500 text-white rounded-lg font-semibold shadow-sm transition-colors"
+                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold shadow-sm transition-colors"
               >
                 {t('list.ctaCreateProfile')}
               </Link>
               <Link
                 href="/it-hilfe"
-                className="px-6 py-2.5 bg-white hover:bg-info-50 text-info-600 border border-info-600 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 bg-white hover:bg-primary-50 text-primary-600 border border-primary-600 rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaToITHelp')}
               </Link>

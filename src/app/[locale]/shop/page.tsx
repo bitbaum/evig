@@ -103,7 +103,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
 
             {/* Online Shops */}
             <Card className="overflow-hidden border-neutral-200">
-              <CardHeader className="bg-info-50">
+              <CardHeader className="bg-neutral-50">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-primary-600 text-white flex items-center justify-center">
                     <ShoppingCart className="w-5 h-5" />
@@ -140,7 +140,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
                 </div>
                 <div className="mt-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700">
                   <div className="flex items-start gap-3">
-                    <Shield className="mt-0.5 w-4 h-4 text-info-700" />
+                    <Shield className="mt-0.5 w-4 h-4 text-neutral-700" />
                     <div>
                       <p className="font-medium text-neutral-900 mb-1">{t('page.online.multiShopTitle')}</p>
                       <p>{t('page.online.multiShopBody', { orgName: ORG.name })}</p>

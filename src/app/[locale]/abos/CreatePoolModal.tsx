@@ -70,7 +70,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               value={form.serviceName}
               onChange={e => setForm(f => ({ ...f, serviceName: e.target.value }))}
               placeholder={t('modal.serviceNamePlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
 
@@ -80,7 +80,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               <select
                 value={form.serviceCategory}
                 onChange={e => setForm(f => ({ ...f, serviceCategory: e.target.value }))}
-                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 {Object.keys(CATEGORY_EMOJIS).map(val => (
                   // @ts-expect-error — dynamic category key
@@ -97,7 +97,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
                 max={20}
                 value={form.maxMembers}
                 onChange={e => setForm(f => ({ ...f, maxMembers: Number(e.target.value) }))}
-                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
           </div>
@@ -112,10 +112,10 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               value={form.monthlyCostChf}
               onChange={e => setForm(f => ({ ...f, monthlyCostChf: e.target.value }))}
               placeholder={t('modal.monthlyCostPlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             {form.monthlyCostChf && form.maxMembers > 0 && (
-              <p className="text-xs text-emerald-600 mt-1">
+              <p className="text-xs text-primary-600 mt-1">
                 {t('modal.perPersonCalc', { amount: (Number(form.monthlyCostChf) / form.maxMembers).toFixed(2) })}
               </p>
             )}
@@ -128,7 +128,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               rows={2}
               placeholder={t('modal.descriptionPlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
             />
           </div>
 
@@ -139,7 +139,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
               onChange={e => setForm(f => ({ ...f, rules: e.target.value }))}
               rows={2}
               placeholder={t('modal.rulesPlaceholder')}
-              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 resize-none"
+              className="w-full border border-neutral-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
             />
           </div>
 
@@ -154,7 +154,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-medium hover:bg-emerald-700 disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 disabled:opacity-50"
             >
               {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
               {t('modal.submit')}

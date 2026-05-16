@@ -102,8 +102,8 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
           </div>
 
           {pricing && (
-            <div className="bg-info-50 border border-info-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
-              <div className="flex items-center text-info-800">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+              <div className="flex items-center text-neutral-800">
                 <Wrench className="w-5 h-5 mr-2 flex-shrink-0" />
                 <span className="font-medium text-sm sm:text-base">Preis: {pricing}</span>
               </div>

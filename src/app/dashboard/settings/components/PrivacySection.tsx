@@ -73,7 +73,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                 onClick={() => handleChange('profile_visibility', 'public')}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
                   profile.profile_visibility === 'public'
-                    ? 'border-info-500 bg-info-50 dark:bg-info-900/20 text-info-700 dark:text-info-300'
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300'
                     : 'border-neutral-200 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-500'
                 }`}
               >

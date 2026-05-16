@@ -13,9 +13,9 @@ interface AIDiagnosisCardProps {
 export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps) {
   const t = useTranslations('components.aiDiagnosisCard')
   return (
-    <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-neutral-800 dark:to-neutral-900 rounded-xl border border-emerald-200 dark:border-white/[0.06] p-6">
+    <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 rounded-xl border border-primary-200 dark:border-white/[0.06] p-6">
       <div className="flex items-center gap-2 mb-3">
-        <Stethoscope className="w-5 h-5 text-emerald-600" />
+        <Stethoscope className="w-5 h-5 text-primary-600" />
         <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('title')}</Heading>
       </div>
 
@@ -27,7 +27,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
 
       <div className="bg-white/60 rounded-lg p-4 mb-3">
         <div className="flex items-start gap-2">
-          <MapPin className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+          <MapPin className="w-4 h-4 text-primary-600 mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-neutral-900">
               {t('bringIn')}
@@ -39,7 +39,7 @@ export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps)
               href={REVAMPIT_STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 mt-1"
+              className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 mt-1"
             >
               {t('mapsLink')}
               <ExternalLink className="w-3 h-3" />

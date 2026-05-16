@@ -61,7 +61,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
               <p className="text-3xl font-bold text-primary-600 mt-2">{formatCHF(parseFloat(formData.price) || 0)}</p>
               <div className="flex gap-2 mt-3">
                 <span className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300">{MARKETPLACE_CATEGORY_LABELS[formData.category] || formData.category}</span>
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-info-100 text-info-800">{conditionLabel}</span>
+                <span className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">{conditionLabel}</span>
               </div>
             </div>
             <div className="space-y-2 text-sm">

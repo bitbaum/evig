@@ -35,7 +35,7 @@ const getTypeColor = (type: Milestone['type']) => {
     case 'founding':
       return 'bg-warning-500'
     case 'growth':
-      return 'bg-info-500'
+      return 'bg-primary-500'
     case 'achievement':
       return 'bg-primary-500'
     case 'expansion':

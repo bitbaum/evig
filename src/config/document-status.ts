@@ -30,7 +30,7 @@ export interface DocumentStatusBadge {
 
 export const DOCUMENT_STATUS_BADGES: Record<string, DocumentStatusBadge> = {
   [DOCUMENT_STATUS.APPROVED]: { label: DOCUMENT_STATUS_LABELS.approved, bg: 'bg-primary-100', color: 'text-primary-800' },
-  [DOCUMENT_STATUS.IN_REVIEW]: { label: DOCUMENT_STATUS_LABELS.in_review, bg: 'bg-info-100', color: 'text-info-800' },
+  [DOCUMENT_STATUS.IN_REVIEW]: { label: DOCUMENT_STATUS_LABELS.in_review, bg: 'bg-warning-100', color: 'text-warning-800' },
   [DOCUMENT_STATUS.INCOMPLETE]: { label: DOCUMENT_STATUS_LABELS.incomplete, bg: 'bg-error-100', color: 'text-error-800' },
   [DOCUMENT_STATUS.REJECTED]: { label: DOCUMENT_STATUS_LABELS.rejected, bg: 'bg-error-100', color: 'text-error-800' },
   [DOCUMENT_STATUS.PENDING]: { label: DOCUMENT_STATUS_LABELS.pending, bg: 'bg-neutral-100', color: 'text-neutral-800' },

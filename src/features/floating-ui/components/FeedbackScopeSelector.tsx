@@ -73,15 +73,15 @@ export function FeedbackScopeSelector({
       </div>
 
       {feedbackScope === 'element' && (
-        <div className="mt-3 p-3 bg-info-50 border border-info-200 rounded-lg">
+        <div className="mt-3 p-3 bg-neutral-50 border border-neutral-200 rounded-lg">
           <button
             type="button"
             onClick={toggleElementSelection}
             className={cn(
               "w-full px-3 py-2 text-sm rounded-lg border-2 transition-all duration-200",
               isElementSelectionMode
-                ? "bg-info-600 text-white border-info-600 shadow-md"
-                : "bg-white text-info-700 border-info-300 hover:bg-info-50 hover:border-info-400"
+                ? "bg-primary-600 text-white border-primary-600 shadow-md"
+                : "bg-white text-neutral-700 border-neutral-300 hover:bg-neutral-50 hover:border-neutral-400"
             )}
           >
             <div className="flex items-center justify-center space-x-2">
@@ -95,18 +95,18 @@ export function FeedbackScopeSelector({
           </button>
 
           {selectedElements.length > 0 && !isElementSelectionMode && (
-            <div className="mt-2 p-2 bg-white rounded border border-info-200">
-              <p className="text-xs font-medium text-info-800 mb-1">
+            <div className="mt-2 p-2 bg-white rounded border border-neutral-200">
+              <p className="text-xs font-medium text-neutral-800 mb-1">
                 {selectedElements.length} Element{selectedElements.length > 1 ? 'e' : ''} ausgewählt
               </p>
               <div className="space-y-1">
                 {selectedElements.slice(0, 2).map((el, index) => (
-                  <div key={index} className="text-xs text-info-700 bg-info-50 px-2 py-1 rounded truncate">
+                  <div key={index} className="text-xs text-neutral-700 bg-neutral-50 px-2 py-1 rounded truncate">
                     {el.elementType}: {el.elementText.substring(0, 25)}...
                   </div>
                 ))}
                 {selectedElements.length > 2 && (
-                  <div className="text-xs text-info-600 italic">
+                  <div className="text-xs text-neutral-600 italic">
                     +{selectedElements.length - 2} weitere...
                   </div>
                 )}
@@ -115,7 +115,7 @@ export function FeedbackScopeSelector({
           )}
 
           {isElementSelectionMode && (
-            <div className="mt-2 text-xs text-info-700 bg-info-100 p-2 rounded">
+            <div className="mt-2 text-xs text-neutral-700 bg-neutral-100 p-2 rounded">
               Klicken Sie auf Elemente der Seite, um sie auszuwählen
             </div>
           )}

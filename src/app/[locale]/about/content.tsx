@@ -62,7 +62,7 @@ export default async function AboutContent() {
             {/* Content Column */}
             <div className="space-y-6">
               {/* Quote Box */}
-              <div className="bg-gradient-to-br from-primary-50 to-emerald-50 dark:from-neutral-800 dark:to-neutral-900 border-l-4 border-primary-500 dark:border-primary-400 p-6 rounded-r-xl">
+              <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 border-l-4 border-primary-500 dark:border-primary-400 p-6 rounded-r-xl">
                 <Quote className="h-8 w-8 text-primary-500 mb-3" />
                 <p className="text-xl md:text-2xl font-medium text-neutral-800 italic">
                   &ldquo;{t('mission.quote')}&rdquo;

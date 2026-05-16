@@ -62,12 +62,12 @@ function SearchForm({
           name="q"
           defaultValue={initialQuery}
           placeholder={placeholder}
-          className="w-full pl-12 pr-4 py-4 text-lg border-2 border-neutral-200 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none"
+          className="w-full pl-12 pr-4 py-4 text-lg border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all outline-none"
           autoFocus
         />
         <button
           type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
         >
           {submitLabel}
         </button>
@@ -98,7 +98,7 @@ function Breadcrumbs({
         <li>
           <Link
             href="/"
-            className="hover:text-emerald-600 transition-colors flex items-center gap-1"
+            className="hover:text-primary-600 transition-colors flex items-center gap-1"
           >
             <Home className="w-4 h-4" />
             <span className="sr-only sm:not-sr-only">{homeLabel}</span>
@@ -106,7 +106,7 @@ function Breadcrumbs({
         </li>
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <Link href="/shop" className="hover:text-emerald-600 transition-colors">
+          <Link href="/shop" className="hover:text-primary-600 transition-colors">
             {shopLabel}
           </Link>
         </li>
@@ -147,7 +147,7 @@ function SearchResults({
     return (
       <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
         <div className="max-w-md mx-auto">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8" />
           </div>
           <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-2">
@@ -157,7 +157,7 @@ function SearchResults({
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/marketplace"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-lg hover:bg-emerald-700 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Package className="w-5 h-5" />
               {goToShopLabel}
@@ -213,7 +213,7 @@ function NoQueryState({
             <Link
               key={search.slug}
               href={getSearchUrl(search.name)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full text-sm font-medium text-neutral-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full text-sm font-medium text-neutral-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 transition-colors"
             >
               <Search className="w-4 h-4" />
               {search.name}
@@ -232,13 +232,13 @@ function NoQueryState({
             <Link
               key={category.slug}
               href={getCategoryUrl(category.slug)}
-              className="flex items-center gap-3 p-4 bg-white border border-neutral-200 rounded-xl hover:border-emerald-300 hover:shadow-sm transition-all group"
+              className="flex items-center gap-3 p-4 bg-white border border-neutral-200 rounded-xl hover:border-primary-300 hover:shadow-sm transition-all group"
             >
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 text-neutral-600 flex items-center justify-center group-hover:bg-emerald-100 group-hover:text-emerald-600 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-neutral-100 text-neutral-600 flex items-center justify-center group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
                 <Package className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-neutral-900 truncate group-hover:text-emerald-600 transition-colors">
+                <p className="font-medium text-neutral-900 truncate group-hover:text-primary-600 transition-colors">
                   {category.name}
                 </p>
                 {category.count !== undefined && (
@@ -247,14 +247,14 @@ function NoQueryState({
                   </p>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-neutral-300 group-hover:text-emerald-500 transition-colors" />
+              <ChevronRight className="w-5 h-5 text-neutral-300 group-hover:text-primary-500 transition-colors" />
             </Link>
           ))}
         </div>
         <div className="mt-4 text-center">
           <Link
             href="/shop"
-            className="text-emerald-600 hover:text-emerald-700 font-medium"
+            className="text-primary-600 hover:text-primary-700 font-medium"
           >
             {allCategoriesLabel}
           </Link>
@@ -279,7 +279,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
   return (
     <div className="min-h-screen bg-neutral-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 text-white py-12 sm:py-16">
+      <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Breadcrumbs
             query={query}

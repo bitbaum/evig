@@ -176,8 +176,8 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
           {/* Tracking info */}
           {order.shippingAddress?.tracking_number && (
-            <div className="mt-4 p-3 bg-info-50 dark:bg-info-900/20 rounded-lg">
-              <p className="text-sm font-medium text-info-800 dark:text-info-300">
+            <div className="mt-4 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+              <p className="text-sm font-medium text-neutral-800 dark:text-neutral-300">
                 {t('trackingNumber', { number: order.shippingAddress.tracking_number })}
               </p>
               {order.shippingAddress.tracking_url && (
@@ -185,7 +185,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   href={order.shippingAddress.tracking_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-info-600 hover:text-info-700 flex items-center gap-1 mt-1"
+                  className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1 mt-1"
                 >
                   {t('trackShipment')} <ExternalLink className="w-3 h-3" />
                 </a>
@@ -299,7 +299,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
             <button
               onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}
               disabled={updatingStatus}
-              className="w-full flex items-center justify-center gap-2 bg-info-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-info-700 disabled:opacity-50 transition-colors"
+              className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 transition-colors"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Package className="w-4 h-4" />}
               {t('markDelivered')}

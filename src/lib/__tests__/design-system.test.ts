@@ -174,8 +174,8 @@ describe('getStatusColors', () => {
 
   it('returns info colors', () => {
     const result = getStatusColors('info')
-    expect(result.bg).toBe('bg-info-50')
-    expect(result.text).toBe('text-info-800')
+    expect(result.bg).toBe('bg-neutral-50')
+    expect(result.text).toBe('text-neutral-800')
   })
 
   it('returns neutral colors', () => {

@@ -118,7 +118,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-info-50 dark:from-neutral-900 dark:to-neutral-800 border border-primary-100 dark:border-white/[0.06] text-xs sm:text-sm">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-primary-100 dark:from-neutral-900 dark:to-neutral-800 border border-primary-100 dark:border-white/[0.06] text-xs sm:text-sm">
               <p className="text-neutral-800">
                 {t('notListed')}
                 <span className="ml-2">

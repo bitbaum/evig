@@ -84,7 +84,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                   {technician.name}
                 </Heading>
                 {technician.isVerified && (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
                     <CheckCircle className="w-3.5 h-3.5" />
                     {t('detail.verified')}
                   </span>
@@ -92,8 +92,8 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 <span
                   className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     isProfessional
-                      ? 'bg-emerald-100 text-emerald-700'
-                      : 'bg-info-100 text-info-700'
+                      ? 'bg-primary-100 text-primary-700'
+                      : 'bg-neutral-100 text-neutral-700'
                   }`}
                 >
                   {isProfessional ? t('detail.professional') : t('detail.community')}
@@ -145,7 +145,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               {isProfessional ? (
                 <Link
                   href={`/it-hilfe/create?technician=${technician.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
                 >
                   <Wrench className="w-4 h-4" />
                   {t('detail.submitRequest')}
@@ -208,7 +208,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 return (
                   <span
                     key={skillId}
-                    className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-info-50 text-info-700"
+                    className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-neutral-100 text-neutral-700"
                     title={skill.description}
                   >
                     {skill.name}
@@ -255,7 +255,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
             <div className="mt-6">
               <Link
                 href={`/it-hilfe/create?technician=${technician.id}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
               >
                 <Wrench className="w-4 h-4" />
                 {t('detail.requestBooking')}

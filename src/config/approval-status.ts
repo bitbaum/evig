@@ -54,8 +54,8 @@ export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   },
   [APPROVAL_STATUS.PUBLISHED]: {
     label: 'Veröffentlicht',
-    color: 'text-info-800 dark:text-info-300',
-    bg: 'bg-info-100 dark:bg-info-900/30',
+    color: 'text-primary-800 dark:text-primary-300',
+    bg: 'bg-primary-100 dark:bg-primary-900/30',
   },
 }
 

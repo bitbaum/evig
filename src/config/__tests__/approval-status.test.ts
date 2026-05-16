@@ -123,11 +123,11 @@ describe('getApprovalStatusBadge', () => {
     expect(badge.bg).toContain('orange')
   })
 
-  it('returns badge for PUBLISHED with blue styling', () => {
+  it('returns badge for PUBLISHED with primary styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.PUBLISHED)
     expect(badge.label).toBe('Veröffentlicht')
-    expect(badge.color).toContain('info')
-    expect(badge.bg).toContain('info')
+    expect(badge.color).toContain('primary')
+    expect(badge.bg).toContain('primary')
   })
 
   it('returns gray fallback badge for unknown status', () => {

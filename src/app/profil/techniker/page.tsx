@@ -44,7 +44,7 @@ export default function TechnikerProfilPage() {
   if (authStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
       </div>
     )
   }
@@ -87,7 +87,7 @@ export default function TechnikerProfilPage() {
         {/* Skills Selection */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-emerald-600" />
+            <Users className="w-5 h-5 text-primary-600" />
             {t('skills.heading')}
           </Heading>
           <p className="text-sm text-neutral-600 mb-6">
@@ -116,7 +116,7 @@ export default function TechnikerProfilPage() {
                       onClick={() => handleSkillToggle(skill.id)}
                       className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                         profile.skills.includes(skill.id)
-                          ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
+                          ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
                           : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                       }`}
                       title={skill.description}
@@ -133,7 +133,7 @@ export default function TechnikerProfilPage() {
         {/* Service Type */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <Clock className="w-5 h-5 text-emerald-600" />
+            <Clock className="w-5 h-5 text-primary-600" />
             {t('serviceType.heading')}
           </Heading>
           <p className="text-sm text-neutral-600 mb-4">
@@ -148,7 +148,7 @@ export default function TechnikerProfilPage() {
                 onClick={() => handleServiceTypeToggle(type.id)}
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${
                   profile.serviceTypes.includes(type.id)
-                    ? 'bg-emerald-100 text-emerald-700 border-2 border-emerald-500'
+                    ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
                     : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                 }`}
               >
@@ -162,7 +162,7 @@ export default function TechnikerProfilPage() {
         {/* Location */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-emerald-600" />
+            <MapPin className="w-5 h-5 text-primary-600" />
             {t('location.heading')}
           </Heading>
           <p className="text-sm text-neutral-600 mb-4">
@@ -181,7 +181,7 @@ export default function TechnikerProfilPage() {
                   setProfile((prev) => ({ ...prev, postalCode: e.target.value }))
                 }
                 placeholder="8000"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                 maxLength={4}
               />
             </div>
@@ -197,7 +197,7 @@ export default function TechnikerProfilPage() {
                   setProfile((prev) => ({ ...prev, city: e.target.value }))
                 }
                 placeholder="Zürich"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
 
@@ -210,7 +210,7 @@ export default function TechnikerProfilPage() {
                 onChange={(e) =>
                   setProfile((prev) => ({ ...prev, canton: e.target.value }))
                 }
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               >
                 <option value="">{t('location.cantonPlaceholder')}</option>
                 {SWISS_CANTONS.map((canton) => (
@@ -236,7 +236,7 @@ export default function TechnikerProfilPage() {
                 }
                 min={0}
                 max={100}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
             </div>
           </div>
@@ -245,7 +245,7 @@ export default function TechnikerProfilPage() {
         {/* Pricing */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <Heading level={2} className="text-lg text-neutral-900 mb-4 flex items-center gap-2">
-            <Euro className="w-5 h-5 text-emerald-600" />
+            <Euro className="w-5 h-5 text-primary-600" />
             {t('pricing.heading')}
           </Heading>
           <p className="text-sm text-neutral-600 mb-4">
@@ -271,7 +271,7 @@ export default function TechnikerProfilPage() {
                 placeholder="z.B. 40"
                 min={0}
                 step={5}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
               />
               <p className="text-xs text-neutral-500 mt-1">
                 {t('pricing.hourlyRateHint')}
@@ -289,7 +289,7 @@ export default function TechnikerProfilPage() {
                       acceptsGratis: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-emerald-600 border-neutral-300 rounded focus:ring-emerald-500"
+                  className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
                 />
                 <span className="text-sm text-neutral-700">
                   {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon} {t('pricing.acceptsGratis')}
@@ -306,7 +306,7 @@ export default function TechnikerProfilPage() {
                       acceptsKulturlegi: e.target.checked,
                     }))
                   }
-                  className="w-4 h-4 text-emerald-600 border-neutral-300 rounded focus:ring-emerald-500"
+                  className="w-4 h-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500"
                 />
                 <span className="text-sm text-neutral-700">
                   {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon} {t('pricing.acceptsKulturlegi')}
@@ -332,7 +332,7 @@ export default function TechnikerProfilPage() {
             }
             placeholder={t('bio.placeholder')}
             rows={4}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
             maxLength={1000}
           />
           <p className="text-xs text-neutral-500 mt-1">
@@ -363,7 +363,7 @@ export default function TechnikerProfilPage() {
                 }
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+              <div className="w-11 h-6 bg-neutral-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-neutral-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
             </div>
           </label>
         </div>
@@ -379,7 +379,7 @@ export default function TechnikerProfilPage() {
           <button
             onClick={handleSave}
             disabled={saving || profile.skills.length === 0}
-            className="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {saving ? (
               <Loader2 className="w-5 h-5 animate-spin" />

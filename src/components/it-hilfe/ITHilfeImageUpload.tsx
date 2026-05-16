@@ -97,7 +97,7 @@ export function ITHilfeImageUpload({
             <Camera className="w-10 h-10 text-neutral-400 mx-auto mb-2" />
           )}
           <label htmlFor="it-hilfe-image-upload" className="cursor-pointer">
-            <span className="text-sm font-medium text-emerald-600 hover:text-emerald-500">
+            <span className="text-sm font-medium text-primary-600 hover:text-primary-500">
               {uploading ? t('uploading') : t('selectPhotos')}
             </span>
           </label>

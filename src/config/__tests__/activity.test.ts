@@ -135,8 +135,8 @@ describe('getHelpRequestUrgencyColor', () => {
     expect(getHelpRequestUrgencyColor(HELP_REQUEST_URGENCY.URGENT)).toContain('error')
   })
 
-  it('returns blue (normal) for null', () => {
-    expect(getHelpRequestUrgencyColor(null)).toContain('info')
+  it('returns neutral class for null', () => {
+    expect(getHelpRequestUrgencyColor(null)).toContain('neutral')
   })
 })
 

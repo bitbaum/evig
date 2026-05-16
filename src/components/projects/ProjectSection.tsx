@@ -63,23 +63,23 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                   key={index}
                   className={section.backgroundColor === 'gray' 
                     ? 'bg-white p-8 rounded-xl shadow-sm' 
-                    : 'bg-gradient-to-br from-info-50 to-white dark:from-neutral-800 dark:to-neutral-900 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300'
+                    : 'bg-gradient-to-br from-primary-50 to-white dark:from-neutral-800 dark:to-neutral-900 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300'
                   }
                 >
                   {/* Card Header with Icon */}
                   {card.icon && (
                     <div className="flex items-center mb-4">
                       {typeof card.icon === 'string' ? (
-                        <div className={`w-8 h-8 ${card.iconColor || 'text-info-600'} mr-3`}>
+                        <div className={`w-8 h-8 ${card.iconColor || 'text-primary-600'} mr-3`}>
                           {card.icon}
                         </div>
                       ) : typeof card.icon === 'function' ? (
-                        <div className={`w-8 h-8 ${card.iconColor || 'text-info-600'} mr-3`}>
+                        <div className={`w-8 h-8 ${card.iconColor || 'text-primary-600'} mr-3`}>
                           {/* @ts-ignore - Component type handling */}
                           <card.icon className="w-8 h-8" />
                         </div>
                       ) : (
-                        <div className={`w-8 h-8 ${card.iconColor || 'text-info-600'} mr-3`}>
+                        <div className={`w-8 h-8 ${card.iconColor || 'text-primary-600'} mr-3`}>
                           {card.icon}
                         </div>
                       )}

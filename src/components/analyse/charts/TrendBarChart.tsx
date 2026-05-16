@@ -47,7 +47,7 @@ function CustomTooltip({ active, payload, label }: {
       <p className="font-semibold mb-2">{label}</p>
       <div className="space-y-1 text-sm">
         <div className="flex justify-between gap-4">
-          <span className="text-info-500">Aktuell</span>
+          <span className="text-primary-500">Aktuell</span>
           <span className="font-medium">{formatCHF(current)}</span>
         </div>
         <div className="flex justify-between gap-4">

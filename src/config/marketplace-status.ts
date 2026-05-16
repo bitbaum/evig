@@ -57,7 +57,7 @@ export const PRODUCT_STATUS_LABELS: Record<string, string> = {
 }
 
 export const PRODUCT_STATUS_BADGES: Record<string, string> = {
-  [PRODUCT_STATUS.APPROVED]: 'bg-info-100 text-info-800',
+  [PRODUCT_STATUS.APPROVED]: 'bg-primary-100 text-primary-800',
   [PRODUCT_STATUS.PENDING_REVIEW]: 'bg-orange-100 text-orange-800',
   [PRODUCT_STATUS.REJECTED]: 'bg-error-100 text-error-800',
 }

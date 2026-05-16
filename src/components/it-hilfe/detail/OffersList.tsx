@@ -41,7 +41,7 @@ export function OffersList({
             <div
               key={offer.id}
               className={`p-4 rounded-lg border ${
-                isAccepted ? 'border-emerald-300 bg-emerald-50' : 'border-neutral-200'
+                isAccepted ? 'border-primary-300 bg-primary-50' : 'border-neutral-200'
               }`}
             >
               <div className="flex items-start justify-between mb-3">
@@ -123,7 +123,7 @@ export function OffersList({
                   <button
                     onClick={() => onAcceptOffer(offer.id)}
                     disabled={acceptingOfferId === offer.id}
-                    className="px-4 py-3 min-h-[44px] bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                    className="px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
                   >
                     {acceptingOfferId === offer.id ? t('accepting') : t('accept')}
                   </button>

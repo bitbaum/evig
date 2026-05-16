@@ -55,7 +55,7 @@ export function FeedbackScopeSelector({
       </div>
 
       {feedbackScope === 'element' && (
-        <div className="text-xs text-neutral-600 bg-info-50 p-2 rounded">
+        <div className="text-xs text-neutral-600 bg-neutral-50 p-2 rounded">
           {isElementSelectionMode ? (
             <div className="flex items-center justify-between">
               <span>Element-Auswahl aktiv - klicken Sie auf Elemente</span>

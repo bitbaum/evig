@@ -34,7 +34,7 @@ export default function SellerDashboard() {
 
   const quickActions = [
     { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: '/marketplace/sell', icon: Plus, color: 'bg-primary-500' },
-    { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-info-500' },
+    { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-neutral-500' },
     { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-purple-500' },
     { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: '/marketplace', icon: BarChart3, color: 'bg-orange-500' },
   ]
@@ -99,7 +99,7 @@ export default function SellerDashboard() {
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalProducts}</p>
               <p className="text-sm text-primary-600">{t('statsActive', { count: stats.activeProducts })}</p>
             </div>
-            <Package className="w-8 h-8 text-info-600" />
+            <Package className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
 
@@ -124,9 +124,9 @@ export default function SellerDashboard() {
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsViews')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-info-600">{t('statsFavorites', { count: stats.totalFavorites })}</p>
+              <p className="text-sm text-neutral-600">{t('statsFavorites', { count: stats.totalFavorites })}</p>
             </div>
-            <Eye className="w-8 h-8 text-info-600" />
+            <Eye className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
 
@@ -249,22 +249,22 @@ export default function SellerDashboard() {
       </div>
 
       {/* Marketplace Info */}
-      <div className="bg-info-50 dark:bg-info-900/20 border border-info-200 dark:border-info-800 rounded-xl p-6">
+      <div className="bg-neutral-50 dark:bg-neutral-900/20 border border-neutral-200 dark:border-neutral-700 rounded-xl p-6">
         <div className="flex items-start gap-4">
-          <div className="w-10 h-10 bg-info-100 dark:bg-info-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Package className="w-5 h-5 text-info-600" />
+          <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Package className="w-5 h-5 text-neutral-600" />
           </div>
           <div>
-            <h3 className="font-medium text-info-900 dark:text-info-200">
+            <h3 className="font-medium text-neutral-900 dark:text-neutral-200">
               {t('infoTitle')}
             </h3>
-            <p className="text-sm text-info-700 dark:text-info-300 mt-1">
+            <p className="text-sm text-neutral-700 dark:text-neutral-300 mt-1">
               {t('infoDesc')}
             </p>
             <div className="mt-3 flex gap-3">
               <Link
                 href="/marketplace"
-                className="text-sm bg-info-600 text-white px-3 py-1.5 rounded hover:bg-info-700 transition-colors"
+                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 {t('viewMarketplace')}
               </Link>

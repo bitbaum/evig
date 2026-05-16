@@ -102,7 +102,7 @@ export default function PublicVoteClient({
         {/* Registration gate — results require an account */}
         <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
           <div className="flex items-start gap-3">
-            <UserPlus className="h-5 w-5 text-info-500 mt-0.5 shrink-0" />
+            <UserPlus className="h-5 w-5 text-neutral-500 mt-0.5 shrink-0" />
             <div className="flex-1">
               <p className="font-semibold text-neutral-900">{t('successRegisterHeading')}</p>
               <p className="mt-1 text-sm text-neutral-600">{t('successRegisterDesc')}</p>
@@ -152,8 +152,8 @@ export default function PublicVoteClient({
       />
 
       {/* Email identification */}
-      <div className="rounded-xl bg-info-50 border border-info-200 p-5">
-        <label className="block text-sm font-semibold text-info-900 mb-2">
+      <div className="rounded-xl bg-neutral-50 border border-neutral-200 p-5">
+        <label className="block text-sm font-semibold text-neutral-900 mb-2">
           {t('emailLabel')}
         </label>
         <input
@@ -162,9 +162,9 @@ export default function PublicVoteClient({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-info-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500"
+          className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
-        <p className="mt-1.5 text-xs text-info-700">
+        <p className="mt-1.5 text-xs text-neutral-700">
           {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}
         </p>
       </div>

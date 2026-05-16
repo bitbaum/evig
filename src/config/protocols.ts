@@ -29,7 +29,7 @@ export const MEETING_TYPE_LABELS: Record<MeetingType, string> = {
 };
 
 export const MEETING_TYPE_COLORS: Record<MeetingType, string> = {
-  team_weekly: 'bg-info-100 text-info-800',
+  team_weekly: 'bg-primary-100 text-primary-800',
   project_review: 'bg-purple-100 text-purple-800',
   retro: 'bg-primary-100 text-primary-800',
   board: 'bg-orange-100 text-orange-800',
@@ -104,7 +104,7 @@ export const PROTOCOL_STATUS_LABELS: Record<ProtocolStatus, string> = {
 export const PROTOCOL_STATUS_COLORS: Record<ProtocolStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800',
   processing: 'bg-warning-100 text-warning-800',
-  review: 'bg-info-100 text-info-800',
+  review: 'bg-warning-100 text-warning-800',
   finalized: 'bg-primary-100 text-primary-800',
 };
 
@@ -133,20 +133,20 @@ export const ACTION_ITEM_TYPE_LABELS: Record<ActionItemType, string> = {
 };
 
 export const ACTION_ITEM_TYPE_COLORS: Record<ActionItemType, string> = {
-  task: 'bg-info-100 text-info-800',
+  task: 'bg-primary-100 text-primary-800',
   decision: 'bg-purple-100 text-purple-800',
   info: 'bg-neutral-100 text-neutral-800',
 };
 
 export const ACTION_ITEM_BORDER_COLORS: Record<ActionItemType, string> = {
-  task: 'border-l-4 border-l-info-400',
+  task: 'border-l-4 border-l-primary-400',
   decision: 'border-l-4 border-l-purple-400',
   info: 'border-l-4 border-l-neutral-300',
 };
 
 export const FOLLOW_UP_STATUS_COLORS: Record<string, string> = {
   erledigt: 'bg-primary-100 text-primary-800',
-  'in Arbeit': 'bg-info-100 text-info-800',
+  'in Arbeit': 'bg-primary-100 text-primary-800',
   offen: 'bg-warning-100 text-warning-800',
 };
 

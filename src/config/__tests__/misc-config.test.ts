@@ -34,10 +34,10 @@ describe('getDocumentStatusBadge', () => {
     expect(badge.bg).toContain('neutral')
   })
 
-  it('in_review → blue badge', () => {
+  it('in_review → warning badge', () => {
     const badge = getDocumentStatusBadge(DOCUMENT_STATUS.IN_REVIEW)
     expect(badge.label).toBe('In Prüfung')
-    expect(badge.bg).toContain('info')
+    expect(badge.bg).toContain('warning')
   })
 
   it('rejected → red badge', () => {

@@ -245,16 +245,16 @@ describe('getUrgencyBadge', () => {
     expect(badge.color).toContain('orange')
   })
 
-  it('returns "Normal" (blue) for normal', () => {
+  it('returns "Normal" (neutral) for normal', () => {
     const badge = getUrgencyBadge('normal')
     expect(badge.label).toBe('Normal')
-    expect(badge.color).toContain('info')
+    expect(badge.color).toContain('neutral')
   })
 
   it('falls back to normal badge for unknown urgency', () => {
     const badge = getUrgencyBadge('unknown_urgency')
     expect(badge.label).toBe('Normal')
-    expect(badge.color).toContain('info')
+    expect(badge.color).toContain('neutral')
   })
 })
 

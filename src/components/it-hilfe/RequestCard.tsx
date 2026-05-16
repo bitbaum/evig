@@ -99,7 +99,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
           </div>
         </div>
 
-        <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
+        <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
           {request.title}
         </Heading>
 
@@ -129,7 +129,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
 
       {/* Card Footer */}
       <div className="px-5 py-3 bg-neutral-50 dark:bg-neutral-800 flex items-center justify-between">
-        <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+        <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
           {formatBudget(request.budgetAmountCents)}
         </span>
         <span className="text-xs text-neutral-500">

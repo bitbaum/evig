@@ -48,7 +48,7 @@ export default function EditRequestPage() {
   if (authStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
       </div>
     )
   }
@@ -57,7 +57,7 @@ export default function EditRequestPage() {
     return (
       <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center gap-4">
         <p className="text-error-600">{error}</p>
-        <Link href={`/it-hilfe/${id}`} className="text-info-600 hover:underline">
+        <Link href={`/it-hilfe/${id}`} className="text-primary-600 hover:underline">
           {t('backToRequest')}
         </Link>
       </div>
@@ -68,7 +68,7 @@ export default function EditRequestPage() {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
         <div className="text-center">
-          <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-4" />
+          <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
           <Heading level={2} className="text-2xl text-neutral-900 mb-2">{t('savedTitle')}</Heading>
           <p className="text-neutral-600">{t('savedRedirect')}</p>
         </div>
@@ -91,8 +91,8 @@ export default function EditRequestPage() {
 
         <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-emerald-100 rounded-lg">
-              <Wrench className="w-6 h-6 text-emerald-600" />
+            <div className="p-2 bg-primary-100 rounded-lg">
+              <Wrench className="w-6 h-6 text-primary-600" />
             </div>
             <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
           </div>
@@ -115,7 +115,7 @@ export default function EditRequestPage() {
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
-                        ? 'border-emerald-500 bg-emerald-50'
+                        ? 'border-primary-500 bg-primary-50'
                         : 'border-neutral-200 hover:border-neutral-300'
                     }`}
                   >
@@ -170,7 +170,7 @@ export default function EditRequestPage() {
                     placeholder={t('budgetPlaceholder')}
                     min="0"
                     step="5"
-                    className="w-32 px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    className="w-32 px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                   />
                   <span className="text-sm text-neutral-500">
                     {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
@@ -189,7 +189,7 @@ export default function EditRequestPage() {
                     <select
                       value={formData.serviceType}
                       onChange={(e) => updateField('serviceType', e.target.value)}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       {SERVICE_TYPES.map((s) => (
                         <option key={s.id} value={s.id}>{s.name}</option>
@@ -203,7 +203,7 @@ export default function EditRequestPage() {
                     <select
                       value={formData.urgency}
                       onChange={(e) => updateField('urgency', e.target.value)}
-                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     >
                       {URGENCY_LEVELS.map((u) => (
                         <option key={u.id} value={u.id}>{u.name}</option>
@@ -228,7 +228,7 @@ export default function EditRequestPage() {
                 <button
                   type="submit"
                   disabled={saving || !formData.categoryId || !formData.title || !formData.postalCode}
-                  className="px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                   {saving ? t('submittingButton') : t('submitButton')}

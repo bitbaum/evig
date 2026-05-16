@@ -108,8 +108,8 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   },
   header: {
     icon: Wrench,
-    iconBgColor: 'bg-info-100',
-    iconColor: 'text-info-600',
+    iconBgColor: 'bg-primary-100',
+    iconColor: 'text-primary-600',
     title: 'Wirst du Reparatur-Experte bei Revamp-IT',
     subtitle: 'Biete deine Reparaturdienste an und verbinde dich mit Kunden, die deine Fachkenntnisse brauchen.'
   },
@@ -122,7 +122,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     },
     {
       icon: TrendingUp,
-      iconColor: 'text-info-600',
+      iconColor: 'text-primary-600',
       title: 'Erhöhe deine Sichtbarkeit',
       description: 'Zeige dein Fachwissen, Bewertungen und Zertifizierungen. Baue Vertrauen mit einem professionellen Profil auf.'
     },
@@ -162,7 +162,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   },
   pricing: {
     icon: Award,
-    iconColor: 'text-info-600',
+    iconColor: 'text-primary-600',
     title: 'Faire Gebühren',
     items: [
       { label: 'Keine', value: 'monatlichen Mitgliedsgebühren' },
@@ -186,7 +186,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
     },
     {
       icon: CheckCircle,
-      iconColor: 'text-info-600',
+      iconColor: 'text-primary-600',
       title: 'Versichert',
       subtitle: 'Haftpflicht'
     }
@@ -194,10 +194,10 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   cta: {
     href: '/profil/techniker',
     label: 'Als Techniker bewerben',
-    buttonColor: 'bg-info-600 hover:bg-info-700',
+    buttonColor: 'bg-primary-600 hover:bg-primary-700',
     loginText: 'Bereits Techniker?',
     loginHref: '/auth/login',
-    linkColor: 'text-info-600 hover:text-info-700'
+    linkColor: 'text-primary-600 hover:text-primary-700'
   },
   faq: {
     title: 'Häufige Fragen',

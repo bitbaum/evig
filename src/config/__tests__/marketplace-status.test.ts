@@ -104,9 +104,9 @@ describe('getProductStatusLabel', () => {
 // ============================================================================
 
 describe('getProductStatusBadgeColor', () => {
-  it('returns blue badge for approved', () => {
+  it('returns primary badge for approved', () => {
     const color = getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)
-    expect(color).toContain('info')
+    expect(color).toContain('primary')
   })
 
   it('returns orange badge for pending_review', () => {

@@ -185,7 +185,7 @@ export default function DonationsDashboard() {
                     'w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0',
                     donation.donation_type === DONATION_TYPES.MONETARY
                       ? 'bg-success-100 text-success-600'
-                      : 'bg-info-100 text-info-600'
+                      : 'bg-neutral-100 text-neutral-600'
                   )}>
                     {getDonationIcon(donation.donation_type)}
                   </div>
@@ -251,13 +251,13 @@ export default function DonationsDashboard() {
         )}
 
         {/* Info Box */}
-        <div className="mt-8 bg-info-50 border border-info-200 rounded-lg p-4">
-          <Heading level={4} className="font-medium mb-2 text-info-800">
+        <div className="mt-8 bg-neutral-50 border border-neutral-200 rounded-lg p-4">
+          <Heading level={4} className="font-medium mb-2 text-neutral-800">
             {t('receiptInfoTitle')}
           </Heading>
-          <p className="text-sm text-info-700">
+          <p className="text-sm text-neutral-700">
             {t('receiptInfoText')}{' '}
-            <a href={`mailto:${CONTACT.email}`} className="underline text-info-800 hover:text-info-900">{CONTACT.email}</a>.
+            <a href={`mailto:${CONTACT.email}`} className="underline text-neutral-800 hover:text-neutral-900">{CONTACT.email}</a>.
           </p>
         </div>
       </div>

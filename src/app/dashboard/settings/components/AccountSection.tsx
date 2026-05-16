@@ -38,7 +38,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
               value={profile.first_name || ''}
               onChange={(e) => handleChange('first_name', e.target.value)}
               placeholder={labels.firstNamePlaceholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
 
@@ -52,7 +52,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
               value={profile.last_name || ''}
               onChange={(e) => handleChange('last_name', e.target.value)}
               placeholder={labels.lastNamePlaceholder}
-              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent"
+              className="w-full px-4 py-2 border-2 border-neutral-200 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
         </div>
@@ -87,7 +87,7 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4">
           {labels.passwordDescription}
         </p>
-        <p className="text-sm text-info-600 dark:text-info-400">
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">
           {t('passwordNote')}
         </p>
       </div>

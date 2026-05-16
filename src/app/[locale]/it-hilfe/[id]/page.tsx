@@ -31,7 +31,7 @@ export default function ITHilfeDetailPage() {
   if (detail.loading) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
@@ -45,7 +45,7 @@ export default function ITHilfeDetailPage() {
           <p className="text-neutral-600 mb-6">{detail.error || t('requestNotFound')}</p>
           <Link
             href="/it-hilfe"
-            className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 min-h-[44px] rounded-lg font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 min-h-[44px] rounded-lg font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             {t('backToList')}
@@ -63,7 +63,7 @@ export default function ITHilfeDetailPage() {
         {/* Back link */}
         <Link
           href="/it-hilfe"
-          className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />
           {t('backToList')}
@@ -122,9 +122,9 @@ export default function ITHilfeDetailPage() {
 
             {/* Completion badge (status completed, visible to everyone) */}
             {request.status === REQUEST_STATUS.COMPLETED && request.completedAt && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0" aria-hidden="true" />
-                <p className="text-emerald-800 text-sm font-medium">
+              <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" aria-hidden="true" />
+                <p className="text-primary-800 text-sm font-medium">
                   {t('completedAt', { date: formatDate(request.completedAt) })}
                 </p>
               </div>
@@ -182,10 +182,10 @@ export default function ITHilfeDetailPage() {
 
             {/* Review submitted confirmation */}
             {detail.reviewSubmitted && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
-                <CheckCircle className="w-8 h-8 text-emerald-600 mx-auto mb-2" aria-hidden="true" />
-                <p className="text-emerald-800 font-medium">{t('reviewSubmittedTitle')}</p>
-                <p className="text-sm text-emerald-600 mt-1">{t('reviewSubmittedMessage')}</p>
+              <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
+                <CheckCircle className="w-8 h-8 text-primary-600 mx-auto mb-2" aria-hidden="true" />
+                <p className="text-primary-800 font-medium">{t('reviewSubmittedTitle')}</p>
+                <p className="text-sm text-primary-600 mt-1">{t('reviewSubmittedMessage')}</p>
               </div>
             )}
           </div>

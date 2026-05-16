@@ -13,7 +13,7 @@ export function ProductCard({ product, stockOneLabel }: Props) {
   return (
     <Link
       href={`/shop/product/${product.item_uuid}`}
-      className="group bg-white rounded-xl border border-neutral-200 hover:border-emerald-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+      className="group bg-white rounded-xl border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
     >
       <div className="relative aspect-[4/3] bg-neutral-50">
         {product.image_url ? (
@@ -38,7 +38,7 @@ export function ProductCard({ product, stockOneLabel }: Props) {
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div>
           <p className="text-xs text-neutral-500 font-medium uppercase tracking-wide">{product.brand}</p>
-          <h3 className="font-medium text-neutral-900 group-hover:text-emerald-600 transition-colors line-clamp-2 leading-snug">
+          <h3 className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors line-clamp-2 leading-snug">
             {product.title}
           </h3>
         </div>
@@ -47,8 +47,8 @@ export function ProductCard({ product, stockOneLabel }: Props) {
         )}
         <div className="mt-auto flex items-center justify-between pt-2">
           <div className="flex items-center gap-1.5">
-            <Tag className="w-3.5 h-3.5 text-emerald-600" />
-            <span className="font-bold text-emerald-700">{formatCHF(product.price)}</span>
+            <Tag className="w-3.5 h-3.5 text-primary-600" />
+            <span className="font-bold text-primary-700">{formatCHF(product.price)}</span>
           </div>
           <span className="text-xs bg-neutral-100 text-neutral-600 px-2 py-0.5 rounded-full capitalize">
             {product.condition}

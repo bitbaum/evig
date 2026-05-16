@@ -231,7 +231,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
                 </div>
 
                 <div className="text-center">
-                  <Users className="w-8 h-8 text-info-600 mx-auto mb-2" />
+                  <Users className="w-8 h-8 text-primary-600 mx-auto mb-2" />
                   <div className="text-sm font-medium text-neutral-900">{t('detail.maxParticipants')}</div>
                   <div className="text-sm text-neutral-600">{workshop.max_participants}</div>
                 </div>

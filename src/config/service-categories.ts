@@ -36,16 +36,16 @@ export interface CategoryStyle {
  */
 export const CATEGORY_STYLES: Record<ServiceCategory, CategoryStyle> = {
   repair: {
-    primary: 'info-600',
-    bgLight: 'info-50',
-    bgDark: 'info-900/20',
+    primary: 'primary-600',
+    bgLight: 'primary-50',
+    bgDark: 'primary-900/20',
     textOnPrimary: 'white',
-    gradient: 'from-info-600 to-info-800',
+    gradient: 'from-primary-600 to-primary-800',
     badge: {
-      bg: 'bg-info-100',
-      text: 'text-info-800',
-      bgDark: 'dark:bg-info-900/30',
-      textDark: 'dark:text-info-300',
+      bg: 'bg-primary-100',
+      text: 'text-primary-800',
+      bgDark: 'dark:bg-primary-900/30',
+      textDark: 'dark:text-primary-300',
     },
   },
   data: {
@@ -62,16 +62,16 @@ export const CATEGORY_STYLES: Record<ServiceCategory, CategoryStyle> = {
     },
   },
   recycling: {
-    primary: 'emerald-600',
-    bgLight: 'emerald-50',
-    bgDark: 'emerald-900/20',
+    primary: 'primary-600',
+    bgLight: 'primary-50',
+    bgDark: 'primary-900/20',
     textOnPrimary: 'white',
-    gradient: 'from-emerald-600 to-emerald-800',
+    gradient: 'from-primary-600 to-primary-800',
     badge: {
-      bg: 'bg-emerald-100',
-      text: 'text-emerald-800',
-      bgDark: 'dark:bg-emerald-900/30',
-      textDark: 'dark:text-emerald-300',
+      bg: 'bg-primary-100',
+      text: 'text-primary-800',
+      bgDark: 'dark:bg-primary-900/30',
+      textDark: 'dark:text-primary-300',
     },
   },
   software: {

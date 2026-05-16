@@ -47,8 +47,8 @@ export function ResponsiveHero({
       getTextColor('primary', 'primary')
     ),
     blue: cn(
-      'bg-gradient-to-br from-info-700 via-info-800 to-info-900',
-      getTextColor('info', 'primary')
+      'bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-900',
+      getTextColor('dark', 'primary')
     ),
     gray: cn(
       'bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-900',
@@ -117,7 +117,7 @@ export function ResponsiveHero({
                 : backgroundColor === 'green'
                 ? 'text-primary-100'
                 : backgroundColor === 'blue'
-                ? 'text-info-100'
+                ? 'text-neutral-200'
                 : 'text-neutral-200'
             )}>
               {subtitle}
@@ -133,7 +133,7 @@ export function ResponsiveHero({
                 : backgroundColor === 'green'
                 ? 'text-primary-50'
                 : backgroundColor === 'blue'
-                ? 'text-info-50'
+                ? 'text-neutral-300'
                 : 'text-neutral-300'
             )}>
               {description}

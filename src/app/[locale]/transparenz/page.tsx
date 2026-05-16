@@ -112,8 +112,8 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-info-100" aria-hidden="true">
-                <Briefcase className="h-5 w-5 text-info-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-100" aria-hidden="true">
+                <Briefcase className="h-5 w-5 text-neutral-600" />
               </div>
             </div>
             <Heading level={2} className="tracking-tight text-neutral-900">

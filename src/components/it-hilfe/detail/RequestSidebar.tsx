@@ -80,7 +80,7 @@ export function RequestSidebar({
             <Wrench className="w-5 h-5 text-neutral-400 mt-0.5" aria-hidden="true" />
             <div>
               <p className="text-sm text-neutral-500">{t('budgetLabel')}</p>
-              <p className="font-medium text-emerald-600">
+              <p className="font-medium text-primary-600">
                 {formatBudget(request.budgetAmountCents)}
               </p>
             </div>
@@ -195,7 +195,7 @@ export function RequestSidebar({
             )}
             <Link
               href="/it-hilfe/my"
-              className="block w-full py-3 px-4 min-h-[44px] bg-neutral-100 text-neutral-700 rounded-lg text-center font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+              className="block w-full py-3 px-4 min-h-[44px] bg-neutral-100 text-neutral-700 rounded-lg text-center font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2"
             >
               {t('allMyRequests')}
             </Link>

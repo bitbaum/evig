@@ -49,7 +49,7 @@ export default function CommunitySpaceSection() {
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-info-500 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-500 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 relative z-10">
@@ -100,9 +100,9 @@ export default function CommunitySpaceSection() {
           </div>
 
           {/* Workshops */}
-          <div className="bg-gradient-to-br from-info-900/50 to-purple-900/50 rounded-2xl p-8 border border-info-700/50">
+          <div className="bg-gradient-to-br from-neutral-800/50 to-purple-900/50 rounded-2xl p-8 border border-neutral-700/50">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-info-500/20 rounded-lg text-info-400">
+              <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
                 <GraduationCap className="h-6 w-6" />
               </div>
               <Heading level={3} className="text-2xl font-bold">{PHYSICAL_SPACE.workshops.title}</Heading>
@@ -115,20 +115,20 @@ export default function CommunitySpaceSection() {
             <ul className="space-y-2 mb-6">
               {PHYSICAL_SPACE.workshops.topics.map((topic, index) => (
                 <li key={index} className="flex items-center gap-2 text-neutral-300">
-                  <ArrowRight className="h-4 w-4 text-info-400 flex-shrink-0" />
+                  <ArrowRight className="h-4 w-4 text-primary-400 flex-shrink-0" />
                   {topic}
                 </li>
               ))}
             </ul>
 
-            <Button variant="outline-light" className="border-info-400 text-info-400 hover:bg-info-400 hover:text-white w-full sm:w-auto">
+            <Button variant="outline-light" className="border-primary-400 text-primary-400 hover:bg-primary-400 hover:text-white w-full sm:w-auto">
               {t('workshopLink')}
             </Button>
           </div>
         </div>
 
         {/* Vision Section */}
-        <div className="bg-gradient-to-r from-primary-900/30 to-emerald-900/30 rounded-2xl p-8 md:p-12 border border-primary-700/50">
+        <div className="bg-gradient-to-r from-primary-900/30 to-primary-800/30 rounded-2xl p-8 md:p-12 border border-primary-700/50">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
               <Sparkles className="h-6 w-6" />

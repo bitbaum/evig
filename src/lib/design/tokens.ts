@@ -22,7 +22,7 @@ const FOCUS_GREEN = 'focus-visible:outline-primary-600'
 export const DESIGN_TOKENS = {
   gradients: {
     marketplace: 'from-orange-50 to-warning-50',
-    itHilfe: 'from-emerald-50 to-primary-50',
+    itHilfe: 'from-primary-50 to-primary-100',
     services: 'from-blue-50 to-indigo-50',
     about: 'from-primary-50 to-teal-50',
     contact: 'from-neutral-50 to-slate-50',
@@ -34,14 +34,14 @@ export const DESIGN_TOKENS = {
     projects: 'from-indigo-50 to-violet-50',
     repairers: 'from-warning-50 to-warning-50',
     knowhow: 'from-cyan-50 to-sky-50',
-    home: 'from-emerald-50 to-teal-50',
+    home: 'from-primary-50 to-teal-50',
   },
 
   // Icon badges — section-tinted in light mode, TWO brand colors only in dark mode.
   // Dark: green = brand identity, orange = marketplace/commerce identity. No rainbow.
   iconBadges: {
     marketplace: { bg: 'bg-orange-100 dark:bg-secondary-500/15', text: 'text-orange-600 dark:text-secondary-400' },
-    itHilfe:     { bg: 'bg-emerald-100 dark:bg-primary-500/15',   text: 'text-emerald-600 dark:text-primary-400' },
+    itHilfe:     { bg: 'bg-primary-100 dark:bg-primary-500/15',   text: 'text-primary-600 dark:text-primary-400' },
     services:    { bg: 'bg-blue-100 dark:bg-primary-500/15',      text: 'text-blue-600 dark:text-primary-400' },
     about:       { bg: 'bg-primary-100 dark:bg-primary-500/15',   text: 'text-primary-600 dark:text-primary-400' },
     contact:     { bg: 'bg-neutral-100 dark:bg-primary-500/15',   text: 'text-neutral-600 dark:text-primary-400' },
@@ -53,7 +53,7 @@ export const DESIGN_TOKENS = {
     projects:    { bg: 'bg-indigo-100 dark:bg-primary-500/15',    text: 'text-indigo-600 dark:text-primary-400' },
     repairers:   { bg: 'bg-warning-100 dark:bg-secondary-500/15', text: 'text-warning-600 dark:text-secondary-400' },
     knowhow:     { bg: 'bg-cyan-100 dark:bg-primary-500/15',      text: 'text-cyan-600 dark:text-primary-400' },
-    home:        { bg: 'bg-emerald-100 dark:bg-primary-500/15',   text: 'text-emerald-600 dark:text-primary-400' },
+    home:        { bg: 'bg-primary-100 dark:bg-primary-500/15',   text: 'text-primary-600 dark:text-primary-400' },
   },
 
   buttons: {
@@ -113,7 +113,7 @@ export const DESIGN_TOKENS = {
   cards: {
     hoverText: {
       marketplace: 'group-hover:text-orange-500 dark:group-hover:text-secondary-400',
-      itHilfe:     'group-hover:text-emerald-600 dark:group-hover:text-primary-400',
+      itHilfe:     'group-hover:text-primary-600 dark:group-hover:text-primary-400',
       services:    'group-hover:text-blue-600 dark:group-hover:text-primary-400',
       about:       'group-hover:text-primary-600 dark:group-hover:text-primary-400',
       contact:     'group-hover:text-neutral-700 dark:group-hover:text-primary-400',
@@ -125,7 +125,7 @@ export const DESIGN_TOKENS = {
       projects:    'group-hover:text-indigo-600 dark:group-hover:text-primary-400',
       repairers:   'group-hover:text-warning-600 dark:group-hover:text-secondary-400',
       knowhow:     'group-hover:text-cyan-600 dark:group-hover:text-primary-400',
-      home:        'group-hover:text-emerald-600 dark:group-hover:text-primary-400',
+      home:        'group-hover:text-primary-600 dark:group-hover:text-primary-400',
     },
     border: {
       default:  'border-neutral-200 dark:border-white/[0.06]',

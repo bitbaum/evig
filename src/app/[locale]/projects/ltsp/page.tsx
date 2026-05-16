@@ -27,7 +27,7 @@ export default async function LTSPPage() {
     hero: {
       title: p.hero.title,
       description: p.hero.description,
-      backgroundColor: 'bg-gradient-to-r from-primary-600 to-info-700',
+      backgroundColor: 'bg-gradient-to-r from-primary-600 to-primary-800',
     },
     sections: [
       {

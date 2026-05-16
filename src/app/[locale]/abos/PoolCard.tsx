@@ -48,7 +48,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
           </div>
         </div>
         <div className="text-right">
-          <div className="text-lg font-bold text-emerald-600">
+          <div className="text-lg font-bold text-primary-600">
             CHF {Number(pool.costPerMemberChf).toFixed(2)}
           </div>
           <div className="text-xs text-neutral-500">{t('perMonthPerson')}</div>
@@ -69,7 +69,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             ? 'bg-error-50 text-error-600'
             : pool.spotsLeft <= 2
             ? 'bg-warning-50 text-warning-700'
-            : 'bg-emerald-50 text-emerald-700'
+            : 'bg-primary-50 text-primary-700'
         }`}>
           {isFull ? t('full') : spotsText}
         </div>
@@ -84,7 +84,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               isMember
                 ? 'bg-error-50 text-error-600 hover:bg-error-100'
-                : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                : 'bg-primary-600 text-white hover:bg-primary-700'
             }`}
           >
             {loading ? (

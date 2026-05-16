@@ -159,9 +159,9 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
         {/* Left: List */}
         <div className="space-y-4 order-1 lg:order-1">
           {/* RevampIT Store Card - Always visible */}
-          <div className="bg-gradient-to-r from-emerald-50 to-primary-50 dark:from-neutral-800 dark:to-neutral-900 border-2 border-emerald-300 dark:border-primary-500/30 rounded-xl p-5">
+          <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 border-2 border-primary-300 dark:border-primary-500/30 rounded-xl p-5">
             <div className="flex items-center gap-2 mb-2">
-              <Store className="w-5 h-5 text-emerald-600" />
+              <Store className="w-5 h-5 text-primary-600" />
               <Heading level={4} className="font-semibold text-neutral-900">{REVAMPIT_STORE.name}</Heading>
             </div>
             <p className="text-sm text-neutral-600 mb-2">
@@ -175,7 +175,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               href={REVAMPIT_STORE.googleMapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+              className="inline-flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
             >
               {t('planRoute')}
               <ExternalLink className="w-3 h-3" />

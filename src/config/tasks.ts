@@ -120,12 +120,12 @@ export const TASK_STATUS_COLORS: Record<TaskStatus, string> = {
   idle: 'bg-primary-100 text-primary-800',
   needs_attention: 'bg-error-100 text-error-800',
   requested: 'bg-warning-100 text-warning-800',
-  in_progress: 'bg-info-100 text-info-800',
+  in_progress: 'bg-primary-100 text-primary-800',
 };
 
 export const TASK_PRIORITY_COLORS: Record<TaskPriority, string> = {
   low: 'bg-neutral-100 text-neutral-800',
-  normal: 'bg-info-100 text-info-800',
+  normal: 'bg-neutral-100 text-neutral-800',
   high: 'bg-orange-100 text-orange-800',
   urgent: 'bg-error-100 text-error-800',
 };

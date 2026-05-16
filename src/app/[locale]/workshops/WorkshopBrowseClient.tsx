@@ -49,7 +49,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   return (
     <div className="min-h-screen bg-canvas">
       {/* Compact hero — workshops visible without scrolling */}
-      <div className="bg-gradient-to-br from-primary-50 to-emerald-50 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>

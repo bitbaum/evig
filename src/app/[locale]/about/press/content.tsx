@@ -25,7 +25,7 @@ import {
 // Tier badge colors
 const TIER_STYLES = {
   1: 'bg-warning-100 text-warning-800 border-warning-200',
-  2: 'bg-info-100 text-info-800 border-info-200',
+  2: 'bg-neutral-100 text-neutral-800 border-neutral-200',
   3: 'bg-primary-100 text-primary-800 border-primary-200',
   4: 'bg-neutral-100 text-neutral-800 border-neutral-200'
 } as const
@@ -102,7 +102,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
       rel="noopener noreferrer"
       className="group flex items-center gap-3 bg-white rounded-full px-5 py-3 border border-neutral-200 hover:border-primary-400 hover:shadow-md transition-all duration-300"
     >
-      <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-emerald-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
+      <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white text-xs font-bold">
         {mention.sourceShort.charAt(0)}
       </div>
       <div className="flex-1 min-w-0">
@@ -203,7 +203,7 @@ export default function PressPageContent() {
                   className="group flex items-center gap-3 p-4 rounded-lg bg-white hover:shadow-md transition-all"
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${
-                    mention.tier === 2 ? 'bg-info-100 text-info-700' :
+                    mention.tier === 2 ? 'bg-neutral-100 text-neutral-700' :
                     mention.tier === 3 ? 'bg-primary-100 text-primary-700' :
                     'bg-neutral-100 text-neutral-700'
                   }`}>

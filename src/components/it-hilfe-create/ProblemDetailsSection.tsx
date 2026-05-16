@@ -47,7 +47,7 @@ export function ProblemDetailsSection({
             value={deviceBrand}
             onChange={(e) => onDeviceBrandChange(e.target.value)}
             placeholder={t('deviceBrandPlaceholder')}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
         <div>
@@ -62,7 +62,7 @@ export function ProblemDetailsSection({
             value={deviceModel}
             onChange={(e) => onDeviceModelChange(e.target.value)}
             placeholder={t('deviceModelPlaceholder')}
-            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
           />
         </div>
       </div>
@@ -79,7 +79,7 @@ export function ProblemDetailsSection({
           value={title}
           onChange={(e) => onTitleChange(e.target.value)}
           placeholder={t('problemTitlePlaceholder')}
-          className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         />
         <span className="text-xs text-neutral-400">{title.length}/200</span>
       </div>
@@ -96,7 +96,7 @@ export function ProblemDetailsSection({
           onChange={(e) => onDescriptionChange(e.target.value)}
           placeholder={t('problemDescriptionPlaceholder')}
           rows={5}
-          className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+          className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         />
         <span className="text-xs text-neutral-400">{description.length}/5000</span>
       </div>

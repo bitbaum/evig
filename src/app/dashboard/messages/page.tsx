@@ -90,8 +90,8 @@ function MessagesContent() {
       {conversations.length === 0 ? (
         <EmptyState
           icon={MessageSquare}
-          iconBg="bg-info-50 dark:bg-info-900/20"
-          iconColor="text-info-500 dark:text-info-400"
+          iconBg="bg-neutral-50 dark:bg-neutral-800"
+          iconColor="text-neutral-500 dark:text-neutral-400"
           title={t('emptyTitle')}
           description={t('emptyDesc')}
           action={

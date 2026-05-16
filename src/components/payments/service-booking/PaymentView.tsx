@@ -56,7 +56,7 @@ export function PaymentView({ service, paymentData }: PaymentViewProps) {
         )}
 
         <div className="flex flex-col items-center gap-3 py-6 text-center">
-          <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center">
             <CreditCard className="w-6 h-6" />
           </div>
           <div className="flex items-center gap-2 text-neutral-600">

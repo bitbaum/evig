@@ -21,7 +21,7 @@ export const DECISION_STATUS_CONFIG: Record<
   { label: string; color: string }
 > = {
   draft: { label: 'Entwurf', color: 'bg-neutral-100 text-neutral-700' },
-  discussion: { label: 'Diskussion', color: 'bg-info-100 text-info-700' },
+  discussion: { label: 'Diskussion', color: 'bg-primary-100 text-primary-700' },
   voting: { label: 'Abstimmung', color: 'bg-warning-100 text-warning-700' },
   closed: { label: 'Abgeschlossen', color: 'bg-primary-100 text-primary-700' },
   cancelled: { label: 'Abgebrochen', color: 'bg-error-100 text-error-700' },
@@ -392,7 +392,7 @@ export const COMMENT_POSITION_CONFIG: Record<
 > = {
   for: { label: 'Dafür', color: 'bg-primary-100 text-primary-700' },
   against: { label: 'Dagegen', color: 'bg-error-100 text-error-700' },
-  question: { label: 'Frage', color: 'bg-info-100 text-info-700' },
+  question: { label: 'Frage', color: 'bg-neutral-100 text-neutral-700' },
   info: { label: 'Information', color: 'bg-purple-100 text-purple-700' },
 };
 

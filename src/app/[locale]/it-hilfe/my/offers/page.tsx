@@ -44,7 +44,7 @@ export default function MyOffersPage() {
   if (sessionStatus === 'loading' || (sessionStatus === 'authenticated' && loading)) {
     return (
       <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
@@ -67,7 +67,7 @@ export default function MyOffersPage() {
             </Link>
             <Link
               href="/it-hilfe"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
             >
               <Heart className="w-4 h-4" />
               {t('browseRequests')}
@@ -81,7 +81,7 @@ export default function MyOffersPage() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
-                  ? 'bg-emerald-100 text-emerald-700'
+                  ? 'bg-primary-100 text-primary-700'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
             >
@@ -93,7 +93,7 @@ export default function MyOffersPage() {
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
-                    ? 'bg-emerald-100 text-emerald-700'
+                    ? 'bg-primary-100 text-primary-700'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
               >
@@ -121,7 +121,7 @@ export default function MyOffersPage() {
             {!statusFilter && (
               <Link
                 href="/it-hilfe"
-                className="inline-flex items-center gap-2 bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
+                className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 <Heart className="w-5 h-5" />
                 {t('browseRequests')}
@@ -157,7 +157,7 @@ export default function MyOffersPage() {
                           </span>
                         </div>
 
-                        <Heading level={3} className="font-semibold text-neutral-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                        <Heading level={3} className="font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
                           {offer.request.title}
                         </Heading>
 
@@ -179,7 +179,7 @@ export default function MyOffersPage() {
                             </div>
                           )}
                           {offer.proposedCompensation && (
-                            <span className="text-emerald-600 font-medium">
+                            <span className="text-primary-600 font-medium">
                               {offer.proposedCompensation}
                             </span>
                           )}
@@ -189,7 +189,7 @@ export default function MyOffersPage() {
                         </div>
                       </div>
 
-                      <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-emerald-600 transition-colors" />
+                      <ArrowRight className="w-5 h-5 text-neutral-500 group-hover:text-primary-600 transition-colors" />
                     </div>
                   </Link>
 

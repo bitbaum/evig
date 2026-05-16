@@ -132,9 +132,9 @@ describe('getLevelBadgeClass', () => {
     expect(cls).toContain('primary')
   })
 
-  it('returns blue badge class for "intermediate"', () => {
+  it('returns neutral badge class for "intermediate"', () => {
     const cls = getLevelBadgeClass('intermediate')
-    expect(cls).toContain('info')
+    expect(cls).toContain('neutral')
   })
 
   it('returns purple badge class for "advanced"', () => {

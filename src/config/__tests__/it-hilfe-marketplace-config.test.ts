@@ -351,8 +351,8 @@ describe('getProductStatusLabel', () => {
 })
 
 describe('getProductStatusBadgeColor', () => {
-  it('approved → blue CSS classes', () => {
-    expect(getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)).toContain('info')
+  it('approved → primary CSS classes', () => {
+    expect(getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)).toContain('primary')
   })
 
   it('unknown → gray fallback', () => {

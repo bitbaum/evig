@@ -76,7 +76,7 @@ export function AISearchModal({
             <div className="p-6 border-b border-neutral-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
                     <Search className="w-5 h-5 text-primary-600" />
                   </div>
                   <div>
@@ -129,8 +129,8 @@ export function AISearchModal({
                 </div>
 
                 {/* Search Examples */}
-                <div className="mt-4 p-4 bg-primary-50 rounded-lg border border-info-200">
-                  <p className={cn('text-sm font-medium mb-2', getStatusColors('info').text)}>
+                <div className="mt-4 p-4 bg-primary-50 rounded-lg border border-primary-200">
+                  <p className={cn('text-sm font-medium mb-2', getStatusColors('success').text)}>
                     Beispiele:
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -138,7 +138,7 @@ export function AISearchModal({
                       <button
                         key={example}
                         onClick={() => onSearchQueryChange(example)}
-                        className="px-3 py-1 bg-info-100 text-info-700 rounded-full text-xs hover:bg-info-200 transition-colors min-h-[touch] touch-target"
+                        className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs hover:bg-primary-200 transition-colors min-h-[touch] touch-target"
                       >
                         {example}
                       </button>
@@ -165,10 +165,10 @@ export function AISearchModal({
                         <div
                           key={result.id}
                           onClick={() => onSelectResult(result)}
-                          className="p-4 border-2 border-neutral-200 rounded-lg hover:border-info-300 hover:bg-primary-50 cursor-pointer transition-colors"
+                          className="p-4 border-2 border-neutral-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 cursor-pointer transition-colors"
                         >
                           <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-info-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
                               <Package className="w-6 h-6 text-primary-600" />
                             </div>
                             <div className="flex-1">

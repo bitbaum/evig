@@ -74,7 +74,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Vintage-Restauration.",
     icon: HardDrive,
-    color: "bg-info-500",
+    color: "bg-neutral-500",
   },
   {
     id: "development",
@@ -122,7 +122,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Nachhaltige IT: Reparieren statt wegwerfen, Energie sparen, E-Waste vermeiden.",
     icon: Leaf,
-    color: "bg-emerald-500",
+    color: "bg-primary-500",
   },
   {
     id: "digital-skills",
@@ -146,7 +146,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "intermediate",
     name: "Fortgeschrittene",
-    badgeClass: "bg-info-100 text-info-800",
+    badgeClass: "bg-neutral-100 text-neutral-800",
   },
   {
     id: "advanced",
@@ -179,7 +179,7 @@ export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, str
 };
 
 export const WORKSHOP_INSTANCE_STATUS_COLORS: Record<WorkshopInstanceStatus, string> = {
-  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-info-100 text-info-800',
+  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-primary-100 text-primary-800',
   [WORKSHOP_INSTANCE_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
   [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-primary-100 text-primary-800',
 };
