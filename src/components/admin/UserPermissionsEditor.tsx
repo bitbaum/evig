@@ -179,7 +179,7 @@ export function UserPermissionsEditor({
                     className={`p-3 text-left rounded-lg border transition-colors ${
                       selectedPermissions.includes(section.id)
                         ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
-                        : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
+                        : 'border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -218,7 +218,7 @@ export function UserPermissionsEditor({
         </div>
 
         {/* Footer */}
-        <div className="pt-6 border-t border-neutral-200 dark:border-neutral-700 flex justify-end gap-3 mt-6">
+        <div className="pt-6 border-t border-neutral-200 dark:border-white/[0.06] flex justify-end gap-3 mt-6">
           <Button
             onClick={onClose}
             variant="ghost"

@@ -78,13 +78,13 @@ export function TeamTalentSection({
             placeholder="Fähigkeit hinzufügen..."
           />
           {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
-            <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg shadow-lg">
+            <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] rounded-lg shadow-lg">
               {filteredSkillSuggestions.map(skill => (
                 <button
                   key={skill}
                   type="button"
                   onClick={() => onAddSkill(skill)}
-                  className="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
+                  className="w-full px-4 py-2 text-left hover:bg-neutral-100 dark:hover:bg-white/[0.06] text-sm"
                 >
                   {skill}
                 </button>

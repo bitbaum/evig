@@ -39,11 +39,11 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
       {/* Toggle header — same structure as card headers, but interactive */}
       <button
         onClick={toggle}
-        className="w-full flex items-center justify-between p-4 text-left hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors rounded-xl"
+        className="w-full flex items-center justify-between p-4 text-left hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors rounded-xl"
         aria-expanded={open}
         aria-controls="monatsueberblick-content"
       >
@@ -63,7 +63,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
       {hydrated && open && (
         <div
           id="monatsueberblick-content"
-          className="border-t border-neutral-100 dark:border-neutral-700 p-4 space-y-4"
+          className="border-t border-neutral-100 dark:border-white/[0.06] p-4 space-y-4"
         >
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />

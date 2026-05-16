@@ -45,7 +45,7 @@ export default async function TeamActivityPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/team"
-            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>

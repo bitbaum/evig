@@ -114,7 +114,7 @@ export default async function AdminCategoriesPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -138,7 +138,7 @@ export default async function AdminCategoriesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-purple-600" />
             <div>
@@ -152,7 +152,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-primary-600" />
             <div>
@@ -166,7 +166,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Tag className="w-8 h-8 text-info-600" />
             <div>
@@ -182,7 +182,7 @@ export default async function AdminCategoriesPage() {
       </div>
 
       {/* Categories Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
         {categories.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -205,11 +205,11 @@ export default async function AdminCategoriesPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+              <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
                 {categories.map((category) => (
                   <tr
                     key={category.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                    className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
                   >
                     <td className="px-6 py-4">
                       <div>

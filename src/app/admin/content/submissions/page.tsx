@@ -30,7 +30,7 @@ export default function SubmissionsAdminPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -76,7 +76,7 @@ export default function SubmissionsAdminPage() {
           <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
         </div>
       ) : s.filteredSubmissions.length === 0 ? (
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-12 text-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-12 text-center">
           <FileText className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
           <p className="text-neutral-600 dark:text-neutral-400">
             Keine Einreichungen gefunden.

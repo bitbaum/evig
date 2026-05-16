@@ -13,7 +13,7 @@ interface SubmissionFiltersProps {
 
 export function SubmissionFilters({ filter, counts, onFilterChange }: SubmissionFiltersProps) {
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-4">
       <div className="flex flex-wrap gap-2">
         {FILTER_OPTIONS.map((status) => (
           <button

@@ -85,7 +85,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
             <Link
               key={card.href}
               href={card.href}
-              className="bg-white dark:bg-neutral-800 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+              className="bg-white dark:bg-neutral-900 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-white/[0.06] hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
             >
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center flex-shrink-0`}>
@@ -112,7 +112,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       </div>
 
       {/* Reference stats — collapsed into a single compact row */}
-      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-neutral-100 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50 px-4 py-2.5 text-xs text-neutral-500 dark:text-neutral-400">
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-neutral-100 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-xs text-neutral-500 dark:text-neutral-400">
         <Link href="/admin/users" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalUsers}</strong> Benutzer</span>

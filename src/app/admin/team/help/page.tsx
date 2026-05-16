@@ -115,7 +115,7 @@ export default async function HelpRequestsPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/team"
-            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
@@ -135,7 +135,7 @@ export default async function HelpRequestsPage() {
 
       {/* Stats */}
       <div className="grid md:grid-cols-4 gap-4">
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center">
               <HelpCircle className="w-5 h-5 text-warning-600" />
@@ -147,7 +147,7 @@ export default async function HelpRequestsPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
               <Users className="w-5 h-5 text-info-600" />
@@ -159,7 +159,7 @@ export default async function HelpRequestsPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
               <CheckCircle className="w-5 h-5 text-primary-600" />
@@ -171,7 +171,7 @@ export default async function HelpRequestsPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-error-100 rounded-lg flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-error-600" />

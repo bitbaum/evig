@@ -320,7 +320,7 @@ export default async function FinanzenPage() {
       </div>
 
       {/* Data Source Info */}
-      <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
         <strong>Datenquelle:</strong> Kivitendo-Export • {yearsData.length} Jahre verfügbar ({availableYears[availableYears.length - 1]} - {availableYears[0]})
       </div>
     </div>

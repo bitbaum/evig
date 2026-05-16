@@ -71,7 +71,7 @@ export function CurrentFocusInput({
               onChange={(e) => setFocus(e.target.value)}
               placeholder="Woran arbeitest du?"
               maxLength={200}
-              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="flex-1 px-2 py-1 text-sm border border-neutral-300 dark:border-neutral-600 rounded bg-white dark:bg-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSave()
@@ -91,7 +91,7 @@ export function CurrentFocusInput({
             </button>
             <button
               onClick={handleCancel}
-              className="p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded"
+              className="p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded"
             >
               <X className="w-4 h-4" />
             </button>
@@ -109,7 +109,7 @@ export function CurrentFocusInput({
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-info-500" />
         <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktueller Fokus</Heading>
@@ -155,7 +155,7 @@ export function CurrentFocusInput({
               )}
               <button
                 onClick={handleCancel}
-                className="px-3 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+                className="px-3 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
               >
                 Abbrechen
               </button>

@@ -20,7 +20,7 @@ export default function ContentPage() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
           href="/admin/content/submissions"
-          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-warning-500 transition-colors relative group"
+          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-warning-500 transition-colors relative group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -31,7 +31,7 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/blog"
-          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-500 transition-colors group"
+          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Blog-Artikel</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -41,7 +41,7 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/categories"
-          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-purple-500 transition-colors group"
+          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-purple-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Kategorien</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -51,7 +51,7 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/pages"
-          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-500 transition-colors group"
+          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Seiten</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -61,7 +61,7 @@ export default function ContentPage() {
 
         <Link
           href="/admin/content/media"
-          className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-500 transition-colors group"
+          className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Medien</Heading>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">

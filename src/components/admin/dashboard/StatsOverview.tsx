@@ -50,7 +50,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
           <Link
             key={card.href}
             href={card.href}
-            className="bg-white dark:bg-neutral-800 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+            className="bg-white dark:bg-neutral-900 rounded-lg p-4 shadow-sm border border-neutral-100 dark:border-white/[0.06] hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center`}>

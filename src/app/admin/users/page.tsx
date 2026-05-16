@@ -93,7 +93,7 @@ export default async function AdminUsersPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-info-600" />
             <div>
@@ -103,7 +103,7 @@ export default async function AdminUsersPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <UserCheck className="w-8 h-8 text-primary-600" />
             <div>
@@ -113,7 +113,7 @@ export default async function AdminUsersPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Crown className="w-8 h-8 text-purple-600" />
             <div>
@@ -123,7 +123,7 @@ export default async function AdminUsersPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-neutral-600" />
             <div>

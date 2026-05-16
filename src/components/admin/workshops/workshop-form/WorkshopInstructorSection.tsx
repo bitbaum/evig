@@ -14,7 +14,7 @@ interface Props {
 
 export function WorkshopInstructorSection({ formData, onInputChange }: Props) {
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
       <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-6 flex items-center gap-2">
         <Users className="w-5 h-5" />
         Kursleiter

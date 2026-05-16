@@ -24,7 +24,7 @@ export function BlogPostSidebar({
   return (
     <div className="space-y-6">
       {/* Status */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Status</Heading>
         <div className="flex items-center gap-3">
           <label className="relative inline-flex items-center cursor-pointer">
@@ -43,7 +43,7 @@ export function BlogPostSidebar({
       </div>
 
       {/* Category */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">Kategorie</Heading>
         <select
           value={formData.categoryId}
@@ -58,7 +58,7 @@ export function BlogPostSidebar({
       </div>
 
       {/* Featured Image */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
           <ImageIcon className="w-4 h-4" />
           Beitragsbild
@@ -80,7 +80,7 @@ export function BlogPostSidebar({
       </div>
 
       {/* Tags */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
           <Tag className="w-4 h-4" />
           Tags
@@ -122,7 +122,7 @@ export function BlogPostSidebar({
       </div>
 
       {/* SEO */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <Heading level={3} className="font-medium text-neutral-900 dark:text-white mb-4">SEO</Heading>
         <div className="space-y-4">
           <div>

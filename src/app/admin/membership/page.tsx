@@ -92,7 +92,7 @@ export default async function MembershipPage() {
       <AdminStatsGrid items={stats} columns={3} />
 
       {/* Members List */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-hidden">
         {members.length === 0 ? (
           <div className="p-8 text-center">
             <Users className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
@@ -104,7 +104,7 @@ export default async function MembershipPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-50 dark:bg-neutral-900/50 border-b border-neutral-200 dark:border-neutral-700">
+              <thead className="bg-neutral-50 dark:bg-neutral-900/50 border-b border-neutral-200 dark:border-white/[0.06]">
                 <tr>
                   <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Name</th>
                   <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">E-Mail</th>
@@ -114,7 +114,7 @@ export default async function MembershipPage() {
                   <th className="text-left px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 dark:divide-neutral-700">
+              <tbody className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
                 {members.map(member => {
                   const paid = isPaid(member)
                   const fee = member.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular

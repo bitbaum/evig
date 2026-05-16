@@ -30,7 +30,7 @@ export function UserTableRow({
   const hasFullAccess = permissions.includes('*')
 
   return (
-    <tr className="hover:bg-neutral-50 dark:hover:bg-neutral-700">
+    <tr className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]">
       <UserInfoCell user={user} userIsSuperAdmin={userIsSuperAdmin} userIsStaff={userIsStaff} />
       <StatusCell
         userIsSuperAdmin={userIsSuperAdmin}

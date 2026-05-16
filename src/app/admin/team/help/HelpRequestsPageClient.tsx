@@ -98,7 +98,7 @@ export function HelpRequestsPageClient({
           <button
             onClick={() => refetch()}
             disabled={loading}
-            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
             title="Aktualisieren"
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -109,7 +109,7 @@ export function HelpRequestsPageClient({
             className={`p-2 rounded-lg ${
               hasActiveFilters
                 ? 'text-info-600 bg-info-50 dark:bg-info-900/30'
-                : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
             }`}
             title="Filter"
           >
@@ -131,7 +131,7 @@ export function HelpRequestsPageClient({
 
       {/* Filter Panel */}
       {showFilters && (
-        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Status Filter */}
             <FormField label="Status" className="flex-1">
@@ -185,7 +185,7 @@ export function HelpRequestsPageClient({
               <div className="flex items-end">
                 <button
                   onClick={clearFilters}
-                  className="px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+                  className="px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
                 >
                   Zurücksetzen
                 </button>
@@ -208,7 +208,7 @@ export function HelpRequestsPageClient({
           {[...Array(3)].map((_, i) => (
             <div
               key={i}
-              className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 animate-pulse"
+              className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4 animate-pulse"
             >
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-neutral-200 dark:bg-neutral-700 rounded-full" />
@@ -225,7 +225,7 @@ export function HelpRequestsPageClient({
 
       {/* Empty State */}
       {!loading && !error && requests.length === 0 && (
-        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-8 text-center">
           <p className="text-neutral-500 dark:text-neutral-400 mb-4">
             {hasActiveFilters
               ? 'Keine Hilfsanfragen mit diesen Filtern gefunden.'

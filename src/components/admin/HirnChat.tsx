@@ -180,7 +180,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
     <div className="flex flex-col h-full">
       {/* Header - hidden in compact mode */}
       {!compact && (
-        <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-700">
+        <div className="flex items-center justify-between p-4 border-b border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-2">
             <Bot className="w-5 h-5 text-purple-600" />
             <span className="font-medium text-neutral-900 dark:text-white">Hirn Assistant</span>
@@ -224,7 +224,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                 className={`max-w-[80%] ${
                   message.role === 'user'
                     ? 'bg-purple-600 text-white rounded-2xl rounded-br-sm px-4 py-2'
-                    : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-2xl rounded-bl-sm px-4 py-3'
+                    : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-white rounded-2xl rounded-bl-sm px-4 py-3'
                 }`}
               >
                 <div className="whitespace-pre-wrap">{message.content}</div>
@@ -274,7 +274,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
               <Bot className="w-4 h-4 text-purple-600" />
             </div>
-            <div className="bg-neutral-100 dark:bg-neutral-800 rounded-2xl rounded-bl-sm px-4 py-3">
+            <div className="bg-neutral-100 dark:bg-neutral-900 rounded-2xl rounded-bl-sm px-4 py-3">
               <div className="flex gap-1">
                 <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                 <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -294,7 +294,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
       </div>
 
       {/* Input */}
-      <form onSubmit={sendMessage} className={`border-t border-neutral-200 dark:border-neutral-700 ${compact ? 'p-3' : 'p-4'}`}>
+      <form onSubmit={sendMessage} className={`border-t border-neutral-200 dark:border-white/[0.06] ${compact ? 'p-3' : 'p-4'}`}>
         <div className="flex gap-2">
           <input
             type="text"
@@ -305,7 +305,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             aria-required="true"
             aria-invalid={!!error}
             aria-describedby={error ? 'hirn-chat-error' : undefined}
-            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
+            className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50"
           />
           <button
             type="submit"

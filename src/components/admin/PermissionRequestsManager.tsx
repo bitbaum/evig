@@ -92,7 +92,7 @@ export function PermissionRequestsManager() {
 
   if (loading) {
     return (
-      <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+      <div className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
         <div className="animate-pulse">
           <div className="h-6 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-4" />
           <div className="space-y-3">
@@ -121,7 +121,7 @@ export function PermissionRequestsManager() {
 
   if (requests.length === 0) {
     return (
-      <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+      <div className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
         <div className="flex items-center gap-3 text-neutral-500 dark:text-neutral-400">
           <Shield className="w-5 h-5" />
           <span>Keine ausstehenden Berechtigungsanfragen</span>
@@ -131,8 +131,8 @@ export function PermissionRequestsManager() {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
-      <div className="p-4 border-b border-neutral-200 dark:border-neutral-700 flex items-center justify-between">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+      <div className="p-4 border-b border-neutral-200 dark:border-white/[0.06] flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-orange-500" />
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">
@@ -147,7 +147,7 @@ export function PermissionRequestsManager() {
         </button>
       </div>
 
-      <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
+      <div className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
         {requests.map(request => (
           <div key={request.id} className="p-4">
             <div className="flex items-start justify-between">

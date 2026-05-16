@@ -10,7 +10,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
   return (
     <div className="lg:col-span-2 space-y-6">
       {/* Title & Slug */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
@@ -44,7 +44,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
       </div>
 
       {/* Excerpt */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Kurzbeschreibung
         </label>
@@ -60,7 +60,7 @@ export function BlogPostEditor({ formData, onFormDataChange, onTitleChange }: Pr
       </div>
 
       {/* Content */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
         <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
           Inhalt * (Markdown)
         </label>

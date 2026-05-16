@@ -59,7 +59,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-900/40">
+      <div className="rounded-lg border border-neutral-200 bg-neutral-50 p-4 dark:border-white/[0.06] dark:bg-neutral-900/40">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
@@ -72,7 +72,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
           <button
             type="button"
             onClick={() => onChange('working_hours', applyStandardSchedule())}
-            className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+            className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
           >
             Mo-Fr 09-17
           </button>
@@ -84,7 +84,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
             return (
               <div
                 key={day}
-                className="grid grid-cols-[44px_minmax(0,1fr)] gap-2 rounded-lg border border-neutral-200 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-800 md:grid-cols-[44px_92px_92px_92px_minmax(140px,1fr)]"
+                className="grid grid-cols-[44px_minmax(0,1fr)] gap-2 rounded-lg border border-neutral-200 bg-white p-2 dark:border-white/[0.06] dark:bg-neutral-900 md:grid-cols-[44px_92px_92px_92px_minmax(140px,1fr)]"
               >
                 <label className="flex items-center gap-2 text-sm font-medium text-neutral-800 dark:text-neutral-100">
                   <input

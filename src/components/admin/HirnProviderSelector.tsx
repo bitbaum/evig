@@ -152,7 +152,7 @@ export function HirnProviderSelector() {
       {/* Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 text-sm bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-purple-300 dark:hover:border-purple-600 rounded-xl transition-all shadow-sm"
+        className="flex items-center gap-2 px-3 py-2 text-sm bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] hover:border-purple-300 dark:hover:border-purple-600 rounded-xl transition-all shadow-sm"
       >
         {currentMeta ? (
           <>
@@ -176,14 +176,14 @@ export function HirnProviderSelector() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" aria-hidden="true" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-neutral-800 rounded-2xl shadow-2xl border border-neutral-200 dark:border-neutral-700 z-50 overflow-hidden">
+          <div className="absolute right-0 top-full mt-2 w-96 bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl border border-neutral-200 dark:border-white/[0.06] z-50 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-neutral-100 dark:border-neutral-700">
+            <div className="flex items-center justify-between p-4 border-b border-neutral-100 dark:border-white/[0.06]">
               <div>
                 <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">Wähle dein Gehirn</Heading>
                 <p className="text-xs text-neutral-500 mt-0.5">Welche KI soll antworten?</p>
               </div>
-              <button onClick={() => setOpen(false)} className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg">
+              <button onClick={() => setOpen(false)} className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg">
                 <X className="w-4 h-4 text-neutral-500" />
               </button>
             </div>
@@ -221,7 +221,7 @@ export function HirnProviderSelector() {
                               isSelected
                                 ? 'bg-purple-50 dark:bg-purple-900/20 border-2 border-purple-300 dark:border-purple-700'
                                 : canSelect
-                                ? 'hover:bg-neutral-50 dark:hover:bg-neutral-700/50 border-2 border-transparent'
+                                ? 'hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 border-2 border-transparent'
                                 : 'opacity-50 cursor-not-allowed border-2 border-transparent'
                             }`}
                           >
@@ -288,7 +288,7 @@ export function HirnProviderSelector() {
               </div>
             )}
 
-            <div className="p-3 bg-neutral-50 dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-neutral-700">
+            <div className="p-3 bg-neutral-50 dark:bg-neutral-900/50 border-t border-neutral-100 dark:border-white/[0.06]">
               <p className="text-xs text-neutral-500 text-center">
                 Wähle einen Provider mit aktivem API-Key
               </p>

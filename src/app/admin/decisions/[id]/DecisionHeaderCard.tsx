@@ -263,9 +263,9 @@ export default function DecisionHeaderCard({
           {decision.options.some((o) => o.imageUrl) ? (
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {decision.options.map((opt) => (
-                <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-700/50 overflow-hidden">
+                <div key={opt.id} className="rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-700/50 overflow-hidden">
                   {opt.imageUrl ? (
-                    <div className="relative aspect-square w-full bg-white dark:bg-neutral-800">
+                    <div className="relative aspect-square w-full bg-white dark:bg-neutral-900">
                       <Image
                         src={opt.imageUrl}
                         alt={opt.label}
@@ -293,7 +293,7 @@ export default function DecisionHeaderCard({
               {decision.options.map((opt) => (
                 <div
                   key={opt.id}
-                  className="rounded-md border border-neutral-200 dark:border-neutral-700 px-3 py-2"
+                  className="rounded-md border border-neutral-200 dark:border-white/[0.06] px-3 py-2"
                 >
                   <span className={cn('font-medium', adminType.body)}>{opt.label}</span>
                   {opt.description && (

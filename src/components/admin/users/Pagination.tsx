@@ -53,7 +53,7 @@ export function Pagination({
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl">
+    <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] rounded-xl">
       {/* Info */}
       <div className="text-sm text-neutral-700 dark:text-neutral-300">
         <span className="font-medium">{start}</span> bis{' '}
@@ -67,7 +67,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -81,7 +81,7 @@ export function Pagination({
               className={`min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium transition-colors ${
                 page === p
                   ? 'bg-primary-600 text-white'
-                  : 'hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300'
+                  : 'hover:bg-neutral-100 dark:hover:bg-white/[0.06] text-neutral-700 dark:text-neutral-300'
               }`}
             >
               {p}
@@ -97,7 +97,7 @@ export function Pagination({
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ChevronRight className="w-5 h-5" />
         </button>

@@ -71,14 +71,14 @@ export function HelpRequestCard({
 
   return (
     <div
-      className={`bg-white dark:bg-neutral-800 rounded-xl border p-4 ${
+      className={`bg-white dark:bg-neutral-900 rounded-xl border p-4 ${
         isResolved
-          ? 'border-neutral-200 dark:border-neutral-700 opacity-75'
+          ? 'border-neutral-200 dark:border-white/[0.06] opacity-75'
           : request.urgency === URGENCY.URGENT
             ? 'border-error-300 dark:border-error-700'
             : request.urgency === URGENCY.HIGH
               ? 'border-orange-300 dark:border-orange-700'
-              : 'border-neutral-200 dark:border-neutral-700'
+              : 'border-neutral-200 dark:border-white/[0.06]'
       }`}
     >
       {/* Header */}
@@ -169,7 +169,7 @@ export function HelpRequestCard({
 
       {/* Actions */}
       {showActions && (canResolve || canTakeOn) && (
-        <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+        <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
           {canTakeOn && (
             <button
               onClick={() => onTakeOn?.(request.id)}

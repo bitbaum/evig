@@ -220,16 +220,16 @@ export default async function ApprovalsPage() {
       </div>
 
       {/* Übersicht — pending counts from all approval sources */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
-        <div className="p-4 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+        <div className="p-4 border-b border-neutral-200 dark:border-white/[0.06]">
           <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">Übersicht</Heading>
         </div>
-        <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
+        <div className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
           {approvalSources.map(source => (
             <Link
               key={source.href}
               href={source.href}
-              className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
+              className="p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors"
             >
               <span className="text-neutral-900 dark:text-white">{source.label}</span>
               <span className="flex items-center gap-2">
@@ -261,13 +261,13 @@ export default async function ApprovalsPage() {
       </div>
 
       {/* Pending Items — inline list for user_content_submissions */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
-        <div className="p-4 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
+        <div className="p-4 border-b border-neutral-200 dark:border-white/[0.06]">
           <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">Ausstehende Freigaben</Heading>
         </div>
 
         {pendingItems.length > 0 ? (
-          <div className="divide-y divide-neutral-200 dark:divide-neutral-700">
+          <div className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
             {pendingItems.map(item => (
               <div key={item.id} className="p-4 flex items-center justify-between">
                 <div>

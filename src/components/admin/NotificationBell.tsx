@@ -125,7 +125,7 @@ export function NotificationBell() {
     <div className="relative" ref={panelRef}>
       <button
         onClick={handleOpen}
-        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+        className="relative flex items-center justify-center w-9 h-9 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
         aria-label={`Benachrichtigungen${unreadCount > 0 ? ` (${unreadCount} ungelesen)` : ''}`}
       >
         <Bell className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -197,7 +197,7 @@ export function NotificationBell() {
                   <button
                     key={n.id}
                     onClick={() => void markOneRead(n)}
-                    className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors ${
+                    className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors ${
                       !n.is_read ? 'bg-info-50/50 dark:bg-info-900/10' : ''
                     }`}
                   >

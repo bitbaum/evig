@@ -49,7 +49,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content/blog"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -69,7 +69,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               <Link
                 href={`/blog/${formData.slug}`}
                 target="_blank"
-                className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
                 title="Veröffentlichten Artikel ansehen"
               >
                 <Eye className="w-4 h-4" />

@@ -17,16 +17,16 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
-        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Status</option>
           {Object.entries(ORDER_STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
         </select>
       </div>
 
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 dark:border-neutral-700 text-left">
+            <tr className="border-b border-neutral-200 dark:border-white/[0.06] text-left">
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Bestell-ID</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Inserat</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Käufer</th>
@@ -36,9 +36,9 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Datum</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
             {orders?.items.map(o => (
-              <tr key={o.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+              <tr key={o.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3 font-mono text-xs text-neutral-600 dark:text-neutral-400">{o.id.slice(0, 8)}</td>
                 <td className="px-4 py-3 font-medium text-neutral-900 dark:text-white">{o.listing_title}</td>
                 <td className="px-4 py-3 text-neutral-600 dark:text-neutral-400">{o.buyer_name || o.buyer_email}</td>

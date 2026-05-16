@@ -119,7 +119,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
               className={`p-3 text-left rounded-lg border transition-colors ${
                 form.data.sections.includes(section.id)
                   ? 'border-info-500 bg-info-50 dark:bg-info-900/20'
-                  : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300'
+                  : 'border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300'
               }`}
             >
               <span className="font-medium text-neutral-900 dark:text-white">

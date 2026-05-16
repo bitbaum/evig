@@ -34,7 +34,7 @@ export default function ITHilfeAdminClient() {
       )}
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="flex gap-1 border-b border-neutral-200 dark:border-white/[0.06]">
         {TABS.map(t => (
           <button
             key={t.id}

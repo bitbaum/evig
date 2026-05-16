@@ -29,19 +29,19 @@ export function RequestsTab({
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
-        <select value={reqFilter.status} onChange={e => { setReqFilter(f => ({ ...f, status: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={reqFilter.status} onChange={e => { setReqFilter(f => ({ ...f, status: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Status</option>
           {REQUEST_STATUSES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>
-        <select value={reqFilter.category} onChange={e => { setReqFilter(f => ({ ...f, category: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={reqFilter.category} onChange={e => { setReqFilter(f => ({ ...f, category: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Kategorien</option>
           {DEVICE_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
-        <select value={reqFilter.urgency} onChange={e => { setReqFilter(f => ({ ...f, urgency: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={reqFilter.urgency} onChange={e => { setReqFilter(f => ({ ...f, urgency: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Dringlichkeiten</option>
           {URGENCY_LEVELS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
         </select>
-        <select value={reqFilter.canton} onChange={e => { setReqFilter(f => ({ ...f, canton: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={reqFilter.canton} onChange={e => { setReqFilter(f => ({ ...f, canton: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="">Alle Kantone</option>
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
@@ -52,16 +52,16 @@ export function RequestsTab({
             placeholder="Suchen..."
             value={reqFilter.search}
             onChange={e => { setReqFilter(f => ({ ...f, search: e.target.value })); setReqOffset(0) }}
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600"
+            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 dark:border-neutral-700 text-left">
+            <tr className="border-b border-neutral-200 dark:border-white/[0.06] text-left">
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Titel</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Kategorie</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Dringlichkeit</th>
@@ -74,9 +74,9 @@ export function RequestsTab({
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Aktionen</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
             {requests?.items.map(r => (
-              <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+              <tr key={r.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
                   <a href={`/it-hilfe/${r.id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-neutral-900 dark:text-white hover:text-primary-600 flex items-center gap-1">
                     {r.title} <ExternalLink className="w-3 h-3 flex-shrink-0" />
@@ -107,14 +107,14 @@ export function RequestsTab({
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => onEdit(r.id, r.status, r.urgency, r.admin_notes)}
-                      className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                      className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
                       title="Bearbeiten"
                     >
                       <Edit3 className="w-4 h-4 text-primary-600" />
                     </button>
                     <Link
                       href={`/admin/tasks/new?source=it_hilfe&source_id=${r.id}&title=${encodeURIComponent(`IT-Hilfe: ${r.title}`)}&priority=${r.urgency === 'urgent' ? 'urgent' : 'normal'}`}
-                      className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                      className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
                       title="Aufgabe erstellen"
                     >
                       <ClipboardList className="w-4 h-4 text-neutral-500" />

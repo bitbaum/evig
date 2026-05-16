@@ -57,7 +57,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
 
       {/* Loading State */}
       {loading && (
-        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-100 dark:border-neutral-700 p-8 text-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-white/[0.06] p-8 text-center">
           <RefreshCw className="w-8 h-8 text-neutral-500 mx-auto animate-spin mb-4" />
           <p className="text-neutral-500">Lade Benutzer...</p>
         </div>
@@ -65,7 +65,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
 
       {/* Empty State */}
       {!loading && !error && users.length === 0 && (
-        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-100 dark:border-neutral-700 p-12 text-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-white/[0.06] p-12 text-center">
           <Users className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
             Keine Benutzer gefunden

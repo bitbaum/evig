@@ -69,7 +69,7 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
         <button
           type="button"
           disabled
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 rounded-lg cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-900 rounded-lg cursor-not-allowed"
           title="Spracheingabe (bald verfügbar)"
         >
           <Mic className="w-4 h-4" />
@@ -78,7 +78,7 @@ export function SmartEntrySection({ query, isLoading, error, success, onQueryCha
         <button
           type="button"
           disabled
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 rounded-lg cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-900 rounded-lg cursor-not-allowed"
           title="Bilderkennung (bald verfügbar)"
         >
           <Camera className="w-4 h-4" />

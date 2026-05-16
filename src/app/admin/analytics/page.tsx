@@ -235,7 +235,7 @@ export default async function AnalyticsPage() {
 
       {/* Quick Stats */}
       <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-info-600" />
             <div>
@@ -250,7 +250,7 @@ export default async function AnalyticsPage() {
           )}
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Calendar className="w-8 h-8 text-purple-600" />
             <div>
@@ -260,7 +260,7 @@ export default async function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-primary-600" />
             <div>
@@ -270,7 +270,7 @@ export default async function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Package className="w-8 h-8 text-orange-600" />
             <div>
@@ -280,7 +280,7 @@ export default async function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 col-span-2">
+        <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] col-span-2">
           <div className="flex items-center gap-3">
             <BarChart3 className="w-8 h-8 text-warning-600" />
             <div>
@@ -302,7 +302,7 @@ export default async function AnalyticsPage() {
       {/* Content Sections */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* User Growth */}
-        <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-4">Benutzer-Wachstum</Heading>
           {userGrowth.length === 0 ? (
             <p className="text-sm text-neutral-500 dark:text-neutral-400">Keine Daten vorhanden</p>
@@ -332,7 +332,7 @@ export default async function AnalyticsPage() {
         </div>
 
         {/* Activity Overview */}
-        <div className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700">
+        <div className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-4">Aktivitäts-Übersicht</Heading>
           <div className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg">
@@ -371,7 +371,7 @@ export default async function AnalyticsPage() {
       <div className="grid md:grid-cols-2 gap-4">
         <Link
           href="/admin/analyse/finanzen"
-          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-info-300 dark:hover:border-info-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-info-300 dark:hover:border-info-600 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -387,7 +387,7 @@ export default async function AnalyticsPage() {
 
         <Link
           href="/admin/tasks/analytics"
-          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-info-300 dark:hover:border-info-600 transition-colors group"
+          className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-info-300 dark:hover:border-info-600 transition-colors group"
         >
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">

@@ -83,14 +83,14 @@ export function HirnSidebar({
       {stats && (
         <div className="px-4 pb-4">
           <div className="grid grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
               <FileText className="w-4 h-4 text-purple-600" />
               <div>
                 <p className="text-xs text-neutral-500">Dokumente</p>
                 <p className="font-medium text-neutral-900 dark:text-white">{stats.totalDocuments}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
+            <div className="flex items-center gap-2 p-2 bg-neutral-100 dark:bg-neutral-900 rounded-lg">
               <BarChart3 className="w-4 h-4 text-purple-600" />
               <div>
                 <p className="text-xs text-neutral-500">Chunks</p>

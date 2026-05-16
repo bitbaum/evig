@@ -31,7 +31,7 @@ export function TeamFilters({
   onSearchChange,
 }: TeamFiltersProps) {
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-4">
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Search */}
         <div className="flex-1 min-w-[200px]">

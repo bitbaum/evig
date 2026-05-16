@@ -26,25 +26,25 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
-        <select value={filter.status} onChange={e => { setFilter(f => ({ ...f, status: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={filter.status} onChange={e => { setFilter(f => ({ ...f, status: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Status</option>
           {Object.entries(LISTING_STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
         </select>
-        <select value={filter.category} onChange={e => { setFilter(f => ({ ...f, category: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={filter.category} onChange={e => { setFilter(f => ({ ...f, category: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="">Alle Kategorien</option>
           {KATEGORIEN.map(k => <option key={k.value} value={k.value}>{k.label}</option>)}
         </select>
-        <select value={filter.seller_type} onChange={e => { setFilter(f => ({ ...f, seller_type: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={filter.seller_type} onChange={e => { setFilter(f => ({ ...f, seller_type: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Verkäufer</option>
           <option value={MARKETPLACE_SELLER_TYPE.REVAMPIT}>RevampIT</option>
           <option value={MARKETPLACE_SELLER_TYPE.COMMUNITY}>Community</option>
         </select>
-        <select value={filter.verified} onChange={e => { setFilter(f => ({ ...f, verified: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={filter.verified} onChange={e => { setFilter(f => ({ ...f, verified: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Verifizierung</option>
           <option value="yes">Geprüft</option>
           <option value="no">Ungeprüft</option>
         </select>
-        <select value={filter.reported} onChange={e => { setFilter(f => ({ ...f, reported: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={filter.reported} onChange={e => { setFilter(f => ({ ...f, reported: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Meldungen</option>
           <option value="yes">Gemeldet</option>
         </select>
@@ -55,16 +55,16 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
             placeholder="Suchen..."
             value={filter.search}
             onChange={e => { setFilter(f => ({ ...f, search: e.target.value })); setOffset(0) }}
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600"
+            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 dark:border-neutral-700 text-left">
+            <tr className="border-b border-neutral-200 dark:border-white/[0.06] text-left">
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Titel</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Kategorie</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Preis</th>
@@ -74,9 +74,9 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Aktionen</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
             {listings?.items.map(l => (
-              <tr key={l.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+              <tr key={l.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="font-medium text-neutral-900 dark:text-white">{l.title}</span>
@@ -103,15 +103,15 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
                 <td className="px-4 py-3 text-neutral-500 dark:text-neutral-400 whitespace-nowrap">{formatDateShort(l.created_at)}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
-                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Ansehen">
+                    <a href={`/marketplace/${l.id}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]" title="Ansehen">
                       <Eye className="w-4 h-4 text-neutral-500" />
                     </a>
-                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Bearbeiten">
+                    <button onClick={() => onEdit(l.id, l.admin_notes || '', l.status)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]" title="Bearbeiten">
                       <Edit3 className="w-4 h-4 text-info-500" />
                     </button>
                     <VerifyActions listingId={l.id} isVerified={!!l.verified_at} title={l.title} />
                     {l.status !== LISTING_STATUS.REMOVED && (
-                      <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700" title="Entfernen">
+                      <button onClick={() => onRemove(l.id, l.title)} className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]" title="Entfernen">
                         <Trash2 className="w-4 h-4 text-error-500" />
                       </button>
                     )}

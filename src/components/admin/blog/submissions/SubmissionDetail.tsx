@@ -46,7 +46,7 @@ export function SubmissionDetail({
 
   if (!submission) {
     return (
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-12 text-center">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-12 text-center">
         <Eye className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
         <p className="text-neutral-600 dark:text-neutral-400">
           Wähle eine Einreichung aus, um Details anzuzeigen
@@ -56,9 +56,9 @@ export function SubmissionDetail({
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
       {/* Header */}
-      <div className="border-b border-neutral-200 dark:border-neutral-700 pb-4 mb-4">
+      <div className="border-b border-neutral-200 dark:border-white/[0.06] pb-4 mb-4">
         <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-3">
           {submission.title}
         </Heading>
@@ -238,7 +238,7 @@ export function SubmissionDetail({
           {submission.published_post_id && (
             <Link
               href={`/admin/content/blog/${submission.published_post_id}`}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors text-sm"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors text-sm"
             >
               <Edit className="w-4 h-4" />
               Im Admin bearbeiten
@@ -248,7 +248,7 @@ export function SubmissionDetail({
       )}
 
       {/* Delete */}
-      <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+      <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
         <button
           onClick={() => setConfirmDelete(true)}
           disabled={actionLoading !== null}

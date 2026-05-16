@@ -85,7 +85,7 @@ export default async function SettingsPage() {
         {settingsSections.map(section => (
           <div
             key={section.title}
-            className="p-6 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 opacity-70"
+            className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] opacity-70"
             aria-disabled="true"
           >
             <div className="flex items-start gap-4">

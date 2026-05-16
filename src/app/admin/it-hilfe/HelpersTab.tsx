@@ -37,23 +37,23 @@ export function HelpersTab({
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
-        <select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="all">Alle Helfer</option>
           <option value={HELPER_STATUS.ACTIVE}>{HELPER_STATUS_LABELS[HELPER_STATUS.ACTIVE]}</option>
           <option value={HELPER_STATUS.VERIFIED}>{HELPER_STATUS_LABELS[HELPER_STATUS.VERIFIED]}</option>
           <option value={HELPER_STATUS.SUSPENDED}>{HELPER_STATUS_LABELS[HELPER_STATUS.SUSPENDED]}</option>
         </select>
-        <select value={helpFilter.canton} onChange={e => { setHelpFilter(f => ({ ...f, canton: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600">
+        <select value={helpFilter.canton} onChange={e => { setHelpFilter(f => ({ ...f, canton: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
           <option value="">Alle Kantone</option>
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 overflow-x-auto">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-neutral-200 dark:border-neutral-700 text-left">
+            <tr className="border-b border-neutral-200 dark:border-white/[0.06] text-left">
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Name</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Fähigkeiten</th>
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Kanton</th>
@@ -63,9 +63,9 @@ export function HelpersTab({
               <th className="px-4 py-3 font-medium text-neutral-600 dark:text-neutral-400">Aktionen</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-neutral-200 dark:divide-neutral-700">
+          <tbody className="divide-y divide-neutral-200 dark:divide-white/[0.04]">
             {helpers?.items.map(h => (
-              <tr key={h.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700/50">
+              <tr key={h.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50">
                 <td className="px-4 py-3">
                   <div>
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-primary-600 hover:underline">
@@ -104,7 +104,7 @@ export function HelpersTab({
                     {!h.is_verified && !h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'verify')}
-                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
                         title="Verifizieren"
                       >
                         <ShieldCheck className="w-4 h-4 text-primary-500" />
@@ -113,7 +113,7 @@ export function HelpersTab({
                     {!h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'suspend')}
-                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
                         title="Sperren"
                       >
                         <Ban className="w-4 h-4 text-error-500" />
@@ -122,7 +122,7 @@ export function HelpersTab({
                     {h.suspended_at && (
                       <button
                         onClick={() => onAction(h.id, 'reactivate')}
-                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                        className="p-2 rounded hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
                         title="Reaktivieren"
                       >
                         <UserCheck className="w-4 h-4 text-info-500" />

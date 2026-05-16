@@ -75,7 +75,7 @@ export function TeamProfileView({
       </div>
 
       {/* Profile Header Card */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -150,7 +150,7 @@ export function TeamProfileView({
         />
 
         {/* Activity Link */}
-        <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-primary-500" />
@@ -174,7 +174,7 @@ export function TeamProfileView({
         {/* Left Column */}
         <div className="space-y-6">
           {/* Skills & Interests */}
-          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
             <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               <Star className="w-5 h-5 text-warning-500" />
               Fähigkeiten & Interessen
@@ -220,7 +220,7 @@ export function TeamProfileView({
           </div>
 
           {/* Development Areas */}
-          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
             <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-purple-500" />
               Entwicklung
@@ -268,7 +268,7 @@ export function TeamProfileView({
         {/* Right Column */}
         <div className="space-y-6">
           {/* Availability */}
-          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
             <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               <Clock className="w-5 h-5 text-info-500" />
               Verfügbarkeit
@@ -321,7 +321,7 @@ export function TeamProfileView({
 
           {/* Emergency Contact */}
           {(profile.emergency_contact_name || profile.emergency_contact_phone) && (
-            <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
               <Heading level={2} className="text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
                 <AlertCircle className="w-5 h-5 text-error-500" />
                 Notfallkontakt

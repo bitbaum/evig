@@ -43,7 +43,7 @@ export default function EditStaticPagePage() {
           <div className="h-5 w-5 bg-neutral-200 rounded animate-pulse"></div>
           <div className="h-8 bg-neutral-200 rounded w-1/3 animate-pulse"></div>
         </div>
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-8">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-8">
           <div className="animate-pulse space-y-6">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="h-12 bg-neutral-200 rounded"></div>
@@ -65,13 +65,13 @@ export default function EditStaticPagePage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content/pages"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
           <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">Seite bearbeiten</Heading>
         </div>
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border p-8 text-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border p-8 text-center">
           <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
           <Heading level={2} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">{error}</Heading>
           <Link
@@ -93,7 +93,7 @@ export default function EditStaticPagePage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content/pages"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -134,7 +134,7 @@ export default function EditStaticPagePage() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6 space-y-6">
           <FormField label="Titel" required htmlFor="page-title">
             <Input
               id="page-title"
@@ -160,7 +160,7 @@ export default function EditStaticPagePage() {
               <button
                 type="button"
                 onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
-                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
+                className="px-3 py-2 text-sm border border-neutral-300 rounded-lg hover:bg-neutral-50 dark:border-neutral-600 dark:hover:bg-white/[0.06] text-neutral-700 dark:text-neutral-300"
               >
                 Generieren
               </button>
@@ -192,7 +192,7 @@ export default function EditStaticPagePage() {
         </div>
 
         {/* SEO Section */}
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 space-y-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6 space-y-6">
           <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white">SEO</Heading>
 
           <FormField label="SEO Titel" htmlFor="seo-title">

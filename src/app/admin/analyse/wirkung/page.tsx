@@ -25,7 +25,7 @@ function ImpactCard({ metric }: { metric: MetricDefinition }) {
   const needsData = metric.status === 'needs_data'
 
   return (
-    <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+    <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
       <div className="flex justify-between items-start mb-2">
         <div className="text-sm text-muted-foreground">{metric.name}</div>
         {needsData && (
@@ -202,7 +202,7 @@ export default async function WirkungPage() {
                 Pro wiederverwendetem Gerät werden durchschnittlich <strong>285 kg CO2</strong> eingespart.
                 Diese Zahl basiert auf Studien zur Herstellungsenergie von Elektronikgeräten.
               </p>
-              <code className="text-xs bg-neutral-100 dark:bg-neutral-800 p-2 rounded block">
+              <code className="text-xs bg-neutral-100 dark:bg-neutral-900 p-2 rounded block">
                 CO2 = Geräte × 285 kg
               </code>
             </div>
@@ -212,7 +212,7 @@ export default async function WirkungPage() {
                 Die Wiederverwendung von Hardware spart wertvolle Rohstoffe wie Seltene Erden,
                 Kupfer und andere Metalle, die sonst neu abgebaut werden müssten.
               </p>
-              <code className="text-xs bg-neutral-100 dark:bg-neutral-800 p-2 rounded block">
+              <code className="text-xs bg-neutral-100 dark:bg-neutral-900 p-2 rounded block">
                 Rohstoffe = Gewichtsmessung Geräte
               </code>
             </div>
@@ -238,7 +238,7 @@ export default async function WirkungPage() {
             ].map(sdg => (
               <div
                 key={sdg.number}
-                className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-center"
+                className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg text-center"
               >
                 <div className="text-2xl font-bold text-primary">SDG {sdg.number}</div>
                 <div className="text-sm font-medium mt-1">{sdg.name}</div>

@@ -193,11 +193,11 @@ export function CreateHelpRequestModal({
         </FormField>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+        <div className="flex justify-end gap-3 pt-4 border-t border-neutral-200 dark:border-white/[0.06]">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg"
+            className="px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
           >
             Abbrechen
           </button>

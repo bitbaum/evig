@@ -151,7 +151,7 @@ export default async function AdminServicesPage() {
     >
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-info-600" />
             <div>
@@ -161,7 +161,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-primary-600" />
             <div>
@@ -171,7 +171,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Users className="w-8 h-8 text-purple-600" />
             <div>
@@ -181,7 +181,7 @@ export default async function AdminServicesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Wrench className="w-8 h-8 text-orange-600" />
             <div>
@@ -193,7 +193,7 @@ export default async function AdminServicesPage() {
       </div>
 
       {/* Services Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
         {services.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -216,9 +216,9 @@ export default async function AdminServicesPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+              <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
                 {services.map((service) => (
-                  <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-700">
+                  <tr key={service.id} className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]">
                     <td className="px-6 py-4">
                       <div>
                         <div className="text-sm font-medium text-neutral-900 dark:text-white">

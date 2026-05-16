@@ -27,7 +27,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
   const displayName = member.user_name || member.user_email.split('@')[0]
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-5 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start gap-4">
         {/* Avatar */}
         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -108,7 +108,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-700">
+      <div className="flex gap-2 mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.06]">
         <Link
           href={`/admin/team/${member.id}`}
           className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-lg transition-colors"

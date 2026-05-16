@@ -43,7 +43,7 @@ export default async function AdminMediaPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -64,7 +64,7 @@ export default async function AdminMediaPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <ImageIcon className="w-8 h-8 text-info-600" />
             <div>
@@ -78,7 +78,7 @@ export default async function AdminMediaPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Video className="w-8 h-8 text-purple-600" />
             <div>
@@ -92,7 +92,7 @@ export default async function AdminMediaPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <FileText className="w-8 h-8 text-orange-600" />
             <div>
@@ -106,7 +106,7 @@ export default async function AdminMediaPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <FolderOpen className="w-8 h-8 text-primary-600" />
             <div>
@@ -122,7 +122,7 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-4">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
@@ -136,7 +136,7 @@ export default async function AdminMediaPage() {
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-2 px-3 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 border border-neutral-200 dark:border-neutral-600 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] transition-colors">
               <Filter className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
               <span className="text-sm text-neutral-700 dark:text-neutral-300">
                 Filter
@@ -147,7 +147,7 @@ export default async function AdminMediaPage() {
               <button className="p-2 bg-primary-50 dark:bg-primary-900/30 text-primary-600">
                 <Grid className="w-4 h-4" />
               </button>
-              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-600 dark:text-neutral-400">
+              <button className="p-2 hover:bg-neutral-50 dark:hover:bg-white/[0.06] text-neutral-600 dark:text-neutral-400">
                 <List className="w-4 h-4" />
               </button>
             </div>
@@ -156,7 +156,7 @@ export default async function AdminMediaPage() {
       </div>
 
       {/* Empty State */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
         <div className="text-center py-16">
           <div className="w-20 h-20 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6">
             <ImageIcon className="w-10 h-10 text-neutral-400" />

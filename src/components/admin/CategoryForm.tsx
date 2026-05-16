@@ -78,7 +78,7 @@ export default function CategoryForm({
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content/categories"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -139,7 +139,7 @@ export default function CategoryForm({
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* Name */}
             <FormField label="Name" required htmlFor="category-name">
@@ -279,7 +279,7 @@ export default function CategoryForm({
         </div>
 
         {/* Preview */}
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
           <Heading level={3} className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-4">
             Vorschau
           </Heading>

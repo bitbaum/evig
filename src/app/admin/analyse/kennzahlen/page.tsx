@@ -232,7 +232,7 @@ export default async function KennzahlenPage() {
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+            <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
               <div className="font-medium text-primary-600">Automatisch</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Kivitendo-Export (Finanzen)
@@ -241,7 +241,7 @@ export default async function KennzahlenPage() {
                 Monatlich aktualisiert
               </div>
             </div>
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+            <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
               <div className="font-medium text-info-600">Berechnet</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Abgeleitet aus anderen Metriken
@@ -250,7 +250,7 @@ export default async function KennzahlenPage() {
                 Bei Datenänderung neu berechnet
               </div>
             </div>
-            <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg">
+            <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg">
               <div className="font-medium text-warning-600">Manuell</div>
               <div className="text-sm text-muted-foreground mt-1">
                 Manuelle Dateneingabe erforderlich

@@ -106,7 +106,7 @@ export default async function AdminPagesPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/admin/content"
-            className="p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700 rounded-lg transition-colors"
+            className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </Link>
@@ -130,7 +130,7 @@ export default async function AdminPagesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Globe className="w-8 h-8 text-info-600" />
             <div>
@@ -144,7 +144,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <CheckCircle className="w-8 h-8 text-primary-600" />
             <div>
@@ -158,7 +158,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 shadow-sm border border-neutral-100 dark:border-white/[0.06]">
           <div className="flex items-center gap-3">
             <Clock className="w-8 h-8 text-orange-600" />
             <div>
@@ -174,7 +174,7 @@ export default async function AdminPagesPage() {
       </div>
 
       {/* Pages Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
         {pages.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -197,11 +197,11 @@ export default async function AdminPagesPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+              <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
                 {pages.map((page) => (
                   <tr
                     key={page.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                    className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
                   >
                     <td className="px-6 py-4">
                       <div className="text-sm font-medium text-neutral-900 dark:text-white">
@@ -291,7 +291,7 @@ export default async function AdminPagesPage() {
               <Link
                 key={suggestion.slug}
                 href={`/admin/content/pages/new?title=${encodeURIComponent(suggestion.title)}&slug=${suggestion.slug}`}
-                className="flex items-center gap-2 p-3 bg-white dark:bg-neutral-800 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
+                className="flex items-center gap-2 p-3 bg-white dark:bg-neutral-900 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors"
               >
                 <Plus className="w-4 h-4 text-purple-600" />
                 <span className="text-sm font-medium text-neutral-900 dark:text-white">

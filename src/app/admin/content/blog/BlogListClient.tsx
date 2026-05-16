@@ -44,9 +44,9 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   }, [posts, search, statusFilter])
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
       {/* Filters */}
-      <div className="px-6 py-4 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="px-6 py-4 border-b border-neutral-200 dark:border-white/[0.06]">
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
@@ -55,13 +55,13 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               placeholder="Titel suchen..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600 focus:ring-2 focus:ring-primary-500"
+              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600 focus:ring-2 focus:ring-primary-500"
             />
           </div>
           <select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value as '' | 'published' | 'draft')}
-            className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-800 dark:border-neutral-600"
+            className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
           >
             <option value="">Alle Status</option>
             <option value="published">Veröffentlicht</option>
@@ -92,11 +92,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+            <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-200 dark:divide-white/[0.04]">
               {filtered.map((post) => (
                 <tr
                   key={post.id}
-                  className="hover:bg-neutral-50 dark:hover:bg-neutral-700"
+                  className="hover:bg-neutral-50 dark:hover:bg-white/[0.06]"
                 >
                   <td className="px-6 py-4">
                     <div>

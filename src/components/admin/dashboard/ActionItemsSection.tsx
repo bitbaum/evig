@@ -30,8 +30,8 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
   const hasNoActionItems = actionItems.length === 0
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
-      <div className="p-4 border-b border-neutral-100 dark:border-neutral-700 flex items-center gap-2">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
+      <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06] flex items-center gap-2">
         <Zap className="w-5 h-5 text-warning-500" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
           Was gibt es zu tun?
@@ -55,7 +55,7 @@ export function ActionItemsSection({ actionItems }: ActionItemsSectionProps) {
                 <li key={index}>
                   <Link
                     href={item.href}
-                    className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors group"
+                    className="flex items-center justify-between p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
                     aria-label={`${urgency.label}: ${item.label}${age ? ` (${age})` : ''}`}
                   >
                     <div className="flex items-start gap-3">

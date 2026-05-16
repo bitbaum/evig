@@ -60,9 +60,9 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
       />
 
       {/* Panel */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-neutral-800 shadow-2xl flex flex-col animate-slide-in-right">
+      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-neutral-900 shadow-2xl flex flex-col animate-slide-in-right">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-neutral-700 bg-gradient-to-r from-purple-500 to-pink-500">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-200 dark:border-white/[0.06] bg-gradient-to-r from-purple-500 to-pink-500">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
               <Brain className="w-4 h-4 text-white" />

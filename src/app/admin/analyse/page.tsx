@@ -312,7 +312,7 @@ export default async function AnalysePage() {
       </div>
 
       {/* Data Source */}
-      <div className="p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg text-sm text-muted-foreground">
+      <div className="p-4 bg-neutral-50 dark:bg-neutral-900 rounded-lg text-sm text-muted-foreground">
         <strong>Datenquellen:</strong> Finanzdaten aus Kivitendo • Letzte Aktualisierung: {latestData?.metadata.importedAt ? formatDateShort(latestData.metadata.importedAt) : 'N/A'}
       </div>
     </div>

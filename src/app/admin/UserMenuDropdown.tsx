@@ -51,7 +51,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
         className={`flex items-center gap-3 p-1.5 pr-3 rounded-full transition-all duration-200 ${
           userMenuOpen
             ? 'bg-neutral-100 dark:bg-neutral-700'
-            : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'
+            : 'hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
         }`}
         aria-expanded={userMenuOpen}
         aria-haspopup="true"

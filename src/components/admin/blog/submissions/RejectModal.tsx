@@ -23,7 +23,7 @@ export function RejectModal({
 }: RejectModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
         <Heading level={3} className="text-lg text-neutral-900 dark:text-white mb-4">
           Einreichung ablehnen
         </Heading>

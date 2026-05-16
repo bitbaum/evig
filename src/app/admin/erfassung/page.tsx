@@ -176,7 +176,7 @@ function ErfassungContent() {
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
       {/* Pipeline progress — shown when entering from Geräte-Eingang */}
       {isIntakePipeline && (
-        <div className="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg px-4 py-3">
+        <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] rounded-lg px-4 py-3">
           <Stepper
             steps={INTAKE_PIPELINE_STEPS}
             currentStep={1}
@@ -189,7 +189,7 @@ function ErfassungContent() {
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
           href="/admin/products"
-          className="p-2 sm:p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 touch-manipulation"
+          className="p-2 sm:p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] touch-manipulation"
         >
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
         </Link>

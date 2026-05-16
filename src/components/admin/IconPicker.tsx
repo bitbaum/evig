@@ -36,7 +36,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center gap-3 px-4 py-3 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-3 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-600 rounded-lg hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors"
       >
         <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
           <RenderIcon iconName={value} className="w-6 h-6 text-neutral-600 dark:text-neutral-300" />
@@ -65,7 +65,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
           />
 
           {/* Icon grid */}
-          <div className="absolute z-20 mt-2 w-full p-4 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-lg max-h-80 overflow-y-auto">
+          <div className="absolute z-20 mt-2 w-full p-4 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] rounded-xl shadow-lg max-h-80 overflow-y-auto">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {iconNames.map((iconName) => {
                 const IconComponent = SERVICE_ICONS[iconName].icon
@@ -85,7 +85,7 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                       flex flex-col items-center justify-center p-2 rounded-lg transition-colors
                       ${isSelected
                         ? 'bg-primary-100 dark:bg-primary-900/30 border-2 border-primary-500'
-                        : 'hover:bg-neutral-100 dark:hover:bg-neutral-700 border-2 border-transparent'
+                        : 'hover:bg-neutral-100 dark:hover:bg-white/[0.06] border-2 border-transparent'
                       }
                     `}
                   >

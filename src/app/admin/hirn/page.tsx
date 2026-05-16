@@ -39,7 +39,7 @@ export default function HirnPage() {
   return (
     <div className="h-[calc(100vh-4rem)]">
       {/* Page Header */}
-      <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-neutral-700">
+      <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-white/[0.06]">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
             <Brain className="w-5 h-5 text-white" />
@@ -57,7 +57,7 @@ export default function HirnPage() {
       {/* Main Content */}
       <div className="flex h-[calc(100%-5rem)]">
         {/* Sidebar */}
-        <div className="w-72 border-r border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900">
+        <div className="w-72 border-r border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-900">
           <HirnSidebar
             currentSessionId={currentSessionId}
             onSelectSession={handleSelectSession}
@@ -67,7 +67,7 @@ export default function HirnPage() {
         </div>
 
         {/* Chat Area */}
-        <div className="flex-1 bg-white dark:bg-neutral-800">
+        <div className="flex-1 bg-white dark:bg-neutral-900">
           <HirnChat
             sessionId={currentSessionId}
             onSessionChange={handleSessionChange}

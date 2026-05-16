@@ -92,7 +92,7 @@ export function TimecardApprovalQueue() {
   }
 
   return (
-    <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+    <section className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Freigabe</h2>
@@ -104,7 +104,7 @@ export function TimecardApprovalQueue() {
           type="button"
           onClick={loadQueue}
           disabled={isLoading}
-          className="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 disabled:opacity-60 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 disabled:opacity-60 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
         >
           <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
           Aktualisieren
@@ -116,7 +116,7 @@ export function TimecardApprovalQueue() {
 
       <div className="mt-4 space-y-3">
         {items.length === 0 && !isLoading && (
-          <div className="rounded-lg border border-dashed border-neutral-300 p-4 text-sm text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">
+          <div className="rounded-lg border border-dashed border-neutral-300 p-4 text-sm text-neutral-500 dark:border-white/[0.06] dark:text-neutral-400">
             Keine eingereichten Monatskarten offen.
           </div>
         )}
@@ -124,7 +124,7 @@ export function TimecardApprovalQueue() {
         {items.map(item => (
           <article
             key={item.id}
-            className="grid gap-3 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-900/40 lg:grid-cols-[minmax(0,1fr)_320px]"
+            className="grid gap-3 rounded-lg border border-neutral-200 bg-neutral-50 p-3 dark:border-white/[0.06] dark:bg-neutral-900/40 lg:grid-cols-[minmax(0,1fr)_320px]"
           >
             <div>
               <div className="flex flex-wrap items-center gap-2">
@@ -149,7 +149,7 @@ export function TimecardApprovalQueue() {
                 value={notes[item.id] || ''}
                 onChange={(event) => setNotes(current => ({ ...current, [item.id]: event.target.value }))}
                 placeholder="Notiz nur bei Rückfrage oder Korrektur"
-                className="w-full resize-none rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white"
+                className="w-full resize-none rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white"
               />
               <div className="grid grid-cols-2 gap-2">
                 <button
@@ -165,7 +165,7 @@ export function TimecardApprovalQueue() {
                   type="button"
                   onClick={() => review(item.id, TIMECARD_STATUSES.REJECTED)}
                   disabled={busyId === item.id || !notes[item.id]?.trim()}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-error-300 bg-white px-3 py-2 text-sm font-medium text-error-700 hover:bg-error-50 disabled:opacity-60 dark:border-error-800 dark:bg-neutral-800 dark:text-error-300 dark:hover:bg-error-900/20"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-error-300 bg-white px-3 py-2 text-sm font-medium text-error-700 hover:bg-error-50 disabled:opacity-60 dark:border-error-800 dark:bg-neutral-900 dark:text-error-300 dark:hover:bg-error-900/20"
                 >
                   <XCircle className="h-4 w-4" />
                   Zurück

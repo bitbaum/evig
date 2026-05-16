@@ -16,7 +16,7 @@ interface Props {
 
 export function ProductVariantsSection({ variants, onVariantChange, onAdd, onRemove }: Props) {
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+    <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
       <div className="flex items-center justify-between mb-6">
         <Heading level={2} className="text-lg text-neutral-900 dark:text-white">Produktvarianten</Heading>
         <Button
@@ -32,7 +32,7 @@ export function ProductVariantsSection({ variants, onVariantChange, onAdd, onRem
 
       <div className="space-y-4">
         {variants.map((variant, index) => (
-          <div key={index} className="border border-neutral-200 dark:border-neutral-700 rounded-lg p-4">
+          <div key={index} className="border border-neutral-200 dark:border-white/[0.06] rounded-lg p-4">
             <div className="flex items-center justify-between mb-4">
               <Heading level={3} className="text-neutral-900 dark:text-white">Variante {index + 1}</Heading>
               {variants.length > 1 && (

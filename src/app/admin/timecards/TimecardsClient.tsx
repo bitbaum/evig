@@ -424,10 +424,10 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
 
   return (
     <div className="space-y-5">
-      <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+      <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-2">
-            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1 dark:border-neutral-700 dark:bg-neutral-900">
+            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1 dark:border-white/[0.06] dark:bg-neutral-900">
               {(['month', 'week'] as PeriodMode[]).map(candidate => (
                 <button
                   key={candidate}
@@ -435,7 +435,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
                   onClick={() => setMode(candidate)}
                   className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
                     mode === candidate
-                      ? 'bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white'
+                      ? 'bg-white text-neutral-900 shadow-sm dark:bg-neutral-900 dark:text-white'
                       : 'text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200'
                   }`}
                 >
@@ -464,7 +464,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             <button
               type="button"
               onClick={rebuildCurrentDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 <RotateCcw className="h-4 w-4" />
                 Vorlage zurücksetzen
@@ -473,7 +473,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               type="button"
               onClick={saveDraft}
               disabled={isSaving || isLoadingDraft}
-              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-700"
+              className="inline-flex items-center gap-2 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 disabled:cursor-not-allowed disabled:opacity-60 dark:border-neutral-600 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
             >
               <Check className="h-4 w-4" />
               {isSaving ? 'Speichere…' : 'Entwurf speichern'}
@@ -492,7 +492,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       </div>
 
       <div className="grid gap-3 md:grid-cols-3">
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
             {mode === 'month' ? 'Diesen Monat' : 'Diese Woche'}
           </p>
@@ -503,7 +503,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             {periodEntries.length} vorbereitete Tage aus Schedule und Ausnahmen.
           </p>
         </div>
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Status</p>
           <p className="mt-2 flex items-center gap-2 text-2xl font-semibold text-neutral-900 dark:text-white">
             {draft.status === TIMECARD_STATUSES.SUBMITTED ? <UserCheck className="h-5 w-5 text-success-600" /> : <Clock className="h-5 w-5 text-info-600" />}
@@ -511,7 +511,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           </p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Einreichen heisst: von dir geprüft und bereit für Freigabe.</p>
         </div>
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <p className="text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400">Schedule</p>
           <p className="mt-2 text-lg font-semibold text-neutral-900 dark:text-white">{scheduleSummary}</p>
           {!hasSchedule && (
@@ -547,7 +547,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       />
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -575,7 +575,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
                   className={`min-h-28 rounded-lg border p-3 text-left transition-colors ${
                     active
                       ? 'border-info-500 bg-info-50 ring-2 ring-info-200 dark:border-info-400 dark:bg-info-900/20'
-                      : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:bg-white dark:border-neutral-700 dark:bg-neutral-900/40 dark:hover:bg-neutral-800'
+                      : 'border-neutral-200 bg-neutral-50 hover:border-neutral-300 hover:bg-white dark:border-white/[0.06] dark:bg-neutral-900/40 dark:hover:bg-neutral-800'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -595,7 +595,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           </div>
         </div>
 
-        <aside className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+        <aside className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
           <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Ausnahme</h2>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{getDisplayDate(draft.selectedDate)}</p>
 
@@ -604,14 +604,14 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('frei')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 Frei
               </button>
               <button
                 type="button"
                 onClick={() => markSelectedDateOff('krank')}
-                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 Krank
               </button>
@@ -685,7 +685,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               <button
                 type="button"
                 onClick={restoreSelectedDateFromSchedule}
-                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-700"
+                className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-white/[0.06]"
               >
                 Tag aus Vorlage wiederherstellen
               </button>
@@ -694,7 +694,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
         </aside>
       </section>
 
-      <label className="block rounded-lg border border-neutral-200 bg-white p-4 dark:border-neutral-700 dark:bg-neutral-800">
+      <label className="block rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
         <span className="flex items-center gap-2 text-sm font-semibold text-neutral-900 dark:text-white">
           <Sparkles className="h-4 w-4 text-purple-600" />
           Wochen- oder Monatskommentar
