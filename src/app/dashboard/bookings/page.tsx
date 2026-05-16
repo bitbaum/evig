@@ -7,6 +7,9 @@ import {
   ChevronRight, Loader2, RefreshCw, Home
 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import { BOOKING_STATUS, BOOKING_STATUS_BADGES, type BookingStatus } from '@/config/booking-status'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
@@ -40,17 +43,17 @@ export default function CustomerBookings() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
           <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900">{t('pageTitle')}</Heading>
-            <p className="text-neutral-600">{t('pageSubtitle')}</p>
+            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
+            <p className="text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
           </div>
           <div className="flex gap-2">
             <button
               onClick={fetchAppointments}
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white border rounded-lg hover:bg-neutral-50 text-sm md:text-base"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 text-sm md:text-base"
             >
               <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">{t('refresh')}</span>
@@ -66,16 +69,16 @@ export default function CustomerBookings() {
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg flex items-center gap-2 text-error-700">
-            <AlertCircle className="h-5 w-5" />
+          <div className="mb-6 p-4 bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg flex items-center gap-2 text-error-700 dark:text-error-400">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
             {error}
-            <button onClick={() => setError(null)} className="ml-auto text-error-500 hover:text-error-700">×</button>
+            <button onClick={() => setError(null)} className="ml-auto text-error-500 hover:text-error-700 dark:hover:text-error-300">×</button>
           </div>
         )}
 
         {needsAction > 0 && (
-          <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg flex items-center gap-2 text-purple-700">
-            <Euro className="h-5 w-5" />
+          <div className="mb-6 p-4 bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 rounded-lg flex items-center gap-2 text-warning-800 dark:text-warning-300">
+            <Euro className="h-5 w-5 flex-shrink-0" />
             {t('pendingQuotes', { count: needsAction })}
           </div>
         )}
@@ -84,7 +87,9 @@ export default function CustomerBookings() {
           <button
             onClick={() => setActiveTab('active')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'active' ? 'bg-primary-100 text-primary-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
+              (activeTab === 'active'
+                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
+                : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700')}
           >
             <Clock className="h-4 w-4" />
             {t('tabActive')}
@@ -95,7 +100,9 @@ export default function CustomerBookings() {
           <button
             onClick={() => setActiveTab('completed')}
             className={'px-4 py-2 rounded-lg font-medium flex items-center gap-2 ' +
-              (activeTab === 'completed' ? 'bg-primary-100 text-primary-800' : 'bg-white text-neutral-600 hover:bg-neutral-50')}
+              (activeTab === 'completed'
+                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
+                : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-700')}
           >
             <CheckCircle className="h-4 w-4" />
             {t('tabCompleted')}
@@ -120,47 +127,47 @@ export default function CustomerBookings() {
             />
           ) : (
             filteredAppointments.map(apt => (
-              <div key={apt.id} className="bg-white rounded-lg shadow-sm border p-4 md:p-6">
+              <div key={apt.id} className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-white/[0.06] p-4 md:p-6">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                   <div>
                     <span className={'px-3 py-1 rounded-full text-sm font-medium ' +
-                      (STATUS_CONFIG[apt.status]?.color || 'bg-neutral-100')}>
+                      (STATUS_CONFIG[apt.status]?.color || 'bg-neutral-100 dark:bg-neutral-800')}>
                       {STATUS_CONFIG[apt.status]?.label || apt.status}
                     </span>
-                    <p className="text-xs text-neutral-500 mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{STATUS_CONFIG[apt.status]?.description}</p>
                   </div>
-                  <div className="text-right text-sm text-neutral-500">
+                  <div className="text-right text-sm text-neutral-500 dark:text-neutral-400">
                     {formatDateShort(apt.created_at)}
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center">
-                    <Wrench className="h-5 w-5 text-neutral-600" />
+                  <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center">
+                    <Wrench className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
                   </div>
                   <div>
-                    <Heading level={3} className="font-semibold text-neutral-900">{apt.business_name || apt.repairer_name}</Heading>
-                    <p className="text-sm text-neutral-500">{apt.service_name || t('repairLabel')}</p>
+                    <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">{apt.business_name || apt.repairer_name}</Heading>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">{apt.service_name || t('repairLabel')}</p>
                   </div>
                 </div>
 
-                <p className="text-neutral-700 mb-4">{apt.description}</p>
+                <p className="text-neutral-700 dark:text-neutral-300 mb-4">{apt.description}</p>
 
                 {apt.quoted_price_chf && (
-                  <div className="bg-purple-50 rounded-lg p-4 mb-4">
+                  <div className="bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 rounded-lg p-4 mb-4">
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                       <div>
-                        <p className="text-sm text-purple-700 font-medium">{t('quoteLabel')}</p>
-                        <p className="text-2xl font-bold text-purple-900">CHF {apt.quoted_price_chf}</p>
+                        <p className="text-sm text-warning-800 dark:text-warning-300 font-medium">{t('quoteLabel')}</p>
+                        <p className="text-2xl font-bold text-warning-900 dark:text-warning-200">CHF {apt.quoted_price_chf}</p>
                       </div>
                       {apt.diagnosis_notes && (
-                        <p className="text-sm text-purple-700 sm:max-w-xs">{apt.diagnosis_notes}</p>
+                        <p className="text-sm text-warning-700 dark:text-warning-400 sm:max-w-xs">{apt.diagnosis_notes}</p>
                       )}
                     </div>
                   </div>
                 )}
 
-                <div className="flex flex-wrap gap-4 text-sm text-neutral-600 mb-4">
+                <div className="flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-400 mb-4">
                   {apt.preferred_date && (
                     <div className="flex items-center gap-1">
                       <Calendar className="h-4 w-4" />
@@ -175,52 +182,57 @@ export default function CustomerBookings() {
                   )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t">
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-neutral-100 dark:border-white/[0.06]">
                   {apt.status === BOOKING_STATUS.QUOTED && (
                     <>
-                      <button
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onClick={() => handleAction(apt.id, 'approve_quote')}
                         disabled={actionLoading === apt.id}
-                        className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 flex items-center gap-2"
                       >
                         {actionLoading === apt.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
                         {t('acceptQuote')}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => handleAction(apt.id, 'reject_quote')}
                         disabled={actionLoading === apt.id}
-                        className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 flex items-center gap-2"
                       >
                         <XCircle className="h-4 w-4" />
                         {t('declineQuote')}
-                      </button>
+                      </Button>
                     </>
                   )}
 
                   {apt.status === BOOKING_STATUS.COMPLETED && !apt.customer_rating && (
-                    <button
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => setRatingModal({ appointmentId: apt.id, open: true })}
-                      className="px-4 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 flex items-center gap-2"
                     >
                       <Star className="h-4 w-4" />
                       {t('rateService')}
-                    </button>
+                    </Button>
                   )}
 
                   {([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as BookingStatus[]).includes(apt.status) && (
-                    <button
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => handleAction(apt.id, 'cancel')}
                       disabled={actionLoading === apt.id}
-                      className="px-4 py-2 bg-error-100 text-error-700 rounded-lg hover:bg-error-200 flex items-center gap-2"
+                      className="text-error-600 dark:text-error-400 border-error-200 dark:border-error-500/50 hover:bg-error-50 dark:hover:bg-error-500/10"
                     >
-                      <XCircle className="h-4 w-4" />
+                      {actionLoading === apt.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
                       {t('cancelAction')}
-                    </button>
+                    </Button>
                   )}
 
                   <Link
                     href={'/dashboard/bookings/' + apt.id}
-                    className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 flex items-center gap-2 sm:ml-auto"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm font-medium sm:ml-auto transition-colors"
                   >
                     {t('details')}
                     <ChevronRight className="h-4 w-4" />
@@ -234,7 +246,7 @@ export default function CustomerBookings() {
         <Modal isOpen={!!ratingModal?.open} onClose={() => setRatingModal(null)} title={t('ratingModalTitle')} size="sm">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">{t('ratingLabel')}</label>
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">{t('ratingLabel')}</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map(star => (
                   <button
@@ -243,40 +255,40 @@ export default function CustomerBookings() {
                     className="p-1"
                   >
                     <Star
-                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300')}
+                      className={'h-8 w-8 ' + (star <= rating ? 'fill-warning-400 text-warning-400' : 'text-neutral-300 dark:text-neutral-600')}
                     />
                   </button>
                 ))}
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('commentLabel')}</label>
-              <textarea
+            <FormField label={t('commentLabel')}>
+              <Textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 placeholder={t('commentPlaceholder')}
                 rows={3}
-                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500"
               />
-            </div>
+            </FormField>
           </div>
           <div className="flex gap-2 mt-6">
-            <button
+            <Button
+              variant="outline"
               onClick={() => setRatingModal(null)}
-              className="flex-1 px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200"
+              className="flex-1"
             >
               {t('cancelButton')}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
               onClick={() => ratingModal && handleAction(ratingModal.appointmentId, 'rate', {
                 customer_rating: rating,
                 customer_review: review || undefined
               })}
               disabled={actionLoading !== null}
-              className="flex-1 px-4 py-2 bg-warning-500 text-white rounded-lg hover:bg-warning-600 disabled:opacity-50"
+              className="flex-1"
             >
-              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : t('submitRating')}
-            </button>
+              {actionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : t('submitRating')}
+            </Button>
           </div>
         </Modal>
       </div>
