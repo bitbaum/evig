@@ -1,14 +1,5 @@
 import { getTranslations } from 'next-intl/server'
 import { TechnologiesClient } from './TechnologiesClient'
-import {
-  Globe,
-  Code,
-  Palette,
-  Shield,
-  Database,
-  Cloud,
-  Layers,
-} from 'lucide-react'
 
 export interface TechItem {
   name: string
@@ -36,10 +27,6 @@ const TECH_DEFS = [
 export async function TechnologiesSection() {
   const t = await getTranslations('services.webDesign.technologies')
 
-  const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-    Code, Palette, Database, Layers, Shield, Globe, Cloud,
-  }
-
   const technologies: TechItem[] = TECH_DEFS.map((def) => ({
     name: def.tKey === 'hosting' ? t('items.hosting.name') : def.name,
     description: t(`items.${def.tKey}.description`),
@@ -66,7 +53,6 @@ export async function TechnologiesSection() {
         showingFiltered: (count: number, category: string) =>
           t('showingFiltered', { count, total: technologies.length, category }),
       }}
-      iconMap={iconMap}
     />
   )
 }

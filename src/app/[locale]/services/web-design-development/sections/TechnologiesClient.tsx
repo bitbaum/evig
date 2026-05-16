@@ -1,9 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, ArrowRight, Filter } from 'lucide-react'
+import { CheckCircle2, ArrowRight, Filter, Globe, Code, Palette, Shield, Database, Cloud, Layers } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import type { TechItem } from './TechnologiesSection'
+
+const ICON_MAP: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
+  Code, Palette, Database, Layers, Shield, Globe, Cloud,
+}
 
 interface TechnologiesClientProps {
   technologies: TechItem[]
@@ -17,10 +21,9 @@ interface TechnologiesClientProps {
     showing: string
     showingFiltered: (count: number, category: string) => string
   }
-  iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>>
 }
 
-export function TechnologiesClient({ technologies, categories, allLabel, labels, iconMap }: TechnologiesClientProps) {
+export function TechnologiesClient({ technologies, categories, allLabel, labels }: TechnologiesClientProps) {
   const [selectedCategory, setSelectedCategory] = useState(allLabel)
 
   const filteredTechnologies = selectedCategory === allLabel
@@ -65,7 +68,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, labels,
         {/* Technologies Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredTechnologies.map((tech, index) => {
-            const IconComponent = iconMap[tech.iconKey] || iconMap['Globe']
+            const IconComponent = ICON_MAP[tech.iconKey] || ICON_MAP['Globe']
             return (
               <a
                 key={`${tech.name}-${selectedCategory}`}
