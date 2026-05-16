@@ -7,7 +7,6 @@ import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'l
 import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api/client'
-import { getTextColor, getStatusColors } from '@/lib/design-system'
 import Heading from '@/components/ui/Heading'
 import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
@@ -105,15 +104,15 @@ export default function DonationsDashboard() {
 
   if (status === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-neutral-200">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 border-2 border-neutral-200 dark:border-white/[0.06]">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 rounded w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 rounded w-full"></div>
-                <div className="h-4 bg-neutral-200 rounded w-3/4"></div>
-                <div className="h-4 bg-neutral-200 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2"></div>
               </div>
             </div>
           </div>
@@ -124,7 +123,7 @@ export default function DonationsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
           <EmptyState
             icon={LogIn}
@@ -145,29 +144,29 @@ export default function DonationsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
+            className="inline-flex items-center mb-4 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>
+          <Heading level={1} className="text-3xl font-bold mb-2 text-neutral-900 dark:text-white">
             {t('pageTitle')}
           </Heading>
-          <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">
             {t('pageSubtitle')}
           </p>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className={cn('rounded-lg p-4 mb-6 border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
-            <p className={cn('text-sm', getStatusColors('error').text)}>{error}</p>
+          <div className="rounded-lg p-4 mb-6 border-2 bg-error-50 dark:bg-error-500/10 border-error-200 dark:border-error-500/30">
+            <p className="text-sm text-error-800 dark:text-error-400">{error}</p>
           </div>
         )}
 
@@ -177,15 +176,15 @@ export default function DonationsDashboard() {
             {donations.map((donation) => (
               <div
                 key={donation.id}
-                className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-neutral-200"
+                className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border-neutral-200 dark:border-white/[0.06]"
               >
                 <div className="flex items-start gap-4">
                   {/* Type Icon */}
                   <div className={cn(
                     'w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0',
                     donation.donation_type === DONATION_TYPES.MONETARY
-                      ? 'bg-success-100 text-success-600'
-                      : 'bg-neutral-100 text-neutral-600'
+                      ? 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'
+                      : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
                   )}>
                     {getDonationIcon(donation.donation_type)}
                   </div>
@@ -194,18 +193,18 @@ export default function DonationsDashboard() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <Heading level={3} className={cn('text-lg font-semibold', getTextColor('white', 'primary'))}>
+                        <Heading level={3} className="text-lg font-semibold text-neutral-900 dark:text-white">
                           {donation.donation_type === DONATION_TYPES.MONETARY
                             ? t('monetaryDonation')
                             : getDeviceTitle(donation)
                           }
                         </Heading>
-                        <p className={cn('text-sm', getTextColor('white', 'muted'))}>
+                        <p className="text-sm text-neutral-600 dark:text-neutral-400">
                           {getDonationTypeLabel(donation.donation_type)} • {formatDate(donation.created_at)}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className={cn('text-lg font-semibold', getTextColor('white', 'primary'))}>
+                        <p className="text-lg font-semibold text-neutral-900 dark:text-white">
                           {getDonationValue(donation)}
                         </p>
                       </div>
@@ -213,7 +212,7 @@ export default function DonationsDashboard() {
 
                     {/* Device Description */}
                     {donation.donation_type === DONATION_TYPES.DEVICE && donation.device_description && (
-                      <p className={cn('mt-2 text-sm', getTextColor('white', 'muted'))}>
+                      <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
                         {donation.device_description}
                       </p>
                     )}
@@ -221,7 +220,7 @@ export default function DonationsDashboard() {
                     {/* Status */}
                     <div className="mt-3 flex items-center gap-2">
                       {getStatusIcon(donation)}
-                      <span className={cn('text-sm', getTextColor('white', 'muted'))}>
+                      <span className="text-sm text-neutral-600 dark:text-neutral-400">
                         {getDonationStatusLabel(donation.status)}
                         {donation.receipt_requested && !donation.receipt_sent && ` • ${t('receiptRequested')}`}
                         {donation.receipt_sent && ` • ${t('receiptSent')}`}
@@ -235,8 +234,8 @@ export default function DonationsDashboard() {
         ) : (
           <EmptyState
             icon={Heart}
-            iconBg="bg-rose-50 dark:bg-rose-900/20"
-            iconColor="text-rose-500 dark:text-rose-400"
+            iconBg="bg-error-50 dark:bg-error-900/20"
+            iconColor="text-error-500 dark:text-error-400"
             title={t('emptyTitle')}
             description={t('emptyDesc')}
             action={
@@ -251,13 +250,13 @@ export default function DonationsDashboard() {
         )}
 
         {/* Info Box */}
-        <div className="mt-8 bg-neutral-50 border border-neutral-200 rounded-lg p-4">
-          <Heading level={4} className="font-medium mb-2 text-neutral-800">
+        <div className="mt-8 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg p-4">
+          <Heading level={4} className="font-medium mb-2 text-neutral-800 dark:text-neutral-200">
             {t('receiptInfoTitle')}
           </Heading>
-          <p className="text-sm text-neutral-700">
+          <p className="text-sm text-neutral-700 dark:text-neutral-300">
             {t('receiptInfoText')}{' '}
-            <a href={`mailto:${CONTACT.email}`} className="underline text-neutral-800 hover:text-neutral-900">{CONTACT.email}</a>.
+            <a href={`mailto:${CONTACT.email}`} className="underline text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white">{CONTACT.email}</a>.
           </p>
         </div>
       </div>
