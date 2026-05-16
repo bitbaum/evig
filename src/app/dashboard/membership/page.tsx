@@ -94,7 +94,7 @@ export default async function MembershipPage() {
                       {t('paidBadge')}
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded-full text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300 rounded-full text-xs font-medium">
                       <AlertCircle className="w-3 h-3" aria-hidden="true" />
                       {t('pendingBadge')}
                     </span>
@@ -126,20 +126,20 @@ export default async function MembershipPage() {
               {membership?.member_paid_until && (
                 <div className="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-700">
                   <span className="text-neutral-600 dark:text-neutral-400">{t('paidUntilLabel')}</span>
-                  <span className={`font-medium ${paid ? 'text-primary-700 dark:text-primary-400' : 'text-orange-700 dark:text-orange-400'}`}>
+                  <span className={`font-medium ${paid ? 'text-primary-700 dark:text-primary-400' : 'text-warning-700 dark:text-warning-400'}`}>
                     {formatDate(membership.member_paid_until)}
                   </span>
                 </div>
               )}
             </div>
             {!paid && (
-              <div className="mt-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
-                <p className="text-sm text-orange-800 dark:text-orange-300 mb-3">
+              <div className="mt-4 p-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200 dark:border-warning-800">
+                <p className="text-sm text-warning-800 dark:text-warning-300 mb-3">
                   {t('pendingNotice', { currency: MEMBERSHIP.currency, fee })}
                 </p>
                 <Link
                   href="/mitglied-werden"
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 dark:text-orange-400 hover:text-orange-600"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-warning-700 dark:text-warning-400 hover:text-warning-600"
                 >
                   {t('paymentDetails')}
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />

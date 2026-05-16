@@ -14,6 +14,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
@@ -35,8 +36,8 @@ export default function SellerDashboard() {
   const quickActions = [
     { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: '/marketplace/sell', icon: Plus, color: 'bg-primary-500' },
     { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-neutral-500' },
-    { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-purple-500' },
-    { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: '/marketplace', icon: BarChart3, color: 'bg-orange-500' },
+    { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-primary-600' },
+    { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: '/marketplace', icon: BarChart3, color: 'bg-secondary-500' },
   ]
 
   if (sessionStatus === 'loading' || isLoading) {
@@ -56,13 +57,10 @@ export default function SellerDashboard() {
           {t('loadErrorTitle')}
         </h3>
         <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
-        <button
-          onClick={fetchDashboardData}
-          className="inline-flex items-center gap-2 bg-error-600 hover:bg-error-700 text-white px-4 py-2 rounded-lg"
-        >
+        <Button variant="destructive" onClick={fetchDashboardData} className="gap-2">
           <RefreshCw className="w-4 h-4" />
           {t('retry')}
-        </button>
+        </Button>
       </div>
     )
   }
@@ -84,6 +82,7 @@ export default function SellerDashboard() {
             onClick={fetchDashboardData}
             className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
             title={t('refresh')}
+            aria-label={t('refresh')}
           >
             <RefreshCw className="w-5 h-5" />
           </button>
@@ -99,7 +98,7 @@ export default function SellerDashboard() {
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalProducts}</p>
               <p className="text-sm text-primary-600">{t('statsActive', { count: stats.activeProducts })}</p>
             </div>
-            <Package className="w-8 h-8 text-neutral-600" />
+            <Package className="w-8 h-8 text-neutral-600 dark:text-neutral-400" />
           </div>
         </div>
 
@@ -124,9 +123,9 @@ export default function SellerDashboard() {
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsViews')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalViews.toLocaleString()}</p>
-              <p className="text-sm text-neutral-600">{t('statsFavorites', { count: stats.totalFavorites })}</p>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400">{t('statsFavorites', { count: stats.totalFavorites })}</p>
             </div>
-            <Eye className="w-8 h-8 text-neutral-600" />
+            <Eye className="w-8 h-8 text-neutral-600 dark:text-neutral-400" />
           </div>
         </div>
 
@@ -135,9 +134,9 @@ export default function SellerDashboard() {
             <div>
               <p className="text-sm font-medium text-neutral-600 dark:text-neutral-400">{t('statsOrders')}</p>
               <p className="text-3xl font-bold text-neutral-900 dark:text-white">{stats.totalOrders}</p>
-              <p className="text-sm text-purple-600">{t('statsPending', { count: stats.pendingOrders })}</p>
+              <p className="text-sm text-warning-600 dark:text-warning-400">{t('statsPending', { count: stats.pendingOrders })}</p>
             </div>
-            <Users className="w-8 h-8 text-purple-600" />
+            <Users className="w-8 h-8 text-neutral-600 dark:text-neutral-400" />
           </div>
         </div>
       </div>
@@ -252,7 +251,7 @@ export default function SellerDashboard() {
       <div className="bg-neutral-50 dark:bg-neutral-900/20 border border-neutral-200 dark:border-neutral-700 rounded-xl p-6">
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center flex-shrink-0">
-            <Package className="w-5 h-5 text-neutral-600" />
+            <Package className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
           </div>
           <div>
             <h3 className="font-medium text-neutral-900 dark:text-neutral-200">
