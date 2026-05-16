@@ -416,7 +416,7 @@ export default function BuildYourComputerPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-primary-50 to-info-50 rounded-2xl p-8 md:p-12 text-center">
+            <div className="bg-gradient-to-br from-primary-50 to-info-50 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl p-8 md:p-12 text-center">
               <div className="inline-flex items-center bg-primary-100 px-6 py-3 rounded-full mb-6">
                 <Award className="w-8 h-8 text-primary-600 mr-3" />
                 <span className="text-2xl font-bold text-primary-800">Revamped</span>

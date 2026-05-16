@@ -65,7 +65,7 @@ export default async function ZeroWasteSolutionSection() {
   const sortedPrinciples = [...ZERO_WASTE_PRINCIPLES].sort((a, b) => a.priority - b.priority)
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-primary-50">
+    <section className="py-20 bg-gradient-to-b from-white to-primary-50 dark:from-neutral-950 dark:to-neutral-900">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">

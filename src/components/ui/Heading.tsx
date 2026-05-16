@@ -17,9 +17,9 @@ const adminScale = {
 } as const
 
 const siteScale = {
-  1: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold',
-  2: 'text-2xl sm:text-3xl md:text-4xl font-bold',
-  3: 'text-xl sm:text-2xl font-bold',
+  1: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight',
+  2: 'text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight',
+  3: 'text-xl sm:text-2xl font-bold tracking-tight',
   4: 'text-lg sm:text-xl md:text-2xl font-bold',
 } as const
 

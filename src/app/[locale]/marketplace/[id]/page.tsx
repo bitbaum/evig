@@ -80,7 +80,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
   const isVerified = !!listing.verified_at
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Back navigation */}
       <Link
         href="/marketplace"

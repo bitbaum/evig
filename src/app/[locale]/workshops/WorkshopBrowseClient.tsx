@@ -47,9 +47,9 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   })
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-canvas">
       {/* Compact hero — workshops visible without scrolling */}
-      <div className="bg-gradient-to-br from-primary-50 to-emerald-50 py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-primary-50 to-emerald-50 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
@@ -302,7 +302,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         )}
 
         {/* Call to Action */}
-        <div className="mt-16 bg-gradient-to-r from-primary-600 to-info-600 rounded-xl p-8 text-white text-center">
+        <div className="mt-16 bg-primary-600 dark:bg-primary-700 rounded-xl p-8 text-white text-center">
           <Sparkles className="w-12 h-12 mx-auto mb-4" />
           <Heading level={2} className="mb-4">
             {t('cta.title')}

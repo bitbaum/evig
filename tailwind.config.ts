@@ -5,6 +5,8 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/lib/**/*.{js,ts,jsx,tsx}',
+    './src/config/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
   theme: {
@@ -13,6 +15,14 @@ const config: Config = {
         sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
+        // Semantic tokens — backed by CSS custom properties in globals.css.
+        // These flip automatically with the .dark class on <html>.
+        canvas: 'var(--color-bg)',
+        surface: 'var(--color-surface)',
+        'surface-raised': 'var(--color-surface-raised)',
+        muted: 'var(--color-text-muted)',
+        faint: 'var(--color-text-faint)',
+
         // Primary brand color (Green - Sustainability)
         primary: {
           50: '#f0fdf4',

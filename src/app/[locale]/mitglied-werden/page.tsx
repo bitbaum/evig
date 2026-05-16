@@ -66,9 +66,9 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
   const faqItems = t.raw('faq.items') as Array<{ question: string; answer: string }>
 
   return (
-    <div className="bg-white">
+    <div className="bg-canvas">
       {/* Compact header */}
-      <div className="bg-gradient-to-br from-primary-50 to-emerald-50 py-8 sm:py-12">
+      <div className="bg-gradient-to-br from-primary-50 to-emerald-50 dark:from-neutral-900 dark:to-neutral-950 py-8 sm:py-12">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <Award className="w-10 h-10 text-primary-600 mx-auto mb-4" />
           <Heading level={1} className="text-2xl sm:text-3xl text-neutral-900 mb-3">
@@ -99,7 +99,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       </div>
 
       {/* Form or status */}
-      <div className="bg-primary-50 py-10 sm:py-14">
+      <div className="bg-primary-50 dark:bg-neutral-900/50 py-10 sm:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-sm">
             {status.isMember ? (

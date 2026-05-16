@@ -199,7 +199,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   ))}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-primary-50 to-info-50 p-12 rounded-2xl">
+              <div className="bg-gradient-to-br from-primary-50 to-info-50 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl">
                 <div className="text-center">
                   <div className="inline-flex items-center justify-center w-32 h-32 bg-white rounded-full shadow-lg mb-6">
                     <div className="text-center">
@@ -258,7 +258,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 <p className="text-neutral-600">{t('stickers.sticker2.body')}</p>
               </div>
               <div className="text-center">
-                <div className="bg-gradient-to-br from-primary-100 to-info-100 p-12 rounded-2xl shadow-lg mb-6 relative">
+                <div className="bg-gradient-to-br from-primary-100 to-info-100 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl shadow-lg mb-6 relative">
                   <div className="w-40 h-40 mx-auto flex items-center justify-center bg-white rounded-xl shadow-sm">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-primary-600 mx-auto mb-2" />

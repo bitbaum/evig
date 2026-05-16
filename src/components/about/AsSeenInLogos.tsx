@@ -57,7 +57,7 @@ export default function AsSeenInLogos() {
   const t = useTranslations('home.asSeenIn')
 
   return (
-    <section className="py-12 sm:py-16 bg-white border-y border-neutral-100">
+    <section className="py-12 sm:py-16 bg-white dark:bg-neutral-900 border-y border-neutral-100 dark:border-white/[0.04]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <p className="text-center text-sm font-medium text-neutral-500 mb-8">

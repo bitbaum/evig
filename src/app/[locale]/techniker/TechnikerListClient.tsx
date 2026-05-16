@@ -161,9 +161,9 @@ export default function TechnikerListClient() {
   ]
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-canvas min-h-screen">
       {/* Compact header */}
-      <div className="bg-gradient-to-br from-info-50 to-cyan-50 py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-info-50 to-cyan-50 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>

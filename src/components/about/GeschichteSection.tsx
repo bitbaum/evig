@@ -105,11 +105,11 @@ export default function GeschichteSection() {
   const { founding, milestones, currentState } = HISTORY_CONFIG
 
   return (
-    <section className="py-20 bg-gradient-to-b from-warning-50 to-white">
+    <section className="py-20 bg-gradient-to-b from-warning-50 to-white dark:from-neutral-900 dark:to-neutral-950">
       <div className="max-w-6xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-warning-100 text-warning-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 bg-warning-100 dark:bg-secondary-500/15 text-warning-800 dark:text-secondary-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
             <Clock className="h-4 w-4" />
             {t('badge')}
           </div>

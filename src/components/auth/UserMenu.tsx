@@ -71,9 +71,9 @@ export function UserMenu() {
         <Link
           href="/auth/login"
           className={cn(
-            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600",
-            "hover:text-neutral-900 transition-colors duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 rounded-lg"
+            "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
+            "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
           )}
         >
           {t('login')}
@@ -178,9 +178,9 @@ export function UserMenu() {
             : "opacity-0 scale-95 pointer-events-none"
         )}
       >
-        <div className="bg-white rounded-2xl shadow-xl shadow-neutral-200/50 border border-neutral-100 overflow-hidden">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
           {/* User Info Header */}
-          <div className="px-5 py-4 bg-gradient-to-br from-neutral-50 to-white border-b border-neutral-100">
+          <div className="px-5 py-4 bg-gradient-to-br from-neutral-50 to-white dark:from-neutral-800 dark:to-neutral-900 border-b border-neutral-100 dark:border-white/[0.06]">
             <div className="flex items-center gap-3">
               {session.user.image ? (
                 <Image

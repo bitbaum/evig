@@ -63,7 +63,7 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                   key={index}
                   className={section.backgroundColor === 'gray' 
                     ? 'bg-white p-8 rounded-xl shadow-sm' 
-                    : 'bg-gradient-to-br from-info-50 to-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300'
+                    : 'bg-gradient-to-br from-info-50 to-white dark:from-neutral-800 dark:to-neutral-900 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300'
                   }
                 >
                   {/* Card Header with Icon */}

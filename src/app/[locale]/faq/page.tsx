@@ -69,7 +69,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
   const groups = t.raw('groups') as FAQGroup[]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-neutral-50">
+    <main className="min-h-screen bg-canvas">
       <FAQSchema groups={groups} />
       <PageHero
         theme="faq"
@@ -87,7 +87,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
                   <Heading level={2} className="text-lg sm:text-xl text-neutral-800 mb-3 sm:mb-4">
                     {group.category}
                   </Heading>
-                  <div className="divide-y divide-neutral-200 rounded-xl border border-neutral-200 bg-white">
+                  <div className="divide-y divide-neutral-200 dark:divide-white/[0.06] rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900">
                     {group.items.map((item, idx) => (
                       <details key={idx} className="group p-4 sm:p-5 open:bg-neutral-50/60">
                         <summary className="cursor-pointer list-none flex items-start justify-between">
@@ -118,7 +118,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
               ))}
             </div>
 
-            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-info-50 border border-primary-100 text-xs sm:text-sm">
+            <div className="mt-8 sm:mt-12 p-4 sm:p-6 rounded-xl bg-gradient-to-r from-primary-50 to-info-50 dark:from-neutral-900 dark:to-neutral-800 border border-primary-100 dark:border-white/[0.06] text-xs sm:text-sm">
               <p className="text-neutral-800">
                 {t('notListed')}
                 <span className="ml-2">

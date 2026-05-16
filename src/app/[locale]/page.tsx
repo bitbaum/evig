@@ -135,7 +135,7 @@ export default async function Home() {
   ]
 
   return (
-    <div className="bg-white">
+    <div className="bg-canvas">
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
@@ -210,17 +210,17 @@ export default async function Home() {
           >
             {t('hero.ctaDiscover')}
           </Link>
-          <Link href="/about" className="text-base font-semibold leading-6 text-neutral-900">
+          <Link href="/about" className="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
             {t('hero.ctaAbout')} <span aria-hidden="true">→</span>
           </Link>
         </div>
       </PageHero>
 
       {/* Section 2: Three Action Cards */}
-      <div id="actions" className="bg-gradient-to-b from-white to-neutral-50 py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
+      <div id="actions" className="bg-canvas py-12 sm:py-16 lg:py-20" aria-label="Hauptaktionen">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-neutral-900">
+            <Heading level={2} variant="site" className="tracking-tight text-neutral-900 dark:text-white">
               {t('actions.heading')}
             </Heading>
           </div>
@@ -232,12 +232,12 @@ export default async function Home() {
               const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
               const focusOutline = DESIGN_TOKENS.focusOutline[card.theme]
               return (
-                <div key={card.title} className="bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                <div key={card.title} className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.06] p-6 sm:p-8 shadow-sm dark:shadow-none hover:shadow-md dark:hover:border-white/[0.1] transition-all flex flex-col">
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
                     <card.icon className={`h-6 w-6 ${badge.text}`} />
                   </div>
-                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-neutral-900">{card.title}</Heading>
-                  <p className="mt-2 text-base text-neutral-600 flex-1">
+                  <Heading level={3} className="text-xl sm:text-2xl font-bold text-neutral-900 dark:text-white">{card.title}</Heading>
+                  <p className="mt-2 text-base text-neutral-600 dark:text-neutral-400 flex-1">
                     {card.subtitle}
                   </p>
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
@@ -249,7 +249,7 @@ export default async function Home() {
                     </Link>
                     <Link
                       href={card.secondaryHref}
-                      className={`flex-1 rounded-md bg-white px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
+                      className={`flex-1 rounded-md px-4 py-3 text-base font-semibold ${secondaryBtn} text-center border focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
                     >
                       {card.secondaryLabel}
                     </Link>
@@ -262,12 +262,12 @@ export default async function Home() {
       </div>
 
       {/* Section 2b: Professional Services (brief mention) */}
-      <div className="bg-white py-8 sm:py-12">
+      <div className="bg-canvas py-8 sm:py-12 border-t border-neutral-100 dark:border-white/[0.04]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-base text-neutral-600">
+          <p className="text-base text-neutral-600 dark:text-neutral-400">
             {t.rich('proServices.text', {
               link: (chunks) => (
-                <Link href="/services" className="font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2">
+                <Link href="/services" className="font-medium text-neutral-900 dark:text-white underline underline-offset-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                   {chunks}
                 </Link>
               ),
@@ -277,13 +277,13 @@ export default async function Home() {
       </div>
 
       {/* Section 3: Social Proof */}
-      <div className="bg-neutral-50 py-8 sm:py-12">
+      <div className="bg-neutral-50 dark:bg-neutral-900 py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <Heading level={2} variant="site" className="tracking-tight text-neutral-900">
+            <Heading level={2} variant="site" className="tracking-tight text-neutral-900 dark:text-white">
               {t('impact.title')}
             </Heading>
-            <p className="mt-2 text-base text-neutral-600">{t('impact.subtitle')}</p>
+            <p className="mt-2 text-base text-neutral-600 dark:text-neutral-400">{t('impact.subtitle')}</p>
           </div>
           {/* Media Logos */}
           <AsSeenInLogos />
@@ -292,21 +292,21 @@ export default async function Home() {
           <CommunityStats className="mt-6" />
 
           {/* Impact Metrics (compact) */}
-          <div className="mt-8 pt-8 border-t border-neutral-200">
+          <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-white/[0.06]">
             <dl className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3">
               {compactMetrics.map((metric, index) => (
                 <div key={index} className="text-center">
-                  <dd className="text-2xl sm:text-3xl font-bold text-primary-600">{metric.value}</dd>
-                  <dt className="mt-1 text-xs sm:text-sm text-neutral-600">{metric.label}</dt>
+                  <dd className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">{metric.value}</dd>
+                  <dt className="mt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">{metric.label}</dt>
                 </div>
               ))}
             </dl>
             <div className="mt-6 text-center">
               <Link
                 href="/about/impact"
-                className="text-sm font-semibold text-primary-600 hover:text-primary-700 underline underline-offset-2"
+                className="text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
               >
-                {t('impact.moreLink')} <span aria-hidden="true">→</span>
+                {t('impact.moreLink')} →
               </Link>
             </div>
           </div>
@@ -314,13 +314,13 @@ export default async function Home() {
       </div>
 
       {/* Section 4: How to Get Involved */}
-      <div className="bg-primary-50 py-12 sm:py-16 lg:py-20">
+      <div className="bg-neutral-50 dark:bg-neutral-950 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
-            <Heading level={2} variant="site" className="tracking-tight text-neutral-900">
+            <Heading level={2} variant="site" className="tracking-tight text-neutral-900 dark:text-white">
               {t('community.heading')}
             </Heading>
-            <p className="mt-4 text-base sm:text-lg text-neutral-600 max-w-2xl mx-auto">
+            <p className="mt-4 text-base sm:text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto">
               {t('community.subtitle')}
             </p>
           </div>
@@ -330,13 +330,13 @@ export default async function Home() {
               <Link
                 key={item.title}
                 href={item.href}
-                className={`bg-white rounded-xl p-6 border ${item.border} hover:shadow-md transition-shadow group`}
+                className={`bg-white dark:bg-neutral-900 rounded-xl p-6 border ${item.border} hover:shadow-md dark:hover:border-white/[0.1] transition-all group`}
               >
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
                   <item.icon className={`h-5 w-5 ${item.badge.text}`} />
                 </div>
-                <Heading level={3} className={`text-lg font-bold text-neutral-900 ${item.hoverColor} transition-colors`}>{item.title}</Heading>
-                <p className="mt-2 text-sm text-neutral-600">{item.desc}</p>
+                <Heading level={3} className={`text-lg font-bold text-neutral-900 dark:text-white ${item.hoverColor} transition-colors`}>{item.title}</Heading>
+                <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{item.desc}</p>
               </Link>
             ))}
           </div>
@@ -344,7 +344,7 @@ export default async function Home() {
       </div>
 
       {/* Section 5: Newsletter */}
-      <div className="bg-white py-12 sm:py-16">
+      <div className="bg-white dark:bg-neutral-900 py-12 sm:py-16 border-t border-neutral-100 dark:border-white/[0.06]">
         <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 text-center">
           <NewsletterSignup
             source="homepage-footer"

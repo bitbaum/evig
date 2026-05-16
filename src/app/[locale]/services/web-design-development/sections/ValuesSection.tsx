@@ -37,7 +37,7 @@ export async function ValuesSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-primary-50 to-info-50">
+    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-primary-50 to-info-50 dark:from-neutral-900 dark:to-neutral-950">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6 text-neutral-800">{t('title')}</Heading>

@@ -216,7 +216,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       </section>
 
       {/* Future Space Vision */}
-      <section id="zukunft" className="py-16 md:py-24 bg-gradient-to-b from-white to-primary-50">
+      <section id="zukunft" className="py-16 md:py-24 bg-gradient-to-b from-white to-primary-50 dark:from-neutral-950 dark:to-neutral-900">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-warning-100 text-warning-800 px-4 py-2 rounded-full mb-6">
@@ -231,7 +231,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
 
           {/* Vision Image Placeholder */}
           <div className="max-w-4xl mx-auto mb-16">
-            <div className="relative aspect-video bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl overflow-hidden border-2 border-primary-300">
+            <div className="relative aspect-video bg-gradient-to-br from-primary-100 to-primary-200 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl overflow-hidden border-2 border-primary-300 dark:border-primary-500/30">
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
                 <Sparkles className="w-16 h-16 text-primary-600 mb-4" />
                 <p className="text-xl font-semibold text-primary-800 mb-2">

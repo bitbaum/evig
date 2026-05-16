@@ -89,10 +89,10 @@ export function NewsletterSignup({
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
             isDark
               ? 'border-neutral-600 bg-neutral-800 text-white'
-              : 'border-neutral-300 bg-white text-neutral-900'
+              : 'border-neutral-300 bg-white dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white text-neutral-900'
           } sm:max-w-[140px]`}
         />
         <label htmlFor="newsletter-email" className="sr-only">{t('emailPlaceholder')}</label>
@@ -103,10 +103,10 @@ export function NewsletterSignup({
           onChange={e => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
           required
-          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
             isDark
               ? 'border-neutral-600 bg-neutral-800 text-white'
-              : 'border-neutral-300 bg-white text-neutral-900'
+              : 'border-neutral-300 bg-white dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white text-neutral-900'
           }`}
         />
         <button

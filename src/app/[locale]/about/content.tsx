@@ -29,7 +29,7 @@ export default async function AboutContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-500/15 text-primary-800 dark:text-primary-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Target className="h-4 w-4" />
               {t('mission.badge')}
             </div>
@@ -62,7 +62,7 @@ export default async function AboutContent() {
             {/* Content Column */}
             <div className="space-y-6">
               {/* Quote Box */}
-              <div className="bg-gradient-to-br from-primary-50 to-emerald-50 border-l-4 border-primary-500 p-6 rounded-r-xl">
+              <div className="bg-gradient-to-br from-primary-50 to-emerald-50 dark:from-neutral-800 dark:to-neutral-900 border-l-4 border-primary-500 dark:border-primary-400 p-6 rounded-r-xl">
                 <Quote className="h-8 w-8 text-primary-500 mb-3" />
                 <p className="text-xl md:text-2xl font-medium text-neutral-800 italic">
                   &ldquo;{t('mission.quote')}&rdquo;
@@ -84,7 +84,7 @@ export default async function AboutContent() {
       </section>
 
       {/* Impact Areas - Redesigned */}
-      <section className="py-16 md:py-24 bg-neutral-50">
+      <section className="py-16 md:py-24 bg-canvas">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
@@ -119,8 +119,8 @@ export default async function AboutContent() {
 
             {/* Card 3 - Community */}
             <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100">
-              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-500 group-hover:scale-110 transition-all duration-300">
-                <Users className="h-7 w-7 text-purple-600 group-hover:text-white transition-colors" />
+              <div className="w-14 h-14 bg-purple-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+                <Users className="h-7 w-7 text-purple-600 dark:text-primary-400 group-hover:text-white transition-colors" />
               </div>
               <Heading level={3} className="text-xl font-bold text-neutral-900 mb-3">{t('impactAreas.community.title')}</Heading>
               <p className="text-neutral-600 leading-relaxed">

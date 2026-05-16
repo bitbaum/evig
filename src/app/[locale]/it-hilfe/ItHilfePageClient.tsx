@@ -56,9 +56,9 @@ export default function ITHilfePage() {
   } = useITHilfeRequests()
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-canvas min-h-screen">
       {/* Compact hero — requests visible without scrolling */}
-      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -70,14 +70,14 @@ export default function ITHilfePage() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 {t('getHelp')}
               </Link>
               <Link
                 href={IT_HILFE.routes.helpers}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-600 rounded-lg text-base font-semibold transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg text-base font-semibold transition-colors"
               >
                 <Users className="w-4 h-4" />
                 {t('findTechnician')}
@@ -93,11 +93,11 @@ export default function ITHilfePage() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-emerald-500 focus:border-transparent shadow-sm"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
               >
                 {t('searchButton')}
               </button>
@@ -113,7 +113,7 @@ export default function ITHilfePage() {
           <div className="mb-6 flex flex-wrap gap-2">
             <Link
               href={session?.user ? IT_HILFE.routes.register : `/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-200 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-500/40 rounded-lg text-sm font-medium transition-colors"
             >
               <Wrench className="w-4 h-4" />
               {t('becomeTechnician')}
@@ -146,14 +146,14 @@ export default function ITHilfePage() {
               <SlidersHorizontal className="w-4 h-4" />
               {t('filterButton')}
               {hasActiveFilters && (
-                <span className="w-2 h-2 rounded-full bg-emerald-500" aria-label={t('activeFiltersIndicator')} />
+                <span className="w-2 h-2 rounded-full bg-primary-500" aria-label={t('activeFiltersIndicator')} />
               )}
             </button>
 
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+              className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               aria-label={t('sortLabel')}
             >
               {SORT_OPTIONS.map((option) => (
@@ -166,7 +166,7 @@ export default function ITHilfePage() {
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                className="inline-flex items-center gap-1 px-3 py-2 text-sm text-primary-600 hover:text-primary-700 font-medium"
               >
                 <X className="w-4 h-4" />
                 {t('resetFilters')}
@@ -186,7 +186,7 @@ export default function ITHilfePage() {
                     id="filter-category"
                     value={filters.category}
                     onChange={(e) => setFilter('category', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCategoryAll')}</option>
                     {DEVICE_CATEGORIES.map((cat) => (
@@ -205,7 +205,7 @@ export default function ITHilfePage() {
                     id="filter-canton"
                     value={filters.canton}
                     onChange={(e) => setFilter('canton', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterCantonAll')}</option>
                     {SWISS_CANTONS.map((c) => (
@@ -224,7 +224,7 @@ export default function ITHilfePage() {
                     id="filter-urgency"
                     value={filters.urgency}
                     onChange={(e) => setFilter('urgency', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterUrgencyAll')}</option>
                     {URGENCY_LEVELS.map((u) => (
@@ -243,7 +243,7 @@ export default function ITHilfePage() {
                     id="filter-budget"
                     value={filters.budgetType}
                     onChange={(e) => setFilter('budgetType', e.target.value)}
-                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-neutral-300 rounded-lg bg-white text-sm text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   >
                     <option value="">{t('filterBudgetAll')}</option>
                     <option value="free">{t('filterBudgetFree')}</option>
@@ -320,8 +320,8 @@ export default function ITHilfePage() {
         {!session?.user && (
           <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
-                <Wrench className="h-6 w-6 text-emerald-600" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-500/15">
+                <Wrench className="h-6 w-6 text-primary-600 dark:text-primary-400" />
               </div>
             </div>
             <Heading level={3} className="text-xl text-neutral-900 mb-2">
@@ -333,13 +333,13 @@ export default function ITHilfePage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href={`/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-                className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-semibold shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaCreateProfile')}
               </Link>
               <Link
                 href="/it-hilfe"
-                className="px-6 py-2.5 bg-white hover:bg-emerald-50 text-emerald-600 border border-emerald-600 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                className="px-6 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaMoreInfo')}
               </Link>
