@@ -80,7 +80,7 @@ export function ProtocolActionItemsList({
           <button
             onClick={onCreateAllTasks}
             disabled={bulkCreatingTasks}
-            className="text-sm px-3 py-1.5 rounded-lg border border-info-300 text-info-700 hover:bg-info-50 disabled:opacity-50"
+            className="text-sm px-3 py-1.5 rounded-lg border border-primary-300 text-primary-700 hover:bg-primary-50 disabled:opacity-50"
           >
             {bulkCreatingTasks ? 'Erstellt...' : `Schritt 4: ${unlinkedTaskItems.length} Aufgaben erstellen`}
           </button>
@@ -144,7 +144,7 @@ export function ProtocolActionItemsList({
                     <button
                       onClick={() => onCreateTask(item)}
                       disabled={creatingTask === item.id}
-                      className="flex items-center gap-1 text-sm text-info-600 hover:text-info-800 disabled:opacity-50"
+                      className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-800 disabled:opacity-50"
                     >
                       {creatingTask === item.id ? (
                         <Loader2 className="w-4 h-4 animate-spin" />

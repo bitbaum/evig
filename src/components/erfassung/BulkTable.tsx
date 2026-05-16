@@ -34,7 +34,7 @@ function StatusIcon({ status }: { status: BulkProductStatus }) {
     case 'error':
       return <AlertCircle className="w-4 h-4 text-error-500" />
     case 'processing':
-      return <Loader2 className="w-4 h-4 text-info-500 animate-spin" />
+      return <Loader2 className="w-4 h-4 text-primary-500 animate-spin" />
     default:
       return null
   }

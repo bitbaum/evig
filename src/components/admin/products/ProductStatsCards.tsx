@@ -44,8 +44,8 @@ export function ProductStatsCards({
         <StatCard
           label="Freigegeben"
           value={inventoryStats.approved}
-          valueColor="text-info-600"
-          icon={<CheckCircle className="w-6 h-6 text-info-500" />}
+          valueColor="text-primary-600"
+          icon={<CheckCircle className="w-6 h-6 text-primary-500" />}
         />
         <StatCard
           label="Zur Prüfung"
@@ -67,15 +67,15 @@ export function ProductStatsCards({
       <StatCard
         label="Im Shop"
         value={shopStats.total}
-        icon={<Package className="w-6 h-6 text-info-500" />}
+        icon={<Package className="w-6 h-6 text-primary-500" />}
       />
       {conditionEntries.map(([condition, count]) => (
         <StatCard
           key={condition}
           label={getConditionLabel(condition)}
           value={count}
-          valueColor="text-info-600"
-          icon={<Tag className="w-6 h-6 text-info-500" />}
+          valueColor="text-primary-600"
+          icon={<Tag className="w-6 h-6 text-primary-500" />}
         />
       ))}
       <StatCard

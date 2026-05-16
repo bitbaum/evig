@@ -136,15 +136,15 @@ export function UserPermissionsEditor({
 
           {/* Full Access Toggle */}
           {!superAdminStatus && (
-            <div className="mb-6 p-4 bg-info-50 dark:bg-info-900/20 rounded-lg">
+            <div className="mb-6 p-4 bg-primary-50 dark:bg-info-900/20 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Shield className="w-5 h-5 text-info-600" />
+                  <Shield className="w-5 h-5 text-primary-600" />
                   <div>
                     <p className="font-medium text-info-900 dark:text-info-200">
                       Voller Zugriff
                     </p>
-                    <p className="text-sm text-info-700 dark:text-info-300">
+                    <p className="text-sm text-primary-700 dark:text-primary-300">
                       Zugriff auf alle Bereiche (ohne Super Admin Rechte)
                     </p>
                   </div>

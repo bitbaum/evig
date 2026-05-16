@@ -163,8 +163,8 @@ export function ListingFormFields({ formData, setFormData }: Props) {
 
       {/* Condition Criteria Checklist */}
       {formData.conditionChecks.length > 0 && (
-        <div className="rounded-lg border border-info-200 dark:border-info-800 bg-info-50 dark:bg-info-900/20 p-4">
-          <p className="text-sm font-medium text-info-800 dark:text-info-300 mb-3">
+        <div className="rounded-lg border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20 p-4">
+          <p className="text-sm font-medium text-primary-800 dark:text-primary-300 mb-3">
             {t('conditionHeader', { condition: ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label ?? '' })}
           </p>
           <div className="space-y-2">
@@ -174,7 +174,7 @@ export function ListingFormFields({ formData, setFormData }: Props) {
                   type="checkbox"
                   checked={check.checked}
                   onChange={() => handleConditionCheckToggle(check.key)}
-                  className="mt-0.5 rounded border-neutral-300 text-info-600 focus:ring-info-500"
+                  className="mt-0.5 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
                 />
                 <span className="text-sm text-neutral-700 dark:text-neutral-300">{check.label}</span>
               </label>

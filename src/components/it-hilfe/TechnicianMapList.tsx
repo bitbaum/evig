@@ -128,7 +128,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-info-600" />
+          <Sparkles className="w-5 h-5 text-primary-600" />
           <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('searchingTechnicians')}</Heading>
         </div>
         <div className="animate-pulse bg-neutral-100 rounded-lg min-h-[300px]" />
@@ -148,7 +148,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <Sparkles className="w-5 h-5 text-info-600" />
+        <Sparkles className="w-5 h-5 text-primary-600" />
         <Heading level={3} className="text-lg font-semibold text-neutral-900">
           {t('technicianSection')}
         </Heading>
@@ -186,7 +186,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
           {topMatches.length > 0 ? (
             <>
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-info-600" />
+                <TrendingUp className="w-4 h-4 text-primary-600" />
                 <p className="text-sm font-medium text-neutral-700">
                   {t('matchCount', { count: topMatches.length })}
                 </p>
@@ -230,7 +230,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                       </div>
                       <div className="w-full bg-neutral-200 rounded-full h-1.5">
                         <div
-                          className="bg-gradient-to-r from-info-500 to-cyan-500 h-1.5 rounded-full transition-all"
+                          className="bg-gradient-to-r from-primary-500 to-primary-400 h-1.5 rounded-full transition-all"
                           style={{ width: `${matchPercentage}%` }}
                         />
                       </div>
@@ -241,7 +241,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                         {helper.matchReasons.slice(0, 3).map((reason, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-info-50 text-info-700"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700"
                           >
                             {reason}
                           </span>
@@ -262,7 +262,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                 <div className="text-center">
                   <Link
                     href="/techniker"
-                    className="inline-flex items-center gap-2 text-info-600 hover:text-info-700 font-medium text-sm"
+                    className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium text-sm"
                   >
                     {t('showAllTechnicians', { count: matches.length })}
                     <TrendingUp className="w-4 h-4" />
@@ -271,7 +271,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               )}
             </>
           ) : (
-            <div className="bg-info-50 border border-info-200 rounded-xl p-6 text-center">
+            <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
               <p className="text-sm text-neutral-600">
                 {t('noMatchesYet')}
               </p>

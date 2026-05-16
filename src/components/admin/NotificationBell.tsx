@@ -198,12 +198,12 @@ export function NotificationBell() {
                     key={n.id}
                     onClick={() => void markOneRead(n)}
                     className={`w-full text-left px-4 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50 transition-colors ${
-                      !n.is_read ? 'bg-info-50/50 dark:bg-info-900/10' : ''
+                      !n.is_read ? 'bg-primary-50/50 dark:bg-primary-900/10' : ''
                     }`}
                   >
                     <div className="flex items-start gap-2">
                       {!n.is_read && (
-                        <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-info-500" />
+                        <span className="mt-1.5 flex-shrink-0 w-2 h-2 rounded-full bg-primary-500" />
                       )}
                       <div className={!n.is_read ? '' : 'pl-4'}>
                         <p className={`text-sm leading-snug ${
@@ -221,7 +221,7 @@ export function NotificationBell() {
                             {relativeTime(n.created_at)}
                           </span>
                           {href && (
-                            <span className="text-xs text-info-500">Öffnen →</span>
+                            <span className="text-xs text-primary-500">Öffnen →</span>
                           )}
                         </div>
                       </div>

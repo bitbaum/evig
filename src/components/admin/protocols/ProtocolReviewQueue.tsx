@@ -56,7 +56,7 @@ export function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
             return (
               <article
                 key={protocol.id}
-                className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-info-300 hover:bg-info-50/40"
+                className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-primary-300 hover:bg-primary-50/40"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div className="min-w-0">
@@ -76,7 +76,7 @@ export function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
                     </div>
                     <Link
                       href={`/admin/protocols/${protocol.id}`}
-                      className="block truncate text-lg font-semibold text-neutral-950 underline-offset-2 hover:text-info-700 hover:underline"
+                      className="block truncate text-lg font-semibold text-neutral-950 underline-offset-2 hover:text-primary-700 hover:underline"
                     >
                       {protocol.title}
                     </Link>

@@ -22,7 +22,7 @@ export function InputMethodStep({ selectedMethod, onSelect, onReset }: Props) {
           {IconComponent && <IconComponent className="w-4 h-4 text-neutral-500" />}
           <span className="font-medium">{INPUT_METHOD_LABELS[selectedMethod]}</span>
         </div>
-        <button onClick={onReset} className="text-sm text-info-600 hover:text-info-800">
+        <button onClick={onReset} className="text-sm text-primary-600 hover:text-primary-800">
           Ändern
         </button>
       </div>
@@ -39,12 +39,12 @@ export function InputMethodStep({ selectedMethod, onSelect, onReset }: Props) {
             <button
               key={method}
               onClick={() => onSelect(method)}
-              className="text-left p-4 bg-white border-2 border-neutral-200 rounded-lg hover:border-info-400 hover:bg-info-50 transition-all"
+              className="text-left p-4 bg-white border-2 border-neutral-200 rounded-lg hover:border-primary-400 hover:bg-primary-50 transition-all"
             >
               <div className="flex items-center gap-3">
                 {IconComponent && (
-                  <div className="w-10 h-10 rounded-lg bg-info-50 flex items-center justify-center flex-shrink-0">
-                    <IconComponent className="w-5 h-5 text-info-600" />
+                  <div className="w-10 h-10 rounded-lg bg-primary-50 flex items-center justify-center flex-shrink-0">
+                    <IconComponent className="w-5 h-5 text-primary-600" />
                   </div>
                 )}
                 <div className="min-w-0">

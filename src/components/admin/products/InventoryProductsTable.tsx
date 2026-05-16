@@ -103,7 +103,7 @@ export function InventoryProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-info-50")}
+                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-primary-50")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">
@@ -200,7 +200,7 @@ export function InventoryProductsTable({
                     )}
                     <Link
                       href={`/admin/products/${product.id}/factsheet`}
-                      className="p-1 text-info-500 hover:text-info-700"
+                      className="p-1 text-primary-500 hover:text-primary-700"
                       title="Factsheet drucken"
                     >
                       <Printer className="w-4 h-4" />

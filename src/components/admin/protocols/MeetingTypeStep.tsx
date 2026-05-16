@@ -25,7 +25,7 @@ export function MeetingTypeStep({ selectedType, onSelect, onReset }: Props) {
           <span className="text-neutral-400">·</span>
           <span>{MEETING_TYPE_TEMPLATES[selectedType].typical_duration}</span>
         </div>
-        <button onClick={onReset} className="text-sm text-info-600 hover:text-info-800">
+        <button onClick={onReset} className="text-sm text-primary-600 hover:text-primary-800">
           Ändern
         </button>
       </div>
@@ -43,7 +43,7 @@ export function MeetingTypeStep({ selectedType, onSelect, onReset }: Props) {
             <button
               key={type}
               onClick={() => onSelect(type)}
-              className="text-left p-4 bg-white border-2 border-neutral-200 rounded-lg hover:border-info-400 hover:bg-info-50 transition-all"
+              className="text-left p-4 bg-white border-2 border-neutral-200 rounded-lg hover:border-primary-400 hover:bg-primary-50 transition-all"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">

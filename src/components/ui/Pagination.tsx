@@ -21,8 +21,8 @@ const btnClass = (active: boolean, disabled = false) =>
     disabled
       ? 'text-neutral-300 dark:text-neutral-600 cursor-not-allowed'
       : active
-      ? 'bg-info-600 text-white font-medium'
-      : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+      ? 'bg-primary-600 text-white font-medium'
+      : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/[0.06]'
   }`
 
 /** Build a page href by replacing or appending the `page` param in `hrefBase` */
@@ -119,7 +119,7 @@ export function Pagination({
   const pageList = Array.from(pages).sort((a, b) => a - b)
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-neutral-100 dark:border-neutral-700">
+    <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-neutral-100 dark:border-white/[0.06]">
       <p className="text-sm text-neutral-600 dark:text-neutral-400">
         {from}–{to} {t('of')} {totalItems}
       </p>

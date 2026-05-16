@@ -170,7 +170,7 @@ export function ContentInputStep({
           <button
             type="button"
             onClick={() => localFileRef.current?.click()}
-            className="flex items-center gap-1.5 text-sm text-info-600 hover:text-info-800"
+            className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-800"
           >
             <Upload className="w-3.5 h-3.5" />
             {config.uploadLabel}

@@ -30,7 +30,7 @@ export function ProtocolDetailsStep({ values, isComplete, onChange, onReset }: P
           <span className="text-neutral-400">·</span>
           <span>{PROTOCOL_VISIBILITY_LABELS[values.visibility]}</span>
         </div>
-        <button onClick={onReset} className="text-sm text-info-600 hover:text-info-800">
+        <button onClick={onReset} className="text-sm text-primary-600 hover:text-primary-800">
           Ändern
         </button>
       </div>

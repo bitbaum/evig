@@ -36,7 +36,7 @@ export function ProtocolDraftInput({
       </p>
 
       {inputMethod === 'audio' ? (
-        <label className="flex items-center gap-1.5 text-sm text-info-600 hover:text-info-800 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-800 cursor-pointer">
           <Upload className="w-3.5 h-3.5" />
           Audiodatei wählen
           <input
@@ -50,7 +50,7 @@ export function ProtocolDraftInput({
         <>
           <div className="flex items-center justify-between">
             <label className="text-sm text-neutral-600">Transkript</label>
-            <label className="flex items-center gap-1.5 text-sm text-info-600 hover:text-info-800 cursor-pointer">
+            <label className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-800 cursor-pointer">
               <Upload className="w-3.5 h-3.5" />
               .txt hochladen
               <input

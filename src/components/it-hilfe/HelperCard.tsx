@@ -133,7 +133,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
             return (
               <span
                 key={skillId}
-                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-info-50 text-info-700"
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-100 text-neutral-700"
               >
                 {skill.name}
               </span>
@@ -171,7 +171,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
 
       {/* Contact Button */}
       {contactSuccess ? (
-        <div className="flex items-center gap-2 text-emerald-700 bg-emerald-50 px-4 py-2.5 rounded-lg text-sm font-medium">
+        <div className="flex items-center gap-2 text-primary-700 bg-primary-50 px-4 py-2.5 rounded-lg text-sm font-medium">
           <CheckCircle className="w-4 h-4 flex-shrink-0" />
           {t('messageSent', { name: helper.name })}
         </div>
@@ -179,7 +179,7 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
         <button
           onClick={handleContact}
           disabled={isContacting}
-          className="w-full bg-gradient-to-r from-info-600 to-cyan-600 text-white px-4 py-2.5 rounded-lg font-medium hover:from-info-700 hover:to-cyan-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isContacting ? t('contacting') : t('contact')}
         </button>
