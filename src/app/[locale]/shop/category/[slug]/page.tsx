@@ -160,18 +160,18 @@ function SubcategoryCard({
   return (
     <Link
       href={getCategoryUrl(category.slug)}
-      className="group block p-4 bg-white rounded-xl border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all"
+      className="group block p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all"
     >
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
+        <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
           <Package className="w-5 h-5" />
         </div>
         <div>
-          <Heading level={3} className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors">
+          <Heading level={3} className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors">
             {category.name}
           </Heading>
           {category.count !== undefined && (
-            <p className="text-sm text-neutral-500">{productCountLabel(category.count)}</p>
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">{productCountLabel(category.count)}</p>
           )}
         </div>
       </div>
@@ -200,7 +200,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }).catch(() => ({ products: [], total: 0, limit: 24, offset: 0 }))
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -229,7 +229,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Subcategories */}
         {hasSubcategories && (
           <div className="mb-12">
-            <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-4">
+            <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
               {t("category.subcategories")}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -248,7 +248,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {inventoryResult.products.length > 0 ? (
           <div>
             <div className="flex items-center justify-between mb-6">
-              <Heading level={2} className="text-xl font-semibold text-neutral-900">
+              <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white">
                 {t("category.categoryProductCount", { count: inventoryResult.total })}
               </Heading>
               <Link
@@ -277,15 +277,15 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
             <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />
               </div>
-              <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-2">
+              <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
                 {t("category.productsLoading")}
               </Heading>
-              <p className="text-neutral-600 mb-6">
+              <p className="text-neutral-600 dark:text-neutral-400 mb-6">
                 {t("category.productsComingSoon", { categoryName: category.name })}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -297,7 +297,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 </Link>
                 <Link
                   href="/shop"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 text-neutral-700 font-semibold rounded-lg hover:bg-neutral-50 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
                 >
                   {t("category.allShopOptions")}
                 </Link>
@@ -309,7 +309,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         {/* Related categories */}
         {parent && (
           <div className="mt-12">
-            <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-4">
+            <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-4">
               {t("category.relatedIn", { parentName: parent.name })}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

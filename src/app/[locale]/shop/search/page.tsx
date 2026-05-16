@@ -62,7 +62,7 @@ function SearchForm({
           name="q"
           defaultValue={initialQuery}
           placeholder={placeholder}
-          className="w-full pl-12 pr-4 py-4 text-lg border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all outline-none"
+          className="w-full pl-12 pr-4 py-4 text-lg border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 rounded-xl focus:border-primary-500 dark:focus:border-primary-400 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-800 transition-all outline-none"
           autoFocus
         />
         <button
@@ -145,15 +145,15 @@ function SearchResults({
 }) {
   if (products.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
+      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
         <div className="max-w-md mx-auto">
-          <div className="w-16 h-16 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8" />
           </div>
-          <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-2">
+          <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
             {noResultsLabel}
           </Heading>
-          <p className="text-neutral-600 mb-6">{noResultsHintLabel}</p>
+          <p className="text-neutral-600 dark:text-neutral-400 mb-6">{noResultsHintLabel}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/marketplace"
@@ -164,7 +164,7 @@ function SearchResults({
             </Link>
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 text-neutral-700 font-semibold rounded-lg hover:bg-neutral-50 transition-colors"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               {allShopOptionsLabel}
@@ -177,7 +177,7 @@ function SearchResults({
 
   return (
     <div>
-      <p className="text-sm text-neutral-500 mb-4">{foundCountLabel}</p>
+      <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">{foundCountLabel}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
@@ -205,7 +205,7 @@ function NoQueryState({
     <div className="space-y-8">
       {/* Popular searches */}
       <div>
-        <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
+        <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
           {popularSearchesLabel}
         </Heading>
         <div className="flex flex-wrap gap-2">
@@ -213,7 +213,7 @@ function NoQueryState({
             <Link
               key={search.slug}
               href={getSearchUrl(search.name)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full text-sm font-medium text-neutral-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-full text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-300 dark:hover:border-primary-600 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
             >
               <Search className="w-4 h-4" />
               {search.name}
@@ -224,7 +224,7 @@ function NoQueryState({
 
       {/* Browse by category */}
       <div>
-        <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
+        <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4">
           {browseByCategoryLabel}
         </Heading>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -232,22 +232,22 @@ function NoQueryState({
             <Link
               key={category.slug}
               href={getCategoryUrl(category.slug)}
-              className="flex items-center gap-3 p-4 bg-white border border-neutral-200 rounded-xl hover:border-primary-300 hover:shadow-sm transition-all group"
+              className="flex items-center gap-3 p-4 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-sm transition-all group"
             >
-              <div className="w-10 h-10 rounded-lg bg-neutral-100 text-neutral-600 flex items-center justify-center group-hover:bg-primary-100 group-hover:text-primary-600 transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors">
                 <Package className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-neutral-900 truncate group-hover:text-primary-600 transition-colors">
+                <p className="font-medium text-neutral-900 dark:text-white truncate group-hover:text-primary-600 transition-colors">
                   {category.name}
                 </p>
                 {category.count !== undefined && (
-                  <p className="text-sm text-neutral-500">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
                     {productCountLabel(category.count)}
                   </p>
                 )}
               </div>
-              <ChevronRight className="w-5 h-5 text-neutral-300 group-hover:text-primary-500 transition-colors" />
+              <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-neutral-600 group-hover:text-primary-500 transition-colors" />
             </Link>
           ))}
         </div>
@@ -277,7 +277,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
     : null;
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">

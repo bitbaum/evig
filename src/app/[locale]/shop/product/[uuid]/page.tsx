@@ -108,24 +108,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
     />
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* Breadcrumbs */}
-      <div className="bg-white border-b border-neutral-100">
+      <div className="bg-white dark:bg-neutral-800 border-b border-neutral-100 dark:border-neutral-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-          <nav className="flex items-center gap-2 text-sm text-neutral-500">
+          <nav className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
             <Link href="/" className="hover:text-primary-600 transition-colors">
               <Home className="w-4 h-4" />
             </Link>
-            <ChevronRight className="w-4 h-4 text-neutral-300" />
+            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
             <Link href="/shop" className="hover:text-primary-600 transition-colors">Shop</Link>
             {product.category && (
               <>
-                <ChevronRight className="w-4 h-4 text-neutral-300" />
-                <span className="text-neutral-900 font-medium truncate max-w-[200px]">{product.category}</span>
+                <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
+                <span className="text-neutral-900 dark:text-white font-medium truncate max-w-[200px]">{product.category}</span>
               </>
             )}
-            <ChevronRight className="w-4 h-4 text-neutral-300" />
-            <span className="text-neutral-900 font-medium truncate max-w-[200px]">{product.title}</span>
+            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
+            <span className="text-neutral-900 dark:text-white font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image */}
-          <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+          <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
             <div className="relative aspect-square">
               {product.image_url ? (
                 <Image
@@ -145,8 +145,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               ) : (
-                <div className="flex items-center justify-center h-full bg-neutral-50">
-                  <Package className="w-24 h-24 text-neutral-200" />
+                <div className="flex items-center justify-center h-full bg-neutral-50 dark:bg-neutral-900">
+                  <Package className="w-24 h-24 text-neutral-200 dark:text-neutral-700" />
                 </div>
               )}
             </div>
@@ -158,11 +158,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <p className="text-sm font-semibold text-primary-600 uppercase tracking-wider mb-1">
                 {product.brand}
               </p>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 leading-tight">
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white leading-tight">
                 {product.title}
               </Heading>
               {product.description && (
-                <p className="mt-3 text-neutral-600">{product.description}</p>
+                <p className="mt-3 text-neutral-600 dark:text-neutral-400">{product.description}</p>
               )}
             </div>
 
@@ -194,7 +194,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {/* Customer profiles */}
             {product.customer_profiles.length > 0 && (
               <div>
-                <p className="text-sm font-medium text-neutral-700 mb-2 flex items-center gap-1.5">
+                <p className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 flex items-center gap-1.5">
                   <Layers className="w-4 h-4" />
                   {t('product.suitableFor')}
                 </p>
@@ -213,11 +213,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
             )}
 
             {/* Trust badge */}
-            <div className="flex items-start gap-3 p-4 bg-primary-50 rounded-xl">
+            <div className="flex items-start gap-3 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-xl">
               <Shield className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-primary-900">{t('product.verifiedTitle')}</p>
-                <p className="text-primary-700 mt-0.5">
+                <p className="font-semibold text-primary-900 dark:text-primary-100">{t('product.verifiedTitle')}</p>
+                <p className="text-primary-700 dark:text-primary-300 mt-0.5">
                   {t('product.verifiedDesc', { orgName: ORG.name })}
                 </p>
               </div>
@@ -236,7 +236,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </a>
               <Link
                 href="/shop#ladenlokal"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-neutral-300 text-neutral-700 font-semibold rounded-xl hover:bg-neutral-50 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
               >
                 {t('product.buyInStore')}
               </Link>
@@ -247,7 +247,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         {/* Related products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-6">
+            <Heading level={2} className="text-xl font-semibold text-neutral-900 dark:text-white mb-6">
               {t('product.similarProducts')}
             </Heading>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -255,9 +255,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Link
                   key={p.id}
                   href={`/shop/product/${p.item_uuid}`}
-                  className="group bg-white rounded-xl border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+                  className="group bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all overflow-hidden flex flex-col"
                 >
-                  <div className="relative aspect-[4/3] bg-neutral-50">
+                  <div className="relative aspect-[4/3] bg-neutral-50 dark:bg-neutral-900">
                     {p.image_url ? (
                       <Image
                         src={p.image_url}
@@ -268,13 +268,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">
-                        <Package className="w-10 h-10 text-neutral-200" />
+                        <Package className="w-10 h-10 text-neutral-200 dark:text-neutral-700" />
                       </div>
                     )}
                   </div>
                   <div className="p-4">
-                    <p className="text-xs text-neutral-500 font-medium uppercase tracking-wide">{p.brand}</p>
-                    <h3 className="font-medium text-neutral-900 group-hover:text-primary-600 transition-colors line-clamp-2 mt-0.5">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 font-medium uppercase tracking-wide">{p.brand}</p>
+                    <h3 className="font-medium text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors line-clamp-2 mt-0.5">
                       {p.title}
                     </h3>
                     <p className="mt-2 font-bold text-primary-700">CHF {p.price.toFixed(2)}</p>

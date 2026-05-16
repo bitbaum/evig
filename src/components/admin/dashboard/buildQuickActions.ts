@@ -45,7 +45,7 @@ export function buildQuickActions(
       label: 'Neuer Workshop',
       href: '/admin/workshops/new',
       icon: GraduationCap,
-      color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 hover:bg-purple-200 dark:hover:bg-purple-900/50',
+      color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 hover:bg-primary-200 dark:hover:bg-primary-900/50',
     })
   }
 
@@ -54,7 +54,7 @@ export function buildQuickActions(
       label: 'Neue Dienstleistung',
       href: '/admin/services/new',
       icon: Wrench,
-      color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 hover:bg-orange-200 dark:hover:bg-orange-900/50',
+      color: 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-600 hover:bg-secondary-200 dark:hover:bg-secondary-900/50',
     })
   }
 
