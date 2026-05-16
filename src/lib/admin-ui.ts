@@ -85,15 +85,15 @@ export const adminIconBox = {
 // ─── Icon Box Colors ──────────────────────────────────────────────────────────
 
 export const adminIconColor = {
-  blue:   'bg-info-100 text-info-600 dark:bg-info-900/30 dark:text-info-400',
-  green:  'bg-primary-100 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400',
-  amber:  'bg-warning-100 text-warning-600 dark:bg-warning-900/30 dark:text-warning-400',
-  red:    'bg-error-100 text-error-600 dark:bg-error-900/30 dark:text-error-400',
-  purple: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
-  indigo: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400',
-  teal:   'bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400',
-  gray:   'bg-neutral-100 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-400',
-  orange: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
+  blue:   'bg-info-100 text-info-600 dark:bg-info-500/[0.12] dark:text-info-400',
+  green:  'bg-primary-100 text-primary-600 dark:bg-primary-500/[0.12] dark:text-primary-400',
+  amber:  'bg-warning-100 text-warning-600 dark:bg-warning-500/[0.12] dark:text-warning-400',
+  red:    'bg-error-100 text-error-600 dark:bg-error-500/[0.12] dark:text-error-400',
+  purple: 'bg-purple-100 text-purple-600 dark:bg-purple-500/[0.12] dark:text-purple-400',
+  indigo: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/[0.12] dark:text-indigo-400',
+  teal:   'bg-teal-100 text-teal-600 dark:bg-teal-500/[0.12] dark:text-teal-400',
+  gray:   'bg-neutral-100 text-neutral-600 dark:bg-white/[0.06] dark:text-neutral-400',
+  orange: 'bg-orange-100 text-orange-600 dark:bg-orange-500/[0.12] dark:text-orange-400',
 } as const
 
 export type AdminIconColorKey = keyof typeof adminIconColor

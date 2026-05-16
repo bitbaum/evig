@@ -137,9 +137,9 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-neutral-800 rounded-xl shadow-2xl border border-neutral-200 dark:border-neutral-700 z-50 overflow-hidden">
+        <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-2xl dark:border-white/[0.08] dark:bg-neutral-900">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100 dark:border-neutral-700">
+          <div className="flex items-center justify-between border-b border-neutral-100 px-4 py-3 dark:border-white/[0.06]">
             <span className="font-semibold text-sm text-neutral-900 dark:text-white">
               Benachrichtigungen
               {unreadCount > 0 && (
@@ -153,7 +153,7 @@ export function NotificationBell() {
                 <button
                   onClick={markAllRead}
                   disabled={markingAll}
-                  className="flex items-center gap-1 px-2 py-1 text-xs text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-400 dark:hover:bg-white/[0.06] dark:hover:text-neutral-200"
                   title="Alle als gelesen markieren"
                 >
                   <Check className="w-3 h-3" />
@@ -162,7 +162,7 @@ export function NotificationBell() {
               )}
               <button
                 onClick={() => setOpen(false)}
-                className="p-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+                className="rounded-md p-1 transition-colors hover:bg-neutral-100 dark:hover:bg-white/[0.06]"
               >
                 <X className="w-4 h-4 text-neutral-500" />
               </button>
@@ -170,13 +170,13 @@ export function NotificationBell() {
           </div>
 
           {/* List */}
-          <div className="max-h-[400px] overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-700">
+          <div className="max-h-[400px] divide-y divide-neutral-100 overflow-y-auto dark:divide-white/[0.04]">
             {error && notifications.length === 0 ? (
               <div className="py-8 text-center">
                 <p className="text-sm text-error-500 dark:text-error-400 mb-2">{error}</p>
                 <button
                   onClick={() => void fetchNotifications()}
-                  className="text-xs text-info-500 hover:text-info-700 dark:hover:text-info-400"
+                  className="text-xs text-primary-500 hover:text-primary-700 dark:hover:text-primary-400"
                 >
                   Erneut versuchen
                 </button>

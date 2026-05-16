@@ -49,7 +49,7 @@ export function AdminLayoutClient({
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950">
       {/* Sidebar */}
       <AdminSidebar
         sidebarCollapsed={sidebarCollapsed}
@@ -75,22 +75,22 @@ export function AdminLayoutClient({
         }`}
       >
         {/* Top Bar */}
-        <div className="sticky top-0 z-40 bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700">
-          <div className="flex items-center justify-between h-14 px-4 lg:px-6">
-            <div className="flex items-center gap-3 min-w-0">
+        <div className="sticky top-0 z-40 border-b border-neutral-200 bg-white/90 backdrop-blur-sm dark:border-white/[0.06] dark:bg-neutral-950/80">
+          <div className="flex h-14 items-center justify-between px-4 lg:px-6">
+            <div className="flex min-w-0 items-center gap-3">
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                className="lg:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex-shrink-0"
+                className="flex-shrink-0 rounded-lg p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:hidden"
               >
-                <Menu className="w-5 h-5" />
+                <Menu className="h-5 w-5" />
               </button>
 
               <button
                 onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                className="hidden lg:flex w-9 h-9 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 flex-shrink-0"
+                className="hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:flex"
                 title={sidebarCollapsed ? 'Seitenleiste aufklappen' : 'Seitenleiste einklappen'}
               >
-                <Menu className="w-4 h-4 text-neutral-500 dark:text-neutral-400" />
+                <Menu className="h-4 w-4 text-neutral-500 dark:text-neutral-400" />
               </button>
 
               {/* Breadcrumbs in top bar — saves a full content line */}
@@ -100,7 +100,7 @@ export function AdminLayoutClient({
             <div className="flex items-center gap-3 flex-shrink-0">
               <Link
                 href="/"
-                className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium text-sm"
+                className="hidden items-center gap-1.5 rounded-md border border-primary-500/40 px-3 py-1.5 text-xs font-medium text-primary-500 transition-colors hover:border-primary-500 hover:bg-primary-500/10 dark:border-primary-500/30 dark:text-primary-400 dark:hover:bg-primary-500/10 sm:flex"
               >
                 <Globe className="w-3.5 h-3.5" />
                 Website

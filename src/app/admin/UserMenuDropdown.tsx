@@ -83,8 +83,8 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             : 'opacity-0 scale-95 pointer-events-none'
         }`}
       >
-        <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-xl shadow-neutral-200/50 dark:shadow-neutral-900/50 border border-neutral-200 dark:border-neutral-700 overflow-hidden">
-          <div className="px-4 py-3 bg-neutral-50 dark:bg-neutral-700/50 border-b border-neutral-200 dark:border-neutral-700">
+        <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-xl dark:border-white/[0.08] dark:bg-neutral-900">
+          <div className="border-b border-neutral-200 bg-neutral-50 px-4 py-3 dark:border-white/[0.06] dark:bg-white/[0.03]">
             <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
               {user?.name || 'Staff'}
             </p>
@@ -97,7 +97,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             <Link
               href="/"
               onClick={() => setUserMenuOpen(false)}
-              className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/[0.04]"
             >
               <ExternalLink className="w-4 h-4 text-neutral-500" />
               Zur Website
@@ -105,7 +105,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
 
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="flex items-center justify-between w-full px-4 py-2.5 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
+              className="flex w-full items-center justify-between px-4 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/[0.04]"
             >
               <div className="flex items-center gap-3">
                 {theme === 'dark' ? (
@@ -129,7 +129,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             </button>
           </div>
 
-          <div className="py-2 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="border-t border-neutral-200 py-2 dark:border-white/[0.06]">
             <button
               onClick={() => {
                 setUserMenuOpen(false)

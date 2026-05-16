@@ -51,6 +51,7 @@ const config: Config = {
           700: '#404040',
           800: '#262626',
           900: '#171717',
+          950: '#0a0a0a',
         },
         // Semantic colors for status and feedback
         success: {

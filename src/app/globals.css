@@ -2,14 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Design Token SSOT ────────────────────────────────────────────────────────
+ * CSS custom properties are the canonical source of truth for all design
+ * tokens. tailwind.config.ts maps Tailwind utilities to these vars wherever
+ * opacity modifiers are not needed; hex literals remain in the config for
+ * Tailwind's opacity modifier system (bg-primary-500/50 etc.) — that is a
+ * known limitation, documented in CLAUDE.md.
+ * ─────────────────────────────────────────────────────────────────────────── */
 @layer base {
-  html {
+  :root {
+    /* Primitive palette — raw values, not used directly by components */
+    --primitive-green-500: #22c55e;
+    --primitive-green-600: #16a34a;
+    --primitive-green-700: #15803d;
+    --primitive-orange-500: #F7931A;
+
+    /* Semantic surface tokens — light mode */
+    --color-bg:             #fafafa;
+    --color-surface:        #ffffff;
+    --color-surface-raised: #f5f5f5;
+    --color-border:         #e5e5e5;
+    --color-border-subtle:  #f5f5f5;
+
+    /* Semantic text tokens — light mode */
+    --color-text:           #171717;
+    --color-text-muted:     #525252;
+    --color-text-faint:     #a3a3a3;
+
+    /* Accent */
+    --color-accent:         var(--primitive-green-600);
+    --color-accent-hover:   var(--primitive-green-700);
+
+    /* Base */
     font-size: 16px;
     line-height: 1.5;
   }
+
+  /* Dark mode — x.ai aesthetic: near-black surfaces, ultra-subtle borders */
+  .dark {
+    --color-bg:             #0a0a0a;
+    --color-surface:        #111111;
+    --color-surface-raised: #171717;
+    --color-border:         rgba(255, 255, 255, 0.06);
+    --color-border-subtle:  rgba(255, 255, 255, 0.03);
+    --color-text:           #ffffff;
+    --color-text-muted:     #a3a3a3;
+    --color-text-faint:     #525252;
+    --color-accent:         var(--primitive-green-500);
+    --color-accent-hover:   var(--primitive-green-600);
+  }
+
+  html {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  body {
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+  }
 }
 
-/* Custom utilities for multi-column dropdowns */
 @layer utilities {
   /* Smooth dropdown animations */
   .animate-in {
@@ -25,7 +81,7 @@
     animation-name: zoomIn;
   }
 
-  /* Text truncation utilities */
+  /* Text truncation */
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -40,23 +96,20 @@
     overflow: hidden;
   }
 
-  /* Backdrop blur utilities */
   .backdrop-blur-sm {
     backdrop-filter: blur(4px);
   }
 
-  /* Mobile-friendly touch targets */
+  /* WCAG 2.5.5 minimum touch target */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
   }
 
-  /* Responsive grid utilities */
   .grid-cols-responsive {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
-  /* Fix text rendering issues */
   .fix-text-rendering {
     font-kerning: normal;
     text-rendering: optimizeLegibility;
@@ -64,20 +117,17 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* High contrast mode support */
   @media (prefers-contrast: high) {
     .dropdown-menu {
       border: 2px solid;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
     }
   }
-  
-  /* Reduced motion support */
+
   @media (prefers-reduced-motion: reduce) {
     .animate-in {
       animation: none;
     }
-    
     * {
       transition-duration: 0ms !important;
       animation-duration: 0ms !important;
@@ -85,36 +135,19 @@
   }
 }
 
-/* Animation keyframes */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .animate-slideUp {
@@ -122,32 +155,16 @@
 }
 
 /* Custom scrollbar for dropdown content */
-.dropdown-scroll::-webkit-scrollbar {
-  width: 6px;
-}
+.dropdown-scroll::-webkit-scrollbar       { width: 6px; }
+.dropdown-scroll::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.05); border-radius: 3px; }
+.dropdown-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
+.dropdown-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
-.dropdown-scroll::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 3px;
-}
-
-.dropdown-scroll::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-}
-
-.dropdown-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-/* Focus styles for accessibility */
+/* Focus ring — keyboard navigation */
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
 }
 
-/* Print styles */
 @media print {
-  .no-print {
-    display: none !important;
-  }
+  .no-print { display: none !important; }
 }

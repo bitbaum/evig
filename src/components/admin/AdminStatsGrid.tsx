@@ -44,7 +44,7 @@ export function AdminStatsGrid({ items, columns = 4 }: AdminStatsGridProps) {
         return (
           <div
             key={index}
-            className="bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-4"
+            className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900"
           >
             <div className="flex items-start gap-3">
               {/* Icon box */}

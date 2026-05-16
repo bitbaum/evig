@@ -324,76 +324,88 @@ export const touchTarget = {
  * when a workflow needs a different information architecture.
  */
 export const designPrimitive = {
+  // Focus ring — primary green, consistent with brand
   focus:
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950',
 
+  // ── Typography ────────────────────────────────────────────────────────────
+  // x.ai style: tight tracking, high contrast, scale discipline
   type: {
-    pageTitle: 'text-2xl font-bold text-neutral-950 dark:text-white',
-    sectionTitle: 'text-base font-semibold text-neutral-950 dark:text-white',
-    subTitle: 'text-base font-medium text-neutral-800 dark:text-neutral-200',
-    body: 'text-base text-neutral-700 dark:text-neutral-300',
-    meta: 'text-base text-neutral-500 dark:text-neutral-400',
-    smallMeta: 'text-sm text-neutral-500 dark:text-neutral-400',
-    tableHeader: 'text-sm font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400',
-    stat: 'text-2xl font-bold tabular-nums font-mono text-neutral-950 dark:text-white',
+    pageTitle:   'text-2xl font-bold tracking-tight text-neutral-900 dark:text-white',
+    sectionTitle:'text-sm font-semibold tracking-tight text-neutral-900 dark:text-white',
+    subTitle:    'text-sm font-medium text-neutral-700 dark:text-neutral-300',
+    body:        'text-sm text-neutral-600 dark:text-neutral-300',
+    meta:        'text-xs text-neutral-500 dark:text-neutral-400',
+    smallMeta:   'text-xs text-neutral-400 dark:text-neutral-500',
+    tableHeader: 'text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500',
+    stat:        'text-2xl font-bold tabular-nums text-neutral-900 dark:text-white',
   },
 
+  // ── Surfaces ──────────────────────────────────────────────────────────────
+  // x.ai: very dark cards, ultra-subtle borders (white/6% in dark mode)
   surface: {
-    card: 'rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800',
-    cardElevated: 'rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-neutral-700 dark:bg-neutral-800',
-    inset: 'rounded-lg border border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900',
-    table: 'overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-800',
+    card:        'rounded-lg border border-neutral-200 bg-white dark:border-white/[0.06] dark:bg-neutral-900',
+    cardElevated:'rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-white/[0.06] dark:bg-neutral-900',
+    inset:       'rounded-lg border border-neutral-200 bg-neutral-50 dark:border-white/[0.04] dark:bg-neutral-950',
+    table:       'overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-white/[0.06] dark:bg-neutral-900',
   },
 
+  // ── Buttons ───────────────────────────────────────────────────────────────
+  // Fix: button.primary was `info-600` (blue) — corrected to `primary-600` (green)
   buttonBase:
     'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 whitespace-nowrap',
 
   button: {
-    default: 'bg-primary-600 text-white hover:bg-primary-700',
-    primary: 'bg-info-600 text-white hover:bg-info-700',
-    outline: 'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700',
-    outlineLight: 'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
-    secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-neutral-700 dark:text-white dark:hover:bg-neutral-600',
-    ghost: 'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700',
+    default:     'bg-primary-600 text-white hover:bg-primary-700',
+    primary:     'bg-primary-600 text-white hover:bg-primary-700',
+    outline:     'border border-neutral-300 bg-white text-neutral-900 hover:bg-neutral-50 dark:border-white/[0.08] dark:bg-transparent dark:text-white dark:hover:bg-white/[0.04]',
+    outlineLight:'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
+    secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-white/[0.06] dark:text-white dark:hover:bg-white/[0.1]',
+    ghost:       'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/[0.04] dark:hover:text-white',
     destructive: 'bg-error-600 text-white hover:bg-error-700',
-    warning: 'bg-warning-500 text-neutral-950 hover:bg-warning-600',
+    warning:     'bg-warning-500 text-neutral-950 hover:bg-warning-600',
   },
 
   buttonSize: {
-    default: 'min-h-[44px] px-4 py-2 text-base',
-    sm: 'min-h-[40px] px-3 py-1.5 text-sm',
-    lg: 'min-h-[48px] px-6 py-3 text-base',
-    icon: 'min-h-[44px] min-w-[44px] p-2',
+    default: 'min-h-[40px] px-4 py-2 text-sm',
+    sm:      'min-h-[36px] px-3 py-1.5 text-sm',
+    lg:      'min-h-[44px] px-6 py-2.5 text-sm',
+    icon:    'min-h-[40px] min-w-[40px] p-2',
   },
 
+  // ── Badges ────────────────────────────────────────────────────────────────
   badgeBase:
-    'inline-flex items-center rounded-full border px-2.5 py-0.5 text-sm font-medium transition-colors',
+    'inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium transition-colors',
 
   badge: {
-    default: 'border-transparent bg-primary-600 text-white',
-    secondary: 'border-transparent bg-neutral-100 text-neutral-900 dark:bg-neutral-700 dark:text-white',
+    default:     'border-transparent bg-primary-600 text-white',
+    secondary:   'border-transparent bg-neutral-100 text-neutral-700 dark:bg-white/[0.08] dark:text-neutral-300',
     destructive: 'border-transparent bg-error-600 text-white',
-    outline: 'border-neutral-300 text-neutral-700 dark:border-neutral-600 dark:text-neutral-300',
-    success: 'border-primary-200 bg-primary-50 text-primary-800',
-    warning: 'border-warning-200 bg-warning-50 text-warning-800',
-    info: 'border-info-200 bg-info-50 text-info-800',
+    outline:     'border-neutral-300 text-neutral-700 dark:border-white/[0.12] dark:text-neutral-400',
+    success:     'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/10 dark:text-primary-400',
+    warning:     'border-warning-200 bg-warning-50 text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-400',
+    info:        'border-info-200 bg-info-50 text-info-800 dark:border-info-500/30 dark:bg-info-500/10 dark:text-info-400',
   },
 
+  // ── Forms ─────────────────────────────────────────────────────────────────
+  // Fix: focus rings were `info-500` (blue) — corrected to `primary-500` (green)
   form: {
-    input: 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
-    textarea: 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent disabled:opacity-50 dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
-    select: 'rounded-md border border-neutral-300 bg-white px-3 py-2 text-base text-neutral-900 focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-transparent dark:border-neutral-600 dark:bg-neutral-800 dark:text-white',
-    label: 'block text-base font-medium text-neutral-700 dark:text-neutral-300',
-    hint: 'mt-1 text-sm text-neutral-500 dark:text-neutral-400',
-    error: 'mt-1 text-sm text-error-600 dark:text-error-400',
+    input:    'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 dark:border-white/[0.08] dark:bg-neutral-900 dark:text-white dark:placeholder:text-neutral-600',
+    textarea: 'w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50 dark:border-white/[0.08] dark:bg-neutral-900 dark:text-white dark:placeholder:text-neutral-600',
+    select:   'rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:border-white/[0.08] dark:bg-neutral-900 dark:text-white',
+    label:    'block text-xs font-medium uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-1',
+    hint:     'mt-1 text-xs text-neutral-400 dark:text-neutral-500',
+    error:    'mt-1 text-xs text-error-600 dark:text-error-400',
   },
 
+  // ── Tables ────────────────────────────────────────────────────────────────
+  // x.ai: very subtle row separators, no heavy borders
   table: {
-    thead: 'border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900',
-    th: 'px-4 py-2.5 text-left text-sm font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400',
-    tr: 'border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-700/50',
-    td: 'px-4 py-3 text-base text-neutral-700 dark:text-neutral-300',
-    empty: 'py-12 text-center text-base text-neutral-500 dark:text-neutral-400',
+    thead: 'border-b border-neutral-200 bg-neutral-50 dark:border-white/[0.06] dark:bg-transparent',
+    th:    'px-4 py-2.5 text-left text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500',
+    tr:    'border-b border-neutral-100 transition-colors hover:bg-neutral-50 dark:border-white/[0.04] dark:hover:bg-white/[0.02]',
+    td:    'px-4 py-3 text-sm text-neutral-700 dark:text-neutral-300',
+    empty: 'py-12 text-center text-sm text-neutral-500 dark:text-neutral-400',
   },
 } as const
 

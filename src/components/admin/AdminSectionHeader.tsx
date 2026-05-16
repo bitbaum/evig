@@ -38,7 +38,7 @@ export function AdminSectionHeader({
     <div
       className={cn(
         'flex items-start justify-between gap-3',
-        divider && 'pb-3 border-b border-neutral-200 dark:border-neutral-700',
+        divider && 'pb-3 border-b border-neutral-200 dark:border-white/[0.06]',
         className
       )}
     >
