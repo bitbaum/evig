@@ -206,7 +206,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                         {spotsLeft !== null && (
                           <div className="flex items-center text-sm">
                             <Users className="w-4 h-4 mr-1 flex-shrink-0" />
-                            <span className={spotsLeft <= 3 ? 'text-orange-600 font-medium' : 'text-neutral-600'}>
+                            <span className={spotsLeft <= 3 ? 'text-warning-600 font-medium' : 'text-neutral-600'}>
                               {spotsLeft <= 0 ? t('soldOut') : t('spotsLeft', { count: spotsLeft })}
                             </span>
                           </div>
@@ -214,7 +214,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                       </div>
                     ) : (
                       <div className="mb-4">
-                        <div className="flex items-center text-sm text-orange-600">
+                        <div className="flex items-center text-sm text-warning-600">
                           <Calendar className="w-4 h-4 mr-1" />
                           <span>{t('dateSoon')}</span>
                         </div>

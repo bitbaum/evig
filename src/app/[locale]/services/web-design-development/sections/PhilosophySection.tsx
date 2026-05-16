@@ -2,7 +2,7 @@ import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
-const RATING_COLORS = ['bg-primary-500', 'bg-primary-400', 'bg-purple-500', 'bg-orange-500', 'bg-teal-500', 'bg-rose-500', 'bg-indigo-500', 'bg-cyan-500']
+const RATING_COLORS = ['bg-primary-500', 'bg-primary-400', 'bg-info-500', 'bg-secondary-500', 'bg-warning-500', 'bg-error-500', 'bg-info-700', 'bg-neutral-400']
 
 export async function PhilosophySection() {
   const t = await getTranslations('services.webDesign.philosophy')
@@ -41,8 +41,8 @@ export async function PhilosophySection() {
                   <p>{t('automationLiberation.text')}</p>
                 </div>
 
-                <div className="border-l-4 border-purple-500 pl-4">
-                  <p className="font-semibold text-purple-800 mb-2">{t('choiceNotCoercion.label')}</p>
+                <div className="border-l-4 border-info-500 pl-4">
+                  <p className="font-semibold text-info-800 mb-2">{t('choiceNotCoercion.label')}</p>
                   <p>{t('choiceNotCoercion.text')}</p>
                 </div>
 

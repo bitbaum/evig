@@ -148,8 +148,8 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       <div className="bg-neutral-50 py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100 flex-shrink-0" aria-hidden="true">
-              <FileText className="h-5 w-5 text-orange-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-100 flex-shrink-0" aria-hidden="true">
+              <FileText className="h-5 w-5 text-secondary-600" />
             </div>
             <Heading level={2} className="tracking-tight text-neutral-900">
               {t('finances.title')}
@@ -173,8 +173,8 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       <div className="py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100 flex-shrink-0" aria-hidden="true">
-              <Users className="h-5 w-5 text-purple-600" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 flex-shrink-0" aria-hidden="true">
+              <Users className="h-5 w-5 text-primary-600" />
             </div>
             <Heading level={2} className="tracking-tight text-neutral-900">
               {t('board.title')}

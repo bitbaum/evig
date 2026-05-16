@@ -153,7 +153,7 @@ export default function ImpactPageContent() {
     switch (category) {
       case 'environmental': return <Leaf className="h-5 w-5 text-primary-600" />
       case 'social': return <Users className="h-5 w-5 text-primary-600" />
-      case 'economic': return <TrendingUp className="h-5 w-5 text-purple-600" />
+      case 'economic': return <TrendingUp className="h-5 w-5 text-primary-600" />
     }
   }
 
@@ -161,7 +161,7 @@ export default function ImpactPageContent() {
     switch (category) {
       case 'environmental': return 'bg-primary-50 border-primary-200'
       case 'social': return 'bg-neutral-50 border-neutral-200'
-      case 'economic': return 'bg-purple-50 border-purple-200'
+      case 'economic': return 'bg-primary-50 border-primary-200'
     }
   }
 
@@ -310,15 +310,15 @@ export default function ImpactPageContent() {
                       <Heading level={4} className="mb-3">{t('economic.title')}</Heading>
                       <ul className="space-y-2 text-sm">
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                           <span>{t('economic.customerSavings', { value: getDefaultNumeric('customer_savings_chf') })}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                           <span>{t('economic.smeOpenSource')}</span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-primary-600 mt-0.5 flex-shrink-0" />
                           <span>{t('economic.jobs', { value: getDefaultValue('team_size_community') })}</span>
                         </li>
                       </ul>

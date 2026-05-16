@@ -2,7 +2,7 @@ export default function WorkshopsLoading() {
   return (
     <div className="min-h-screen bg-canvas">
       {/* Hero skeleton */}
-      <div className="bg-gradient-to-br from-warning-50 to-orange-50 dark:from-neutral-900 dark:to-neutral-950 py-12 sm:py-16 lg:py-20">
+      <div className="bg-gradient-to-br from-warning-50 to-warning-100 dark:from-neutral-900 dark:to-neutral-950 py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center mb-6">
             <div className="h-16 w-16 rounded-2xl bg-warning-200 animate-pulse" />

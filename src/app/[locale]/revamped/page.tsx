@@ -167,8 +167,8 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-purple-100 rounded-full mb-6">
-                  <Star className="w-10 h-10 text-purple-600" />
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-full mb-6">
+                  <Star className="w-10 h-10 text-primary-600" />
                 </div>
                 <Heading level={3} className="text-2xl font-bold mb-4">{t('whatIs.ai.title')}</Heading>
                 <p className="text-neutral-600 leading-relaxed">

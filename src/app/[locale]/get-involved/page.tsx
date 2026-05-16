@@ -77,13 +77,13 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
           <a
             href="#get-started"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white transition-colors"
           >
             {t('hero.startBtn')}
           </a>
           <a
             href="#learn-more"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-purple-600 hover:bg-neutral-50 border-2 border-purple-600 transition-colors"
+            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-primary-600 hover:bg-neutral-50 border-2 border-primary-600 transition-colors"
           >
             {t('hero.learnBtn')}
           </a>

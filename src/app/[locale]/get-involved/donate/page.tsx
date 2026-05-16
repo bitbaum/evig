@@ -119,11 +119,11 @@ export default async function DonatePage({ params }: DonatePageProps) {
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
                       color === 'green' ? 'bg-primary-100' :
-                      color === 'blue' ? 'bg-primary-100' : 'bg-purple-100'
+                      color === 'blue' ? 'bg-primary-100' : 'bg-primary-100'
                     }`}>
                       <Icon className={`h-5 w-5 ${
                         color === 'green' ? 'text-primary-600' :
-                        color === 'blue' ? 'text-primary-600' : 'text-purple-600'
+                        color === 'blue' ? 'text-primary-600' : 'text-primary-600'
                       }`} />
                     </div>
                     <span className="text-2xl font-bold text-neutral-900">CHF {TIER_AMOUNTS[index]}</span>
@@ -188,12 +188,12 @@ export default async function DonatePage({ params }: DonatePageProps) {
         <section id="geraete" className="mb-12 scroll-mt-8">
           <Heading level={2} className="text-neutral-900 mb-2">{t('devices.heading')}</Heading>
           <p className="text-sm text-neutral-500 mb-6">{t('devices.intro')}</p>
-          <div className="rounded-xl border-2 border-orange-200 bg-orange-50 p-6 sm:p-8">
+          <div className="rounded-xl border-2 border-secondary-200 bg-secondary-50 p-6 sm:p-8">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
               {DEVICE_ICONS.map(({ icon: Icon }, index) => (
                 <div key={index} className="flex flex-col items-center gap-2 text-center">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-                    <Icon className="h-5 w-5 text-orange-600" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-100">
+                    <Icon className="h-5 w-5 text-secondary-600" />
                   </div>
                   <span className="text-xs font-medium text-neutral-700">{deviceItems[index]}</span>
                 </div>
@@ -204,14 +204,14 @@ export default async function DonatePage({ params }: DonatePageProps) {
               <p><span className="font-semibold">{t('devices.notAcceptLabel')}</span> {t('devices.notAcceptText')}</p>
               <p><span className="font-semibold">{t('devices.prepLabel')}</span> {t('devices.prepText')}</p>
             </div>
-            <div className="rounded-lg bg-white border border-orange-200 p-4">
+            <div className="rounded-lg bg-white border border-secondary-200 p-4">
               <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide mb-2">{t('devices.addressLabel')}</p>
               <p className="text-sm font-semibold text-neutral-900">{ORG.name} {LOCATIONS.store.name}</p>
               <p className="text-sm text-neutral-600">{LOCATIONS.store.full}</p>
               <p className="text-xs text-neutral-500 mt-2">{OPENING_HOURS.compact}</p>
               <a
                 href={`mailto:${CONTACT.email}`}
-                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-orange-700 hover:text-orange-600"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-700 hover:text-secondary-600"
               >
                 {t('devices.questionsLink')}
               </a>

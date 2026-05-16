@@ -237,13 +237,13 @@ export default async function WorkshopDetailPage({ params }: Props) {
                 </div>
 
                 <div className="text-center">
-                  <BookOpen className="w-8 h-8 text-purple-600 mx-auto mb-2" />
+                  <BookOpen className="w-8 h-8 text-primary-600 mx-auto mb-2" />
                   <div className="text-sm font-medium text-neutral-900">{t('detail.category')}</div>
                   <div className="text-sm text-neutral-600">{categoryName || t('detail.generalCategory')}</div>
                 </div>
 
                 <div className="text-center">
-                  <Award className="w-8 h-8 text-orange-600 mx-auto mb-2" />
+                  <Award className="w-8 h-8 text-secondary-600 mx-auto mb-2" />
                   <div className="text-sm font-medium text-neutral-900">{t('detail.price')}</div>
                   <div className="text-sm text-neutral-600">
                     {workshop.price_cents === 0 ? t('detail.free') : t('detail.priceChf', { amount: Math.round(workshop.price_cents / 100) })}

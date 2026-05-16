@@ -88,15 +88,15 @@ export default async function WissenPage() {
   const colorClasses = {
     green: 'bg-primary-50 border-primary-200 text-primary-900',
     blue: 'bg-primary-50 border-primary-200 text-primary-900',
-    purple: 'bg-purple-50 border-purple-200 text-purple-900',
-    orange: 'bg-orange-50 border-orange-200 text-orange-900',
+    purple: 'bg-primary-50 border-primary-200 text-primary-900',
+    orange: 'bg-secondary-50 border-secondary-200 text-secondary-900',
   }
 
   const buttonClasses = {
     green: 'bg-primary-600 hover:bg-primary-700',
     blue: 'bg-primary-600 hover:bg-primary-700',
-    purple: 'bg-purple-600 hover:bg-purple-700',
-    orange: 'bg-orange-600 hover:bg-orange-700',
+    purple: 'bg-primary-600 hover:bg-primary-700',
+    orange: 'bg-secondary-600 hover:bg-secondary-700',
   }
 
   return (
@@ -195,7 +195,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-purple-500 hover:bg-purple-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>

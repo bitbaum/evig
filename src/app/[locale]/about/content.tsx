@@ -119,8 +119,8 @@ export default async function AboutContent() {
 
             {/* Card 3 - Community */}
             <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100">
-              <div className="w-14 h-14 bg-purple-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
-                <Users className="h-7 w-7 text-purple-600 dark:text-primary-400 group-hover:text-white transition-colors" />
+              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+                <Users className="h-7 w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors" />
               </div>
               <Heading level={3} className="text-xl font-bold text-neutral-900 mb-3">{t('impactAreas.community.title')}</Heading>
               <p className="text-neutral-600 leading-relaxed">

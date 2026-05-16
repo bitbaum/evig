@@ -110,7 +110,7 @@ export default function SubmissionsAdminPage() {
                           className={`px-2 py-1 text-xs rounded-full font-medium ${
                             submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA
                               ? 'bg-primary-100 text-primary-800'
-                              : 'bg-purple-100 text-purple-800'
+                              : 'bg-primary-100 text-primary-800'
                           }`}
                         >
                           {submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('typeIdea') : t('typeDraft')}

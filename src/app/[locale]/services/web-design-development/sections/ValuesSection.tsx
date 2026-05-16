@@ -16,12 +16,12 @@ const VALUE_ICONS = [Code, Globe, Shield, Database, Heart, Zap, Users, Monitor]
 const VALUE_STYLES = [
   { borderColor: 'border-primary-500', bgColor: 'bg-primary-100', iconColor: 'text-primary-600', titleColor: 'text-primary-800' },
   { borderColor: 'border-primary-400', bgColor: 'bg-primary-100', iconColor: 'text-primary-600', titleColor: 'text-primary-800' },
-  { borderColor: 'border-purple-500', bgColor: 'bg-purple-100', iconColor: 'text-purple-600', titleColor: 'text-purple-800' },
-  { borderColor: 'border-orange-500', bgColor: 'bg-orange-100', iconColor: 'text-orange-600', titleColor: 'text-orange-800' },
-  { borderColor: 'border-teal-500', bgColor: 'bg-teal-100', iconColor: 'text-teal-600', titleColor: 'text-teal-800' },
-  { borderColor: 'border-rose-500', bgColor: 'bg-rose-100', iconColor: 'text-rose-600', titleColor: 'text-rose-800' },
-  { borderColor: 'border-indigo-500', bgColor: 'bg-indigo-100', iconColor: 'text-indigo-600', titleColor: 'text-indigo-800' },
-  { borderColor: 'border-cyan-500', bgColor: 'bg-cyan-100', iconColor: 'text-cyan-600', titleColor: 'text-cyan-800' },
+  { borderColor: 'border-info-500', bgColor: 'bg-info-100', iconColor: 'text-info-600', titleColor: 'text-info-800' },
+  { borderColor: 'border-secondary-500', bgColor: 'bg-secondary-100', iconColor: 'text-secondary-600', titleColor: 'text-secondary-800' },
+  { borderColor: 'border-warning-500', bgColor: 'bg-warning-100', iconColor: 'text-warning-600', titleColor: 'text-warning-800' },
+  { borderColor: 'border-error-500', bgColor: 'bg-error-100', iconColor: 'text-error-600', titleColor: 'text-error-800' },
+  { borderColor: 'border-info-700', bgColor: 'bg-info-100', iconColor: 'text-info-700', titleColor: 'text-info-900' },
+  { borderColor: 'border-neutral-400', bgColor: 'bg-neutral-100', iconColor: 'text-neutral-600', titleColor: 'text-neutral-800' },
 ]
 
 const VALUE_KEYS = ['openSource', 'decentralization', 'privacyFirst', 'ownYourData', 'ownYourCode', 'maxAutomation', 'userExperience', 'developerExperience'] as const

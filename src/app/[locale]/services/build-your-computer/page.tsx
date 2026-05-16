@@ -87,7 +87,7 @@ export default function BuildYourComputerPage() {
   const getConditionClass = (condition: string) => {
     if (condition === 'used') return 'bg-primary-100 text-primary-800'
     if (condition === 'refurbished') return 'bg-neutral-100 text-neutral-800'
-    return 'bg-orange-100 text-orange-800'
+    return 'bg-warning-100 text-warning-800'
   }
 
   const scanningLines = t.raw('buildTool.scanningLines') as string[]

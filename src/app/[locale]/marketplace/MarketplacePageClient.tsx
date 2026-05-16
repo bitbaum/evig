@@ -71,7 +71,7 @@ export default function MarketplacePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact search hero — orange accents maintained for marketplace identity */}
-      <div className="bg-gradient-to-br from-orange-50 to-warning-50 dark:from-neutral-900 dark:to-neutral-950 border-b border-orange-100 dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-gradient-to-br from-secondary-50 to-warning-50 dark:from-neutral-900 dark:to-neutral-950 border-b border-secondary-100 dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -259,8 +259,8 @@ export default function MarketplacePage() {
         {status === 'unauthenticated' && (
           <div className="mt-12 bg-white dark:bg-neutral-900 rounded-2xl shadow-sm dark:shadow-none border border-neutral-100 dark:border-white/[0.06] p-8 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-500/15">
-                <Package className="h-6 w-6 text-orange-600 dark:text-orange-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary-100 dark:bg-secondary-500/15">
+                <Package className="h-6 w-6 text-secondary-600 dark:text-secondary-400" />
               </div>
             </div>
             <Heading level={3} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
