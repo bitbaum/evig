@@ -11,6 +11,10 @@ import { ImageCapture } from '@/components/erfassung/ImageCapture'
 import type { CreateFormData } from './types'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 
 interface IntakeCreateFormProps {
   formData: CreateFormData
@@ -76,8 +80,8 @@ export function IntakeCreateForm({
               onClick={() => setFormData(f => ({ ...f, intake_tier: opt.value }))}
               className={`p-3 rounded-lg border-2 text-center transition-colors ${
                 formData.intake_tier === opt.value
-                  ? 'border-info-500 bg-info-50'
-                  : 'border-neutral-200 hover:border-neutral-300'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
+                  : 'border-neutral-200 dark:border-white/[0.08] hover:border-neutral-300'
               }`}
             >
               <div className="text-2xl mb-1">{opt.icon}</div>
@@ -130,12 +134,11 @@ export function IntakeCreateForm({
             {/* Text Tab */}
             {aiTab === 'text' && (
               <div className="space-y-2">
-                <textarea
+                <Textarea
                   value={aiText}
                   onChange={(e) => setAiText(e.target.value)}
                   placeholder="z.B. Dell Latitude E7470 i5 8GB 256GB SSD guter Zustand"
                   rows={3}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
                 />
                 <button
                   type="button"
@@ -205,93 +208,79 @@ export function IntakeCreateForm({
 
       {/* Device Info */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Hersteller *</label>
-          <input
+        <FormField label="Hersteller" required>
+          <Input
             type="text"
             value={formData.hersteller}
             onChange={(e) => setFormData(f => ({ ...f, hersteller: e.target.value }))}
             placeholder="z.B. Lenovo, Apple, Dell"
-            className="w-full border rounded-lg px-3 py-2 text-sm"
           />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Produktname *</label>
-          <input
+        </FormField>
+        <FormField label="Produktname" required>
+          <Input
             type="text"
             value={formData.produktname}
             onChange={(e) => setFormData(f => ({ ...f, produktname: e.target.value }))}
             placeholder="z.B. ThinkPad T480"
-            className="w-full border rounded-lg px-3 py-2 text-sm"
           />
-        </div>
+        </FormField>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1">Kurzbeschreibung</label>
-        <textarea
+      <FormField label="Kurzbeschreibung">
+        <Textarea
           value={formData.kurzbeschreibung}
           onChange={(e) => setFormData(f => ({ ...f, kurzbeschreibung: e.target.value }))}
           placeholder="Kurze Beschreibung des Geräts und seines Zustands"
           rows={2}
-          className="w-full border rounded-lg px-3 py-2 text-sm"
         />
-      </div>
+      </FormField>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Kategorie</label>
-          <select
+        <FormField label="Kategorie">
+          <Select
             value={formData.hauptkategorie}
             onChange={(e) => setFormData(f => ({ ...f, hauptkategorie: e.target.value, unterkategorie: '' }))}
-            className="w-full border rounded-lg px-3 py-2 text-sm"
           >
             <option value="">Wählen...</option>
             {KATEGORIEN.map(k => (
               <option key={k.value} value={k.value}>{k.icon} {k.label}</option>
             ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Unterkategorie</label>
-          <select
+          </Select>
+        </FormField>
+        <FormField label="Unterkategorie">
+          <Select
             value={formData.unterkategorie}
             onChange={(e) => setFormData(f => ({ ...f, unterkategorie: e.target.value }))}
-            className="w-full border rounded-lg px-3 py-2 text-sm"
             disabled={!selectedCategory}
           >
             <option value="">Wählen...</option>
             {selectedCategory?.subs.map(s => (
               <option key={s.value} value={s.value}>{s.label}</option>
             ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Zustand *</label>
-          <select
+          </Select>
+        </FormField>
+        <FormField label="Zustand" required>
+          <Select
             value={formData.zustand}
             onChange={(e) => setFormData(f => ({ ...f, zustand: e.target.value }))}
-            className="w-full border rounded-lg px-3 py-2 text-sm"
           >
             {ZUSTAND_OPTIONS.map(z => (
               <option key={z.value} value={z.value}>{z.label}</option>
             ))}
-          </select>
-        </div>
+          </Select>
+        </FormField>
       </div>
 
       {formData.intake_tier === INTAKE_TIERS.REFURBISH && (
-        <div>
-          <label className="block text-sm font-medium mb-1">Geschätzter Verkaufspreis (CHF)</label>
-          <input
+        <FormField label="Geschätzter Verkaufspreis (CHF)">
+          <Input
             type="number"
             value={formData.verkaufspreis || ''}
             onChange={(e) => setFormData(f => ({ ...f, verkaufspreis: Number(e.target.value) }))}
             placeholder="0"
             min={0}
-            className="w-full border rounded-lg px-3 py-2 text-sm"
           />
-        </div>
+        </FormField>
       )}
 
       {/* Donation Toggle */}
@@ -308,35 +297,31 @@ export function IntakeCreateForm({
 
         {formData.is_donation && (
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium mb-1 text-neutral-600">Name Spender/in</label>
-              <input
+            <FormField label="Name Spender/in">
+              <Input
                 type="text"
                 value={formData.donor_name}
                 onChange={(e) => setFormData(f => ({ ...f, donor_name: e.target.value }))}
                 placeholder="Optional"
-                className="w-full border rounded px-2 py-1.5 text-sm"
               />
-            </div>
-            <div>
-              <label className="block text-xs font-medium mb-1 text-neutral-600">E-Mail Spender/in</label>
-              <input
+            </FormField>
+            <FormField label="E-Mail Spender/in">
+              <Input
                 type="email"
                 value={formData.donor_email}
                 onChange={(e) => setFormData(f => ({ ...f, donor_email: e.target.value }))}
                 placeholder="Optional"
-                className="w-full border rounded px-2 py-1.5 text-sm"
               />
-            </div>
+            </FormField>
             <div className="col-span-2">
-              <label className="block text-xs font-medium mb-1 text-neutral-600">Notizen zur Spende</label>
-              <input
-                type="text"
-                value={formData.donor_notes}
-                onChange={(e) => setFormData(f => ({ ...f, donor_notes: e.target.value }))}
-                placeholder="z.B. Übergeben am Standort Zürich"
-                className="w-full border rounded px-2 py-1.5 text-sm"
-              />
+              <FormField label="Notizen zur Spende">
+                <Input
+                  type="text"
+                  value={formData.donor_notes}
+                  onChange={(e) => setFormData(f => ({ ...f, donor_notes: e.target.value }))}
+                  placeholder="z.B. Übergeben am Standort Zürich"
+                />
+              </FormField>
             </div>
           </div>
         )}

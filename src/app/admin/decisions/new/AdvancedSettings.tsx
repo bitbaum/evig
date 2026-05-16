@@ -1,6 +1,9 @@
 'use client';
 
 import { VOTING_METHODS, VOTING_METHOD_CONFIG, DOT_VOTING_DEFAULTS, type VotingMethod } from '@/config/decisions';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 
 interface Props {
   votingMethod: VotingMethod;
@@ -24,80 +27,62 @@ export function AdvancedSettings({
 }: Props) {
   return (
     <div className="space-y-4">
-      {/* Voting Method */}
-      <div>
-        <label htmlFor="decision-voting-method" className="mb-1 block text-sm font-medium text-neutral-700">
-          Abstimmungsmethode
-          <span className="ml-1.5 font-normal text-neutral-400">(wird durch Entscheidungstyp gesetzt)</span>
-        </label>
-        <select
+      <FormField
+        htmlFor="decision-voting-method"
+        label={<>Abstimmungsmethode<span className="ml-1.5 font-normal text-neutral-400">(wird durch Entscheidungstyp gesetzt)</span></>}
+        hint={VOTING_METHOD_CONFIG[votingMethod].description}
+      >
+        <Select
           id="decision-voting-method"
           value={votingMethod}
           onChange={(e) => onMethodChange(e.target.value as VotingMethod)}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
         >
           {VOTING_METHODS.map((m) => (
             <option key={m} value={m}>
               {VOTING_METHOD_CONFIG[m].label}
             </option>
           ))}
-        </select>
-        <p className="mt-1 text-xs text-neutral-500">
-          {VOTING_METHOD_CONFIG[votingMethod].description}
-        </p>
-      </div>
+        </Select>
+      </FormField>
 
-      {/* Dot Count */}
       {votingMethod === 'dot' && (
-        <div>
-          <label htmlFor="decision-dot-count" className="mb-1 block text-sm font-medium text-neutral-700">
-            Punkte pro Person
-          </label>
-          <input
+        <FormField htmlFor="decision-dot-count" label="Punkte pro Person">
+          <Input
             id="decision-dot-count"
             type="number"
             value={dotCount}
             onChange={(e) => onDotCountChange(Number(e.target.value))}
             min={DOT_VOTING_DEFAULTS.min}
             max={DOT_VOTING_DEFAULTS.max}
-            className="w-24 rounded-md border border-neutral-300 px-3 py-2 text-sm"
+            className="w-24"
           />
-        </div>
+        </FormField>
       )}
 
-      {/* Quorum */}
       <div className="flex gap-3">
-        <div>
-          <label htmlFor="decision-quorum-type" className="mb-1 block text-sm font-medium text-neutral-700">
-            Quorum Typ
-          </label>
-          <select
+        <FormField htmlFor="decision-quorum-type" label="Quorum Typ">
+          <Select
             id="decision-quorum-type"
             value={quorumType}
             onChange={(e) => onQuorumTypeChange(e.target.value as 'percentage' | 'absolute')}
-            className="rounded-md border border-neutral-300 px-3 py-2 text-sm"
           >
             <option value="percentage">Prozent</option>
             <option value="absolute">Absolut</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="decision-quorum-value" className="mb-1 block text-sm font-medium text-neutral-700">
-            Wert
-          </label>
-          <input
+          </Select>
+        </FormField>
+        <FormField htmlFor="decision-quorum-value" label="Wert">
+          <Input
             id="decision-quorum-value"
             type="number"
             value={quorumValue}
             onChange={(e) => onQuorumValueChange(Number(e.target.value))}
             min={1}
-            className="w-24 rounded-md border border-neutral-300 px-3 py-2 text-sm"
+            className="w-24"
           />
-        </div>
+        </FormField>
       </div>
 
-      {/* Blind Voting */}
-      <label className="flex items-center gap-2 text-sm text-neutral-700">
+      <label className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-300">
         <input
           type="checkbox"
           checked={blindVoting}
@@ -106,7 +91,6 @@ export function AdvancedSettings({
         />
         Geheime Abstimmung (Stimmen erst nach eigener Abgabe sichtbar)
       </label>
-
     </div>
   );
 }

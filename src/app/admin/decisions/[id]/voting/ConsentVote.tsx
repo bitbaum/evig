@@ -1,6 +1,7 @@
 'use client';
 
 import { CONSENT_RESPONSE_CONFIG, CONSENT_RESPONSES, type ConsentResponse } from '@/config/decisions';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Props {
   response: ConsentResponse;
@@ -31,7 +32,7 @@ export function ConsentVote({ response, rationale, onResponseChange, onRationale
           );
         })}
       </div>
-      <textarea
+      <Textarea
         value={rationale}
         onChange={(e) => onRationaleChange(e.target.value)}
         placeholder={
@@ -40,7 +41,6 @@ export function ConsentVote({ response, rationale, onResponseChange, onRationale
             : 'Begründung (optional)'
         }
         rows={3}
-        className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
       />
     </div>
   );

@@ -124,12 +124,12 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           {showAttendees && (
             <div className="mt-2 p-3 bg-neutral-50 rounded-lg border space-y-2">
               <div className="flex items-center justify-between gap-2">
-                <input
+                <Input
                   type="text"
                   value={attendeeSearch}
                   onChange={(e) => setAttendeeSearch(e.target.value)}
                   placeholder="Teilnehmer suchen..."
-                  className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-primary-500"
+                  className="flex-1 py-1"
                 />
                 <button
                   type="button"
@@ -233,16 +233,16 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   <label htmlFor="whisper_model" className="block text-xs font-medium text-info-700 mb-1">
                     Whisper-Modell
                   </label>
-                  <select
+                  <Select
                     id="whisper_model"
                     value={whisperModel}
                     onChange={(e) => setWhisperModel(e.target.value)}
-                    className="w-full px-2 py-1 text-sm border border-primary-200 rounded focus:outline-none focus:ring-1 focus:ring-primary-500 bg-white"
+                    className="py-1 text-xs"
                   >
                     {WHISPER_MODELS.map((model) => (
                       <option key={model.id} value={model.id}>{model.label}</option>
                     ))}
-                  </select>
+                  </Select>
                 </div>
               </div>
             )}

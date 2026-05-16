@@ -5,6 +5,10 @@ import { DecisionTypeSelector } from '../../new/DecisionTypeSelector';
 import { DecisionOptionsEditor } from '../../new/DecisionOptionsEditor';
 import { AdvancedSettings } from '../../new/AdvancedSettings';
 import { useDecisionEditForm } from './useDecisionEditForm';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
 
 export default function DecisionEditFormClient({ decisionId }: { decisionId: string }) {
   const {
@@ -38,49 +42,39 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
 
       <DecisionTypeSelector selected={decisionType} onChange={setDecisionType} />
 
-      <div>
-        <label htmlFor="edit-title" className="mb-1 block text-sm font-medium text-neutral-700">
-          Titel
-        </label>
-        <input
+      <FormField htmlFor="edit-title" label="Titel" required>
+        <Input
           id="edit-title"
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
           maxLength={200}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="edit-description" className="mb-1 block text-sm font-medium text-neutral-700">
-          Was wird entschieden?
-        </label>
-        <textarea
+      <FormField htmlFor="edit-description" label="Was wird entschieden?" required>
+        <Textarea
           id="edit-description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
           rows={3}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="edit-background" className="mb-1 block text-sm font-medium text-neutral-700">
-          Begründung & Hintergrund
-          <span className="ml-1.5 font-normal text-neutral-400">(optional)</span>
-        </label>
-        <textarea
+      <FormField
+        htmlFor="edit-background"
+        label={<>Begründung &amp; Hintergrund<span className="ml-1.5 font-normal text-neutral-400">(optional)</span></>}
+      >
+        <Textarea
           id="edit-background"
           value={background}
           onChange={(e) => setBackground(e.target.value)}
           rows={4}
-          className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
           placeholder="Begründung, Alternativen, Risiken — sichtbar für Abstimmungsberechtigte vor dem Abstimmen."
         />
-      </div>
+      </FormField>
 
       {needsOptions && (
         <DecisionOptionsEditor
@@ -135,16 +129,12 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
       </div>
 
       <div className="flex gap-3">
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={submitting} variant="primary" size="sm">
           {submitting ? 'Wird gespeichert...' : 'Änderungen speichern'}
-        </button>
+        </Button>
         <Link
           href={`/admin/decisions/${decisionId}`}
-          className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+          className="rounded-lg border border-neutral-300 dark:border-white/[0.08] px-4 py-2 text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"
         >
           Abbrechen
         </Link>

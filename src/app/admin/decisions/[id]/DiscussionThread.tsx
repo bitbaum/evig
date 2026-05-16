@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import Heading from '@/components/admin/AdminHeading';
+import { Textarea } from '@/components/ui/textarea';
 import { apiFetch } from '@/lib/api/client';
 import {
   COMMENT_POSITIONS,
@@ -205,11 +206,10 @@ export default function DiscussionThread({
                         </div>
                         {isEditing ? (
                           <div className="mt-2 space-y-2">
-                            <textarea
+                            <Textarea
                               value={editContent}
                               onChange={(e) => setEditContent(e.target.value)}
                               rows={2}
-                              className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
                             />
                             <div className="flex gap-2">
                               <button
@@ -268,12 +268,12 @@ export default function DiscussionThread({
             })}
           </div>
           <div className="flex gap-2">
-            <textarea
+            <Textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Kommentar schreiben..."
               rows={2}
-              className="flex-1 rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
+              className="flex-1"
             />
             <button
               type="submit"

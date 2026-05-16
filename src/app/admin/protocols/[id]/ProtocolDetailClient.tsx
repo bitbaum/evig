@@ -10,6 +10,7 @@
 import { useState, useMemo } from 'react'
 import { Loader2, CheckCircle2, FileText, Trash2, Users, Pencil, X, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   useProtocolDetail,
@@ -197,12 +198,12 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
           {editingAttendees && (
             <div className="mt-3 space-y-2">
-              <input
+              <Input
                 type="text"
                 value={attendeeSearch}
                 onChange={(e) => setAttendeeSearch(e.target.value)}
                 placeholder="Teilnehmer suchen..."
-                className="w-full px-2 py-1 text-sm border rounded focus:outline-none focus:ring-1 focus:ring-primary-500"
+                className="py-1"
               />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto">
                 {filteredTeamMembersForEdit.map((member) => (

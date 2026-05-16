@@ -2,6 +2,7 @@
 
 import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, PARTICIPANT_SCOPE, type ParticipantScope } from '@/config/decisions';
 import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
 import { type TeamMember } from './useDecisionForm';
 
 interface Props {
@@ -50,12 +51,11 @@ export function ParticipantSelector({
 
       {participantScope === PARTICIPANT_SCOPE.INVITED && (
         <div className="space-y-2 pt-1">
-          <input
+          <Input
             type="text"
             value={participantSearch}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Teilnehmer suchen..."
-            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm"
           />
           {teamMembers.length === 0 ? (
             <p className="text-xs text-neutral-400">Team wird geladen...</p>

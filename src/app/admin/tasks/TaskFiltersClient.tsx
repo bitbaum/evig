@@ -1,12 +1,5 @@
 'use client'
 
-/**
- * Task Filters Client Component
- *
- * Client-side filter dropdowns and search for task list.
- * Created: 2026-02-05
- */
-
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Filter, Search } from 'lucide-react'
@@ -15,6 +8,8 @@ import {
   TASK_STATUS_LABELS,
   TASK_PRIORITY_LABELS,
 } from '@/config/tasks'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 
 export default function TaskFiltersClient() {
   const router = useRouter()
@@ -44,72 +39,65 @@ export default function TaskFiltersClient() {
     } else {
       params.delete(key)
     }
-    // Reset to page 1 when any filter changes
     params.delete('page')
     router.push(`/admin/tasks?${params.toString()}`)
   }
 
   return (
-    <div className="bg-white rounded-lg border p-4">
+    <div className="bg-white dark:bg-neutral-900 rounded-lg border dark:border-white/[0.08] p-4">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
         {/* Search */}
         <div className="relative flex-1 w-full md:w-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-          <input
+          <Input
             type="text"
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Aufgaben suchen..."
-            className="w-full pl-9 pr-3 py-1.5 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            className="pl-9 py-1.5"
           />
         </div>
 
         <div className="flex items-center gap-4">
           <Filter className="w-5 h-5 text-neutral-500" />
           <div className="flex items-center gap-2">
-            <label className="text-sm text-neutral-600">Kategorie:</label>
-            <select
-              className="text-sm border rounded px-2 py-1"
+            <label className="text-sm text-neutral-600 dark:text-neutral-400">Kategorie:</label>
+            <Select
+              className="py-1 text-sm"
               value={searchParams.get('category') || ''}
               onChange={(e) => handleFilterChange('category', e.target.value)}
             >
               <option value="">Alle</option>
               {Object.entries(TASK_CATEGORY_LABELS).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
+                <option key={key} value={key}>{label}</option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-neutral-600">Status:</label>
-            <select
-              className="text-sm border rounded px-2 py-1"
+            <label className="text-sm text-neutral-600 dark:text-neutral-400">Status:</label>
+            <Select
+              className="py-1 text-sm"
               value={searchParams.get('status') || ''}
               onChange={(e) => handleFilterChange('status', e.target.value)}
             >
               <option value="">Alle</option>
               {Object.entries(TASK_STATUS_LABELS).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
+                <option key={key} value={key}>{label}</option>
               ))}
-            </select>
+            </Select>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-neutral-600">Priorität:</label>
-            <select
-              className="text-sm border rounded px-2 py-1"
+            <label className="text-sm text-neutral-600 dark:text-neutral-400">Priorität:</label>
+            <Select
+              className="py-1 text-sm"
               value={searchParams.get('priority') || ''}
               onChange={(e) => handleFilterChange('priority', e.target.value)}
             >
               <option value="">Alle</option>
               {Object.entries(TASK_PRIORITY_LABELS).map(([key, label]) => (
-                <option key={key} value={key}>
-                  {label}
-                </option>
+                <option key={key} value={key}>{label}</option>
               ))}
-            </select>
+            </Select>
           </div>
         </div>
       </div>
