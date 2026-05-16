@@ -11,6 +11,10 @@ import { URGENCY } from '@/config/it-hilfe'
 import { Modal } from '@/components/ui/Modal'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import { useAppointments, type ServiceAppointment } from '@/hooks/useAppointments'
 
 function getStatusIcon(status: string) {
@@ -71,15 +75,15 @@ export default function AppointmentsDashboard() {
 
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-4 sm:py-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-4 sm:py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-4 sm:p-8">
             <div className="animate-pulse">
-              <div className="h-6 sm:h-8 bg-neutral-200 rounded w-1/3 mb-4 sm:mb-6"></div>
+              <div className="h-6 sm:h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-4 sm:mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 rounded w-full"></div>
-                <div className="h-4 bg-neutral-200 rounded w-3/4"></div>
-                <div className="h-4 bg-neutral-200 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2"></div>
               </div>
             </div>
           </div>
@@ -89,15 +93,15 @@ export default function AppointmentsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
-          <Link href="/dashboard" className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4">
+          <Link href="/dashboard" className="inline-flex items-center text-neutral-600 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200 mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <Heading level={1} className="text-3xl font-bold text-neutral-900 mb-2">{t('pageTitle')}</Heading>
-          <p className="text-neutral-600">{t('pageSubtitle')}</p>
+          <Heading level={1} className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">{t('pageTitle')}</Heading>
+          <p className="text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
         </div>
 
         {paymentSuccess && (
@@ -125,11 +129,11 @@ export default function AppointmentsDashboard() {
         {appointments.length > 0 ? (
           <div className="space-y-4 sm:space-y-6">
             {appointments.map((appointment: ServiceAppointment) => (
-              <div key={appointment.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+              <div key={appointment.id} className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border border-transparent dark:border-white/[0.06]">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-start gap-3 sm:gap-4 flex-1">
-                    <div className="p-2 sm:p-3 bg-neutral-100 rounded-lg flex-shrink-0">
-                      <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-600" />
+                    <div className="p-2 sm:p-3 bg-neutral-100 dark:bg-neutral-800 rounded-lg flex-shrink-0">
+                      <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-neutral-600 dark:text-neutral-400" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <Heading level={3} className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
@@ -157,40 +161,40 @@ export default function AppointmentsDashboard() {
                 </div>
 
                 {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
-                  <div className="bg-warning-50 border-2 border-warning-200 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center text-warning-800">
+                  <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-warning-800 dark:text-warning-300">
                       <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('requestedTitle')}</span>
                     </div>
-                    <p className="text-warning-700 text-xs sm:text-sm mt-1 ml-7">{t('requestedDesc')}</p>
+                    <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">{t('requestedDesc')}</p>
                   </div>
                 )}
 
                 {appointment.status === APPOINTMENT_STATUS.CONFIRMED && (
-                  <div className="bg-success-50 border-2 border-success-200 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center text-success-800">
+                  <div className="bg-success-50 dark:bg-success-500/10 border-2 border-success-200 dark:border-success-500/30 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-success-800 dark:text-success-300">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('confirmedTitle')}</span>
                     </div>
-                    <p className="text-success-700 text-xs sm:text-sm mt-1 ml-7">{t('confirmedDesc')}</p>
+                    <p className="text-success-700 dark:text-success-400 text-xs sm:text-sm mt-1 ml-7">{t('confirmedDesc')}</p>
                   </div>
                 )}
 
                 {appointment.status === APPOINTMENT_STATUS.COMPLETED && (
-                  <div className="bg-primary-50 border-2 border-primary-200 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center text-primary-800">
+                  <div className="bg-primary-50 dark:bg-primary-500/10 border-2 border-primary-200 dark:border-primary-500/30 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-primary-800 dark:text-primary-300">
                       <CheckCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('completedTitle')}</span>
                     </div>
                     {appointment.outcome_notes && (
-                      <p className="text-primary-700 text-xs sm:text-sm mt-1 ml-7">{appointment.outcome_notes}</p>
+                      <p className="text-primary-700 dark:text-primary-400 text-xs sm:text-sm mt-1 ml-7">{appointment.outcome_notes}</p>
                     )}
                   </div>
                 )}
 
                 {appointment.status === APPOINTMENT_STATUS.CANCELLED && (
-                  <div className="bg-error-50 border-2 border-error-200 rounded-lg p-3 sm:p-4">
-                    <div className="flex items-center text-error-800">
+                  <div className="bg-error-50 dark:bg-error-500/10 border-2 border-error-200 dark:border-error-500/30 rounded-lg p-3 sm:p-4">
+                    <div className="flex items-center text-error-800 dark:text-error-300">
                       <XCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="font-medium text-sm sm:text-base">{t('cancelledTitle')}</span>
                     </div>
@@ -199,19 +203,21 @@ export default function AppointmentsDashboard() {
 
                 {appointment.status !== APPOINTMENT_STATUS.CANCELLED && (
                   <div className="mt-4 flex gap-3">
-                    <button
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => setPendingCancelId(appointment.id)}
-                      className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       {t('cancelButton')}
-                    </button>
+                    </Button>
                     {appointment.status === APPOINTMENT_STATUS.REQUESTED && (
-                      <button
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => openEdit(appointment)}
-                        className="px-4 py-2 rounded-lg border border-primary-300 text-primary-700 hover:bg-primary-50"
                       >
                         {t('editButton')}
-                      </button>
+                      </Button>
                     )}
                   </div>
                 )}
@@ -239,33 +245,29 @@ export default function AppointmentsDashboard() {
 
       <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title={t('modalTitle')}>
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('descriptionLabel')}</label>
-            <textarea
+          <FormField label={t('descriptionLabel')}>
+            <Textarea
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               rows={4}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
               placeholder={t('descriptionPlaceholder')}
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-1">{t('dateLabel')}</label>
-            <input
+          </FormField>
+          <FormField label={t('dateLabel')}>
+            <Input
               type="datetime-local"
               value={editPreferredDate}
               onChange={(e) => setEditPreferredDate(e.target.value)}
-              className="px-3 py-2 border border-neutral-300 rounded-lg"
             />
-          </div>
+          </FormField>
         </div>
         <div className="mt-6 flex justify-end gap-3">
-          <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">
+          <Button variant="outline" onClick={() => setEditingId(null)}>
             {t('cancel')}
-          </button>
-          <button onClick={saveEdit} disabled={saving} className="px-4 py-2 rounded-lg bg-primary-600 text-white disabled:opacity-50">
+          </Button>
+          <Button variant="primary" onClick={saveEdit} disabled={saving}>
             {saving ? t('saving') : t('save')}
-          </button>
+          </Button>
         </div>
       </Modal>
 

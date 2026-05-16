@@ -18,6 +18,10 @@ import { formatDateShort } from '@/lib/date-formats'
 import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
 import { REVIEW_STATUS, REVIEW_STATUS_BADGES } from '@/config/review-status'
 
 const STATUS_STYLES = REVIEW_STATUS_BADGES
@@ -81,35 +85,27 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
         ))}
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 mb-1">{t('editTitle')}</label>
-        <input
+      <FormField label={t('editTitle')}>
+        <Input
           type="text"
           value={editForm.title}
           onChange={(e) => setEditForm({...editForm, title: e.target.value})}
-          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           placeholder={t('editTitlePlaceholder')}
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-neutral-700 mb-1">{t('editContent')}</label>
-        <textarea
+      <FormField label={t('editContent')}>
+        <Textarea
           value={editForm.content}
           onChange={(e) => setEditForm({...editForm, content: e.target.value})}
           rows={4}
-          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           placeholder={t('editContentPlaceholder')}
         />
-      </div>
+      </FormField>
 
       <div className="flex gap-2">
-        <button onClick={onSave} className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
-          {t('save')}
-        </button>
-        <button onClick={onCancel} className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200">
-          {t('cancel')}
-        </button>
+        <Button variant="primary" onClick={onSave}>{t('save')}</Button>
+        <Button variant="outline" onClick={onCancel}>{t('cancel')}</Button>
       </div>
     </div>
   )
@@ -131,8 +127,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   const t = useTranslations('dashboard.reviews')
   const tDates = useTranslations('dashboard.dates')
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-neutral-200 overflow-hidden">
-      <div className="p-6 border-b border-neutral-200">
+    <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-white/[0.06] overflow-hidden">
+      <div className="p-6 border-b border-neutral-200 dark:border-white/[0.06]">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-3">
@@ -187,7 +183,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               {canEdit(review.createdAt) && review.status === REVIEW_STATUS.PUBLISHED && (
                 <button
                   onClick={() => onEdit(review)}
-                  className="px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded text-sm hover:bg-neutral-200 flex items-center gap-1"
+                  className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 flex items-center gap-1"
                 >
                   <Edit3 className="w-3 h-3" />
                   {t('edit')}
@@ -195,7 +191,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               )}
               <button
                 onClick={() => onDelete(review.id)}
-                className="px-3 py-1.5 bg-error-100 text-error-700 rounded text-sm hover:bg-error-200 flex items-center gap-1"
+                className="px-3 py-1.5 bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400 rounded text-sm hover:bg-error-200 dark:hover:bg-error-500/30 flex items-center gap-1"
               >
                 <Trash2 className="w-3 h-3" />
                 {t('delete')}
@@ -205,8 +201,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
         </div>
 
         {/* Review Stats */}
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-neutral-100">
-          <div className="flex items-center gap-4 text-sm text-neutral-500">
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-neutral-100 dark:border-white/[0.04]">
+          <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
             <span>{t('helpfulVotes', { count: review.helpfulVotes })}</span>
             <span>{tDates('createdOn', { date: formatDateShort(review.createdAt) })}</span>
             {review.updatedAt !== review.createdAt && (
@@ -221,8 +217,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 onClick={() => onVote(review.id, 'helpful')}
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'helpful'
-                    ? 'bg-primary-100 text-primary-700'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                    ? 'bg-primary-100 dark:bg-primary-500/20 text-primary-700 dark:text-primary-400'
+                    : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600'
                 }`}
               >
                 <ThumbsUp className="w-3 h-3" />
@@ -232,8 +228,8 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 onClick={() => onVote(review.id, 'unhelpful')}
                 className={`flex items-center gap-1 px-3 py-1 rounded text-sm ${
                   getUserVote(review.id) === 'unhelpful'
-                    ? 'bg-error-100 text-error-700'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                    ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
+                    : 'bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-600'
                 }`}
               >
                 <ThumbsDown className="w-3 h-3" />
@@ -276,12 +272,12 @@ export default function UserReviewsPage() {
 
   if (error) {
     return (
-      <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+      <div className="bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg p-4">
         <div className="flex">
           <div className="text-error-400">⚠️</div>
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-error-800">{t('loadError')}</Heading>
-            <p className="text-sm text-error-700 mt-1">{error}</p>
+            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-300">{t('loadError')}</Heading>
+            <p className="text-sm text-error-700 dark:text-error-400 mt-1">{error}</p>
           </div>
         </div>
       </div>
@@ -291,9 +287,9 @@ export default function UserReviewsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border border-neutral-200 p-6">
-        <Heading level={1} className="text-2xl font-bold text-neutral-900 mb-2">{t('pageTitle')}</Heading>
-        <p className="text-neutral-600">
+      <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-sm border border-neutral-200 dark:border-white/[0.06] p-6">
+        <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">{t('pageTitle')}</Heading>
+        <p className="text-neutral-600 dark:text-neutral-400">
           {t('pageDescription')}
         </p>
       </div>
