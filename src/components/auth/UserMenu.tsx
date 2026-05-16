@@ -136,10 +136,10 @@ export function UserMenu() {
         className={cn(
           "flex items-center gap-2 p-1.5 rounded-full",
           "transition-all duration-200",
-          "ring-2 ring-primary-100",
+          "ring-2 ring-primary-100 dark:ring-primary-500/20",
           isOpen
-            ? "bg-primary-50 ring-primary-200"
-            : "hover:bg-primary-50 hover:ring-primary-200",
+            ? "bg-primary-50 dark:bg-primary-500/10 ring-primary-200 dark:ring-primary-500/30"
+            : "hover:bg-primary-50 dark:hover:bg-primary-500/10 hover:ring-primary-200 dark:hover:ring-primary-500/30",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
         )}
         aria-expanded={isOpen}
@@ -197,10 +197,10 @@ export function UserMenu() {
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-neutral-900 truncate">
+                <p className="text-sm font-semibold text-neutral-900 dark:text-white truncate">
                   {session.user.name || t('user')}
                 </p>
-                <p className="text-xs text-neutral-500 truncate">
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
                   {session.user.email}
                 </p>
               </div>
@@ -212,7 +212,7 @@ export function UserMenu() {
             {menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 {groupIndex > 0 && (
-                  <div className="my-1 mx-3 border-t border-neutral-100" />
+                  <div className="my-1 mx-3 border-t border-neutral-100 dark:border-white/[0.06]" />
                 )}
                 {group.map((item) => (
                   <Link
@@ -223,15 +223,15 @@ export function UserMenu() {
                       "group flex items-center gap-3 px-5 py-2.5",
                       "text-sm transition-colors duration-150",
                       'highlight' in item && item.highlight
-                        ? "text-warning-700 bg-warning-50 hover:bg-warning-100 font-medium"
-                        : "text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50"
+                        ? "text-warning-700 dark:text-warning-400 bg-warning-50 dark:bg-warning-500/10 hover:bg-warning-100 dark:hover:bg-warning-500/20 font-medium"
+                        : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-white/[0.04]"
                     )}
                   >
                     <item.icon className={cn(
                       "w-4 h-4 transition-colors",
                       'highlight' in item && item.highlight
-                        ? "text-warning-600"
-                        : "text-neutral-400 group-hover:text-primary-600"
+                        ? "text-warning-600 dark:text-warning-400"
+                        : "text-neutral-400 dark:text-neutral-500 group-hover:text-primary-600 dark:group-hover:text-primary-400"
                     )} />
                     {item.label}
                   </Link>
@@ -241,17 +241,17 @@ export function UserMenu() {
           </div>
 
           {/* Settings & Logout */}
-          <div className="py-2 border-t border-neutral-100">
+          <div className="py-2 border-t border-neutral-100 dark:border-white/[0.06]">
             <Link
               href="/dashboard/settings"
               onClick={() => setIsOpen(false)}
               className={cn(
                 "group flex items-center gap-3 px-5 py-2.5",
-                "text-sm text-neutral-600 hover:text-neutral-900",
-                "hover:bg-neutral-50 transition-colors duration-150"
+                "text-sm text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white",
+                "hover:bg-neutral-50 dark:hover:bg-white/[0.04] transition-colors duration-150"
               )}
             >
-              <Settings className="w-4 h-4 text-neutral-500 group-hover:text-primary-600 transition-colors" />
+              <Settings className="w-4 h-4 text-neutral-500 dark:text-neutral-500 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" />
               {t('settings')}
             </Link>
             <button
@@ -261,11 +261,11 @@ export function UserMenu() {
               }}
               className={cn(
                 "group flex items-center gap-3 w-full px-5 py-2.5",
-                "text-sm text-neutral-600 hover:text-error-600",
-                "hover:bg-error-50 transition-colors duration-150"
+                "text-sm text-neutral-600 dark:text-neutral-300 hover:text-error-600 dark:hover:text-error-400",
+                "hover:bg-error-50 dark:hover:bg-error-500/10 transition-colors duration-150"
               )}
             >
-              <LogOut className="w-4 h-4 text-neutral-500 group-hover:text-error-500 transition-colors" />
+              <LogOut className="w-4 h-4 text-neutral-500 dark:text-neutral-500 group-hover:text-error-500 dark:group-hover:text-error-400 transition-colors" />
               {t('logout')}
             </button>
           </div>

@@ -140,7 +140,7 @@ export function MobileMenu({
 
         {/* Experimental Site Banner */}
         <div className="mx-6 mt-4">
-          <div className="flex items-center gap-2 px-4 py-3 bg-warning-50 border border-warning-100 rounded-xl text-sm text-warning-700">
+          <div className="flex items-center gap-2 px-4 py-3 bg-warning-50 dark:bg-warning-500/10 border border-warning-100 dark:border-warning-500/20 rounded-xl text-sm text-warning-700 dark:text-warning-400">
             <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse flex-shrink-0" />
             <span>
               {t('experimentalBanner')} –
@@ -148,7 +148,7 @@ export function MobileMenu({
                 href={ORG.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-warning-800 hover:text-warning-900 underline ml-1"
+                className="font-medium text-warning-800 dark:text-warning-300 hover:text-warning-900 dark:hover:text-warning-200 underline ml-1"
                 onClick={onClose}
               >
                 {t('experimentalBannerLink')}
