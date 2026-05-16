@@ -103,7 +103,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
   return (
     <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06]">
       <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06] flex items-center gap-2">
-        <CheckSquare className="w-5 h-5 text-info-500 flex-shrink-0" aria-hidden="true" />
+        <CheckSquare className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
           Meine Aufgaben
         </Heading>
@@ -130,7 +130,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                       {overdue ? (
                         <AlertCircle className="w-4 h-4 text-error-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       ) : (
-                        <Calendar className="w-4 h-4 text-info-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                        <Calendar className="w-4 h-4 text-primary-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                       )}
                       <div className="min-w-0 flex-1">
                         <p className="font-medium text-neutral-900 dark:text-white leading-snug">
@@ -150,7 +150,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             {myTasks.length === TASK_LIMIT && (
               <Link
                 href="/admin/tasks"
-                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-info-600 dark:text-info-400 hover:text-info-700 dark:hover:text-info-300 hover:bg-info-50 dark:hover:bg-info-900/20 rounded-lg transition-colors"
+                className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
               >
                 Alle Aufgaben ansehen
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />

@@ -25,8 +25,8 @@ export function PaymentForm({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-center p-3 bg-info-50 rounded-lg">
-        <Shield className="w-4 h-4 text-info-600 mr-2" />
+      <div className="flex items-center justify-center p-3 bg-primary-50 rounded-lg">
+        <Shield className="w-4 h-4 text-primary-600 mr-2" />
         <span className="text-sm text-info-800">{t('sslNote')}</span>
       </div>
 

@@ -31,7 +31,7 @@ function getSourceIcon(sourceType: string): JSX.Element | null {
     case 'help_request':
       return <HelpCircle className="w-5 h-5 text-warning-500" />
     case 'focus_update':
-      return <Clock className="w-5 h-5 text-info-500" />
+      return <Clock className="w-5 h-5 text-primary-500" />
     default:
       return <FileText className="w-5 h-5 text-neutral-500" />
   }
@@ -46,7 +46,7 @@ function getActivityUpdateIcon(updateType: string): JSX.Element {
     case 'note':
       return <FileText className="w-5 h-5 text-neutral-500" />
     case 'announcement':
-      return <Megaphone className="w-5 h-5 text-info-500" />
+      return <Megaphone className="w-5 h-5 text-primary-500" />
     default:
       return <FileText className="w-5 h-5 text-neutral-500" />
   }
@@ -93,7 +93,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-info-500 to-purple-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-purple-600 flex items-center justify-center">
             <span className="text-white font-medium text-sm">{initials}</span>
           </div>
         </div>

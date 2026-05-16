@@ -49,7 +49,7 @@ export function InstanceList({
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
-                    <GraduationCap className="w-5 h-5 text-info-600" />
+                    <GraduationCap className="w-5 h-5 text-primary-600" />
                     <Heading level={3} className="text-lg text-neutral-900 truncate">
                       {instance.workshop_title}
                     </Heading>

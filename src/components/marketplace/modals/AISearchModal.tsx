@@ -77,7 +77,7 @@ export function AISearchModal({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-info-100 rounded-lg flex items-center justify-center">
-                    <Search className="w-5 h-5 text-info-600" />
+                    <Search className="w-5 h-5 text-primary-600" />
                   </div>
                   <div>
                     <h2 className={cn('text-xl font-semibold', getTextColor('white', 'primary'))}>
@@ -111,13 +111,13 @@ export function AISearchModal({
                       onChange={(e) => onSearchQueryChange(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && onSearch()}
                       placeholder="z.B. iPhone 13 Pro Max, Dell XPS 13, Artikel-Nr. 12345..."
-                      className="w-full pl-10 pr-4 py-3 border-2 border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-info-500 focus:border-info-500 text-base"
+                      className="w-full pl-10 pr-4 py-3 border-2 border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
                     />
                   </div>
                   <button
                     onClick={onSearch}
                     disabled={!searchQuery.trim() || isSearching}
-                    className="px-6 py-3 bg-info-600 text-white rounded-lg hover:bg-info-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 min-h-[touch] touch-target"
+                    className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 min-h-[touch] touch-target"
                   >
                     {isSearching ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -129,7 +129,7 @@ export function AISearchModal({
                 </div>
 
                 {/* Search Examples */}
-                <div className="mt-4 p-4 bg-info-50 rounded-lg border border-info-200">
+                <div className="mt-4 p-4 bg-primary-50 rounded-lg border border-info-200">
                   <p className={cn('text-sm font-medium mb-2', getStatusColors('info').text)}>
                     Beispiele:
                   </p>
@@ -165,11 +165,11 @@ export function AISearchModal({
                         <div
                           key={result.id}
                           onClick={() => onSelectResult(result)}
-                          className="p-4 border-2 border-neutral-200 rounded-lg hover:border-info-300 hover:bg-info-50 cursor-pointer transition-colors"
+                          className="p-4 border-2 border-neutral-200 rounded-lg hover:border-info-300 hover:bg-primary-50 cursor-pointer transition-colors"
                         >
                           <div className="flex items-start gap-4">
                             <div className="w-12 h-12 bg-info-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                              <Package className="w-6 h-6 text-info-600" />
+                              <Package className="w-6 h-6 text-primary-600" />
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
@@ -195,7 +195,7 @@ export function AISearchModal({
                                 ))}
                               </div>
                             </div>
-                            <CheckCircle className="w-5 h-5 text-info-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <CheckCircle className="w-5 h-5 text-primary-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                         </div>
                       )
@@ -226,7 +226,7 @@ export function AISearchModal({
               {/* Loading State */}
               {isSearching && (
                 <div className="text-center py-12">
-                  <Loader2 className="w-8 h-8 text-info-600 animate-spin mx-auto mb-4" />
+                  <Loader2 className="w-8 h-8 text-primary-600 animate-spin mx-auto mb-4" />
                   <h3 className={cn('text-lg font-medium mb-2', getTextColor('white', 'primary'))}>
                     Produkt wird gesucht...
                   </h3>
@@ -249,7 +249,7 @@ export function AISearchModal({
                   <div className="flex gap-3 justify-center">
                     <button
                       onClick={() => onSearchQueryChange('')}
-                      className="px-4 py-2 bg-info-600 text-white rounded-lg hover:bg-info-700 transition-colors min-h-[touch] touch-target"
+                      className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
                     >
                       Neue Suche
                     </button>

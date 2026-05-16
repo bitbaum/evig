@@ -90,7 +90,7 @@ export function ApplicationDetails({ application }: Props) {
                   href={doc}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm text-info-600 hover:text-info-700"
+                  className="flex items-center gap-2 text-sm text-primary-600 hover:text-primary-700"
                 >
                   <FileText className="w-4 h-4" />
                   Dokument {index + 1}
