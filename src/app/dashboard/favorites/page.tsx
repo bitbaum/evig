@@ -122,8 +122,8 @@ export default function FavoritesPage() {
       {!isLoading && !error && favorites.length === 0 && (
         <EmptyState
           icon={Heart}
-          iconBg="bg-rose-50 dark:bg-rose-900/20"
-          iconColor="text-rose-500 dark:text-rose-400"
+          iconBg="bg-error-50 dark:bg-error-900/20"
+          iconColor="text-error-500 dark:text-error-400"
           title={t('emptyTitle')}
           description={t('emptyDesc')}
           action={
@@ -185,7 +185,7 @@ export default function FavoritesPage() {
                   <button
                     onClick={() => removeFavorite(listing.id)}
                     disabled={removingId === listing.id}
-                    className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
+                    className="w-full flex items-center justify-center gap-1 py-1.5 rounded-lg text-xs font-medium text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors disabled:opacity-50"
                   >
                     {removingId === listing.id ? (
                       <Loader2 className="w-3 h-3 animate-spin" />

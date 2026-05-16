@@ -3,14 +3,18 @@
 import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
-import { getTextColor, getStatusColors } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
 import { formatDate } from '@/lib/date-formats'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { FormField } from '@/components/ui/form-field'
+import { EmptyState } from '@/components/ui/EmptyState'
+import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { useWorkshopRegistrations } from '@/hooks/useWorkshopRegistrations'
 import type { WorkshopRegistration } from '@/hooks/useWorkshopRegistrations'
-import React from 'react'
 
 function getStatusIcon(status: string) {
   switch (status) {
@@ -21,19 +25,8 @@ function getStatusIcon(status: string) {
     case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
       return <XCircle className="w-5 h-5 text-error-500" />
     default:
-      return <AlertCircle className="w-5 h-5 text-neutral-500" />
+      return <AlertCircle className="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
   }
-}
-
-function Modal({ open, onClose, children }: { open: boolean; onClose: () => void; children: React.ReactNode }) {
-  if (!open) return null
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  )
 }
 
 export default function WorkshopsDashboard() {
@@ -75,15 +68,15 @@ export default function WorkshopsDashboard() {
 
   if (sessionStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 border-2 border-neutral-200">
+          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 border-2 border-neutral-200 dark:border-white/[0.06]">
             <div className="animate-pulse">
-              <div className="h-8 bg-neutral-200 rounded w-1/3 mb-6"></div>
+              <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3 mb-6"></div>
               <div className="space-y-4">
-                <div className="h-4 bg-neutral-200 rounded w-full"></div>
-                <div className="h-4 bg-neutral-200 rounded w-3/4"></div>
-                <div className="h-4 bg-neutral-200 rounded w-1/2"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-3/4"></div>
+                <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-1/2"></div>
               </div>
             </div>
           </div>
@@ -94,11 +87,11 @@ export default function WorkshopsDashboard() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200">
-            <h1 className={cn('text-2xl font-bold mb-4', getTextColor('white', 'primary'))}>{t('loginRequired')}</h1>
-            <p className={cn('mb-6', getTextColor('white', 'muted'))}>{t('loginDesc')}</p>
+          <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200 dark:border-white/[0.06]">
+            <Heading level={1} className="text-2xl font-bold mb-4 text-neutral-900 dark:text-white">{t('loginRequired')}</Heading>
+            <p className="mb-6 text-neutral-600 dark:text-neutral-400">{t('loginDesc')}</p>
             <Link
               href="/auth/login"
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
@@ -112,36 +105,36 @@ export default function WorkshopsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="mb-8">
           <Link
             href="/dashboard"
-            className={cn('inline-flex items-center mb-4', getTextColor('neutral', 'muted'), 'hover:text-primary-600')}
+            className="inline-flex items-center mb-4 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             {t('backToDashboard')}
           </Link>
-          <h1 className={cn('text-3xl font-bold mb-2', getTextColor('neutral', 'primary'))}>{t('pageTitle')}</h1>
-          <p className={cn('text-sm sm:text-base', getTextColor('neutral', 'muted'))}>{t('pageSubtitle')}</p>
+          <Heading level={1} className="text-3xl font-bold mb-2 text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
+          <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
         </div>
 
         {error && (
-          <div className={cn('rounded-lg p-4 mb-6 border-2', getStatusColors('error').bg, getStatusColors('error').border)}>
-            <p className={cn('text-sm', getStatusColors('error').text)}>{error}</p>
+          <div className="rounded-lg p-4 mb-6 border-2 bg-error-50 dark:bg-error-500/10 border-error-200 dark:border-error-500/30">
+            <p className="text-sm text-error-800 dark:text-error-400">{error}</p>
           </div>
         )}
 
         {registrations.length > 0 ? (
           <div className="space-y-6">
             {registrations.map((registration: WorkshopRegistration) => (
-              <div key={registration.id} className="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-2 border-neutral-200">
+              <div key={registration.id} className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg dark:shadow-black/30 p-4 sm:p-6 border-2 border-neutral-200 dark:border-white/[0.06]">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h3 className={cn('text-xl font-semibold mb-2', getTextColor('white', 'primary'))}>
+                    <Heading level={3} className="text-xl font-semibold mb-2 text-neutral-900 dark:text-white">
                       {registration.workshop_title}
-                    </h3>
-                    <div className={cn('flex items-center gap-4 text-sm mb-3', getTextColor('white', 'muted'))}>
+                    </Heading>
+                    <div className="flex items-center gap-4 text-sm mb-3 text-neutral-600 dark:text-neutral-400">
                       <div className="flex items-center">
                         {getStatusIcon(registration.status)}
                         <span className="ml-2">{getStatusText(registration.status)}</span>
@@ -155,33 +148,33 @@ export default function WorkshopsDashboard() {
                 </div>
 
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED && (
-                  <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
-                    <div className="flex items-center text-primary-800">
+                  <div className="bg-primary-50 dark:bg-primary-500/10 border border-primary-200 dark:border-primary-500/30 rounded-lg p-4">
+                    <div className="flex items-center text-primary-800 dark:text-primary-300">
                       <CheckCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('confirmedTitle')}</span>
                     </div>
-                    <p className="text-primary-700 text-sm mt-1">{t('confirmedDesc')}</p>
+                    <p className="text-primary-700 dark:text-primary-400 text-sm mt-1">{t('confirmedDesc')}</p>
                   </div>
                 )}
 
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.PENDING && (
-                  <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
-                    <div className="flex items-center text-warning-800">
+                  <div className="bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 rounded-lg p-4">
+                    <div className="flex items-center text-warning-800 dark:text-warning-300">
                       <AlertCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('pendingTitle')}</span>
                     </div>
-                    <p className="text-warning-700 text-sm mt-1">{t('pendingDesc')}</p>
+                    <p className="text-warning-700 dark:text-warning-400 text-sm mt-1">{t('pendingDesc')}</p>
                   </div>
                 )}
 
                 {registration.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED && (
-                  <div className="bg-error-50 border border-error-200 rounded-lg p-4">
-                    <div className="flex items-center text-error-800">
+                  <div className="bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 rounded-lg p-4">
+                    <div className="flex items-center text-error-800 dark:text-error-300">
                       <XCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('cancelledTitle')}</span>
                     </div>
                     {registration.cancelled_at && (
-                      <p className="text-error-700 text-sm mt-1">
+                      <p className="text-error-700 dark:text-error-400 text-sm mt-1">
                         {t('cancelledOn', { date: formatDate(registration.cancelled_at) })}
                       </p>
                     )}
@@ -190,35 +183,41 @@ export default function WorkshopsDashboard() {
 
                 {registration.status !== WORKSHOP_REGISTRATION_STATUS.CANCELLED && (
                   <div className="mt-4 flex gap-3">
-                    <button
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => setPendingCancelId(registration.id)}
-                      className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       {t('cancelButton')}
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => openEdit(registration)}
-                      className="px-4 py-2 rounded-lg border border-neutral-300 text-neutral-700 hover:bg-neutral-50"
                     >
                       {registration.feedback || registration.rating ? t('feedbackEdit') : t('feedbackAdd')}
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-            <Calendar className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-900 mb-2">{t('emptyTitle')}</h3>
-            <p className="text-neutral-600 mb-6">{t('emptyDesc')}</p>
-            <Link
-              href="/workshops"
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              {t('discoverWorkshops')}
-            </Link>
-          </div>
+          <EmptyState
+            icon={Calendar}
+            iconBg="bg-primary-50 dark:bg-primary-900/20"
+            iconColor="text-primary-500 dark:text-primary-400"
+            title={t('emptyTitle')}
+            description={t('emptyDesc')}
+            action={
+              <Link
+                href="/workshops"
+                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                {t('discoverWorkshops')}
+              </Link>
+            }
+          />
         )}
       </div>
 
@@ -231,44 +230,34 @@ export default function WorkshopsDashboard() {
         onClose={() => setPendingCancelId(null)}
       />
 
-      <Modal open={!!editingId} onClose={() => setEditingId(null)}>
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-neutral-900 mb-4">{t('modalTitle')}</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('ratingLabel')}</label>
-              <input
-                type="number"
-                min={1}
-                max={5}
-                value={editRating}
-                onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
-                className="w-24 px-3 py-2 border border-neutral-300 rounded-lg"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1">{t('feedbackLabel')}</label>
-              <textarea
-                value={editFeedback}
-                onChange={(e) => setEditFeedback(e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg"
-                placeholder={t('feedbackPlaceholder')}
-              />
-            </div>
-          </div>
-          <div className="mt-6 flex justify-end gap-3">
-            <button onClick={() => setEditingId(null)} className="px-4 py-2 rounded-lg border border-neutral-300">
-              {t('cancel')}
-            </button>
-            <button
-              onClick={saveEdit}
-              disabled={saving}
-              className="px-4 py-2 rounded-lg bg-primary-600 text-white disabled:opacity-50"
-            >
-              {saving ? t('saving') : t('save')}
-            </button>
-          </div>
+      <Modal isOpen={!!editingId} onClose={() => setEditingId(null)} title={t('modalTitle')}>
+        <div className="space-y-4">
+          <FormField label={t('ratingLabel')}>
+            <Input
+              type="number"
+              min={1}
+              max={5}
+              value={editRating}
+              onChange={(e) => setEditRating(Math.max(1, Math.min(5, Number(e.target.value))))}
+              className="w-24"
+            />
+          </FormField>
+          <FormField label={t('feedbackLabel')}>
+            <Textarea
+              value={editFeedback}
+              onChange={(e) => setEditFeedback(e.target.value)}
+              rows={4}
+              placeholder={t('feedbackPlaceholder')}
+            />
+          </FormField>
+        </div>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setEditingId(null)}>
+            {t('cancel')}
+          </Button>
+          <Button variant="primary" onClick={saveEdit} disabled={saving}>
+            {saving ? t('saving') : t('save')}
+          </Button>
         </div>
       </Modal>
     </div>
