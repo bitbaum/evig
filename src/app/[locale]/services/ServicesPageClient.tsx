@@ -78,7 +78,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   }
 
   return (
-    <div className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+    <div className="group bg-white rounded-xl shadow-lg dark:shadow-black/30 hover:shadow-2xl dark:hover:shadow-black/50 transition-all duration-300 overflow-hidden flex flex-col h-full">
       <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
@@ -182,7 +182,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           )}
 
           {bookingStatus === 'error' && errorMessage && (
-            <div className="mt-2 text-xs text-error-600 bg-error-50 p-2 rounded">
+            <div className="mt-2 text-xs text-error-600 dark:text-error-300 bg-error-50 dark:bg-error-900/20 p-2 rounded">
               {errorMessage}
             </div>
           )}
@@ -279,7 +279,7 @@ export default function ServicesPage() {
               </Link>
               <Link
                 href="/shop"
-                className="inline-block border-2 border-neutral-300 text-neutral-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
+                className="inline-block border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}
               </Link>

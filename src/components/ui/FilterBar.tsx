@@ -14,19 +14,19 @@ interface FilterBarProps {
 const colorVariants = {
   green: {
     active: 'bg-primary-600 text-white shadow-lg transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
   },
   blue: {
     active: 'bg-primary-600 text-white shadow-lg transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
   },
   purple: {
     active: 'bg-primary-600 text-white shadow-lg transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
   },
   orange: {
     active: 'bg-secondary-600 text-white shadow-lg transform scale-105',
-    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+    inactive: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:hover:bg-neutral-700 hover:text-neutral-800 dark:hover:text-neutral-100'
   }
 }
 
