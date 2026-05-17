@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export function HeroSection() {
   return (
-    <section className="bg-gradient-to-b from-primary-50 to-white py-20 px-4">
+    <section className="bg-gradient-to-b from-primary-50 to-white dark:from-neutral-950 dark:to-neutral-950 py-20 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <span className="inline-block bg-primary-100 text-primary-800 text-sm font-medium px-3 py-1 rounded-full mb-6">
           Kontextuelles Feedback-System
