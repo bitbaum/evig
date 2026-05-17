@@ -27,10 +27,10 @@ export default async function AGBPage({ params }: AGBPageProps) {
   const section2Items = t.raw('section2.items') as string[]
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-16">
-      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
+    <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
+      <Heading level={1} className="mb-8 text-3xl dark:text-white">{t('title')}</Heading>
 
-      <section className="prose prose-neutral max-w-none space-y-6">
+      <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('section1.title')}</Heading>
         <p>{t('section1.body', { legalName: ORG.legalName, address: LOCATIONS.store.fullWithCountry })}</p>
 
@@ -78,7 +78,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
           </Link>.
         </p>
 
-        <p className="mt-12 text-sm text-neutral-500">{t('asOf')}</p>
+        <p className="mt-12 text-sm text-neutral-500 dark:text-neutral-400">{t('asOf')}</p>
       </section>
     </main>
   )
