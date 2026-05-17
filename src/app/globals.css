@@ -127,6 +127,15 @@
    * so there are no visual conflicts.
    * ───────────────────────────────────────────────────────────────────────── */
 
+  /* Default border — Tailwind's plain `border` without a color class defaults to
+   * neutral-200 in light mode. In dark mode we want ultra-subtle instead. */
+  .dark .border { border-color: var(--color-border); }
+  /* border-t, border-b, border-l, border-r — same fix */
+  .dark .border-t { border-top-color: var(--color-border); }
+  .dark .border-b { border-bottom-color: var(--color-border); }
+  .dark .border-l { border-left-color: var(--color-border); }
+  .dark .border-r { border-right-color: var(--color-border); }
+
   /* Neutral backgrounds */
   .dark .bg-white           { background-color: var(--color-surface); }
   .dark .bg-neutral-50      { background-color: var(--color-surface-raised); }
@@ -137,22 +146,55 @@
   .dark .bg-primary-100     { background-color: rgba(22, 163, 74, 0.12); }
   .dark .bg-emerald-50      { background-color: rgba(22, 163, 74, 0.08); }
   .dark .bg-emerald-100     { background-color: rgba(22, 163, 74, 0.12); }
-  .dark .bg-info-50         { background-color: var(--color-surface-raised); }
-  .dark .bg-info-100        { background-color: var(--color-surface-raised); }
-  .dark .bg-warning-50      { background-color: var(--color-surface-raised); }
-  .dark .bg-sky-50          { background-color: var(--color-surface-raised); }
-  .dark .bg-teal-50         { background-color: var(--color-surface-raised); }
-  .dark .bg-purple-50       { background-color: var(--color-surface-raised); }
+  .dark .bg-info-50         { background-color: rgba(59, 130, 246, 0.08); }
+  .dark .bg-info-100        { background-color: rgba(59, 130, 246, 0.12); }
+  .dark .bg-warning-50      { background-color: rgba(245, 158, 11, 0.08); }
+  .dark .bg-warning-100     { background-color: rgba(245, 158, 11, 0.12); }
+  .dark .bg-error-50        { background-color: rgba(239, 68, 68, 0.08); }
+  .dark .bg-error-100       { background-color: rgba(239, 68, 68, 0.12); }
+  .dark .bg-success-50      { background-color: rgba(22, 163, 74, 0.08); }
+  .dark .bg-success-100     { background-color: rgba(22, 163, 74, 0.12); }
+  .dark .bg-sky-50          { background-color: rgba(14, 165, 233, 0.08); }
+  .dark .bg-teal-50         { background-color: rgba(20, 184, 166, 0.08); }
+  .dark .bg-purple-50       { background-color: rgba(168, 85, 247, 0.08); }
+  .dark .bg-rose-50         { background-color: rgba(244, 63, 94, 0.08); }
+  .dark .bg-orange-50       { background-color: rgba(249, 115, 22, 0.08); }
 
   /* Brand-tint text — readable on near-black surfaces */
-  .dark .text-primary-800   { color: var(--color-text); }
+  .dark .text-primary-900   { color: rgba(74, 222, 128, 1.0); }   /* green-400 */
+  .dark .text-primary-800   { color: rgba(74, 222, 128, 0.95); }
   .dark .text-primary-700   { color: rgba(74, 222, 128, 0.9); }
-  .dark .text-emerald-800   { color: var(--color-text); }
+  .dark .text-primary-600   { color: var(--primitive-green-500); } /* #22c55e — brand green */
+  .dark .text-emerald-900   { color: rgba(74, 222, 128, 1.0); }
+  .dark .text-emerald-800   { color: rgba(74, 222, 128, 0.95); }
   .dark .text-emerald-700   { color: rgba(74, 222, 128, 0.9); }
 
-  /* Brand-tint borders */
-  .dark .border-primary-100 { border-color: var(--color-border-subtle); }
+  /* Status text — dark shades that are unreadable on dark bg → lighter variants */
+  .dark .text-error-900     { color: rgba(252, 165, 165, 1.0); }   /* red-300 */
+  .dark .text-error-800     { color: rgba(252, 165, 165, 0.95); }
+  .dark .text-error-700     { color: rgba(248, 113, 113, 0.9); }   /* red-400 */
+  .dark .text-error-600     { color: rgba(248, 113, 113, 0.85); }
+  .dark .text-warning-900   { color: rgba(253, 230, 138, 1.0); }   /* amber-200 */
+  .dark .text-warning-800   { color: rgba(253, 186, 36, 0.95); }   /* amber-400 */
+  .dark .text-warning-700   { color: rgba(251, 191, 36, 0.9); }
+  .dark .text-warning-600   { color: rgba(245, 158, 11, 0.9); }
+  .dark .text-success-800   { color: rgba(74, 222, 128, 0.95); }   /* green-400 */
+  .dark .text-success-700   { color: rgba(74, 222, 128, 0.9); }
+  .dark .text-info-800      { color: rgba(147, 197, 253, 0.95); }  /* blue-300 */
+  .dark .text-info-700      { color: rgba(96, 165, 250, 0.9); }    /* blue-400 */
+
+  /* Status borders — light pastel shades → semi-transparent in dark */
+  .dark .border-primary-100 { border-color: rgba(22, 163, 74, 0.15); }
   .dark .border-primary-200 { border-color: rgba(22, 163, 74, 0.25); }
+  .dark .border-error-100   { border-color: rgba(239, 68, 68, 0.12); }
+  .dark .border-error-200   { border-color: rgba(239, 68, 68, 0.2); }
+  .dark .border-error-300   { border-color: rgba(239, 68, 68, 0.3); }
+  .dark .border-warning-100 { border-color: rgba(245, 158, 11, 0.12); }
+  .dark .border-warning-200 { border-color: rgba(245, 158, 11, 0.2); }
+  .dark .border-warning-300 { border-color: rgba(245, 158, 11, 0.3); }
+  .dark .border-success-100 { border-color: rgba(22, 163, 74, 0.12); }
+  .dark .border-success-200 { border-color: rgba(22, 163, 74, 0.2); }
+  .dark .border-info-200    { border-color: rgba(59, 130, 246, 0.2); }
 
   /* Neutral text */
   .dark .text-neutral-900   { color: var(--color-text); }
@@ -176,6 +218,40 @@
   /* Hover text */
   .dark .hover\:text-neutral-900:hover { color: var(--color-text); }
   .dark .group:hover .group-hover\:text-neutral-900 { color: var(--color-text); }
+
+  /* ─── Dark-mode explicit variant overrides ────────────────────────────────
+   * Override Tailwind's dark: prefix classes so all dark-mode neutrals resolve
+   * through CSS vars. This lets us retheme by editing :root/.dark vars only.
+   *
+   * Specificity: [0,2,0] — same as Tailwind's .dark .dark\:* generated rules,
+   * but these appear after @tailwind utilities in source, so they win.
+   * ───────────────────────────────────────────────────────────────────────── */
+
+  /* Backgrounds — dark: variant neutrals → semantic CSS vars */
+  .dark .dark\:bg-neutral-950 { background-color: var(--color-bg); }
+  .dark .dark\:bg-neutral-900 { background-color: var(--color-surface); }
+  .dark .dark\:bg-neutral-800 { background-color: var(--color-surface-raised); }
+  .dark .dark\:bg-neutral-700 { background-color: var(--color-surface-raised); }
+  /* neutral-600 used for interactive highlights (hover targets, selected rows) */
+  .dark .dark\:bg-neutral-600 { background-color: rgba(255, 255, 255, 0.08); }
+
+  /* Hover backgrounds */
+  .dark .dark\:hover\:bg-neutral-800:hover { background-color: var(--color-surface-raised); }
+  .dark .dark\:hover\:bg-neutral-700:hover { background-color: var(--color-surface-raised); }
+  .dark .dark\:hover\:bg-neutral-600:hover { background-color: rgba(255, 255, 255, 0.08); }
+
+  /* Borders — x.ai aesthetic: ultra-subtle, rgba-based */
+  .dark .dark\:border-neutral-700 { border-color: var(--color-border-subtle); }
+  .dark .dark\:border-neutral-600 { border-color: var(--color-border); }
+  .dark .dark\:border-neutral-500 { border-color: var(--color-border); }
+
+  /* Text — dark: variant neutrals → semantic CSS vars */
+  .dark .dark\:text-white       { color: var(--color-text); }
+  .dark .dark\:text-neutral-100 { color: var(--color-text); }
+  .dark .dark\:text-neutral-200 { color: rgba(255, 255, 255, 0.90); }
+  .dark .dark\:text-neutral-300 { color: rgba(255, 255, 255, 0.75); }
+  .dark .dark\:text-neutral-400 { color: var(--color-text-muted); }
+  .dark .dark\:text-neutral-500 { color: var(--color-text-faint); }
 
   @media (prefers-contrast: high) {
     .dropdown-menu {

@@ -93,28 +93,28 @@ export default function PublicVoteClient({
   if (success) {
     return (
       <div className="space-y-4">
-        <div className="rounded-xl bg-primary-50 border border-primary-200 p-6 text-center">
+        <div className="rounded-xl bg-primary-50 dark:bg-primary-500/[0.08] border border-primary-200 dark:border-primary-500/20 p-6 text-center">
           <CheckCircle className="mx-auto h-10 w-10 text-primary-500 mb-3" />
-          <p className="text-lg font-semibold text-primary-800">{t('successHeading')}</p>
-          <p className="mt-1 text-sm text-primary-700">{t('successDesc')}</p>
+          <p className="text-lg font-semibold text-primary-800 dark:text-primary-300">{t('successHeading')}</p>
+          <p className="mt-1 text-sm text-primary-700 dark:text-primary-400">{t('successDesc')}</p>
         </div>
 
         {/* Registration gate — results require an account */}
-        <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-6 shadow-sm dark:shadow-none">
           <div className="flex items-start gap-3">
-            <UserPlus className="h-5 w-5 text-neutral-500 mt-0.5 shrink-0" />
+            <UserPlus className="h-5 w-5 text-neutral-500 dark:text-neutral-400 mt-0.5 shrink-0" />
             <div className="flex-1">
-              <p className="font-semibold text-neutral-900">{t('successRegisterHeading')}</p>
-              <p className="mt-1 text-sm text-neutral-600">{t('successRegisterDesc')}</p>
+              <p className="font-semibold text-neutral-900 dark:text-white">{t('successRegisterHeading')}</p>
+              <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{t('successRegisterDesc')}</p>
               <Link
                 href={registerUrl}
                 className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
               >
                 {t('successRegisterCta')}
               </Link>
-              <p className="mt-3 text-xs text-neutral-500">
+              <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
                 {t('successOrLogin')}{' '}
-                <Link href={loginUrl} className="text-primary-600 hover:underline">
+                <Link href={loginUrl} className="text-primary-600 dark:text-primary-400 hover:underline">
                   {t('successLoginCta')}
                 </Link>
               </p>
@@ -127,9 +127,9 @@ export default function PublicVoteClient({
 
   if (!isVotingPhase) {
     return (
-      <div className="rounded-xl bg-warning-50 border border-warning-200 p-6 text-center">
-        <p className="text-warning-800 font-medium">{t('notStartedHeading')}</p>
-        <p className="mt-1 text-sm text-warning-700">
+      <div className="rounded-xl bg-warning-50 dark:bg-yellow-500/[0.08] border border-warning-200 dark:border-yellow-500/20 p-6 text-center">
+        <p className="text-warning-800 dark:text-yellow-300 font-medium">{t('notStartedHeading')}</p>
+        <p className="mt-1 text-sm text-warning-700 dark:text-yellow-400">
           {t('notStartedDesc')}
         </p>
       </div>
@@ -152,8 +152,8 @@ export default function PublicVoteClient({
       />
 
       {/* Email identification */}
-      <div className="rounded-xl bg-neutral-50 border border-neutral-200 p-5">
-        <label className="block text-sm font-semibold text-neutral-900 mb-2">
+      <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] p-5">
+        <label className="block text-sm font-semibold text-neutral-900 dark:text-white mb-2">
           {t('emailLabel')}
         </label>
         <input
@@ -162,16 +162,16 @@ export default function PublicVoteClient({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
-          className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+          className="w-full rounded-lg border border-neutral-300 dark:border-white/[0.08] bg-white dark:bg-neutral-800 px-3 py-2 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400"
         />
-        <p className="mt-1.5 text-xs text-neutral-700">
+        <p className="mt-1.5 text-xs text-neutral-700 dark:text-neutral-400">
           {allowPublicVoting ? t('emailHintPublic') : t('emailHint')}
         </p>
       </div>
 
       {/* Ballot */}
-      <div className="rounded-xl bg-white border border-neutral-200 p-5 shadow-sm">
-        <p className="text-sm font-semibold text-neutral-700 mb-4">{t('yourVote')}</p>
+      <div className="rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] p-5 shadow-sm dark:shadow-none">
+        <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-4">{t('yourVote')}</p>
 
         {votingMethod === 'consent' && (
           <ConsentVote
@@ -224,7 +224,7 @@ export default function PublicVoteClient({
       </div>
 
       {error && (
-        <div className="rounded-lg bg-error-50 border border-error-200 p-3 text-sm text-error-700">
+        <div className="rounded-lg bg-error-50 dark:bg-red-500/[0.08] border border-error-200 dark:border-red-500/20 p-3 text-sm text-error-700 dark:text-red-300">
           {error}
         </div>
       )}
@@ -232,7 +232,7 @@ export default function PublicVoteClient({
       <button
         type="submit"
         disabled={submitting}
-        className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-offset-neutral-900 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         <Vote className="h-4 w-4" />
         {submitting ? t('saving') : t('submit')}

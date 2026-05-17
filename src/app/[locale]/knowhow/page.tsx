@@ -86,10 +86,10 @@ export default async function WissenPage() {
   }
 
   const colorClasses = {
-    green: 'bg-primary-50 border-primary-200 text-primary-900',
-    blue: 'bg-primary-50 border-primary-200 text-primary-900',
-    purple: 'bg-primary-50 border-primary-200 text-primary-900',
-    orange: 'bg-secondary-50 border-secondary-200 text-secondary-900',
+    green: 'bg-primary-50 border-primary-200 text-primary-900 dark:text-primary-100',
+    blue: 'bg-primary-50 border-primary-200 text-primary-900 dark:text-primary-100',
+    purple: 'bg-primary-50 border-primary-200 text-primary-900 dark:text-primary-100',
+    orange: 'bg-secondary-50 dark:bg-secondary-900/20 border-secondary-200 dark:border-secondary-700/30 text-secondary-900 dark:text-secondary-200',
   }
 
   const buttonClasses = {
