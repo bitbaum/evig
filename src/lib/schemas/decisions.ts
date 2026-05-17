@@ -53,6 +53,7 @@ export const createDecisionSchema = z
     participantScope: z.enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]]).optional().default(PARTICIPANT_SCOPE_DEFAULT),
     discussionDeadline: z.string().datetime().optional().nullable(),
     votingDeadline: z.string().datetime().optional().nullable(),
+    allowPublicVoting: z.boolean().optional().default(false),
     // Allow immediate transition on create
     initialStatus: z
       .enum(['draft', 'discussion', 'voting'] as const)
@@ -103,6 +104,7 @@ export const updateDecisionSchema = z.object({
   discussionDeadline: z.string().datetime().optional().nullable(),
   votingDeadline: z.string().datetime().optional().nullable(),
   outcomeSummary: z.string().optional().nullable(),
+  allowPublicVoting: z.boolean().optional(),
 });
 
 export type UpdateDecisionInput = z.infer<typeof updateDecisionSchema>;

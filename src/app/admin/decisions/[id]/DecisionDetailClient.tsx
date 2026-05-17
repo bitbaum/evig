@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   DECISION_STATUS,
   PARTICIPATABLE_STATUSES,
@@ -23,6 +24,8 @@ export default function DecisionDetailClient({
   currentUserId: string;
   isSuperAdmin: boolean;
 }) {
+  const [participationRefreshKey, setParticipationRefreshKey] = useState(0);
+
   const {
     decision,
     loading,
@@ -32,6 +35,11 @@ export default function DecisionDetailClient({
     handleTransition,
     router,
   } = useDecisionDetailClient(decisionId);
+
+  function handleVoted() {
+    setParticipationRefreshKey(k => k + 1);
+    void fetchDecision();
+  }
 
   if (loading) {
     return <div className={cn('py-12 text-center', adminType.meta)}>Laden...</div>;
@@ -63,7 +71,7 @@ export default function DecisionDetailClient({
       />
 
       {(PARTICIPATABLE_STATUSES as readonly string[]).includes(decision.status) && (
-        <ParticipationCard decisionId={decisionId} />
+        <ParticipationCard decisionId={decisionId} refreshTrigger={participationRefreshKey} />
       )}
 
       {decision.status === DECISION_STATUS.VOTING && (
@@ -73,7 +81,7 @@ export default function DecisionDetailClient({
           options={decision.options}
           dotCount={decision.dotCount}
           hasUserVoted={decision.hasUserVoted}
-          onVoted={fetchDecision}
+          onVoted={handleVoted}
           votingDeadline={decision.votingDeadline}
           status={decision.status}
           decisionTitle={decision.title}

@@ -54,6 +54,7 @@ export interface DbDecisionRow {
   closed_at: string | null;
   closed_by: string | null;
   cancel_reason: string | null;
+  allow_public_voting: boolean;
   created_by: string;
   created_at: string;
   updated_at: string;
@@ -235,7 +236,7 @@ export async function getDecisionById(id: string, requestingUserId: string) {
 
   return {
     ...mapDecisionBase(d),
-    allowPublicVoting: (d as unknown as { allow_public_voting?: boolean }).allow_public_voting ?? false,
+    allowPublicVoting: d.allow_public_voting ?? false,
     revealedAt: d.revealed_at,
     closedAt: d.closed_at,
     closedBy: d.closed_by,

@@ -102,6 +102,7 @@ export const POST = withAdmin<{ id: string }>(async (
       decision.title,
       decision.voting_deadline ?? undefined,
       decision.id,
+      decision.allow_public_voting,
     );
 
     const results = await Promise.allSettled(

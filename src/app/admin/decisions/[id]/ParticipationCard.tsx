@@ -16,7 +16,7 @@ interface ParticipationData {
   quorumPercent?: number;
 }
 
-export default function ParticipationCard({ decisionId }: { decisionId: string }) {
+export default function ParticipationCard({ decisionId, refreshTrigger }: { decisionId: string; refreshTrigger?: number }) {
   const [data, setData] = useState<ParticipationData | null>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function ParticipationCard({ decisionId }: { decisionId: string }
     fetchParticipation();
     const interval = setInterval(fetchParticipation, 30_000);
     return () => clearInterval(interval);
-  }, [decisionId]);
+  }, [decisionId, refreshTrigger]);
 
   if (!data) return null;
 

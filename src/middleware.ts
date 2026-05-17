@@ -9,7 +9,7 @@ import { csrfMiddleware, generateCsrfToken, createCsrfCookie, getCsrfFromCookies
 const intlMiddleware = createIntlMiddleware(routing)
 
 // Routes that bypass intl routing and are handled directly
-const BYPASS_INTL = ['/api/', '/admin', '/auth', '/dashboard', '/profil', '/_next', '/_vercel']
+const BYPASS_INTL = ['/api/', '/admin', '/auth', '/dashboard', '/profil', '/vote', '/_next', '/_vercel']
 
 function requiresAuth(pathname: string): boolean {
   return pathname.startsWith('/admin') || pathname.startsWith('/dashboard')

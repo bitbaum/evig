@@ -199,6 +199,7 @@ export async function transitionDecision(
           metadata: {
             decisionId: updatedDecision.id,
             votingDeadline: updatedDecision.voting_deadline ?? '',
+            allowPublicVoting: String(updatedDecision.allow_public_voting ?? false),
           },
         },
       ),

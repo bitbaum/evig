@@ -52,7 +52,8 @@ function getEmailContent(payload: NotificationPayload): EmailContent {
   const deadline = metadata?.votingDeadline ?? undefined
 
   if (type === NOTIFICATION_TYPES.DECISION_VOTING) {
-    return decisionVotingOpened(title, deadline || undefined, id)
+    const allowPublicVoting = metadata?.allowPublicVoting === 'true'
+    return decisionVotingOpened(title, deadline || undefined, id, allowPublicVoting)
   }
   if (type === NOTIFICATION_TYPES.DECISION_CLOSED) {
     return decisionClosed(title, id)

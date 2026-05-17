@@ -14,10 +14,14 @@ import { escapeHtml } from '@/lib/utils/escape-html'
 // HTML body. Date interpolation comes from `new Date().toLocaleDateString`
 // which is internally generated, no escape needed.
 
-/** Resolve a deep link for a specific decision — non-admin members land on
- *  /dashboard/decisions/:id, admin links fall back to /admin/decisions. */
-function decisionUrl(decisionId?: string, isAdmin = false): string {
+/** Resolve a deep link for a specific decision.
+ *  - isPublic=true  → /vote/:id (no login required)
+ *  - isAdmin=true   → /admin/decisions/:id
+ *  - default        → /dashboard/decisions/:id (staff login required)
+ */
+function decisionUrl(decisionId?: string, isAdmin = false, isPublic = false): string {
   if (!decisionId) return `${APP_URL}/admin/decisions`
+  if (isPublic) return `${APP_URL}/vote/${decisionId}`
   const base = isAdmin ? '/admin/decisions' : '/dashboard/decisions'
   return `${APP_URL}${base}/${decisionId}`
 }
@@ -26,6 +30,7 @@ export const decisionVotingOpened = (
   title: string,
   deadline?: string,
   decisionId?: string,
+  allowPublicVoting = false,
 ): EmailContent => {
   const deadlineText = deadline
     ? `<p><strong>Frist:</strong> ${new Date(deadline).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>`
@@ -34,7 +39,7 @@ export const decisionVotingOpened = (
     ? `Frist: ${new Date(deadline).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}\n`
     : ''
 
-  const link = decisionUrl(decisionId)
+  const link = decisionUrl(decisionId, false, allowPublicVoting)
 
   const html = createEmailLayout(
     'Abstimmung geöffnet',
