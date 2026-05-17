@@ -151,7 +151,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "advanced",
     name: "Experten",
-    badgeClass: "bg-purple-100 text-purple-800",
+    badgeClass: "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300",
   },
   {
     id: "all",

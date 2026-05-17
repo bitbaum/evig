@@ -82,7 +82,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 id="filter-category"
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-700 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="all">{t('allCategories')}</option>
                 {WORKSHOP_CATEGORIES.map(cat => (
@@ -100,7 +100,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 id="filter-level"
                 value={levelFilter}
                 onChange={(e) => setLevelFilter(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-neutral-300 bg-white text-sm text-neutral-700 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                className="px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-sm text-neutral-700 dark:text-neutral-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               >
                 <option value="all">{t('allLevels')}</option>
                 {WORKSHOP_LEVELS.map(level => (
@@ -145,7 +145,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 : null
 
               return (
-                <div key={workshop.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+                <div key={workshop.id} className="bg-white rounded-xl shadow-lg dark:shadow-black/30 overflow-hidden hover:shadow-xl dark:hover:shadow-black/50 transition-shadow flex flex-col">
                   {/* Workshop Header */}
                   <div className="p-6 border-b border-neutral-100 flex-1">
                     <div className="flex items-start justify-between mb-4">
@@ -240,7 +240,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                     <div className="flex gap-2">
                       <Link
                         href={`/workshops/${workshop.slug}`}
-                        className="flex-1 bg-neutral-100 text-neutral-700 px-4 py-2 rounded-lg hover:bg-neutral-200 transition-colors text-center text-sm font-medium"
+                        className="flex-1 bg-neutral-100 text-neutral-700 px-4 py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors text-center text-sm font-medium"
                       >
                         {t('viewDetails')}
                       </Link>
@@ -260,11 +260,11 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                           {t('registerNow')}
                         </Link>
                       ) : nextInstance && spotsLeft !== null && spotsLeft <= 0 ? (
-                        <span className="flex-1 bg-error-100 text-error-700 px-4 py-2 rounded-lg text-center text-sm font-medium">
+                        <span className="flex-1 bg-error-100 dark:bg-error-900/20 text-error-700 dark:text-error-300 px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('soldOut')}
                         </span>
                       ) : (
-                        <span className="flex-1 bg-neutral-300 text-neutral-500 px-4 py-2 rounded-lg text-center text-sm font-medium">
+                        <span className="flex-1 bg-neutral-300 dark:bg-neutral-700 text-neutral-500 px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('noDate')}
                         </span>
                       )}
@@ -276,7 +276,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           </div>
         ) : (
           <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+            <BookOpen className="w-16 h-16 text-neutral-300 dark:text-neutral-600 mx-auto mb-4" />
             <Heading level={3} className="text-xl font-semibold text-neutral-900 mb-2">
               {categoryFilter !== 'all' || levelFilter !== 'all'
                 ? t('emptyFiltered.title')
