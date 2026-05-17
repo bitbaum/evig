@@ -64,24 +64,24 @@ export default async function ContactPage() {
       />
 
       {/* Contact Information Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-neutral-900">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
             {contactInfo.map((info, index) => (
-              <div key={index} className="bg-primary-50 rounded-xl p-4 sm:p-6 text-center">
+              <div key={index} className="bg-primary-50 dark:bg-primary-900/20 rounded-xl p-4 sm:p-6 text-center">
                 <div className="flex justify-center mb-3 sm:mb-4">
                   <info.icon className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
                 </div>
-                <Heading level={3} className="text-base sm:text-lg font-semibold text-primary-700 mb-2">{info.title}</Heading>
+                <Heading level={3} className="text-base sm:text-lg font-semibold text-primary-700 dark:text-primary-300 mb-2">{info.title}</Heading>
                 {info.link ? (
                   <a
                     href={info.link}
-                    className="text-neutral-600 hover:text-primary-600 transition-colors duration-200"
+                    className="text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200"
                   >
                     {info.value}
                   </a>
                 ) : (
-                  <p className="text-neutral-600">{info.value}</p>
+                  <p className="text-neutral-600 dark:text-neutral-400">{info.value}</p>
                 )}
               </div>
             ))}
@@ -90,7 +90,7 @@ export default async function ContactPage() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-neutral-50">
+      <section className="py-12 sm:py-16 md:py-20 bg-neutral-50 dark:bg-neutral-800/50">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
             <ContactForm />
@@ -99,7 +99,7 @@ export default async function ContactPage() {
       </section>
 
       {/* Map Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-neutral-900">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <Heading level={2} className="mb-6 sm:mb-8 text-center">{t('map.title')}</Heading>
@@ -135,7 +135,7 @@ export default async function ContactPage() {
               </div>
 
               {/* Explanation about map choices */}
-              <div className="mt-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-700 max-w-2xl mx-auto">
+              <div className="mt-6 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 p-4 text-sm text-neutral-700 dark:text-neutral-300 max-w-2xl mx-auto">
                 <div className="flex items-start gap-3">
                   <Shield className="mt-0.5 w-4 h-4 text-primary-700 flex-shrink-0" />
                   <div>
@@ -147,8 +147,8 @@ export default async function ContactPage() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-neutral-200">
-                <p className="text-neutral-600 mb-3">{t('map.warehouseNote', { address: LOCATIONS.warehouse.full, note: LOCATIONS.warehouse.note })}</p>
+              <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700">
+                <p className="text-neutral-600 dark:text-neutral-400 mb-3">{t('map.warehouseNote', { address: LOCATIONS.warehouse.full, note: LOCATIONS.warehouse.note })}</p>
                 <div className="flex flex-wrap justify-center gap-3">
                   <a
                     href={WAREHOUSE_GOOGLE_MAPS_URL}

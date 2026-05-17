@@ -52,15 +52,15 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-8">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-black/30 p-8">
       <Heading level={2} className="text-3xl font-bold mb-6 text-center">{t('title')}</Heading>
       {status === 'success' && (
-        <div className="mb-6 rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 text-primary-800 text-sm">
+        <div className="mb-6 rounded-lg border border-primary-200 dark:border-primary-700/50 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 text-primary-800 dark:text-primary-200 text-sm">
           {t('successMessage')}
         </div>
       )}
       {status === 'error' && (
-        <div id="contact-error" className="mb-6 rounded-lg border border-error-200 bg-error-50 px-4 py-3 text-error-700 text-sm">
+        <div id="contact-error" className="mb-6 rounded-lg border border-error-200 dark:border-error-700/50 bg-error-50 dark:bg-error-900/20 px-4 py-3 text-error-700 dark:text-error-300 text-sm">
           {error}
         </div>
       )}

@@ -25,10 +25,10 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
   const t = await getTranslations({ locale, namespace: 'impressum' })
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-16">
-      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
+    <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
+      <Heading level={1} className="mb-8 text-3xl dark:text-white">{t('title')}</Heading>
 
-      <section className="prose prose-neutral max-w-none space-y-6">
+      <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('legalInfo')}</Heading>
 
         <Heading level={3}>{t('organisation')}</Heading>
@@ -74,7 +74,7 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
           )}.
         </p>
 
-        <p className="mt-12 text-sm text-neutral-500">{t('asOf')}</p>
+        <p className="mt-12 text-sm text-neutral-500 dark:text-neutral-400">{t('asOf')}</p>
       </section>
     </main>
   )
