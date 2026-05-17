@@ -21,8 +21,11 @@ interface UserMenuDropdownProps {
 
 export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
   const { theme, setTheme } = useTheme()
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -108,7 +111,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
               className="flex w-full items-center justify-between px-4 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/[0.04]"
             >
               <div className="flex items-center gap-3">
-                {theme === 'dark' ? (
+                {mounted && theme === 'dark' ? (
                   <Sun className="w-4 h-4 text-neutral-500" />
                 ) : (
                   <Moon className="w-4 h-4 text-neutral-500" />
@@ -117,12 +120,12 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
               </div>
               <div
                 className={`w-9 h-5 rounded-full transition-colors ${
-                  theme === 'dark' ? 'bg-primary-600' : 'bg-neutral-300'
+                  mounted && theme === 'dark' ? 'bg-primary-600' : 'bg-neutral-300'
                 }`}
               >
                 <div
                   className={`w-4 h-4 mt-0.5 rounded-full bg-white shadow transition-transform ${
-                    theme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'
+                    mounted && theme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'
                   }`}
                 />
               </div>
