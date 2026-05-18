@@ -93,6 +93,10 @@ export {
   // Notification template
   notificationEmail,
 
+  // Referral templates
+  referralInvitation,
+  referralCouponReceived,
+
   // Base styles (for custom templates)
   BASE_STYLES,
   COPYRIGHT_TEXT,
