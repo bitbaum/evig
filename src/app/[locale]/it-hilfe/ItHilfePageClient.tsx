@@ -27,6 +27,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
 
 export default function ITHilfePage() {
@@ -58,7 +59,7 @@ export default function ITHilfePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact hero — requests visible without scrolling */}
-      <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
+      <div className="bg-white dark:bg-neutral-950 border-b border-neutral-100 dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -320,9 +321,7 @@ export default function ITHilfePage() {
         {!session?.user && (
           <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-500/15">
-                <Wrench className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-              </div>
+              <IconBadge icon={Wrench} theme="itHilfe" size="lg" />
             </div>
             <Heading level={3} className="text-xl text-neutral-900 mb-2">
               {t('ctaTitle')}

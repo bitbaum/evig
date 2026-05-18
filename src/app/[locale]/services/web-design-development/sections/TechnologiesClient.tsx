@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { CheckCircle2, ArrowRight, Filter, Globe, Code, Palette, Shield, Database, Cloud, Layers } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import type { TechItem } from './TechnologiesSection'
 
 const ICON_MAP: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
@@ -77,13 +78,11 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 href={tech.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-neutral-50 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
+                className="bg-neutral-50 dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn block group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="flex items-start mb-4">
-                  <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4 flex-shrink-0 group-hover:bg-primary-200 transition-colors duration-300">
-                    <IconComponent className="w-8 h-8" />
-                  </div>
+                  <IconBadge icon={IconComponent} theme="services" size="lg" className="mr-4" />
                   <div className="min-w-0 flex-1">
                     <div className="text-sm text-primary-600 font-semibold mb-1 truncate">{tech.category}</div>
                     <Heading level={3} className="mb-2 line-clamp-2 group-hover:text-primary-700 transition-colors duration-300">{tech.name}</Heading>

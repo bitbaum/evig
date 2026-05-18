@@ -1,5 +1,6 @@
 import { CheckCircle2 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { getTranslations } from 'next-intl/server'
 import { Code, Palette, Globe, Shield } from 'lucide-react'
 
@@ -27,20 +28,18 @@ export async function ServicesSection() {
           <div className="text-primary-600 font-semibold text-xl mb-8">
             {t('pricing')}
           </div>
-          <div className="bg-primary-50 rounded-lg p-6 text-left">
-            <Heading level={3} className="text-primary-800 mb-2">{t('consultationTitle')}</Heading>
-            <p className="text-primary-700">
+          <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-6 text-left border border-neutral-200 dark:border-white/[0.06]">
+            <Heading level={3} className="text-neutral-900 dark:text-white mb-2">{t('consultationTitle')}</Heading>
+            <p className="text-neutral-700 dark:text-neutral-300">
               {t('consultationText')}
             </p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="bg-neutral-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div key={index} className="bg-neutral-50 dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300">
               <div className="flex items-start mb-6">
-                <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
-                  <service.icon className="w-8 h-8" />
-                </div>
+                <IconBadge icon={service.icon} theme="services" size="lg" className="mr-4" />
                 <div>
                   <Heading level={3} className="mb-3">{service.title}</Heading>
                   <p className="text-neutral-600 mb-4">{service.description}</p>

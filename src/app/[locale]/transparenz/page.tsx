@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { Eye, Target, BarChart3, Briefcase, FileText, Users } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { getCompactMetrics } from '@/data/impact-metrics'
 import { ORG, CONTACT } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -59,9 +60,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       <div className="py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 flex-shrink-0" aria-hidden="true">
-              <Target className="h-5 w-5 text-primary-600" />
-            </div>
+            <IconBadge icon={Target} theme="about" size="md" />
             <Heading level={2} className="tracking-tight text-neutral-900">
               {t('mission.title')}
             </Heading>
@@ -74,24 +73,22 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       </div>
 
       {/* Section 2: Stats */}
-      <div className="bg-primary-50 py-12 sm:py-16">
+      <div className="bg-neutral-50 dark:bg-neutral-900 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100" aria-hidden="true">
-                <BarChart3 className="h-5 w-5 text-primary-600" />
-              </div>
+              <IconBadge icon={BarChart3} theme="about" size="md" />
             </div>
-            <Heading level={2} className="tracking-tight text-neutral-900">
+            <Heading level={2} className="tracking-tight text-neutral-900 dark:text-white">
               {t('stats.title')}
             </Heading>
           </div>
 
           <dl className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
             {compactMetrics.map((metric, index) => (
-              <div key={index} className="bg-white rounded-xl p-4 sm:p-6 text-center border border-neutral-100">
-                <dd className="text-2xl sm:text-3xl font-bold text-primary-600">{metric.value}</dd>
-                <dt className="mt-1 text-xs sm:text-sm text-neutral-600">{metric.label}</dt>
+              <div key={index} className="bg-white dark:bg-neutral-800 rounded-xl p-4 sm:p-6 text-center border border-neutral-100 dark:border-white/[0.06]">
+                <dd className="text-2xl sm:text-3xl font-bold text-primary-600 dark:text-primary-400">{metric.value}</dd>
+                <dt className="mt-1 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">{metric.label}</dt>
               </div>
             ))}
           </dl>
@@ -148,9 +145,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       <div className="bg-neutral-50 py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-100 flex-shrink-0" aria-hidden="true">
-              <FileText className="h-5 w-5 text-secondary-600" />
-            </div>
+            <IconBadge icon={FileText} theme="marketplace" size="md" />
             <Heading level={2} className="tracking-tight text-neutral-900">
               {t('finances.title')}
             </Heading>
@@ -173,9 +168,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
       <div className="py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-start gap-4 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 flex-shrink-0" aria-hidden="true">
-              <Users className="h-5 w-5 text-primary-600" />
-            </div>
+            <IconBadge icon={Users} theme="about" size="md" />
             <Heading level={2} className="tracking-tight text-neutral-900">
               {t('board.title')}
             </Heading>

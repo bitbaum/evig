@@ -1,4 +1,5 @@
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { getTranslations } from 'next-intl/server'
 import { Zap, Code, Smartphone, Search } from 'lucide-react'
 
@@ -25,11 +26,9 @@ export async function BenefitsSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {benefits.map((benefit, index) => (
-            <div key={index} className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300">
               <div className="flex items-start">
-                <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
-                  <benefit.icon className="w-8 h-8" />
-                </div>
+                <IconBadge icon={benefit.icon} theme="services" size="lg" className="mr-4" />
                 <div>
                   <Heading level={3} className="mb-3">{benefit.title}</Heading>
                   <p className="text-neutral-600">{benefit.description}</p>

@@ -6,6 +6,7 @@ import { Wrench, CheckCircle2, Clock, Shield, Zap } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
@@ -56,11 +57,9 @@ export default async function RepairPage({ params }: Props) {
             {features.map((feature, index) => {
               const Icon = FEATURE_ICONS[index]
               return (
-                <div key={index} className="bg-white rounded-xl p-8 shadow-lg">
+                <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.08]">
                   <div className="flex items-start mb-6">
-                    <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
-                      <Icon className="w-8 h-8" />
-                    </div>
+                    <IconBadge icon={Icon} theme="services" size="lg" className="mr-4" />
                     <div>
                       <Heading level={3} className="text-2xl font-bold mb-3">{feature.title}</Heading>
                       <p className="text-neutral-600">{feature.description}</p>
@@ -94,7 +93,7 @@ export default async function RepairPage({ params }: Props) {
       {/* Pricing Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto bg-white rounded-xl p-8 shadow-lg">
+          <div className="max-w-2xl mx-auto bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.08]">
             <Heading level={2} className="text-3xl font-bold mb-8 text-center">{t('pricing.heading')}</Heading>
             <div className="text-center mb-8">
               <p className="text-2xl font-bold text-primary-600">{t('pricing.base')}</p>
@@ -112,7 +111,7 @@ export default async function RepairPage({ params }: Props) {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
+      <section className="py-20 bg-primary-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <Heading level={2} className="text-4xl font-bold mb-6">{t('cta.heading')}</Heading>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">

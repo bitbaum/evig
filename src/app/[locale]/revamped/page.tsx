@@ -15,6 +15,7 @@ import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
@@ -114,7 +115,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
 
               {/* Right Column - Image */}
               <div className="relative">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/3]">
+                <div className="relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.08] aspect-[4/3]">
                   <Image
                     src="/images/certification/revamped-laptop-user.jpg"
                     alt="Woman with pink hair using a laptop with REVAMPED certification sticker"
@@ -149,27 +150,21 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-full mb-6">
-                  <Recycle className="w-10 h-10 text-primary-600" />
-                </div>
+                <IconBadge icon={Recycle} theme="about" size="xl" shape="circle" className="mx-auto mb-6" />
                 <Heading level={3} className="text-2xl font-bold mb-4">{t('whatIs.sustainability.title')}</Heading>
                 <p className="text-neutral-600 leading-relaxed">
                   {t('whatIs.sustainability.body')}
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-full mb-6">
-                  <Shield className="w-10 h-10 text-primary-600" />
-                </div>
+                <IconBadge icon={Shield} theme="about" size="xl" shape="circle" className="mx-auto mb-6" />
                 <Heading level={3} className="text-2xl font-bold mb-4">{t('whatIs.quality.title')}</Heading>
                 <p className="text-neutral-600 leading-relaxed">
                   {t('whatIs.quality.body')}
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-primary-100 rounded-full mb-6">
-                  <Star className="w-10 h-10 text-primary-600" />
-                </div>
+                <IconBadge icon={Star} theme="about" size="xl" shape="circle" className="mx-auto mb-6" />
                 <Heading level={3} className="text-2xl font-bold mb-4">{t('whatIs.ai.title')}</Heading>
                 <p className="text-neutral-600 leading-relaxed">
                   {t('whatIs.ai.body')}
@@ -199,9 +194,9 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   ))}
                 </div>
               </div>
-              <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl">
+              <div className="bg-neutral-50 dark:bg-neutral-800 p-12 rounded-2xl border border-neutral-200 dark:border-white/[0.06]">
                 <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-32 h-32 bg-white rounded-full shadow-lg mb-6">
+                  <div className="inline-flex items-center justify-center w-32 h-32 bg-white dark:bg-neutral-900 rounded-full border border-neutral-200 dark:border-white/[0.08] mb-6">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-primary-600 mx-auto mb-2" />
                       <div className="text-sm font-bold text-primary-800">REVAMPED</div>
@@ -232,7 +227,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="bg-white p-12 rounded-2xl shadow-lg mb-6">
+                <div className="bg-white dark:bg-neutral-900 p-12 rounded-2xl border border-neutral-200 dark:border-white/[0.08] mb-6">
                   <Image
                     src="/images/certification/sticker-1.png"
                     alt="REVAMPED certification sticker design"
@@ -245,7 +240,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 <p className="text-neutral-600">{t('stickers.sticker1.body')}</p>
               </div>
               <div className="text-center">
-                <div className="bg-white p-12 rounded-2xl shadow-lg mb-6">
+                <div className="bg-white dark:bg-neutral-900 p-12 rounded-2xl border border-neutral-200 dark:border-white/[0.08] mb-6">
                   <Image
                     src="/images/certification/sticker-2.png"
                     alt="REVAMPED certification sticker variant"
@@ -258,8 +253,8 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 <p className="text-neutral-600">{t('stickers.sticker2.body')}</p>
               </div>
               <div className="text-center">
-                <div className="bg-gradient-to-br from-primary-100 to-primary-200 dark:from-neutral-800 dark:to-neutral-900 p-12 rounded-2xl shadow-lg mb-6 relative">
-                  <div className="w-40 h-40 mx-auto flex items-center justify-center bg-white rounded-xl shadow-sm">
+                <div className="bg-neutral-100 dark:bg-neutral-800 p-12 rounded-2xl border border-neutral-200 dark:border-white/[0.06] mb-6 relative">
+                  <div className="w-40 h-40 mx-auto flex items-center justify-center bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.08]">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-primary-600 mx-auto mb-2" />
                       <div className="text-sm font-bold text-primary-800">REVAMPED</div>

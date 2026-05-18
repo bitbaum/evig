@@ -26,6 +26,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 import { ORG, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -187,18 +188,14 @@ export default async function SpacePage({ params }: SpacePageProps) {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center">
-                <Store className="w-6 h-6 text-primary-700" />
-              </div>
+              <IconBadge icon={Store} theme="space" size="lg" shape="circle" />
               <div>
                 <p className="font-semibold text-neutral-900">{t('currentLocation.label')}</p>
                 <p className="text-neutral-600">{STORE_ADDRESS}</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center">
-                <Clock className="w-6 h-6 text-neutral-700" />
-              </div>
+              <IconBadge icon={Clock} theme="space" size="lg" shape="circle" />
               <div>
                 <p className="font-semibold text-neutral-900">{t('currentLocation.hoursLabel')}</p>
                 <p className="text-neutral-600">
@@ -216,7 +213,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       </section>
 
       {/* Future Space Vision */}
-      <section id="zukunft" className="py-16 md:py-24 bg-gradient-to-b from-white to-primary-50 dark:from-neutral-950 dark:to-neutral-900">
+      <section id="zukunft" className="py-16 md:py-24 bg-neutral-50 dark:bg-neutral-900">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-warning-100 text-warning-800 px-4 py-2 rounded-full mb-6">
@@ -231,7 +228,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
 
           {/* Vision Image Placeholder */}
           <div className="max-w-4xl mx-auto mb-16">
-            <div className="relative aspect-video bg-gradient-to-br from-primary-100 to-primary-200 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl overflow-hidden border-2 border-primary-300 dark:border-primary-500/30">
+            <div className="relative aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.08]">
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
                 <Sparkles className="w-16 h-16 text-primary-600 mb-4" />
                 <p className="text-xl font-semibold text-primary-800 mb-2">
@@ -253,9 +250,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
               const Icon = spaceFeatureIcons[index]
               return (
                 <Card key={index} className="text-center p-4 hover:shadow-md transition-shadow">
-                  <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center mx-auto mb-3">
-                    {Icon && <Icon className="w-6 h-6 text-primary-700" />}
-                  </div>
+                  {Icon && <IconBadge icon={Icon} theme="space" size="lg" shape="circle" className="mx-auto mb-3" />}
                   <Heading level={3} className="font-semibold text-neutral-900 mb-1">{feature.name}</Heading>
                   <p className="text-sm text-neutral-600">{feature.description}</p>
                 </Card>
@@ -289,7 +284,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                   <p className="text-sm text-neutral-600">{t('future.params.locationLabel')}</p>
                 </div>
               </div>
-              <div className="mt-6 p-4 bg-primary-50 rounded-lg">
+              <div className="mt-6 p-4 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg">
                 <p className="text-sm text-neutral-700">
                   {t('future.params.ideal')}
                 </p>
@@ -352,7 +347,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
             </div>
 
             {/* Donation CTA */}
-            <Card className="bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+            <Card className="bg-primary-600 text-white">
               <CardContent className="p-8 text-center">
                 <Heart className="w-12 h-12 mx-auto mb-4 opacity-90" />
                 <Heading level={3} className="text-2xl mb-3">

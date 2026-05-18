@@ -19,6 +19,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSkeleton } from '@/components/common/LoadingState'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
 import { formatCentsToChf } from '@/lib/pricing'
@@ -163,7 +164,7 @@ export default function TechnikerListClient() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact header */}
-      <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-950 py-6 sm:py-8">
+      <div className="bg-neutral-50 dark:bg-neutral-900 border-b border-neutral-100 dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
@@ -327,9 +328,7 @@ export default function TechnikerListClient() {
         {!session?.user && (
           <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100">
-                <Wrench className="h-6 w-6 text-primary-600" />
-              </div>
+              <IconBadge icon={Wrench} theme="repairers" size="lg" />
             </div>
             <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2">
               {t('list.ctaTitle')}
