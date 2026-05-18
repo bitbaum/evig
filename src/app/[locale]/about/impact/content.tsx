@@ -7,53 +7,12 @@ import { ORG } from '@/config/org'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import AboutSubNav from '@/components/about/AboutSubNav'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Tabs } from '@/components/ui/Tabs'
 import { IMPACT_METRICS, getEnvironmentalSummary, getSocialSummary, type ImpactMetric } from '@/data/impact-metrics'
 import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { useTranslations } from 'next-intl'
-// Simple Badge component replacement
-const Badge = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
-  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${className}`}>
-    {children}
-  </span>
-)
-
-// Simple Tabs replacement using state
-const SimpleTabs = ({
-  tabs,
-  defaultValue,
-  children
-}: {
-  tabs: { value: string, label: string, icon?: React.ReactNode }[],
-  defaultValue: string,
-  children: (value: string) => React.ReactNode
-}) => {
-  const [activeTab, setActiveTab] = useState(defaultValue)
-
-  return (
-    <div className="w-full">
-      <div className="flex space-x-1 bg-neutral-100 p-1 rounded-lg mb-6">
-        {tabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => setActiveTab(tab.value)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors flex-1 ${
-              activeTab === tab.value
-                ? 'bg-white text-neutral-900 shadow-sm'
-                : 'text-neutral-600 hover:text-neutral-900'
-            }`}
-          >
-            {tab.icon}
-            {tab.label}
-          </button>
-        ))}
-      </div>
-      <div>
-        {children(activeTab)}
-      </div>
-    </div>
-  )
-}
 import {
   Heart,
   Leaf,
@@ -157,12 +116,10 @@ export default function ImpactPageContent() {
     }
   }
 
-  const getCategoryColor = (category: ImpactMetric['category']) => {
-    switch (category) {
-      case 'environmental': return 'bg-primary-50 border-primary-200'
-      case 'social': return 'bg-neutral-50 border-neutral-200'
-      case 'economic': return 'bg-primary-50 border-primary-200'
-    }
+  const CATEGORY_COLOR: Record<ImpactMetric['category'], string> = {
+    environmental: 'bg-primary-50 border-primary-200',
+    social: 'bg-neutral-50 border-neutral-200',
+    economic: 'bg-primary-50 border-primary-200',
   }
 
   return (
@@ -197,7 +154,7 @@ export default function ImpactPageContent() {
         {/* Key Metrics Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {IMPACT_METRICS.map((metric) => (
-            <Card key={metric.id} className={`${getCategoryColor(metric.category)} border-2`}>
+            <Card key={metric.id} className={`${CATEGORY_COLOR[metric.category]} border-2`}>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   {getCategoryIcon(metric.category)}
@@ -226,7 +183,7 @@ export default function ImpactPageContent() {
         {/* Impact Stories */}
         <div className="bg-neutral-50 rounded-lg p-8">
           <Heading level={3} className="mb-6 text-center">{t('impactInNumbers')}</Heading>
-          <SimpleTabs
+          <Tabs
             defaultValue="environmental"
             tabs={[
               { value: 'environmental', label: t('tabs.environmental'), icon: <Leaf className="h-4 w-4" /> },
@@ -344,7 +301,7 @@ export default function ImpactPageContent() {
                 )}
               </>
             )}
-          </SimpleTabs>
+          </Tabs>
         </div>
       </section>
 
