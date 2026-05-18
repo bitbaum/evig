@@ -20,85 +20,93 @@ Swiss non-profit platform enabling free exchange of technology — used computer
 
 ## Design System
 
-### Token SSOT: `src/app/globals.css`
-
-**There are NO CSS custom properties (no `:root` block) in `globals.css`.** The file defines only utility classes and animation keyframes — no color tokens.
-
-**All design tokens live in `tailwind.config.ts` as literal hex values** and in `src/lib/design/tokens.ts` as Tailwind class strings.
-
-**Tailwind config (`tailwind.config.ts`) — literal hex values (⚠️ violations: should reference CSS vars):**
+### How it works — three layers, each with one job
 
 ```
-primary:   50→#f0fdf4  100→#dcfce7  200→#bbf7d0  300→#86efac  400→#4ade80
-           500→#22c55e  600→#16a34a  700→#15803d  800→#166534  900→#14532d
-           (green — sustainability brand color)
-
-secondary: 50→#fff7ed  100→#ffedd5  200→#fed7aa  300→#fdba74  400→#fb923c
-           500→#F7931A  600→#ea580c  700→#c2410c  800→#9a3412  900→#7c2d12
-           (Bitcoin orange)
-
-neutral:   50→#fafafa  100→#f5f5f5  200→#e5e5e5  300→#d4d4d4  400→#a3a3a3
-           500→#737373  600→#525252  700→#404040  800→#262626  900→#171717
-
-success:   500→#22c55e  600→#16a34a  (mirrors primary)
-warning:   500→#f59e0b  600→#d97706
-error:     500→#ef4444  600→#dc2626
-info:      500→#3b82f6  600→#2563eb
+globals.css             ← SSOT: CSS custom properties + global dark overrides
+tailwind.config.ts      ← palette scales (hex literals) + Tailwind utilities
+src/lib/design/         ← TypeScript SSOT for section theming (tokens.ts) and component primitives (design-system.ts)
 ```
 
-Font: `var(--font-inter)` (CSS var set externally, e.g. via Next.js `localFont`)
+### Layer 1 — `src/app/globals.css`
 
-**Design token TypeScript SSOT: `src/lib/design/tokens.ts`**
+**CSS custom properties** (`:root` + `.dark`) define semantic surface, text, and border tokens:
 
-`DESIGN_TOKENS` exports Tailwind class strings (not raw hex values) for page-level theming:
-- `gradients` — page background gradients (e.g. `from-orange-50 to-error-50`)
-- `iconBadges` — `{ bg, text }` pairs per section/page
-- `buttons.primary` / `buttons.secondary` — per-section button class strings
-- `focusOutline` — per-section focus ring classes
-- `cards.hoverText` / `cards.border` — card-level class tokens
-
-This file is the SSOT for **which section uses which palette**. Never hardcode section color strings in components — import from `DESIGN_TOKENS`.
-
-**Utility classes defined in `globals.css` (`@layer utilities`):**
-- `.animate-in` — 200ms animation base
-- `.fade-in-0` — fadeIn keyframe
-- `.zoom-in-95` — zoomIn keyframe
-- `.line-clamp-2`, `.line-clamp-3` — webkit line-clamp
-- `.backdrop-blur-sm` — 4px blur
-- `.touch-target` — min 44×44px touch area
-- `.grid-cols-responsive` — `auto-fit minmax(200px, 1fr)`
-- `.fix-text-rendering` — antialiasing + kerning
-- `.animate-slideUp` — 0.3s ease-out slide-up
-
-**Named keyframes:** `fadeIn`, `zoomIn`, `slideUp`
-
-**Utility class `.focus-ring`** (defined in globals.css):
-```css
-@apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+```
+light / dark
+--color-bg:              #fafafa   / #0a0a0a    (page background)
+--color-surface:         #ffffff   / #171717    (card/panel = neutral-900)
+--color-surface-raised:  #f5f5f5   / #262626    (section bg = neutral-800)
+--color-border:          #e5e5e5   / rgba(255,255,255,0.06)
+--color-text:            #171717   / #ffffff
+--color-text-muted:      #525252   / #a3a3a3
 ```
 
-### SSOT Rule
+**Global dark mode overrides** (in `@layer utilities`) auto-remap standard Tailwind classes in dark mode.
+This means: **you do NOT need explicit `dark:` variants for these common classes**:
 
-Design tokens have **two SSOTs that must stay in sync**:
-1. `tailwind.config.ts` — raw palette scales (hex literals — see violations below)
-2. `src/lib/design/tokens.ts` — semantic Tailwind class mappings per section
+| Class you write | In dark mode becomes |
+|---|---|
+| `bg-white` | `var(--color-surface)` = neutral-900 |
+| `bg-neutral-50` | `var(--color-surface-raised)` = neutral-800 |
+| `bg-neutral-100` | same as neutral-50 |
+| `border-neutral-200` | `var(--color-border)` = white/6% |
+| `border-neutral-100` | `var(--color-border-subtle)` = white/4% |
+| `text-neutral-900/800` | white |
+| `text-neutral-700/600` | `var(--color-text-muted)` = neutral-400 |
+| `text-neutral-500` | `var(--color-text-faint)` = neutral-500 |
+| `text-primary-600` | `var(--primitive-green-500)` = #22c55e |
 
-Components MUST use Tailwind semantic classes from the config palette (`bg-primary-500`, `text-warning-600`), never arbitrary hex values.
+**Use explicit `dark:` only when** the automatic mapping is wrong for your use case (e.g. `dark:bg-neutral-950` for a deeper black, or `dark:text-primary-400` for a lighter green).
 
-Section/page color choices MUST come from `DESIGN_TOKENS` in `tokens.ts`, never hardcoded in component files.
+**What breaks dark mode** — avoid these:
+- `shadow-lg`, `shadow-xl`, `shadow-2xl` on cards (no global override, invisible on dark)
+- `bg-gradient-to-*` for decoration (flat colors only — brand CTA: `bg-primary-700`)
+- Inline `style={{ background: '...' }}` (bypasses the override system)
+- `border-neutral-100` on white cards (too subtle — use `border-neutral-200`)
 
-### Violations to fix when touching UI
+### Layer 2 — `tailwind.config.ts`
 
-**No remaining `[#hex]` violations** — all arbitrary hex values have been resolved.
+Color palette scales (hex literals). Used via Tailwind utilities like `bg-primary-600`, `text-warning-500`.
 
-Third-party brand colors (Mastodon, LinkedIn, Facebook) are now named tokens under `brand.*` in `tailwind.config.ts`.
-Use `bg-brand-mastodon`, `bg-brand-linkedin`, `bg-brand-facebook` (and `-hover` variants) in social/share components.
+```
+primary:   green  (50→#f0fdf4 … 900→#14532d) — sustainability brand
+secondary: orange (50→#fff7ed … 900→#7c2d12) — commerce/marketplace
+neutral:   gray   (50→#fafafa … 900→#171717)
+warning/error/info/success: standard semantic palette
+brand.*:   social (mastodon, linkedin, facebook) — bg-brand-mastodon etc.
+```
 
-**Structural violation (known, low priority):** All palette values in `tailwind.config.ts` are literal hex strings, not CSS var references. This means retheme requires changing the config, not just `globals.css`.
+### Layer 3 — `src/lib/design/`
 
-**Audit commands:**
+**`tokens.ts` → `DESIGN_TOKENS`**: which section uses which icon badge color (green vs orange) and button variant. Import when a component needs to know its section theme.
+
+**`design-system.ts` → `designPrimitive`**: TypeScript strings for component-level primitives:
+- `designPrimitive.surface.card` — full card class string (used by `<Card>`)
+- `designPrimitive.type.*` — heading/body/meta typography strings
+- `designPrimitive.button.*` — button variant strings
+
+### Component primitives — always use these
+
+| Pattern | Use this | Never write this |
+|---|---|---|
+| Content card | `<Card className="p-6">` | `<div className="bg-white rounded-xl border...">` |
+| Icon circle/badge | `<IconBadge icon={X} theme="about" size="lg">` | `<div className="w-14 h-14 bg-primary-100 rounded-xl flex...">` |
+| CTA band | `bg-primary-700 text-white` | `bg-gradient-to-r from-primary-700 to-primary-800` |
+| Section BG light | `bg-neutral-50` (dark auto-handled) | `bg-neutral-50 dark:bg-neutral-900` (redundant) |
+| Section BG white | `bg-white` (dark auto-handled) | `bg-white dark:bg-neutral-950` (unless deeper black needed) |
+| Card hover | `hover:border-neutral-300` | `hover:shadow-xl` |
+
+### Audit commands
+
 ```bash
-# Find all arbitrary hex violations in className props (should return zero)
+# Arbitrary hex violations (must be zero)
 grep -rn '\[#' src/
+
+# Shadow-lg on cards (should be zero for static cards)
+grep -rn 'shadow-lg\|shadow-xl\|shadow-2xl' src/app/[locale]/ src/components/
+
+# Gradient backgrounds that should be flat
+grep -rn 'bg-gradient-to' src/app/[locale]/ src/components/ | grep -v 'from-black\|to-transparent'
 ```
 
