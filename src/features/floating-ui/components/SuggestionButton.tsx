@@ -319,7 +319,7 @@ export default function SuggestionButton() {
         onClick={() => { setIsExpanded(true); uiEvents.emit('openSuggestion') }}
         className={cn(
           "group relative",
-          "bg-primary-100 hover:bg-primary-600 text-primary-600 hover:text-white",
+          "bg-primary-100 dark:bg-primary-900/30 hover:bg-primary-600 text-primary-600 dark:text-primary-400 hover:text-white",
           "w-12 h-12 sm:w-12 sm:h-12 rounded-full shadow-lg hover:shadow-xl",
           "transition-all duration-300 ease-out",
           "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",

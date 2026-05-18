@@ -83,7 +83,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${
             service.available
-              ? 'bg-primary-100 text-primary-600 group-hover:bg-primary-600 group-hover:text-white'
+              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 group-hover:bg-primary-600 group-hover:text-white'
               : 'bg-neutral-100 text-neutral-400'
           }`}>
             <service.icon className="w-6 h-6 sm:w-8 sm:h-8" />
