@@ -182,7 +182,7 @@ export default function ITHilfeDetailPage() {
 
             {/* Review submitted confirmation */}
             {detail.reviewSubmitted && (
-              <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
+              <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6 text-center">
                 <CheckCircle className="w-8 h-8 text-primary-600 mx-auto mb-2" aria-hidden="true" />
                 <p className="text-primary-800 dark:text-primary-300 font-medium">{t('reviewSubmittedTitle')}</p>
                 <p className="text-sm text-primary-600 mt-1">{t('reviewSubmittedMessage')}</p>
