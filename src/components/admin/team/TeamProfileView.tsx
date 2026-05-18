@@ -38,6 +38,7 @@ import {
 import { CurrentFocusInput } from './activity/CurrentFocusInput'
 import { formatDateShort } from '@/lib/date-formats'
 import type { TeamProfileViewProps } from './types'
+import { ROUTES } from '@/config/routes'
 
 export function TeamProfileView({
   profile,
@@ -157,7 +158,7 @@ export function TeamProfileView({
               <Heading level={3} className="text-neutral-900 dark:text-neutral-100">Aktivitäten</Heading>
             </div>
             <Link
-              href="/admin/team/activity"
+              href={ROUTES.admin.teamActivity}
               className="px-3 py-1.5 text-sm text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-lg"
             >
               Team-Aktivitäten ansehen

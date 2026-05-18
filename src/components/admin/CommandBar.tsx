@@ -12,6 +12,7 @@ import {
   User,
   ChevronRight,
 } from 'lucide-react'
+import { ROUTES } from '@/config/routes'
 
 // ---------------------------------------------------------------------------
 // Types
@@ -66,28 +67,28 @@ const ACTION_COMMANDS: ResultItem[] = [
   {
     key: 'cmd-erfassung',
     label: 'Neues Gerät erfassen',
-    href: '/admin/erfassung/new',
+    href: ROUTES.admin.erfassungNew,
     icon: <Monitor className="w-4 h-4" />,
     group: 'Aktionen',
   },
   {
     key: 'cmd-decision',
     label: 'Neue Entscheidung',
-    href: '/admin/decisions/new',
+    href: ROUTES.admin.decisionNew,
     icon: <Vote className="w-4 h-4" />,
     group: 'Aktionen',
   },
   {
     key: 'cmd-protocol',
     label: 'Neues Protokoll',
-    href: '/admin/protocols/new',
+    href: ROUTES.admin.protocolNew,
     icon: <FileText className="w-4 h-4" />,
     group: 'Aktionen',
   },
   {
     key: 'cmd-dashboard',
     label: 'Dashboard',
-    href: '/admin',
+    href: ROUTES.admin.dashboard,
     icon: <LayoutDashboard className="w-4 h-4" />,
     group: 'Aktionen',
   },
@@ -131,7 +132,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
           key: `user-${u.id}`,
           label: u.name || u.email,
           sub: u.email,
-          href: `/admin/users/${u.id}`,
+          href: ROUTES.admin.user(u.id),
           icon: <User className="w-4 h-4" />,
           group: 'Benutzer',
         })
@@ -145,7 +146,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
           key: `decision-${d.id}`,
           label: d.title,
           sub: d.status,
-          href: `/admin/decisions/${d.id}`,
+          href: ROUTES.admin.decision(d.id),
           icon: <Vote className="w-4 h-4" />,
           group: 'Entscheide',
         })
@@ -159,7 +160,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
           key: `listing-${l.id}`,
           label: l.title,
           sub: l.status,
-          href: `/admin/marketplace/${l.id}`,
+          href: ROUTES.admin.listing(l.id),
           icon: <Monitor className="w-4 h-4" />,
           group: 'Inserate',
         })

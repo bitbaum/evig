@@ -6,6 +6,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { Link } from '@/i18n/navigation'
 import { HirnChat } from './HirnChat'
 import { ORG } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 
 interface HirnSlideOverProps {
   isOpen: boolean
@@ -76,7 +77,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
           <div className="flex items-center gap-2">
             {/* Full screen link */}
             <Link
-              href="/admin/hirn"
+              href={ROUTES.admin.hirn}
               onClick={onClose}
               className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
               title="Vollbild öffnen"

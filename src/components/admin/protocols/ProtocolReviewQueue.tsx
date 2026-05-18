@@ -8,6 +8,7 @@ import { adminSurface, adminType } from '@/lib/admin-ui'
 import { cn } from '@/lib/utils'
 import { AdminButton } from '@/components/admin/AdminButton'
 import { AdminSectionHeader } from '@/components/admin/AdminSectionHeader'
+import { ROUTES } from '@/config/routes'
 
 interface ProtocolReviewQueueProps {
   protocols: ProtocolListItem[]
@@ -32,7 +33,7 @@ export function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
         description="KI-Ergebnisse prüfen, daraus Aufgaben und Entscheidungen erzeugen, dann abschliessen."
         icon={ListChecks}
         actions={
-          <AdminButton href="/admin/protocols/new" variant="primary">
+          <AdminButton href={ROUTES.admin.protocolNew} variant="primary">
             <FileText className="w-4 h-4" />
             Neues Protokoll
           </AdminButton>
@@ -75,7 +76,7 @@ export function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
                       )}
                     </div>
                     <Link
-                      href={`/admin/protocols/${protocol.id}`}
+                      href={ROUTES.admin.protocol(protocol.id)}
                       className="block truncate text-lg font-semibold text-neutral-950 underline-offset-2 hover:text-primary-700 hover:underline"
                     >
                       {protocol.title}
@@ -90,7 +91,7 @@ export function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
                     </p>
                   </div>
 
-                  <AdminButton href={`/admin/protocols/${protocol.id}`} variant={needsTasks ? 'action' : 'secondary'} className="md:mt-1">
+                  <AdminButton href={ROUTES.admin.protocol(protocol.id)} variant={needsTasks ? 'action' : 'secondary'} className="md:mt-1">
                     Review öffnen
                     <ArrowRight className="h-4 w-4" />
                   </AdminButton>

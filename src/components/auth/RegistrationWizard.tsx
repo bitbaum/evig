@@ -15,6 +15,7 @@ import {
 import { useRegistration } from '@/hooks/useRegistration'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 
 interface RegistrationState {
   name: string
@@ -177,7 +178,7 @@ export function RegistrationWizard() {
             </p>
 
             <Link
-              href="/it-hilfe"
+              href={ROUTES.public.itHilfe}
               className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
@@ -195,7 +196,7 @@ export function RegistrationWizard() {
             </Link>
 
             <Link
-              href="/profil/techniker"
+              href={ROUTES.public.profilTechniker}
               className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
@@ -213,7 +214,7 @@ export function RegistrationWizard() {
             </Link>
 
             <Link
-              href="/shop"
+              href={ROUTES.public.shop}
               className="flex items-center gap-3 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors"
             >
               <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
@@ -233,7 +234,7 @@ export function RegistrationWizard() {
 
           <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
             <Link
-              href="/auth/login"
+              href={ROUTES.public.login}
               className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
             >
               {t('signInNow')}
@@ -298,7 +299,7 @@ export function RegistrationWizard() {
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
             {t('alreadyRegistered')}{' '}
             <Link
-              href="/auth/login"
+              href={ROUTES.public.login}
               className="text-primary-600 hover:underline font-medium"
             >
               {t('login')}

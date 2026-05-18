@@ -21,6 +21,7 @@ import type { CategoryFormData } from '@/hooks/useBlogCategories'
 import { DEFAULT_CATEGORY_COLOR, UI_COLOR_PALETTE } from '@/config/ui-colors'
 import { generateSlug } from '@/lib/utils/slug'
 import { UI_FEEDBACK_MS } from '@/config/limits'
+import { ROUTES } from '@/config/routes'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
@@ -59,7 +60,7 @@ export default function CategoryForm({
     e.preventDefault()
     const saved = await saveCategory(formData, { isEdit, id: initialData?.id })
     if (saved) {
-      setTimeout(() => router.push('/admin/content/categories'), UI_FEEDBACK_MS.REDIRECT)
+      setTimeout(() => router.push(ROUTES.admin.categories), UI_FEEDBACK_MS.REDIRECT)
     }
   }
 
@@ -67,7 +68,7 @@ export default function CategoryForm({
     setConfirmDelete(false)
     const deleted = await deleteCategory(initialData?.id || '')
     if (deleted) {
-      router.push('/admin/content/categories')
+      router.push(ROUTES.admin.categories)
     }
   }
 

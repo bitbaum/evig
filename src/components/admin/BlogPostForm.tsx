@@ -25,6 +25,7 @@ import {
 import type { BlogPostFormProps } from './blog'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { generateSlug } from '@/lib/utils/slug'
+import { ROUTES } from '@/config/routes'
 
 export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps) {
   const {
@@ -48,7 +49,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content/blog"
+            href={ROUTES.admin.blog}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -67,7 +68,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
           {formData.slug && isEdit && (
             formData.isPublished ? (
               <Link
-                href={`/blog/${formData.slug}`}
+                href={ROUTES.public.blogPost(formData.slug)}
                 target="_blank"
                 className="inline-flex items-center gap-2 px-4 py-2 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
                 title="Veröffentlichten Artikel ansehen"

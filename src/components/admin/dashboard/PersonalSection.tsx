@@ -6,6 +6,7 @@ import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { APPROVAL_STATUS } from '@/config/approval-status'
+import { ROUTES } from '@/config/routes'
 
 interface PersonalSectionProps {
   userId: string
@@ -124,7 +125,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 return (
                   <li key={task.id}>
                     <Link
-                      href={`/admin/tasks?highlight=${task.id}`}
+                      href={`${ROUTES.admin.tasks}?highlight=${task.id}`}
                       className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors group"
                     >
                       {overdue ? (
@@ -149,7 +150,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             </ul>
             {myTasks.length === TASK_LIMIT && (
               <Link
-                href="/admin/tasks"
+                href={ROUTES.admin.tasks}
                 className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
               >
                 Alle Aufgaben ansehen
@@ -169,7 +170,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
               {mySubmissions.map(sub => (
                 <li key={sub.id}>
                   <Link
-                    href="/admin/approvals"
+                    href={ROUTES.admin.approvals}
                     className="flex items-start gap-3 p-3 rounded-lg bg-neutral-50 dark:bg-neutral-700/50 hover:bg-neutral-100 dark:hover:bg-white/[0.06] transition-colors"
                   >
                     <FileText className="w-4 h-4 text-warning-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
@@ -187,7 +188,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
             </ul>
             {mySubmissions.length === SUBMISSION_LIMIT && (
               <Link
-                href="/admin/approvals"
+                href={ROUTES.admin.approvals}
                 className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-warning-600 dark:text-warning-400 hover:text-warning-700 dark:hover:text-warning-300 hover:bg-warning-50 dark:hover:bg-warning-900/20 rounded-lg transition-colors"
               >
                 Alle Einreichungen ansehen

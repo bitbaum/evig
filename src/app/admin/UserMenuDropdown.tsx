@@ -8,6 +8,7 @@ import {
   ExternalLink,
   LogOut,
 } from 'lucide-react'
+import { ROUTES } from '@/config/routes'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 interface UserMenuDropdownProps {
@@ -92,7 +93,7 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
 
           <div className="py-2">
             <Link
-              href="/"
+              href={ROUTES.public.home}
               onClick={() => setUserMenuOpen(false)}
               className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/[0.04]"
             >

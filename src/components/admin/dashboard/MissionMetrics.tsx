@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { Users, UserCheck, Wrench, Monitor } from 'lucide-react'
 import type { DashboardStats, MissionDelta } from './types'
+import { ROUTES } from '@/config/routes'
 
 interface MissionMetricsProps {
   stats: DashboardStats
@@ -41,7 +42,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       icon: Monitor,
       iconBg: 'bg-primary-100 dark:bg-primary-900/30',
       iconColor: 'text-primary-600 dark:text-primary-400',
-      href: '/admin/erfassung',
+      href: ROUTES.admin.erfassung,
     },
     {
       value: mission.devicesSoldThisMonth,
@@ -51,7 +52,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       icon: Monitor,
       iconBg: 'bg-primary-100 dark:bg-primary-900/30',
       iconColor: 'text-primary-600 dark:text-primary-400',
-      href: '/admin/products',
+      href: ROUTES.admin.products,
     },
     {
       value: mission.itHilfeCompletedThisMonth,
@@ -61,7 +62,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       icon: Wrench,
       iconBg: 'bg-primary-100 dark:bg-primary-900/30',
       iconColor: 'text-primary-600 dark:text-primary-400',
-      href: '/admin/it-hilfe',
+      href: ROUTES.admin.itHilfe,
     },
     {
       value: mission.workshopAttendeesThisMonth,
@@ -71,7 +72,7 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       icon: Users,
       iconBg: 'bg-warning-100 dark:bg-warning-900/30',
       iconColor: 'text-warning-600 dark:text-warning-400',
-      href: '/admin/workshops',
+      href: ROUTES.admin.workshops,
     },
   ]
 
@@ -113,22 +114,22 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
 
       {/* Reference stats — collapsed into a single compact row */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-neutral-100 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-900/50 px-4 py-2.5 text-xs text-neutral-500 dark:text-neutral-400">
-        <Link href="/admin/users" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+        <Link href={ROUTES.admin.users} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalUsers}</strong> Benutzer</span>
         </Link>
         <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
-        <Link href="/admin/team" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+        <Link href={ROUTES.admin.team} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <UserCheck className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalStaff}</strong> Team</span>
         </Link>
         <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
-        <Link href="/admin/services" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+        <Link href={ROUTES.admin.services} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <Wrench className="w-3.5 h-3.5" aria-hidden="true" />
           <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.totalTechnicians}</strong> Techniker</span>
         </Link>
         <span className="text-neutral-300 dark:text-neutral-600" aria-hidden="true">·</span>
-        <Link href="/admin/marketplace" className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
+        <Link href={ROUTES.admin.marketplace} className="flex items-center gap-1.5 hover:text-neutral-700 dark:hover:text-neutral-300 transition-colors">
           <span><strong className="text-neutral-700 dark:text-neutral-200">{stats.activeListings}</strong> aktive Inserate</span>
         </Link>
       </div>

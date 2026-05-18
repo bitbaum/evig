@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { Save, Loader2, Package } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { ROUTES } from '@/config/routes'
 
 interface Props {
   isEditMode: boolean
@@ -20,7 +21,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
       {/* Desktop */}
       <div className="hidden sm:flex justify-between items-center pt-4">
         <Link
-          href="/admin/products"
+          href={ROUTES.admin.products}
           className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-neutral-300 bg-white hover:bg-neutral-50 text-neutral-900"
         >
           {t('cancel')}

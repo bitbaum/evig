@@ -5,6 +5,7 @@ import { Search, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { ROUTES } from '@/config/routes'
 import type { TabType, FilterStatus } from './types'
 
 interface ProductFilterBarProps {
@@ -81,7 +82,7 @@ export function ProductFilterBar({
           )}
           {activeTab === 'inventory' && (
             <Link
-              href="/admin/erfassung"
+              href={ROUTES.admin.erfassung}
               className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4 inline mr-2" />

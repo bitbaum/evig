@@ -30,6 +30,7 @@ import type { Feature, ProcessStep, ServiceFormData } from './service-form'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { generateSlug } from '@/lib/utils/slug'
 import { useFormHandler } from '@/hooks/useFormHandler'
+import { ROUTES } from '@/config/routes'
 
 interface ServiceFormProps {
   initialData?: Partial<ServiceFormData>
@@ -64,7 +65,7 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
     isEdit,
     editId: initialData?.id,
     editMethod: 'PUT',
-    redirectTo: '/admin/services',
+    redirectTo: ROUTES.admin.services,
     createSuccessMessage: 'Dienstleistung erstellt!',
     editSuccessMessage: 'Dienstleistung gespeichert!',
   })
