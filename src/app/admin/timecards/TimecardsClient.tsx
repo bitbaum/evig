@@ -25,7 +25,19 @@ import {
   getNextMonthStart,
   parseWeeklySchedule,
   summarizeWeeklySchedule,
+  addDays,
+  toISODate,
 } from '@/lib/team/schedule'
+import {
+  startOfWeek,
+  getDaysInRange,
+  getWeekDates,
+  getDisplayDate,
+  formatShortDateRange,
+  normalizeEntry,
+  mergeEntries,
+  getEntryForDate,
+} from '@/lib/team/timecard-utils'
 import type { Timecard, TimecardEntryInput, TimecardSaveInput } from '@/lib/schemas/timecards'
 
 type PeriodMode = 'month' | 'week'
@@ -47,71 +59,6 @@ interface DraftState {
   selectedDate: string
 }
 
-function startOfWeek(date: Date): Date {
-  const next = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  const day = next.getUTCDay()
-  const diff = day === 0 ? -6 : 1 - day
-  next.setUTCDate(next.getUTCDate() + diff)
-  return next
-}
-
-function addDays(date: Date, days: number): Date {
-  const next = new Date(date)
-  next.setUTCDate(next.getUTCDate() + days)
-  return next
-}
-
-function toISODate(date: Date): string {
-  return date.toISOString().slice(0, 10)
-}
-
-function getDaysInRange(start: Date, end: Date): string[] {
-  const dates: string[] = []
-  const cursor = new Date(start)
-  while (cursor < end) {
-    dates.push(toISODate(cursor))
-    cursor.setUTCDate(cursor.getUTCDate() + 1)
-  }
-  return dates
-}
-
-function getWeekDates(periodStart: string): string[] {
-  const start = new Date(`${periodStart}T00:00:00.000Z`)
-  return WEEKDAY_IDS.map((_, index) => toISODate(addDays(start, index)))
-}
-
-function getDisplayDate(dateValue: string): string {
-  const [year, month, day] = dateValue.split('-').map(Number)
-  return new Intl.DateTimeFormat('de-CH', {
-    weekday: 'short',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-  }).format(new Date(Date.UTC(year, month - 1, day)))
-}
-
-function formatShortDate(date: Date): string {
-  return new Intl.DateTimeFormat('de-CH', { day: '2-digit', month: '2-digit' }).format(date)
-}
-
-function normalizeEntry(entry: TimecardEntryInput): TimecardEntryInput {
-  return {
-    ...entry,
-    break_minutes: entry.break_minutes ?? 0,
-    category: entry.category ?? 'other',
-    source: entry.source ?? 'manual',
-  }
-}
-
-function mergeEntries(current: TimecardEntryInput[], incoming: TimecardEntryInput[]): TimecardEntryInput[] {
-  const byDate = new Map(current.map(entry => [entry.work_date, normalizeEntry(entry)]))
-  incoming.forEach(entry => byDate.set(entry.work_date, normalizeEntry(entry)))
-  return Array.from(byDate.values()).sort((a, b) => a.work_date.localeCompare(b.work_date))
-}
-
-function getEntryForDate(entries: TimecardEntryInput[], date: string): TimecardEntryInput | undefined {
-  return entries.find(entry => entry.work_date === date)
-}
 
 function createDraft(entries: TimecardEntryInput[], selectedDate: string): DraftState {
   return {
@@ -193,7 +140,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
   const scheduleSummary = hasSchedule ? summarizeWeeklySchedule(schedule) : 'Noch kein Standardschedule hinterlegt'
   const currentPeriodLabel = mode === 'month'
     ? monthLabel
-    : `${formatShortDate(currentWeekStart)} bis ${formatShortDate(addDays(currentWeekStart, 4))}`
+    : `${formatShortDateRange(currentWeekStart)} bis ${formatShortDateRange(addDays(currentWeekStart, 4))}`
 
   const updateCurrentDraft = (updater: (current: DraftState) => DraftState) => {
     setDrafts(prev => ({

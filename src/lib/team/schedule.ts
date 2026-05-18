@@ -141,7 +141,7 @@ export function calculateTimeRangeMinutes(start: string, end: string, breakMinut
   return Math.max(0, duration)
 }
 
-function addDays(date: Date, days: number): Date {
+export function addDays(date: Date, days: number): Date {
   const next = new Date(date)
   next.setUTCDate(next.getUTCDate() + days)
   return next
@@ -155,7 +155,7 @@ export function getNextMonthStart(date: Date): Date {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + 1, 1))
 }
 
-function toISODate(date: Date): string {
+export function toISODate(date: Date): string {
   return date.toISOString().slice(0, 10)
 }
 
