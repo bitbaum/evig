@@ -16,6 +16,7 @@ import {
   Clock,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { getSkillById, BUDGET_TIERS, SERVICE_TYPE } from '@/config/it-hilfe'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -76,7 +77,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
         </Link>
 
         {/* Profile header */}
-        <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 sm:p-8 mb-6">
+        <Card className="rounded-2xl p-6 sm:p-8 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
@@ -183,21 +184,21 @@ export default async function TechnikerDetailPage({ params }: Props) {
               </span>
             )}
           </div>
-        </div>
+        </Card>
 
         {/* Bio */}
         {technician.bio && (
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 mb-6">
+          <Card className="rounded-2xl p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-3">
               {t('detail.aboutMe')}
             </Heading>
             <p className="text-neutral-700 whitespace-pre-line">{technician.bio}</p>
-          </div>
+          </Card>
         )}
 
         {/* Skills */}
         {technician.skills.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 mb-6">
+          <Card className="rounded-2xl p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
               {t('detail.skills')}
             </Heading>
@@ -216,12 +217,12 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 )
               })}
             </div>
-          </div>
+          </Card>
         )}
 
         {/* Services (professional only) */}
         {isProfessional && technician.services.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 mb-6">
+          <Card className="rounded-2xl p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">
               {t('detail.offeredServices')}
             </Heading>
@@ -261,12 +262,12 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 {t('detail.requestBooking')}
               </Link>
             </div>
-          </div>
+          </Card>
         )}
 
         {/* Delivery types */}
         {technician.serviceDeliveryTypes && technician.serviceDeliveryTypes.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 mb-6">
+          <Card className="rounded-2xl p-6 mb-6">
             <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-3">
               {t('detail.deliveryTypes')}
             </Heading>
@@ -280,7 +281,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
                 </span>
               ))}
             </div>
-          </div>
+          </Card>
         )}
       </div>
     </div>

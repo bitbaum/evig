@@ -33,7 +33,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
   return (
     <Link
       href={`/techniker/${technician.id}`}
-      className="block bg-white rounded-xl border border-neutral-200 p-5 hover:shadow-lg transition-shadow"
+      className="block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-5 hover:border-neutral-300 dark:hover:border-white/[0.12] hover:shadow-sm transition-all"
     >
       {/* Name + tier badge */}
       <div className="flex items-start justify-between gap-2 mb-3">

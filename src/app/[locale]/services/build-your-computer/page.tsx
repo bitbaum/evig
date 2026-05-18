@@ -151,7 +151,7 @@ export default function BuildYourComputerPage() {
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-neutral-600'}`}>3</div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-lg p-8">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.08] p-8">
               {/* Step 1: Requirements */}
               {step === 1 && (
                 <div className="space-y-8">
@@ -235,7 +235,7 @@ export default function BuildYourComputerPage() {
 
                   {!isAnalyzing ? (
                     <>
-                      <div className="bg-primary-50 p-6 rounded-lg">
+                      <div className="bg-neutral-50 dark:bg-neutral-800/50 p-6 rounded-lg">
                         <Heading level={4} className="mb-4">{t('buildTool.requirementsSummary')}</Heading>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
                           <div>
@@ -366,7 +366,7 @@ export default function BuildYourComputerPage() {
                   </div>
 
                   {/* Sustainability Impact */}
-                  <div className="bg-primary-50 p-6 rounded-lg">
+                  <div className="bg-neutral-50 dark:bg-neutral-800/50 p-6 rounded-lg">
                     <Heading level={4} className="mb-4 flex items-center">
                       <Leaf className="w-5 h-5 text-primary-600 mr-2" />
                       {t('buildTool.environmentHeading')}
@@ -401,7 +401,7 @@ export default function BuildYourComputerPage() {
             {[Globe, Star, CheckCircle2].map((Icon, index) => {
               const items = t.raw('features.items') as Array<{ title: string; description: string }>
               return (
-                <div key={index} className="bg-white p-8 rounded-xl shadow-lg">
+                <div key={index} className="bg-white dark:bg-neutral-900 p-8 rounded-xl border border-neutral-200 dark:border-white/[0.08]">
                   <Icon className="w-12 h-12 text-primary-600 mb-4" />
                   <Heading level={3} className="mb-4">{items[index].title}</Heading>
                   <p className="text-neutral-600">{items[index].description}</p>
@@ -416,7 +416,7 @@ export default function BuildYourComputerPage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 rounded-2xl p-8 md:p-12 text-center">
+            <div className="bg-neutral-50 dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.06] p-8 md:p-12 text-center">
               <div className="inline-flex items-center bg-primary-100 px-6 py-3 rounded-full mb-6">
                 <Award className="w-8 h-8 text-primary-600 mr-3" />
                 <span className="text-2xl font-bold text-primary-800">Revamped</span>
@@ -453,7 +453,7 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
+      <section className="py-20 bg-primary-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <Heading level={2} className="mb-6">{t('cta.heading')}</Heading>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">

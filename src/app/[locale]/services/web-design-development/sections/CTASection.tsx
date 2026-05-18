@@ -6,7 +6,7 @@ export async function CTASection() {
   const t = await getTranslations('services.webDesign.cta')
 
   return (
-    <section className="py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
+    <section className="py-20 bg-primary-700 text-white">
       <div className="container mx-auto px-4 text-center">
         <Heading level={2} className="mb-6">{t('title')}</Heading>
         <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">

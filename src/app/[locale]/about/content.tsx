@@ -42,7 +42,7 @@ export default async function AboutContent() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Image Column */}
             <div className="relative">
-              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.08]">
                 <Image
                   src="/images/Article Pics/storefront.png"
                   alt={`${ORG.name} ${t('mission.imageAlt')}`}
@@ -62,7 +62,7 @@ export default async function AboutContent() {
             {/* Content Column */}
             <div className="space-y-6">
               {/* Quote Box */}
-              <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 border-l-4 border-primary-500 dark:border-primary-400 p-6 rounded-r-xl">
+              <div className="bg-neutral-50 dark:bg-neutral-800 border-l-4 border-primary-500 dark:border-primary-400 p-6 rounded-r-xl">
                 <Quote className="h-8 w-8 text-primary-500 mb-3" />
                 <p className="text-xl md:text-2xl font-medium text-neutral-800 italic">
                   &ldquo;{t('mission.quote')}&rdquo;
@@ -96,34 +96,34 @@ export default async function AboutContent() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Card 1 - Hardware Recycling */}
-            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100">
-              <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
-                <Recycle className="h-7 w-7 text-primary-600 group-hover:text-white transition-colors" />
+            <div className="group bg-white dark:bg-neutral-900 rounded-2xl p-8 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300">
+              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+                <Recycle className="h-7 w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors" />
               </div>
-              <Heading level={3} className="text-xl font-bold text-neutral-900 mb-3">{t('impactAreas.hardware.title')}</Heading>
-              <p className="text-neutral-600 leading-relaxed">
+              <Heading level={3} className="text-xl font-bold text-neutral-900 dark:text-white mb-3">{t('impactAreas.hardware.title')}</Heading>
+              <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
                 {t('impactAreas.hardware.description')}
               </p>
             </div>
 
             {/* Card 2 - Open Source */}
-            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100">
-              <div className="w-14 h-14 bg-primary-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
-                <Code className="h-7 w-7 text-primary-600 group-hover:text-white transition-colors" />
+            <div className="group bg-white dark:bg-neutral-900 rounded-2xl p-8 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300">
+              <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
+                <Code className="h-7 w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors" />
               </div>
-              <Heading level={3} className="text-xl font-bold text-neutral-900 mb-3">{t('impactAreas.openSource.title')}</Heading>
-              <p className="text-neutral-600 leading-relaxed">
+              <Heading level={3} className="text-xl font-bold text-neutral-900 dark:text-white mb-3">{t('impactAreas.openSource.title')}</Heading>
+              <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
                 {t('impactAreas.openSource.description')}
               </p>
             </div>
 
             {/* Card 3 - Community */}
-            <div className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-neutral-100">
+            <div className="group bg-white dark:bg-neutral-900 rounded-2xl p-8 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300">
               <div className="w-14 h-14 bg-primary-100 dark:bg-primary-500/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary-500 group-hover:scale-110 transition-all duration-300">
                 <Users className="h-7 w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors" />
               </div>
-              <Heading level={3} className="text-xl font-bold text-neutral-900 mb-3">{t('impactAreas.community.title')}</Heading>
-              <p className="text-neutral-600 leading-relaxed">
+              <Heading level={3} className="text-xl font-bold text-neutral-900 dark:text-white mb-3">{t('impactAreas.community.title')}</Heading>
+              <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
                 {t('impactAreas.community.description')}
               </p>
             </div>

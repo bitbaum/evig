@@ -52,7 +52,7 @@ export async function PhilosophySection() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 rounded-xl p-8">
+            <div className="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06]">
               <Heading level={4} className="mb-4 text-neutral-800">{t('ratingTitle')}</Heading>
               <p className="text-neutral-600 mb-4">
                 {t('ratingIntro')}

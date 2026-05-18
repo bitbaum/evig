@@ -120,7 +120,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {advantageItems.map((adv, index) => (
-                <div key={index} className="bg-white rounded-xl p-8 shadow-lg border-l-4 border-primary-600">
+                <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-8 border border-neutral-200 dark:border-white/[0.06] border-l-4 border-l-primary-600">
                   <Heading level={3} className="mb-4">{adv.title}</Heading>
                   <ul className="space-y-3">
                     {adv.points.map((point, i) => (
@@ -136,7 +136,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
           </div>
 
           {/* Quick Contact CTA */}
-          <div className="mt-12 bg-primary-50 rounded-xl p-8 text-center">
+          <div className="mt-12 bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-8 text-center">
             <Heading level={3} className="mb-4">{t('quickCta.heading')}</Heading>
             <p className="text-neutral-600 mb-6 max-w-2xl mx-auto">
               {t('quickCta.body')}
@@ -269,7 +269,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       </section>
 
       {/* Final CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
+      <section className="py-20 bg-primary-700 text-white">
         <div className="container mx-auto px-4 text-center">
           <Heading level={2} className="mb-6">{t('finalCta.heading')}</Heading>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-primary-100">

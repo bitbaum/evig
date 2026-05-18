@@ -95,14 +95,14 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               {features.map((feature, index) => {
                 const Icon = FEATURE_ICONS[index]
                 return (
-                  <div key={index} className="bg-primary-50 rounded-xl p-6 sm:p-8 shadow-lg border-l-4 border-primary-600">
+                  <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-6 sm:p-8 shadow-sm border border-neutral-200 dark:border-white/[0.08] border-l-4 border-l-primary-600">
                     <div className="flex items-start">
-                      <div className="p-2 sm:p-3 bg-primary-100 rounded-lg text-primary-600 mr-3 sm:mr-4">
+                      <div className="p-2 sm:p-3 bg-primary-100 dark:bg-primary-500/15 rounded-lg text-primary-600 dark:text-primary-400 mr-3 sm:mr-4">
                         <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
                       </div>
                       <div>
                         <Heading level={3} className="mb-2">{feature.title}</Heading>
-                        <p className="text-sm sm:text-base text-neutral-600">{feature.description}</p>
+                        <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">{feature.description}</p>
                       </div>
                     </div>
                   </div>
@@ -121,7 +121,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 <p className="text-base sm:text-lg md:text-xl text-neutral-600">{t('pricing.subtitle')}</p>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 md:p-12">
+              <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.08] shadow-sm p-6 sm:p-8 md:p-12">
                 <div className="text-center mb-6 sm:mb-8">
                   <div className="inline-block bg-primary-100 text-primary-800 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     {t('pricing.badge')}
@@ -165,17 +165,17 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
-                <div className="bg-primary-50 rounded-xl p-6 sm:p-8">
-                  <div className="text-3xl sm:text-4xl font-bold text-primary-600 mb-2">100%</div>
-                  <p className="text-sm sm:text-base text-neutral-700">{t('impact.dataSecurity')}</p>
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-6 sm:p-8">
+                  <div className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">100%</div>
+                  <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300">{t('impact.dataSecurity')}</p>
                 </div>
-                <div className="bg-primary-50 rounded-xl p-6 sm:p-8">
-                  <div className="text-3xl sm:text-4xl font-bold text-primary-600 mb-2">♻</div>
-                  <p className="text-sm sm:text-base text-neutral-700">{t('impact.sustainableProcesses')}</p>
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-6 sm:p-8">
+                  <div className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">♻</div>
+                  <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300">{t('impact.sustainableProcesses')}</p>
                 </div>
-                <div className="bg-primary-50 rounded-xl p-6 sm:p-8">
-                  <div className="text-3xl sm:text-4xl font-bold text-primary-600 mb-2">🌱</div>
-                  <p className="text-sm sm:text-base text-neutral-700">{t('impact.reducedEwaste')}</p>
+                <div className="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-6 sm:p-8">
+                  <div className="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">🌱</div>
+                  <p className="text-sm sm:text-base text-neutral-700 dark:text-neutral-300">{t('impact.reducedEwaste')}</p>
                 </div>
               </div>
             </div>
@@ -194,7 +194,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 sm:p-8 border border-neutral-200 dark:border-white/[0.08]">
                   <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600 mb-3 sm:mb-4" />
                   <Heading level={3} className="mb-3 sm:mb-4">{t('contact.locations')}</Heading>
                   <div className="space-y-2 sm:space-y-3 text-sm sm:text-base text-neutral-600">
@@ -203,7 +203,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                   </div>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 sm:p-8 shadow-lg">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 sm:p-8 border border-neutral-200 dark:border-white/[0.08]">
                   <div className="mb-4 sm:mb-6">
                     <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600 mb-3 sm:mb-4" />
                     <Heading level={3} className="mb-3 sm:mb-4">{t('contact.contactInfo')}</Heading>
@@ -228,7 +228,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
         </section>
 
         {/* CTA Section */}
-        <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
+        <section className="py-12 sm:py-16 md:py-20 bg-primary-700 text-white">
           <div className="container mx-auto px-4 sm:px-6 text-center">
             <Heading level={2} className="mb-4 sm:mb-6">{t('cta.heading')}</Heading>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-primary-100">

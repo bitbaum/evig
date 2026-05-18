@@ -16,14 +16,12 @@ interface ProjectHeroProps {
 }
 
 export function ProjectHero({ hero }: ProjectHeroProps) {
-  const { title, description, backgroundColor = 'from-primary-700 via-primary-800 to-primary-900', ctas } = hero
+  const { title, description, backgroundColor = 'bg-primary-700', ctas } = hero
 
   return (
     <section className={cn(
       'relative text-white py-24 overflow-hidden',
-      backgroundColor.startsWith('from-')
-        ? `bg-gradient-to-br ${backgroundColor}`
-        : backgroundColor
+      backgroundColor
     )}>
       <div
         className="absolute inset-0 opacity-10"

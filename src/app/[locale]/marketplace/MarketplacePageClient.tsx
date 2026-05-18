@@ -71,7 +71,7 @@ export default function MarketplacePage() {
   return (
     <div className="bg-canvas min-h-screen">
       {/* Compact search hero — orange accents maintained for marketplace identity */}
-      <div className="bg-gradient-to-br from-secondary-50 to-warning-50 dark:from-neutral-900 dark:to-neutral-950 border-b border-secondary-100 dark:border-white/[0.06] py-6 sm:py-8">
+      <div className="bg-secondary-50 dark:bg-neutral-900 border-b border-secondary-100 dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <div>
