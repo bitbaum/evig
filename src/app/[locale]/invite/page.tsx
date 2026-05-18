@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { Link2, Gift, Users, Send, Copy, Check } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -14,6 +16,8 @@ interface ReferralData {
 }
 
 export default function InvitePage() {
+  const { status } = useSession()
+  const router = useRouter()
   const [data, setData] = useState<ReferralData | null>(null)
   const [email, setEmail] = useState('')
   const [sending, setSending] = useState(false)
@@ -22,11 +26,16 @@ export default function InvitePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/auth/login?callbackUrl=/invite')
+      return
+    }
+    if (status !== 'authenticated') return
     fetch('/api/referral/my-code')
       .then(r => r.json())
       .then(j => { if (j.success) setData(j.data) })
       .finally(() => setLoading(false))
-  }, [])
+  }, [status, router])
 
   async function handleInvite(e: React.FormEvent) {
     e.preventDefault()
