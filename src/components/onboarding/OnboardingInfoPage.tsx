@@ -90,7 +90,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         </div>
 
         {/* Pricing Info Box */}
-        <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 rounded-lg p-6 border border-primary-100 dark:border-white/[0.06] mb-8">
+        <div className="bg-neutral-50 dark:bg-neutral-800 rounded-lg p-6 border border-neutral-200 dark:border-white/[0.06] mb-8">
           <div className="flex items-center space-x-3 mb-4">
             <config.pricing.icon className={`w-6 h-6 ${config.pricing.iconColor}`} />
             <Heading level={2} className="text-xl font-semibold text-neutral-900">

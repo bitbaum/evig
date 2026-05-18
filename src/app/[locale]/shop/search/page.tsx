@@ -279,7 +279,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white py-12 sm:py-16">
+      <section className="bg-primary-700 text-white py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Breadcrumbs
             query={query}

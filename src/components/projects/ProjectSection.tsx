@@ -62,8 +62,8 @@ export function ProjectSection({ section }: ProjectSectionProps) {
                 <div 
                   key={index}
                   className={section.backgroundColor === 'gray' 
-                    ? 'bg-white p-8 rounded-xl shadow-sm' 
-                    : 'bg-gradient-to-br from-primary-50 to-white dark:from-neutral-800 dark:to-neutral-900 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300'
+                    ? 'bg-white dark:bg-neutral-900 p-8 rounded-xl border border-neutral-200 dark:border-white/[0.06]'
+                    : 'bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300'
                   }
                 >
                   {/* Card Header with Icon */}

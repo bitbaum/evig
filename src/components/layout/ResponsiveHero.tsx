@@ -43,15 +43,15 @@ export function ResponsiveHero({
 }: ResponsiveHeroProps) {
   const bgClasses = {
     green: cn(
-      'bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900',
+      'bg-primary-700',
       getTextColor('primary', 'primary')
     ),
     blue: cn(
-      'bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-900',
+      'bg-neutral-800',
       getTextColor('dark', 'primary')
     ),
     gray: cn(
-      'bg-gradient-to-br from-neutral-700 via-neutral-800 to-neutral-900',
+      'bg-neutral-800',
       getTextColor('dark', 'primary')
     ),
     white: cn(

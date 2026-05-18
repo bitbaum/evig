@@ -29,7 +29,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
             />
           </div>
         ) : (
-          <div className="aspect-[16/10] lg:aspect-[4/3] bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg flex items-center justify-center order-2 lg:order-1">
+          <div className="aspect-[16/10] lg:aspect-[4/3] bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-white/[0.06] rounded-lg flex items-center justify-center order-2 lg:order-1">
             <span className="text-primary-700 text-6xl font-bold">R</span>
           </div>
         )}

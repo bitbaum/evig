@@ -13,7 +13,7 @@ interface AIDiagnosisCardProps {
 export function AIDiagnosisCard({ diagnosis, deviceInfo }: AIDiagnosisCardProps) {
   const t = useTranslations('components.aiDiagnosisCard')
   return (
-    <div className="bg-gradient-to-r from-primary-50 to-primary-100 dark:from-neutral-800 dark:to-neutral-900 rounded-xl border border-primary-200 dark:border-white/[0.06] p-6">
+    <div className="bg-neutral-50 dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
       <div className="flex items-center gap-2 mb-3">
         <Stethoscope className="w-5 h-5 text-primary-600" />
         <Heading level={3} className="text-lg font-semibold text-neutral-900">{t('title')}</Heading>

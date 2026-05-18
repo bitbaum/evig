@@ -33,7 +33,7 @@ const getPriorityColor = (priority: number) => {
 function PrincipleCard({ principle, isLast, priorityLabel }: { principle: ZeroWastePrinciple; isLast: boolean; priorityLabel: string }) {
   return (
     <div className="relative">
-      <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-100 hover:shadow-xl transition-shadow">
+      <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors">
         <div className="flex items-start gap-4">
           <div className={`p-3 rounded-lg ${getPriorityColor(principle.priority)}`}>
             {getIcon(principle.icon)}
@@ -65,7 +65,7 @@ export default async function ZeroWasteSolutionSection() {
   const sortedPrinciples = [...ZERO_WASTE_PRINCIPLES].sort((a, b) => a.priority - b.priority)
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-primary-50 dark:from-neutral-950 dark:to-neutral-900">
+    <section className="py-20 bg-neutral-50 dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -134,7 +134,7 @@ export default async function ZeroWasteSolutionSection() {
             </div>
 
             {/* Key Insight */}
-            <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-100">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]">
               <Heading level={4} className="font-bold text-neutral-900 mb-3">{t('whyRepairTitle')}</Heading>
               <p className="text-neutral-600 text-sm mb-4">
                 {t('whyRepairText')}

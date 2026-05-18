@@ -32,7 +32,7 @@ export default function BlogLatestList({ posts }: BlogLatestListProps) {
                   />
                 </div>
               ) : (
-                <div className="w-32 h-32 flex-shrink-0 bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-lg flex items-center justify-center">
+                <div className="w-32 h-32 flex-shrink-0 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-white/[0.06] rounded-lg flex items-center justify-center">
                   <span className="text-neutral-400 text-2xl font-bold">R</span>
                 </div>
               )}

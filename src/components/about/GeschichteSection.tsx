@@ -61,7 +61,7 @@ function TimelineItem({
         className={`flex-1 ${isLeft ? 'md:text-right' : ''}`}
       >
         <div
-          className={`bg-white rounded-xl p-6 shadow-lg border border-neutral-100
+          className={`bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]
             ${milestone.highlight ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
         >
           <div
@@ -105,7 +105,7 @@ export default function GeschichteSection() {
   const { founding, milestones, currentState } = HISTORY_CONFIG
 
   return (
-    <section className="py-20 bg-gradient-to-b from-warning-50 to-white dark:from-neutral-900 dark:to-neutral-950">
+    <section className="py-20 bg-neutral-50 dark:bg-neutral-900">
       <div className="max-w-6xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
@@ -123,7 +123,7 @@ export default function GeschichteSection() {
 
         {/* Founding Story */}
         <div className="max-w-3xl mx-auto mb-20">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-neutral-100">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl p-8 border border-neutral-200 dark:border-white/[0.06]">
             <div className="prose prose-lg max-w-none">
               {founding.paragraphs.map((paragraph, index) => (
                 <p key={index} className="text-neutral-600 mb-4 last:mb-0">

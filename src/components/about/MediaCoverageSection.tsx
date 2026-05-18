@@ -91,7 +91,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
       rel="noopener noreferrer"
       className="group flex items-center gap-3 bg-white rounded-full px-5 py-3 border border-neutral-200 hover:border-primary-400 hover:shadow-md transition-all duration-300"
     >
-      <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white text-xs font-bold">
+      <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
         {mention.sourceShort.charAt(0)}
       </div>
       <div className="flex-1 min-w-0">
@@ -122,7 +122,7 @@ export default function MediaCoverageSection() {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-neutral-50 to-white dark:from-neutral-900 dark:to-neutral-950">
+    <section className="py-20 bg-neutral-50 dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-16">

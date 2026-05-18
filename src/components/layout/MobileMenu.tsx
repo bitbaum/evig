@@ -317,7 +317,7 @@ export function MobileMenu({
             <div className="space-y-3">
               {/* User Info */}
               <div className="flex items-center gap-3 p-3 bg-primary-50 dark:bg-primary-500/[0.08] rounded-xl border border-primary-100 dark:border-primary-500/20">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                   {session.user.name
                     ?.split(' ')
                     .map((n) => n[0])

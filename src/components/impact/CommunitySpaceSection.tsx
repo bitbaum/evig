@@ -100,7 +100,7 @@ export default function CommunitySpaceSection() {
           </div>
 
           {/* Workshops */}
-          <div className="bg-gradient-to-br from-neutral-800/50 to-primary-900/50 rounded-2xl p-8 border border-neutral-700/50">
+          <div className="bg-neutral-800/50 rounded-2xl p-8 border border-neutral-700">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
                 <GraduationCap className="h-6 w-6" />
@@ -128,7 +128,7 @@ export default function CommunitySpaceSection() {
         </div>
 
         {/* Vision Section */}
-        <div className="bg-gradient-to-r from-primary-900/30 to-primary-800/30 rounded-2xl p-8 md:p-12 border border-primary-700/50">
+        <div className="bg-primary-900/30 rounded-2xl p-8 md:p-12 border border-primary-700/50">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 bg-primary-500/20 rounded-lg text-primary-400">
               <Sparkles className="h-6 w-6" />

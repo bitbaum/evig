@@ -156,7 +156,7 @@ export function UserMenu() {
             unoptimized
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
+          <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
             {initials}
           </div>
         )}
@@ -180,7 +180,7 @@ export function UserMenu() {
       >
         <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-xl shadow-neutral-200/50 dark:shadow-black/40 border border-neutral-100 dark:border-white/[0.06] overflow-hidden">
           {/* User Info Header */}
-          <div className="px-5 py-4 bg-gradient-to-br from-neutral-50 to-white dark:from-neutral-800 dark:to-neutral-900 border-b border-neutral-100 dark:border-white/[0.06]">
+          <div className="px-5 py-4 bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-100 dark:border-white/[0.06]">
             <div className="flex items-center gap-3">
               {session.user.image ? (
                 <Image
@@ -192,7 +192,7 @@ export function UserMenu() {
                   unoptimized
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-sm font-semibold">
+                <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-semibold">
                   {initials}
                 </div>
               )}
