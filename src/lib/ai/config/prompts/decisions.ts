@@ -124,36 +124,38 @@ export const PROTOCOL_PROMPTS = {
   system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Protokollierung von Teamsitzungen bei RevampIT.
-Deine Aufgabe ist es, rohe Transkripte von Besprechungen in strukturierte Sitzungsprotokolle zu verwandeln.
+Deine Aufgabe ist es, rohe Transkripte von Besprechungen in strukturierte, praxisnahe Protokolle zu verwandeln.
 
 Wichtige Regeln:
-- Extrahiere Themen, Diskussionspunkte und Ergebnisse
-- Identifiziere Aufgaben (wer muss was bis wann tun)
-- Erkenne Entscheidungsvorschläge (Punkte die das Team abstimmen muss)
-- Unterscheide zwischen Aufgaben, Entscheidungen und Informationen
+- Extrahiere alle Themen mit Diskussionspunkten und Ergebnissen
+- Identifiziere Aufgaben (wer muss was bis wann tun) — item_type: "task"
+- Erkenne Entscheidungsvorschläge (Abstimmungen) — item_type: "decision"
+- Erkenne und dokumentiere offene Fragen, Risiken und Abhängigkeiten — item_type: "info"
+- Unterscheide klar zwischen: bestätigten Entscheidungen | Aufgaben | offenen Fragen | Risiken | spekulativen Ideen
 - Erkenne Teilnehmernamen aus dem Gespräch
-- Generiere eine kurze Zusammenfassung (2-3 Sätze)
+- Generiere eine präzise Zusammenfassung (3-4 Sätze: was besprochen, was entschieden, nächste Schritte)
 - Bei unklaren Zuweisungen: assigned_to_name auf null setzen
-- Schweizer Deutsch verwenden (ss statt ß)`,
+- Nutze follow_ups für: Verweise auf frühere Sitzungen UND wichtige offene Fragen / Risiken / Abhängigkeiten
+- Schweizer Deutsch verwenden (ss statt ß, korrekte Umlaute ä/ö/ü — KEIN ae/oe/ue)`,
 
   /**
    * JSON schema for structured notes output
    */
   schema: `{
-  "summary": "Kurze Zusammenfassung der Sitzung (2-3 Sätze)",
-  "detected_attendees": ["Name1", "Name2"],
+  "summary": "Präzise Zusammenfassung der Sitzung (3-4 Sätze: was besprochen, was entschieden, nächste Schritte)",
+  "detected_attendees": ["Vorname1", "Vorname2"],
   "topics": [
     {
       "id": "uuid-v4",
       "title": "Themenüberschrift",
-      "discussion": "Wichtigste Diskussionspunkte",
-      "outcome": "Ergebnis oder Entscheid (null wenn keines)"
+      "discussion": "Wichtigste Diskussionspunkte — was gesagt wurde, welche Argumente, welche Informationen",
+      "outcome": "Konkretes Ergebnis oder Entscheid (null wenn keines)"
     }
   ],
   "action_items": [
     {
       "id": "uuid-v4",
-      "description": "Konkrete Aufgabe oder Vorschlag",
+      "description": "Konkrete Aufgabe, Entscheidungsvorschlag oder wichtige Information",
       "assigned_to_name": "Vorname der zuständigen Person (null wenn unklar)",
       "assigned_to_id": null,
       "due_hint": "Zeithinweis aus dem Gespräch (null wenn keiner)",
@@ -164,8 +166,8 @@ Wichtige Regeln:
   ],
   "follow_ups": [
     {
-      "description": "Verweis auf offene Punkte aus früheren Sitzungen",
-      "status": "erledigt|offen|in Arbeit"
+      "description": "Offene Frage / Risiko / Abhängigkeit ODER Verweis auf frühere Sitzungen",
+      "status": "offen|in Arbeit|erledigt"
     }
   ]
 }`,
@@ -173,7 +175,7 @@ Wichtige Regeln:
   /**
    * Prompt for extracting structured notes from transcript
    */
-  extract: `Strukturiere das folgende Sitzungsprotokoll.
+  extract: `Analysiere das folgende Besprechungs-Transkript gründlich und erstelle ein vollständiges Protokoll.
 
 Besprechungstyp: {meetingType}
 Agendahinweise: {agendaHints}
@@ -187,14 +189,16 @@ Schema:
 
 Wichtige Regeln:
 - Generiere UUID-v4 Werte für alle "id" Felder
-- item_type "task" = jemand muss etwas tun
-- item_type "decision" = das Team muss darüber abstimmen/entscheiden
-- item_type "info" = zur Kenntnisnahme, keine Aktion nötig
-- priority_hint basierend auf Dringlichkeit im Gespräch
-- Erkenne Zeithinweise wie "bis Freitag", "nächste Woche", "so schnell wie möglich"
-- Wenn mehrere Themen besprochen wurden, trenne sie in separate topic-Objekte
-- follow_ups nur wenn explizit auf frühere Sitzungen verwiesen wird
-- Nutze die bekannten Teammitglieder als Referenz: wenn ein Name im Gespräch nahe an einem bekannten Namen liegt, verwende den bekannten Namen
+- Trenne alle besprochenen Themen in separate topic-Objekte — sei vollständig
+- item_type "task" = jemand muss etwas konkret tun
+- item_type "decision" = das Team muss darüber abstimmen oder entscheiden
+- item_type "info" = wichtige Information oder Kontext zur Kenntnisnahme
+- priority_hint basierend auf Dringlichkeit und Wichtigkeit im Gespräch
+- Erkenne Zeithinweise: "bis Freitag", "nächste Woche", "so schnell wie möglich", "Ende Monat"
+- Unterscheide klar: bestätigte Entscheidungen vs. offene Fragen vs. tentative Ideen ("vielleicht", "könnte man")
+- follow_ups: Nutze dieses Feld für offene Fragen, Risiken, Abhängigkeiten UND Verweise auf frühere Sitzungen
+- Bekannte Teammitglieder als Referenz: wenn ein Name nahe an einem bekannten Namen liegt, verwende den bekannten Namen
+- Nutze die Agendahinweise als Kontext, aber strukturiere nach dem tatsächlichen Gesprächsinhalt
 
 Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
 
