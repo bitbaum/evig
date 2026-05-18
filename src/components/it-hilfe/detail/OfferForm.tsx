@@ -55,7 +55,7 @@ export function OfferForm({
           <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
 
           {error && (
-            <div id="offer-error" className="bg-error-50 border border-error-200 rounded-lg p-3 mb-4 text-sm text-error-700">
+            <div id="offer-error" className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400">
               {error}
             </div>
           )}
@@ -122,7 +122,7 @@ export function OfferForm({
                     onClick={() => onSkillToggle(skill.id)}
                     className={`px-3 py-3 min-h-[44px] rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
                       offerSkills.includes(skill.id)
-                        ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
+                        ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 border-2 border-primary-500'
                         : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                     }`}
                   >

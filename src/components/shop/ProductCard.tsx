@@ -30,7 +30,7 @@ export function ProductCard({ product, stockOneLabel }: Props) {
           </div>
         )}
         {stockOneLabel && product.quantity <= 1 && (
-          <span className="absolute top-2 right-2 text-xs bg-warning-100 text-warning-700 font-medium px-2 py-0.5 rounded-full">
+          <span className="absolute top-2 right-2 text-xs bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-400 font-medium px-2 py-0.5 rounded-full">
             {stockOneLabel}
           </span>
         )}

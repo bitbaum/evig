@@ -49,7 +49,7 @@ export function ConfirmReviewCard({
   }
 
   return (
-    <div className="bg-primary-50 rounded-xl shadow-sm border-2 border-primary-300 p-6">
+    <div className="bg-primary-50 dark:bg-primary-900/20 rounded-xl shadow-sm border-2 border-primary-300 dark:border-primary-800/30 p-6">
       <div className="flex items-start gap-3 mb-4">
         <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div>
@@ -63,7 +63,7 @@ export function ConfirmReviewCard({
       </div>
 
       {error && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-3 mb-4 text-sm text-error-700">
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400">
           {error}
         </div>
       )}

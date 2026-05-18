@@ -110,7 +110,7 @@ export function VerifyStep({
   if (verified) {
     return (
       <div className="text-center py-8">
-        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-8 h-8 text-primary-600" />
         </div>
         <Heading level={2} className="text-xl font-bold text-neutral-900 mb-2">
@@ -126,7 +126,7 @@ export function VerifyStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
           <Mail className="w-8 h-8 text-primary-600" />
         </div>
         <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
@@ -151,8 +151,8 @@ export function VerifyStep({
 
       {/* Error Message */}
       {error && (
-        <div className="p-4 rounded-lg bg-error-50 border border-error-200">
-          <p className="text-sm text-error-700">{error}</p>
+        <div className="p-4 rounded-lg bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30">
+          <p className="text-sm text-error-700 dark:text-error-400">{error}</p>
         </div>
       )}
 
@@ -173,7 +173,7 @@ export function VerifyStep({
             className={cn(
               'w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-lg border-2 transition-colors',
               'focus:ring-2 focus:ring-primary-500 focus:border-primary-500',
-              digit ? 'border-primary-500 bg-primary-50' : 'border-neutral-300',
+              digit ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-300',
               (isVerifying || isLoading) && 'opacity-50'
             )}
           />

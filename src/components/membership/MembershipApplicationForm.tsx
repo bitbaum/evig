@@ -80,8 +80,8 @@ export function MembershipApplicationForm() {
     return (
       <div className="space-y-6">
         {/* Confirmation */}
-        <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary-100 rounded-full mb-4">
+        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6 text-center">
+          <div className="inline-flex items-center justify-center w-14 h-14 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4">
             <CheckCircle className="w-7 h-7 text-primary-600" />
           </div>
           <Heading level={3} className="text-xl text-primary-900 mb-2">
@@ -145,7 +145,7 @@ export function MembershipApplicationForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       {error && (
-        <div className="flex items-start gap-2 bg-error-50 border border-error-200 text-error-700 px-4 py-3 rounded-lg text-sm">
+        <div className="flex items-start gap-2 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 text-error-700 dark:text-error-400 px-4 py-3 rounded-lg text-sm">
           <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
           <span>{error}</span>
         </div>

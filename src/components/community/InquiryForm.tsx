@@ -53,7 +53,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
   if (success) {
     return (
       <div className="text-center py-12 px-4">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 mb-4">
           <CheckCircle className="w-8 h-8 text-primary-600" />
         </div>
         <Heading level={2} className="text-neutral-900 mb-2">{t('successHeading', { name })}</Heading>
@@ -124,7 +124,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-error-50 text-error-700 text-sm">
+        <div className="flex items-center gap-2 p-3 rounded-lg bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 text-sm">
           <AlertCircle className="w-4 h-4 shrink-0" />
           {error}
         </div>
