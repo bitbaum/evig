@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import Heading from '@/components/admin/AdminHeading'
 import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { useBlogCategories } from '@/hooks/useBlogCategories'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Button } from '@/components/ui/button'
@@ -35,6 +36,7 @@ export default function CategoryForm({
   isEdit = false,
 }: CategoryFormProps) {
   const router = useRouter()
+  const t = useTranslations('admin.categories')
   const { saving, deleting, error, success, saveCategory, deleteCategory } = useBlogCategories()
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [formData, setFormData] = useState<CategoryFormData>({
@@ -92,12 +94,10 @@ export default function CategoryForm({
             </div>
             <div>
               <Heading level={1} className="text-2xl text-neutral-900 dark:text-white">
-                {isEdit ? 'Kategorie bearbeiten' : 'Neue Kategorie'}
+                {isEdit ? t('titleEdit') : t('titleNew')}
               </Heading>
               <p className="text-neutral-600 dark:text-neutral-400">
-                {isEdit
-                  ? 'Kategorie-Details anpassen'
-                  : 'Neue Blog-Kategorie erstellen'}
+                {isEdit ? t('subtitleEdit') : t('subtitleNew')}
               </p>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function CategoryForm({
               className="flex items-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
-              {deleting ? 'Löschen...' : 'Löschen'}
+              {deleting ? t('deleting') : t('delete')}
             </Button>
           )}
           <Button
@@ -121,7 +121,7 @@ export default function CategoryForm({
             className="flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
-            {saving ? 'Speichern...' : 'Speichern'}
+            {saving ? t('saving') : t('save')}
           </Button>
         </div>
       </div>
@@ -282,7 +282,7 @@ export default function CategoryForm({
         {/* Preview */}
         <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-sm border border-neutral-100 dark:border-white/[0.06] p-6">
           <Heading level={3} className="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-4">
-            Vorschau
+            {t('preview')}
           </Heading>
           <div className="flex items-center gap-3">
             <span
@@ -293,7 +293,7 @@ export default function CategoryForm({
               }}
             >
               <Tag className="w-4 h-4" />
-              {formData.name || 'Kategorie-Name'}
+              {formData.name || t('defaultName')}
             </span>
             <span className="text-sm text-neutral-500 dark:text-neutral-400">
               /blog/kategorie/{formData.slug || 'slug'}
@@ -304,8 +304,8 @@ export default function CategoryForm({
 
       <ConfirmDialog
         isOpen={confirmDelete}
-        title="Kategorie löschen"
-        message="Kategorie wirklich löschen?"
+        title={t('deleteDialog.title')}
+        message={t('deleteDialog.message')}
         itemName={formData.name}
         isLoading={deleting}
         onConfirm={doDelete}

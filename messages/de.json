@@ -6620,5 +6620,87 @@
     "description": "Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung.",
     "layoutTitle": "Unsere Projekte",
     "templateSuffix": "Projekte"
+  },
+  "admin": {
+    "approvals": {
+      "approve": "Genehmigen",
+      "release": "Freigeben",
+      "accept": "Annehmen"
+    },
+    "hirn": {
+      "assistantSubtitle": "Assistent",
+      "openFullscreen": "Vollbild öffnen"
+    },
+    "team": {
+      "backToTeam": "Zurück zum Team",
+      "edit": "Bearbeiten",
+      "inactive": "Inaktiv",
+      "since": "Seit",
+      "activities": "Aktivitäten",
+      "viewTeamActivities": "Team-Aktivitäten ansehen",
+      "activitiesDescription": "Erledigte Aufgaben, Meilensteine und Hilfsanfragen",
+      "skillsAndInterests": "Fähigkeiten & Interessen",
+      "skills": "Fähigkeiten",
+      "noSkills": "Keine Fähigkeiten erfasst",
+      "interests": "Interessen",
+      "development": "Entwicklung",
+      "goals": "Ziele",
+      "strengths": "Stärken",
+      "developmentAreas": "Entwicklungsbereiche",
+      "noDevelopmentData": "Keine Entwicklungsdaten erfasst",
+      "availability": "Verfügbarkeit",
+      "workingHours": "Arbeitszeiten",
+      "contractHours": "Vertragsstunden",
+      "hoursPerWeek": "Stunden/Woche",
+      "generalAvailability": "Allgemeine Verfügbarkeit",
+      "preferredContact": "Bevorzugte Kontaktart",
+      "emergencyContact": "Notfallkontakt",
+      "hrNotes": "HR-Notizen (Vertraulich)",
+      "createdAt": "Erstellt",
+      "updatedAt": "Aktualisiert"
+    },
+    "protocols": {
+      "queueTitle": "AI Review Queue",
+      "queueDescription": "KI-Ergebnisse prüfen, daraus Aufgaben und Entscheidungen erzeugen, dann abschliessen.",
+      "newProtocol": "Neues Protokoll",
+      "noPendingReviews": "Keine Protokolle warten auf Review.",
+      "noPendingDescription": "Neue Transkripte oder Notizen erscheinen hier, sobald die KI sie strukturiert hat.",
+      "recognizedActions": "erkannte Aktionen",
+      "notInTaskSystem": "noch nicht im Aufgaben-System",
+      "readyToClose": "bereit zum Abschluss",
+      "open": "offen",
+      "by": "von",
+      "openReview": "Review öffnen"
+    },
+    "categories": {
+      "titleNew": "Neue Kategorie",
+      "titleEdit": "Kategorie bearbeiten",
+      "subtitleNew": "Neue Blog-Kategorie erstellen",
+      "subtitleEdit": "Kategorie-Details anpassen",
+      "delete": "Löschen",
+      "deleting": "Löschen...",
+      "save": "Speichern",
+      "saving": "Speichern...",
+      "preview": "Vorschau",
+      "defaultName": "Kategorie-Name",
+      "deleteDialog": {
+        "title": "Kategorie löschen",
+        "message": "Kategorie wirklich löschen?"
+      }
+    },
+    "dashboard": {
+      "myTasks": "Meine Aufgaben",
+      "assignedTasks": "Zugewiesene Aufgaben",
+      "viewAllTasks": "Alle Aufgaben ansehen",
+      "submittedContent": "Eingereichte Inhalte",
+      "awaitingApproval": "wartet auf Freigabe",
+      "viewAllSubmissions": "Alle Einreichungen ansehen",
+      "contentTypeLabels": {
+        "blogPost": "Blogartikel",
+        "workshop": "Workshop",
+        "service": "Dienstleistung",
+        "other": "Einreichung"
+      }
+    }
   }
 }

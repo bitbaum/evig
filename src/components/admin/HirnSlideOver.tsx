@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { X, Brain, Maximize2 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
 import { HirnChat } from './HirnChat'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
@@ -23,6 +24,7 @@ function generateSessionId(): string {
  */
 export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
   const [sessionId, setSessionId] = useState<string>(() => generateSessionId())
+  const t = useTranslations('admin.hirn')
 
   // Handle escape key
   useEffect(() => {
@@ -70,7 +72,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
             </div>
             <div>
               <Heading level={2} className="font-semibold text-white">Hirn AI</Heading>
-              <p className="text-xs text-white/70">{ORG.name} Assistent</p>
+              <p className="text-xs text-white/70">{ORG.name} {t('assistantSubtitle')}</p>
             </div>
           </div>
 
@@ -80,7 +82,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
               href={ROUTES.admin.hirn}
               onClick={onClose}
               className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-              title="Vollbild öffnen"
+              title={t('openFullscreen')}
             >
               <Maximize2 className="w-4 h-4" />
             </Link>

@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { CheckSquare, FileText, Calendar, AlertCircle, ArrowRight } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/db'
 import { sql } from 'drizzle-orm'
 import { TABLE_NAMES } from '@/config/database'
@@ -48,17 +49,18 @@ function formatDueDate(iso: string | null): string | null {
   return `fällig in ${diff} Tagen`
 }
 
-function contentTypeLabel(type: string | null): string {
-  switch (type) {
-    case 'blog_post': return 'Blogartikel'
-    case 'workshop': return 'Workshop'
-    case 'service': return 'Dienstleistung'
-    default: return 'Einreichung'
-  }
-}
-
 export async function PersonalSection({ userId }: PersonalSectionProps) {
+  const t = await getTranslations('admin.dashboard')
   type Row = Record<string, unknown>
+
+  function contentTypeLabel(type: string | null): string {
+    switch (type) {
+      case 'blog_post': return t('contentTypeLabels.blogPost')
+      case 'workshop': return t('contentTypeLabels.workshop')
+      case 'service': return t('contentTypeLabels.service')
+      default: return t('contentTypeLabels.other')
+    }
+  }
 
   const [tasksResult, submissionsResult] = await Promise.allSettled([
     db.execute(sql`
@@ -106,7 +108,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
       <div className="p-4 border-b border-neutral-100 dark:border-white/[0.06] flex items-center gap-2">
         <CheckSquare className="w-5 h-5 text-primary-500 flex-shrink-0" aria-hidden="true" />
         <Heading level={2} className="font-semibold text-neutral-900 dark:text-white">
-          Meine Aufgaben
+          {t('myTasks')}
         </Heading>
       </div>
 
@@ -115,7 +117,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         {myTasks.length > 0 && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">
-              Zugewiesene Aufgaben
+              {t('assignedTasks')}
             </p>
             <ul className="space-y-2" role="list">
               {myTasks.map(task => {
@@ -153,7 +155,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 href={ROUTES.admin.tasks}
                 className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 rounded-lg transition-colors"
               >
-                Alle Aufgaben ansehen
+                {t('viewAllTasks')}
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             )}
@@ -164,7 +166,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
         {mySubmissions.length > 0 && (
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">
-              Eingereichte Inhalte
+              {t('submittedContent')}
             </p>
             <ul className="space-y-2" role="list">
               {mySubmissions.map(sub => (
@@ -179,7 +181,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                         {sub.title ?? contentTypeLabel(sub.content_type)}
                       </p>
                       <p className="text-sm text-warning-600 dark:text-warning-400 mt-0.5">
-                        {contentTypeLabel(sub.content_type)} · wartet auf Freigabe
+                        {contentTypeLabel(sub.content_type)} · {t('awaitingApproval')}
                       </p>
                     </div>
                   </Link>
@@ -191,7 +193,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
                 href={ROUTES.admin.approvals}
                 className="flex items-center gap-1 mt-2 px-3 py-2 text-sm text-warning-600 dark:text-warning-400 hover:text-warning-700 dark:hover:text-warning-300 hover:bg-warning-50 dark:hover:bg-warning-900/20 rounded-lg transition-colors"
               >
-                Alle Einreichungen ansehen
+                {t('viewAllSubmissions')}
                 <ArrowRight className="w-4 h-4" aria-hidden="true" />
               </Link>
             )}
