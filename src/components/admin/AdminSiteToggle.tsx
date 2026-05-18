@@ -3,6 +3,7 @@
 import { Link } from '@/i18n/navigation'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Globe, ChevronRight } from 'lucide-react'
+import { ROUTES } from '@/config/routes'
 
 interface AdminSiteToggleProps {
   /** User's name for display */
@@ -63,7 +64,7 @@ export function AdminSiteToggle({
   // Show "Go to Admin" button when on public pages
   return (
     <Link
-      href="/admin"
+      href={ROUTES.admin.dashboard}
       className={`
         inline-flex items-center gap-2
         px-4 py-2 rounded-lg
@@ -100,7 +101,7 @@ export function FloatingAdminToggle({
 
   return (
     <Link
-      href="/admin"
+      href={ROUTES.admin.dashboard}
       className="
         fixed bottom-6 right-6 z-50
         flex items-center gap-2

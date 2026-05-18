@@ -13,6 +13,7 @@ import {
   Upload,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ROUTES } from '@/config/routes'
 import type { InventoryProduct } from '@/hooks/useInventoryProducts'
 import {
   MARKETPLACE_STATUS,
@@ -199,7 +200,7 @@ export function InventoryProductsTable({
                       </button>
                     )}
                     <Link
-                      href={`/admin/products/${product.id}/factsheet`}
+                      href={ROUTES.admin.productFactsheet(product.id)}
                       className="p-1 text-primary-500 hover:text-primary-700"
                       title="Factsheet drucken"
                     >
@@ -244,7 +245,7 @@ export function InventoryProductsTable({
             Erfasse dein erstes Produkt, um zu beginnen.
           </p>
           <Link
-            href="/admin/erfassung"
+            href={ROUTES.admin.erfassung}
             className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
           >
             <Plus className="w-4 h-4" />
