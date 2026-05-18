@@ -3,7 +3,7 @@ import { referralCodes, referralInvitations, coupons } from '@/db/schema/referra
 import { users } from '@/db/schema/auth'
 import { eq, and, isNull, count } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
-import { sendEmail } from '@/lib/email'
+import { sendCustomEmail } from '@/lib/email'
 import { referralInvitation, referralCouponReceived } from '@/lib/email/templates/referral'
 import { APP_URL } from '@/config/urls'
 
@@ -81,7 +81,7 @@ export async function sendReferralInvitation(
   const referralUrl = getReferralUrl(refCode.code)
   const template = referralInvitation(inviterName, referralUrl)
 
-  const result = await sendEmail({ to: inviteeEmail, ...template })
+  const result = await sendCustomEmail(inviteeEmail, template)
   if (!result.success) {
     logger.error('Failed to send referral invitation', { inviterEmail, inviteeEmail, error: result.error })
     return { success: false, error: 'email_failed' }
@@ -137,7 +137,7 @@ export async function redeemReferralCode(
   // Send coupon email to the new user
   const [inviter] = await db.select({ name: users.name, email: users.email }).from(users).where(eq(users.id, refCode.userId)).limit(1)
   const template = referralCouponReceived(newUserName, couponCode, REFERRAL_INVITEE_CENTS / 100, 'welcome')
-  await sendEmail({ to: newUserEmail, ...template })
+  await sendCustomEmail(newUserEmail, template)
 
   logger.info('Referral code redeemed', { code, newUserId, couponCode, inviterUserId: refCode.userId, inviterName: inviter?.name })
 }
@@ -145,7 +145,6 @@ export async function redeemReferralCode(
 export async function getReferralStats(userId: string) {
   const refCode = await getOrCreateReferralCode(userId)
   const [{ total }] = await db.select({ total: count() }).from(referralInvitations).where(eq(referralInvitations.referralCodeId, refCode.id))
-  const [{ registered }] = await db.select({ registered: count() }).from(referralInvitations).where(and(eq(referralInvitations.referralCodeId, refCode.id), eq(referralInvitations.uses ?? 0, 0)))
 
   return {
     code: refCode.code,

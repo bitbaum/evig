@@ -11,7 +11,7 @@ const InviteSchema = z.object({
 export const POST = withAuth(async (request: NextRequest, session) => {
   const body = await request.json().catch(() => null)
   const parsed = InviteSchema.safeParse(body)
-  if (!parsed.success) return apiError('Invalid email address', 400)
+  if (!parsed.success) return apiError(null, 'Invalid email address', 400)
 
   const { email } = parsed.data
   const inviterName = session.user.name ?? session.user.email ?? 'Jemand'
@@ -29,7 +29,8 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       already_invited: 'Diese E-Mail-Adresse wurde bereits eingeladen.',
       email_failed: 'Einladung konnte nicht gesendet werden. Bitte versuche es später erneut.',
     }
-    return apiError(messages[result.error ?? ''] ?? 'Fehler beim Senden der Einladung.', 400)
+    const message = messages[result.error ?? ''] ?? 'Fehler beim Senden der Einladung.'
+    return apiError(null, message, 400)
   }
 
   return apiSuccess({ message: 'Einladung gesendet.' })

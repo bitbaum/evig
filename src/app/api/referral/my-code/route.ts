@@ -13,6 +13,6 @@ export const GET = withAuth(async (_request, session) => {
       },
     })
   } catch (error) {
-    return apiError('Failed to load referral code', 500)
+    return apiError(error, 'Failed to load referral code', 500)
   }
 })
