@@ -159,7 +159,7 @@ export default function ImpactPageContent() {
                 <div className="flex items-center justify-between">
                   {getCategoryIcon(metric.category)}
                   {metric.verified && (
-                    <Badge className="bg-primary-100 text-primary-800">
+                    <Badge className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       {t('verified')}
                     </Badge>

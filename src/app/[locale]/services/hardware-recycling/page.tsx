@@ -123,7 +123,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
 
               <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.08] shadow-sm p-6 sm:p-8 md:p-12">
                 <div className="text-center mb-6 sm:mb-8">
-                  <div className="inline-block bg-primary-100 text-primary-800 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
+                  <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     {t('pricing.badge')}
                   </div>
                   <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-2">

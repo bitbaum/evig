@@ -157,7 +157,7 @@ export function MembershipApplicationForm() {
           type="button"
           onClick={() => setMemberType('regular')}
           className={`px-4 py-3 rounded-lg border-2 text-left transition-colors ${
-            memberType === 'regular' ? 'border-primary-600 bg-primary-50' : 'border-neutral-200 hover:border-neutral-300'
+            memberType === 'regular' ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200 hover:border-neutral-300'
           }`}
         >
           <div className="font-semibold text-neutral-900">{t('regularLabel')}</div>
@@ -167,7 +167,7 @@ export function MembershipApplicationForm() {
           type="button"
           onClick={() => setMemberType('reduced')}
           className={`px-4 py-3 rounded-lg border-2 text-left transition-colors ${
-            memberType === 'reduced' ? 'border-primary-600 bg-primary-50' : 'border-neutral-200 hover:border-neutral-300'
+            memberType === 'reduced' ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200 hover:border-neutral-300'
           }`}
         >
           <div className="font-semibold text-neutral-900">{t('reducedLabel')}</div>

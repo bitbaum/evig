@@ -59,7 +59,7 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-error-50 text-error-700 rounded-xl text-sm">{error}</div>
+          <div className="mb-4 p-3 bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-xl text-sm">{error}</div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">

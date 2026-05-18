@@ -209,7 +209,7 @@ export function AvatarUpload({
 
       {/* Error Message */}
       {error && (
-        <div className="text-sm text-error-600 bg-error-50 border border-error-200 rounded-md p-3">
+        <div className="text-sm text-error-600 dark:text-error-400 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-md p-3">
           {error}
         </div>
       )}

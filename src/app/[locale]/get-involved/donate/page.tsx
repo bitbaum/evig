@@ -108,7 +108,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 <div
                   key={index}
                   className={`relative rounded-xl border-2 p-6 ${
-                    highlight ? 'border-primary-400 bg-primary-50' : 'border-neutral-200 bg-neutral-50'
+                    highlight ? 'border-primary-400 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200 bg-neutral-50'
                   }`}
                 >
                   {highlight && (
@@ -118,8 +118,8 @@ export default async function DonatePage({ params }: DonatePageProps) {
                   )}
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      color === 'green' ? 'bg-primary-100' :
-                      color === 'blue' ? 'bg-primary-100' : 'bg-primary-100'
+                      color === 'green' ? 'bg-primary-100 dark:bg-primary-900/30' :
+                      color === 'blue' ? 'bg-primary-100 dark:bg-primary-900/30' : 'bg-primary-100 dark:bg-primary-900/30'
                     }`}>
                       <Icon className={`h-5 w-5 ${
                         color === 'green' ? 'text-primary-600' :
@@ -148,7 +148,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
 
         {/* Bank transfer box */}
         <section id="bankueberweisung" className="mb-12 scroll-mt-8">
-          <div className="rounded-xl border-2 border-primary-200 bg-primary-50 p-6 sm:p-8">
+          <div className="rounded-xl border-2 border-primary-200 dark:border-primary-800/30 bg-primary-50 dark:bg-primary-900/20 p-6 sm:p-8">
             <Heading level={2} className="text-neutral-900 mb-2">{t('transfer.heading')}</Heading>
             <p className="text-sm text-neutral-500 mb-6">{t('transfer.intro')}</p>
             <div className="space-y-4">

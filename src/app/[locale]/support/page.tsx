@@ -44,7 +44,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
         {/* Three pillars */}
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 rounded-full mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-3 sm:mb-4">
               <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
             </div>
             <Heading level={3} className="text-base sm:text-lg text-neutral-900 mb-2">
@@ -53,7 +53,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             <p className="text-neutral-600">{t('pillars.noAds.description')}</p>
           </div>
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 rounded-full mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-3 sm:mb-4">
               <Users className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
             </div>
             <Heading level={3} className="text-base sm:text-lg text-neutral-900 mb-2">
@@ -62,7 +62,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             <p className="text-neutral-600">{t('pillars.communityDriven.description')}</p>
           </div>
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 rounded-full mb-3 sm:mb-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-3 sm:mb-4">
               <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
             </div>
             <Heading level={3} className="text-base sm:text-lg text-neutral-900 mb-2">
@@ -108,7 +108,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             </a>
           </div>
 
-          <div className="border-2 border-primary-500 rounded-lg p-6 sm:p-8 bg-primary-50">
+          <div className="border-2 border-primary-500 rounded-lg p-6 sm:p-8 bg-primary-50 dark:bg-primary-900/20">
             <div className="flex items-center gap-3 mb-3 sm:mb-4">
               <Heart className="w-6 h-6 sm:w-8 sm:h-8 text-primary-600" />
               <Heading level={3} className="text-xl sm:text-2xl text-neutral-900">
