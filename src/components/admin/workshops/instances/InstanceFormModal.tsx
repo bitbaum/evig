@@ -33,7 +33,7 @@ export function InstanceFormModal({
 }: InstanceFormModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white dark:border dark:border-white/[0.06] rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between">
           <Heading level={2} className="text-xl text-neutral-900">
             {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}

@@ -28,7 +28,7 @@ export function ApplicationActionDialog({ dialog, onDialogChange, onSubmit, onCl
   const needsReason = REASON_REQUIRED_TYPES.includes(dialog.type)
 
   return (
-    <div className="bg-white rounded-lg shadow-lg border-2 border-neutral-300 p-6">
+    <div className="bg-white rounded-lg shadow-lg border-2 border-neutral-300 dark:border-white/[0.06] p-6">
       <Heading level={3} className="text-lg text-neutral-900 mb-4">
         {DIALOG_TITLES[dialog.type]}
       </Heading>

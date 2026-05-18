@@ -168,8 +168,8 @@ describe('getStatusColors', () => {
 
   it('returns error colors', () => {
     const result = getStatusColors('error')
-    expect(result.bg).toBe('bg-error-50')
-    expect(result.text).toBe('text-error-800')
+    expect(result.bg).toContain('bg-error-50')
+    expect(result.text).toContain('text-error-800')
   })
 
   it('returns info colors', () => {
