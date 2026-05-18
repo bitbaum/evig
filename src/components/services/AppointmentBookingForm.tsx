@@ -114,7 +114,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
             <div id={submitResult.success ? undefined : 'appointment-error'} className={`mb-4 sm:mb-6 p-3 sm:p-4 rounded-lg border ${
               submitResult.success
                 ? 'bg-success-50 border-success-200 text-success-800'
-                : 'bg-error-50 border-error-200 text-error-800'
+                : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800/30 text-error-800 dark:text-error-400'
             }`}>
               <div className="flex items-start">
                 {submitResult.success ? (

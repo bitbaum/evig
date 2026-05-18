@@ -138,8 +138,8 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
 
   if (error) {
     return (
-      <div className="bg-error-50 border border-error-200 rounded-xl p-6">
-        <p className="text-error-800">{error}</p>
+      <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-xl p-6">
+        <p className="text-error-800 dark:text-error-400">{error}</p>
       </div>
     )
   }
@@ -241,7 +241,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                         {helper.matchReasons.slice(0, 3).map((reason, idx) => (
                           <span
                             key={idx}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400"
                           >
                             {reason}
                           </span>
@@ -271,7 +271,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               )}
             </>
           ) : (
-            <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
+            <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-6 text-center">
               <p className="text-sm text-neutral-600">
                 {t('noMatchesYet')}
               </p>

@@ -41,12 +41,12 @@ export function OffersList({
             <div
               key={offer.id}
               className={`p-4 rounded-lg border ${
-                isAccepted ? 'border-primary-300 bg-primary-50' : 'border-neutral-200'
+                isAccepted ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200'
               }`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-primary-100' : 'bg-neutral-200'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${offer.repairerProfile ? 'bg-primary-100 dark:bg-primary-900/30' : 'bg-neutral-200'}`}>
                     {offer.repairerProfile ? (
                       <Wrench className="w-5 h-5 text-primary-600" aria-hidden="true" />
                     ) : (

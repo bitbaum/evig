@@ -31,9 +31,9 @@ export function SuccessView({ service, paymentData, useEscrow }: SuccessViewProp
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="bg-primary-50 p-4 rounded-lg">
-          <Heading level={3} className="font-semibold text-primary-800 mb-2">{t('bookingDetails')}</Heading>
-          <div className="space-y-2 text-sm text-primary-700">
+        <div className="bg-primary-50 dark:bg-primary-900/20 p-4 rounded-lg">
+          <Heading level={3} className="font-semibold text-primary-800 dark:text-primary-300 mb-2">{t('bookingDetails')}</Heading>
+          <div className="space-y-2 text-sm text-primary-700 dark:text-primary-400">
             <p><strong>{t('detailService')}</strong> {service.name}</p>
             <p><strong>{t('detailAppointmentId')}</strong> {paymentData?.appointmentId}</p>
             <p><strong>{t('detailInvoice')}</strong> {paymentData?.invoiceNumber}</p>

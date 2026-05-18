@@ -73,7 +73,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
       </p>
 
       {error && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-3 mb-4 text-sm text-error-700">
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400">
           {error}
         </div>
       )}

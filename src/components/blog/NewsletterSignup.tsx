@@ -42,7 +42,7 @@ export default function NewsletterSignup() {
       <div className="border-t border-b border-neutral-200 py-12">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-4">
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
           <Heading level={3} className="text-2xl font-bold text-neutral-900 mb-3">
@@ -82,12 +82,12 @@ export default function NewsletterSignup() {
 
         {/* Signup Form */}
         {status === 'success' ? (
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 rounded-full mb-3">
+          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-6 text-center">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-3">
               <Check className="w-6 h-6 text-primary-600" />
             </div>
-            <p className="text-primary-800 font-semibold mb-1">{message}</p>
-            <p className="text-primary-700 text-sm">
+            <p className="text-primary-800 dark:text-primary-300 font-semibold mb-1">{message}</p>
+            <p className="text-primary-700 dark:text-primary-400 text-sm">
               {t('confirmEmail')}
             </p>
           </div>
