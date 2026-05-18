@@ -25,7 +25,7 @@ export async function WhyOpenSourceSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {reasons.map((reason, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div key={index} className="bg-white rounded-xl p-6 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
               <div className="flex items-center mb-4">
                 <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
                   <reason.icon className="w-6 h-6" />

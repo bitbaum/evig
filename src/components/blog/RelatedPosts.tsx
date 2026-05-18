@@ -23,7 +23,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
               href={`/blog/${post.slug}`}
               className="group"
             >
-              <article className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+              <article className="bg-white rounded-lg border border-neutral-200 overflow-hidden hover:border-neutral-300 transition-all">
                 {post.featuredImage && (
                   <div className="aspect-video overflow-hidden bg-neutral-200 relative">
                     <Image

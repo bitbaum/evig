@@ -52,7 +52,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-black/30 p-8">
+    <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8">
       <Heading level={2} className="text-3xl font-bold mb-6 text-center">{t('title')}</Heading>
       {status === 'success' && (
         <div className="mb-6 rounded-lg border border-primary-200 dark:border-primary-700/50 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 text-primary-800 dark:text-primary-200 text-sm">

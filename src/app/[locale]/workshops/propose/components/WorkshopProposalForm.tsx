@@ -200,7 +200,7 @@ export function WorkshopProposalForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-8">
+    <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-neutral-200 p-8">
       <AIFormAssist
         formType="workshop"
         variant="section"

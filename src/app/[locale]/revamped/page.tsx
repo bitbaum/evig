@@ -124,7 +124,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                   />
-                  <div className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-lg">
+                  <div className="absolute top-4 right-4 bg-primary-600 text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-sm">
                     <div className="flex items-center">
                       <Award className="w-4 h-4 mr-2" />
                       REVAMPED

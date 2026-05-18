@@ -27,7 +27,7 @@ export function InfoSection({ title, items, description, className = '' }: InfoS
           {description}
         </p>
       )}
-      <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-neutral-100`}>
+      <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} border border-neutral-200`}>
         <ul className={`space-y-${description ? '4' : '4'}`}>
           {items.map((item, index) => (
             <li key={index} className="flex items-start">
@@ -60,7 +60,7 @@ export function NumberedSteps({ title, steps, className = '' }: NumberedStepsPro
       <Heading level={2} className={`${responsiveTypography.section} font-bold text-neutral-900`}>
         {title}
       </Heading>
-      <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} shadow-lg border border-neutral-100`}>
+      <div className={`bg-white rounded-xl ${responsiveSpacing.cardPadding} border border-neutral-200`}>
         <ol className="space-y-4">
           {steps.map((step, index) => (
             <li key={index} className="flex items-start">

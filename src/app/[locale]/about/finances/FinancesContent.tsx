@@ -106,7 +106,7 @@ export default function FinancesContent() {
             {/* Key Metrics Cards */}
             {latest && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-neutral-100">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-neutral-600">{t('metrics.totalRevenue', { year: latest.year })}</span>
                     {previous && <TrendIndicator current={latest.totals.total} previous={previous.totals.total} />}
@@ -114,7 +114,7 @@ export default function FinancesContent() {
                   <p className="text-2xl font-bold text-neutral-900">{formatCHF(latest.totals.total)}</p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-neutral-100">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-neutral-600 flex items-center gap-1">
                       <TrendingUp className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function FinancesContent() {
                   </p>
                 </div>
 
-                <div className="bg-white rounded-xl p-6 shadow-sm border border-neutral-100">
+                <div className="bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-sm text-neutral-600 flex items-center gap-1">
                       <Heart className="w-4 h-4" />
@@ -143,7 +143,7 @@ export default function FinancesContent() {
             )}
 
             {/* Revenue Breakdown Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-neutral-100 overflow-hidden mb-10">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-hidden mb-10">
               <div className="px-6 py-4 border-b border-neutral-100">
                 <Heading level={2} className="text-lg text-neutral-900">{t('table.title')}</Heading>
                 <p className="text-sm text-neutral-600">{t('table.subtitle')}</p>

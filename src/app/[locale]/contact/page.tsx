@@ -103,7 +103,7 @@ export default async function ContactPage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <Heading level={2} className="mb-6 sm:mb-8 text-center">{t('map.title')}</Heading>
-            <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden shadow-lg">
+            <div className="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden border border-neutral-200">
               <iframe
                 src={LOCATIONS.store.googleMapsEmbedUrl}
                 width="100%"

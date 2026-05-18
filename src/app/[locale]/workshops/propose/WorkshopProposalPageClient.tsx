@@ -19,7 +19,7 @@ export default function WorkshopProposalPage() {
     return (
       <div className="min-h-screen bg-neutral-50 py-12">
         <div className="max-w-2xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+          <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
             <AlertCircle className="w-16 h-16 text-warning-500 mx-auto mb-4" />
             <Heading level={1} className={`${responsiveTypography.subsection} text-neutral-900 mb-4`}>
               {t('loginRequired')}

@@ -19,7 +19,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg border-2 border-neutral-200">
+            <div key={index} className="bg-white rounded-xl p-6 sm:p-8 border border-neutral-200">
               <div className="flex items-start mb-4 sm:mb-6">
                 <div className="p-2 sm:p-3 bg-success-100 rounded-lg text-success-600 mr-3 sm:mr-4 flex-shrink-0">
                   <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />

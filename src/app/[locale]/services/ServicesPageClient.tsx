@@ -78,7 +78,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   }
 
   return (
-    <div className="group bg-white rounded-xl shadow-lg dark:shadow-black/30 hover:shadow-2xl dark:hover:shadow-black/50 transition-all duration-300 overflow-hidden flex flex-col h-full">
+    <div className="group bg-white rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300 overflow-hidden flex flex-col h-full">
       <div className="p-4 sm:p-6 md:p-8 flex flex-col h-full">
         <div className="flex items-start mb-4 sm:mb-6">
           <div className={`p-2 sm:p-3 rounded-lg mr-3 sm:mr-4 transition-colors duration-300 ${

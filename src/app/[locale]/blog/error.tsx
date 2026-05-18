@@ -22,7 +22,7 @@ export default function BlogError({
 
   return (
     <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6 text-center">
+      <div className="max-w-md w-full bg-white rounded-lg border border-neutral-200 p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
         <Heading level={1} className="text-lg text-neutral-900">
           {t('genericTitle')}

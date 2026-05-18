@@ -19,7 +19,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       href={`/services/open-source-solutions/${alternative.id}`}
       className={cn(
         'group block bg-white rounded-xl border-2 border-neutral-200',
-        'hover:border-primary-300 hover:shadow-lg transition-all duration-200',
+        'hover:border-primary-300 transition-all duration-200',
         'p-5 sm:p-6'
       )}
     >

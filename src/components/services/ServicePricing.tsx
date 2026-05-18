@@ -18,7 +18,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
   return (
     <section className="py-12 sm:py-16 md:py-20">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto bg-white rounded-xl p-6 sm:p-8 shadow-lg border-2 border-neutral-200">
+        <div className="max-w-2xl mx-auto bg-white rounded-xl p-6 sm:p-8 border border-neutral-200">
           <h2 className={cn('text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center', getTextColor('white', 'primary'))}>Preise</h2>
           <div className="text-center mb-6 sm:mb-8">
             <p className="text-xl sm:text-2xl font-bold text-primary-600">{pricing.base}</p>

@@ -101,7 +101,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       {/* Form or status */}
       <div className="bg-primary-50 dark:bg-neutral-900/50 py-10 sm:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-neutral-200 shadow-sm">
+          <div className="bg-white dark:bg-neutral-900 rounded-2xl p-6 sm:p-8 border border-neutral-200 dark:border-white/[0.06]">
             {status.isMember ? (
               <div className="text-center">
                 <CheckCircle className="w-12 h-12 text-primary-600 mx-auto mb-4" />

@@ -58,7 +58,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === category
-                    ? 'bg-primary-600 text-white shadow-lg transform scale-105'
+                    ? 'bg-primary-600 text-white transform scale-105'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
                 }`}
               >

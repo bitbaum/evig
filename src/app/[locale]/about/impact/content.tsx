@@ -362,7 +362,7 @@ export default function ImpactPageContent() {
             {donationMethods.map((method) => (
               <Card
                 key={method.id}
-                className={`cursor-pointer transition-all hover:shadow-lg ${
+                className={`cursor-pointer transition-all hover:border-neutral-300 ${
                   method.popular ? 'ring-2 ring-primary-500 bg-primary-50' : ''
                 }`}
                 onClick={() => setSelectedDonationMethod(method.id)}

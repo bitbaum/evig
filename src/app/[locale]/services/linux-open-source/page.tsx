@@ -95,7 +95,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {serviceItems.map((service, index) => {
               const Icon = SERVICE_ICONS[index]
               return (
-                <div key={index} className="bg-neutral-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div key={index} className="bg-neutral-50 rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-start">
                     <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
                       <Icon className="w-8 h-8" />
@@ -174,7 +174,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {benefitItems.map((benefit, index) => {
               const Icon = BENEFIT_ICONS[index]
               return (
-                <div key={index} className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div key={index} className="bg-white rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-center mb-4">
                     <Icon className="w-6 h-6 text-primary-600 mr-3" />
                     <Heading level={3} className="">{benefit.title}</Heading>
@@ -200,7 +200,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {distroItems.map((distro, index) => {
               const Icon = DISTRO_ICONS[index]
               return (
-                <div key={index} className="bg-neutral-50 rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div key={index} className="bg-neutral-50 rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-start mb-6">
                     <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
                       <Icon className="w-8 h-8" />

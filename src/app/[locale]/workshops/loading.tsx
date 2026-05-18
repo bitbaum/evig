@@ -24,7 +24,7 @@ export default function WorkshopsLoading() {
         {/* Grid skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div key={i} className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
               <div className="p-6 border-b border-neutral-100">
                 <div className="flex items-start justify-between mb-4">
                   <div className="h-12 w-12 bg-neutral-200 rounded-lg animate-pulse" />

@@ -44,7 +44,7 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
       href={mention.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block bg-white rounded-xl border border-neutral-200 p-6 hover:shadow-lg hover:border-primary-300 transition-all duration-300 h-full"
+      className="group block bg-white rounded-xl border border-neutral-200 p-6 hover:border-primary-300 transition-all duration-300 h-full"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -100,7 +100,7 @@ function FeaturedSourceBadge({ mention }: { mention: MediaMention }) {
       href={mention.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 bg-white rounded-full px-5 py-3 border border-neutral-200 hover:border-primary-400 hover:shadow-md transition-all duration-300"
+      className="group flex items-center gap-3 bg-white rounded-full px-5 py-3 border border-neutral-200 hover:border-primary-400 transition-all duration-300"
     >
       <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white text-xs font-bold">
         {mention.sourceShort.charAt(0)}
@@ -200,7 +200,7 @@ export default function PressPageContent() {
                   href={mention.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-3 p-4 rounded-lg bg-white hover:shadow-md transition-all"
+                  className="group flex items-center gap-3 p-4 rounded-lg bg-white hover:bg-neutral-50 transition-all"
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${
                     mention.tier === 2 ? 'bg-neutral-100 text-neutral-700' :

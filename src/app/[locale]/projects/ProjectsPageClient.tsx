@@ -83,7 +83,7 @@ export default function ProjectsPage() {
                 onClick={() => setSelectedCategory(allLabel)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === allLabel
-                    ? 'bg-primary-600 text-white shadow-lg transform scale-105'
+                    ? 'bg-primary-600 text-white transform scale-105'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
                 }`}
               >
@@ -97,7 +97,7 @@ export default function ProjectsPage() {
                     onClick={() => handleToggle(label)}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                       selectedCategory === label
-                        ? 'bg-primary-600 text-white shadow-lg transform scale-105'
+                        ? 'bg-primary-600 text-white transform scale-105'
                         : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
                     }`}
                   >
@@ -116,7 +116,7 @@ export default function ProjectsPage() {
               return (
                 <div
                   key={`${project.title}-${selectedCategory}`}
-                  className="group bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full animate-fadeIn"
+                  className="group bg-white rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all duration-300 overflow-hidden flex flex-col h-full animate-fadeIn"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="p-6 sm:p-8 flex flex-col h-full">

@@ -53,7 +53,7 @@ export default async function AboutContent() {
                 />
               </div>
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-primary-600 text-white p-4 rounded-xl shadow-lg hidden md:block">
+              <div className="absolute -bottom-6 -right-6 bg-primary-600 text-white p-4 rounded-xl shadow-sm hidden md:block">
                 <p className="text-3xl font-bold">{yearsActive}+</p>
                 <p className="text-sm">{t('mission.yearsExperience')}</p>
               </div>
