@@ -1,8 +1,8 @@
-import { Metadata } from "next";
-
-// Force runtime rendering — same React-null SSR bundle issue as OSS detail pages
-// (lucide icons in a server component alongside next-auth v5 beta SSR bundles).
+// SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles.
+// Must be before any import so Turbopack's static analysis picks it up.
 export const dynamic = 'force-dynamic'
+
+import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard";
@@ -75,23 +75,6 @@ export async function generateMetadata({
   return { title, description, openGraph: { title, description, type: 'website' } };
 }
 
-/**
- * Generate static params for all categories
- */
-export async function generateStaticParams() {
-  const slugs: { slug: string }[] = [];
-
-  for (const cat of SHOP_CATEGORIES) {
-    slugs.push({ slug: cat.slug });
-    if (cat.children) {
-      for (const child of cat.children) {
-        slugs.push({ slug: child.slug });
-      }
-    }
-  }
-
-  return slugs;
-}
 
 /**
  * Breadcrumb component

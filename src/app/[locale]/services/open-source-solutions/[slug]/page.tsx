@@ -1,10 +1,9 @@
+// SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles.
+// Must be before any import so Turbopack's static analysis picks it up.
+export const dynamic = 'force-dynamic'
+
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-
-// Force runtime rendering — the lucide-icon imports in AlternativeDetail land in
-// an SSR bundle where Next.js 16 + next-auth v5 leave the vendored React module
-// null during parallel static generation workers, causing hooks to throw.
-export const dynamic = 'force-dynamic'
 import {
   getAllAlternatives,
   getAlternativeById,
@@ -13,10 +12,6 @@ import {
 import { AlternativeDetail } from '../components/AlternativeDetail'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
-
-export async function generateStaticParams() {
-  return getAllAlternatives().map(alt => ({ slug: alt.id }))
-}
 
 export async function generateMetadata({
   params,
