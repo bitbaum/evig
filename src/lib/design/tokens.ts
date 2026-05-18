@@ -6,8 +6,8 @@
  * - Color appears in focused moments only: CTAs, icon accents
  * - Primary action = brand green (always)
  * - Secondary = ghost/outline (neutral, dark-aware)
- * - Orange reserved for marketplace-specific contexts
- * - Rainbow per-section button colours eliminated
+ * - Two-color icon system: green (brand/content) + orange (commerce/marketplace)
+ * - No rainbow per-section colors
  */
 
 // Unified button classes — same across all themes for visual discipline
@@ -19,41 +19,34 @@ const SECONDARY_BTN =
 
 const FOCUS_GREEN = 'focus-visible:outline-primary-600'
 
-export const DESIGN_TOKENS = {
-  gradients: {
-    marketplace: 'from-orange-50 to-warning-50',
-    itHilfe: 'from-primary-50 to-primary-100',
-    services: 'from-blue-50 to-indigo-50',
-    about: 'from-primary-50 to-teal-50',
-    contact: 'from-neutral-50 to-slate-50',
-    getInvolved: 'from-purple-50 to-pink-50',
-    workshops: 'from-warning-50 to-orange-50',
-    blog: 'from-rose-50 to-pink-50',
-    faq: 'from-sky-50 to-blue-50',
-    space: 'from-teal-50 to-cyan-50',
-    projects: 'from-indigo-50 to-violet-50',
-    repairers: 'from-warning-50 to-warning-50',
-    knowhow: 'from-cyan-50 to-sky-50',
-    home: 'from-primary-50 to-teal-50',
-  },
+// Two-color icon badge system:
+// Green = brand identity (content, mission, community, knowledge)
+// Orange = commerce identity (marketplace, workshops, repairers)
+const GREEN_BADGE = { bg: 'bg-primary-100 dark:bg-primary-500/15', text: 'text-primary-600 dark:text-primary-400' }
+const ORANGE_BADGE = { bg: 'bg-secondary-100/70 dark:bg-secondary-500/15', text: 'text-secondary-600 dark:text-secondary-400' }
 
-  // Icon badges — section-tinted in light mode, TWO brand colors only in dark mode.
-  // Dark: green = brand identity, orange = marketplace/commerce identity. No rainbow.
+// Two-color hover system matching badge system
+const GREEN_HOVER = 'group-hover:text-primary-600 dark:group-hover:text-primary-400'
+const ORANGE_HOVER = 'group-hover:text-secondary-500 dark:group-hover:text-secondary-400'
+
+export const DESIGN_TOKENS = {
+  // Icon badges — TWO brand colors only (green + orange). No rainbow.
+  // Green = brand/content identity; Orange = commerce/marketplace identity.
   iconBadges: {
-    marketplace: { bg: 'bg-orange-100 dark:bg-secondary-500/15', text: 'text-orange-600 dark:text-secondary-400' },
-    itHilfe:     { bg: 'bg-primary-100 dark:bg-primary-500/15',   text: 'text-primary-600 dark:text-primary-400' },
-    services:    { bg: 'bg-blue-100 dark:bg-primary-500/15',      text: 'text-blue-600 dark:text-primary-400' },
-    about:       { bg: 'bg-primary-100 dark:bg-primary-500/15',   text: 'text-primary-600 dark:text-primary-400' },
-    contact:     { bg: 'bg-neutral-100 dark:bg-primary-500/15',   text: 'text-neutral-600 dark:text-primary-400' },
-    getInvolved: { bg: 'bg-purple-100 dark:bg-primary-500/15',    text: 'text-purple-600 dark:text-primary-400' },
-    workshops:   { bg: 'bg-warning-100 dark:bg-secondary-500/15', text: 'text-warning-600 dark:text-secondary-400' },
-    blog:        { bg: 'bg-rose-100 dark:bg-primary-500/15',      text: 'text-rose-600 dark:text-primary-400' },
-    faq:         { bg: 'bg-sky-100 dark:bg-primary-500/15',       text: 'text-sky-600 dark:text-primary-400' },
-    space:       { bg: 'bg-teal-100 dark:bg-primary-500/15',      text: 'text-teal-600 dark:text-primary-400' },
-    projects:    { bg: 'bg-indigo-100 dark:bg-primary-500/15',    text: 'text-indigo-600 dark:text-primary-400' },
-    repairers:   { bg: 'bg-warning-100 dark:bg-secondary-500/15', text: 'text-warning-600 dark:text-secondary-400' },
-    knowhow:     { bg: 'bg-cyan-100 dark:bg-primary-500/15',      text: 'text-cyan-600 dark:text-primary-400' },
-    home:        { bg: 'bg-primary-100 dark:bg-primary-500/15',   text: 'text-primary-600 dark:text-primary-400' },
+    marketplace: ORANGE_BADGE,
+    itHilfe:     GREEN_BADGE,
+    services:    GREEN_BADGE,
+    about:       GREEN_BADGE,
+    contact:     GREEN_BADGE,
+    getInvolved: GREEN_BADGE,
+    workshops:   ORANGE_BADGE,
+    blog:        GREEN_BADGE,
+    faq:         GREEN_BADGE,
+    space:       GREEN_BADGE,
+    projects:    GREEN_BADGE,
+    repairers:   ORANGE_BADGE,
+    knowhow:     GREEN_BADGE,
+    home:        GREEN_BADGE,
   },
 
   buttons: {
@@ -112,20 +105,20 @@ export const DESIGN_TOKENS = {
 
   cards: {
     hoverText: {
-      marketplace: 'group-hover:text-orange-500 dark:group-hover:text-secondary-400',
-      itHilfe:     'group-hover:text-primary-600 dark:group-hover:text-primary-400',
-      services:    'group-hover:text-blue-600 dark:group-hover:text-primary-400',
-      about:       'group-hover:text-primary-600 dark:group-hover:text-primary-400',
-      contact:     'group-hover:text-neutral-700 dark:group-hover:text-primary-400',
-      getInvolved: 'group-hover:text-purple-600 dark:group-hover:text-primary-400',
-      workshops:   'group-hover:text-warning-600 dark:group-hover:text-secondary-400',
-      blog:        'group-hover:text-rose-600 dark:group-hover:text-primary-400',
-      faq:         'group-hover:text-sky-600 dark:group-hover:text-primary-400',
-      space:       'group-hover:text-teal-600 dark:group-hover:text-primary-400',
-      projects:    'group-hover:text-indigo-600 dark:group-hover:text-primary-400',
-      repairers:   'group-hover:text-warning-600 dark:group-hover:text-secondary-400',
-      knowhow:     'group-hover:text-cyan-600 dark:group-hover:text-primary-400',
-      home:        'group-hover:text-primary-600 dark:group-hover:text-primary-400',
+      marketplace: ORANGE_HOVER,
+      itHilfe:     GREEN_HOVER,
+      services:    GREEN_HOVER,
+      about:       GREEN_HOVER,
+      contact:     GREEN_HOVER,
+      getInvolved: GREEN_HOVER,
+      workshops:   ORANGE_HOVER,
+      blog:        GREEN_HOVER,
+      faq:         GREEN_HOVER,
+      space:       GREEN_HOVER,
+      projects:    GREEN_HOVER,
+      repairers:   ORANGE_HOVER,
+      knowhow:     GREEN_HOVER,
+      home:        GREEN_HOVER,
     },
     border: {
       default:  'border-neutral-200 dark:border-white/[0.06]',
@@ -134,4 +127,4 @@ export const DESIGN_TOKENS = {
   },
 } as const
 
-export type ThemeKey = keyof typeof DESIGN_TOKENS.gradients
+export type ThemeKey = keyof typeof DESIGN_TOKENS.iconBadges

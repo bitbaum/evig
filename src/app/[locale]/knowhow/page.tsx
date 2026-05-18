@@ -31,7 +31,6 @@ export default async function WissenPage() {
       ctaKey: 'sections.guides.cta',
       icon: BookOpen,
       href: '/#guides',
-      color: 'green',
     },
     {
       id: 'blog',
@@ -40,7 +39,6 @@ export default async function WissenPage() {
       ctaKey: 'sections.blog.cta',
       icon: FileText,
       href: '/blog',
-      color: 'blue',
     },
     {
       id: 'workshops',
@@ -49,7 +47,6 @@ export default async function WissenPage() {
       ctaKey: 'sections.workshops.cta',
       icon: Users,
       href: '/workshops',
-      color: 'purple',
     },
     {
       id: 'ressourcen',
@@ -58,7 +55,6 @@ export default async function WissenPage() {
       ctaKey: 'sections.resources.cta',
       icon: LinkIcon,
       href: '#ressourcen',
-      color: 'orange',
     },
   ]
 
@@ -85,19 +81,8 @@ export default async function WissenPage() {
     ],
   }
 
-  const colorClasses = {
-    green: 'bg-primary-50 border-primary-200 text-primary-900 dark:text-primary-100',
-    blue: 'bg-primary-50 border-primary-200 text-primary-900 dark:text-primary-100',
-    purple: 'bg-primary-50 border-primary-200 text-primary-900 dark:text-primary-100',
-    orange: 'bg-secondary-50 dark:bg-secondary-900/20 border-secondary-200 dark:border-secondary-700/30 text-secondary-900 dark:text-secondary-200',
-  }
-
-  const buttonClasses = {
-    green: 'bg-primary-600 hover:bg-primary-700',
-    blue: 'bg-primary-600 hover:bg-primary-700',
-    purple: 'bg-primary-600 hover:bg-primary-700',
-    orange: 'bg-secondary-600 hover:bg-secondary-700',
-  }
+  const cardClass = 'bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/[0.06] text-neutral-900 dark:text-white'
+  const buttonClass = 'bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400'
 
   return (
     <main className="min-h-screen bg-white">
@@ -114,22 +99,20 @@ export default async function WissenPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {sections.map((section) => {
               const Icon = section.icon
-              const colorClass = colorClasses[section.color as keyof typeof colorClasses]
-              const buttonClass = buttonClasses[section.color as keyof typeof buttonClasses]
 
               return (
                 <div
                   key={section.id}
-                  className={`${colorClass} border rounded-lg p-6 sm:p-8 flex flex-col`}
+                  className={`${cardClass} rounded-xl p-6 sm:p-8 flex flex-col`}
                 >
                   <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                    <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600 dark:text-primary-400" />
                     <Heading level={2} className="text-xl sm:text-2xl">{t(section.titleKey as Parameters<typeof t>[0])}</Heading>
                   </div>
-                  <p className="text-sm sm:text-base mb-4 sm:mb-6 flex-grow">{t(section.descriptionKey as Parameters<typeof t>[0])}</p>
+                  <p className="text-sm sm:text-base mb-4 sm:mb-6 flex-grow text-neutral-600 dark:text-neutral-400">{t(section.descriptionKey as Parameters<typeof t>[0])}</p>
                   <Link
                     href={section.href}
-                    className={`inline-flex items-center justify-center px-4 py-2 rounded-md text-white font-semibold text-sm sm:text-base ${buttonClass} transition-colors`}
+                    className={`inline-flex items-center justify-center px-4 py-2 rounded-lg text-white font-semibold text-sm sm:text-base ${buttonClass} transition-colors`}
                   >
                     {t(section.ctaKey as Parameters<typeof t>[0])}
                   </Link>
