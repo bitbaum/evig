@@ -123,7 +123,7 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <button
         onClick={onStartCamera}
-        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 transition-colors text-center"
+        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
       >
         <Camera className="w-12 h-12 text-primary-600 mx-auto mb-3" />
         <div className="font-medium text-neutral-900">{labelOpenCamera}</div>
@@ -132,7 +132,7 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
 
       <button
         onClick={() => fileInputRef.current?.click()}
-        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 transition-colors text-center"
+        className="p-6 border-2 border-dashed border-primary-300 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors text-center"
       >
         <Upload className="w-12 h-12 text-primary-600 mx-auto mb-3" />
         <div className="font-medium text-neutral-900">{labelUploadFile}</div>

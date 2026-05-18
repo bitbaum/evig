@@ -66,10 +66,10 @@ export default async function SettingsPage() {
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
       blue: 'bg-neutral-100 text-neutral-600',
-      green: 'bg-primary-100 text-primary-600',
-      red: 'bg-error-100 text-error-600',
-      purple: 'bg-primary-100 text-primary-600',
-      orange: 'bg-secondary-100 text-secondary-600',
+      green: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600',
+      red: 'bg-error-100 dark:bg-error-900/30 text-error-600 dark:text-error-400',
+      purple: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600',
+      orange: 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-600',
     }
     return colors[color] || colors.blue
   }

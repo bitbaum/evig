@@ -151,7 +151,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
               </Link>
               <Link
                 href={CONTACT.phoneTel}
-                className="inline-flex items-center border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors"
+                className="inline-flex items-center border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
               >
                 {t('quickCta.call')}
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -250,8 +250,8 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           <ul className="space-y-2">
                             {distro.cons.map((con, i) => (
                               <li key={i} className="flex items-start">
-                                <div className="p-1 bg-error-100 rounded-full mr-3 mt-0.5">
-                                  <XCircle className="w-4 h-4 text-error-600" />
+                                <div className="p-1 bg-error-100 dark:bg-error-900/30 rounded-full mr-3 mt-0.5">
+                                  <XCircle className="w-4 h-4 text-error-600 dark:text-error-400" />
                                 </div>
                                 <span className="text-neutral-600">{con}</span>
                               </li>
@@ -278,7 +278,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-300 text-lg"
+              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
             >
               {t('finalCta.start')}
             </Link>

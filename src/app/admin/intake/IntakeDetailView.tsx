@@ -109,7 +109,7 @@ export function IntakeDetailView({
 
         <div className="flex items-center gap-2">
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-primary-100 text-primary-800">
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
               <Check className="w-4 h-4" /> Im Shop
             </span>
           ) : (
@@ -185,7 +185,7 @@ export function IntakeDetailView({
       {detail.intake_tier === INTAKE_TIERS.REFURBISH && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
-            ? 'border-primary-300 bg-primary-50'
+            ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20'
             : 'border-neutral-200 bg-neutral-50'
         }`}>
           <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
@@ -194,7 +194,7 @@ export function IntakeDetailView({
           </Heading>
 
           {!detail.checklist_complete && (
-            <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 bg-warning-50 p-2 rounded">
+            <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 dark:text-warning-200 bg-warning-50 dark:bg-warning-900/20 p-2 rounded">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
               <span>Alle Pflichtpunkte der Checkliste müssen abgehakt sein, bevor das Gerät publiziert werden kann.</span>
             </div>
@@ -235,22 +235,22 @@ export function IntakeDetailView({
 
       {/* Published confirmation */}
       {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
-        <div className="border-2 border-primary-300 bg-primary-50 rounded-lg p-4 text-center">
+        <div className="border-2 border-primary-300 bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4 text-center">
           <Check className="w-8 h-8 text-primary-600 mx-auto mb-2" />
-          <p className="font-medium text-primary-800">Dieses Gerät ist im Shop veröffentlicht</p>
+          <p className="font-medium text-primary-800 dark:text-primary-300">Dieses Gerät ist im Shop veröffentlicht</p>
           {detail.selling_price_chf && (
-            <p className="text-sm text-primary-700 mt-1">Preis: CHF {detail.selling_price_chf.toFixed(2)}</p>
+            <p className="text-sm text-primary-700 dark:text-primary-300 mt-1">Preis: CHF {detail.selling_price_chf.toFixed(2)}</p>
           )}
         </div>
       )}
 
       {/* Tier Change Dialog */}
       {showTierChange && (
-        <div className="border-2 border-warning-300 bg-warning-50 rounded-lg p-4 space-y-3">
-          <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800">
+        <div className="border-2 border-warning-300 bg-warning-50 dark:bg-warning-900/20 rounded-lg p-4 space-y-3">
+          <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800 dark:text-warning-200">
             <ArrowDownUp className="w-4 h-4" /> Stufe ändern
           </Heading>
-          <div className="flex items-start gap-2 text-sm text-warning-700 bg-warning-100 p-2 rounded">
+          <div className="flex items-start gap-2 text-sm text-warning-700 dark:text-warning-200 bg-warning-100 dark:bg-warning-900/30 p-2 rounded">
             <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
             <span>Alle Checklisten-Fortschritte werden zurückgesetzt.</span>
           </div>

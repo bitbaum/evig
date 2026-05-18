@@ -31,7 +31,7 @@ export function ProductTabSwitcher({
         <Database className="w-4 h-4" />
         Erfasste Produkte
         {inventoryStats.total > 0 && (
-          <span className="bg-primary-100 text-primary-800 text-xs px-2 py-0.5 rounded-full">
+          <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 text-xs px-2 py-0.5 rounded-full">
             {inventoryStats.total}
           </span>
         )}
@@ -48,7 +48,7 @@ export function ProductTabSwitcher({
         <Store className="w-4 h-4" />
         Shop Produkte
         {shopStats.total > 0 && (
-          <span className="bg-primary-100 text-primary-800 text-xs px-2 py-0.5 rounded-full">
+          <span className="bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 text-xs px-2 py-0.5 rounded-full">
             {shopStats.total}
           </span>
         )}

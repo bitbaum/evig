@@ -23,10 +23,10 @@ export const ACTIVITY_UPDATE_TYPE_LABELS: Record<ActivityUpdateType, string> = {
 };
 
 export const ACTIVITY_UPDATE_TYPE_COLORS: Record<ActivityUpdateType, string> = {
-  accomplishment: 'bg-primary-100 text-primary-800',
+  accomplishment: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   milestone: 'bg-purple-100 text-purple-800',
   note: 'bg-neutral-100 text-neutral-800',
-  announcement: 'bg-primary-100 text-primary-800',
+  announcement: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
 };
 
 export const ACTIVITY_UPDATE_TYPE_ICONS: Record<ActivityUpdateType, string> = {
@@ -90,9 +90,9 @@ export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
 };
 
 export const HELP_REQUEST_STATUS_COLORS: Record<HelpRequestStatus, string> = {
-  open: 'bg-warning-100 text-warning-800',
-  in_progress: 'bg-primary-100 text-primary-800',
-  resolved: 'bg-primary-100 text-primary-800',
+  open: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+  in_progress: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  resolved: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   cancelled: 'bg-neutral-100 text-neutral-800',
 };
 
@@ -183,8 +183,8 @@ export function getHelpRequestStatusLabel(status: string | null): string {
 }
 
 export function getHelpRequestStatusColor(status: string | null): string {
-  if (!status) return 'bg-warning-100 text-warning-800';
-  return HELP_REQUEST_STATUS_COLORS[status as HelpRequestStatus] || 'bg-warning-100 text-warning-800';
+  if (!status) return 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200';
+  return HELP_REQUEST_STATUS_COLORS[status as HelpRequestStatus] || 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200';
 }
 
 export function getActivityCategoryLabel(category: string | null): string {

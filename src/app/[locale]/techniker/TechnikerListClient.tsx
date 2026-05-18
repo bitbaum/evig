@@ -345,7 +345,7 @@ export default function TechnikerListClient() {
               </Link>
               <Link
                 href="/it-hilfe"
-                className="px-6 py-2.5 bg-white hover:bg-primary-50 text-primary-600 border border-primary-600 rounded-lg font-semibold transition-colors"
+                className="px-6 py-2.5 bg-white hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 border border-primary-600 rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaToITHelp')}
               </Link>

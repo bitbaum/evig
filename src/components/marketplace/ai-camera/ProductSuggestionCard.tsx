@@ -25,7 +25,7 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
   return (
     <div
       onClick={() => onSelect(suggestion)}
-      className="p-4 border border-neutral-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 cursor-pointer transition-colors"
+      className="p-4 border border-neutral-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 cursor-pointer transition-colors"
     >
       <div className="flex items-start gap-4">
         <CategoryIcon category={suggestion.category} className="w-8 h-8 text-primary-600 mt-1" />
@@ -51,7 +51,7 @@ function ConfidenceBadge({ confidence }: { confidence: number }) {
       "px-2 py-1 text-xs rounded-full",
       confidence > 0.8 ? "bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300" :
       confidence > 0.6 ? "bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300" :
-      "bg-error-100 text-error-800"
+      "bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-400"
     )}>
       {Math.round(confidence * 100)}%
     </span>

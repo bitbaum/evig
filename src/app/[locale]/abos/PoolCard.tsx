@@ -83,7 +83,7 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             disabled={loading || (isFull && !isMember)}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
               isMember
-                ? 'bg-error-50 text-error-600 hover:bg-error-100'
+                ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400 hover:bg-error-100 dark:hover:bg-error-900/30'
                 : 'bg-primary-600 text-white hover:bg-primary-700'
             }`}
           >

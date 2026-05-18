@@ -16,7 +16,7 @@ export function DeadlineCountdown({ deadline }: { deadline: string }) {
 
   if (diffMs <= 0) {
     return (
-      <div className="rounded-md bg-error-50 px-3 py-2 text-sm text-error-700">
+      <div className="rounded-md bg-error-50 dark:bg-error-900/20 px-3 py-2 text-sm text-error-700 dark:text-error-400">
         Abstimmungsfrist abgelaufen
       </div>
     );

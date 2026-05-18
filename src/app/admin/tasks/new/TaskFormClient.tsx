@@ -50,13 +50,13 @@ export default function TaskFormClient({ task }: Props) {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
       {source === 'it_hilfe' && (
-        <div className="mb-4 p-3 bg-primary-50 border border-primary-200 rounded-lg flex items-center gap-2 text-sm text-primary-800">
+        <div className="mb-4 p-3 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 rounded-lg flex items-center gap-2 text-sm text-primary-800 dark:text-primary-200">
           <Info className="w-4 h-4 flex-shrink-0" />
           Aus IT-Hilfe-Anfrage erstellt — Felder wurden vorausgefüllt.
         </div>
       )}
       {error && (
-        <div id={errorId} className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
+        <div id={errorId} className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300">
           {error}
         </div>
       )}

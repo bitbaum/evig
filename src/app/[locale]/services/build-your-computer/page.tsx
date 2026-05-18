@@ -339,7 +339,7 @@ export default function BuildYourComputerPage() {
                   </div>
 
                   {/* Total and Actions */}
-                  <div className="bg-neutral-50 p-6 rounded-lg">
+                  <div className="bg-neutral-50 dark:bg-neutral-800/50 p-6 rounded-lg">
                     <div className="flex justify-between items-center mb-4">
                       <span className="text-lg font-semibold">{t('buildTool.totalCost')}</span>
                       <span className="text-2xl font-bold text-primary-600">CHF {buildResult.totalPrice}</span>
@@ -462,7 +462,7 @@ export default function BuildYourComputerPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-300 text-lg"
+              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
             >
               {t('cta.startBuild')}
             </Link>

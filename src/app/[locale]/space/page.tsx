@@ -123,7 +123,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                       <div className={`hidden md:flex w-16 h-16 rounded-full items-center justify-center flex-shrink-0 z-10 ${
                         isCurrent
                           ? 'bg-primary-600 text-white'
-                          : 'bg-white border-2 border-primary-300 text-primary-700'
+                          : 'bg-white border-2 border-primary-300 text-primary-700 dark:text-primary-300'
                       }`}>
                         <MapPin className="w-6 h-6" />
                       </div>
@@ -231,10 +231,10 @@ export default async function SpacePage({ params }: SpacePageProps) {
             <div className="relative aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.08]">
               <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
                 <Sparkles className="w-16 h-16 text-primary-600 mb-4" />
-                <p className="text-xl font-semibold text-primary-800 mb-2">
+                <p className="text-xl font-semibold text-primary-800 dark:text-primary-300 mb-2">
                   {t('future.visionTagline', { orgName: ORG.name })}
                 </p>
-                <p className="text-primary-700 max-w-md">
+                <p className="text-primary-700 dark:text-primary-300 max-w-md">
                   {t('future.visionDesc')}
                 </p>
               </div>
@@ -272,15 +272,15 @@ export default async function SpacePage({ params }: SpacePageProps) {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center p-4 bg-neutral-50 rounded-lg">
-                  <p className="text-3xl font-bold text-primary-700 mb-1">{t('future.params.areaValue')}</p>
+                  <p className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-1">{t('future.params.areaValue')}</p>
                   <p className="text-sm text-neutral-600">{t('future.params.areaLabel')}</p>
                 </div>
                 <div className="text-center p-4 bg-neutral-50 rounded-lg">
-                  <p className="text-3xl font-bold text-primary-700 mb-1">{t('future.params.budgetValue')}</p>
+                  <p className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-1">{t('future.params.budgetValue')}</p>
                   <p className="text-sm text-neutral-600">{t('future.params.budgetLabel')}</p>
                 </div>
                 <div className="text-center p-4 bg-neutral-50 rounded-lg">
-                  <p className="text-3xl font-bold text-primary-700 mb-1">{t('future.params.locationValue')}</p>
+                  <p className="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-1">{t('future.params.locationValue')}</p>
                   <p className="text-sm text-neutral-600">{t('future.params.locationLabel')}</p>
                 </div>
               </div>
@@ -337,7 +337,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                       <ChevronRight className="w-6 h-6 text-primary-500 mb-2" />
                       <div>
                         <p className="text-sm text-primary-600">{t('impact.potentialLabel')}</p>
-                        <p className="text-2xl font-bold text-primary-700">{item.potential}</p>
+                        <p className="text-2xl font-bold text-primary-700 dark:text-primary-300">{item.potential}</p>
                       </div>
                     </div>
                     <p className="text-sm text-neutral-600">{item.reason}</p>
@@ -358,7 +358,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
                   <Link href="/get-involved/donate">
-                    <Button size="lg" className="bg-white text-primary-700 hover:bg-primary-50">
+                    <Button size="lg" className="bg-white text-primary-700 hover:bg-primary-50 dark:hover:bg-primary-900/20">
                       <Heart className="w-5 h-5 mr-2" />
                       {t('impact.donateCard.donateBtn')}
                     </Button>

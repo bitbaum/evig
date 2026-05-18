@@ -43,11 +43,11 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
       />
 
       {!hasItems ? (
-        <div className="mt-5 flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 p-4 text-primary-900">
+        <div className="mt-5 flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 dark:bg-primary-900/20 p-4 text-primary-900 dark:text-primary-300">
           <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary-600" />
           <div>
-            <p className={cn(adminType.body, 'font-medium text-primary-900')}>{t('noPendingReviews')}</p>
-            <p className="mt-1 text-base text-primary-800">
+            <p className={cn(adminType.body, 'font-medium text-primary-900 dark:text-primary-300')}>{t('noPendingReviews')}</p>
+            <p className="mt-1 text-base text-primary-800 dark:text-primary-300">
               {t('noPendingDescription')}
             </p>
           </div>
@@ -59,7 +59,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
             return (
               <article
                 key={protocol.id}
-                className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-primary-300 hover:bg-primary-50/40"
+                className="rounded-lg border border-neutral-200 bg-white p-4 transition-colors hover:border-primary-300 hover:bg-primary-50/40 dark:hover:bg-primary-900/20"
               >
                 <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                   <div className="min-w-0">
@@ -71,7 +71,7 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
                         {getWorkflowLabel(protocol)}
                       </span>
                       {needsTasks && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-warning-100 px-3 py-1 text-sm font-medium text-warning-800">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-warning-100 dark:bg-warning-900/30 px-3 py-1 text-sm font-medium text-warning-800 dark:text-warning-200">
                           <AlertCircle className="h-4 w-4" />
                           {protocol.unlinked_action_item_count} {t('open')}
                         </span>

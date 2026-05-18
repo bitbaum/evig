@@ -163,8 +163,8 @@ export default async function TaskDetailPage({
           </Link>
           <div className="w-px h-6 bg-neutral-300" />
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <ClipboardList className="w-5 h-5 text-primary-600" />
+            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <ClipboardList className="w-5 h-5 text-primary-600 dark:text-primary-400" />
             </div>
             <div>
               <Heading level={1} className="text-2xl font-bold text-neutral-900">{task.title}</Heading>
@@ -203,7 +203,7 @@ export default async function TaskDetailPage({
           {TASK_PRIORITY_LABELS[task.priority]}
         </span>
         {task.is_completed && (
-          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-primary-100 text-primary-800">
+          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
             Abgeschlossen
           </span>
         )}
@@ -216,15 +216,15 @@ export default async function TaskDetailPage({
 
       {/* Active Alerts */}
       {activeFlags.length > 0 && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-error-600 mt-0.5" />
             <div>
-              <Heading level={3} className="font-medium text-error-800">
+              <Heading level={3} className="font-medium text-error-800 dark:text-error-200">
                 Aufgabe braucht Aufmerksamkeit
               </Heading>
               {activeFlags.map((flag) => (
-                <p key={flag.id} className="text-sm text-error-700 mt-1">
+                <p key={flag.id} className="text-sm text-error-700 dark:text-error-300 mt-1">
                   {flag.flagged_by_name || 'Jemand'}: {flag.message || 'Keine Nachricht'}
                   <span className="text-error-500 ml-2">
                     ({formatDateTimeNumeric(flag.created_at)})
@@ -238,13 +238,13 @@ export default async function TaskDetailPage({
 
       {/* Pending Requests */}
       {pendingRequests.length > 0 && (
-        <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
+        <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <Send className="w-5 h-5 text-warning-600 mt-0.5" />
             <div>
-              <Heading level={3} className="font-medium text-warning-800">Offene Anfragen</Heading>
+              <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">Offene Anfragen</Heading>
               {pendingRequests.map((req) => (
-                <p key={req.id} className="text-sm text-warning-700 mt-1">
+                <p key={req.id} className="text-sm text-warning-700 dark:text-warning-300 mt-1">
                   {req.requested_by_name || 'Jemand'} fragt{' '}
                   {req.is_broadcast
                     ? 'alle Teammitglieder'
@@ -298,8 +298,8 @@ export default async function TaskDetailPage({
                     key={completion.id}
                     className="flex items-start gap-3 pb-4 border-b last:border-0"
                   >
-                    <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4 text-primary-600" />
+                    <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">

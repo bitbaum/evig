@@ -62,7 +62,7 @@ export function ResponsiveHero({
 
   const buttonClasses = {
     primary: cn(
-      'bg-white text-primary-800 hover:bg-primary-50',
+      'bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20',
       responsiveButtons.primary,
       'rounded-lg font-semibold transition-colors duration-300 text-center min-h-[44px]'
     ),

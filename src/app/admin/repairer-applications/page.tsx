@@ -50,12 +50,12 @@ export default function RepairerApplicationsAdmin() {
 
   if (error) {
     return (
-      <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+      <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4">
         <div className="flex">
           <XCircle className="w-5 h-5 text-error-400" />
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-error-800">Fehler beim Laden</Heading>
-            <p className="text-sm text-error-700 mt-1">{error}</p>
+            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-400">Fehler beim Laden</Heading>
+            <p className="text-sm text-error-700 dark:text-error-400 mt-1">{error}</p>
           </div>
         </div>
       </div>
@@ -80,8 +80,8 @@ export default function RepairerApplicationsAdmin() {
 
       {/* Success Message */}
       {successMessage && (
-        <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
-          <p className="text-primary-800">{successMessage}</p>
+        <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 rounded-lg p-4">
+          <p className="text-primary-800 dark:text-primary-300">{successMessage}</p>
         </div>
       )}
 

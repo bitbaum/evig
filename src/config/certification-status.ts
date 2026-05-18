@@ -26,9 +26,9 @@ export interface CertificationStatusBadge {
 }
 
 export const CERTIFICATION_STATUS_BADGES: Record<string, CertificationStatusBadge> = {
-  [CERTIFICATION_STATUS.VERIFIED]: { label: CERTIFICATION_STATUS_LABELS.verified, bg: 'bg-primary-100', color: 'text-primary-800' },
-  [CERTIFICATION_STATUS.REJECTED]: { label: CERTIFICATION_STATUS_LABELS.rejected, bg: 'bg-error-100', color: 'text-error-800' },
-  [CERTIFICATION_STATUS.EXPIRED]: { label: CERTIFICATION_STATUS_LABELS.expired, bg: 'bg-orange-100', color: 'text-orange-800' },
+  [CERTIFICATION_STATUS.VERIFIED]: { label: CERTIFICATION_STATUS_LABELS.verified, bg: 'bg-primary-100 dark:bg-primary-900/30', color: 'text-primary-800 dark:text-primary-300' },
+  [CERTIFICATION_STATUS.REJECTED]: { label: CERTIFICATION_STATUS_LABELS.rejected, bg: 'bg-error-100 dark:bg-error-900/30', color: 'text-error-800 dark:text-error-300' },
+  [CERTIFICATION_STATUS.EXPIRED]: { label: CERTIFICATION_STATUS_LABELS.expired, bg: 'bg-orange-100 dark:bg-orange-900/30', color: 'text-orange-800 dark:text-orange-300' },
   [CERTIFICATION_STATUS.PENDING]: { label: CERTIFICATION_STATUS_LABELS.pending, bg: 'bg-neutral-100', color: 'text-neutral-800' },
 };
 

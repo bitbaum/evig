@@ -244,7 +244,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
     icon: '💰',
     requiresAmount: true,
     multiplier: 1.0,
-    badgeClass: 'bg-primary-100 text-primary-700',
+    badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
   },
   {
     id: 'supporter',
@@ -253,7 +253,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
     icon: '💚',
     requiresAmount: true,
     multiplier: 1.5,
-    badgeClass: 'bg-primary-100 text-primary-700',
+    badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
   },
 ]
 
@@ -482,10 +482,10 @@ export function deriveBudgetType(amountCents: number | null | undefined): 'free'
 }
 
 export const REQUEST_STATUSES: RequestStatus[] = [
-  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-primary-100 text-primary-700' },
-  { id: REQUEST_STATUS.IN_DISCUSSION, name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-warning-100 text-warning-700' },
-  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-primary-100 text-primary-700' },
-  { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-primary-100 text-primary-700' },
+  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
+  { id: REQUEST_STATUS.IN_DISCUSSION, name: 'In Gespräch', description: 'In Verhandlung mit Technikern', badgeClass: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200' },
+  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
+  { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]
 
@@ -509,8 +509,8 @@ export const OFFER_STATUS = {
 export type OfferStatusId = typeof OFFER_STATUS[keyof typeof OFFER_STATUS];
 
 export const OFFER_STATUSES: OfferStatus[] = [
-  { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-warning-100 text-warning-700' },
-  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-primary-100 text-primary-700' },
+  { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200' },
+  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-error-100 text-error-700' },
   { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]

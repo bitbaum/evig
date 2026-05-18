@@ -25,7 +25,7 @@ export default function DecisionFormClient() {
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       {form.error && (
-        <div className="rounded-md bg-error-50 p-3 text-sm text-error-700">{form.error}</div>
+        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">{form.error}</div>
       )}
 
       {/* AI Assistant — open by default, reduces blank-page anxiety */}
@@ -55,7 +55,7 @@ export default function DecisionFormClient() {
 
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
-        <div className="flex items-start justify-between gap-3 rounded-md border border-primary-200 bg-primary-50 px-4 py-3 text-sm text-primary-700">
+        <div className="flex items-start justify-between gap-3 rounded-md border border-primary-200 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 text-sm text-primary-700 dark:text-primary-300">
           <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
           <button
             type="button"
@@ -205,7 +205,7 @@ export default function DecisionFormClient() {
       </div>
 
       {/* Public voting — surfaced prominently so sharing is easy */}
-      <label className="flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 px-4 py-3 cursor-pointer">
+      <label className="flex items-start gap-3 rounded-lg border border-primary-200 bg-primary-50 dark:bg-primary-900/20 px-4 py-3 cursor-pointer">
         <input
           type="checkbox"
           checked={form.allowPublicVoting}
@@ -213,8 +213,8 @@ export default function DecisionFormClient() {
           className="mt-0.5 rounded border-primary-400 text-primary-600 focus:ring-primary-500"
         />
         <div>
-          <span className="text-sm font-medium text-primary-900">Mit Link teilen — kein Konto nötig</span>
-          <p className="text-xs text-primary-700 mt-0.5">
+          <span className="text-sm font-medium text-primary-900 dark:text-primary-200">Mit Link teilen — kein Konto nötig</span>
+          <p className="text-xs text-primary-700 dark:text-primary-300 mt-0.5">
             Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
           </p>
         </div>

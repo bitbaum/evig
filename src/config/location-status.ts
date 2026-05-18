@@ -28,8 +28,8 @@ export function getLocationStatusLabel(status: string): string {
 }
 
 export const LOCATION_STATUS_COLORS: Record<string, string> = {
-  [LOCATION_STATUS.APPROVED]: 'bg-primary-100 text-primary-800',
-  [LOCATION_STATUS.PENDING]: 'bg-warning-100 text-warning-800',
+  [LOCATION_STATUS.APPROVED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  [LOCATION_STATUS.PENDING]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   [LOCATION_STATUS.REJECTED]: 'bg-error-100 text-error-800',
   [LOCATION_STATUS.SUSPENDED]: 'bg-orange-100 text-orange-800',
 };

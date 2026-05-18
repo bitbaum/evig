@@ -32,7 +32,7 @@ export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: Servi
           )}
           <Link
             href="/contact"
-            className="inline-block bg-white text-primary-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-300 text-base sm:text-lg min-h-[44px] touch-target"
+            className="inline-block bg-white text-primary-800 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-base sm:text-lg min-h-[44px] touch-target"
           >
             Kontakt
           </Link>

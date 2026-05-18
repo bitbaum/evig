@@ -29,9 +29,9 @@ export const MEETING_TYPE_LABELS: Record<MeetingType, string> = {
 };
 
 export const MEETING_TYPE_COLORS: Record<MeetingType, string> = {
-  team_weekly: 'bg-primary-100 text-primary-800',
+  team_weekly: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   project_review: 'bg-purple-100 text-purple-800',
-  retro: 'bg-primary-100 text-primary-800',
+  retro: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   board: 'bg-orange-100 text-orange-800',
   ad_hoc: 'bg-neutral-100 text-neutral-800',
 };
@@ -103,9 +103,9 @@ export const PROTOCOL_STATUS_LABELS: Record<ProtocolStatus, string> = {
 
 export const PROTOCOL_STATUS_COLORS: Record<ProtocolStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800',
-  processing: 'bg-warning-100 text-warning-800',
-  review: 'bg-warning-100 text-warning-800',
-  finalized: 'bg-primary-100 text-primary-800',
+  processing: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+  review: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+  finalized: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
 };
 
 // Visibility options
@@ -133,7 +133,7 @@ export const ACTION_ITEM_TYPE_LABELS: Record<ActionItemType, string> = {
 };
 
 export const ACTION_ITEM_TYPE_COLORS: Record<ActionItemType, string> = {
-  task: 'bg-primary-100 text-primary-800',
+  task: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   decision: 'bg-purple-100 text-purple-800',
   info: 'bg-neutral-100 text-neutral-800',
 };
@@ -145,9 +145,9 @@ export const ACTION_ITEM_BORDER_COLORS: Record<ActionItemType, string> = {
 };
 
 export const FOLLOW_UP_STATUS_COLORS: Record<string, string> = {
-  erledigt: 'bg-primary-100 text-primary-800',
-  'in Arbeit': 'bg-primary-100 text-primary-800',
-  offen: 'bg-warning-100 text-warning-800',
+  erledigt: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  'in Arbeit': 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  offen: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
 };
 
 export function getFollowUpStatusColor(status: string | null | undefined): string {
@@ -217,9 +217,9 @@ export const DECISION_RESULT_LABELS: Record<DecisionResult, string> = {
 };
 
 export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
-  approved: 'bg-primary-100 text-primary-800',
+  approved: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   rejected: 'bg-error-100 text-error-800',
-  pending: 'bg-warning-100 text-warning-800',
+  pending: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
 };
 
 // Types derived from constants

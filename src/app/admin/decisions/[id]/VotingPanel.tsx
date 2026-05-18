@@ -87,9 +87,9 @@ export default function VotingPanel({
         {votingDeadline && status === DECISION_STATUS.VOTING && (
           <DeadlineCountdown deadline={votingDeadline} />
         )}
-        <div className="rounded-lg bg-primary-50 p-6 text-center shadow-sm">
-          <p className="font-medium text-primary-700">Deine Stimme wurde abgegeben</p>
-          <p className="mt-1 text-sm text-primary-600">
+        <div className="rounded-lg bg-primary-50 dark:bg-primary-900/20 p-6 text-center shadow-sm">
+          <p className="font-medium text-primary-700 dark:text-primary-300">Deine Stimme wurde abgegeben</p>
+          <p className="mt-1 text-sm text-primary-600 dark:text-primary-400">
             Du kannst deine Stimme ändern, solange die Abstimmung läuft.
           </p>
         </div>
@@ -122,7 +122,7 @@ export default function VotingPanel({
       </Heading>
 
       {error && (
-        <div className="mb-4 rounded-md bg-error-50 p-3 text-sm text-error-700">{error}</div>
+        <div className="mb-4 rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">{error}</div>
       )}
 
       {votingMethod === 'consent' && (

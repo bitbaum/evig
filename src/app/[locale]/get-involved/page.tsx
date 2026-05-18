@@ -219,7 +219,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             {t('cta.body')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <ContactLink variant="outline" size="lg" className="bg-white text-primary-800 hover:bg-primary-50">
+            <ContactLink variant="outline" size="lg" className="bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20">
               {t('cta.contactBtn')}
             </ContactLink>
             <Link

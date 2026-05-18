@@ -69,9 +69,9 @@ export default async function FinanzenPage() {
           </Link>
           <Heading level={1} className="text-3xl font-bold">Finanzen</Heading>
         </div>
-        <div className="p-6 bg-warning-50 border border-warning-200 rounded-lg">
-          <Heading level={3} className="font-semibold text-warning-800">Keine Daten verfügbar</Heading>
-          <p className="text-sm text-warning-700 mt-2">
+        <div className="p-6 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg">
+          <Heading level={3} className="font-semibold text-warning-800 dark:text-warning-200">Keine Daten verfügbar</Heading>
+          <p className="text-sm text-warning-700 dark:text-warning-300 mt-2">
             Die Finanzdaten konnten nicht geladen werden.
           </p>
         </div>
@@ -151,7 +151,7 @@ export default async function FinanzenPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 rounded-lg">
+          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
             <PiggyBank className="w-6 h-6 text-primary-600" />
           </div>
           <div>
@@ -277,8 +277,8 @@ export default async function FinanzenPage() {
                     <span>{year}</span>
                     <span className={`text-sm px-2 py-1 rounded ${
                       selfFinancingPct >= 50
-                        ? 'bg-primary-100 text-primary-700'
-                        : 'bg-warning-100 text-warning-700'
+                        ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
+                        : 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200'
                     }`}>
                       {selfFinancingPct.toFixed(1)}% Eigenfinanzierung
                     </span>

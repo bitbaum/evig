@@ -43,7 +43,7 @@ export function ProjectHero({ hero }: ProjectHeroProps) {
                 const variant = cta.variant || 'primary'
                 const primaryBtn = cn(
                   'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all min-h-[44px] touch-target',
-                  'bg-white text-primary-900 hover:bg-primary-50'
+                  'bg-white text-primary-900 hover:bg-primary-50 dark:hover:bg-primary-900/20'
                 )
                 const outlineBtn = cn(
                   'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all min-h-[44px] touch-target',

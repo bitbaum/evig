@@ -22,10 +22,10 @@ export const SCOPE_CONFIG = {
     focusRing: 'focus:ring-primary-500',
     buttonBg: 'bg-primary-600 hover:bg-primary-700',
     borderColor: 'border-primary-500',
-    bgColor: 'bg-primary-50',
+    bgColor: 'bg-primary-50 dark:bg-primary-900/20',
     textColor: 'text-primary-900',
-    hoverBg: 'hover:bg-primary-50 hover:border-primary-300',
-    activeClasses: 'bg-primary-100 border-primary-300 text-primary-800',
+    hoverBg: 'hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-300',
+    activeClasses: 'bg-primary-100 dark:bg-primary-900/30 border-primary-300 text-primary-800 dark:text-primary-300',
   },
   element: {
     emoji: '🎯',

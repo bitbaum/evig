@@ -136,8 +136,8 @@ export default function AdminWorkshopsPage() {
       />
 
       {error && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
-          <p className="text-error-800">{error}</p>
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4">
+          <p className="text-error-800 dark:text-error-400">{error}</p>
         </div>
       )}
 
@@ -230,8 +230,8 @@ export default function AdminWorkshopsPage() {
                 </div>
 
                 {rejectingId === proposal.id && (
-                  <div className="mt-4 p-4 bg-error-50 border border-error-200 rounded-lg">
-                    <label className="block text-sm font-medium text-error-800 mb-2">
+                  <div className="mt-4 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg">
+                    <label className="block text-sm font-medium text-error-800 dark:text-error-400 mb-2">
                       Ablehnungsgrund:
                     </label>
                     <textarea

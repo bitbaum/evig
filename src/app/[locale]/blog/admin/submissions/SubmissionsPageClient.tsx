@@ -109,8 +109,8 @@ export default function SubmissionsAdminPage() {
                         <span
                           className={`px-2 py-1 text-xs rounded-full font-medium ${
                             submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA
-                              ? 'bg-primary-100 text-primary-800'
-                              : 'bg-primary-100 text-primary-800'
+                              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
+                              : 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
                           }`}
                         >
                           {submission.submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('typeIdea') : t('typeDraft')}

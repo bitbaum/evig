@@ -27,14 +27,14 @@ const STATE_CONFIG = {
   },
   active: {
     icon: Clock,
-    dotClass: 'bg-warning-100 border-2 border-warning-400 text-warning-600',
-    labelClass: 'text-warning-700 font-semibold',
+    dotClass: 'bg-warning-100 dark:bg-warning-900/30 border-2 border-warning-400 text-warning-600',
+    labelClass: 'text-warning-700 dark:text-warning-200 font-semibold',
     lineClass: 'bg-neutral-200',
   },
   blocked: {
     icon: CircleAlert,
-    dotClass: 'bg-error-100 border-2 border-error-400 text-error-600',
-    labelClass: 'text-error-700 font-semibold',
+    dotClass: 'bg-error-100 dark:bg-error-900/30 border-2 border-error-400 text-error-600',
+    labelClass: 'text-error-700 dark:text-error-400 font-semibold',
     lineClass: 'bg-neutral-200',
   },
   pending: {

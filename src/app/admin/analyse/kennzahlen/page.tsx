@@ -132,7 +132,7 @@ export default async function KennzahlenPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 rounded-lg">
+          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
             <TrendingUp className="w-6 h-6 text-primary-600" />
           </div>
           <div>

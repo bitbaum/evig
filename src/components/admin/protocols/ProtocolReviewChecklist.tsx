@@ -15,7 +15,7 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
 }> = {
   done: {
     icon: CheckCircle2,
-    className: 'bg-primary-50 text-primary-800 border-primary-200',
+    className: 'bg-primary-50 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 border-primary-200',
     label: 'Erledigt',
   },
   active: {
@@ -25,7 +25,7 @@ const stateConfig: Record<ProtocolReviewChecklistItem['state'], {
   },
   blocked: {
     icon: CircleAlert,
-    className: 'bg-error-50 text-error-800 border-error-200',
+    className: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-400 border-error-200',
     label: 'Blockiert',
   },
   pending: {

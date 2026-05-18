@@ -78,13 +78,13 @@ function Bar({
 
 function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
   return (
-    <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-warning-400 bg-warning-50 p-4">
+    <div className="mb-4 flex items-center gap-4 rounded-xl border-2 border-warning-400 bg-warning-50 dark:bg-warning-900/20 p-4">
       {opt.imageUrl ? (
         <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-warning-200 bg-white shadow">
           <Image src={opt.imageUrl} alt={opt.label} fill className="object-contain p-1" unoptimized />
         </div>
       ) : (
-        <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-warning-100 text-3xl font-bold text-warning-600">
+        <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-lg bg-warning-100 dark:bg-warning-900/30 text-3xl font-bold text-warning-600 dark:text-warning-400">
           {opt.label.charAt(0).toUpperCase()}
         </div>
       )}
@@ -123,7 +123,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
         <div className="mb-4">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              data.passed ? 'bg-primary-100 text-primary-700' : 'bg-error-100 text-error-700'
+              data.passed ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-300'
             }`}
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
@@ -150,10 +150,10 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
             />
           ))}
           {data.blocks && data.blocks.length > 0 && (
-            <div className="mt-3 rounded-md bg-error-50 p-3">
-              <p className="text-sm font-medium text-error-700">Blockierungen:</p>
+            <div className="mt-3 rounded-md bg-error-50 dark:bg-error-900/20 p-3">
+              <p className="text-sm font-medium text-error-700 dark:text-error-300">Blockierungen:</p>
               {data.blocks.map((b, i) => (
-                <p key={i} className="mt-1 text-sm text-error-600">
+                <p key={i} className="mt-1 text-sm text-error-600 dark:text-error-400">
                   &bull; {b.rationale || '(Keine Begründung)'}
                 </p>
               ))}
@@ -279,9 +279,9 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
 
       {/* Outcome Summary */}
       {outcomeSummary && (
-        <div className="mt-4 rounded-md bg-primary-50 p-3">
-          <p className="text-sm font-medium text-primary-700">Zusammenfassung</p>
-          <p className="mt-1 text-sm text-primary-600">{outcomeSummary}</p>
+        <div className="mt-4 rounded-md bg-primary-50 dark:bg-primary-900/20 p-3">
+          <p className="text-sm font-medium text-primary-700 dark:text-primary-300">Zusammenfassung</p>
+          <p className="mt-1 text-sm text-primary-600 dark:text-primary-400">{outcomeSummary}</p>
         </div>
       )}
     </div>

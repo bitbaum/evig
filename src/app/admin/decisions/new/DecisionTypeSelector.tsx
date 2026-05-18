@@ -22,7 +22,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               onClick={() => onChange(type)}
               className={`rounded-lg border-2 p-3 text-left transition-all ${
                 isSelected
-                  ? 'border-primary-500 bg-primary-50 ring-1 ring-primary-200'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-1 ring-primary-200'
                   : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50'
               }`}
             >
@@ -36,7 +36,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               </div>
               <p className="mt-1.5 text-xs text-neutral-500">{conf.description}</p>
               {isSelected && (
-                <p className="mt-1.5 rounded bg-primary-100 px-2 py-1 text-xs text-primary-700">
+                <p className="mt-1.5 rounded bg-primary-100 dark:bg-primary-900/30 px-2 py-1 text-xs text-primary-700 dark:text-primary-300">
                   {conf.mechanic}
                 </p>
               )}

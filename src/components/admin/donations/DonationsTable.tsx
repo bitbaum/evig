@@ -67,8 +67,8 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
               <td className="px-4 py-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                   donation.donation_type === DONATION_TYPES.MONETARY
-                    ? 'bg-primary-100 text-primary-600'
-                    : 'bg-primary-100 text-primary-600'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600'
+                    : 'bg-primary-100 dark:bg-primary-900/30 text-primary-600'
                 }`}>
                   {getDonationIcon(donation.donation_type)}
                 </div>
@@ -103,9 +103,9 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
               <td className="px-4 py-3">
                 <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
                   donation.status === DONATION_STATUSES.RECEIPT_SENT
-                    ? 'bg-primary-100 text-primary-800'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
                     : donation.status === DONATION_STATUSES.THANKED
-                    ? 'bg-primary-100 text-primary-800'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
                     : 'bg-neutral-100 text-neutral-800'
                 }`}>
                   {donation.status === DONATION_STATUSES.RECEIPT_SENT && <Receipt className="w-3 h-3" />}
@@ -119,7 +119,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {!donation.thank_you_sent && (
                     <button
                       onClick={() => onMarkThanked(donation.id)}
-                      className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded hover:bg-primary-200"
+                      className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded hover:bg-primary-200"
                       title="Als bedankt markieren"
                     >
                       Bedanken
@@ -137,7 +137,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
                   {donation.donation_type === DONATION_TYPES.DEVICE && (
                     <Link
                       href={`/admin/intake?donation_id=${donation.id}&donor_name=${encodeURIComponent(donation.donor_name || '')}&donor_email=${encodeURIComponent(donation.donor_email || '')}`}
-                      className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded hover:bg-primary-200 inline-flex items-center gap-1"
+                      className="text-xs px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded hover:bg-primary-200 inline-flex items-center gap-1"
                       title="Im Geräte-Eingang erfassen"
                     >
                       Eingang <ArrowRight className="w-3 h-3" />

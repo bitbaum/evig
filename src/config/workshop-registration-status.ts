@@ -25,10 +25,10 @@ export const WORKSHOP_REGISTRATION_STATUS_LABELS: Record<string, string> = {
 };
 
 export const WORKSHOP_REGISTRATION_STATUS_COLORS: Record<string, string> = {
-  [WORKSHOP_REGISTRATION_STATUS.CONFIRMED]: 'bg-primary-100 text-primary-800',
-  [WORKSHOP_REGISTRATION_STATUS.PENDING]: 'bg-warning-100 text-warning-800',
+  [WORKSHOP_REGISTRATION_STATUS.CONFIRMED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  [WORKSHOP_REGISTRATION_STATUS.PENDING]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   [WORKSHOP_REGISTRATION_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
-  [WORKSHOP_REGISTRATION_STATUS.ATTENDED]: 'bg-primary-100 text-primary-800',
+  [WORKSHOP_REGISTRATION_STATUS.ATTENDED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   [WORKSHOP_REGISTRATION_STATUS.NO_SHOW]: 'bg-neutral-100 text-neutral-800',
   [WORKSHOP_REGISTRATION_STATUS.WAITLIST]: 'bg-neutral-100 text-neutral-600',
 };
@@ -58,8 +58,8 @@ export const WORKSHOP_PAYMENT_STATUS_LABELS: Record<string, string> = {
 };
 
 export const WORKSHOP_PAYMENT_STATUS_COLORS: Record<string, string> = {
-  [WORKSHOP_PAYMENT_STATUS.PAID]: 'bg-primary-100 text-primary-800',
-  [WORKSHOP_PAYMENT_STATUS.PENDING]: 'bg-warning-100 text-warning-800',
+  [WORKSHOP_PAYMENT_STATUS.PAID]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  [WORKSHOP_PAYMENT_STATUS.PENDING]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   [WORKSHOP_PAYMENT_STATUS.REFUNDED]: 'bg-purple-100 text-purple-800',
   [WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED]: 'bg-neutral-100 text-neutral-600',
 };

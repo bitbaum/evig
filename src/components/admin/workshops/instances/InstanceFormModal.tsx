@@ -45,7 +45,7 @@ export function InstanceFormModal({
 
         <div className="p-6 space-y-4">
           {error && (
-            <div className="bg-error-50 border border-error-200 rounded-lg p-3 text-error-800 text-sm">
+            <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-3 text-error-800 dark:text-error-400 text-sm">
               {error}
             </div>
           )}

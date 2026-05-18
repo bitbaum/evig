@@ -43,7 +43,7 @@ export function MeetingTypeStep({ selectedType, onSelect, onReset }: Props) {
             <button
               key={type}
               onClick={() => onSelect(type)}
-              className="text-left p-4 bg-white border-2 border-neutral-200 rounded-lg hover:border-primary-400 hover:bg-primary-50 transition-all"
+              className="text-left p-4 bg-white border-2 border-neutral-200 rounded-lg hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all"
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">

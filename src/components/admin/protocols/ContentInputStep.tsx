@@ -103,7 +103,7 @@ export function ContentInputStep({
         </div>
 
         {processing && (
-          <div className="rounded-lg border border-warning-200 bg-warning-50 p-3 text-sm text-warning-800">
+          <div className="rounded-lg border border-warning-200 bg-warning-50 p-3 text-sm text-warning-800 dark:bg-warning-900/30 dark:border-warning-700 dark:text-warning-200">
             {audioStage === 'uploading' && 'Audio wird hochgeladen...'}
             {audioStage === 'transcribing' && 'Audio wird transkribiert...'}
             {audioStage === 'processing' && 'Transkript wird in Protokoll und Aufgaben umgewandelt...'}
@@ -160,7 +160,7 @@ export function ContentInputStep({
             {config.showFormatBadge && contentFormat && (
               <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
                 contentFormat === 'json'
-                  ? 'bg-primary-100 text-primary-800'
+                  ? 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
                   : 'bg-neutral-100 text-neutral-800'
               }`}>
                 {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext erkannt'}

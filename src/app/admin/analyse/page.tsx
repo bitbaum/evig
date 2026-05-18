@@ -101,7 +101,7 @@ export default async function AnalysePage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 rounded-lg">
+          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
             <BarChart3 className="w-6 h-6 text-primary-600" />
           </div>
           <div>
@@ -127,8 +127,8 @@ export default async function AnalysePage() {
               </div>
               {comparison && (
                 <div className={`text-sm mt-2 ${
-                  comparison.totalChange.direction === 'up' ? 'text-primary-600' :
-                  comparison.totalChange.direction === 'down' ? 'text-error-600' : 'text-neutral-500'
+                  comparison.totalChange.direction === 'up' ? 'text-primary-600 dark:text-primary-400' :
+                  comparison.totalChange.direction === 'down' ? 'text-error-600 dark:text-error-400' : 'text-neutral-500'
                 }`}>
                   {comparison.totalChange.direction === 'up' ? '+' : ''}
                   {comparison.totalChange.percentChange.toFixed(1)}% vs. {previousYear}
@@ -144,7 +144,7 @@ export default async function AnalysePage() {
                 {latestData.derived.eigenfinanzierungPct.value.toFixed(1)}%
               </div>
               <div className={`text-sm mt-2 ${
-                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-primary-600' : 'text-warning-600'
+                latestData.derived.eigenfinanzierungPct.value >= 50 ? 'text-primary-600 dark:text-primary-400' : 'text-warning-600 dark:text-warning-400'
               }`}>
                 {latestData.derived.eigenfinanzierungPct.value >= 50 ? 'Ziel erreicht' : 'Unter Ziel (50%)'}
               </div>
@@ -200,7 +200,7 @@ export default async function AnalysePage() {
             </div>
             <div className="mt-4">
               <Link href="/admin/analyse/kennzahlen">
-                <Button variant="outline" size="sm" className="text-warning-700 border-warning-300 hover:bg-warning-100">
+                <Button variant="outline" size="sm" className="text-warning-700 dark:text-warning-300 border-warning-300 hover:bg-warning-100 dark:hover:bg-warning-900/30">
                   Alle Kennzahlen anzeigen
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -216,7 +216,7 @@ export default async function AnalysePage() {
         {highPriorityInsights.length > 0 && (
           <Card className="border-error-200">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-error-700">
+              <CardTitle className="text-lg flex items-center gap-2 text-error-700 dark:text-error-400">
                 <AlertCircle className="w-5 h-5" />
                 Handlungsbedarf
               </CardTitle>
@@ -228,7 +228,7 @@ export default async function AnalysePage() {
                     <div className="font-medium">{insight.title}</div>
                     <div className="text-sm text-muted-foreground">{insight.description}</div>
                     {insight.recommendation && (
-                      <div className="text-sm text-error-700 mt-1">
+                      <div className="text-sm text-error-700 dark:text-error-400 mt-1">
                         → {insight.recommendation}
                       </div>
                     )}
@@ -243,7 +243,7 @@ export default async function AnalysePage() {
         {positiveInsights.length > 0 && (
           <Card className="border-primary-200">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-primary-700">
+              <CardTitle className="text-lg flex items-center gap-2 text-primary-700 dark:text-primary-300">
                 <CheckCircle2 className="w-5 h-5" />
                 Positive Entwicklungen
               </CardTitle>
@@ -255,7 +255,7 @@ export default async function AnalysePage() {
                     <div className="font-medium">{insight.title}</div>
                     <div className="text-sm text-muted-foreground">{insight.description}</div>
                     {insight.implication && (
-                      <div className="text-sm text-primary-700 mt-1">
+                      <div className="text-sm text-primary-700 dark:text-primary-300 mt-1">
                         {insight.implication}
                       </div>
                     )}

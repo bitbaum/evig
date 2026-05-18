@@ -10,7 +10,7 @@ import Heading from '@/components/ui/Heading'
 export function AIAnalysisLoader() {
   return (
     <div className="text-center py-12">
-      <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
         <Loader2 className="w-8 h-8 text-primary-600 animate-spin" />
       </div>
       <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">

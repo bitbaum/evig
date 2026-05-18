@@ -27,7 +27,7 @@ export function OptionCard({
         onClick ? 'cursor-pointer' : ''
       } ${
         selected
-          ? 'border-primary-500 bg-primary-50 shadow-md'
+          ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 shadow-md'
           : 'border-neutral-200 bg-white hover:border-neutral-300 hover:shadow-sm'
       }`}
     >
@@ -50,14 +50,14 @@ export function OptionCard({
           )}
         </div>
       ) : (
-        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-primary-100 text-primary-600' : 'bg-neutral-100 text-neutral-400'}`}>
+        <div className={`flex aspect-square w-full items-center justify-center rounded-t-xl text-4xl font-bold ${selected ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400' : 'bg-neutral-100 text-neutral-400'}`}>
           {opt.label.charAt(0).toUpperCase()}
         </div>
       )}
 
       {/* Label + controls */}
       <div className="p-3">
-        <p className={`truncate text-sm font-medium ${selected ? 'text-primary-700' : 'text-neutral-800'}`}>
+        <p className={`truncate text-sm font-medium ${selected ? 'text-primary-700 dark:text-primary-300' : 'text-neutral-800'}`}>
           {opt.label}
         </p>
         {opt.description && (

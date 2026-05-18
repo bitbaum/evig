@@ -78,7 +78,7 @@ export default async function RepairPage({ params }: Props) {
           <Heading level={2} className="text-3xl font-bold mb-12 text-center">{t('processHeading')}</Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {process.map((step, index) => (
-              <div key={index} className="bg-neutral-50 rounded-xl p-8">
+              <div key={index} className="bg-neutral-50 dark:bg-neutral-800/50 rounded-xl p-8">
                 <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
                   {index + 1}
                 </div>
@@ -120,7 +120,7 @@ export default async function RepairPage({ params }: Props) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/contact"
-              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-300 text-lg"
+              className="inline-block bg-white text-primary-800 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
             >
               {t('cta.contact')}
             </Link>

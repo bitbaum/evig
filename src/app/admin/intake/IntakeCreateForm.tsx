@@ -97,9 +97,9 @@ export function IntakeCreateForm({
         <button
           type="button"
           onClick={() => setAiOpen(!aiOpen)}
-          className="w-full flex items-center justify-between p-3 bg-primary-50 hover:bg-primary-100 text-left"
+          className="w-full flex items-center justify-between p-3 bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 text-left"
         >
-          <span className="text-sm font-medium text-primary-800 flex items-center gap-2">
+          <span className="text-sm font-medium text-primary-800 dark:text-primary-300 flex items-center gap-2">
             <Loader2 className="w-4 h-4" />
             KI-Schnelleingabe
           </span>
@@ -169,14 +169,14 @@ export function IntakeCreateForm({
                   <button
                     type="button"
                     onClick={onStopVoiceRecording}
-                    className="flex items-center gap-2 px-4 py-3 bg-error-50 border-2 border-error-300 rounded-lg w-full justify-center text-sm text-error-700 animate-pulse"
+                    className="flex items-center gap-2 px-4 py-3 bg-error-50 dark:bg-error-900/20 border-2 border-error-300 rounded-lg w-full justify-center text-sm text-error-700 dark:text-error-400 animate-pulse"
                   >
                     <Mic className="w-5 h-5" />
                     Aufnahme stoppen
                   </button>
                 )}
                 {voiceState === 'processing' && (
-                  <div className="flex items-center gap-2 px-4 py-3 bg-primary-50 rounded-lg justify-center text-sm text-primary-700">
+                  <div className="flex items-center gap-2 px-4 py-3 bg-primary-50 dark:bg-primary-900/20 rounded-lg justify-center text-sm text-primary-700 dark:text-primary-300">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Verarbeite Sprache...
                   </div>
@@ -197,7 +197,7 @@ export function IntakeCreateForm({
 
             {/* Error */}
             {aiError && (
-              <div className="flex items-center gap-2 text-sm text-error-600 bg-error-50 p-2 rounded">
+              <div className="flex items-center gap-2 text-sm text-error-600 dark:text-error-400 bg-error-50 dark:bg-error-900/20 p-2 rounded">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 {aiError}
               </div>
@@ -284,7 +284,7 @@ export function IntakeCreateForm({
       )}
 
       {/* Donation Toggle */}
-      <div className="border rounded-lg p-4 bg-primary-50">
+      <div className="border rounded-lg p-4 bg-primary-50 dark:bg-primary-900/20">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"

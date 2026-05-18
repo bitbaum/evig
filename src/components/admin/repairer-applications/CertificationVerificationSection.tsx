@@ -47,12 +47,12 @@ export function CertificationVerificationSection({
                             {cert.certificationTypeName || cert.customName}
                           </h6>
                           {cert.category && (
-                            <span className="px-2 py-1 bg-primary-100 text-primary-800 rounded-full text-xs">
+                            <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs">
                               {cert.category}
                             </span>
                           )}
                           {cert.isExpired && (
-                            <span className="px-2 py-1 bg-error-100 text-error-800 rounded-full text-xs">
+                            <span className="px-2 py-1 bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-400 rounded-full text-xs">
                               {CERTIFICATION_STATUS_LABELS.expired}
                             </span>
                           )}
@@ -91,7 +91,7 @@ export function CertificationVerificationSection({
                         </div>
 
                         {cert.adminNotes && (
-                          <div className="mt-2 p-2 bg-primary-50 rounded text-sm text-primary-800">
+                          <div className="mt-2 p-2 bg-primary-50 dark:bg-primary-900/20 rounded text-sm text-primary-800 dark:text-primary-300">
                             <strong>Admin-Notiz:</strong> {cert.adminNotes}
                           </div>
                         )}

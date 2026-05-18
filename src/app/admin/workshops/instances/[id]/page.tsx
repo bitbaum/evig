@@ -72,8 +72,8 @@ export default function AdminWorkshopInstanceDetailPage({
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-error-50 border border-error-200 rounded-lg p-8 text-center">
-            <p className="text-error-800">{error || 'Termin nicht gefunden'}</p>
+          <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-8 text-center">
+            <p className="text-error-800 dark:text-error-400">{error || 'Termin nicht gefunden'}</p>
             <Link
               href="/admin/workshops/instances"
               className="mt-4 inline-flex items-center text-error-600 hover:text-error-800"
@@ -149,15 +149,15 @@ export default function AdminWorkshopInstanceDetailPage({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error && (
-          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-error-800">{error}</p>
+          <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4 mb-6">
+            <p className="text-sm text-error-800 dark:text-error-400">{error}</p>
           </div>
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary-100 rounded-lg">
+              <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
                 <CheckCircle className="w-5 h-5 text-primary-600" />
               </div>
               <div>
@@ -169,7 +169,7 @@ export default function AdminWorkshopInstanceDetailPage({
 
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-warning-100 rounded-lg">
+              <div className="p-2 bg-warning-100 dark:bg-warning-900/30 rounded-lg">
                 <Clock className="w-5 h-5 text-warning-600" />
               </div>
               <div>
@@ -181,7 +181,7 @@ export default function AdminWorkshopInstanceDetailPage({
 
           <div className="bg-white rounded-xl shadow-sm border p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-error-100 rounded-lg">
+              <div className="p-2 bg-error-100 dark:bg-error-900/30 rounded-lg">
                 <XCircle className="w-5 h-5 text-error-600" />
               </div>
               <div>

@@ -113,7 +113,7 @@ export function InstanceList({
                   {instance.current_participants === 0 && (
                     <button
                       onClick={() => onDelete(instance.id)}
-                      className="inline-flex items-center px-3 py-2 border border-error-300 rounded-lg text-sm font-medium text-error-700 hover:bg-error-50"
+                      className="inline-flex items-center px-3 py-2 border border-error-300 rounded-lg text-sm font-medium text-error-700 hover:bg-error-50 dark:hover:bg-error-900/20"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

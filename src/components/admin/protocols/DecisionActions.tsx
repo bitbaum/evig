@@ -234,8 +234,8 @@ export default function DecisionActions({
               disabled={loading === 'vote'}
               className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'up'
-                  ? 'bg-primary-100 border-primary-300 text-primary-800'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-primary-50 hover:border-primary-200'
+                  ? 'bg-primary-100 dark:bg-primary-900/30 border-primary-300 text-primary-800 dark:text-primary-300'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-200'
               } disabled:opacity-50`}
             >
               {loading === 'vote' ? (
@@ -250,8 +250,8 @@ export default function DecisionActions({
               disabled={loading === 'vote'}
               className={`inline-flex items-center gap-1 px-2.5 py-1 text-sm rounded-md border transition-colors ${
                 currentUserVote === 'down'
-                  ? 'bg-error-100 border-error-300 text-error-800'
-                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-error-50 hover:border-error-200'
+                  ? 'bg-error-100 dark:bg-error-900/30 border-error-300 text-error-800 dark:text-error-400'
+                  : 'bg-white border-neutral-200 text-neutral-600 hover:bg-error-50 dark:hover:bg-error-900/20 hover:border-error-200'
               } disabled:opacity-50`}
             >
               <ThumbsDown className="w-3.5 h-3.5" />
@@ -306,7 +306,7 @@ export default function DecisionActions({
               <button
                 onClick={handlePropose}
                 disabled={loading === 'propose'}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-primary-50 text-primary-700 border border-primary-200 rounded-md hover:bg-primary-100 disabled:opacity-50"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 border border-primary-200 rounded-md hover:bg-primary-100 dark:hover:bg-primary-900/30 disabled:opacity-50"
               >
                 {loading === 'propose' ? (
                   <Loader2 className="w-3 h-3 animate-spin" />

@@ -67,14 +67,14 @@ export interface OSSAlternative {
 // ---------------------------------------------------------------------------
 
 export const MATURITY_CONFIG: Record<Maturity, { label: string; color: string }> = {
-  established: { label: 'Etabliert', color: 'bg-primary-100 text-primary-800' },
+  established: { label: 'Etabliert', color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
   growing: { label: 'Wachsend', color: 'bg-neutral-100 text-neutral-800' },
-  emerging: { label: 'Aufkommend', color: 'bg-warning-100 text-warning-800' },
+  emerging: { label: 'Aufkommend', color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200' },
 }
 
 export const MIGRATION_DIFFICULTY_CONFIG: Record<MigrationDifficulty, { label: string; color: string; description: string }> = {
-  easy: { label: 'Einfach', color: 'bg-primary-100 text-primary-800', description: 'Direkter Umstieg, kaum Einarbeitung nötig' },
-  medium: { label: 'Mittel', color: 'bg-warning-100 text-warning-800', description: 'Etwas Einarbeitung nötig, aber machbar' },
+  easy: { label: 'Einfach', color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300', description: 'Direkter Umstieg, kaum Einarbeitung nötig' },
+  medium: { label: 'Mittel', color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200', description: 'Etwas Einarbeitung nötig, aber machbar' },
   advanced: { label: 'Anspruchsvoll', color: 'bg-error-100 text-error-800', description: 'Deutliche Unterschiede, Einarbeitung erforderlich' },
 }
 

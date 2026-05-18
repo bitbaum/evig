@@ -51,8 +51,8 @@ export default function WorkshopProposalDetailPage() {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-error-50 border border-error-200 rounded-lg p-6">
-            <p className="text-error-800">{error || 'Vorschlag nicht gefunden'}</p>
+          <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-6">
+            <p className="text-error-800 dark:text-error-400">{error || 'Vorschlag nicht gefunden'}</p>
             <Link
               href="/admin/workshops"
               className="inline-flex items-center mt-4 text-primary-600 hover:text-primary-700"

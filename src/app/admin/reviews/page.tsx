@@ -61,12 +61,12 @@ export default function AdminReviewsPage() {
 
   if (error && filteredReviews.length === 0) {
     return (
-      <div className="bg-error-50 border border-error-200 rounded-lg p-4">
+      <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4">
         <div className="flex">
           <XCircle className="w-5 h-5 text-error-400" />
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-error-800">Fehler beim Laden</Heading>
-            <p className="text-sm text-error-700 mt-1">{error}</p>
+            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-400">Fehler beim Laden</Heading>
+            <p className="text-sm text-error-700 dark:text-error-400 mt-1">{error}</p>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function AdminReviewsPage() {
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedStatus === status
-                    ? 'bg-primary-100 text-primary-800'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
                     : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}
               >
@@ -118,8 +118,8 @@ export default function AdminReviewsPage() {
       </AdminFilterBar>
 
       {error && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-4">
-          <p className="text-error-800">{error}</p>
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4">
+          <p className="text-error-800 dark:text-error-400">{error}</p>
         </div>
       )}
 
@@ -227,7 +227,7 @@ export default function AdminReviewsPage() {
                         onClick={() => startModeration(review.id, 'flag_spam')}
                         disabled={actionInProgress === review.id}
                         aria-label="Als Spam markieren"
-                        className="min-h-[2.75rem] px-2 py-1 bg-warning-100 text-warning-700 rounded text-xs hover:bg-warning-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
+                        className="min-h-[2.75rem] px-2 py-1 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded text-xs hover:bg-warning-200 dark:hover:bg-warning-900/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1"
                       >
                         <Flag className="w-3 h-3" /> Spam
                       </button>

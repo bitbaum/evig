@@ -54,7 +54,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
       />
 
       {error && (
-        <div className="p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">{error}</div>
+        <div className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300">{error}</div>
       )}
 
       {/* Step 1: Setup */}
@@ -184,7 +184,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
             <div className="flex items-center justify-between mt-1">
               <div className="flex items-center gap-2">
                 {contentFormat && (
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-primary-100 text-primary-700' : 'bg-neutral-100 text-neutral-600'}`}>
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'bg-neutral-100 text-neutral-600'}`}>
                     {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
                   </span>
                 )}

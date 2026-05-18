@@ -71,7 +71,7 @@ export function HelpersTab({
                     <Link href={`/admin/users/${h.user_id}`} className="font-medium text-primary-600 hover:underline">
                       {h.helper_name || h.helper_email}
                     </Link>
-                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-primary-100 text-primary-700">Gratis</span>}
+                    {h.accepts_gratis && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Gratis</span>}
                     {h.accepts_kulturlegi && <span className="ml-1 px-1 py-0.5 text-[10px] rounded bg-neutral-100 text-neutral-700">KulturLegi</span>}
                   </div>
                 </td>
@@ -88,11 +88,11 @@ export function HelpersTab({
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-1">
                     {h.suspended_at ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-error-100 text-error-700">Gesperrt</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400">Gesperrt</span>
                     ) : h.is_verified ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">Verifiziert</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Verifiziert</span>
                     ) : h.is_active ? (
-                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-700">Aktiv</span>
+                      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">Aktiv</span>
                     ) : (
                       <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-500">Inaktiv</span>
                     )}

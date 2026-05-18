@@ -50,8 +50,8 @@ export default async function DigestPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
-          <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-            <BarChart3 className="w-6 h-6 text-primary-600" />
+          <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+            <BarChart3 className="w-6 h-6 text-primary-600 dark:text-primary-300" />
           </div>
           <div>
             <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">

@@ -115,7 +115,7 @@ export default async function WirkungPage() {
           </Button>
         </Link>
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary-100 rounded-lg">
+          <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
             <Target className="w-6 h-6 text-primary-600" />
           </div>
           <div>
@@ -153,9 +153,9 @@ export default async function WirkungPage() {
       <div className="grid md:grid-cols-3 gap-6">
         {impactAreas.map(area => {
           const bgColor = {
-            green: 'bg-primary-100 text-primary-600',
+            green: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600',
             blue: 'bg-neutral-100 text-neutral-600',
-            purple: 'bg-primary-100 text-primary-600',
+            purple: 'bg-primary-100 dark:bg-primary-900/30 text-primary-600',
           }[area.color]
 
           const pendingCount = area.metrics.filter(m => m.status === 'needs_data').length
@@ -169,7 +169,7 @@ export default async function WirkungPage() {
                 <CardTitle className="flex items-center gap-2">
                   {area.title}
                   {pendingCount > 0 && (
-                    <span className="text-xs font-normal px-2 py-0.5 bg-warning-100 text-warning-700 rounded">
+                    <span className="text-xs font-normal px-2 py-0.5 bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200 rounded">
                       {pendingCount} ausstehend
                     </span>
                   )}

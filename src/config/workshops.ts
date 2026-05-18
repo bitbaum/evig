@@ -141,7 +141,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "beginner",
     name: "Anfänger",
-    badgeClass: "bg-primary-100 text-primary-800",
+    badgeClass: "bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300",
   },
   {
     id: "intermediate",
@@ -179,9 +179,9 @@ export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, str
 };
 
 export const WORKSHOP_INSTANCE_STATUS_COLORS: Record<WorkshopInstanceStatus, string> = {
-  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-primary-100 text-primary-800',
+  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   [WORKSHOP_INSTANCE_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
-  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-primary-100 text-primary-800',
+  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
 };
 
 /**

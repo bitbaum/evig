@@ -82,7 +82,7 @@ export function VoteAIAdvisor({
   const quickQuestions = Object.values(VOTING_ADVISOR_PROMPTS.quickQuestions)
 
   return (
-    <div className="rounded-lg border border-info-200 bg-info-50">
+    <div className="rounded-lg border border-info-200 bg-info-50 dark:bg-info-900/20">
       {/* Header */}
       <button
         type="button"
@@ -110,7 +110,7 @@ export function VoteAIAdvisor({
                 type="button"
                 onClick={() => ask(q.question)}
                 disabled={loading}
-                className="px-2.5 py-1.5 rounded-full bg-info-100 text-info-700 text-xs font-medium hover:bg-info-200 disabled:opacity-50 transition-colors touch-manipulation"
+                className="px-2.5 py-1.5 rounded-full bg-info-100 dark:bg-info-900/30 text-info-700 dark:text-info-300 text-xs font-medium hover:bg-info-200 dark:hover:bg-info-900/40 disabled:opacity-50 transition-colors touch-manipulation"
               >
                 {q.label}
               </button>
@@ -144,7 +144,7 @@ export function VoteAIAdvisor({
 
           {/* Error */}
           {error && (
-            <div className="flex items-start gap-2 bg-error-50 border border-error-200 text-error-700 px-3 py-2 rounded-lg text-sm">
+            <div className="flex items-start gap-2 bg-error-50 dark:bg-error-900/20 border border-error-200 text-error-700 dark:text-error-400 px-3 py-2 rounded-lg text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>

@@ -38,7 +38,7 @@ export function ParticipantSelector({
               onClick={() => onScopeChange(scope)}
               className={`rounded-lg border-2 p-2.5 text-left transition ${
                 participantScope === scope
-                  ? 'border-primary-500 bg-primary-50'
+                  ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
                   : 'border-neutral-200 hover:border-neutral-300 bg-white'
               }`}
             >

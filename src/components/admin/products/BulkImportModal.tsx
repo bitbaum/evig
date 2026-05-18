@@ -67,7 +67,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
               </div>
 
               {/* CSV Format Info */}
-              <div className="bg-primary-50 rounded-lg p-4">
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4">
                 <Heading level={4} className="font-medium text-neutral-900 mb-2">
                   Erforderliches CSV-Format:
                 </Heading>
@@ -78,7 +78,7 @@ export function BulkImportModal({ isOpen, onClose }: BulkImportModalProps) {
                   <br />
                   &quot;Samsung Monitor 27&quot;&quot;,&quot;4K Monitor&quot;,449.00,&quot;Monitore&quot;,&quot;Samsung&quot;,&quot;https://...&quot;
                 </div>
-                <p className="text-xs text-primary-700 mt-2">
+                <p className="text-xs text-primary-700 dark:text-primary-300 mt-2">
                   Hinweis: Die erste Zeile muss die Spaltenüberschriften enthalten
                 </p>
               </div>

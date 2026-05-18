@@ -98,9 +98,9 @@ export interface ConditionBadge {
 }
 
 const CONDITION_BADGE_COLORS: Record<string, string> = {
-  new: 'bg-primary-100 text-primary-800',
-  like_new: 'bg-primary-100 text-primary-800',
-  good: 'bg-warning-100 text-warning-800',
+  new: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  like_new: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  good: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   fair: 'bg-orange-100 text-orange-800',
   poor: 'bg-error-100 text-error-800',
   defect: 'bg-neutral-100 text-neutral-800',

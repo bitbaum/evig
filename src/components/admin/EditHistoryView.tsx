@@ -72,7 +72,7 @@ function EditHistoryEntryView({
   );
 
   return (
-    <div className="border-l-2 border-primary-400 pl-4 py-2 bg-primary-50/30">
+    <div className="border-l-2 border-primary-400 pl-4 py-2 bg-primary-50/30 dark:bg-primary-900/20">
       {/* Header: Editor name and timestamp */}
       <div className="flex items-center justify-between mb-2">
         <span className="font-medium text-neutral-900">{entry.editor_name}</span>

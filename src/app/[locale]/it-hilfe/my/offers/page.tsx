@@ -198,7 +198,7 @@ export default function MyOffersPage() {
                       <button
                         onClick={() => setPendingWithdraw(offer)}
                         disabled={withdrawingId === offer.id}
-                        className="px-4 py-2 min-h-[44px] bg-error-50 text-error-700 rounded-lg text-sm font-medium hover:bg-error-100 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
+                        className="px-4 py-2 min-h-[44px] bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-sm font-medium hover:bg-error-100 dark:hover:bg-error-900/30 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"
                       >
                         {withdrawingId === offer.id ? t('withdrawingButton') : t('withdrawButton')}
                       </button>

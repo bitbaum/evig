@@ -101,9 +101,9 @@ function NewStaticPageContent() {
 
       {/* Error */}
       {error && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-4 flex items-center gap-2">
-          <AlertCircle className="w-5 h-5 text-error-600 flex-shrink-0" />
-          <p className="text-error-800">{error}</p>
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 text-error-600 dark:text-error-400 flex-shrink-0" />
+          <p className="text-error-800 dark:text-error-400">{error}</p>
         </div>
       )}
 

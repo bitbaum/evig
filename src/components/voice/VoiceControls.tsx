@@ -110,7 +110,7 @@ export function VoiceControls({
             type="button"
             onClick={onDiscard}
             variant="outline"
-            className="w-12 h-12 rounded-full text-error-600 border-error-300 hover:bg-error-50"
+            className="w-12 h-12 rounded-full text-error-600 border-error-300 hover:bg-error-50 dark:hover:bg-error-900/20"
           >
             <RotateCcw className="w-5 h-5" />
           </Button>
@@ -169,7 +169,7 @@ export function VoiceControls({
           >
             <RotateCcw className="w-5 h-5" />
           </Button>
-          <div className="w-16 h-16 rounded-full bg-error-100 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-error-100 dark:bg-error-900/20 flex items-center justify-center">
             <AlertCircle className="w-8 h-8 text-error-600" />
           </div>
         </>

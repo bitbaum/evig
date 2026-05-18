@@ -140,12 +140,12 @@ export default async function MembershipPage() {
                       </td>
                       <td className="px-4 py-3">
                         {paid ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 text-primary-800 rounded-full text-xs font-medium">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 rounded-full text-xs font-medium">
                             <CheckCircle className="w-3 h-3" />
                             Bezahlt
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-100 text-secondary-800 rounded-full text-xs font-medium">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-secondary-100 dark:bg-secondary-900/30 text-secondary-800 dark:text-secondary-300 rounded-full text-xs font-medium">
                             <AlertCircle className="w-3 h-3" />
                             Offen
                           </span>

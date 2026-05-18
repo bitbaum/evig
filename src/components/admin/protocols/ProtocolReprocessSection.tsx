@@ -33,8 +33,8 @@ export function ProtocolReprocessSection({
     : 'Transkript erneut verarbeiten'
 
   return (
-    <details id="protocol-step-input" className="bg-warning-50 rounded-lg border border-warning-200">
-      <summary className="p-4 cursor-pointer text-sm font-medium text-warning-800 hover:text-warning-900">
+    <details id="protocol-step-input" className="bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200">
+      <summary className="p-4 cursor-pointer text-sm font-medium text-warning-800 dark:text-warning-200 hover:text-warning-900">
         Nicht zufrieden? {summaryLabel}
       </summary>
       <div className="px-4 pb-4 space-y-3">
@@ -90,7 +90,7 @@ export function ProtocolReprocessSection({
         <button
           onClick={onProcess}
           disabled={processing || (inputMethod === 'audio' ? !audioFile : transcript.length < reprocessMinLength)}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-warning-800 border border-warning-300 rounded-lg hover:bg-warning-100 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 text-sm text-warning-800 dark:text-warning-200 border border-warning-300 rounded-lg hover:bg-warning-100 dark:hover:bg-warning-900/30 disabled:opacity-50"
         >
           {processing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
           Erneut verarbeiten

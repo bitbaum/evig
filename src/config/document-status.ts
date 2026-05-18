@@ -29,10 +29,10 @@ export interface DocumentStatusBadge {
 }
 
 export const DOCUMENT_STATUS_BADGES: Record<string, DocumentStatusBadge> = {
-  [DOCUMENT_STATUS.APPROVED]: { label: DOCUMENT_STATUS_LABELS.approved, bg: 'bg-primary-100', color: 'text-primary-800' },
-  [DOCUMENT_STATUS.IN_REVIEW]: { label: DOCUMENT_STATUS_LABELS.in_review, bg: 'bg-warning-100', color: 'text-warning-800' },
-  [DOCUMENT_STATUS.INCOMPLETE]: { label: DOCUMENT_STATUS_LABELS.incomplete, bg: 'bg-error-100', color: 'text-error-800' },
-  [DOCUMENT_STATUS.REJECTED]: { label: DOCUMENT_STATUS_LABELS.rejected, bg: 'bg-error-100', color: 'text-error-800' },
+  [DOCUMENT_STATUS.APPROVED]: { label: DOCUMENT_STATUS_LABELS.approved, bg: 'bg-primary-100 dark:bg-primary-900/30', color: 'text-primary-800 dark:text-primary-300' },
+  [DOCUMENT_STATUS.IN_REVIEW]: { label: DOCUMENT_STATUS_LABELS.in_review, bg: 'bg-warning-100 dark:bg-warning-900/30', color: 'text-warning-800 dark:text-warning-200' },
+  [DOCUMENT_STATUS.INCOMPLETE]: { label: DOCUMENT_STATUS_LABELS.incomplete, bg: 'bg-error-100 dark:bg-error-900/30', color: 'text-error-800 dark:text-error-300' },
+  [DOCUMENT_STATUS.REJECTED]: { label: DOCUMENT_STATUS_LABELS.rejected, bg: 'bg-error-100 dark:bg-error-900/30', color: 'text-error-800 dark:text-error-300' },
   [DOCUMENT_STATUS.PENDING]: { label: DOCUMENT_STATUS_LABELS.pending, bg: 'bg-neutral-100', color: 'text-neutral-800' },
 };
 

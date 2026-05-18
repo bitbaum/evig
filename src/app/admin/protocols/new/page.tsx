@@ -32,7 +32,7 @@ export default async function NewProtocolPage() {
         </Link>
         <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
             <FileText className="w-5 h-5 text-primary-600" />
           </div>
           <div>

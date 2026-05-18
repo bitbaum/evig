@@ -21,9 +21,9 @@ export const DECISION_STATUS_CONFIG: Record<
   { label: string; color: string }
 > = {
   draft: { label: 'Entwurf', color: 'bg-neutral-100 text-neutral-700' },
-  discussion: { label: 'Diskussion', color: 'bg-primary-100 text-primary-700' },
-  voting: { label: 'Abstimmung', color: 'bg-warning-100 text-warning-700' },
-  closed: { label: 'Abgeschlossen', color: 'bg-primary-100 text-primary-700' },
+  discussion: { label: 'Diskussion', color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
+  voting: { label: 'Abstimmung', color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200' },
+  closed: { label: 'Abgeschlossen', color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   cancelled: { label: 'Abgebrochen', color: 'bg-error-100 text-error-700' },
 };
 
@@ -353,7 +353,7 @@ export const CONSENT_RESPONSE_CONFIG: Record<
   ConsentResponse,
   { label: string; color: string }
 > = {
-  agree: { label: 'Zustimmen', color: 'bg-primary-100 text-primary-700' },
+  agree: { label: 'Zustimmen', color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   abstain: { label: 'Enthalten', color: 'bg-neutral-100 text-neutral-700' },
   disagree: { label: 'Ablehnen', color: 'bg-orange-100 text-orange-700' },
   block: { label: 'Blockieren', color: 'bg-error-100 text-error-700' },
@@ -390,7 +390,7 @@ export const COMMENT_POSITION_CONFIG: Record<
   CommentPosition,
   { label: string; color: string }
 > = {
-  for: { label: 'Dafür', color: 'bg-primary-100 text-primary-700' },
+  for: { label: 'Dafür', color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   against: { label: 'Dagegen', color: 'bg-error-100 text-error-700' },
   question: { label: 'Frage', color: 'bg-neutral-100 text-neutral-700' },
   info: { label: 'Information', color: 'bg-purple-100 text-purple-700' },

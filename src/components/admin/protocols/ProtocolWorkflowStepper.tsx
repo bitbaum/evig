@@ -31,9 +31,9 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
               onClick={() => onScrollToStep(step.id)}
               className={`rounded-lg border px-3 py-2 text-xs text-left transition-colors ${
                 isCurrent
-                  ? 'border-primary-300 bg-primary-50 text-primary-800'
+                  ? 'border-primary-300 bg-primary-50 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300'
                   : isDone
-                  ? 'border-primary-200 bg-primary-50 text-primary-700 hover:bg-primary-100'
+                  ? 'border-primary-200 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-900/30'
                   : 'border-neutral-200 bg-neutral-50 text-neutral-500 hover:bg-neutral-100'
               }`}
             >
@@ -44,10 +44,10 @@ export function ProtocolWorkflowStepper({ currentStepIndex, workflowProgress, on
         })}
       </div>
       {workflowProgress.nextStepId && (
-        <div className="rounded-lg border border-warning-200 bg-warning-50 px-3 py-2 text-sm text-warning-900">
+        <div className="rounded-lg border border-warning-200 bg-warning-50 dark:bg-warning-900/20 px-3 py-2 text-sm text-warning-900 dark:text-warning-200">
           <p className="font-medium">Nächster Schritt: {PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === workflowProgress.nextStepId)?.label}</p>
-          {workflowProgress.ctaHint && <p className="text-warning-800">{workflowProgress.ctaHint}</p>}
-          {workflowProgress.ctaLabel && <p className="text-warning-800">Aktion: {workflowProgress.ctaLabel}</p>}
+          {workflowProgress.ctaHint && <p className="text-warning-800 dark:text-warning-200">{workflowProgress.ctaHint}</p>}
+          {workflowProgress.ctaLabel && <p className="text-warning-800 dark:text-warning-200">Aktion: {workflowProgress.ctaLabel}</p>}
         </div>
       )}
     </div>

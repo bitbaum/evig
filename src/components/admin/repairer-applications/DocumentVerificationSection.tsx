@@ -74,14 +74,14 @@ export function DocumentVerificationSection({
                           <button
                             onClick={() => onOpenDialog('approve_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs hover:bg-primary-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded text-xs hover:bg-primary-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Genehmigen'}
                           </button>
                           <button
                             onClick={() => onOpenDialog('reject_doc', doc.id)}
                             disabled={documentActionLoading === doc.id}
-                            className="px-2 py-1 bg-error-100 text-error-700 rounded text-xs hover:bg-error-200 disabled:opacity-50"
+                            className="px-2 py-1 bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-400 rounded text-xs hover:bg-error-200 disabled:opacity-50"
                           >
                             {documentActionLoading === doc.id ? '...' : 'Ablehnen'}
                           </button>
@@ -105,11 +105,11 @@ export function DocumentVerificationSection({
               <h5 className="text-sm font-medium text-error-700 mb-2">Fehlende erforderliche Dokumente</h5>
               <div className="space-y-2">
                 {missingRequiredDocuments.map((docType) => (
-                  <div key={docType.id} className="flex items-center gap-3 p-3 bg-error-50 rounded-lg">
+                  <div key={docType.id} className="flex items-center gap-3 p-3 bg-error-50 dark:bg-error-900/20 rounded-lg">
                     <div className="w-3 h-3 rounded-full bg-error-500" />
                     <div>
-                      <p className="text-sm font-medium text-error-800">{docType.name}</p>
-                      <p className="text-xs text-error-600">{docType.description}</p>
+                      <p className="text-sm font-medium text-error-800 dark:text-error-400">{docType.name}</p>
+                      <p className="text-xs text-error-600 dark:text-error-400">{docType.description}</p>
                     </div>
                   </div>
                 ))}

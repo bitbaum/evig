@@ -24,7 +24,7 @@ export const REVIEW_STATUS_LABELS: Record<string, string> = {
 }
 
 export const REVIEW_STATUS_BADGES: Record<string, string> = {
-  [REVIEW_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
+  [REVIEW_STATUS.PUBLISHED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   [REVIEW_STATUS.PENDING_MODERATION]: 'bg-orange-100 text-orange-800',
   [REVIEW_STATUS.HIDDEN]: 'bg-error-100 text-error-800',
   [REVIEW_STATUS.DELETED]: 'bg-neutral-100 text-neutral-800',

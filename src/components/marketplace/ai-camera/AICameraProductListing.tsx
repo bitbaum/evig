@@ -99,7 +99,7 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
             ) : (
               <>
                 {analysisError && (
-                  <div className="mb-4 p-3 bg-warning-50 border border-warning-200 rounded-lg text-sm text-warning-800">
+                  <div className="mb-4 p-3 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 rounded-lg text-sm text-warning-800 dark:text-warning-200">
                     {analysisError}
                   </div>
                 )}
@@ -124,7 +124,7 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
     <div className="p-6 border-b border-neutral-200">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
             <Zap className="w-5 h-5 text-primary-600" />
           </div>
           <div>

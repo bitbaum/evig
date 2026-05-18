@@ -178,8 +178,8 @@ export default function LocationDetailPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Error Message */}
         {error && (
-          <div className="bg-error-50 border border-error-200 rounded-lg p-4">
-            <p className="text-error-800">{error}</p>
+          <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4">
+            <p className="text-error-800 dark:text-error-400">{error}</p>
           </div>
         )}
 

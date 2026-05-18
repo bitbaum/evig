@@ -40,7 +40,7 @@ export function LearningObjectivesSection({
             <button
               type="button"
               onClick={() => onRemove(index)}
-              className={`${responsiveButtons.small} text-error-600 hover:text-error-700 hover:bg-error-50 rounded-lg transition-colors`}
+              className={`${responsiveButtons.small} text-error-600 hover:text-error-700 hover:bg-error-50 dark:hover:bg-error-900/20 rounded-lg transition-colors`}
             >
               {t('sections.learningObjectives.remove')}
             </button>

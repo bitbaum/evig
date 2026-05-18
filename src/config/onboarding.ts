@@ -108,7 +108,7 @@ export const REPAIRER_ONBOARDING: OnboardingConfig = {
   },
   header: {
     icon: Wrench,
-    iconBgColor: 'bg-primary-100',
+    iconBgColor: 'bg-primary-100 dark:bg-primary-900/30',
     iconColor: 'text-primary-600',
     title: 'Wirst du Reparatur-Experte bei Revamp-IT',
     subtitle: 'Biete deine Reparaturdienste an und verbinde dich mit Kunden, die deine Fachkenntnisse brauchen.'

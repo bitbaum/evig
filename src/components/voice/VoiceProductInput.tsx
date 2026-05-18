@@ -146,9 +146,9 @@ export function VoiceProductInput({
       case 'success':
         return 'bg-primary-500 hover:bg-primary-600 text-white'
       case 'error':
-        return 'bg-error-100 hover:bg-error-200 text-error-700 border-error-300'
+        return 'bg-error-100 hover:bg-error-200 text-error-700 border-error-300 dark:bg-error-900/30 dark:hover:bg-error-900/40 dark:text-error-300'
       default:
-        return 'bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-300'
+        return 'bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-300 dark:bg-primary-900/30 dark:hover:bg-primary-900/40 dark:text-primary-300'
     }
   }
 
@@ -198,14 +198,14 @@ export function VoiceProductInput({
 
       {/* Transcription preview */}
       {transcribedText && state === 'success' && (
-        <div className="text-sm text-primary-700 bg-primary-50 px-3 py-2 rounded-md">
+        <div className="text-sm text-primary-700 bg-primary-50 px-3 py-2 rounded-md dark:bg-primary-900/20 dark:text-primary-300">
           <span className="font-medium">{t('transcribedPrefix')}</span> {transcribedText}
         </div>
       )}
 
       {/* Error message */}
       {errorMessage && state === 'error' && (
-        <div className="text-sm text-error-700 bg-error-50 px-3 py-2 rounded-md">
+        <div className="text-sm text-error-700 bg-error-50 px-3 py-2 rounded-md dark:bg-error-900/20 dark:text-error-300">
           {errorMessage}
         </div>
       )}

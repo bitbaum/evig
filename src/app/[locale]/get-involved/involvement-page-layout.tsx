@@ -27,7 +27,7 @@ export async function InvolvementPageLayout({
       <ResponsiveHero title={title} description={description}>
         <a
           href={ctaHref}
-          className={`${responsiveButtons.primary} bg-white text-primary-800 hover:bg-primary-50 text-center`}
+          className={`${responsiveButtons.primary} bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-center`}
         >
           {ctaText}
         </a>
@@ -60,7 +60,7 @@ export async function InvolvementPageLayout({
             </Link>
             <Link
               href="/get-involved"
-              className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50`}
+              className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20`}
             >
               {t('exploreOptionsBtn')}
             </Link>

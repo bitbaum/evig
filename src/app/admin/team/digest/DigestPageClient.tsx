@@ -120,8 +120,8 @@ export function DigestPageClient() {
           <div className="grid md:grid-cols-5 gap-4">
             <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-300" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -148,8 +148,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-warning-100 rounded-lg flex items-center justify-center">
-                  <HelpCircle className="w-5 h-5 text-warning-600" />
+                <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
+                  <HelpCircle className="w-5 h-5 text-warning-600 dark:text-warning-200" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -162,8 +162,8 @@ export function DigestPageClient() {
 
             <div className="p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-5 h-5 text-primary-600" />
+                <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-300" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-neutral-900 dark:text-white">
@@ -212,11 +212,11 @@ export function DigestPageClient() {
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                           index === 0
-                            ? 'bg-warning-100 text-warning-700'
+                            ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200'
                             : index === 1
                               ? 'bg-neutral-200 text-neutral-600'
                               : index === 2
-                                ? 'bg-secondary-100 text-secondary-700'
+                                ? 'bg-secondary-100 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-300'
                                 : 'bg-neutral-100 text-neutral-500'
                         }`}
                       >
@@ -262,8 +262,8 @@ export function DigestPageClient() {
                       key={milestone.id}
                       className="flex items-start gap-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06]/50"
                     >
-                      <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Flag className="w-4 h-4 text-primary-600" />
+                      <div className="w-8 h-8 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Flag className="w-4 h-4 text-primary-600 dark:text-primary-300" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-neutral-900 dark:text-neutral-100">

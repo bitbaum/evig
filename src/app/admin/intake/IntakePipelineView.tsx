@@ -55,9 +55,9 @@ export function IntakePipelineView({
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: 'Total', value: statusCounts.total, color: 'bg-neutral-100 text-neutral-800' },
-          { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 text-warning-800' },
-          { label: 'Bereit', value: statusCounts.ready, color: 'bg-primary-100 text-primary-800' },
-          { label: 'Publiziert', value: statusCounts.published, color: 'bg-primary-100 text-primary-800' },
+          { label: 'In Bearbeitung', value: statusCounts.inProgress, color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200' },
+          { label: 'Bereit', value: statusCounts.ready, color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
+          { label: 'Publiziert', value: statusCounts.published, color: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300' },
         ].map((stat) => (
           <div key={stat.label} className={`rounded-lg p-3 ${stat.color}`}>
             <div className="text-2xl font-bold">{stat.value}</div>
@@ -192,15 +192,15 @@ export function IntakePipelineView({
                       </td>
                       <td className="py-2.5">
                         {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 text-primary-800">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
                             <Check className="w-3 h-3" /> Publiziert
                           </span>
                         ) : item.checklist_complete ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 text-primary-800">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
                             Bereit
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-warning-100 text-warning-800">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200">
                             In Bearbeitung
                           </span>
                         )}

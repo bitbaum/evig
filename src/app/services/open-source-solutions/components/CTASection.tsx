@@ -27,7 +27,7 @@ export function CTASection() {
             href="/contact"
             className={cn(
               'inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold transition-colors duration-300 text-base sm:text-lg min-h-[touch] touch-target',
-              'bg-white text-primary-800 hover:bg-primary-50'
+              'bg-white text-primary-800 hover:bg-primary-50 dark:hover:bg-primary-900/20'
             )}
           >
             Starten Sie noch heute

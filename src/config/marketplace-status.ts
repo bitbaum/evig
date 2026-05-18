@@ -19,8 +19,8 @@ export const MARKETPLACE_STATUS_LABELS: Record<string, string> = {
 }
 
 export const MARKETPLACE_STATUS_BADGES: Record<string, string> = {
-  [MARKETPLACE_STATUS.PUBLISHED]: 'bg-primary-100 text-primary-800',
-  [MARKETPLACE_STATUS.DRAFT]: 'bg-warning-100 text-warning-800',
+  [MARKETPLACE_STATUS.PUBLISHED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  [MARKETPLACE_STATUS.DRAFT]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
 }
 
 /**
@@ -57,7 +57,7 @@ export const PRODUCT_STATUS_LABELS: Record<string, string> = {
 }
 
 export const PRODUCT_STATUS_BADGES: Record<string, string> = {
-  [PRODUCT_STATUS.APPROVED]: 'bg-primary-100 text-primary-800',
+  [PRODUCT_STATUS.APPROVED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   [PRODUCT_STATUS.PENDING_REVIEW]: 'bg-orange-100 text-orange-800',
   [PRODUCT_STATUS.REJECTED]: 'bg-error-100 text-error-800',
 }

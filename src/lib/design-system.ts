@@ -179,10 +179,10 @@ export const statusColors = {
     icon: 'text-warning-600',
   },
   error: {
-    bg: 'bg-error-50',
-    text: 'text-error-800',
-    border: 'border-error-200',
-    icon: 'text-error-600',
+    bg: 'bg-error-50 dark:bg-error-900/20',
+    text: 'text-error-800 dark:text-error-300',
+    border: 'border-error-200 dark:border-error-800/30',
+    icon: 'text-error-600 dark:text-error-400',
   },
   info: {
     bg: 'bg-neutral-50',
@@ -275,9 +275,9 @@ export const containerVariants = {
     border: 'border-neutral-200',
   },
   primary: {
-    bg: 'bg-primary-50',
+    bg: 'bg-primary-50 dark:bg-primary-900/20',
     text: 'text-neutral-900',
-    border: 'border-primary-200',
+    border: 'border-primary-200 dark:border-primary-800/30',
   },
 } as const
 

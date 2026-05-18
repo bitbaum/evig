@@ -190,8 +190,8 @@ export default async function TaskAnalyticsPage() {
         </Link>
         <div className="w-px h-6 bg-neutral-300" />
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-            <BarChart3 className="w-5 h-5 text-primary-600" />
+          <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+            <BarChart3 className="w-5 h-5 text-primary-600 dark:text-primary-300" />
           </div>
           <div>
             <Heading level={1} className="text-2xl font-bold text-neutral-900">Aufgaben Analyse</Heading>
@@ -201,9 +201,9 @@ export default async function TaskAnalyticsPage() {
       </div>
 
       {loadError && (
-        <div className="bg-error-50 border border-error-200 rounded-lg p-4 flex items-center gap-3">
+        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-4 flex items-center gap-3">
           <AlertCircle className="w-5 h-5 text-error-500 shrink-0" />
-          <p className="text-error-700">
+          <p className="text-error-700 dark:text-error-400">
             Statistiken konnten nicht geladen werden. Bitte versuche es später erneut.
           </p>
         </div>
@@ -225,8 +225,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary-600" />
+            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-5 h-5 text-primary-600 dark:text-primary-300" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">{stats.completions_today}</p>
@@ -237,8 +237,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-5 h-5 text-primary-600" />
+            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-primary-600 dark:text-primary-300" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">{stats.completions_this_week}</p>
@@ -249,8 +249,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-secondary-600" />
+            <div className="w-10 h-10 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg flex items-center justify-center">
+              <Users className="w-5 h-5 text-secondary-600 dark:text-secondary-300" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">{stats.completions_this_month}</p>
@@ -261,8 +261,8 @@ export default async function TaskAnalyticsPage() {
 
         <div className="bg-white rounded-lg border p-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-primary-600" />
+            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center">
+              <Clock className="w-5 h-5 text-primary-600 dark:text-primary-300" />
             </div>
             <div>
               <p className="text-2xl font-bold text-neutral-900">

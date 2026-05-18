@@ -56,7 +56,7 @@ export default function TaskActionsClient({
       <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Aktionen</Heading>
 
       {error && (
-        <div className="mb-4 p-3 bg-error-50 border border-error-200 rounded-lg text-error-700 text-sm">
+        <div className="mb-4 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300 text-sm">
           {error}
         </div>
       )}
@@ -89,8 +89,8 @@ export default function TaskActionsClient({
 
       {/* Complete Form */}
       {showCompleteForm && (
-        <div className="mt-4 p-4 bg-primary-50 rounded-lg border border-primary-200">
-          <Heading level={3} className="font-medium text-primary-800 mb-3">
+        <div className="mt-4 p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg border border-primary-200">
+          <Heading level={3} className="font-medium text-primary-800 dark:text-primary-200 mb-3">
             Aufgabe als erledigt markieren
           </Heading>
           <div className="space-y-3">
@@ -134,8 +134,8 @@ export default function TaskActionsClient({
 
       {/* Attention Form */}
       {showAttentionForm && (
-        <div className="mt-4 p-4 bg-error-50 rounded-lg border border-error-200">
-          <Heading level={3} className="font-medium text-error-800 mb-3">
+        <div className="mt-4 p-4 bg-error-50 dark:bg-error-900/20 rounded-lg border border-error-200">
+          <Heading level={3} className="font-medium text-error-800 dark:text-error-200 mb-3">
             Aufgabe braucht Aufmerksamkeit
           </Heading>
           <div className="space-y-3">
@@ -170,8 +170,8 @@ export default function TaskActionsClient({
 
       {/* Request Form */}
       {showRequestForm && (
-        <div className="mt-4 p-4 bg-warning-50 rounded-lg border border-warning-200">
-          <Heading level={3} className="font-medium text-warning-800 mb-3">Um Hilfe bitten</Heading>
+        <div className="mt-4 p-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200">
+          <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200 mb-3">Um Hilfe bitten</Heading>
           <div className="space-y-3">
             <FormField label="An wen?" htmlFor="request-target">
               <Select
@@ -222,14 +222,14 @@ export default function TaskActionsClient({
           {!showArchiveConfirm ? (
             <button
               onClick={() => setShowArchiveConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2 text-error-600 border border-error-200 rounded-lg hover:bg-error-50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-error-600 dark:text-error-400 border border-error-200 dark:border-error-800/30 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
             >
               <Archive className="w-4 h-4" />
               Aufgabe archivieren
             </button>
           ) : (
-            <div className="p-4 bg-error-50 rounded-lg border border-error-200">
-              <p className="text-sm text-error-700 mb-3">
+            <div className="p-4 bg-error-50 dark:bg-error-900/20 rounded-lg border border-error-200">
+              <p className="text-sm text-error-700 dark:text-error-300 mb-3">
                 Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Diese wird aus der Liste entfernt.
               </p>
               <div className="flex gap-2">

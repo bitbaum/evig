@@ -103,7 +103,7 @@ export function InventoryProductsTable({
                 key={product.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-primary-50")}
+                className={cn("hover:bg-neutral-50", selectable && selectedIds.has(product.id) && "bg-primary-50 dark:bg-primary-900/20")}
               >
                 {selectable && (
                   <td className="w-10 px-3 py-4">
