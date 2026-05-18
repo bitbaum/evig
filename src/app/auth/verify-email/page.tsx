@@ -51,7 +51,7 @@ function VerifyEmailContent() {
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
         </div>
@@ -131,7 +131,7 @@ function VerifyEmailFallback() {
     <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
         </div>

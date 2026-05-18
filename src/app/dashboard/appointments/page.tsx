@@ -105,10 +105,10 @@ export default function AppointmentsDashboard() {
         </div>
 
         {paymentSuccess && (
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
+          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
-              <p className="text-primary-800 font-medium">{t('paymentSuccess')}</p>
+              <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
             </div>
             <button
               onClick={() => setPaymentSuccess(false)}
@@ -121,8 +121,8 @@ export default function AppointmentsDashboard() {
         )}
 
         {error && (
-          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
-            <p className="text-error-800">{error}</p>
+          <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 mb-6">
+            <p className="text-error-800 dark:text-error-400">{error}</p>
           </div>
         )}
 

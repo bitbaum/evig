@@ -82,7 +82,7 @@ function ResetPasswordContent() {
       <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-error-100 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-error-100 dark:bg-error-900/20 rounded-full flex items-center justify-center">
               <AlertCircle className="w-8 h-8 text-error-600" />
             </div>
           </div>
@@ -120,7 +120,7 @@ function ResetPasswordContent() {
       <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-8 h-8 text-primary-600" />
             </div>
           </div>
@@ -169,9 +169,9 @@ function ResetPasswordContent() {
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
           {/* Error Message */}
           {error && (
-            <div id="reset-password-error" className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg flex items-start gap-3">
+            <div id="reset-password-error" className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-error-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-error-700">{error}</p>
+              <p className="text-sm text-error-700 dark:text-error-400">{error}</p>
             </div>
           )}
 

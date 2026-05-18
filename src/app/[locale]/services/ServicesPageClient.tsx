@@ -92,7 +92,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
             <div className="flex items-center gap-2 mb-2">
               <Heading level={3} className="text-xl sm:text-2xl font-bold">{service.title}</Heading>
               {service.badge && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
                   {service.badge}
                 </span>
               )}
@@ -143,7 +143,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           {service.available && (
             <div className="flex gap-2">
               {bookingStatus === 'booked' ? (
-                <div className="w-full inline-flex items-center justify-center text-primary-600 font-semibold bg-primary-50 px-4 py-2 rounded-lg">
+                <div className="w-full inline-flex items-center justify-center text-primary-600 font-semibold bg-primary-50 dark:bg-primary-900/20 px-4 py-2 rounded-lg">
                   <CheckCircle2 className="w-4 h-4 mr-2" />
                   {t('appointmentRequested')}
                 </div>
@@ -155,7 +155,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : !session?.user ? (
                 <button
                   onClick={() => router.push('/auth/login?callbackUrl=' + encodeURIComponent(window.location.pathname))}
-                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 hover:bg-primary-100 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <Calendar className="w-4 h-4 mr-2" />
                   {t('bookAppointment')}
@@ -172,7 +172,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
               ) : (
                 <Link
                   href={service.href}
-                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 hover:bg-primary-100 px-4 py-2 rounded-lg transition-colors duration-300"
+                  className="flex-1 inline-flex items-center justify-center text-primary-600 hover:text-primary-800 font-semibold bg-primary-50 dark:bg-primary-900/20 hover:bg-primary-100 dark:hover:bg-primary-900/30 px-4 py-2 rounded-lg transition-colors duration-300"
                 >
                   <ArrowRight className="w-4 h-4 mr-2" />
                   {t('learnMore')}

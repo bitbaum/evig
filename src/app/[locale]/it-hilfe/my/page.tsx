@@ -118,7 +118,7 @@ export default function MyRequestsPage() {
               onClick={() => setStatusFilter('')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 statusFilter === ''
-                  ? 'bg-primary-100 text-primary-700'
+                  ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
             >
@@ -130,7 +130,7 @@ export default function MyRequestsPage() {
                 onClick={() => setStatusFilter(s.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   statusFilter === s.id
-                    ? 'bg-primary-100 text-primary-700'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300'
                     : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
                 }`}
               >
@@ -142,8 +142,8 @@ export default function MyRequestsPage() {
 
         {/* Fetch Error */}
         {fetchError && (
-          <div className="bg-error-50 border border-error-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-error-800">{t('fetchError')}</p>
+          <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 mb-6">
+            <p className="text-sm text-error-800 dark:text-error-400">{t('fetchError')}</p>
           </div>
         )}
 

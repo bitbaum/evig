@@ -53,7 +53,7 @@ export default function WorkshopProposalPage() {
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6">
               <GraduationCap className="w-8 h-8 text-primary-600" />
             </div>
             <Heading level={1} className={`${responsiveTypography.section} text-neutral-900 mb-2`}>

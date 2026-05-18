@@ -91,7 +91,7 @@ export default function EditRequestPage() {
 
         <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-primary-100 rounded-lg">
+            <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
               <Wrench className="w-6 h-6 text-primary-600" />
             </div>
             <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
@@ -115,7 +115,7 @@ export default function EditRequestPage() {
                     onClick={() => handleCategorySelect(cat.id)}
                     className={`p-4 rounded-xl border-2 transition-all ${
                       formData.categoryId === cat.id
-                        ? 'border-primary-500 bg-primary-50'
+                        ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20'
                         : 'border-neutral-200 hover:border-neutral-300'
                     }`}
                   >

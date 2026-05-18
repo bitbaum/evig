@@ -72,13 +72,13 @@ export default function TechnikerProfilPage() {
 
         {/* Error/Success Messages */}
         {error && (
-          <div className="mb-6 p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
+          <div className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg text-error-700 dark:text-error-400">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mb-6 p-4 bg-primary-50 border border-primary-200 rounded-lg text-primary-700 flex items-center gap-2">
+          <div className="mb-6 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg text-primary-700 dark:text-primary-300 flex items-center gap-2">
             <CheckCircle className="w-5 h-5" />
             {t('saveSuccess')}
           </div>
@@ -116,7 +116,7 @@ export default function TechnikerProfilPage() {
                       onClick={() => handleSkillToggle(skill.id)}
                       className={`px-3 py-1.5 rounded-full text-sm transition-all ${
                         profile.skills.includes(skill.id)
-                          ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
+                          ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-2 border-primary-500'
                           : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                       }`}
                       title={skill.description}
@@ -148,7 +148,7 @@ export default function TechnikerProfilPage() {
                 onClick={() => handleServiceTypeToggle(type.id)}
                 className={`px-4 py-2 rounded-lg text-sm transition-all ${
                   profile.serviceTypes.includes(type.id)
-                    ? 'bg-primary-100 text-primary-700 border-2 border-primary-500'
+                    ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border-2 border-primary-500'
                     : 'bg-neutral-100 text-neutral-700 border-2 border-transparent hover:bg-neutral-200'
                 }`}
               >

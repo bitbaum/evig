@@ -266,8 +266,8 @@ export function WorkshopProposalForm() {
           id={submitResult.success ? undefined : 'workshop-propose-error'}
           className={`mb-8 p-6 rounded-xl border ${
             submitResult.success
-              ? 'bg-primary-50 border-primary-200 text-primary-800'
-              : 'bg-error-50 border-error-200 text-error-800'
+              ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/30 text-primary-800 dark:text-primary-300'
+              : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800/30 text-error-800 dark:text-error-400'
           }`}
         >
           {submitResult.success ? (

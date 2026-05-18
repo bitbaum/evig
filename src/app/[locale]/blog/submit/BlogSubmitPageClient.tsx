@@ -93,7 +93,7 @@ export default function SubmitPostPage() {
                   key={type}
                   type="button"
                   onClick={() => setSubmissionType(type)}
-                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-primary-600 bg-primary-50' : 'border-neutral-200 hover:border-primary-300'}`}
+                  className={`p-6 rounded-lg border-2 transition-all ${isActive ? 'border-primary-600 bg-primary-50 dark:bg-primary-900/20' : 'border-neutral-200 hover:border-primary-300'}`}
                 >
                   {isIdea
                     ? <Lightbulb className={`w-8 h-8 mb-3 ${isActive ? 'text-primary-600' : 'text-neutral-400'}`} />
@@ -262,9 +262,9 @@ export default function SubmitPostPage() {
           </div>
 
           {submitStatus === 'error' && (
-            <div className="mt-6 p-4 bg-error-50 border border-error-200 rounded-lg">
-              <p className="text-error-800 font-medium">{t('errorTitle')}</p>
-              <p className="text-error-700 text-sm mt-1">{t('errorMessage')}</p>
+            <div className="mt-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg">
+              <p className="text-error-800 dark:text-error-400 font-medium">{t('errorTitle')}</p>
+              <p className="text-error-700 dark:text-error-400 text-sm mt-1">{t('errorMessage')}</p>
             </div>
           )}
         </form>
