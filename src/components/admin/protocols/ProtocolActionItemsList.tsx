@@ -12,7 +12,7 @@ import {
   PRIORITY_HINT_LABELS,
 } from '@/config/protocols'
 import type { StructuredNotes, ActionLinkRecord, DecisionVoteRecord, DecisionOutcomeRecord } from '@/lib/schemas/protocols'
-import DecisionActions from '@/app/admin/protocols/[id]/DecisionActions'
+import DecisionActions from '@/components/admin/protocols/DecisionActions'
 
 interface Props {
   notes: StructuredNotes
