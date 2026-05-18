@@ -10,6 +10,7 @@ import { NavigationItem } from '@/config/navigation'
 import { ORG } from '@/config/org'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 
@@ -304,9 +305,11 @@ export function MobileMenu({
           )}
         </nav>
 
-        {/* Footer - Locale Switcher + Auth Actions */}
+        {/* Footer - Locale Switcher + Theme Toggle + Auth Actions */}
         <div className="border-t border-neutral-100 dark:border-white/[0.06] px-6 pt-3 pb-1 flex items-center justify-between">
-          <span className="text-xs text-neutral-400 dark:text-neutral-500">{t('language')}</span>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+          </div>
           <LocaleSwitcher />
         </div>
         <div className="px-6 pb-4">

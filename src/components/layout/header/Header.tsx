@@ -17,6 +17,7 @@ import { useTranslations } from 'next-intl'
 import dynamic from 'next/dynamic'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { cn } from '@/lib/utils'
 
 // Skip SSR — both use useSession which requires SessionProvider (lazy-loaded client-side only)
@@ -110,6 +111,9 @@ export function Header() {
               {/* Locale Switcher */}
               <LocaleSwitcher />
 
+              {/* Theme Toggle */}
+              <ThemeToggle />
+
               {/* Divider */}
               <div className="w-px h-5 bg-neutral-200 dark:bg-white/[0.1]" />
 
@@ -119,6 +123,8 @@ export function Header() {
 
             {/* Mobile Right Side - Auth + Menu */}
             <div className="lg:hidden flex items-center gap-2">
+              {/* Theme Toggle - Mobile */}
+              <ThemeToggle />
               {/* User Menu - Mobile */}
               <UserMenu />
               {/* Mobile Menu Button */}

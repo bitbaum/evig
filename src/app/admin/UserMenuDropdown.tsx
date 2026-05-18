@@ -3,14 +3,12 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import { useTheme } from 'next-themes'
 import {
   ChevronDown,
   ExternalLink,
   LogOut,
-  Moon,
-  Sun,
 } from 'lucide-react'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 interface UserMenuDropdownProps {
   user: {
@@ -21,11 +19,7 @@ interface UserMenuDropdownProps {
 
 export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const userMenuRef = useRef<HTMLDivElement>(null)
-  const { theme, setTheme } = useTheme()
-
-  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -106,30 +100,10 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
               Zur Website
             </Link>
 
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="flex w-full items-center justify-between px-4 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-white/[0.04]"
-            >
-              <div className="flex items-center gap-3">
-                {mounted && theme === 'dark' ? (
-                  <Sun className="w-4 h-4 text-neutral-500" />
-                ) : (
-                  <Moon className="w-4 h-4 text-neutral-500" />
-                )}
-                Dark Mode
-              </div>
-              <div
-                className={`w-9 h-5 rounded-full transition-colors ${
-                  mounted && theme === 'dark' ? 'bg-primary-600' : 'bg-neutral-300'
-                }`}
-              >
-                <div
-                  className={`w-4 h-4 mt-0.5 rounded-full bg-white shadow transition-transform ${
-                    mounted && theme === 'dark' ? 'translate-x-4' : 'translate-x-0.5'
-                  }`}
-                />
-              </div>
-            </button>
+            <div className="flex w-full items-center justify-between px-4 py-1.5 text-sm text-neutral-700 dark:text-neutral-300">
+              <span>Dark Mode</span>
+              <ThemeToggle />
+            </div>
           </div>
 
           <div className="border-t border-neutral-200 py-2 dark:border-white/[0.06]">
