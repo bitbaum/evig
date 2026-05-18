@@ -49,7 +49,7 @@ export async function getOrCreateReferralCode(userId: string) {
 }
 
 export function getReferralUrl(code: string): string {
-  return `${APP_URL}/register?ref=${code}`
+  return `${APP_URL}/auth/register?ref=${code}`
 }
 
 export async function sendReferralInvitation(
