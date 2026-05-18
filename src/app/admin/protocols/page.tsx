@@ -46,13 +46,14 @@ import { Pagination } from '@/components/ui/Pagination'
 import { getTeamMembers } from '@/lib/services/protocols'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { ProtocolReviewQueue } from '@/components/admin/protocols/ProtocolReviewQueue'
+import { PAGINATION } from '@/config/pagination'
 
 export const metadata: Metadata = {
   title: 'Protokolle',
   description: 'Sitzungsprotokolle verwalten.',
 }
 
-const PROTOCOLS_PAGE_SIZE = 20
+const PROTOCOLS_PAGE_SIZE = PAGINATION.PUBLIC
 
 export default async function ProtocolsAdminPage({
   searchParams,

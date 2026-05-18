@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { PAGINATION } from '@/config/pagination'
 
 export interface Technician {
   id: string
@@ -29,7 +30,7 @@ export interface TechnicianPagination {
   hasMore: boolean
 }
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = PAGINATION.PUBLIC
 
 export function useTechnicianList(loadingErrorMessage: string) {
   const [technicians, setTechnicians] = useState<Technician[]>([])

@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { ADMIN_CONTENT } from '@/config/admin-content'
+import { PAGINATION } from '@/config/pagination'
 
 export interface Location {
   id: string
@@ -25,7 +26,7 @@ export interface LocationFilters {
   city: string
 }
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = PAGINATION.PUBLIC
 
 export function useAdminLocations() {
   const { data: session, status: sessionStatus } = useSession()

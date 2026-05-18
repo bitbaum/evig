@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import type { DecisionStatus, DecisionType, VotingMethod } from '@/config/decisions'
+import { PAGINATION } from '@/config/pagination'
 
 export interface DecisionListItem {
   id: string
@@ -19,7 +20,7 @@ export interface DecisionListItem {
   createdAt: string
 }
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = PAGINATION.PUBLIC
 
 export function useDecisionList() {
   const [decisions, setDecisions] = useState<DecisionListItem[]>([])

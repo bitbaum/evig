@@ -10,6 +10,7 @@
 
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { UI_STATUS } from '@/config/ui/status'
+import { PAGINATION } from '@/config/pagination'
 
 // ============================================================================
 // Categories — derived from KATEGORIEN SSOT
@@ -138,7 +139,7 @@ export const MARKETPLACE_LIMITS = {
   MAX_TITLE_LENGTH: 120,
   MAX_DESCRIPTION_LENGTH: 5000,
   MAX_PRICE_CHF: 50000,
-  DEFAULT_PAGE_SIZE: 20,
+  DEFAULT_PAGE_SIZE: PAGINATION.PUBLIC,
   MAX_PAGE_SIZE: 100,
 } as const;
 

@@ -11,6 +11,8 @@ export const PAGINATION = {
   DENSE: 50,
   /** Quick-select dropdowns and type-ahead searches */
   SEARCH: 10,
+  /** Small widgets (recent items, sidebars) */
+  WIDGET: 5,
   /** Notification / activity feeds */
   FEED: 20,
   /** Intake / inventory pipeline */

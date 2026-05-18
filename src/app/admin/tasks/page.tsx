@@ -38,6 +38,7 @@ import Heading from '@/components/admin/AdminHeading'
 import TaskFiltersClient from './TaskFiltersClient'
 import { Pagination } from '@/components/ui/Pagination'
 import { ADMIN_CONTENT } from '@/config/admin-content'
+import { PAGINATION } from '@/config/pagination'
 
 export const metadata: Metadata = {
   title: 'Aufgaben',
@@ -84,7 +85,7 @@ async function getTaskStats(): Promise<TaskStats> {
   }
 }
 
-const TASKS_PAGE_SIZE = 20
+const TASKS_PAGE_SIZE = PAGINATION.PUBLIC
 
 async function getTasks(
   category?: string,

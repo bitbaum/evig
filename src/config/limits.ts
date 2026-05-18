@@ -6,13 +6,6 @@ export const FILE_SIZE_LIMITS = {
   AUDIO_MAX: 25 * 1024 * 1024,         // 25MB - audio files
 } as const
 
-/** Time durations in milliseconds */
-export const TIME_DURATIONS = {
-  ONE_DAY_MS: 24 * 60 * 60 * 1000,
-  ONE_DAY_S: 24 * 60 * 60,
-  SEVEN_DAYS_MS: 7 * 24 * 60 * 60 * 1000,
-} as const
-
 /** UI feedback timeouts in milliseconds — how long transient states stay visible */
 export const UI_FEEDBACK_MS = {
   /** "Saved" / "Success" confirmation banners */

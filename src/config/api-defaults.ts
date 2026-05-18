@@ -6,6 +6,7 @@
  */
 
 import { FILE_SIZE_LIMITS } from '@/config/limits'
+import { PAGINATION } from '@/config/pagination'
 
 export const API_DEFAULTS = {
   /** Default pagination limit for list endpoints */
@@ -24,7 +25,7 @@ export const API_DEFAULTS = {
   ANALYTICS_MAX_DAYS: 365,
 
   /** Default page size for admin tables */
-  ADMIN_PAGE_SIZE: 25,
+  ADMIN_PAGE_SIZE: PAGINATION.DEFAULT,
 
   /** Maximum items in a bulk operation */
   BULK_OPERATION_LIMIT: 100,
