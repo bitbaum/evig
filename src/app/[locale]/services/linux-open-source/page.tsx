@@ -97,7 +97,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
               return (
                 <div key={index} className="bg-neutral-50 rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-start">
-                    <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
+                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-primary-600 dark:text-primary-400 mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div>
@@ -202,7 +202,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
               return (
                 <div key={index} className="bg-neutral-50 rounded-xl p-8 border border-neutral-200 hover:border-neutral-300 transition-all duration-300">
                   <div className="flex items-start mb-6">
-                    <div className="p-3 bg-primary-100 rounded-lg text-primary-600 mr-4">
+                    <div className="p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-primary-600 dark:text-primary-400 mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div className="flex-1">
@@ -222,8 +222,8 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           <ul className="space-y-2">
                             {distro.useCases.map((useCase, i) => (
                               <li key={i} className="flex items-start">
-                                <div className="p-1 bg-primary-100 rounded-full mr-3 mt-0.5">
-                                  <CheckCircle2 className="w-4 h-4 text-primary-600" />
+                                <div className="p-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3 mt-0.5">
+                                  <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                                 </div>
                                 <span className="text-neutral-600">{useCase}</span>
                               </li>
@@ -235,8 +235,8 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           <ul className="space-y-2">
                             {distro.pros.map((pro, i) => (
                               <li key={i} className="flex items-start">
-                                <div className="p-1 bg-primary-100 rounded-full mr-3 mt-0.5">
-                                  <CheckCircle2 className="w-4 h-4 text-primary-600" />
+                                <div className="p-1 bg-primary-100 dark:bg-primary-900/30 rounded-full mr-3 mt-0.5">
+                                  <CheckCircle2 className="w-4 h-4 text-primary-600 dark:text-primary-400" />
                                 </div>
                                 <span className="text-neutral-600">{pro}</span>
                               </li>

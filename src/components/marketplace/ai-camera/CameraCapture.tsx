@@ -33,7 +33,7 @@ export function CameraCapture({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
           <Camera className="w-8 h-8 text-primary-600" />
         </div>
         <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">

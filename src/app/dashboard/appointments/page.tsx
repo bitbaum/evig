@@ -30,8 +30,8 @@ function getStatusIcon(status: string) {
 function getUrgencyColor(urgency: string) {
   switch (urgency) {
     case URGENCY.URGENT:
-    case URGENCY.HIGH: return 'text-error-700 bg-error-50 border border-error-200'
-    case URGENCY.NORMAL: return 'text-warning-700 bg-warning-50 border border-warning-200'
+    case URGENCY.HIGH: return 'text-error-700 dark:text-error-400 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30'
+    case URGENCY.NORMAL: return 'text-warning-700 dark:text-warning-400 bg-warning-50 border border-warning-200'
     case URGENCY.LOW: return 'text-success-700 bg-success-50 border border-success-200'
     default: return 'text-neutral-700 bg-neutral-50 border border-neutral-200'
   }

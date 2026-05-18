@@ -137,7 +137,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
               </Heading>
               <StatusBadge status={review.status} />
               {review.isVerifiedPurchase && (
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 gap-1">
+                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 gap-1">
                   <CheckCircle className="w-3 h-3" />
                   {t('verifiedPurchase')}
                 </span>

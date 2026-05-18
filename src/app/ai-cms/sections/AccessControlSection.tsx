@@ -6,9 +6,9 @@ export function AccessControlSection() {
   ]
 
   const colorMap: Record<string, string> = {
-    blue: 'bg-primary-50 border-primary-100 text-primary-900',
-    green: 'bg-primary-50 border-primary-100 text-primary-900',
-    purple: 'bg-primary-50 border-primary-100 text-primary-900',
+    blue: 'bg-primary-50 dark:bg-primary-900/20 border-primary-100 dark:border-primary-800/30 text-primary-900 dark:text-primary-300',
+    green: 'bg-primary-50 dark:bg-primary-900/20 border-primary-100 dark:border-primary-800/30 text-primary-900 dark:text-primary-300',
+    purple: 'bg-primary-50 dark:bg-primary-900/20 border-primary-100 dark:border-primary-800/30 text-primary-900 dark:text-primary-300',
   }
 
   return (

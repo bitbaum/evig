@@ -14,11 +14,11 @@ import {
 const VALUE_ICONS = [Code, Globe, Shield, Database, Heart, Zap, Users, Monitor]
 
 const VALUE_STYLES = [
-  { borderColor: 'border-primary-500', bgColor: 'bg-primary-100', iconColor: 'text-primary-600', titleColor: 'text-primary-800' },
-  { borderColor: 'border-primary-400', bgColor: 'bg-primary-100', iconColor: 'text-primary-600', titleColor: 'text-primary-800' },
+  { borderColor: 'border-primary-500', bgColor: 'bg-primary-100 dark:bg-primary-900/30', iconColor: 'text-primary-600', titleColor: 'text-primary-800 dark:text-primary-300' },
+  { borderColor: 'border-primary-400', bgColor: 'bg-primary-100 dark:bg-primary-900/30', iconColor: 'text-primary-600', titleColor: 'text-primary-800 dark:text-primary-300' },
   { borderColor: 'border-info-500', bgColor: 'bg-info-100', iconColor: 'text-info-600', titleColor: 'text-info-800' },
   { borderColor: 'border-secondary-500', bgColor: 'bg-secondary-100', iconColor: 'text-secondary-600', titleColor: 'text-secondary-800' },
-  { borderColor: 'border-warning-500', bgColor: 'bg-warning-100', iconColor: 'text-warning-600', titleColor: 'text-warning-800' },
+  { borderColor: 'border-warning-500', bgColor: 'bg-warning-100 dark:bg-warning-900/30', iconColor: 'text-warning-600', titleColor: 'text-warning-800 dark:text-warning-400' },
   { borderColor: 'border-error-500', bgColor: 'bg-error-100', iconColor: 'text-error-600', titleColor: 'text-error-800' },
   { borderColor: 'border-info-700', bgColor: 'bg-info-100', iconColor: 'text-info-700', titleColor: 'text-info-900' },
   { borderColor: 'border-neutral-400', bgColor: 'bg-neutral-100', iconColor: 'text-neutral-600', titleColor: 'text-neutral-800' },

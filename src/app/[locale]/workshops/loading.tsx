@@ -8,7 +8,7 @@ export default function WorkshopsLoading() {
             <div className="h-16 w-16 rounded-2xl bg-warning-200 animate-pulse" />
           </div>
           <div className="h-10 bg-warning-200 rounded w-64 mx-auto mb-6 animate-pulse" />
-          <div className="h-5 bg-warning-100 rounded w-96 mx-auto animate-pulse" />
+          <div className="h-5 bg-neutral-200 dark:bg-neutral-700 rounded w-96 mx-auto animate-pulse" />
         </div>
       </div>
 

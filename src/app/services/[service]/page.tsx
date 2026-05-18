@@ -132,7 +132,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
       <main>
         {/* Coming Soon Banner */}
         {isComingSoon && (
-          <div className="bg-warning-100 border-b border-warning-200">
+          <div className="bg-warning-100 dark:bg-warning-900/30 border-b border-warning-200 dark:border-warning-800/30">
             <div className="container mx-auto px-4 py-3">
               <div className="flex items-center justify-center">
                 <Clock className="w-5 h-5 text-warning-600 mr-2" />

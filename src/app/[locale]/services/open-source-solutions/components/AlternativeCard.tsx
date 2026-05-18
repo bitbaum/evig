@@ -52,7 +52,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
             return (
               <span
                 key={r.appId}
-                className="inline-flex items-center px-2 py-0.5 rounded-md bg-error-50 text-error-700 text-xs font-medium"
+                className="inline-flex items-center px-2 py-0.5 rounded-md bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 text-xs font-medium"
               >
                 Ersetzt {app.name}
               </span>
