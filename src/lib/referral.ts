@@ -1,7 +1,7 @@
 import { db } from '@/db'
 import { referralCodes, referralInvitations, coupons } from '@/db/schema/referral'
 import { users } from '@/db/schema/auth'
-import { eq, and, isNull, count } from 'drizzle-orm'
+import { eq, and, isNull, isNotNull, count } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { sendCustomEmail } from '@/lib/email'
 import { referralInvitation, referralCouponReceived } from '@/lib/email/templates/referral'
@@ -140,6 +140,56 @@ export async function redeemReferralCode(
   await sendCustomEmail(newUserEmail, template)
 
   logger.info('Referral code redeemed', { code, newUserId, couponCode, inviterUserId: refCode.userId, inviterName: inviter?.name })
+}
+
+/**
+ * Called when a buyer completes their first marketplace purchase.
+ * Finds their inviter (if any) and issues the CHF 10 reward coupon.
+ * Safe to call on every purchase — idempotent via the reward_issued flag.
+ */
+export async function triggerInviterReward(buyerId: string): Promise<void> {
+  const [buyer] = await db.select({ email: users.email, name: users.name }).from(users).where(eq(users.id, buyerId)).limit(1)
+  if (!buyer) return
+
+  // Find invitation record for this buyer's email that hasn't already triggered a reward
+  const [invitation] = await db
+    .select({ id: referralInvitations.id, referralCodeId: referralInvitations.referralCodeId })
+    .from(referralInvitations)
+    .where(and(
+      eq(referralInvitations.invitedEmail, buyer.email.toLowerCase()),
+      isNotNull(referralInvitations.registeredAt),
+      isNull(referralInvitations.rewardedAt),
+    ))
+    .limit(1)
+
+  if (!invitation) return
+
+  // Get the inviter's user ID
+  const [refCode] = await db.select({ userId: referralCodes.userId }).from(referralCodes).where(eq(referralCodes.id, invitation.referralCodeId)).limit(1)
+  if (!refCode) return
+
+  const [inviter] = await db.select({ id: users.id, email: users.email, name: users.name }).from(users).where(eq(users.id, refCode.userId)).limit(1)
+  if (!inviter) return
+
+  const couponCode = generateCouponCode('REWARD')
+  const expiresAt = new Date(Date.now() + 180 * 24 * 60 * 60 * 1000).toISOString()
+
+  await db.insert(coupons).values({
+    userId: inviter.id,
+    code: couponCode,
+    amountCents: REFERRAL_REWARD_CENTS,
+    source: 'referral_reward',
+    expiresAt,
+  })
+
+  await db.update(referralInvitations)
+    .set({ rewardedAt: new Date().toISOString() })
+    .where(eq(referralInvitations.id, invitation.id))
+
+  const template = referralCouponReceived(inviter.name ?? inviter.email, couponCode, REFERRAL_REWARD_CENTS / 100, 'reward')
+  await sendCustomEmail(inviter.email, template)
+
+  logger.info('Inviter reward issued', { inviterUserId: inviter.id, couponCode, buyerId, buyerEmail: buyer.email })
 }
 
 export async function getReferralStats(userId: string) {

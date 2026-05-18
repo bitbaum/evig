@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { RegisterSchema } from '@/lib/schemas'
+import { redeemReferralCode } from '@/lib/referral'
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
       return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, validationResult.error.flatten().fieldErrors)
     }
 
-    const { email, password, name, role } = validationResult.data
+    const { email, password, name, role, referralCode } = validationResult.data
 
     try {
       const result = await registerUser({ email, password, name, role })
@@ -45,6 +46,12 @@ export async function POST(request: NextRequest) {
         return apiBadRequest(
           result.error || 'Registration failed',
           result.errors ? { validation: result.errors } : undefined
+        )
+      }
+
+      if (referralCode && result.data?.userId) {
+        redeemReferralCode(referralCode, result.data.userId, email, name ?? email).catch(err =>
+          logger.error('Referral redemption failed', { referralCode, userId: result.data!.userId, error: err })
         )
       }
 

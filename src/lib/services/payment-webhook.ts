@@ -28,6 +28,7 @@ import {
   recordKivviPayment,
   updateKivviInventoryItem,
 } from '@/lib/kivvi/client'
+import { triggerInviterReward } from '@/lib/referral'
 
 // ============================================================================
 // Types
@@ -154,6 +155,11 @@ export async function handleMarketplacePayment(
           error: err,
           orderId: order.id,
         })
+      )
+
+      // Fire-and-forget inviter reward (CHF 10 coupon on buyer's first purchase)
+      triggerInviterReward(order.buyerId).catch(err =>
+        logger.error('Referral inviter reward failed', { error: err, orderId: order.id, buyerId: order.buyerId })
       )
       break
     }

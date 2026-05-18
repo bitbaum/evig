@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Wrench,
   BadgeCheck,
+  Gift,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -115,6 +116,7 @@ export function UserMenu() {
       { href: '/dashboard/profile', icon: User, label: t('myProfile') },
       { href: '/dashboard/messages', icon: MessageSquare, label: t('messages') },
       { href: '/dashboard/membership', icon: BadgeCheck, label: t('membership') },
+      { href: '/invite', icon: Gift, label: t('invite') },
     ],
     // Marketplace
     [

@@ -7,6 +7,7 @@ interface RegisterParams {
   email: string
   password: string
   name: string
+  referralCode?: string
 }
 
 interface RegisterResult {
@@ -39,6 +40,7 @@ export function useRegistration(): UseRegistrationResult {
           email: params.email,
           password: params.password,
           name: params.name,
+          ...(params.referralCode ? { referralCode: params.referralCode } : {}),
         },
       })
 

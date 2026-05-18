@@ -66,6 +66,7 @@ export const RegisterSchema = z.object({
     .max(100, 'Name darf maximal 100 Zeichen lang sein')
     .optional(),
   role: RegistrationRoleSchema.optional().default('customer'),
+  referralCode: z.string().optional(),
 });
 
 export type RegisterInput = z.infer<typeof RegisterSchema>;

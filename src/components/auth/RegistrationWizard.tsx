@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Stepper } from '@/components/ui/Stepper'
@@ -33,6 +33,12 @@ export function RegistrationWizard() {
   const t = useTranslations('auth.register')
   const { isLoading, errors, verifyError, register, verifyCode, resendCode } = useRegistration()
   const [isComplete, setIsComplete] = useState(false)
+  const [referralCode, setReferralCode] = useState<string | undefined>()
+
+  useEffect(() => {
+    const ref = new URLSearchParams(window.location.search).get('ref')
+    if (ref) setReferralCode(ref)
+  }, [])
   const [emailSendFailed, setEmailSendFailed] = useState(false)
 
   const steps = [
@@ -111,6 +117,7 @@ export function RegistrationWizard() {
       email: state.email,
       password: state.password,
       name: state.name,
+      referralCode,
     })
 
     if (result) {
