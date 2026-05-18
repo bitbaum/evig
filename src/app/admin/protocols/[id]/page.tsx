@@ -3,7 +3,6 @@
  *
  * Shows protocol details, structured notes, and action items.
  * Uses service layer with visibility filtering.
- * Created: 2026-02-10
  */
 
 import { Metadata } from 'next'
@@ -20,6 +19,7 @@ import {
   MEETING_TYPE_ICON_COMPONENTS,
   PROTOCOL_STATUS_LABELS,
   PROTOCOL_STATUS_COLORS,
+  PROTOCOL_STATUSES,
   PROTOCOL_VISIBILITY_LABELS,
   INPUT_METHOD_LABELS,
   INPUT_METHOD_ICON_COMPONENTS,
@@ -32,9 +32,9 @@ import {
   Calendar,
   User,
   Eye,
-  Users,
 } from 'lucide-react'
 import ProtocolDetailClient from './ProtocolDetailClient'
+import { ProtocolAttendeesCard } from '@/components/admin/protocols'
 import { formatDateWithWeekday } from '@/lib/date-formats'
 
 export const metadata: Metadata = {
@@ -59,7 +59,6 @@ export default async function ProtocolDetailPage({
 
   const isAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
 
-  // Resolve dbUserId from email
   const userResult = await query<{ id: string }>(
     `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
     [session.user.email]
@@ -70,7 +69,6 @@ export default async function ProtocolDetailPage({
   }
 
   const protocol = await getProtocolById(id, dbUserId, isAdmin)
-
   if (!protocol) {
     notFound()
   }
@@ -81,7 +79,7 @@ export default async function ProtocolDetailPage({
     getDecisionData(id),
   ])
 
-  // Resolve attendee UUIDs to names
+  // Resolve attendee UUIDs to display names
   const attendeeNames: Record<string, string> = {}
   if (protocol.attendees && protocol.attendees.length > 0) {
     for (const member of teamMembers) {
@@ -92,53 +90,57 @@ export default async function ProtocolDetailPage({
   }
 
   const MeetingIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType] || FileText
+  const isReview = protocol.status === PROTOCOL_STATUSES.REVIEW
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className="space-y-5">
+      {/* Page Header */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4 min-w-0">
           <Link
             href="/admin/protocols"
-            className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
+            className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors flex-shrink-0"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
             Zurück
           </Link>
-          <div className="w-px h-6 bg-neutral-300" />
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
-              <MeetingIcon className="w-5 h-5 text-primary-600" />
+          <div className="w-px h-5 bg-neutral-200 dark:bg-white/[0.08] flex-shrink-0" />
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 bg-primary-100 dark:bg-primary-500/[0.12] rounded-lg flex items-center justify-center flex-shrink-0">
+              <MeetingIcon className="w-4 h-4 text-primary-600 dark:text-primary-400" />
             </div>
-            <div>
-              <Heading level={1} className="text-2xl font-bold text-neutral-900">{protocol.title}</Heading>
-              <p className="text-neutral-600">
-                {MEETING_TYPE_LABELS[protocol.meeting_type]}
+            <div className="min-w-0">
+              <Heading level={1} className="text-xl font-bold text-neutral-900 dark:text-white truncate">
+                {protocol.title}
+              </Heading>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                {MEETING_TYPE_LABELS[protocol.meeting_type]} · {formatDateWithWeekday(protocol.meeting_date)}
               </p>
             </div>
           </div>
         </div>
+
+        {/* Status badge */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <span
+            className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
+              PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-neutral-100 text-neutral-800'
+            }`}
+          >
+            {PROTOCOL_STATUS_LABELS[protocol.status]}
+          </span>
+          <span
+            className={`inline-flex px-3 py-1 text-xs font-medium rounded-full ${
+              MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-neutral-100 text-neutral-800'
+            }`}
+          >
+            {MEETING_TYPE_LABELS[protocol.meeting_type]}
+          </span>
+        </div>
       </div>
 
-      {/* Status + Type Badges */}
-      <div className="flex items-center gap-3">
-        <span
-          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            PROTOCOL_STATUS_COLORS[protocol.status] || 'bg-neutral-100 text-neutral-800'
-          }`}
-        >
-          {PROTOCOL_STATUS_LABELS[protocol.status]}
-        </span>
-        <span
-          className={`inline-flex px-3 py-1 text-sm font-medium rounded-full ${
-            MEETING_TYPE_COLORS[protocol.meeting_type] || 'bg-neutral-100 text-neutral-800'
-          }`}
-        >
-          {MEETING_TYPE_LABELS[protocol.meeting_type]}
-        </span>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Main layout: 2/3 content + 1/3 sidebar */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Main Content */}
         <div className="lg:col-span-2">
           <ProtocolDetailClient
@@ -158,74 +160,57 @@ export default async function ProtocolDetailPage({
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Protocol Info */}
-          <div className="bg-white rounded-lg border p-6">
-            <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">Details</Heading>
-            <dl className="space-y-4">
+        <div className="space-y-4">
+          {/* Protocol Details */}
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-4">
+            <Heading level={2} className="text-sm font-semibold text-neutral-900 dark:text-white mb-3">Details</Heading>
+            <dl className="space-y-3">
               <div>
-                <dt className="text-sm text-neutral-500">Datum</dt>
-                <dd className="flex items-center gap-2 mt-1">
-                  <Calendar className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">
+                <dt className="text-xs text-neutral-400 dark:text-neutral-500 mb-0.5">Datum</dt>
+                <dd className="flex items-center gap-2">
+                  <Calendar className="w-3.5 h-3.5 text-neutral-400" />
+                  <span className="text-sm text-neutral-900 dark:text-neutral-200">
                     {formatDateWithWeekday(protocol.meeting_date)}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-neutral-500">Erstellt von</dt>
-                <dd className="flex items-center gap-2 mt-1">
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">
+                <dt className="text-xs text-neutral-400 dark:text-neutral-500 mb-0.5">Erstellt von</dt>
+                <dd className="flex items-center gap-2">
+                  <User className="w-3.5 h-3.5 text-neutral-400" />
+                  <span className="text-sm text-neutral-900 dark:text-neutral-200">
                     {protocol.created_by_name || protocol.created_by_email || 'Unbekannt'}
                   </span>
                 </dd>
               </div>
               <div>
-                <dt className="text-sm text-neutral-500">Sichtbarkeit</dt>
-                <dd className="flex items-center gap-2 mt-1">
-                  <Eye className="w-4 h-4 text-neutral-400" />
-                  <span className="text-neutral-900">
+                <dt className="text-xs text-neutral-400 dark:text-neutral-500 mb-0.5">Sichtbarkeit</dt>
+                <dd className="flex items-center gap-2">
+                  <Eye className="w-3.5 h-3.5 text-neutral-400" />
+                  <span className="text-sm text-neutral-900 dark:text-neutral-200">
                     {PROTOCOL_VISIBILITY_LABELS[protocol.visibility]}
                   </span>
                 </dd>
               </div>
               {protocol.input_method && (
                 <div>
-                  <dt className="text-sm text-neutral-500">Eingabemethode</dt>
-                  <dd className="flex items-center gap-2 mt-1">
+                  <dt className="text-xs text-neutral-400 dark:text-neutral-500 mb-0.5">Eingabemethode</dt>
+                  <dd className="flex items-center gap-2">
                     {(() => {
                       const InputIcon = INPUT_METHOD_ICON_COMPONENTS[protocol.input_method as InputMethod]
-                      return InputIcon ? <InputIcon className="w-4 h-4 text-neutral-400" /> : null
+                      return InputIcon ? <InputIcon className="w-3.5 h-3.5 text-neutral-400" /> : null
                     })()}
-                    <span className="text-neutral-900">
+                    <span className="text-sm text-neutral-900 dark:text-neutral-200">
                       {INPUT_METHOD_LABELS[protocol.input_method as InputMethod] || protocol.input_method}
                     </span>
                   </dd>
                 </div>
               )}
-              {protocol.attendees && protocol.attendees.length > 0 && (
-                <div>
-                  <dt className="text-sm text-neutral-500">Teilnehmer</dt>
-                  <dd className="mt-1">
-                    <div className="flex flex-wrap gap-1">
-                      {protocol.attendees.map((uid) => (
-                        <span
-                          key={uid}
-                          className="inline-flex px-1.5 py-0.5 text-xs font-medium rounded bg-neutral-100 text-neutral-700"
-                        >
-                          {attendeeNames[uid] || 'Unbekannt'}
-                        </span>
-                      ))}
-                    </div>
-                  </dd>
-                </div>
-              )}
               {protocol.processing_model && (
                 <div>
-                  <dt className="text-sm text-neutral-500">KI-Modell</dt>
-                  <dd className="mt-1">
-                    <span className="text-sm text-neutral-600 font-mono">
+                  <dt className="text-xs text-neutral-400 dark:text-neutral-500 mb-0.5">KI-Modell</dt>
+                  <dd>
+                    <span className="text-xs text-neutral-500 dark:text-neutral-400 font-mono">
                       {protocol.processing_model}
                     </span>
                   </dd>
@@ -234,14 +219,23 @@ export default async function ProtocolDetailPage({
             </dl>
           </div>
 
-          {/* Raw Transcript (collapsible) */}
+          {/* Attendees — editable client component */}
+          <ProtocolAttendeesCard
+            protocolId={protocol.id}
+            attendees={protocol.attendees || []}
+            attendeeNames={attendeeNames}
+            teamMembers={teamMembers}
+            isReview={isReview}
+          />
+
+          {/* Raw Transcript (collapsed) */}
           {protocol.raw_transcript && (
-            <details className="bg-white rounded-lg border">
-              <summary className="p-4 cursor-pointer text-sm font-medium text-neutral-700 hover:text-neutral-900">
-                Rohtranskript anzeigen ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
+            <details className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08]">
+              <summary className="p-4 cursor-pointer text-sm font-medium text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white select-none">
+                Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
               </summary>
               <div className="px-4 pb-4">
-                <pre className="text-xs text-neutral-600 whitespace-pre-wrap max-h-96 overflow-y-auto bg-neutral-50 rounded p-3">
+                <pre className="text-xs text-neutral-600 dark:text-neutral-400 whitespace-pre-wrap max-h-80 overflow-y-auto bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-3 leading-relaxed">
                   {protocol.raw_transcript}
                 </pre>
               </div>

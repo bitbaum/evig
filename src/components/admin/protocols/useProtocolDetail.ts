@@ -38,15 +38,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
   const isDraft = protocol.status === PROTOCOL_STATUS.DRAFT
   const isFinalized = protocol.status === PROTOCOL_STATUS.FINALIZED
 
-  const [expandedTopics, setExpandedTopics] = useState<Set<string>>(
-    () => new Set(isReview && notes?.topics ? notes.topics.map(t => t.id) : [])
-  )
-
-  useEffect(() => {
-    if (isReview && notes?.topics && expandedTopics.size === 0) {
-      setExpandedTopics(new Set(notes.topics.map(t => t.id)))
-    }
-  }, [isReview, notes?.topics]) // eslint-disable-line react-hooks/exhaustive-deps
+  // Topics are collapsed by default — users expand what they need
+  const [expandedTopics, setExpandedTopics] = useState<Set<string>>(() => new Set())
 
   useEffect(() => {
     if (!transcript && protocol.raw_transcript) {

@@ -17,6 +17,9 @@ export { ProtocolActionItemsList } from './ProtocolActionItemsList'
 export { ProtocolFollowUps } from './ProtocolFollowUps'
 export { ProtocolReviewChecklist } from './ProtocolReviewChecklist'
 export { ProtocolReviewQueue } from './ProtocolReviewQueue'
+export { ProtocolProgressStrip } from './ProtocolProgressStrip'
+export { ProtocolAIChat } from './ProtocolAIChat'
+export { ProtocolAttendeesCard } from './ProtocolAttendeesCard'
 export type { ProtocolDetailProps } from './types'
 
 // Form components

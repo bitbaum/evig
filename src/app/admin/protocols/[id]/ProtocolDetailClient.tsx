@@ -1,69 +1,41 @@
 'use client'
 
 /**
- * Protocol Detail Client Component
+ * Protocol Detail Client Component — Redesigned
  *
- * Renders structured notes with action item management.
- * Adapts to status: review (editable) vs finalized (read-only).
+ * Information hierarchy:
+ *   1. Progress strip (where are we in the review flow?)
+ *   2. Summary + AI chat (the content)
+ *   3. Attendee mapping callout (only when needed)
+ *   4. Topics (collapsed accordion)
+ *   5. Action items (primary CTA area)
+ *   6. Follow-ups
+ *   7. Finalize / delete buttons
  */
 
 import { useState, useMemo } from 'react'
-import { Loader2, CheckCircle2, FileText, Trash2, Users, Pencil, X, Check } from 'lucide-react'
+import { Loader2, CheckCircle2, FileText, Trash2, AlertCircle, UserCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import {
   useProtocolDetail,
   ProtocolReprocessSection,
   ProtocolDraftInput,
-  ProtocolSummarySection,
   ProtocolTopicsSection,
   ProtocolActionItemsList,
   ProtocolFollowUps,
-  ProtocolReviewChecklist,
+  ProtocolProgressStrip,
+  ProtocolAIChat,
 } from '@/components/admin/protocols'
 import type { ProtocolDetailProps } from '@/components/admin/protocols'
-import { PROTOCOL_STATUSES, PROTOCOL_STATUS_COLORS, PROTOCOL_STATUS_LABELS } from '@/config/protocols'
+import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { getErrorMessage } from '@/lib/utils/error'
 import Heading from '@/components/admin/AdminHeading'
 import { getProtocolReviewChecklist } from '@/lib/protocols/review'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
   const { protocol, actionLinks, teamMembers, decisionVotes, decisionOutcomes, currentUserId, isProtocolCreator, isSuperAdmin } = props
-
-  // Attendee editing state
-  const [editingAttendees, setEditingAttendees] = useState(false)
-  const [editedAttendees, setEditedAttendees] = useState<string[]>(protocol.attendees || [])
-  const [attendeeSearch, setAttendeeSearch] = useState('')
-  const [savingAttendees, setSavingAttendees] = useState(false)
-  const [attendeeError, setAttendeeError] = useState<string | null>(null)
-
-  const filteredTeamMembersForEdit = useMemo(() => {
-    if (!attendeeSearch.trim()) return teamMembers
-    const search = attendeeSearch.toLowerCase()
-    return teamMembers.filter(m => m.name.toLowerCase().includes(search))
-  }, [teamMembers, attendeeSearch])
-
-  const handleSaveAttendees = async () => {
-    setSavingAttendees(true)
-    setAttendeeError(null)
-    try {
-      const result = await apiFetch<unknown>(`/api/protocols/${protocol.id}`, {
-        method: 'PATCH',
-        body: { attendees: editedAttendees },
-      })
-      if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
-      setEditingAttendees(false)
-      router.refresh()
-    } catch (err) {
-      setAttendeeError(getErrorMessage(err))
-    } finally {
-      setSavingAttendees(false)
-    }
-  }
 
   const {
     notes,
@@ -72,9 +44,6 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     isFinalized,
     error,
     initialProcessingError,
-    workflowProgress,
-    currentStepIndex,
-    scrollToStep,
     expandedTopics,
     toggleTopic,
     attendeeMapping,
@@ -117,138 +86,48 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     decisionOutcomes,
   }), [protocol.status, protocol.raw_transcript, notes, actionLinks, decisionVotes, decisionOutcomes])
 
+  // Detected attendees that aren't yet mapped to a team member
+  const unmappedAttendees = useMemo(() => {
+    if (!notes?.detected_attendees) return []
+    return notes.detected_attendees.filter(name => !attendeeMapping[name])
+  }, [notes?.detected_attendees, attendeeMapping])
+
+  const allMapped = unmappedAttendees.length === 0 && (notes?.detected_attendees?.length ?? 0) > 0
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      {/* Error Banner */}
       {error && (
-        <div className="p-4 bg-error-50 border border-error-200 rounded-lg text-error-700">
-          <p>{error}</p>
-          {initialProcessingError?.retryable && (
-            <p className="text-sm mt-1 text-error-600">Sie können das Transkript unten direkt erneut verarbeiten.</p>
-          )}
-        </div>
-      )}
-
-      {/* Status Badge */}
-      <div className="flex items-center gap-3">
-        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${PROTOCOL_STATUS_COLORS[protocol.status as keyof typeof PROTOCOL_STATUS_COLORS] ?? 'bg-neutral-100 text-neutral-800'}`}>
-          {PROTOCOL_STATUS_LABELS[protocol.status as keyof typeof PROTOCOL_STATUS_LABELS] ?? protocol.status}
-        </span>
-        {unlinkedTaskItems.length > 0 && isReview && (
-          <span className="text-sm text-warning-600 font-medium">
-            {unlinkedTaskItems.length} Aufgabe{unlinkedTaskItems.length !== 1 ? 'n' : ''} noch nicht verknüpft
-          </span>
-        )}
-      </div>
-
-      {(isReview || isFinalized) && (
-        <ProtocolReviewChecklist items={reviewChecklist} />
-      )}
-
-      {/* Edit Attendees (review phase) */}
-      {isReview && (
-        <div className="bg-white rounded-lg border p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-neutral-500" />
-              <span className="text-sm font-medium text-neutral-700">
-                Teilnehmer ({protocol.attendees?.length || 0})
-              </span>
-            </div>
-            {!editingAttendees ? (
-              <button
-                onClick={() => {
-                  setEditedAttendees(protocol.attendees || [])
-                  setAttendeeSearch('')
-                  setEditingAttendees(true)
-                }}
-                className="flex items-center gap-1 text-sm text-primary-600 hover:text-primary-800"
-              >
-                <Pencil className="w-3.5 h-3.5" />
-                Teilnehmer bearbeiten
-              </button>
-            ) : (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setEditingAttendees(false)}
-                  className="flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700"
-                >
-                  <X className="w-3.5 h-3.5" />
-                  Abbrechen
-                </button>
-                <Button
-                  onClick={handleSaveAttendees}
-                  disabled={savingAttendees}
-                  size="sm"
-                  className="gap-1"
-                >
-                  {savingAttendees ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <Check className="w-3.5 h-3.5" />
-                  )}
-                  Speichern
-                </Button>
-              </div>
+        <div className="flex items-start gap-3 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-400">
+          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          <div>
+            <p>{error}</p>
+            {initialProcessingError?.retryable && (
+              <p className="text-sm mt-1 opacity-80">
+                Nutze &ldquo;Erneut verarbeiten&rdquo; weiter unten, um es erneut zu versuchen.
+              </p>
             )}
           </div>
-
-          {attendeeError && (
-            <p className="mt-2 text-sm text-error-600">{attendeeError}</p>
-          )}
-
-          {editingAttendees && (
-            <div className="mt-3 space-y-2">
-              <Input
-                type="text"
-                value={attendeeSearch}
-                onChange={(e) => setAttendeeSearch(e.target.value)}
-                placeholder="Teilnehmer suchen..."
-                className="py-1"
-              />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-48 overflow-y-auto">
-                {filteredTeamMembersForEdit.map((member) => (
-                  <label
-                    key={member.id}
-                    className="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-50 cursor-pointer text-sm"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={editedAttendees.includes(member.id)}
-                      onChange={() => {
-                        setEditedAttendees(prev =>
-                          prev.includes(member.id)
-                            ? prev.filter(id => id !== member.id)
-                            : [...prev, member.id]
-                        )
-                      }}
-                      className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
-                    />
-                    {member.name}
-                  </label>
-                ))}
-                {filteredTeamMembersForEdit.length === 0 && (
-                  <p className="text-sm text-neutral-500 px-2 py-1">Keine Teilnehmer gefunden</p>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {isReview && (
-        <ProtocolReprocessSection
-          inputMethod={protocol.input_method}
-          transcript={transcript}
-          audioFile={audioFile}
-          processing={processing}
-          reprocessMinLength={getReprocessMinLength()}
-          onTranscriptChange={setTranscript}
-          onAudioFileSelect={handleAudioFileSelect}
-          onFileUpload={handleFileUpload}
-          onProcess={handleProcess}
-        />
+      {/* Progress Strip — replaces the old wall-of-cards checklist */}
+      {(isReview || isFinalized) && (
+        <ProtocolProgressStrip items={reviewChecklist} />
       )}
 
+      {/* Processing Spinner */}
+      {protocol.status === PROTOCOL_STATUSES.PROCESSING && (
+        <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg p-8 text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-warning-500 mx-auto mb-3" />
+          <p className="font-medium text-warning-800 dark:text-warning-300">Wird verarbeitet…</p>
+          <p className="text-sm text-warning-700 dark:text-warning-400 mt-1">
+            Die KI strukturiert das Transkript. Dies dauert einige Sekunden.
+          </p>
+        </div>
+      )}
+
+      {/* Draft input (no notes yet) */}
       {isDraft && !notes && (
         <ProtocolDraftInput
           inputMethod={protocol.input_method}
@@ -262,38 +141,97 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         />
       )}
 
-      {protocol.status === PROTOCOL_STATUSES.PROCESSING && (
-        <div className="bg-warning-50 border border-warning-200 rounded-lg p-6 text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-warning-600 mx-auto mb-3" />
-          <p className="font-medium text-warning-800">Wird verarbeitet...</p>
-          <p className="text-sm text-warning-700 mt-1">
-            Die KI strukturiert das Transkript. Dies kann einige Sekunden dauern.
-          </p>
-        </div>
-      )}
-
+      {/* Main content — only when structured notes exist */}
       {notes && (
         <>
-          <ProtocolSummarySection
-            notes={notes}
-            isReview={isReview}
-            teamMembers={teamMembers}
-            attendeeMapping={attendeeMapping}
-            mappingDirty={mappingDirty}
-            savingMapping={savingMapping}
-            onMappingChange={(name, memberId) => {
-              setAttendeeMapping(prev => ({ ...prev, [name]: memberId }))
-              setMappingDirty(true)
-            }}
-            onSaveMapping={handleSaveMapping}
-          />
+          {/* 1. Summary */}
+          <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-5">
+            <h2 className="text-base font-semibold text-neutral-900 dark:text-white mb-2">
+              Zusammenfassung
+            </h2>
+            <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
+              {notes.summary}
+            </p>
+          </div>
 
+          {/* 2. AI Chat — collapsed by default */}
+          <ProtocolAIChat title={protocol.title} notes={notes} />
+
+          {/* 3. Attendee mapping callout — shown only when there are unresolved names */}
+          {isReview && notes.detected_attendees && notes.detected_attendees.length > 0 && (
+            <div className={`rounded-lg border p-4 ${
+              allMapped
+                ? 'border-primary-200 bg-primary-50 dark:border-primary-800/30 dark:bg-primary-900/10'
+                : 'border-warning-200 bg-warning-50 dark:border-warning-800/30 dark:bg-warning-900/10'
+            }`}>
+              <div className="flex items-start gap-3">
+                <UserCheck className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                  allMapped ? 'text-primary-600 dark:text-primary-400' : 'text-warning-600 dark:text-warning-400'
+                }`} />
+                <div className="flex-1 min-w-0">
+                  <h3 className={`text-sm font-semibold mb-1 ${
+                    allMapped ? 'text-primary-900 dark:text-primary-300' : 'text-warning-900 dark:text-warning-300'
+                  }`}>
+                    {allMapped
+                      ? 'Alle Personen zugeordnet'
+                      : `${unmappedAttendees.length} Person${unmappedAttendees.length !== 1 ? 'en' : ''} noch nicht zugeordnet`
+                    }
+                  </h3>
+                  {!allMapped && (
+                    <p className="text-xs text-warning-700 dark:text-warning-400 mb-3">
+                      Die KI hat Namen aus dem Protokoll erkannt. Ordne sie den Teammitgliedern zu, damit Aufgaben korrekt zugewiesen werden.
+                    </p>
+                  )}
+                  <div className="space-y-2">
+                    {notes.detected_attendees.map((name) => (
+                      <div key={name} className="flex items-center gap-3">
+                        <span className="text-sm text-neutral-700 dark:text-neutral-300 min-w-[120px] font-medium">{name}</span>
+                        <select
+                          value={attendeeMapping[name] || ''}
+                          onChange={(e) => {
+                            setAttendeeMapping(prev => ({ ...prev, [name]: e.target.value }))
+                            setMappingDirty(true)
+                          }}
+                          className="text-sm border border-neutral-300 dark:border-white/[0.12] rounded-lg px-2.5 py-1.5 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                        >
+                          <option value="">— Nicht zugeordnet —</option>
+                          {teamMembers.map(m => (
+                            <option key={m.id} value={m.id}>
+                              {m.name}{m.open_task_count > 0 ? ` (${m.open_task_count} Aufgaben)` : ''}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                  {mappingDirty && (
+                    <Button
+                      onClick={handleSaveMapping}
+                      disabled={savingMapping}
+                      variant="primary"
+                      size="sm"
+                      className="mt-3 gap-2"
+                    >
+                      {savingMapping
+                        ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        : <CheckCircle2 className="w-3.5 h-3.5" />
+                      }
+                      Zuordnung speichern
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 4. Topics — all collapsed by default for cleaner view */}
           <ProtocolTopicsSection
             topics={notes.topics}
             expandedTopics={expandedTopics}
             onToggleTopic={toggleTopic}
           />
 
+          {/* 5. Action Items — primary CTA section */}
           <ProtocolActionItemsList
             notes={notes}
             actionLinks={actionLinks}
@@ -317,46 +255,62 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             onRefresh={() => router.refresh()}
           />
 
+          {/* 6. Follow-ups */}
           {notes.follow_ups && notes.follow_ups.length > 0 && (
             <ProtocolFollowUps followUps={notes.follow_ups} />
           )}
 
-          {(isReview || (isProtocolCreator || isSuperAdmin)) && (
-            <div id="protocol-step-done" className="flex justify-between pt-4">
+          {/* 7. Reprocess (edge case — collapsed by default) */}
+          {isReview && (
+            <ProtocolReprocessSection
+              inputMethod={protocol.input_method}
+              transcript={transcript}
+              audioFile={audioFile}
+              processing={processing}
+              reprocessMinLength={getReprocessMinLength()}
+              onTranscriptChange={setTranscript}
+              onAudioFileSelect={handleAudioFileSelect}
+              onFileUpload={handleFileUpload}
+              onProcess={handleProcess}
+            />
+          )}
+
+          {/* 8. Footer actions */}
+          {(isReview || isProtocolCreator || isSuperAdmin) && (
+            <div id="protocol-step-done" className="flex items-center justify-between pt-2">
               <div>
                 {(isProtocolCreator || isSuperAdmin) && (
                   <button
                     onClick={() => setShowDeleteDialog(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-error-600 border border-error-300 rounded-lg hover:bg-error-50 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-error-600 dark:text-error-400 border border-error-300 dark:border-error-800 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                     Löschen
                   </button>
                 )}
               </div>
-              <div>
-                {isReview && (
-                  <Button
-                    onClick={() => setShowFinalizeDialog(true)}
-                    className="gap-2 px-6"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    Protokoll abschliessen
-                  </Button>
-                )}
-              </div>
+              {isReview && (
+                <Button
+                  onClick={() => setShowFinalizeDialog(true)}
+                  className="gap-2 px-6"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  Protokoll abschliessen
+                </Button>
+              )}
             </div>
           )}
         </>
       )}
 
+      {/* Empty state */}
       {!notes && !isDraft && protocol.status !== PROTOCOL_STATUSES.PROCESSING && (
-        <div className="bg-white rounded-lg border p-12 text-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-white/[0.08] p-12 text-center">
           <FileText className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-neutral-900 mb-2">
+          <Heading level={3} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">
             Keine strukturierten Notizen
           </Heading>
-          <p className="text-neutral-600">
+          <p className="text-neutral-500 dark:text-neutral-400">
             Füge ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
           </p>
         </div>
