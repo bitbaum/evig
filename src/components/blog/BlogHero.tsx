@@ -18,7 +18,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
       <article className="grid lg:grid-cols-2 gap-8 items-center">
         {/* Image */}
         {post.featuredImage ? (
-          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200 order-2 lg:order-1 relative">
+          <div className="aspect-[16/10] lg:aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 order-2 lg:order-1 relative">
             <Image
               src={post.featuredImage}
               alt={post.title}
@@ -44,7 +44,7 @@ export default function BlogHero({ post }: BlogHeroProps) {
           )}
 
           {/* Title */}
-          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 leading-tight group-hover:text-primary-700 transition-colors">
+          <Heading level={2} className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 leading-tight group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors">
             {post.title}
           </Heading>
 

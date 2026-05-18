@@ -21,7 +21,7 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
             <article>
               {/* Image */}
               {post.featuredImage ? (
-                <div className="aspect-[16/10] overflow-hidden rounded-lg bg-neutral-200 mb-4 relative">
+                <div className="aspect-[16/10] overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-700 mb-4 relative">
                   <Image
                     src={post.featuredImage}
                     alt={post.title}
@@ -45,7 +45,7 @@ export default function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
               )}
 
               {/* Title */}
-              <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2 leading-snug group-hover:text-primary-700 transition-colors line-clamp-3">
+              <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2 leading-snug group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-3">
                 {post.title}
               </Heading>
 

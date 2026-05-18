@@ -72,7 +72,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
               </em>
             ),
             blockquote: ({ children }) => (
-              <blockquote className="border-l-4 border-neutral-900 pl-6 py-2 my-8 italic text-[21px] text-neutral-700 leading-[1.58]">
+              <blockquote className="border-l-4 border-neutral-900 dark:border-neutral-500 pl-6 py-2 my-8 italic text-[21px] text-neutral-700 leading-[1.58]">
                 {children}
               </blockquote>
             ),
@@ -86,7 +86,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                 )
               }
               return (
-                <code className="block bg-neutral-900 text-neutral-100 p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
+                <code className="block bg-neutral-900 dark:bg-neutral-800 text-neutral-100 p-6 rounded-lg overflow-x-auto text-[16px] font-mono my-8">
                   {children}
                 </code>
               )
@@ -107,7 +107,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
             {post.tags.map((tag, index) => (
               <span
                 key={index}
-                className="px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full hover:bg-neutral-200 transition-colors"
+                className="px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
               >
                 {tag}
               </span>

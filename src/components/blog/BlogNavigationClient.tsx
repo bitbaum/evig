@@ -75,8 +75,8 @@ export default function BlogNavigationClient({
               className={cn(
                 "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                 selectedCategorySlugs.length === 0
-                  ? "bg-neutral-900 text-white"
-                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                  ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
+                  : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-700"
               )}
             >
               {t('all')}
@@ -93,7 +93,7 @@ export default function BlogNavigationClient({
                       "px-3 py-1.5 rounded-full text-sm font-medium transition-all",
                       selected
                         ? "text-white"
-                        : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"
+                        : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-700"
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >
@@ -124,7 +124,7 @@ export default function BlogNavigationClient({
             {/* Mobile dropdown trigger */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden inline-flex items-center gap-1 px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-sm font-medium"
+              className="md:hidden inline-flex items-center gap-1 px-3 py-1.5 bg-neutral-100 text-neutral-700 dark:text-neutral-300 rounded-lg text-sm font-medium"
             >
               {selectedCategorySlugs.length > 0 ? (
                 <>
@@ -164,7 +164,7 @@ export default function BlogNavigationClient({
                 className={cn(
                   "px-3 py-1.5 rounded-full text-sm font-medium transition-colors",
                   selectedCategorySlugs.length === 0
-                    ? "bg-neutral-900 text-white"
+                    ? "bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900"
                     : "bg-neutral-100 text-neutral-700"
                 )}
               >

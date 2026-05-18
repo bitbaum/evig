@@ -23,7 +23,7 @@ export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
       {/* Category */}
       {post.category && (
         <div className="mb-4">
-          <span className="text-sm font-medium text-primary-700 uppercase tracking-wide">
+          <span className="text-sm font-medium text-primary-700 dark:text-primary-400 uppercase tracking-wide">
             {post.category}
           </span>
         </div>

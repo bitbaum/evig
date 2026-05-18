@@ -25,7 +25,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
             >
               <article className="bg-white rounded-lg border border-neutral-200 overflow-hidden hover:border-neutral-300 transition-all">
                 {post.featuredImage && (
-                  <div className="aspect-video overflow-hidden bg-neutral-200 relative">
+                  <div className="aspect-video overflow-hidden bg-neutral-200 dark:bg-neutral-700 relative">
                     <Image
                       src={post.featuredImage}
                       alt={post.title}
@@ -37,7 +37,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
                   </div>
                 )}
                 <div className="p-6">
-                  <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-primary-700 transition-colors line-clamp-2">
+                  <Heading level={3} className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-primary-700 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                     {post.title}
                   </Heading>
                   {post.excerpt && (
