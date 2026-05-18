@@ -57,6 +57,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     audioFile,
     processing,
     handleProcess,
+    handleImportExternal,
     handleFileUpload,
     handleAudioFileSelect,
     getReprocessMinLength,
@@ -138,6 +139,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           onAudioFileSelect={handleAudioFileSelect}
           onFileUpload={handleFileUpload}
           onProcess={handleProcess}
+          onImportExternal={handleImportExternal}
         />
       )}
 

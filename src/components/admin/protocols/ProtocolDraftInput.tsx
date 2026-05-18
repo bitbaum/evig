@@ -2,6 +2,7 @@ import { Loader2, Wand2, Upload } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { ExternalAIPanel } from './ExternalAIPanel'
 
 interface Props {
   inputMethod: string
@@ -12,6 +13,7 @@ interface Props {
   onAudioFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
   onProcess: () => void
+  onImportExternal: (content: string) => void
 }
 
 export function ProtocolDraftInput({
@@ -23,6 +25,7 @@ export function ProtocolDraftInput({
   onAudioFileSelect,
   onFileUpload,
   onProcess,
+  onImportExternal,
 }: Props) {
   return (
     <div id="protocol-step-input" className="bg-white rounded-lg border p-6 space-y-4">
@@ -93,6 +96,14 @@ export function ProtocolDraftInput({
           )}
         </Button>
       </div>
+
+      {inputMethod !== 'audio' && (
+        <ExternalAIPanel
+          transcript={transcript}
+          importing={processing}
+          onImport={onImportExternal}
+        />
+      )}
     </div>
   )
 }

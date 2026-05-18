@@ -20,6 +20,7 @@ export { ProtocolReviewQueue } from './ProtocolReviewQueue'
 export { ProtocolProgressStrip } from './ProtocolProgressStrip'
 export { ProtocolAIChat } from './ProtocolAIChat'
 export { ProtocolAttendeesCard } from './ProtocolAttendeesCard'
+export { ExternalAIPanel } from './ExternalAIPanel'
 export type { ProtocolDetailProps } from './types'
 
 // Form components

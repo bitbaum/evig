@@ -278,6 +278,25 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     }
   }
 
+  const handleImportExternal = async (content: string) => {
+    if (!content.trim()) return
+    setProcessing(true)
+    setError(null)
+
+    try {
+      const result = await apiFetch<void>(`/api/protocols/${protocol.id}/process-notes`, {
+        method: 'POST',
+        body: { content },
+      })
+      if (!result.success) throw new Error(result.error || 'Import fehlgeschlagen')
+      router.refresh()
+    } catch (err) {
+      setError(getErrorMessage(err))
+    } finally {
+      setProcessing(false)
+    }
+  }
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -328,6 +347,7 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     audioFile,
     processing,
     handleProcess,
+    handleImportExternal,
     handleFileUpload,
     handleAudioFileSelect,
     getReprocessMinLength,
