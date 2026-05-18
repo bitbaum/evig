@@ -6,8 +6,7 @@ import { apiFetch } from '@/lib/api/client'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { PROPOSAL_STATUS, type ProposalStatus } from '@/config/workshops'
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
-
-const PAGE_SIZE = 20
+import { PAGINATION } from '@/config/pagination'
 
 const STRINGS = {
   APPROVE_ERROR: 'Fehler bei der Genehmigung',
@@ -44,8 +43,8 @@ export function useAdminWorkshops() {
     setLoading(true)
     const params = new URLSearchParams({
       status: filters.status,
-      limit: String(PAGE_SIZE),
-      offset: String((currentPage - 1) * PAGE_SIZE),
+      limit: String(PAGINATION.DEFAULT),
+      offset: String((currentPage - 1) * PAGINATION.DEFAULT),
     })
     if (filters.category !== 'all') params.set('category', filters.category)
     if (searchTerm.trim()) params.set('q', searchTerm.trim())
@@ -124,7 +123,7 @@ export function useAdminWorkshops() {
     setRejectError(null)
   }
 
-  const totalPages = Math.ceil(totalItems / PAGE_SIZE)
+  const totalPages = Math.ceil(totalItems / PAGINATION.DEFAULT)
 
   return {
     proposals,
@@ -135,7 +134,7 @@ export function useAdminWorkshops() {
     filters,
     searchTerm,
     currentPage,
-    pageSize: PAGE_SIZE,
+    pageSize: PAGINATION.DEFAULT,
     rejectingId,
     rejectionReason,
     rejectError,

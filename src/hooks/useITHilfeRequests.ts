@@ -4,8 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
-
-const PAGE_SIZE = 20
+import { PAGINATION } from '@/config/pagination'
 
 export interface ITHilfeFilters {
   category: string
@@ -44,7 +43,7 @@ export function useITHilfeRequests() {
       if (filters.budgetType) params.set('budgetType', filters.budgetType)
       if (search) params.set('search', search)
       if (sort) params.set('sort', sort)
-      params.set('limit', String(PAGE_SIZE))
+      params.set('limit', String(PAGINATION.PUBLIC))
       params.set('offset', String(offset))
 
       const result = await apiFetch<{ requests: ITHilfeRequest[]; total: number }>(
@@ -87,9 +86,9 @@ export function useITHilfeRequests() {
     setOffset(0)
   }
 
-  const totalPages = Math.ceil(total / PAGE_SIZE)
-  const currentPage = Math.floor(offset / PAGE_SIZE) + 1
-  const goToPage = (page: number) => setOffset((page - 1) * PAGE_SIZE)
+  const totalPages = Math.ceil(total / PAGINATION.PUBLIC)
+  const currentPage = Math.floor(offset / PAGINATION.PUBLIC) + 1
+  const goToPage = (page: number) => setOffset((page - 1) * PAGINATION.PUBLIC)
 
   const hasActiveFilters = !!(
     filters.category || filters.canton || filters.urgency || filters.budgetType || search
@@ -113,6 +112,6 @@ export function useITHilfeRequests() {
     currentPage,
     goToPage,
     retry: fetchRequests,
-    limit: PAGE_SIZE,
+    limit: PAGINATION.PUBLIC,
   }
 }
