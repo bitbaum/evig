@@ -74,8 +74,8 @@ export function AccountStep({
 
       {/* Error Messages */}
       {errors.length > 0 && (
-        <div id="account-errors" className="p-4 rounded-lg border-2 bg-error-50 border-error-200">
-          <ul className="text-sm text-error-700 space-y-1">
+        <div id="account-errors" className="p-4 rounded-lg border-2 bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800/30">
+          <ul className="text-sm text-error-700 dark:text-error-400 space-y-1">
             {errors.map((error, index) => (
               <li key={index}>{error}</li>
             ))}

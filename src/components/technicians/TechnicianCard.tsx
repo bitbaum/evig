@@ -43,7 +43,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
           </div>
 
           {technician.isVerified && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-800 flex-shrink-0">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 flex-shrink-0">
               <CheckCircle className="w-3 h-3" />
               {t('verified')}
             </span>
@@ -124,7 +124,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         {/* Pricing badges */}
         <div className="flex flex-wrap gap-2 mb-4">
           {technician.acceptsGratis && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">
               <Users className="w-3 h-3" />
               {t('gratis')}
             </span>
@@ -136,7 +136,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
             </span>
           )}
           {technician.hourlyRateCents && (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400">
               <Euro className="w-3 h-3" />
               {formatCentsToChf(technician.hourlyRateCents)}/h
             </span>

@@ -18,8 +18,8 @@ export function ContactLink({
   
   const variants = {
     default: 'bg-primary-600 text-white hover:bg-primary-700',
-    outline: 'bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50',
-    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50'
+    outline: 'bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20',
+    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20'
   }
 
   const sizes = {
