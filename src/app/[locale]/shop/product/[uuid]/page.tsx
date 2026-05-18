@@ -53,10 +53,10 @@ function mapConditionToSchema(condition: string): string {
 
 // Condition badge colors (labels come from translations)
 const CONDITION_COLORS: Record<string, string> = {
-  'wie neu':    'bg-primary-100 text-primary-800',
-  'sehr gut':   'bg-primary-100 text-primary-800',
+  'wie neu':    'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  'sehr gut':   'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
   'gut':        'bg-neutral-100 text-neutral-800',
-  'akzeptabel': 'bg-warning-100 text-warning-800',
+  'akzeptabel': 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300',
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {

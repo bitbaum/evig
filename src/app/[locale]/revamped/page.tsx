@@ -50,21 +50,21 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <div className="inline-flex items-center gap-2 bg-primary-100 px-6 py-3 rounded-full mb-6 mt-6">
-          <Award className="w-6 h-6 text-primary-600" />
-          <span className="text-xl font-bold text-primary-800">REVAMPED</span>
-          <Sparkles className="w-5 h-5 text-primary-600" />
+        <div className="inline-flex items-center gap-2 bg-primary-100 dark:bg-primary-900/30 px-6 py-3 rounded-full mb-6 mt-6">
+          <Award className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+          <span className="text-xl font-bold text-primary-800 dark:text-primary-300">REVAMPED</span>
+          <Sparkles className="w-5 h-5 text-primary-600 dark:text-primary-400" />
         </div>
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4 text-sm mt-6">
-          <div className="flex items-center bg-primary-100 text-primary-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
             <Recycle className="w-4 h-4 mr-2" />
             {t('hero.badge1')}
           </div>
-          <div className="flex items-center bg-primary-100 text-primary-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
             <Shield className="w-4 h-4 mr-2" />
             {t('hero.badge2')}
           </div>
-          <div className="flex items-center bg-primary-100 text-primary-700 px-4 py-2 rounded-full">
+          <div className="flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 px-4 py-2 rounded-full">
             <Star className="w-4 h-4 mr-2" />
             {t('hero.badge3')}
           </div>
@@ -106,7 +106,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                   </Link>
                   <a
                     href="#certificate"
-                    className="inline-block border-2 border-primary-600 text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors"
+                    className="inline-block border-2 border-primary-600 text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                   >
                     {t('heroSection.learnBtn')}
                   </a>
@@ -289,7 +289,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               </Link>
               <Link
                 href="/contact"
-                className="inline-block border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-300 text-lg"
+                className="inline-block border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"
               >
                 {t('cta.learnBtn')}
               </Link>

@@ -43,7 +43,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
         <span
           className={`flex-shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
             technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
-              ? 'bg-primary-100 text-primary-700'
+              ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
               : 'bg-neutral-100 text-neutral-700'
           }`}
         >
@@ -120,7 +120,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
           </span>
         )}
         {technician.hourlyRateCents && (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 text-primary-700">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400">
             <Euro className="w-3 h-3" />
             {formatCentsToChf(technician.hourlyRateCents)}/h
           </span>

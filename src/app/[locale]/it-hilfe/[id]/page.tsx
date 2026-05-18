@@ -122,9 +122,9 @@ export default function ITHilfeDetailPage() {
 
             {/* Completion badge (status completed, visible to everyone) */}
             {request.status === REQUEST_STATUS.COMPLETED && request.completedAt && (
-              <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 flex items-center gap-3">
+              <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-4 flex items-center gap-3">
                 <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" aria-hidden="true" />
-                <p className="text-primary-800 text-sm font-medium">
+                <p className="text-primary-800 dark:text-primary-300 text-sm font-medium">
                   {t('completedAt', { date: formatDate(request.completedAt) })}
                 </p>
               </div>
@@ -184,7 +184,7 @@ export default function ITHilfeDetailPage() {
             {detail.reviewSubmitted && (
               <div className="bg-primary-50 border border-primary-200 rounded-xl p-6 text-center">
                 <CheckCircle className="w-8 h-8 text-primary-600 mx-auto mb-2" aria-hidden="true" />
-                <p className="text-primary-800 font-medium">{t('reviewSubmittedTitle')}</p>
+                <p className="text-primary-800 dark:text-primary-300 font-medium">{t('reviewSubmittedTitle')}</p>
                 <p className="text-sm text-primary-600 mt-1">{t('reviewSubmittedMessage')}</p>
               </div>
             )}

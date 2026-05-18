@@ -66,10 +66,10 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
         </div>
         <div className={`text-xs px-2 py-0.5 rounded-full font-medium ${
           isFull
-            ? 'bg-error-50 text-error-600'
+            ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400'
             : pool.spotsLeft <= 2
-            ? 'bg-warning-50 text-warning-700'
-            : 'bg-primary-50 text-primary-700'
+            ? 'bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-400'
+            : 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400'
         }`}>
           {isFull ? t('full') : spotsText}
         </div>

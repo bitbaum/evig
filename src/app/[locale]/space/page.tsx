@@ -137,7 +137,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                             </div>
                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                               isCurrent
-                                ? 'bg-primary-100 text-primary-800'
+                                ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300'
                                 : 'bg-neutral-100 text-neutral-600'
                             }`}>
                               {location.highlight}
@@ -216,7 +216,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       <section id="zukunft" className="py-16 md:py-24 bg-neutral-50 dark:bg-neutral-900">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-warning-100 text-warning-800 px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300 px-4 py-2 rounded-full mb-6">
               <Calendar className="w-4 h-4" />
               <span className="text-sm font-medium">{t('future.moveDeadline')}</span>
             </div>
