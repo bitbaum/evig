@@ -140,7 +140,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>
@@ -159,7 +159,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>
@@ -178,7 +178,7 @@ export default async function WissenPage() {
                   href={resource.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                  className="block p-4 sm:p-6 rounded-lg border border-neutral-200 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
                 >
                   <Heading level={4} className="font-semibold text-sm sm:text-base text-neutral-900 mb-2">{resource.name}</Heading>
                   <p className="text-xs sm:text-sm text-neutral-600">{resource.description}</p>

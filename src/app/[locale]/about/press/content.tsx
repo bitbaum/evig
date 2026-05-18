@@ -24,9 +24,9 @@ import {
 
 // Tier badge colors
 const TIER_STYLES = {
-  1: 'bg-warning-100 text-warning-800 border-warning-200',
+  1: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-400 border-warning-200 dark:border-warning-800/30',
   2: 'bg-neutral-100 text-neutral-800 border-neutral-200',
-  3: 'bg-primary-100 text-primary-800 border-primary-200',
+  3: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-400 border-primary-200 dark:border-primary-800/30',
   4: 'bg-neutral-100 text-neutral-800 border-neutral-200'
 } as const
 
@@ -203,8 +203,7 @@ export default function PressPageContent() {
                   className="group flex items-center gap-3 p-4 rounded-lg bg-white hover:bg-neutral-50 transition-all"
                 >
                   <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold ${
-                    mention.tier === 2 ? 'bg-neutral-100 text-neutral-700' :
-                    mention.tier === 3 ? 'bg-primary-100 text-primary-700' :
+                    mention.tier === 3 ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400' :
                     'bg-neutral-100 text-neutral-700'
                   }`}>
                     {mention.sourceShort.charAt(0)}

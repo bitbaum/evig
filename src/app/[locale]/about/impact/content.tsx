@@ -117,9 +117,9 @@ export default function ImpactPageContent() {
   }
 
   const CATEGORY_COLOR: Record<ImpactMetric['category'], string> = {
-    environmental: 'bg-primary-50 border-primary-200',
+    environmental: 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/30',
     social: 'bg-neutral-50 border-neutral-200',
-    economic: 'bg-primary-50 border-primary-200',
+    economic: 'bg-primary-50 dark:bg-primary-900/20 border-primary-200 dark:border-primary-800/30',
   }
 
   return (
@@ -320,7 +320,7 @@ export default function ImpactPageContent() {
               <Card
                 key={method.id}
                 className={`cursor-pointer transition-all hover:border-neutral-300 ${
-                  method.popular ? 'ring-2 ring-primary-500 bg-primary-50' : ''
+                  method.popular ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20' : ''
                 }`}
                 onClick={() => setSelectedDonationMethod(method.id)}
               >

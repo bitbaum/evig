@@ -84,7 +84,7 @@ export default function ProjectsPage() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   selectedCategory === allLabel
                     ? 'bg-primary-600 text-white transform scale-105'
-                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-white'
                 }`}
               >
                 {allLabel}
@@ -98,7 +98,7 @@ export default function ProjectsPage() {
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                       selectedCategory === label
                         ? 'bg-primary-600 text-white transform scale-105'
-                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800'
+                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 hover:text-neutral-800 dark:hover:bg-neutral-700 dark:hover:text-white'
                     }`}
                   >
                     {label}
@@ -121,13 +121,13 @@ export default function ProjectsPage() {
                 >
                   <div className="p-6 sm:p-8 flex flex-col h-full">
                     <div className="flex items-start mb-4 sm:mb-6">
-                      <div className="p-2 sm:p-3 bg-primary-100 rounded-lg text-primary-600 mr-3 sm:mr-4 transition-colors duration-300 group-hover:bg-primary-600 group-hover:text-white flex-shrink-0">
+                      <div className="p-2 sm:p-3 bg-primary-100 dark:bg-primary-900/30 rounded-lg text-primary-600 mr-3 sm:mr-4 transition-colors duration-300 group-hover:bg-primary-600 group-hover:text-white flex-shrink-0">
                         <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                           <Heading level={3} className="text-xl sm:text-2xl">{project.title}</Heading>
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">
                             {t(`status.${project.status}`)}
                           </span>
                         </div>
