@@ -5,6 +5,7 @@ import { MapPin, User, CheckCircle, Users, Sparkles, Euro } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { StarRating } from '@/components/ui/StarRating'
+import { Button } from '@/components/ui/button'
 import { type TechnicianProfile } from './types'
 import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
 import { formatCentsToChf } from '@/lib/pricing'
@@ -147,12 +148,9 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
         </div>
 
         {/* CTA */}
-        <Link
-          href={`/techniker/${technician.id}`}
-          className="block w-full bg-primary-600 text-white px-4 py-2.5 rounded-lg hover:bg-primary-700 transition-colors text-center text-sm font-medium"
-        >
+        <Button as={Link} href={`/techniker/${technician.id}`} variant="primary" className="w-full justify-center">
           {t('viewProfile')}
-        </Link>
+        </Button>
       </div>
     </div>
   )

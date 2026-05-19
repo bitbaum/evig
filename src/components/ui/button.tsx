@@ -7,6 +7,7 @@ import { designPrimitive } from '@/lib/design-system'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   as?: ElementType
+  href?: string
   variant?: 'default' | 'primary' | 'outline' | 'outline-light' | 'secondary' | 'ghost' | 'destructive'
   size?: 'default' | 'sm' | 'lg'
 }
