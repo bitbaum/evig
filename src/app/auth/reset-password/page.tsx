@@ -80,7 +80,7 @@ function ResetPasswordContent() {
 
   if (!token || tokenValid === false) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
             <div className="w-16 h-16 bg-error-100 dark:bg-error-900/20 rounded-full flex items-center justify-center">
@@ -96,7 +96,7 @@ function ResetPasswordContent() {
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10 text-center">
+          <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10 text-center">
             <div className="space-y-3">
               <Link
                 href={ROUTES.public.forgotPassword}
@@ -118,7 +118,7 @@ function ResetPasswordContent() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
             <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
@@ -134,7 +134,7 @@ function ResetPasswordContent() {
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10 text-center">
+          <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10 text-center">
             <p className="text-sm text-neutral-600 mb-6">
               {t('successRedirect')}
             </p>
@@ -151,10 +151,10 @@ function ResetPasswordContent() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center">
             <Lock className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
@@ -167,7 +167,7 @@ function ResetPasswordContent() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10">
           {/* Error Message */}
           {error && (
             <div id="reset-password-error" className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg flex items-start gap-3">
@@ -194,7 +194,7 @@ function ResetPasswordContent() {
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 rounded-lg bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder={t('newPasswordPlaceholder')}
                 />
                 <button
@@ -224,7 +224,7 @@ function ResetPasswordContent() {
                   aria-describedby={error ? 'reset-password-error' : undefined}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 rounded-lg bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-11 pr-11 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder={t('confirmPasswordPlaceholder')}
                 />
                 <button
@@ -268,16 +268,16 @@ function ResetPasswordContent() {
 
 function ResetPasswordFallback() {
   return (
-    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center">
             <Lock className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10">
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-12 h-12 text-primary-500 animate-spin" />
           </div>

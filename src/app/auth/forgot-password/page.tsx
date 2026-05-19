@@ -41,7 +41,7 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
             <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center">
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
+          <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10">
             <div className="text-center">
               <p className="text-sm text-neutral-600 mb-6">
                 {t('successInstructions')}
@@ -87,10 +87,10 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-neutral-100 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-neutral-100 dark:bg-neutral-700 rounded-full flex items-center justify-center">
             <Mail className="w-8 h-8 text-neutral-600" />
           </div>
         </div>
@@ -103,7 +103,7 @@ export default function ForgotPasswordPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10">
           <Link
             href={ROUTES.public.login}
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
@@ -138,7 +138,7 @@ export default function ForgotPasswordPage() {
                   aria-describedby={error ? 'email-error' : undefined}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-2.5 border border-neutral-300 rounded-lg bg-white text-neutral-900 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  className="w-full pl-11 pr-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white placeholder-neutral-400 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   placeholder={t('emailPlaceholder')}
                 />
               </div>
