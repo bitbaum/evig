@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 
 export default function Error({
@@ -21,7 +22,7 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-neutral-50 px-4">
+    <div className="flex items-center justify-center py-24 px-4">
       <div className="max-w-md w-full text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 bg-error-100 rounded-full mb-6">
           <AlertTriangle className="w-8 h-8 text-error-600" />
@@ -33,20 +34,14 @@ export default function Error({
           {t('description')}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button
-            onClick={reset}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
-          >
+          <Button onClick={reset} variant="primary">
             <RefreshCw className="w-4 h-4" />
             {t('retry')}
-          </button>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-neutral-700 font-medium rounded-lg border border-neutral-300 hover:bg-neutral-50 transition-colors"
-          >
+          </Button>
+          <Button as={Link} href="/" variant="outline">
             <Home className="w-4 h-4" />
             {t('goHome')}
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

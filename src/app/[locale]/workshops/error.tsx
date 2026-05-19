@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation'
 import { AlertCircle, ArrowLeft } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 
 export default function WorkshopsError({
@@ -31,12 +32,9 @@ export default function WorkshopsError({
           {t('workshops.description')}
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          <button
-            onClick={reset}
-            className="w-full px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-          >
+          <Button onClick={reset} variant="primary" className="w-full">
             {t('retry')}
-          </button>
+          </Button>
           <Link
             href="/workshops"
             className="inline-flex items-center justify-center gap-2 text-neutral-600 hover:text-neutral-900 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"

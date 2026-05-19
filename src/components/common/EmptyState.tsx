@@ -1,5 +1,6 @@
 import { type LucideIcon, Package } from 'lucide-react'
 import { EmptyState as UIEmptyState } from '@/components/ui/EmptyState'
+import { Button } from '@/components/ui/button'
 
 interface EmptyStateProps {
   icon?: LucideIcon
@@ -22,19 +23,13 @@ export function EmptyState({
 }: EmptyStateProps) {
   const actionNode = action ? (
     action.href ? (
-      <a
-        href={action.href}
-        className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-      >
+      <Button as="a" href={action.href} variant="primary" className="mt-4">
         {action.label}
-      </a>
+      </Button>
     ) : (
-      <button
-        onClick={action.onClick}
-        className="mt-4 inline-flex items-center justify-center px-4 py-2 rounded-lg text-sm font-medium bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-      >
+      <Button onClick={action.onClick} variant="primary" className="mt-4">
         {action.label}
-      </button>
+      </Button>
     )
   ) : undefined
 
