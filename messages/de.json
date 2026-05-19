@@ -4357,6 +4357,26 @@
             "description": "Möchtest du mehr darüber erfahren, wie LTSP deiner Organisation zugute kommen kann? Kontaktiere uns, um deine Bedürfnisse zu besprechen und wie wir dir bei der Implementierung dieser leistungsstarken Lösung helfen können."
           }
         ]
+      },
+      "cta": {
+        "title": "Mit LTSP durchstarten",
+        "actions": [
+          {
+            "title": "Volunteer werden",
+            "description": "Hilf uns beim Aufbau und Betrieb von LTSP-Installationen für gemeinnützige Organisationen.",
+            "cta": "Jetzt mitmachen"
+          },
+          {
+            "title": "LTSP installieren",
+            "description": "Besuche die offizielle LTSP-Dokumentation, um mehr über die Einrichtung zu erfahren.",
+            "cta": "Zur Doku"
+          },
+          {
+            "title": "Kontakt aufnehmen",
+            "description": "Hast du Fragen oder möchtest eine LTSP-Lösung für deine Schule oder Organisation?",
+            "cta": "Kontakt"
+          }
+        ]
       }
     },
     "hero": {
@@ -4395,7 +4415,9 @@
           "Buchhaltung und Ressourcenverwaltung",
           "Kundenverwaltung",
           "Open-Source ERP-System"
-        ]
+        ],
+        "slug": "kivitendo",
+        "year": "2015"
       },
       {
         "title": "Verein Linuxola",
@@ -4407,7 +4429,9 @@
           "Fokus auf Afrika-Partnerschaften",
           "Zugang zu Informationstechnologie",
           "Verbindung zu digitalen Gemeingütern"
-        ]
+        ],
+        "slug": "linuxola",
+        "year": "2005"
       },
       {
         "title": "FreieComputer.ch",
@@ -4419,7 +4443,9 @@
           "Vorinstallierte Open-Source-Software",
           "Garantierter Support",
           "Community-Unterstützung"
-        ]
+        ],
+        "slug": "freiecomputer",
+        "year": "2010"
       },
       {
         "title": "Compirat",
@@ -4431,7 +4457,9 @@
           "Unterstützung für Menschen mit begrenzten Mitteln",
           "Computer-Schulungen im Kanton Zürich",
           "Wohnortnahe Lernmöglichkeiten"
-        ]
+        ],
+        "slug": "compirat",
+        "year": "2018"
       },
       {
         "title": "Hardware-Entwicklung",
@@ -4443,7 +4471,9 @@
           "Energie- und Ressourcenoptimierung",
           "Open-Source-Hardware-Anleitungen",
           "Nachhaltige Entwicklung"
-        ]
+        ],
+        "slug": "hardware",
+        "year": "2020"
       },
       {
         "title": "LTSP - Linux Terminal Server Project",
@@ -4455,7 +4485,9 @@
           "Effiziente Nutzung älterer Hardware",
           "Multi-User-Computing",
           "Ressourcenoptimierung"
-        ]
+        ],
+        "slug": "ltsp",
+        "year": "2016"
       }
     ],
     "freiecomputer": {

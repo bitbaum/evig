@@ -1,47 +1,60 @@
-/**
- * Project Page Types
- *
- * Centralized type definitions for consistent project page structure
- */
+import type { LucideIcon } from 'lucide-react'
+
+// ── Shared translation-layer types ────────────────────────────────────────────
+// Used in every project page to type the raw t.raw() output before mapping.
+
+export type RawCard = { title: string; description?: string; features?: string[] }
+export type RawAction = { title: string; description: string; cta: string }
+
+// ── Component types ───────────────────────────────────────────────────────────
 
 export interface ProjectCTA {
   text: string
   href: string
-  variant?: 'primary' | 'outline' | 'secondary'
-  icon?: React.ReactNode
+  variant?: 'primary' | 'outline'
 }
 
 export interface ProjectHero {
   title: string
   description: string
-  backgroundColor?: string
+  icon?: LucideIcon
   ctas?: ProjectCTA[]
 }
 
 export interface ProjectCard {
   title: string
   description: string
-  icon?: string | React.ReactNode | React.ComponentType<{ className?: string }>
+  icon?: LucideIcon
   features?: string[]
   href?: string
   ctaText?: string
-  iconColor?: string
 }
 
 export interface ProjectSection {
-  title: string
+  title?: string
   description?: string
   cards?: ProjectCard[]
-  backgroundColor?: 'white' | 'gray' | 'primary'
+  backgroundColor?: 'white' | 'gray'
   layout?: 'grid-2' | 'grid-3' | 'grid-4' | 'single'
+}
+
+export interface ProjectCTASection {
+  title: string
+  subtitle?: string
+  actions: Array<{
+    title: string
+    description: string
+    href: string
+    ctaText: string
+  }>
 }
 
 export interface ProjectPageConfig {
   hero: ProjectHero
   sections: ProjectSection[]
+  cta?: ProjectCTASection
   metadata: {
     title: string
     description: string
   }
 }
-

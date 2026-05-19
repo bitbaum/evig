@@ -1,128 +1,90 @@
-/**
- * ProjectSection - Reusable section component for project pages
- * 
- * Handles different layouts and background colors consistently
- */
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ProjectSection as ProjectSectionType } from './types'
 import { CheckCircle } from 'lucide-react'
-import { getTextColor, getBackgroundColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { designPrimitive } from '@/lib/design-system'
+import type { ProjectSection as ProjectSectionType } from './types'
 
 interface ProjectSectionProps {
   section: ProjectSectionType
 }
 
-export function ProjectSection({ section }: ProjectSectionProps) {
-  const bgVariant = (section.backgroundColor || 'white') as 'white' | 'neutral' | 'primary' | 'gray'
-  const bgClass = cn(
-    bgVariant === 'white' ? getBackgroundColor('white') :
-    (bgVariant === 'gray' || bgVariant === 'neutral') ? getBackgroundColor('neutral') :
-    getBackgroundColor('primary')
-  )
+const gridClass: Record<string, string> = {
+  'grid-2': 'md:grid-cols-2',
+  'grid-3': 'md:grid-cols-3',
+  'grid-4': 'sm:grid-cols-2 lg:grid-cols-4',
+  'single': 'max-w-2xl mx-auto',
+}
 
-  const textColorClass = bgVariant === 'primary' 
-    ? getTextColor('primary', 'primary')
-    : getTextColor('white', 'primary')
-  
-  const textSecondaryClass = bgVariant === 'primary' 
-    ? getTextColor('primary', 'secondary')
-    : getTextColor('white', 'muted')
+export function ProjectSection({ section }: ProjectSectionProps) {
+  const isGray = section.backgroundColor === 'gray'
 
   return (
-    <section className={`py-20 ${bgClass}`}>
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Section Header */}
-          {(section.title || section.description) && (
-            <div className="text-center mb-12">
-              {section.title && (
-                <h2 className={`text-4xl font-bold mb-4 ${textColorClass}`}>
-                  {section.title}
-                </h2>
-              )}
-              {section.description && (
-                <p className={`text-xl max-w-3xl mx-auto ${textSecondaryClass}`}>
-                  {section.description}
-                </p>
-              )}
-            </div>
-          )}
+    <section className={cn('py-16 sm:py-20', isGray ? 'bg-neutral-50' : 'bg-white')}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-          {/* Cards Grid */}
-          {section.cards && section.cards.length > 0 && (
-            <div className={`grid gap-8 ${
-              section.layout === 'grid-2' ? 'md:grid-cols-2' :
-              section.layout === 'grid-3' ? 'md:grid-cols-3' :
-              section.layout === 'grid-4' ? 'md:grid-cols-4' :
-              'md:grid-cols-2'
-            }`}>
-              {section.cards.map((card, index) => (
-                <div 
-                  key={index}
-                  className={section.backgroundColor === 'gray' 
-                    ? 'bg-white dark:bg-neutral-900 p-8 rounded-xl border border-neutral-200 dark:border-white/[0.06]'
-                    : 'bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300'
-                  }
-                >
-                  {/* Card Header with Icon */}
-                  {card.icon && (
-                    <div className="flex items-center mb-4">
-                      {typeof card.icon === 'string' ? (
-                        <div className={`w-8 h-8 ${card.iconColor || 'text-primary-600'} mr-3`}>
-                          {card.icon}
-                        </div>
-                      ) : typeof card.icon === 'function' ? (
-                        <div className={`w-8 h-8 ${card.iconColor || 'text-primary-600'} mr-3`}>
-                          {/* @ts-ignore - Component type handling */}
-                          <card.icon className="w-8 h-8" />
-                        </div>
-                      ) : (
-                        <div className={`w-8 h-8 ${card.iconColor || 'text-primary-600'} mr-3`}>
-                          {card.icon}
-                        </div>
-                      )}
-                      <h3 className={`text-2xl font-semibold ${textColorClass}`}>
+        {(section.title || section.description) && (
+          <div className="text-center mb-12">
+            {section.title && (
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-3">
+                {section.title}
+              </h2>
+            )}
+            {section.description && (
+              <p className="text-base sm:text-lg text-neutral-500 dark:text-neutral-400 max-w-3xl mx-auto">
+                {section.description}
+              </p>
+            )}
+          </div>
+        )}
+
+        {section.cards && section.cards.length > 0 && (
+          <div className={cn(
+            'grid gap-6',
+            section.layout === 'single' ? '' : 'md:grid-cols-2',
+            gridClass[section.layout ?? 'grid-2']
+          )}>
+            {section.cards.map((card, i) => {
+              const CardIcon = card.icon
+              return (
+                <div key={i} className={cn(designPrimitive.surface.card, 'p-6 sm:p-8')}>
+                  {CardIcon && (
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+                        <CardIcon className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-neutral-900 dark:text-white">
                         {card.title}
                       </h3>
                     </div>
                   )}
-                  
-                  {/* Card Title without Icon */}
-                  {!card.icon && (
-                    <CardHeader className="p-0 mb-4">
-                      <CardTitle className={`text-xl ${textColorClass}`}>
-                        {card.title}
-                      </CardTitle>
-                    </CardHeader>
+
+                  {!CardIcon && (
+                    <h3 className="text-lg font-semibold text-neutral-900 dark:text-white mb-3">
+                      {card.title}
+                    </h3>
                   )}
 
-                  {/* Card Content */}
-                  <div>
-                    {card.description && (
-                      <p className={`${textSecondaryClass} mb-4`}>
-                        {card.description}
-                      </p>
-                    )}
-                    {card.features && card.features.length > 0 && (
-                      <ul className={`space-y-3 ${textSecondaryClass}`}>
-                        {card.features.map((feature, fIndex) => (
-                          <li key={fIndex} className="flex items-start">
-                            <CheckCircle className="w-5 h-5 text-primary-500 mr-2 flex-shrink-0 mt-1" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+                  {card.description && (
+                    <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-4">
+                      {card.description}
+                    </p>
+                  )}
+
+                  {card.features && card.features.length > 0 && (
+                    <ul className="space-y-2.5">
+                      {card.features.map((feat, fi) => (
+                        <li key={fi} className="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-300">
+                          <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-primary-500" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </section>
   )
 }
-

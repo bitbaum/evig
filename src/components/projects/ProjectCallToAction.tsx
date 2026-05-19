@@ -1,96 +1,72 @@
-/**
- * ProjectCallToAction - Standardized CTA section for project pages
- * 
- * Displays action cards for getting involved with the project
- */
-
-import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { ProjectCard } from './types'
-import { getTextColor, getBackgroundColor, getButtonVariant } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { designPrimitive } from '@/lib/design-system'
+import type { ProjectCTASection } from './types'
 
 interface ProjectCallToActionProps {
-  title: string
-  subtitle?: string
-  actions: ProjectCard[]
-  backgroundColor?: 'white' | 'gray' | 'primary'
+  cta: ProjectCTASection
 }
 
-export function ProjectCallToAction({ 
-  title, 
-  subtitle, 
-  actions, 
-  backgroundColor = 'gray' 
-}: ProjectCallToActionProps) {
-  const bgClass = cn(
-    backgroundColor === 'white' ? getBackgroundColor('white') :
-    backgroundColor === 'gray' ? getBackgroundColor('neutral') :
-    getBackgroundColor('primary')
-  )
-
-  const textColorClass = backgroundColor === 'primary' 
-    ? getTextColor('primary', 'primary')
-    : getTextColor('white', 'primary')
-  
-  const textSecondaryClass = backgroundColor === 'primary' 
-    ? getTextColor('primary', 'secondary')
-    : getTextColor('white', 'muted')
-
+export function ProjectCallToAction({ cta }: ProjectCallToActionProps) {
   return (
-    <section className={`py-20 ${bgClass}`}>
-      <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className={`text-4xl font-bold mb-8 ${textColorClass}`}>
-            {title}
+    <section className="bg-primary-700 py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-3">
+            {cta.title}
           </h2>
-          {subtitle && (
-            <p className={`text-xl mb-12 ${textSecondaryClass}`}>
-              {subtitle}
+          {cta.subtitle && (
+            <p className="text-base sm:text-lg text-primary-100 max-w-2xl mx-auto">
+              {cta.subtitle}
             </p>
           )}
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {actions.map((action, index) => (
-              <div 
-                key={index}
-                className={`p-6 rounded-lg shadow-sm flex flex-col h-full ${
-                  backgroundColor === 'gray' ? 'bg-white' : 'bg-white/10'
-                }`}
-              >
-                <h3 className={`text-xl font-semibold mb-4 ${textColorClass}`}>
-                  {action.title}
-                </h3>
-                <p className={`mb-4 flex-grow ${textSecondaryClass}`}>
-                  {action.description}
-                </p>
-                {action.href && (
-                  action.href.startsWith('http') ? (
-                    <a href={action.href} target="_blank" rel="noopener noreferrer" className="block w-full">
-                      <Button
-                        variant={backgroundColor === 'primary' ? 'outline-light' : 'outline'}
-                        className="w-full"
-                      >
-                        {action.ctaText || 'Mehr erfahren'}
-                      </Button>
-                    </a>
-                  ) : (
-                    <Link href={action.href} className="block w-full">
-                      <Button
-                        variant={backgroundColor === 'primary' ? 'outline-light' : 'outline'}
-                        className="w-full"
-                      >
-                        {action.ctaText || 'Mehr erfahren'}
-                      </Button>
-                    </Link>
-                  )
-                )}
-              </div>
-            ))}
-          </div>
+        </div>
+
+        <div className={cn(
+          'grid gap-6',
+          cta.actions.length === 2 ? 'sm:grid-cols-2 max-w-3xl mx-auto' :
+          cta.actions.length >= 3 ? 'sm:grid-cols-2 lg:grid-cols-3' :
+          'max-w-sm mx-auto'
+        )}>
+          {cta.actions.map((action, i) => (
+            <div key={i} className="flex flex-col rounded-lg bg-white/10 p-6">
+              <h3 className="text-base font-semibold text-white mb-2">
+                {action.title}
+              </h3>
+              <p className="text-sm text-primary-100 flex-grow mb-5">
+                {action.description}
+              </p>
+              {action.href.startsWith('http') ? (
+                <a
+                  href={action.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    designPrimitive.buttonBase,
+                    designPrimitive.buttonSize.default,
+                    designPrimitive.button.outlineLight,
+                    'w-full justify-center'
+                  )}
+                >
+                  {action.ctaText}
+                </a>
+              ) : (
+                <Link
+                  href={action.href}
+                  className={cn(
+                    designPrimitive.buttonBase,
+                    designPrimitive.buttonSize.default,
+                    designPrimitive.button.outlineLight,
+                    'w-full justify-center'
+                  )}
+                >
+                  {action.ctaText}
+                </Link>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>
   )
 }
-

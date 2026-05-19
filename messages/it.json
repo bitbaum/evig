@@ -2771,7 +2771,9 @@
           "Contabilità e gestione delle risorse",
           "Gestione clienti",
           "Sistema ERP open source"
-        ]
+        ],
+        "slug": "kivitendo",
+        "year": "2015"
       },
       {
         "title": "Verein Linuxola",
@@ -2783,7 +2785,9 @@
           "Focus sui partenariati africani",
           "Accesso alle tecnologie dell'informazione",
           "Collegamento ai beni comuni digitali"
-        ]
+        ],
+        "slug": "linuxola",
+        "year": "2005"
       },
       {
         "title": "FreieComputer.ch",
@@ -2795,7 +2799,9 @@
           "Software open source preinstallato",
           "Supporto garantito",
           "Sostegno della comunità"
-        ]
+        ],
+        "slug": "freiecomputer",
+        "year": "2010"
       },
       {
         "title": "Compirat",
@@ -2807,7 +2813,9 @@
           "Supporto per persone con risorse limitate",
           "Corsi di informatica nel Canton Zurigo",
           "Opportunità di apprendimento locali"
-        ]
+        ],
+        "slug": "compirat",
+        "year": "2018"
       },
       {
         "title": "Sviluppo hardware",
@@ -2819,7 +2827,9 @@
           "Ottimizzazione di energia e risorse",
           "Guide hardware open source",
           "Sviluppo sostenibile"
-        ]
+        ],
+        "slug": "hardware",
+        "year": "2020"
       },
       {
         "title": "LTSP - Linux Terminal Server Project",
@@ -2831,7 +2841,9 @@
           "Utilizzo efficiente di hardware più vecchio",
           "Informatica multi-utente",
           "Ottimizzazione delle risorse"
-        ]
+        ],
+        "slug": "ltsp",
+        "year": "2016"
       }
     ],
     "freiecomputer": {
@@ -3404,6 +3416,26 @@
           {
             "title": "Contact us",
             "description": "Would you like to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
+          }
+        ]
+      },
+      "cta": {
+        "title": "Inizia con LTSP",
+        "actions": [
+          {
+            "title": "Diventare volontario",
+            "description": "Aiutaci a costruire e gestire installazioni LTSP per organizzazioni non profit.",
+            "cta": "Partecipa"
+          },
+          {
+            "title": "Installare LTSP",
+            "description": "Consulta la documentazione ufficiale di LTSP per saperne di più sulla configurazione.",
+            "cta": "Documentazione"
+          },
+          {
+            "title": "Contattaci",
+            "description": "Hai domande o vuoi una soluzione LTSP per la tua scuola o organizzazione?",
+            "cta": "Contatto"
           }
         ]
       }

@@ -4556,6 +4556,26 @@
             "description": "Would you like to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
           }
         ]
+      },
+      "cta": {
+        "title": "Get Started with LTSP",
+        "actions": [
+          {
+            "title": "Become a Volunteer",
+            "description": "Help us build and operate LTSP installations for non-profit organizations.",
+            "cta": "Get involved"
+          },
+          {
+            "title": "Install LTSP",
+            "description": "Visit the official LTSP documentation to learn more about setting it up.",
+            "cta": "Documentation"
+          },
+          {
+            "title": "Get in touch",
+            "description": "Have questions or want an LTSP solution for your school or organization?",
+            "cta": "Contact us"
+          }
+        ]
       }
     },
     "hero": {
@@ -4594,7 +4614,9 @@
           "Accounting and resource management",
           "Customer management",
           "Open-source ERP system"
-        ]
+        ],
+        "slug": "kivitendo",
+        "year": "2015"
       },
       {
         "title": "Verein Linuxola",
@@ -4606,7 +4628,9 @@
           "Focus on Africa partnerships",
           "Access to information technology",
           "Connection to digital commons"
-        ]
+        ],
+        "slug": "linuxola",
+        "year": "2005"
       },
       {
         "title": "FreieComputer.ch",
@@ -4618,7 +4642,9 @@
           "Pre-installed open-source software",
           "Guaranteed support",
           "Community support"
-        ]
+        ],
+        "slug": "freiecomputer",
+        "year": "2010"
       },
       {
         "title": "Compirat",
@@ -4630,7 +4656,9 @@
           "Support for people with limited means",
           "Computer courses in the canton of Zurich",
           "Local learning opportunities"
-        ]
+        ],
+        "slug": "compirat",
+        "year": "2018"
       },
       {
         "title": "Hardware Development",
@@ -4642,7 +4670,9 @@
           "Energy and resource optimization",
           "Open-source hardware guides",
           "Sustainable development"
-        ]
+        ],
+        "slug": "hardware",
+        "year": "2020"
       },
       {
         "title": "LTSP - Linux Terminal Server Project",
@@ -4654,7 +4684,9 @@
           "Efficient use of older hardware",
           "Multi-user computing",
           "Resource optimization"
-        ]
+        ],
+        "slug": "ltsp",
+        "year": "2016"
       }
     ],
     "freiecomputer": {

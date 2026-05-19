@@ -2771,7 +2771,9 @@
           "会計とリソース管理",
           "顧客管理",
           "オープンソースERPシステム"
-        ]
+        ],
+        "slug": "kivitendo",
+        "year": "2015"
       },
       {
         "title": "Verein Linuxola",
@@ -2783,7 +2785,9 @@
           "アフリカパートナーシップに注力",
           "情報技術へのアクセス",
           "デジタルコモンズへの接続"
-        ]
+        ],
+        "slug": "linuxola",
+        "year": "2005"
       },
       {
         "title": "FreieComputer.ch",
@@ -2795,7 +2799,9 @@
           "オープンソースソフトウェアのプリインストール",
           "サポート保証",
           "コミュニティサポート"
-        ]
+        ],
+        "slug": "freiecomputer",
+        "year": "2010"
       },
       {
         "title": "Compirat",
@@ -2807,7 +2813,9 @@
           "限られた資金の人々への支援",
           "チューリッヒ州でのコンピュータ講座",
           "地域での学習機会"
-        ]
+        ],
+        "slug": "compirat",
+        "year": "2018"
       },
       {
         "title": "ハードウェア開発",
@@ -2819,7 +2827,9 @@
           "エネルギーとリソースの最適化",
           "オープンソースハードウェアガイド",
           "持続可能な開発"
-        ]
+        ],
+        "slug": "hardware",
+        "year": "2020"
       },
       {
         "title": "LTSP - Linux Terminal Server Project",
@@ -2831,7 +2841,9 @@
           "古いハードウェアの効率的な使用",
           "マルチユーザーコンピューティング",
           "リソース最適化"
-        ]
+        ],
+        "slug": "ltsp",
+        "year": "2016"
       }
     ],
     "freiecomputer": {
@@ -3404,6 +3416,26 @@
           {
             "title": "Contact us",
             "description": "Would you like to learn more about how LTSP can benefit your organisation? Contact us to discuss your needs and how we can help you implement this powerful solution."
+          }
+        ]
+      },
+      "cta": {
+        "title": "LTSPを始めよう",
+        "actions": [
+          {
+            "title": "ボランティアになる",
+            "description": "非営利団体向けのLTSPインストールの構築・運営を手伝ってください。",
+            "cta": "参加する"
+          },
+          {
+            "title": "LTSPをインストール",
+            "description": "公式LTSPドキュメントでセットアップ方法を学んでください。",
+            "cta": "ドキュメント"
+          },
+          {
+            "title": "お問い合わせ",
+            "description": "学校や組織向けのLTSPソリューションについてご質問がありますか？",
+            "cta": "連絡する"
           }
         ]
       }

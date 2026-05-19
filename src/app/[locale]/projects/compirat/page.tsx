@@ -1,9 +1,8 @@
 import { getTranslations } from 'next-intl/server'
-import { ProjectPage, ProjectCallToAction } from '@/components/projects'
-import type { ProjectPageConfig } from '@/components/projects/types'
+import { Users } from 'lucide-react'
+import { ProjectPage } from '@/components/projects'
+import type { ProjectPageConfig, RawCard, RawAction } from '@/components/projects'
 
-type RawCard = { title: string; description?: string; features?: string[] }
-type RawAction = { title: string; description: string; cta: string }
 type PageMessages = {
   meta: { title: string; description: string }
   hero: { title: string; description: string; cta1: string; cta2: string }
@@ -15,9 +14,11 @@ type PageMessages = {
 export async function generateMetadata() {
   const t = await getTranslations('projects')
   const p = t.raw('compirat') as PageMessages
-  const title = p.meta.title
-  const description = p.meta.description
-  return { title, description, openGraph: { title, description, type: 'website' } }
+  return {
+    title: p.meta.title,
+    description: p.meta.description,
+    openGraph: { title: p.meta.title, description: p.meta.description, type: 'website' },
+  }
 }
 
 export default async function CompiratPage() {
@@ -28,6 +29,7 @@ export default async function CompiratPage() {
     hero: {
       title: p.hero.title,
       description: p.hero.description,
+      icon: Users,
       ctas: [
         { text: p.hero.cta1, href: '/get-involved/volunteer', variant: 'primary' },
         { text: p.hero.cta2, href: '/contact', variant: 'outline' },
@@ -48,20 +50,16 @@ export default async function CompiratPage() {
         cards: p.program.cards.map(c => ({ title: c.title, description: c.description ?? '', features: c.features })),
       },
     ],
+    cta: {
+      title: p.cta.title,
+      actions: [
+        { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: '/get-involved/volunteer', ctaText: p.cta.actions[0].cta },
+        { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: 'https://www.compirat.ch', ctaText: p.cta.actions[1].cta },
+        { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact', ctaText: p.cta.actions[2].cta },
+      ],
+    },
     metadata: { title: p.meta.title, description: p.meta.description },
   }
 
-  return (
-    <>
-      <ProjectPage config={config} />
-      <ProjectCallToAction
-        title={p.cta.title}
-        actions={[
-          { title: p.cta.actions[0].title, description: p.cta.actions[0].description, href: '/get-involved/volunteer', ctaText: p.cta.actions[0].cta },
-          { title: p.cta.actions[1].title, description: p.cta.actions[1].description, href: 'https://www.compirat.ch', ctaText: p.cta.actions[1].cta },
-          { title: p.cta.actions[2].title, description: p.cta.actions[2].description, href: '/contact', ctaText: p.cta.actions[2].cta },
-        ]}
-      />
-    </>
-  )
+  return <ProjectPage config={config} />
 }
