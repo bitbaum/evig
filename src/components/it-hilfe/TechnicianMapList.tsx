@@ -231,7 +231,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
                       </div>
                       <div className="w-full bg-neutral-200 rounded-full h-1.5">
                         <div
-                          className="bg-gradient-to-r from-primary-500 to-primary-400 h-1.5 rounded-full transition-all"
+                          className="bg-primary-500 h-1.5 rounded-full transition-all"
                           style={{ width: `${matchPercentage}%` }}
                         />
                       </div>
