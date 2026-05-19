@@ -12,7 +12,7 @@ import { Logo } from '@/components/ui/Logo'
 function LoginFormFallback() {
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 p-8">
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
         </div>
@@ -44,7 +44,7 @@ export default function LoginPage() {
     )
   }
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Back link */}
         <div className="mb-8">
@@ -70,7 +70,3 @@ export default function LoginPage() {
     </main>
   )
 }
-
-
-
-

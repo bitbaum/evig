@@ -186,7 +186,7 @@ export function RegistrationWizard() {
   if (isComplete) {
     return (
       <div className="w-full max-w-md mx-auto">
-        <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-8 border border-neutral-100 dark:border-neutral-700">
+        <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 p-8">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-primary-600" />
@@ -278,7 +278,7 @@ export function RegistrationWizard() {
 
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="bg-white dark:bg-neutral-800 rounded-2xl shadow-xl p-6 sm:p-8 border border-neutral-100 dark:border-neutral-700">
+      <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 p-6 sm:p-8">
         {/* Stepper */}
         <div className="mb-8">
           <Stepper
