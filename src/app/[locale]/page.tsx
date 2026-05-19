@@ -15,6 +15,7 @@ import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
+import { auth } from '@/auth'
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -52,6 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Home() {
   const t = await getTranslations('home')
+  const session = await auth()
   const compactMetrics = getCompactMetrics({
     devicesRescued: t('impact.compactMetrics.devicesRescued'),
     peopleTrained: t('impact.compactMetrics.peopleTrained'),
@@ -103,7 +105,7 @@ export default async function Home() {
       hoverColor: DESIGN_TOKENS.cards.hoverText.about,
       title: t('community.use.title'),
       desc: t('community.use.desc'),
-      href: '/auth/register',
+      href: session ? ROUTES.public.shop : ROUTES.public.register,
       border: DESIGN_TOKENS.cards.border.default,
     },
     {

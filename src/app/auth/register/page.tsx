@@ -1,25 +1,41 @@
 'use client'
 
-import { RegistrationWizard } from '@/components/auth/RegistrationWizard'
-import Link from 'next/link'
 import { useEffect } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ORG } from '@/config/org'
 import { Logo } from '@/components/ui/Logo'
+import { RegistrationWizard } from '@/components/auth/RegistrationWizard'
 
-// Client-side only page to avoid server-side session checks blocking the page
 export default function RegisterPage() {
   const t = useTranslations('auth.login')
+  const { status } = useSession()
+  const router = useRouter()
 
-  // Set page title on client side
   useEffect(() => {
     document.title = `Registrieren | ${ORG.name}`
   }, [])
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.replace('/admin')
+    }
+  }, [status, router])
+
+  if (status === 'loading' || status === 'authenticated') {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+      </main>
+    )
+  }
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Back link */}
         <div className="mb-8">
           <Link
             href="/"
@@ -29,23 +45,11 @@ export default function RegisterPage() {
             {t('backHome')}
           </Link>
         </div>
-
-        {/* Logo */}
         <div className="flex justify-center mb-8">
           <Logo showText={true} />
         </div>
-
-        {/* Registration Wizard */}
         <RegistrationWizard />
       </div>
     </main>
   )
 }
-
-
-
-
-
-
-
-

@@ -109,6 +109,8 @@ tina/__generated__
 # Uploaded files (development)
 public/uploads/
 *.sh
+ship
+cookies.txt
 daten/
 docker-compose.override.yml
 
