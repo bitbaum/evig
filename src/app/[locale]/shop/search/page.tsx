@@ -147,7 +147,7 @@ function SearchResults({
 }) {
   if (products.length === 0) {
     return (
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
+      <div className="card-shell p-8 text-center">
         <div className="max-w-md mx-auto">
           <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center mx-auto mb-4">
             <Search className="w-8 h-8" />

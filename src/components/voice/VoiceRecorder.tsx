@@ -110,7 +110,7 @@ export function VoiceRecorder({
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
       {/* Main recording area */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6">
+      <div className="card-shell p-6">
         {/* Waveform visualization */}
         <div className="mb-4">
           <VoiceWaveform

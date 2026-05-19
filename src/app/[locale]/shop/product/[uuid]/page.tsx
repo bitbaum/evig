@@ -135,7 +135,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <PageShell py="py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image */}
-          <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
+          <div className="card-shell rounded-2xl overflow-hidden">
             <div className="relative aspect-square">
               {product.image_url ? (
                 <Image
