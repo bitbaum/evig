@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 export default function ForgotPasswordPage() {
   const t = useTranslations('auth.forgotPassword')
@@ -64,7 +65,7 @@ export default function ForgotPasswordPage() {
 
               <div className="space-y-3">
                 <Link
-                  href="/auth/login"
+                  href={ROUTES.public.login}
                   className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
                 >
                   {t('successLoginLink')}
@@ -104,7 +105,7 @@ export default function ForgotPasswordPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10">
           <Link
-            href="/auth/login"
+            href={ROUTES.public.login}
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -158,7 +159,7 @@ export default function ForgotPasswordPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-neutral-600">
               {t('rememberPassword')}{' '}
-              <Link href="/auth/login" className="font-medium text-primary-600 hover:text-primary-700">
+              <Link href={ROUTES.public.login} className="font-medium text-primary-600 hover:text-primary-700">
                 {t('loginLink')}
               </Link>
             </p>

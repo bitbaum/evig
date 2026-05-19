@@ -13,6 +13,7 @@ import Heading from '@/components/ui/Heading'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useTranslations } from 'next-intl'
 import { useListingSellForm } from '@/hooks/useListingSellForm'
+import { ROUTES } from '@/config/routes'
 
 function SellPageContent() {
   const t = useTranslations('marketplace.sell')
@@ -51,7 +52,7 @@ function SellPageContent() {
         <p className="text-neutral-600 dark:text-neutral-400 mb-6">
           {t('loginRequiredDesc')}
         </p>
-        <Link href="/auth/login" className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium">
+        <Link href={ROUTES.public.login} className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium">
           {t('login')}
         </Link>
       </div>
@@ -75,7 +76,7 @@ function SellPageContent() {
   return (
     <div className="max-w-3xl mx-auto">
       <Link
-        href="/marketplace"
+        href={ROUTES.public.marketplace}
         className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -158,7 +159,7 @@ function SellPageContent() {
           {error && <ErrorAlert message={error} variant="inline" className="mb-4" />}
           <div className="flex flex-col-reverse sm:flex-row gap-3">
             <Link
-              href="/marketplace"
+              href={ROUTES.public.marketplace}
               className="px-6 py-2.5 rounded-lg border border-neutral-300 dark:border-neutral-600 font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 text-center"
             >
               {t('cancelButton')}

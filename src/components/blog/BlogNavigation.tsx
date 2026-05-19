@@ -2,6 +2,7 @@ import { Link } from '@/i18n/navigation'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { ROUTES } from '@/config/routes'
 
 interface BlogNavigationProps {
   categories: string[]
@@ -17,7 +18,7 @@ export default function BlogNavigation({
   const router = useRouter()
 
   const handleClearFilters = () => {
-    router.push('/blog')
+    router.push(ROUTES.public.blog)
   }
 
   return (
@@ -25,7 +26,7 @@ export default function BlogNavigation({
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Title */}
-          <Link href="/blog" className="flex items-center">
+          <Link href={ROUTES.public.blog} className="flex items-center">
             <Heading level={1} className="text-2xl font-bold text-neutral-900">Blog</Heading>
           </Link>
 
@@ -60,7 +61,7 @@ export default function BlogNavigation({
 
           {/* CTA */}
           <Link
-            href="/blog/submit"
+            href={ROUTES.public.blogSubmit}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-semibold"
           >
             Beitrag einreichen

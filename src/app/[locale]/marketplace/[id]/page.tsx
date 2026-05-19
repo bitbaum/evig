@@ -22,6 +22,7 @@ import { SimilarListings } from './SimilarListings'
 import type { ListingImageData } from './types'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { data: session } = useSession()
@@ -64,7 +65,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         <Heading level={2} className="text-xl font-bold text-neutral-900 dark:text-white mb-2">
           {error || t('listing.notFound')}
         </Heading>
-        <Link href="/marketplace" className="text-primary-600 hover:text-primary-700 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">
+        <Link href={ROUTES.public.marketplace} className="text-primary-600 hover:text-primary-700 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1">
           {t('listing.backToMarketplace')}
         </Link>
       </div>
@@ -83,7 +84,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Back navigation */}
       <Link
-        href="/marketplace"
+        href={ROUTES.public.marketplace}
         className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded px-2 py-1 min-h-[44px]"
       >
         <ArrowLeft className="w-4 h-4" aria-hidden="true" />

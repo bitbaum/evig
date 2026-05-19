@@ -22,6 +22,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 interface SellerProfile {
   id: string
@@ -110,7 +111,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
           {error || t('seller.sellerNotFound')}
         </Heading>
-        <Link href="/marketplace" className="text-primary-600 hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplace} className="text-primary-600 hover:text-primary-700 font-medium">
           {t('seller.backToMarketplace')}
         </Link>
       </div>
@@ -124,7 +125,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
   return (
     <div className="max-w-6xl mx-auto">
       <Link
-        href="/marketplace"
+        href={ROUTES.public.marketplace}
         className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -213,7 +214,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               return (
                 <Link
                   key={listing.id}
-                  href={`/marketplace/${listing.id}`}
+                  href={ROUTES.public.marketplaceListing(listing.id)}
                   className="group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow"
                 >
                   <div className="relative aspect-[4/3]">

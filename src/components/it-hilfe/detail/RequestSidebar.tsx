@@ -18,6 +18,7 @@ import {
 import { formatDate } from '@/lib/date-formats'
 import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from './types'
+import { ROUTES } from '@/config/routes'
 
 interface RequestSidebarProps {
   request: ITHilfeRequest
@@ -194,7 +195,7 @@ export function RequestSidebar({
               </button>
             )}
             <Link
-              href="/it-hilfe/my"
+              href={ROUTES.public.itHilfeMy}
               className="block w-full py-3 px-4 min-h-[44px] bg-neutral-100 text-neutral-700 rounded-lg text-center font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2"
             >
               {t('allMyRequests')}

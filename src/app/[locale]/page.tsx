@@ -14,6 +14,7 @@ import { CommunityStats } from '@/components/community/CommunityStats'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { ROUTES } from '@/config/routes'
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -68,7 +69,7 @@ export default async function Home() {
       title: t('actions.sell.title'),
       subtitle: t('actions.sell.subtitle'),
       primaryLabel: t('actions.sell.primaryLabel'),
-      primaryHref: '/marketplace',
+      primaryHref: ROUTES.public.marketplace,
       secondaryLabel: t('actions.sell.secondaryLabel'),
       secondaryHref: '/marketplace/sell',
     },
@@ -205,7 +206,7 @@ export default async function Home() {
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
           <Link
-            href="/marketplace"
+            href={ROUTES.public.marketplace}
             className="w-full sm:w-auto rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 text-center"
           >
             {t('hero.ctaDiscover')}

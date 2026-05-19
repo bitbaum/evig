@@ -9,6 +9,7 @@ import type { BlogCategory } from '@/lib/blog-db'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 interface BlogNavigationClientProps {
   categories: BlogCategory[]
@@ -64,7 +65,7 @@ export default function BlogNavigationClient({
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo/Title */}
-          <Link href="/blog" className="flex items-center">
+          <Link href={ROUTES.public.blog} className="flex items-center">
             <Heading level={1} className="text-xl sm:text-2xl font-bold text-neutral-900">Blog</Heading>
           </Link>
 
@@ -147,7 +148,7 @@ export default function BlogNavigationClient({
 
             {/* CTA */}
             <Link
-              href="/blog/submit"
+              href={ROUTES.public.blogSubmit}
               className="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-xs sm:text-sm font-semibold"
             >
               {t('navSubmitPost')}

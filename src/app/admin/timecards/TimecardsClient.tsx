@@ -39,6 +39,7 @@ import {
   getEntryForDate,
 } from '@/lib/team/timecard-utils'
 import type { Timecard, TimecardEntryInput, TimecardSaveInput } from '@/lib/schemas/timecards'
+import { ROUTES } from '@/config/routes'
 
 type PeriodMode = 'month' | 'week'
 
@@ -474,7 +475,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             Lege ihn im Team-Profil fest. Danach werden Zeitkarten automatisch vorgefüllt und du musst nur noch Ausnahmen anfassen.
           </p>
           <Link
-            href="/admin/team"
+            href={ROUTES.admin.team}
             className="mt-3 inline-flex items-center rounded-lg bg-white px-3 py-2 text-sm font-medium text-warning-900 transition-colors hover:bg-warning-100 dark:bg-warning-950/40 dark:text-warning-100 dark:hover:bg-warning-900/40"
           >
             Team-Profil öffnen

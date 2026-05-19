@@ -10,6 +10,7 @@ import { ArrowLeft, FileText } from 'lucide-react'
 import { getTeamMembers } from '@/lib/services/protocols'
 import Heading from '@/components/admin/AdminHeading'
 import ProtocolFormClient from './ProtocolFormClient'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Neues Protokoll',
@@ -24,7 +25,7 @@ export default async function NewProtocolPage() {
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
-          href="/admin/protocols"
+          href={ROUTES.admin.protocols}
           className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />

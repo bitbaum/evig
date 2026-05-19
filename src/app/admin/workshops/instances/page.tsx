@@ -11,6 +11,7 @@ import {
 } from '@/components/admin/workshops/instances'
 import Heading from '@/components/admin/AdminHeading'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { ROUTES } from '@/config/routes'
 
 export default function AdminWorkshopInstancesPage() {
   const router = useRouter()
@@ -42,7 +43,7 @@ export default function AdminWorkshopInstancesPage() {
             </div>
             <div className="flex gap-3">
               <Link
-                href="/admin/workshops"
+                href={ROUTES.admin.workshops}
                 className="inline-flex items-center px-4 py-2 border border-neutral-300 rounded-lg text-neutral-700 hover:bg-neutral-50 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />

@@ -23,6 +23,7 @@ import {
   Filter,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Medienbibliothek',
@@ -42,7 +43,7 @@ export default async function AdminMediaPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content"
+            href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />

@@ -16,6 +16,7 @@ import {
 import { ORG } from "@/config/org";
 import { getTranslations } from "next-intl/server";
 import { getInventoryProducts, type InventoryProduct } from "@/lib/services/inventory-service";
+import { ROUTES } from "@/config/routes";
 
 interface CategoryPageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -104,7 +105,7 @@ function Breadcrumbs({
         </li>
         <ChevronRight className="w-4 h-4 text-neutral-300" />
         <li>
-          <Link href="/shop" className="hover:text-primary-600 transition-colors">
+          <Link href={ROUTES.public.shop} className="hover:text-primary-600 transition-colors">
             {shopLabel}
           </Link>
         </li>
@@ -235,7 +236,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 {t("category.categoryProductCount", { count: inventoryResult.total })}
               </Heading>
               <Link
-                href="/shop"
+                href={ROUTES.public.shop}
                 className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
               >
                 {t("category.allShopOptions")}
@@ -273,13 +274,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
-                  href="/marketplace"
+                  href={ROUTES.public.marketplace}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
                 >
                   {t("category.goToShop")}
                 </Link>
                 <Link
-                  href="/shop"
+                  href={ROUTES.public.shop}
                   className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
                 >
                   {t("category.allShopOptions")}

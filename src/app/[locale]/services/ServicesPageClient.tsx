@@ -28,6 +28,7 @@ import {
   type ServiceCategoryKey,
 } from './data'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   const { data: session } = useSession()
@@ -278,7 +279,7 @@ export default function ServicesPage() {
                 {t('ctaContact')}
               </Link>
               <Link
-                href="/shop"
+                href={ROUTES.public.shop}
                 className="inline-block border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
               >
                 {t('ctaInventory')}

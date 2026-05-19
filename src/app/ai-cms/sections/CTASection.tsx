@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ORG } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 
 export function CTASection() {
   return (
@@ -13,7 +14,7 @@ export function CTASection() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/auth/register"
+            href={ROUTES.public.register}
             className="inline-flex items-center justify-center px-8 py-3 bg-white text-primary-700 font-semibold rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
           >
             Kostenlos registrieren

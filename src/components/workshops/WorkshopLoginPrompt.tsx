@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { LogIn, UserPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { ROUTES } from '@/config/routes'
 
 export function WorkshopLoginPrompt() {
   const t = useTranslations('workshops.detail')
@@ -25,7 +26,7 @@ export function WorkshopLoginPrompt() {
 
       <div className="space-y-3">
         <Link
-          href="/auth/login"
+          href={ROUTES.public.login}
           className="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
           <LogIn className="w-4 h-4 mr-2" />
@@ -33,7 +34,7 @@ export function WorkshopLoginPrompt() {
         </Link>
 
         <Link
-          href="/auth/register"
+          href={ROUTES.public.register}
           className="w-full inline-flex items-center justify-center px-4 py-3 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
         >
           <UserPlus className="w-4 h-4 mr-2" />

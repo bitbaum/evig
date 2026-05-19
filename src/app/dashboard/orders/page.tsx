@@ -19,6 +19,7 @@ import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { ROUTES } from '@/config/routes'
 
 interface OrderItem {
   id: string
@@ -152,7 +153,7 @@ export default function DashboardOrdersPage() {
           action={
             role === 'buyer' ? (
               <Link
-                href="/marketplace"
+                href={ROUTES.public.marketplace}
                 className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 {t('goToMarketplace')}

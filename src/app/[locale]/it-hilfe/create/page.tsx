@@ -22,6 +22,7 @@ import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { useCreateITHilfeForm } from '@/hooks/useCreateITHilfeForm'
+import { ROUTES } from '@/config/routes'
 
 interface AIFormFields {
   categoryId: string
@@ -75,7 +76,7 @@ export default function CreatePeerRepairPage() {
     <div className="min-h-screen bg-neutral-50 py-8">
       <div className="max-w-3xl mx-auto px-4">
         <Link
-          href="/it-hilfe"
+          href={ROUTES.public.itHilfe}
           className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -232,7 +233,7 @@ export default function CreatePeerRepairPage() {
 
               <div className="flex justify-end gap-4">
                 <Link
-                  href="/it-hilfe"
+                  href={ROUTES.public.itHilfe}
                   className="px-6 py-3 text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors"
                 >
                   {t('cancelButton')}

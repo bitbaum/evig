@@ -23,6 +23,7 @@ import {
   Globe,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Statische Seiten',
@@ -105,7 +106,7 @@ export default async function AdminPagesPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content"
+            href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -120,7 +121,7 @@ export default async function AdminPagesPage() {
           </div>
         </div>
         <Link
-          href="/admin/content/pages/new"
+          href={ROUTES.admin.contentPageNew}
           className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
@@ -239,7 +240,7 @@ export default async function AdminPagesPage() {
                           <Eye className="w-4 h-4" />
                         </Link>
                         <Link
-                          href={`/admin/content/pages/${page.id}`}
+                          href={ROUTES.admin.contentPage(page.id)}
                           className="text-primary-600 hover:text-primary-900 dark:text-primary-400 dark:hover:text-primary-300"
                         >
                           <Edit className="w-4 h-4" />
@@ -261,7 +262,7 @@ export default async function AdminPagesPage() {
               Erstelle statische Seiten wie Über uns, Kontakt oder FAQ.
             </p>
             <Link
-              href="/admin/content/pages/new"
+              href={ROUTES.admin.contentPageNew}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />
@@ -290,7 +291,7 @@ export default async function AdminPagesPage() {
             ].map((suggestion) => (
               <Link
                 key={suggestion.slug}
-                href={`/admin/content/pages/new?title=${encodeURIComponent(suggestion.title)}&slug=${suggestion.slug}`}
+                href={`${ROUTES.admin.contentPageNew}?title=${encodeURIComponent(suggestion.title)}&slug=${suggestion.slug}`}
                 className="flex items-center gap-2 p-3 bg-white dark:bg-neutral-900 rounded-lg hover:bg-primary-100 dark:hover:bg-primary-900/30 transition-colors"
               >
                 <Plus className="w-4 h-4 text-primary-600" />

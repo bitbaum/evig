@@ -22,6 +22,7 @@ import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { getTechnicianById } from '@/lib/services/technician-service'
 import { logger } from '@/lib/logger'
+import { ROUTES } from '@/config/routes'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -69,7 +70,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Back link */}
         <Link
-          href="/techniker"
+          href={ROUTES.public.techniker}
           className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 text-sm"
         >
           <ArrowLeft className="w-4 h-4" />

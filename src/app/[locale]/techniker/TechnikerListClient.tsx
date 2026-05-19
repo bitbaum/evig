@@ -24,6 +24,7 @@ import type { ITSkill } from '@/config/it-hilfe'
 import { useTranslations } from 'next-intl'
 import { formatCentsToChf } from '@/lib/pricing'
 import { useTechnicianList, type Technician } from '@/hooks/useTechnicianList'
+import { ROUTES } from '@/config/routes'
 
 function TechnicianCard({ technician }: { technician: Technician }) {
   const t = useTranslations('techniker')
@@ -32,7 +33,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
 
   return (
     <Link
-      href={`/techniker/${technician.id}`}
+      href={ROUTES.public.technicianProfile(technician.id)}
       className="block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-5 hover:border-neutral-300 dark:hover:border-white/[0.12] hover:shadow-sm transition-all"
     >
       {/* Name + tier badge */}
@@ -344,7 +345,7 @@ export default function TechnikerListClient() {
                 {t('list.ctaCreateProfile')}
               </Link>
               <Link
-                href="/it-hilfe"
+                href={ROUTES.public.itHilfe}
                 className="px-6 py-2.5 bg-white hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 border border-primary-600 rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaToITHelp')}

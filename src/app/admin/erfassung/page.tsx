@@ -20,6 +20,7 @@ import { Stepper } from '@/components/ui/Stepper'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 const INTAKE_PIPELINE_STEPS = [
   { label: 'Geräte-Eingang', description: 'Checkliste & Spende' },
@@ -188,7 +189,7 @@ function ErfassungContent() {
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
-          href="/admin/products"
+          href={ROUTES.admin.products}
           className="p-2 sm:p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] touch-manipulation"
         >
           <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />

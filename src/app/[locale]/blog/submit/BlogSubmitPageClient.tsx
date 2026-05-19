@@ -8,6 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { BLOG_SUBMISSION_TYPE } from '@/config/approval-status'
 import { useBlogSubmitForm } from '@/hooks/useBlogSubmitForm'
+import { ROUTES } from '@/config/routes'
 
 export default function SubmitPostPage() {
   const t = useTranslations('blog.submit')
@@ -36,7 +37,7 @@ export default function SubmitPostPage() {
       />
       <div className="absolute top-4 left-4 sm:left-8">
         <Link
-          href="/blog"
+          href={ROUTES.public.blog}
           className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -64,7 +65,7 @@ export default function SubmitPostPage() {
                 {t('submitAnotherButton')}
               </button>
               <Link
-                href="/blog"
+                href={ROUTES.public.blog}
                 className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
               >
                 {t('toBlogButton')}

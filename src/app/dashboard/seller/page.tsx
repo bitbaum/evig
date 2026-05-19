@@ -20,6 +20,7 @@ import { LISTING_STATUS_CONFIG, formatCHF } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import type { ListingStatus } from '@/config/marketplace'
 import { useSellerDashboard } from '@/hooks/useSellerDashboard'
+import { ROUTES } from '@/config/routes'
 
 function getStatusLabel(status: string) {
   const config = LISTING_STATUS_CONFIG[status as ListingStatus]
@@ -34,10 +35,10 @@ export default function SellerDashboard() {
     useSellerDashboard(t('unexpectedError'))
 
   const quickActions = [
-    { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: '/marketplace/sell', icon: Plus, color: 'bg-primary-500' },
+    { title: t('quickNewProduct'), description: t('quickNewProductDesc'), href: ROUTES.public.marketplaceSell, icon: Plus, color: 'bg-primary-500' },
     { title: t('quickMyProducts'), description: t('quickMyProductsDesc'), href: '/dashboard/listings', icon: Package, color: 'bg-neutral-500' },
     { title: t('quickSales'), description: t('quickSalesDesc'), href: '/dashboard/orders', icon: TrendingUp, color: 'bg-primary-600' },
-    { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: '/marketplace', icon: BarChart3, color: 'bg-secondary-500' },
+    { title: t('quickMarketplace'), description: t('quickMarketplaceDesc'), href: ROUTES.public.marketplace, icon: BarChart3, color: 'bg-secondary-500' },
   ]
 
   if (sessionStatus === 'loading' || isLoading) {
@@ -161,7 +162,7 @@ export default function SellerDashboard() {
                   {t('noProducts')}
                 </p>
                 <Link
-                  href="/marketplace/sell"
+                  href={ROUTES.public.marketplaceSell}
                   className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg"
                 >
                   <Plus className="w-4 h-4" />
@@ -262,13 +263,13 @@ export default function SellerDashboard() {
             </p>
             <div className="mt-3 flex gap-3">
               <Link
-                href="/marketplace"
+                href={ROUTES.public.marketplace}
                 className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 {t('viewMarketplace')}
               </Link>
               <Link
-                href="/marketplace/sell"
+                href={ROUTES.public.marketplaceSell}
                 className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 {t('addProduct')}

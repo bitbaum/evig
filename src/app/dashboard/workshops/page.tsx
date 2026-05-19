@@ -15,6 +15,7 @@ import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { useWorkshopRegistrations } from '@/hooks/useWorkshopRegistrations'
 import type { WorkshopRegistration } from '@/hooks/useWorkshopRegistrations'
+import { ROUTES } from '@/config/routes'
 
 function getStatusIcon(status: string) {
   switch (status) {
@@ -93,7 +94,7 @@ export default function WorkshopsDashboard() {
             <Heading level={1} className="text-2xl font-bold mb-4 text-neutral-900 dark:text-white">{t('loginRequired')}</Heading>
             <p className="mb-6 text-neutral-600 dark:text-neutral-400">{t('loginDesc')}</p>
             <Link
-              href="/auth/login"
+              href={ROUTES.public.login}
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
             >
               {t('login')}

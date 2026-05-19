@@ -19,6 +19,7 @@ import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF, LISTING_STATUS } from '@/config/marketplace'
+import { ROUTES } from '@/config/routes'
 
 interface FavoriteListing {
   id: string
@@ -128,7 +129,7 @@ export default function FavoritesPage() {
           description={t('emptyDesc')}
           action={
             <Link
-              href="/marketplace"
+              href={ROUTES.public.marketplace}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               {t('browseMarketplace')}

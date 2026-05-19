@@ -10,6 +10,7 @@ import { WorkshopProposalForm } from './components/WorkshopProposalForm'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 export default function WorkshopProposalPage() {
   const { data: session } = useSession()
@@ -28,7 +29,7 @@ export default function WorkshopProposalPage() {
               {t('loginPrompt')}
             </p>
             <Link
-              href="/auth/login"
+              href={ROUTES.public.login}
               className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
             >
               {t('loginButton')}

@@ -26,6 +26,7 @@ import {
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 export default function MyRequestsPage() {
   const { data: session, status } = useSession()
@@ -95,14 +96,14 @@ export default function MyRequestsPage() {
           </div>
           <div className="flex gap-3">
             <Link
-              href="/it-hilfe/my/offers"
+              href={ROUTES.public.itHilfeMyOffers}
               className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-700 rounded-lg font-medium hover:bg-neutral-50 transition-colors"
             >
               <Heart className="w-4 h-4" />
               {t('myOffersButton')}
             </Link>
             <Link
-              href="/it-hilfe/create"
+              href={ROUTES.public.itHilfeCreate}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -159,7 +160,7 @@ export default function MyRequestsPage() {
             </p>
             {!statusFilter && (
               <Link
-                href="/it-hilfe/create"
+                href={ROUTES.public.itHilfeCreate}
                 className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 <Plus className="w-5 h-5" />

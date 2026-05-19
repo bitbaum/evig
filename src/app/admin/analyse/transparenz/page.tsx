@@ -16,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { AnalyseTabs } from '@/components/analyse'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export default async function TransparenzPage() {
   const session = await auth()
@@ -94,7 +95,7 @@ export default async function TransparenzPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/analyse">
+        <Link href={ROUTES.admin.analyse}>
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück

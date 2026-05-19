@@ -15,6 +15,7 @@ import Heading from '@/components/ui/Heading'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import { useCheckout } from '@/hooks/useCheckout'
+import { ROUTES } from '@/config/routes'
 
 export default function CheckoutPage({ params }: { params: Promise<{ listingId: string }> }) {
   const t = useTranslations('marketplace.checkout')
@@ -58,7 +59,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-neutral-400 mx-auto mb-4" />
         <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">{error}</Heading>
-        <Link href="/marketplace" className="text-primary-600 hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplace} className="text-primary-600 hover:text-primary-700 font-medium">
           {t('backToMarketplace')}
         </Link>
       </div>
@@ -77,7 +78,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         <p className="text-neutral-600 dark:text-neutral-400 mb-4">
           {t('ownListing.message')}
         </p>
-        <Link href={`/marketplace/${listing.id}`} className="text-primary-600 hover:text-primary-700 font-medium">
+        <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-primary-600 hover:text-primary-700 font-medium">
           {t('backToListing')}
         </Link>
       </div>
@@ -87,7 +88,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
   return (
     <div className="max-w-3xl mx-auto">
       <Link
-        href={`/marketplace/${listing.id}`}
+        href={ROUTES.public.marketplaceListing(listing.id)}
         className="inline-flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-primary-600 mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />

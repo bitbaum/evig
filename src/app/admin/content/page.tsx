@@ -3,6 +3,7 @@ import { FileText } from 'lucide-react'
 import Link from 'next/link'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Inhalte',
@@ -19,7 +20,7 @@ export default function ContentPage() {
     >
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
-          href="/admin/content/submissions"
+          href={ROUTES.admin.contentSubmissions}
           className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-warning-500 transition-colors relative group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
@@ -30,7 +31,7 @@ export default function ContentPage() {
         </Link>
 
         <Link
-          href="/admin/content/blog"
+          href={ROUTES.admin.contentBlog}
           className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Blog-Artikel</Heading>
@@ -40,7 +41,7 @@ export default function ContentPage() {
         </Link>
 
         <Link
-          href="/admin/content/categories"
+          href={ROUTES.admin.categories}
           className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Kategorien</Heading>
@@ -50,7 +51,7 @@ export default function ContentPage() {
         </Link>
 
         <Link
-          href="/admin/content/pages"
+          href={ROUTES.admin.contentPages}
           className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Seiten</Heading>
@@ -60,7 +61,7 @@ export default function ContentPage() {
         </Link>
 
         <Link
-          href="/admin/content/media"
+          href={ROUTES.admin.contentMedia}
           className="p-6 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-500 transition-colors group"
         >
           <Heading level={3} className="font-semibold text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Medien</Heading>

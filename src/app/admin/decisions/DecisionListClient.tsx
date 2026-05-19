@@ -19,6 +19,7 @@ import { adminSurface, adminTable, adminForm, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import type { DecisionStats } from '@/lib/services/decisions';
 import { useDecisionList } from '@/hooks/useDecisionList';
+import { ROUTES } from '@/config/routes';
 
 export default function DecisionListClient({
   currentUserId,
@@ -92,7 +93,7 @@ export default function DecisionListClient({
       ) : decisions.length === 0 ? (
         <div className={cn(adminSurface.card, 'py-12 text-center')}>
           <p className={adminType.meta}>Keine Entscheidungen gefunden</p>
-          <AdminButton variant="action" href="/admin/decisions/new" className="mt-3">
+          <AdminButton variant="action" href={ROUTES.admin.decisionNew} className="mt-3">
             Ersten Vorschlag erstellen
           </AdminButton>
         </div>

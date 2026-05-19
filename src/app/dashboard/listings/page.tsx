@@ -25,6 +25,7 @@ import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF } from '@/config/marke
 import type { ListingStatus } from '@/config/marketplace'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { useMyListings } from '@/hooks/useMyListings'
+import { ROUTES } from '@/config/routes'
 
 export default function MyListingsPage() {
   const t = useTranslations('dashboard.listings')
@@ -72,7 +73,7 @@ export default function MyListingsPage() {
           <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t('pageSubtitle')}</p>
         </div>
         <Link
-          href="/marketplace/sell"
+          href={ROUTES.public.marketplaceSell}
           className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-9 px-3 bg-primary-600 text-white hover:bg-primary-700 transition-colors"
         >
           <Plus className="w-4 h-4" />
@@ -123,7 +124,7 @@ export default function MyListingsPage() {
           description={t('emptyDesc')}
           action={
             <Link
-              href="/marketplace/sell"
+              href={ROUTES.public.marketplaceSell}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -180,7 +181,7 @@ export default function MyListingsPage() {
 
                 <div className="flex items-center gap-1 flex-shrink-0">
                   <Link
-                    href={`/marketplace/sell?edit=${listing.id}`}
+                    href={`${ROUTES.public.marketplaceSell}?edit=${listing.id}`}
                     className="p-2 rounded-lg text-neutral-500 hover:text-neutral-600 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors"
                     title={t('actionEdit')}
                   >

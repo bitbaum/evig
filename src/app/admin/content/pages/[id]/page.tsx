@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { generateSlug } from '@/lib/utils/slug'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
@@ -64,7 +65,7 @@ export default function EditStaticPagePage() {
       <div className="space-y-8">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content/pages"
+            href={ROUTES.admin.contentPages}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -75,7 +76,7 @@ export default function EditStaticPagePage() {
           <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
           <Heading level={2} className="text-lg font-medium text-neutral-900 dark:text-white mb-2">{error}</Heading>
           <Link
-            href="/admin/content/pages"
+            href={ROUTES.admin.contentPages}
             className="inline-flex items-center text-primary-600 hover:text-primary-700 mt-4"
           >
             <ArrowLeft className="w-4 h-4 mr-1" />
@@ -92,7 +93,7 @@ export default function EditStaticPagePage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content/pages"
+            href={ROUTES.admin.contentPages}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -217,7 +218,7 @@ export default function EditStaticPagePage() {
 
         <div className="flex justify-end gap-3">
           <Link
-            href="/admin/content/pages"
+            href={ROUTES.admin.contentPages}
             className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
           >
             Abbrechen

@@ -12,6 +12,7 @@ import { formatCHF } from '@/config/marketplace'
 import { ORDER_STATUS_CONFIG } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 interface OrderSummary {
   id: string
@@ -105,7 +106,7 @@ function CheckoutSuccessContent() {
             </Link>
           )}
           <Link
-            href="/marketplace"
+            href={ROUTES.public.marketplace}
             className="flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
           >
             {t('continueShopping')}

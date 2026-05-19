@@ -18,6 +18,7 @@ import {
   type MetricCategory,
 } from '@/config/analyse/metrics'
 import Link from 'next/link'
+import { ROUTES } from '@/config/routes'
 import { ArrowLeft, TrendingUp, Leaf, Users, Monitor, PiggyBank } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -125,7 +126,7 @@ export default async function KennzahlenPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/analyse">
+        <Link href={ROUTES.admin.analyse}>
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück

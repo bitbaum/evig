@@ -47,6 +47,7 @@ import { getTeamMembers } from '@/lib/services/protocols'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { ProtocolReviewQueue } from '@/components/admin/protocols/ProtocolReviewQueue'
 import { PAGINATION } from '@/config/pagination'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Protokolle',
@@ -133,7 +134,7 @@ export default async function ProtocolsAdminPage({
     if (params.q) p.set('q', params.q)
     if (params.attendee) p.set('attendee', params.attendee)
     const qs = p.toString()
-    return `/admin/protocols${qs ? `?${qs}` : ''}`
+    return `${ROUTES.admin.protocols}${qs ? `?${qs}` : ''}`
   })()
 
   return (
@@ -144,7 +145,7 @@ export default async function ProtocolsAdminPage({
       iconColor="blue"
       actions={
         <Link
-          href="/admin/protocols/new"
+          href={ROUTES.admin.protocolNew}
           className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
@@ -201,7 +202,7 @@ export default async function ProtocolsAdminPage({
               Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
             </p>
             <Link
-              href="/admin/protocols"
+              href={ROUTES.admin.protocols}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Seite neu laden
@@ -217,7 +218,7 @@ export default async function ProtocolsAdminPage({
               {ADMIN_CONTENT.protocols.emptyDescription}
             </p>
             <Link
-              href="/admin/protocols/new"
+              href={ROUTES.admin.protocolNew}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -261,7 +262,7 @@ export default async function ProtocolsAdminPage({
                   <tr key={protocol.id} className="hover:bg-neutral-50">
                     <td className="px-4 py-3 max-w-[180px] sm:max-w-xs">
                       <Link
-                        href={`/admin/protocols/${protocol.id}`}
+                        href={ROUTES.admin.protocol(protocol.id)}
                         className="font-medium text-neutral-900 hover:text-primary-600 underline-offset-2 hover:underline truncate block focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
                       >
                         {protocol.title}
@@ -342,7 +343,7 @@ export default async function ProtocolsAdminPage({
                           <span className="hidden sm:inline text-sm text-neutral-500">{protocol.action_item_count} Aktionen</span>
                         )}
                         <Link
-                          href={`/admin/protocols/${protocol.id}`}
+                          href={ROUTES.admin.protocol(protocol.id)}
                           className="text-sm text-primary-600 hover:text-primary-800 underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
                         >
                           Öffnen

@@ -39,6 +39,7 @@ import TaskFiltersClient from './TaskFiltersClient'
 import { Pagination } from '@/components/ui/Pagination'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { PAGINATION } from '@/config/pagination'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Aufgaben',
@@ -213,7 +214,7 @@ export default async function TasksAdminPage({
     if (params.q) p.set('q', params.q)
     if (params.priority) p.set('priority', params.priority)
     const qs = p.toString()
-    return `/admin/tasks${qs ? `?${qs}` : ''}`
+    return `${ROUTES.admin.tasks}${qs ? `?${qs}` : ''}`
   })()
 
   return (
@@ -225,14 +226,14 @@ export default async function TasksAdminPage({
       actions={
         <>
           <Link
-            href="/admin/tasks/analytics"
+            href={ROUTES.admin.tasksAnalytics}
             className="px-4 py-2 text-sm text-neutral-600 hover:text-neutral-900 border border-neutral-200 hover:border-neutral-300 rounded-lg transition-colors flex items-center gap-2"
           >
             <BarChart3 className="w-4 h-4" />
             Statistiken
           </Link>
           <Link
-            href="/admin/tasks/new"
+            href={ROUTES.admin.taskNew}
             className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
@@ -290,7 +291,7 @@ export default async function TasksAdminPage({
               Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
             </p>
             <Link
-              href="/admin/tasks"
+              href={ROUTES.admin.tasks}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Seite neu laden
@@ -306,7 +307,7 @@ export default async function TasksAdminPage({
               {ADMIN_CONTENT.tasks.emptyDescription}
             </p>
             <Link
-              href="/admin/tasks/new"
+              href={ROUTES.admin.taskNew}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               <Plus className="w-4 h-4" />
@@ -351,7 +352,7 @@ export default async function TasksAdminPage({
                 <tr key={task.id} className="hover:bg-neutral-50">
                   <td className="px-4 py-3 max-w-[200px] sm:max-w-xs">
                     <Link
-                      href={`/admin/tasks/${task.id}`}
+                      href={ROUTES.admin.task(task.id)}
                       className="font-medium text-neutral-900 hover:text-primary-600 truncate block focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 rounded"
                     >
                       {task.title}

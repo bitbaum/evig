@@ -6,6 +6,7 @@ import { AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { ROUTES } from '@/config/routes'
 
 export default function AuthError({
   error,
@@ -38,7 +39,7 @@ export default function AuthError({
             {t('retry')}
           </button>
           <Link
-            href="/auth/login"
+            href={ROUTES.public.login}
             className="text-sm text-neutral-600 hover:text-neutral-900 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
           >
             {t('goToLogin')}

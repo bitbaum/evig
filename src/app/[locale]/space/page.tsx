@@ -30,6 +30,7 @@ import { IconBadge } from '@/components/ui/IconBadge'
 import { STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 import { ORG, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { ROUTES } from '@/config/routes'
 
 interface SpacePageProps {
   params: Promise<{ locale: string }>
@@ -388,12 +389,12 @@ export default async function SpacePage({ params }: SpacePageProps) {
                 <Store className="w-4 h-4 mr-2" /> {t('shopLinks.currentStore')}
               </Button>
             </Link>
-            <Link href="/shop">
+            <Link href={ROUTES.public.shop}>
               <Button variant="outline">
                 <Store className="w-4 h-4 mr-2" /> {t('shopLinks.shopOverview')}
               </Button>
             </Link>
-            <Link href="/marketplace">
+            <Link href={ROUTES.public.marketplace}>
               <Button>
                 {t('shopLinks.onlineShop')} <ChevronRight className="w-4 h-4 ml-1" />
               </Button>

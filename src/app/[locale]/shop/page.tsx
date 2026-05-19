@@ -9,6 +9,7 @@ import { SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } fro
 import { ORG, OPENING_HOURS } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'
 import { getTranslations } from 'next-intl/server'
+import { ROUTES } from '@/config/routes'
 
 interface ShopPageProps {
   params: Promise<{ locale: string }>
@@ -132,7 +133,7 @@ export default async function ShopPage({ params }: ShopPageProps) {
                     <ExternalLink className="w-4 h-4 mr-2" /> {t('page.online.shopwareShop')}
                   </a>
                   <Link
-                    href="/marketplace"
+                    href={ROUTES.public.marketplace}
                     className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary-600 text-white hover:bg-primary-700 h-10 px-4 py-2"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2" /> {t('page.online.onlineShop', { orgName: ORG.name })}

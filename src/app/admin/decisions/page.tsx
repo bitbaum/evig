@@ -13,6 +13,7 @@ import { isSuperAdmin } from '@/lib/permissions'
 import { Plus, Vote } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import DecisionListClient from './DecisionListClient'
+import { ROUTES } from '@/config/routes'
 import { getDecisionStats } from '@/lib/services/decisions'
 
 export const metadata: Metadata = {
@@ -45,7 +46,7 @@ export default async function DecisionsAdminPage() {
       iconColor="blue"
       actions={
         <Link
-          href="/admin/decisions/new"
+          href={ROUTES.admin.decisionNew}
           className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />

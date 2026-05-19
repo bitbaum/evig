@@ -6,6 +6,7 @@ import { AlertCircle, ArrowLeft } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 export default function BlogError({
   error,
@@ -38,7 +39,7 @@ export default function BlogError({
             {t('retry')}
           </button>
           <Link
-            href="/blog"
+            href={ROUTES.public.blog}
             className="inline-flex items-center justify-center gap-2 text-neutral-600 hover:text-neutral-900 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />

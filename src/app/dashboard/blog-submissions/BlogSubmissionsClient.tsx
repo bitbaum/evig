@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { useBlogSubmissions, type MySubmission } from '@/hooks/useBlogSubmissions'
+import { ROUTES } from '@/config/routes'
 
 export default function BlogSubmissionsClient() {
   const t = useTranslations('dashboard.blogSubmissions')
@@ -328,7 +329,7 @@ function EmptyState() {
         {t('emptyDesc')}
       </p>
       <Link
-        href="/blog/submit"
+        href={ROUTES.public.blogSubmit}
         className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
       >
         {t('submitNow')}

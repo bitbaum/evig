@@ -30,6 +30,7 @@ import {
 import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
 import Heading from '@/components/admin/AdminHeading'
 import { useAdminWorkshopInstance } from '@/hooks/useAdminWorkshopInstance'
+import { ROUTES } from '@/config/routes'
 
 function getStatusBadge(status: string) {
   return (
@@ -75,7 +76,7 @@ export default function AdminWorkshopInstanceDetailPage({
           <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-8 text-center">
             <p className="text-error-800 dark:text-error-400">{error || 'Termin nicht gefunden'}</p>
             <Link
-              href="/admin/workshops/instances"
+              href={ROUTES.admin.workshopsInstances}
               className="mt-4 inline-flex items-center text-error-600 hover:text-error-800"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -107,7 +108,7 @@ export default function AdminWorkshopInstanceDetailPage({
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <Link
-            href="/admin/workshops/instances"
+            href={ROUTES.admin.workshopsInstances}
             className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -239,7 +240,7 @@ export default function AdminWorkshopInstanceDetailPage({
                             <User className="w-5 h-5 text-neutral-600" />
                           </div>
                           <div className="ml-4">
-                            <Link href={`/admin/users/${reg.user_id}`} className="text-sm font-medium text-primary-600 hover:underline">{reg.user_name}</Link>
+                            <Link href={ROUTES.admin.user(reg.user_id)} className="text-sm font-medium text-primary-600 hover:underline">{reg.user_name}</Link>
                             <div className="text-sm text-neutral-500 flex items-center gap-1">
                               <Mail className="w-3 h-3" />
                               {reg.user_email}

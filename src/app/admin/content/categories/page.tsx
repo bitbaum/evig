@@ -21,6 +21,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Kategorien',
@@ -113,7 +114,7 @@ export default async function AdminCategoriesPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content"
+            href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -128,7 +129,7 @@ export default async function AdminCategoriesPage() {
           </div>
         </div>
         <Link
-          href="/admin/content/categories/new"
+          href={ROUTES.admin.categoryNew}
           className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
@@ -303,7 +304,7 @@ export default async function AdminCategoriesPage() {
               Erstelle Kategorien, um deine Blog-Artikel zu organisieren.
             </p>
             <Link
-              href="/admin/content/categories/new"
+              href={ROUTES.admin.categoryNew}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />

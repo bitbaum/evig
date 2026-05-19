@@ -16,6 +16,7 @@ import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { useTranslations } from 'next-intl'
 import { useCustomerBookings } from '@/hooks/useCustomerBookings'
+import { ROUTES } from '@/config/routes'
 
 const STATUS_CONFIG = BOOKING_STATUS_BADGES
 
@@ -59,7 +60,7 @@ export default function CustomerBookings() {
               <span className="hidden sm:inline">{t('refresh')}</span>
             </button>
             <Link
-              href="/techniker"
+              href={ROUTES.public.techniker}
               className="flex items-center gap-2 px-3 md:px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm md:text-base"
             >
               <Wrench className="h-4 w-4" />
@@ -118,7 +119,7 @@ export default function CustomerBookings() {
               title={t('emptyTitle')}
               action={
                 <Link
-                  href="/techniker"
+                  href={ROUTES.public.techniker}
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium transition-colors"
                 >
                   {t('findTechnician')}

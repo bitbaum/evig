@@ -18,6 +18,7 @@ import { AnalyseTabs } from '@/components/analyse'
 import { formatCHF } from '@/lib/hirn/format'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export default async function AnalysePage() {
   const session = await auth()
@@ -94,7 +95,7 @@ export default async function AnalysePage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link href="/admin">
+        <Link href={ROUTES.admin.dashboard}>
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Zurück
@@ -199,7 +200,7 @@ export default async function AnalysePage() {
               ))}
             </div>
             <div className="mt-4">
-              <Link href="/admin/analyse/kennzahlen">
+              <Link href={ROUTES.admin.analyseKennzahlen}>
                 <Button variant="outline" size="sm" className="text-warning-700 dark:text-warning-300 border-warning-300 hover:bg-warning-100 dark:hover:bg-warning-900/30">
                   Alle Kennzahlen anzeigen
                   <ArrowRight className="ml-2 w-4 h-4" />
@@ -269,7 +270,7 @@ export default async function AnalysePage() {
 
       {/* Quick Links */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Link href="/admin/analyse/finanzen" className="block">
+        <Link href={ROUTES.admin.analyseFinanzen} className="block">
           <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Finanzen</div>
@@ -279,7 +280,7 @@ export default async function AnalysePage() {
             </CardContent>
           </Card>
         </Link>
-        <Link href="/admin/analyse/kennzahlen" className="block">
+        <Link href={ROUTES.admin.analyseKennzahlen} className="block">
           <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Kennzahlen</div>
@@ -289,7 +290,7 @@ export default async function AnalysePage() {
             </CardContent>
           </Card>
         </Link>
-        <Link href="/admin/analyse/wirkung" className="block">
+        <Link href={ROUTES.admin.analyseWirkung} className="block">
           <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Wirkung</div>
@@ -299,7 +300,7 @@ export default async function AnalysePage() {
             </CardContent>
           </Card>
         </Link>
-        <Link href="/admin/analyse/transparenz" className="block">
+        <Link href={ROUTES.admin.analyseTransparenz} className="block">
           <Card className="hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
             <CardContent className="pt-4 pb-4 text-center">
               <div className="font-medium">Transparenz</div>

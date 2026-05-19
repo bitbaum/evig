@@ -15,6 +15,7 @@ import {
   WorkshopTagsSection,
 } from '@/components/admin/workshops/workshop-form'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import type { WorkshopFormData } from '@/components/admin/workshops/workshop-form/types'
@@ -53,7 +54,7 @@ export default function NewWorkshopPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Link href="/admin/workshops" className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06]">
+        <Link href={ROUTES.admin.workshops} className="p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06]">
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
@@ -88,7 +89,7 @@ export default function NewWorkshopPage() {
 
         <div className="flex justify-end gap-4">
           <Link
-            href="/admin/workshops"
+            href={ROUTES.admin.workshops}
             className="px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-50 dark:hover:bg-white/[0.06] font-medium"
           >
             Abbrechen

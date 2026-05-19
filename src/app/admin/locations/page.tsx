@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 import { useAdminLocations } from '@/hooks/useAdminLocations'
+import { ROUTES } from '@/config/routes'
 
 function getTypeIcon(type: string) {
   switch (type) {
@@ -73,7 +74,7 @@ export default function AdminLocationsPage() {
       iconColor="blue"
       actions={
         <Link
-          href="/admin/locations/new"
+          href={ROUTES.admin.locationNew}
           className="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors gap-2"
         >
           <Plus className="w-4 h-4" />
@@ -175,7 +176,7 @@ export default function AdminLocationsPage() {
 
                 <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
                   <Link
-                    href={`/admin/locations/${location.id}`}
+                    href={ROUTES.admin.location(location.id)}
                     className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                   >
                     <Eye className="w-4 h-4 mr-1" />
@@ -229,7 +230,7 @@ export default function AdminLocationsPage() {
                   : ADMIN_CONTENT.locations.emptyDescription}
               </p>
               <Link
-                href="/admin/locations/new"
+                href={ROUTES.admin.locationNew}
                 className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
               >
                 <Plus className="w-4 h-4 mr-2" />

@@ -18,6 +18,7 @@ import { SHOPWARE_URL } from '@/lib/constants'
 import { APP_URL } from '@/config/urls'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { formatCHF } from '@/config/marketplace'
+import { ROUTES } from '@/config/routes'
 
 interface ProductPageProps {
   params: Promise<{ locale: string; uuid: string }>
@@ -117,7 +118,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               <Home className="w-4 h-4" />
             </Link>
             <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
-            <Link href="/shop" className="hover:text-primary-600 transition-colors">Shop</Link>
+            <Link href={ROUTES.public.shop} className="hover:text-primary-600 transition-colors">Shop</Link>
             {product.category && (
               <>
                 <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />

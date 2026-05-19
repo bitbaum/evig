@@ -8,6 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { formatDate } from '@/lib/date-formats'
 import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
+import { ROUTES } from '@/config/routes'
 import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
 import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
 import { ITHilfeReviewForm } from '@/components/it-hilfe/ITHilfeReviewForm'
@@ -44,7 +45,7 @@ export default function ITHilfeDetailPage() {
           <Heading level={1} className="text-2xl text-neutral-900 mb-2">{t('error')}</Heading>
           <p className="text-neutral-600 mb-6">{detail.error || t('requestNotFound')}</p>
           <Link
-            href="/it-hilfe"
+            href={ROUTES.public.itHilfe}
             className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 min-h-[44px] rounded-lg font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -62,7 +63,7 @@ export default function ITHilfeDetailPage() {
       <div className="max-w-4xl mx-auto px-4">
         {/* Back link */}
         <Link
-          href="/it-hilfe"
+          href={ROUTES.public.itHilfe}
           className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6 px-2 py-1 min-h-[44px] rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
         >
           <ArrowLeft className="w-4 h-4" aria-hidden="true" />

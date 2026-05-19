@@ -5,6 +5,7 @@ import { Wrench, GraduationCap } from 'lucide-react'
 import { type OSSAlternative } from '@/config/open-source-registry'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 interface RevampITServicesCTAProps {
   alternative: OSSAlternative
@@ -27,7 +28,7 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
           <div>
             <p className="text-sm text-neutral-800">{services.itHilfeNote}</p>
             <Link
-              href="/it-hilfe"
+              href={ROUTES.public.itHilfe}
               className="text-sm font-medium text-primary-700 hover:text-neutral-900 underline"
             >
               {t('itHilfeLink')}

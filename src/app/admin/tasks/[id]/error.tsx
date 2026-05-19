@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export default function TaskDetailError({
   error,
@@ -35,7 +36,7 @@ export default function TaskDetailError({
             Erneut versuchen
           </button>
           <Link
-            href="/admin/tasks"
+            href={ROUTES.admin.tasks}
             className="text-sm text-neutral-600 hover:text-neutral-900 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"
           >
             Zurück zur Aufgabenliste

@@ -10,6 +10,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { ROUTES } from '@/config/routes'
 import {
   Printer,
   Heart,
@@ -137,7 +138,7 @@ export default function FactSheetPage() {
       <div className="print:hidden fixed top-0 left-0 right-0 bg-white border-b border-neutral-200 z-50 px-4 py-3">
         <div className="max-w-[210mm] mx-auto flex items-center justify-between">
           <Link
-            href="/admin/products"
+            href={ROUTES.admin.products}
             className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900"
           >
             <ArrowLeft className="w-5 h-5" />

@@ -14,6 +14,7 @@ import {
 import { generateSlug } from '@/lib/utils/slug'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
@@ -84,7 +85,7 @@ function NewStaticPageContent() {
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
-          href="/admin/content/pages"
+          href={ROUTES.admin.contentPages}
           className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
         >
           <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
@@ -207,7 +208,7 @@ function NewStaticPageContent() {
         {/* Submit */}
         <div className="flex justify-end gap-3">
           <Link
-            href="/admin/content/pages"
+            href={ROUTES.admin.contentPages}
             className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
           >
             Abbrechen

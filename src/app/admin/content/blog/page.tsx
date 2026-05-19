@@ -22,6 +22,7 @@ import {
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { BlogListClient } from './BlogListClient'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Blog-Artikel',
@@ -121,10 +122,10 @@ export default async function AdminBlogPage() {
       description="News, Tutorials und Ankündigungen verwalten"
       icon={FileText}
       iconColor="blue"
-      backButton={{ href: '/admin/content', label: 'Zurück' }}
+      backButton={{ href: ROUTES.admin.content, label: 'Zurück' }}
       actions={
         <Link
-          href="/admin/content/blog/new"
+          href={ROUTES.admin.contentBlogNew}
           className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
@@ -211,7 +212,7 @@ export default async function AdminBlogPage() {
             </p>
             <div className="flex gap-3">
               <Link
-                href="/admin/content/blog/new"
+                href={ROUTES.admin.contentBlogNew}
                 className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 Artikel erstellen

@@ -25,6 +25,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { logger } from '@/lib/logger'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Aufgaben Analyse',
@@ -182,7 +183,7 @@ export default async function TaskAnalyticsPage() {
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link
-          href="/admin/tasks"
+          href={ROUTES.admin.tasks}
           className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />

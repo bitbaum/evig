@@ -29,6 +29,7 @@ import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
+import { ROUTES } from '@/config/routes'
 
 export default function ITHilfePage() {
   const { data: session } = useSession()
@@ -337,7 +338,7 @@ export default function ITHilfePage() {
                 {t('ctaCreateProfile')}
               </Link>
               <Link
-                href="/it-hilfe"
+                href={ROUTES.public.itHilfe}
                 className="px-6 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaMoreInfo')}

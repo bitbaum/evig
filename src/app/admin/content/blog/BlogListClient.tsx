@@ -13,6 +13,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 interface BlogPost {
   id: string
@@ -186,7 +187,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           </p>
           {!search.trim() && !statusFilter && (
             <Link
-              href="/admin/content/blog/new"
+              href={ROUTES.admin.contentBlogNew}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />

@@ -8,6 +8,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { ROUTES } from '@/config/routes'
 
 interface SupportPageProps {
   params: Promise<{ locale: string }>
@@ -134,7 +135,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
           </Heading>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
-              href="/blog/submit"
+              href={ROUTES.public.blogSubmit}
               className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
             >
               {t('otherWays.submitPost')}
@@ -148,7 +149,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
               {t('otherWays.contributeCode')}
             </a>
             <Link
-              href="/blog"
+              href={ROUTES.public.blog}
               className="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
             >
               {t('otherWays.shareArticle')}

@@ -27,6 +27,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { formatDateMonth } from '@/lib/date-formats'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Analytics',
@@ -290,7 +291,7 @@ export default async function AnalyticsPage() {
           </div>
           {stats.pendingApprovals > 0 && (
             <Link
-              href="/admin/approvals"
+              href={ROUTES.admin.approvals}
               className="text-xs text-primary-600 hover:underline mt-2 inline-block"
             >
               Freigaben anzeigen →
@@ -370,7 +371,7 @@ export default async function AnalyticsPage() {
       {/* Drill-Down Links */}
       <div className="grid md:grid-cols-2 gap-4">
         <Link
-          href="/admin/analyse/finanzen"
+          href={ROUTES.admin.analyseFinanzen}
           className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-400 transition-colors group"
         >
           <div className="flex items-center gap-3">
@@ -386,7 +387,7 @@ export default async function AnalyticsPage() {
         </Link>
 
         <Link
-          href="/admin/tasks/analytics"
+          href={ROUTES.admin.tasksAnalytics}
           className="flex items-center justify-between p-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-400 transition-colors group"
         >
           <div className="flex items-center gap-3">
@@ -406,7 +407,7 @@ export default async function AnalyticsPage() {
         <p className="text-sm text-neutral-700 dark:text-neutral-300">
           <strong>Hinweis:</strong> Die Statistiken werden in Echtzeit aus der Datenbank berechnet.
           Für detaillierte Finanz-Analytics, siehe{' '}
-          <Link href="/admin/analyse/finanzen" className="underline hover:text-neutral-900">
+          <Link href={ROUTES.admin.analyseFinanzen} className="underline hover:text-neutral-900">
             Finanzen-Analyse
           </Link>.
         </p>

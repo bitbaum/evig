@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
+import { ROUTES } from '@/config/routes'
 
 interface BlogPostHeaderProps {
   post: BlogPost
@@ -13,7 +14,7 @@ export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
     <header className="max-w-[680px] mx-auto px-6 py-12">
       {/* Back Link */}
       <Link
-        href="/blog"
+        href={ROUTES.public.blog}
         className="inline-flex items-center text-neutral-600 hover:text-neutral-900 mb-8 transition-colors"
       >
         <ArrowLeft className="w-4 h-4 mr-2" />

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
 import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { ROUTES } from '@/config/routes'
 import {
   useLocationForm,
   LocationBasicInfoSection,
@@ -29,7 +30,7 @@ export default function NewLocationPage() {
         {/* Header */}
         <div className="mb-8">
           <Link
-            href="/admin/locations"
+            href={ROUTES.admin.locations}
             className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />

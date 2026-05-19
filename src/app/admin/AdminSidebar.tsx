@@ -21,6 +21,7 @@ import {
   getSensitivityReason,
   type SidebarGroupId,
 } from '@/config/sections'
+import { ROUTES } from '@/config/routes'
 
 interface AdminSidebarProps {
   sidebarCollapsed: boolean
@@ -79,7 +80,7 @@ export function AdminSidebar({
       {/* Sidebar Header */}
       <div className="flex h-14 items-center justify-between border-b border-neutral-200 px-3 dark:border-white/[0.06]">
         {!sidebarCollapsed && (
-          <Link href="/admin" className="flex items-center gap-2.5 min-w-0">
+          <Link href={ROUTES.admin.dashboard} className="flex items-center gap-2.5 min-w-0">
             <Image
               src={ORG_IMAGES.favicon}
               alt={ORG.name}
@@ -93,7 +94,7 @@ export function AdminSidebar({
           </Link>
         )}
         {sidebarCollapsed && (
-          <Link href="/admin" className="mx-auto">
+          <Link href={ROUTES.admin.dashboard} className="mx-auto">
             <Image
               src={ORG_IMAGES.favicon}
               alt={ORG.name}

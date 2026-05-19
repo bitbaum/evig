@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 
 export function LoginForm() {
   const t = useTranslations('auth.login')
@@ -166,7 +167,7 @@ export function LoginForm() {
                 {t('password')}
               </label>
               <Link
-                href="/auth/forgot-password"
+                href={ROUTES.public.forgotPassword}
                 className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
               >
                 {t('forgotPassword')}
@@ -246,7 +247,7 @@ export function LoginForm() {
 
         {/* Register Link */}
         <Link
-          href="/auth/register"
+          href={ROUTES.public.register}
           className="w-full flex items-center justify-center gap-2 border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 font-semibold py-3 px-4 rounded-lg transition-colors"
         >
           {t('createAccount')}

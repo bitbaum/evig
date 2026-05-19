@@ -13,6 +13,7 @@ import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
+import { ROUTES } from '@/config/routes'
 
 interface MobileMenuProps {
   isOpen: boolean
@@ -353,7 +354,7 @@ export function MobileMenu({
           ) : (
             <div className="flex gap-3">
               <Link
-                href="/auth/login"
+                href={ROUTES.public.login}
                 onClick={onClose}
                 className={cn(
                   "flex-1 py-3 text-center",
@@ -365,7 +366,7 @@ export function MobileMenu({
                 {t('login')}
               </Link>
               <Link
-                href="/auth/register"
+                href={ROUTES.public.register}
                 onClick={onClose}
                 className={cn(
                   "flex-1 py-3 text-center",

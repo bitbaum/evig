@@ -36,6 +36,7 @@ import {
 import ProtocolDetailClient from './ProtocolDetailClient'
 import { ProtocolAttendeesCard } from '@/components/admin/protocols'
 import { formatDateWithWeekday } from '@/lib/date-formats'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Protokoll Details',
@@ -98,7 +99,7 @@ export default async function ProtocolDetailPage({
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-4 min-w-0">
           <Link
-            href="/admin/protocols"
+            href={ROUTES.admin.protocols}
             className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors flex-shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />

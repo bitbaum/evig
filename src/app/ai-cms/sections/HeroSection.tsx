@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ROUTES } from '@/config/routes'
 
 export function HeroSection() {
   return (
@@ -16,7 +17,7 @@ export function HeroSection() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/auth/register"
+            href={ROUTES.public.register}
             className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
           >
             Jetzt mitmachen

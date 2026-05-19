@@ -10,6 +10,7 @@ import { getBookingStatusBadge } from '@/config/booking-status'
 import { LOCATION_TYPES } from '@/components/admin/locations/location-form'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { useLocationDetail } from '@/hooks/useLocationDetail'
+import { ROUTES } from '@/config/routes'
 import {
   MapPin,
   Users,
@@ -106,7 +107,7 @@ export default function LocationDetailPage() {
             <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
             <Heading level={2} className="text-lg font-medium text-neutral-900 mb-2">{error}</Heading>
             <Link
-              href="/admin/locations"
+              href={ROUTES.admin.locations}
               className="inline-flex items-center text-primary-600 hover:text-primary-700 mt-4"
             >
               <ArrowLeft className="w-4 h-4 mr-1" />
@@ -133,7 +134,7 @@ export default function LocationDetailPage() {
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <Link
-                  href="/admin/locations"
+                  href={ROUTES.admin.locations}
                   className="text-neutral-500 hover:text-neutral-600 transition-colors"
                 >
                   <ArrowLeft className="w-5 h-5" />

@@ -26,6 +26,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -123,7 +124,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <Link
-          href="/admin/users"
+          href={ROUTES.admin.users}
           className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />

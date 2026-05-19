@@ -23,6 +23,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
+import { ROUTES } from '@/config/routes'
 
 export const metadata: Metadata = {
   title: 'Dienstleistungen verwalten',
@@ -141,7 +142,7 @@ export default async function AdminServicesPage() {
       iconColor="green"
       actions={
         <Link
-          href="/admin/services/new"
+          href={ROUTES.admin.serviceNew}
           className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-5 h-5" />
@@ -299,7 +300,7 @@ export default async function AdminServicesPage() {
               Erstellen Sie Ihre erste Dienstleistung, um Service-Termine anzubieten.
             </p>
             <Link
-              href="/admin/services/new"
+              href={ROUTES.admin.serviceNew}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />
@@ -325,7 +326,7 @@ export default async function AdminServicesPage() {
             </p>
             <div className="flex gap-3">
               <Link
-                href="/admin/services/new"
+                href={ROUTES.admin.serviceNew}
                 className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
               >
                 Dienstleistung erstellen

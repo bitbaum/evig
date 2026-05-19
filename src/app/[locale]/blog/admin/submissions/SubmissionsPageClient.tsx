@@ -7,6 +7,7 @@ import { APPROVAL_STATUS, BLOG_SUBMISSION_TYPE, getApprovalStatusBadge } from '@
 import { formatDateTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { useSubmissionsAdmin } from './useSubmissionsAdmin'
+import { ROUTES } from '@/config/routes'
 
 export default function SubmissionsAdminPage() {
   const t = useTranslations('blog.admin')
@@ -30,7 +31,7 @@ export default function SubmissionsAdminPage() {
       <div className="bg-primary-700 text-white py-12">
         <div className="container mx-auto px-4 max-w-7xl">
           <Link
-            href="/blog"
+            href={ROUTES.public.blog}
             className="inline-flex items-center text-primary-200 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />

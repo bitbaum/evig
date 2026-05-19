@@ -20,6 +20,7 @@ import {
   OFFER_STATUS,
 } from '@/config/it-hilfe'
 import { useMyOffers } from '@/hooks/useMyOffers'
+import { ROUTES } from '@/config/routes'
 
 export default function MyOffersPage() {
   const t = useTranslations('itHelp.myOffers')
@@ -59,14 +60,14 @@ export default function MyOffersPage() {
           </div>
           <div className="flex gap-3">
             <Link
-              href="/it-hilfe/my"
+              href={ROUTES.public.itHilfeMy}
               className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-700 rounded-lg font-medium hover:bg-neutral-50 transition-colors"
             >
               <FileText className="w-4 h-4" />
               {t('myRequestsButton')}
             </Link>
             <Link
-              href="/it-hilfe"
+              href={ROUTES.public.itHilfe}
               className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
             >
               <Heart className="w-4 h-4" />
@@ -120,7 +121,7 @@ export default function MyOffersPage() {
             </p>
             {!statusFilter && (
               <Link
-                href="/it-hilfe"
+                href={ROUTES.public.itHilfe}
                 className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
               >
                 <Heart className="w-5 h-5" />

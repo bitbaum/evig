@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 function ResetPasswordContent() {
   const t = useTranslations('auth.resetPassword')
@@ -98,13 +99,13 @@ function ResetPasswordContent() {
           <div className="bg-white py-8 px-4 shadow-lg rounded-lg sm:px-10 text-center">
             <div className="space-y-3">
               <Link
-                href="/auth/forgot-password"
+                href={ROUTES.public.forgotPassword}
                 className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
               >
                 {t('requestNewLink')}
               </Link>
               <p className="text-sm text-neutral-600">
-                <Link href="/auth/login" className="text-primary-600 hover:text-primary-500">
+                <Link href={ROUTES.public.login} className="text-primary-600 hover:text-primary-500">
                   {t('backToLogin')}
                 </Link>
               </p>
@@ -138,7 +139,7 @@ function ResetPasswordContent() {
               {t('successRedirect')}
             </p>
             <Link
-              href="/auth/login"
+              href={ROUTES.public.login}
               className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
             >
               {t('loginNow')}

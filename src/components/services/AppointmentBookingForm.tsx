@@ -7,6 +7,7 @@ import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'luci
 import Link from 'next/link'
 import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { apiFetch } from '@/lib/api/client'
+import { ROUTES } from '@/config/routes'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -138,13 +139,13 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Link
-                  href="/auth/login"
+                  href={ROUTES.public.login}
                   className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target text-center font-medium"
                 >
                   Anmelden
                 </Link>
                 <Link
-                  href="/auth/register"
+                  href={ROUTES.public.register}
                   className="border-2 border-neutral-300 text-neutral-700 px-6 py-3 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target text-center font-medium"
                 >
                   Registrieren

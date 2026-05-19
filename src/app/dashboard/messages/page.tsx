@@ -13,6 +13,7 @@ import { logger } from '@/lib/logger'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { ROUTES } from '@/config/routes'
 
 function MessagesContent() {
   const t = useTranslations('dashboard.messages')
@@ -96,7 +97,7 @@ function MessagesContent() {
           description={t('emptyDesc')}
           action={
             <Link
-              href="/marketplace"
+              href={ROUTES.public.marketplace}
               className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
             >
               {t('goToMarketplace')}

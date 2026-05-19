@@ -28,6 +28,7 @@ import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
 import Heading from '@/components/admin/AdminHeading'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { ROUTES } from '@/config/routes'
 import { Pagination } from '@/components/ui/Pagination'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 import { useAdminWorkshops } from '@/hooks/useAdminWorkshops'
@@ -98,14 +99,14 @@ export default function AdminWorkshopsPage() {
       iconColor="blue"
       actions={
         <Link
-          href="/admin/workshops/instances"
+          href={ROUTES.admin.workshopsInstances}
           className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
           <Calendar className="w-4 h-4 mr-2" />
           Termine verwalten
         </Link>
       }
-      backButton={{ href: '/admin', label: 'Zurück zum Dashboard' }}
+      backButton={{ href: ROUTES.admin.dashboard, label: 'Zurück zum Dashboard' }}
     >
       <AdminFilterBar
         searchValue={searchTerm}
@@ -198,7 +199,7 @@ export default function AdminWorkshopsPage() {
 
                   <div className="flex flex-wrap items-center gap-2 sm:ml-4 sm:flex-shrink-0">
                     <Link
-                      href={`/admin/workshops/proposals/${proposal.id}`}
+                      href={ROUTES.admin.workshopProposal(proposal.id)}
                       className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                       <Eye className="w-4 h-4 mr-1" /> Details

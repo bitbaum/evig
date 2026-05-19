@@ -22,6 +22,7 @@ import { ActiveFilterChips } from '@/components/marketplace/ActiveFilterChips'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 export default function MarketplacePage() {
   const { data: session, status } = useSession()
@@ -271,13 +272,13 @@ export default function MarketplacePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href="/auth/login"
+                href={ROUTES.public.login}
                 className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400 text-white rounded-lg font-semibold shadow-sm transition-colors"
               >
                 {t('signInCta.login')}
               </Link>
               <Link
-                href="/auth/register"
+                href={ROUTES.public.register}
                 className="px-6 py-2.5 border border-neutral-300 dark:border-white/[0.1] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.register')}

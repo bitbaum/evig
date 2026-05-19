@@ -25,6 +25,7 @@ import { getCantonCoordinates } from '@/config/canton-coordinates'
 import LeafletMap, { type MapMarker } from '@/components/map/LeafletMap'
 import { HelperCard } from './HelperCard'
 import Heading from '@/components/ui/Heading'
+import { ROUTES } from '@/config/routes'
 
 // =============================================================================
 // TYPES
@@ -261,7 +262,7 @@ export function TechnicianMapList({ requestId, requestTitle }: TechnicianMapList
               {matches.length > 5 && (
                 <div className="text-center">
                   <Link
-                    href="/techniker"
+                    href={ROUTES.public.techniker}
                     className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium text-sm"
                   >
                     {t('showAllTechnicians', { count: matches.length })}

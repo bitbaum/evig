@@ -10,6 +10,7 @@
 import Link from 'next/link'
 import { ArrowLeft, Loader2, FileText } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { ROUTES } from '@/config/routes'
 import { EditSubmissionModal } from '@/components/admin/blog/EditSubmissionModal'
 import {
   useSubmissions,
@@ -29,7 +30,7 @@ export default function SubmissionsAdminPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
-            href="/admin/content"
+            href={ROUTES.admin.content}
             className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />

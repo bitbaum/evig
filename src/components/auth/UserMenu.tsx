@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
+import { ROUTES } from '@/config/routes'
 
 /**
  * UserMenu Component
@@ -70,7 +71,7 @@ export function UserMenu() {
     return (
       <div className="flex items-center gap-2">
         <Link
-          href="/auth/login"
+          href={ROUTES.public.login}
           className={cn(
             "hidden sm:inline-flex px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
             "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
@@ -80,7 +81,7 @@ export function UserMenu() {
           {t('login')}
         </Link>
         <Link
-          href="/auth/register"
+          href={ROUTES.public.register}
           className={cn(
             "inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium",
             "bg-primary-600 text-white rounded-lg",
