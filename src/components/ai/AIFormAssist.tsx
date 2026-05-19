@@ -94,7 +94,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
 
   // Styles
   const containerClass = variant === 'section'
-    ? 'bg-gradient-to-r from-primary-50 to-info-50 dark:from-primary-900/20 dark:to-info-900/20 rounded-xl shadow-sm border border-primary-200 dark:border-primary-700'
+    ? 'bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-700'
     : 'rounded-lg border border-primary-200 dark:border-primary-800 bg-primary-50 dark:bg-primary-900/20'
 
   const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4'

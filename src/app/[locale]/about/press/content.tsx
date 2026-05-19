@@ -44,7 +44,7 @@ function MediaCard({ mention, readArticleLabel }: { mention: MediaMention; readA
       href={mention.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block bg-white rounded-xl border border-neutral-200 p-6 hover:border-primary-300 transition-all duration-300 h-full"
+      className="group block card-shell p-6 hover:border-primary-300 transition-all duration-300 h-full"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">

@@ -86,7 +86,7 @@ export default function InvitePage() {
 
         {/* Incentive cards */}
         <div className="grid sm:grid-cols-2 gap-4 mb-8">
-          <div className="bg-white rounded-xl border border-neutral-200 p-5">
+          <div className="card-shell p-5">
             <div className="flex items-center gap-3 mb-2">
               <Gift className="w-5 h-5 text-primary-600 dark:text-primary-400" />
               <span className="font-semibold text-neutral-900">Dein Freund erhält</span>
@@ -94,7 +94,7 @@ export default function InvitePage() {
             <p className="text-2xl font-bold text-primary-600 mb-1">CHF {inviteeCHF}</p>
             <p className="text-sm text-neutral-500">Rabatt auf den ersten Einkauf im Shop</p>
           </div>
-          <div className="bg-white rounded-xl border border-neutral-200 p-5">
+          <div className="card-shell p-5">
             <div className="flex items-center gap-3 mb-2">
               <Gift className="w-5 h-5 text-primary-600 dark:text-primary-400" />
               <span className="font-semibold text-neutral-900">Du erhältst</span>
@@ -105,7 +105,7 @@ export default function InvitePage() {
         </div>
 
         {/* Referral link */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-6 mb-6">
+        <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Link2 className="w-4 h-4 text-neutral-500" />
             <span className="text-sm font-medium text-neutral-700">Dein persönlicher Einladungslink</span>
@@ -131,7 +131,7 @@ export default function InvitePage() {
         </div>
 
         {/* Invite by email */}
-        <div className="bg-white rounded-xl border border-neutral-200 p-6 mb-6">
+        <div className="card-shell p-6 mb-6">
           <Heading level={2} className="text-lg font-semibold mb-4">Per E-Mail einladen</Heading>
           <form onSubmit={handleInvite} className="flex gap-2">
             <input
@@ -161,11 +161,11 @@ export default function InvitePage() {
         {/* Stats */}
         {data && (
           <div className="flex gap-6 text-center">
-            <div className="flex-1 bg-white rounded-xl border border-neutral-200 p-4">
+            <div className="flex-1 card-shell p-4">
               <p className="text-2xl font-bold text-neutral-900">{data.totalInvites}</p>
               <p className="text-sm text-neutral-500">Einladungen gesendet</p>
             </div>
-            <div className="flex-1 bg-white rounded-xl border border-neutral-200 p-4">
+            <div className="flex-1 card-shell p-4">
               <p className="text-2xl font-bold text-primary-600">{data.registrations}</p>
               <p className="text-sm text-neutral-500">Registrierungen</p>
             </div>

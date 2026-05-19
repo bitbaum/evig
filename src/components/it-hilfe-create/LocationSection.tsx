@@ -23,7 +23,7 @@ export function LocationSection({
   const t = useTranslations('itHelp.create')
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+    <div className="card-shell p-6">
       <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">{t('locationHeading')}</Heading>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>

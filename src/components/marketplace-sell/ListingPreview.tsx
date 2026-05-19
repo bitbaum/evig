@@ -35,7 +35,7 @@ export function ListingPreview({ formData, editId, isSubmitting, success, error,
         {t('backToEdit')}
       </button>
 
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+      <div className="card-shell overflow-hidden">
         <div className="p-6 border-b border-neutral-100 dark:border-neutral-700">
           <Heading level={1} className="text-xl font-bold text-neutral-900 dark:text-white flex items-center gap-2">
             <Eye className="w-5 h-5" />

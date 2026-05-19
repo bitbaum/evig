@@ -61,8 +61,7 @@ function TimelineItem({
         className={`flex-1 ${isLeft ? 'md:text-right' : ''}`}
       >
         <div
-          className={`bg-white dark:bg-neutral-900 rounded-xl p-6 border border-neutral-200 dark:border-white/[0.06]
-            ${milestone.highlight ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
+          className={`card-shell p-6 ${milestone.highlight ? 'ring-2 ring-primary-500 ring-offset-2' : ''}`}
         >
           <div
             className={`flex items-center gap-3 mb-3 ${isLeft ? 'md:flex-row-reverse' : ''}`}
@@ -123,7 +122,7 @@ export default function GeschichteSection() {
 
         {/* Founding Story */}
         <div className="max-w-3xl mx-auto mb-20">
-          <div className="bg-white dark:bg-neutral-900 rounded-2xl p-8 border border-neutral-200 dark:border-white/[0.06]">
+          <div className="card-shell rounded-2xl p-8">
             <div className="prose prose-lg max-w-none">
               {founding.paragraphs.map((paragraph, index) => (
                 <p key={index} className="text-neutral-600 mb-4 last:mb-0">

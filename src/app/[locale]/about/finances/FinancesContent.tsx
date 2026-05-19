@@ -143,7 +143,7 @@ export default function FinancesContent() {
             )}
 
             {/* Revenue Breakdown Table */}
-            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-hidden mb-10">
+            <div className="card-shell overflow-hidden mb-10">
               <div className="px-6 py-4 border-b border-neutral-100">
                 <Heading level={2} className="text-lg text-neutral-900">{t('table.title')}</Heading>
                 <p className="text-sm text-neutral-600">{t('table.subtitle')}</p>

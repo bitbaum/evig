@@ -78,7 +78,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
   return (
     <Link
       href={IT_HILFE.routes.detail(request.id)}
-      className={`bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow group ${className}`}
+      className={`card-shell overflow-hidden hover:border-neutral-300 transition-all group ${className}`}
     >
       {/* Card Header */}
       <div className="p-5 border-b border-neutral-100 dark:border-neutral-700">

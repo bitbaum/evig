@@ -126,7 +126,7 @@ function SellPageContent() {
         </div>
       )}
 
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700">
+      <div className="card-shell">
         <div className="p-4 md:p-6 border-b border-neutral-100 dark:border-neutral-700">
           <Heading level={1} className="text-xl text-neutral-900 dark:text-white flex items-center gap-2">
             <Package className="w-5 h-5 text-primary-600" />

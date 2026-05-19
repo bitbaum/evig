@@ -83,7 +83,7 @@ export default function CreatePeerRepairPage() {
           {t('backToList')}
         </Link>
 
-        <div className="bg-white rounded-xl border border-neutral-200 dark:bg-neutral-900 dark:border-white/[0.06] p-6 mb-6">
+        <div className="card-shell p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-primary-100 dark:bg-primary-900/30 rounded-lg">
               <Wrench className="w-6 h-6 text-primary-600" />
@@ -116,7 +116,7 @@ export default function CreatePeerRepairPage() {
           )}
 
           {/* Device Category */}
-          <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+          <div className="card-shell p-6">
             <Heading level={2} className="text-lg text-neutral-900 mb-4">{t('sectionDevice')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
@@ -171,7 +171,7 @@ export default function CreatePeerRepairPage() {
               />
 
               {/* Budget */}
-              <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+              <div className="card-shell p-6">
                 <Heading level={2} className="text-lg text-neutral-900 mb-2">{t('sectionBudget')}</Heading>
                 <p className="text-sm text-neutral-600 mb-4">{t('budgetDescription')}</p>
                 <div className="flex items-center gap-3">
@@ -192,7 +192,7 @@ export default function CreatePeerRepairPage() {
               </div>
 
               {/* Service Type & Urgency */}
-              <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-6">
+              <div className="card-shell p-6">
                 <Heading level={2} className="text-lg text-neutral-900 mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>

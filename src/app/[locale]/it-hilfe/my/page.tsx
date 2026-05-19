@@ -113,7 +113,7 @@ export default function MyRequestsPage() {
         </div>
 
         {/* Status Filter */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 mb-6">
+        <div className="card-shell p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setStatusFilter('')}
@@ -150,7 +150,7 @@ export default function MyRequestsPage() {
 
         {/* Requests List */}
         {requests.length === 0 && !fetchError ? (
-          <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center">
+          <div className="card-shell p-12 text-center">
             <FileText className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
             <Heading level={3} className="text-xl text-neutral-900 mb-2">
               {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
@@ -180,7 +180,7 @@ export default function MyRequestsPage() {
                 <Link
                   key={req.id}
                   href={`/it-hilfe/${req.id}`}
-                  className="block bg-white rounded-xl shadow-sm border border-neutral-100 p-6 hover:shadow-md transition-shadow group"
+                  className="block card-shell p-6 hover:border-neutral-300 transition-all group"
                 >
                   <div className="flex items-start gap-4">
                     <div className={`p-3 ${categoryConfig?.color || 'bg-neutral-500'} rounded-xl`}>

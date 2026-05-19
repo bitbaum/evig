@@ -28,7 +28,7 @@ export function OffersList({
   if (offers.length === 0) return null
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+    <div className="card-shell p-6">
       <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">
         {t('incomingOffers', { count: offers.length })}
       </Heading>

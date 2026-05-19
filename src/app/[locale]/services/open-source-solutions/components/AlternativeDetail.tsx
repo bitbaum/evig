@@ -71,14 +71,14 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           {/* Main content (2/3) */}
           <div className="lg:col-span-2 space-y-8">
             {/* Description */}
-            <section className="bg-white rounded-xl border border-neutral-200 p-6">
+            <section className="card-shell p-6">
               <Heading level={2} className="text-xl font-bold text-neutral-900 mb-4">{t('detail.description')}</Heading>
               <p className="text-neutral-700 leading-relaxed">{alternative.description}</p>
             </section>
 
             {/* What it replaces */}
             {alternative.replaces.length > 0 && (
-              <section className="bg-white rounded-xl border border-neutral-200 p-6">
+              <section className="card-shell p-6">
                 <Heading level={2} className="text-xl font-bold text-neutral-900 mb-4">{t('detail.replaces')}</Heading>
                 <div className="space-y-4">
                   {alternative.replaces.map(r => {
@@ -125,7 +125,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             )}
 
             {/* Highlights */}
-            <section className="bg-white rounded-xl border border-neutral-200 p-6">
+            <section className="card-shell p-6">
               <Heading level={2} className="text-xl font-bold text-neutral-900 mb-4">{t('detail.highlights')}</Heading>
               <ul className="space-y-2">
                 {alternative.highlights.map((h, i) => (
@@ -138,7 +138,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             </section>
 
             {/* Limitations */}
-            <section className="bg-white rounded-xl border border-neutral-200 p-6">
+            <section className="card-shell p-6">
               <Heading level={2} className="text-xl font-bold text-neutral-900 mb-4">{t('detail.limitations')}</Heading>
               <ul className="space-y-2">
                 {alternative.limitations.map((l, i) => (
@@ -157,7 +157,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           {/* Sidebar (1/3) */}
           <div className="space-y-6">
             {/* Quick links */}
-            <div className="bg-white rounded-xl border border-neutral-200 p-5">
+            <div className="card-shell p-5">
               <Heading level={3} className="text-base font-bold text-neutral-900 mb-4">{t('detail.links')}</Heading>
               <div className="space-y-3">
                 <a
@@ -192,7 +192,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             </div>
 
             {/* Info */}
-            <div className="bg-white rounded-xl border border-neutral-200 p-5">
+            <div className="card-shell p-5">
               <Heading level={3} className="text-base font-bold text-neutral-900 mb-4">{t('detail.details')}</Heading>
               <dl className="space-y-3 text-sm">
                 <div>

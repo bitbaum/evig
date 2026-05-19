@@ -144,7 +144,7 @@ function SubcategoryCard({
   return (
     <Link
       href={getCategoryUrl(category.slug)}
-      className="group block p-4 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all"
+      className="group block p-4 card-shell hover:border-primary-300 transition-all"
     >
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center group-hover:bg-primary-600 group-hover:text-white transition-colors">
@@ -261,7 +261,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             )}
           </div>
         ) : (
-          <div className="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-8 text-center">
+          <div className="card-shell p-8 text-center">
             <div className="max-w-md mx-auto">
               <div className="w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 flex items-center justify-center mx-auto mb-4">
                 <Package className="w-8 h-8" />

@@ -137,7 +137,7 @@ export default function ITHilfePage() {
         )}
 
         {/* Filter Bar */}
-        <div className="mb-6 bg-white rounded-2xl shadow-sm border border-neutral-100 p-4">
+        <div className="mb-6 card-shell rounded-2xl p-4">
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -320,7 +320,7 @@ export default function ITHilfePage() {
 
         {/* CTA Section for Becoming a Technician */}
         {!session?.user && (
-          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
+          <div className="mt-12 card-shell rounded-2xl p-8 text-center">
             <div className="flex justify-center mb-4">
               <IconBadge icon={Wrench} theme="itHilfe" size="lg" />
             </div>

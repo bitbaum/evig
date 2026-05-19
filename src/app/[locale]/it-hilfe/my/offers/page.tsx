@@ -76,7 +76,7 @@ export default function MyOffersPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 mb-6">
+        <div className="card-shell p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setStatusFilter('')}
@@ -111,7 +111,7 @@ export default function MyOffersPage() {
         )}
 
         {offers.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-12 text-center">
+          <div className="card-shell p-12 text-center">
             <Heart className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
             <Heading level={3} className="text-xl text-neutral-900 mb-2">
               {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
@@ -140,7 +140,7 @@ export default function MyOffersPage() {
               return (
                 <div
                   key={offer.id}
-                  className="bg-white rounded-xl shadow-sm border border-neutral-100 hover:shadow-md transition-shadow"
+                  className="card-shell hover:border-neutral-300 transition-all"
                 >
                   <Link href={`/it-hilfe/${offer.requestId}`} className="block p-6 group">
                     <div className="flex items-start gap-4">

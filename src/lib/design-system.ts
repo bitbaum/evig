@@ -342,12 +342,13 @@ export const designPrimitive = {
   },
 
   // ── Surfaces ──────────────────────────────────────────────────────────────
-  // x.ai: very dark cards, ultra-subtle borders (white/6% in dark mode)
+  // card-shell / card-shell-inset are defined in globals.css @layer components.
+  // They use CSS custom properties so dark mode is automatic — no dark: needed.
   surface: {
-    card:        'rounded-lg border border-neutral-200 bg-white dark:border-white/[0.06] dark:bg-neutral-900',
-    cardElevated:'rounded-lg border border-neutral-200 bg-white shadow-sm dark:border-white/[0.06] dark:bg-neutral-900',
-    inset:       'rounded-lg border border-neutral-200 bg-neutral-50 dark:border-white/[0.04] dark:bg-neutral-950',
-    table:       'overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-white/[0.06] dark:bg-neutral-900',
+    card:        'card-shell',
+    cardElevated:'card-shell shadow-sm',
+    inset:       'card-shell-inset',
+    table:       'card-shell overflow-hidden',
   },
 
   // ── Buttons ───────────────────────────────────────────────────────────────

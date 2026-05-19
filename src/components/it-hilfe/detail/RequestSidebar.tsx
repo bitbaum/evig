@@ -58,7 +58,7 @@ export function RequestSidebar({
   return (
     <div className="space-y-6">
       {/* Request Info */}
-      <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+      <div className="card-shell p-6">
         <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
           {t('sidebarDetails')}
         </Heading>
@@ -139,7 +139,7 @@ export function RequestSidebar({
       </div>
 
       {/* Requester Info */}
-      <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+      <div className="card-shell p-6">
         <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
           {t('requesterSection')}
         </Heading>
@@ -158,7 +158,7 @@ export function RequestSidebar({
 
       {/* Message Button */}
       {conversationId && hasSession && (
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+        <div className="card-shell p-6">
           <button
             onClick={onShowMessages}
             className="w-full py-3 px-4 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
@@ -171,7 +171,7 @@ export function RequestSidebar({
 
       {/* Owner Actions */}
       {request.isOwner && (
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+        <div className="card-shell p-6">
           <Heading level={3} className="text-sm font-medium text-neutral-500 uppercase tracking-wider mb-4">
             {t('actionsSection')}
           </Heading>

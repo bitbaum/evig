@@ -100,7 +100,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             {coreValueItems.map((value, index) => {
               const Icon = CORE_VALUE_ICONS[index]
               return (
-                <div key={index} className={`bg-white dark:bg-neutral-900 rounded-xl ${responsiveSpacing.cardPadding} border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300`}>
+                <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-neutral-300 transition-all duration-300`}>
                   <div className={`text-primary-600 dark:text-primary-400 ${responsiveSpacing.mbMedium}`}>
                     <Icon className="w-10 h-10 sm:w-12 sm:h-12" />
                   </div>
@@ -125,7 +125,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           </Heading>
           <div className={responsiveGrid.cards}>
             {optionItems.map((option, index) => (
-              <div key={index} className={`bg-white dark:bg-neutral-900 rounded-xl ${responsiveSpacing.cardPadding} border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}>
+              <div key={index} className={`card-shell ${responsiveSpacing.cardPadding} hover:border-neutral-300 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full`}>
                 <div className={`text-primary-600 dark:text-primary-400 ${responsiveSpacing.mbMedium}`}>
                   <Users className="w-10 h-10 sm:w-12 sm:h-12" />
                 </div>
@@ -165,7 +165,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           </Heading>
           <div className="max-w-3xl mx-auto">
             {testimonialItems.map((testimonial, index) => (
-              <div key={index} className={`bg-white dark:bg-neutral-900 rounded-xl ${responsiveSpacing.cardPadding} border border-neutral-200 dark:border-white/[0.06]`}>
+              <div key={index} className={`card-shell ${responsiveSpacing.cardPadding}`}>
                 <div className={`text-primary-600 dark:text-primary-400 ${responsiveSpacing.mbSmall}`}>
                   <Heart className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
@@ -194,7 +194,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                   href={PARTNER_URLS[index]}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center ${responsiveSpacing.cardPadding} bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] hover:border-primary-300 dark:hover:border-primary-500/30 transition-all duration-300 group`}
+                  className={`flex items-center ${responsiveSpacing.cardPadding} card-shell hover:border-primary-300 transition-all duration-300 group`}
                 >
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 mr-3 sm:mr-4 text-primary-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

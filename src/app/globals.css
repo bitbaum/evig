@@ -340,6 +340,32 @@
 .dropdown-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 3px; }
 .dropdown-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 
+/* ─── Card / surface primitives (@layer components) ────────────────────────
+ * Single source of truth for all card/panel surfaces.
+ * Uses CSS custom properties directly — dark mode is automatic, zero dark:
+ * variants needed in any component that uses these classes.
+ * ─────────────────────────────────────────────────────────────────────────── */
+@layer components {
+  /* Standard content card — border + surface bg, no shadow */
+  .card-shell {
+    border-radius: 0.75rem;                    /* rounded-xl */
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  /* Inset / nested card — slightly raised bg for contrast */
+  .card-shell-inset {
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface-raised);
+  }
+
+  /* Page section with neutral tint */
+  .section-tint {
+    background-color: var(--color-surface-raised);
+  }
+}
+
 /* Focus ring — keyboard navigation */
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;

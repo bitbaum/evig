@@ -237,7 +237,7 @@ export function DataEntryTabs({
 
   return (
     <div
-      className={`bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-900/30 rounded-xl border border-primary-200 dark:border-primary-800 overflow-hidden ${className}`}
+      className={`bg-primary-50 dark:bg-primary-900/20 rounded-xl border border-primary-200 dark:border-primary-800 overflow-hidden ${className}`}
     >
       {/* Collapsible header */}
       <button

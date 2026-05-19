@@ -82,7 +82,7 @@ export function ITHilfeImageUpload({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+    <div className="card-shell p-6">
       <Heading level={2} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
 
       {error && (

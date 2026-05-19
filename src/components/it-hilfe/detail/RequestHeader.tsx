@@ -24,7 +24,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
   const CategoryIcon = categoryConfig?.icon || Wrench
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+    <div className="card-shell p-6">
       <div className="flex items-start gap-4 mb-4">
         <div className={`p-3 ${categoryConfig?.color || 'bg-neutral-500'} rounded-xl`}>
           <CategoryIcon className="w-6 h-6 text-white" aria-hidden="true" />

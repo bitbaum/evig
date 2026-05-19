@@ -151,7 +151,7 @@ export default function BuildYourComputerPage() {
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 3 ? 'bg-primary-600 text-white' : 'bg-neutral-300 text-neutral-600'}`}>3</div>
             </div>
 
-            <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.08] p-8">
+            <div className="card-shell p-8">
               {/* Step 1: Requirements */}
               {step === 1 && (
                 <div className="space-y-8">

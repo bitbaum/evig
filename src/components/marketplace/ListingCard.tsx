@@ -66,7 +66,7 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
   return (
     <Link
       href={`/marketplace/${listing.id}`}
-      className={`group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow ${className}`}
+      className={`group card-shell overflow-hidden hover:border-neutral-300 transition-all ${className}`}
     >
       {/* Image */}
       <div className={`relative ${isCompact ? 'aspect-square' : 'aspect-[4/3]'}`}>

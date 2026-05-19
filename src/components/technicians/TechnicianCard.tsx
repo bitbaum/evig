@@ -20,7 +20,7 @@ export function TechnicianCard({ technician }: TechnicianCardProps) {
   const remainingSkillsCount = technician.skills.length - 5
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 hover:shadow-md transition-shadow">
+    <div className="card-shell hover:border-neutral-300 transition-all">
       {/* Header */}
       <div className="p-6 border-b border-neutral-100">
         <div className="flex items-start justify-between mb-3">

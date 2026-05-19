@@ -52,8 +52,8 @@ export default function AboutSection({ section }: AboutSectionProps) {
                 <article
                   key={index}
                   className={section.backgroundColor === 'gray'
-                    ? 'bg-white dark:bg-neutral-900 p-8 rounded-xl border border-neutral-200 dark:border-white/[0.06]'
-                    : 'bg-neutral-50 dark:bg-neutral-900 p-8 rounded-2xl border border-neutral-200 dark:border-white/[0.06] hover:border-neutral-300 dark:hover:border-white/[0.12] transition-colors duration-300'
+                    ? 'card-shell p-8'
+                    : 'card-shell-inset rounded-2xl p-8 hover:border-neutral-300 transition-colors duration-300'
                   }
                 >
                   {/* Card Title */}

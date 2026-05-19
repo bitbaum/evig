@@ -41,7 +41,7 @@ export function OfferForm({
   const t = useTranslations('itHelp.offer')
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+    <div className="card-shell p-6">
       {!showForm ? (
         <button
           onClick={onShowForm}

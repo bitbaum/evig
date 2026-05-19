@@ -34,7 +34,7 @@ function TechnicianCard({ technician }: { technician: Technician }) {
   return (
     <Link
       href={ROUTES.public.technicianProfile(technician.id)}
-      className="block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] p-5 hover:border-neutral-300 dark:hover:border-white/[0.12] hover:shadow-sm transition-all"
+      className="block card-shell p-5 hover:border-neutral-300 transition-all"
     >
       {/* Name + tier badge */}
       <div className="flex items-start justify-between gap-2 mb-3">
@@ -327,7 +327,7 @@ export default function TechnikerListClient() {
 
         {/* CTA for non-logged-in */}
         {!session?.user && (
-          <div className="mt-12 bg-white rounded-2xl shadow-sm border border-neutral-100 p-8 text-center">
+          <div className="mt-12 card-shell rounded-2xl p-8 text-center">
             <div className="flex justify-center mb-4">
               <IconBadge icon={Wrench} theme="repairers" size="lg" />
             </div>

@@ -33,7 +33,7 @@ function MediaCard({ mention, tierLabel, readArticleLabel }: { mention: MediaMen
       href={mention.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group block bg-white rounded-xl border border-neutral-200 p-6 hover:border-primary-300 transition-all duration-300 h-full"
+      className="group block card-shell p-6 hover:border-primary-300 transition-all duration-300 h-full"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -185,7 +185,7 @@ export default function MediaCoverageSection() {
         </div>
 
         {/* Other Mentions - Compact Grid */}
-        <div className="bg-white rounded-2xl border border-neutral-200 p-8">
+        <div className="card-shell rounded-2xl p-8">
           <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-6 text-center">
             {t('moreTitle')}
           </Heading>

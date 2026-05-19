@@ -133,7 +133,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       </Link>
 
       {/* Seller Header */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6 mb-6">
+      <div className="card-shell p-6 mb-6">
         <div className="flex items-start gap-4">
           <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center flex-shrink-0">
             {seller.avatar_url ? (
@@ -215,7 +215,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 <Link
                   key={listing.id}
                   href={ROUTES.public.marketplaceListing(listing.id)}
-                  className="group bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-md transition-shadow"
+                  className="group card-shell overflow-hidden hover:border-neutral-300 transition-all"
                 >
                   <div className="relative aspect-[4/3]">
                     {listing.thumbnail ? (

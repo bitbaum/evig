@@ -66,7 +66,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+    <div className="card-shell p-6">
       <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-2">{t('heading')}</Heading>
       <p className="text-sm text-neutral-600 mb-4">
         {t('experienceWith', { title: requestTitle })}

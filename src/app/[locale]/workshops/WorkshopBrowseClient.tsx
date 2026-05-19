@@ -71,7 +71,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
       <div className="max-w-7xl mx-auto px-4 pt-12 pb-16">
         {/* Filter Bar */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-4 mb-8">
+        <div className="card-shell p-4 mb-8">
           <div className="flex flex-wrap items-center gap-4">
             {/* Category Dropdown */}
             <div>
@@ -145,7 +145,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 : null
 
               return (
-                <div key={workshop.id} className="bg-white rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-hidden hover:border-neutral-300 dark:hover:border-white/[0.12] transition-all flex flex-col">
+                <div key={workshop.id} className="card-shell overflow-hidden hover:border-neutral-300 transition-all flex flex-col">
                   {/* Workshop Header */}
                   <div className="p-6 border-b border-neutral-100 flex-1">
                     <div className="flex items-start justify-between mb-4">

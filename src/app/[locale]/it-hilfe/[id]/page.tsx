@@ -99,7 +99,7 @@ export default function ITHilfeDetailPage() {
 
             {/* Technician Map */}
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
-              <div className="bg-white rounded-xl shadow-sm border border-neutral-100 p-6">
+              <div className="card-shell p-6">
                 <TechnicianMapList requestId={request.id} requestTitle={request.title} />
               </div>
             )}

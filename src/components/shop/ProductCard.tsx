@@ -13,7 +13,7 @@ export function ProductCard({ product, stockOneLabel }: Props) {
   return (
     <Link
       href={`/shop/product/${product.item_uuid}`}
-      className="group bg-white rounded-xl border border-neutral-200 hover:border-primary-300 hover:shadow-md transition-all overflow-hidden flex flex-col"
+      className="group card-shell hover:border-primary-300 transition-all overflow-hidden flex flex-col"
     >
       <div className="relative aspect-[4/3] bg-neutral-50">
         {product.image_url ? (

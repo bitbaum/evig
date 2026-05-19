@@ -235,7 +235,7 @@ export default async function Home() {
               const secondaryBtn = DESIGN_TOKENS.buttons.secondary[card.theme]
               const focusOutline = DESIGN_TOKENS.focusOutline[card.theme]
               return (
-                <div key={card.title} className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.06] p-6 sm:p-8 shadow-sm dark:shadow-none hover:shadow-md dark:hover:border-white/[0.1] transition-all flex flex-col">
+                <div key={card.title} className="card-shell rounded-2xl p-6 sm:p-8 hover:border-neutral-300 transition-all flex flex-col">
                   <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${badge.bg} mb-4`} aria-hidden="true">
                     <card.icon className={`h-6 w-6 ${badge.text}`} />
                   </div>
@@ -333,7 +333,7 @@ export default async function Home() {
               <Link
                 key={item.title}
                 href={item.href}
-                className={`bg-white dark:bg-neutral-900 rounded-xl p-6 border ${item.border} hover:shadow-md dark:hover:border-white/[0.1] transition-all group`}
+                className={`card-shell p-6 border ${item.border} hover:border-neutral-300 transition-all group`}
               >
                 <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${item.badge.bg} mb-4`} aria-hidden="true">
                   <item.icon className={`h-5 w-5 ${item.badge.text}`} />
