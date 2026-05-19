@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { Link } from '@/i18n/navigation'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Stepper } from '@/components/ui/Stepper'
 import { AccountStep, VerifyStep } from './steps'
@@ -31,6 +33,7 @@ const STORAGE_KEY = 'revampit_registration_state'
 
 export function RegistrationWizard() {
   const t = useTranslations('auth.register')
+  const router = useRouter()
   const { isLoading, errors, verifyError, register, verifyCode, resendCode } = useRegistration()
   const [isComplete, setIsComplete] = useState(false)
   const [referralCode, setReferralCode] = useState<string | undefined>()
@@ -137,6 +140,26 @@ export function RegistrationWizard() {
     if (success) {
       saveState({ emailVerified: true })
       clearState()
+
+      // Auto sign-in after email verification when password is still in memory.
+      // Falls back to the completion screen (manual "Sign In Now") if password
+      // is no longer available (e.g., user returned to the wizard after a page reload).
+      if (state.password) {
+        try {
+          const result = await signIn('credentials', {
+            email: state.email,
+            password: state.password,
+            redirect: false,
+          })
+          if (result?.ok) {
+            router.replace('/dashboard')
+            return true
+          }
+        } catch {
+          // sign-in failed — fall through to completion screen
+        }
+      }
+
       setIsComplete(true)
     }
 
