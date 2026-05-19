@@ -117,7 +117,7 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    fireEvent.click(screen.getByRole('button', { name: /Schritt 4: 1 Aufgaben erstellen/i }))
+    fireEvent.click(screen.getByRole('button', { name: /1 Aufgaben erstellen/i }))
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
@@ -141,10 +141,11 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    expect(screen.getByText('Zur Überprüfung')).toBeInTheDocument()
+    // Progress strip is shown in review mode; active step hint label is rendered
+    expect(screen.getByText('KI-Struktur prüfen:')).toBeInTheDocument()
   })
 
-  it('shows status badge in review mode', () => {
+  it('shows progress strip in review mode', () => {
     render(
       <ProtocolDetailClient
         protocol={baseProtocol}
@@ -158,7 +159,8 @@ describe('ProtocolDetailClient', () => {
       />
     )
 
-    expect(screen.getByText('Zur Überprüfung')).toBeInTheDocument()
+    // All step labels appear in the progress strip
+    expect(screen.getByText('Abschliessen')).toBeInTheDocument()
   })
 
   it('shows actionable empty state when no action items were extracted', () => {
