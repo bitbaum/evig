@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { Button } from "@/components/ui/button";
 import { ChevronRight, Home, Package, ShoppingCart, Tag } from "lucide-react";
 import Heading from "@/components/ui/Heading";
 import {
@@ -251,13 +252,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
             {inventoryResult.total > inventoryResult.products.length && (
               <div className="text-center mt-8">
-                <Link
-                  href={`/shop?category=${encodeURIComponent(category.name)}`}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-                >
+                <Button as={Link} href={`/shop?category=${encodeURIComponent(category.name)}`} variant="primary" size="lg">
                   <ShoppingCart className="w-4 h-4" />
                   {t('category.showAllProducts', { count: inventoryResult.total })}
-                </Link>
+                </Button>
               </div>
             )}
           </div>
@@ -274,18 +272,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 {t("category.productsComingSoon", { categoryName: category.name })}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  href={ROUTES.public.marketplace}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-                >
+                <Button as={Link} href={ROUTES.public.marketplace} variant="primary" size="lg">
                   {t("category.goToShop")}
-                </Link>
-                <Link
-                  href={ROUTES.public.shop}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-                >
+                </Button>
+                <Button as={Link} href={ROUTES.public.shop} variant="outline" size="lg">
                   {t("category.allShopOptions")}
-                </Link>
+                </Button>
               </div>
             </div>
           </div>

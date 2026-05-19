@@ -5,6 +5,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 import { ChevronRight, Home, Package, ShoppingCart, Shield, Tag, Layers } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -227,21 +228,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <a
+              <Button
+                as="a"
                 href={SHOPWARE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 transition-colors"
+                variant="primary"
+                size="lg"
+                className="flex-1"
               >
                 <ShoppingCart className="w-5 h-5" />
                 {t('product.buyOnline')}
-              </a>
-              <Link
-                href="/shop#ladenlokal"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-              >
+              </Button>
+              <Button as={Link} href="/shop#ladenlokal" variant="outline" size="lg" className="flex-1">
                 {t('product.buyInStore')}
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

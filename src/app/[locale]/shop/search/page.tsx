@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ProductCard } from "@/components/shop/ProductCard";
+import { Button } from "@/components/ui/button";
 import { Search, Package, ChevronRight, Home, ArrowLeft, Tag } from "lucide-react";
 import Heading from "@/components/ui/Heading";
 import {
@@ -67,12 +68,14 @@ function SearchForm({
           className="w-full pl-12 pr-4 py-4 text-lg border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 rounded-xl focus:border-primary-500 dark:focus:border-primary-400 focus:ring-2 focus:ring-primary-200 dark:focus:ring-primary-800 transition-all outline-none"
           autoFocus
         />
-        <button
+        <Button
           type="submit"
-          className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+          variant="primary"
+          size="sm"
+          className="absolute right-2 top-1/2 -translate-y-1/2 px-5"
         >
           {submitLabel}
-        </button>
+        </Button>
       </div>
     </form>
   );
@@ -157,20 +160,14 @@ function SearchResults({
           </Heading>
           <p className="text-neutral-600 dark:text-neutral-400 mb-6">{noResultsHintLabel}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link
-              href={ROUTES.public.marketplace}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-            >
+            <Button as={Link} href={ROUTES.public.marketplace} variant="primary" size="lg">
               <Package className="w-5 h-5" />
               {goToShopLabel}
-            </Link>
-            <Link
-              href={ROUTES.public.shop}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 font-semibold rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
-            >
+            </Button>
+            <Button as={Link} href={ROUTES.public.shop} variant="outline" size="lg">
               <ArrowLeft className="w-5 h-5" />
               {allShopOptionsLabel}
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
