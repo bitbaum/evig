@@ -82,7 +82,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+    <div className="card-shell p-6">
       <div className="flex items-center justify-between mb-4">
         <Heading level={2} className="text-lg font-bold text-neutral-900 dark:text-white flex items-center gap-2">
           <MessageSquare className="w-5 h-5" />

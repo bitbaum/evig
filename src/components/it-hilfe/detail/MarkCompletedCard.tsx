@@ -16,7 +16,7 @@ interface MarkCompletedCardProps {
 export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompletedCardProps) {
   const t = useTranslations('itHelp.detail')
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-primary-200 p-6">
+    <div className="rounded-xl border border-primary-200 bg-white dark:bg-neutral-900 p-6">
       <div className="flex items-start gap-3">
         <CheckCircle className="w-6 h-6 text-primary-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
         <div className="flex-1">

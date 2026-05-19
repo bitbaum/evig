@@ -63,7 +63,7 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
       </div>
 
       {/* Details Table */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm space-y-3">
+      <div className="card-shell p-4 space-y-3">
         {listing.brand && (
           <div className="flex justify-between text-sm">
             <span className="text-neutral-500 dark:text-neutral-400">{t('brand')}</span>

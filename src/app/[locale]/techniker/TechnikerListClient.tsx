@@ -179,7 +179,7 @@ export default function TechnikerListClient() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors"
               >
                 <Wrench className="w-4 h-4" />
                 {t('list.becomeTechnician')}
@@ -197,11 +197,11 @@ export default function TechnikerListClient() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('list.searchPlaceholder')}
                 aria-label={t('list.searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold"
               >
                 {t('list.searchButton')}
               </button>
@@ -220,7 +220,7 @@ export default function TechnikerListClient() {
               onClick={() => setTierFilter(tab.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 tier === tab.value
-                  ? 'bg-primary-600 text-white shadow-sm'
+                  ? 'bg-primary-600 text-white'
                   : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
               }`}
               aria-pressed={tier === tab.value}
@@ -340,7 +340,7 @@ export default function TechnikerListClient() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/auth/login?callbackUrl=/profil/techniker"
-                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold shadow-sm transition-colors"
+                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
               >
                 {t('list.ctaCreateProfile')}
               </Link>

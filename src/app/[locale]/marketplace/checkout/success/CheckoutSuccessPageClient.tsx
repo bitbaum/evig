@@ -57,7 +57,7 @@ function CheckoutSuccessContent() {
 
   return (
     <div className="max-w-lg mx-auto py-12 text-center">
-      <div className="bg-white dark:bg-neutral-800 rounded-2xl p-8 shadow-sm">
+      <div className="card-shell rounded-2xl p-8">
         <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
 
         <Heading level={1} className="text-2xl text-neutral-900 dark:text-white mb-2">

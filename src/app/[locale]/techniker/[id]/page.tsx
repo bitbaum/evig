@@ -147,7 +147,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               {isProfessional ? (
                 <Link
                   href={`/it-hilfe/create?technician=${technician.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
                 >
                   <Wrench className="w-4 h-4" />
                   {t('detail.submitRequest')}
@@ -155,7 +155,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
               ) : (
                 <Link
                   href={`/it-hilfe/create?technician=${technician.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
                 >
                   <Users className="w-4 h-4" />
                   {t('detail.contact')}
@@ -257,7 +257,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
             <div className="mt-6">
               <Link
                 href={`/it-hilfe/create?technician=${technician.id}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
               >
                 <Wrench className="w-4 h-4" />
                 {t('detail.requestBooking')}

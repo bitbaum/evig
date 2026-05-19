@@ -21,7 +21,7 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
   const t = useTranslations('components.erfassung.productImage')
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-6">
+    <div className="card-shell p-6">
       <Heading level={2} className="text-lg font-semibold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
         <Camera className="w-5 h-5" />
         {t('title')}

@@ -15,7 +15,7 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
   const t = useTranslations('marketplace.listing')
   return (
     <div className="space-y-3">
-      <div className="bg-white dark:bg-neutral-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="card-shell overflow-hidden">
         <ListingImage
           src={images[selectedImage]?.url}
           alt={title}

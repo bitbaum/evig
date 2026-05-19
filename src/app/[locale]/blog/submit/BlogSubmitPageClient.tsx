@@ -38,7 +38,7 @@ export default function SubmitPostPage() {
       <div className="absolute top-4 left-4 sm:left-8">
         <Link
           href={ROUTES.public.blog}
-          className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg shadow-sm"
+          className="inline-flex items-center text-neutral-600 hover:text-neutral-900 transition-colors bg-white px-4 py-2 rounded-lg"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t('backToBlog')}
@@ -52,7 +52,7 @@ export default function SubmitPostPage() {
       <main className="min-h-screen bg-neutral-50">
         {hero}
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
-          <div className="bg-white rounded-lg shadow-sm p-12">
+          <div className="card-shell rounded-lg p-12">
             <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-6" />
             <Heading level={2} className="text-2xl text-neutral-900 mb-3">{t('successTitle')}</Heading>
             <p className="text-neutral-700 text-lg mb-2">{t('successMessage')}</p>
@@ -83,7 +83,7 @@ export default function SubmitPostPage() {
 
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         {/* Submission Type Selection */}
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+        <div className="card-shell rounded-lg p-8 mb-8">
           <Heading level={2} className="text-2xl text-neutral-900 mb-6">{t('whatToSubmit')}</Heading>
           <div className="grid md:grid-cols-2 gap-4">
             {([BLOG_SUBMISSION_TYPE.IDEA, BLOG_SUBMISSION_TYPE.DRAFT] as const).map((type) => {
@@ -113,7 +113,7 @@ export default function SubmitPostPage() {
         </div>
 
         {/* Submission Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8">
+        <form onSubmit={handleSubmit} className="card-shell rounded-lg p-8">
           <Heading level={2} className="text-2xl text-neutral-900 mb-6">
             {submissionType === BLOG_SUBMISSION_TYPE.IDEA ? t('formHeadingIdea') : t('formHeadingDraft')}
           </Heading>

@@ -126,7 +126,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
               <Link
                 key={platform.href}
                 href={platform.href}
-                className="bg-neutral-50 rounded-xl p-6 border border-neutral-100 hover:shadow-md transition-shadow group"
+                className="card-shell-inset rounded-xl p-6 hover:border-neutral-300 transition-colors group"
               >
                 <Heading level={3} className="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">
                   {platform.title}
@@ -186,7 +186,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
             <Link
               href="/mitglied-werden"
-              className="rounded-md bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 text-center"
+              className="rounded-md bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-500 text-center"
             >
               {t('board.joinBtn')}
             </Link>

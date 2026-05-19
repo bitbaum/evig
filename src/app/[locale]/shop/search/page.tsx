@@ -233,7 +233,7 @@ function NoQueryState({
             <Link
               key={category.slug}
               href={getCategoryUrl(category.slug)}
-              className="flex items-center gap-3 p-4 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-sm transition-all group"
+              className="flex items-center gap-3 p-4 card-shell hover:border-primary-300 transition-all group"
             >
               <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-400 flex items-center justify-center group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 group-hover:text-primary-600 transition-colors">
                 <Package className="w-5 h-5" />

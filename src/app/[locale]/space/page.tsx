@@ -250,7 +250,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
             {spaceFeatures.map((feature, index) => {
               const Icon = spaceFeatureIcons[index]
               return (
-                <Card key={index} className="text-center p-4 hover:shadow-md transition-shadow">
+                <Card key={index} className="text-center p-4 hover:border-neutral-300 transition-colors">
                   {Icon && <IconBadge icon={Icon} theme="space" size="lg" shape="circle" className="mx-auto mb-3" />}
                   <Heading level={3} className="font-semibold text-neutral-900 mb-1">{feature.name}</Heading>
                   <p className="text-sm text-neutral-600">{feature.description}</p>

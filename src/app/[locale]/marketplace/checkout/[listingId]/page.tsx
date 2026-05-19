@@ -101,7 +101,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
         {/* Left: Form */}
         <div className="lg:col-span-3 space-y-6">
           {canSelectDelivery && (
-            <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+            <div className="card-shell p-6">
               <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('delivery.title')}</Heading>
               <div className="space-y-3">
                 <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
@@ -154,7 +154,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
           )}
 
           {deliveryMethod === 'shipping' && (
-            <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm">
+            <div className="card-shell p-6">
               <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('address.title')}</Heading>
               <div className="space-y-4">
                 <div>
@@ -238,7 +238,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
 
         {/* Right: Order summary */}
         <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-neutral-800 rounded-xl p-6 shadow-sm sticky top-6">
+          <div className="card-shell p-6 sticky top-6">
             <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-4">{t('summary.title')}</Heading>
 
             <div className="flex gap-3 mb-4">

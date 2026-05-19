@@ -29,7 +29,7 @@ export function ProductDimensionFields({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
       {/* Dimensions */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 sm:p-6">
+      <div className="card-shell p-4 sm:p-6">
         <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
           <Ruler className="w-5 h-5" />
           {t('dimensionsTitle')}
@@ -81,7 +81,7 @@ export function ProductDimensionFields({
       </div>
 
       {/* Inventory */}
-      <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 sm:p-6">
+      <div className="card-shell p-4 sm:p-6">
         <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
           <MapPin className="w-5 h-5" />
           {t('stockTitle')}

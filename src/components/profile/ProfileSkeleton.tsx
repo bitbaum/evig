@@ -14,7 +14,7 @@ export function ProfileSkeleton() {
       </div>
 
       {/* Avatar Section Skeleton */}
-      <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+      <div className="card-shell rounded-lg p-6 space-y-4">
         <div className="h-6 bg-neutral-200 rounded w-1/3"></div>
         <div className="flex items-center gap-4">
           <div className="w-32 h-32 bg-neutral-200 rounded-full"></div>
@@ -26,7 +26,7 @@ export function ProfileSkeleton() {
       </div>
 
       {/* Public Profile Section Skeleton */}
-      <div className="bg-white rounded-lg shadow-sm p-6 space-y-6">
+      <div className="card-shell rounded-lg p-6 space-y-6">
         <div className="h-6 bg-neutral-200 rounded w-1/3"></div>
 
         {/* Display Name */}
@@ -49,7 +49,7 @@ export function ProfileSkeleton() {
       </div>
 
       {/* Service Provider Section Skeleton */}
-      <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
+      <div className="card-shell rounded-lg p-6 space-y-4">
         <div className="h-6 bg-neutral-200 rounded w-1/3"></div>
         <div className="space-y-3">
           <div className="h-4 bg-neutral-200 rounded"></div>

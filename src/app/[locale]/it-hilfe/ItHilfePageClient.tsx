@@ -72,7 +72,7 @@ export default function ITHilfePage() {
             <div className="flex flex-wrap gap-2">
               <Link
                 href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 {t('getHelp')}
@@ -95,11 +95,11 @@ export default function ITHilfePage() {
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm"
+                className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold shadow-sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold"
               >
                 {t('searchButton')}
               </button>
@@ -333,7 +333,7 @@ export default function ITHilfePage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href={`/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold shadow-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
               >
                 {t('ctaCreateProfile')}
               </Link>

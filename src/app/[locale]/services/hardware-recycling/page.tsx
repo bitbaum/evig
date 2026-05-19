@@ -95,7 +95,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               {features.map((feature, index) => {
                 const Icon = FEATURE_ICONS[index]
                 return (
-                  <div key={index} className="bg-white dark:bg-neutral-900 rounded-xl p-6 sm:p-8 shadow-sm border border-neutral-200 dark:border-white/[0.08] border-l-4 border-l-primary-600">
+                  <div key={index} className="card-shell p-6 sm:p-8 border-l-4 border-l-primary-600">
                     <div className="flex items-start">
                       <div className="p-2 sm:p-3 bg-primary-100 dark:bg-primary-500/15 rounded-lg text-primary-600 dark:text-primary-400 mr-3 sm:mr-4">
                         <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -121,7 +121,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 <p className="text-base sm:text-lg md:text-xl text-neutral-600">{t('pricing.subtitle')}</p>
               </div>
 
-              <div className="bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-200 dark:border-white/[0.08] shadow-sm p-6 sm:p-8 md:p-12">
+              <div className="card-shell rounded-2xl p-6 sm:p-8 md:p-12">
                 <div className="text-center mb-6 sm:mb-8">
                   <div className="inline-block bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300 px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     {t('pricing.badge')}

@@ -209,7 +209,7 @@ export default async function Home() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
           <Link
             href={ROUTES.public.marketplace}
-            className="w-full sm:w-auto rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 text-center"
+            className="w-full sm:w-auto rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 text-center"
           >
             {t('hero.ctaDiscover')}
           </Link>
@@ -246,7 +246,7 @@ export default async function Home() {
                   <div className="mt-6 flex flex-col sm:flex-row gap-3">
                     <Link
                       href={card.primaryHref}
-                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
+                      className={`flex-1 rounded-md ${primaryBtn} px-4 py-3 text-base font-semibold text-white text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${focusOutline}`}
                     >
                       {card.primaryLabel}
                     </Link>

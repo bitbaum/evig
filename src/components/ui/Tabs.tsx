@@ -29,7 +29,7 @@ export function Tabs({ tabs, defaultValue, children, className }: TabsProps) {
             className={cn(
               'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors flex-1',
               activeTab === tab.value
-                ? 'bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 shadow-sm'
+                ? 'bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100'
                 : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200'
             )}
           >

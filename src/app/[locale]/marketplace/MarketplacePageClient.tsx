@@ -89,7 +89,7 @@ export default function MarketplacePage() {
                   ? '/marketplace/sell'
                   : '/auth/login?callbackUrl=/marketplace/sell'
               }
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-secondary-500 hover:bg-secondary-600 dark:bg-secondary-500 dark:hover:bg-secondary-400 text-white rounded-lg text-sm font-semibold transition-colors shadow-sm flex-shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-secondary-500 hover:bg-secondary-600 dark:bg-secondary-500 dark:hover:bg-secondary-400 text-white rounded-lg text-sm font-semibold transition-colors flex-shrink-0"
             >
               <Plus className="w-4 h-4" />
               {t('sell.label')}
@@ -104,7 +104,7 @@ export default function MarketplacePage() {
                 onChange={(e) => filters.setSearchInput(e.target.value)}
                 placeholder={t('searchPlaceholder')}
                 aria-label={t('searchAriaLabel')}
-                className="w-full pl-10 pr-24 py-2.5 rounded-lg border border-neutral-300 dark:border-white/[0.1] bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-sm focus:ring-2 focus:ring-secondary-500 focus:border-transparent shadow-sm outline-none"
+                className="w-full pl-10 pr-24 py-2.5 rounded-lg border border-neutral-300 dark:border-white/[0.1] bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-500 text-sm focus:ring-2 focus:ring-secondary-500 focus:border-transparent outline-none"
               />
               <button
                 type="submit"
@@ -258,7 +258,7 @@ export default function MarketplacePage() {
 
         {/* Sign-in CTA */}
         {status === 'unauthenticated' && (
-          <div className="mt-12 bg-white dark:bg-neutral-900 rounded-2xl shadow-sm dark:shadow-none border border-neutral-100 dark:border-white/[0.06] p-8 text-center">
+          <div className="mt-12 card-shell rounded-2xl p-8 text-center">
             <div className="flex justify-center mb-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-secondary-100 dark:bg-secondary-500/15">
                 <Package className="h-6 w-6 text-secondary-600 dark:text-secondary-400" />
@@ -273,7 +273,7 @@ export default function MarketplacePage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href={ROUTES.public.login}
-                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400 text-white rounded-lg font-semibold shadow-sm transition-colors"
+                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400 text-white rounded-lg font-semibold transition-colors"
               >
                 {t('signInCta.login')}
               </Link>

@@ -76,7 +76,7 @@ export function BulkTable({
   }
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 overflow-hidden">
+    <div className="card-shell overflow-hidden">
       {/* Table wrapper with horizontal scroll on mobile */}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

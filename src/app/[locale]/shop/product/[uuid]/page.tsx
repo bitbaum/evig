@@ -256,7 +256,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <Link
                   key={p.id}
                   href={`/shop/product/${p.item_uuid}`}
-                  className="group bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all overflow-hidden flex flex-col"
+                  className="group card-shell hover:border-primary-300 transition-all overflow-hidden flex flex-col"
                 >
                   <div className="relative aspect-[4/3] bg-neutral-50 dark:bg-neutral-900">
                     {p.image_url ? (

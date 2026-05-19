@@ -246,7 +246,7 @@ export function MembershipApplicationForm() {
       <button
         type="submit"
         disabled={!canSubmit}
-        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-primary-500 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
+        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-500 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
       >
         {submitting ? (
           <>

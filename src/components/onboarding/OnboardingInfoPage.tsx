@@ -49,7 +49,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
             return (
               <div
                 key={index}
-                className="bg-white rounded-lg p-6 shadow-sm border border-neutral-200"
+                className="card-shell rounded-lg p-6"
               >
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
@@ -70,7 +70,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         </div>
 
         {/* Requirements Section */}
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-200 mb-8">
+        <div className="card-shell rounded-lg p-6 mb-8">
           <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-4">
             {config.requirements.title}
           </Heading>
@@ -143,7 +143,7 @@ export function OnboardingInfoPage({ config }: OnboardingInfoPageProps) {
         </div>
 
         {/* FAQ Section */}
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-neutral-200">
+        <div className="card-shell rounded-lg p-6">
           <Heading level={2} className="text-xl font-semibold text-neutral-900 mb-6">
             {config.faq.title}
           </Heading>

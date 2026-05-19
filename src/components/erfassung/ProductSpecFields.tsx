@@ -31,7 +31,7 @@ export function ProductSpecFields({
   const t = useTranslations('components.erfassung.specFields')
 
   return (
-    <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 p-4 sm:p-6">
+    <div className="card-shell p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
         <Heading level={2} className="text-base sm:text-lg font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
           <FileText className="w-5 h-5" />

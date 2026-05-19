@@ -220,7 +220,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Workshop Details */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="card-shell p-6">
               <Heading level={2} className="text-xl text-neutral-900 mb-4">{t('detail.details')}</Heading>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -313,7 +313,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
 
             {/* Upcoming Instances */}
             {upcomingInstances.length > 0 && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="card-shell p-6">
                 <Heading level={2} className="text-xl text-neutral-900 mb-4">{t('detail.upcomingDates')}</Heading>
 
                 <div className="space-y-4">
@@ -384,14 +384,14 @@ export default async function WorkshopDetailPage({ params }: Props) {
           <div className="space-y-6">
             {/* Registration Form */}
             {nextInstance ? (
-              <div id="register" className="bg-white rounded-xl shadow-sm p-6">
+              <div id="register" className="card-shell p-6">
                 <WorkshopRegistrationForm
                   workshop={workshopForForm}
                   instance={nextInstance}
                 />
               </div>
             ) : (
-              <div className="bg-white rounded-xl shadow-sm p-6">
+              <div className="card-shell p-6">
                 <Heading level={3} className="text-lg text-neutral-900 mb-4">{t('detail.registration')}</Heading>
                 <div className="bg-warning-50 border border-warning-200 rounded-lg p-4">
                   <p className="text-warning-800 text-sm">
@@ -402,7 +402,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
             )}
 
             {/* Workshop Stats */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="card-shell p-6">
               <Heading level={3} className="text-lg text-neutral-900 mb-4">{t('detail.stats')}</Heading>
 
               <div className="space-y-3">
@@ -436,13 +436,13 @@ export default async function WorkshopDetailPage({ params }: Props) {
             </div>
 
             {/* Workshop Materials */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="card-shell p-6">
               <Heading level={3} className="text-lg text-neutral-900 mb-4">{t('detail.materials')}</Heading>
               <WorkshopMaterials workshopSlug={workshop.slug} />
             </div>
 
             {/* Reviews/Feedback */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="card-shell p-6">
               <Heading level={3} className="text-lg text-neutral-900 mb-4">{t('detail.reviews')}</Heading>
               <WorkshopReviews workshopSlug={workshop.slug} />
             </div>

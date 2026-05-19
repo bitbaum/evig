@@ -22,7 +22,7 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
   return (
     <Link
       href={`/sellers/${listing.seller_id}`}
-      className="block bg-white dark:bg-neutral-800 rounded-xl p-4 shadow-sm hover:shadow-md hover:ring-1 hover:ring-primary-200 dark:hover:ring-primary-800 transition-all focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+      className="block card-shell p-4 hover:border-primary-300 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
     >
       <Heading level={3} className="text-sm text-neutral-900 dark:text-white mb-3">{t('seller')}</Heading>
       <div className="flex items-center gap-3">

@@ -56,10 +56,8 @@ export function DashboardCard({ card, className }: DashboardCardProps) {
     <Link
       href={card.href}
       className={cn(
-        'bg-white dark:bg-neutral-800 rounded-lg shadow-sm',
-        'border-2 border-neutral-200 dark:border-neutral-700',
-        'p-4 sm:p-6 hover:shadow-md transition-all duration-200',
-        'hover:border-neutral-300 dark:hover:border-neutral-600',
+        'card-shell rounded-lg border-2',
+        'p-4 sm:p-6 hover:border-neutral-300 transition-colors',
         className
       )}
     >
