@@ -10,6 +10,7 @@ import { formatCHF } from '@/lib/hirn/format'
 import Heading from '@/components/ui/Heading'
 import { AlertCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { PageShell } from '@/components/layout/PageShell'
 
 interface YearData {
   year: number
@@ -72,7 +73,7 @@ export default function FinancesContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <>
       <PageHero
         theme="about"
         icon={Wallet}
@@ -81,7 +82,7 @@ export default function FinancesContent() {
       />
       <AboutSubNav />
 
-      <div className="max-w-5xl mx-auto px-4 py-12">
+      <PageShell maxWidth="5xl" py="py-12">
         {loading ? (
           <div className="animate-pulse space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -201,7 +202,7 @@ export default function FinancesContent() {
             </div>
           </>
         )}
-      </div>
-    </div>
+      </PageShell>
+    </>
   )
 }

@@ -248,7 +248,7 @@ export default function ServicesPage() {
           })
         }}
       />
-      <main className="min-h-screen bg-neutral-50">
+      <main>
         <PageHero
           theme="services"
           icon={Wrench}

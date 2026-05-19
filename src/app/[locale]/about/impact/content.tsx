@@ -123,7 +123,7 @@ export default function ImpactPageContent() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main>
       {/* Hero Section */}
       <ResponsiveHero
         title={t('hero.title')}

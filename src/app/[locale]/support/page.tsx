@@ -9,6 +9,7 @@ import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { ROUTES } from '@/config/routes'
+import { PageShell } from '@/components/layout/PageShell'
 
 interface SupportPageProps {
   params: Promise<{ locale: string }>
@@ -33,7 +34,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
   const promiseItems = t.raw('promise.items') as string[]
 
   return (
-    <main className="min-h-screen bg-white">
+    <>
       <PageHero
         theme="getInvolved"
         icon={Heart}
@@ -41,7 +42,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
         subtitle={t('hero.subtitle')}
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <PageShell maxWidth="4xl" py="py-12 sm:py-16">
         {/* Three pillars */}
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
           <div className="text-center">
@@ -163,7 +164,7 @@ export default async function SupportPage({ params }: SupportPageProps) {
             <strong>{t('thanks')}</strong>
           </p>
         </div>
-      </div>
-    </main>
+      </PageShell>
+    </>
   )
 }

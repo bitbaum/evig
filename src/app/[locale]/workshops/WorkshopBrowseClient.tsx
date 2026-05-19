@@ -26,6 +26,7 @@ import type { WorkshopWithInstances } from '@/components/workshops/types'
 import { ORG } from '@/config/org'
 import { useTranslations } from 'next-intl'
 import { formatCentsToChf } from '@/lib/pricing'
+import { PageShell } from '@/components/layout/PageShell'
 
 interface WorkshopBrowseClientProps {
   workshops: WorkshopWithInstances[]
@@ -47,7 +48,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
   })
 
   return (
-    <div className="min-h-screen bg-canvas">
+    <>
       {/* Compact hero — workshops visible without scrolling */}
       <div className="bg-white dark:bg-neutral-950 border-b border-neutral-100 dark:border-white/[0.06] py-6 sm:py-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -69,7 +70,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pt-12 pb-16">
+      <PageShell py="pt-12 pb-16">
         {/* Filter Bar */}
         <div className="card-shell p-4 mb-8">
           <div className="flex flex-wrap items-center gap-4">
@@ -318,7 +319,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
-      </div>
-    </div>
+      </PageShell>
+    </>
   )
 }

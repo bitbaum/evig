@@ -21,6 +21,7 @@ import {
 } from '@/config/it-hilfe'
 import { useMyOffers } from '@/hooks/useMyOffers'
 import { ROUTES } from '@/config/routes'
+import { PageShell } from '@/components/layout/PageShell'
 
 export default function MyOffersPage() {
   const t = useTranslations('itHelp.myOffers')
@@ -44,15 +45,14 @@ export default function MyOffersPage() {
 
   if (sessionStatus === 'loading' || (sessionStatus === 'authenticated' && loading)) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-5xl mx-auto px-4">
+    <PageShell maxWidth="5xl">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
             <Heading level={1} className="text-2xl text-neutral-900">{t('title')}</Heading>
@@ -210,7 +210,6 @@ export default function MyOffersPage() {
             })}
           </div>
         )}
-      </div>
 
       <ConfirmDialog
         isOpen={!!pendingWithdraw}
@@ -220,6 +219,6 @@ export default function MyOffersPage() {
         onConfirm={doWithdraw}
         onClose={() => setPendingWithdraw(null)}
       />
-    </div>
+    </PageShell>
   )
 }

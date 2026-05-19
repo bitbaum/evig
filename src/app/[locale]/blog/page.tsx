@@ -101,7 +101,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const latestPosts = restPosts.slice(3)
 
   return (
-    <main className="min-h-screen bg-white">
+    <main>
       <PageHero
         theme="blog"
         icon={BookOpen}

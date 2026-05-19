@@ -9,6 +9,7 @@ import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { PageShell } from '@/components/layout/PageShell'
 
 interface FAQPageProps {
   params: Promise<{ locale: string }>
@@ -69,7 +70,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
   const groups = t.raw('groups') as FAQGroup[]
 
   return (
-    <main className="min-h-screen bg-canvas">
+    <>
       <FAQSchema groups={groups} />
       <PageHero
         theme="faq"
@@ -78,8 +79,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
         subtitle={t('hero.subtitle')}
       />
       <section className="py-12 sm:py-16">
-        <div className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-5xl mx-auto">
+        <PageShell maxWidth="5xl" py="">
 
             <div className="space-y-8 sm:space-y-10">
               {groups.map((group) => (
@@ -128,9 +128,8 @@ export default async function FAQPage({ params }: FAQPageProps) {
                 </span>
               </p>
             </div>
-          </div>
-        </div>
+        </PageShell>
       </section>
-    </main>
+    </>
   )
 }

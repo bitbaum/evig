@@ -124,7 +124,7 @@ export default function PressPageContent() {
   const otherMedia = MEDIA_COVERAGE.filter(m => m.tier > 1)
 
   return (
-    <main className="min-h-screen">
+    <main>
       <ResponsiveHero
         title={t('hero.title')}
         description={t('hero.description')}

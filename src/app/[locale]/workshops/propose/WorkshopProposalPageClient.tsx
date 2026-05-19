@@ -11,6 +11,7 @@ import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { PageShell } from '@/components/layout/PageShell'
 
 export default function WorkshopProposalPage() {
   const { data: session } = useSession()
@@ -18,8 +19,7 @@ export default function WorkshopProposalPage() {
 
   if (!session?.user) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-12">
-        <div className="max-w-2xl mx-auto px-4">
+      <PageShell maxWidth="2xl" py="py-12">
           <div className="card-shell p-8 text-center">
             <AlertCircle className="w-16 h-16 text-warning-500 mx-auto mb-4" />
             <Heading level={1} className={`${responsiveTypography.subsection} text-neutral-900 mb-4`}>
@@ -35,14 +35,12 @@ export default function WorkshopProposalPage() {
               {t('loginButton')}
             </Link>
           </div>
-        </div>
-      </div>
+      </PageShell>
     )
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
+    <PageShell maxWidth="4xl" py="py-12">
         {/* Header */}
         <div className="mb-8">
           <Link
@@ -67,7 +65,6 @@ export default function WorkshopProposalPage() {
         </div>
 
         <WorkshopProposalForm />
-      </div>
-    </div>
+    </PageShell>
   )
 }

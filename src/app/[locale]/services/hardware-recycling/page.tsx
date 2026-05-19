@@ -80,7 +80,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
         }}
       />
 
-      <main className="min-h-screen bg-neutral-50">
+      <main>
         <PageHero
           theme="services"
           icon={Recycle}

@@ -19,6 +19,7 @@ import { APP_URL } from '@/config/urls'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { formatCHF } from '@/config/marketplace'
 import { ROUTES } from '@/config/routes'
+import { PageShell } from '@/components/layout/PageShell'
 
 interface ProductPageProps {
   params: Promise<{ locale: string; uuid: string }>
@@ -109,10 +110,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
     />
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <div>
       {/* Breadcrumbs */}
-      <div className="bg-white dark:bg-neutral-800 border-b border-neutral-100 dark:border-neutral-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+      <div className="bg-white border-b border-neutral-100">
+        <PageShell py="py-3">
           <nav className="flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
             <Link href="/" className="hover:text-primary-600 transition-colors">
               <Home className="w-4 h-4" />
@@ -128,10 +129,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600" />
             <span className="text-neutral-900 dark:text-white font-medium truncate max-w-[200px]">{product.title}</span>
           </nav>
-        </div>
+        </PageShell>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <PageShell py="py-8 sm:py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Image */}
           <div className="bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden">
@@ -285,7 +286,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </div>
           </div>
         )}
-      </div>
+      </PageShell>
     </div>
     </>
   )

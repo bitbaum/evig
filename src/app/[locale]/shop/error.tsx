@@ -22,8 +22,8 @@ export default function ShopError({
   }, [error])
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center">
-      <div className="max-w-md w-full bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 p-6 text-center">
+    <div className="flex items-center justify-center py-24">
+      <div className="card-shell max-w-md w-full p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
         <Heading level={1} className="text-lg font-medium text-neutral-900 dark:text-white" role="alert">
           {t('error.title')}

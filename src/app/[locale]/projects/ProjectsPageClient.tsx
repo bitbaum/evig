@@ -51,7 +51,7 @@ export default function ProjectsPage() {
   const iconBadge = DESIGN_TOKENS.iconBadges.projects
 
   return (
-    <main className="min-h-screen bg-neutral-50">
+    <main>
       <PageHero
         theme="projects"
         icon={Rocket}

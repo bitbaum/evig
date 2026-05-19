@@ -6,6 +6,7 @@ import { CATEGORY_EMOJIS } from './types'
 import { PoolCard } from './PoolCard'
 import { CreatePoolModal } from './CreatePoolModal'
 import { useAbosPage } from './useAbosPage'
+import { PageShell } from '@/components/layout/PageShell'
 
 export default function AbosPageClient() {
   const t = useTranslations('abos')
@@ -27,10 +28,10 @@ export default function AbosPageClient() {
   } = useAbosPage()
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <>
       {/* Hero */}
       <div className="bg-white border-b border-neutral-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+        <PageShell maxWidth="5xl" py="py-10">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -50,10 +51,10 @@ export default function AbosPageClient() {
               </button>
             )}
           </div>
-        </div>
+        </PageShell>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+      <PageShell maxWidth="5xl" py="py-8">
         {/* Category filter */}
         {categories.length > 1 && (
           <div className="flex flex-wrap gap-2 mb-6">
@@ -118,7 +119,8 @@ export default function AbosPageClient() {
             ))}
           </div>
         )}
-      </div>
+
+      </PageShell>
 
       {showCreate && (
         <CreatePoolModal
@@ -129,6 +131,6 @@ export default function AbosPageClient() {
           }}
         />
       )}
-    </div>
+    </>
   )
 }

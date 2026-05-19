@@ -23,6 +23,7 @@ import { getTranslations } from 'next-intl/server'
 import { getTechnicianById } from '@/lib/services/technician-service'
 import { logger } from '@/lib/logger'
 import { ROUTES } from '@/config/routes'
+import { PageShell } from '@/components/layout/PageShell'
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
@@ -66,8 +67,7 @@ export default async function TechnikerDetailPage({ params }: Props) {
   const isProfessional = technician.profileTier === 'professional'
 
   return (
-    <div className="min-h-screen bg-neutral-50">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8">
+    <PageShell maxWidth="4xl">
         {/* Back link */}
         <Link
           href={ROUTES.public.techniker}
@@ -284,7 +284,6 @@ export default async function TechnikerDetailPage({ params }: Props) {
             </div>
           </Card>
         )}
-      </div>
-    </div>
+    </PageShell>
   )
 }

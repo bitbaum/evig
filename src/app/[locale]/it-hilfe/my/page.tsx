@@ -27,6 +27,7 @@ import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { PageShell } from '@/components/layout/PageShell'
 
 export default function MyRequestsPage() {
   const { data: session, status } = useSession()
@@ -77,15 +78,14 @@ export default function MyRequestsPage() {
 
   if (status === 'loading' || (status === 'authenticated' && loading)) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-5xl mx-auto px-4">
+    <PageShell maxWidth="5xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
           <div>
@@ -233,7 +233,6 @@ export default function MyRequestsPage() {
             })}
           </div>
         )}
-      </div>
-    </div>
+    </PageShell>
   )
 }

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Link2, Gift, Users, Send, Copy, Check } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
+import { PageShell } from '@/components/layout/PageShell'
 
 interface ReferralData {
   code: string
@@ -70,8 +71,7 @@ export default function InvitePage() {
   const rewardCHF  = data ? data.incentive.rewardCents / 100 : 10
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      <div className="max-w-2xl mx-auto px-4 py-12 sm:py-16">
+    <PageShell maxWidth="2xl" py="py-12 sm:py-16">
 
         {/* Header */}
         <div className="text-center mb-10">
@@ -171,7 +171,6 @@ export default function InvitePage() {
             </div>
           </div>
         )}
-      </div>
-    </main>
+    </PageShell>
   )
 }

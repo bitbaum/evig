@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-white">
+    <main>
       <BlogPostHeader post={post} />
       <BlogPostContent post={post} />
       {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}

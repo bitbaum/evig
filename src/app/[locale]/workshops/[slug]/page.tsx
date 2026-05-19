@@ -29,6 +29,7 @@ import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
 import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
+import { PageShell } from '@/components/layout/PageShell'
 
 // Extended Workshop type to include fields from migration 038
 interface WorkshopDetail {
@@ -178,10 +179,10 @@ export default async function WorkshopDetailPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <>
       {/* Header */}
       <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-4xl mx-auto px-4 py-6">
+        <PageShell maxWidth="4xl" py="py-6">
           <Link
             href="/workshops"
             className="inline-flex items-center text-neutral-600 hover:text-neutral-800 mb-4"
@@ -212,10 +213,10 @@ export default async function WorkshopDetailPage({ params }: Props) {
               )}
             </div>
           </div>
-        </div>
+        </PageShell>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <PageShell maxWidth="4xl" py="py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-8">
@@ -448,7 +449,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </PageShell>
+    </>
   )
 }

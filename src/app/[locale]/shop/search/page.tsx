@@ -17,6 +17,7 @@ import { ORG } from "@/config/org";
 import { getTranslations } from "next-intl/server";
 import { getInventoryProducts, type InventoryProduct } from "@/lib/services/inventory-service";
 import { ROUTES } from "@/config/routes";
+import { PageShell } from "@/components/layout/PageShell";
 
 interface SearchPageProps {
   params: Promise<{ locale: string }>;
@@ -278,10 +279,10 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
     : null;
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <>
       {/* Hero Section */}
       <section className="bg-primary-700 text-white py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             query={query}
             homeLabel={t("search.breadcrumbHome")}
@@ -303,7 +304,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
       </section>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <PageShell py="py-8 sm:py-12">
         {query && searchResult ? (
           <SearchResults
             products={searchResult.products}
@@ -323,7 +324,7 @@ export default async function SearchPage({ params, searchParams }: SearchPagePro
             allCategoriesLabel={t("search.allCategories")}
           />
         )}
-      </div>
-    </div>
+      </PageShell>
+    </>
   );
 }

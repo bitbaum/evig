@@ -22,6 +22,7 @@ import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { useCreateITHilfeForm } from '@/hooks/useCreateITHilfeForm'
+import { PageShell } from '@/components/layout/PageShell'
 import { ROUTES } from '@/config/routes'
 
 interface AIFormFields {
@@ -54,7 +55,7 @@ export default function CreatePeerRepairPage() {
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
@@ -62,7 +63,7 @@ export default function CreatePeerRepairPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
           <Heading level={2} className="text-2xl text-neutral-900 mb-2">{t('createdTitle')}</Heading>
@@ -73,8 +74,7 @@ export default function CreatePeerRepairPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+    <PageShell maxWidth="3xl">
         <Link
           href={ROUTES.public.itHilfe}
           className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6"
@@ -249,7 +249,6 @@ export default function CreatePeerRepairPage() {
             </>
           )}
         </form>
-      </div>
-    </div>
+    </PageShell>
   )
 }

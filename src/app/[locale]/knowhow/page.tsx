@@ -85,7 +85,7 @@ export default async function WissenPage() {
   const buttonClass = 'bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400'
 
   return (
-    <main className="min-h-screen bg-white">
+    <main>
       <PageHero
         theme="knowhow"
         icon={Lightbulb}

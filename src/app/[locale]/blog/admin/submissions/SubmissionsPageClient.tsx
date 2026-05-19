@@ -26,7 +26,7 @@ export default function SubmissionsAdminPage() {
   } = useSubmissionsAdmin()
 
   return (
-    <main className="min-h-screen bg-neutral-50">
+    <main>
       {/* Header */}
       <div className="bg-primary-700 text-white py-12">
         <div className="container mx-auto px-4 max-w-7xl">

@@ -17,6 +17,7 @@ import { ORG } from "@/config/org";
 import { getTranslations } from "next-intl/server";
 import { getInventoryProducts, type InventoryProduct } from "@/lib/services/inventory-service";
 import { ROUTES } from "@/config/routes";
+import { PageShell } from "@/components/layout/PageShell";
 
 interface CategoryPageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -184,10 +185,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }).catch(() => ({ products: [], total: 0, limit: 24, offset: 0 }))
 
   return (
-    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900">
+    <>
       {/* Hero Section */}
       <section className="bg-primary-700 text-white py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             category={category}
             parent={parent}
@@ -209,7 +210,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <PageShell py="py-8 sm:py-12">
         {/* Subcategories */}
         {hasSubcategories && (
           <div className="mb-12">
@@ -309,7 +310,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </PageShell>
+    </>
   );
 }

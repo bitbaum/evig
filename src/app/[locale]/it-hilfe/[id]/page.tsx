@@ -23,6 +23,7 @@ import {
   ConfirmReviewCard,
   useITHilfeDetail,
 } from '@/components/it-hilfe/detail'
+import { PageShell } from '@/components/layout/PageShell'
 
 export default function ITHilfeDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -31,7 +32,7 @@ export default function ITHilfeDetailPage() {
 
   if (detail.loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
     )
@@ -39,8 +40,7 @@ export default function ITHilfeDetailPage() {
 
   if (detail.error || !detail.request) {
     return (
-      <div className="min-h-screen bg-neutral-50 py-12">
-        <div className="max-w-3xl mx-auto px-4 text-center">
+      <PageShell maxWidth="3xl" py="py-12" className="text-center">
           <AlertCircle className="w-16 h-16 text-error-500 mx-auto mb-4" aria-hidden="true" />
           <Heading level={1} className="text-2xl text-neutral-900 mb-2">{t('error')}</Heading>
           <p className="text-neutral-600 mb-6">{detail.error || t('requestNotFound')}</p>
@@ -51,16 +51,14 @@ export default function ITHilfeDetailPage() {
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             {t('backToList')}
           </Link>
-        </div>
-      </div>
+      </PageShell>
     )
   }
 
   const { request } = detail
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <PageShell maxWidth="4xl">
         {/* Back link */}
         <Link
           href={ROUTES.public.itHilfe}
@@ -200,7 +198,6 @@ export default function ITHilfeDetailPage() {
             onStatusChange={detail.handleStatusChange}
           />
         </div>
-      </div>
 
       {/* Message Sidebar */}
       <MessageSidebar
@@ -216,6 +213,6 @@ export default function ITHilfeDetailPage() {
         onConfirm={detail.executePendingConfirm}
         onClose={detail.cancelPendingConfirm}
       />
-    </div>
+    </PageShell>
   )
 }

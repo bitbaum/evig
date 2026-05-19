@@ -1,6 +1,8 @@
+import { PageShell } from '@/components/layout/PageShell'
+
 export default function WorkshopsLoading() {
   return (
-    <div className="min-h-screen bg-canvas">
+    <>
       {/* Hero skeleton */}
       <div className="bg-warning-50 dark:bg-neutral-900 border-b border-warning-100 dark:border-white/[0.06] py-12 sm:py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
@@ -12,7 +14,7 @@ export default function WorkshopsLoading() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 pt-12 pb-16">
+      <PageShell py="pt-12 pb-16">
         {/* Filter bar skeleton */}
         <div className="card-shell p-4 mb-8">
           <div className="flex gap-4">
@@ -46,7 +48,7 @@ export default function WorkshopsLoading() {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </PageShell>
+    </>
   )
 }

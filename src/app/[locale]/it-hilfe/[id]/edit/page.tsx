@@ -21,6 +21,7 @@ import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
 import { useEditITHilfeForm } from '@/hooks/useEditITHilfeForm'
+import { PageShell } from '@/components/layout/PageShell'
 
 export default function EditRequestPage() {
   const { id } = useParams<{ id: string }>()
@@ -47,7 +48,7 @@ export default function EditRequestPage() {
 
   if (authStatus === 'loading' || loading) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600" />
       </div>
     )
@@ -55,7 +56,7 @@ export default function EditRequestPage() {
 
   if (error && !formData) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center justify-center gap-4 py-24">
         <p className="text-error-600">{error}</p>
         <Link href={`/it-hilfe/${id}`} className="text-primary-600 hover:underline">
           {t('backToRequest')}
@@ -66,7 +67,7 @@ export default function EditRequestPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+      <div className="flex items-center justify-center py-24">
         <div className="text-center">
           <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
           <Heading level={2} className="text-2xl text-neutral-900 mb-2">{t('savedTitle')}</Heading>
@@ -79,8 +80,7 @@ export default function EditRequestPage() {
   if (!formData) return null
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+    <PageShell maxWidth="3xl">
         <Link
           href={`/it-hilfe/${id}`}
           className="inline-flex items-center gap-2 text-neutral-600 hover:text-neutral-900 mb-6"
@@ -237,7 +237,6 @@ export default function EditRequestPage() {
             </>
           )}
         </form>
-      </div>
-    </div>
+    </PageShell>
   )
 }
