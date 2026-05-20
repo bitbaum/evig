@@ -5,6 +5,7 @@ import { ArrowLeft, Send, Lightbulb, FileText, Edit, CheckCircle } from 'lucide-
 import { PageHero } from '@/components/layout/PageHero'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { BLOG_SUBMISSION_TYPE } from '@/config/approval-status'
 import { useBlogSubmitForm } from '@/hooks/useBlogSubmitForm'
@@ -64,12 +65,9 @@ export default function SubmitPostPage() {
               >
                 {t('submitAnotherButton')}
               </button>
-              <Link
-                href={ROUTES.public.blog}
-                className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
-              >
+              <Button as={Link} href={ROUTES.public.blog} variant="primary">
                 {t('toBlogButton')}
-              </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -240,10 +238,10 @@ export default function SubmitPostPage() {
           {/* Submit */}
           <div className="flex items-center justify-between">
             <div className="text-sm text-neutral-500">{t('requiredFields')}</div>
-            <button
+            <Button
               type="submit"
+              variant="primary"
               disabled={!canSubmit}
-              className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? (
                 <>
@@ -259,7 +257,7 @@ export default function SubmitPostPage() {
                   {t('submitButton')}
                 </>
               )}
-            </button>
+            </Button>
           </div>
 
           {submitStatus === 'error' && (

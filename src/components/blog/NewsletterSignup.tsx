@@ -6,6 +6,7 @@ import { Mail, Heart, Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 export default function NewsletterSignup() {
   const t = useTranslations('components.newsletterSignup')
@@ -106,13 +107,14 @@ export default function NewsletterSignup() {
                 disabled={status === 'loading'}
                 className="flex-1 px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-neutral-100 disabled:cursor-not-allowed text-base"
               />
-              <button
+              <Button
                 type="submit"
+                variant="primary"
                 disabled={status === 'loading'}
-                className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-neutral-400 disabled:cursor-not-allowed transition-colors font-semibold whitespace-nowrap"
+                className="whitespace-nowrap"
               >
                 {status === 'loading' ? t('sending') : t('subscribe')}
-              </button>
+              </Button>
             </div>
 
             {status === 'error' && (

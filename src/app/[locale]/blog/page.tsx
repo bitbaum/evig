@@ -12,6 +12,7 @@ import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
 import BlogLatestList from '@/components/blog/BlogLatestList'
 import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -135,12 +136,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <p className="text-sm sm:text-base text-neutral-600 mb-6 sm:mb-8">
               {t('empty.description')}
             </p>
-            <Link
-              href="/blog/submit"
-              className="inline-flex items-center px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold text-sm sm:text-base"
-            >
+            <Button as={Link} href="/blog/submit" variant="primary">
               {t('empty.submitButton')}
-            </Link>
+            </Button>
           </div>
         ) : (
           <>
@@ -184,12 +182,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 {t('footerCta.description')}
               </p>
             </div>
-            <Link
-              href="/blog/submit"
-              className="px-4 sm:px-6 py-2.5 sm:py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-semibold whitespace-nowrap text-sm sm:text-base"
-            >
+            <Button as={Link} href="/blog/submit" variant="primary" className="whitespace-nowrap">
               {t('footerCta.button')}
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

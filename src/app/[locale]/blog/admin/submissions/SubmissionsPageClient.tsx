@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { APPROVAL_STATUS, BLOG_SUBMISSION_TYPE, getApprovalStatusBadge } from '@/config/approval-status'
 import { formatDateTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useSubmissionsAdmin } from './useSubmissionsAdmin'
 import { ROUTES } from '@/config/routes'
 
@@ -203,16 +204,17 @@ export default function SubmissionsAdminPage() {
                   </div>
 
                   <div className="flex gap-3">
-                    <button
+                    <Button
                       onClick={() => handleConvertToPost(
                         selectedSubmission,
                         t('submittedBy', { name: selectedSubmission.name, email: selectedSubmission.email })
                       )}
-                      className="flex-1 inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                      variant="primary"
+                      className="flex-1"
                     >
                       <Edit className="w-4 h-4 mr-2" />
                       {t('downloadMarkdown')}
-                    </button>
+                    </Button>
                   </div>
 
                   <p className="mt-4 text-xs text-neutral-500 bg-neutral-50 border border-neutral-200 rounded p-3">

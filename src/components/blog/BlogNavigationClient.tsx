@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import type { BlogCategory } from '@/lib/blog-db'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 
@@ -147,12 +148,9 @@ export default function BlogNavigationClient({
             </button>
 
             {/* CTA */}
-            <Link
-              href={ROUTES.public.blogSubmit}
-              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-xs sm:text-sm font-semibold"
-            >
+            <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary" size="sm">
               {t('navSubmitPost')}
-            </Link>
+            </Button>
           </div>
         </div>
 

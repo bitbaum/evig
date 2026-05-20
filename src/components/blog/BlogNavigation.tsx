@@ -1,4 +1,5 @@
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
@@ -60,12 +61,9 @@ export default function BlogNavigation({
           </div>
 
           {/* CTA */}
-          <Link
-            href={ROUTES.public.blogSubmit}
-            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm font-semibold"
-          >
+          <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary" size="sm">
             Beitrag einreichen
-          </Link>
+          </Button>
         </div>
       </div>
     </nav>
