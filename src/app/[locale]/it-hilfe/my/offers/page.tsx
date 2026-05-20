@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import {
   ArrowRight,
   MapPin,
@@ -59,20 +60,14 @@ export default function MyOffersPage() {
             <p className="text-neutral-600 mt-1">{t('description')}</p>
           </div>
           <div className="flex gap-3">
-            <Link
-              href={ROUTES.public.itHilfeMy}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-700 rounded-lg font-medium hover:bg-neutral-50 transition-colors"
-            >
+            <Button as={Link} href={ROUTES.public.itHilfeMy} variant="outline">
               <FileText className="w-4 h-4" />
               {t('myRequestsButton')}
-            </Link>
-            <Link
-              href={ROUTES.public.itHilfe}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
-            >
+            </Button>
+            <Button as={Link} href={ROUTES.public.itHilfe} variant="primary">
               <Heart className="w-4 h-4" />
               {t('browseRequests')}
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -120,13 +115,10 @@ export default function MyOffersPage() {
               {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
             </p>
             {!statusFilter && (
-              <Link
-                href={ROUTES.public.itHilfe}
-                className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={ROUTES.public.itHilfe} variant="primary" size="lg">
                 <Heart className="w-5 h-5" />
                 {t('browseRequests')}
-              </Link>
+              </Button>
             )}
           </div>
         ) : (

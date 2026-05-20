@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
@@ -232,19 +233,16 @@ export default function CreatePeerRepairPage() {
               />
 
               <div className="flex justify-end gap-4">
-                <Link
-                  href={ROUTES.public.itHilfe}
-                  className="px-6 py-3 text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors"
-                >
+                <Button as={Link} href={ROUTES.public.itHilfe} variant="secondary">
                   {t('cancelButton')}
-                </Link>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  variant="primary"
                   disabled={loading || !formData.title.trim()}
-                  className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? t('submittingButton') : t('submitButton')}
-                </button>
+                </Button>
               </div>
             </>
           )}

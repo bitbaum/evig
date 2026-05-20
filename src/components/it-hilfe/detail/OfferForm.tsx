@@ -4,6 +4,7 @@ import { Send } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getAllSkills } from '@/config/it-hilfe'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface OfferFormProps {
   showForm: boolean
@@ -43,13 +44,10 @@ export function OfferForm({
   return (
     <div className="card-shell p-6">
       {!showForm ? (
-        <button
-          onClick={onShowForm}
-          className="w-full py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-        >
+        <Button onClick={onShowForm} variant="primary" className="w-full">
           <Send className="w-5 h-5" aria-hidden="true" />
           {t('offerButton')}
-        </button>
+        </Button>
       ) : (
         <form onSubmit={onSubmit}>
           <Heading level={3} className="text-lg font-semibold text-neutral-900 mb-4">{t('heading')}</Heading>
@@ -134,20 +132,12 @@ export function OfferForm({
           </div>
 
           <div className="flex justify-end gap-3 mt-6">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="px-4 py-3 min-h-[44px] text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            >
+            <Button type="button" onClick={onCancel} variant="secondary">
               {t('cancelButton')}
-            </button>
-            <button
-              type="submit"
-              disabled={submitting || offerMessage.length < 20}
-              className="px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-            >
+            </Button>
+            <Button type="submit" variant="primary" disabled={submitting || offerMessage.length < 20}>
               {submitting ? t('submittingButton') : t('sendButton')}
-            </button>
+            </Button>
           </div>
         </form>
       )}

@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
@@ -95,20 +96,14 @@ export default function MyRequestsPage() {
             </p>
           </div>
           <div className="flex gap-3">
-            <Link
-              href={ROUTES.public.itHilfeMyOffers}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-neutral-200 text-neutral-700 rounded-lg font-medium hover:bg-neutral-50 transition-colors"
-            >
+            <Button as={Link} href={ROUTES.public.itHilfeMyOffers} variant="outline">
               <Heart className="w-4 h-4" />
               {t('myOffersButton')}
-            </Link>
-            <Link
-              href={ROUTES.public.itHilfeCreate}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
-            >
+            </Button>
+            <Button as={Link} href={ROUTES.public.itHilfeCreate} variant="primary">
               <Plus className="w-4 h-4" />
               {t('newRequestButton')}
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -159,13 +154,10 @@ export default function MyRequestsPage() {
               {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
             </p>
             {!statusFilter && (
-              <Link
-                href={ROUTES.public.itHilfeCreate}
-                className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={ROUTES.public.itHilfeCreate} variant="primary" size="lg">
                 <Plus className="w-5 h-5" />
                 {t('createButton')}
-              </Link>
+              </Button>
             )}
           </div>
         ) : (

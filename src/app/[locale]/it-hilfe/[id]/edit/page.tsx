@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
@@ -219,20 +220,17 @@ export default function EditRequestPage() {
               />
 
               <div className="flex justify-end gap-4">
-                <Link
-                  href={`/it-hilfe/${id}`}
-                  className="px-6 py-3 text-neutral-700 bg-neutral-100 rounded-lg font-medium hover:bg-neutral-200 transition-colors"
-                >
+                <Button as={Link} href={`/it-hilfe/${id}`} variant="secondary">
                   {t('cancelButton')}
-                </Link>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  variant="primary"
                   disabled={saving || !formData.categoryId || !formData.title || !formData.postalCode}
-                  className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                 >
                   {saving && <Loader2 className="w-4 h-4 animate-spin" />}
                   {saving ? t('submittingButton') : t('submitButton')}
-                </button>
+                </Button>
               </div>
             </>
           )}

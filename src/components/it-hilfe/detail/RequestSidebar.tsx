@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import {
   MapPin,
   Clock,
@@ -159,13 +160,10 @@ export function RequestSidebar({
       {/* Message Button */}
       {conversationId && hasSession && (
         <div className="card-shell p-6">
-          <button
-            onClick={onShowMessages}
-            className="w-full py-3 px-4 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-          >
+          <Button onClick={onShowMessages} variant="primary" className="w-full">
             <MessageSquare className="w-4 h-4" aria-hidden="true" />
             {t('sendMessage')}
-          </button>
+          </Button>
         </div>
       )}
 
@@ -177,13 +175,10 @@ export function RequestSidebar({
           </Heading>
           <div className="space-y-2">
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
-              <Link
-                href={`/it-hilfe/${request.id}/edit`}
-                className="block w-full py-3 px-4 min-h-[44px] bg-primary-600 text-white rounded-lg text-center font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-              >
-                <Pencil className="w-4 h-4 inline-block mr-2" />
+              <Button as={Link} href={`/it-hilfe/${request.id}/edit`} variant="primary" className="w-full justify-center">
+                <Pencil className="w-4 h-4" />
                 {t('editRequest')}
-              </Link>
+              </Button>
             )}
             {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION || request.status === REQUEST_STATUS.MATCHED) && (
               <button
@@ -194,12 +189,9 @@ export function RequestSidebar({
                 {t('cancelRequest')}
               </button>
             )}
-            <Link
-              href={ROUTES.public.itHilfeMy}
-              className="block w-full py-3 px-4 min-h-[44px] bg-neutral-100 text-neutral-700 rounded-lg text-center font-medium hover:bg-neutral-200 transition-colors focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2"
-            >
+            <Button as={Link} href={ROUTES.public.itHilfeMy} variant="secondary" className="w-full justify-center">
               {t('allMyRequests')}
-            </Link>
+            </Button>
           </div>
         </div>
       )}

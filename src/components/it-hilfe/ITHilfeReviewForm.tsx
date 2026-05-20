@@ -8,6 +8,7 @@ import { apiFetch } from '@/lib/api/client'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 import Heading from '@/components/ui/Heading'
 import { StarRating } from '@/components/ui/StarRating'
+import { Button } from '@/components/ui/button'
 
 interface ITHilfeReviewFormProps {
   requestId: string
@@ -118,10 +119,11 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
           <p className="text-xs text-neutral-500 mt-1">{content.length}/5000</p>
         </div>
 
-        <button
+        <Button
           type="submit"
+          variant="primary"
           disabled={submitting || overallRating === 0 || content.length < 10}
-          className="w-full py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="w-full"
         >
           {submitting ? (
             <>
@@ -131,7 +133,7 @@ export function ITHilfeReviewForm({ requestId, requestTitle, onSuccess }: ITHilf
           ) : (
             t('submitButton')
           )}
-        </button>
+        </Button>
       </form>
     </div>
   )

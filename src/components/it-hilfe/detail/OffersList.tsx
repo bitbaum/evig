@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { Clock, User, Wrench, CheckCircle, Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { getOfferStatusById, getSkillById, OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
 import type { Offer } from './types'
 
@@ -120,20 +121,22 @@ export function OffersList({
 
               {offer.status === OFFER_STATUS.PENDING && (requestStatus === REQUEST_STATUS.OPEN || requestStatus === REQUEST_STATUS.IN_DISCUSSION) && (
                 <div className="mt-2 flex gap-2">
-                  <button
+                  <Button
                     onClick={() => onAcceptOffer(offer.id)}
                     disabled={acceptingOfferId === offer.id}
-                    className="px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    variant="primary"
+                    size="sm"
                   >
                     {acceptingOfferId === offer.id ? t('accepting') : t('accept')}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => onDeclineOffer(offer.id)}
                     disabled={decliningOfferId === offer.id}
-                    className="px-4 py-3 min-h-[44px] border border-neutral-300 text-neutral-700 rounded-lg text-sm font-medium hover:bg-neutral-50 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:ring-offset-2"
+                    variant="outline"
+                    size="sm"
                   >
                     {decliningOfferId === offer.id ? t('declining') : t('decline')}
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

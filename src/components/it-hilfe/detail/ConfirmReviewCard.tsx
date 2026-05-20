@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Star, Loader2, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface ConfirmReviewCardProps {
   requestTitle: string
@@ -145,10 +146,11 @@ export function ConfirmReviewCard({
           </div>
         </div>
 
-        <button
+        <Button
           type="submit"
+          variant="primary"
           disabled={submitting || rating < 1 || recommended === null}
-          className="w-full py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          className="w-full"
         >
           {submitting ? (
             <>
@@ -158,7 +160,7 @@ export function ConfirmReviewCard({
           ) : (
             t('submitButton')
           )}
-        </button>
+        </Button>
       </form>
     </div>
   )

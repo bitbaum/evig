@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { getSkillById, BUDGET_TIERS } from '@/config/it-hilfe'
 import { logger } from '@/lib/logger'
@@ -176,13 +177,9 @@ export function HelperCard({ helper, requestId, requestTitle }: HelperCardProps)
           {t('messageSent', { name: helper.name })}
         </div>
       ) : (
-        <button
-          onClick={handleContact}
-          disabled={isContacting}
-          className="w-full bg-primary-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        <Button onClick={handleContact} disabled={isContacting} variant="primary" className="w-full">
           {isContacting ? t('contacting') : t('contact')}
-        </button>
+        </Button>
       )}
     </div>
   )

@@ -3,6 +3,7 @@
 import { CheckCircle, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface MarkCompletedCardProps {
   onMarkCompleted: () => void
@@ -26,12 +27,7 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
           <p className="text-sm text-neutral-600 mb-4">
             {t('markCompletedDesc')}
           </p>
-          <button
-            type="button"
-            onClick={onMarkCompleted}
-            disabled={submitting}
-            className="inline-flex items-center gap-2 px-5 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-          >
+          <Button type="button" onClick={onMarkCompleted} disabled={submitting} variant="primary">
             {submitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -43,7 +39,7 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
                 {t('markCompletedButton')}
               </>
             )}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

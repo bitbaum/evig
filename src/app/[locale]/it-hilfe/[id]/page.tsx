@@ -6,6 +6,7 @@ import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/date-formats'
 import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
 import { ROUTES } from '@/config/routes'
@@ -44,13 +45,10 @@ export default function ITHilfeDetailPage() {
           <AlertCircle className="w-16 h-16 text-error-500 mx-auto mb-4" aria-hidden="true" />
           <Heading level={1} className="text-2xl text-neutral-900 mb-2">{t('error')}</Heading>
           <p className="text-neutral-600 mb-6">{detail.error || t('requestNotFound')}</p>
-          <Link
-            href={ROUTES.public.itHilfe}
-            className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-3 min-h-[44px] rounded-lg font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-          >
+          <Button as={Link} href={ROUTES.public.itHilfe} variant="primary" size="lg">
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             {t('backToList')}
-          </Link>
+          </Button>
       </PageShell>
     )
   }
