@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { LogIn, UserPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
 
 export function WorkshopLoginPrompt() {
@@ -25,21 +26,15 @@ export function WorkshopLoginPrompt() {
       </div>
 
       <div className="space-y-3">
-        <Link
-          href={ROUTES.public.login}
-          className="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
+        <Button as={Link} href={ROUTES.public.login} variant="primary" className="w-full">
           <LogIn className="w-4 h-4 mr-2" />
           {tCommon('signIn')}
-        </Link>
+        </Button>
 
-        <Link
-          href={ROUTES.public.register}
-          className="w-full inline-flex items-center justify-center px-4 py-3 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
-        >
+        <Button as={Link} href={ROUTES.public.register} variant="outline" className="w-full">
           <UserPlus className="w-4 h-4 mr-2" />
           {tCommon('signUp')}
-        </Link>
+        </Button>
       </div>
     </div>
   )

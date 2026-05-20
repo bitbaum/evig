@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import {
   Calendar,
   Clock,
@@ -239,27 +240,18 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Link
-                        href={`/workshops/${workshop.slug}`}
-                        className="flex-1 bg-neutral-100 text-neutral-700 px-4 py-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors text-center text-sm font-medium"
-                      >
+                      <Button as={Link} href={`/workshops/${workshop.slug}`} variant="secondary" size="sm" className="flex-1 justify-center">
                         {t('viewDetails')}
-                      </Link>
+                      </Button>
 
                       {workshop.user_registered ? (
-                        <Link
-                          href="/dashboard/workshops"
-                          className="flex-1 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors text-center text-sm font-medium"
-                        >
+                        <Button as={Link} href="/dashboard/workshops" variant="primary" size="sm" className="flex-1 justify-center">
                           {t('manage')}
-                        </Link>
+                        </Button>
                       ) : nextInstance && spotsLeft !== null && spotsLeft > 0 ? (
-                        <Link
-                          href={`/workshops/${workshop.slug}#register`}
-                          className="flex-1 bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700 transition-colors text-center text-sm font-medium"
-                        >
+                        <Button as={Link} href={`/workshops/${workshop.slug}#register`} variant="primary" size="sm" className="flex-1 justify-center">
                           {t('registerNow')}
-                        </Link>
+                        </Button>
                       ) : nextInstance && spotsLeft !== null && spotsLeft <= 0 ? (
                         <span className="flex-1 bg-error-100 dark:bg-error-900/20 text-error-700 dark:text-error-300 px-4 py-2 rounded-lg text-center text-sm font-medium">
                           {t('soldOut')}

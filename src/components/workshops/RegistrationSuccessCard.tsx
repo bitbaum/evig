@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { CheckCircle, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface RegistrationSuccessCardProps {
   requiresPayment: boolean
@@ -45,12 +46,9 @@ export function RegistrationSuccessCard({
         </div>
       )}
 
-      <Link
-        href="/dashboard/workshops"
-        className="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-      >
+      <Button as={Link} href="/dashboard/workshops" variant="primary" className="w-full">
         {t('dashboardLink')}
-      </Link>
+      </Button>
     </div>
   )
 }

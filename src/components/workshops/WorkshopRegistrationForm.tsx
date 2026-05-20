@@ -26,6 +26,7 @@ import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import {
   PaymentForm,
   WorkshopLoginPrompt,
@@ -303,9 +304,10 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
       />
 
       {/* Registration Button */}
-      <button
+      <Button
         onClick={requiresPayment ? handlePaidRegistration : handleFreeRegistration}
-        className="w-full inline-flex items-center justify-center px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+        variant="primary"
+        className="w-full"
       >
         {requiresPayment ? (
           <>
@@ -315,7 +317,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         ) : (
           t('registerFree')
         )}
-      </button>
+      </Button>
 
       {/* Info */}
       <p className="text-xs text-neutral-500 mt-3 text-center">

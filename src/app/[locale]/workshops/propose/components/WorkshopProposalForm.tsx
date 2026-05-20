@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { Loader2 } from 'lucide-react'
 import { responsiveButtons } from '@/lib/responsive'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import { BasicInfoSection } from './BasicInfoSection'
@@ -297,10 +298,11 @@ export function WorkshopProposalForm() {
 
       {!submitResult?.success && (
       <div className="text-center">
-        <button
+        <Button
           type="submit"
+          variant="primary"
           disabled={isSubmitting || !formData.title.trim() || !formData.description.trim() || !formData.category || !formData.termsAccepted}
-          className={`${responsiveButtons.primary} inline-flex items-center bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+          className={responsiveButtons.primary}
         >
           {isSubmitting ? (
             <>
@@ -310,7 +312,7 @@ export function WorkshopProposalForm() {
           ) : (
             t('form.submit')
           )}
-        </button>
+        </Button>
 
         <p className="text-sm text-neutral-600 mt-4">
           {t('form.reviewNote')}

@@ -1,6 +1,7 @@
 'use client'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import {
   GraduationCap,
   AlertCircle,
@@ -28,12 +29,9 @@ export default function WorkshopProposalPage() {
             <p className="text-neutral-600 mb-6">
               {t('loginPrompt')}
             </p>
-            <Link
-              href={ROUTES.public.login}
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-            >
+            <Button as={Link} href={ROUTES.public.login} variant="primary" size="lg">
               {t('loginButton')}
-            </Link>
+            </Button>
           </div>
       </PageShell>
     )
