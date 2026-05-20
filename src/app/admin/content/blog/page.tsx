@@ -8,6 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
+import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
@@ -211,12 +212,9 @@ export default async function AdminBlogPage() {
               Computeraufarbeitung oder kündige Workshops und Events an.
             </p>
             <div className="flex gap-3">
-              <Link
-                href={ROUTES.admin.contentBlogNew}
-                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={ROUTES.admin.contentBlogNew} variant="primary" size="sm">
                 Artikel erstellen
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

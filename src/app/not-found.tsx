@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { Search, Home, ArrowLeft } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 export default function NotFound() {
   return (
@@ -18,19 +19,13 @@ export default function NotFound() {
           Die gesuchte Seite existiert nicht oder wurde verschoben.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
-          >
+          <Button as={Link} href="/" variant="primary">
             <Home className="w-4 h-4" />
             Zur Startseite
-          </Link>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-neutral-700 font-medium rounded-lg border border-neutral-300 hover:bg-neutral-50 transition-colors"
-          >
+          </Button>
+          <Button as={Link} href="/contact" variant="outline">
             Problem melden
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

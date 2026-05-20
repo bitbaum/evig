@@ -64,12 +64,9 @@ export default function ForgotPasswordPage() {
               </p>
 
               <div className="space-y-3">
-                <Link
-                  href={ROUTES.public.login}
-                  className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
-                >
+                <Button as={Link} href={ROUTES.public.login} variant="primary">
                   {t('successLoginLink')}
-                </Link>
+                </Button>
                 <p className="text-sm text-neutral-500">
                   <button
                     onClick={() => setSuccess(false)}

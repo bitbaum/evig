@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 
 export default function AdminError({
   error,
@@ -26,12 +27,9 @@ export default function AdminError({
         <p className="mt-2 text-sm text-neutral-600">
           Beim Laden der Admin-Seite ist ein Fehler aufgetreten.
         </p>
-        <button
-          onClick={reset}
-          className="mt-6 w-full px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-        >
+        <Button onClick={reset} variant="primary" className="mt-6 w-full min-h-[44px]">
           Erneut versuchen
-        </button>
+        </Button>
       </div>
     </div>
   )

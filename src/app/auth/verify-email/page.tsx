@@ -8,6 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { Button } from '@/components/ui/button'
 
 function VerifyEmailContent() {
   const t = useTranslations('auth.verifyEmail')
@@ -103,12 +104,9 @@ function VerifyEmailContent() {
                 </Heading>
                 <p className="text-neutral-600 mb-4">{message}</p>
                 <div className="space-y-3">
-                  <Link
-                    href={ROUTES.public.login}
-                    className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors"
-                  >
+                  <Button as={Link} href={ROUTES.public.login} variant="primary">
                     {t('errorLogin')}
-                  </Link>
+                  </Button>
                   <div>
                     <button
                       onClick={() => window.location.reload()}

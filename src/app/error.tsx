@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 export default function Error({
   error,
@@ -30,20 +31,14 @@ export default function Error({
           Ein unerwarteter Fehler ist aufgetreten. Versuche die Seite neu zu laden — falls das Problem weiterhin besteht, kontaktiere uns.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button
-            onClick={reset}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
-          >
+          <Button onClick={reset} variant="primary">
             <RefreshCw className="w-4 h-4" />
             Erneut versuchen
-          </button>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white text-neutral-700 font-medium rounded-lg border border-neutral-300 hover:bg-neutral-50 transition-colors"
-          >
+          </Button>
+          <Button as={Link} href="/" variant="outline">
             <Home className="w-4 h-4" />
             Zur Startseite
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

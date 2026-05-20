@@ -98,12 +98,9 @@ function ResetPasswordContent() {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white dark:bg-neutral-800 py-8 px-4 rounded-xl border border-neutral-200 dark:border-neutral-700 sm:px-10 text-center">
             <div className="space-y-3">
-              <Link
-                href={ROUTES.public.forgotPassword}
-                className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
-              >
+              <Button as={Link} href={ROUTES.public.forgotPassword} variant="primary">
                 {t('requestNewLink')}
-              </Link>
+              </Button>
               <p className="text-sm text-neutral-600">
                 <Link href={ROUTES.public.login} className="text-primary-600 hover:text-primary-500">
                   {t('backToLogin')}
@@ -138,12 +135,9 @@ function ResetPasswordContent() {
             <p className="text-sm text-neutral-600 mb-6">
               {t('successRedirect')}
             </p>
-            <Link
-              href={ROUTES.public.login}
-              className="inline-block bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors font-medium"
-            >
+            <Button as={Link} href={ROUTES.public.login} variant="primary">
               {t('loginNow')}
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
