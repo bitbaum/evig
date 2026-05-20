@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Stepper } from '@/components/ui/Stepper'
+import { Button } from '@/components/ui/button'
 import { AccountStep, VerifyStep } from './steps'
 import {
   CheckCircle2,
@@ -263,13 +264,10 @@ export function RegistrationWizard() {
           </div>
 
           <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-700">
-            <Link
-              href={ROUTES.public.login}
-              className="inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-3 rounded-lg transition-colors w-full"
-            >
+            <Button as={Link} href={ROUTES.public.login} variant="primary" className="w-full">
               {t('signInNow')}
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </Button>
           </div>
         </div>
       </div>

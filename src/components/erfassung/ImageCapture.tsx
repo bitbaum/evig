@@ -272,7 +272,7 @@ export function ImageCapture({
                     <Button
                       type="button"
                       onClick={analyzeWithAI}
-                      className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white"
+                      variant="primary"
                     >
                       <Zap className="w-4 h-4" />
                       {t('analyzeWithAI')}

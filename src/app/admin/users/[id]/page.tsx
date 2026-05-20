@@ -13,6 +13,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
+import { Button } from '@/components/ui/button'
 import {
   ArrowLeft,
   Mail,
@@ -214,26 +215,20 @@ export default async function UserDetailPage({ params }: PageProps) {
               <p className="text-neutral-600 dark:text-neutral-400">
                 Dieses Mitglied hat ein Team-Profil.
               </p>
-              <Link
-                href={`/admin/team/${user.team_profile_id}`}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-              >
+              <Button as={Link} href={`/admin/team/${user.team_profile_id}`} variant="primary" size="sm">
                 <ExternalLink className="w-4 h-4" />
                 Profil ansehen
-              </Link>
+              </Button>
             </div>
           ) : (
             <div className="flex items-center justify-between">
               <p className="text-neutral-600 dark:text-neutral-400">
                 Noch kein Team-Profil vorhanden.
               </p>
-              <Link
-                href={`/admin/team/new?user_id=${user.id}`}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-              >
+              <Button as={Link} href={`/admin/team/new?user_id=${user.id}`} variant="primary" size="sm">
                 <User className="w-4 h-4" />
                 Profil erstellen
-              </Link>
+              </Button>
             </div>
           )}
         </div>

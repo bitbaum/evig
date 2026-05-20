@@ -17,6 +17,7 @@ import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
 import { Users, UserPlus, Briefcase, Crown, Shield } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { TeamListClient } from './TeamListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -126,13 +127,10 @@ export default async function TeamPage() {
       icon={Users}
       iconColor="purple"
       actions={
-        <Link
-          href="/admin/team/new"
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-        >
+        <Button as={Link} href="/admin/team/new" variant="primary">
           <UserPlus className="w-5 h-5" />
           Profil erstellen
-        </Link>
+        </Button>
       }
     >
       {/* Stats */}

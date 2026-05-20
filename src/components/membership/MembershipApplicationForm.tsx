@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 
@@ -243,10 +244,11 @@ export function MembershipApplicationForm() {
       </div>
 
       {/* Submit */}
-      <button
+      <Button
         type="submit"
         disabled={!canSubmit}
-        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-500 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
+        variant="primary"
+        className="w-full sm:w-auto"
       >
         {submitting ? (
           <>
@@ -256,7 +258,7 @@ export function MembershipApplicationForm() {
         ) : (
           t('submitButton', { currency: MEMBERSHIP.currency, fee })
         )}
-      </button>
+      </Button>
       <p className="text-xs text-neutral-500">
         {t('legalNote')}
       </p>

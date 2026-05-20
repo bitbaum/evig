@@ -10,6 +10,7 @@
 import { CheckCircle2, AlertCircle, Download, RotateCcw, Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import type { BulkSaveResponse } from '@/types/erfassung'
 
 interface BulkSuccessScreenProps {
@@ -129,14 +130,14 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
             {t('downloadCsv')}
           </button>
 
-          <button
+          <Button
             type="button"
             onClick={onReset}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+            variant="primary"
           >
             <Plus className="w-4 h-4" />
             {t('newCapture')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

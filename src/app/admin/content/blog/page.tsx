@@ -125,13 +125,10 @@ export default async function AdminBlogPage() {
       iconColor="blue"
       backButton={{ href: ROUTES.admin.content, label: 'Zurück' }}
       actions={
-        <Link
-          href={ROUTES.admin.contentBlogNew}
-          className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-        >
+        <Button as={Link} href={ROUTES.admin.contentBlogNew} variant="primary">
           <Plus className="w-5 h-5" />
           Neuer Artikel
-        </Link>
+        </Button>
       }
     >
       {/* Stats Cards */}

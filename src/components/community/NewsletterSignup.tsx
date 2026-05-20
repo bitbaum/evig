@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
+import { Button } from '@/components/ui/button'
 
 interface NewsletterSignupProps {
   title?: string
@@ -109,13 +110,14 @@ export function NewsletterSignup({
               : 'border-neutral-300 bg-white dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white text-neutral-900'
           }`}
         />
-        <button
+        <Button
           type="submit"
           disabled={status === 'loading'}
-          className="h-10 rounded-md bg-primary-600 px-4 text-sm font-semibold text-white hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 disabled:opacity-60 whitespace-nowrap"
+          variant="primary"
+          size="sm"
         >
           {status === 'loading' ? t('submitting') : t('submit')}
-        </button>
+        </Button>
       </form>
 
       {status === 'error' && (

@@ -9,6 +9,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 import {
   Plus,
   Image as ImageIcon,
@@ -57,10 +58,10 @@ export default async function AdminMediaPage() {
             </p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
+        <Button variant="primary">
           <Upload className="w-5 h-5" />
           Hochladen
-        </button>
+        </Button>
       </div>
 
       {/* Stats Cards */}

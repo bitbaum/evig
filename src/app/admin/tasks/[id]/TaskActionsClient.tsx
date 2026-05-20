@@ -68,13 +68,13 @@ export default function TaskActionsClient({
           Als erledigt markieren
         </Button>
 
-        <button
+        <Button
           onClick={() => setShowAttentionForm(!showAttentionForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors"
+          variant="destructive"
         >
           <AlertTriangle className="w-4 h-4" />
           Aufmerksamkeit nötig
-        </button>
+        </Button>
 
         <button
           onClick={() => setShowRequestForm(!showRequestForm)}
@@ -147,14 +147,14 @@ export default function TaskActionsClient({
               />
             </FormField>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={handleFlagAttention}
                 disabled={loading === 'attention'}
-                className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors disabled:opacity-50"
+                variant="destructive"
               >
                 {loading === 'attention' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Markieren
-              </button>
+              </Button>
               <button
                 onClick={() => setShowAttentionForm(false)}
                 className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
@@ -231,14 +231,14 @@ export default function TaskActionsClient({
                 Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Diese wird aus der Liste entfernt.
               </p>
               <div className="flex gap-2">
-                <button
+                <Button
                   onClick={handleArchive}
                   disabled={loading === 'archive'}
-                  className="flex items-center gap-2 px-4 py-2 bg-error-600 text-white rounded-lg hover:bg-error-700 transition-colors disabled:opacity-50"
+                  variant="destructive"
                 >
                   {loading === 'archive' && <Loader2 className="w-4 h-4 animate-spin" />}
                   Archivieren
-                </button>
+                </Button>
                 <button
                   onClick={() => setShowArchiveConfirm(false)}
                   className="px-4 py-2 text-neutral-600 hover:text-neutral-900"

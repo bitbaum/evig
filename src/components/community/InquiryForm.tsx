@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface InquiryFormProps {
   defaultThema?: string
@@ -130,10 +131,11 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={!canSubmit}
-        className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary-600 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        variant="primary"
+        className="w-full"
       >
         {submitting ? (
           <>
@@ -143,7 +145,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         ) : (
           t('submit')
         )}
-      </button>
+      </Button>
 
       <p className="text-xs text-neutral-400 text-center">
         {t('responseNote')}

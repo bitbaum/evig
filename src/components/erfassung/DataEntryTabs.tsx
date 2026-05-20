@@ -331,7 +331,8 @@ export function DataEntryTabs({
                 type="button"
                 onClick={handleQuickTextSubmit}
                 disabled={!quickText.trim() || quickEntryState === 'loading'}
-                className="w-full sm:w-auto sm:self-end inline-flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-medium"
+                variant="primary"
+                className="w-full sm:w-auto sm:self-end"
               >
                 {quickEntryState === 'loading' ? (
                   <>
