@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { getTranslations } from 'next-intl/server'
 import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
 import { responsiveTypography, responsiveSpacing, responsiveButtons } from '@/lib/responsive'
@@ -52,12 +53,9 @@ export async function InvolvementPageLayout({
             {t('readyBody')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link
-              href="/get-involved/kontakt"
-              className={`${responsiveButtons.large} bg-primary-600 text-white hover:bg-primary-700`}
-            >
+            <Button as={Link} href="/get-involved/kontakt" variant="primary" className={responsiveButtons.large}>
               {t('expressInterestBtn')}
-            </Link>
+            </Button>
             <Link
               href="/get-involved"
               className={`${responsiveButtons.large} bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20`}

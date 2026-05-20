@@ -86,7 +86,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
       >
         <div className="flex flex-wrap justify-center gap-4 mt-8">
           <Link href="#zukunft">
-            <Button size="lg" className="bg-primary-600 text-white hover:bg-primary-700">
+            <Button size="lg" variant="primary">
               <Sparkles className="w-5 h-5 mr-2" />
               {t('hero.visionBtn')}
             </Button>

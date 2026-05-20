@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { Heart, Recycle, Users, Zap, Globe } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'
@@ -75,12 +76,9 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
         subtitle={t('hero.subtitle')}
       >
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
-          <a
-            href="#get-started"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white transition-colors"
-          >
+          <Button as="a" href="#get-started" variant="primary">
             {t('hero.startBtn')}
-          </a>
+          </Button>
           <a
             href="#learn-more"
             className="inline-flex items-center justify-center rounded-md text-sm font-medium px-6 py-3 bg-white text-primary-600 hover:bg-neutral-50 border-2 border-primary-600 transition-colors"
@@ -145,12 +143,9 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                     </li>
                   ))}
                 </ul>
-                <a
-                  href={INVOLVEMENT_HREFS[index]}
-                  className={`${responsiveButtons.primary} bg-primary-600 text-white hover:bg-primary-700 w-full text-center mt-auto`}
-                >
+                <Button as="a" href={INVOLVEMENT_HREFS[index]} variant="primary" className={`${responsiveButtons.primary} w-full mt-auto`}>
                   {option.cta}
-                </a>
+                </Button>
               </div>
             ))}
           </div>

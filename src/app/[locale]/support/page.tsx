@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { Heart, Coffee, Users, Shield } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { ROUTES } from '@/config/routes'
@@ -100,14 +101,9 @@ export default async function SupportPage({ params }: SupportPageProps) {
               </Heading>
             </div>
             <p className="text-neutral-600 mb-6">{t('oneTime.description')}</p>
-            <a
-              href="https://ko-fi.com/revampit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full px-6 py-3 bg-primary-600 text-white text-center rounded-lg hover:bg-primary-700 transition-colors font-semibold"
-            >
+            <Button as="a" href="https://ko-fi.com/revampit" target="_blank" rel="noopener noreferrer" variant="primary" className="w-full">
               {t('oneTime.cta')}
-            </a>
+            </Button>
           </div>
 
           <div className="border-2 border-primary-500 rounded-lg p-6 sm:p-8 bg-primary-50 dark:bg-primary-900/20">
@@ -118,14 +114,9 @@ export default async function SupportPage({ params }: SupportPageProps) {
               </Heading>
             </div>
             <p className="text-neutral-600 mb-6">{t('monthly.description')}</p>
-            <a
-              href="https://github.com/sponsors/revampit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full px-6 py-3 bg-primary-600 text-white text-center rounded-lg hover:bg-primary-700 transition-colors font-semibold"
-            >
+            <Button as="a" href="https://github.com/sponsors/revampit" target="_blank" rel="noopener noreferrer" variant="primary" className="w-full">
               {t('monthly.cta')}
-            </a>
+            </Button>
           </div>
         </div>
 

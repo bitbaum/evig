@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import {
   Search,
   Users,
@@ -177,13 +178,10 @@ export default function TechnikerListClient() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link
-                href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors"
-              >
+              <Button as={Link} href={session?.user ? '/profil/techniker' : '/auth/login?callbackUrl=/profil/techniker'} variant="primary">
                 <Wrench className="w-4 h-4" />
                 {t('list.becomeTechnician')}
-              </Link>
+              </Button>
             </div>
           </div>
 
@@ -199,12 +197,9 @@ export default function TechnikerListClient() {
                 aria-label={t('list.searchAriaLabel')}
                 className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold"
-              >
+              <Button type="submit" variant="primary" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2">
                 {t('list.searchButton')}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -338,12 +333,9 @@ export default function TechnikerListClient() {
               {t('list.ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href="/auth/login?callbackUrl=/profil/techniker"
-                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
-              >
+              <Button as={Link} href="/auth/login?callbackUrl=/profil/techniker" variant="primary">
                 {t('list.ctaCreateProfile')}
-              </Link>
+              </Button>
               <Link
                 href={ROUTES.public.itHilfe}
                 className="px-6 py-2.5 bg-white hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 border border-primary-600 rounded-lg font-semibold transition-colors"
