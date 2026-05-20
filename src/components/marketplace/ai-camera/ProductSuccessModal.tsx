@@ -9,6 +9,7 @@ import { CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { ProductSuggestion } from './types'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface ProductSuccessModalProps {
   suggestion: ProductSuggestion
@@ -52,12 +53,9 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
             {t('confidence', { percent: Math.round(suggestion.confidence * 100) })}
           </p>
         </div>
-        <button
-          onClick={onClose}
-          className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors font-medium"
-        >
+        <Button onClick={onClose} variant="primary" className="w-full">
           {t('editForm')}
-        </button>
+        </Button>
       </motion.div>
     </motion.div>
   )

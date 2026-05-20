@@ -13,6 +13,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Package, CheckCircle, Loader2, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { getTextColor, getStatusColors } from '@/lib/design-system'
 
 interface SearchResult {
@@ -114,10 +115,10 @@ export function AISearchModal({
                       className="w-full pl-10 pr-4 py-3 border-2 border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base"
                     />
                   </div>
-                  <button
+                  <Button
                     onClick={onSearch}
                     disabled={!searchQuery.trim() || isSearching}
-                    className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 min-h-[touch] touch-target"
+                    variant="primary"
                   >
                     {isSearching ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -125,7 +126,7 @@ export function AISearchModal({
                       <Search className="w-4 h-4" />
                     )}
                     Suchen
-                  </button>
+                  </Button>
                 </div>
 
                 {/* Search Examples */}
@@ -247,18 +248,12 @@ export function AISearchModal({
                     Für "{searchQuery}" wurden keine passenden Produkte gefunden.
                   </p>
                   <div className="flex gap-3 justify-center">
-                    <button
-                      onClick={() => onSearchQueryChange('')}
-                      className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
-                    >
+                    <Button onClick={() => onSearchQueryChange('')} variant="primary" size="sm">
                       Neue Suche
-                    </button>
-                    <button
-                      onClick={onClose}
-                      className="px-4 py-2 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target"
-                    >
+                    </Button>
+                    <Button onClick={onClose} variant="outline" size="sm">
                       Manueller Eintrag
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )}

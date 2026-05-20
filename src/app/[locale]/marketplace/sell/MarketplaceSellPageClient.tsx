@@ -52,9 +52,9 @@ function SellPageContent() {
         <p className="text-neutral-600 dark:text-neutral-400 mb-6">
           {t('loginRequiredDesc')}
         </p>
-        <Link href={ROUTES.public.login} className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg font-medium">
+        <Button as={Link} href={ROUTES.public.login} variant="primary">
           {t('login')}
-        </Link>
+        </Button>
       </div>
     )
   }

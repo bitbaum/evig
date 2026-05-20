@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { Star, Loader2, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 
 interface OrderReviewFormProps {
@@ -171,14 +172,15 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
+        variant="primary"
         disabled={submitting || rating === 0}
-        className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="w-full"
       >
         {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Star className="w-4 h-4" />}
         {t('submitButton')}
-      </button>
+      </Button>
     </form>
   )
 }

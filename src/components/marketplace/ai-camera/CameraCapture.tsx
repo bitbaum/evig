@@ -7,6 +7,7 @@
 import { Camera, Upload } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface CameraCaptureProps {
   isCapturing: boolean
@@ -90,19 +91,13 @@ function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePho
         <canvas ref={canvasRef} className="hidden" />
       </div>
       <div className="flex gap-3">
-        <button
-          onClick={onCapture}
-          className="flex-1 bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors font-medium flex items-center justify-center gap-2"
-        >
+        <Button onClick={onCapture} variant="primary" className="flex-1">
           <Camera className="w-5 h-5" />
           {labelTakePhoto}
-        </button>
-        <button
-          onClick={onCancel}
-          className="px-6 py-3 border border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors"
-        >
+        </Button>
+        <Button onClick={onCancel} variant="outline">
           {labelCancel}
-        </button>
+        </Button>
       </div>
     </div>
   )

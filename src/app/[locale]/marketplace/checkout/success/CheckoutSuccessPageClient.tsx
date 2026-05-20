@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { CheckCircle, Package, ArrowRight, Loader2 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
@@ -97,20 +98,14 @@ function CheckoutSuccessContent() {
 
         <div className="flex flex-col gap-3">
           {orderId && (
-            <Link
-              href={`/dashboard/orders/${orderId}`}
-              className="flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
-            >
+            <Button as={Link} href={`/dashboard/orders/${orderId}`} variant="primary">
               {t('viewOrder')}
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </Button>
           )}
-          <Link
-            href={ROUTES.public.marketplace}
-            className="flex items-center justify-center gap-2 py-3 px-6 rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
-          >
+          <Button as={Link} href={ROUTES.public.marketplace} variant="outline">
             {t('continueShopping')}
-          </Link>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import {
   Heart,
@@ -127,10 +128,11 @@ export function ListingActionButtons({
                 className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 resize-none"
               />
               <div className="flex gap-2">
-                <button
+                <Button
                   onClick={onSendMessage}
                   disabled={sendingMessage || !contactMessage.trim()}
-                  className="flex-1 flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-4 min-h-[44px] rounded-lg font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  variant="primary"
+                  className="flex-1"
                 >
                   {sendingMessage ? (
                     <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -138,20 +140,20 @@ export function ListingActionButtons({
                     <Send className="w-4 h-4" aria-hidden="true" />
                   )}
                   {t('sendMessage')}
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => {
                     onShowMessageForm(false)
                     onContactMessageChange('')
                   }}
-                  className="py-3 px-4 min-h-[44px] rounded-lg font-medium border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  variant="outline"
                 >
                   {t('cancel')}
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
-            <button
+            <Button
               onClick={() => {
                 if (!sessionUserId) {
                   router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
@@ -159,11 +161,12 @@ export function ListingActionButtons({
                 }
                 onShowMessageForm(true)
               }}
-              className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 min-h-[44px] rounded-lg font-semibold hover:bg-primary-500 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+              variant="primary"
+              className="w-full"
             >
               <MessageSquare className="w-5 h-5" aria-hidden="true" />
               {t('contactSeller')}
-            </button>
+            </Button>
           )}
         </>
       )}
