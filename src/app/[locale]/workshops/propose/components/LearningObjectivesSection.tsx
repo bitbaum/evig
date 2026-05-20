@@ -2,8 +2,9 @@
 
 import { Target } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { responsiveTypography, responsiveButtons } from '@/lib/responsive'
+import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface LearningObjectivesSectionProps {
   objectives: string[]
@@ -37,13 +38,14 @@ export function LearningObjectivesSection({
               className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               placeholder={t('sections.learningObjectives.placeholder')}
             />
-            <button
+            <Button
               type="button"
+              variant="destructive-ghost"
+              size="sm"
               onClick={() => onRemove(index)}
-              className={`${responsiveButtons.small} text-error-600 hover:text-error-700 hover:bg-error-50 dark:hover:bg-error-900/20 rounded-lg transition-colors`}
             >
               {t('sections.learningObjectives.remove')}
-            </button>
+            </Button>
           </div>
         ))}
 

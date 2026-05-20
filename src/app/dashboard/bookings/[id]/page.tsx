@@ -287,11 +287,10 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
           )}
           {canCancel && isCustomer && (
             <Button
-              variant="outline"
+              variant="destructive-outline"
               size="sm"
               onClick={() => handleAction('cancel')}
               disabled={actionLoading}
-              className="text-error-600 dark:text-error-400 border-error-200 dark:border-error-500/50 hover:bg-error-50 dark:hover:bg-error-500/10"
             >
               {actionLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
               {t('cancelAction')}

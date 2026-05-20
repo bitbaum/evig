@@ -42,7 +42,9 @@ export const BUTTONS = {
     outlineLight: designPrimitive.button.outlineLight,
     secondary: designPrimitive.button.secondary,
     ghost: designPrimitive.button.ghost,
-    destructive: designPrimitive.button.destructive,
+    destructive:        designPrimitive.button.destructive,
+    'destructive-ghost':    designPrimitive.button['destructive-ghost'],
+    'destructive-outline':  designPrimitive.button['destructive-outline'],
     warning: designPrimitive.button.warning,
   },
 

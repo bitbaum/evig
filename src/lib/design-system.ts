@@ -363,8 +363,10 @@ export const designPrimitive = {
     outlineLight:'border border-white/70 bg-transparent text-white hover:bg-white hover:text-neutral-900',
     secondary:   'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 dark:bg-white/[0.06] dark:text-white dark:hover:bg-white/[0.1]',
     ghost:       'bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-white/[0.04] dark:hover:text-white',
-    destructive: 'bg-error-600 text-white hover:bg-error-700',
-    warning:     'bg-warning-500 text-neutral-950 hover:bg-warning-600',
+    destructive:         'bg-error-600 text-white hover:bg-error-700',
+    'destructive-ghost': 'bg-transparent text-error-600 hover:bg-error-50 dark:text-error-400 dark:hover:bg-error-900/20',
+    'destructive-outline':'border border-error-200 text-error-700 hover:bg-error-50 dark:border-error-800 dark:text-error-400 dark:hover:bg-error-900/20',
+    warning:             'bg-warning-500 text-neutral-950 hover:bg-warning-600',
   },
 
   buttonSize: {

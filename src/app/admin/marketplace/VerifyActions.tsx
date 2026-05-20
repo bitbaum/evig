@@ -63,14 +63,16 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   if (isVerified) {
     return (
       <>
-        <button
+        <Button
+          variant="destructive-outline"
+          size="sm"
           onClick={() => setConfirmUnverify(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
           title="Verifizierung entfernen"
+          className="gap-1.5"
         >
           <ShieldOff className="w-4 h-4" />
           <span className="hidden sm:inline">Entfernen</span>
-        </button>
+        </Button>
         <ConfirmDialog
           isOpen={confirmUnverify}
           title="Verifizierung entfernen"

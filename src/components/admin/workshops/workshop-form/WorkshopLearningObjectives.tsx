@@ -43,13 +43,14 @@ export function WorkshopLearningObjectives({ objectives, onObjectiveChange, onAd
               />
             </div>
             {objectives.length > 1 && (
-              <button
+              <Button
                 type="button"
+                variant="destructive-ghost"
+                size="icon"
                 onClick={() => onRemove(index)}
-                className="p-2 text-error-600 hover:text-error-700 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20"
               >
                 <Minus className="w-4 h-4" />
-              </button>
+              </Button>
             )}
           </div>
         ))}

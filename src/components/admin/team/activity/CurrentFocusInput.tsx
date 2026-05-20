@@ -142,13 +142,14 @@ export function CurrentFocusInput({
             </p>
             <div className="flex gap-2">
               {initialFocus && (
-                <button
+                <Button
+                  variant="destructive-ghost"
+                  size="sm"
                   onClick={handleClear}
                   disabled={saving}
-                  className="px-3 py-1.5 text-sm text-error-600 hover:bg-error-50 dark:hover:bg-error-900/30 rounded-lg disabled:opacity-50"
                 >
                   Löschen
-                </button>
+                </Button>
               )}
               <Button onClick={handleCancel} variant="ghost" size="sm">
                 Abbrechen

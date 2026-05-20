@@ -223,13 +223,15 @@ export default function TaskActionsClient({
       {!isArchived && (
         <div className="mt-6 pt-4 border-t">
           {!showArchiveConfirm ? (
-            <button
+            <Button
+              variant="destructive-outline"
+              size="sm"
               onClick={() => setShowArchiveConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2 text-error-600 dark:text-error-400 border border-error-200 dark:border-error-800/30 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
+              className="gap-2"
             >
               <Archive className="w-4 h-4" />
               Aufgabe archivieren
-            </button>
+            </Button>
           ) : (
             <div className="p-4 bg-error-50 dark:bg-error-900/20 rounded-lg border border-error-200">
               <p className="text-sm text-error-700 dark:text-error-300 mb-3">

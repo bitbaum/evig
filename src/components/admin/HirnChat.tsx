@@ -187,13 +187,15 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             <span className="font-medium text-neutral-900 dark:text-white">Hirn Assistant</span>
           </div>
           {messages.length > 0 && (
-            <button
+            <Button
+              variant="destructive-ghost"
+              size="sm"
               onClick={clearSession}
-              className="flex items-center gap-1 px-2 py-1 text-sm text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 rounded"
+              className="gap-1"
             >
               <Trash2 className="w-4 h-4" />
               Löschen
-            </button>
+            </Button>
           )}
         </div>
       )}

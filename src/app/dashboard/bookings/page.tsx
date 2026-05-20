@@ -214,11 +214,10 @@ export default function CustomerBookings() {
 
                   {([BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED] as BookingStatus[]).includes(apt.status) && (
                     <Button
-                      variant="outline"
+                      variant="destructive-outline"
                       size="sm"
                       onClick={() => handleAction(apt.id, 'cancel')}
                       disabled={actionLoading === apt.id}
-                      className="text-error-600 dark:text-error-400 border-error-200 dark:border-error-500/50 hover:bg-error-50 dark:hover:bg-error-500/10"
                     >
                       {actionLoading === apt.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <XCircle className="h-4 w-4" />}
                       {t('cancelAction')}

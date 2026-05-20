@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { CheckCircle2, RefreshCw, XCircle } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import {
   TIMECARD_STATUSES,
   formatTimecardDuration,
@@ -161,15 +162,17 @@ export function TimecardApprovalQueue() {
                   <CheckCircle2 className="h-4 w-4" />
                   Genehmigen
                 </button>
-                <button
+                <Button
                   type="button"
+                  variant="destructive-outline"
+                  size="sm"
                   onClick={() => review(item.id, TIMECARD_STATUSES.REJECTED)}
                   disabled={busyId === item.id || !notes[item.id]?.trim()}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-error-300 bg-white px-3 py-2 text-sm font-medium text-error-700 hover:bg-error-50 disabled:opacity-60 dark:border-error-800 dark:bg-neutral-900 dark:text-error-300 dark:hover:bg-error-900/20"
+                  className="gap-2"
                 >
                   <XCircle className="h-4 w-4" />
                   Zurück
-                </button>
+                </Button>
               </div>
             </div>
           </article>

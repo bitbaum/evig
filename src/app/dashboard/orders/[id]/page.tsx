@@ -327,14 +327,15 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
           {/* Cancel (buyer: pending_payment or paid) */}
           {order.role === 'buyer' && (order.status === ORDER_STATUS.PENDING_PAYMENT || order.status === ORDER_STATUS.PAID) && (
-            <button
+            <Button
+              variant="destructive-outline"
               onClick={() => setConfirmCancel(true)}
               disabled={updatingStatus}
-              className="w-full flex items-center justify-center gap-2 border border-error-300 dark:border-error-800 text-error-600 dark:text-error-400 py-3 px-6 rounded-lg font-medium hover:bg-error-50 dark:hover:bg-error-900/20 disabled:opacity-50 transition-colors"
+              className="w-full gap-2"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
               {t('cancelButton')}
-            </button>
+            </Button>
           )}
 
           {/* No actions available */}

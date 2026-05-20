@@ -196,14 +196,14 @@ export function AvatarUpload({
           </Button>
 
           {previewUrl && (
-            <button
+            <Button
               type="button"
+              variant="destructive-outline"
               onClick={handleRemove}
               disabled={isUploading}
-              className="px-4 py-2 bg-white text-error-600 border border-error-600 rounded-md hover:bg-error-50 dark:hover:bg-error-900/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {t('remove')}
-            </button>
+            </Button>
           )}
         </div>
       </div>

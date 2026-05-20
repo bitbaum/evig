@@ -11,6 +11,7 @@ import { Plus, Trash2, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import type { AIFieldMetadata, SpecField } from '@/types/erfassung'
 
 interface ProductSpecFieldsProps {
@@ -67,14 +68,15 @@ export function ProductSpecFields({
               className="flex-1 px-3 py-2.5 sm:py-2 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-sm touch-manipulation"
               placeholder={t('valuePlaceholder')}
             />
-            <button
+            <Button
               type="button"
+              variant="destructive-ghost"
+              size="icon"
               onClick={() => onSpecRemove(index)}
-              className="p-2.5 text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 rounded-lg touch-manipulation min-w-[44px] flex items-center justify-center"
               disabled={specs.length <= 1}
             >
               <Trash2 className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         ))}
       </div>

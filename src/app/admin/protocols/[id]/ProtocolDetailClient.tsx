@@ -282,13 +282,15 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             <div id="protocol-step-done" className="flex items-center justify-between pt-2">
               <div>
                 {(isProtocolCreator || isSuperAdmin) && (
-                  <button
+                  <Button
+                    variant="destructive-outline"
+                    size="sm"
                     onClick={() => setShowDeleteDialog(true)}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-error-600 dark:text-error-400 border border-error-300 dark:border-error-800 rounded-lg hover:bg-error-50 dark:hover:bg-error-900/20 transition-colors"
+                    className="gap-2"
                   >
                     <Trash2 className="w-4 h-4" />
                     Löschen
-                  </button>
+                  </Button>
                 )}
               </div>
               {isReview && (

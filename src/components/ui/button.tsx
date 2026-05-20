@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string
   target?: string
   rel?: string
-  variant?: 'default' | 'primary' | 'outline' | 'outline-light' | 'secondary' | 'ghost' | 'destructive' | 'warning'
+  variant?: 'default' | 'primary' | 'outline' | 'outline-light' | 'secondary' | 'ghost' | 'destructive' | 'destructive-ghost' | 'destructive-outline' | 'warning'
   size?: 'default' | 'sm' | 'lg' | 'icon'
 }
 
@@ -22,6 +22,8 @@ const buttonVariantClass = {
   secondary: BUTTONS.app.secondary,
   ghost: BUTTONS.app.ghost,
   destructive: BUTTONS.app.destructive,
+  'destructive-ghost': BUTTONS.app['destructive-ghost'],
+  'destructive-outline': BUTTONS.app['destructive-outline'],
   warning: BUTTONS.app.warning,
 } as const
 
