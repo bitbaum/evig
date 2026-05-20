@@ -143,15 +143,16 @@ export function IntakeDetailView({
           </span>
           <div className="flex items-center gap-3">
             {progress.percentage < 100 && (
-              <button
+              <Button
                 type="button"
                 onClick={onMarkAllRequired}
-                className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-lg bg-primary-600 hover:bg-primary-700 text-white transition-colors"
+                variant="primary"
+                size="sm"
                 title="Alle Pflichtpunkte auf 'erledigt' setzen"
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 Alles in Ordnung
-              </button>
+              </Button>
             )}
             <span className={`text-sm font-bold ${
               progress.percentage === 100 ? 'text-primary-600' : 'text-neutral-600'

@@ -18,6 +18,7 @@ import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
+import { Button } from '@/components/ui/button'
 
 interface AIFormAssistProps<T = Record<string, unknown>> {
   formType: string
@@ -152,18 +153,19 @@ export function AIFormAssist<T = Record<string, unknown>>({
               disabled={isExtracting}
               className="flex-1 px-3 py-2 text-sm border border-primary-300 dark:border-primary-700 rounded-lg bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
             />
-            <button
+            <Button
               type="button"
               onClick={handleSubmit}
               disabled={isExtracting || !inputText.trim()}
-              className="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-400 text-white font-medium rounded-lg transition-colors touch-manipulation self-end"
+              variant="primary"
+              className="self-end"
               aria-label={isExtracting ? t('ariaProcessing') : t('ariaRun')}
             >
               {isExtracting
                 ? <Loader2 className="w-5 h-5 animate-spin" />
                 : <Sparkles className="w-5 h-5" />
               }
-            </button>
+            </Button>
           </div>
 
           {/* Quick actions: AI-suggested (dynamic) or static from registry */}

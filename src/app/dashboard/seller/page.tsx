@@ -161,13 +161,10 @@ export default function SellerDashboard() {
                 <p className="text-neutral-600 dark:text-neutral-400 mb-4">
                   {t('noProducts')}
                 </p>
-                <Link
-                  href={ROUTES.public.marketplaceSell}
-                  className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg"
-                >
+                <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
                   <Plus className="w-4 h-4" />
                   {t('createFirst')}
-                </Link>
+                </Button>
               </div>
             ) : (
               <div className="space-y-4">

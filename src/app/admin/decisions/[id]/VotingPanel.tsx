@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { DECISION_STATUS, type VotingMethod } from '@/config/decisions';
 import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
 import { useVoteState } from '@/hooks/useVoteState';
 import Heading from '@/components/admin/AdminHeading';
 import { DeadlineCountdown } from './voting/DeadlineCountdown';
@@ -171,13 +172,14 @@ export default function VotingPanel({
         <SimpleMajorityVote response={vote.majorityResponse} onChange={vote.setMajorityResponse} />
       )}
 
-      <button
+      <Button
         onClick={handleSubmit}
         disabled={submitting}
-        className="mt-6 w-full rounded-lg bg-primary-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+        variant="primary"
+        className="mt-6 w-full"
       >
         {submitting ? 'Wird gesendet...' : 'Stimme abgeben'}
-      </button>
+      </Button>
       </div>
     </div>
   );

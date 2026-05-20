@@ -120,13 +120,10 @@ export default function MyListingsPage() {
           title={statusFilter ? t('emptyFilteredTitle') : t('emptyTitle')}
           description={t('emptyDesc')}
           action={
-            <Link
-              href={ROUTES.public.marketplaceSell}
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
-            >
+            <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary">
               <Plus className="w-4 h-4" />
               {t('createFirst')}
-            </Link>
+            </Button>
           }
         />
       )}

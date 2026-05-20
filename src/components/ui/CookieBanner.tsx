@@ -3,6 +3,7 @@
 import { useSyncExternalStore, useCallback } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 
 const CONSENT_KEY = 'cookie_consent'
 const CONSENT_VALUE = 'accepted'
@@ -65,13 +66,14 @@ export function CookieBanner() {
           >
             {t('learnMore')}
           </Link>
-          <button
+          <Button
             type="button"
             onClick={handleAccept}
-            className="inline-flex items-center justify-center rounded-lg bg-primary-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            variant="primary"
+            size="sm"
           >
             {t('accept')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

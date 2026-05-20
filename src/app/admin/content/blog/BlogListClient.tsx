@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {
   Search,
@@ -186,13 +187,10 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               : 'Erstelle deinen ersten Blog-Artikel.'}
           </p>
           {!search.trim() && !statusFilter && (
-            <Link
-              href={ROUTES.admin.contentBlogNew}
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
+            <Button as={Link} href={ROUTES.admin.contentBlogNew} variant="primary">
               <Plus className="w-5 h-5" />
               Ersten Artikel erstellen
-            </Link>
+            </Button>
           )}
         </div>
       )}

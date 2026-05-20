@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MessageSquare, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import ConversationList from '@/components/messages/ConversationList'
 import type { Conversation } from '@/components/messages/ConversationList'
 import MessageThread from '@/components/messages/MessageThread'
@@ -96,12 +97,9 @@ function MessagesContent() {
           title={t('emptyTitle')}
           description={t('emptyDesc')}
           action={
-            <Link
-              href={ROUTES.public.marketplace}
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
-            >
+            <Button as={Link} href={ROUTES.public.marketplace} variant="primary">
               {t('goToMarketplace')}
-            </Link>
+            </Button>
           }
         />
       ) : (

@@ -142,13 +142,10 @@ export default async function AdminServicesPage() {
       icon={Wrench}
       iconColor="green"
       actions={
-        <Link
-          href={ROUTES.admin.serviceNew}
-          className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
-        >
+        <Button as={Link} href={ROUTES.admin.serviceNew} variant="primary">
           <Plus className="w-5 h-5" />
           Dienstleistung erstellen
-        </Link>
+        </Button>
       }
     >
       {/* Stats Cards */}
@@ -300,13 +297,10 @@ export default async function AdminServicesPage() {
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
               Erstellen Sie Ihre erste Dienstleistung, um Service-Termine anzubieten.
             </p>
-            <Link
-              href={ROUTES.admin.serviceNew}
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-            >
+            <Button as={Link} href={ROUTES.admin.serviceNew} variant="primary">
               <Plus className="w-5 h-5" />
               Erste Dienstleistung erstellen
-            </Link>
+            </Button>
           </div>
         )}
       </div>

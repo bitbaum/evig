@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { CheckCircle, Vote, UserPlus } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { type VotingMethod } from '@/config/decisions'
@@ -106,12 +107,9 @@ export default function PublicVoteClient({
             <div className="flex-1">
               <p className="font-semibold text-neutral-900 dark:text-white">{t('successRegisterHeading')}</p>
               <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{t('successRegisterDesc')}</p>
-              <Link
-                href={registerUrl}
-                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={registerUrl} variant="primary" size="sm" className="mt-3">
                 {t('successRegisterCta')}
-              </Link>
+              </Button>
               <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
                 {t('successOrLogin')}{' '}
                 <Link href={loginUrl} className="text-primary-600 dark:text-primary-400 hover:underline">
@@ -229,14 +227,15 @@ export default function PublicVoteClient({
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={submitting}
-        className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary-600 px-6 py-3 text-sm font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:focus:ring-offset-neutral-900 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        variant="primary"
+        className="w-full"
       >
         <Vote className="h-4 w-4" />
         {submitting ? t('saving') : t('submit')}
-      </button>
+      </Button>
     </form>
   )
 }

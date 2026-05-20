@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { BadgeCheck, CheckCircle, AlertCircle, ArrowRight, CreditCard, Calendar } from 'lucide-react'
@@ -177,13 +178,10 @@ export default async function MembershipPage() {
           title={t('notMemberTitle')}
           description={t('notMemberDesc', { orgName: ORG.legalName, currency: MEMBERSHIP.currency, fee: MEMBERSHIP.fees.regular })}
           action={
-            <Link
-              href="/mitglied-werden"
-              className="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
+            <Button as={Link} href="/mitglied-werden" variant="primary">
               {t('becomeMember')}
               <ArrowRight className="w-4 h-4" aria-hidden="true" />
-            </Link>
+            </Button>
           }
         />
       )}

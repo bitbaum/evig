@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { apiFetch } from '@/lib/api/client';
 import {
@@ -212,14 +213,15 @@ export default function DiscussionThread({
                               rows={2}
                             />
                             <div className="flex gap-2">
-                              <button
+                              <Button
                                 onClick={() => handleEditSave(c.id)}
                                 disabled={editSaving || !editContent.trim()}
-                                className="flex items-center gap-1 rounded-md bg-primary-600 px-3 py-1 text-xs text-white hover:bg-primary-700 disabled:opacity-50"
+                                variant="primary"
+                                size="sm"
                               >
                                 <Check className="w-3 h-3" />
                                 Speichern
-                              </button>
+                              </Button>
                               <button
                                 onClick={cancelEdit}
                                 className="flex items-center gap-1 rounded-md border border-neutral-300 px-3 py-1 text-xs text-neutral-600 hover:bg-neutral-50"
@@ -275,13 +277,15 @@ export default function DiscussionThread({
               rows={2}
               className="flex-1"
             />
-            <button
+            <Button
               type="submit"
               disabled={submitting || !content.trim()}
-              className="self-end rounded-md bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+              variant="primary"
+              size="sm"
+              className="self-end"
             >
               Senden
-            </button>
+            </Button>
           </div>
         </form>
       )}
