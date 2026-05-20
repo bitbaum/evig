@@ -123,13 +123,9 @@ export function IntakeDetailView({
               >
                 <ArrowDownUp className="w-3.5 h-3.5" /> Stufe ändern
               </button>
-              <button
-                onClick={onRefresh}
-                className="p-2 hover:bg-neutral-100 rounded-lg"
-                title="Aktualisieren"
-              >
+              <Button onClick={onRefresh} variant="ghost" size="icon" title="Aktualisieren">
                 <RefreshCw className="w-4 h-4" />
-              </button>
+              </Button>
             </>
           )}
         </div>

@@ -89,12 +89,9 @@ export function CurrentFocusInput({
                 <Check className="w-4 h-4" />
               )}
             </button>
-            <button
-              onClick={handleCancel}
-              className="p-1 text-neutral-500 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded"
-            >
+            <Button onClick={handleCancel} variant="ghost" size="icon" className="p-1 text-neutral-500">
               <X className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
         ) : (
           <button
@@ -153,12 +150,9 @@ export function CurrentFocusInput({
                   Löschen
                 </button>
               )}
-              <button
-                onClick={handleCancel}
-                className="px-3 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
-              >
+              <Button onClick={handleCancel} variant="ghost" size="sm">
                 Abbrechen
-              </button>
+              </Button>
               <Button
                 onClick={handleSave}
                 disabled={saving || !hasChanges}

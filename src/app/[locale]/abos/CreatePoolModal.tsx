@@ -54,9 +54,9 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
       <div className="bg-white dark:border dark:border-white/[0.06] rounded-2xl shadow-2xl w-full max-w-lg p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-semibold">{t('modal.title')}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-neutral-100 rounded-lg">
+          <Button onClick={onClose} variant="ghost" size="icon">
             <X className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
 
         {error && (

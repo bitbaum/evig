@@ -11,7 +11,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   target?: string
   rel?: string
   variant?: 'default' | 'primary' | 'outline' | 'outline-light' | 'secondary' | 'ghost' | 'destructive' | 'warning'
-  size?: 'default' | 'sm' | 'lg'
+  size?: 'default' | 'sm' | 'lg' | 'icon'
 }
 
 const buttonVariantClass = {
@@ -29,6 +29,7 @@ const buttonSizeClass = {
   default: designPrimitive.buttonSize.default,
   sm: designPrimitive.buttonSize.sm,
   lg: designPrimitive.buttonSize.lg,
+  icon: designPrimitive.buttonSize.icon,
 } as const
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(

@@ -35,14 +35,10 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
             <Printer className="w-5 h-5" />
             {t('printFactsheet')}
           </Button>
-          <button
-            type="button"
-            onClick={onReset}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-600 transition-colors"
-          >
+          <Button type="button" onClick={onReset} variant="secondary">
             <Plus className="w-5 h-5" />
             {t('captureAnother')}
-          </button>
+          </Button>
           <Link
             href={ROUTES.admin.products}
             className="inline-flex items-center gap-2 px-4 py-2 border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-200 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"

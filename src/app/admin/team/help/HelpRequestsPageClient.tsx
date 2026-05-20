@@ -95,14 +95,16 @@ export function HelpRequestsPageClient({
       {/* Actions Bar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <button
+          <Button
             onClick={() => refetch()}
             disabled={loading}
-            className="p-2 text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
+            variant="ghost"
+            size="icon"
+            className="text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-200"
             title="Aktualisieren"
           >
             <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
-          </button>
+          </Button>
 
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -183,12 +185,9 @@ export function HelpRequestsPageClient({
             {/* Clear Filters */}
             {hasActiveFilters && (
               <div className="flex items-end">
-                <button
-                  onClick={clearFilters}
-                  className="px-3 py-2 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg"
-                >
+                <Button onClick={clearFilters} variant="ghost" size="sm">
                   Zurücksetzen
-                </button>
+                </Button>
               </div>
             )}
           </div>

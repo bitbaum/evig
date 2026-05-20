@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Settings, Check, Loader2, Cpu, Cloud, Zap, X, Key, ExternalLink } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import { apiFetch } from '@/lib/api/client'
 
@@ -183,9 +184,9 @@ export function HirnProviderSelector() {
                 <Heading level={3} className="font-semibold text-neutral-900 dark:text-white">Wähle dein Gehirn</Heading>
                 <p className="text-xs text-neutral-500 mt-0.5">Welche KI soll antworten?</p>
               </div>
-              <button onClick={() => setOpen(false)} className="p-2 hover:bg-neutral-100 dark:hover:bg-white/[0.06] rounded-lg">
-                <X className="w-4 h-4 text-neutral-500" />
-              </button>
+              <Button onClick={() => setOpen(false)} variant="ghost" size="icon" className="text-neutral-500">
+                <X className="w-4 h-4" />
+              </Button>
             </div>
 
             {/* Provider List by Category */}
