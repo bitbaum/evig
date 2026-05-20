@@ -232,13 +232,14 @@ export function HelpRequestsPageClient({
               : 'Noch keine Hilfsanfragen vorhanden.'}
           </p>
           {!hasActiveFilters && (
-            <button
+            <Button
               onClick={() => setShowCreateModal(true)}
-              className="px-4 py-2 text-sm text-white bg-primary-600 hover:bg-primary-700 rounded-lg inline-flex items-center gap-2"
+              variant="primary"
+              size="sm"
             >
               <Plus className="w-4 h-4" />
               Erste Anfrage erstellen
-            </button>
+            </Button>
           )}
         </div>
       )}
