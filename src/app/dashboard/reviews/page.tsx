@@ -181,13 +181,10 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           {editingReview !== review.id && (
             <div className="flex flex-col gap-2 ml-4">
               {canEdit(review.createdAt) && review.status === REVIEW_STATUS.PUBLISHED && (
-                <button
-                  onClick={() => onEdit(review)}
-                  className="px-3 py-1.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 rounded text-sm hover:bg-neutral-200 dark:hover:bg-neutral-600 flex items-center gap-1"
-                >
+                <Button onClick={() => onEdit(review)} variant="secondary" size="sm" className="gap-1">
                   <Edit3 className="w-3 h-3" />
                   {t('edit')}
-                </button>
+                </Button>
               )}
               <button
                 onClick={() => onDelete(review.id)}

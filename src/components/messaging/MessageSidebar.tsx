@@ -137,12 +137,9 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
         {/* Header */}
         <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
           <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-neutral-100 rounded"
-          >
+          <Button onClick={onClose} variant="ghost" size="icon" className="p-1">
             ×
-          </button>
+          </Button>
         </div>
 
         <div className="flex-1 flex flex-col min-h-0">
@@ -215,20 +212,17 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
             <div className="flex-1 flex flex-col">
               {/* Message Header */}
               <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
-                <button
-                  onClick={() => setSelectedConversation(null)}
-                  className="p-1 hover:bg-neutral-100 rounded"
-                >
+                <Button onClick={() => setSelectedConversation(null)} variant="ghost" size="icon" className="p-1">
                   ←
-                </button>
+                </Button>
                 <div className="flex-1 text-center">
                   <Heading level={3} className="text-sm font-medium">
                     {conversations.find(c => c.id === selectedConversation)?.other_participant.name}
                   </Heading>
                 </div>
-                <button className="p-1 hover:bg-neutral-100 rounded">
+                <Button variant="ghost" size="icon" className="p-1">
                   <MoreVertical className="w-4 h-4" />
-                </button>
+                </Button>
               </div>
 
               {/* Messages */}

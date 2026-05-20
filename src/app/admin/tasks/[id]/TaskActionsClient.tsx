@@ -120,12 +120,13 @@ export default function TaskActionsClient({
                 {loading === 'complete' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Bestätigen
               </Button>
-              <button
+              <Button
                 onClick={() => setShowCompleteForm(false)}
-                className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
+                variant="ghost"
+                size="sm"
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -156,12 +157,13 @@ export default function TaskActionsClient({
                 {loading === 'attention' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Markieren
               </Button>
-              <button
+              <Button
                 onClick={() => setShowAttentionForm(false)}
-                className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
+                variant="ghost"
+                size="sm"
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -205,12 +207,13 @@ export default function TaskActionsClient({
                 {loading === 'request' && <Loader2 className="w-4 h-4 animate-spin" />}
                 {selectedUserId ? 'Anfrage senden' : 'An alle senden'}
               </Button>
-              <button
+              <Button
                 onClick={() => setShowRequestForm(false)}
-                className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
+                variant="ghost"
+                size="sm"
               >
                 Abbrechen
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -241,12 +244,13 @@ export default function TaskActionsClient({
                   {loading === 'archive' && <Loader2 className="w-4 h-4 animate-spin" />}
                   Archivieren
                 </Button>
-                <button
+                <Button
                   onClick={() => setShowArchiveConfirm(false)}
-                  className="px-4 py-2 text-neutral-600 hover:text-neutral-900"
+                  variant="ghost"
+                  size="sm"
                 >
                   Abbrechen
-                </button>
+                </Button>
               </div>
             </div>
           )}

@@ -124,9 +124,11 @@ export default function BlogNavigationClient({
           {/* Mobile Menu Button + CTA */}
           <div className="flex items-center gap-2">
             {/* Mobile dropdown trigger */}
-            <button
+            <Button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden inline-flex items-center gap-1 px-3 py-1.5 bg-neutral-100 text-neutral-700 dark:text-neutral-300 rounded-lg text-sm font-medium"
+              variant="secondary"
+              size="sm"
+              className="md:hidden gap-1"
             >
               {selectedCategorySlugs.length > 0 ? (
                 <>
@@ -145,7 +147,7 @@ export default function BlogNavigationClient({
                   <ChevronDown className={cn("w-4 h-4 transition-transform", mobileMenuOpen && "rotate-180")} />
                 </>
               )}
-            </button>
+            </Button>
 
             {/* CTA */}
             <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary" size="sm">
