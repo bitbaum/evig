@@ -94,21 +94,15 @@ export function InstanceList({
                 </div>
 
                 <div className="flex items-center gap-2 ml-4">
-                  <Link
-                    href={`/admin/workshops/instances/${instance.id}`}
-                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
-                  >
-                    <Eye className="w-4 h-4 mr-1" />
+                  <Button as={Link} href={`/admin/workshops/instances/${instance.id}`} variant="outline" size="sm" className="gap-1">
+                    <Eye className="w-4 h-4" />
                     Details
-                  </Link>
+                  </Button>
 
-                  <button
-                    onClick={() => onEdit(instance)}
-                    className="inline-flex items-center px-3 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
-                  >
-                    <Edit className="w-4 h-4 mr-1" />
+                  <Button onClick={() => onEdit(instance)} variant="outline" size="sm" className="gap-1">
+                    <Edit className="w-4 h-4" />
                     Bearbeiten
-                  </button>
+                  </Button>
 
                   {instance.current_participants === 0 && (
                     <button

@@ -261,12 +261,9 @@ export default function BuildYourComputerPage() {
                       <p className="text-neutral-600">{t('buildTool.analyzeDescription')}</p>
 
                       <div className="flex gap-4 justify-center">
-                        <button
-                          onClick={() => setStep(1)}
-                          className="px-6 py-3 border border-neutral-300 rounded-lg hover:bg-neutral-50"
-                        >
+                        <Button onClick={() => setStep(1)} variant="outline">
                           {t('buildTool.backButton')}
-                        </button>
+                        </Button>
                         <Button onClick={handleAnalyze} variant="primary">
                           <Search className="w-5 h-5 mr-2" />
                           {t('buildTool.analyzeButton')}
@@ -348,12 +345,9 @@ export default function BuildYourComputerPage() {
                     </div>
 
                     <div className="flex gap-4">
-                      <button
-                        onClick={() => setStep(1)}
-                        className="flex-1 py-3 border border-neutral-300 rounded-lg hover:bg-neutral-50"
-                      >
+                      <Button onClick={() => setStep(1)} variant="outline" className="flex-1">
                         {t('buildTool.changeRequirements')}
-                      </button>
+                      </Button>
                       <Button as={Link} href="/contact" variant="primary" className="flex-1">
                         <ShoppingCart className="w-5 h-5 mr-2" />
                         {t('buildTool.orderBuild')}

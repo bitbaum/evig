@@ -1,4 +1,5 @@
 import { Image as ImageIcon, Tag } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import type { BlogPostData, Category } from './types'
 
@@ -94,13 +95,9 @@ export function BlogPostSidebar({
             className="flex-1 px-3 py-2 bg-neutral-50 dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             placeholder="Tag hinzufügen"
           />
-          <button
-            type="button"
-            onClick={onAddTag}
-            className="px-3 py-2 bg-neutral-100 dark:bg-neutral-600 text-neutral-700 dark:text-neutral-300 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-500"
-          >
+          <Button type="button" onClick={onAddTag} variant="secondary" size="sm">
             +
-          </button>
+          </Button>
         </div>
         <div className="flex flex-wrap gap-2">
           {formData.tags.map((tag) => (

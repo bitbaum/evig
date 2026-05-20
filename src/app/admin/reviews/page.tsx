@@ -108,13 +108,10 @@ export default function AdminReviewsPage() {
           </div>
         </div>
         <div className="flex items-end">
-          <button
-            onClick={loadReviews}
-            className="px-4 py-2 bg-neutral-100 text-neutral-700 rounded-lg hover:bg-neutral-200 flex items-center gap-2"
-          >
+          <Button onClick={loadReviews} variant="secondary" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             Aktualisieren
-          </button>
+          </Button>
         </div>
       </AdminFilterBar>
 
@@ -279,12 +276,9 @@ export default function AdminReviewsPage() {
             autoFocus
           />
           <div className="flex justify-end gap-3">
-            <button
-              onClick={cancelModeration}
-              className="px-4 py-2 border border-neutral-300 rounded-lg text-sm font-medium text-neutral-700 hover:bg-neutral-50"
-            >
+            <Button onClick={cancelModeration} variant="outline" size="sm">
               Abbrechen
-            </button>
+            </Button>
             <Button
               onClick={handleModerate}
               disabled={!moderationReason.trim() || !!actionInProgress}
