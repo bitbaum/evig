@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { formatRelativeTime } from '@/lib/utils'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
@@ -70,13 +71,10 @@ export function HirnSidebar({
     <div className="flex flex-col h-full">
       {/* New Chat Button */}
       <div className="p-4">
-        <button
-          onClick={onNewSession}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors"
-        >
+        <Button onClick={onNewSession} variant="primary" className="w-full">
           <Plus className="w-4 h-4" />
           Neues Gespräch
-        </button>
+        </Button>
       </div>
 
       {/* Stats */}

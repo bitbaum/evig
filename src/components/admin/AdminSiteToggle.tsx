@@ -1,6 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, Globe, ChevronRight } from 'lucide-react'
 import { ROUTES } from '@/config/routes'
@@ -42,22 +43,11 @@ export function AdminSiteToggle({
   if (isInAdmin) {
     // Show "View Site" button when in admin
     return (
-      <Link
-        href="/"
-        className={`
-          inline-flex items-center gap-2
-          px-4 py-2 rounded-lg
-          bg-primary-600 text-white
-          hover:bg-primary-700
-          transition-colors
-          font-medium text-sm
-          ${className}
-        `}
-      >
+      <Button as={Link} href="/" variant="primary" size="sm" className={className}>
         <Globe className="w-4 h-4" />
         {!compact && <span>Website anzeigen</span>}
         <ChevronRight className="w-4 h-4" />
-      </Link>
+      </Button>
     )
   }
 

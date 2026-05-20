@@ -81,13 +81,10 @@ export function ProductFilterBar({
             </Button>
           )}
           {activeTab === 'inventory' && (
-            <Link
-              href={ROUTES.admin.erfassung}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              <Plus className="w-4 h-4 inline mr-2" />
+            <Button as={Link} href={ROUTES.admin.erfassung} variant="primary" size="sm">
+              <Plus className="w-4 h-4" />
               Produkt erfassen
-            </Link>
+            </Button>
           )}
         </div>
       </div>

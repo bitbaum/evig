@@ -226,14 +226,10 @@ export function SubmissionDetail({
       {submission.status === APPROVAL_STATUS.PUBLISHED && (
         <div className="flex flex-col gap-2">
           {submission.slug && (
-            <Link
-              href={`/blog/${submission.slug}`}
-              target="_blank"
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
+            <Button as={Link} href={`/blog/${submission.slug}`} target="_blank" variant="primary" className="w-full">
               <ExternalLink className="w-4 h-4" />
               Beitrag ansehen
-            </Link>
+            </Button>
           )}
           {submission.published_post_id && (
             <Link

@@ -1,5 +1,6 @@
 import { CheckCircle, XCircle, Clock, AlertCircle, Mail, Phone, ExternalLink, MapPin } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { APPROVAL_STATUS, getApprovalStatusBadge } from '@/config/approval-status'
 import { getDocumentStatusBadge } from '@/config/document-status'
 import { formatDateShort } from '@/lib/date-formats'
@@ -97,13 +98,14 @@ export function ApplicationCard({ application, isPending, actionLoading, onOpenD
             >
               {actionLoading === application.id ? '...' : 'Ablehnen'}
             </button>
-            <button
+            <Button
               onClick={() => onOpenDialog('approve_app', application.id)}
               disabled={actionLoading === application.id}
-              className="px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
+              variant="primary"
+              size="sm"
             >
               {actionLoading === application.id ? '...' : 'Genehmigen'}
-            </button>
+            </Button>
           </div>
         )}
       </div>

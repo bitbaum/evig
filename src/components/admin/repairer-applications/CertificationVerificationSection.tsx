@@ -1,5 +1,6 @@
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { CERTIFICATION_STATUS, CERTIFICATION_STATUS_LABELS, getCertificationStatusBadge } from '@/config/certification-status'
 import type { RepairerApplication, Certification, ActionDialogState } from './types'
 
@@ -100,13 +101,14 @@ export function CertificationVerificationSection({
                       <div className="flex flex-col gap-2 ml-4">
                         {cert.verificationStatus === CERTIFICATION_STATUS.PENDING && (
                           <>
-                            <button
+                            <Button
                               onClick={() => onOpenDialog('verify_cert', cert.id)}
                               disabled={certificationActionLoading === cert.id}
-                              className="px-3 py-1.5 bg-primary-600 text-white rounded text-xs hover:bg-primary-700 disabled:opacity-50"
+                              variant="primary"
+                              size="sm"
                             >
                               {certificationActionLoading === cert.id ? '...' : 'Verifizieren'}
-                            </button>
+                            </Button>
                             <button
                               onClick={() => onOpenDialog('reject_cert', cert.id)}
                               disabled={certificationActionLoading === cert.id}

@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { Vote, Clock, ArrowRight } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { db } from '@/db'
 import { sql, getTableName } from 'drizzle-orm'
 import { decisions, decisionVotes, users } from '@/db/schema'
@@ -114,13 +115,10 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
         </div>
 
         {/* CTA — min-h-[44px] ensures touch target */}
-        <Link
-          href={`/admin/decisions/${first.id}`}
-          className="flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg transition-colors flex-shrink-0 self-center"
-        >
+        <Button as={Link} href={`/admin/decisions/${first.id}`} variant="primary" className="flex-shrink-0 self-center">
           Abstimmen
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
-        </Link>
+        </Button>
       </div>
     </div>
   )

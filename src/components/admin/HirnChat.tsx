@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, Bot, User, Sparkles, Trash2, Rocket, TriangleAlert } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { ORG } from '@/config/org'
@@ -240,14 +241,16 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
                           </div>
                           {action.risky && <TriangleAlert className="w-4 h-4 text-warning-500" />}
                         </div>
-                        <button
+                        <Button
                           type="button"
                           onClick={() => executeAction(action)}
-                          className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-primary-600 hover:bg-primary-700 text-white"
+                          variant="primary"
+                          size="sm"
+                          className="mt-3"
                         >
                           <Rocket className="w-3.5 h-3.5" />
                           {action.cta}
-                        </button>
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -307,17 +310,17 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             aria-describedby={error ? 'hirn-chat-error' : undefined}
             className="flex-1 px-4 py-2 border border-neutral-300 dark:border-neutral-600 rounded-xl bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
           />
-          <button
+          <Button
             type="submit"
+            variant="primary"
             disabled={!input.trim() || loading}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-400 text-white rounded-xl transition-colors"
           >
             {loading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <Send className="w-5 h-5" />
             )}
-          </button>
+          </Button>
         </div>
       </form>
 

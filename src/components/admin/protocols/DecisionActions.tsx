@@ -13,6 +13,7 @@
  */
 
 import { useState } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   DECISION_RESULTS,
   DECISION_RESULT_LABELS,
@@ -337,10 +338,11 @@ export default function DecisionActions({
                 ))}
               </ul>
               {isProtocolCreator && (
-                <button
+                <Button
                   onClick={handleCreateTasks}
                   disabled={loading === 'create'}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 text-xs bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50"
+                  variant="primary"
+                  size="sm"
                 >
                   {loading === 'create' ? (
                     <Loader2 className="w-3 h-3 animate-spin" />
@@ -348,7 +350,7 @@ export default function DecisionActions({
                     <CheckCircle2 className="w-3 h-3" />
                   )}
                   Alle Aufgaben erstellen
-                </button>
+                </Button>
               )}
             </div>
           )}
