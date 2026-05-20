@@ -51,7 +51,7 @@ export default function BlogSubmissionsClient() {
     return (
       <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg p-8 border-2 border-neutral-200 dark:border-neutral-700">
+          <div className="bg-white dark:bg-neutral-800 rounded-xl shadow-lg dark:shadow-black/30 p-8 border-2 border-neutral-200 dark:border-neutral-700">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-1/3" />
               <div className="h-4 bg-neutral-200 dark:bg-neutral-700 rounded w-full" />

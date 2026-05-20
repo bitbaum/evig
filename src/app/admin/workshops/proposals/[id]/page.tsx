@@ -37,7 +37,7 @@ export default function WorkshopProposalDetailPage() {
     return (
       <div className="min-h-screen bg-neutral-50 py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white rounded-xl shadow-lg dark:shadow-black/30 p-8">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-neutral-200 rounded w-1/3"></div>
               <div className="h-4 bg-neutral-200 rounded w-full"></div>

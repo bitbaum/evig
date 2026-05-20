@@ -15,7 +15,7 @@ import { ORG } from '@/config/org'
 
 export function CTASection() {
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-r from-primary-700 to-primary-800 text-white">
+    <section className="py-16 sm:py-20 bg-primary-700 text-white">
       <div className="container mx-auto px-4 sm:px-6 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-6">Bereit für Open Source?</h2>
         <p className="text-lg sm:text-xl mb-8 max-w-2xl mx-auto text-white/90">
