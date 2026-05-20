@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { Eye, Target, BarChart3, Briefcase, FileText, Users } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
@@ -184,12 +185,9 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/mitglied-werden"
-              className="rounded-md bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-500 text-center"
-            >
+            <Button as={Link} href="/mitglied-werden" variant="primary" size="sm">
               {t('board.joinBtn')}
-            </Link>
+            </Button>
             <Link
               href="/get-involved/donate"
               className="rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-primary-600 border border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 text-center"

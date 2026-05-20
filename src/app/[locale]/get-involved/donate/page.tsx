@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import React from 'react'
 import { Metadata } from 'next'
+import { Button } from '@/components/ui/button'
 import { Leaf, Monitor, Building2, ArrowDown, Laptop, MonitorSpeaker, Keyboard, HardDrive } from 'lucide-react'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CopyButton } from '@/components/community/CopyButton'
@@ -67,12 +68,9 @@ export default async function DonatePage({ params }: DonatePageProps) {
           <p className="text-lg text-neutral-600 max-w-2xl mx-auto mb-8">
             {t('hero.body')}
           </p>
-          <a
-            href="#bankueberweisung"
-            className="inline-flex items-center gap-2 rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-          >
+          <Button as="a" href="#bankueberweisung" variant="primary">
             {t('hero.cta')} <ArrowDown className="h-4 w-4" />
-          </a>
+          </Button>
         </div>
 
         {/* Transparency row */}

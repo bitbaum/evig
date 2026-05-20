@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG, MEMBERSHIP } from '@/config/org'
@@ -114,13 +115,10 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
                     {t('member.since', { date: new Date(status.memberSince).toLocaleDateString(locale) })}
                   </p>
                 )}
-                <Link
-                  href="/dashboard"
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-500"
-                >
+                <Button as={Link} href="/dashboard" variant="primary" size="sm">
                   <UserIcon className="h-4 w-4" />
                   {t('member.dashboard')}
-                </Link>
+                </Button>
               </div>
             ) : (
               <>

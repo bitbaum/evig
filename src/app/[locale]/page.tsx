@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { Recycle, Store, Wrench, BookOpen, Heart, Users, Award, Gift } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { getCompactMetrics } from '@/data/impact-metrics'
@@ -207,12 +208,9 @@ export default async function Home() {
         subtitle={t('hero.subtitle')}
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
-          <Link
-            href={ROUTES.public.marketplace}
-            className="w-full sm:w-auto rounded-md bg-primary-600 px-6 py-3 text-base font-semibold text-white hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 text-center"
-          >
+          <Button as={Link} href={ROUTES.public.marketplace} variant="primary" className="w-full sm:w-auto text-center">
             {t('hero.ctaDiscover')}
-          </Link>
+          </Button>
           <Link href="/about" className="text-base font-semibold leading-6 text-neutral-900 dark:text-white">
             {t('hero.ctaAbout')} <span aria-hidden="true">→</span>
           </Link>

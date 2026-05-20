@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import {
   ArrowLeft,
   MapPin,
@@ -145,21 +146,15 @@ export default async function TechnikerDetailPage({ params }: Props) {
             {/* CTA */}
             <div className="flex flex-col gap-2 sm:min-w-[180px]">
               {isProfessional ? (
-                <Link
-                  href={`/it-hilfe/create?technician=${technician.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
-                >
+                <Button as={Link} href={`/it-hilfe/create?technician=${technician.id}`} variant="primary">
                   <Wrench className="w-4 h-4" />
                   {t('detail.submitRequest')}
-                </Link>
+                </Button>
               ) : (
-                <Link
-                  href={`/it-hilfe/create?technician=${technician.id}`}
-                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
-                >
+                <Button as={Link} href={`/it-hilfe/create?technician=${technician.id}`} variant="primary">
                   <Users className="w-4 h-4" />
                   {t('detail.contact')}
-                </Link>
+                </Button>
               )}
             </div>
           </div>
@@ -255,13 +250,10 @@ export default async function TechnikerDetailPage({ params }: Props) {
               ))}
             </div>
             <div className="mt-6">
-              <Link
-                href={`/it-hilfe/create?technician=${technician.id}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors"
-              >
+              <Button as={Link} href={`/it-hilfe/create?technician=${technician.id}`} variant="primary">
                 <Wrench className="w-4 h-4" />
                 {t('detail.requestBooking')}
-              </Link>
+              </Button>
             </div>
           </Card>
         )}

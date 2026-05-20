@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import {
   Search,
   Package,
@@ -271,12 +272,9 @@ export default function MarketplacePage() {
               {t('signInCta.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href={ROUTES.public.login}
-                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400 text-white rounded-lg font-semibold transition-colors"
-              >
+              <Button as={Link} href={ROUTES.public.login} variant="primary">
                 {t('signInCta.login')}
-              </Link>
+              </Button>
               <Link
                 href={ROUTES.public.register}
                 className="px-6 py-2.5 border border-neutral-300 dark:border-white/[0.1] text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-white/[0.04] rounded-lg font-semibold transition-colors"
@@ -315,14 +313,15 @@ export default function MarketplacePage() {
               />
             </div>
             <div className="p-4 border-t border-neutral-200 dark:border-white/[0.06] flex-shrink-0">
-              <button
+              <Button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
-                className="w-full py-2.5 bg-primary-600 hover:bg-primary-500 dark:bg-primary-500 dark:hover:bg-primary-400 text-white rounded-lg text-sm font-semibold transition-colors"
+                variant="primary"
+                className="w-full"
               >
                 {t('filters.showResults')}
                 {pagination.total > 0 && ` (${pagination.total})`}
-              </button>
+              </Button>
             </div>
           </aside>
         </div>

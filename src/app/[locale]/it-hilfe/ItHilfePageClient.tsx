@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
   Search,
@@ -70,13 +71,10 @@ export default function ITHilfePage() {
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link
-                href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors"
-              >
+              <Button as={Link} href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`} variant="primary">
                 <Plus className="w-4 h-4" />
                 {t('getHelp')}
-              </Link>
+              </Button>
               <Link
                 href={IT_HILFE.routes.helpers}
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg text-base font-semibold transition-colors"
@@ -97,12 +95,14 @@ export default function ITHilfePage() {
                 aria-label={t('searchAriaLabel')}
                 className="w-full pl-12 pr-24 py-3 rounded-lg border border-neutral-300 text-neutral-900 placeholder-neutral-500 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
               />
-              <button
+              <Button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary-600 hover:bg-primary-500 text-white px-5 py-2 rounded-md transition-colors text-sm font-semibold"
+                variant="primary"
+                size="sm"
+                className="absolute right-2 top-1/2 -translate-y-1/2"
               >
                 {t('searchButton')}
-              </button>
+              </Button>
             </div>
           </form>
         </div>
@@ -331,12 +331,9 @@ export default function ITHilfePage() {
               {t('ctaDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href={`/auth/login?callbackUrl=${IT_HILFE.routes.register}`}
-                className="px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
-              >
+              <Button as={Link} href={`/auth/login?callbackUrl=${IT_HILFE.routes.register}`} variant="primary">
                 {t('ctaCreateProfile')}
-              </Link>
+              </Button>
               <Link
                 href={ROUTES.public.itHilfe}
                 className="px-6 py-2.5 bg-white dark:bg-transparent hover:bg-primary-50 dark:hover:bg-primary-900/20 text-primary-600 dark:text-primary-400 border border-primary-600 dark:border-primary-500 rounded-lg font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"

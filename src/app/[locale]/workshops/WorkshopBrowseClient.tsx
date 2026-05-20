@@ -60,13 +60,10 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 {t('subtitle', { count: workshops.length, orgName: ORG.name })}
               </p>
             </div>
-            <Link
-              href="/workshops/propose"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-base font-semibold transition-colors"
-            >
+            <Button as={Link} href="/workshops/propose" variant="primary">
               <Plus className="w-4 h-4" />
               {t('proposeButton')}
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
