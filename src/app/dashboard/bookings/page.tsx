@@ -59,13 +59,10 @@ export default function CustomerBookings() {
               <RefreshCw className="h-4 w-4" />
               <span className="hidden sm:inline">{t('refresh')}</span>
             </button>
-            <Link
-              href={ROUTES.public.techniker}
-              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm md:text-base"
-            >
+            <Button as={Link} href={ROUTES.public.techniker} variant="primary" size="sm">
               <Wrench className="h-4 w-4" />
               {t('newOrder')}
-            </Link>
+            </Button>
           </div>
         </div>
 
@@ -118,12 +115,9 @@ export default function CustomerBookings() {
               iconColor="text-primary-500 dark:text-primary-400"
               title={t('emptyTitle')}
               action={
-                <Link
-                  href={ROUTES.public.techniker}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium transition-colors"
-                >
+                <Button as={Link} href={ROUTES.public.techniker} variant="primary">
                   {t('findTechnician')}
-                </Link>
+                </Button>
               }
             />
           ) : (

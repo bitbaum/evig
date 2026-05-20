@@ -8,6 +8,7 @@ import {
   Archive,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
@@ -62,13 +63,10 @@ export default function TaskActionsClient({
       )}
 
       <div className="flex flex-wrap gap-3">
-        <button
-          onClick={() => setShowCompleteForm(!showCompleteForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
+        <Button onClick={() => setShowCompleteForm(!showCompleteForm)} variant="primary">
           <CheckCircle2 className="w-4 h-4" />
           Als erledigt markieren
-        </button>
+        </Button>
 
         <button
           onClick={() => setShowAttentionForm(!showAttentionForm)}
@@ -113,14 +111,14 @@ export default function TaskActionsClient({
               />
             </FormField>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={handleComplete}
                 disabled={loading === 'complete'}
-                className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                variant="primary"
               >
                 {loading === 'complete' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Bestätigen
-              </button>
+              </Button>
               <button
                 onClick={() => setShowCompleteForm(false)}
                 className="px-4 py-2 text-neutral-600 hover:text-neutral-900"

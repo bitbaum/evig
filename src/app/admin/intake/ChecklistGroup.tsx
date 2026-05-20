@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronRight, Check, StickyNote } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
+import { Button } from '@/components/ui/button'
 import type { ChecklistGroup as ChecklistGroupType } from './types'
 
 interface ChecklistGroupProps {
@@ -123,13 +124,14 @@ export function ChecklistGroup({ group, onToggle }: ChecklistGroupProps) {
                         className="w-full text-xs border border-neutral-300 rounded px-2 py-1.5 focus:ring-1 focus:ring-primary-400 focus:border-primary-400 resize-none"
                       />
                       <div className="flex gap-2">
-                        <button
+                        <Button
                           type="button"
                           onClick={() => saveNotes(item.id, item.state.completed)}
-                          className="text-xs px-2.5 py-1 bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
+                          variant="primary"
+                          size="sm"
                         >
                           Speichern
-                        </button>
+                        </Button>
                         <button
                           type="button"
                           onClick={() => setNotesOpen(prev => ({ ...prev, [item.id]: false }))}

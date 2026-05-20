@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { ROUTES } from '@/config/routes'
+import { Button } from '@/components/ui/button'
 import {
   Printer,
   Heart,
@@ -148,13 +149,10 @@ export default function FactSheetPage() {
             <span className="text-sm text-neutral-500">
               A4 Factsheet - {product.brand} {product.product_name}
             </span>
-            <button
-              onClick={() => window.print()}
-              className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
+            <Button onClick={() => window.print()} variant="primary">
               <Printer className="w-5 h-5" />
               Drucken
-            </button>
+            </Button>
           </div>
         </div>
       </div>

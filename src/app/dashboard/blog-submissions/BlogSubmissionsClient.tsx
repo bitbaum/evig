@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
   APPROVAL_STATUS,
@@ -266,13 +267,14 @@ function SubmissionCard({
                 />
               </div>
               <div className="flex gap-2">
-                <button
+                <Button
                   onClick={onResubmit}
                   disabled={saving}
-                  className="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
+                  variant="primary"
+                  size="sm"
                 >
                   {saving ? t('submitting') : t('resubmit')}
-                </button>
+                </Button>
                 <button
                   onClick={onCancelEditing}
                   disabled={saving}
@@ -328,12 +330,9 @@ function EmptyState() {
       <p className="text-neutral-600 dark:text-neutral-400 mb-6">
         {t('emptyDesc')}
       </p>
-      <Link
-        href={ROUTES.public.blogSubmit}
-        className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
-      >
+      <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary">
         {t('submitNow')}
-      </Link>
+      </Button>
     </div>
   )
 }

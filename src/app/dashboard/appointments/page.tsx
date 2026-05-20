@@ -232,12 +232,9 @@ export default function AppointmentsDashboard() {
             title={t('emptyTitle')}
             description={t('emptyDesc')}
             action={
-              <Link
-                href="/services"
-                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
-              >
+              <Button as={Link} href="/services" variant="primary">
                 {t('discoverServices')}
-              </Link>
+              </Button>
             }
           />
         )}

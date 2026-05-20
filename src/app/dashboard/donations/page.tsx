@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react'
 import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { cn } from '@/lib/utils'
@@ -130,12 +131,9 @@ export default function DonationsDashboard() {
             title={t('loginTitle')}
             description={t('loginDesc')}
             action={
-              <Link
-                href="/auth/login"
-                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
-              >
+              <Button as={Link} href="/auth/login" variant="primary">
                 {t('loginButton')}
-              </Link>
+              </Button>
             }
           />
         </div>
@@ -239,12 +237,9 @@ export default function DonationsDashboard() {
             title={t('emptyTitle')}
             description={t('emptyDesc')}
             action={
-              <Link
-                href="/get-involved/donate"
-                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors font-medium"
-              >
+              <Button as={Link} href="/get-involved/donate" variant="primary">
                 {t('donateNow')}
-              </Link>
+              </Button>
             }
           />
         )}

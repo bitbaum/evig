@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import {
   ShoppingBag,
@@ -152,12 +153,9 @@ export default function DashboardOrdersPage() {
           description={role === 'buyer' ? t('emptyBuyerDesc') : t('emptySellerDesc')}
           action={
             role === 'buyer' ? (
-              <Link
-                href={ROUTES.public.marketplace}
-                className="inline-flex items-center gap-2 bg-primary-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={ROUTES.public.marketplace} variant="primary">
                 {t('goToMarketplace')}
-              </Link>
+              </Button>
             ) : undefined
           }
         />

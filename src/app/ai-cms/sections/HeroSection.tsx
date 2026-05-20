@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ROUTES } from '@/config/routes'
+import { Button } from '@/components/ui/button'
 
 export function HeroSection() {
   return (
@@ -16,18 +17,13 @@ export function HeroSection() {
           ohne E-Mail, ohne Ticket, ohne Umwege. Eine moderne Alternative zu herkömmlichen CMS-Workflows.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href={ROUTES.public.register}
-            className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
-          >
+          <Button as={Link} href={ROUTES.public.register} variant="primary">
             Jetzt mitmachen
-          </Link>
-          <Link
-            href="#workflow"
-            className="inline-flex items-center justify-center px-6 py-3 border border-neutral-300 text-neutral-700 font-semibold rounded-lg hover:bg-neutral-50 transition-colors"
+          </Button>
+          <Button as={Link} href="#workflow" variant="outline"
           >
             So funktioniert es
-          </Link>
+          </Button>
         </div>
       </div>
     </section>

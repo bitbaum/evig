@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import {
   ArrowLeft,
   Edit,
@@ -90,13 +91,10 @@ export default function WorkshopProposalDetailPage() {
               </p>
             </div>
             {proposal.status === APPROVAL_STATUS.PENDING && (
-              <button
-                onClick={() => setShowEditModal(true)}
-                className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
+              <Button onClick={() => setShowEditModal(true)} variant="primary" size="sm">
                 <Edit className="w-4 h-4 mr-2" />
                 Bearbeiten
-              </button>
+              </Button>
             )}
           </div>
         </div>

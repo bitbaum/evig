@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import {
   ArrowLeft,
@@ -283,39 +284,42 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                   className="w-full rounded-lg border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 />
               </div>
-              <button
+              <Button
                 onClick={() => updateStatus(ORDER_STATUS.SHIPPED)}
                 disabled={updatingStatus}
-                className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                variant="primary"
+                className="w-full"
               >
                 {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Truck className="w-4 h-4" />}
                 {t('markShipped')}
-              </button>
+              </Button>
             </div>
           )}
 
           {/* Seller: shipped → delivered */}
           {order.role === 'seller' && order.status === ORDER_STATUS.SHIPPED && (
-            <button
+            <Button
               onClick={() => updateStatus(ORDER_STATUS.DELIVERED)}
               disabled={updatingStatus}
-              className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 transition-colors"
+              variant="primary"
+              className="w-full"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <Package className="w-4 h-4" />}
               {t('markDelivered')}
-            </button>
+            </Button>
           )}
 
           {/* Buyer: shipped or delivered → completed (via confirm-receipt) */}
           {order.role === 'buyer' && (order.status === ORDER_STATUS.SHIPPED || order.status === ORDER_STATUS.DELIVERED) && (
-            <button
+            <Button
               onClick={confirmReceipt}
               disabled={updatingStatus}
-              className="w-full flex items-center justify-center gap-2 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 transition-colors"
+              variant="primary"
+              className="w-full"
             >
               {updatingStatus ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
               {t('confirmReceipt')}
-            </button>
+            </Button>
           )}
 
           {/* Cancel (buyer: pending_payment or paid) */}

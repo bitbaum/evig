@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
@@ -376,10 +377,10 @@ export default function TechnikerProfilPage() {
           >
             {t('cancel')}
           </Link>
-          <button
+          <Button
             onClick={handleSave}
             disabled={saving || profile.skills.length === 0}
-            className="flex items-center gap-2 px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            variant="primary"
           >
             {saving ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -387,7 +388,7 @@ export default function TechnikerProfilPage() {
               <Save className="w-5 h-5" />
             )}
             {saving ? t('saving') : t('save')}
-          </button>
+          </Button>
         </div>
 
         {profile.skills.length === 0 && (

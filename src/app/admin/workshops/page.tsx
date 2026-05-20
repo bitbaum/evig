@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import {
   GraduationCap,
@@ -98,13 +99,10 @@ export default function AdminWorkshopsPage() {
       icon={GraduationCap}
       iconColor="blue"
       actions={
-        <Link
-          href={ROUTES.admin.workshopsInstances}
-          className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-        >
+        <Button as={Link} href={ROUTES.admin.workshopsInstances} variant="primary" size="sm">
           <Calendar className="w-4 h-4 mr-2" />
           Termine verwalten
-        </Link>
+        </Button>
       }
       backButton={{ href: ROUTES.admin.dashboard, label: 'Zurück zum Dashboard' }}
     >
@@ -207,10 +205,11 @@ export default function AdminWorkshopsPage() {
 
                     {proposal.status === PROPOSAL_STATUS.PENDING && (
                       <>
-                        <button
+                        <Button
                           onClick={() => handleApprove(proposal.id)}
                           disabled={approveLoading}
-                          className="inline-flex items-center px-3 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                          variant="primary"
+                          size="sm"
                         >
                           {approveLoading ? (
                             <Loader2 className="w-4 h-4 mr-1 animate-spin" />
@@ -218,7 +217,7 @@ export default function AdminWorkshopsPage() {
                             <CheckCircle className="w-4 h-4 mr-1" />
                           )}
                           Genehmigen
-                        </button>
+                        </Button>
                         <button
                           onClick={() => openRejectForm(proposal.id)}
                           className="inline-flex items-center px-3 py-2 bg-error-600 text-white rounded-lg text-sm font-medium hover:bg-error-700"

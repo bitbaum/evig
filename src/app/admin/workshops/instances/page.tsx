@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { ArrowLeft, Plus, Loader2 } from 'lucide-react'
 import {
   useWorkshopInstances,
@@ -49,13 +50,10 @@ export default function AdminWorkshopInstancesPage() {
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Workshop-Vorschläge
               </Link>
-              <button
-                onClick={() => hook.setShowCreateModal(true)}
-                className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
+              <Button onClick={() => hook.setShowCreateModal(true)} variant="primary" size="sm">
                 <Plus className="w-4 h-4 mr-2" />
                 Neuer Termin
-              </button>
+              </Button>
             </div>
           </div>
         </div>

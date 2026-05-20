@@ -93,12 +93,9 @@ export default function WorkshopsDashboard() {
           <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 text-center border-2 border-neutral-200 dark:border-white/[0.06]">
             <Heading level={1} className="text-2xl font-bold mb-4 text-neutral-900 dark:text-white">{t('loginRequired')}</Heading>
             <p className="mb-6 text-neutral-600 dark:text-neutral-400">{t('loginDesc')}</p>
-            <Link
-              href={ROUTES.public.login}
-              className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target"
-            >
+            <Button as={Link} href={ROUTES.public.login} variant="primary">
               {t('login')}
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
@@ -211,12 +208,9 @@ export default function WorkshopsDashboard() {
             title={t('emptyTitle')}
             description={t('emptyDesc')}
             action={
-              <Link
-                href="/workshops"
-                className="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href="/workshops" variant="primary">
                 {t('discoverWorkshops')}
-              </Link>
+              </Button>
             }
           />
         )}
