@@ -76,13 +76,14 @@ export default function TaskActionsClient({
           Aufmerksamkeit nötig
         </Button>
 
-        <button
+        <Button
           onClick={() => setShowRequestForm(!showRequestForm)}
-          className="flex items-center gap-2 px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors"
+          variant="warning"
+          className="gap-2"
         >
           <Send className="w-4 h-4" />
           Um Hilfe bitten
-        </button>
+        </Button>
       </div>
 
       {/* Complete Form */}
@@ -195,14 +196,15 @@ export default function TaskActionsClient({
               />
             </FormField>
             <div className="flex gap-2">
-              <button
+              <Button
                 onClick={handleRequest}
                 disabled={loading === 'request'}
-                className="flex items-center gap-2 px-4 py-2 bg-warning-600 text-white rounded-lg hover:bg-warning-700 transition-colors disabled:opacity-50"
+                variant="warning"
+                className="gap-2"
               >
                 {loading === 'request' && <Loader2 className="w-4 h-4 animate-spin" />}
                 {selectedUserId ? 'Anfrage senden' : 'An alle senden'}
-              </button>
+              </Button>
               <button
                 onClick={() => setShowRequestForm(false)}
                 className="px-4 py-2 text-neutral-600 hover:text-neutral-900"

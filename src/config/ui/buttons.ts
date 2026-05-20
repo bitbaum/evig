@@ -43,6 +43,7 @@ export const BUTTONS = {
     secondary: designPrimitive.button.secondary,
     ghost: designPrimitive.button.ghost,
     destructive: designPrimitive.button.destructive,
+    warning: designPrimitive.button.warning,
   },
 
   badges: {

@@ -111,14 +111,14 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {hasFailures && (
-            <button
+            <Button
               type="button"
               onClick={onRetryFailed}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-warning-600 hover:bg-warning-700 text-white rounded-lg font-medium transition-colors"
+              variant="warning"
             >
               <RotateCcw className="w-4 h-4" />
               {t('retryFailed')}
-            </button>
+            </Button>
           )}
 
           <button

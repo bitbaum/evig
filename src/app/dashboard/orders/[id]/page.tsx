@@ -120,13 +120,16 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               {order.role === 'buyer' ? t('pendingPaymentBuyer') : t('pendingPaymentSeller')}
             </p>
             {order.role === 'buyer' && (
-              <Link
+              <Button
+                as={Link}
                 href={`/marketplace/checkout/${order.listingId}`}
-                className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-warning-600 hover:bg-warning-700 text-white text-sm font-medium rounded-lg transition-colors"
+                variant="warning"
+                size="sm"
+                className="gap-2 mt-3"
               >
                 <Shield className="w-4 h-4" />
                 {t('retryPayment')}
-              </Link>
+              </Button>
             )}
           </div>
         </div>

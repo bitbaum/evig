@@ -280,14 +280,15 @@ export function IntakeDetailView({
             />
           </div>
           <div className="flex gap-2">
-            <button
+            <Button
               type="button"
               onClick={onTierChange}
               disabled={tierChanging || !tierChangeReason.trim()}
-              className="px-3 py-1.5 bg-warning-600 text-white rounded-lg hover:bg-warning-700 disabled:opacity-50 text-sm"
+              variant="warning"
+              size="sm"
             >
               {tierChanging ? 'Ändern...' : 'Stufe ändern'}
-            </button>
+            </Button>
             <button
               type="button"
               onClick={() => setShowTierChange(false)}

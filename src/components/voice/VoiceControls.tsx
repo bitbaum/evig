@@ -95,7 +95,8 @@ export function VoiceControls({
           <Button
             type="button"
             onClick={onStop}
-            className="w-16 h-16 rounded-full bg-warning-500 hover:bg-warning-600 text-white"
+            variant="warning"
+            className="w-16 h-16 rounded-full"
           >
             <Square className="w-6 h-6" />
           </Button>

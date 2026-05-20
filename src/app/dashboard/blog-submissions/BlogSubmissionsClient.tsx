@@ -234,13 +234,15 @@ function SubmissionCard({
           )}
 
           {!isEditing ? (
-            <button
+            <Button
               onClick={onStartEditing}
-              className="inline-flex items-center px-4 py-2 rounded-lg bg-warning-600 text-white hover:bg-warning-700 text-sm font-medium"
+              variant="warning"
+              size="sm"
+              className="gap-2"
             >
-              <PenSquare className="w-4 h-4 mr-2" />
+              <PenSquare className="w-4 h-4" />
               {t('reviseButton')}
-            </button>
+            </Button>
           ) : (
             <div className="space-y-3">
               <div>
