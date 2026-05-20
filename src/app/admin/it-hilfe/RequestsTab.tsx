@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------
 
 import { Search, ExternalLink, Edit3, ClipboardList } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -134,8 +135,8 @@ export function RequestsTab({
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">{requests.pagination.total} Anfragen</span>
           <div className="flex gap-2">
-            <button disabled={reqOffset === 0} onClick={() => setReqOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
-            <button disabled={!requests.pagination.hasMore} onClick={() => setReqOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>
+            <Button variant="outline" size="sm" disabled={reqOffset === 0} onClick={() => setReqOffset(o => Math.max(0, o - 50))}>Zurück</Button>
+            <Button variant="outline" size="sm" disabled={!requests.pagination.hasMore} onClick={() => setReqOffset(o => o + 50)}>Weiter</Button>
           </div>
         </div>
       )}

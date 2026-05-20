@@ -1,6 +1,7 @@
 'use client'
 
 import { ExternalLink } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/date-formats'
 import { REPORT_REASONS } from '@/config/marketplace'
 import { REPORT_STATUS, REPORT_STATUS_LABELS } from '@/config/report-status'
@@ -87,8 +88,8 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">{reports.pagination.total} Meldungen</span>
           <div className="flex gap-2">
-            <button disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
-            <button disabled={!reports.pagination.hasMore} onClick={() => setOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>
+            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>Zurück</Button>
+            <Button variant="outline" size="sm" disabled={!reports.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>Weiter</Button>
           </div>
         </div>
       )}

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { Search, ShieldCheck, Eye, Edit3, Trash2 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { formatPrice } from '@/config/marketplace'
@@ -131,8 +132,8 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">{listings.pagination.total} Inserate</span>
           <div className="flex gap-2">
-            <button disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
-            <button disabled={!listings.pagination.hasMore} onClick={() => setOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>
+            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>Zurück</Button>
+            <Button variant="outline" size="sm" disabled={!listings.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>Weiter</Button>
           </div>
         </div>
       )}

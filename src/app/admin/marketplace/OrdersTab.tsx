@@ -1,6 +1,7 @@
 'use client'
 
 import { formatDateShort } from '@/lib/date-formats'
+import { Button } from '@/components/ui/button'
 import { formatPrice, ORDER_STATUS_CONFIG } from '@/config/marketplace'
 import { StatusBadge } from './StatusBadge'
 import type { OrderRow, PaginatedResponse } from './types'
@@ -59,8 +60,8 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">{orders.pagination.total} Bestellungen</span>
           <div className="flex gap-2">
-            <button disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
-            <button disabled={!orders.pagination.hasMore} onClick={() => setOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>
+            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>Zurück</Button>
+            <Button variant="outline" size="sm" disabled={!orders.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>Weiter</Button>
           </div>
         </div>
       )}

@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   HelpCircle, UserCheck, ShieldCheck, Ban,
 } from 'lucide-react'
@@ -143,8 +144,8 @@ export function HelpersTab({
         <div className="flex items-center justify-between">
           <span className="text-sm text-neutral-500">{helpers.pagination.total} Helfer</span>
           <div className="flex gap-2">
-            <button disabled={helpOffset === 0} onClick={() => setHelpOffset(o => Math.max(0, o - 50))} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Zurück</button>
-            <button disabled={!helpers.pagination.hasMore} onClick={() => setHelpOffset(o => o + 50)} className="px-3 py-1.5 text-sm border rounded-lg disabled:opacity-50">Weiter</button>
+            <Button variant="outline" size="sm" disabled={helpOffset === 0} onClick={() => setHelpOffset(o => Math.max(0, o - 50))}>Zurück</Button>
+            <Button variant="outline" size="sm" disabled={!helpers.pagination.hasMore} onClick={() => setHelpOffset(o => o + 50)}>Weiter</Button>
           </div>
         </div>
       )}
