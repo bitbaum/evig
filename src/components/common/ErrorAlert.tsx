@@ -11,6 +11,7 @@ import { AlertCircle, RefreshCw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { TYPOGRAPHY, SPACING } from '@/config/ui'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface ErrorAlertProps {
   title?: string
@@ -63,13 +64,13 @@ export function ErrorAlert({
         {message}
       </p>
       {onRetry && (
-        <button
+        <Button
           onClick={onRetry}
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${TYPOGRAPHY.button} bg-error-600 text-white hover:bg-error-700 transition-colors`}
+          variant="destructive"
         >
           <RefreshCw className="w-4 h-4" />
           {effectiveRetryLabel}
-        </button>
+        </Button>
       )}
     </div>
   )

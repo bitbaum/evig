@@ -164,14 +164,15 @@ export default function LocationDetailPage() {
                   {actionLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-1" />}
                   Genehmigen
                 </Button>
-                <button
+                <Button
                   onClick={() => handleApproval('reject')}
                   disabled={actionLoading}
-                  className="inline-flex items-center px-4 py-2 bg-error-600 text-white rounded-lg text-sm font-medium hover:bg-error-700 disabled:opacity-50"
+                  variant="destructive"
+                  size="sm"
                 >
                   {actionLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <XCircle className="w-4 h-4 mr-1" />}
                   Ablehnen
-                </button>
+                </Button>
               </div>
             )}
           </div>

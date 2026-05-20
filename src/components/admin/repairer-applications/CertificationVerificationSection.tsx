@@ -109,13 +109,14 @@ export function CertificationVerificationSection({
                             >
                               {certificationActionLoading === cert.id ? '...' : 'Verifizieren'}
                             </Button>
-                            <button
+                            <Button
                               onClick={() => onOpenDialog('reject_cert', cert.id)}
                               disabled={certificationActionLoading === cert.id}
-                              className="px-3 py-1.5 bg-error-600 text-white rounded text-xs hover:bg-error-700 disabled:opacity-50"
+                              variant="destructive"
+                              size="sm"
                             >
                               {certificationActionLoading === cert.id ? '...' : 'Ablehnen'}
-                            </button>
+                            </Button>
                           </>
                         )}
                         {cert.verificationStatus !== CERTIFICATION_STATUS.PENDING && (() => {

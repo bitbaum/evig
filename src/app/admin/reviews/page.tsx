@@ -192,14 +192,15 @@ export default function AdminReviewsPage() {
                           <CheckCircle className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Freigeben'}
                         </Button>
-                        <button
+                        <Button
                           onClick={() => startModeration(review.id, 'hide')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-error-600 text-white rounded text-xs hover:bg-error-700 disabled:opacity-50 flex items-center gap-1"
+                          variant="destructive"
+                          size="sm"
                         >
                           <EyeOff className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Ausblenden'}
-                        </button>
+                        </Button>
                       </>
                     )}
 
