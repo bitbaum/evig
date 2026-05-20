@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Plus, RefreshCw, X } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
+import { Button } from '@/components/ui/button'
 import type { Pool } from './types'
 import { CATEGORY_EMOJIS } from './types'
 
@@ -144,21 +145,13 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-neutral-200 rounded-xl text-sm font-medium hover:bg-neutral-50"
-            >
+            <Button type="button" onClick={onClose} variant="outline" className="flex-1">
               {t('modal.cancel')}
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 disabled:opacity-50"
-            >
+            </Button>
+            <Button type="submit" variant="primary" disabled={loading} className="flex-1">
               {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
               {t('modal.submit')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Link2, Gift, Users, Send, Copy, Check } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { ORG } from '@/config/org'
 import { PageShell } from '@/components/layout/PageShell'
 
@@ -119,13 +120,10 @@ export default function InvitePage() {
                 value={data?.url ?? ''}
                 className="flex-1 text-sm bg-neutral-50 border border-neutral-200 rounded-lg px-3 py-2 text-neutral-700 font-mono truncate"
               />
-              <button
-                onClick={copyLink}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium transition-colors whitespace-nowrap"
-              >
+              <Button onClick={copyLink} variant="primary" size="sm" className="whitespace-nowrap">
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 {copied ? 'Kopiert!' : 'Kopieren'}
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -142,14 +140,10 @@ export default function InvitePage() {
               placeholder="email@beispiel.ch"
               className="flex-1 text-sm border border-neutral-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
-            <button
-              type="submit"
-              disabled={sending}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white text-sm font-medium transition-colors whitespace-nowrap"
-            >
+            <Button type="submit" variant="primary" size="sm" disabled={sending} className="whitespace-nowrap">
               <Send className="w-4 h-4" />
               {sending ? 'Senden…' : 'Einladen'}
-            </button>
+            </Button>
           </form>
           {feedback && (
             <p className={`mt-3 text-sm ${feedback.type === 'success' ? 'text-primary-600' : 'text-red-600'}`}>

@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
@@ -97,13 +98,10 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Link
-                    href="/services/build-your-computer"
-                    className="inline-flex items-center bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
-                  >
+                  <Button as={Link} href="/services/build-your-computer" variant="primary">
                     {t('heroSection.buildBtn')}
                     <ArrowRight className="w-5 h-5 ml-2" />
-                  </Link>
+                  </Button>
                   <a
                     href="#certificate"
                     className="inline-block border-2 border-primary-600 text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"
@@ -280,13 +278,10 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               {t('cta.body')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/services/build-your-computer"
-                className="inline-flex items-center bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-300 text-lg"
-              >
+              <Button as={Link} href="/services/build-your-computer" variant="primary" size="lg">
                 {t('cta.buildBtn')}
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
+              </Button>
               <Link
                 href="/contact"
                 className="inline-block border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors duration-300 text-lg"

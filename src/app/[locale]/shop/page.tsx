@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
+import { Button } from '@/components/ui/button'
 import { Store, ShoppingCart, MapPin, Clock, ExternalLink, Map as MapIcon, Shield } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
@@ -124,20 +125,12 @@ export default async function ShopPage({ params }: ShopPageProps) {
                   <li>{t('page.online.benefit3')}</li>
                 </ul>
                 <div className="flex flex-wrap gap-3 pt-2">
-                  <a
-                    href={SHOPWARE_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-                  >
+                  <Button as="a" href={SHOPWARE_URL} target="_blank" rel="noopener noreferrer" variant="outline">
                     <ExternalLink className="w-4 h-4 mr-2" /> {t('page.online.shopwareShop')}
-                  </a>
-                  <Link
-                    href={ROUTES.public.marketplace}
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary-600 text-white hover:bg-primary-700 h-10 px-4 py-2"
-                  >
+                  </Button>
+                  <Button as={Link} href={ROUTES.public.marketplace} variant="primary">
                     <ShoppingCart className="w-4 h-4 mr-2" /> {t('page.online.onlineShop', { orgName: ORG.name })}
-                  </Link>
+                  </Button>
                 </div>
                 <div className="mt-4 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 p-4 text-sm text-neutral-700 dark:text-neutral-300">
                   <div className="flex items-start gap-3">

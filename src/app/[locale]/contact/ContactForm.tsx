@@ -5,6 +5,7 @@ import { Mail, MessageSquare, Send, User } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 
 export default function ContactForm() {
@@ -143,14 +144,10 @@ export default function ContactForm() {
           </div>
         </div>
         <div className="flex justify-center">
-          <button
-            type="submit"
-            disabled={status === 'submitting'}
-            className="inline-flex items-center px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200 disabled:opacity-60"
-          >
+          <Button type="submit" variant="primary" disabled={status === 'submitting'}>
             <Send className="w-5 h-5 mr-2" />
             {status === 'submitting' ? t('submitting') : t('submit')}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

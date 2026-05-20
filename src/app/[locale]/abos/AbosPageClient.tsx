@@ -7,6 +7,7 @@ import { PoolCard } from './PoolCard'
 import { CreatePoolModal } from './CreatePoolModal'
 import { useAbosPage } from './useAbosPage'
 import { PageShell } from '@/components/layout/PageShell'
+import { Button } from '@/components/ui/button'
 
 export default function AbosPageClient() {
   const t = useTranslations('abos')
@@ -42,13 +43,10 @@ export default function AbosPageClient() {
               <p className="mt-2 text-neutral-500 max-w-lg">{t('subtitle')}</p>
             </div>
             {session?.user && (
-              <button
-                onClick={() => setShowCreate(true)}
-                className="flex items-center gap-2 px-5 py-3 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-colors shrink-0"
-              >
+              <Button onClick={() => setShowCreate(true)} variant="primary" size="sm" className="shrink-0">
                 <Plus className="w-4 h-4" />
                 {t('createPool')}
-              </button>
+              </Button>
             )}
           </div>
         </PageShell>

@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { BookOpen, FileText, Users, LinkIcon, Lightbulb } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { getTranslations } from 'next-intl/server'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -198,12 +199,9 @@ export default async function WissenPage() {
           <p className="text-base sm:text-lg text-neutral-600 mb-8 sm:mb-10">
             {t('cta.description')}
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center px-4 sm:px-6 py-2.5 sm:py-3 rounded-md bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-colors text-sm sm:text-base"
-          >
+          <Button as={Link} href="/contact" variant="primary">
             {t('cta.button')}
-          </Link>
+          </Button>
         </div>
       </section>
     </main>
