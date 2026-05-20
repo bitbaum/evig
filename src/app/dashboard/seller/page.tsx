@@ -262,18 +262,12 @@ export default function SellerDashboard() {
               {t('infoDesc')}
             </p>
             <div className="mt-3 flex gap-3">
-              <Link
-                href={ROUTES.public.marketplace}
-                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={ROUTES.public.marketplace} variant="primary" size="sm">
                 {t('viewMarketplace')}
-              </Link>
-              <Link
-                href={ROUTES.public.marketplaceSell}
-                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
-              >
+              </Button>
+              <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
                 {t('addProduct')}
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

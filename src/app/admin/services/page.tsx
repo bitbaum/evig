@@ -6,6 +6,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
@@ -325,12 +326,9 @@ export default async function AdminServicesPage() {
               Beratungen und andere technische Services an. Kunden können online Termine buchen.
             </p>
             <div className="flex gap-3">
-              <Link
-                href={ROUTES.admin.serviceNew}
-                className="text-sm bg-primary-600 text-white px-3 py-1.5 rounded hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href={ROUTES.admin.serviceNew} variant="primary" size="sm">
                 Dienstleistung erstellen
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

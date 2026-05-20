@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { AlertCircle } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
@@ -28,12 +29,9 @@ export default function DashboardError({
           Beim Laden des Dashboards ist ein Fehler aufgetreten.
         </p>
         <div className="mt-6 flex flex-col gap-3">
-          <button
-            onClick={reset}
-            className="w-full px-4 py-3 min-h-[44px] bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
-          >
+          <Button onClick={reset} variant="primary" className="w-full min-h-[44px]">
             Erneut versuchen
-          </button>
+          </Button>
           <Link
             href="/dashboard"
             className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 min-h-[44px] inline-flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded"

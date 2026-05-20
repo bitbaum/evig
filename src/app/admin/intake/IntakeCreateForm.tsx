@@ -140,15 +140,16 @@ export function IntakeCreateForm({
                   placeholder="z.B. Dell Latitude E7470 i5 8GB 256GB SSD guter Zustand"
                   rows={3}
                 />
-                <button
+                <Button
                   type="button"
                   onClick={onAiTextExtract}
                   disabled={aiLoading || aiText.trim().length < 3}
-                  className="px-3 py-1.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 text-sm flex items-center gap-1.5"
+                  variant="primary"
+                  size="sm"
                 >
                   {aiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Type className="w-3.5 h-3.5" />}
                   Analysieren
-                </button>
+                </Button>
               </div>
             )}
 

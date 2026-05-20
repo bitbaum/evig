@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import {
   Check, RefreshCw, ExternalLink,
   AlertCircle, ArrowDownUp, Clock, CheckCheck, ClipboardList,
@@ -212,13 +213,14 @@ export function IntakeDetailView({
                 disabled={!detail.checklist_complete}
               />
             </div>
-            <button
+            <Button
               onClick={onPublish}
               disabled={!detail.checklist_complete || publishing || publishPrice <= 0}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 text-sm font-medium"
+              variant="primary"
+              size="sm"
             >
               {publishing ? 'Publizieren...' : 'Jetzt publizieren'}
-            </button>
+            </Button>
             {detail.checklist_complete && (
               <Link
                 href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}

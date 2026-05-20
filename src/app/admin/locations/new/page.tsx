@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
+import { Button } from '@/components/ui/button'
 import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { ROUTES } from '@/config/routes'
 import {
@@ -83,10 +84,10 @@ export default function NewLocationPage() {
 
           {/* Submit Button */}
           <div className="text-center">
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center px-8 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              variant="primary"
             >
               {isSubmitting ? (
                 <>
@@ -99,7 +100,7 @@ export default function NewLocationPage() {
                   Ort erstellen
                 </>
               )}
-            </button>
+            </Button>
 
             <p className="text-sm text-neutral-600 mt-4">
               Nach Erstellung wird der Ort zur Genehmigung eingereicht und muss von einem Administrator freigegeben werden.

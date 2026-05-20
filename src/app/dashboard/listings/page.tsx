@@ -72,13 +72,10 @@ export default function MyListingsPage() {
           <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
           <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{t('pageSubtitle')}</p>
         </div>
-        <Link
-          href={ROUTES.public.marketplaceSell}
-          className="inline-flex items-center justify-center gap-2 rounded-md font-medium h-9 px-3 bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-        >
+        <Button as={Link} href={ROUTES.public.marketplaceSell} variant="primary" size="sm">
           <Plus className="w-4 h-4" />
           {t('newListing')}
-        </Link>
+        </Button>
       </div>
 
       <div className="flex gap-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg p-1">

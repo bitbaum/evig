@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/date-formats'
 import { LOCATION_STATUS, LOCATION_STATUS_CONFIG } from '@/config/location-status'
 import { ADMIN_CONTENT } from '@/config/admin-content'
@@ -73,13 +74,10 @@ export default function AdminLocationsPage() {
       icon={MapPin}
       iconColor="blue"
       actions={
-        <Link
-          href={ROUTES.admin.locationNew}
-          className="inline-flex items-center px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors gap-2"
-        >
+        <Button as={Link} href={ROUTES.admin.locationNew} variant="primary" size="sm">
           <Plus className="w-4 h-4" />
           Neuer Ort
-        </Link>
+        </Button>
       }
     >
       <AdminFilterBar
@@ -185,10 +183,11 @@ export default function AdminLocationsPage() {
 
                   {location.approvalStatus === LOCATION_STATUS.PENDING && (
                     <>
-                      <button
+                      <Button
                         onClick={() => setConfirmTarget({ id: location.id, action: 'approve', name: location.name })}
                         disabled={actionLoading}
-                        className="inline-flex items-center px-3 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        variant="primary"
+                        size="sm"
                       >
                         {actionLoading ? (
                           <Loader2 className="w-4 h-4 mr-1 animate-spin" />
@@ -196,7 +195,7 @@ export default function AdminLocationsPage() {
                           <CheckCircle className="w-4 h-4 mr-1" />
                         )}
                         Genehmigen
-                      </button>
+                      </Button>
                       <button
                         onClick={() => setConfirmTarget({ id: location.id, action: 'reject', name: location.name })}
                         disabled={actionLoading}
@@ -229,13 +228,10 @@ export default function AdminLocationsPage() {
                   ? `Keine Orte mit Status "${LOCATION_STATUS_CONFIG[filters.status as keyof typeof LOCATION_STATUS_CONFIG]?.label ?? filters.status}" gefunden.`
                   : ADMIN_CONTENT.locations.emptyDescription}
               </p>
-              <Link
-                href={ROUTES.admin.locationNew}
-                className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700"
-              >
+              <Button as={Link} href={ROUTES.admin.locationNew} variant="primary">
                 <Plus className="w-4 h-4 mr-2" />
                 Ersten Ort erstellen
-              </Link>
+              </Button>
             </div>
           )}
         </div>

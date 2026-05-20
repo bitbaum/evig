@@ -3,6 +3,7 @@
 import {
   Plus, Search, Filter, Check, Package,
 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
@@ -68,12 +69,9 @@ export function IntakePipelineView({
 
       {/* Filters + Actions */}
       <div className="flex flex-wrap gap-2 items-center">
-        <button
-          onClick={onCreateNew}
-          className="flex items-center gap-1 px-3 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium"
-        >
+        <Button onClick={onCreateNew} variant="primary" size="sm">
           <Plus className="w-4 h-4" /> Neues Gerät
-        </button>
+        </Button>
 
         <div className="flex items-center gap-1 ml-auto">
           <Filter className="w-4 h-4 text-neutral-400" />

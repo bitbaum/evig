@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { formatDateShort } from '@/lib/date-formats'
 import {
   type ReviewStatus,
@@ -182,14 +183,15 @@ export default function AdminReviewsPage() {
                   <div className="flex flex-col gap-2 ml-4">
                     {selectedStatus === REVIEW_STATUS.PENDING_MODERATION && (
                       <>
-                        <button
+                        <Button
                           onClick={() => startModeration(review.id, 'approve')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-primary-600 text-white rounded text-xs hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
+                          variant="primary"
+                          size="sm"
                         >
                           <CheckCircle className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Freigeben'}
-                        </button>
+                        </Button>
                         <button
                           onClick={() => startModeration(review.id, 'hide')}
                           disabled={actionInProgress === review.id}
@@ -203,14 +205,15 @@ export default function AdminReviewsPage() {
 
                     {selectedStatus === REVIEW_STATUS.HIDDEN && (
                       <>
-                        <button
+                        <Button
                           onClick={() => startModeration(review.id, 'restore')}
                           disabled={actionInProgress === review.id}
-                          className="px-3 py-1.5 bg-primary-600 text-white rounded text-xs hover:bg-primary-700 disabled:opacity-50 flex items-center gap-1"
+                          variant="primary"
+                          size="sm"
                         >
                           <RefreshCw className="w-3 h-3" />
                           {actionInProgress === review.id ? '...' : 'Wiederherstellen'}
-                        </button>
+                        </Button>
                         <button
                           onClick={() => startModeration(review.id, 'delete')}
                           disabled={actionInProgress === review.id}
@@ -280,14 +283,15 @@ export default function AdminReviewsPage() {
             >
               Abbrechen
             </button>
-            <button
+            <Button
               onClick={handleModerate}
               disabled={!moderationReason.trim() || !!actionInProgress}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm font-medium hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="primary"
+              size="sm"
             >
               {actionInProgress && <Loader2 className="w-4 h-4 animate-spin" />}
               Bestätigen
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>

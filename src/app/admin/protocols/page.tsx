@@ -8,6 +8,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { Suspense } from 'react'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
@@ -144,13 +145,10 @@ export default async function ProtocolsAdminPage({
       icon={FileText}
       iconColor="blue"
       actions={
-        <Link
-          href={ROUTES.admin.protocolNew}
-          className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
-        >
+        <Button as={Link} href={ROUTES.admin.protocolNew} variant="primary" size="sm">
           <Plus className="w-4 h-4" />
           Neues Protokoll
-        </Link>
+        </Button>
       }
     >
       {/* Stats Cards */}
@@ -201,12 +199,9 @@ export default async function ProtocolsAdminPage({
             <p className="text-neutral-600 mb-4">
               Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
             </p>
-            <Link
-              href={ROUTES.admin.protocols}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
+            <Button as={Link} href={ROUTES.admin.protocols} variant="primary">
               Seite neu laden
-            </Link>
+            </Button>
           </div>
         ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
@@ -217,13 +212,10 @@ export default async function ProtocolsAdminPage({
             <p className="text-neutral-600 mb-4">
               {ADMIN_CONTENT.protocols.emptyDescription}
             </p>
-            <Link
-              href={ROUTES.admin.protocolNew}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-            >
+            <Button as={Link} href={ROUTES.admin.protocolNew} variant="primary">
               <Plus className="w-4 h-4" />
               Neues Protokoll
-            </Link>
+            </Button>
           </div>
         ) : (
           <table className="w-full">

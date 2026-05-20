@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ShieldCheck, ShieldOff, Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { Button } from '@/components/ui/button'
 
 interface VerifyActionsProps {
   listingId: string
@@ -95,13 +96,10 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
           onKeyDown={e => { if (e.key === 'Enter') handleVerify() }}
           autoFocus
         />
-        <button
-          onClick={handleVerify}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors"
-        >
+        <Button onClick={handleVerify} variant="primary" size="sm">
           <ShieldCheck className="w-4 h-4" />
           OK
-        </button>
+        </Button>
         <button
           onClick={() => { setShowNotes(false); setNotes('') }}
           className="px-2 py-1.5 text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
