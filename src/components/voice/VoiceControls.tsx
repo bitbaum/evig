@@ -129,7 +129,8 @@ export function VoiceControls({
           <Button
             type="button"
             onClick={onSubmit}
-            className="w-16 h-16 rounded-full bg-primary-500 hover:bg-primary-600 text-white"
+            variant="primary"
+            className="w-16 h-16 rounded-full"
           >
             <Send className="w-6 h-6" />
           </Button>

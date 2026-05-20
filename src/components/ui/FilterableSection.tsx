@@ -6,6 +6,7 @@ import { FilterBar } from './FilterBar'
 import { FilterableGrid } from './FilterableGrid'
 import { useFiltering, FilterConfig, FilterableItem } from '@/hooks/useFiltering'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface FilterableSectionProps<T extends FilterableItem> {
   title: string
@@ -90,12 +91,9 @@ export function FilterableSection<T extends FilterableItem>({
           <div className="text-center py-16">
             <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-4">{resolvedNoResults}</p>
             {hasActiveFilters && (
-              <button
-                onClick={resetFilters}
-                className="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
+              <Button onClick={resetFilters} variant="primary">
                 {t('resetFilters')}
-              </button>
+              </Button>
             )}
           </div>
         )}

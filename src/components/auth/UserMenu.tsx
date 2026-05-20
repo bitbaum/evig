@@ -23,6 +23,7 @@ import {
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { Button } from '@/components/ui/button'
 
 /**
  * UserMenu Component
@@ -80,19 +81,10 @@ export function UserMenu() {
         >
           {t('login')}
         </Link>
-        <Link
-          href={ROUTES.public.register}
-          className={cn(
-            "inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium",
-            "bg-primary-600 text-white rounded-lg",
-            "hover:bg-primary-700 transition-all duration-200",
-            "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:ring-offset-2",
-            "shadow-sm hover:shadow"
-          )}
-        >
+        <Button as={Link} href={ROUTES.public.register} variant="primary" size="sm">
           {t('register')}
           <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
+        </Button>
       </div>
     )
   }

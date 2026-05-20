@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { Package, Printer, Plus, FileText } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
 
 interface SuccessScreenProps {
@@ -30,13 +31,10 @@ export function SuccessScreen({ itemUUID, productId, onReset }: SuccessScreenPro
 
         {/* Action buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center mt-6">
-          <Link
-            href={ROUTES.admin.productFactsheet(productId)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-          >
+          <Button as={Link} href={ROUTES.admin.productFactsheet(productId)} variant="primary">
             <Printer className="w-5 h-5" />
             {t('printFactsheet')}
-          </Link>
+          </Button>
           <button
             type="button"
             onClick={onReset}

@@ -6,6 +6,7 @@ import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
 import { PROFILE_CONFIG } from '@/config/profile'
 import { useTranslations } from 'next-intl'
+import { Button } from '@/components/ui/button'
 
 interface AvatarUploadProps {
   currentAvatarUrl?: string | null
@@ -181,18 +182,18 @@ export function AvatarUpload({
             disabled={isUploading}
           />
 
-          <button
+          <Button
             type="button"
             onClick={handleClick}
             disabled={isUploading}
-            className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
+            variant="primary"
           >
             {isUploading
               ? t('saving')
               : previewUrl
               ? t('change')
               : t('upload')}
-          </button>
+          </Button>
 
           {previewUrl && (
             <button

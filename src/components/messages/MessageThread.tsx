@@ -7,6 +7,7 @@ import { apiFetch } from '@/lib/api/client'
 import { formatTime as fmtTime, formatDateShort } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 export interface Message {
   id: string
@@ -199,18 +200,19 @@ export default function MessageThread({
             className="flex-1 resize-none rounded-xl border border-neutral-300 dark:border-neutral-600 bg-neutral-50 dark:bg-neutral-700 text-neutral-900 dark:text-white px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent max-h-32"
             style={{ minHeight: '42px' }}
           />
-          <button
+          <Button
             onClick={handleSend}
             disabled={!reply.trim() || sending}
-            className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl bg-primary-600 text-white hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            variant="primary"
             aria-label={t('send')}
+            className="flex-shrink-0 w-10 h-10 rounded-xl"
           >
             {sending ? (
               <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
             ) : (
               <Send className="w-4 h-4" aria-hidden="true" />
             )}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
