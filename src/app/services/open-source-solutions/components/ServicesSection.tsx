@@ -27,7 +27,7 @@ export function ServicesSection({ features }: ServicesSectionProps) {
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
-              <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg border-2 border-neutral-200">
+              <div key={index} className="bg-white rounded-xl p-6 sm:p-8 shadow-lg dark:shadow-black/30 border-2 border-neutral-200">
                 <div className="flex items-start mb-6">
                   <div className="p-3 bg-success-100 rounded-lg text-success-600 mr-4">
                     <Icon className="w-8 h-8" />

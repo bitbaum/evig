@@ -167,7 +167,7 @@ export default function SuggestionButton() {
             aria-labelledby="suggestion-panel-title"
             data-suggestion-panel
             className={cn(
-              "bg-white shadow-2xl border border-neutral-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
+              "bg-white shadow-2xl dark:shadow-black/50 border border-neutral-200 rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
               "w-[calc(100%-2rem)] max-w-sm sm:w-80 md:w-96",
               isElementSelectionMode && "ring-2 ring-primary-500 ring-opacity-50 pointer-events-auto"
             )}
