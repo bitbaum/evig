@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
@@ -75,13 +76,10 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
 
   if (!isOpen) {
     return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="inline-block bg-primary-600 text-white px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-300 text-base sm:text-lg mr-4 min-h-[touch] touch-target"
-      >
+      <Button onClick={() => setIsOpen(true)} variant="primary" size="lg" className="mr-4">
         <Calendar className="w-5 h-5 inline mr-2" />
         Termin buchen
-      </button>
+      </Button>
     )
   }
 
@@ -138,18 +136,12 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                 Bitte melden Sie sich an, um einen Termin zu buchen.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  href={ROUTES.public.login}
-                  className="bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors min-h-[touch] touch-target text-center font-medium"
-                >
+                <Button as={Link} href={ROUTES.public.login} variant="primary">
                   Anmelden
-                </Link>
-                <Link
-                  href={ROUTES.public.register}
-                  className="border-2 border-neutral-300 text-neutral-700 px-6 py-3 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target text-center font-medium"
-                >
+                </Button>
+                <Button as={Link} href={ROUTES.public.register} variant="outline">
                   Registrieren
-                </Link>
+                </Button>
               </div>
             </div>
           ) : (
@@ -227,17 +219,19 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <button
+                <Button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="flex-1 px-4 py-3 border-2 border-neutral-300 text-neutral-700 rounded-lg hover:bg-neutral-50 transition-colors min-h-[touch] touch-target font-medium"
+                  variant="outline"
+                  className="flex-1"
                 >
                   Abbrechen
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
+                  variant="primary"
                   disabled={isSubmitting || !formData.description.trim()}
-                  className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center min-h-[touch] touch-target font-medium"
+                  className="flex-1"
                 >
                   {isSubmitting ? (
                     <>
@@ -250,7 +244,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                       Termin buchen
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </form>
           )}

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import {
   Computer,
   Cpu,
@@ -218,13 +219,14 @@ export default function BuildYourComputerPage() {
                     />
                   </div>
 
-                  <button
+                  <Button
                     onClick={() => setStep(2)}
                     disabled={!formData.useCase || !formData.performance || !formData.budget}
-                    className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold disabled:bg-neutral-300 disabled:cursor-not-allowed hover:bg-primary-700 transition-colors"
+                    variant="primary"
+                    className="w-full"
                   >
                     {t('buildTool.nextButton')}
-                  </button>
+                  </Button>
                 </div>
               )}
 
@@ -265,13 +267,10 @@ export default function BuildYourComputerPage() {
                         >
                           {t('buildTool.backButton')}
                         </button>
-                        <button
-                          onClick={handleAnalyze}
-                          className="px-8 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 flex items-center"
-                        >
+                        <Button onClick={handleAnalyze} variant="primary">
                           <Search className="w-5 h-5 mr-2" />
                           {t('buildTool.analyzeButton')}
-                        </button>
+                        </Button>
                       </div>
                     </>
                   ) : (
@@ -355,13 +354,10 @@ export default function BuildYourComputerPage() {
                       >
                         {t('buildTool.changeRequirements')}
                       </button>
-                      <Link
-                        href="/contact"
-                        className="flex-1 bg-primary-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-primary-700 transition-colors text-center flex items-center justify-center"
-                      >
+                      <Button as={Link} href="/contact" variant="primary" className="flex-1">
                         <ShoppingCart className="w-5 h-5 mr-2" />
                         {t('buildTool.orderBuild')}
-                      </Link>
+                      </Button>
                     </div>
                   </div>
 
@@ -440,13 +436,10 @@ export default function BuildYourComputerPage() {
                   <div className="text-sm text-neutral-600">{t('certification.certifiedComputers')}</div>
                 </div>
               </div>
-              <Link
-                href="/revamped"
-                className="inline-flex items-center bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href="/revamped" variant="primary">
                 {t('certification.learnMore')}
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import {
   Terminal,
   Shield,
@@ -142,13 +143,10 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
               {t('quickCta.body')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact"
-                className="inline-flex items-center bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors"
-              >
+              <Button as={Link} href="/contact" variant="primary" size="lg">
                 {t('quickCta.consult')}
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
+              </Button>
               <Link
                 href={CONTACT.phoneTel}
                 className="inline-flex items-center border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-lg font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors"

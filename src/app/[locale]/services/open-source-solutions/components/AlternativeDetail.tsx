@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 import {
   type OSSAlternative,
   getCategoryById,
@@ -160,33 +161,15 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
             <div className="card-shell p-5">
               <Heading level={3} className="text-base font-bold text-neutral-900 mb-4">{t('detail.links')}</Heading>
               <div className="space-y-3">
-                <a
-                  href={alternative.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-lg',
-                    'bg-primary-600 text-white font-medium text-sm',
-                    'hover:bg-primary-700 transition-colors'
-                  )}
-                >
+                <Button as="a" href={alternative.website} target="_blank" rel="noopener noreferrer" variant="primary" size="sm">
                   <ExternalLink className="w-4 h-4" />
                   {t('detail.visitWebsite')}
-                </a>
+                </Button>
                 {alternative.sourceCode && (
-                  <a
-                    href={alternative.sourceCode}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      'flex items-center gap-3 px-4 py-3 rounded-lg',
-                      'border border-neutral-200 text-neutral-700 font-medium text-sm',
-                      'hover:bg-neutral-50 transition-colors'
-                    )}
-                  >
+                  <Button as="a" href={alternative.sourceCode} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">
                     <Code2 className="w-4 h-4" />
                     {t('detail.viewSourceCode')}
-                  </a>
+                  </Button>
                 )}
               </div>
             </div>
@@ -226,16 +209,9 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
               <p className="text-sm text-primary-800 mb-3">
                 {t('detail.helpDescription')}
               </p>
-              <Link
-                href="/contact"
-                className={cn(
-                  'inline-flex items-center px-4 py-2 rounded-lg',
-                  'bg-primary-600 text-white text-sm font-medium',
-                  'hover:bg-primary-700 transition-colors'
-                )}
-              >
+              <Button as={Link} href="/contact" variant="primary" size="sm">
                 {t('detail.contactUs')}
-              </Link>
+              </Button>
             </div>
           </div>
         </div>

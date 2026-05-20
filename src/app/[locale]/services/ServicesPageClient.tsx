@@ -272,12 +272,9 @@ export default function ServicesPage() {
             <Heading level={2} className="mb-4 sm:mb-6 text-neutral-900">{t('ctaTitle')}</Heading>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto text-neutral-600">{t('ctaSubtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/contact"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-500 transition-colors duration-300 text-lg"
-              >
+              <Button as={Link} href="/contact" variant="primary" size="lg">
                 {t('ctaContact')}
-              </Link>
+              </Button>
               <Link
                 href={ROUTES.public.shop}
                 className="inline-block border-2 border-neutral-300 dark:border-neutral-600 text-neutral-700 px-4 sm:px-6 md:px-8 py-3 sm:py-4 rounded-lg font-semibold hover:bg-neutral-50 transition-colors duration-300 text-base sm:text-lg"
