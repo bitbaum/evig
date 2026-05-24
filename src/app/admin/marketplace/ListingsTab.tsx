@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import { Search, ShieldCheck, Eye, Edit3, Trash2 } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { formatPrice } from '@/config/marketplace'
@@ -27,36 +29,36 @@ export function ListingsTab({ listings, filter, setFilter, offset, setOffset, on
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
-        <select value={filter.status} onChange={e => { setFilter(f => ({ ...f, status: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        <Select value={filter.status} onChange={e => { setFilter(f => ({ ...f, status: e.target.value })); setOffset(0) }} className="w-auto">
           <option value="all">Alle Status</option>
           {Object.entries(LISTING_STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-        </select>
-        <select value={filter.category} onChange={e => { setFilter(f => ({ ...f, category: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={filter.category} onChange={e => { setFilter(f => ({ ...f, category: e.target.value })); setOffset(0) }} className="w-auto">
           <option value="">Alle Kategorien</option>
           {KATEGORIEN.map(k => <option key={k.value} value={k.value}>{k.label}</option>)}
-        </select>
-        <select value={filter.seller_type} onChange={e => { setFilter(f => ({ ...f, seller_type: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={filter.seller_type} onChange={e => { setFilter(f => ({ ...f, seller_type: e.target.value })); setOffset(0) }} className="w-auto">
           <option value="all">Alle Verkäufer</option>
           <option value={MARKETPLACE_SELLER_TYPE.REVAMPIT}>RevampIT</option>
           <option value={MARKETPLACE_SELLER_TYPE.COMMUNITY}>Community</option>
-        </select>
-        <select value={filter.verified} onChange={e => { setFilter(f => ({ ...f, verified: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={filter.verified} onChange={e => { setFilter(f => ({ ...f, verified: e.target.value })); setOffset(0) }} className="w-auto">
           <option value="all">Verifizierung</option>
           <option value="yes">Geprüft</option>
           <option value="no">Ungeprüft</option>
-        </select>
-        <select value={filter.reported} onChange={e => { setFilter(f => ({ ...f, reported: e.target.value })); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={filter.reported} onChange={e => { setFilter(f => ({ ...f, reported: e.target.value })); setOffset(0) }} className="w-auto">
           <option value="all">Meldungen</option>
           <option value="yes">Gemeldet</option>
-        </select>
+        </Select>
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-          <input
+          <Input
             type="text"
             placeholder="Suchen..."
             value={filter.search}
             onChange={e => { setFilter(f => ({ ...f, search: e.target.value })); setOffset(0) }}
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
+            className="pl-9 pr-3"
           />
         </div>
       </div>

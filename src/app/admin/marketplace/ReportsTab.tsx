@@ -2,6 +2,7 @@
 
 import { ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { formatDateShort } from '@/lib/date-formats'
 import { REPORT_REASONS } from '@/config/marketplace'
 import { REPORT_STATUS, REPORT_STATUS_LABELS } from '@/config/report-status'
@@ -24,11 +25,11 @@ export function ReportsTab({ reports, filter, setFilter, offset, setOffset, onHa
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
-        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        <Select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="w-auto">
           <option value={REPORT_STATUS.PENDING}>{REPORT_STATUS_LABELS[REPORT_STATUS.PENDING]}</option>
           <option value={REPORT_STATUS.REVIEWED}>{REPORT_STATUS_LABELS[REPORT_STATUS.REVIEWED]}</option>
           <option value="all">Alle</option>
-        </select>
+        </Select>
       </div>
 
       <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">

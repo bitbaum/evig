@@ -2,6 +2,7 @@
 
 import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import { formatPrice, ORDER_STATUS_CONFIG } from '@/config/marketplace'
 import { StatusBadge } from './StatusBadge'
 import type { OrderRow, PaginatedResponse } from './types'
@@ -18,10 +19,10 @@ export function OrdersTab({ orders, filter, setFilter, offset, setOffset }: Orde
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
-        <select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        <Select value={filter.status} onChange={e => { setFilter({ status: e.target.value }); setOffset(0) }} className="w-auto">
           <option value="all">Alle Status</option>
           {Object.entries(ORDER_STATUS_CONFIG).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
-        </select>
+        </Select>
       </div>
 
       <div className="bg-white dark:bg-neutral-900 rounded-xl border border-neutral-200 dark:border-white/[0.06] overflow-x-auto">
