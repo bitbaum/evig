@@ -22,6 +22,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
+import { Input } from '@/components/ui/input'
 import { useAdminLocations } from '@/hooks/useAdminLocations'
 import { ROUTES } from '@/config/routes'
 
@@ -113,13 +114,12 @@ export default function AdminLocationsPage() {
         ]}
       >
         <div className="flex-1 min-w-48">
-          <label className="block text-sm font-medium text-neutral-700 mb-1">Stadt</label>
-          <input
+          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Stadt</label>
+          <Input
             type="text"
             value={filters.city}
             onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
             placeholder="Stadt suchen..."
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500"
           />
         </div>
       </AdminFilterBar>
