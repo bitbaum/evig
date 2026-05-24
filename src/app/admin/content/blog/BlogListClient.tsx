@@ -3,6 +3,8 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import { formatDateNumeric } from '@/lib/date-formats'
 import {
   Search,
@@ -52,23 +54,23 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-            <input
+            <Input
               type="text"
               placeholder="Titel suchen..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600 focus:ring-2 focus:ring-primary-500"
+              className="pl-10 pr-4"
             />
           </div>
-          <select
+          <Select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value as '' | 'published' | 'draft')}
-            className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
+            className="w-auto"
           >
             <option value="">Alle Status</option>
             <option value="published">Veröffentlicht</option>
             <option value="draft">Entwurf</option>
-          </select>
+          </Select>
         </div>
       </div>
 

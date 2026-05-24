@@ -10,6 +10,8 @@ import {
   Calendar,
   Wrench,
 } from 'lucide-react'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
 import { formatPriceCents } from '@/config/marketplace'
 import Heading from '@/components/admin/AdminHeading'
@@ -66,33 +68,33 @@ export function ServiceListClient({ services }: ServiceListClientProps) {
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-            <input
+            <Input
               type="text"
               placeholder="Dienstleistung suchen..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600 focus:ring-2 focus:ring-primary-500"
+              className="pl-10 pr-4"
             />
           </div>
-          <select
+          <Select
             value={categoryFilter}
             onChange={e => setCategoryFilter(e.target.value)}
-            className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
+            className="w-auto"
           >
             <option value="">Alle Kategorien</option>
             {categoryOptions.map(([key, label]) => (
               <option key={key} value={key}>{label}</option>
             ))}
-          </select>
-          <select
+          </Select>
+          <Select
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value as '' | 'active' | 'inactive')}
-            className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
+            className="w-auto"
           >
             <option value="">Alle Status</option>
             <option value="active">Aktiv</option>
             <option value="inactive">Inaktiv</option>
-          </select>
+          </Select>
         </div>
       </div>
 
