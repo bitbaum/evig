@@ -4,6 +4,8 @@
 
 import { Search, ExternalLink, Edit3, ClipboardList } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import Link from 'next/link'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -30,30 +32,30 @@ export function RequestsTab({
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
-        <select value={reqFilter.status} onChange={e => { setReqFilter(f => ({ ...f, status: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        <Select value={reqFilter.status} onChange={e => { setReqFilter(f => ({ ...f, status: e.target.value })); setReqOffset(0) }} className="w-auto">
           <option value="all">Alle Status</option>
           {REQUEST_STATUSES.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-        </select>
-        <select value={reqFilter.category} onChange={e => { setReqFilter(f => ({ ...f, category: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={reqFilter.category} onChange={e => { setReqFilter(f => ({ ...f, category: e.target.value })); setReqOffset(0) }} className="w-auto">
           <option value="all">Alle Kategorien</option>
           {DEVICE_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-        </select>
-        <select value={reqFilter.urgency} onChange={e => { setReqFilter(f => ({ ...f, urgency: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={reqFilter.urgency} onChange={e => { setReqFilter(f => ({ ...f, urgency: e.target.value })); setReqOffset(0) }} className="w-auto">
           <option value="all">Alle Dringlichkeiten</option>
           {URGENCY_LEVELS.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-        </select>
-        <select value={reqFilter.canton} onChange={e => { setReqFilter(f => ({ ...f, canton: e.target.value })); setReqOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={reqFilter.canton} onChange={e => { setReqFilter(f => ({ ...f, canton: e.target.value })); setReqOffset(0) }} className="w-auto">
           <option value="">Alle Kantone</option>
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
+        </Select>
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-          <input
+          <Input
             type="text"
             placeholder="Suchen..."
             value={reqFilter.search}
             onChange={e => { setReqFilter(f => ({ ...f, search: e.target.value })); setReqOffset(0) }}
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600"
+            className="pl-9 pr-3"
           />
         </div>
       </div>

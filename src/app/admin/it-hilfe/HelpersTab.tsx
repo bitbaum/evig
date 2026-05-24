@@ -4,6 +4,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
 import {
   HelpCircle, UserCheck, ShieldCheck, Ban,
 } from 'lucide-react'
@@ -38,16 +39,16 @@ export function HelpersTab({
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
-        <select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        <Select value={helpFilter.status} onChange={e => { setHelpFilter(f => ({ ...f, status: e.target.value })); setHelpOffset(0) }} className="w-auto">
           <option value="all">Alle Helfer</option>
           <option value={HELPER_STATUS.ACTIVE}>{HELPER_STATUS_LABELS[HELPER_STATUS.ACTIVE]}</option>
           <option value={HELPER_STATUS.VERIFIED}>{HELPER_STATUS_LABELS[HELPER_STATUS.VERIFIED]}</option>
           <option value={HELPER_STATUS.SUSPENDED}>{HELPER_STATUS_LABELS[HELPER_STATUS.SUSPENDED]}</option>
-        </select>
-        <select value={helpFilter.canton} onChange={e => { setHelpFilter(f => ({ ...f, canton: e.target.value })); setHelpOffset(0) }} className="px-3 py-2 text-sm border rounded-lg dark:bg-neutral-900 dark:border-neutral-600">
+        </Select>
+        <Select value={helpFilter.canton} onChange={e => { setHelpFilter(f => ({ ...f, canton: e.target.value })); setHelpOffset(0) }} className="w-auto">
           <option value="">Alle Kantone</option>
           {SWISS_CANTONS.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
+        </Select>
       </div>
 
       {/* Table */}
