@@ -9,6 +9,8 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Filter, Search } from 'lucide-react'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import {
   MEETING_TYPE_LABELS,
   PROTOCOL_STATUS_LABELS,
@@ -43,10 +45,10 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
         {/* Search */}
         <div className="flex items-center gap-2">
           <Search className="w-4 h-4 text-neutral-500" />
-          <input
+          <Input
             type="text"
             placeholder="Suchen..."
-            className="text-sm border rounded px-2 py-1 w-48"
+            className="w-48"
             defaultValue={searchParams.get('q') || ''}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -64,9 +66,9 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
 
         {/* Meeting type filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600">Typ:</label>
-          <select
-            className="text-sm border rounded px-2 py-1"
+          <label className="text-sm text-neutral-600 dark:text-neutral-400">Typ:</label>
+          <Select
+            className="w-auto"
             value={searchParams.get('meeting_type') || ''}
             onChange={(e) => handleFilterChange('meeting_type', e.target.value)}
           >
@@ -76,14 +78,14 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
                 {label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         {/* Status filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600">Status:</label>
-          <select
-            className="text-sm border rounded px-2 py-1"
+          <label className="text-sm text-neutral-600 dark:text-neutral-400">Status:</label>
+          <Select
+            className="w-auto"
             value={searchParams.get('status') || ''}
             onChange={(e) => handleFilterChange('status', e.target.value)}
           >
@@ -93,14 +95,14 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
                 {label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         {/* Workflow step filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600">Schritt:</label>
-          <select
-            className="text-sm border rounded px-2 py-1"
+          <label className="text-sm text-neutral-600 dark:text-neutral-400">Schritt:</label>
+          <Select
+            className="w-auto"
             value={searchParams.get('step') || ''}
             onChange={(e) => handleFilterChange('step', e.target.value)}
           >
@@ -110,14 +112,14 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
                 {index + 1}) {step.label}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
 
         {/* Attendee filter */}
         <div className="flex items-center gap-2">
-          <label className="text-sm text-neutral-600">Teilnehmer:</label>
-          <select
-            className="text-sm border rounded px-2 py-1"
+          <label className="text-sm text-neutral-600 dark:text-neutral-400">Teilnehmer:</label>
+          <Select
+            className="w-auto"
             value={searchParams.get('attendee') || ''}
             onChange={(e) => handleFilterChange('attendee', e.target.value)}
           >
@@ -127,7 +129,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
                 {member.name}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
       </div>
     </div>
