@@ -212,19 +212,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       })
       .returning({ id: itHilfeOffers.id })
 
-    // Increment offer count
+    // Increment offer count. Request status stays OPEN until an offer is
+    // accepted (→ MATCHED). The legacy `IN_DISCUSSION` auto-transition was
+    // removed — it was a dead state never surfaced in UI. Legacy rows with
+    // status='in_discussion' remain accepted by the filter at line 158
+    // until a follow-up DB migration normalises them to 'open'.
     await db
       .update(itHilfeRequests)
       .set({ offerCount: sql`${itHilfeRequests.offerCount} + 1` })
       .where(eq(itHilfeRequests.id, id))
-
-    // Update request status to in_discussion if it was open
-    if (requestData.status === REQUEST_STATUS.OPEN) {
-      await db
-        .update(itHilfeRequests)
-        .set({ status: REQUEST_STATUS.IN_DISCUSSION })
-        .where(eq(itHilfeRequests.id, id))
-    }
 
     logger.info('Created IT-Hilfe offer', {
       offerId: newOffer.id,
