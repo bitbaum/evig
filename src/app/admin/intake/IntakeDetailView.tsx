@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import {
   Check, RefreshCw, ExternalLink,
   AlertCircle, ArrowDownUp, Clock, CheckCheck, ClipboardList,
@@ -201,12 +203,12 @@ export function IntakeDetailView({
           <div className="flex flex-wrap items-end gap-3">
             <div>
               <label className="block text-sm font-medium mb-1">Verkaufspreis (CHF)</label>
-              <input
+              <Input
                 type="number"
                 value={publishPrice || ''}
                 onChange={(e) => setPublishPrice(Number(e.target.value))}
                 min={0}
-                className="border rounded-lg px-3 py-2 text-sm w-32"
+                className="w-32"
                 disabled={!detail.checklist_complete}
               />
             </div>
@@ -255,24 +257,23 @@ export function IntakeDetailView({
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Neue Stufe</label>
-            <select
+            <Select
               value={newTier}
               onChange={(e) => setNewTier(e.target.value as IntakeTier)}
-              className="border rounded-lg px-3 py-2 text-sm"
+              className="w-auto"
             >
               {getIntakeTierOptions().filter(o => o.value !== detail.intake_tier).map(o => (
                 <option key={o.value} value={o.value}>{o.icon} {o.label}</option>
               ))}
-            </select>
+            </Select>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1">Begründung *</label>
-            <input
+            <Input
               type="text"
               value={tierChangeReason}
               onChange={(e) => setTierChangeReason(e.target.value)}
               placeholder="z.B. Gerät ist nicht reparierbar"
-              className="w-full border rounded-lg px-3 py-2 text-sm"
             />
           </div>
           <div className="flex gap-2">

@@ -4,6 +4,8 @@ import {
   Plus, Search, Filter, Check, Package,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 import {
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
@@ -77,47 +79,47 @@ export function IntakePipelineView({
           <Filter className="w-4 h-4 text-neutral-400" />
         </div>
 
-        <select
+        <Select
           value={tierFilter}
           onChange={(e) => onTierFilterChange(e.target.value)}
-          className="border rounded-lg px-2 py-1.5 text-sm"
+          className="w-auto"
         >
           <option value="">Alle Stufen</option>
           {getIntakeTierOptions().map(o => (
             <option key={o.value} value={o.value}>{o.icon} {o.label}</option>
           ))}
-        </select>
+        </Select>
 
-        <select
+        <Select
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
-          className="border rounded-lg px-2 py-1.5 text-sm"
+          className="w-auto"
         >
           <option value="">Alle Status</option>
           {Object.values(INTAKE_STATUS).map(status => (
             <option key={status} value={status}>{INTAKE_STATUS_LABELS[status]}</option>
           ))}
-        </select>
+        </Select>
 
-        <select
+        <Select
           value={categoryFilter}
           onChange={(e) => onCategoryFilterChange(e.target.value)}
-          className="border rounded-lg px-2 py-1.5 text-sm"
+          className="w-auto"
         >
           <option value="">Alle Kategorien</option>
           {KATEGORIEN.map(k => (
             <option key={k.value} value={k.value}>{k.icon} {k.label}</option>
           ))}
-        </select>
+        </Select>
 
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-2 top-2 text-neutral-500" />
-          <input
+          <Search className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2 text-neutral-500" />
+          <Input
             type="text"
             placeholder="Suche..."
             value={searchFilter}
             onChange={(e) => onSearchFilterChange(e.target.value)}
-            className="border rounded-lg pl-8 pr-3 py-1.5 text-sm w-40"
+            className="pl-8 pr-3 w-40"
           />
         </div>
       </div>
