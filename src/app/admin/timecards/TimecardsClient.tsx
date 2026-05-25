@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { AlertCircle, Check, Clock, RotateCcw, Send, Sparkles, UserCheck } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
@@ -568,34 +571,37 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
             <div className="grid grid-cols-2 gap-2">
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 Start
-                <input
+                <Input
+                  variant="elevated"
                   type="time"
                   value={selectedEntry?.start_time ?? '09:00'}
                   onChange={(e) => updateSelectedEntry({ start_time: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+                  className="mt-1"
                 />
               </label>
               <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
                 Ende
-                <input
+                <Input
+                  variant="elevated"
                   type="time"
                   value={selectedEntry?.end_time ?? '17:00'}
                   onChange={(e) => updateSelectedEntry({ end_time: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+                  className="mt-1"
                 />
               </label>
             </div>
 
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Pause in Minuten
-              <input
+              <Input
+                variant="elevated"
                 type="number"
                 min={0}
                 max={240}
                 step={15}
                 value={selectedEntry?.break_minutes ?? 0}
                 onChange={(e) => updateSelectedEntry({ break_minutes: Number(e.target.value) })}
-                className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+                className="mt-1"
               />
             </label>
 
@@ -605,27 +611,29 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
 
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Kategorie
-              <select
+              <Select
+                variant="elevated"
                 value={selectedEntry?.category ?? 'other'}
                 onChange={(e) => updateSelectedEntry({ category: e.target.value as TimecardEntryCategory })}
-                className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+                className="mt-1"
               >
                 {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
                   <option key={category} value={category}>
                     {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
                   </option>
                 ))}
-              </select>
+              </Select>
             </label>
 
             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
               Notiz
-              <textarea
+              <Textarea
+                variant="elevated"
                 rows={3}
                 value={selectedEntry?.description ?? ''}
                 onChange={(e) => updateSelectedEntry({ description: e.target.value })}
                 placeholder="Nur wenn dieser Tag anders war"
-                className="mt-1 w-full resize-none rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+                className="mt-1 resize-none"
               />
             </label>
 
@@ -647,12 +655,13 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
           <Sparkles className="h-4 w-4 text-primary-600" />
           Wochen- oder Monatskommentar
         </span>
-        <textarea
+        <Textarea
+          variant="elevated"
           rows={2}
           value={draft.notes}
           onChange={(e) => updateCurrentDraft(current => ({ ...current, notes: e.target.value }))}
           placeholder="Optional, z.B. Ferien, Krankheit, Sondereinsatz oder Korrekturgrund"
-          className="mt-2 w-full resize-none rounded-lg border border-neutral-300 px-3 py-2 text-sm dark:border-neutral-600 dark:bg-neutral-700 dark:text-white"
+          className="mt-2 resize-none"
         />
       </label>
     </div>
