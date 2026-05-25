@@ -1,7 +1,6 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
 import { Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -10,14 +9,16 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  // next-themes' resolvedTheme is undefined during SSR + first client
+  // render, then fills in once the client reads its preference. Skipping
+  // render while undefined prevents hydration mismatch (server can't know
+  // light-vs-dark, so we can't render the icon yet). This replaces the
+  // older [mounted, setMounted] + useEffect dance, which tripped the
+  // react-hooks/set-state-in-effect rule.
+  const { resolvedTheme, setTheme } = useTheme()
+  if (!resolvedTheme) return null
 
-  useEffect(() => setMounted(true), [])
-
-  if (!mounted) return null
-
-  const isDark = theme === 'dark'
+  const isDark = resolvedTheme === 'dark'
 
   return (
     <button
