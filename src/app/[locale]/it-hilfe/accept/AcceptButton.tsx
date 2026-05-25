@@ -1,7 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+// Locale-aware router from next-intl wrapper, NOT next/navigation directly —
+// localePrefix is 'as-needed', so a non-DE user on /en/it-hilfe/accept who
+// gets pushed to a plain /it-hilfe/<id> path would jump locale (en → de).
+// Using this useRouter preserves the active locale across the redirect.
+import { useRouter } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 
