@@ -91,7 +91,13 @@ export async function POST(
         })
     })
 
-    // Send notification to location creator
+    // Send notification to location creator. sendEmail RESOLVES with
+    // {success:false,error} on SMTP/Listmonk failure rather than throwing,
+    // so a bare try/catch only catches the rare exception path. Realistic
+    // failures left no log entry. Same shape as c610bb72 / c002ec24 /
+    // 74d8bd19 — capture the result and check .success. Location
+    // submitters have no in-app fallback for approve/reject decisions, so
+    // a silent SMTP failure leaves them unaware their location was reviewed.
     if (locationRow.createdBy) {
       try {
         const [creator] = await db
@@ -100,7 +106,7 @@ export async function POST(
           .where(eq(users.id, locationRow.createdBy))
 
         if (creator?.email) {
-          await sendEmail(
+          const emailResult = await sendEmail(
             creator.email,
             'locationApprovalNotification',
             creator.name || 'Benutzer',
@@ -108,9 +114,16 @@ export async function POST(
             action,
             review_notes || null
           )
+          if (!emailResult.success) {
+            logger.warn('Location approval notification email failed (resolved)', {
+              locationId,
+              action,
+              error: emailResult.error,
+            })
+          }
         }
       } catch (emailError) {
-        logger.warn('Failed to send location approval notification', {
+        logger.warn('Location approval notification email failed (rejected)', {
           locationId,
           action,
           error: emailError

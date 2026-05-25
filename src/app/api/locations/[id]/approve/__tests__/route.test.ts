@@ -78,7 +78,7 @@ jest.mock('@/lib/schemas', () => ({
   ApproveLocationSchema: {},
 }))
 
-const mockSendEmail = jest.fn().mockResolvedValue(undefined)
+const mockSendEmail = jest.fn().mockResolvedValue({ success: true, messageId: 'test-msg' })
 
 jest.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail(...args),
@@ -174,7 +174,7 @@ beforeEach(() => {
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockResolvedValue(undefined)
   mockValues.mockResolvedValue(undefined)
-  mockSendEmail.mockResolvedValue(undefined)
+  mockSendEmail.mockResolvedValue({ success: true, messageId: 'test-msg' })
 
   setupSuccessfulTransaction()
 
@@ -291,5 +291,23 @@ describe('POST /api/locations/[id]/approve — success', () => {
     const req = makeRequest({ action: 'approve' })
     await POST(req, makeContext())
     expect(mockSendEmail).toHaveBeenCalled()
+  })
+
+  it('logs (resolved) warn when sendEmail returns {success:false} — admin-detectable, not silently swallowed', async () => {
+    // sendEmail RESOLVES with {success:false,error} on SMTP/Listmonk
+    // failure rather than throwing. The bare try/catch only catches the
+    // rare exception path. Location submitters have no in-app fallback
+    // for approve/reject decisions, so a silent SMTP failure would leave
+    // them unaware their location was reviewed.
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+    const req = makeRequest({ action: 'approve' })
+    const response = await POST(req, makeContext())
+    expect(response.status).toBe(200)  // The decision still applies
+
+    const { logger } = require('@/lib/logger')
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Location approval notification email failed (resolved)',
+      expect.objectContaining({ action: 'approve', error: 'SMTP rejected' }),
+    )
   })
 })
