@@ -91,7 +91,7 @@ jest.mock('@/config/org', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true, messageId: 'test-msg' }),
 }))
 
 jest.mock('@/lib/email/templates/notification', () => ({
@@ -158,7 +158,7 @@ beforeEach(() => {
   mockAuth.mockResolvedValue(MOCK_SESSION)
   mockDbExecute.mockResolvedValueOnce({ rows: [MOCK_DOC_PENDING] })
   const { sendCustomEmail } = require('@/lib/email')
-  sendCustomEmail.mockResolvedValue(undefined)
+  sendCustomEmail.mockResolvedValue({ success: true, messageId: 'test-msg' })
   mockTransaction.mockImplementation(async (cb: (tx: { execute: typeof mockTxExecute }) => unknown) => {
     mockTxExecute
       .mockResolvedValueOnce({ rows: [] })  // UPDATE document
@@ -222,5 +222,27 @@ describe('PUT /api/admin/documents/[id]/reject — success', () => {
     mockDbExecute.mockRejectedValueOnce(new Error('DB error'))
     const response = await PUT(makeRequest(), makeContext())
     expect(response.status).toBe(500)
+  })
+
+  it('logs (resolved) warn when sendCustomEmail returns {success:false} — admin-detectable, not silently swallowed', async () => {
+    // sendCustomEmail RESOLVES with {success:false,error} on SMTP/
+    // Listmonk failure rather than throwing. The bare .catch() only
+    // catches the rare exception path. Especially load-bearing for
+    // rejection: applicants need the rejection reason to know what
+    // to fix; with no in-app fallback and a silently-failed email
+    // they're stuck wondering what happened.
+    const { sendCustomEmail } = require('@/lib/email')
+    sendCustomEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+
+    const response = await PUT(makeRequest(), makeContext())
+    expect(response.status).toBe(200)
+    // Flush the fire-and-forget chain
+    await new Promise(resolve => setImmediate(resolve))
+
+    const { logger } = require('@/lib/logger')
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Document rejection email failed (resolved)',
+      expect.objectContaining({ error: 'SMTP rejected', documentId: 'doc-1' }),
+    )
   })
 })

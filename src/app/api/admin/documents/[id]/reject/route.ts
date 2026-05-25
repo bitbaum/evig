@@ -91,7 +91,13 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       rejectionReason
     })
 
-    // Fire-and-forget email to applicant
+    // Fire-and-forget email to applicant. sendCustomEmail RESOLVES with
+    // {success:false,error} on SMTP/Listmonk failure rather than throwing.
+    // Same shape as the document-approval fix in this commit — surface
+    // resolved-failures under a distinct log key. Especially load-bearing
+    // for rejection: applicants need the rejection reason to know what
+    // to fix; without the email + with no in-app fallback they're stuck
+    // wondering what happened.
     if (document.user_email) {
       sendCustomEmail(
         document.user_email,
@@ -99,13 +105,23 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
           'Dein Dokument wurde abgelehnt',
           `Dein eingereichtes Dokument wurde leider abgelehnt. Grund: ${rejectionReason}\n\nBei Fragen wende dich bitte an ${CONTACT.supportEmail}.`,
         ),
-      ).catch((err) =>
-        logger.error('Failed to send document rejection email', {
-          error: err,
-          documentId,
-          userId: document.user_id,
-        }),
       )
+        .then((result) => {
+          if (!result.success) {
+            logger.warn('Document rejection email failed (resolved)', {
+              error: result.error,
+              documentId,
+              userId: document.user_id,
+            })
+          }
+        })
+        .catch((err) =>
+          logger.error('Document rejection email failed (rejected)', {
+            error: err,
+            documentId,
+            userId: document.user_id,
+          }),
+        )
     }
 
     return apiSuccess({

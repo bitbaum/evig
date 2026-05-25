@@ -88,7 +88,7 @@ jest.mock('@/config/document-status', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true, messageId: 'test-msg' }),
 }))
 
 jest.mock('@/lib/email/templates/notification', () => ({
@@ -154,9 +154,9 @@ beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
   mockDbExecute.mockResolvedValueOnce({ rows: [MOCK_DOC_PENDING] })
-  // sendCustomEmail is fire-and-forget with .catch() — must return a Promise
+  // sendCustomEmail is fire-and-forget — returns SendEmailResult
   const { sendCustomEmail } = require('@/lib/email')
-  sendCustomEmail.mockResolvedValue(undefined)
+  sendCustomEmail.mockResolvedValue({ success: true, messageId: 'test-msg' })
   // Transaction: callback is called with tx, which returns newStatus
   mockTransaction.mockImplementation(async (cb: (tx: { execute: typeof mockTxExecute }) => unknown) => {
     mockTxExecute
@@ -220,5 +220,27 @@ describe('PUT /api/admin/documents/[id]/approve — success', () => {
     mockDbExecute.mockRejectedValueOnce(new Error('DB error'))
     const response = await PUT(makeRequest(), makeContext())
     expect(response.status).toBe(500)
+  })
+
+  it('logs (resolved) warn when sendCustomEmail returns {success:false} — admin-detectable, not silently swallowed', async () => {
+    // sendCustomEmail RESOLVES with {success:false,error} on SMTP/
+    // Listmonk failure rather than throwing. The bare .catch() only
+    // catches the rare exception path; without checking .success the
+    // resolved-failure case left no log. The applicant has no in-app
+    // fallback for document decisions, so the email is their only
+    // signal that their submitted ID/cert was reviewed.
+    const { sendCustomEmail } = require('@/lib/email')
+    sendCustomEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+
+    const response = await PUT(makeRequest(), makeContext())
+    expect(response.status).toBe(200)
+    // Flush the fire-and-forget chain
+    await new Promise(resolve => setImmediate(resolve))
+
+    const { logger } = require('@/lib/logger')
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Document approval email failed (resolved)',
+      expect.objectContaining({ error: 'SMTP rejected', documentId: 'doc-1' }),
+    )
   })
 })

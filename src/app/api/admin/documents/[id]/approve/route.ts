@@ -116,7 +116,13 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
       newVerificationStatus: newStatus
     })
 
-    // Fire-and-forget email to applicant
+    // Fire-and-forget email to applicant. sendCustomEmail RESOLVES with
+    // {success:false,error} on SMTP/Listmonk failure rather than throwing
+    // — the bare `.catch` only catches the rare exception path. Document
+    // decisions have no in-app fallback (the user uploaded ID/cert docs
+    // as part of an application; the email is the only signal), so
+    // surface resolved-failures under a distinct log key the same way
+    // 65e3e707 did for the IT-Hilfe anonymous-claim flow.
     if (document.user_email) {
       sendCustomEmail(
         document.user_email,
@@ -124,13 +130,23 @@ export const PUT = withAdmin<{ id: string }>('content', async (request, session,
           'Dein Dokument wurde genehmigt',
           `Dein eingereichtes Dokument wurde erfolgreich überprüft und genehmigt.`,
         ),
-      ).catch((err) =>
-        logger.error('Failed to send document approval email', {
-          error: err,
-          documentId,
-          userId: document.user_id,
-        }),
       )
+        .then((result) => {
+          if (!result.success) {
+            logger.warn('Document approval email failed (resolved)', {
+              error: result.error,
+              documentId,
+              userId: document.user_id,
+            })
+          }
+        })
+        .catch((err) =>
+          logger.error('Document approval email failed (rejected)', {
+            error: err,
+            documentId,
+            userId: document.user_id,
+          }),
+        )
     }
 
     return apiSuccess({
