@@ -356,7 +356,9 @@ describe('POST /api/it-hilfe/requests — anonymous submissions', () => {
     // Allow the fire-and-forget chain a tick to complete
     await new Promise(resolve => setImmediate(resolve))
 
-    expect(mockCreatePasswordResetToken).toHaveBeenCalledWith('newuser@example.com')
+    // 7-day TTL — claim links shouldn't expire while users are still
+    // reading their email backlog.
+    expect(mockCreatePasswordResetToken).toHaveBeenCalledWith('newuser@example.com', 7 * 24 * 60 * 60 * 1000)
     expect(mockSendCustomEmail).toHaveBeenCalledWith(
       'newuser@example.com',
       expect.any(Object)

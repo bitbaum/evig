@@ -348,6 +348,34 @@ describe('createPasswordResetToken', () => {
 
     expect(mockDbInsert).toHaveBeenCalledTimes(1)
   })
+
+  it('uses ~1 hour expiry by default', async () => {
+    const before = Date.now()
+    await createPasswordResetToken(EMAIL)
+    const after = Date.now()
+
+    const chain = mockDbInsert.mock.results[0].value as { values: jest.Mock }
+    const valuesArg = chain.values.mock.calls[0][0] as { expires: string }
+    const exp = new Date(valuesArg.expires).getTime()
+    const oneHourMs = 60 * 60 * 1000
+
+    expect(exp).toBeGreaterThanOrEqual(before + oneHourMs)
+    expect(exp).toBeLessThanOrEqual(after + oneHourMs)
+  })
+
+  it('honours a custom expiresInMs (e.g. 7 days for IT-Hilfe claim links)', async () => {
+    const sevenDaysMs = 7 * 24 * 60 * 60 * 1000
+    const before = Date.now()
+    await createPasswordResetToken(EMAIL, sevenDaysMs)
+    const after = Date.now()
+
+    const chain = mockDbInsert.mock.results[0].value as { values: jest.Mock }
+    const valuesArg = chain.values.mock.calls[0][0] as { expires: string }
+    const exp = new Date(valuesArg.expires).getTime()
+
+    expect(exp).toBeGreaterThanOrEqual(before + sevenDaysMs)
+    expect(exp).toBeLessThanOrEqual(after + sevenDaysMs)
+  })
 })
 
 // ============================================================================

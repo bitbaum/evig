@@ -118,7 +118,9 @@ Das ${ORG.name} Team
  *
  * `claimUrl` is the URL of /auth/reset-password?token=... — the
  * existing forgot-password infrastructure handles password set + login.
- * Link is valid for 1 hour (createPasswordResetToken TTL).
+ * Link is valid for 7 days (caller passes an explicit TTL to
+ * createPasswordResetToken since the 1-hour default is too short for
+ * an email a recipient may not read for a day or two).
  *
  * Used only when `wasCreated: true` from findOrCreateAnonymousUser.
  * Existing-account anonymous submissions get a different message
@@ -159,7 +161,7 @@ export const itHilfeAnonymousRequestClaim = (
           <a href="${claimUrl}" class="button button-green">Konto aktivieren</a>
 
           <p style="font-size: 12px; color: #666; margin-top: 16px;">
-            Dieser Link ist 1 Stunde gültig. Falls er abgelaufen ist, kannst du auf der Anmeldeseite "Passwort vergessen" wählen und einen neuen Link anfordern.
+            Dieser Link ist 7 Tage gültig. Falls er abgelaufen ist, kannst du auf der Anmeldeseite "Passwort vergessen" wählen und einen neuen Link anfordern.
           </p>
 
           <div style="background-color: #f0fdf4; padding: 15px; border-radius: 5px; margin: 15px 0;">
@@ -185,7 +187,7 @@ Wir haben für dich ein Konto erstellt, damit du Angebote sehen und annehmen kan
 Klick auf diesen Link, um ein Passwort festzulegen und auf deine Anfrage zuzugreifen:
 ${claimUrl}
 
-Dieser Link ist 1 Stunde gültig.
+Dieser Link ist 7 Tage gültig.
 
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team

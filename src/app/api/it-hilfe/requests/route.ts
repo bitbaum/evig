@@ -286,7 +286,13 @@ export async function POST(request: NextRequest) {
     // "see what I posted." Fire-and-forget; failure shouldn't fail the
     // request creation.
     if (isNewAnonymousUser) {
-      createPasswordResetToken(requesterEmail)
+      // 7-day TTL: claim links go to people who may not read email for
+      // hours or days. Default password-reset TTL is 1 hour, which is
+      // appropriate for forgot-password (user is actively recovering)
+      // but functionally broken for this flow (user just walked away
+      // from a form).
+      const CLAIM_TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000
+      createPasswordResetToken(requesterEmail, CLAIM_TOKEN_TTL_MS)
         .then(token => {
           const callbackUrl = `/it-hilfe/${requestId}`
           const claimUrl =

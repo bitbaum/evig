@@ -190,15 +190,26 @@ export interface DbPasswordResetToken {
   expires: Date
 }
 
+/** Default TTL for password-reset tokens: 1 hour. */
+export const PASSWORD_RESET_TOKEN_DEFAULT_TTL_MS = 60 * 60 * 1000
+
 /**
- * Create a password reset token
+ * Create a password reset token.
+ *
+ * @param email recipient identifier (will be lowercased)
+ * @param expiresInMs how long the token is valid; defaults to 1 hour.
+ *   Callers that aren't a direct forgot-password flow — e.g. the
+ *   IT-Hilfe anonymous-post claim email, which a recipient may not
+ *   read for hours or days — should pass a longer TTL.
  */
-export async function createPasswordResetToken(email: string): Promise<string> {
+export async function createPasswordResetToken(
+  email: string,
+  expiresInMs: number = PASSWORD_RESET_TOKEN_DEFAULT_TTL_MS,
+): Promise<string> {
   // Generate a secure random token
   const token = randomBytes(32).toString('hex')
 
-  // Set expiration to 1 hour from now
-  const expires = new Date(Date.now() + 60 * 60 * 1000)
+  const expires = new Date(Date.now() + expiresInMs)
 
   await db
     .insert(verificationTokens)
