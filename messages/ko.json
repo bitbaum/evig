@@ -2029,6 +2029,7 @@
       "error": "오류",
       "requestNotFound": "요청을 찾을 수 없습니다",
       "expiredBanner": "이 요청은 {date}에 만료되어 더 이상 새 제안을 받지 않습니다.",
+      "acceptedBanner": "제안이 수락되었습니다. 기술자와의 대화가 시작되었습니다.",
       "completedAt": "{date}에 완료됨",
       "reviewSubmittedTitle": "리뷰가 제출되었습니다!",
       "reviewSubmittedMessage": "피드백 감사합니다.",

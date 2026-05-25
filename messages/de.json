@@ -2653,6 +2653,7 @@
       "error": "Fehler",
       "requestNotFound": "Anfrage nicht gefunden",
       "expiredBanner": "Diese Anfrage ist am {date} abgelaufen und akzeptiert keine neuen Angebote mehr.",
+      "acceptedBanner": "Angebot angenommen. Eine Unterhaltung mit dem Techniker wurde gestartet.",
       "completedAt": "Abgeschlossen am {date}",
       "reviewSubmittedTitle": "Bewertung abgegeben!",
       "reviewSubmittedMessage": "Vielen Dank für dein Feedback.",

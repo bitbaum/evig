@@ -2029,6 +2029,7 @@
       "error": "Error",
       "requestNotFound": "Solicitud no encontrada",
       "expiredBanner": "Esta solicitud expiró el {date} y ya no acepta nuevas ofertas.",
+      "acceptedBanner": "Oferta aceptada. Se ha iniciado una conversación con el técnico.",
       "completedAt": "Completada el {date}",
       "reviewSubmittedTitle": "¡Valoración enviada!",
       "reviewSubmittedMessage": "Muchas gracias por tu opinión.",

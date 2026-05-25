@@ -2029,6 +2029,7 @@
       "error": "エラー",
       "requestNotFound": "リクエストが見つかりません",
       "expiredBanner": "このリクエストは{date}に期限切れになり、新しいオファーを受け付けなくなりました。",
+      "acceptedBanner": "オファーを承認しました。技術者との会話が開始されました。",
       "completedAt": "{date}に完了",
       "reviewSubmittedTitle": "レビューを投稿しました！",
       "reviewSubmittedMessage": "フィードバックをありがとうございます。",

@@ -1,6 +1,7 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useEffect } from 'react'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft, AlertCircle, CheckCircle } from 'lucide-react'
 import { useTranslations } from 'next-intl'
@@ -30,6 +31,25 @@ export default function ITHilfeDetailPage() {
   const { id } = useParams<{ id: string }>()
   const t = useTranslations('itHelp.detail')
   const detail = useITHilfeDetail(id)
+  const searchParams = useSearchParams()
+
+  // One-tap accept flow lands here with ?accepted=1 (from AcceptButton in
+  // /it-hilfe/accept). The banner is computed directly from searchParams
+  // so we avoid useState-in-effect (banned by react-hooks/set-state-in-effect).
+  // The effect below strips the query param via history.replaceState so
+  // refresh/back-nav don't replay the banner — replaceState is invisible
+  // to next/navigation's useSearchParams, so the banner stays visible for
+  // the lifetime of this render. The state change itself is already
+  // visible (request status OPEN → MATCHED, helper info appears), but
+  // the explicit confirmation closes the loop the email flow opened.
+  const showAcceptedBanner = searchParams.get('accepted') === '1'
+  useEffect(() => {
+    if (!showAcceptedBanner) return
+    if (typeof window === 'undefined') return
+    const url = new URL(window.location.href)
+    url.searchParams.delete('accepted')
+    window.history.replaceState({}, '', url.toString())
+  }, [showAcceptedBanner])
 
   if (detail.loading) {
     return (
@@ -72,6 +92,16 @@ export default function ITHilfeDetailPage() {
             <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0" aria-hidden="true" />
             <p className="text-warning-800 text-sm font-medium">
               {t('expiredBanner', { date: formatDate(request.expiresAt) })}
+            </p>
+          </div>
+        )}
+
+        {/* Just-Accepted Banner — landed here via ?accepted=1 from email link */}
+        {showAcceptedBanner && request.status === REQUEST_STATUS.MATCHED && (
+          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-xl p-4 mb-6 flex items-center gap-3">
+            <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" aria-hidden="true" />
+            <p className="text-primary-800 dark:text-primary-300 text-sm font-medium">
+              {t('acceptedBanner')}
             </p>
           </div>
         )}

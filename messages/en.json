@@ -2602,6 +2602,7 @@
       "error": "Error",
       "requestNotFound": "Request not found",
       "expiredBanner": "This request expired on {date} and is no longer accepting new offers.",
+      "acceptedBanner": "Offer accepted. A conversation with the technician has been started.",
       "completedAt": "Completed on {date}",
       "reviewSubmittedTitle": "Review submitted!",
       "reviewSubmittedMessage": "Thank you for your feedback.",
