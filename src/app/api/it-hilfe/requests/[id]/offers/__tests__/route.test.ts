@@ -82,6 +82,7 @@ jest.mock('@/config/error-messages', () => ({
 
 jest.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
+  OFFER_STATUS: { PENDING: 'pending', ACCEPTED: 'accepted', REJECTED: 'rejected', WITHDRAWN: 'withdrawn' },
 }))
 
 jest.mock('@/lib/it-hilfe/notifications', () => ({
@@ -351,6 +352,63 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     expect(res.status).toBe(201)
     expect(body.success).toBe(true)
     expect(body.data.offerId).toBe('new-offer-1')
+  })
+
+  it('resurrects a withdrawn offer instead of returning 400 (UPDATE not INSERT)', async () => {
+    // Helper previously submitted, then withdrew. They want to re-offer on
+    // the same OPEN request. Old behaviour: 400 "Du hast bereits ein
+    // Angebot abgegeben". New: UPDATE the withdrawn row back to PENDING.
+    // Locks in the fix so a future refactor can't silently regress.
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+
+    // 1. Request select — open, not owner
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        innerJoin: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue([{ requesterId: 'other-user', status: 'open', title: 'Fix laptop', requester_name: 'Jane', requester_email: 'jane@example.com' }]),
+        }),
+      }),
+    })
+    // 2. Expiry check — not expired
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    })
+    // 3. Existing-offer check — WITHDRAWN row found
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([{ id: 'old-withdrawn-offer', status: 'withdrawn' }]),
+      }),
+    })
+    // 4. Repairer profile check — none
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    })
+
+    // The resurrect path uses .update().set().where().returning() — set up
+    // a chain that supports it (overrides the default chain which has no
+    // .returning()).
+    const resurrectReturning = jest.fn().mockResolvedValue([{ id: 'old-withdrawn-offer' }])
+    const resurrectWhere = jest.fn().mockReturnValue({ returning: resurrectReturning })
+    // Subsequent calls (offerCount increment) use the default where→Promise pattern
+    mockSet
+      .mockReturnValueOnce({ where: resurrectWhere })  // First update call: resurrect
+      .mockReturnValue({ where: mockUpdateWhere })      // Subsequent: offerCount
+
+    mockValidateBody.mockReturnValue({
+      success: true,
+      data: { message: 'I changed my mind, I can help!', estimatedTime: null, proposedCompensation: null, relevantSkills: [] },
+    })
+
+    const res = await POST(makeRequest(VALID_UUID, 'POST', { message: 'I changed my mind, I can help!' }), routeParams(VALID_UUID))
+    const body = await res.json()
+
+    expect(res.status).toBe(201)
+    expect(body.success).toBe(true)
+    // Returned offerId is the resurrected row's id, NOT a fresh one
+    expect(body.data.offerId).toBe('old-withdrawn-offer')
+    // UPDATE path taken — INSERT must NOT have been called
+    expect(mockInsert).not.toHaveBeenCalled()
+    expect(resurrectReturning).toHaveBeenCalledTimes(1)
   })
 
   it('passes a verifiable signed acceptUrl to the offer-received email template', async () => {

@@ -6,7 +6,7 @@ import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 import { validateBody, CreateOfferSchema } from '@/lib/schemas'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
@@ -172,18 +172,27 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest('Diese Anfrage ist abgelaufen')
     }
 
-    // Check if user already made an offer
+    // Check if user already made an offer. The UNIQUE(request_id, helper_id)
+    // schema constraint means a withdrawn-then-resubmit helper would hit
+    // a duplicate-key violation on a fresh INSERT — and the prior version
+    // of this check rejected with "Du hast bereits ein Angebot abgegeben"
+    // even after the helper had withdrawn. Resurrect a withdrawn row by
+    // UPDATEing it back to PENDING below. Same shape as the workshop
+    // re-registration fix (501ff9fa) and the repairer re-application
+    // fix (d128beff).
     const [existingOffer] = await db
-      .select({ id: itHilfeOffers.id })
+      .select({ id: itHilfeOffers.id, status: itHilfeOffers.status })
       .from(itHilfeOffers)
       .where(and(
         eq(itHilfeOffers.requestId, id),
         eq(itHilfeOffers.helperId, session.user.id)
       ))
 
-    if (existingOffer) {
+    if (existingOffer && existingOffer.status !== OFFER_STATUS.WITHDRAWN) {
       return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben')
     }
+
+    const withdrawnOfferId = existingOffer?.status === OFFER_STATUS.WITHDRAWN ? existingOffer.id : null
 
     const body = await request.json()
     const validation = validateBody(CreateOfferSchema, body)
@@ -199,19 +208,41 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         eq(repairerProfiles.isActive, true)
       ))
 
-    // Insert the offer
-    const [newOffer] = await db
-      .insert(itHilfeOffers)
-      .values({
-        requestId: id,
-        helperId: session.user.id,
-        message,
-        estimatedTime: estimatedTime || undefined,
-        proposedCompensation: proposedCompensation || undefined,
-        relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
-        repairerProfileId: repairerProfile?.id || undefined,
-      })
-      .returning({ id: itHilfeOffers.id })
+    // Insert OR resurrect a withdrawn offer. UNIQUE(request_id, helper_id)
+    // prevents a fresh INSERT when a withdrawn row exists, so reuse it:
+    // overwrite the message/details, flip status back to PENDING, keep the
+    // same id so any external references remain valid. offerCount is
+    // incremented either way (the withdraw route decremented it).
+    let newOffer: { id: string }
+    if (withdrawnOfferId) {
+      const [updated] = await db
+        .update(itHilfeOffers)
+        .set({
+          message,
+          estimatedTime: estimatedTime || undefined,
+          proposedCompensation: proposedCompensation || undefined,
+          relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
+          repairerProfileId: repairerProfile?.id || undefined,
+          status: OFFER_STATUS.PENDING,
+        })
+        .where(eq(itHilfeOffers.id, withdrawnOfferId))
+        .returning({ id: itHilfeOffers.id })
+      newOffer = updated
+    } else {
+      const [inserted] = await db
+        .insert(itHilfeOffers)
+        .values({
+          requestId: id,
+          helperId: session.user.id,
+          message,
+          estimatedTime: estimatedTime || undefined,
+          proposedCompensation: proposedCompensation || undefined,
+          relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
+          repairerProfileId: repairerProfile?.id || undefined,
+        })
+        .returning({ id: itHilfeOffers.id })
+      newOffer = inserted
+    }
 
     // Increment offer count. Request status stays OPEN until an offer is
     // accepted (→ MATCHED).
