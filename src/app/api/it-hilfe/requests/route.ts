@@ -284,7 +284,17 @@ export async function POST(request: NextRequest) {
     // the user lands directly on their just-submitted request after the
     // sign-in completes — closing the seam between "set password" and
     // "see what I posted." Fire-and-forget; failure shouldn't fail the
-    // request creation.
+    // request creation (the user can still recover via /auth/forgot-password
+    // with their email).
+    //
+    // sendCustomEmail RESOLVES with { success: false, error } on SMTP/
+    // Listmonk failure rather than throwing. The bare .catch() therefore
+    // only logs throws — silent SMTP failures slip through invisibly, even
+    // though this is the SINGLE MOST CONSEQUENTIAL email in the codebase
+    // (the only path a brand-new anonymous user has to ever set a password
+    // and access their just-submitted request). Split into a .then() that
+    // catches resolved-failure and a .catch() that catches throws, so ops
+    // can grep logs for both modes.
     if (isNewAnonymousUser) {
       // 7-day TTL: claim links go to people who may not read email for
       // hours or days. Default password-reset TTL is 1 hour, which is
@@ -304,7 +314,16 @@ export async function POST(request: NextRequest) {
             itHilfeAnonymousRequestClaim(sanitizedTitle, claimUrl)
           )
         })
-        .catch(err => logger.error('Failed to send anonymous-request claim email', { err, requestId, email: requesterEmail }))
+        .then(result => {
+          if (!result.success) {
+            logger.warn('Anonymous-request claim email failed (resolved)', {
+              error: result.error,
+              requestId,
+              email: requesterEmail,
+            })
+          }
+        })
+        .catch(err => logger.error('Anonymous-request claim email failed (rejected)', { err, requestId, email: requesterEmail }))
     }
 
     // Fire-and-forget: Send all notifications (confirmation, admin, matching helpers).

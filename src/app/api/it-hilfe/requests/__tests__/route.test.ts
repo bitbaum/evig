@@ -403,6 +403,32 @@ describe('POST /api/it-hilfe/requests — anonymous submissions', () => {
     expect(notifArgs.includeRequesterConfirmation).toBe(true)
   })
 
+  it('logs resolved {success:false} claim email failure under (resolved) key — admin-detectable, not silently swallowed', async () => {
+    // sendCustomEmail RESOLVES with {success:false} on SMTP/Listmonk
+    // failure rather than throwing. Without splitting the fire-and-forget
+    // chain into .then(check)+.catch, that resolved-failure is invisible
+    // in the logs — the silent-failure-with-DB-state-already-mutated mode
+    // (new anon account exists in users table; password-bearing claim
+    // email never arrived; user locked out).
+    mockAuth.mockResolvedValueOnce(null)
+    mockFindOrCreateAnonymousUser.mockResolvedValueOnce({ userId: 'new-anon-2', wasCreated: true })
+    const schemas = require('@/lib/schemas/it-hilfe')
+    schemas.validateAndRespond.mockReturnValueOnce({
+      success: true,
+      data: { title: 'Laptop geht nicht', submitterEmail: 'newuser2@example.com' },
+    })
+    mockSendCustomEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+
+    await POST(makePostRequest({ submitterEmail: 'newuser2@example.com' }))
+    await new Promise(resolve => setImmediate(resolve))
+
+    const loggerMod = require('@/lib/logger')
+    expect(loggerMod.logger.warn).toHaveBeenCalledWith(
+      'Anonymous-request claim email failed (resolved)',
+      expect.objectContaining({ error: 'SMTP rejected', email: 'newuser2@example.com' }),
+    )
+  })
+
   it('does NOT send the claim email when wasCreated is false (existing account)', async () => {
     mockAuth.mockResolvedValueOnce(null)
     mockFindOrCreateAnonymousUser.mockResolvedValueOnce({ userId: 'existing-1', wasCreated: false })
