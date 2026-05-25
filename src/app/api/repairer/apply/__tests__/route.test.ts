@@ -12,6 +12,10 @@ const mockSelect = jest.fn()
 const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockReturning = jest.fn()
+const mockUpdate = jest.fn()
+const mockSet = jest.fn()
+const mockUpdateWhere = jest.fn()
+const mockUpdateReturning = jest.fn()
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
@@ -34,6 +38,7 @@ jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
   },
 }))
 
@@ -211,6 +216,11 @@ beforeEach(() => {
   // Default: successful insert
   mockReturning.mockResolvedValue([{ id: 'app-1' }])
   mockValues.mockReturnValue({ returning: mockReturning })
+
+  // Default: successful update (for re-applications)
+  mockUpdateReturning.mockResolvedValue([{ id: 'app-existing' }])
+  mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning })
+  mockSet.mockReturnValue({ where: mockUpdateWhere })
 })
 
 // ============================================================================
@@ -277,14 +287,55 @@ describe('POST /api/repairer/apply — duplicate checks', () => {
     expect(response.status).toBe(400)
   })
 
-  it('returns 400 when application already exists (any status)', async () => {
-    const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'rejected' }])
-    const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
-    mockSelect.mockReturnValue({ from: mockFrom })
+  it('re-submits (200, UPDATE) when prior application was REJECTED', async () => {
+    // The user was rejected; they're re-applying. The route should reuse
+    // the existing row (UPDATE) — UNIQUE(userId) prevents inserting a new
+    // one — and reset its status to PENDING. Prior to this fix the route
+    // returned 400 "Du hast bereits ein Reparateur-Profil" and locked the
+    // user out forever.
+    let selectCallCount = 0
+    mockSelect.mockImplementation(() => {
+      selectCallCount++
+      if (selectCallCount === 1) {
+        const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'rejected' }])
+        const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
+        return { from: mockFrom }
+      }
+      const mockWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }])
+      const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
+      return { from: mockFrom }
+    })
 
     const req = makeRequest(makeValidFormDataBody())
     const response = await POST(req)
-    expect(response.status).toBe(400)
+    expect(response.status).toBe(200)
+    const body = await response.json()
+    expect(body.success).toBe(true)
+    expect(body.data.applicationId).toBe('app-existing')
+    // UPDATE was called, INSERT was NOT.
+    expect(mockUpdate).toHaveBeenCalledTimes(1)
+    expect(mockInsert).not.toHaveBeenCalled()
+  })
+
+  it('re-submits (200, UPDATE) when prior application was REQUIRES_CHANGES', async () => {
+    let selectCallCount = 0
+    mockSelect.mockImplementation(() => {
+      selectCallCount++
+      if (selectCallCount === 1) {
+        const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'requires_changes' }])
+        const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
+        return { from: mockFrom }
+      }
+      const mockWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }])
+      const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
+      return { from: mockFrom }
+    })
+
+    const req = makeRequest(makeValidFormDataBody())
+    const response = await POST(req)
+    expect(response.status).toBe(200)
+    expect(mockUpdate).toHaveBeenCalledTimes(1)
+    expect(mockInsert).not.toHaveBeenCalled()
   })
 })
 

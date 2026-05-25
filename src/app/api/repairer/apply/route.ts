@@ -49,12 +49,15 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       termsAccepted
     } = validation.data
 
-    // Check if user already has a repairer application
+    // Check if user already has a repairer application. The userId column
+    // has a UNIQUE constraint so there's at most one row per user — but its
+    // status determines what re-applying means.
     const existingApplication = await db
       .select({ id: repairerApplications.id, status: repairerApplications.status })
       .from(repairerApplications)
       .where(eq(repairerApplications.userId, session.user.id))
 
+    let existingApplicationId: string | null = null
     if (existingApplication.length > 0) {
       const app = existingApplication[0]
       if (app.status === APPROVAL_STATUS.APPROVED) {
@@ -63,8 +66,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       if (app.status === APPROVAL_STATUS.PENDING) {
         return apiBadRequest(ERROR_MESSAGES.PENDING_APPLICATION)
       }
-      // For any other status (rejected, etc.), they already have an application
-      return apiBadRequest('Du hast bereits ein Reparateur-Profil')
+      // REJECTED or REQUIRES_CHANGES: the user has been told the application
+      // didn't pass and is now resubmitting. Reuse the row (UNIQUE(userId)
+      // prevents inserting a fresh one anyway) — overwrite the fields with
+      // the new submission, reset status to PENDING, clear the admin-side
+      // review fields so the next reviewer sees a clean slate.
+      existingApplicationId = app.id
     }
 
     // Handle file uploads (simplified - in production, you'd upload to cloud storage)
@@ -84,35 +91,59 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       }
     }
 
-    // Create repairer application
-    const [createdApplication] = await db
-      .insert(repairerApplications)
-      .values({
-        userId: session.user.id,
-        businessName: businessName || null,
-        businessType,
-        description,
-        yearsExperience,
-        phone,
-        website: website || null,
-        address,
-        city,
-        postalCode,
-        serviceRadiusKm: serviceRadius,
-        remoteServices,
-        hourlyRateCents: hourlyRate ? Math.round(hourlyRate * 100) : null,
-        emergencyFeeCents: emergencyFee ? Math.round(emergencyFee * 100) : null,
-        homeVisitFeeCents: homeVisitFee ? Math.round(homeVisitFee * 100) : null,
-        servicesOffered,
-        specializations,
-        certifications,
-        insuranceInfo: insuranceInfo || null,
-        portfolioImages,
-        verificationDocuments: certificationDocs,
-        termsAccepted,
-        status: APPROVAL_STATUS.PENDING,
-      })
-      .returning({ id: repairerApplications.id })
+    // Create OR re-submit repairer application. UPDATE when the user has a
+    // prior REJECTED / REQUIRES_CHANGES row (captured above), INSERT
+    // otherwise. The row's id stays stable across re-submissions so any
+    // admin-side links/notifications referencing the application id keep
+    // working.
+    const applicationFields = {
+      userId: session.user.id,
+      businessName: businessName || null,
+      businessType,
+      description,
+      yearsExperience,
+      phone,
+      website: website || null,
+      address,
+      city,
+      postalCode,
+      serviceRadiusKm: serviceRadius,
+      remoteServices,
+      hourlyRateCents: hourlyRate ? Math.round(hourlyRate * 100) : null,
+      emergencyFeeCents: emergencyFee ? Math.round(emergencyFee * 100) : null,
+      homeVisitFeeCents: homeVisitFee ? Math.round(homeVisitFee * 100) : null,
+      servicesOffered,
+      specializations,
+      certifications,
+      insuranceInfo: insuranceInfo || null,
+      portfolioImages,
+      verificationDocuments: certificationDocs,
+      termsAccepted,
+      status: APPROVAL_STATUS.PENDING,
+    }
+
+    let createdApplication: { id: string }
+    if (existingApplicationId) {
+      const [updated] = await db
+        .update(repairerApplications)
+        .set({
+          ...applicationFields,
+          // Clear the admin-side review fields so the next reviewer sees a
+          // clean slate (not the prior reviewer's notes/decision).
+          adminNotes: null,
+          reviewedBy: null,
+          reviewedAt: null,
+        })
+        .where(eq(repairerApplications.id, existingApplicationId))
+        .returning({ id: repairerApplications.id })
+      createdApplication = updated
+    } else {
+      const [inserted] = await db
+        .insert(repairerApplications)
+        .values(applicationFields)
+        .returning({ id: repairerApplications.id })
+      createdApplication = inserted
+    }
 
     // Send confirmation email to applicant
     const applicantEmailResult = await sendEmail(
