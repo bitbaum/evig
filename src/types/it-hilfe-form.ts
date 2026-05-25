@@ -22,6 +22,10 @@ export interface ITHilfeCreateFormData {
   skillsNeeded: string[]
   imageUrls: string[]
   aiDiagnosis: string
+  // For anonymous (logged-out) submissions: the user supplies their email
+  // and the backend provisions an account + sends a claim link. Empty
+  // when the user is already authenticated.
+  submitterEmail: string
 }
 
 export const INITIAL_IT_HILFE_FORM: ITHilfeCreateFormData = {
@@ -39,4 +43,5 @@ export const INITIAL_IT_HILFE_FORM: ITHilfeCreateFormData = {
   skillsNeeded: [],
   imageUrls: [],
   aiDiagnosis: '',
+  submitterEmail: '',
 }

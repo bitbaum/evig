@@ -93,6 +93,9 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
         skillsNeeded: r.skillsNeeded || [],
         imageUrls: r.imageUrls || [],
         aiDiagnosis: r.aiDiagnosis || '',
+        // Edit flow is always authenticated; submitterEmail is for the
+        // anonymous-create path only. Empty preserves the form-type shape.
+        submitterEmail: '',
       })
       setLoading(false)
     })

@@ -30,14 +30,17 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  // `anonymousAccountCreated` flips when the backend provisioned a new
+  // account for a logged-out submitter — the success UI then tells them to
+  // check their email instead of redirecting (they can't view the request
+  // until they set a password via the claim link).
+  const [anonymousAccountCreated, setAnonymousAccountCreated] = useState(false)
   const [formData, setFormData] = useState<ITHilfeCreateFormData>(INITIAL_IT_HILFE_FORM)
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/it-hilfe/create')
-    }
-  }, [status, router])
+  // No auth gate here. Logged-out visitors can submit; the form shows an
+  // email field and the backend provisions an account on-the-fly. This
+  // closes the conversion-killing auth wall for people in distress.
 
   useEffect(() => {
     if (status !== 'authenticated') return
@@ -135,19 +138,29 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
     setLoading(true)
     try {
       const payload = transformITHilfeFormToPayload(formData)
-      const result = await apiFetch<{ requestId: string }>('/api/it-hilfe/requests', {
-        method: 'POST',
-        body: payload,
-      })
+      const result = await apiFetch<{ requestId: string; newAccount?: boolean }>(
+        '/api/it-hilfe/requests',
+        {
+          method: 'POST',
+          body: payload,
+        },
+      )
 
       if (!result.success || !result.data) {
         throw new Error(result.error || errorCreateFailed)
       }
 
       setSuccess(true)
-      setTimeout(() => {
-        router.push(`/it-hilfe/${result.data!.requestId}`)
-      }, UI_FEEDBACK_MS.REDIRECT)
+      // newAccount → backend just provisioned an account; user must claim
+      // via email link before they can view the request. Skip the redirect
+      // and let the page render the check-your-email state.
+      if (result.data.newAccount) {
+        setAnonymousAccountCreated(true)
+      } else {
+        setTimeout(() => {
+          router.push(`/it-hilfe/${result.data!.requestId}`)
+        }, UI_FEEDBACK_MS.REDIRECT)
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : errorGeneric
       setError(message)
@@ -162,6 +175,7 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
     loading,
     error,
     success,
+    anonymousAccountCreated,
     formData,
     aiFieldMeta,
     updateField,

@@ -21,6 +21,7 @@ import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
+import { Input } from '@/components/ui/input'
 import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { useCreateITHilfeForm } from '@/hooks/useCreateITHilfeForm'
 import { PageShell } from '@/components/layout/PageShell'
@@ -45,6 +46,7 @@ export default function CreatePeerRepairPage() {
     loading,
     error,
     success,
+    anonymousAccountCreated,
     formData,
     aiFieldMeta,
     updateField,
@@ -59,6 +61,30 @@ export default function CreatePeerRepairPage() {
       <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
       </div>
+    )
+  }
+
+  if (success && anonymousAccountCreated) {
+    return (
+      <PageShell maxWidth="2xl" py="py-24" className="text-center">
+        <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+        <Heading level={2} className="text-2xl text-neutral-900 dark:text-white mb-2">
+          Anfrage gespeichert!
+        </Heading>
+        <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-prose mx-auto">
+          Wir haben dir eine E-Mail an <strong>{formData.submitterEmail}</strong> gesendet.
+          Klicke auf den Link in der E-Mail, um ein Passwort festzulegen und auf deine
+          Anfrage zuzugreifen. Techniker aus der Community werden deine Anfrage sehen,
+          während du dein Konto aktivierst.
+        </p>
+        <p className="text-xs text-neutral-500 dark:text-neutral-500 mb-6">
+          Keine E-Mail erhalten? Überprüfe deinen Spam-Ordner oder fordere auf der
+          Anmeldeseite mit &ldquo;Passwort vergessen&rdquo; einen neuen Link an.
+        </p>
+        <Button as={Link} href={ROUTES.public.itHilfe} variant="outline">
+          Zurück zur Übersicht
+        </Button>
+      </PageShell>
     )
   }
 
@@ -97,6 +123,28 @@ export default function CreatePeerRepairPage() {
         {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {status === 'unauthenticated' && (
+            <div className="card-shell p-6 border-l-4 border-primary-500">
+              <Heading level={2} className="text-lg text-neutral-900 dark:text-white mb-2">
+                Deine E-Mail-Adresse
+              </Heading>
+              <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">
+                Damit du Angebote sehen und mit Technikern kommunizieren kannst, brauchen
+                wir deine E-Mail. Wir senden dir einen Link, um ein Passwort festzulegen —
+                kein vorheriges Konto erforderlich.
+              </p>
+              <Input
+                type="email"
+                value={formData.submitterEmail}
+                onChange={(e) => updateField('submitterEmail', e.target.value)}
+                placeholder="dein@email.ch"
+                required
+                autoComplete="email"
+                aria-label="E-Mail-Adresse"
+              />
+            </div>
+          )}
+
           <AIFormAssist<AIFormFields>
             formType="it-hilfe"
             placeholder={t('aiPlaceholder')}
@@ -239,7 +287,11 @@ export default function CreatePeerRepairPage() {
                 <Button
                   type="submit"
                   variant="primary"
-                  disabled={loading || !formData.title.trim()}
+                  disabled={
+                    loading ||
+                    !formData.title.trim() ||
+                    (status === 'unauthenticated' && !formData.submitterEmail.trim())
+                  }
                 >
                   {loading ? t('submittingButton') : t('submitButton')}
                 </Button>
