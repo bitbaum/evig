@@ -7,7 +7,7 @@ import {
   approveBlogSubmissionAction,
   verifyListingAction,
   approveRepairerApplicationAction,
-} from '@/app/admin/actions'
+} from '@/lib/admin/actions'
 
 interface InlineActionButtonProps {
   itemId: string
