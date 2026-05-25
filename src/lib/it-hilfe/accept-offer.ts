@@ -69,6 +69,20 @@ const uTable = getTableName(users)
 const convTable = getTableName(conversations)
 
 /**
+ * Resolve an offer's parent requestId. Returns null if the offer doesn't
+ * exist. Used by the token-driven accept route, where the signed token
+ * only encodes the offerId and the route needs the requestId to call
+ * acceptOffer().
+ */
+export async function lookupOfferRequestId(offerId: string): Promise<string | null> {
+  const result = await db.execute(sql`
+    SELECT request_id FROM ${sql.raw(offTable)} WHERE id = ${offerId}
+  `)
+  if (result.rows.length === 0) return null
+  return (result.rows[0] as unknown as { request_id: string }).request_id
+}
+
+/**
  * Accept an offer atomically. Fetches request + offer, validates state,
  * mutates inside a transaction, then triggers notifications (fire-and-forget).
  *
