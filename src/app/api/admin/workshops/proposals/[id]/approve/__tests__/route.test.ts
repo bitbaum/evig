@@ -189,4 +189,24 @@ describe('POST /api/admin/workshops/proposals/[id]/approve — success', () => {
     const body = await response.json()
     expect(body.data.proposal.status).toBe('approved')
   })
+
+  it('logs resolved {success:false} email failure under (resolved) key for reject — not silently swallowed', async () => {
+    // sendEmail RESOLVES with {success:false} on SMTP/Listmonk failure
+    // rather than throwing. The bare try/catch the route used to wrap
+    // sendEmail in only caught throws — resolved failures slipped
+    // through invisibly. Especially critical for reject and
+    // require_changes since neither has an in-app notification fallback
+    // (only approve fires notifyUsers below), so the proposer would
+    // never learn the decision.
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+
+    const response = await POST(makeRequest({ action: 'reject', review_notes: 'Not enough detail' }), makeContext())
+    expect(response.status).toBe(200) // The decision still applies; we just log the email failure
+
+    const loggerMod = require('@/lib/logger')
+    expect(loggerMod.logger.warn).toHaveBeenCalledWith(
+      'Workshop proposal notification email failed (resolved)',
+      expect.objectContaining({ action: 'reject', error: 'SMTP rejected' }),
+    )
+  })
 })

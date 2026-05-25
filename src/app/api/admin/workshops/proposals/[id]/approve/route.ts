@@ -154,17 +154,27 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
       }
     })
 
-    // Send notification email to proposer
+    // Send notification email to proposer. sendEmail RESOLVES with
+    // {success:false,error} on SMTP/Listmonk failure rather than throwing,
+    // so a bare try/catch only catches the rare exception path and silently
+    // miscounts realistic failures. Matches the repairer-applications
+    // approve/reject/request-changes pattern in d128beff/87f084af —
+    // capture the result and check .success. Particularly important for
+    // reject + require_changes here: those actions have NO in-app
+    // notification fallback (only the approve branch fires notifyUsers
+    // below), so a silently-failed email leaves the proposer with no
+    // signal that their proposal was decided.
     try {
+      let emailResult
       if (action === 'approve') {
-        await sendEmail(
+        emailResult = await sendEmail(
           proposal.proposerEmail!,
           'workshopProposalApproved',
           proposal.proposerName!,
           proposal.title
         )
       } else if (action === 'reject') {
-        await sendEmail(
+        emailResult = await sendEmail(
           proposal.proposerEmail!,
           'workshopProposalRejected',
           proposal.proposerName!,
@@ -172,7 +182,7 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
           review_notes || 'Kein Grund angegeben'
         )
       } else if (action === 'require_changes') {
-        await sendEmail(
+        emailResult = await sendEmail(
           proposal.proposerEmail!,
           'workshopProposalChangesRequested',
           proposal.proposerName!,
@@ -180,8 +190,15 @@ export const POST = withAdmin<{ id: string }>('workshops-admin', async (request,
           required_changes || review_notes || ''
         )
       }
+      if (emailResult && !emailResult.success) {
+        logger.warn('Workshop proposal notification email failed (resolved)', {
+          proposalId,
+          action,
+          error: emailResult.error,
+        })
+      }
     } catch (emailError) {
-      logger.warn('Failed to send workshop proposal email', { error: emailError, proposalId, action })
+      logger.warn('Workshop proposal notification email failed (rejected)', { error: emailError, proposalId, action })
     }
 
     // In-app notification for the proposer
