@@ -47,6 +47,8 @@ export default function CreatePeerRepairPage() {
     error,
     success,
     anonymousAccountCreated,
+    existingAccountAttached,
+    submittedRequestId,
     formData,
     aiFieldMeta,
     updateField,
@@ -84,6 +86,31 @@ export default function CreatePeerRepairPage() {
         <Button as={Link} href={ROUTES.public.itHilfe} variant="outline">
           Zurück zur Übersicht
         </Button>
+      </PageShell>
+    )
+  }
+
+  if (success && existingAccountAttached) {
+    const loginHref = submittedRequestId
+      ? `/auth/login?callbackUrl=${encodeURIComponent(`/it-hilfe/${submittedRequestId}`)}`
+      : '/auth/login'
+    return (
+      <PageShell maxWidth="2xl" py="py-24" className="text-center">
+        <CheckCircle className="w-16 h-16 text-primary-500 mx-auto mb-4" />
+        <Heading level={2} className="text-2xl text-neutral-900 dark:text-white mb-2">
+          Anfrage gespeichert!
+        </Heading>
+        <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-prose mx-auto">
+          Wir haben deine Anfrage an dein bestehendes Konto unter{' '}
+          <strong>{formData.submitterEmail}</strong> angehängt.
+          Melde dich an, um Angebote zu sehen und deine Anfrage zu verwalten.
+        </p>
+        <Button as={Link} href={loginHref} variant="primary">
+          Anmelden
+        </Button>
+        <p className="text-xs text-neutral-500 dark:text-neutral-500 mt-6">
+          Passwort vergessen? Du kannst es auf der Anmeldeseite zurücksetzen.
+        </p>
       </PageShell>
     )
   }

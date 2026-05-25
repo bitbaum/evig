@@ -35,6 +35,13 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
   // check their email instead of redirecting (they can't view the request
   // until they set a password via the claim link).
   const [anonymousAccountCreated, setAnonymousAccountCreated] = useState(false)
+  // `existingAccountAttached` flips when a logged-out submitter's email
+  // matched an existing account. The request was attached silently; we
+  // can't auto-redirect to the request page because the browser tab is
+  // still logged-out, so owner actions wouldn't work — show a "sign in
+  // to manage" CTA instead.
+  const [existingAccountAttached, setExistingAccountAttached] = useState(false)
+  const [submittedRequestId, setSubmittedRequestId] = useState<string | null>(null)
   const [formData, setFormData] = useState<ITHilfeCreateFormData>(INITIAL_IT_HILFE_FORM)
   const [aiFieldMeta, setAiFieldMeta] = useState<Record<string, AIFieldMetadataEntry>>({})
 
@@ -151,11 +158,18 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
       }
 
       setSuccess(true)
-      // newAccount → backend just provisioned an account; user must claim
-      // via email link before they can view the request. Skip the redirect
-      // and let the page render the check-your-email state.
+      setSubmittedRequestId(result.data.requestId)
+      // Three branches based on auth state + whether the backend created
+      // a new account:
+      //
+      //   newAccount=true                     → "check your email" claim flow
+      //   status=unauth, newAccount=false    → "we attached this to your
+      //                                          existing account, sign in"
+      //   status=authenticated (or default)  → normal redirect to request
       if (result.data.newAccount) {
         setAnonymousAccountCreated(true)
+      } else if (status === 'unauthenticated') {
+        setExistingAccountAttached(true)
       } else {
         setTimeout(() => {
           router.push(`/it-hilfe/${result.data!.requestId}`)
@@ -176,6 +190,8 @@ export function useCreateITHilfeForm(errorCreateFailed: string, errorGeneric: st
     error,
     success,
     anonymousAccountCreated,
+    existingAccountAttached,
+    submittedRequestId,
     formData,
     aiFieldMeta,
     updateField,
