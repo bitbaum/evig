@@ -185,7 +185,15 @@ export const POST = withAuth<{ id: string }>(async (
       return appointment
     })
 
-    // Fire-and-forget: notify repairer by email
+    // Fire-and-forget: notify repairer by email. Sibling of the fix in
+    // 1707e5ea: /dashboard/appointments is customer-mode (uses
+    // useAppointments which defaults role=customer), so a repairer
+    // clicking the email landed on their own customer-side bookings,
+    // not the new booking they were notified about. /dashboard/techniker
+    // is the only existing repairer-context dashboard page; doesn't list
+    // service appointments either (no UI built for that yet — tracked in
+    // roadmap T1 enhancements) but at least it's a page the repairer
+    // recognizes as theirs.
     const repairerUserRows = await db
       .select({ email: users.email, name: users.name })
       .from(users)
@@ -193,7 +201,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     if (repairerUserRows.length > 0) {
       const repairerUser = repairerUserRows[0]
-      const appointmentUrl = `${APP_URL}/dashboard/appointments`
+      const appointmentUrl = `${APP_URL}/dashboard/techniker`
       const emailContent = appointmentNewBooking(
         repairerUser.name || repairer.businessName || 'Reparateur',
         session.user.name || 'Kunde',

@@ -296,4 +296,40 @@ describe('POST /api/repairers/[id]/book — success', () => {
     expect(body.success).toBe(true)
     expect(body.data.appointment.id).toBe('appt-1')
   })
+
+  it('repairer notification email links to /dashboard/techniker (not customer-mode /dashboard/appointments)', async () => {
+    // Sibling fix to 1707e5ea. The previous URL pointed at
+    // /dashboard/appointments, which is customer-mode (useAppointments
+    // calls /api/appointments without a role param), so the repairer
+    // landed on their own customer-side bookings, not the new booking.
+    // /dashboard/techniker is the only existing repairer-context page.
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([MOCK_REPAIRER]),
+      }),
+    })
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([MOCK_SERVICE_TYPE]),
+      }),
+    })
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([{ email: 'repairer@example.com', name: 'Repairer' }]),
+      }),
+    })
+
+    await POST(makeRequest(VALID_BODY), makeContext())
+    // Flush the fire-and-forget chain
+    await new Promise(resolve => setImmediate(resolve))
+
+    const emailMocks = jest.requireMock('@/lib/email') as { appointmentNewBooking: jest.Mock }
+    expect(emailMocks.appointmentNewBooking).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.any(String),
+      expect.any(String),
+      expect.stringMatching(/\/dashboard\/techniker$/),
+    )
+  })
 })
