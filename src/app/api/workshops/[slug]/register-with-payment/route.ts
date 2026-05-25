@@ -117,17 +117,49 @@ export async function POST(request: NextRequest) {
         )
       )
 
+    // UNIQUE(user_id, workshop_instance_id) means a stale row from a prior
+    // cancellation or in-flight payment attempt blocks a fresh INSERT. Branch
+    // on existing status so the user gets a clear message instead of a 500
+    // from the unique-constraint violation, and so CANCELLED rows can be
+    // resurrected (matches the register/route.ts fix at 501ff9fa for the
+    // non-payment variant).
+    let cancelledRegistrationId: string | null = null
     if (existingRegistration.length > 0) {
       const reg = existingRegistration[0]
       if (reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || reg.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
         return apiBadRequest('Sie sind bereits für diesen Workshop angemeldet')
       }
+      if (reg.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
+        return apiBadRequest('Es läuft bereits eine Anmeldung für diesen Workshop. Bitte schliesse die Zahlung ab oder storniere zuerst.')
+      }
+      if (reg.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED) {
+        cancelledRegistrationId = reg.id
+      }
+      // Other statuses (WAITLIST, NO_SHOW): fall through to INSERT which will
+      // 500 on UNIQUE — these states are rare and not the primary fix scope.
     }
 
     const baseAmount = workshop.price_cents
 
-    // Wrap registration + participant count update in transaction
+    // Wrap registration + participant count update in transaction. INSERT a
+    // fresh row when there's no prior registration; UPDATE the existing
+    // CANCELLED row back to PENDING when resurrecting (no participant count
+    // change in that case — the cancel route doesn't decrement, so the
+    // count was already adjusted at the original INSERT).
     const registrationId = await db.transaction(async (tx) => {
+      if (cancelledRegistrationId) {
+        const [resurrected] = await tx.update(workshopRegistrations)
+          .set({
+            status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+            paymentStatus: PAYMENT_STATUS.PENDING,
+            paymentAmountCents: baseAmount,
+            cancelledAt: null,
+          })
+          .where(eq(workshopRegistrations.id, cancelledRegistrationId))
+          .returning({ id: workshopRegistrations.id })
+        return resurrected.id
+      }
+
       const [createdReg] = await tx.insert(workshopRegistrations).values({
         userId: session.user.id,
         workshopInstanceId: registrationTarget,

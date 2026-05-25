@@ -245,3 +245,51 @@ describe('POST /api/workshops/[slug]/register-with-payment — success', () => {
     expect(body.data.workshopTitle).toBe('Linux Basics')
   })
 })
+
+describe('POST /api/workshops/[slug]/register-with-payment — existing registration', () => {
+  it('returns 400 with clear message when prior PENDING registration is in flight (was 500 from UNIQUE conflict)', async () => {
+    mockExecute.mockResolvedValueOnce({ rows: [MOCK_WORKSHOP] })
+    // Existing PENDING row blocks the new payment flow
+    mockWhere.mockResolvedValue([{ id: 'prior-reg', status: 'pending' }])
+    mockFrom.mockReturnValue({ where: mockWhere })
+    mockSelect.mockReturnValue({ from: mockFrom })
+
+    const res = await POST(makeRequest())
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toMatch(/läuft bereits/i)
+  })
+
+  it('resurrects a CANCELLED registration via UPDATE instead of 500ing on UNIQUE conflict', async () => {
+    mockExecute.mockResolvedValueOnce({ rows: [MOCK_WORKSHOP] })
+    mockWhere.mockResolvedValue([{ id: 'prior-reg', status: 'cancelled' }])
+    mockFrom.mockReturnValue({ where: mockWhere })
+    mockSelect.mockReturnValue({ from: mockFrom })
+
+    // Capture which path the transaction took: UPDATE (resurrect) vs INSERT
+    const txInsert = jest.fn().mockReturnValue({
+      values: jest.fn().mockReturnValue({
+        returning: jest.fn().mockResolvedValue([{ id: 'new-reg' }]),
+      }),
+    })
+    const txUpdate = jest.fn().mockReturnValue({
+      set: jest.fn().mockReturnValue({
+        where: jest.fn().mockReturnValue({
+          returning: jest.fn().mockResolvedValue([{ id: 'prior-reg' }]),
+        }),
+      }),
+    })
+    const txExecute = jest.fn().mockResolvedValue({ rows: [] })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
+      fn({ insert: txInsert, update: txUpdate, execute: txExecute })
+    )
+
+    const res = await POST(makeRequest())
+    expect(res.status).toBe(200)
+    const body = await res.json()
+    // Existing CANCELLED row resurrected — returned ID matches the prior row
+    expect(body.data.registrationId).toBe('prior-reg')
+    expect(txUpdate).toHaveBeenCalled()
+    expect(txInsert).not.toHaveBeenCalled()
+  })
+})
