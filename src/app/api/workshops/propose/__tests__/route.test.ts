@@ -75,7 +75,7 @@ jest.mock('@/config/urls', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendEmail: jest.fn().mockResolvedValue(undefined),
+  sendEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/logger', () => ({
@@ -292,7 +292,7 @@ describe('POST /api/workshops/propose — success', () => {
       .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]))
 
     const emailMod = require('@/lib/email')
-    emailMod.sendEmail.mockResolvedValue(undefined)
+    emailMod.sendEmail.mockResolvedValue({ success: true })
 
     const req = new NextRequest('http://localhost/api/workshops/propose', {
       method: 'POST',

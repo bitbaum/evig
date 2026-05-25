@@ -83,7 +83,7 @@ jest.mock('@/lib/it-hilfe/notifications', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({
@@ -148,7 +148,7 @@ describe('POST /api/it-hilfe/requests/[id]/complete', () => {
     })
     // Re-establish fire-and-forget mocks cleared by resetAllMocks
     const email = jest.requireMock('@/lib/email') as { sendCustomEmail: jest.Mock }
-    email.sendCustomEmail.mockResolvedValue(undefined)
+    email.sendCustomEmail.mockResolvedValue({ success: true })
     const notif = jest.requireMock('@/lib/it-hilfe/notifications') as { sendItHilfeNotification: jest.Mock }
     notif.sendItHilfeNotification.mockResolvedValue(undefined)
   })

@@ -112,7 +112,7 @@ jest.mock('@/lib/payments/payrexx-client', () => ({
 // ---------------------------------------------------------------------------
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
   orderConfirmationBuyer: jest.fn().mockReturnValue({}),
   newOrderNotificationSeller: jest.fn().mockReturnValue({}),
 }))
@@ -329,7 +329,7 @@ beforeEach(() => {
   // Re-wire fire-and-forget email mocks — resetAllMocks() wipes implementations,
   // so these must be restored or .catch() calls on undefined will throw inside the route
   const emailMod = require('@/lib/email')
-  emailMod.sendCustomEmail.mockResolvedValue(undefined)
+  emailMod.sendCustomEmail.mockResolvedValue({ success: true })
   emailMod.orderConfirmationBuyer.mockReturnValue({})
   emailMod.newOrderNotificationSeller.mockReturnValue({})
 

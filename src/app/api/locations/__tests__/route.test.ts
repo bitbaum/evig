@@ -96,7 +96,7 @@ const mockLocationSubmissionConfirmation = jest.fn().mockReturnValue({ subject: 
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
   locationSubmissionConfirmation: (...args: unknown[]) => mockLocationSubmissionConfirmation(...args),
-  sendEmail: jest.fn().mockResolvedValue(undefined),
+  sendEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 const mockValidateBody = jest.fn()

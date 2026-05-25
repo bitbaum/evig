@@ -82,7 +82,7 @@ const mockSendEmail = jest.fn().mockResolvedValue(undefined)
 
 jest.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail(...args),
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
   locationSubmissionConfirmation: jest.fn().mockReturnValue({}),
 }))
 

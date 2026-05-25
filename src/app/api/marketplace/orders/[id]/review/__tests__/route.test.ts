@@ -106,7 +106,7 @@ jest.mock('@/lib/services/notifications', () => ({
 // ---------------------------------------------------------------------------
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/email/templates/marketplace', () => ({
@@ -262,7 +262,7 @@ beforeEach(() => {
 
   // Re-wire fire-and-forget mocks
   const emailMod = require('@/lib/email')
-  emailMod.sendCustomEmail.mockResolvedValue(undefined)
+  emailMod.sendCustomEmail.mockResolvedValue({ success: true })
   const notifyMod = require('@/lib/services/notifications')
   notifyMod.createNotification.mockResolvedValue(undefined)
 })

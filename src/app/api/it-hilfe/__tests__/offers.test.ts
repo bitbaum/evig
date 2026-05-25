@@ -50,7 +50,7 @@ jest.mock('@/auth', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({

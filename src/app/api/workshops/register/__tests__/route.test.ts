@@ -91,7 +91,7 @@ jest.mock('@/config/urls', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendEmail: jest.fn().mockResolvedValue(undefined),
+  sendEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/logger', () => ({

@@ -88,9 +88,9 @@ jest.mock('@/lib/logger', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
   appointmentUnassignedAlert: jest.fn().mockResolvedValue(undefined),
-  sendEmail: jest.fn().mockResolvedValue(undefined),
+  sendEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 const mockValidateBody = jest.fn((_schema: unknown, data: unknown) => ({ success: true, data }))
@@ -172,7 +172,7 @@ beforeEach(() => {
   mockValidateBody.mockImplementation((_schema: unknown, data: unknown) => ({ success: true, data }))
   mockValidateQuery.mockImplementation((_schema: unknown, data: unknown) => ({ success: true, data: { limit: 20, offset: 0, ...(data as object) } }))
 
-  jest.requireMock('@/lib/email').sendCustomEmail.mockResolvedValue(undefined)
+  jest.requireMock('@/lib/email').sendCustomEmail.mockResolvedValue({ success: true })
   jest.requireMock('@/lib/email').appointmentUnassignedAlert.mockResolvedValue(undefined)
 
   // Default: first select returns appointments list, second returns count

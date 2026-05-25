@@ -148,7 +148,7 @@ jest.mock('@/lib/permissions', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/email/templates/marketplace', () => ({
@@ -357,7 +357,7 @@ beforeEach(() => {
   const { indexListingInSearch } = require('@/lib/marketplace/listing-helpers')
   const { sendCustomEmail } = require('@/lib/email')
   indexListingInSearch.mockReturnValue(undefined)
-  sendCustomEmail.mockResolvedValue(undefined)
+  sendCustomEmail.mockResolvedValue({ success: true })
 
   // Transaction default: success
   mockTransactionFn.mockImplementation(async (callback: (tx: unknown) => unknown) => {

@@ -133,7 +133,7 @@ jest.mock('@/config/repairer-status', () => ({
 jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
   appointmentNewBooking: jest.fn().mockReturnValue({}),
 }))
 
@@ -191,7 +191,7 @@ beforeEach(() => {
   rateLimiters.bookingCreate.mockReturnValue(true)
   // Re-wire fire-and-forget email mock so .catch() doesn't throw
   const emailMocks = jest.requireMock('@/lib/email') as { sendCustomEmail: jest.Mock; appointmentNewBooking: jest.Mock }
-  emailMocks.sendCustomEmail.mockResolvedValue(undefined)
+  emailMocks.sendCustomEmail.mockResolvedValue({ success: true })
   emailMocks.appointmentNewBooking.mockReturnValue({})
   mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
     const txInsert = jest.fn().mockReturnValue({

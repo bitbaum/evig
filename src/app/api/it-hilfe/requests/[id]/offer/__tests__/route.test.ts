@@ -114,7 +114,7 @@ jest.mock('@/lib/it-hilfe/notifications', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
+  sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
 }))
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({
@@ -173,7 +173,7 @@ beforeEach(() => {
   rateLimiters.offerCreate.mockReturnValue(true)
   // Re-wire fire-and-forget mocks that need .catch() to not throw
   const emailMocks = jest.requireMock('@/lib/email') as { sendCustomEmail: jest.Mock }
-  emailMocks.sendCustomEmail.mockResolvedValue(undefined)
+  emailMocks.sendCustomEmail.mockResolvedValue({ success: true })
   const notifyMocks = jest.requireMock('@/lib/it-hilfe/notifications') as { sendItHilfeNotification: jest.Mock }
   notifyMocks.sendItHilfeNotification.mockResolvedValue(undefined)
 })
