@@ -157,20 +157,30 @@ async function updateSellerRatingFromListing(listingId: string): Promise<void> {
 
 /** Update repairer_profiles average rating from all repairer reviews */
 async function updateRepairerRating(repairerId: string): Promise<void> {
+  // For 'repairer' reviews, reviews.target_id is the repairer_profiles.id
+  // (the profile UUID), NOT repairer_profiles.user_id. See api/reviews/
+  // route.ts:131-132 where the JOIN is `eq(reviews.targetId,
+  // repairerProfiles.id)`. Matching the WHERE clause to .user_id silently
+  // never updated a row — the displayed average_rating + total_reviews
+  // stayed stale until an admin manually called /api/admin/repairers/[id]/
+  // recalculate-ratings (which calls the update_repairer_rating_summary
+  // stored proc that does the math correctly). Compare to the
+  // IT-Hilfe and seller paths above where the JOIN is via the helper's /
+  // seller's user_id from offers / listings — those are correct.
   const result = await db.execute(sql`
     UPDATE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} SET
       average_rating = sub.avg_rating,
       total_reviews = sub.review_count
     FROM (
       SELECT
-        target_id AS repairer_id,
+        target_id AS repairer_profile_id,
         AVG(overall_rating)::numeric(3,2) AS avg_rating,
         COUNT(id)::int AS review_count
       FROM ${sql.raw(TABLE_NAMES.REVIEWS)}
       WHERE target_type = ${REVIEW_TARGET_TYPES.REPAIRER} AND status = ${REVIEW_STATUS.PUBLISHED} AND target_id = ${repairerId}
       GROUP BY target_id
     ) sub
-    WHERE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)}.user_id = sub.repairer_id
+    WHERE ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)}.id = sub.repairer_profile_id
   `)
   logger.info('Updated repairer rating', { repairerId, rows: result.rowCount })
 }
