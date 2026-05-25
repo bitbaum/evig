@@ -6,6 +6,7 @@ import { ShieldCheck, ShieldOff, Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface VerifyActionsProps {
   listingId: string
@@ -88,12 +89,15 @@ export function VerifyActions({ listingId, isVerified, title }: VerifyActionsPro
   if (showNotes) {
     return (
       <div className="flex items-center gap-2">
-        <input
+        <Input
+          variant="elevated"
           type="text"
           value={notes}
           onChange={e => setNotes(e.target.value)}
           placeholder="Notiz (optional)"
-          className="w-40 px-2 py-1.5 text-sm border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          // Inline-row context: compact width + tighter padding override
+          // the primitive's `w-full px-3 py-2` defaults. twMerge resolves.
+          className="w-40 px-2 py-1.5"
           maxLength={2000}
           onKeyDown={e => { if (e.key === 'Enter') handleVerify() }}
           autoFocus
