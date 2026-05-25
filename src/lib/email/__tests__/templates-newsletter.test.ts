@@ -27,4 +27,9 @@ describe('newsletterConfirmation', () => {
   it('subject is in German', () => {
     expect(email.subject).toContain('bestätigen')
   })
+
+  it('subject interpolates ORG.name (not literal "${ORG.name}")', () => {
+    expect(email.subject).not.toMatch(/\$\{/)
+    expect(email.subject).toMatch(/Revamp-IT|revamp-it/i)
+  })
 })

@@ -3,7 +3,7 @@ import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 
 export const newsletterConfirmation = (confirmUrl: string): EmailContent => ({
-  subject: 'Newsletter-Anmeldung bestätigen - ${ORG.name}',
+  subject: `Newsletter-Anmeldung bestätigen - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

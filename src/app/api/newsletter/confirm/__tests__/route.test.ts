@@ -4,21 +4,20 @@
  * Tests for GET /api/newsletter/confirm
  *
  * Mission-relevant: newsletter confirmation is the double-opt-in step.
- * If this endpoint is broken, subscribers who click the email link get an
- * error and are never added to the active list — donor/volunteer outreach fails.
+ * The user clicks a link in their email and lands here via browser
+ * navigation — so this route returns text/html (not JSON) so the
+ * subscriber sees a friendly confirmation page rather than raw API
+ * output.
  *
  * Behaviors locked:
  *   GET /api/newsletter/confirm
- *   - returns 400 when token query param is missing
- *   - returns 400 with Swiss-German message when token is invalid/already used
- *   - returns 200 with success message when token is valid
+ *   - returns 400 HTML when token query param is missing
+ *   - returns 400 HTML with "ungültig" / "verwendet" copy when token is invalid/already used
+ *   - returns 200 HTML with success message when token is valid
  *   - calls DB update to set isActive=true, confirmToken=null
- *   - returns 500 error response when DB throws
+ *   - returns 500 HTML when DB throws
+ *   - Content-Type is text/html for all responses
  */
-
-// ---------------------------------------------------------------------------
-// Mocks
-// ---------------------------------------------------------------------------
 
 const mockReturning = jest.fn()
 const mockWhere = jest.fn().mockReturnValue({ returning: mockReturning })
@@ -54,31 +53,16 @@ jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
 }))
 
-jest.mock('@/lib/api/helpers', () => ({
-  apiSuccess: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: true, data })
-  },
-  apiError: (err: unknown, msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status: 500 })
-  },
-  apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status: 400 })
-  },
+jest.mock('@/config/org', () => ({
+  ORG: { name: 'Revamp-IT' },
 }))
 
-// ---------------------------------------------------------------------------
-// Imports (after mocks)
-// ---------------------------------------------------------------------------
+jest.mock('@/config/urls', () => ({
+  APP_URL: 'https://revamp-it.test',
+}))
 
 import { NextRequest } from 'next/server'
 import { GET } from '../route'
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function makeRequest(token?: string) {
   const url = new URL('http://localhost/api/newsletter/confirm')
@@ -94,56 +78,39 @@ beforeEach(() => {
   mockWhere.mockReturnValue({ returning: mockReturning })
 })
 
-// ============================================================================
-// GET /api/newsletter/confirm
-// ============================================================================
-
 describe('GET /api/newsletter/confirm — missing token', () => {
-  it('returns 400 when token is missing', async () => {
+  it('returns 400 HTML when token is missing', async () => {
     const response = await GET(makeRequest())
     expect(response.status).toBe(400)
-  })
-
-  it('error message references token', async () => {
-    const response = await GET(makeRequest())
-    const body = await response.json()
-    expect(body.error.toLowerCase()).toContain('token')
+    expect(response.headers.get('content-type')).toMatch(/text\/html/)
+    const text = await response.text()
+    expect(text.toLowerCase()).toContain('token')
   })
 })
 
 describe('GET /api/newsletter/confirm — invalid token', () => {
-  it('returns 400 when token not found (no matching DB row)', async () => {
-    mockReturning.mockResolvedValueOnce([]) // empty = not found or already used
-
+  it('returns 400 HTML when token not found (no matching DB row)', async () => {
+    mockReturning.mockResolvedValueOnce([])
     const response = await GET(makeRequest('invalid-token-xyz'))
     expect(response.status).toBe(400)
-  })
-
-  it('error message mentions invalid or already used link', async () => {
-    mockReturning.mockResolvedValueOnce([])
-
-    const response = await GET(makeRequest('expired-token'))
-    const body = await response.json()
-    expect(body.error).toMatch(/ungültig|verwendet/i)
+    expect(response.headers.get('content-type')).toMatch(/text\/html/)
+    const text = await response.text()
+    expect(text).toMatch(/ungültig|verwendet/i)
   })
 })
 
 describe('GET /api/newsletter/confirm — valid token', () => {
-  it('returns 200 on success', async () => {
+  it('returns 200 HTML on success', async () => {
     const response = await GET(makeRequest('valid-token-abc'))
     expect(response.status).toBe(200)
+    expect(response.headers.get('content-type')).toMatch(/text\/html/)
   })
 
-  it('returns success: true', async () => {
+  it('success HTML contains confirmation copy and link back to homepage', async () => {
     const response = await GET(makeRequest('valid-token-abc'))
-    const body = await response.json()
-    expect(body.success).toBe(true)
-  })
-
-  it('success message mentions newsletter confirmation', async () => {
-    const response = await GET(makeRequest('valid-token-abc'))
-    const body = await response.json()
-    expect(body.data.message).toMatch(/newsletter|bestätigt/i)
+    const text = await response.text()
+    expect(text).toMatch(/bestätigt/i)
+    expect(text).toContain('https://revamp-it.test')
   })
 
   it('calls db.update to activate subscription', async () => {
@@ -156,12 +123,10 @@ describe('GET /api/newsletter/confirm — valid token', () => {
 })
 
 describe('GET /api/newsletter/confirm — DB error', () => {
-  it('returns 500 when DB throws', async () => {
+  it('returns 500 HTML when DB throws', async () => {
     mockReturning.mockRejectedValueOnce(new Error('DB connection lost'))
-
     const response = await GET(makeRequest('some-token'))
     expect(response.status).toBe(500)
-    const body = await response.json()
-    expect(body.success).toBe(false)
+    expect(response.headers.get('content-type')).toMatch(/text\/html/)
   })
 })
