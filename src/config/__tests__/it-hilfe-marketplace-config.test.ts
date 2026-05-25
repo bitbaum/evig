@@ -73,10 +73,6 @@ describe('isRequestAcceptingOffers', () => {
     expect(isRequestAcceptingOffers(REQUEST_STATUS.OPEN)).toBe(true)
   })
 
-  it('in_discussion → does NOT accept offers (legacy status — kill in progress)', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.IN_DISCUSSION)).toBe(false)
-  })
-
   it('matched → does NOT accept offers', () => {
     expect(isRequestAcceptingOffers(REQUEST_STATUS.MATCHED)).toBe(false)
   })

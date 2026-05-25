@@ -246,8 +246,6 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     mockInsertChain.returning.mockResolvedValueOnce([{ id: validOfferId }])
     // UPDATE offerCount increment
     mockUpdateChain.where.mockResolvedValueOnce([])
-    // UPDATE request status to in_discussion
-    mockUpdateChain.where.mockResolvedValueOnce([])
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {

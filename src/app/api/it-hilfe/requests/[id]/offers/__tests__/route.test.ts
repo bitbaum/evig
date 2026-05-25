@@ -81,7 +81,7 @@ jest.mock('@/config/error-messages', () => ({
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion', MATCHED: 'matched', COMPLETED: 'completed' },
+  REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
 }))
 
 jest.mock('@/lib/it-hilfe/notifications', () => ({
@@ -264,7 +264,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     expect(res.status).toBe(400)
   })
 
-  it('returns 400 when request status is not open or in_discussion', async () => {
+  it('returns 400 when request status is not open', async () => {
     mockAuth.mockResolvedValue(MOCK_SESSION)
 
     mockWhere.mockResolvedValue([{ requesterId: 'other-user', status: 'matched', title: 'X', requester_name: 'Jane', requester_email: 'jane@example.com' }])

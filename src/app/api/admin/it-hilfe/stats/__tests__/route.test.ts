@@ -67,7 +67,7 @@ jest.mock('@/config/error-messages', () => ({
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion', MATCHED: 'matched', COMPLETED: 'completed', CANCELLED: 'cancelled' },
+  REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed', CANCELLED: 'cancelled' },
   URGENCY: { LOW: 'low', NORMAL: 'normal', HIGH: 'high', URGENT: 'urgent' },
 }))
 
@@ -102,7 +102,7 @@ const MOCK_SESSION = {
 }
 
 const MOCK_ROW = {
-  total: '10', open: '4', in_discussion: '2', matched: '1',
+  total: '10', open: '4', matched: '1',
   completed: '2', cancelled: '1', low: '3', normal: '4', high: '2', urgent: '1',
   activeHelpers: '5', verifiedHelpers: '3', totalOffers: '8',
 }

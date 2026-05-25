@@ -86,7 +86,7 @@ jest.mock('@/config/error-messages', () => ({
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion' },
+  REQUEST_STATUS: { OPEN: 'open' },
 }))
 
 import { NextRequest } from 'next/server'

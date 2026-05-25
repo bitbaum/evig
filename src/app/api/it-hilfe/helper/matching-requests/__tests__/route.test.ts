@@ -64,7 +64,7 @@ jest.mock('@/config/error-messages', () => ({
 jest.mock('@/config/it-hilfe', () => ({
   getCategoryIds: jest.fn().mockReturnValue(['cat-1']),
   URGENCY_LEVELS: [{ id: 'low' }, { id: 'high' }],
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion', MATCHED: 'matched', COMPLETED: 'completed' },
+  REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
 }))
 
 jest.mock('drizzle-orm', () => ({

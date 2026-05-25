@@ -74,7 +74,7 @@ jest.mock('@/config/error-messages', () => ({
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion', MATCHED: 'matched', COMPLETED: 'completed' },
+  REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
   OFFER_STATUS: { PENDING: 'pending', ACCEPTED: 'accepted', REJECTED: 'rejected', WITHDRAWN: 'withdrawn' },
 }))
 

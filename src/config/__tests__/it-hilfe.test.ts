@@ -33,8 +33,7 @@
  *
  *   isRequestAcceptingOffers
  *   - returns true for 'open'
- *   - returns false for 'in_discussion' (legacy — kill in progress),
- *     'matched', 'completed', 'cancelled'
+ *   - returns false for 'matched', 'completed', 'cancelled'
  *
  *   formatBudget
  *   - returns "Gratis (Community-Hilfe)" for gratis tier
@@ -241,10 +240,6 @@ describe('getSkillsForCategory', () => {
 describe('isRequestAcceptingOffers', () => {
   it('returns true for "open"', () => {
     expect(isRequestAcceptingOffers(REQUEST_STATUS.OPEN)).toBe(true)
-  })
-
-  it('returns false for "in_discussion" (legacy status — kill in progress)', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.IN_DISCUSSION)).toBe(false)
   })
 
   it('returns false for "matched"', () => {

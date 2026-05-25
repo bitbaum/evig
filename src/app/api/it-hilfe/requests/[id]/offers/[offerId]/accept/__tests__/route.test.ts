@@ -79,7 +79,7 @@ jest.mock('@/config/database', () => ({
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion', MATCHED: 'matched', COMPLETED: 'completed' },
+  REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
   OFFER_STATUS: { PENDING: 'pending', ACCEPTED: 'accepted', REJECTED: 'rejected', WITHDRAWN: 'withdrawn' },
 }))
 
@@ -196,7 +196,7 @@ describe('POST /api/it-hilfe/requests/[id]/offers/[offerId]/accept', () => {
     expect(res.status).toBe(403)
   })
 
-  it('returns 400 when request status is not open or in_discussion', async () => {
+  it('returns 400 when request status is not open', async () => {
     mockAuth.mockResolvedValue(MOCK_SESSION)
     mockExecute
       .mockResolvedValueOnce({ rows: [{ requester_id: 'user-1', requester_name: 'Test', status: 'completed', title: 'X' }] })

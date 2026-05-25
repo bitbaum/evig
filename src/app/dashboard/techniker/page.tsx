@@ -30,7 +30,6 @@ export default async function TechnikerDashboardPage() {
   const session = await auth()
   const requestStatusLabels: Record<string, string> = {
     open: t('statusOpen'),
-    in_discussion: t('statusInDiscussion'),
     matched: t('statusMatched'),
     completed: t('statusCompleted'),
     cancelled: t('statusCancelled'),

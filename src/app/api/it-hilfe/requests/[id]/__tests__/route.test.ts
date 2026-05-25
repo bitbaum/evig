@@ -91,8 +91,8 @@ jest.mock('@/config/error-messages', () => ({
 }))
 
 jest.mock('@/config/it-hilfe', () => ({
-  REQUEST_STATUS: { OPEN: 'open', IN_DISCUSSION: 'in_discussion', MATCHED: 'matched', COMPLETED: 'completed' },
-  VALID_REQUEST_TRANSITIONS: { open: ['in_discussion', 'cancelled'], in_discussion: ['open', 'cancelled'] },
+  REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
+  VALID_REQUEST_TRANSITIONS: { open: ['cancelled'] },
   deriveBudgetType: jest.fn().mockReturnValue('free'),
 }))
 
