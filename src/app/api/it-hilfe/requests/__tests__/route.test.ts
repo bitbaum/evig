@@ -33,17 +33,9 @@ jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
 }))
 
-jest.mock('@/lib/api/middleware', () => ({
-  withAuth: (handler: (req: Request, session: unknown) => unknown) =>
-    (req: Request) =>
-      mockAuth().then((session: unknown) => {
-        if (!session || !(session as { user?: unknown }).user) {
-          const { NextResponse } = jest.requireActual('next/server')
-          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-        }
-        return handler(req, session)
-      }),
-}))
+// withAuth no longer wraps POST (the route now resolves session manually
+// to allow anonymous submissions). Mock left out — the route imports
+// auth() from '@/auth' directly, which is already mocked above.
 
 const mockDbExecute = jest.fn()
 const mockInsert = jest.fn()
@@ -72,12 +64,35 @@ jest.mock('drizzle-orm', () => ({
 }))
 
 const mockItHilfeCreateLimiter = jest.fn()
+const mockGetClientIdentifier = jest.fn().mockReturnValue('127.0.0.1')
 
 jest.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
     itHilfeCreate: (...args: unknown[]) => mockItHilfeCreateLimiter.apply(null, args),
   },
+  getClientIdentifier: (...args: unknown[]) => mockGetClientIdentifier.apply(null, args),
 }))
+
+const mockFindOrCreateAnonymousUser = jest.fn()
+jest.mock('@/lib/it-hilfe/find-or-create-anonymous-user', () => ({
+  findOrCreateAnonymousUser: (...args: unknown[]) => mockFindOrCreateAnonymousUser.apply(null, args),
+}))
+
+const mockCreatePasswordResetToken = jest.fn()
+jest.mock('@/lib/auth/db-verification', () => ({
+  createPasswordResetToken: (...args: unknown[]) => mockCreatePasswordResetToken.apply(null, args),
+}))
+
+const mockSendCustomEmail = jest.fn()
+jest.mock('@/lib/email', () => ({
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail.apply(null, args),
+}))
+
+jest.mock('@/lib/email/templates/it-hilfe', () => ({
+  itHilfeAnonymousRequestClaim: jest.fn().mockReturnValue({ subject: 's', html: 'h', text: 't' }),
+}))
+
+jest.mock('@/config/urls', () => ({ APP_URL: 'https://example.com' }))
 
 jest.mock('@/lib/security/sanitize', () => ({
   sanitizeInput: (input: string) => input,
@@ -202,8 +217,17 @@ beforeEach(() => {
   mockAuth.mockResolvedValue(MOCK_SESSION)
   mockDbExecute.mockResolvedValue({ rows: MOCK_ROWS })
   mockItHilfeCreateLimiter.mockReturnValue(true)
+  mockGetClientIdentifier.mockReturnValue('127.0.0.1')
   mockInsertValues.mockReturnValue({ returning: mockInsertReturning })
   mockInsertReturning.mockResolvedValue([{ id: 'req-new' }])
+  mockFindOrCreateAnonymousUser.mockResolvedValue({ userId: 'anon-user-1', wasCreated: true })
+  mockCreatePasswordResetToken.mockResolvedValue('reset-token-abc')
+  mockSendCustomEmail.mockResolvedValue(undefined)
+  // jest.resetAllMocks() wipes return values on jest.fn() defined inside
+  // jest.mock() factories — re-set the template mock so it doesn't return
+  // undefined into sendCustomEmail.
+  const templates = require('@/lib/email/templates/it-hilfe')
+  templates.itHilfeAnonymousRequestClaim.mockReturnValue({ subject: 's', html: 'h', text: 't' })
 
   const helpers = require('@/lib/api/helpers')
   helpers.parsePagination.mockReturnValue({ limit: 20, offset: 0, page: 1 })
@@ -275,11 +299,104 @@ describe('GET /api/it-hilfe/requests — success', () => {
 // POST /api/it-hilfe/requests
 // ============================================================================
 
-describe('POST /api/it-hilfe/requests — unauthenticated', () => {
-  it('returns 401 when session is null', async () => {
+describe('POST /api/it-hilfe/requests — anonymous submissions', () => {
+  // Anonymous-post is the conversion-driver T1 from the roadmap: a logged-out
+  // visitor must be able to submit a request by supplying just their email.
+
+  it('returns 400 when session is null AND no submitterEmail provided', async () => {
     mockAuth.mockResolvedValueOnce(null)
     const response = await POST(makePostRequest())
-    expect(response.status).toBe(401)
+    expect(response.status).toBe(400)
+    expect(mockInsertReturning).not.toHaveBeenCalled()
+  })
+
+  it('returns 201 when session is null AND submitterEmail is provided', async () => {
+    mockAuth.mockResolvedValueOnce(null)
+    const schemas = require('@/lib/schemas/it-hilfe')
+    schemas.validateAndRespond.mockReturnValueOnce({
+      success: true,
+      data: {
+        title: 'Laptop geht nicht',
+        description: 'Laptop startet nicht mehr',
+        categoryId: 'hardware',
+        urgency: 'normal',
+        serviceType: 'flexible',
+        skillsNeeded: [],
+        submitterEmail: 'anon@example.com',
+      },
+    })
+
+    const response = await POST(makePostRequest({ submitterEmail: 'anon@example.com' }))
+    expect(response.status).toBe(201)
+    const body = await response.json()
+    expect(body.data.newAccount).toBe(true)
+
+    // findOrCreateAnonymousUser was called with the email
+    expect(mockFindOrCreateAnonymousUser).toHaveBeenCalledWith('anon@example.com')
+    // The request was inserted with the resolved anonymous userId
+    expect(mockInsertValues).toHaveBeenCalledWith(
+      expect.objectContaining({ requesterId: 'anon-user-1' })
+    )
+  })
+
+  it('sends the claim email when wasCreated is true (new anonymous account)', async () => {
+    mockAuth.mockResolvedValueOnce(null)
+    mockFindOrCreateAnonymousUser.mockResolvedValueOnce({ userId: 'new-anon-1', wasCreated: true })
+    const schemas = require('@/lib/schemas/it-hilfe')
+    schemas.validateAndRespond.mockReturnValueOnce({
+      success: true,
+      data: {
+        title: 'Laptop geht nicht',
+        submitterEmail: 'newuser@example.com',
+      },
+    })
+
+    await POST(makePostRequest({ submitterEmail: 'newuser@example.com' }))
+
+    // Allow the fire-and-forget chain a tick to complete
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(mockCreatePasswordResetToken).toHaveBeenCalledWith('newuser@example.com')
+    expect(mockSendCustomEmail).toHaveBeenCalledWith(
+      'newuser@example.com',
+      expect.any(Object)
+    )
+  })
+
+  it('does NOT send the claim email when wasCreated is false (existing account)', async () => {
+    mockAuth.mockResolvedValueOnce(null)
+    mockFindOrCreateAnonymousUser.mockResolvedValueOnce({ userId: 'existing-1', wasCreated: false })
+    const schemas = require('@/lib/schemas/it-hilfe')
+    schemas.validateAndRespond.mockReturnValueOnce({
+      success: true,
+      data: {
+        title: 'Laptop geht nicht',
+        submitterEmail: 'existing@example.com',
+      },
+    })
+
+    await POST(makePostRequest({ submitterEmail: 'existing@example.com' }))
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(mockCreatePasswordResetToken).not.toHaveBeenCalled()
+    expect(mockSendCustomEmail).not.toHaveBeenCalled()
+  })
+
+  it('uses client IP for rate limiting key when unauthenticated', async () => {
+    mockAuth.mockResolvedValueOnce(null)
+    mockGetClientIdentifier.mockReturnValueOnce('203.0.113.1')
+    const schemas = require('@/lib/schemas/it-hilfe')
+    schemas.validateAndRespond.mockReturnValueOnce({
+      success: true,
+      data: { title: 'X', submitterEmail: 'foo@bar.com' },
+    })
+
+    await POST(makePostRequest({ submitterEmail: 'foo@bar.com' }))
+
+    // First arg to itHilfeCreate is the rate-limit key
+    const callKey = mockItHilfeCreateLimiter.mock.calls[0][0] as string
+    expect(callKey).toContain('203.0.113.1')
+    expect(callKey).toContain('anon')
   })
 })
 

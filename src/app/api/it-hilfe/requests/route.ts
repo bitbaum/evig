@@ -1,11 +1,10 @@
 import { NextRequest } from 'next/server'
 import { auth } from '@/auth'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { sql, getTableName, SQL } from 'drizzle-orm'
 import { itHilfeRequests } from '@/db/schema/itHilfe'
 import { users } from '@/db/schema/auth'
-import { apiError, apiSuccess, apiSuccessCached, apiUnauthorized, apiBadRequest, parsePagination , hasMoreItems} from '@/lib/api/helpers'
+import { apiError, apiSuccess, apiSuccessCached, apiBadRequest, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import {
@@ -18,11 +17,16 @@ import {
   REQUEST_STATUS,
   deriveBudgetType,
 } from '@/config/it-hilfe'
-import { rateLimiters } from '@/lib/security/rate-limit'
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { sanitizeInput } from '@/lib/security/sanitize'
 import { itHilfeRequestSchema, validateAndRespond } from '@/lib/schemas/it-hilfe'
 import { type RequestRow, mapRequestListRow } from '@/lib/it-hilfe/request-mapper'
 import { sendRequestCreatedNotifications } from '@/lib/it-hilfe/notifications'
+import { findOrCreateAnonymousUser } from '@/lib/it-hilfe/find-or-create-anonymous-user'
+import { createPasswordResetToken } from '@/lib/auth/db-verification'
+import { sendCustomEmail } from '@/lib/email'
+import { itHilfeAnonymousRequestClaim } from '@/lib/email/templates/it-hilfe'
+import { APP_URL } from '@/config/urls'
 
 // Table name refs
 const rTable = getTableName(itHilfeRequests)
@@ -149,12 +153,30 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/it-hilfe/requests
- * Create a new IT-Hilfe request (requires auth)
+ * Create a new IT-Hilfe request.
+ *
+ * Auth is OPTIONAL — anonymous submission is supported as the conversion-
+ * driver T1 from the roadmap (people in distress shouldn't have to make
+ * an account before describing their broken laptop).
+ *
+ * Resolution:
+ *   - session present → use session.user.id as requesterId (unchanged)
+ *   - session absent  → require `submitterEmail` in body; findOrCreate-
+ *     AnonymousUser provisions an account; if newly created, send a
+ *     password-set claim email so the user can later access their request
+ *
+ * Rate limiting key: session.user.id when authed; client IP otherwise.
  */
-export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
+export async function POST(request: NextRequest) {
   try {
-    // SECURITY: Rate limiting - 5 requests per hour per user
-    if (!rateLimiters.itHilfeCreate(`${session.user.id}:it-hilfe-create`)) {
+    const session = await auth()
+    const sessionUserId = session?.user?.id ?? null
+
+    // SECURITY: Rate limiting — 5 requests per hour per identity (user or IP)
+    const rateLimitKey = sessionUserId
+      ? `${sessionUserId}:it-hilfe-create`
+      : `${getClientIdentifier(request)}:it-hilfe-create-anon`
+    if (!rateLimiters.itHilfeCreate(rateLimitKey)) {
       return apiBadRequest('Zu viele Anfragen. Bitte warte 1 Stunde.')
     }
 
@@ -164,13 +186,19 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     const validation = validateAndRespond(itHilfeRequestSchema, body)
     if (!validation.success) {
       logger.warn('IT-Hilfe validation failed', {
-        userId: session.user.id,
+        userId: sessionUserId,
         errors: validation.errors,
       })
       return apiBadRequest(validation.errors.join('; '))
     }
 
     const validatedData = validation.data
+
+    // Anonymous submissions MUST provide submitterEmail. Schema can't
+    // enforce this (it doesn't see auth state); enforced here.
+    if (!sessionUserId && !validatedData.submitterEmail) {
+      return apiBadRequest('E-Mail-Adresse erforderlich, wenn du nicht angemeldet bist')
+    }
 
     // SECURITY: Sanitize user inputs
     const sanitizedTitle = sanitizeInput(validatedData.title, { maxLength: 200 })
@@ -188,10 +216,30 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       serviceType = SERVICE_TYPE_DEFAULT,
       skillsNeeded = [],
       budgetTier,
+      submitterEmail,
     } = validatedData
 
     // Additional body fields not in schema
     const { deviceBrand, deviceModel, imageUrls = [], aiDiagnosis } = body
+
+    // Resolve the requester: existing session OR find-or-create by email
+    let requesterId: string
+    let isNewAnonymousUser = false
+    let requesterEmail: string
+    let requesterName: string
+
+    if (sessionUserId) {
+      requesterId = sessionUserId
+      requesterEmail = session?.user?.email || ''
+      requesterName = session?.user?.name || 'Nutzer'
+    } else {
+      // submitterEmail is guaranteed non-null by the guard above
+      const resolved = await findOrCreateAnonymousUser(submitterEmail!)
+      requesterId = resolved.userId
+      isNewAnonymousUser = resolved.wasCreated
+      requesterEmail = submitterEmail!
+      requesterName = 'Nutzer'
+    }
 
     // Derive budget_type from maxBudgetCents for backwards compatibility
     const budgetType = deriveBudgetType(maxBudgetCents)
@@ -199,7 +247,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     // Insert the request with sanitized data
     const [insertedRow] = await db.insert(itHilfeRequests).values({
-      requesterId: session.user.id,
+      requesterId,
       categoryId: categoryId ?? 'other',
       deviceBrand: deviceBrand || null,
       deviceModel: deviceModel || null,
@@ -222,18 +270,35 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     logger.info('Created IT-Hilfe request', {
       requestId,
-      requesterId: session.user.id,
+      requesterId,
       categoryId,
       budgetType,
       canton,
+      anonymous: !sessionUserId,
+      newAccount: isNewAnonymousUser,
     })
+
+    // For newly-provisioned anonymous accounts: send a claim email with a
+    // password-reset token so the user can set a password and access their
+    // request. Fire-and-forget; failure shouldn't fail the request creation.
+    if (isNewAnonymousUser) {
+      createPasswordResetToken(requesterEmail)
+        .then(token => {
+          const claimUrl = `${APP_URL}/auth/reset-password?token=${encodeURIComponent(token)}`
+          return sendCustomEmail(
+            requesterEmail,
+            itHilfeAnonymousRequestClaim(sanitizedTitle, claimUrl)
+          )
+        })
+        .catch(err => logger.error('Failed to send anonymous-request claim email', { err, requestId, email: requesterEmail }))
+    }
 
     // Fire-and-forget: Send all notifications (confirmation, admin, matching helpers)
     sendRequestCreatedNotifications({
       requestId,
-      requesterId: session.user.id,
-      requesterName: session.user.name || 'Nutzer',
-      requesterEmail: session.user.email || '',
+      requesterId,
+      requesterName,
+      requesterEmail,
       title: sanitizedTitle,
       categoryId: categoryId ?? 'other',
       urgency: urgency ?? URGENCY_DEFAULT,
@@ -246,9 +311,10 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     return apiSuccess({
       message: 'IT-Hilfe-Anfrage erfolgreich erstellt',
       requestId,
+      newAccount: isNewAnonymousUser,
     }, 201)
   } catch (error) {
     logger.error('Error creating IT-Hilfe request', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
-})
+}

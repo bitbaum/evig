@@ -74,6 +74,14 @@ export const itHilfeRequestSchema = z.object({
       }
     )
     .optional(),
+  // For anonymous submissions: a logged-out visitor supplies their email
+  // and the backend either finds their account or provisions a new one.
+  // Required when no session is present; the route enforces this since
+  // schema can't see auth state.
+  submitterEmail: z
+    .string()
+    .email('Ungültige E-Mail-Adresse')
+    .optional(),
 });
 
 // ============================================================================

@@ -110,6 +110,89 @@ Das ${ORG.name} Team
 })
 
 /**
+ * Sent to a logged-out visitor who just submitted an IT-Hilfe request
+ * via the anonymous-post flow. We provisioned them a new (unclaimed)
+ * user account; this email links them to the existing reset-password
+ * page where they set their password and gain access to the request
+ * they just submitted.
+ *
+ * `claimUrl` is the URL of /auth/reset-password?token=... — the
+ * existing forgot-password infrastructure handles password set + login.
+ * Link is valid for 1 hour (createPasswordResetToken TTL).
+ *
+ * Used only when `wasCreated: true` from findOrCreateAnonymousUser.
+ * Existing-account anonymous submissions get a different message
+ * (we attached this to your account, log in normally).
+ */
+export const itHilfeAnonymousRequestClaim = (
+  requestTitle: string,
+  claimUrl: string
+): EmailContent => ({
+  subject: `Deine IT-Hilfe Anfrage ist eingereicht — Konto aktivieren - ${ORG.name}`,
+  html: `
+    <!DOCTYPE html>
+    <html lang="de">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Konto aktivieren</title>
+      <style>${BASE_STYLES}</style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header header-green">
+          <h1>Deine Anfrage ist eingereicht!</h1>
+        </div>
+        <div class="content">
+          <p>Hallo,</p>
+          <p>Deine IT-Hilfe Anfrage <strong>"${escapeHtml(requestTitle)}"</strong> wurde erfolgreich gespeichert.</p>
+
+          <p>Wir haben für dich ein Konto erstellt, damit du:</p>
+          <ul>
+            <li>Angebote von Technikern sehen und annehmen kannst</li>
+            <li>Mit deinem gewählten Techniker kommunizieren kannst</li>
+            <li>Den Status deiner Anfrage verfolgen kannst</li>
+          </ul>
+
+          <p><strong>Klick auf den Button unten, um ein Passwort festzulegen und auf deine Anfrage zuzugreifen:</strong></p>
+
+          <a href="${claimUrl}" class="button button-green">Konto aktivieren</a>
+
+          <p style="font-size: 12px; color: #666; margin-top: 16px;">
+            Dieser Link ist 1 Stunde gültig. Falls er abgelaufen ist, kannst du auf der Anmeldeseite "Passwort vergessen" wählen und einen neuen Link anfordern.
+          </p>
+
+          <div style="background-color: #f0fdf4; padding: 15px; border-radius: 5px; margin: 15px 0;">
+            <p style="margin: 0;"><strong>Was passiert als Nächstes?</strong></p>
+            <p style="margin: 8px 0 0 0;">Sobald dein Konto aktiviert ist, siehst du eingehende Angebote von Technikern aus der Community. Du entscheidest, welches Angebot du annimmst.</p>
+          </div>
+        </div>
+        <div class="footer">
+          <p>Diese E-Mail wurde automatisch generiert.</p>
+          <p>${COPYRIGHT_TEXT}</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `,
+  text: `
+Hallo,
+
+Deine IT-Hilfe Anfrage "${requestTitle}" wurde erfolgreich gespeichert.
+
+Wir haben für dich ein Konto erstellt, damit du Angebote sehen und annehmen kannst.
+
+Klick auf diesen Link, um ein Passwort festzulegen und auf deine Anfrage zuzugreifen:
+${claimUrl}
+
+Dieser Link ist 1 Stunde gültig.
+
+Mit freundlichen Grüssen,
+Das ${ORG.name} Team
+  `.trim(),
+})
+
+/**
  * Notification email sent to matching helpers when a new IT-Hilfe request is created
  */
 export const helperNewMatchingRequest = (
