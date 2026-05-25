@@ -11,6 +11,7 @@ import { validateBody, CreateOfferSchema } from '@/lib/schemas'
 import { sendCustomEmail } from '@/lib/email'
 import { itHilfeNewOfferReceived } from '@/lib/email/templates/it-hilfe'
 import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
+import { signOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { APP_URL } from '@/config/urls'
 
@@ -233,9 +234,24 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       requestId: id,
     })
 
-    // Notify requester about new offer (fire-and-forget)
+    // Notify requester about new offer (fire-and-forget). The signed
+    // acceptToken is the proof-of-authorization for the one-tap accept
+    // flow at /it-hilfe/accept?token=... — token verification is HMAC,
+    // so signing failures only happen if AUTH_SECRET isn't configured.
+    // In that (dev-only) case, fall back to the no-token email instead
+    // of failing the whole offer-creation request.
     if (requestData.requester_email) {
       const requestUrl = `${APP_URL}/it-hilfe/${id}`
+      let acceptUrl: string | undefined
+      try {
+        const acceptToken = signOfferAcceptToken(newOffer.id)
+        acceptUrl = `${APP_URL}/it-hilfe/accept?token=${encodeURIComponent(acceptToken)}`
+      } catch (err) {
+        logger.warn('Could not sign offer-accept token; email will fall back to view-only link', {
+          err,
+          offerId: newOffer.id,
+        })
+      }
       sendCustomEmail(
         requestData.requester_email,
         itHilfeNewOfferReceived(
@@ -243,7 +259,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           requestData.title,
           session.user.name || 'Ein Techniker',
           message,
-          requestUrl
+          requestUrl,
+          acceptUrl
         )
       ).catch(err => logger.error('Failed to send new offer notification', { err, requestId: id }))
     }

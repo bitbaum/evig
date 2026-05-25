@@ -352,4 +352,64 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
     expect(body.success).toBe(true)
     expect(body.data.offerId).toBe('new-offer-1')
   })
+
+  it('passes a verifiable signed acceptUrl to the offer-received email template', async () => {
+    // Real signing helper needs AUTH_SECRET. This test deliberately does NOT
+    // mock @/lib/it-hilfe/offer-accept-tokens — we want to exercise the real
+    // signing path and round-trip the token back through verify.
+    const previous = process.env.AUTH_SECRET
+    process.env.AUTH_SECRET = 'test-secret-offers-route-' + Date.now()
+
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+
+    mockSelect.mockReturnValueOnce({
+      from: jest.fn().mockReturnValue({
+        innerJoin: jest.fn().mockReturnValue({
+          where: jest.fn().mockResolvedValue([{ requesterId: 'other-user', status: 'open', title: 'Fix laptop', requester_name: 'Jane', requester_email: 'jane@example.com' }]),
+        }),
+      }),
+    })
+    mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }) })
+    mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }) })
+    mockSelect.mockReturnValueOnce({ from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }) })
+
+    mockValidateBody.mockReturnValue({
+      success: true,
+      data: { message: 'I can help', estimatedTime: null, proposedCompensation: null, relevantSkills: [] },
+    })
+
+    try {
+      const res = await POST(makeRequest(VALID_UUID, 'POST', { message: 'I can help' }), routeParams(VALID_UUID))
+      expect(res.status).toBe(201)
+
+      // Inspect the captured email-template args
+      const templateMock = jest.requireMock('@/lib/email/templates/it-hilfe') as {
+        itHilfeNewOfferReceived: jest.Mock
+      }
+      expect(templateMock.itHilfeNewOfferReceived).toHaveBeenCalledTimes(1)
+      const args = templateMock.itHilfeNewOfferReceived.mock.calls[0]
+      // signature: (requesterName, requestTitle, helperName, offerMessage, requestUrl, acceptUrl)
+      const acceptUrl = args[5] as string | undefined
+      expect(typeof acceptUrl).toBe('string')
+      expect(acceptUrl).toMatch(/^https:\/\/example\.com\/it-hilfe\/accept\?token=/)
+
+      // Extract the token and round-trip it through the real verifier
+      const url = new URL(acceptUrl as string)
+      const token = url.searchParams.get('token')
+      expect(token).toBeTruthy()
+
+      const { verifyOfferAcceptToken } = jest.requireActual('@/lib/it-hilfe/offer-accept-tokens') as {
+        verifyOfferAcceptToken: (t: string) => { ok: boolean; offerId?: string; reason?: string }
+      }
+      const verifyResult = verifyOfferAcceptToken(token as string)
+      expect(verifyResult.ok).toBe(true)
+      expect(verifyResult.offerId).toBe('new-offer-1')
+    } finally {
+      if (previous === undefined) {
+        delete process.env.AUTH_SECRET
+      } else {
+        process.env.AUTH_SECRET = previous
+      }
+    }
+  })
 })

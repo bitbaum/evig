@@ -354,14 +354,20 @@ Das ${ORG.name} Team
  * (auto-rejected when another offer is accepted)
  */
 /**
- * Notification email sent to the requester when a new offer is received
+ * Notification email sent to the requester when a new offer is received.
+ *
+ * `acceptUrl` is optional: when present, the email renders a primary
+ * "Angebot direkt annehmen" CTA backed by a signed one-use token, so
+ * the requester can accept without logging in. The "Angebot ansehen"
+ * link is preserved as the secondary action.
  */
 export const itHilfeNewOfferReceived = (
   requesterName: string,
   requestTitle: string,
   helperName: string,
   offerMessage: string,
-  requestUrl: string
+  requestUrl: string,
+  acceptUrl?: string
 ): EmailContent => ({
   subject: 'Neues Angebot für deine Anfrage - ${ORG.name} IT-Hilfe',
   html: `
@@ -391,7 +397,14 @@ export const itHilfeNewOfferReceived = (
             ${escapeHtml(offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage)}
           </p>
 
+          ${acceptUrl ? `
+          <a href="${acceptUrl}" class="button button-green">Angebot direkt annehmen</a>
+          <p style="margin-top: 16px;">
+            <a href="${requestUrl}" style="color: #525252;">Oder zuerst alle Angebote vergleichen →</a>
+          </p>
+          ` : `
           <a href="${requestUrl}" class="button button-green">Angebot ansehen</a>
+          `}
         </div>
         <div class="footer">
           <p>Du erhältst diese E-Mail, weil jemand ein Angebot für deine Anfrage abgegeben hat.</p>
@@ -411,7 +424,9 @@ ${helperName} hat ein Angebot für deine Anfrage abgegeben:
 Nachricht des Technikers:
 ${offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage}
 
-Angebot ansehen: ${requestUrl}
+${acceptUrl ? `Angebot direkt annehmen: ${acceptUrl}
+
+Alle Angebote ansehen: ${requestUrl}` : `Angebot ansehen: ${requestUrl}`}
 
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
