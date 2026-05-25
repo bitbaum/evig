@@ -130,7 +130,9 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         .from(users)
         .where(eq(users.isStaff, true))
 
-      const adminDashboardUrl = `${APP_URL}/admin/workshop-proposals`
+      // Admin dashboard for proposals lives at /admin/workshops/proposals;
+      // the previous URL (/admin/workshop-proposals) is not a route and 404s.
+      const adminDashboardUrl = `${APP_URL}/admin/workshops/proposals`
 
       // Fan out in parallel — sequential awaits would add ~200 ms × N
       // admins to the user's response time.

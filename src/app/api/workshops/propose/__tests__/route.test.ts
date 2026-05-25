@@ -285,4 +285,32 @@ describe('POST /api/workshops/propose — success', () => {
     expect(body.success).toBe(true)
     expect(body.data.proposalId).toBe('proposal-1')
   })
+
+  it('admin notification email URL points to /admin/workshops/proposals (not the previous /admin/workshop-proposals which 404s)', async () => {
+    mockSelect
+      .mockReturnValueOnce(makeSpamCheckChain(0))
+      .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]))
+
+    const emailMod = require('@/lib/email')
+    emailMod.sendEmail.mockResolvedValue(undefined)
+
+    const req = new NextRequest('http://localhost/api/workshops/propose', {
+      method: 'POST',
+      body: JSON.stringify(VALID_PROPOSAL_BODY),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    await POST(req)
+
+    // sendEmail is called twice: applicant confirmation + admin notification.
+    // The admin call uses template 'adminNewWorkshopProposal' and passes the
+    // dashboard URL as its 5th template argument (last positional arg).
+    expect(emailMod.sendEmail).toHaveBeenCalledWith(
+      'admin@revamp-it.ch',
+      'adminNewWorkshopProposal',
+      expect.any(String),       // proposer name
+      expect.any(String),       // proposer email
+      VALID_PROPOSAL_BODY.title,
+      'https://revamp-it.ch/admin/workshops/proposals',
+    )
+  })
 })
