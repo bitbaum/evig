@@ -15,6 +15,10 @@ function ResetPasswordContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
+  // Propagated through from the email link so that callers (e.g. the
+  // IT-Hilfe anonymous-post claim flow) can land users on a specific
+  // page after they sign in — not just the default post-login destination.
+  const callbackUrl = searchParams.get('callbackUrl')
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -67,9 +71,12 @@ function ResetPasswordContent() {
 
       setSuccess(true)
 
-      // Redirect to login after 3 seconds
+      // Redirect to login after 3 seconds, preserving callbackUrl so the
+      // user lands on their original destination after signing in.
       setTimeout(() => {
-        router.push('/auth/login?reset=success')
+        const params = new URLSearchParams({ reset: 'success' })
+        if (callbackUrl) params.set('callbackUrl', callbackUrl)
+        router.push(`/auth/login?${params.toString()}`)
       }, 3000)
     } catch (error) {
       setError(error instanceof Error ? error.message : t('genericError'))
@@ -135,7 +142,15 @@ function ResetPasswordContent() {
             <p className="text-sm text-neutral-600 mb-6">
               {t('successRedirect')}
             </p>
-            <Button as={Link} href={ROUTES.public.login} variant="primary">
+            <Button
+              as={Link}
+              href={
+                callbackUrl
+                  ? `${ROUTES.public.login}?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                  : ROUTES.public.login
+              }
+              variant="primary"
+            >
               {t('loginNow')}
             </Button>
           </div>

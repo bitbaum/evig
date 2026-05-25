@@ -280,11 +280,19 @@ export async function POST(request: NextRequest) {
 
     // For newly-provisioned anonymous accounts: send a claim email with a
     // password-reset token so the user can set a password and access their
-    // request. Fire-and-forget; failure shouldn't fail the request creation.
+    // request. callbackUrl propagates through reset-password → login so
+    // the user lands directly on their just-submitted request after the
+    // sign-in completes — closing the seam between "set password" and
+    // "see what I posted." Fire-and-forget; failure shouldn't fail the
+    // request creation.
     if (isNewAnonymousUser) {
       createPasswordResetToken(requesterEmail)
         .then(token => {
-          const claimUrl = `${APP_URL}/auth/reset-password?token=${encodeURIComponent(token)}`
+          const callbackUrl = `/it-hilfe/${requestId}`
+          const claimUrl =
+            `${APP_URL}/auth/reset-password` +
+            `?token=${encodeURIComponent(token)}` +
+            `&callbackUrl=${encodeURIComponent(callbackUrl)}`
           return sendCustomEmail(
             requesterEmail,
             itHilfeAnonymousRequestClaim(sanitizedTitle, claimUrl)

@@ -361,6 +361,17 @@ describe('POST /api/it-hilfe/requests — anonymous submissions', () => {
       'newuser@example.com',
       expect.any(Object)
     )
+
+    // The claim URL must include callbackUrl pointing to the just-created
+    // request, so the user lands on it after setting a password + signing in.
+    // (Without this, the post-claim UX dumps users on the default page and
+    // they have to navigate to /it-hilfe/my themselves.)
+    const templates = require('@/lib/email/templates/it-hilfe')
+    const claimArgs = templates.itHilfeAnonymousRequestClaim.mock.calls[0]
+    const claimUrl = claimArgs[1] as string
+    expect(claimUrl).toContain('callbackUrl=')
+    expect(claimUrl).toContain(encodeURIComponent('/it-hilfe/req-new'))
+    expect(claimUrl).toContain('token=')
   })
 
   it('does NOT send the claim email when wasCreated is false (existing account)', async () => {
