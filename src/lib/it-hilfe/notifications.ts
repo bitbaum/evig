@@ -41,6 +41,16 @@ interface NotifyParams {
   serviceType: string
   skillsNeeded: string[]
   aiDiagnosis: string | null
+  /**
+   * When true (default), sends the standard request-confirmation email
+   * to the requester. Set to false when the caller is already sending a
+   * dedicated email that supersedes the confirmation — e.g. the IT-Hilfe
+   * anonymous-post claim flow, where the requester has no active session
+   * yet and the standard email's "view your request" link would bounce
+   * them to login they can't perform until they claim their account.
+   * Admin notification + matching-helper notifications still fire.
+   */
+  includeRequesterConfirmation?: boolean
 }
 
 /**
@@ -52,8 +62,9 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
   const categoryName = getCategoryById(params.categoryId)?.name || params.categoryId
   const urgencyName = getUrgencyById(params.urgency)?.name || params.urgency
 
-  // 1. Confirmation to requester
-  if (params.requesterEmail) {
+  // 1. Confirmation to requester (suppressed for new-anonymous accounts
+  //    where the dedicated claim email replaces it)
+  if (params.requesterEmail && params.includeRequesterConfirmation !== false) {
     const content = itHilfeRequestConfirmation(
       params.requesterName,
       params.title,

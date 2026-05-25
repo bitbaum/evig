@@ -374,6 +374,33 @@ describe('POST /api/it-hilfe/requests — anonymous submissions', () => {
     expect(claimUrl).toContain('callbackUrl=')
     expect(claimUrl).toContain(encodeURIComponent('/it-hilfe/req-new'))
     expect(claimUrl).toContain('token=')
+
+    // The standard request-confirmation email must be SUPPRESSED for new
+    // anonymous accounts (the claim email replaces it). Two emails to the
+    // same person would confuse and the standard one's "view your request"
+    // link wouldn't work until they've claimed.
+    const notifMod = require('@/lib/it-hilfe/notifications')
+    const notifArgs = notifMod.sendRequestCreatedNotifications.mock.calls[0][0]
+    expect(notifArgs.includeRequesterConfirmation).toBe(false)
+  })
+
+  it('keeps requester confirmation enabled when wasCreated is false (existing account)', async () => {
+    mockAuth.mockResolvedValueOnce(null)
+    mockFindOrCreateAnonymousUser.mockResolvedValueOnce({ userId: 'existing-2', wasCreated: false })
+    const schemas = require('@/lib/schemas/it-hilfe')
+    schemas.validateAndRespond.mockReturnValueOnce({
+      success: true,
+      data: { title: 'X', submitterEmail: 'known@example.com' },
+    })
+
+    await POST(makePostRequest({ submitterEmail: 'known@example.com' }))
+    await new Promise(resolve => setImmediate(resolve))
+
+    const notifMod = require('@/lib/it-hilfe/notifications')
+    const notifArgs = notifMod.sendRequestCreatedNotifications.mock.calls[0][0]
+    // Existing user: they have a password, the standard confirmation email's
+    // link works for them — DON'T suppress it.
+    expect(notifArgs.includeRequesterConfirmation).toBe(true)
   })
 
   it('does NOT send the claim email when wasCreated is false (existing account)', async () => {

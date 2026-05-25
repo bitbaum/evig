@@ -307,7 +307,13 @@ export async function POST(request: NextRequest) {
         .catch(err => logger.error('Failed to send anonymous-request claim email', { err, requestId, email: requesterEmail }))
     }
 
-    // Fire-and-forget: Send all notifications (confirmation, admin, matching helpers)
+    // Fire-and-forget: Send all notifications (confirmation, admin, matching helpers).
+    // For brand-new anonymous accounts, the dedicated claim email above
+    // replaces the standard requester confirmation — sending both would
+    // give the user two emails, one with a working "Konto aktivieren" CTA
+    // and one with a "view your request" link they can't follow until
+    // they've claimed the account. Admin + matching-helper notifications
+    // still fire.
     sendRequestCreatedNotifications({
       requestId,
       requesterId,
@@ -320,6 +326,7 @@ export async function POST(request: NextRequest) {
       serviceType: serviceType ?? 'flexible',
       skillsNeeded: skillsNeeded || [],
       aiDiagnosis: aiDiagnosis || null,
+      includeRequesterConfirmation: !isNewAnonymousUser,
     })
 
     return apiSuccess({

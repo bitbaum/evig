@@ -172,6 +172,27 @@ describe('sendRequestCreatedNotifications', () => {
     expect(calls).toContain('notify@revamp-it.ch')
   })
 
+  it('SUPPRESSES requester confirmation when includeRequesterConfirmation is false', async () => {
+    // The IT-Hilfe anonymous-post flow uses this: the dedicated claim
+    // email replaces the standard confirmation (which would link to a
+    // request the new user can't yet view).
+    sendRequestCreatedNotifications({ ...BASE_PARAMS, includeRequesterConfirmation: false })
+    await flushAsync()
+
+    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
+    expect(calls).not.toContain('hans@example.com')
+    // Admin notification still goes through
+    expect(calls).toContain('notify@revamp-it.ch')
+  })
+
+  it('sends requester confirmation when includeRequesterConfirmation is true (explicit)', async () => {
+    sendRequestCreatedNotifications({ ...BASE_PARAMS, includeRequesterConfirmation: true })
+    await flushAsync()
+
+    const calls = (mockSendCustomEmail.mock.calls as [string, unknown][]).map(([to]) => to)
+    expect(calls).toContain('hans@example.com')
+  })
+
   it('queries DB for matching helpers when skillsNeeded is non-empty', async () => {
     sendRequestCreatedNotifications(BASE_PARAMS)
     await flushAsync()
