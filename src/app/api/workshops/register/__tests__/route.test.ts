@@ -59,6 +59,7 @@ jest.mock('@/db/schema', () => ({
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
+  ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
   sql: Object.assign(
     (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
     { raw: (s: string) => ({ __raw: s }) }
@@ -249,6 +250,38 @@ describe('POST /api/workshops/register — already registered', () => {
     expect(response.status).toBe(409)
     const body = await response.json()
     expect(body.error).toMatch(/bereits/i)
+  })
+
+  it('duplicate check WHERE excludes cancelled registrations', async () => {
+    // Without this filter, a user who cancelled a prior registration is
+    // locked out forever — the cancel route sets status='cancelled' but
+    // leaves the row in place. Re-registering should succeed once they
+    // change their mind.
+    const parallelChain = makeParallelChain(null)
+    const instanceChain = makeParallelChain(MOCK_INSTANCE)
+    mockSelect
+      .mockReturnValueOnce(makeWorkshopChain(MOCK_WORKSHOP))
+      .mockReturnValueOnce(parallelChain)
+      .mockReturnValue(instanceChain)
+
+    const req = new NextRequest('http://localhost/api/workshops/register', {
+      method: 'POST',
+      body: JSON.stringify({ workshopSlug: 'linux-einfuehrung' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    await POST(req)
+
+    // Inspect the duplicate-check's WHERE clause: it should be an `and(...)`
+    // wrapping eq(userId), eq(workshopId), AND ne(status, 'cancelled').
+    const whereMock = (parallelChain.from as jest.Mock).mock.results[0].value.innerJoin.mock.results[0].value.where as jest.Mock
+    const whereArg = whereMock.mock.calls[0][0] as { __and?: unknown[] }
+    expect(whereArg.__and).toBeDefined()
+    const containsCancelledExclusion = whereArg.__and!.some(
+      cond => typeof cond === 'object' && cond !== null && '__ne' in cond &&
+              Array.isArray((cond as { __ne: unknown[] }).__ne) &&
+              (cond as { __ne: unknown[] }).__ne[1] === 'cancelled'
+    )
+    expect(containsCancelledExclusion).toBe(true)
   })
 })
 

@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, ne } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/error-messages'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
@@ -37,7 +37,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       return apiNotFound('Workshop')
     }
 
-    // Duplicate check + next instance lookup are independent — run in parallel
+    // Duplicate check + next instance lookup are independent — run in parallel.
+    // Excludes cancelled registrations so a user who explicitly cancelled can
+    // re-register; without that filter the cancel route's set-status-to-
+    // 'cancelled' (vs. row deletion) would lock them out forever with a
+    // confusing 409.
     const [existing, instance] = await Promise.all([
       db
         .select({ id: workshopRegistrations.id })
@@ -45,7 +49,8 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
         .where(and(
           eq(workshopRegistrations.userId, session.user.id),
-          eq(workshopInstances.workshopId, workshop.id)
+          eq(workshopInstances.workshopId, workshop.id),
+          ne(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CANCELLED),
         ))
         .then(rows => rows[0]),
       db
