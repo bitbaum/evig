@@ -92,7 +92,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     // Check if request is in a state where offers can be accepted
-    if (requestData.status !== REQUEST_STATUS.OPEN && requestData.status !== REQUEST_STATUS.IN_DISCUSSION) {
+    if (requestData.status !== REQUEST_STATUS.OPEN) {
       return apiBadRequest('Diese Anfrage kann keine Angebote mehr akzeptieren')
     }
 

@@ -72,7 +72,7 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
         return
       }
 
-      if (r.status !== REQUEST_STATUS.OPEN && r.status !== REQUEST_STATUS.IN_DISCUSSION) {
+      if (r.status !== REQUEST_STATUS.OPEN) {
         setError(errors.errorNotEditable)
         setLoading(false)
         return

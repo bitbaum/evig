@@ -119,7 +119,7 @@ export function OffersList({
                 </div>
               )}
 
-              {offer.status === OFFER_STATUS.PENDING && (requestStatus === REQUEST_STATUS.OPEN || requestStatus === REQUEST_STATUS.IN_DISCUSSION) && (
+              {offer.status === OFFER_STATUS.PENDING && requestStatus === REQUEST_STATUS.OPEN && (
                 <div className="mt-2 flex gap-2">
                   <Button
                     onClick={() => onAcceptOffer(offer.id)}

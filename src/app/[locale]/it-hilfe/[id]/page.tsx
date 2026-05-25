@@ -67,7 +67,7 @@ export default function ITHilfeDetailPage() {
         </Link>
 
         {/* Expiration Banner */}
-        {detail.isExpired && (request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
+        {detail.isExpired && request.status === REQUEST_STATUS.OPEN && (
           <div className="bg-warning-50 border border-warning-200 rounded-xl p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0" aria-hidden="true" />
             <p className="text-warning-800 text-sm font-medium">
@@ -94,7 +94,7 @@ export default function ITHilfeDetailPage() {
             )}
 
             {/* Technician Map */}
-            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
+            {request.status === REQUEST_STATUS.OPEN && (
               <div className="card-shell p-6">
                 <TechnicianMapList requestId={request.id} requestTitle={request.title} />
               </div>

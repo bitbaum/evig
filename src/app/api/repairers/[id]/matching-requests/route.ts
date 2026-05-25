@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { itHilfeRequests, repairerProfiles, users } from '@/db/schema'
-import { eq, and, sql, desc, inArray } from 'drizzle-orm'
+import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
@@ -68,7 +68,7 @@ export async function GET(
       .from(itHilfeRequests)
       .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
       .where(and(
-        inArray(itHilfeRequests.status, [REQUEST_STATUS.OPEN, REQUEST_STATUS.IN_DISCUSSION]),
+        eq(itHilfeRequests.status, REQUEST_STATUS.OPEN),
         sql`(${itHilfeRequests.expiresAt} IS NULL OR ${itHilfeRequests.expiresAt} > NOW())`,
         // Match: request skills overlap with repairer services, OR same city
         sql`(

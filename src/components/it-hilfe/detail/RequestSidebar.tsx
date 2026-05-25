@@ -174,13 +174,13 @@ export function RequestSidebar({
             {t('actionsSection')}
           </Heading>
           <div className="space-y-2">
-            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && (
+            {request.status === REQUEST_STATUS.OPEN && (
               <Button as={Link} href={`/it-hilfe/${request.id}/edit`} variant="primary" className="w-full justify-center">
                 <Pencil className="w-4 h-4" />
                 {t('editRequest')}
               </Button>
             )}
-            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION || request.status === REQUEST_STATUS.MATCHED) && (
+            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.MATCHED) && (
               <button
                 onClick={() => onStatusChange(REQUEST_STATUS.CANCELLED)}
                 className="block w-full py-3 px-4 min-h-[44px] bg-error-50 dark:bg-error-900/20 text-error-700 dark:text-error-400 rounded-lg text-center font-medium hover:bg-error-100 dark:hover:bg-error-900/30 transition-colors focus:outline-none focus:ring-2 focus:ring-error-500 focus:ring-offset-2"

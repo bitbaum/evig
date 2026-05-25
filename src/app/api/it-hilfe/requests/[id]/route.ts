@@ -147,8 +147,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     // Status-only updates (completion, cancellation) are allowed on matched requests
     const isStatusOnlyUpdate = status && Object.keys(body).length === 1
 
-    // Only allow editing open or in_discussion requests (unless it's a status transition)
-    if (existing.status !== REQUEST_STATUS.OPEN && existing.status !== REQUEST_STATUS.IN_DISCUSSION && !isStatusOnlyUpdate) {
+    // Only allow editing open requests (unless it's a status transition)
+    if (existing.status !== REQUEST_STATUS.OPEN && !isStatusOnlyUpdate) {
       return apiBadRequest('Diese Anfrage kann nicht mehr bearbeitet werden')
     }
 

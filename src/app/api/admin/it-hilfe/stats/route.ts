@@ -15,7 +15,6 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
       .select({
         total: sql<number>`count(*)`,
         open: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.OPEN})`,
-        in_discussion: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.IN_DISCUSSION})`,
         matched: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.MATCHED})`,
         completed: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.COMPLETED})`,
         cancelled: sql<number>`count(*) FILTER (WHERE ${itHilfeRequests.status} = ${REQUEST_STATUS.CANCELLED})`,
@@ -36,7 +35,6 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
       total,
       byStatus: {
         open: Number(row.open),
-        in_discussion: Number(row.in_discussion),
         matched: Number(row.matched),
         completed,
         cancelled: Number(row.cancelled),

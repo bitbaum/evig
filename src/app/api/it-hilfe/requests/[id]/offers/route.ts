@@ -154,8 +154,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       return apiBadRequest('Du kannst kein Angebot für deine eigene Anfrage abgeben')
     }
 
-    // Only allow offers on open or in_discussion requests
-    if (requestData.status !== REQUEST_STATUS.OPEN && requestData.status !== REQUEST_STATUS.IN_DISCUSSION) {
+    // Only allow offers on open requests
+    if (requestData.status !== REQUEST_STATUS.OPEN) {
       return apiBadRequest('Diese Anfrage akzeptiert keine neuen Angebote mehr')
     }
 

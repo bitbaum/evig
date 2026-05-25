@@ -32,8 +32,9 @@
  *   - returns empty array for unknown device category
  *
  *   isRequestAcceptingOffers
- *   - returns true for 'open' and 'in_discussion'
- *   - returns false for 'matched', 'completed', 'cancelled'
+ *   - returns true for 'open'
+ *   - returns false for 'in_discussion' (legacy — kill in progress),
+ *     'matched', 'completed', 'cancelled'
  *
  *   formatBudget
  *   - returns "Gratis (Community-Hilfe)" for gratis tier
@@ -242,8 +243,8 @@ describe('isRequestAcceptingOffers', () => {
     expect(isRequestAcceptingOffers(REQUEST_STATUS.OPEN)).toBe(true)
   })
 
-  it('returns true for "in_discussion"', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.IN_DISCUSSION)).toBe(true)
+  it('returns false for "in_discussion" (legacy status — kill in progress)', () => {
+    expect(isRequestAcceptingOffers(REQUEST_STATUS.IN_DISCUSSION)).toBe(false)
   })
 
   it('returns false for "matched"', () => {

@@ -596,7 +596,7 @@ export function getOfferStatusById(id: string): OfferStatus | undefined {
 
 /** Check if a request status allows new offers */
 export function isRequestAcceptingOffers(status: string): boolean {
-  return status === REQUEST_STATUS.OPEN || status === REQUEST_STATUS.IN_DISCUSSION
+  return status === REQUEST_STATUS.OPEN
 }
 
 /**

@@ -305,7 +305,7 @@ export function useITHilfeDetail(id: string) {
   }
 
   const isExpired = request ? new Date(request.expiresAt) < new Date() : false
-  const canOffer = !!(session?.user && request && !request.isOwner && (request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.IN_DISCUSSION) && !isExpired)
+  const canOffer = !!(session?.user && request && !request.isOwner && request.status === REQUEST_STATUS.OPEN && !isExpired)
 
   // Is the current user the matched helper for this request?
   const isMatchedHelper = !!(
