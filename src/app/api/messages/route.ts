@@ -112,7 +112,12 @@ export const POST = withAuth(async (
       .limit(1)
       .then(([recipient]) => {
         if (!recipient?.email) return
-        const conversationUrl = `${APP_URL}/messages/${result.conversationId}`
+        // /dashboard/messages?conversation=<id> — the dashboard page reads
+        // `conversation` from searchParams to deep-link into a thread. There's
+        // no /messages/[id] route (the previous URL 404'd on click), and no
+        // /dashboard/messages/[id] either; the dashboard handles deep-linking
+        // via query string.
+        const conversationUrl = `${APP_URL}/dashboard/messages?conversation=${result.conversationId}`
         const preview = content.length > 200 ? content.slice(0, 200) + '...' : content
         sendCustomEmail(recipient.email, newMarketplaceMessage({
           recipientName: recipient.name || 'Nutzer',

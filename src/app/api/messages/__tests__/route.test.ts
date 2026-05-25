@@ -75,9 +75,12 @@ jest.mock('@/lib/messaging/send-message', () => ({
   }),
 }))
 
+const mockSendCustomEmail = jest.fn().mockResolvedValue({ success: true })
+const mockNewMarketplaceMessage = jest.fn().mockReturnValue({})
+
 jest.mock('@/lib/email', () => ({
-  sendCustomEmail: jest.fn().mockResolvedValue(undefined),
-  newMarketplaceMessage: jest.fn().mockReturnValue({}),
+  sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
+  newMarketplaceMessage: (...args: unknown[]) => mockNewMarketplaceMessage(...args),
 }))
 
 jest.mock('@/lib/security/rate-limit', () => ({
@@ -288,5 +291,24 @@ describe('POST /api/messages', () => {
     expect(body.success).toBe(true)
     expect(body.data.conversation_id).toBe('conv-1')
     expect(body.data.message_id).toBe('msg-1')
+  })
+
+  it('email link points to /dashboard/messages?conversation=<id> (not the previous /messages/<id> which 404s)', async () => {
+    ;(rateLimiters.messageCreate as jest.Mock).mockReturnValue(true)
+    mockValidateBody.mockReturnValue({
+      success: true,
+      data: { recipient_id: 'user-2', content: 'Hallo!', context_id: 'listing-1', context_type: 'marketplace' },
+    })
+    mockSelect.mockReturnValue(makeChain('limit', [{ email: 'other@example.com', name: 'Other' }]))
+
+    await POST(makeRequest('POST', { recipient_id: 'user-2', content: 'Hallo!' }) as never)
+    // Flush the fire-and-forget DB-lookup → sendCustomEmail chain
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(mockNewMarketplaceMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        conversationUrl: 'https://example.com/dashboard/messages?conversation=conv-1',
+      }),
+    )
   })
 })
