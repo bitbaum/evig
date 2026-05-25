@@ -251,12 +251,23 @@ export async function sendAppointmentNotification(
       logger.error('Failed to send status email to customer', { error: err, appointmentId })
     })
   } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && party.repairer_email) {
+    // Repairer landing destination. The previous URL pointed at
+    // /dashboard/appointments — but that page uses useAppointments which
+    // calls /api/appointments WITHOUT a role param (defaults to
+    // customer-mode), so a repairer clicking the email landed on their
+    // own customer-side bookings (likely empty) rather than the service
+    // appointment the email was about. /dashboard/techniker is the only
+    // existing repairer-context dashboard page; it doesn't list service
+    // appointments either, but at least it's a page the repairer
+    // recognizes as theirs and can navigate from. Real fix tracked in
+    // the roadmap under "T1 enhancements" — building a proper
+    // repairer service-appointment view.
     const emailContent = appointmentStatusUpdate(
       party.repairer_name || 'Techniker',
       party.customer_name || 'Kunde',
       statusLabel,
       serviceName,
-      baseUrl + '/dashboard/appointments'
+      baseUrl + '/dashboard/techniker'
     )
     sendCustomEmail(party.repairer_email, emailContent).catch(err => {
       logger.error('Failed to send status email to repairer', { error: err, appointmentId })
