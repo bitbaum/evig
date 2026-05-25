@@ -35,11 +35,13 @@ const mockSelect = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockReturning = jest.fn()
+const mockExecute = jest.fn().mockResolvedValue({ rows: [] })
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    execute: (...args: unknown[]) => mockExecute(...args),
   },
 }))
 
@@ -49,6 +51,8 @@ jest.mock('@/db/schema', () => ({
     status: 'wr_status', feedback: 'wr_feedback',
     rating: 'wr_rating', cancelledAt: 'wr_cancelledAt',
     updatedAt: 'wr_updatedAt',
+    workshopInstanceId: 'wr_workshopInstanceId',
+    paymentStatus: 'wr_paymentStatus',
   },
 }))
 
@@ -66,6 +70,12 @@ jest.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
     PENDING: 'pending', CONFIRMED: 'confirmed',
     CANCELLED: 'cancelled', ATTENDED: 'attended',
+  },
+  WORKSHOP_PAYMENT_STATUS: {
+    NOT_REQUIRED: 'not_required',
+    PENDING: 'pending',
+    PAID: 'paid',
+    REFUNDED: 'refunded',
   },
 }))
 
@@ -108,6 +118,7 @@ beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
   makeUpdateChain([{ id: 'reg-1' }])
+  mockExecute.mockResolvedValue({ rows: [] })
 })
 
 // ============================================================================
@@ -240,5 +251,39 @@ describe('PATCH /api/workshops/registrations/[id] — cancel', () => {
     })
     const response = await PATCH(req, { params: Promise.resolve({ id: 'reg-1' }) })
     expect(response.status).toBe(200)
+  })
+
+  it('decrements workshop_instances.current_participants when cancelling a paid registration (mirrors webhook fix eac01d4a)', async () => {
+    // Paid registration: register-with-payment incremented current_participants
+    // at INSERT — cancelling must decrement to avoid phantom-seat leak.
+    makeUpdateChain([
+      { id: 'reg-paid', workshopInstanceId: 'inst-42', paymentStatus: 'paid' },
+    ])
+
+    const req = new NextRequest('http://localhost/api/workshops/registrations/reg-paid', {
+      method: 'PATCH',
+      body: JSON.stringify({}),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await PATCH(req, { params: Promise.resolve({ id: 'reg-paid' }) })
+    expect(response.status).toBe(200)
+    expect(mockExecute).toHaveBeenCalledTimes(1)
+  })
+
+  it('does NOT decrement when cancelling a free (not_required) registration — basic-register never incremented', async () => {
+    // Free workshop registered via /api/workshops/register: no count
+    // increment at INSERT, so cancelling must not decrement either.
+    makeUpdateChain([
+      { id: 'reg-free', workshopInstanceId: 'inst-42', paymentStatus: 'not_required' },
+    ])
+
+    const req = new NextRequest('http://localhost/api/workshops/registrations/reg-free', {
+      method: 'PATCH',
+      body: JSON.stringify({}),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await PATCH(req, { params: Promise.resolve({ id: 'reg-free' }) })
+    expect(response.status).toBe(200)
+    expect(mockExecute).not.toHaveBeenCalled()
   })
 })
