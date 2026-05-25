@@ -44,6 +44,10 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         request_status: itHilfeRequests.status,
         request_city: itHilfeRequests.city,
         request_canton: itHilfeRequests.canton,
+        // Needed by /it-hilfe/my/offers to render an "Abgelaufen" badge
+        // when the underlying request silently expired — otherwise the
+        // helper waits indefinitely for a response that can't come.
+        request_expires_at: itHilfeRequests.expiresAt,
         requester_name: users.name,
       })
       .from(itHilfeOffers)
@@ -73,6 +77,7 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         status: row.request_status,
         city: row.request_city,
         canton: row.request_canton,
+        expiresAt: row.request_expires_at,
         requesterName: row.requester_name,
       },
     }))

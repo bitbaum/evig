@@ -19,6 +19,7 @@ import {
   getRequestStatusById,
   OFFER_STATUSES,
   OFFER_STATUS,
+  REQUEST_STATUS,
 } from '@/config/it-hilfe'
 import { useMyOffers } from '@/hooks/useMyOffers'
 import { ROUTES } from '@/config/routes'
@@ -128,6 +129,15 @@ export default function MyOffersPage() {
               const offerStatusConfig = getOfferStatusById(offer.status)
               const requestStatusConfig = getRequestStatusById(offer.request.status)
               const CategoryIcon = categoryConfig?.icon || Wrench
+              // Helper-side mirror of 627fc731 on /it-hilfe/my (requester-side):
+              // when the underlying request has silently expired (status='open'
+              // AND expires_at past), the helper's PENDING offer effectively
+              // can't progress — no new state changes happen on expired
+              // requests. Without this badge the helper waits indefinitely.
+              const requestExpired =
+                offer.request.status === REQUEST_STATUS.OPEN &&
+                offer.request.expiresAt != null &&
+                new Date(offer.request.expiresAt) < new Date()
 
               return (
                 <div
@@ -141,13 +151,18 @@ export default function MyOffersPage() {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex items-center gap-2 mb-1 flex-wrap">
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
                             {t('offerLabel')} {offerStatusConfig?.name || offer.status}
                           </span>
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
                             {t('requestLabel')} {requestStatusConfig?.name || offer.request.status}
                           </span>
+                          {requestExpired && (
+                            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200">
+                              Anfrage abgelaufen
+                            </span>
+                          )}
                         </div>
 
                         <Heading level={3} className="font-semibold text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">

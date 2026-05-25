@@ -24,6 +24,8 @@ export interface OfferWithRequest {
     status: string
     city: string
     canton: string
+    /** Null only on rows from older code paths; the API always emits it now. */
+    expiresAt: string | null
     requesterName: string
   }
 }
