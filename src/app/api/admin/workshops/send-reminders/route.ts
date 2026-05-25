@@ -58,7 +58,13 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
         })
         const workshopUrl = `${APP_URL}/workshops/${registration.workshop_slug}`
 
-        await sendEmail(
+        // sendEmail RESOLVES with { success: false, error } on SMTP/Listmonk
+        // failure rather than throwing — a bare try/catch only catches the
+        // rare unexpected-exception path, missing the realistic failure
+        // modes and silently miscounting them as sent. Check .success
+        // explicitly. Matches the repairer/apply admin-notifications
+        // pattern (d128beff).
+        const result = await sendEmail(
           registration.user_email!,
           'workshopReminder',
           registration.user_name || 'Benutzer',
@@ -70,15 +76,23 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
           workshopUrl
         )
 
-        sentCount++
-        logger.info('Workshop reminder sent', {
-          registrationId: registration.registration_id,
-          userId: registration.user_id,
-          workshopTitle: registration.workshop_title
-        })
+        if (result.success) {
+          sentCount++
+          logger.info('Workshop reminder sent', {
+            registrationId: registration.registration_id,
+            userId: registration.user_id,
+            workshopTitle: registration.workshop_title
+          })
+        } else {
+          failedCount++
+          logger.warn('Failed to send workshop reminder', {
+            registrationId: registration.registration_id,
+            error: result.error,
+          })
+        }
       } catch (emailError) {
         failedCount++
-        logger.error('Failed to send workshop reminder', {
+        logger.error('Unexpected exception sending workshop reminder', {
           registrationId: registration.registration_id,
           error: emailError
         })

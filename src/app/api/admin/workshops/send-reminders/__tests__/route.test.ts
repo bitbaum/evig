@@ -177,4 +177,21 @@ describe('POST /api/admin/workshops/send-reminders — success', () => {
     expect(body.data.failed).toBe(1)
     expect(mockSendEmail).toHaveBeenCalledTimes(2)
   })
+
+  it('counts resolved {success:false} as failed (was miscounted as sent before this fix)', async () => {
+    // sendEmail's realistic failure mode is to RESOLVE with {success:false}
+    // (SMTP rejection, Listmonk disabled, API non-2xx) — not throw. The
+    // previous try/catch only caught throws, so these silent failures were
+    // miscounted as sent. This test locks the .success check in place.
+    mockOrderBy.mockResolvedValueOnce(MOCK_UPCOMING)
+    mockSendEmail
+      .mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+      .mockResolvedValueOnce({ success: false, error: 'Listmonk disabled' })
+
+    const response = await POST(makeRequest())
+    const body = await response.json()
+    expect(body.data.total).toBe(2)
+    expect(body.data.sent).toBe(0)
+    expect(body.data.failed).toBe(2)
+  })
 })

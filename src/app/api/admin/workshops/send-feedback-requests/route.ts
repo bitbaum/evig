@@ -65,21 +65,32 @@ export const POST = withAdmin('workshops-admin', async (request, session) => {
       })
     )
 
+    // sendEmail RESOLVES with { success: false, error } on SMTP/Listmonk
+    // failure rather than throwing — `settled.status === 'fulfilled'` is
+    // therefore true even when the email didn't go out, so the prior code
+    // miscounted silent failures as sent. Check settled.value.success too.
+    // Matches the repairer/apply admin-notifications pattern (d128beff).
     let sentCount = 0
     let failedCount = 0
     for (let i = 0; i < results.length; i++) {
       const settled = results[i]
       const registration = completed[i]
-      if (settled.status === 'fulfilled') {
+      if (settled.status === 'fulfilled' && settled.value.success) {
         sentCount++
         logger.info('Workshop feedback request sent', {
           registrationId: registration.registration_id,
           userId: registration.user_id,
           workshopTitle: registration.workshop_title,
         })
+      } else if (settled.status === 'fulfilled') {
+        failedCount++
+        logger.warn('Failed to send workshop feedback request', {
+          registrationId: registration.registration_id,
+          error: settled.value.error,
+        })
       } else {
         failedCount++
-        logger.error('Failed to send workshop feedback request', {
+        logger.error('Unexpected exception sending workshop feedback request', {
           registrationId: registration.registration_id,
           error: settled.reason,
         })
