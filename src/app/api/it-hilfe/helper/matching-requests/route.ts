@@ -7,7 +7,7 @@ import { users } from '@/db/schema/auth'
 import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
-import { getCategoryIds, URGENCY_LEVELS, REQUEST_STATUS } from '@/config/it-hilfe'
+import { getCategoryIds, URGENCY_LEVELS, REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
 
 const rTable = getTableName(itHilfeRequests)
 const oTable = getTableName(itHilfeOffers)
@@ -50,7 +50,10 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       sql`r.expires_at > NOW()`,
       // Skills overlap: request's skills_needed overlaps with helper's skills
       sql`r.skills_needed && ARRAY[${sql.join(helperSkills.map(s => sql`${s}`), sql`, `)}]::text[]`,
-      // Exclude requests already offered by this helper
+      // Exclude requests already offered by this helper — but only when the
+      // existing offer is non-WITHDRAWN. WITHDRAWN offers are filtered out
+      // of the LEFT JOIN below so the helper can rediscover requests after
+      // withdrawing (matches the POST /offers re-offer path from ab6bc94e).
       sql`o.id IS NULL`,
     ]
 
@@ -77,7 +80,9 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       FROM ${sql.raw(rTable)} r
       JOIN ${sql.raw(uTable)} u ON r.requester_id = u.id
       LEFT JOIN ${sql.raw(oTable)} o
-        ON o.request_id = r.id AND o.helper_id = ${session.user.id}
+        ON o.request_id = r.id
+        AND o.helper_id = ${session.user.id}
+        AND o.status != ${OFFER_STATUS.WITHDRAWN}
       ${whereClause}
       ORDER BY r.created_at DESC
       LIMIT ${limit} OFFSET ${offset}

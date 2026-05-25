@@ -65,6 +65,7 @@ jest.mock('@/config/it-hilfe', () => ({
   getCategoryIds: jest.fn().mockReturnValue(['cat-1']),
   URGENCY_LEVELS: [{ id: 'low' }, { id: 'high' }],
   REQUEST_STATUS: { OPEN: 'open', MATCHED: 'matched', COMPLETED: 'completed' },
+  OFFER_STATUS: { PENDING: 'pending', ACCEPTED: 'accepted', REJECTED: 'rejected', WITHDRAWN: 'withdrawn' },
 }))
 
 jest.mock('drizzle-orm', () => ({
@@ -162,5 +163,25 @@ describe('GET /api/it-hilfe/helper/matching-requests', () => {
     expect(body.data.requests).toHaveLength(1)
     expect(body.data.requests[0].id).toBe('req-1')
     expect(body.data.total).toBe(1)
+  })
+
+  it('LEFT JOIN on offers filters out WITHDRAWN offers so the helper can rediscover requests after withdrawing', async () => {
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+    mockExecute
+      .mockResolvedValueOnce(MOCK_SKILL_ROWS)
+      .mockResolvedValueOnce(MOCK_REQUEST_ROWS)
+
+    await GET(makeRequest())
+
+    // 2nd db.execute call is the matching-requests query. The sql-mock
+    // collapses interpolations to '?' so we can't read the bound value,
+    // but the literal `o.status !=` fragment must be present in the
+    // LEFT JOIN — without it, the helper's withdrawn-then-want-to-reoffer
+    // path is locked out because o.id IS NULL would never match (the
+    // withdrawn row still exists, just with status=WITHDRAWN). Matches
+    // the POST /offers route (commit ab6bc94e) which already allows
+    // re-offering after WITHDRAWN.
+    const secondCall = mockExecute.mock.calls[1][0] as { __sql: string }
+    expect(secondCall.__sql).toMatch(/o\.status\s*!=/)
   })
 })
