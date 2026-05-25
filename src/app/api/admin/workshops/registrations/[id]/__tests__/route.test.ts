@@ -189,4 +189,27 @@ describe('PUT /api/admin/workshops/registrations/[id] — success', () => {
     expect(response.status).toBe(200)
     expect(mockSendEmail).toHaveBeenCalledTimes(1)
   })
+
+  it('logs (resolved) warn when sendEmail returns {success:false} on status-change email — admin-detectable, not silently swallowed', async () => {
+    // sendEmail RESOLVES with {success:false} on SMTP/Listmonk failure
+    // rather than throwing. The bare try/catch only caught throws —
+    // realistic failures left no log entry. The status-change email is
+    // the only signal users get when an admin manually moves their
+    // registration between confirmed/cancelled/waitlist (no in-app
+    // fallback here).
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'confirmed' } })
+    mockWhere
+      .mockResolvedValueOnce([{ id: 'reg-1' }])
+      .mockResolvedValueOnce([MOCK_EMAIL_DETAILS])
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'Listmonk disabled' })
+
+    const response = await PUT(makeRequest({ status: 'confirmed' }), makeContext())
+    expect(response.status).toBe(200) // status change applies regardless
+
+    const { logger } = require('@/lib/logger')
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Workshop status update email failed (resolved)',
+      expect.objectContaining({ newStatus: 'confirmed', error: 'Listmonk disabled' }),
+    )
+  })
 })

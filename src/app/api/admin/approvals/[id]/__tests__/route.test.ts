@@ -88,7 +88,7 @@ jest.mock('@/config/approval-status', () => ({
 }))
 
 jest.mock('@/lib/email', () => ({
-  sendEmail: jest.fn().mockResolvedValue(undefined),
+  sendEmail: jest.fn().mockResolvedValue({ success: true, messageId: 'test-msg' }),
 }))
 
 jest.mock('@/lib/activity', () => ({
@@ -239,6 +239,24 @@ describe('PATCH /api/admin/approvals/[id] — success', () => {
     sendEmail.mockRejectedValueOnce(new Error('SMTP error'))
     const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(200)
+  })
+
+  it('logs (resolved) warn when sendEmail returns {success:false} — admin-detectable, not silently swallowed', async () => {
+    // sendEmail RESOLVES with {success:false,error} on SMTP/Listmonk
+    // failure rather than throwing. Without the .success check the
+    // submitter would silently never learn of the approve/reject
+    // decision (no in-app fallback for content submissions).
+    const { sendEmail } = require('@/lib/email')
+    sendEmail.mockResolvedValueOnce({ success: false, error: 'Listmonk disabled' })
+
+    const response = await PATCH(makeRequest({ action: 'approve' }), makeContext())
+    expect(response.status).toBe(200) // The decision still applies
+
+    const { logger } = require('@/lib/logger')
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Content approval email failed (resolved)',
+      expect.objectContaining({ action: 'approve', error: 'Listmonk disabled' }),
+    )
   })
 
   it('returns 500 when DB update throws', async () => {

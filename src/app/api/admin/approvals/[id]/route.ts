@@ -66,7 +66,13 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
       })
       .where(eq(userContentSubmissions.id, id))
 
-    // Send notification email to submitter
+    // Send notification email to submitter. sendEmail RESOLVES with
+    // {success:false,error} on SMTP/Listmonk failure rather than throwing,
+    // so the bare try/catch only catches the rare exception path.
+    // Realistic failures slipped through with no log entry. Same pattern
+    // as c610bb72 / 87f084af. Content-submission decisions have no
+    // in-app notification fallback, so the email is the submitter's
+    // only signal — silent SMTP failure leaves them unaware.
     try {
       const [submitter] = await db
         .select({ email: users.email, name: users.name })
@@ -76,16 +82,23 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
 
       if (submitter) {
         const templateName = action === 'approve' ? 'contentSubmissionApproved' : 'contentSubmissionRejected'
-        await sendEmail(
+        const emailResult = await sendEmail(
           submitter.email,
           templateName,
           submitter.name || 'Benutzer',
           submission.title,
           submission.contentType
         )
+        if (!emailResult.success) {
+          logger.warn('Content approval email failed (resolved)', {
+            submissionId: id,
+            action,
+            error: emailResult.error,
+          })
+        }
       }
     } catch (emailError) {
-      logger.warn('Failed to send content approval email', { error: emailError, submissionId: id, action })
+      logger.warn('Content approval email failed (rejected)', { error: emailError, submissionId: id, action })
     }
 
     logger.info('Content submission reviewed', {

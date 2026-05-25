@@ -61,7 +61,14 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
       newStatus: status
     })
 
-    // Send email notification for status changes
+    // Send email notification for status changes. sendEmail RESOLVES with
+    // {success:false,error} on SMTP/Listmonk failure rather than throwing,
+    // so the bare try/catch only catches the rare exception path —
+    // realistic failures slipped through with no log entry. Same pattern
+    // as c610bb72 / 87f084af. Status-change emails are the user's only
+    // signal that an admin moved their workshop registration between
+    // confirmed/cancelled/waitlist (no in-app fallback here) — silent
+    // SMTP failure leaves them with stale information.
     if (status && (status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || status === WORKSHOP_REGISTRATION_STATUS.CANCELLED || status === WORKSHOP_REGISTRATION_STATUS.WAITLIST)) {
       try {
         const [details] = await db
@@ -81,7 +88,7 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
         if (details) {
           const workshopDate = formatDateTimeWithWeekday(details.startDate)
 
-          await sendEmail(
+          const emailResult = await sendEmail(
             details.userEmail,
             'workshopRegistrationStatusUpdate',
             details.userName || 'Benutzer',
@@ -91,14 +98,23 @@ export const PUT = withAdmin<{ id: string }>('workshops-admin', async (request, 
             notes || undefined
           )
 
-          logger.info('Workshop status update email sent', {
-            registrationId: id,
-            userId: details.userId,
-            newStatus: status
-          })
+          if (emailResult.success) {
+            logger.info('Workshop status update email sent', {
+              registrationId: id,
+              userId: details.userId,
+              newStatus: status
+            })
+          } else {
+            logger.warn('Workshop status update email failed (resolved)', {
+              registrationId: id,
+              userId: details.userId,
+              newStatus: status,
+              error: emailResult.error,
+            })
+          }
         }
       } catch (emailError) {
-        logger.error('Failed to send workshop status update email', { error: emailError })
+        logger.error('Workshop status update email failed (rejected)', { error: emailError, registrationId: id })
       }
     }
 
