@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -37,12 +37,14 @@ export function RegistrationWizard() {
   const router = useRouter()
   const { isLoading, errors, verifyError, register, verifyCode, resendCode } = useRegistration()
   const [isComplete, setIsComplete] = useState(false)
-  const [referralCode, setReferralCode] = useState<string | undefined>()
-
-  useEffect(() => {
-    const ref = new URLSearchParams(window.location.search).get('ref')
-    if (ref) setReferralCode(ref)
-  }, [])
+  // Read ?ref=… once via lazy initializer — no useEffect-setState dance.
+  // Guarded for SSR (Next pre-renders client components on the server too,
+  // where window is undefined). The referral code is only used for
+  // invite-link attribution, so capturing it on mount is sufficient.
+  const [referralCode] = useState<string | undefined>(() => {
+    if (typeof window === 'undefined') return undefined
+    return new URLSearchParams(window.location.search).get('ref') ?? undefined
+  })
   const [emailSendFailed, setEmailSendFailed] = useState(false)
 
   const steps = [
