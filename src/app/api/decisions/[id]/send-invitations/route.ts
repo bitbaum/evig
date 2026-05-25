@@ -109,13 +109,26 @@ export const POST = withAdmin<{ id: string }>(async (
       recipients.map(r => sendCustomEmail(r.email!, emailContent))
     );
 
+    // sendCustomEmail RESOLVES with { success: false, error } on SMTP/
+    // Listmonk failure rather than throwing — `fulfilled` alone is true
+    // even when the email didn't go out, so the prior `if (status ===
+    // 'fulfilled') sent++` counted silent failures as sent. Check
+    // settled.value.success too. Matches admin/workshops/send-feedback-
+    // requests (commit 87f084af) and the repairer/apply admin
+    // notifications (d128beff).
     let sent = 0;
     for (let i = 0; i < results.length; i++) {
       const settled = results[i];
-      if (settled.status === 'fulfilled') {
+      if (settled.status === 'fulfilled' && settled.value.success) {
         sent++;
+      } else if (settled.status === 'fulfilled') {
+        logger.warn('Invitation email failed (resolved)', {
+          userId: recipients[i].id,
+          decisionId: id,
+          error: settled.value.error,
+        });
       } else {
-        logger.error('Failed to send invitation email', {
+        logger.error('Invitation email failed (rejected)', {
           userId: recipients[i].id,
           decisionId: id,
           error: settled.reason,

@@ -230,8 +230,32 @@ describe('createNotification', () => {
     ).resolves.toBeUndefined()
 
     expect(logger.error).toHaveBeenCalledWith(
-      'Notification email failed',
+      'Notification email failed (rejected)',
       expect.objectContaining({ userId: 'user-1' }),
+    )
+  })
+
+  it('logs resolved {success:false} as resolved-failure (not as rejected), preventing a sent_email=true DB lie', async () => {
+    // Realistic failure mode of sendCustomEmail: RESOLVE with {success:false},
+    // don't throw. The prior code treated 'fulfilled' as anySent=true and
+    // then marked notifications.sent_email=true — a DB lie that prevented
+    // any retry job from re-sending. With the fix, this branch takes the
+    // "resolved-failure" path (logger.warn with `(resolved)`), not the
+    // throw-path. anySent stays false → sent_email update is skipped.
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+    insertReturningResult = [{ id: 'notif-1' }]
+    selectResult = [{ user_id: 'user-1', email: 'a@b.ch', email_notifications: true }]
+
+    await createNotification('user-1', { type: 'system', title: 'T', content: 'C' })
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Notification email failed (resolved)',
+      expect.objectContaining({ userId: 'user-1' }),
+    )
+    // Verify the rejected-path log key did NOT fire (the bug-mode branch)
+    expect(logger.error).not.toHaveBeenCalledWith(
+      'Notification email failed (rejected)',
+      expect.any(Object),
     )
   })
 })

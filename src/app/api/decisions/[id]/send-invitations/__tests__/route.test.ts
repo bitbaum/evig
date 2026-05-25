@@ -284,4 +284,28 @@ describe('POST /api/decisions/[id]/send-invitations — sends emails', () => {
     expect(mockSendCustomEmail).toHaveBeenCalledTimes(1)
     expect(mockSendCustomEmail).toHaveBeenCalledWith('user2@example.com', expect.any(Object))
   })
+
+  it('counts resolved {success:false} as failed (was miscounted as sent before this fix)', async () => {
+    // Promise.allSettled's `fulfilled` only means "promise resolved", not
+    // "email sent" — sendCustomEmail RESOLVES with {success:false} on
+    // realistic failures (SMTP rejection, Listmonk disabled, API non-2xx).
+    // The prior `if (status === 'fulfilled') sent++` counted those as
+    // sent. This test locks in the settled.value.success check.
+    mockDbExecute
+      .mockResolvedValueOnce({ rows: [VOTING_DECISION] })
+      .mockResolvedValueOnce({ rows: [] })
+    mockResolveEligibleUserIds.mockResolvedValue(['user-1', 'user-2'])
+    const chain = makeSelectChain([
+      { id: 'user-1', email: 'user1@example.com', emailNotifications: true },
+      { id: 'user-2', email: 'user2@example.com', emailNotifications: true },
+    ])
+    mockDbSelect.mockReturnValue(chain)
+    mockSendCustomEmail
+      .mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+      .mockResolvedValueOnce({ success: false, error: 'Listmonk disabled' })
+
+    const res = await POST(makeRequest(), { params: Promise.resolve({ id: 'decision-1' }) })
+    const body = await res.json()
+    expect(body.data.sent).toBe(0)
+  })
 })

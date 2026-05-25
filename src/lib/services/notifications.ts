@@ -83,13 +83,26 @@ async function trySendEmail(
     eligible.map(r => sendCustomEmail(r.email!, emailContent))
   )
 
+  // sendCustomEmail RESOLVES with { success: false, error } on SMTP/
+  // Listmonk failure rather than throwing — `fulfilled` alone is true
+  // even when the email didn't go out. Previously this set anySent=true
+  // on resolved-failure too, then marked notifications.sent_email=true
+  // for every notificationId — a data-integrity lie that prevented any
+  // future retry job from re-sending. Check settled.value.success too.
+  // Matches admin/workshops/send-feedback-requests (commit 87f084af) and
+  // the repairer/apply admin notifications (d128beff).
   let anySent = false
   for (let i = 0; i < results.length; i++) {
     const settled = results[i]
-    if (settled.status === 'fulfilled') {
+    if (settled.status === 'fulfilled' && settled.value.success) {
       anySent = true
+    } else if (settled.status === 'fulfilled') {
+      logger.warn('Notification email failed (resolved)', {
+        userId: eligible[i].user_id,
+        error: settled.value.error,
+      })
     } else {
-      logger.error('Notification email failed', {
+      logger.error('Notification email failed (rejected)', {
         userId: eligible[i].user_id,
         error: settled.reason,
       })
