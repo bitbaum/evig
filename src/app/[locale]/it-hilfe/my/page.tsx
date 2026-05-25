@@ -22,6 +22,7 @@ import {
   getUrgencyById,
   formatBudget,
   getRequestStatusById,
+  REQUEST_STATUS,
   REQUEST_STATUSES,
 } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
@@ -167,6 +168,15 @@ export default function MyRequestsPage() {
               const urgencyConfig = getUrgencyById(req.urgency)
               const statusConfig = getRequestStatusById(req.status)
               const CategoryIcon = categoryConfig?.icon || Wrench
+              // An "Abgelaufen" request is still status=open in the DB but
+              // past its expires_at — the public browse silently filters it
+              // out and the API rejects new offers, so without this badge
+              // the requester sees "Offen" and wonders why no offers come
+              // in. Surface it explicitly.
+              const isExpired =
+                req.status === REQUEST_STATUS.OPEN &&
+                req.expiresAt != null &&
+                new Date(req.expiresAt) < new Date()
 
               return (
                 <Link
@@ -180,10 +190,18 @@ export default function MyRequestsPage() {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
                           {statusConfig?.name || req.status}
                         </span>
+                        {isExpired && (
+                          <span
+                            className="px-2.5 py-1 rounded-full text-xs font-medium bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200"
+                            title={`Abgelaufen am ${formatDateShort(req.expiresAt)}`}
+                          >
+                            Abgelaufen
+                          </span>
+                        )}
                         <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-neutral-100 text-neutral-700'}`}>
                           {urgencyConfig?.name || req.urgency}
                         </span>
