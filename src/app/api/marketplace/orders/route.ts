@@ -163,8 +163,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       payrexxGatewayId: gateway.id,
     });
 
-    // Send order notifications (fire-and-forget)
-    const orderUrl = `${APP_URL}/marketplace/orders/${orderId}`;
+    // Send order notifications (fire-and-forget). The order detail page is
+    // mounted at /dashboard/orders/[id]; there is no /marketplace/orders/[id]
+    // route, so the prior URL shape 404'd on click for both buyer and seller.
+    // Other order-route emails (confirm-receipt, review, [id] PATCH) already
+    // use /dashboard/orders/<id>, so this aligns with the rest of the surface.
+    const orderUrl = `${APP_URL}/dashboard/orders/${orderId}`;
     const deliveryLabel = data.delivery_method === 'shipping' ? 'Versand' : 'Abholung';
 
     // Notify buyer — user data comes from session (no extra RTT)

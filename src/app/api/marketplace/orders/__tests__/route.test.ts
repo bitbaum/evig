@@ -495,4 +495,28 @@ describe('POST /api/marketplace/orders — success', () => {
       })
     )
   })
+
+  it('buyer + seller email orderUrl points to /dashboard/orders/<id> (not the previous /marketplace/orders/<id> which 404s)', async () => {
+    const emailMod = require('@/lib/email')
+    // Seller lookup returns a valid recipient so the fire-and-forget chain runs
+    const limitFn = jest.fn().mockResolvedValue([{ email: 'seller@example.com', name: 'Seller' }])
+    const sellerWhereFn = jest.fn().mockReturnValue({ limit: limitFn })
+    const sellerFromFn = jest.fn().mockReturnValue({ where: sellerWhereFn })
+    mockSelect.mockReturnValue({ from: sellerFromFn })
+
+    await POST(makePostRequest({ listing_id: 'listing-1', delivery_method: 'pickup' }))
+    // Flush the fire-and-forget DB-lookup → sendCustomEmail chain for the seller
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(emailMod.orderConfirmationBuyer).toHaveBeenCalledWith(
+      expect.objectContaining({
+        orderUrl: 'https://example.com/dashboard/orders/order-1',
+      })
+    )
+    expect(emailMod.newOrderNotificationSeller).toHaveBeenCalledWith(
+      expect.objectContaining({
+        orderUrl: 'https://example.com/dashboard/orders/order-1',
+      })
+    )
+  })
 })
