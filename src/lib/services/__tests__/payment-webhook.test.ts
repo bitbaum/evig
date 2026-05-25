@@ -75,10 +75,15 @@ const mockDbUpdate = jest.fn().mockReturnValue({ set: mockUpdateSet })
 // Select — configurable per call; default returns empty
 const mockDbSelect = jest.fn(() => makeSelectChain([]))
 
+// db.execute — used for raw SQL (e.g. workshop_instances participant
+// decrement, which isn't modeled in the Drizzle schema)
+const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] })
+
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockDbSelect.apply(null, args),
     update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
 }))
 
@@ -253,6 +258,7 @@ beforeEach(() => {
   mockUpdateSet.mockReturnValue({ where: mockUpdateWhere })
   mockDbUpdate.mockReturnValue({ set: mockUpdateSet })
   mockDbSelect.mockImplementation(() => makeSelectChain([]))
+  mockDbExecute.mockResolvedValue({ rows: [] })
 })
 
 // ============================================================================
@@ -547,6 +553,33 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: WORKSHOP_REGISTRATION_STATUS.CANCELLED }),
     )
+  })
+
+  it('decrements workshop_instances.current_participants on payment failure so phantom count from register-with-payment is undone', async () => {
+    // The register-with-payment route increments current_participants when
+    // the registration is INSERTed (before payment completes). Without
+    // decrementing here on payment failure, the count leaks +1 per failed
+    // payment and the capacity check eventually blocks legit users.
+    // (The sql mock in this file collapses template-literals to a
+    // {__sql:'mocked'} placeholder, so we can only assert that the raw-
+    // SQL path was taken via db.execute — the inline GREATEST(...) clamp
+    // is enforced by direct read of the route source.)
+    mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]))
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' })
+
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null)
+
+    expect(mockDbExecute).toHaveBeenCalledTimes(1)
+  })
+
+  it('skips the participant decrement when the registration row is missing (idempotent on duplicate webhook)', async () => {
+    // select returns empty (registration already gone / never existed)
+    mockDbSelect.mockImplementation(() => makeSelectChain([]))
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-missing' })
+
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+
+    expect(mockDbExecute).not.toHaveBeenCalled()
   })
 
   it('cancels service appointment when serviceAppointmentId is set', async () => {

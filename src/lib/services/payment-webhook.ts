@@ -319,8 +319,24 @@ export async function handleGenericPayment(
         })
         .where(eq(paymentTransactions.id, paymentTx.id))
 
-      // Revert workshop registration to cancelled
+      // Revert workshop registration to cancelled + decrement the phantom
+      // participant count. The register-with-payment route at route.ts:140
+      // increments workshop_instances.current_participants on the initial
+      // INSERT (before payment completes). Without decrementing here, every
+      // failed payment leaves a +1 in the count that has no real
+      // registration backing it — over time the capacity check at
+      // register-with-payment.ts:102 blocks legitimate users from a
+      // workshop that's not actually full. GREATEST(...,0) clamps so a
+      // duplicate webhook can't drive the count negative.
       if (paymentTx.workshopRegistrationId) {
+        // Look up the instanceId first (the registration row will be
+        // flipped to cancelled below, but we still need to know which
+        // instance's count to decrement).
+        const [reg] = await db
+          .select({ workshopInstanceId: workshopRegistrations.workshopInstanceId })
+          .from(workshopRegistrations)
+          .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+
         await db
           .update(workshopRegistrations)
           .set({
@@ -330,6 +346,17 @@ export async function handleGenericPayment(
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
           .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+
+        if (reg?.workshopInstanceId) {
+          // current_participants is a real DB column (cms-api migration 003)
+          // but isn't modeled in the Drizzle schema — fall back to raw SQL.
+          // Matches the increment shape in register-with-payment/route.ts:141.
+          await db.execute(sql`
+            UPDATE workshop_instances
+            SET current_participants = GREATEST(current_participants - 1, 0)
+            WHERE id = ${reg.workshopInstanceId}
+          `)
+        }
       }
 
       // Revert service appointment
