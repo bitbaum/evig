@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { apiFetch } from '@/lib/api/client'
 
@@ -28,15 +29,34 @@ interface UseWorkshopRegistrationsErrors {
 
 export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors) {
   const { data: session, status: sessionStatus } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  // Mirrors useAppointments.ts — the paid-workshop flow at
+  // /api/workshops/[slug]/register-with-payment uses
+  // successRedirectUrl: /dashboard/workshops?payment=success, and the
+  // `dashboard.workshops.paymentSuccess` translation key already exists in
+  // all 7 locales waiting for a consumer. The page just never rendered the
+  // banner. Initializer captures the flag once on mount; the effect below
+  // strips the query param via router.replace so refresh/back-nav don't
+  // replay the banner.
+  const [paymentSuccess, setPaymentSuccess] = useState(
+    () => searchParams.get('payment') === 'success'
+  )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRating, setEditRating] = useState(5)
   const [editFeedback, setEditFeedback] = useState('')
   const [saving, setSaving] = useState(false)
   const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (searchParams.get('payment') === 'success') {
+      router.replace('/dashboard/workshops')
+    }
+  }, [searchParams, router])
 
   const fetchRegistrations = useCallback(async () => {
     const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
@@ -96,6 +116,8 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
     registrations,
     loading,
     error,
+    paymentSuccess,
+    setPaymentSuccess,
     editingId,
     editRating,
     editFeedback,

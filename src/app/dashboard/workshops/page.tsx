@@ -40,6 +40,8 @@ export default function WorkshopsDashboard() {
     registrations,
     loading,
     error,
+    paymentSuccess,
+    setPaymentSuccess,
     editingId,
     editRating,
     editFeedback,
@@ -116,6 +118,22 @@ export default function WorkshopsDashboard() {
           <Heading level={1} className="text-3xl font-bold mb-2 text-neutral-900 dark:text-white">{t('pageTitle')}</Heading>
           <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
         </div>
+
+        {paymentSuccess && (
+          <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800/30 rounded-lg p-4 mb-6 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
+              <p className="text-primary-800 dark:text-primary-300 font-medium">{t('paymentSuccess')}</p>
+            </div>
+            <button
+              onClick={() => setPaymentSuccess(false)}
+              className="text-primary-600 hover:text-primary-800 text-lg leading-none"
+              aria-label={t('cancel')}
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         {error && (
           <div className="rounded-lg p-4 mb-6 border-2 bg-error-50 dark:bg-error-500/10 border-error-200 dark:border-error-500/30">
