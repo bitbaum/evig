@@ -3,6 +3,8 @@
 import { Loader2 } from 'lucide-react'
 import { Modal } from '@/components/ui/Modal'
 import { Button } from '@/components/ui/button'
+import { Select } from '@/components/ui/select'
+import { Textarea } from '@/components/ui/textarea'
 
 interface HandleReportModalProps {
   reportAction: string
@@ -20,19 +22,19 @@ export function HandleReportModal({ reportAction, setReportAction, reportNotes, 
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Aktion</label>
-          <select value={reportAction} onChange={e => setReportAction(e.target.value)} className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600">
+          <Select variant="elevated" value={reportAction} onChange={e => setReportAction(e.target.value)}>
             <option value="dismiss">Abweisen</option>
             <option value="warn_seller">Verkäufer verwarnen</option>
             <option value="remove_listing">Inserat entfernen</option>
-          </select>
+          </Select>
         </div>
         <div>
           <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">Notizen</label>
-          <textarea
+          <Textarea
+            variant="elevated"
             value={reportNotes}
             onChange={e => setReportNotes(e.target.value)}
             rows={3}
-            className="w-full px-3 py-2 text-sm border rounded-lg dark:bg-neutral-700 dark:border-neutral-600"
             placeholder="Begründung..."
           />
         </div>
