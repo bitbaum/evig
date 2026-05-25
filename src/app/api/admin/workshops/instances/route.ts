@@ -42,7 +42,10 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
         updatedAt: workshopInstances.updatedAt,
         workshop_title: workshops.title,
         workshop_slug: workshops.slug,
-        current_participants: sql<string>`COUNT(${workshopRegistrations.id})`,
+        // Exclude CANCELLED — they don't occupy a seat (matches the
+        // workshop_instances.current_participants invariant fixed in
+        // eac01d4a/d38a2787 on the increment-vs-decrement side).
+        current_participants: sql<string>`COUNT(CASE WHEN ${workshopRegistrations.status} != ${WORKSHOP_REGISTRATION_STATUS.CANCELLED} THEN ${workshopRegistrations.id} END)`,
         confirmed_count: sql<string>`COUNT(CASE WHEN ${workshopRegistrations.status} = ${WORKSHOP_REGISTRATION_STATUS.CONFIRMED} THEN 1 END)`,
         pending_count: sql<string>`COUNT(CASE WHEN ${workshopRegistrations.status} = ${WORKSHOP_REGISTRATION_STATUS.PENDING} THEN 1 END)`,
       })

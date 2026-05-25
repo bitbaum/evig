@@ -6,6 +6,7 @@ import { eq, desc, asc, inArray, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 export async function GET(request: NextRequest) {
   const clientIp = getClientIdentifier(request)
@@ -64,7 +65,9 @@ export async function GET(request: NextRequest) {
         status: workshopInstances.status,
         created_at: workshopInstances.createdAt,
         updated_at: workshopInstances.updatedAt,
-        current_participants: sql<number>`count(${workshopRegistrations.id})`,
+        // Exclude CANCELLED — see eac01d4a/d38a2787 for the matching
+        // invariant on the stored-count side.
+        current_participants: sql<number>`count(CASE WHEN ${workshopRegistrations.status} != ${WORKSHOP_REGISTRATION_STATUS.CANCELLED} THEN ${workshopRegistrations.id} END)`,
       })
       .from(workshopInstances)
       .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))

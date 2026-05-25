@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema'
 import { eq, sql, asc, and } from 'drizzle-orm'
 import { apiError, apiSuccessCached, apiNotFound } from '@/lib/api/helpers'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 export async function GET(
   request: NextRequest,
@@ -20,7 +21,9 @@ export async function GET(
         end_date: workshopInstances.endDate,
         location: workshopInstances.location,
         max_participants: workshopInstances.maxParticipants,
-        current_participants: sql<string>`COUNT(${workshopRegistrations.id})`,
+        // Exclude CANCELLED — see eac01d4a/d38a2787 for the matching
+        // invariant on the stored-count side.
+        current_participants: sql<string>`COUNT(CASE WHEN ${workshopRegistrations.status} != ${WORKSHOP_REGISTRATION_STATUS.CANCELLED} THEN ${workshopRegistrations.id} END)`,
         status: workshopInstances.status,
         notes: workshopInstances.notes,
         created_at: workshopInstances.createdAt,

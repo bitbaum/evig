@@ -9,6 +9,7 @@ import { auth } from '@/auth'
 import WorkshopBrowseClient from './WorkshopBrowseClient'
 import type { WorkshopWithInstances } from '@/components/workshops/types'
 import { type WorkshopInstanceStatus, WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 // auth() reads request headers — prevent static generation so this page is SSR'd per-request
 export const dynamic = 'force-dynamic'
@@ -68,7 +69,9 @@ async function getWorkshopsWithInstances(): Promise<WorkshopWithInstances[]> {
           status: workshopInstances.status,
           created_at: workshopInstances.createdAt,
           updated_at: workshopInstances.updatedAt,
-          current_participants: sql<number>`count(${workshopRegistrations.id})`,
+          // Exclude CANCELLED — see eac01d4a/d38a2787 for the matching
+          // invariant on the stored-count side.
+          current_participants: sql<number>`count(CASE WHEN ${workshopRegistrations.status} != ${WORKSHOP_REGISTRATION_STATUS.CANCELLED} THEN ${workshopRegistrations.id} END)`,
         })
         .from(workshopInstances)
         .leftJoin(workshopRegistrations, eq(workshopInstances.id, workshopRegistrations.workshopInstanceId))

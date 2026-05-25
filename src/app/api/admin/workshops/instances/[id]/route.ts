@@ -6,6 +6,7 @@ import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 
 // GET /api/admin/workshops/instances/[id] - Get instance details
 export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, session, context) => {
@@ -26,7 +27,9 @@ export const GET = withAdmin<{ id: string }>('workshops-admin', async (request, 
         max_participants: workshopInstances.maxParticipants,
         notes: workshopInstances.notes,
         status: workshopInstances.status,
-        current_participants: sql<number>`count(${workshopRegistrations.id})`,
+        // Exclude CANCELLED — see eac01d4a/d38a2787 for the matching
+        // invariant on the stored-count side.
+        current_participants: sql<number>`count(CASE WHEN ${workshopRegistrations.status} != ${WORKSHOP_REGISTRATION_STATUS.CANCELLED} THEN ${workshopRegistrations.id} END)`,
         created_at: workshopInstances.createdAt,
       })
       .from(workshopInstances)
