@@ -134,7 +134,7 @@ beforeEach(() => {
   mockAuth.mockResolvedValue(MOCK_STAFF_SESSION)
   mockGetClientIp.mockReturnValue('127.0.0.1')
   mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 10, resetAt: 0 })
-  mockSendEmail.mockResolvedValue(undefined)
+  mockSendEmail.mockResolvedValue({ success: true, messageId: 'test-msg' })
 
   // Set up select chain
   mockWhere.mockResolvedValue([])
@@ -212,6 +212,24 @@ describe('POST /api/newsletter/subscribe — new subscriber', () => {
     const body = await response.json()
     expect(body.success).toBe(true)
     expect(mockInsert).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('POST /api/newsletter/subscribe — email failure', () => {
+  it('returns 502 when sendEmail resolves with success=false (does not swallow silent failure)', async () => {
+    mockWhere.mockResolvedValueOnce([])
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
+
+    const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
+      method: 'POST',
+      body: JSON.stringify({ email: 'fail@example.com' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await POST(req)
+    expect(response.status).toBe(502)
+    const body = await response.json()
+    expect(body.success).toBe(false)
+    expect(body.error).toMatch(/Bestätigungs-E-Mail/i)
   })
 })
 

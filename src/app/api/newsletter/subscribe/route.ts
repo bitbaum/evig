@@ -73,17 +73,28 @@ export async function POST(request: NextRequest) {
         })
     }
 
-    // Send confirmation email
-    try {
-      const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${confirmToken}`
-      await sendEmail(normalizedEmail, 'newsletterConfirmation', confirmUrl)
-      logger.info('Newsletter confirmation email sent', { email: normalizedEmail })
-    } catch (emailError) {
+    // Send confirmation email. sendEmail returns a resolved SendEmailResult on
+    // failure (SMTP rejection, Listmonk disabled, API non-2xx) rather than
+    // throwing — a bare try/catch would silently swallow those cases and the
+    // user would see "Bestätigungs-E-Mail gesendet" even when no email was
+    // sent. The subscription row exists with isActive=false, so without the
+    // confirmation email arriving the user has no path to activate it and
+    // no UI surface showing the pending state. Surface the failure instead
+    // so they can retry (the retry path overwrites the existing row's token).
+    const confirmUrl = `${APP_URL}/api/newsletter/confirm?token=${confirmToken}`
+    const emailResult = await sendEmail(normalizedEmail, 'newsletterConfirmation', confirmUrl)
+    if (!emailResult.success) {
       logger.warn('Failed to send newsletter confirmation email', {
         email: normalizedEmail,
-        error: emailError
+        error: emailResult.error,
       })
+      return apiError(
+        new Error(emailResult.error || 'Email send failed'),
+        'Bestätigungs-E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut.',
+        502
+      )
     }
+    logger.info('Newsletter confirmation email sent', { email: normalizedEmail })
 
     // Sync to Listmonk if enabled
     if (process.env.LISTMONK_ENABLED === 'true') {
