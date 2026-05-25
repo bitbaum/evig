@@ -106,9 +106,11 @@ import { NextRequest } from 'next/server'
 import { POST } from '../route'
 import { rateLimiters } from '@/lib/security/rate-limit'
 import { sendCustomEmail } from '@/lib/email'
+import { newMarketplaceMessage } from '@/lib/email/templates/marketplace'
 
 const mockContactSeller = rateLimiters.contactSeller as jest.MockedFunction<typeof rateLimiters.contactSeller>
 const mockSendCustomEmail = sendCustomEmail as jest.MockedFunction<typeof sendCustomEmail>
+const mockNewMarketplaceMessage = newMarketplaceMessage as jest.MockedFunction<typeof newMarketplaceMessage>
 
 // ── Fixtures ───────────────────────────────────────────────────────────────
 
@@ -258,5 +260,21 @@ describe('POST /api/listings/[id]/contact', () => {
 
     expect(res.status).toBe(500)
     expect(body.success).toBe(false)
+  })
+
+  it('email notification conversationUrl deep-links into the specific conversation (not just the inbox)', async () => {
+    // Matches the messages-route fix at commit 0b773948: the dashboard
+    // page at /dashboard/messages reads `conversation` from searchParams
+    // to auto-select the thread. Without ?conversation=<id> the seller
+    // lands on the inbox list and has to scroll/search to find the
+    // brand-new conversation.
+    await POST(makeRequest('http://localhost:3000/api/listings/listing-1/contact'), makeContext('listing-1'))
+    await new Promise(resolve => setImmediate(resolve))
+
+    expect(mockNewMarketplaceMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        conversationUrl: expect.stringMatching(/\/dashboard\/messages\?conversation=conv-1$/),
+      })
+    )
   })
 })

@@ -75,7 +75,12 @@ export const POST = withAuth<{ id: string }>(async (
       title: listing.title,
     });
 
-    // Fire-and-forget: email notification to seller
+    // Fire-and-forget: email notification to seller. Deep-link into the
+    // specific conversation (?conversation=<id>) so the seller doesn't
+    // have to find the new thread in their inbox list — matches the
+    // /api/messages route shape fixed in 0b773948 (the dashboard page
+    // at /dashboard/messages reads `conversation` from searchParams to
+    // auto-select the thread).
     if (listing.sellerEmail) {
       sendCustomEmail(
         listing.sellerEmail,
@@ -84,7 +89,7 @@ export const POST = withAuth<{ id: string }>(async (
           senderName: session.user.name || 'Nutzer',
           listingTitle: listing.title,
           messagePreview: message.substring(0, 200),
-          conversationUrl: `${APP_URL}/dashboard/messages`,
+          conversationUrl: `${APP_URL}/dashboard/messages?conversation=${conversationId}`,
         })
       ).catch(err => logger.error('Failed to send marketplace message notification', { error: err, listingId: id }));
     }
