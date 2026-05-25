@@ -18,6 +18,7 @@ import { Input } from '../input'
 import { Textarea } from '../textarea'
 import { Select } from '../select'
 import { FormField } from '../form-field'
+import { designPrimitive } from '@/lib/design-system'
 
 // ============================================================================
 // Input
@@ -45,6 +46,21 @@ describe('Input', () => {
     render(<Input disabled />)
     expect(screen.getByRole('textbox')).toBeDisabled()
   })
+
+  it('applies the elevated form primitive class when variant="elevated"', () => {
+    render(<Input variant="elevated" data-testid="elev" />)
+    const el = screen.getByTestId('elev')
+    // The elevated bg is what differentiates the two — neutral-700 vs neutral-900
+    expect(el).toHaveClass('dark:bg-neutral-700')
+    expect(el).not.toHaveClass('dark:bg-neutral-900')
+  })
+
+  it('defaults to the regular form primitive when variant is omitted', () => {
+    render(<Input data-testid="def" />)
+    const el = screen.getByTestId('def')
+    expect(el).toHaveClass('dark:bg-neutral-900')
+    expect(el).not.toHaveClass('dark:bg-neutral-700')
+  })
 })
 
 // ============================================================================
@@ -67,6 +83,13 @@ describe('Textarea', () => {
   it('applies a custom className', () => {
     render(<Textarea className="resize-none" />)
     expect(screen.getByRole('textbox')).toHaveClass('resize-none')
+  })
+
+  it('applies the elevated form primitive class when variant="elevated"', () => {
+    render(<Textarea variant="elevated" data-testid="elev" />)
+    const el = screen.getByTestId('elev')
+    expect(el).toHaveClass('dark:bg-neutral-700')
+    expect(el).not.toHaveClass('dark:bg-neutral-900')
   })
 })
 
@@ -104,6 +127,43 @@ describe('Select', () => {
       </Select>
     )
     expect(screen.getByRole('combobox')).toHaveClass('extra')
+  })
+
+  it('applies the elevated form primitive class when variant="elevated"', () => {
+    render(
+      <Select variant="elevated" data-testid="elev">
+        <option value="">–</option>
+      </Select>
+    )
+    const el = screen.getByTestId('elev')
+    expect(el).toHaveClass('dark:bg-neutral-700')
+    expect(el).not.toHaveClass('dark:bg-neutral-900')
+  })
+})
+
+// ============================================================================
+// designPrimitive.form — SSOT for variant pairing
+// ============================================================================
+
+describe('designPrimitive.form variants', () => {
+  it('exports paired regular + elevated class strings for input/textarea/select', () => {
+    expect(typeof designPrimitive.form.input).toBe('string')
+    expect(typeof designPrimitive.form.inputElevated).toBe('string')
+    expect(typeof designPrimitive.form.textarea).toBe('string')
+    expect(typeof designPrimitive.form.textareaElevated).toBe('string')
+    expect(typeof designPrimitive.form.select).toBe('string')
+    expect(typeof designPrimitive.form.selectElevated).toBe('string')
+  })
+
+  it('elevated variants use neutral-700 dark bg, default variants use neutral-900', () => {
+    expect(designPrimitive.form.inputElevated).toContain('dark:bg-neutral-700')
+    expect(designPrimitive.form.input).toContain('dark:bg-neutral-900')
+
+    expect(designPrimitive.form.textareaElevated).toContain('dark:bg-neutral-700')
+    expect(designPrimitive.form.textarea).toContain('dark:bg-neutral-900')
+
+    expect(designPrimitive.form.selectElevated).toContain('dark:bg-neutral-700')
+    expect(designPrimitive.form.select).toContain('dark:bg-neutral-900')
   })
 })
 

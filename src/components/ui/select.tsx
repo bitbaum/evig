@@ -6,12 +6,18 @@ import { designPrimitive } from '@/lib/design-system'
 
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   children: ReactNode
+  /** `elevated` lifts the dark-mode bg for use inside Modal/aside/toolbar containers. */
+  variant?: 'default' | 'elevated'
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, children, ...props }, ref) => (
+  ({ className, children, variant = 'default', ...props }, ref) => (
     <select
-      className={cn(designPrimitive.form.select, 'w-full', className)}
+      className={cn(
+        variant === 'elevated' ? designPrimitive.form.selectElevated : designPrimitive.form.select,
+        'w-full',
+        className
+      )}
       ref={ref}
       {...props}
     >
