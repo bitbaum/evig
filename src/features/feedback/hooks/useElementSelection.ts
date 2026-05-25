@@ -50,7 +50,8 @@ export function useElementSelection({ panelRef }: UseElementSelectionProps): Use
       }
       setSelectedElements(prev => [...prev, selectedElement])
     }
-  }, [isElementSelectionMode, selectedElements, generateSelector])
+    // generateSelector is a stable module-level import — not a valid dep
+  }, [isElementSelectionMode, selectedElements])
 
   // Handle element hover in selection mode
   const handleElementHover = useCallback((event: MouseEvent) => {
