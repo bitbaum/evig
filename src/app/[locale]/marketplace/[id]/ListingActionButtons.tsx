@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import type { ListingDetail } from './types'
 import { useTranslations } from 'next-intl'
-import { formatCHF } from '@/config/marketplace'
+import { formatCHF, LISTING_STATUS } from '@/config/marketplace'
 
 interface ListingActionButtonsProps {
   listing: ListingDetail
@@ -67,11 +67,34 @@ export function ListingActionButtons({
   const t = useTranslations('marketplace.listing_actions')
 
   const isRevampit = listing.is_revampit
+  // The contact-seller API and the checkout flow both reject non-ACTIVE
+  // listings server-side. Without this guard the UI rendered fully-enabled
+  // CTAs that failed silently when clicked (generic "Inserat ist nicht mehr
+  // verfügbar" error, no explanation that it was reserved/sold/removed).
+  const isAvailable = listing.status === LISTING_STATUS.ACTIVE
+  const unavailableLabel =
+    listing.status === LISTING_STATUS.RESERVED ? t('unavailableReserved')
+    : listing.status === LISTING_STATUS.SOLD ? t('unavailableSold')
+    : listing.status === LISTING_STATUS.REMOVED ? t('unavailableRemoved')
+    : listing.status === LISTING_STATUS.DRAFT ? t('unavailableDraft')
+    : t('unavailableGeneric')
 
   return (
     <div className="space-y-3">
-      {/* RevampIT direct purchase */}
-      {!isOwner && isRevampit && (
+      {/* Unavailable banner for non-ACTIVE listings (replaces the buy/contact CTAs) */}
+      {!isOwner && !isAvailable && (
+        <div
+          className="w-full bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg p-4 text-center"
+          role="status"
+        >
+          <p className="text-warning-800 dark:text-warning-300 font-medium text-sm">
+            {unavailableLabel}
+          </p>
+        </div>
+      )}
+
+      {/* RevampIT direct purchase — only when ACTIVE */}
+      {!isOwner && isRevampit && isAvailable && (
         <>
           <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
             <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
@@ -93,7 +116,7 @@ export function ListingActionButtons({
       )}
 
       {/* P2P payment info */}
-      {!isOwner && !isRevampit && (
+      {!isOwner && !isRevampit && isAvailable && (
         <div className="bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 space-y-2">
           <div className="flex items-center gap-2 text-primary-800 dark:text-primary-300 font-medium text-sm">
             <Shield className="w-4 h-4" aria-hidden="true" />
@@ -104,7 +127,7 @@ export function ListingActionButtons({
           </p>
         </div>
       )}
-      {!isOwner && !isRevampit && (
+      {!isOwner && !isRevampit && isAvailable && (
         <>
           {messageSent ? (
             <div className="w-full bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-lg p-4 text-center space-y-2">

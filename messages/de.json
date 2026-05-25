@@ -696,7 +696,12 @@
       "errorMessage": "Fehler beim Senden der Nachricht",
       "errorNetworkMessage": "Netzwerkfehler beim Senden der Nachricht",
       "errorReport": "Fehler beim Melden des Inserats",
-      "errorNetworkReport": "Netzwerkfehler beim Melden des Inserats"
+      "errorNetworkReport": "Netzwerkfehler beim Melden des Inserats",
+      "unavailableReserved": "Dieses Inserat ist von einer anderen Person reserviert.",
+      "unavailableSold": "Dieses Inserat ist bereits verkauft.",
+      "unavailableRemoved": "Dieses Inserat wurde entfernt und ist nicht mehr verfügbar.",
+      "unavailableDraft": "Dieses Inserat ist noch nicht veröffentlicht.",
+      "unavailableGeneric": "Dieses Inserat ist derzeit nicht verfügbar."
     },
     "empty": "Keine Inserate gefunden",
     "conditions": {
