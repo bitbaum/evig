@@ -296,4 +296,26 @@ describe('POST /api/appointments/[id]/pay — success', () => {
     const body = await response.json()
     expect(body.data.message).toMatch(/treuhänderisch/)
   })
+
+  it('failed/cancelled redirect URLs land on the list page, not the nonexistent /dashboard/appointments/[id]', async () => {
+    // The previous URLs included `/${appointmentId}`, but no
+    // /dashboard/appointments/[id] page exists — only the list at
+    // /dashboard/appointments/page.tsx. So Payrexx-redirected
+    // failed/cancelled payments 404'd. This test locks in the fix
+    // (matching shape to the success URL).
+    const req = new NextRequest('http://localhost/api/appointments/appt-1/pay', {
+      method: 'POST',
+      body: JSON.stringify({ useEscrow: false, autoReleaseDays: 7, paymentType: 'full' }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    await POST(req)
+
+    const { processPaymentWithoutInvoice } = jest.requireMock('@/lib/payments/payment-flow')
+    const callArgs = processPaymentWithoutInvoice.mock.calls[0][0]
+    expect(callArgs.successRedirectUrl).toMatch(/\/dashboard\/appointments\?payment=success$/)
+    expect(callArgs.failedRedirectUrl).toMatch(/\/dashboard\/appointments\?payment=failed$/)
+    expect(callArgs.cancelRedirectUrl).toMatch(/\/dashboard\/appointments\?payment=cancelled$/)
+    expect(callArgs.failedRedirectUrl).not.toMatch(/\/appointments\/appt-1/)
+    expect(callArgs.cancelRedirectUrl).not.toMatch(/\/appointments\/appt-1/)
+  })
 })

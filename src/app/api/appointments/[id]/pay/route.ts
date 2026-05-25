@@ -127,8 +127,16 @@ export async function POST(request: NextRequest) {
       },
       serviceAppointmentId: appointmentId,
       successRedirectUrl: `${baseUrl}/dashboard/appointments?payment=success`,
-      failedRedirectUrl: `${baseUrl}/dashboard/appointments/${appointmentId}?payment=failed`,
-      cancelRedirectUrl: `${baseUrl}/dashboard/appointments/${appointmentId}?payment=cancelled`,
+      // The previous failed/cancelled URLs included `/${appointmentId}`, but
+      // no /dashboard/appointments/[id] page exists in src/app/dashboard/
+      // appointments — only the list at /dashboard/appointments/page.tsx.
+      // So Payrexx-redirected failed/cancelled payments 404'd. Land them
+      // on the same list page as the success path; useAppointments doesn't
+      // currently render banners for failed/cancelled (only `success`),
+      // but the user can at least see their PENDING_PAYMENT appointment in
+      // the list and know payment didn't complete.
+      failedRedirectUrl: `${baseUrl}/dashboard/appointments?payment=failed`,
+      cancelRedirectUrl: `${baseUrl}/dashboard/appointments?payment=cancelled`,
       purpose: `${paymentTypeLabel}: ${appointment.service_name}`,
       transactionMetadata: {
         paymentType,
