@@ -23,7 +23,7 @@ export const appointmentNewBooking = (
   description: string,
   appointmentUrl: string
 ): EmailContent => ({
-  subject: 'Neuer Reparaturauftrag - ${ORG.name}',
+  subject: `Neuer Reparaturauftrag - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -97,7 +97,7 @@ export const appointmentQuoteReceived = (
   diagnosisNotes: string | null,
   appointmentUrl: string
 ): EmailContent => ({
-  subject: 'Neues Angebot für deine Reparatur - ${ORG.name}',
+  subject: `Neues Angebot für deine Reparatur - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -237,7 +237,7 @@ export const appointmentUnassignedAlert = (
   urgency: string,
   adminUrl: string
 ): EmailContent => ({
-  subject: 'Unzugewiesener Reparaturauftrag - ${ORG.name}',
+  subject: `Unzugewiesener Reparaturauftrag - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

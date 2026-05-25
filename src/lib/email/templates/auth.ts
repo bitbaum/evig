@@ -14,7 +14,7 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 // need escaping but the name does — escape before HTML interpolation.
 
 export const verificationCode = (name: string, code: string): EmailContent => ({
-  subject: 'Dein Bestätigungscode - ${ORG.name}',
+  subject: `Dein Bestätigungscode - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -59,7 +59,7 @@ ${createTextFooter()}
 });
 
 export const emailVerification = (name: string, verificationUrl: string): EmailContent => ({
-  subject: 'E-Mail-Adresse bestätigen - ${ORG.name}',
+  subject: `E-Mail-Adresse bestätigen - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -108,7 +108,7 @@ ${createTextFooter()}
 });
 
 export const welcome = (name: string): EmailContent => ({
-  subject: 'Willkommen bei ${ORG.name}!',
+  subject: `Willkommen bei ${ORG.name}!`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -159,7 +159,7 @@ ${createTextFooter()}
  * Uses a warmer, team-focused tone
  */
 export const staffVerificationCode = (name: string, code: string): EmailContent => ({
-  subject: 'Willkommen im ${ORG.name} Team - Dein Bestätigungscode',
+  subject: `Willkommen im ${ORG.name} Team - Dein Bestätigungscode`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -222,7 +222,7 @@ ${createTextFooter()}
  * Provides onboarding info for new team members
  */
 export const staffWelcome = (name: string): EmailContent => ({
-  subject: 'Willkommen im ${ORG.name} Team!',
+  subject: `Willkommen im ${ORG.name} Team!`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -285,7 +285,7 @@ ${createTextFooter()}
 });
 
 export const passwordReset = (name: string, resetUrl: string): EmailContent => ({
-  subject: 'Passwort zurücksetzen - ${ORG.name}',
+  subject: `Passwort zurücksetzen - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -338,7 +338,7 @@ ${createTextFooter()}
  * Sent after a user successfully resets their password
  */
 export const passwordChangeConfirmation = (name: string): EmailContent => ({
-  subject: 'Passwort erfolgreich geändert - ${ORG.name}',
+  subject: `Passwort erfolgreich geändert - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

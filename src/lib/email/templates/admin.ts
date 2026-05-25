@@ -22,7 +22,7 @@ export const adminNewRepairerApplication = (
   const eName = escapeHtml(applicantName);
   const eEmail = escapeHtml(applicantEmail);
   return {
-    subject: 'Neue Techniker-Bewerbung wartet auf Prüfung - ${ORG.name}',
+    subject: `Neue Techniker-Bewerbung wartet auf Prüfung - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -77,7 +77,7 @@ export const adminNewWorkshopProposal = (
   const eEmail = escapeHtml(proposerEmail);
   const eTitle = escapeHtml(workshopTitle);
   return {
-    subject: 'Neuer Workshop-Vorschlag wartet auf Prüfung - ${ORG.name}',
+    subject: `Neuer Workshop-Vorschlag wartet auf Prüfung - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -134,7 +134,7 @@ export const adminNewBlogSubmission = (
   const eEmail = escapeHtml(submitterEmail);
   const eTitle = escapeHtml(articleTitle);
   return {
-    subject: 'Neuer Blog-Beitrag wartet auf Prüfung - ${ORG.name}',
+    subject: `Neuer Blog-Beitrag wartet auf Prüfung - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -189,7 +189,7 @@ export const adminNewSellerApplication = (
   const eName = escapeHtml(applicantName);
   const eEmail = escapeHtml(applicantEmail);
   return {
-    subject: 'Neue Verkäufer-Bewerbung wartet auf Prüfung - ${ORG.name}',
+    subject: `Neue Verkäufer-Bewerbung wartet auf Prüfung - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">

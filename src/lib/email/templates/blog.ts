@@ -15,7 +15,7 @@ export const blogSubmissionReceived = (
   const eTitle = escapeHtml(articleTitle);
   const eId = escapeHtml(submissionId);
   return {
-    subject: 'Blog-Beitrag eingereicht - ${ORG.name}',
+    subject: `Blog-Beitrag eingereicht - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -77,7 +77,7 @@ export const blogSubmissionApproved = (
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);
   return {
-    subject: 'Blog-Beitrag genehmigt - ${ORG.name}',
+    subject: `Blog-Beitrag genehmigt - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -128,7 +128,7 @@ export const blogSubmissionRejected = (
   const eTitle = escapeHtml(articleTitle);
   const eReason = escapeHtml(reason);
   return {
-    subject: 'Blog-Beitrag abgelehnt - ${ORG.name}',
+    subject: `Blog-Beitrag abgelehnt - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -180,7 +180,7 @@ export const blogSubmissionPublished = (
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);
   return {
-    subject: 'Ihr Blog-Beitrag ist live! - ${ORG.name}',
+    subject: `Ihr Blog-Beitrag ist live! - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -233,7 +233,7 @@ export const blogSubmissionChangesRequested = (
   const eTitle = escapeHtml(articleTitle);
   const eNotesHtml = escapeHtml(notes).replace(/\n/g, '<br>');
   return {
-    subject: 'Änderungen für Blog-Beitrag angefragt - ${ORG.name}',
+    subject: `Änderungen für Blog-Beitrag angefragt - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">

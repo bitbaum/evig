@@ -22,7 +22,7 @@ export const workshopRegistrationConfirmation = (
   priceCents: number,
   workshopUrl: string
 ): EmailContent => ({
-  subject: 'Workshop-Anmeldung bestätigt - ${ORG.name}',
+  subject: `Workshop-Anmeldung bestätigt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -281,7 +281,7 @@ export const workshopFeedbackRequest = (
   workshopDate: string,
   feedbackUrl: string
 ): EmailContent => ({
-  subject: 'Wie war der Workshop? Ihr Feedback zählt! - ${ORG.name}',
+  subject: `Wie war der Workshop? Ihr Feedback zählt! - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -333,7 +333,7 @@ export const workshopProposalSubmitted = (
   workshopTitle: string,
   proposalId: string
 ): EmailContent => ({
-  subject: 'Workshop-Vorschlag eingereicht - ${ORG.name}',
+  subject: `Workshop-Vorschlag eingereicht - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -391,7 +391,7 @@ export const workshopProposalApproved = (
   name: string,
   workshopTitle: string
 ): EmailContent => ({
-  subject: 'Workshop-Vorschlag genehmigt - ${ORG.name}',
+  subject: `Workshop-Vorschlag genehmigt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -440,7 +440,7 @@ export const workshopProposalRejected = (
   workshopTitle: string,
   reason: string
 ): EmailContent => ({
-  subject: 'Workshop-Vorschlag abgelehnt - ${ORG.name}',
+  subject: `Workshop-Vorschlag abgelehnt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -488,7 +488,7 @@ export const workshopProposalChangesRequested = (
   workshopTitle: string,
   notes: string
 ): EmailContent => ({
-  subject: 'Änderungen für Workshop-Vorschlag angefragt - ${ORG.name}',
+  subject: `Änderungen für Workshop-Vorschlag angefragt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

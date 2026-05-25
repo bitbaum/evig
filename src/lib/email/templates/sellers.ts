@@ -10,7 +10,7 @@ export const sellerApplicationSubmitted = (
   const eName = escapeHtml(name);
   const eId = escapeHtml(applicationId);
   return {
-    subject: 'Verkäufer-Bewerbung eingereicht - ${ORG.name}',
+    subject: `Verkäufer-Bewerbung eingereicht - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">

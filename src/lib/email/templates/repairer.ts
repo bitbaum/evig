@@ -13,7 +13,7 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 // user/admin-entered free text — escape before HTML interpolation.
 
 export const repairerApplicationSubmitted = (name: string, applicationId: string): EmailContent => ({
-  subject: 'Techniker-Bewerbung erhalten - ${ORG.name}',
+  subject: `Techniker-Bewerbung erhalten - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -69,7 +69,7 @@ ${createTextFooter()}
 });
 
 export const repairerApplicationApproved = (name: string, dashboardUrl: string): EmailContent => ({
-  subject: 'Techniker-Bewerbung genehmigt - ${ORG.name}',
+  subject: `Techniker-Bewerbung genehmigt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -130,7 +130,7 @@ export const repairerApplicationRejected = (
   rejectionReason: string,
   supportEmail: string
 ): EmailContent => ({
-  subject: 'Techniker-Bewerbung - ${ORG.name}',
+  subject: `Techniker-Bewerbung - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -181,7 +181,7 @@ export const repairerApplicationChangesRequested = (
   requestedChanges: string,
   dashboardUrl: string
 ): EmailContent => ({
-  subject: 'Techniker-Bewerbung - Änderungen erforderlich - ${ORG.name}',
+  subject: `Techniker-Bewerbung - Änderungen erforderlich - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

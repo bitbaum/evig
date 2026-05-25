@@ -8,7 +8,7 @@ export const contentSubmissionApproved = (
   title: string,
   contentType: string
 ): EmailContent => ({
-  subject: 'Einreichung genehmigt - ${ORG.name}',
+  subject: `Einreichung genehmigt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -56,7 +56,7 @@ export const contentSubmissionRejected = (
   title: string,
   contentType: string
 ): EmailContent => ({
-  subject: 'Einreichung abgelehnt - ${ORG.name}',
+  subject: `Einreichung abgelehnt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

@@ -24,7 +24,7 @@ export const itHilfeRequestConfirmation = (
   aiDiagnosis: string | null,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Deine IT-Hilfe Anfrage wurde erstellt - ${ORG.name}',
+  subject: `Deine IT-Hilfe Anfrage wurde erstellt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -207,7 +207,7 @@ export const helperNewMatchingRequest = (
   matchingSkillNames: string[],
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Neue passende Anfrage für dich - ${ORG.name} IT-Hilfe',
+  subject: `Neue passende Anfrage für dich - ${ORG.name} IT-Hilfe`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -297,7 +297,7 @@ export const adminNewITHilfeRequest = (
   urgencyName: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Neue IT-Hilfe Anfrage - ${ORG.name}',
+  subject: `Neue IT-Hilfe Anfrage - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -373,7 +373,7 @@ export const itHilfeOfferAccepted = (
   requesterName: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Dein Angebot wurde angenommen! - ${ORG.name} IT-Hilfe',
+  subject: `Dein Angebot wurde angenommen! - ${ORG.name} IT-Hilfe`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -454,7 +454,7 @@ export const itHilfeNewOfferReceived = (
   requestUrl: string,
   acceptUrl?: string
 ): EmailContent => ({
-  subject: 'Neues Angebot für deine Anfrage - ${ORG.name} IT-Hilfe',
+  subject: `Neues Angebot für deine Anfrage - ${ORG.name} IT-Hilfe`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -527,7 +527,7 @@ export const itHilfeCompleted = (
   requestTitle: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Hilfe abgeschlossen - bitte bestätigen und bewerten - ${ORG.name}',
+  subject: `Hilfe abgeschlossen - bitte bestätigen und bewerten - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -589,7 +589,7 @@ export const itHilfeReviewReceived = (
   reviewText: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Du hast eine neue Bewertung erhalten - ${ORG.name} IT-Hilfe',
+  subject: `Du hast eine neue Bewertung erhalten - ${ORG.name} IT-Hilfe`,
   html: `
     <!DOCTYPE html>
     <html lang="de">
@@ -651,7 +651,7 @@ export const itHilfeOfferRejected = (
   requestTitle: string,
   requestUrl: string
 ): EmailContent => ({
-  subject: 'Anfrage vergeben - ${ORG.name} IT-Hilfe',
+  subject: `Anfrage vergeben - ${ORG.name} IT-Hilfe`,
   html: `
     <!DOCTYPE html>
     <html lang="de">

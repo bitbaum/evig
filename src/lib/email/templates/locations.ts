@@ -76,7 +76,7 @@ export const locationSubmissionConfirmation = (
   const eLocationName = escapeHtml(locationName);
   const eCity = escapeHtml(city);
   return {
-    subject: 'Ort eingereicht - ${ORG.name}',
+    subject: `Ort eingereicht - ${ORG.name}`,
     html: `
     <!DOCTYPE html>
     <html lang="de">
