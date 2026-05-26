@@ -136,61 +136,18 @@ export type UserSkill = typeof userSkills.$inferSelect
 export type NewUserSkill = typeof userSkills.$inferInsert
 
 // =============================================================================
-// HELPER PROFILES — DEPRECATED, kept for Drizzle schema reference only
+// HELPER PROFILES — TS-level REMOVED (was kept as a Drizzle-only deprecated stub)
 // =============================================================================
-// Phase 2 migration complete: IT_HILFE_TECHNICIAN_PROFILES now points to
-// repairer_profiles (profile_tier='community'). This table definition is kept
-// so existing Drizzle migrations compile; do NOT use helperProfiles in new queries.
-// Safe to drop helper_profiles table once helper_profiles_v view is also dropped.
+// Phase 2 migration unified helper_profiles into repairer_profiles
+// (profile_tier='community'). The Drizzle table definition has been
+// removed; no TypeScript code references it (verified by grep at
+// removal time — only the schema file itself and two adjacent
+// comments mentioned the name). The earlier comment claimed the
+// definition was kept "so existing Drizzle migrations compile" but
+// Drizzle migrations are SQL files that don't reference the TS
+// schema, so that justification didn't hold.
 //
-// Optional profile for users who want to offer IT help services.
-
-export const helperProfiles = pgTable('helper_profiles', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: uuid('user_id').notNull().unique().references(() => users.id, { onDelete: 'cascade' }),
-
-  // Profile information
-  bio: text('bio'),
-  avatarUrl: text('avatar_url'),
-
-  // Pricing
-  hourlyRateCents: integer('hourly_rate_cents'),
-  acceptsGratis: boolean('accepts_gratis').default(true),
-  acceptsKulturlegi: boolean('accepts_kulturlegi').default(true),
-
-  // Service delivery options
-  serviceTypes: text('service_types').array().default(['remote', 'onsite']),
-
-  // Location for onsite services
-  locationPostalCode: varchar('location_postal_code', { length: 10 }),
-  locationCity: varchar('location_city', { length: 100 }),
-  locationCanton: varchar('location_canton', { length: 50 }),
-  maxTravelKm: integer('max_travel_km').default(10),
-
-  // Availability
-  isActive: boolean('is_active').default(true),
-
-  // Verification and moderation (added by 045)
-  isVerified: boolean('is_verified').default(false),
-  verifiedAt: timestamp('verified_at', { withTimezone: true, mode: 'string' }),
-  verifiedBy: uuid('verified_by').references(() => users.id),
-  suspendedAt: timestamp('suspended_at', { withTimezone: true, mode: 'string' }),
-  adminNotes: text('admin_notes'),
-
-  // Statistics
-  totalHelpsCompleted: integer('total_helps_completed').default(0),
-  averageRating: decimal('average_rating', { precision: 3, scale: 2 }),
-
-  // Timestamps
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  index('idx_helper_profiles_user_id').on(table.userId),
-  index('idx_helper_profiles_location').on(table.locationPostalCode),
-  index('idx_helper_profiles_canton').on(table.locationCanton),
-  index('idx_helper_profiles_active').on(table.isActive),
-  index('idx_helper_profiles_rating').on(table.averageRating),
-])
-
-export type HelperProfile = typeof helperProfiles.$inferSelect
-export type NewHelperProfile = typeof helperProfiles.$inferInsert
+// The DB-level objects (helper_profiles table, helper_profiles_v
+// view) still exist — keeping them preserves the historical rows
+// for any post-hoc inspection or recovery. A future migration can
+// drop both once it's confirmed no operational tooling reads them.
