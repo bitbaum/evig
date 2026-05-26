@@ -292,17 +292,27 @@ export function validateVATId(vatId: string, countryCode: string): boolean {
 }
 
 /**
- * Generate tax report data for accounting
+ * Generate tax report data for accounting.
+ *
+ * Period boundaries are passed as Swiss-local YYYY-MM-DD strings (not
+ * Date objects). The caller is responsible for computing the period in
+ * Europe/Zurich time — see src/app/api/admin/tax-reports/route.ts
+ * calculatePeriodDates. Prior versions accepted Date objects and called
+ * `toISOString().split('T')[0]` for display, which silently produced UTC
+ * dates instead of Swiss-local ones — e.g. a January 2026 monthly report
+ * could display "2025-12-31" as the period start because UTC midnight of
+ * Jan 1 Zurich is 23:00 UTC Dec 31 in winter, AND transactions in the
+ * 00:00–02:00 Zurich Jan 1 window were attributed to the prior VAT period.
  */
 export function generateTaxReport(
   transactions: TaxTransaction[],
-  period: { start: Date; end: Date },
+  period: { start: string; end: string },
   countryCode: string = 'CH'
 ) {
   const report = {
     period: {
-      start: period.start.toISOString().split('T')[0],
-      end: period.end.toISOString().split('T')[0]
+      start: period.start,
+      end: period.end,
     },
     country: countryCode,
     summary: {
@@ -347,16 +357,16 @@ export function generateTaxReport(
 }
 
 /**
- * Calculate tax reporting deadline
+ * Calculate tax reporting deadline. periodEnd is a YYYY-MM-DD string in
+ * Europe/Zurich local time. Adding N days is pure calendar arithmetic —
+ * use Date.UTC so the day-shift isn't perturbed by the host's local tz.
  */
-function calculateReportingDeadline(periodEnd: Date, countryCode: string): string {
-  const deadline = new Date(periodEnd)
-
+function calculateReportingDeadline(periodEnd: string, countryCode: string): string {
+  const [y, m, d] = periodEnd.split('-').map(Number)
   // Add reporting period (typically 30-90 days after period end)
   const daysToAdd = countryCode === 'CH' ? 60 : 30 // Switzerland has longer deadline
-  deadline.setDate(deadline.getDate() + daysToAdd)
-
-  return deadline.toISOString().split('T')[0]
+  const dt = new Date(Date.UTC(y, m - 1, d + daysToAdd))
+  return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(dt.getUTCDate()).padStart(2, '0')}`
 }
 
 /**

@@ -236,7 +236,7 @@ describe('generateTaxReport', () => {
 
     const report = generateTaxReport(
       transactions,
-      { start: new Date('2024-01-01'), end: new Date('2024-03-31') },
+      { start: '2024-01-01', end: '2024-03-31' },
       'CH'
     )
 
@@ -244,5 +244,46 @@ describe('generateTaxReport', () => {
     expect(report.summary.totalAmount).toBeGreaterThan(0)
     expect(report.transactions).toHaveLength(2)
     expect(report.compliance.reportingRequired).toBe(true)
+  })
+
+  it('uses period string boundaries verbatim for display (no UTC conversion that drifted year-end transactions)', () => {
+    // Regression: prior signature was period: { start: Date; end: Date }
+    // and the function did `period.end.toISOString().split('T')[0]` which
+    // produced UTC dates. A Swiss-local January 2026 monthly report
+    // (Swiss midnight Jan 1 = 23:00 UTC Dec 31 in winter) displayed the
+    // start as "2025-12-31" — wrong. Now the function accepts already-
+    // formatted Swiss-local YYYY-MM-DD strings and displays them as-is.
+    const report = generateTaxReport(
+      [],
+      { start: '2026-01-01', end: '2026-01-31' },
+      'CH',
+    )
+    expect(report.period.start).toBe('2026-01-01')
+    expect(report.period.end).toBe('2026-01-31')
+  })
+
+  it('computes the CH reporting deadline 60 calendar days after period end', () => {
+    // Reporting-deadline math used to receive a Date and use setDate +
+    // toISOString. Now it parses YYYY-MM-DD and uses Date.UTC for pure
+    // calendar arithmetic — no host-tz interference. Jan 31 + 60 days
+    // = April 1 (2024 leap year: 31 + 60 = 91st day = March 31; 2026
+    // non-leap: 31 + 60 = 91 = April 1).
+    const report = generateTaxReport(
+      [],
+      { start: '2026-01-01', end: '2026-01-31' },
+      'CH',
+    )
+    // 2026 is non-leap: Jan(31) + 60d = day 91 = Apr 1
+    expect(report.compliance.deadline).toBe('2026-04-01')
+  })
+
+  it('computes the non-CH reporting deadline 30 calendar days after period end', () => {
+    const report = generateTaxReport(
+      [],
+      { start: '2026-01-01', end: '2026-01-31' },
+      'DE',
+    )
+    // Jan 31 + 30d = March 2 (Jan 31 + 30 days = day 61 = Mar 2 in 2026)
+    expect(report.compliance.deadline).toBe('2026-03-02')
   })
 })
