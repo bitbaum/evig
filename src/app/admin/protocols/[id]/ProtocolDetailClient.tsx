@@ -87,11 +87,19 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     decisionOutcomes,
   }), [protocol.status, protocol.raw_transcript, notes, actionLinks, decisionVotes, decisionOutcomes])
 
-  // Detected attendees that aren't yet mapped to a team member
+  // Detected attendees that aren't yet mapped to a team member.
+  // Dep on `notes` directly (not `notes?.detected_attendees`) — the
+  // React Compiler eslint rule preserve-manual-memoization couldn't
+  // verify the optional-chained dep against what the compiler would
+  // infer, so it flagged the useMemo. Depending on the parent object
+  // and re-deriving the array inside the body satisfies the rule and
+  // doesn't change behavior — both `notes` and `notes.detected_attendees`
+  // change together in practice (the parent owns the whole `notes`
+  // object's identity).
   const unmappedAttendees = useMemo(() => {
     if (!notes?.detected_attendees) return []
     return notes.detected_attendees.filter(name => !attendeeMapping[name])
-  }, [notes?.detected_attendees, attendeeMapping])
+  }, [notes, attendeeMapping])
 
   const allMapped = unmappedAttendees.length === 0 && (notes?.detected_attendees?.length ?? 0) > 0
 
