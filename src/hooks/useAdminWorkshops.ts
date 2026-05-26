@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { PROPOSAL_STATUS, type ProposalStatus } from '@/config/workshops'
 import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
@@ -22,16 +23,13 @@ export interface WorkshopFilters {
 export function useAdminWorkshops() {
   const { status: sessionStatus } = useSession()
 
-  const [proposals, setProposals] = useState<WorkshopProposalWithProposer[]>([])
-  const [totalItems, setTotalItems] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filters, setFilters] = useState<WorkshopFilters>({
     status: PROPOSAL_STATUS.PENDING,
     category: 'all',
   })
   const [currentPage, setCurrentPage] = useState(1)
+  const [error, setError] = useState('')
   const [rejectingId, setRejectingId] = useState<string | null>(null)
   const [rejectionReason, setRejectionReason] = useState('')
   const [rejectError, setRejectError] = useState<string | null>(null)
@@ -39,8 +37,12 @@ export function useAdminWorkshops() {
   const [approveLoading, setApproveLoading] = useState(false)
   const [rejectLoading, setRejectLoading] = useState(false)
 
-  const loadProposals = useCallback(async (signal?: AbortSignal) => {
-    setLoading(true)
+  // Build the SWR key from filter + pagination state. When any of these
+  // change, SWR refetches automatically against the new key — no manual
+  // useEffect-with-deps + AbortController dance needed. When the session
+  // isn't authenticated yet, pass null so SWR skips the fetch entirely.
+  const swrKey = (() => {
+    if (sessionStatus !== 'authenticated') return null
     const params = new URLSearchParams({
       status: filters.status,
       limit: String(PAGINATION.DEFAULT),
@@ -48,26 +50,24 @@ export function useAdminWorkshops() {
     })
     if (filters.category !== 'all') params.set('category', filters.category)
     if (searchTerm.trim()) params.set('q', searchTerm.trim())
+    return `/api/admin/workshops/proposals?${params}`
+  })()
 
-    const result = await apiFetch<{ items: WorkshopProposalWithProposer[]; pagination?: { total: number } }>(
-      `/api/admin/workshops/proposals?${params}`
-    )
-    if (signal?.aborted) return
-    if (result.success && result.data) {
-      setProposals(result.data.items || [])
-      setTotalItems(result.data.pagination?.total || 0)
-    } else {
-      setError(result.error || ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED)
-    }
-    setLoading(false)
-  }, [filters.status, filters.category, currentPage, searchTerm])
+  const {
+    data,
+    error: swrError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<{
+    items: WorkshopProposalWithProposer[]
+    pagination?: { total: number }
+  }>(swrKey)
 
-  useEffect(() => {
-    if (sessionStatus !== 'authenticated') return
-    const controller = new AbortController()
-    loadProposals(controller.signal)
-    return () => controller.abort()
-  }, [sessionStatus, loadProposals])
+  const proposals = data?.items ?? []
+  const totalItems = data?.pagination?.total ?? 0
+
+  // displayError priority: local action errors override SWR load errors.
+  const displayError = error || (swrError ? ERROR_MESSAGES.WORKSHOP_PROPOSALS_LOAD_FAILED : '')
 
   const handleApprove = (proposalId: string) => {
     setApproveConfirmId(proposalId)
@@ -83,7 +83,10 @@ export function useAdminWorkshops() {
     setApproveLoading(false)
     if (result.success) {
       setApproveConfirmId(null)
-      loadProposals()
+      // Revalidate the SWR cache so the approved proposal disappears
+      // from the pending list (or appears in the approved tab depending
+      // on the current filter).
+      await mutate()
     } else {
       setError(result.error || STRINGS.APPROVE_ERROR)
       setApproveConfirmId(null)
@@ -105,7 +108,7 @@ export function useAdminWorkshops() {
     if (result.success) {
       setRejectingId(null)
       setRejectionReason('')
-      loadProposals()
+      await mutate()
     } else {
       setError(result.error || STRINGS.REJECT_ERROR)
     }
@@ -129,8 +132,8 @@ export function useAdminWorkshops() {
     proposals,
     totalItems,
     totalPages,
-    loading,
-    error,
+    loading: isLoading,
+    error: displayError,
     filters,
     searchTerm,
     currentPage,
