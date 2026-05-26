@@ -22,6 +22,7 @@ import {
   Clock,
   ArrowLeft,
   Globe,
+  AlertTriangle,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
@@ -125,6 +126,31 @@ export default async function AdminPagesPage() {
           <Plus className="w-5 h-5" />
           Neue Seite
         </Button>
+      </div>
+
+      {/* Half-wired warning: public pages (/about, /faq, /impressum,
+          /datenschutz) currently render from hardcoded React components,
+          not from this table. An admin who creates or edits an entry
+          here will see it saved + counted in the stats above, but the
+          content will NOT appear on the public site. Wiring the public
+          /pages/[slug] route to read from static_pages is the proper
+          fix — until then, this banner prevents wasted admin effort. */}
+      <div className="rounded-xl border border-warning-200 dark:border-warning-800/40 bg-warning-50 dark:bg-warning-900/20 p-4">
+        <div className="flex gap-3">
+          <AlertTriangle className="w-5 h-5 text-warning-700 dark:text-warning-400 flex-shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-semibold text-warning-900 dark:text-warning-200 mb-1">
+              Hinweis: Diese Seiten sind aktuell nicht öffentlich verknüpft
+            </p>
+            <p className="text-warning-800 dark:text-warning-300">
+              Die öffentlichen Seiten (Über uns, FAQ, Impressum, Datenschutz)
+              werden derzeit aus festen React-Komponenten gerendert, nicht aus
+              dieser Datenbank. Hier gespeicherte Inhalte erscheinen nicht
+              automatisch auf der öffentlichen Website. Die Anbindung wird in
+              einem späteren Schritt nachgezogen.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards */}
