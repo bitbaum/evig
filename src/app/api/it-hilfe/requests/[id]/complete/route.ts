@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/db'
-import { eq, sql } from 'drizzle-orm'
+import { eq, sql, getTableName } from 'drizzle-orm'
 import { itHilfeRequests, itHilfeOffers, users, repairerProfiles } from '@/db/schema'
+
+const reqTable = getTableName(itHilfeRequests)
 import { withAuth, type ValidSession } from '@/lib/api/middleware'
 import {
   apiError,
@@ -84,8 +86,25 @@ export const POST = withAuth<{ id: string }>(async (
       )
     }
 
-    // Mark request as completed + bump helper totals (transactional)
-    await db.transaction(async (tx) => {
+    // Mark request as completed + bump helper totals (transactional).
+    //
+    // Race: helper double-clicks "Mark complete". Both reads pass (request
+    // MATCHED, offer ACCEPTED, helperId matches). Without a lock both
+    // transactions run — the status UPDATE is idempotent but the
+    // totalJobsCompleted increment double-fires, inflating the helper's
+    // job count by 1 per duplicate click. Lock the request row with
+    // FOR UPDATE inside the transaction and re-verify status === MATCHED;
+    // a race-loser sees status === 'completed' and aborts cleanly without
+    // re-incrementing. Same shape as 90bdbabf / cc89b7f6.
+    const raceWon = await db.transaction(async (tx) => {
+      const lockedReq = await tx.execute(sql`
+        SELECT status FROM ${sql.raw(reqTable)}
+        WHERE id = ${id}
+        FOR UPDATE
+      `)
+      const lockedStatus = (lockedReq.rows[0] as { status?: string } | undefined)?.status
+      if (lockedStatus !== REQUEST_STATUS.MATCHED) return false
+
       await tx
         .update(itHilfeRequests)
         .set({
@@ -99,7 +118,15 @@ export const POST = withAuth<{ id: string }>(async (
         .update(repairerProfiles)
         .set({ totalJobsCompleted: sql`${repairerProfiles.totalJobsCompleted} + 1` })
         .where(eq(repairerProfiles.userId, session.user.id))
+      return true
     })
+
+    if (!raceWon) {
+      // Idempotent: the request is already completed (likely by a sibling
+      // double-click). Return success so the UI doesn't show an error for
+      // what is essentially the desired end-state.
+      return apiSuccess({ message: 'Anfrage als abgeschlossen markiert' })
+    }
 
     logger.info('IT-Hilfe request marked completed by helper', {
       requestId: id,

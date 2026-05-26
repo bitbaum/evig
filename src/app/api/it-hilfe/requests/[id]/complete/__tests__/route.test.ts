@@ -52,6 +52,7 @@ jest.mock('drizzle-orm', () => ({
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
+  getTableName: (_t: unknown) => 'it_hilfe_requests',
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -144,7 +145,11 @@ describe('POST /api/it-hilfe/requests/[id]/complete', () => {
       const txUpdate = jest.fn().mockReturnValue({
         set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
       })
-      return fn({ update: txUpdate })
+      // Default FOR UPDATE inside transaction returns status='matched' so the
+      // race-recheck passes for happy-path tests. Tests covering the
+      // race-loser case override via mockTransaction.mockImplementationOnce.
+      const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'matched' }] })
+      return fn({ update: txUpdate, execute: txExecute })
     })
     // Re-establish fire-and-forget mocks cleared by resetAllMocks
     const email = jest.requireMock('@/lib/email') as { sendCustomEmail: jest.Mock }
@@ -209,5 +214,33 @@ describe('POST /api/it-hilfe/requests/[id]/complete', () => {
 
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
+  })
+
+  it('idempotent on double-click: FOR UPDATE re-check sees completed, returns 200 without double-incrementing totalJobsCompleted', async () => {
+    // Helper double-clicks "Mark complete". Both reads pass (MATCHED,
+    // ACCEPTED, helperId matches). Without the FOR UPDATE re-check, both
+    // transactions would run — status UPDATE is idempotent but
+    // totalJobsCompleted++ would double-fire. With the re-check, the
+    // second click sees status='completed' inside the lock and aborts.
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+    setupTwoSelectChain(
+      { requestId: VALID_UUID, requesterId: 'requester-1', requesterName: 'Requester', requesterEmail: 'req@example.com', title: 'Fix laptop', status: 'matched', matchedOfferId: VALID_OFFER_UUID },
+      { id: VALID_OFFER_UUID, helperId: 'helper-user', status: 'accepted' }
+    )
+
+    // Inside the transaction the FOR UPDATE sees status='completed' — a
+    // sibling click already won the race.
+    const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'completed' }] })
+    const txUpdate = jest.fn().mockReturnValue({
+      set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+    })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
+      fn({ update: txUpdate, execute: txExecute })
+    )
+
+    const res = await POST(makeRequest(VALID_UUID), routeParams(VALID_UUID))
+    expect(res.status).toBe(200) // idempotent — desired end-state already reached
+    // Critical: no updates fired (no double-increment of totalJobsCompleted)
+    expect(txUpdate).not.toHaveBeenCalled()
   })
 })
