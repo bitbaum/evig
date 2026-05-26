@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/db'
-import { eq, sql } from 'drizzle-orm'
+import { eq, sql, getTableName } from 'drizzle-orm'
 import { itHilfeRequests, itHilfeOffers, users } from '@/db/schema'
+
+const reqTable = getTableName(itHilfeRequests)
 import { withAuth, type ValidSession } from '@/lib/api/middleware'
 import {
   apiError,
@@ -125,7 +127,41 @@ export const POST = withAuth<{ id: string }>(async (
       : '\n\n[Empfehlung: Nein]'
     const content = (reviewText || 'Hilfe erfolgreich abgeschlossen.') + recommendationLine
 
-    // Create review via shared service (handles insert + rating update)
+    // Race: requester double-clicks "Submit review". Both pass the outer
+    // reviewedAt + findDuplicateReview checks and both call createReview
+    // — the reviews table has uniqueIndex(reviewer_id, target_type,
+    // target_id, booking_id) but booking_id is null for IT-Hilfe and
+    // Postgres treats NULLs as distinct, so the constraint doesn't block
+    // duplicates. Net: two review rows + double-counted rating in
+    // repairer_profiles. Lock the request row with FOR UPDATE and re-
+    // verify reviewedAt IS NULL inside a transaction. Stamp reviewedAt
+    // there too so race-losers see it on their re-check. Same shape as
+    // 90bdbabf / cc89b7f6 / f7b652b7. createReview runs OUTSIDE the
+    // transaction (the lock already serialized us past the race window;
+    // if createReview itself fails after the stamp commits, the user
+    // sees "already reviewed" on retry — paper cut, no data corruption.)
+    const raceWon = await db.transaction(async (tx) => {
+      const lockedReq = await tx.execute(sql`
+        SELECT reviewed_at FROM ${sql.raw(reqTable)}
+        WHERE id = ${id}
+        FOR UPDATE
+      `)
+      const lockedReviewedAt = (lockedReq.rows[0] as { reviewed_at?: string | null } | undefined)?.reviewed_at
+      if (lockedReviewedAt != null) return false
+      await tx
+        .update(itHilfeRequests)
+        .set({ reviewedAt: sql`NOW()` })
+        .where(eq(itHilfeRequests.id, id))
+      return true
+    })
+
+    if (!raceWon) {
+      return apiBadRequest('Diese Anfrage wurde bereits bewertet')
+    }
+
+    // Create review via shared service (handles insert + rating update).
+    // Safe to call outside the transaction now — request.reviewed_at is
+    // set, so no concurrent caller can reach this line.
     const { reviewId } = await createReview({
       reviewerId: session.user.id,
       targetType: REVIEW_TARGET_TYPES.IT_HILFE,
@@ -134,12 +170,6 @@ export const POST = withAuth<{ id: string }>(async (
       content,
       isVerifiedPurchase: true,
     })
-
-    // Stamp reviewed_at on the request
-    await db
-      .update(itHilfeRequests)
-      .set({ reviewedAt: sql`NOW()` })
-      .where(eq(itHilfeRequests.id, id))
 
     logger.info('IT-Hilfe review submitted', {
       requestId: id,

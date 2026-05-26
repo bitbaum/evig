@@ -30,11 +30,13 @@ const mockWhere = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
+const mockTransaction = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    transaction: (...args: unknown[]) => mockTransaction(...args),
   },
 }))
 
@@ -49,6 +51,7 @@ jest.mock('drizzle-orm', () => ({
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
+  getTableName: (_t: unknown) => 'it_hilfe_requests',
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -160,6 +163,16 @@ describe('POST /api/it-hilfe/requests/[id]/confirm-review', () => {
     jest.resetAllMocks()
     mockUpdateWhere.mockResolvedValue(undefined)
     mockSet.mockReturnValue({ where: mockUpdateWhere })
+    // Default FOR UPDATE inside transaction returns reviewed_at=null so the
+    // race-recheck passes for happy-path tests. Tests covering the race-
+    // loser branch override via mockTransaction.mockImplementationOnce.
+    mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
+      const txUpdate = jest.fn().mockReturnValue({
+        set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+      })
+      const txExecute = jest.fn().mockResolvedValue({ rows: [{ reviewed_at: null }] })
+      return fn({ update: txUpdate, execute: txExecute })
+    })
     // Re-establish default mocks that resetAllMocks clears
     const reviews = jest.requireMock('@/lib/reviews/create-review') as { createReview: jest.Mock; findDuplicateReview: jest.Mock }
     reviews.createReview.mockResolvedValue({ reviewId: 'review-1' })
@@ -239,5 +252,34 @@ describe('POST /api/it-hilfe/requests/[id]/confirm-review', () => {
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
     expect(body.data.reviewId).toBe('review-1')
+  })
+
+  it('returns 400 when FOR UPDATE re-check sees request already reviewed (double-submit guard)', async () => {
+    // Race: requester double-clicks "Submit review". Both pass the outer
+    // reviewedAt + findDuplicateReview checks. Inside the transaction the
+    // FOR UPDATE on the request row sees reviewed_at IS NOT NULL (sibling
+    // click already committed) — abort. createReview must NOT be called,
+    // and reviewed_at must NOT be re-stamped.
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+    setupSelectChains(MOCK_REQUEST_ROW, MOCK_OFFER_ROW)
+
+    const txUpdate = jest.fn().mockReturnValue({
+      set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+    })
+    const txExecute = jest.fn().mockResolvedValue({
+      rows: [{ reviewed_at: '2026-05-25T00:00:00Z' }],  // already reviewed
+    })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
+      fn({ update: txUpdate, execute: txExecute })
+    )
+
+    const res = await POST(makeRequest(VALID_UUID, { rating: 5 }), routeParams(VALID_UUID))
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toMatch(/bereits bewertet/i)
+    // Critical assertions: the race-loser must not write
+    expect(txUpdate).not.toHaveBeenCalled()
+    const reviews = jest.requireMock('@/lib/reviews/create-review') as { createReview: jest.Mock }
+    expect(reviews.createReview).not.toHaveBeenCalled()
   })
 })
