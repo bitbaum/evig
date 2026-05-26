@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 
 export interface MySubmission {
@@ -30,8 +31,20 @@ interface UseBlogSubmissionsErrors {
 }
 
 export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
-  const [submissions, setSubmissions] = useState<MySubmission[]>([])
-  const [loading, setLoading] = useState(true)
+  // Submissions list — SWR replaces the prior useState + useEffect +
+  // setState pattern (which tripped react-hooks/set-state-in-effect).
+  // The wrapper bridges apiFetch's { success, data, error } envelope
+  // into SWR's throw-on-error contract; see src/lib/api/swr.ts.
+  const {
+    data,
+    error: swrError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<{ submissions: MySubmission[] }>('/api/blog/my-submissions')
+
+  const submissions = data?.submissions ?? []
+
+  // Local UI state that's independent of the fetch
   const [error, setError] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editTitle, setEditTitle] = useState('')
@@ -39,21 +52,9 @@ export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
   const [saving, setSaving] = useState(false)
   const [expandedFeedback, setExpandedFeedback] = useState<Set<string>>(new Set())
 
-  const loadSubmissions = useCallback(async () => {
-    setLoading(true)
-    const result = await apiFetch<{ submissions: MySubmission[] }>('/api/blog/my-submissions')
-    if (result.success && result.data) {
-      setSubmissions(result.data.submissions || [])
-      setError('')
-    } else {
-      setError(result.error || errors.loadError)
-    }
-    setLoading(false)
-  }, [errors.loadError])
-
-  useEffect(() => {
-    loadSubmissions()
-  }, [loadSubmissions])
+  // Surface SWR fetch errors via the same `error` field consumers
+  // already check. Falls back to the localized loadError message.
+  const displayError = error || (swrError ? errors.loadError : '')
 
   const toggleFeedback = (id: string) => {
     setExpandedFeedback((prev) => {
@@ -89,7 +90,9 @@ export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
     setSaving(false)
     if (result.success) {
       cancelEditing()
-      await loadSubmissions()
+      // Revalidate SWR cache so the list reflects the resubmitted entry's
+      // updated status without a full re-mount.
+      await mutate()
     } else {
       setError(result.error || errors.resubmitError)
     }
@@ -106,8 +109,8 @@ export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
 
   return {
     submissions,
-    loading,
-    error,
+    loading: isLoading,
+    error: displayError,
     editingId,
     editTitle,
     editContent,
