@@ -5620,6 +5620,7 @@
       "editButton": "Edit details",
       "emptyTitle": "No appointments yet",
       "emptyDesc": "You have not booked any service appointments yet.",
+      "emptyDescRepairer": "No appointments are currently assigned to you. As soon as someone books one of your services, the appointment will appear here.",
       "discoverServices": "Discover services",
       "modalTitle": "Edit appointment details",
       "descriptionLabel": "Description",

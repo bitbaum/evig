@@ -5676,6 +5676,7 @@
       "editButton": "Angaben bearbeiten",
       "emptyTitle": "Noch keine Termine",
       "emptyDesc": "Du hast noch keine Service-Termine gebucht.",
+      "emptyDescRepairer": "Es sind dir aktuell keine Termine zugewiesen. Sobald jemand eine deiner Dienstleistungen bucht, erscheint der Termin hier.",
       "discoverServices": "Dienstleistungen entdecken",
       "modalTitle": "Termindetails bearbeiten",
       "descriptionLabel": "Beschreibung",

@@ -47,6 +47,7 @@ export default function AppointmentsDashboard() {
     setPaymentSuccess, setEditingId, setPendingCancelId,
     setEditDescription, setEditPreferredDate,
     doCancel, openEdit, saveEdit,
+    isRepairerView,
   } = useAppointments({
     loadError: t('loadError'),
     cancelFailed: t('cancelFailed'),
@@ -230,11 +231,13 @@ export default function AppointmentsDashboard() {
             iconBg="bg-teal-50 dark:bg-teal-900/20"
             iconColor="text-teal-500 dark:text-teal-400"
             title={t('emptyTitle')}
-            description={t('emptyDesc')}
+            description={isRepairerView ? t('emptyDescRepairer') : t('emptyDesc')}
             action={
-              <Button as={Link} href="/services" variant="primary">
-                {t('discoverServices')}
-              </Button>
+              isRepairerView ? undefined : (
+                <Button as={Link} href="/services" variant="primary">
+                  {t('discoverServices')}
+                </Button>
+              )
             }
           />
         )}

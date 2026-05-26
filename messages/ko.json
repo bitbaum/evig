@@ -5648,6 +5648,7 @@
       "editButton": "세부 정보 수정",
       "emptyTitle": "예약 없음",
       "emptyDesc": "아직 서비스 예약을 하지 않았습니다.",
+      "emptyDescRepairer": "현재 할당된 예약이 없습니다. 고객이 귀하의 서비스를 예약하면 여기에 표시됩니다.",
       "discoverServices": "서비스 탐색",
       "modalTitle": "예약 세부 정보 수정",
       "descriptionLabel": "설명",

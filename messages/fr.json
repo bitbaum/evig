@@ -5612,6 +5612,7 @@
       "editButton": "Modifier les détails",
       "emptyTitle": "Aucun rendez-vous",
       "emptyDesc": "Vous n'avez pas encore réservé de rendez-vous.",
+      "emptyDescRepairer": "Aucun rendez-vous ne vous est actuellement assigné. Dès que quelqu'un réserve l'un de vos services, le rendez-vous apparaîtra ici.",
       "discoverServices": "Découvrir les services",
       "modalTitle": "Modifier les détails du rendez-vous",
       "descriptionLabel": "Description",

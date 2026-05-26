@@ -5648,6 +5648,7 @@
       "editButton": "Modifica dettagli",
       "emptyTitle": "Nessun appuntamento",
       "emptyDesc": "Non hai ancora prenotato appuntamenti di servizio.",
+      "emptyDescRepairer": "Al momento non hai appuntamenti assegnati. Non appena qualcuno prenoterà uno dei tuoi servizi, l'appuntamento apparirà qui.",
       "discoverServices": "Scopri i servizi",
       "modalTitle": "Modifica dettagli appuntamento",
       "descriptionLabel": "Descrizione",

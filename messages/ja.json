@@ -5648,6 +5648,7 @@
       "editButton": "詳細を編集",
       "emptyTitle": "予約なし",
       "emptyDesc": "まだサービス予約をしていません。",
+      "emptyDescRepairer": "現在割り当てられている予約はありません。お客様があなたのサービスを予約すると、ここに表示されます。",
       "discoverServices": "サービスを見つける",
       "modalTitle": "予約詳細を編集",
       "descriptionLabel": "説明",

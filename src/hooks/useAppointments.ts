@@ -170,5 +170,10 @@ export function useAppointments(errors: ErrorMessages) {
     doCancel,
     openEdit,
     saveEdit,
+    // Surface to the page so it can pick role-appropriate empty-state
+    // copy (a customer-flavored "you haven't booked any services yet"
+    // misleads a repairer who arrives from the appointment notification
+    // email — they're the service provider, not the booker).
+    isRepairerView: roleParam === 'repairer',
   }
 }

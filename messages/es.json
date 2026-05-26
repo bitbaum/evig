@@ -5648,6 +5648,7 @@
       "editButton": "Editar detalles",
       "emptyTitle": "Sin citas",
       "emptyDesc": "Aún no has reservado ninguna cita de servicio.",
+      "emptyDescRepairer": "Actualmente no tienes citas asignadas. En cuanto alguien reserve uno de tus servicios, la cita aparecerá aquí.",
       "discoverServices": "Descubrir servicios",
       "modalTitle": "Editar detalles de la cita",
       "descriptionLabel": "Descripción",
