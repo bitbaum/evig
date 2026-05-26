@@ -1,79 +1,42 @@
 /**
- * Admin Hirn Page - Pure AI Chat Interface
+ * Admin Hirn Page - Server Component (auth gate)
  *
- * Main entry point for Hirn AI assistant.
- * Transformed from BI dashboard to pure AI chat.
- * Protected by role-based access control.
+ * Belt-and-suspenders page-level access check for the sensitive `hirn`
+ * section (AI chat assistant — can be configured to expose org data via
+ * future tools). Layout-level sidebar filtering already hides the entry
+ * point but a direct URL would otherwise render the client chat UI; only
+ * the per-message API calls would then fail auth-side, producing a
+ * confusing partial-render. Matches the pattern used by
+ * /admin/users/page.tsx and /admin/team/page.tsx.
  */
 
-'use client'
+import { Metadata } from 'next'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
+import { canAccessSection } from '@/lib/permissions'
+import HirnPageClient from './HirnPageClient'
 
-import { useState, useCallback } from 'react'
-import { Brain } from 'lucide-react'
-import { HirnChat } from '@/components/admin/HirnChat'
-import { HirnSidebar } from '@/components/admin/HirnSidebar'
-import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector'
-import Heading from '@/components/admin/AdminHeading'
-import { ORG } from '@/config/org'
-
-function generateSessionId(): string {
-  return crypto.randomUUID()
+export const metadata: Metadata = {
+  title: 'Hirn AI',
+  description: 'AI-Assistent für RevampIT.',
 }
 
-export default function HirnPage() {
-  const [currentSessionId, setCurrentSessionId] = useState<string>(generateSessionId())
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
+export default async function AdminHirnPage() {
+  const session = await auth()
 
-  const handleNewSession = useCallback(() => {
-    setCurrentSessionId(generateSessionId())
-  }, [])
+  if (!session?.user) {
+    redirect('/auth/login?callbackUrl=/admin/hirn')
+  }
 
-  const handleSelectSession = useCallback((sessionId: string) => {
-    setCurrentSessionId(sessionId)
-  }, [])
+  const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'hirn')
 
-  const handleSessionChange = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1)
-  }, [])
+  if (!hasAccess) {
+    redirect('/admin?error=no_hirn_access')
+  }
 
-  return (
-    <div className="h-[calc(100vh-4rem)]">
-      {/* Page Header */}
-      <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-white/[0.06]">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-error-500 flex items-center justify-center">
-            <Brain className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <Heading level={1} className="text-2xl font-bold text-neutral-900 dark:text-white">Hirn AI</Heading>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400">
-              KI-Assistent mit {ORG.name} Dokumentation und Code-Kontext
-            </p>
-          </div>
-        </div>
-        <HirnProviderSelector />
-      </div>
-
-      {/* Main Content */}
-      <div className="flex h-[calc(100%-5rem)]">
-        {/* Sidebar */}
-        <div className="w-72 border-r border-neutral-200 dark:border-white/[0.06] bg-neutral-50 dark:bg-neutral-900">
-          <HirnSidebar
-            currentSessionId={currentSessionId}
-            onSelectSession={handleSelectSession}
-            onNewSession={handleNewSession}
-            refreshTrigger={refreshTrigger}
-          />
-        </div>
-
-        {/* Chat Area */}
-        <div className="flex-1 bg-white dark:bg-neutral-900">
-          <HirnChat
-            sessionId={currentSessionId}
-            onSessionChange={handleSessionChange}
-          />
-        </div>
-      </div>
-    </div>
-  )
+  return <HirnPageClient />
 }

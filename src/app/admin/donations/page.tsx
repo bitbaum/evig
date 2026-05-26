@@ -1,104 +1,41 @@
-'use client'
+/**
+ * Admin Donations Page - Server Component (auth gate)
+ *
+ * Belt-and-suspenders page-level access check for the sensitive
+ * `donations` section. Layout-level sidebar filtering already hides the
+ * link, but a direct URL would otherwise bypass that check and render the
+ * client UI (which then would only fail at API-call time, with a confusing
+ * error). This redirects to the admin home with a flag, matching the
+ * pattern used by /admin/users/page.tsx and /admin/team/page.tsx.
+ */
 
-import { Plus, Heart } from 'lucide-react'
-import {
-  useDonations,
-  DonationStatsCards,
-  DonationFilters,
-  DonationsTable,
-  DonationFormModal,
-} from '@/components/admin/donations'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { adminBtn } from '@/lib/admin-ui'
+import { Metadata } from 'next'
+import { auth } from '@/auth'
+import { redirect } from 'next/navigation'
+import { canAccessSection } from '@/lib/permissions'
+import DonationsPageClient from './DonationsPageClient'
 
-export default function AdminDonationsPage() {
-  const {
-    donations,
-    stats,
-    loading,
-    error,
-    filters,
-    setFilters,
-    showForm,
-    setShowForm,
-    formType,
-    setFormType,
-    formData,
-    setFormData,
-    submitting,
-    handleSubmit,
-    userSearch,
-    setUserSearch,
-    userResults,
-    searchingUsers,
-    selectedUser,
-    handleSelectUser,
-    handleClearUser,
-    handleMarkThanked,
-    handleMarkReceiptSent,
-  } = useDonations()
+export const metadata: Metadata = {
+  title: 'Spenden',
+  description: 'Geld- und Sachspenden verwalten.',
+}
 
-  if (loading) {
-    return (
-      <div className="animate-pulse space-y-4">
-        <div className="h-8 bg-neutral-200 rounded w-1/4"></div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-24 bg-neutral-200 rounded"></div>
-          ))}
-        </div>
-        <div className="h-64 bg-neutral-200 rounded"></div>
-      </div>
-    )
+export default async function AdminDonationsPage() {
+  const session = await auth()
+
+  if (!session?.user) {
+    redirect('/auth/login?callbackUrl=/admin/donations')
   }
 
-  return (
-    <AdminPageWrapper
-      title="Spenden"
-      description="Geld- und Sachspenden verwalten"
-      icon={Heart}
-      iconColor="green"
-      actions={
-        <button onClick={() => setShowForm(true)} className={adminBtn.primary}>
-          <Plus className="w-4 h-4" />
-          Spende erfassen
-        </button>
-      }
-    >
-      {stats && <DonationStatsCards stats={stats} />}
+  const hasAccess = canAccessSection({
+    email: session.user.email,
+    is_staff: session.user.isStaff,
+    staff_permissions: session.user.staffPermissions,
+  }, 'donations')
 
-      <DonationFilters filters={filters} onFiltersChange={setFilters} />
+  if (!hasAccess) {
+    redirect('/admin?error=no_donations_access')
+  }
 
-      {error && (
-        <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-4">
-          <p className="text-error-700 dark:text-error-400">{error}</p>
-        </div>
-      )}
-
-      <DonationsTable
-        donations={donations}
-        onMarkThanked={handleMarkThanked}
-        onMarkReceiptSent={handleMarkReceiptSent}
-      />
-
-      {showForm && (
-        <DonationFormModal
-          formType={formType}
-          formData={formData}
-          submitting={submitting}
-          selectedUser={selectedUser}
-          userSearch={userSearch}
-          userResults={userResults}
-          searchingUsers={searchingUsers}
-          onFormTypeChange={setFormType}
-          onFormDataChange={setFormData}
-          onSubmit={handleSubmit}
-          onClose={() => setShowForm(false)}
-          onSearchChange={setUserSearch}
-          onSelectUser={handleSelectUser}
-          onClearUser={handleClearUser}
-        />
-      )}
-    </AdminPageWrapper>
-  )
+  return <DonationsPageClient />
 }
