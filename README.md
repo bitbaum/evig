@@ -14,19 +14,11 @@ RevampIT is a Swiss nonprofit enabling the free exchange of technology on a nonp
 
 ## Architecture
 
-### Why a Custom CMS
-
-We built a lightweight CMS instead of adopting Strapi. The reasoning:
-
-- **Complete control** over features and TypeScript integration -- no fighting the framework
-- **Lighter footprint** -- simpler deployment, lower resource usage
-- **No complexity tax** -- Strapi's setup conflicts and over-engineering weren't worth it
-
-The CMS runs as an Express.js backend (port 3001) with JWT authentication, role-based access control (Admin / Editor / Viewer), and a RESTful API.
+The application is a single Next.js 16 app with App Router for both pages and API routes. Data lives in a Neon-hosted PostgreSQL, accessed through Drizzle ORM. Authentication uses NextAuth v5 (Auth.js) with the @auth/pg-adapter. Search is powered by Meilisearch. Payments go through Payrexx (Swiss-based, ZKB/Twint/card). Email is delivered via Listmonk with Nodemailer / Brevo as fallback.
 
 ### TABLE_NAMES as Single Source of Truth
 
-`src/config/database.ts` defines 165 table name constants. Every database query references `TABLE_NAMES` -- never a hardcoded string. The constants are organized into logical groups:
+`src/config/database.ts` defines ~130 table name constants. Every database query references `TABLE_NAMES` -- never a hardcoded string. The constants are organized into logical groups:
 
 ```
 User & Auth | Inventory | Messaging | Services | Workshops | Locations
@@ -76,14 +68,15 @@ These are enforced, not suggested:
 
 | Layer | Technology |
 |-------|------------|
-| Frontend | Next.js 16, React 18, TypeScript 5, Tailwind 3 |
-| CMS | Express.js, JWT, RBAC |
-| Database | PostgreSQL (Neon), Redis, Meilisearch |
-| Payments | Stripe |
-| Email | Nodemailer (Listmonk / Brevo) |
-| AI | HIRN (in-house), OpenAI |
-| Maps | Leaflet |
-| Testing | Jest (312 tests), Playwright (E2E) |
+| Framework | Next.js 16 (App Router), React 18, TypeScript 5, Tailwind 3 |
+| Database | Neon PostgreSQL (cloud), Drizzle ORM |
+| Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter |
+| Search | Meilisearch |
+| Payments | Payrexx (Swiss-based; ZKB / Twint / card) |
+| Email | Listmonk (primary), Nodemailer / Brevo (fallback) |
+| Rate limiting | Redis (upstash) |
+| AI | HIRN (in-house provider stack: Groq → OpenRouter → Ollama cascade) |
+| Testing | Jest (7,500+ tests), Playwright (E2E) |
 | CI/CD | GitHub Actions, Vercel |
 
 <details>
@@ -92,28 +85,29 @@ These are enforced, not suggested:
 ### Prerequisites
 
 - Node.js 20+
-- PostgreSQL (or a Neon account)
-- Redis
+- A Neon PostgreSQL account (free tier works)
+- Optional: Meilisearch, Redis, Listmonk for full feature coverage
 
 ### Setup
 
 ```bash
-git clone https://github.com/revamp-it/revampit.git
+git clone https://github.com/g-but/revampit.git
 cd revampit
-cp .env.example .env.local    # fill in your database URL, Stripe keys, etc.
+cp .env.example .env.local    # fill in DATABASE_URL, AUTH_SECRET, payment keys, etc.
 npm install
 npm run db:migrate
-npm run dev                    # Next.js on :3000, CMS on :3001
+npm run dev                    # Next.js on :3000
 ```
 
 ### Environment Variables
 
 At minimum, configure:
 
-- `DATABASE_URL` -- PostgreSQL connection string
-- `REDIS_URL` -- Redis connection string
-- `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET`
-- `JWT_SECRET`
+- `DATABASE_URL` -- Neon PostgreSQL connection string (sslmode=require)
+- `AUTH_SECRET` -- 32+ char random string for NextAuth JWT signing
+- `PAYREXX_INSTANCE` / `PAYREXX_API_SECRET` / `PAYREXX_WEBHOOK_SECRET` -- payment integration
+- `LISTMONK_URL` + Listmonk credentials -- email delivery
+- `MEILISEARCH_URL` / `MEILISEARCH_KEY` -- search
 
 See `.env.example` for the full list.
 
@@ -121,7 +115,7 @@ See `.env.example` for the full list.
 
 ## Testing
 
-312 tests across 24 suites.
+7,500+ tests across 500+ Jest suites, plus a Playwright E2E layer.
 
 | Category | Coverage |
 |----------|----------|
@@ -151,21 +145,27 @@ Vercel handles production deployment on merge to `main`.
 
 ```
 src/
-  app/              # Next.js pages and API routes
+  app/              # Next.js App Router (pages + API routes)
+    [locale]/       # Public site (next-intl, de/en/fr/es/it/ja/ko)
+    admin/          # Staff admin surface
+    api/            # API route handlers
   components/       # React components (UI only, no business logic)
   config/
-    database.ts     # TABLE_NAMES SSOT (165 constants)
+    database.ts     # TABLE_NAMES SSOT (~130 constants)
+    org.ts          # Org-wide data SSOT (name, address, email, hours)
   lib/
-    auth/           # JWT, permissions, staff detection
-    domain/         # Business logic (no HTTP, no UI)
+    auth/           # NextAuth v5 wiring, permissions, staff detection
+    services/       # Business logic (no HTTP, no UI)
     email/          # Templates and delivery
+    it-hilfe/       # IT-Hilfe domain (notifications, matching, offers)
+    payments/       # Payrexx integration
     logger.ts       # Structured logging
-  hooks/            # Data fetching, state management
+  hooks/            # Data fetching (SWR), state management
+  db/schema/        # Drizzle schemas
 scripts/
-  db/migrations/    # Sequential SQL migrations
+  db/migrations/    # Sequential SQL migrations (072 ADD COLUMN token_version, etc.)
 tests/              # Jest test suites
 e2e/                # Playwright E2E tests
-cms/                # Express.js CMS backend
 ```
 
 ## Contributing
