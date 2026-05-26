@@ -12,9 +12,18 @@ import { db } from '@/db'
 import { users } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { validateBody, ChangePasswordSchema } from '@/lib/schemas'
+import { rateLimiters } from '@/lib/security/rate-limit'
 
 export const POST = withAuth(async (request: NextRequest, session) => {
   try {
+    // Rate-limit current-password attempts. Endpoint returns a distinct error
+    // for wrong current password (line 40), so without a cap a session-
+    // hijacker can brute-force the real password unlimited times. 5/hour is
+    // generous for typos and tight enough to make guessing impractical.
+    if (!rateLimiters.passwordChange(`${session.user.id}:change-password`)) {
+      return apiBadRequest('Zu viele Passwort-Änderungsversuche. Bitte warte 1 Stunde.')
+    }
+
     const body = await request.json()
     const validation = validateBody(ChangePasswordSchema, body)
     if (!validation.success) return validation.error

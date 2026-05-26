@@ -69,6 +69,12 @@ export const rateLimiters = {
   // Public vote submit: 10 per hour per IP (unauthenticated, prevents vote spam)
   voteSubmit: createRateLimiter(60 * 60 * 1000, 10),
 
+  // Password change: 5 attempts per hour per user. Defends against current-
+  // password brute-force via a hijacked session — the endpoint reveals
+  // right/wrong on each attempt, so unlimited attempts let a session-thief
+  // recover the user's actual password.
+  passwordChange: createRateLimiter(60 * 60 * 1000, 5),
+
   // General API: 100 requests per 15 minutes per IP
   apiGeneral: createRateLimiter(15 * 60 * 1000, 100)
 };

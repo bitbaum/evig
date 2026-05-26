@@ -81,6 +81,13 @@ jest.mock('@/lib/api/helpers', () => ({
   },
 }))
 
+const mockPasswordChangeLimiter = jest.fn().mockReturnValue(true)
+jest.mock('@/lib/security/rate-limit', () => ({
+  rateLimiters: {
+    passwordChange: (id: string) => mockPasswordChangeLimiter(id),
+  },
+}))
+
 jest.mock('@/lib/schemas', () => {
   const { z } = jest.requireActual('zod')
   const ChangePasswordSchema = z.object({
@@ -140,6 +147,7 @@ function makeRequest(body: unknown) {
 beforeEach(() => {
   jest.clearAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
+  mockPasswordChangeLimiter.mockReturnValue(true)
 
   // Default: user found with a password hash
   mockSelectWhere.mockResolvedValue([{ passwordHash: STORED_HASH }])
@@ -227,6 +235,27 @@ describe('POST /api/user/change-password — success', () => {
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ passwordHash: NEW_HASH }),
     )
+  })
+})
+
+describe('POST /api/user/change-password — rate limiting', () => {
+  it('returns 400 when the per-user passwordChange limiter rejects', async () => {
+    // Attack scenario: session-thief hammers the endpoint with guesses for
+    // the user's current password. The limiter must reject BEFORE we read
+    // the stored hash or call verifyPassword — otherwise the timing/error
+    // channel still leaks information per-attempt.
+    mockPasswordChangeLimiter.mockReturnValueOnce(false)
+    const response = await POST(makeRequest({ currentPassword: 'Guess123!', newPassword: 'NewPass99!' }))
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toMatch(/zu viele/i)
+    expect(mockSelect).not.toHaveBeenCalled()
+    expect(mockVerifyPassword).not.toHaveBeenCalled()
+  })
+
+  it('keys the limiter by the authenticated user id', async () => {
+    await POST(makeRequest({ currentPassword: 'OldPass1!', newPassword: 'NewPass99!' }))
+    expect(mockPasswordChangeLimiter).toHaveBeenCalledWith('user-99:change-password')
   })
 })
 
