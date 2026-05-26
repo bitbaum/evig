@@ -231,6 +231,84 @@ describe('sendRequestCreatedNotifications', () => {
     await flushAsync()
   })
 
+  it('logs (resolved) warn on resolved { success: false } from requester confirmation — silent SMTP must not be swallowed', async () => {
+    // sendCustomEmail resolves { success: false } on SMTP / Listmonk
+    // failure rather than throwing. The previous bare `.catch()` only
+    // caught throws, so silent send-failures slipped through and the
+    // requester was left wondering whether their request was received,
+    // with no diagnostic trail. Regression: the (resolved) failure must
+    // log warn with the request id and email captured.
+    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
+    // First send = requester confirmation (resolved failure), subsequent
+    // sends (admin + helpers) succeed
+    mockSendCustomEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
+
+    sendRequestCreatedNotifications(BASE_PARAMS)
+    await flushAsync()
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to send IT-Hilfe confirmation email (resolved)',
+      expect.objectContaining({
+        requestId: 'req-1',
+        email: 'hans@example.com',
+        error: 'SMTP timeout',
+      }),
+    )
+  })
+
+  it('logs (resolved) warn on resolved { success: false } from admin notification — admin must not silently lose new requests', async () => {
+    // Mission-critical: a silently-failed admin notification means a new
+    // request sits in the DB with nobody alerted to act on it. Regression:
+    // the (resolved) failure logs warn with the request id captured.
+    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
+    // First send = requester (success), second = admin (resolved failure)
+    mockSendCustomEmail
+      .mockResolvedValueOnce({ success: true, messageId: 'r1' })
+      .mockResolvedValueOnce({ success: false, error: 'Mailbox full' })
+
+    sendRequestCreatedNotifications(BASE_PARAMS)
+    await flushAsync()
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to send IT-Hilfe admin notification (resolved)',
+      expect.objectContaining({
+        requestId: 'req-1',
+        error: 'Mailbox full',
+      }),
+    )
+  })
+
+  it('logs (resolved) warn per-helper on resolved { success: false } from helper fan-out — helpers must not silently be missed', async () => {
+    // Mission-critical: a silently-failed helper notification means a
+    // matched helper never sees the request and it goes unanswered.
+    // Regression: per-helper (resolved) failure logs warn with the
+    // helper email and request id captured.
+    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
+
+    mockDbSelect.mockReturnValueOnce(
+      makeChain([
+        { userId: 'helper-1', name: 'Anna', email: 'anna@example.com', matchingSkills: ['windows'] },
+      ])
+    )
+    // First = requester (success), second = admin (success), third = helper (resolved failure)
+    mockSendCustomEmail
+      .mockResolvedValueOnce({ success: true, messageId: 'r1' })
+      .mockResolvedValueOnce({ success: true, messageId: 'a1' })
+      .mockResolvedValueOnce({ success: false, error: 'rejected by server' })
+
+    sendRequestCreatedNotifications(BASE_PARAMS)
+    await flushAsync()
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to send IT-Hilfe helper notification (resolved)',
+      expect.objectContaining({
+        helperEmail: 'anna@example.com',
+        requestId: 'req-1',
+        error: 'rejected by server',
+      }),
+    )
+  })
+
   it('does not throw when DB query for helpers fails', async () => {
     mockDbSelect.mockImplementationOnce(() => {
       const chain = makeChain([])

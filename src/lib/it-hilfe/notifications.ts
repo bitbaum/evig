@@ -62,9 +62,21 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
   const categoryName = getCategoryById(params.categoryId)?.name || params.categoryId
   const urgencyName = getUrgencyById(params.urgency)?.name || params.urgency
 
+  // sendCustomEmail() resolves { success: false } on SMTP / Listmonk
+  // failure rather than throwing (src/lib/email/index.ts). A bare .catch()
+  // only catches actual rejections, so silent send-failures slip through
+  // invisibly. For the IT-Hilfe creation flow this is high-impact: a
+  // failed admin notification means the new request sits in the DB with
+  // nobody alerted, and a failed helper fan-out means the request never
+  // reaches the technicians it was routed to. Inspect each result and
+  // log (resolved) failures with the same convention used by the route's
+  // own claim-email at /api/it-hilfe/requests/route.ts:317-326 and the
+  // 11 prior swallow fixes this thread.
+
   // 1. Confirmation to requester (suppressed for new-anonymous accounts
   //    where the dedicated claim email replaces it)
   if (params.requesterEmail && params.includeRequesterConfirmation !== false) {
+    const requesterEmail = params.requesterEmail
     const content = itHilfeRequestConfirmation(
       params.requesterName,
       params.title,
@@ -73,9 +85,23 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
       params.aiDiagnosis,
       requestUrl
     )
-    sendCustomEmail(params.requesterEmail, content).catch(err => {
-      logger.warn('Failed to send IT-Hilfe confirmation email', { error: err, requestId: params.requestId })
-    })
+    sendCustomEmail(requesterEmail, content)
+      .then(result => {
+        if (!result.success) {
+          logger.warn('Failed to send IT-Hilfe confirmation email (resolved)', {
+            error: result.error,
+            requestId: params.requestId,
+            email: requesterEmail,
+          })
+        }
+      })
+      .catch(err => {
+        logger.warn('Failed to send IT-Hilfe confirmation email (rejected)', {
+          error: err,
+          requestId: params.requestId,
+          email: requesterEmail,
+        })
+      })
   }
 
   // 2. Admin notification
@@ -87,9 +113,21 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
     urgencyName,
     requestUrl
   )
-  sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, adminContent).catch(err => {
-    logger.warn('Failed to send IT-Hilfe admin notification', { error: err })
-  })
+  sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, adminContent)
+    .then(result => {
+      if (!result.success) {
+        logger.warn('Failed to send IT-Hilfe admin notification (resolved)', {
+          error: result.error,
+          requestId: params.requestId,
+        })
+      }
+    })
+    .catch(err => {
+      logger.warn('Failed to send IT-Hilfe admin notification (rejected)', {
+        error: err,
+        requestId: params.requestId,
+      })
+    })
 
   // 3. Matching helper notifications
   const serviceTypeName = getServiceTypeById(params.serviceType)?.name || params.serviceType
@@ -128,9 +166,24 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
             matchingSkillNames,
             requestUrl
           )
-          sendCustomEmail(helper.email, helperContent).catch(err => {
-            logger.warn('Failed to send IT-Hilfe helper notification', { error: err, helperEmail: helper.email })
-          })
+          const helperEmail = helper.email
+          sendCustomEmail(helperEmail, helperContent)
+            .then(result => {
+              if (!result.success) {
+                logger.warn('Failed to send IT-Hilfe helper notification (resolved)', {
+                  error: result.error,
+                  helperEmail,
+                  requestId: params.requestId,
+                })
+              }
+            })
+            .catch(err => {
+              logger.warn('Failed to send IT-Hilfe helper notification (rejected)', {
+                error: err,
+                helperEmail,
+                requestId: params.requestId,
+              })
+            })
         }
         logger.info('Sent IT-Hilfe helper notifications', { requestId: params.requestId, helperCount: helpersResult.length })
       }).catch(err => {
