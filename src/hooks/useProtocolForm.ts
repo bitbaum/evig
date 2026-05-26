@@ -12,6 +12,7 @@ import { getErrorMessage } from '@/lib/utils/error'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { DEFAULT_WHISPER_MODEL } from '@/config/transcription'
 import { formatDateShort } from '@/lib/date-formats'
+import { todayLocalIso } from '@/lib/utils/date'
 import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 
 export function useProtocolForm(
@@ -22,9 +23,21 @@ export function useProtocolForm(
   // Form state
   const [meetingType, setMeetingType] = useState<MeetingType | ''>('')
   const [title, setTitle] = useState('')
-  const [meetingDate, setMeetingDate] = useState(
-    new Date().toISOString().split('T')[0]
-  )
+  // Default meeting date — populated client-side post-mount so the value
+  // reflects the user's local-tz today, not the server's UTC today.
+  // Without the deferral, a Zurich user logging a protocol between
+  // 00:00–02:00 local would see yesterday's UTC date pre-filled and
+  // either have to manually correct it or post a protocol dated to the
+  // wrong day. Empty initial value triggers the input's "no date" UI
+  // for the brief window between SSR and useEffect — protocol author is
+  // an admin who immediately interacts with the form, so the gap is
+  // imperceptible.
+  const [meetingDate, setMeetingDate] = useState<string>('')
+  useEffect(() => {
+    if (!meetingDate) setMeetingDate(todayLocalIso())
+  // Only populate on initial mount — never overwrite a user-picked date.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [visibility, setVisibility] = useState<ProtocolVisibility>('team')
   const [selectedAttendees, setSelectedAttendees] = useState<string[]>([])
   const [showAttendees, setShowAttendees] = useState(true)

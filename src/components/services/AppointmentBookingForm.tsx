@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Calendar, Clock, AlertCircle, CheckCircle, Loader2, Wrench } from 'lucide-react'
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
+import { todayLocalIso } from '@/lib/utils/date'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -31,6 +32,18 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
     success: boolean
     message: string
   } | null>(null)
+  // Populate the date-input min after mount. Computing today client-side
+  // gives the browser's local-tz today (correct for the user) instead of
+  // UTC's today — without the deferral, SSR would render UTC's today
+  // into the HTML and the client would re-render with browser-tz today,
+  // producing a hydration mismatch at the UTC-midnight boundary.
+  // Empty string before mount means no min constraint is enforced for
+  // the brief window between SSR and client mount — fine, the user can't
+  // interact with the input that fast anyway.
+  const [minDate, setMinDate] = useState<string>('')
+  useEffect(() => {
+    setMinDate(todayLocalIso())
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -187,7 +200,7 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
                     type="date"
                     value={formData.preferredDate}
                     onChange={(e) => setFormData(prev => ({ ...prev, preferredDate: e.target.value }))}
-                    min={new Date().toISOString().split('T')[0]}
+                    min={minDate || undefined}
                     className="w-full px-3 py-2.5 border-2 border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base min-h-[touch] touch-target"
                   />
                 </div>

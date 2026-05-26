@@ -8,7 +8,7 @@
 
 jest.useFakeTimers()
 
-import { formatDeadline } from '../date'
+import { formatDeadline, todayLocalIso } from '../date'
 
 // Pin current time to 2026-01-15T12:00:00.000Z
 const NOW = new Date('2026-01-15T12:00:00.000Z')
@@ -100,5 +100,23 @@ describe('formatDeadline — days format', () => {
   it('returns "30d" for 30 days remaining', () => {
     const in30d = new Date(NOW.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString()
     expect(formatDeadline(in30d)).toBe('30d')
+  })
+})
+
+// ============================================================================
+// todayLocalIso
+// ============================================================================
+
+describe('todayLocalIso', () => {
+  it('returns YYYY-MM-DD format (matches what HTML date inputs expect for min/value)', () => {
+    expect(todayLocalIso()).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+  })
+
+  it('returns the local-tz date — when the system clock is mid-day UTC the local date matches across all reasonable timezones', () => {
+    // Pinned NOW = 2026-01-15T12:00:00Z — noon UTC. Every reasonable
+    // timezone (UTC-12 to UTC+14) sees this instant as still on the 15th
+    // of January, so toLocaleDateString returns the same date in any
+    // jest environment regardless of host timezone settings.
+    expect(todayLocalIso()).toBe('2026-01-15')
   })
 })
