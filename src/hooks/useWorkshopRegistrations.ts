@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 
 export interface WorkshopRegistration {
   id: string
@@ -32,8 +33,22 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const [registrations, setRegistrations] = useState<WorkshopRegistration[]>([])
-  const [loading, setLoading] = useState(true)
+  // SWR-driven fetch — gated by session presence. When the user isn't
+  // logged in, pass null as the key so SWR skips the request entirely
+  // (no setState during render, no 401 spam). Mirrors the prior
+  // useEffect guard `if (!session?.user) return`.
+  const {
+    data,
+    error: swrError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<{ registrations: WorkshopRegistration[] }>(
+    session?.user ? '/api/user/workshop-registrations' : null,
+  )
+
+  const registrations = data?.registrations ?? []
+
+  // Local UI state independent of the fetch
   const [error, setError] = useState('')
   // Mirrors useAppointments.ts — the paid-workshop flow at
   // /api/workshops/[slug]/register-with-payment uses
@@ -44,7 +59,7 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
   // strips the query param via router.replace so refresh/back-nav don't
   // replay the banner.
   const [paymentSuccess, setPaymentSuccess] = useState(
-    () => searchParams.get('payment') === 'success'
+    () => searchParams.get('payment') === 'success',
   )
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editRating, setEditRating] = useState(5)
@@ -58,20 +73,10 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
     }
   }, [searchParams, router])
 
-  const fetchRegistrations = useCallback(async () => {
-    const result = await apiFetch<{ registrations: WorkshopRegistration[] }>('/api/user/workshop-registrations')
-    if (result.success && result.data) {
-      setRegistrations(result.data.registrations || [])
-    } else {
-      setError(result.error || errors.loadError)
-    }
-    setLoading(false)
-  }, [errors.loadError])
-
-  useEffect(() => {
-    if (!session?.user) return
-    fetchRegistrations()
-  }, [session, fetchRegistrations])
+  // Surface SWR fetch errors via the existing `error` field. Local
+  // errors (saveFailed / cancelFailed from action handlers) take
+  // precedence over the load-error fallback.
+  const displayError = error || (swrError ? errors.loadError : '')
 
   const openEdit = (reg: WorkshopRegistration) => {
     setEditingId(reg.id)
@@ -88,7 +93,9 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
     })
     if (result.success) {
       setEditingId(null)
-      fetchRegistrations()
+      // Revalidate the SWR cache against the same key — the saved
+      // rating/feedback is fetched back into the list.
+      await mutate()
     } else {
       setError(result.error || errors.saveFailed)
     }
@@ -104,7 +111,7 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
       body: { action: 'cancel' },
     })
     if (result.success) {
-      fetchRegistrations()
+      await mutate()
     } else {
       setError(result.error || errors.cancelFailed)
     }
@@ -114,8 +121,8 @@ export function useWorkshopRegistrations(errors: UseWorkshopRegistrationsErrors)
     session,
     sessionStatus,
     registrations,
-    loading,
-    error,
+    loading: isLoading,
+    error: displayError,
     paymentSuccess,
     setPaymentSuccess,
     editingId,
