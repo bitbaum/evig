@@ -3,6 +3,7 @@ import { sql, getTableName } from 'drizzle-orm'
 import { activityFeed, users } from '@/db/schema'
 import { logger } from '@/lib/logger'
 import { formatRelativeTime } from '@/lib/utils'
+import type { ActivityAction } from '@/lib/activity'
 
 const feedTable = getTableName(activityFeed)
 const usersTable = getTableName(users)
@@ -14,14 +15,22 @@ interface FeedRow {
   created_at: string
 }
 
-// Human-readable labels for each action type
-const ACTION_LABELS: Record<string, string> = {
+// Human-readable labels for each action type. Typed as
+// Record<ActivityAction, string> so adding a new variant to the
+// ActivityAction union in src/lib/activity.ts without a matching label
+// here fails tsc — the prior loose Record<string, string> typing let
+// the timecard variants ship silently and they displayed as raw English
+// snake-case ("submitted_timecard") in the German dashboard feed.
+const ACTION_LABELS: Record<ActivityAction, string> = {
   approved_listing: 'genehmigte Inserat',
   rejected_listing: 'lehnte Inserat ab',
   closed_it_hilfe: 'schloss IT-Hilfe ab',
   captured_device: 'erfasste Gerät',
   approved_blog: 'genehmigte Blogartikel',
   approved_repairer: 'genehmigte Reparateur',
+  submitted_timecard: 'reichte Zeitkarte ein',
+  approved_timecard: 'genehmigte Zeitkarte',
+  rejected_timecard: 'wies Zeitkarte zurück',
 }
 
 export async function TeamActivityFeed() {
@@ -55,7 +64,11 @@ export async function TeamActivityFeed() {
       <ul className="space-y-2" role="list">
         {rows.map((row, i) => {
           const actorName = row.actor_name?.split(' ')[0] ?? 'Jemand'
-          const actionLabel = ACTION_LABELS[row.action] ?? row.action
+          // row.action comes from the DB column (typed as string) and
+          // may be a legacy / unknown action code; fall back to the raw
+          // value when the labels map has no entry. The cast is safe
+          // because the lookup uses ?? to handle the undefined case.
+          const actionLabel = ACTION_LABELS[row.action as ActivityAction] ?? row.action
           return (
             <li key={i} className="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-400">
               <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-600 mt-2 flex-shrink-0" aria-hidden="true" />
