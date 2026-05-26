@@ -5587,6 +5587,7 @@
     "appointments": {
       "pageTitle": "Mes rendez-vous",
       "pageSubtitle": "Aperçu de vos demandes de rendez-vous et réservations",
+      "pageSubtitleRepairer": "Aperçu des rendez-vous qui vous sont assignés",
       "backToDashboard": "Retour au tableau de bord",
       "loadError": "Erreur lors du chargement des rendez-vous",
       "saveError": "Impossible d'enregistrer (uniquement disponible avec le statut \"Demandé\")",

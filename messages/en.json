@@ -5595,6 +5595,7 @@
     "appointments": {
       "pageTitle": "My Appointments",
       "pageSubtitle": "Overview of your service appointment requests and bookings",
+      "pageSubtitleRepairer": "Overview of service appointments assigned to you",
       "backToDashboard": "Back to Dashboard",
       "loadError": "Error loading appointments",
       "saveError": "Cannot save (only available in status \"Requested\")",

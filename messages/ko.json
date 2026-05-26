@@ -5623,6 +5623,7 @@
     "appointments": {
       "pageTitle": "내 예약",
       "pageSubtitle": "서비스 예약 요청 및 예약 현황 개요",
+      "pageSubtitleRepairer": "귀하에게 할당된 서비스 예약 개요",
       "backToDashboard": "대시보드로 돌아가기",
       "loadError": "예약 로딩 오류",
       "saveError": "저장할 수 없습니다 (\"요청됨\" 상태에서만 가능)",

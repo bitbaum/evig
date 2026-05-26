@@ -5623,6 +5623,7 @@
     "appointments": {
       "pageTitle": "I miei appuntamenti",
       "pageSubtitle": "Panoramica delle richieste di appuntamento e prenotazioni",
+      "pageSubtitleRepairer": "Panoramica degli appuntamenti assegnati a te",
       "backToDashboard": "Torna alla dashboard",
       "loadError": "Errore nel caricamento degli appuntamenti",
       "saveError": "Impossibile salvare (disponibile solo con stato \"Richiesto\")",

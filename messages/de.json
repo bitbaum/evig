@@ -5651,6 +5651,7 @@
     "appointments": {
       "pageTitle": "Meine Termine",
       "pageSubtitle": "Übersicht deiner Service-Termin-Anfragen und gebuchten Dienstleistungen",
+      "pageSubtitleRepairer": "Übersicht der dir zugewiesenen Service-Termine",
       "backToDashboard": "Zurück zum Dashboard",
       "loadError": "Fehler beim Laden der Termine",
       "saveError": "Speichern nicht möglich (nur im Status \"Angefragt\")",

@@ -5623,6 +5623,7 @@
     "appointments": {
       "pageTitle": "Mis citas",
       "pageSubtitle": "Resumen de sus solicitudes de citas y reservas",
+      "pageSubtitleRepairer": "Resumen de las citas asignadas a usted",
       "backToDashboard": "Volver al panel",
       "loadError": "Error al cargar las citas",
       "saveError": "No se puede guardar (solo disponible con estado \"Solicitado\")",

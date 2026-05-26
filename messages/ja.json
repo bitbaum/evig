@@ -5623,6 +5623,7 @@
     "appointments": {
       "pageTitle": "マイ予約",
       "pageSubtitle": "サービス予約リクエストと予約の概要",
+      "pageSubtitleRepairer": "あなたに割り当てられたサービス予約の概要",
       "backToDashboard": "ダッシュボードに戻る",
       "loadError": "予約の読み込みエラー",
       "saveError": "保存できません（「リクエスト済み」状態でのみ利用可能）",

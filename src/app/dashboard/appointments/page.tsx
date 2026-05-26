@@ -102,7 +102,9 @@ export default function AppointmentsDashboard() {
             {t('backToDashboard')}
           </Link>
           <Heading level={1} className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">{t('pageTitle')}</Heading>
-          <p className="text-neutral-600 dark:text-neutral-400">{t('pageSubtitle')}</p>
+          <p className="text-neutral-600 dark:text-neutral-400">
+            {isRepairerView ? t('pageSubtitleRepairer') : t('pageSubtitle')}
+          </p>
         </div>
 
         {paymentSuccess && (
