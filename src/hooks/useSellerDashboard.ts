@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { ROLES } from '@/lib/constants'
 
 export interface SellerProduct {
@@ -48,22 +48,10 @@ export function useSellerDashboard(unexpectedError: string) {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
 
-  const [data, setData] = useState<SellerDashboardData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchDashboardData = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    const result = await apiFetch<SellerDashboardData>('/api/seller/dashboard')
-    if (result.success && result.data) {
-      setData(result.data)
-    } else {
-      setError(result.error || unexpectedError)
-    }
-    setIsLoading(false)
-  }, [unexpectedError])
-
+  // Authorization gating: redirect non-sellers + unauthenticated users.
+  // Stays in a useEffect (not part of the fetch) — the redirect is a
+  // navigation side effect, not a setState, so this useEffect doesn't
+  // trip the react-hooks/set-state-in-effect rule.
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (!session?.user) {
@@ -80,18 +68,39 @@ export function useSellerDashboard(unexpectedError: string) {
 
     if (!hasAccess) {
       router.push('/dashboard')
-      return
     }
+  }, [session, sessionStatus, router])
 
-    fetchDashboardData()
-  }, [session, sessionStatus, router, fetchDashboardData])
+  // SWR-driven fetch — gated by the auth/role check. When the user
+  // isn't authorized (or session hasn't loaded), pass null as the key
+  // so SWR skips the fetch entirely (no setState during render).
+  const hasAccess = (() => {
+    if (sessionStatus !== 'authenticated' || !session?.user) return false
+    const userRole = session.user.role as string
+    const isAdmin =
+      userRole === ROLES.REVAMPIT_ADMIN ||
+      session.user.isStaff === true ||
+      session.user.isSuperAdmin === true
+    return userRole === ROLES.SELLER || isAdmin
+  })()
+
+  const {
+    data,
+    error: swrError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<SellerDashboardData>(hasAccess ? '/api/seller/dashboard' : null)
 
   return {
     sessionStatus,
     isLoading,
-    error,
+    error: swrError ? unexpectedError : null,
     stats: data?.stats ?? DEFAULT_STATS,
     products: data?.products ?? [],
-    fetchDashboardData,
+    // Expose mutate() under the legacy name so the consumer's retry
+    // buttons (dashboard/seller/page.tsx:61, 83) keep working without
+    // a parallel change. SWR mutate() revalidates the cache against
+    // the same key.
+    fetchDashboardData: () => mutate(),
   }
 }
