@@ -11,7 +11,7 @@
 import { NextRequest } from 'next/server'
 import { db } from '@/db'
 import { users, sessions, accounts, userProfiles } from '@/db/schema'
-import { eq, and, ne } from 'drizzle-orm'
+import { eq, and, ne, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
@@ -101,6 +101,18 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     if (name !== undefined) userUpdate.name = name
     if (email !== undefined) userUpdate.email = email
     if (is_staff !== undefined) userUpdate.isStaff = is_staff
+
+    // Bump tokenVersion if a JWT-relevant field changed. Forces the
+    // Auth.js jwt callback to re-fetch permissions on the user's next
+    // token refresh (see commit 3/3 of the JWT-stale-permissions
+    // sequence). Without this, demoting a user via `is_staff: false`
+    // leaves their existing token claiming isStaff=true until the
+    // 30-day maxAge expires or they manually re-login. The bump is
+    // a no-op for cosmetic changes (name, email, phone, address)
+    // because the token doesn't store those.
+    if (is_staff !== undefined) {
+      userUpdate.tokenVersion = sql`${users.tokenVersion} + 1`
+    }
 
     // Build profile table update (phone and address live on user_profiles)
     const profileUpdate: Record<string, unknown> = {}

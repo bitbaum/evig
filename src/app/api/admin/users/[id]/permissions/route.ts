@@ -130,6 +130,14 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
       return apiBadRequest('Keine Aktualisierungen angegeben')
     }
 
+    // Bump tokenVersion so the Auth.js jwt callback re-fetches
+    // permissions on the user's next token refresh. Without this, a
+    // demoted user keeps their old token's staff_permissions /
+    // isSuperAdmin claims until the 30-day maxAge expires or they
+    // manually re-login. See commit 3/3 of the JWT-stale-permissions
+    // sequence for the callback enforcement side.
+    update.tokenVersion = sql`${users.tokenVersion} + 1`
+
     await db.update(users).set(update).where(eq(users.id, id))
 
     return apiSuccess({ message: 'Benutzerberechtigungen erfolgreich aktualisiert' })
