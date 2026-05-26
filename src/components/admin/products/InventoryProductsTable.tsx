@@ -3,7 +3,7 @@
 import { Link } from '@/i18n/navigation'
 import { motion } from 'framer-motion'
 import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import {
   Package,
   Eye,
@@ -245,10 +245,10 @@ export function InventoryProductsTable({
           <p className="text-neutral-600 mb-4">
             Erfasse dein erstes Produkt, um zu beginnen.
           </p>
-          <Button as={Link} href={ROUTES.admin.erfassung} variant="primary" size="sm">
+          <Link href={ROUTES.admin.erfassung} className={buttonClass({ variant: 'primary', size: 'sm' })}>
             <Plus className="w-4 h-4" />
             Produkt erfassen
-          </Button>
+          </Link>
         </div>
       )}
     </div>

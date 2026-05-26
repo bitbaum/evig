@@ -5,6 +5,7 @@ import { Search, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { ROUTES } from '@/config/routes'
 import type { TabType, FilterStatus } from './types'
 
@@ -81,10 +82,10 @@ export function ProductFilterBar({
             </Button>
           )}
           {activeTab === 'inventory' && (
-            <Button as={Link} href={ROUTES.admin.erfassung} variant="primary" size="sm">
+            <Link href={ROUTES.admin.erfassung} className={buttonClass({ variant: 'primary', size: 'sm' })}>
               <Plus className="w-4 h-4" />
               Produkt erfassen
-            </Button>
+            </Link>
           )}
         </div>
       </div>

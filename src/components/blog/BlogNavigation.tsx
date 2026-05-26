@@ -1,5 +1,5 @@
 import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
@@ -61,9 +61,9 @@ export default function BlogNavigation({
           </div>
 
           {/* CTA */}
-          <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary" size="sm">
+          <Link href={ROUTES.public.blogSubmit} className={buttonClass({ variant: 'primary', size: 'sm' })}>
             Beitrag einreichen
-          </Button>
+          </Link>
         </div>
       </div>
     </nav>

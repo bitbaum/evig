@@ -11,7 +11,7 @@ import { Link } from '@/i18n/navigation'
 import { ExternalLink, Quote, Newspaper, Award, Star } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import {
   MEDIA_COVERAGE,
   getTier1Sources,
@@ -224,9 +224,9 @@ export default function MediaCoverageSection() {
           <p className="text-neutral-600 mb-4">
             {t('ctaText')}
           </p>
-          <Button as={Link} href="/contact" variant="primary">
+          <Link href="/contact" className={buttonClass({ variant: 'primary' })}>
             {t('ctaButton')}
-          </Button>
+          </Link>
         </div>
       </div>
     </section>
