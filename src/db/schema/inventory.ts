@@ -78,7 +78,10 @@ export const aiExtractedProducts = pgTable('ai_extracted_products', {
 
   // Integration fields
   kivitendoArticleNumber: text('kivitendo_article_number'),
-  medusaProductId: text('medusa_product_id'),
+  // medusa_product_id (TS removed 2026-05-26): abandoned Medusa
+  // integration, no consumers anywhere in src/. Column stays in DB
+  // until a future migration drops it. See payments.ts + below in
+  // inventoryItems for the parallel removals.
   marketplaceListingId: text('marketplace_listing_id'),
 
   // Added by 012: short description
@@ -145,12 +148,12 @@ export const inventoryItems = pgTable('inventory_items', {
   minSellingPriceChf: decimal('min_selling_price_chf', { precision: 10, scale: 2 }),
 
   // Marketplace integration
-  medusaProductId: text('medusa_product_id').unique(),
+  // medusa_product_id + medusa_variant_id (TS removed 2026-05-26):
+  // abandoned Medusa integration, no consumers in src/. Columns stay
+  // in DB until a future migration drops them along with the
+  // marketplace_listing_id reference above and the payments.ts ones.
   // CHECK (marketplace_status IN ('draft', 'published', 'sold', 'archived'))
   marketplaceStatus: text('marketplace_status').default('draft'),
-
-  // Added by 037: Medusa variant ID for cart API
-  medusaVariantId: text('medusa_variant_id'),
 
   // User assignments
   assignedTo: uuid('assigned_to').references(() => users.id),

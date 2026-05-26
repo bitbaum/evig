@@ -103,9 +103,11 @@ export const orders = pgTable('orders', {
   // Seller information (for marketplace orders)
   sellerId: uuid('seller_id').references(() => users.id),
 
-  // Medusa integration
-  medusaOrderId: text('medusa_order_id'),
-  medusaCartId: text('medusa_cart_id'),
+  // medusa_order_id + medusa_cart_id (TS removed 2026-05-26):
+  // abandoned Medusa integration, no consumers anywhere in src/.
+  // Columns stay in DB until a future migration drops them along
+  // with the parallel removals in inventory.ts (aiExtractedProducts
+  // and inventoryItems) and the order_items.medusaVariantId below.
 
   // Notes
   customerNotes: text('customer_notes'),
@@ -140,7 +142,8 @@ export const orderItems = pgTable('order_items', {
   // Product information
   productTitle: text('product_title').notNull(),
   productSku: text('product_sku'),
-  medusaVariantId: text('medusa_variant_id'),
+  // medusa_variant_id (TS removed 2026-05-26): see comment above on
+  // orders.medusaOrderId — abandoned integration, no consumers.
   inventoryItemId: uuid('inventory_item_id'),
 
   // Quantity and pricing — CHECK (quantity > 0)
