@@ -110,9 +110,11 @@ export type NewAiExtractedProduct = typeof aiExtractedProducts.$inferInsert
 // INVENTORY ITEMS
 // =============================================================================
 // Links AI extraction to physical inventory. Tracks location, quantity, pricing.
-// Final state includes columns from 004 + 012 (box_id) + 037 (medusa_variant_id)
-// + 046 (intake_tier, intake_checklist, checklist_complete, source_donation_id)
-// + 047 (intake_events).
+// Final state includes columns from 004 + 012 (box_id) + 046 (intake_tier,
+// intake_checklist, checklist_complete, source_donation_id) + 047 (intake_events).
+// Migration 037 added medusa_variant_id; the Drizzle declaration was removed in
+// 15e443fb when the abandoned Medusa integration was cleaned up at the TS layer
+// (DB column itself stays until a future drop-column migration).
 
 export const inventoryItems = pgTable('inventory_items', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -346,8 +348,11 @@ export const marketplaceListings = pgTable('marketplace_listings', {
   description: text('description'),
   priceChf: decimal('price_chf', { precision: 10, scale: 2 }).notNull(),
 
-  // Platform integration
-  // Values: 'medusa', 'external_api', etc.
+  // Platform integration. In practice only MARKETPLACE_LISTING_PLATFORM.INTERNAL
+  // ('internal') is written — see create-product.ts:273, inventory-actions.ts:78,
+  // intake/[id]/publish/route.ts:97. The 'medusa' and 'external_api' values
+  // mentioned in earlier comments were aspirational for integrations that never
+  // shipped (Medusa was abandoned — see TS-removal note at line 113).
   platform: text('platform').notNull(),
   platformListingId: text('platform_listing_id'),
   platformUrl: text('platform_url'),
