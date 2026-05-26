@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef } from 'react'
 import { Loader2, Save, Wand2, Upload } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
