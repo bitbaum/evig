@@ -42,7 +42,8 @@ export default function MyListingsPage() {
     page,
     totalPages,
     total,
-    fetchListings,
+    setPage,
+    refresh,
     handleStatusFilterChange,
     doDelete,
     handleDuplicate,
@@ -105,7 +106,7 @@ export default function MyListingsPage() {
         <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-xl p-6 text-center">
           <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" />
           <p className="text-error-600 dark:text-error-300 mb-4">{error}</p>
-          <Button onClick={() => fetchListings(page, statusFilter)} variant="destructive" className="gap-2">
+          <Button onClick={() => refresh()} variant="destructive" className="gap-2">
             <RefreshCw className="w-4 h-4" />
             {t('retry')}
           </Button>
@@ -219,7 +220,7 @@ export default function MyListingsPage() {
           </p>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => fetchListings(page - 1, statusFilter)}
+              onClick={() => setPage(page - 1)}
               disabled={page <= 1}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
@@ -230,7 +231,7 @@ export default function MyListingsPage() {
               {t('paginationPage', { page, total: totalPages })}
             </span>
             <button
-              onClick={() => fetchListings(page + 1, statusFilter)}
+              onClick={() => setPage(page + 1)}
               disabled={page >= totalPages}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >

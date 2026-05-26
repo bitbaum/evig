@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 
 export interface MyListing {
   id: string
@@ -22,61 +23,57 @@ interface UseMyListingsErrors {
   loadError: string
 }
 
+interface ListingsResponse {
+  items: MyListing[]
+  page: number
+  totalPages: number
+  total: number
+}
+
 export function useMyListings(errors: UseMyListingsErrors) {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
 
-  const [listings, setListings] = useState<MyListing[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState('')
+  const [page, setPage] = useState(1)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [total, setTotal] = useState(0)
 
-  const fetchListings = useCallback(async (fetchPage: number, filter: string) => {
-    setIsLoading(true)
-    setError(null)
-
-    const params = new URLSearchParams()
-    if (filter) params.set('status', filter)
-    params.set('page', String(fetchPage))
-
-    const result = await apiFetch<{
-      items: MyListing[]
-      page: number
-      totalPages: number
-      total: number
-    }>(`/api/listings/mine?${params.toString()}`)
-
-    if (result.success && result.data) {
-      setListings(result.data.items)
-      setPage(result.data.page)
-      setTotalPages(result.data.totalPages)
-      setTotal(result.data.total)
-    } else {
-      setError(result.error || errors.loadError)
-    }
-    setIsLoading(false)
-  }, [errors.loadError])
-
+  // Unauthenticated redirect: separate useEffect that only navigates,
+  // no setState, so the react-hooks/set-state-in-effect rule doesn't
+  // fire. SWR key gating below skips the fetch when no session, so
+  // this just handles the navigation side effect.
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (!session?.user) {
       router.push('/auth/login')
-      return
     }
-    let cancelled = false
-    fetchListings(1, statusFilter).then(() => {
-      if (cancelled) {
-        setIsLoading(false)
-      }
-    })
-    return () => { cancelled = true }
-  }, [session, sessionStatus, router, statusFilter, fetchListings])
+  }, [session, sessionStatus, router])
+
+  // SWR key built from page + statusFilter. SWR refetches automatically
+  // when either changes (replacing the prior useEffect + fetchListings
+  // dance). Conditional null key skips the fetch until session is ready.
+  const swrKey = (() => {
+    if (sessionStatus !== 'authenticated' || !session?.user) return null
+    const params = new URLSearchParams()
+    if (statusFilter) params.set('status', statusFilter)
+    params.set('page', String(page))
+    return `/api/listings/mine?${params.toString()}`
+  })()
+
+  const {
+    data,
+    error: swrError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<ListingsResponse>(swrKey)
+
+  const listings = data?.items ?? []
+  const totalPages = data?.totalPages ?? 1
+  const total = data?.total ?? 0
+
+  const error = swrError ? errors.loadError : null
 
   const handleStatusFilterChange = (value: string) => {
     setStatusFilter(value)
@@ -90,8 +87,19 @@ export function useMyListings(errors: UseMyListingsErrors) {
     setDeletingId(id)
     const result = await apiFetch<void>(`/api/listings/${id}`, { method: 'DELETE' })
     if (result.success) {
-      setListings(prev => prev.filter(l => l.id !== id))
-      setTotal(prev => prev - 1)
+      // Optimistic local update: drop the deleted row + decrement total
+      // without a full refetch. SWR's mutate with a function lets us
+      // patch the cached response in place; the next natural refetch
+      // (page change, filter change, or manual refresh) brings the
+      // backend back into sync.
+      await mutate(
+        (current) => current ? {
+          ...current,
+          items: current.items.filter((l) => l.id !== id),
+          total: current.total - 1,
+        } : current,
+        { revalidate: false },
+      )
     }
     setDeletingId(null)
   }
@@ -117,7 +125,10 @@ export function useMyListings(errors: UseMyListingsErrors) {
     page,
     totalPages,
     total,
-    fetchListings,
+    setPage,
+    // Manual refresh for retry buttons — revalidates the current key
+    // (preserves the user's filter + page context).
+    refresh: () => mutate(),
     handleStatusFilterChange,
     doDelete,
     handleDuplicate,
