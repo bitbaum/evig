@@ -1,7 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { Search, Home } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { getTranslations } from 'next-intl/server'
 
 export default async function NotFound() {
@@ -18,13 +18,13 @@ export default async function NotFound() {
           {t('description')}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button as={Link} href="/" variant="primary">
+          <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2' })}>
             <Home className="w-4 h-4" />
             {t('goHome')}
-          </Button>
-          <Button as={Link} href="/contact" variant="outline">
+          </Link>
+          <Link href="/contact" className={buttonClass({ variant: 'outline' })}>
             {t('reportProblem')}
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

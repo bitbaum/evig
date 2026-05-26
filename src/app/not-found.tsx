@@ -3,9 +3,9 @@
 export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
-import { Search, Home, ArrowLeft } from 'lucide-react'
+import { Search, Home } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 
 export default function NotFound() {
   return (
@@ -19,13 +19,13 @@ export default function NotFound() {
           Die gesuchte Seite existiert nicht oder wurde verschoben.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button as={Link} href="/" variant="primary">
+          <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2' })}>
             <Home className="w-4 h-4" />
             Zur Startseite
-          </Button>
-          <Button as={Link} href="/contact" variant="outline">
+          </Link>
+          <Link href="/contact" className={buttonClass({ variant: 'outline' })}>
             Problem melden
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

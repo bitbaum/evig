@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
