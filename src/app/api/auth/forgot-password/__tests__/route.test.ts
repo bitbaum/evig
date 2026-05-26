@@ -38,7 +38,7 @@ jest.mock('@/lib/auth/db', () => ({
   createPasswordResetToken: (...args: unknown[]) => mockCreatePasswordResetToken.apply(null, args),
 }))
 
-const mockSendEmail = jest.fn().mockResolvedValue(undefined)
+const mockSendEmail = jest.fn().mockResolvedValue({ success: true, messageId: 'msg-1' })
 
 jest.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
@@ -108,7 +108,7 @@ beforeEach(() => {
   jest.clearAllMocks()
   mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 9, resetAt: 0 })
   mockGetUserByEmail.mockResolvedValue(MOCK_USER)
-  mockSendEmail.mockResolvedValue(undefined)
+  mockSendEmail.mockResolvedValue({ success: true, messageId: 'msg-1' })
 })
 
 // ============================================================================
@@ -180,6 +180,32 @@ describe('POST /api/auth/forgot-password — user found', () => {
     mockSendEmail.mockRejectedValueOnce(new Error('SMTP error'))
     const response = await POST(makeRequest({ email: 'hans@example.com' }))
     expect(response.status).toBe(200)
+  })
+
+  it('logs an error (not info) when sendEmail resolves { success: false } — silent SMTP failure must not be logged as success', async () => {
+    // sendEmail catches its own errors and resolves { success: false }
+    // rather than throwing. The old try/catch only caught rejections, so
+    // a silent send failure logged "Password reset email sent" (false
+    // positive) and the user was locked out with no diagnostic trail.
+    // Regression: check the resolved-failure case is logged as error.
+    const logger = jest.requireMock('@/lib/logger').logger as {
+      info: jest.Mock; error: jest.Mock
+    }
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
+
+    const response = await POST(makeRequest({ email: 'hans@example.com' }))
+    expect(response.status).toBe(200) // user-facing response unchanged (enumeration protection)
+
+    // The success-path info log must NOT fire on a resolved failure.
+    expect(logger.info).not.toHaveBeenCalledWith(
+      'Password reset email sent',
+      expect.anything(),
+    )
+    // The (resolved) error path MUST fire so operators can investigate.
+    expect(logger.error).toHaveBeenCalledWith(
+      'Failed to send password reset email (resolved)',
+      expect.objectContaining({ email: 'hans@example.com', error: 'SMTP timeout' }),
+    )
   })
 })
 

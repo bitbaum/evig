@@ -44,14 +44,39 @@ export async function POST(request: NextRequest) {
     // Create reset token
     const resetToken = await createPasswordResetToken(email)
 
-    // Send reset email
+    // Send reset email.
+    //
+    // sendEmail() resolves { success: false } on SMTP / Listmonk failure
+    // rather than throwing (see src/lib/email/index.ts:178). The previous
+    // try/catch only caught actual rejections, so a silent send-failure
+    // logged "Password reset email sent" (false positive) and the user
+    // was locked out — generic "we sent you a link" response, no link
+    // ever delivered. Inspect the resolved result AND keep a defensive
+    // try/catch in case an unexpected throw escapes the email layer
+    // (older callsites used to throw). Both paths log error and fall
+    // through to the same generic success response — enumeration
+    // protection requires not surfacing the failure to the caller.
     const resetUrl = getPasswordResetUrl(resetToken)
     try {
-      await sendEmail(email, 'passwordReset', user.name || `${ORG.name} Benutzer`, resetUrl)
-      logger.info('Password reset email sent', { email })
+      const sendResult = await sendEmail(
+        email,
+        'passwordReset',
+        user.name || `${ORG.name} Benutzer`,
+        resetUrl,
+      )
+      if (sendResult.success) {
+        logger.info('Password reset email sent', { email })
+      } else {
+        logger.error('Failed to send password reset email (resolved)', {
+          email,
+          error: sendResult.error,
+        })
+      }
     } catch (emailError) {
-      logger.error('Failed to send password reset email', { error: emailError, email })
-      // Still return success for security (don't reveal email issues)
+      logger.error('Failed to send password reset email (rejected)', {
+        error: emailError,
+        email,
+      })
     }
 
     return apiSuccess({
