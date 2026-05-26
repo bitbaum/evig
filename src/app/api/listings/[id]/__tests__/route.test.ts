@@ -496,7 +496,7 @@ describe('PATCH /api/listings/[id] — ownership checks', () => {
 
   it('returns 403 when not owner', async () => {
     // Ownership check: sellerId is different user
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }])
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user', currentStatus: 'active' }])
     mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
     mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockOwnerWhere })
     mockLeftJoin.mockReturnValue({ where: mockOwnerWhere })
@@ -508,11 +508,135 @@ describe('PATCH /api/listings/[id] — ownership checks', () => {
   })
 })
 
+describe('PATCH /api/listings/[id] — owner status-transition gate', () => {
+  // Bug class: same shape as the PUT /api/invoices/[id] fix at b740abca.
+  // UpdateListingSchema accepts status ∈ {active, sold, reserved, draft,
+  // removed}. Without this gate an owner could:
+  //   - flip ACTIVE → SOLD off-book (bypass marketplace order + payment)
+  //   - flip RESERVED → ACTIVE during a mid-flight order (double-sale)
+  //   - PATCH to REMOVED outside the DELETE endpoint's audit/Meili paths
+  // Gate: only DRAFT and ACTIVE are owner-manageable; current AND target
+  // must be in that set.
+  beforeEach(() => {
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+  })
+
+  it('returns 403 when owner tries ACTIVE → SOLD (off-book sale)', async () => {
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'active' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'sold' } })
+
+    const response = await PATCH(makePatchRequest(undefined, { status: 'sold' }), makeContext())
+    expect(response.status).toBe(403)
+    expect(mockTransactionFn).not.toHaveBeenCalled()
+  })
+
+  it('returns 403 when owner tries RESERVED → ACTIVE (double-sale)', async () => {
+    // Buyer's order is mid-flight (listing is RESERVED). Owner tries to
+    // flip it back to ACTIVE so other buyers can also purchase. Blocked.
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'reserved' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } })
+
+    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext())
+    expect(response.status).toBe(403)
+    expect(mockTransactionFn).not.toHaveBeenCalled()
+  })
+
+  it('returns 403 when owner tries to set REMOVED via PATCH (must use DELETE endpoint)', async () => {
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'active' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'removed' } })
+
+    const response = await PATCH(makePatchRequest(undefined, { status: 'removed' }), makeContext())
+    expect(response.status).toBe(403)
+    expect(mockTransactionFn).not.toHaveBeenCalled()
+  })
+
+  it('returns 403 on PATCH against SOLD listing trying to set anything (system-managed state)', async () => {
+    // Listing already SOLD. Owner can't PATCH status — needs admin/system intervention.
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'sold' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } })
+
+    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext())
+    expect(response.status).toBe(403)
+    expect(mockTransactionFn).not.toHaveBeenCalled()
+  })
+
+  it('allows DRAFT → ACTIVE (legitimate publish flow)', async () => {
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'draft' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } })
+
+    // Fire-and-forget Meilisearch select chain
+    const mockMeiliWhere = jest.fn().mockReturnValue({
+      then: jest.fn().mockResolvedValue(undefined),
+      catch: jest.fn().mockResolvedValue(undefined),
+    })
+    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere })
+    const mockMeiliInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+    mockFrom.mockReturnValue({ innerJoin: mockMeiliInnerJoin, leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+
+    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockTransactionFn).toHaveBeenCalled()
+  })
+
+  it('allows ACTIVE → DRAFT (legitimate unpublish flow)', async () => {
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'active' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'draft' } })
+
+    // PATCH to draft removes from Meili (route line 252); no Meili select needed.
+    const response = await PATCH(makePatchRequest(undefined, { status: 'draft' }), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockTransactionFn).toHaveBeenCalled()
+  })
+
+  it('allows non-status PATCH on RESERVED listing (only status field is gated)', async () => {
+    // Important: the gate ONLY blocks the status field. An owner can
+    // still update title/description/etc. on a RESERVED listing. This
+    // matters so an owner with a mid-flight order can correct a typo
+    // in the description without admin intervention.
+    const mockOwnerWhere = jest.fn().mockResolvedValue([
+      { sellerId: 'user-1', currentStatus: 'reserved' },
+    ])
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { title: 'Corrected title' } })
+
+    // Fire-and-forget Meilisearch select chain (status not provided, falls through to indexListing branch)
+    const mockMeiliWhere = jest.fn().mockReturnValue({
+      then: jest.fn().mockResolvedValue(undefined),
+      catch: jest.fn().mockResolvedValue(undefined),
+    })
+    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere })
+    const mockMeiliInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+    mockFrom.mockReturnValue({ innerJoin: mockMeiliInnerJoin, leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+
+    const response = await PATCH(makePatchRequest(undefined, { title: 'Corrected title' }), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockTransactionFn).toHaveBeenCalled()
+  })
+})
+
 describe('PATCH /api/listings/[id] — validation', () => {
   beforeEach(() => {
     mockAuth.mockResolvedValue(MOCK_SESSION)
     // Owner is current user
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1' }])
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }])
     mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
   })
 
@@ -534,7 +658,7 @@ describe('PATCH /api/listings/[id] — success', () => {
 
   it('returns 200 on successful update', async () => {
     // Ownership check
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1' }])
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }])
     mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
 
     // Transaction

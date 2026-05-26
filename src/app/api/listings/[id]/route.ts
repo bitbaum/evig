@@ -159,9 +159,10 @@ export const PATCH = withAuth<{ id: string }>(async (
     const id = context?.params?.id;
     if (!id) return apiNotFound('Inserat');
 
-    // Check ownership
+    // Check ownership + current status. Status is required for the
+    // owner-status-transition gate below (see comment near the gate).
     const [owner] = await db
-      .select({ sellerId: listings.sellerId })
+      .select({ sellerId: listings.sellerId, currentStatus: listings.status })
       .from(listings)
       .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)));
     if (!owner) return apiNotFound('Inserat');
@@ -173,6 +174,45 @@ export const PATCH = withAuth<{ id: string }>(async (
     const validation = validateBody(UpdateListingSchema, body);
     if (!validation.success) return validation.error;
     const data = validation.data;
+
+    // Owner-driven status transitions are constrained to {DRAFT, ACTIVE}.
+    // RESERVED, SOLD, and REMOVED are system-driven states:
+    //
+    // - RESERVED is set when a marketplace order is created; clearing it
+    //   back to ACTIVE happens via the Payrexx cancellation webhook
+    //   (handleMarketplacePayment CANCELLED in payment-webhook.ts).
+    // - SOLD is set by payment confirmation (RESERVED → SOLD on the
+    //   buyer's successful payment).
+    // - REMOVED is set by the DELETE endpoint (soft-delete).
+    //
+    // Without this gate an owner could:
+    //   (a) self-mark ACTIVE → SOLD to take the listing off-book,
+    //       bypassing the marketplace order + payment flow entirely;
+    //   (b) flip RESERVED → ACTIVE while a buyer's order is mid-flight,
+    //       enabling a double-sale where two buyers each believe they
+    //       have a valid order on the same listing;
+    //   (c) self-set REMOVED without going through the DELETE endpoint's
+    //       Meilisearch + audit-log paths.
+    //
+    // Both the current status AND the target status must be in the
+    // owner-manageable set — blocks both directions of the double-sale
+    // and off-book attacks. A regular non-status PATCH (e.g. updating
+    // title/description) is still allowed on RESERVED/SOLD listings —
+    // only the `status` field is gated.
+    if (data.status !== undefined) {
+      const OWNER_MANAGEABLE_STATUSES: string[] = [
+        LISTING_STATUS.DRAFT,
+        LISTING_STATUS.ACTIVE,
+      ];
+      if (
+        !OWNER_MANAGEABLE_STATUSES.includes(owner.currentStatus) ||
+        !OWNER_MANAGEABLE_STATUSES.includes(data.status)
+      ) {
+        return apiForbidden(
+          'Nur Entwurf und Aktiv können vom Eigentümer gesetzt werden. Reserviert, Verkauft und Entfernt werden vom System verwaltet.'
+        );
+      }
+    }
 
     // Extract images and specs separately
     const { images, specs, condition_checks, ...updateFields } = data;
