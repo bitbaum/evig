@@ -134,20 +134,3 @@ export const userSkills = pgTable('user_skills', {
 
 export type UserSkill = typeof userSkills.$inferSelect
 export type NewUserSkill = typeof userSkills.$inferInsert
-
-// =============================================================================
-// HELPER PROFILES — TS-level REMOVED (was kept as a Drizzle-only deprecated stub)
-// =============================================================================
-// Phase 2 migration unified helper_profiles into repairer_profiles
-// (profile_tier='community'). The Drizzle table definition has been
-// removed; no TypeScript code references it (verified by grep at
-// removal time — only the schema file itself and two adjacent
-// comments mentioned the name). The earlier comment claimed the
-// definition was kept "so existing Drizzle migrations compile" but
-// Drizzle migrations are SQL files that don't reference the TS
-// schema, so that justification didn't hold.
-//
-// The DB-level objects (helper_profiles table, helper_profiles_v
-// view) still exist — keeping them preserves the historical rows
-// for any post-hoc inspection or recovery. A future migration can
-// drop both once it's confirmed no operational tooling reads them.

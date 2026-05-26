@@ -78,10 +78,6 @@ export const aiExtractedProducts = pgTable('ai_extracted_products', {
 
   // Integration fields
   kivitendoArticleNumber: text('kivitendo_article_number'),
-  // medusa_product_id (TS removed 2026-05-26): abandoned Medusa
-  // integration, no consumers anywhere in src/. Column stays in DB
-  // until a future migration drops it. See payments.ts + below in
-  // inventoryItems for the parallel removals.
   marketplaceListingId: text('marketplace_listing_id'),
 
   // Added by 012: short description
@@ -112,9 +108,6 @@ export type NewAiExtractedProduct = typeof aiExtractedProducts.$inferInsert
 // Links AI extraction to physical inventory. Tracks location, quantity, pricing.
 // Final state includes columns from 004 + 012 (box_id) + 046 (intake_tier,
 // intake_checklist, checklist_complete, source_donation_id) + 047 (intake_events).
-// Migration 037 added medusa_variant_id; the Drizzle declaration was removed in
-// 15e443fb when the abandoned Medusa integration was cleaned up at the TS layer
-// (DB column itself stays until a future drop-column migration).
 
 export const inventoryItems = pgTable('inventory_items', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -150,10 +143,6 @@ export const inventoryItems = pgTable('inventory_items', {
   minSellingPriceChf: decimal('min_selling_price_chf', { precision: 10, scale: 2 }),
 
   // Marketplace integration
-  // medusa_product_id + medusa_variant_id (TS removed 2026-05-26):
-  // abandoned Medusa integration, no consumers in src/. Columns stay
-  // in DB until a future migration drops them along with the
-  // marketplace_listing_id reference above and the payments.ts ones.
   // CHECK (marketplace_status IN ('draft', 'published', 'sold', 'archived'))
   marketplaceStatus: text('marketplace_status').default('draft'),
 
@@ -350,9 +339,7 @@ export const marketplaceListings = pgTable('marketplace_listings', {
 
   // Platform integration. In practice only MARKETPLACE_LISTING_PLATFORM.INTERNAL
   // ('internal') is written — see create-product.ts:273, inventory-actions.ts:78,
-  // intake/[id]/publish/route.ts:97. The 'medusa' and 'external_api' values
-  // mentioned in earlier comments were aspirational for integrations that never
-  // shipped (Medusa was abandoned — see TS-removal note at line 113).
+  // intake/[id]/publish/route.ts:97.
   platform: text('platform').notNull(),
   platformListingId: text('platform_listing_id'),
   platformUrl: text('platform_url'),
