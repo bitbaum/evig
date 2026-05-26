@@ -74,22 +74,24 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       existingApplicationId = app.id
     }
 
-    // Handle file uploads (simplified - in production, you'd upload to cloud storage)
+    // File uploads (portfolio images, certifications, ID document) are
+    // not handled by this route. The previous implementation read
+    // `value.name` from FormData and constructed phantom URLs like
+    // `/uploads/portfolio/${value.name}` without ever saving the file
+    // bytes — so any "uploaded" file ended up as a broken link in the
+    // admin reviewer's UI, AND `value.name` is fully user-controlled so
+    // an attacker could store path-traversal strings in the DB columns.
+    // The legitimate apply form doesn't send these field names; only the
+    // dead code path existed.
+    //
+    // If file upload becomes a requirement, the proper path is to have
+    // the client upload via /api/uploads (which actually saves files
+    // with MIME / size / extension validation and sharp-based resizing)
+    // and then send the returned URLs as JSON fields with the
+    // application. Adding raw file handling here without that pipeline
+    // re-introduces the same security + correctness gap.
     const portfolioImages: string[] = []
     const certificationDocs: string[] = []
-    let idDocument: string | null = null
-
-    // Process uploaded files
-    for (const [key, value] of formData.entries()) {
-      if (key.startsWith('portfolioImage_') && value instanceof File) {
-        // In production, upload to cloud storage and get URL
-        portfolioImages.push(`/uploads/portfolio/${value.name}`)
-      } else if (key.startsWith('certificationDoc_') && value instanceof File) {
-        certificationDocs.push(`/uploads/certifications/${value.name}`)
-      } else if (key === 'idDocument' && value instanceof File) {
-        idDocument = `/uploads/id/${value.name}`
-      }
-    }
 
     // Create OR re-submit repairer application. UPDATE when the user has a
     // prior REJECTED / REQUIRES_CHANGES row (captured above), INSERT
