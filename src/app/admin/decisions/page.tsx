@@ -6,7 +6,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -46,10 +46,10 @@ export default async function DecisionsAdminPage() {
       icon={Vote}
       iconColor="blue"
       actions={
-        <Button as={Link} href={ROUTES.admin.decisionNew} variant="primary" size="sm">
+        <Link href={ROUTES.admin.decisionNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
           <Plus className="w-4 h-4" />
           Neuer Vorschlag
-        </Button>
+        </Link>
       }
     >
       <DecisionListClient currentUserId={currentUserId} isSuperAdmin={isAdmin} stats={stats} />

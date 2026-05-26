@@ -11,7 +11,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import {
   Plus,
   Tag,
@@ -129,10 +129,10 @@ export default async function AdminCategoriesPage() {
             </p>
           </div>
         </div>
-        <Button as={Link} href={ROUTES.admin.categoryNew} variant="primary">
+        <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
           <Plus className="w-5 h-5" />
           Neue Kategorie
-        </Button>
+        </Link>
       </div>
 
       {/* Stats Cards */}
@@ -301,10 +301,10 @@ export default async function AdminCategoriesPage() {
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
               Erstelle Kategorien, um deine Blog-Artikel zu organisieren.
             </p>
-            <Button as={Link} href={ROUTES.admin.categoryNew} variant="primary">
+            <Link href={ROUTES.admin.categoryNew} className={buttonClass({ variant: 'primary' })}>
               <Plus className="w-5 h-5" />
               Erste Kategorie erstellen
-            </Button>
+            </Link>
           </div>
         )}
       </div>

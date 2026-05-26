@@ -6,7 +6,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
@@ -142,10 +142,10 @@ export default async function AdminServicesPage() {
       icon={Wrench}
       iconColor="green"
       actions={
-        <Button as={Link} href={ROUTES.admin.serviceNew} variant="primary">
+        <Link href={ROUTES.admin.serviceNew} className={buttonClass({ variant: 'primary' })}>
           <Plus className="w-5 h-5" />
           Dienstleistung erstellen
-        </Button>
+        </Link>
       }
     >
       {/* Stats Cards */}
@@ -297,10 +297,10 @@ export default async function AdminServicesPage() {
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
               Erstellen Sie Ihre erste Dienstleistung, um Service-Termine anzubieten.
             </p>
-            <Button as={Link} href={ROUTES.admin.serviceNew} variant="primary">
+            <Link href={ROUTES.admin.serviceNew} className={buttonClass({ variant: 'primary' })}>
               <Plus className="w-5 h-5" />
               Erste Dienstleistung erstellen
-            </Button>
+            </Link>
           </div>
         )}
       </div>
@@ -320,9 +320,9 @@ export default async function AdminServicesPage() {
               Beratungen und andere technische Services an. Kunden können online Termine buchen.
             </p>
             <div className="flex gap-3">
-              <Button as={Link} href={ROUTES.admin.serviceNew} variant="primary" size="sm">
+              <Link href={ROUTES.admin.serviceNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
                 Dienstleistung erstellen
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

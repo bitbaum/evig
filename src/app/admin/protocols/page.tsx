@@ -8,7 +8,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { Suspense } from 'react'
 import { auth } from '@/auth'
 import { query } from '@/lib/auth/db'
@@ -145,10 +145,10 @@ export default async function ProtocolsAdminPage({
       icon={FileText}
       iconColor="blue"
       actions={
-        <Button as={Link} href={ROUTES.admin.protocolNew} variant="primary" size="sm">
+        <Link href={ROUTES.admin.protocolNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
           <Plus className="w-4 h-4" />
           Neues Protokoll
-        </Button>
+        </Link>
       }
     >
       {/* Stats Cards */}
@@ -199,9 +199,9 @@ export default async function ProtocolsAdminPage({
             <p className="text-neutral-600 mb-4">
               Es gab ein Problem beim Laden der Protokolle. Bitte versuche es erneut.
             </p>
-            <Button as={Link} href={ROUTES.admin.protocols} variant="primary">
+            <Link href={ROUTES.admin.protocols} className={buttonClass({ variant: 'primary' })}>
               Seite neu laden
-            </Button>
+            </Link>
           </div>
         ) : filteredProtocols.length === 0 ? (
           <div className="p-12 text-center">
@@ -212,10 +212,10 @@ export default async function ProtocolsAdminPage({
             <p className="text-neutral-600 mb-4">
               {ADMIN_CONTENT.protocols.emptyDescription}
             </p>
-            <Button as={Link} href={ROUTES.admin.protocolNew} variant="primary">
+            <Link href={ROUTES.admin.protocolNew} className={buttonClass({ variant: 'primary' })}>
               <Plus className="w-4 h-4" />
               Neues Protokoll
-            </Button>
+            </Link>
           </div>
         ) : (
           <table className="w-full">

@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { auth } from '@/auth'
 import { formatDateNumeric } from '@/lib/date-formats'
 import { redirect } from 'next/navigation'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import {
@@ -122,10 +122,10 @@ export default async function AdminPagesPage() {
             </p>
           </div>
         </div>
-        <Button as={Link} href={ROUTES.admin.contentPageNew} variant="primary">
+        <Link href={ROUTES.admin.contentPageNew} className={buttonClass({ variant: 'primary' })}>
           <Plus className="w-5 h-5" />
           Neue Seite
-        </Button>
+        </Link>
       </div>
 
       {/* Half-wired warning: public pages (/about, /faq, /impressum,
@@ -285,10 +285,10 @@ export default async function AdminPagesPage() {
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
               Erstelle statische Seiten wie Über uns, Kontakt oder FAQ.
             </p>
-            <Button as={Link} href={ROUTES.admin.contentPageNew} variant="primary">
+            <Link href={ROUTES.admin.contentPageNew} className={buttonClass({ variant: 'primary' })}>
               <Plus className="w-5 h-5" />
               Erste Seite erstellen
-            </Button>
+            </Link>
           </div>
         )}
       </div>

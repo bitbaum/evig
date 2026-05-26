@@ -7,7 +7,7 @@
 
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { Suspense } from 'react'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
@@ -233,10 +233,10 @@ export default async function TasksAdminPage({
             <BarChart3 className="w-4 h-4" />
             Statistiken
           </Link>
-          <Button as={Link} href={ROUTES.admin.taskNew} variant="primary" size="sm">
+          <Link href={ROUTES.admin.taskNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
             <Plus className="w-4 h-4" />
             Neue Aufgabe
-          </Button>
+          </Link>
         </>
       }
     >
@@ -288,9 +288,9 @@ export default async function TasksAdminPage({
             <p className="text-neutral-600 mb-4">
               Es gab ein Problem beim Laden der Aufgaben. Bitte versuche es erneut.
             </p>
-            <Button as={Link} href={ROUTES.admin.tasks} variant="primary">
+            <Link href={ROUTES.admin.tasks} className={buttonClass({ variant: 'primary' })}>
               Seite neu laden
-            </Button>
+            </Link>
           </div>
         ) : tasks.length === 0 ? (
           <div className="p-12 text-center">
@@ -301,10 +301,10 @@ export default async function TasksAdminPage({
             <p className="text-neutral-600 mb-4">
               {ADMIN_CONTENT.tasks.emptyDescription}
             </p>
-            <Button as={Link} href={ROUTES.admin.taskNew} variant="primary">
+            <Link href={ROUTES.admin.taskNew} className={buttonClass({ variant: 'primary' })}>
               <Plus className="w-4 h-4" />
               Neue Aufgabe
-            </Button>
+            </Link>
           </div>
         ) : (
           <table className="w-full">

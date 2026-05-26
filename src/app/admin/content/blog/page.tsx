@@ -8,7 +8,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { auth } from '@/auth'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { ORG } from '@/config/org'
 import { redirect } from 'next/navigation'
 import { query } from '@/lib/auth/db'
@@ -125,10 +125,10 @@ export default async function AdminBlogPage() {
       iconColor="blue"
       backButton={{ href: ROUTES.admin.content, label: 'Zurück' }}
       actions={
-        <Button as={Link} href={ROUTES.admin.contentBlogNew} variant="primary">
+        <Link href={ROUTES.admin.contentBlogNew} className={buttonClass({ variant: 'primary' })}>
           <Plus className="w-5 h-5" />
           Neuer Artikel
-        </Button>
+        </Link>
       }
     >
       {/* Stats Cards */}
@@ -209,9 +209,9 @@ export default async function AdminBlogPage() {
               Computeraufarbeitung oder kündige Workshops und Events an.
             </p>
             <div className="flex gap-3">
-              <Button as={Link} href={ROUTES.admin.contentBlogNew} variant="primary" size="sm">
+              <Link href={ROUTES.admin.contentBlogNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
                 Artikel erstellen
-              </Button>
+              </Link>
             </div>
           </div>
         </div>

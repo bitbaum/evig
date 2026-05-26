@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import ProductManagement from '@/components/admin/ProductManagement'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { Package } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { ROUTES } from '@/config/routes'
@@ -20,9 +20,9 @@ export default async function ProductsAdminPage() {
       iconColor="indigo"
       backButton={{ href: ROUTES.admin.dashboard, label: 'Zurück zum Dashboard' }}
       actions={
-        <Button as={Link} href={ROUTES.admin.erfassung} variant="primary" size="sm">
+        <Link href={ROUTES.admin.erfassung} className={buttonClass({ variant: 'primary', size: 'sm' })}>
           Neues Produkt
-        </Button>
+        </Link>
       }
     >
       <ProductManagement />
