@@ -309,14 +309,91 @@ describe('PUT /api/invoices/[id] — validation', () => {
 // ============================================================================
 
 describe('PUT /api/invoices/[id] — success', () => {
-  it('returns 200 with updated invoice', async () => {
+  it('returns 200 with updated invoice when admin updates status', async () => {
+    // Admin can update status; owners cannot (separate test below).
+    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION)
     mockWhere
       .mockResolvedValueOnce([MOCK_INVOICE_STUB])   // ownership check
       .mockResolvedValueOnce([MOCK_INVOICE_DETAIL])  // fetch updated
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'sent' } })
     const req = makeRequest('PUT', { status: 'sent' })
     const response = await PUT(req, makeContext())
     expect(response.status).toBe(200)
     expect(mockUpdate).toHaveBeenCalled()
+  })
+
+  it('returns 200 when owner updates safe metadata (notes)', async () => {
+    mockWhere
+      .mockResolvedValueOnce([MOCK_INVOICE_STUB])
+      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL])
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { notes: 'Updated note' } })
+    const req = makeRequest('PUT', { notes: 'Updated note' })
+    const response = await PUT(req, makeContext())
+    expect(response.status).toBe(200)
+    expect(mockUpdate).toHaveBeenCalled()
+  })
+})
+
+// ============================================================================
+// PUT /api/invoices/[id] — owner cannot self-mark as paid (auth/authorization)
+// ============================================================================
+
+describe('PUT /api/invoices/[id] — owner cannot self-mark as paid', () => {
+  it('returns 400 (no valid fields) when owner submits ONLY status — the field is filtered out for non-admins', async () => {
+    // Bug class: UpdateInvoiceSchema accepted `status: z.string()` with
+    // no enum validation, and the route applied the same allowedFields
+    // for owners and admins. Owners could PUT { status: 'paid' }
+    // against their own unpaid invoice and bypass the payment flow
+    // entirely. Now `status` is admin-only — owner requests with only
+    // status field get silently dropped, leaving hasUpdates=false and
+    // returning the existing "no valid fields" 400.
+    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB])  // owner of invoice-1
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'paid' } })
+    const req = makeRequest('PUT', { status: 'paid' })
+    const response = await PUT(req, makeContext())
+    expect(response.status).toBe(400)
+    // Critical: no UPDATE statement fired at all (silently dropping
+    // status from an empty allowlist means hasUpdates=false).
+    expect(mockSet).not.toHaveBeenCalled()
+  })
+
+  it('owner update with mixed fields strips admin-only fields and applies only owner-allowed ones', async () => {
+    // Realistic attack: owner submits both an allowed field (notes) and
+    // a forbidden one (status). The forbidden field must NOT make it
+    // into the SQL update — only the allowed field. The route still
+    // succeeds so the user's note change applies; only the status
+    // hijack attempt is silently dropped.
+    mockWhere
+      .mockResolvedValueOnce([MOCK_INVOICE_STUB])
+      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL])
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { status: 'paid', notes: 'Self-claimed paid' },
+    })
+    const req = makeRequest('PUT', { status: 'paid', notes: 'Self-claimed paid' })
+    const response = await PUT(req, makeContext())
+    expect(response.status).toBe(200)
+    // mockSet receives the SQL update set. Must contain notes, must
+    // NOT contain status (the admin-only field).
+    const setArgs = mockSet.mock.calls[0]?.[0] as Record<string, unknown> | undefined
+    expect(setArgs).toBeDefined()
+    expect(setArgs).toHaveProperty('notes', 'Self-claimed paid')
+    expect(setArgs).not.toHaveProperty('status')
+  })
+
+  it('owner cannot modify line_items either — same admin-only restriction', async () => {
+    // line_items drive the displayed invoice breakdown; letting an
+    // owner overwrite them would produce a PDF/email that doesn't
+    // match what was actually billed.
+    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB])
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { line_items: [{ desc: 'free thing', amount: 0 }] },
+    })
+    const req = makeRequest('PUT', { line_items: [{ desc: 'free thing', amount: 0 }] })
+    const response = await PUT(req, makeContext())
+    expect(response.status).toBe(400)
+    expect(mockSet).not.toHaveBeenCalled()
   })
 })
 

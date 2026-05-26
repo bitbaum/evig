@@ -97,17 +97,42 @@ export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session
       return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu aktualisieren')
     }
 
-    // Build update set
-    const updateSet: Record<string, unknown> = { updatedAt: sql`CURRENT_TIMESTAMP` }
-    const allowedFields: Record<string, string> = {
-      status: 'status',
+    // Build update set. Field allowlist splits by role:
+    //
+    // - Owners can edit their own metadata (notes, billing/shipping address).
+    // - Admins can additionally edit state-affecting and totals-affecting
+    //   fields (status, due_date, payment_terms, line_items).
+    //
+    // Previously the schema accepted `status: z.string()` without enum
+    // validation and the route applied the same allowedFields set for
+    // both owners and admins. Owners could therefore PUT
+    // { status: 'paid' } against their own unpaid invoice and the route
+    // would happily flip it to PAID — completely bypassing the payment
+    // flow. Same shape risk with line_items (changing the displayed
+    // breakdown after the totals were calculated, producing a PDF /
+    // emailed invoice that lies about what was billed).
+    //
+    // Non-admin requests with admin-only fields silently drop those
+    // fields (matches the pre-existing pattern for unknown fields).
+    // If the request supplied ONLY admin-only fields, `hasUpdates`
+    // stays false and the route returns 400 "no valid fields" —
+    // already-correct error semantics.
+    const ownerAllowedFields: Record<string, string> = {
       notes: 'notes',
-      due_date: 'dueDate',
       billing_address: 'billingAddress',
       shipping_address: 'shippingAddress',
+    }
+    const adminOnlyFields: Record<string, string> = {
+      status: 'status',
+      due_date: 'dueDate',
       payment_terms: 'paymentTerms',
       line_items: 'lineItems',
     }
+    const allowedFields: Record<string, string> = isAdmin
+      ? { ...ownerAllowedFields, ...adminOnlyFields }
+      : ownerAllowedFields
+
+    const updateSet: Record<string, unknown> = { updatedAt: sql`CURRENT_TIMESTAMP` }
 
     let hasUpdates = false
     for (const [key, value] of Object.entries(updates)) {
