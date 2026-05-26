@@ -134,7 +134,39 @@ export async function acceptOffer(params: {
     return { ok: false, reason: 'offer_not_pending' }
   }
 
-  await db.transaction(async (tx) => {
+  // The pre-transaction SELECT above is a fast-fail check. Re-verify
+  // request.status === OPEN and offer.status === PENDING INSIDE the
+  // transaction with FOR UPDATE on the request row. Without this lock,
+  // two concurrent acceptOffer calls on the SAME request (e.g. owner
+  // accepts offer1 via the session-auth route + simultaneously accepts
+  // offer2 via the one-tap-token email link) can both pass the outer
+  // OPEN check, both run their transactions, and produce inconsistent
+  // state: two ACCEPTED offers, request.matchedOfferId pointing at one
+  // of them (last-write-wins), the other helper getting accepted+rejected
+  // emails seconds apart. FOR UPDATE on the request serializes them;
+  // the second transaction sees MATCHED and aborts cleanly. Returning
+  // a sentinel so the outer function can map it to AcceptOfferResult.
+  const raceFailed = await db.transaction(async (tx) => {
+    const lockedReq = await tx.execute(sql`
+      SELECT status FROM ${sql.raw(reqTable)}
+      WHERE id = ${requestId}
+      FOR UPDATE
+    `)
+    const lockedReqStatus = (lockedReq.rows[0] as { status?: string } | undefined)?.status
+    if (lockedReqStatus !== REQUEST_STATUS.OPEN) return true
+
+    // The request lock serializes all acceptances; an offer can't be
+    // accepted concurrently because the surrounding request transaction
+    // is queued. Still re-read the offer status — if a separate (non-
+    // acceptance) path WITHDREW the offer between the outer SELECT and
+    // this point, we should abort the same way.
+    const lockedOff = await tx.execute(sql`
+      SELECT status FROM ${sql.raw(offTable)}
+      WHERE id = ${offerId}
+    `)
+    const lockedOffStatus = (lockedOff.rows[0] as { status?: string } | undefined)?.status
+    if (lockedOffStatus !== OFFER_STATUS.PENDING) return true
+
     await tx.update(itHilfeOffers)
       .set({ status: OFFER_STATUS.ACCEPTED })
       .where(eq(itHilfeOffers.id, offerId))
@@ -176,7 +208,17 @@ export async function acceptOffer(params: {
         title: `IT-Hilfe: ${requestData.title}`,
       })
     }
+
+    return false
   })
+
+  if (raceFailed) {
+    // Map to the most accurate reason. We can't distinguish here whether
+    // the request was already matched vs the offer was withdrawn out-of-
+    // band; surface the request-side reason since that's what the
+    // typical race shape (concurrent accept) produces.
+    return { ok: false, reason: 'request_not_open' }
+  }
 
   logger.info('Accepted peer repair offer', {
     requestId,

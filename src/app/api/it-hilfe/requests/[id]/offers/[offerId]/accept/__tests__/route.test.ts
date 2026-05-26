@@ -138,8 +138,14 @@ function makeRequest(id: string, offerId: string) {
 }
 
 function setupSuccessExecute() {
-  // tx execute for conversation check + notification
-  const txExecute = jest.fn().mockResolvedValue({ rows: [] })
+  // Inside the transaction the route now FOR-UPDATEs the request row + reads
+  // the offer status (see accept-offer.ts race-fix). Then it does the
+  // conversation-check execute. Return rows for the lock+recheck reads,
+  // then empty rows for the conversation lookup.
+  const txExecute = jest.fn()
+    .mockResolvedValueOnce({ rows: [{ status: 'open' }] })       // FOR UPDATE request
+    .mockResolvedValueOnce({ rows: [{ status: 'pending' }] })    // re-read offer
+    .mockResolvedValue({ rows: [] })                              // conversation lookup + rest
   const txUpdate = jest.fn().mockReturnValue({ set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }) })
   const txInsert = jest.fn().mockReturnValue({ values: jest.fn().mockResolvedValue(undefined) })
   mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
@@ -215,5 +221,35 @@ describe('POST /api/it-hilfe/requests/[id]/offers/[offerId]/accept', () => {
 
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
+  })
+
+  it('returns 400 when FOR UPDATE re-check sees the request already matched (race-window guard)', async () => {
+    // Outer pre-transaction read sees request OPEN + offer PENDING → passes
+    // validation. But by the time the transaction acquires the FOR UPDATE
+    // lock on the request row, a concurrent transaction has already
+    // accepted a different offer and flipped status to 'matched'. Inner
+    // re-check sees status='matched' (not 'open'), aborts cleanly with
+    // request_not_open which the route maps to 400.
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+    mockExecute
+      .mockResolvedValueOnce({ rows: [MOCK_REQUEST_ROW] })   // outer pre-read: OPEN
+      .mockResolvedValueOnce({ rows: [MOCK_OFFER_ROW] })     // outer pre-read: offer PENDING
+
+    // Inside the transaction the FOR UPDATE sees the row already MATCHED
+    // (sibling transaction won the race).
+    const txExecute = jest.fn()
+      .mockResolvedValueOnce({ rows: [{ status: 'matched' }] })   // FOR UPDATE: race lost
+    const txUpdate = jest.fn().mockReturnValue({ set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }) })
+    const txInsert = jest.fn().mockReturnValue({ values: jest.fn().mockResolvedValue(undefined) })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) => {
+      return fn({ update: txUpdate, insert: txInsert, execute: txExecute })
+    })
+
+    const res = await POST(makeRequest(VALID_UUID, VALID_OFFER_UUID), routeParams(VALID_UUID, VALID_OFFER_UUID))
+    expect(res.status).toBe(400)
+    // Updates must NOT have happened — the race-loser aborts cleanly
+    // before touching offer/request state.
+    expect(txUpdate).not.toHaveBeenCalled()
+    expect(txInsert).not.toHaveBeenCalled()
   })
 })
