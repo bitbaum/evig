@@ -79,11 +79,26 @@ const mockDbSelect = jest.fn(() => makeSelectChain([]))
 // decrement, which isn't modeled in the Drizzle schema)
 const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] })
 
+// db.transaction(callback) — payment webhooks now wrap multi-write
+// branches in a transaction. Default impl invokes the callback with a tx
+// object whose select/update/execute methods route through the existing
+// outer mocks, so the same mock chain (mockDbUpdate / mockDbSelect /
+// mockDbExecute) drives both the per-statement test assertions AND the
+// transactional payment-webhook flow.
+const mockDbTransaction = jest.fn().mockImplementation(
+  async (fn: (tx: unknown) => Promise<unknown>) => fn({
+    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+  })
+)
+
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockDbSelect.apply(null, args),
     update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
     execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
 }))
 
@@ -259,6 +274,16 @@ beforeEach(() => {
   mockDbUpdate.mockReturnValue({ set: mockUpdateSet })
   mockDbSelect.mockImplementation(() => makeSelectChain([]))
   mockDbExecute.mockResolvedValue({ rows: [] })
+  // jest.clearAllMocks wipes mockDbTransaction's default impl too — restore
+  // it so the transactional payment-webhook flow continues to work for
+  // tests that don't customize it.
+  mockDbTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
+    fn({
+      select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+      update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+      execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    })
+  )
 })
 
 // ============================================================================
@@ -433,6 +458,36 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
       expect.objectContaining({ status: ORDER_STATUS.CANCELLED }),
     )
   })
+
+  it('wraps the order cancellation + listing restore in a single transaction', async () => {
+    // Without the transaction, a failure on the listings restore after the
+    // order was already CANCELLED leaves the listing in RESERVED forever
+    // (permanently locked: can't be bought by anyone else, can't be
+    // re-listed). Regression: assert db.transaction is invoked and both
+    // writes run through the tx wrapper, so postgres rolls back if either
+    // half fails.
+    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
+    // Both updates happen inside the transaction callback (which routes
+    // tx.update through mockDbUpdate via the default impl).
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
+  })
+
+  it('surfaces a transaction failure rather than silently committing the partial state', async () => {
+    // Simulate: order update inside the transaction commits OK, listings
+    // restore throws. The transaction must reject — postgres rolls back
+    // the order update — and the throw bubbles out of handleMarketplacePayment.
+    mockDbTransaction.mockImplementationOnce(async () => {
+      throw new Error('FK contention on listings restore')
+    })
+    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
+
+    await expect(
+      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null),
+    ).rejects.toThrow('FK contention')
+  })
 })
 
 // ============================================================================
@@ -518,6 +573,34 @@ describe('handleGenericPayment — RESERVED', () => {
     // Only one update: the payment transaction itself
     expect(mockDbUpdate).toHaveBeenCalledTimes(1)
   })
+
+  it('wraps payment + workshop confirmation in a single transaction (highest-impact gap)', async () => {
+    // Without the transaction, payment can be marked SUCCEEDED while the
+    // workshop registration update fails — leaving the user PAID but
+    // their registration still PENDING. They've paid real money and the
+    // platform shows the spot as unconfirmed. The next webhook retry
+    // doesn't recover because the early-return at
+    // `paymentTx.status !== PENDING` skips the whole block. Regression:
+    // assert both writes happen inside one db.transaction.
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
+
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1')
+
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
+    // Both updates happen via tx.update routed through mockDbUpdate.
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
+  })
+
+  it('throws when the transaction rejects so a partial-state commit cannot happen', async () => {
+    mockDbTransaction.mockImplementationOnce(async () => {
+      throw new Error('workshop registration update failed')
+    })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
+
+    await expect(
+      handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1'),
+    ).rejects.toThrow('workshop registration update failed')
+  })
 })
 
 // ============================================================================
@@ -590,6 +673,25 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: APPOINTMENT_STATUS.CANCELLED }),
     )
+  })
+
+  it('wraps the FAILED + revert + participant-decrement in a single transaction', async () => {
+    // Critical: without the transaction, a failure on the
+    // participant-count decrement after the registration was already
+    // CANCELLED leaves a phantom +1 on workshop_instances.current_participants.
+    // Over many failed payments the capacity check blocks legitimate
+    // users from a workshop that's not actually full. Regression: assert
+    // db.transaction is invoked and all three writes route through it.
+    mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]))
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' })
+
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null)
+
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
+    // Two updates (paymentTx FAILED + registration CANCELLED) routed
+    // through tx.update; the participant-count UPDATE goes via tx.execute.
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
+    expect(mockDbExecute).toHaveBeenCalledTimes(1)
   })
 })
 

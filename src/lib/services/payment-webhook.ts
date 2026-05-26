@@ -189,24 +189,35 @@ export async function handleMarketplacePayment(
         return
       }
 
-      await db
-        .update(marketplaceOrders)
-        .set({
-          status: ORDER_STATUS.CANCELLED,
-          updatedAt: sql`NOW()`,
-        })
-        .where(eq(marketplaceOrders.id, order.id))
+      // Atomic: cancel the order AND restore the listing in one shot.
+      // Previously these were two independent auto-commit updates. If the
+      // listings restore failed (network blip, FK contention) after the
+      // order was already CANCELLED, the listing stayed in RESERVED
+      // forever — permanently locked, can't be bought by anyone else,
+      // can't be re-listed by the seller. Same root cause as the
+      // admin-user-delete (b41c7b21) and inventory-delete (d5ea93bd)
+      // multi-write fixes; payments are even more impact-sensitive
+      // because the listing lock can't be observed by the seller.
+      await db.transaction(async (tx) => {
+        await tx
+          .update(marketplaceOrders)
+          .set({
+            status: ORDER_STATUS.CANCELLED,
+            updatedAt: sql`NOW()`,
+          })
+          .where(eq(marketplaceOrders.id, order.id))
 
-      // Restore listing to active
-      await db
-        .update(listings)
-        .set({ status: LISTING_STATUS.ACTIVE })
-        .where(
-          and(
-            eq(listings.id, order.listingId),
-            eq(listings.status, LISTING_STATUS.RESERVED)
+        // Restore listing to active
+        await tx
+          .update(listings)
+          .set({ status: LISTING_STATUS.ACTIVE })
+          .where(
+            and(
+              eq(listings.id, order.listingId),
+              eq(listings.status, LISTING_STATUS.RESERVED)
+            )
           )
-        )
+      })
 
       logger.info('Marketplace order cancelled via Payrexx webhook', {
         orderId: order.id,
@@ -260,44 +271,59 @@ export async function handleGenericPayment(
         return
       }
 
-      await db
-        .update(paymentTransactions)
-        .set({
-          status: PAYMENT_STATUS.SUCCEEDED,
-          providerTransactionId: payrexxTransactionId || undefined,
-          processedAt: sql`CURRENT_TIMESTAMP`,
-          updatedAt: sql`CURRENT_TIMESTAMP`,
-        })
-        .where(eq(paymentTransactions.id, paymentTx.id))
-
-      // Update linked workshop registration
-      if (paymentTx.workshopRegistrationId) {
-        await db
-          .update(workshopRegistrations)
+      // Atomic: payment is recorded as SUCCEEDED AND the linked
+      // registration/appointment is confirmed in one shot. The HIGHEST-
+      // impact transaction gap in this file — without the transaction,
+      // a failure on the second update (workshopRegistrations or
+      // serviceAppointments) after the first commits leaves the user
+      // PAID but their registration still PENDING. They've paid real
+      // money and the platform shows their workshop spot or appointment
+      // as unconfirmed — locked out of what they paid for. The next
+      // webhook retry doesn't recover because the early-return at
+      // `paymentTx.status !== PENDING` skips the whole block.
+      await db.transaction(async (tx) => {
+        await tx
+          .update(paymentTransactions)
           .set({
-            paymentStatus: WORKSHOP_PAYMENT_STATUS.PAID,
-            status: WORKSHOP_REGISTRATION_STATUS.CONFIRMED,
-            confirmedAt: sql`CURRENT_TIMESTAMP`,
+            status: PAYMENT_STATUS.SUCCEEDED,
+            providerTransactionId: payrexxTransactionId || undefined,
+            processedAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+          .where(eq(paymentTransactions.id, paymentTx.id))
 
+        // Update linked workshop registration
+        if (paymentTx.workshopRegistrationId) {
+          await tx
+            .update(workshopRegistrations)
+            .set({
+              paymentStatus: WORKSHOP_PAYMENT_STATUS.PAID,
+              status: WORKSHOP_REGISTRATION_STATUS.CONFIRMED,
+              confirmedAt: sql`CURRENT_TIMESTAMP`,
+              updatedAt: sql`CURRENT_TIMESTAMP`,
+            })
+            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+        }
+
+        // Update linked service appointment
+        if (paymentTx.serviceAppointmentId) {
+          await tx
+            .update(serviceAppointments)
+            .set({
+              status: APPOINTMENT_STATUS.CONFIRMED,
+              updatedAt: sql`CURRENT_TIMESTAMP`,
+            })
+            .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
+        }
+      })
+
+      if (paymentTx.workshopRegistrationId) {
         logger.info('Workshop registration confirmed via Payrexx', {
           registrationId: paymentTx.workshopRegistrationId,
           transactionId: paymentTx.id,
         })
       }
-
-      // Update linked service appointment
       if (paymentTx.serviceAppointmentId) {
-        await db
-          .update(serviceAppointments)
-          .set({
-            status: APPOINTMENT_STATUS.CONFIRMED,
-            updatedAt: sql`CURRENT_TIMESTAMP`,
-          })
-          .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
-
         logger.info('Service appointment confirmed via Payrexx payment', {
           appointmentId: paymentTx.serviceAppointmentId,
           transactionId: paymentTx.id,
@@ -309,66 +335,70 @@ export async function handleGenericPayment(
 
     case PAYREXX_TRANSACTION_STATUS.CANCELLED:
     case PAYREXX_TRANSACTION_STATUS.DECLINED: {
-      await db
-        .update(paymentTransactions)
-        .set({
-          status: PAYMENT_STATUS.FAILED,
-          failureReason: status === PAYREXX_TRANSACTION_STATUS.DECLINED ? 'Payment declined' : 'Payment cancelled',
-          processedAt: sql`CURRENT_TIMESTAMP`,
-          updatedAt: sql`CURRENT_TIMESTAMP`,
-        })
-        .where(eq(paymentTransactions.id, paymentTx.id))
-
-      // Revert workshop registration to cancelled + decrement the phantom
-      // participant count. The register-with-payment route at route.ts:140
-      // increments workshop_instances.current_participants on the initial
-      // INSERT (before payment completes). Without decrementing here, every
-      // failed payment leaves a +1 in the count that has no real
-      // registration backing it — over time the capacity check at
-      // register-with-payment.ts:102 blocks legitimate users from a
-      // workshop that's not actually full. GREATEST(...,0) clamps so a
-      // duplicate webhook can't drive the count negative.
-      if (paymentTx.workshopRegistrationId) {
-        // Look up the instanceId first (the registration row will be
-        // flipped to cancelled below, but we still need to know which
-        // instance's count to decrement).
-        const [reg] = await db
-          .select({ workshopInstanceId: workshopRegistrations.workshopInstanceId })
-          .from(workshopRegistrations)
-          .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
-
-        await db
-          .update(workshopRegistrations)
+      // Atomic: failed payment + registration revert + participant-count
+      // decrement + appointment revert in one shot. Without the
+      // transaction, a failure on the participant-count decrement after
+      // the registration was already flipped to CANCELLED leaves a
+      // phantom +1 on workshop_instances.current_participants — the
+      // exact drift the existing comment warns about. Over time the
+      // capacity check at register-with-payment.ts:102 blocks
+      // legitimate users from a workshop that's not actually full.
+      // GREATEST(...,0) still clamps so a duplicate webhook can't drive
+      // the count negative.
+      await db.transaction(async (tx) => {
+        await tx
+          .update(paymentTransactions)
           .set({
-            paymentStatus: WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED,
-            status: WORKSHOP_REGISTRATION_STATUS.CANCELLED,
-            cancelledAt: sql`CURRENT_TIMESTAMP`,
+            status: PAYMENT_STATUS.FAILED,
+            failureReason: status === PAYREXX_TRANSACTION_STATUS.DECLINED ? 'Payment declined' : 'Payment cancelled',
+            processedAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+          .where(eq(paymentTransactions.id, paymentTx.id))
 
-        if (reg?.workshopInstanceId) {
-          // current_participants is a real DB column (cms-api migration 003)
-          // but isn't modeled in the Drizzle schema — fall back to raw SQL.
-          // Matches the increment shape in register-with-payment/route.ts:141.
-          await db.execute(sql`
-            UPDATE workshop_instances
-            SET current_participants = GREATEST(current_participants - 1, 0)
-            WHERE id = ${reg.workshopInstanceId}
-          `)
+        // Revert workshop registration + decrement participant count
+        if (paymentTx.workshopRegistrationId) {
+          // Look up the instanceId first (the registration row will be
+          // flipped to cancelled below, but we still need to know which
+          // instance's count to decrement).
+          const [reg] = await tx
+            .select({ workshopInstanceId: workshopRegistrations.workshopInstanceId })
+            .from(workshopRegistrations)
+            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+
+          await tx
+            .update(workshopRegistrations)
+            .set({
+              paymentStatus: WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED,
+              status: WORKSHOP_REGISTRATION_STATUS.CANCELLED,
+              cancelledAt: sql`CURRENT_TIMESTAMP`,
+              updatedAt: sql`CURRENT_TIMESTAMP`,
+            })
+            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+
+          if (reg?.workshopInstanceId) {
+            // current_participants is a real DB column (cms-api migration 003)
+            // but isn't modeled in the Drizzle schema — fall back to raw SQL.
+            // Matches the increment shape in register-with-payment/route.ts:141.
+            await tx.execute(sql`
+              UPDATE workshop_instances
+              SET current_participants = GREATEST(current_participants - 1, 0)
+              WHERE id = ${reg.workshopInstanceId}
+            `)
+          }
         }
-      }
 
-      // Revert service appointment
-      if (paymentTx.serviceAppointmentId) {
-        await db
-          .update(serviceAppointments)
-          .set({
-            status: APPOINTMENT_STATUS.CANCELLED,
-            updatedAt: sql`CURRENT_TIMESTAMP`,
-          })
-          .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
-      }
+        // Revert service appointment
+        if (paymentTx.serviceAppointmentId) {
+          await tx
+            .update(serviceAppointments)
+            .set({
+              status: APPOINTMENT_STATUS.CANCELLED,
+              updatedAt: sql`CURRENT_TIMESTAMP`,
+            })
+            .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
+        }
+      })
 
       logger.info('Payment transaction failed via Payrexx webhook', {
         transactionId: paymentTx.id,
