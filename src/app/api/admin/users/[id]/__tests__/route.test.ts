@@ -66,6 +66,7 @@ const mockValues = jest.fn()
 const mockOnConflictDoUpdate = jest.fn()
 const mockDelete = jest.fn()
 const mockDeleteWhere = jest.fn()
+const mockTransaction = jest.fn()
 const mockValidateBody = jest.fn()
 const mockIsSuperAdmin = jest.fn()
 
@@ -75,6 +76,7 @@ jest.mock('@/db', () => ({
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
     delete: (...args: unknown[]) => { mockDelete(...args); return { where: mockDeleteWhere } },
+    transaction: (...args: unknown[]) => mockTransaction(...args),
   },
 }))
 
@@ -171,6 +173,16 @@ beforeEach(() => {
   mockOnConflictDoUpdate.mockResolvedValue(undefined)
 
   mockDeleteWhere.mockResolvedValue(undefined)
+
+  // Default transaction stub: invokes the callback with a tx object that
+  // exposes tx.delete(...).where(...) returning undefined for all three
+  // delete chains (sessions, accounts, users).
+  mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) => {
+    const txDelete = jest.fn().mockReturnValue({
+      where: jest.fn().mockResolvedValue(undefined),
+    })
+    return fn({ delete: txDelete })
+  })
 
   mockValidateBody.mockReturnValue({ success: true, data: { name: 'New Name' } })
 })
@@ -307,5 +319,46 @@ describe('DELETE /api/admin/users/[id] — success', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.data.message).toContain('hans@example.com')
+  })
+
+  it('wraps sessions + accounts + users deletes in a single transaction so partial failures roll back', async () => {
+    // Previously the route ran:
+    //   await Promise.all([db.delete(sessions), db.delete(accounts)])
+    //   await db.delete(users)
+    // …three auto-commit statements. If the users delete failed (FK
+    // reference from listings/orders/etc that wasn't cascaded), sessions
+    // and accounts were ALREADY committed, leaving a zombie user that
+    // can't authenticate but still exists. Regression: assert all three
+    // deletes happen inside one db.transaction() callback so a partial
+    // failure aborts the whole operation.
+    const txDelete = jest.fn().mockReturnValue({
+      where: jest.fn().mockResolvedValue(undefined),
+    })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => Promise<unknown>) =>
+      fn({ delete: txDelete }),
+    )
+
+    const response = await DELETE(makeRequest('DELETE'), makeContext())
+    expect(response.status).toBe(200)
+    // db.transaction called exactly once with the whole batch
+    expect(mockTransaction).toHaveBeenCalledTimes(1)
+    // All three deletes go through tx.delete (NOT db.delete), so the
+    // statements share one transaction context.
+    expect(txDelete).toHaveBeenCalledTimes(3)
+    // Top-level mockDelete must not be used during DELETE (only the
+    // transactional tx.delete path is allowed).
+    expect(mockDelete).not.toHaveBeenCalled()
+  })
+
+  it('rolls back the response to 500 when the transaction throws partway through', async () => {
+    // Simulate: sessions delete OK, accounts delete OK, users delete throws.
+    // The transaction must reject — postgres will roll back the prior two —
+    // and the route's outer catch surfaces a 500 to the admin caller.
+    mockTransaction.mockImplementationOnce(async () => {
+      throw new Error('FK constraint violation on users delete')
+    })
+
+    const response = await DELETE(makeRequest('DELETE'), makeContext())
+    expect(response.status).toBe(500)
   })
 })

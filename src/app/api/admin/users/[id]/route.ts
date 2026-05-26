@@ -175,12 +175,20 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
       return apiBadRequest('Du kannst dich nicht selbst löschen')
     }
 
-    // Delete related data first (FK constraints) — sessions + accounts are independent
-    await Promise.all([
-      db.delete(sessions).where(eq(sessions.userId, id)),
-      db.delete(accounts).where(eq(accounts.userId, id)),
-    ])
-    await db.delete(users).where(eq(users.id, id))
+    // Delete related data first (FK constraints), then the user row, all
+    // atomically. The previous Promise.all + sequential delete pattern ran
+    // three separate auto-commit statements — if the final users delete
+    // failed (e.g. a remaining FK reference from listings/orders/etc that
+    // wasn't cascaded), sessions + accounts were ALREADY committed,
+    // leaving the user as a zombie row that can't authenticate but still
+    // exists. Worse: a mid-Promise.all rejection committed one of
+    // sessions/accounts and skipped the other. Wrap in a transaction so
+    // partial failures roll back to a consistent state.
+    await db.transaction(async (tx) => {
+      await tx.delete(sessions).where(eq(sessions.userId, id))
+      await tx.delete(accounts).where(eq(accounts.userId, id))
+      await tx.delete(users).where(eq(users.id, id))
+    })
 
     logger.info('User deleted by admin', {
       adminId: session.user.id,
