@@ -401,3 +401,97 @@ describe('PATCH /api/marketplace/orders/[id] — success (buyer cancels)', () =>
     expect(mockSet).toHaveBeenCalled()
   })
 })
+
+// ============================================================================
+// PATCH /api/marketplace/orders/[id] — security boundaries (regression locks)
+//
+// The route's STATUS_TRANSITIONS state machine is the SOLE protection against
+// a buyer or seller bypassing the Payrexx payment flow. These tests lock in
+// the boundaries — any future "simplification" of the transition table or
+// role check that regresses one of these cases would be caught here. Same
+// shape as the audits that produced the listings (35f1f997) and invoices
+// (b740abca) fixes — except those routes HAD the bug; this route does NOT,
+// and these regressions ensure it stays that way.
+// ============================================================================
+
+describe('PATCH /api/marketplace/orders/[id] — buyer cannot bypass payment flow', () => {
+  it('returns 400 when buyer tries to skip PAID → COMPLETED (would short-circuit Payrexx capture)', async () => {
+    // Without the transition gate, a buyer could PATCH { status: completed }
+    // against their own paid order, which triggers the captureTransaction()
+    // call at route.ts:160-168. The buyer would effectively self-confirm
+    // delivery and release funds to the seller without the seller ever
+    // marking SHIPPED or the buyer marking DELIVERED — bypassing the
+    // tracking/handoff trail. The state machine only allows the buyer to
+    // move PAID → CANCELLED, not PAID → COMPLETED.
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { status: 'completed', tracking_number: undefined, tracking_url: undefined },
+    })
+    const response = await PATCH(makePatchRequest({ status: 'completed' }), makeContext())
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toMatch(/nicht erlaubt/i)
+    expect(mockUpdate).not.toHaveBeenCalled()
+  })
+
+  it('returns 400 when buyer tries to set PAID directly (system-managed by webhook)', async () => {
+    // PAID is set by handleMarketplacePayment.RESERVED in the Payrexx
+    // webhook. Neither buyer nor seller appears as a target in any
+    // STATUS_TRANSITIONS row, so any PATCH targeting PAID is rejected.
+    // Buyer is on a PAID order trying to "reaffirm" — blocked.
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { status: 'paid', tracking_number: undefined, tracking_url: undefined },
+    })
+    const response = await PATCH(makePatchRequest({ status: 'paid' }), makeContext())
+    expect(response.status).toBe(400)
+    expect(mockUpdate).not.toHaveBeenCalled()
+  })
+})
+
+describe('PATCH /api/marketplace/orders/[id] — seller cannot self-release escrow', () => {
+  beforeEach(() => {
+    // Switch session to seller for this block
+    mockAuth.mockResolvedValue({
+      user: {
+        id: 'seller-1',
+        email: 'seller@example.com',
+        name: 'Seller',
+        isStaff: false,
+        staffPermissions: [],
+      },
+      expires: '2027-01-01',
+    })
+  })
+
+  it('returns 400 when seller tries DELIVERED → COMPLETED (only buyer can complete)', async () => {
+    // The DELIVERED → COMPLETED transition is buyer-only — it triggers
+    // Payrexx capture, releasing funds to the seller. Letting the seller
+    // self-complete would let them grab their own funds without buyer
+    // acceptance of the goods.
+    wireSelectReturning({ ...MOCK_ORDER, status: 'delivered' })
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { status: 'completed', tracking_number: undefined, tracking_url: undefined },
+    })
+    const response = await PATCH(makePatchRequest({ status: 'completed' }), makeContext())
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toMatch(/nicht erlaubt/i)
+    expect(mockUpdate).not.toHaveBeenCalled()
+  })
+
+  it('returns 400 when seller tries to skip PAID → DELIVERED (must mark SHIPPED first)', async () => {
+    // The order must transit PAID → SHIPPED → DELIVERED. The intermediate
+    // SHIPPED step is what tracks handoff to the carrier; skipping it
+    // would let a seller mark "delivered" with no shipping evidence.
+    wireSelectReturning({ ...MOCK_ORDER, status: 'paid' })
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { status: 'delivered', tracking_number: undefined, tracking_url: undefined },
+    })
+    const response = await PATCH(makePatchRequest({ status: 'delivered' }), makeContext())
+    expect(response.status).toBe(400)
+    expect(mockUpdate).not.toHaveBeenCalled()
+  })
+})
