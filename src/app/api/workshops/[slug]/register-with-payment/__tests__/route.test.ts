@@ -292,4 +292,50 @@ describe('POST /api/workshops/[slug]/register-with-payment — existing registra
     expect(txUpdate).toHaveBeenCalled()
     expect(txInsert).not.toHaveBeenCalled()
   })
+
+  it('returns 400 ausgebucht when in-transaction capacity re-check fails (race-window guard)', async () => {
+    // The pre-transaction capacity check at the top of the route reads
+    // current_participants without a lock — between that read and the
+    // INSERT inside the transaction, a concurrent registrant could push
+    // the count to max. The fix re-verifies under FOR UPDATE inside the
+    // transaction and throws CapacityExceededError → the handler maps
+    // to 400 ausgebucht.
+    const bodyWithInstance = { instanceId: 'instance-1', useEscrow: false }
+    mockValidateBody.mockReturnValue({ success: true, data: bodyWithInstance })
+
+    // Workshop found
+    mockExecute.mockResolvedValueOnce({ rows: [MOCK_WORKSHOP] })
+    // Instance found with capacity at the pre-transaction read (19 < 20)
+    mockExecute.mockResolvedValueOnce({
+      rows: [{
+        id: 'instance-1',
+        title: 'Linux Basics',
+        workshop_price: 2500,
+        current_participants: 19,
+        max_participants: 20,
+        status: 'scheduled',
+      }],
+    })
+    // No existing registration
+    mockWhere.mockResolvedValue([])
+    mockFrom.mockReturnValue({ where: mockWhere })
+    mockSelect.mockReturnValue({ from: mockFrom })
+
+    // Inside the transaction the FOR UPDATE re-check sees current=20 (a
+    // sibling registrant slipped in between the outer read and the
+    // transaction). Capacity exceeded.
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) => {
+      const txInsert = jest.fn()
+      const txUpdate = jest.fn()
+      const txExecute = jest.fn().mockResolvedValueOnce({
+        rows: [{ current_participants: 20, max_participants: 20 }],
+      })
+      return fn({ insert: txInsert, update: txUpdate, execute: txExecute })
+    })
+
+    const res = await POST(makeRequest('linux-basics', bodyWithInstance))
+    expect(res.status).toBe(400)
+    const body = await res.json()
+    expect(body.error).toMatch(/ausgebucht/i)
+  })
 })

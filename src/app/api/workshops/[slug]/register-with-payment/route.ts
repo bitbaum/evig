@@ -38,6 +38,15 @@ interface InstanceRow {
 const wTable = getTableName(workshops)
 const wiTable = getTableName(workshopInstances)
 
+// Thrown from inside the transaction to surface a 400 ("ausgebucht") outside.
+// Caught and translated by the handler — never bubbles to the user.
+class CapacityExceededError extends Error {
+  constructor() {
+    super('Workshop instance capacity exceeded')
+    this.name = 'CapacityExceededError'
+  }
+}
+
 // POST /api/workshops/[slug]/register-with-payment - Register for workshop with payment
 export async function POST(request: NextRequest) {
   try {
@@ -146,39 +155,72 @@ export async function POST(request: NextRequest) {
     // CANCELLED row back to PENDING when resurrecting (no participant count
     // change in that case — the cancel route doesn't decrement, so the
     // count was already adjusted at the original INSERT).
-    const registrationId = await db.transaction(async (tx) => {
-      if (cancelledRegistrationId) {
-        const [resurrected] = await tx.update(workshopRegistrations)
-          .set({
-            status: WORKSHOP_REGISTRATION_STATUS.PENDING,
-            paymentStatus: PAYMENT_STATUS.PENDING,
-            paymentAmountCents: baseAmount,
-            cancelledAt: null,
-          })
-          .where(eq(workshopRegistrations.id, cancelledRegistrationId))
-          .returning({ id: workshopRegistrations.id })
-        return resurrected.id
+    //
+    // Concurrency: the capacity check at line 102 is a TOCTOU read — between
+    // that read and the increment below, two concurrent requests can both
+    // pass the check and both INSERT, over-booking the workshop. Re-verify
+    // capacity inside the transaction with FOR UPDATE on the
+    // workshop_instances row to serialise concurrent registrants on the
+    // same instance. Resurrection of a CANCELLED row skips the lock + check
+    // because that path doesn't touch current_participants (the row's seat
+    // was never decremented at cancel time, so it still counts).
+    let registrationId: string
+    try {
+      registrationId = await db.transaction(async (tx) => {
+        if (cancelledRegistrationId) {
+          const [resurrected] = await tx.update(workshopRegistrations)
+            .set({
+              status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+              paymentStatus: PAYMENT_STATUS.PENDING,
+              paymentAmountCents: baseAmount,
+              cancelledAt: null,
+            })
+            .where(eq(workshopRegistrations.id, cancelledRegistrationId))
+            .returning({ id: workshopRegistrations.id })
+          return resurrected.id
+        }
+
+        // Lock the instance row + re-verify capacity for a fresh registration.
+        if (instanceId) {
+          const lockedResult = await tx.execute(sql`
+            SELECT current_participants, max_participants
+            FROM ${sql.raw(wiTable)}
+            WHERE id = ${instanceId}
+            FOR UPDATE
+          `)
+          const locked = lockedResult.rows[0] as
+            | { current_participants: number; max_participants: number }
+            | undefined
+          if (locked && locked.current_participants >= locked.max_participants) {
+            throw new CapacityExceededError()
+          }
+        }
+
+        const [createdReg] = await tx.insert(workshopRegistrations).values({
+          userId: session.user.id,
+          workshopInstanceId: registrationTarget,
+          status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+          paymentStatus: PAYMENT_STATUS.PENDING,
+          paymentAmountCents: baseAmount,
+        }).returning({ id: workshopRegistrations.id })
+
+        // Update instance participant count if registering for specific instance
+        if (instanceId) {
+          await tx.execute(sql`
+            UPDATE ${sql.raw(wiTable)}
+            SET current_participants = current_participants + 1
+            WHERE id = ${instanceId}
+          `)
+        }
+
+        return createdReg.id
+      })
+    } catch (err) {
+      if (err instanceof CapacityExceededError) {
+        return apiBadRequest('Workshop-Termin ist ausgebucht')
       }
-
-      const [createdReg] = await tx.insert(workshopRegistrations).values({
-        userId: session.user.id,
-        workshopInstanceId: registrationTarget,
-        status: WORKSHOP_REGISTRATION_STATUS.PENDING,
-        paymentStatus: PAYMENT_STATUS.PENDING,
-        paymentAmountCents: baseAmount,
-      }).returning({ id: workshopRegistrations.id })
-
-      // Update instance participant count if registering for specific instance
-      if (instanceId) {
-        await tx.execute(sql`
-          UPDATE ${sql.raw(wiTable)}
-          SET current_participants = current_participants + 1
-          WHERE id = ${instanceId}
-        `)
-      }
-
-      return createdReg.id
-    })
+      throw err
+    }
 
     // Process payment using shared utility
     const autoReleaseDays = 1
