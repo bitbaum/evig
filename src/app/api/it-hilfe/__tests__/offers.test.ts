@@ -27,11 +27,23 @@ const mockUpdateChain = {
   where: jest.fn().mockResolvedValue([]),
 }
 
+// db.transaction mock: provide tx.update returning a happy-path chain, and
+// tx.execute returning status='pending' so the withdraw race-recheck passes.
+// Individual tests can override via jest.requireMock('@/db').db.transaction.
+const mockDbTransaction = jest.fn(async (fn: (tx: unknown) => unknown) => {
+  const txUpdate = jest.fn(() => ({
+    set: jest.fn(() => ({ where: jest.fn().mockResolvedValue(undefined) })),
+  }))
+  const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] })
+  return fn({ update: txUpdate, execute: txExecute })
+})
+
 jest.mock('@/db', () => ({
   db: {
     select: jest.fn(() => mockSelectChain),
     insert: jest.fn(() => mockInsertChain),
     update: jest.fn(() => mockUpdateChain),
+    transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args as never),
   },
 }))
 

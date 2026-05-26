@@ -20,11 +20,13 @@ const mockWhere = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
+const mockTransaction = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    transaction: (...args: unknown[]) => mockTransaction(...args),
   },
 }))
 
@@ -39,6 +41,7 @@ jest.mock('drizzle-orm', () => ({
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
+  getTableName: (_t: unknown) => 'it_hilfe_offers',
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -109,6 +112,16 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
     jest.clearAllMocks()
     mockUpdateWhere.mockResolvedValue(undefined)
     mockSet.mockReturnValue({ where: mockUpdateWhere })
+    // Default FOR UPDATE inside transaction returns status='pending' so the
+    // race-recheck passes. Tests covering the race-loser branch override
+    // via mockTransaction.mockImplementationOnce.
+    mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) => {
+      const txUpdate = jest.fn().mockReturnValue({
+        set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+      })
+      const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] })
+      return fn({ update: txUpdate, execute: txExecute })
+    })
   })
 
   it('returns 401 when not authenticated', async () => {
@@ -165,5 +178,29 @@ describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
 
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
+  })
+
+  it('idempotent on double-click: FOR UPDATE re-check sees withdrawn, no offerCount decrement fires', async () => {
+    // Helper double-clicks "Withdraw". Both pre-reads pass status ===
+    // PENDING. Inside the transaction the FOR UPDATE on the offer row
+    // sees status='withdrawn' (sibling click already won). The transaction
+    // returns false; neither the WITHDRAWN UPDATE nor the offerCount
+    // decrement fires. Without this guard, offerCount would drift down
+    // in the "X Angebote erhalten" UI on every double-click.
+    mockAuth.mockResolvedValue(MOCK_SESSION)
+    setupSelectChain([MOCK_OFFER])
+
+    const txUpdate = jest.fn().mockReturnValue({
+      set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
+    })
+    const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'withdrawn' }] })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => unknown) =>
+      fn({ update: txUpdate, execute: txExecute })
+    )
+
+    const res = await DELETE(makeRequest(VALID_UUID, VALID_OFFER_UUID), routeParams(VALID_UUID, VALID_OFFER_UUID))
+    expect(res.status).toBe(200) // idempotent — desired end-state already reached
+    // Critical: neither UPDATE fired inside the transaction
+    expect(txUpdate).not.toHaveBeenCalled()
   })
 })
