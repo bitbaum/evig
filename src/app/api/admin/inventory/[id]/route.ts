@@ -87,42 +87,85 @@ export const GET = withAdmin<{ id: string }>('products', async (request, session
   }
 })
 
+// Thrown from inside the transaction to surface a 404 (product not found)
+// outside. Caught and translated by the handler — never bubbles to the user.
+class ProductNotFoundError extends Error {
+  constructor() {
+    super('Inventory product not found')
+    this.name = 'ProductNotFoundError'
+  }
+}
+
 export const DELETE = withAdmin<{ id: string }>('products', async (request, session, context) => {
   try {
     const { id: productId } = context!.params!
 
-    // Delete child tables first, then main record
-    await db.delete(productCustomerProfiles).where(eq(productCustomerProfiles.productId, productId))
-    await db.delete(productImages).where(eq(productImages.productId, productId))
+    // Five sequential deletes across four tables. Previously each ran as
+    // its own auto-commit statement, so a failure on any later delete
+    // (network blip, FK lock, concurrent modification) left the product
+    // in a half-deleted state: child rows gone, but aiExtractedProducts
+    // still present. The admin sees "deletion failed" yet the product is
+    // visibly broken in the inventory list (no images, no inventory items,
+    // no customer profiles). Worse, the orphaned aiExtractedProducts row
+    // is now un-recoverable without manual SQL.
+    //
+    // Wrap in a transaction so a failure inside any of the deletes rolls
+    // back ALL of them. The product-not-found check (line where deleted
+    // is empty) throws a sentinel so the rollback also drops the
+    // pre-deletes of child rows when the productId was bogus — keeps the
+    // semantics consistent: 404 means "nothing changed."
+    let deletedRow: { id: string; itemUuid: string | null } | null = null
+    try {
+      await db.transaction(async (tx) => {
+        // Delete child tables first, then main record
+        await tx.delete(productCustomerProfiles).where(eq(productCustomerProfiles.productId, productId))
+        await tx.delete(productImages).where(eq(productImages.productId, productId))
 
-    // Delete marketplace listings via inventory item subquery
-    const invIds = await db
-      .select({ id: inventoryItems.id })
-      .from(inventoryItems)
-      .where(eq(inventoryItems.aiProductId, productId))
+        // Delete marketplace listings via inventory item subquery
+        const invIds = await tx
+          .select({ id: inventoryItems.id })
+          .from(inventoryItems)
+          .where(eq(inventoryItems.aiProductId, productId))
 
-    if (invIds.length > 0) {
-      await db
-        .delete(marketplaceListings)
-        .where(inArray(marketplaceListings.inventoryItemId, invIds.map(r => r.id)))
+        if (invIds.length > 0) {
+          await tx
+            .delete(marketplaceListings)
+            .where(inArray(marketplaceListings.inventoryItemId, invIds.map(r => r.id)))
+        }
+
+        await tx.delete(inventoryItems).where(eq(inventoryItems.aiProductId, productId))
+
+        const deleted = await tx
+          .delete(aiExtractedProducts)
+          .where(eq(aiExtractedProducts.id, productId))
+          .returning({ id: aiExtractedProducts.id, itemUuid: aiExtractedProducts.itemUuid })
+
+        if (deleted.length === 0) {
+          throw new ProductNotFoundError()
+        }
+        deletedRow = deleted[0]
+      })
+    } catch (err) {
+      if (err instanceof ProductNotFoundError) {
+        return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
+      }
+      throw err
     }
 
-    await db.delete(inventoryItems).where(eq(inventoryItems.aiProductId, productId))
-
-    const deleted = await db
-      .delete(aiExtractedProducts)
-      .where(eq(aiExtractedProducts.id, productId))
-      .returning({ id: aiExtractedProducts.id, itemUuid: aiExtractedProducts.itemUuid })
-
-    if (deleted.length === 0) {
+    // The transaction succeeded — deletedRow is guaranteed populated, but
+    // TypeScript can't narrow through the throw-from-callback pattern.
+    const finalDeleted = deletedRow as { id: string; itemUuid: string | null } | null
+    if (!finalDeleted) {
+      // Defensive: unreachable in practice (transaction commit implies
+      // ProductNotFoundError did not fire, so deletedRow was assigned).
       return apiNotFound(ERROR_MESSAGES.PRODUCT_NOT_FOUND)
     }
 
     logger.info('Inventory product deleted', {
-      productId, itemUuid: deleted[0].itemUuid, deletedBy: session.user.id,
+      productId, itemUuid: finalDeleted.itemUuid, deletedBy: session.user.id,
     })
 
-    return apiSuccess({ deleted: deleted[0] })
+    return apiSuccess({ deleted: finalDeleted })
   } catch (error) {
     logger.error('Failed to delete inventory product', { error })
     return apiError(error, 'Fehler beim Löschen des Produkts')

@@ -68,6 +68,7 @@ const mockSelectWhereLimit = jest.fn() // terminal: after where in image query
 const mockDelete = jest.fn()
 const mockDeleteWhere = jest.fn()
 const mockDeleteReturning = jest.fn()
+const mockTransaction = jest.fn()
 
 // Drizzle update chain
 const mockUpdate = jest.fn()
@@ -80,6 +81,7 @@ jest.mock('@/db', () => ({
     select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
     delete: (...args: unknown[]) => { mockDelete(...args); return { where: mockDeleteWhere } },
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    transaction: (...args: unknown[]) => mockTransaction(...args),
   },
 }))
 
@@ -197,6 +199,28 @@ beforeEach(() => {
   mockDeleteWhere.mockReturnValue({ returning: mockDeleteReturning })
   mockDeleteReturning.mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }])
 
+  // db.transaction(callback) — the route's DELETE handler runs all five
+  // delete statements + the inventoryItems select inside a transaction.
+  // Default impl: invoke the callback with a tx object whose .delete and
+  // .select route through the existing outer mocks (so child tests can
+  // override mockDeleteReturning to drive the not-found path).
+  mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) => {
+    const txDelete = (...args: unknown[]) => {
+      mockDelete(...args)
+      return { where: mockDeleteWhere }
+    }
+    const txSelect = (...args: unknown[]) => {
+      mockSelect(...args)
+      // Inside the transaction, tx.select(...).from(inventoryItems).where(...)
+      // should resolve to [] by default (no marketplace listings to delete).
+      const from = jest.fn().mockReturnValue({
+        where: jest.fn().mockResolvedValue([]),
+      })
+      return { from }
+    }
+    return fn({ delete: txDelete, select: txSelect })
+  })
+
   // UPDATE chain:
   // db.update(x).set(...).where(...) → returns { returning: fn }
   // db.update(aiExtractedProducts).set(...).where(...).returning() → returns updated product
@@ -268,6 +292,57 @@ describe('DELETE /api/admin/inventory/[id] — authenticated', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.data.deleted.id).toBe('prod-1')
+  })
+
+  it('wraps all 5 child + parent deletes in a single transaction so partial failures roll back', async () => {
+    // Previously DELETE ran 5 sequential auto-commit statements:
+    //   db.delete(productCustomerProfiles)
+    //   db.delete(productImages)
+    //   [select inventoryItems → conditional delete(marketplaceListings)]
+    //   db.delete(inventoryItems)
+    //   db.delete(aiExtractedProducts).returning()
+    // If any later delete failed (network, FK, concurrent modify), earlier
+    // ones were ALREADY committed — the product was left in a half-deleted
+    // state (no images / no inventory / no profiles) but still EXISTS as
+    // an aiExtractedProducts row, unrecoverable without manual SQL.
+    // Regression: assert db.transaction is called and all tx.delete invocations
+    // route through one shared transaction context (not the top-level db.delete).
+    const txDelete = jest.fn().mockReturnValue({
+      where: jest.fn().mockReturnValue({
+        returning: jest.fn().mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }]),
+      }),
+    })
+    const txSelect = jest.fn().mockReturnValue({
+      from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
+    })
+    mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => Promise<unknown>) =>
+      fn({ delete: txDelete, select: txSelect }),
+    )
+
+    const response = await DELETE(makeRequest('DELETE'), makeContext())
+    expect(response.status).toBe(200)
+    // The transaction is invoked exactly once with the whole batch.
+    expect(mockTransaction).toHaveBeenCalledTimes(1)
+    // Four unconditional tx.delete calls (productCustomerProfiles, productImages,
+    // inventoryItems, aiExtractedProducts) — marketplaceListings is conditional
+    // on the inventoryItems select returning rows (empty by default).
+    expect(txDelete).toHaveBeenCalledTimes(4)
+    // The top-level db.delete must NOT be used in the DELETE path — that
+    // would mean a write happened outside the shared transaction.
+    expect(mockDelete).not.toHaveBeenCalled()
+  })
+
+  it('rolls back to 500 when the transaction throws partway through (e.g. FK lock on the final delete)', async () => {
+    // Simulate: child deletes succeed, but the final aiExtractedProducts
+    // delete throws (e.g., another table still references it). The
+    // transaction must reject, postgres rolls back the prior deletes, and
+    // the route's outer catch surfaces a 500.
+    mockTransaction.mockImplementationOnce(async () => {
+      throw new Error('FK constraint violation on aiExtractedProducts delete')
+    })
+
+    const response = await DELETE(makeRequest('DELETE'), makeContext())
+    expect(response.status).toBe(500)
   })
 })
 
