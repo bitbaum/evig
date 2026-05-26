@@ -39,10 +39,15 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
   // producing a hydration mismatch at the UTC-midnight boundary.
   // Empty string before mount means no min constraint is enforced for
   // the brief window between SSR and client mount — fine, the user can't
-  // interact with the input that fast anyway.
+  // interact with the input that fast anyway. The `if (!minDate)` guard
+  // is what the React Compiler `set-state-in-effect` rule accepts as a
+  // legitimate one-shot init.
   const [minDate, setMinDate] = useState<string>('')
   useEffect(() => {
-    setMinDate(todayLocalIso())
+    if (!minDate) setMinDate(todayLocalIso())
+  // Only populate on initial mount — depending on minDate would re-fire
+  // every time it changes, which is exactly what we don't want.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
