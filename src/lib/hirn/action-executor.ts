@@ -61,8 +61,18 @@ function coerceProtocolPayload(payload: Record<string, unknown>): Record<string,
     ? payload.visibility
     : PROTOCOL_VISIBILITY.TEAM
 
-  // Ensure meeting_date is present — default to today
-  const meetingDate = payload.meeting_date || new Date().toISOString().split('T')[0]
+  // Ensure meeting_date is present — default to today in Europe/Zurich
+  // local time, not server UTC. Without explicit timezone, a Hirn-initiated
+  // protocol creation between 00:00 and 02:00 Zurich would default to
+  // yesterday's date (server clock is UTC; Zurich is UTC+1 winter / UTC+2
+  // summer). Same bug class as the user-form fix in 7954cc9e
+  // (AppointmentBookingForm + useProtocolForm) — that one was client-side,
+  // this one is server-side, so the helper there (todayLocalIso using
+  // browser tz) doesn't apply; instead use Intl.DateTimeFormat with the
+  // explicit Europe/Zurich timeZone. en-CA returns YYYY-MM-DD.
+  const meetingDate = payload.meeting_date || new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Zurich',
+  }).format(new Date())
 
   // LLM may send "participants" instead of "attendees", and names instead of UUIDs.
   // Strip non-UUID entries — attendees schema requires uuid[] and defaults to [].
