@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import {
   ArrowLeft,
   MapPin,
@@ -146,15 +146,15 @@ export default async function TechnikerDetailPage({ params }: Props) {
             {/* CTA */}
             <div className="flex flex-col gap-2 sm:min-w-[180px]">
               {isProfessional ? (
-                <Button as={Link} href={`/it-hilfe/create?technician=${technician.id}`} variant="primary">
+                <Link href={`/it-hilfe/create?technician=${technician.id}`} className={buttonClass({ variant: 'primary' })}>
                   <Wrench className="w-4 h-4" />
                   {t('detail.submitRequest')}
-                </Button>
+                </Link>
               ) : (
-                <Button as={Link} href={`/it-hilfe/create?technician=${technician.id}`} variant="primary">
+                <Link href={`/it-hilfe/create?technician=${technician.id}`} className={buttonClass({ variant: 'primary' })}>
                   <Users className="w-4 h-4" />
                   {t('detail.contact')}
-                </Button>
+                </Link>
               )}
             </div>
           </div>
@@ -250,10 +250,10 @@ export default async function TechnikerDetailPage({ params }: Props) {
               ))}
             </div>
             <div className="mt-6">
-              <Button as={Link} href={`/it-hilfe/create?technician=${technician.id}`} variant="primary">
+              <Link href={`/it-hilfe/create?technician=${technician.id}`} className={buttonClass({ variant: 'primary' })}>
                 <Wrench className="w-4 h-4" />
                 {t('detail.requestBooking')}
-              </Button>
+              </Link>
             </div>
           </Card>
         )}

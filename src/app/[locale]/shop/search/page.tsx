@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { Button } from "@/components/ui/button";
+import { buttonClass } from "@/components/ui/button-class";
 import { Search, Package, ChevronRight, Home, ArrowLeft, Tag } from "lucide-react";
 import Heading from "@/components/ui/Heading";
 import {
@@ -160,14 +161,14 @@ function SearchResults({
           </Heading>
           <p className="text-neutral-600 dark:text-neutral-400 mb-6">{noResultsHintLabel}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button as={Link} href={ROUTES.public.marketplace} variant="primary" size="lg">
+            <Link href={ROUTES.public.marketplace} className={buttonClass({ variant: 'primary', size: 'lg' })}>
               <Package className="w-5 h-5" />
               {goToShopLabel}
-            </Button>
-            <Button as={Link} href={ROUTES.public.shop} variant="outline" size="lg">
+            </Link>
+            <Link href={ROUTES.public.shop} className={buttonClass({ variant: 'outline', size: 'lg' })}>
               <ArrowLeft className="w-5 h-5" />
               {allShopOptionsLabel}
-            </Button>
+            </Link>
           </div>
         </div>
       </div>

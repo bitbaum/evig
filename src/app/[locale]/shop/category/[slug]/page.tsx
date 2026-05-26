@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { Button } from "@/components/ui/button";
+import { buttonClass } from "@/components/ui/button-class";
 import { ChevronRight, Home, Package, ShoppingCart, Tag } from "lucide-react";
 import Heading from "@/components/ui/Heading";
 import {
@@ -252,10 +252,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             </div>
             {inventoryResult.total > inventoryResult.products.length && (
               <div className="text-center mt-8">
-                <Button as={Link} href={`/shop?category=${encodeURIComponent(category.name)}`} variant="primary" size="lg">
+                <Link
+                  href={`/shop?category=${encodeURIComponent(category.name)}`}
+                  className={buttonClass({ variant: 'primary', size: 'lg' })}
+                >
                   <ShoppingCart className="w-4 h-4" />
                   {t('category.showAllProducts', { count: inventoryResult.total })}
-                </Button>
+                </Link>
               </div>
             )}
           </div>
@@ -272,12 +275,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                 {t("category.productsComingSoon", { categoryName: category.name })}
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button as={Link} href={ROUTES.public.marketplace} variant="primary" size="lg">
+                <Link href={ROUTES.public.marketplace} className={buttonClass({ variant: 'primary', size: 'lg' })}>
                   {t("category.goToShop")}
-                </Button>
-                <Button as={Link} href={ROUTES.public.shop} variant="outline" size="lg">
+                </Link>
+                <Link href={ROUTES.public.shop} className={buttonClass({ variant: 'outline', size: 'lg' })}>
                   {t("category.allShopOptions")}
-                </Button>
+                </Link>
               </div>
             </div>
           </div>

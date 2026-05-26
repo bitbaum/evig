@@ -12,7 +12,7 @@ import { AcceptButton } from './AcceptButton'
 import { Link } from '@/i18n/navigation'
 import { PageShell } from '@/components/layout/PageShell'
 import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { AlertCircle, CheckCircle, ArrowRight, Clock, Ban } from 'lucide-react'
 
 interface OfferDisplay {
@@ -156,9 +156,9 @@ export default async function AcceptOfferTokenPage({ searchParams }: PageProps) 
 
         <div className="flex flex-wrap items-center gap-3">
           <AcceptButton token={token} />
-          <Button as={Link} href={`/it-hilfe/${offerDisplay.request_id}`} variant="outline">
+          <Link href={`/it-hilfe/${offerDisplay.request_id}`} className={buttonClass({ variant: 'outline' })}>
             Anfrage öffnen
-          </Button>
+          </Link>
         </div>
       </div>
     </PageShell>
@@ -184,10 +184,10 @@ function StateCard({
       </Heading>
       <p className="text-neutral-600 dark:text-neutral-400 mb-6 max-w-prose mx-auto">{message}</p>
       {cta && (
-        <Button as={Link} href={cta.href} variant="primary">
+        <Link href={cta.href} className={buttonClass({ variant: 'primary' })}>
           {cta.label}
           <ArrowRight className="w-4 h-4" />
-        </Button>
+        </Link>
       )}
     </PageShell>
   )

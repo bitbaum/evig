@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import {
   ArrowRight,
   Recycle,
@@ -142,9 +142,9 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                   ))}
                 </div>
 
-                <Button as={Link} href="/contact" variant="primary" className="w-full">
+                <Link href="/contact" className={buttonClass({ variant: 'primary', className: 'w-full' })}>
                   {t('pricing.cta')}
-                </Button>
+                </Link>
               </div>
             </div>
           </div>

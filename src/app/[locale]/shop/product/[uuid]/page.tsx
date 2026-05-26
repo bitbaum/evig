@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { buttonClass } from '@/components/ui/button-class'
 import { ChevronRight, Home, Package, ShoppingCart, Shield, Tag, Layers } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -240,9 +241,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <ShoppingCart className="w-5 h-5" />
                 {t('product.buyOnline')}
               </Button>
-              <Button as={Link} href="/shop#ladenlokal" variant="outline" size="lg" className="flex-1">
+              <Link
+                href="/shop#ladenlokal"
+                className={buttonClass({ variant: 'outline', size: 'lg', className: 'flex-1' })}
+              >
                 {t('product.buyInStore')}
-              </Button>
+              </Link>
             </div>
           </div>
         </div>
