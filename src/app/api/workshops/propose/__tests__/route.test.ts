@@ -286,6 +286,103 @@ describe('POST /api/workshops/propose — success', () => {
     expect(body.data.proposalId).toBe('proposal-1')
   })
 
+  it('logs warn (not info) on resolved { success: false } from proposer email — silent SMTP must not be logged as success', async () => {
+    // sendEmail() resolves { success: false } on SMTP / Listmonk failure
+    // rather than throwing. The old code awaited it inside try/catch alone
+    // and the silent failure left the proposer with no email and no
+    // diagnostic trail. Regression: the (resolved) failure must surface as
+    // a warn so an operator can investigate.
+    mockSelect
+      .mockReturnValueOnce(makeSpamCheckChain(0))
+      .mockReturnValue(makeAdminEmailsChain([]))
+
+    const emailMod = require('@/lib/email') as { sendEmail: jest.Mock }
+    emailMod.sendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
+    const logger = jest.requireMock('@/lib/logger').logger as {
+      info: jest.Mock; warn: jest.Mock
+    }
+
+    const req = new NextRequest('http://localhost/api/workshops/propose', {
+      method: 'POST',
+      body: JSON.stringify(VALID_PROPOSAL_BODY),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await POST(req)
+
+    expect(response.status).toBe(200) // proposal saved — only the email side failed
+    expect(logger.info).not.toHaveBeenCalledWith(
+      'Workshop proposal confirmation email sent',
+      expect.anything(),
+    )
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to send workshop proposal confirmation email (resolved)',
+      expect.objectContaining({ proposalId: 'proposal-1', error: 'SMTP timeout' }),
+    )
+  })
+
+  it('logs warn per-admin on resolved { success: false } from admin fan-out — silent admin notification must surface', async () => {
+    // Previously the fan-out was `await Promise.allSettled(...)` with no
+    // result inspection — every admin email failure was silently dropped
+    // and admins never saw the proposal ping. Regression: per-admin
+    // (resolved) failure logs a warn with the admin email.
+    mockSelect
+      .mockReturnValueOnce(makeSpamCheckChain(0))
+      .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]))
+
+    const emailMod = require('@/lib/email') as { sendEmail: jest.Mock }
+    // first call = proposer (succeeds), second = admin (resolved failure)
+    emailMod.sendEmail
+      .mockResolvedValueOnce({ success: true, messageId: 'msg-1' })
+      .mockResolvedValueOnce({ success: false, error: 'Mailbox full' })
+    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
+
+    const req = new NextRequest('http://localhost/api/workshops/propose', {
+      method: 'POST',
+      body: JSON.stringify(VALID_PROPOSAL_BODY),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    await POST(req)
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to send workshop proposal admin notification (resolved)',
+      expect.objectContaining({
+        proposalId: 'proposal-1',
+        adminEmail: 'admin@revamp-it.ch',
+        error: 'Mailbox full',
+      }),
+    )
+  })
+
+  it('logs warn per-admin on rejected sendEmail from admin fan-out', async () => {
+    // The (rejected) branch must also surface — older callsites occasionally
+    // throw despite the inner catch. Per-admin rejected logging captures
+    // the failed admin email so the operator can investigate.
+    mockSelect
+      .mockReturnValueOnce(makeSpamCheckChain(0))
+      .mockReturnValue(makeAdminEmailsChain([{ email: 'admin@revamp-it.ch' }]))
+
+    const emailMod = require('@/lib/email') as { sendEmail: jest.Mock }
+    emailMod.sendEmail
+      .mockResolvedValueOnce({ success: true, messageId: 'msg-1' })
+      .mockRejectedValueOnce(new Error('connection refused'))
+    const logger = jest.requireMock('@/lib/logger').logger as { warn: jest.Mock }
+
+    const req = new NextRequest('http://localhost/api/workshops/propose', {
+      method: 'POST',
+      body: JSON.stringify(VALID_PROPOSAL_BODY),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    await POST(req)
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Failed to send workshop proposal admin notification (rejected)',
+      expect.objectContaining({
+        proposalId: 'proposal-1',
+        adminEmail: 'admin@revamp-it.ch',
+      }),
+    )
+  })
+
   it('admin notification email URL points to /admin/workshops/proposals (not the previous /admin/workshop-proposals which 404s)', async () => {
     mockSelect
       .mockReturnValueOnce(makeSpamCheckChain(0))
