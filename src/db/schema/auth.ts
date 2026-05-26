@@ -20,6 +20,13 @@ export const users = pgTable('users', {
   staffPermissions: text('staff_permissions').array().default([]),
   // Super admin management (004)
   isSuperAdmin: boolean('is_super_admin').default(false),
+  // JWT staleness counter (072). Bumped by admin permission-change routes
+  // to force the Auth.js jwt callback to re-fetch staff_permissions /
+  // is_staff / is_super_admin from the DB on the user's next token
+  // refresh (~24h via Auth.js updateAge). Without this, a demoted admin
+  // retained their old token's permissions until the 30-day maxAge
+  // expired or they manually re-logged-in.
+  tokenVersion: integer('token_version').notNull().default(0),
   // Dashboard layout preference (Phase 6)
   dashboardMode: text('dashboard_mode').notNull().default('coordinator'),
   // Verein membership (062)
