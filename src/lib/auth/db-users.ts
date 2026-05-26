@@ -35,6 +35,10 @@ export interface DbUser {
   staff_permissions: string[]
   is_super_admin: boolean
   dashboard_mode: 'coordinator' | 'lead' | 'volunteer'
+  // JWT staleness counter — bumped by admin permission-change routes;
+  // compared in the Auth.js jwt callback to detect when a token's
+  // cached permissions have been invalidated by an admin action.
+  token_version: number
 }
 
 export interface DbUserProfile {
@@ -173,6 +177,7 @@ function mapUserToDbUser(row: User): DbUser {
     staff_permissions: row.staffPermissions ?? [],
     is_super_admin: row.isSuperAdmin ?? false,
     dashboard_mode: (row.dashboardMode as 'coordinator' | 'lead' | 'volunteer') ?? 'coordinator',
+    token_version: row.tokenVersion ?? 0,
   }
 }
 

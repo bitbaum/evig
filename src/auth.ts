@@ -36,6 +36,8 @@ declare module 'next-auth' {
     staff_permissions?: string[]
     is_super_admin?: boolean
     dashboard_mode?: 'coordinator' | 'lead' | 'volunteer'
+    // JWT staleness counter — see jwt callback for usage
+    token_version?: number
   }
 
   interface Session {
@@ -216,7 +218,26 @@ export const authConfig = {
   ],
 
   callbacks: {
-    // Add user info into JWT token
+    // Populate JWT token from user data. Two paths:
+    //   1. Initial sign-in (`user` is defined): capture all permission
+    //      claims plus the user's current token_version from the DB row.
+    //   2. Subsequent refreshes (`user` is undefined): re-fetch the
+    //      user's token_version from the DB and compare against the
+    //      token's. If they diverge, an admin has changed permissions
+    //      since the token was minted — re-fetch the full user and
+    //      refresh the permission claims. This is the stale-permissions
+    //      enforcement (3/3 of the JWT-stale-permissions sequence).
+    //
+    // Without #2, a demoted admin retained their old is_staff/
+    // staff_permissions/is_super_admin claims for up to 30 days
+    // (Auth.js maxAge) until they manually re-logged-in. With #2, the
+    // demotion takes effect on the next token refresh — at most 24h
+    // (Auth.js updateAge), often immediately on the next request.
+    //
+    // Perf: the DB lookup is a single PK-indexed SELECT, gated to
+    // refresh-time only (~once per 24h per active user). Failures fall
+    // through to the token's existing claims so transient DB issues
+    // don't break auth.
     async jwt({ token, user }: {
       token: JWT & {
         id?: string
@@ -226,10 +247,11 @@ export const authConfig = {
         staffPermissions?: string[]
         isSuperAdmin?: boolean
         dashboardMode?: 'coordinator' | 'lead' | 'volunteer'
+        tokenVersion?: number
       },
       user?: User
     }) {
-      // On first sign in, add user info to token
+      // Path 1: initial sign-in
       if (user) {
         token.id = user.id
         // Legacy role - kept for backward compatibility
@@ -246,6 +268,45 @@ export const authConfig = {
           : (userIsStaff ? getInitialStaffPermissions(user.email ?? '') : [])
         token.isSuperAdmin = emailVerified ? (Boolean(user.is_super_admin) || isSuperAdmin(user.email ?? '')) : false
         token.dashboardMode = user.dashboard_mode ?? 'coordinator'
+        token.tokenVersion = user.token_version ?? 0
+        return token
+      }
+
+      // Path 2: token refresh (no user arg). Detect stale permissions.
+      if (token.id) {
+        try {
+          const { getUserById } = await import('@/lib/auth/db')
+          const freshUser = await getUserById(token.id as string)
+          if (freshUser && freshUser.token_version !== (token.tokenVersion ?? 0)) {
+            // Admin changed permissions — refresh the token's claims.
+            const emailVerified = !!freshUser.emailVerified
+            const userIsStaff = emailVerified
+              ? (Boolean(freshUser.is_staff) || isStaffEmail(freshUser.email ?? ''))
+              : false
+            token.role = freshUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER)
+            token.emailVerified = emailVerified
+            token.isStaff = userIsStaff
+            token.staffPermissions = freshUser.staff_permissions?.length
+              ? freshUser.staff_permissions
+              : (userIsStaff ? getInitialStaffPermissions(freshUser.email ?? '') : [])
+            token.isSuperAdmin = emailVerified
+              ? (Boolean(freshUser.is_super_admin) || isSuperAdmin(freshUser.email ?? ''))
+              : false
+            token.dashboardMode = freshUser.dashboard_mode ?? 'coordinator'
+            token.tokenVersion = freshUser.token_version
+            logger.info('JWT permissions refreshed after admin change', {
+              userId: token.id,
+              newTokenVersion: freshUser.token_version,
+            })
+          }
+        } catch (error) {
+          // Defensive: transient DB failure shouldn't break auth. Token
+          // keeps its existing claims; next refresh re-attempts the check.
+          logger.warn('JWT staleness check failed — keeping existing token', {
+            userId: token.id,
+            error,
+          })
+        }
       }
       return token
     },
