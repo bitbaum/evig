@@ -297,12 +297,13 @@ describe('POST /api/repairers/[id]/book — success', () => {
     expect(body.data.appointment.id).toBe('appt-1')
   })
 
-  it('repairer notification email links to /dashboard/techniker (not customer-mode /dashboard/appointments)', async () => {
-    // Sibling fix to 1707e5ea. The previous URL pointed at
-    // /dashboard/appointments, which is customer-mode (useAppointments
-    // calls /api/appointments without a role param), so the repairer
-    // landed on their own customer-side bookings, not the new booking.
-    // /dashboard/techniker is the only existing repairer-context page.
+  it('repairer notification email links to /dashboard/appointments?role=repairer (the hook now honors the role param)', async () => {
+    // useAppointments now forwards ?role=repairer to /api/appointments
+    // (which has always supported the role filter), so the repairer
+    // landing-URL no longer needs the /dashboard/techniker stopgap.
+    // The page renders the repairer's service-appointment workload
+    // when ?role=repairer is set; without it the page defaults to the
+    // customer-side bookings as before.
     mockSelect.mockReturnValueOnce({
       from: jest.fn().mockReturnValue({
         where: jest.fn().mockResolvedValue([MOCK_REPAIRER]),
@@ -329,7 +330,7 @@ describe('POST /api/repairers/[id]/book — success', () => {
       expect.any(String),
       expect.any(String),
       expect.any(String),
-      expect.stringMatching(/\/dashboard\/techniker$/),
+      expect.stringMatching(/\/dashboard\/appointments\?role=repairer$/),
     )
   })
 })

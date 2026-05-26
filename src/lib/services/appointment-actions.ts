@@ -251,23 +251,21 @@ export async function sendAppointmentNotification(
       logger.error('Failed to send status email to customer', { error: err, appointmentId })
     })
   } else if (['approve_quote', 'reject_quote', 'cancel'].includes(action) && party.repairer_email) {
-    // Repairer landing destination. The previous URL pointed at
-    // /dashboard/appointments — but that page uses useAppointments which
-    // calls /api/appointments WITHOUT a role param (defaults to
-    // customer-mode), so a repairer clicking the email landed on their
-    // own customer-side bookings (likely empty) rather than the service
-    // appointment the email was about. /dashboard/techniker is the only
-    // existing repairer-context dashboard page; it doesn't list service
-    // appointments either, but at least it's a page the repairer
-    // recognizes as theirs and can navigate from. Real fix tracked in
-    // the roadmap under "T1 enhancements" — building a proper
-    // repairer service-appointment view.
+    // Repairer landing destination. /dashboard/appointments?role=repairer
+    // — the page uses useAppointments which now passes the role param to
+    // /api/appointments (which has supported ?role=repairer since the
+    // route was created — only the hook needed to be wired). The
+    // previous stopgap pointed at /dashboard/techniker because the hook
+    // defaulted to customer-mode and landed repairers on their own
+    // bookings; that page didn't list service appointments either. Now
+    // the same /dashboard/appointments page renders the repairer's
+    // service-appointment workload when ?role=repairer is set.
     const emailContent = appointmentStatusUpdate(
       party.repairer_name || 'Techniker',
       party.customer_name || 'Kunde',
       statusLabel,
       serviceName,
-      baseUrl + '/dashboard/techniker'
+      baseUrl + '/dashboard/appointments?role=repairer'
     )
     sendCustomEmail(party.repairer_email, emailContent).catch(err => {
       logger.error('Failed to send status email to repairer', { error: err, appointmentId })

@@ -26,10 +26,31 @@ interface ErrorMessages {
   saveError: string
 }
 
+// Forward the ?role=repairer query param to /api/appointments so the API
+// returns appointments where the current user is the REPAIRER (not the
+// customer). Repairer-side notification emails link to
+// /dashboard/appointments?role=repairer — without this passthrough they
+// landed on their (likely empty) customer-side bookings instead of the
+// service appointment the email was about. /api/appointments has
+// supported ?role since the route was created; only the hook needed to
+// honor it. Any value other than 'repairer' is treated as customer-mode
+// (the API's default), so a stray ?role=garbage doesn't break the page.
+function buildAppointmentsUrl(roleParam: string | null): string {
+  if (roleParam === 'repairer') {
+    return '/api/appointments?role=repairer'
+  }
+  return '/api/appointments'
+}
+
 export function useAppointments(errors: ErrorMessages) {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
+  const roleParam = searchParams.get('role')
+  const apiUrl = buildAppointmentsUrl(roleParam)
+  const callbackUrl = roleParam === 'repairer'
+    ? '/dashboard/appointments?role=repairer'
+    : '/dashboard/appointments'
 
   const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
   const [loading, setLoading] = useState(true)
@@ -43,15 +64,18 @@ export function useAppointments(errors: ErrorMessages) {
   const [editPreferredDate, setEditPreferredDate] = useState('')
   const [saving, setSaving] = useState(false)
 
-  // Strip the ?payment=success param from the URL after capturing it into state
+  // Strip the ?payment=success param from the URL after capturing it into
+  // state. Preserve ?role on the cleaned URL so a repairer who deep-links
+  // via the email + a successful payment doesn't get bumped to
+  // customer-mode after the banner shows.
   useEffect(() => {
     if (searchParams.get('payment') === 'success') {
-      router.replace('/dashboard/appointments')
+      router.replace(callbackUrl)
     }
-  }, [searchParams, router])
+  }, [searchParams, router, callbackUrl])
 
   const fetchAppointments = async () => {
-    const result = await apiFetch<{ appointments: ServiceAppointment[] }>('/api/appointments')
+    const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl)
     if (result.success && result.data) {
       setAppointments(result.data.appointments || [])
     } else {
@@ -62,13 +86,13 @@ export function useAppointments(errors: ErrorMessages) {
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/dashboard/appointments')
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`)
       return
     }
     if (!session?.user) return
     let cancelled = false
     async function load() {
-      const result = await apiFetch<{ appointments: ServiceAppointment[] }>('/api/appointments')
+      const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl)
       if (cancelled) return
       if (result.success && result.data) {
         setAppointments(result.data.appointments || [])
@@ -79,7 +103,7 @@ export function useAppointments(errors: ErrorMessages) {
     }
     load()
     return () => { cancelled = true }
-  }, [session, sessionStatus, router, errors.loadError])
+  }, [session, sessionStatus, router, errors.loadError, apiUrl, callbackUrl])
 
   const doCancel = async () => {
     if (!pendingCancelId) return

@@ -185,15 +185,15 @@ export const POST = withAuth<{ id: string }>(async (
       return appointment
     })
 
-    // Fire-and-forget: notify repairer by email. Sibling of the fix in
-    // 1707e5ea: /dashboard/appointments is customer-mode (uses
-    // useAppointments which defaults role=customer), so a repairer
-    // clicking the email landed on their own customer-side bookings,
-    // not the new booking they were notified about. /dashboard/techniker
-    // is the only existing repairer-context dashboard page; doesn't list
-    // service appointments either (no UI built for that yet — tracked in
-    // roadmap T1 enhancements) but at least it's a page the repairer
-    // recognizes as theirs.
+    // Fire-and-forget: notify repairer by email. /dashboard/appointments
+    // now honors ?role=repairer (the page-level hook passes it through
+    // to /api/appointments which has supported the role filter since
+    // the route was created — only the hook was previously dropping it).
+    // Previously this fell back to /dashboard/techniker as a stopgap
+    // because the hook always defaulted to customer-mode, sending the
+    // repairer to their own bookings list instead of the new booking
+    // they were notified about. Sibling fix to appointment-actions.ts
+    // landing-URL update in the same commit.
     const repairerUserRows = await db
       .select({ email: users.email, name: users.name })
       .from(users)
@@ -201,7 +201,7 @@ export const POST = withAuth<{ id: string }>(async (
 
     if (repairerUserRows.length > 0) {
       const repairerUser = repairerUserRows[0]
-      const appointmentUrl = `${APP_URL}/dashboard/techniker`
+      const appointmentUrl = `${APP_URL}/dashboard/appointments?role=repairer`
       const emailContent = appointmentNewBooking(
         repairerUser.name || repairer.businessName || 'Reparateur',
         session.user.name || 'Kunde',
