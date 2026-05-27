@@ -71,18 +71,18 @@ export async function POST(request: NextRequest) {
       questionLength: question.length,
     })
 
-    const ADVISOR_TIMEOUT_MS = 30_000
-    const result = await Promise.race([
-      callWithFallback({
-        systemPrompt: VOTING_ADVISOR_PROMPTS.system,
-        userPrompt,
-        maxTokens: 512,
-        temperature: 0.3,
-      }),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Zeitüberschreitung')), ADVISOR_TIMEOUT_MS)
-      ),
-    ])
+    // Per-provider timeout. callWithFallback cascades Groq → OpenRouter →
+    // Ollama; with 10s each the chain caps at ~30s total. Prior code wrapped
+    // the call in Promise.race against an external setTimeout — when the
+    // race timed out, the underlying fetch kept running with no client
+    // waiting (the AbortSignals only fire from the internal timeoutMs path).
+    const result = await callWithFallback({
+      systemPrompt: VOTING_ADVISOR_PROMPTS.system,
+      userPrompt,
+      maxTokens: 512,
+      temperature: 0.3,
+      timeoutMs: 10_000,
+    })
 
     if (!result) {
       // Custom 503 — AI fallback chain exhausted
