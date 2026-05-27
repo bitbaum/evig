@@ -13,6 +13,7 @@ import { db } from '@/db'
 import { hirnProviderSettings } from '@/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { OLLAMA_URL, APP_URL } from '@/config/urls'
+import { ORG } from '@/config/org'
 
 // =============================================================================
 // CONFIGURATION (SSOT - all AI provider settings in one place)
@@ -278,7 +279,7 @@ async function callOpenRouter(opts: CallOptions, cfg: ProviderRuntimeConfig): Pr
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${cfg.openRouterApiKey}`,
         'HTTP-Referer': APP_URL,
-        'X-Title': 'Revamp-IT',
+        'X-Title': ORG.name,
       },
       body: JSON.stringify({
         model: OPENROUTER_MODEL,
