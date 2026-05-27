@@ -37,13 +37,19 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       return apiNotFound('Workshop')
     }
 
-    // Duplicate check + next instance lookup are independent — run in parallel.
+    // Duplicate check + INSERT must be atomic — two concurrent registrations
+    // from the same user could both pass the check and create duplicate rows.
     // Excludes cancelled registrations so a user who explicitly cancelled can
     // re-register; without that filter the cancel route's set-status-to-
     // 'cancelled' (vs. row deletion) would lock them out forever with a
     // confusing 409.
-    const [existing, instance] = await Promise.all([
-      db
+    type RegisterResult =
+      | { kind: 'already' }
+      | { kind: 'noInstance' }
+      | { kind: 'created'; registration: { id: string; createdAt: string | null }; instance: { id: string; startDate: string; location: string | null } }
+
+    const txResult: RegisterResult = await db.transaction(async (tx) => {
+      const [existing] = await tx
         .select({ id: workshopRegistrations.id })
         .from(workshopRegistrations)
         .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
@@ -52,8 +58,10 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           eq(workshopInstances.workshopId, workshop.id),
           ne(workshopRegistrations.status, WORKSHOP_REGISTRATION_STATUS.CANCELLED),
         ))
-        .then(rows => rows[0]),
-      db
+
+      if (existing) return { kind: 'already' }
+
+      const [instance] = await tx
         .select({
           id: workshopInstances.id,
           startDate: workshopInstances.startDate,
@@ -66,30 +74,33 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         ))
         .orderBy(workshopInstances.startDate)
         .limit(1)
-        .then(rows => rows[0]),
-    ])
 
-    if (existing) {
+      if (!instance) return { kind: 'noInstance' }
+
+      const [registration] = await tx
+        .insert(workshopRegistrations)
+        .values({
+          userId: session.user.id,
+          workshopInstanceId: instance.id,
+          status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+        })
+        .returning({ id: workshopRegistrations.id, createdAt: workshopRegistrations.createdAt })
+
+      return { kind: 'created', registration, instance }
+    })
+
+    if (txResult.kind === 'already') {
       return apiError(
         new Error('Already registered'),
         ERROR_MESSAGES.ALREADY_REGISTERED_WORKSHOP,
         409
       )
     }
-
-    if (!instance) {
+    if (txResult.kind === 'noInstance') {
       return apiBadRequest(ERROR_MESSAGES.NO_WORKSHOP_INSTANCES)
     }
 
-    // Create the registration
-    const [registration] = await db
-      .insert(workshopRegistrations)
-      .values({
-        userId: session.user.id,
-        workshopInstanceId: instance.id,
-        status: WORKSHOP_REGISTRATION_STATUS.PENDING,
-      })
-      .returning({ id: workshopRegistrations.id, createdAt: workshopRegistrations.createdAt })
+    const { registration, instance } = txResult
 
     // Send registration confirmation email — user details come from session (no extra RTT)
     const workshopUrl = `${APP_URL}/workshops/${workshop.slug}`

@@ -43,70 +43,83 @@ export async function POST(request: NextRequest) {
     const session = await auth()
     const userId = session?.user?.id ?? null
 
-    // Check if already a member
-    if (userId) {
-      const [existing] = await db
-        .select({ isMember: users.isMember })
-        .from(users)
-        .where(eq(users.id, userId))
-        .limit(1)
+    // Membership check + activation must be atomic: without a transaction
+    // two fast applies for the same logged-in user both read isMember=false
+    // and both create an APPROVED application row.
+    type ApplyResult =
+      | { kind: 'blocked'; message: string }
+      | { kind: 'ok'; applicationId: string }
 
-      if (existing?.isMember) {
-        return apiBadRequest('Du bist bereits Mitglied.')
+    const txResult: ApplyResult = await db.transaction(async (tx) => {
+      if (userId) {
+        const [existing] = await tx
+          .select({ isMember: users.isMember })
+          .from(users)
+          .where(eq(users.id, userId))
+          .for('update')
+          .limit(1)
+
+        if (existing?.isMember) {
+          return { kind: 'blocked', message: 'Du bist bereits Mitglied.' }
+        }
       }
-    }
 
-    // Record the application (for audit trail)
-    const [application] = await db
-      .insert(membershipApplications)
-      .values({
-        userId,
-        applicantName: result.data.applicantName,
-        applicantEmail: result.data.applicantEmail,
-        addressStreet: result.data.addressStreet,
-        addressPostalCode: result.data.addressPostalCode,
-        addressCity: result.data.addressCity,
-        memberType: result.data.memberType,
-        status: MEMBERSHIP_APPLICATION_STATUS.APPROVED,
-        reviewedAt: new Date().toISOString(),
-      })
-      .returning({ id: membershipApplications.id })
-
-    // Instantly activate membership if logged in
-    if (userId) {
-      await db
-        .update(users)
-        .set({
-          isMember: true,
-          memberSince: new Date().toISOString(),
+      const [application] = await tx
+        .insert(membershipApplications)
+        .values({
+          userId,
+          applicantName: result.data.applicantName,
+          applicantEmail: result.data.applicantEmail,
+          addressStreet: result.data.addressStreet,
+          addressPostalCode: result.data.addressPostalCode,
+          addressCity: result.data.addressCity,
           memberType: result.data.memberType,
+          status: MEMBERSHIP_APPLICATION_STATUS.APPROVED,
+          reviewedAt: new Date().toISOString(),
         })
-        .where(eq(users.id, userId))
-    } else {
-      // Try to find user by email and activate
-      const [existingUser] = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.email, result.data.applicantEmail))
-        .limit(1)
+        .returning({ id: membershipApplications.id })
 
-      if (existingUser) {
-        await db
+      if (userId) {
+        await tx
           .update(users)
           .set({
             isMember: true,
             memberSince: new Date().toISOString(),
             memberType: result.data.memberType,
           })
-          .where(eq(users.id, existingUser.id))
+          .where(eq(users.id, userId))
+      } else {
+        const [existingUser] = await tx
+          .select({ id: users.id })
+          .from(users)
+          .where(eq(users.email, result.data.applicantEmail))
+          .for('update')
+          .limit(1)
 
-        // Link application to user
-        await db
-          .update(membershipApplications)
-          .set({ userId: existingUser.id })
-          .where(eq(membershipApplications.id, application.id))
+        if (existingUser) {
+          await tx
+            .update(users)
+            .set({
+              isMember: true,
+              memberSince: new Date().toISOString(),
+              memberType: result.data.memberType,
+            })
+            .where(eq(users.id, existingUser.id))
+
+          await tx
+            .update(membershipApplications)
+            .set({ userId: existingUser.id })
+            .where(eq(membershipApplications.id, application.id))
+        }
       }
+
+      return { kind: 'ok', applicationId: application.id }
+    })
+
+    if (txResult.kind === 'blocked') {
+      return apiBadRequest(txResult.message)
     }
+    const application = { id: txResult.applicationId }
 
     logger.info('Membership activated', {
       applicationId: application.id,

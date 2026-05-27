@@ -78,34 +78,38 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
       throw new Error('Warenkorb ist leer')
     }
 
-    // Look up inventory items
     const itemIds = items.map(i => i.inventoryItemId)
 
-    const inventoryResult = await db.execute(sql`
-      SELECT ii.id, ii.selling_price_chf, ii.quantity_available, aep.product_name
-      FROM ${sql.raw(iiTable)} ii
-      JOIN ${sql.raw(aepTable)} aep ON aep.id = ii.ai_product_id
-      WHERE ii.id IN (${sql.join(itemIds.map(id => sql`${id}`), sql`, `)})
-    `)
-
-    const inventoryMap = new Map((inventoryResult.rows as unknown as InventoryRow[]).map(r => [r.id, r]))
-
-    // Calculate total
-    let totalCents = 0
-    for (const item of items) {
-      const inv = inventoryMap.get(item.inventoryItemId)
-      if (!inv) {
-        throw new Error(`Artikel nicht gefunden: ${item.inventoryItemId}`)
-      }
-      if (inv.quantity_available < item.quantity) {
-        throw new Error(`Nicht genügend Lagerbestand für: ${inv.product_name}`)
-      }
-      totalCents += (inv.selling_price_chf || 0) * 100 * item.quantity
-    }
-
-    // Use a transaction for order creation + inventory decrement
+    // Lock inventory rows, validate stock, calculate total, create order +
+    // items, decrement — all inside one transaction. Without the FOR UPDATE
+    // lock, two concurrent orders for the same last-N items both pass the
+    // stock check and oversell (GREATEST(...,0) hides the bug but the orders
+    // still exist with no inventory to fulfill them).
     const result = await db.transaction(async (tx) => {
-      // Create order record
+      const inventoryResult = await tx.execute(sql`
+        SELECT ii.id, ii.selling_price_chf, ii.quantity_available, aep.product_name
+        FROM ${sql.raw(iiTable)} ii
+        JOIN ${sql.raw(aepTable)} aep ON aep.id = ii.ai_product_id
+        WHERE ii.id IN (${sql.join(itemIds.map(id => sql`${id}`), sql`, `)})
+        FOR UPDATE OF ii
+      `)
+
+      const inventoryMap = new Map(
+        (inventoryResult.rows as unknown as InventoryRow[]).map(r => [r.id, r])
+      )
+
+      let totalCents = 0
+      for (const item of items) {
+        const inv = inventoryMap.get(item.inventoryItemId)
+        if (!inv) {
+          throw new Error(`Artikel nicht gefunden: ${item.inventoryItemId}`)
+        }
+        if (inv.quantity_available < item.quantity) {
+          throw new Error(`Nicht genügend Lagerbestand für: ${inv.product_name}`)
+        }
+        totalCents += (inv.selling_price_chf || 0) * 100 * item.quantity
+      }
+
       const orderResult = await tx.execute(sql`
         INSERT INTO ${sql.raw(ordersTable)} (
           user_id,
@@ -150,25 +154,25 @@ export async function createOrder(params: CreateOrderParams): Promise<CreatedOrd
           )
         `)
 
-        // Decrement inventory
+        // Row is locked + stock validated above; safe to decrement without clamp
         await tx.execute(sql`
           UPDATE ${sql.raw(iiTable)}
-          SET quantity_available = GREATEST(quantity_available - ${item.quantity}, 0)
+          SET quantity_available = quantity_available - ${item.quantity}
           WHERE id = ${item.inventoryItemId}
         `)
       }
 
-      return { orderId, createdAt: orderData.created_at }
+      return { orderId, createdAt: orderData.created_at, totalCents }
     })
 
     logger.info('Order created', {
       orderId: result.orderId,
       userId,
-      totalCents,
+      totalCents: result.totalCents,
       itemCount: items.length,
     })
 
-    return result
+    return { orderId: result.orderId, createdAt: result.createdAt }
   } catch (error) {
     logger.error('Failed to create order', {
       userId,

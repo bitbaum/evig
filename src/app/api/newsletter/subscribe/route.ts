@@ -33,44 +33,43 @@ export async function POST(request: NextRequest) {
     if (!validation.success) return validation.error
 
     const normalizedEmail = validation.data.email
-
-    // Check for existing active subscriber
-    const [existing] = await db
-      .select({
-        isActive: newsletterSubscriptions.isActive,
-        confirmedAt: newsletterSubscriptions.confirmedAt,
-      })
-      .from(newsletterSubscriptions)
-      .where(eq(newsletterSubscriptions.email, normalizedEmail))
-
-    if (existing?.isActive && existing.confirmedAt) {
-      return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
-    }
-
     const confirmToken = randomBytes(32).toString('hex')
+    const source = body.source || 'website'
 
-    if (existing) {
-      // Re-subscribe: update existing row with new token
-      await db
-        .update(newsletterSubscriptions)
-        .set({
+    // Atomic upsert avoids the check-then-act race: the prior pattern (SELECT
+    // then UPDATE-or-INSERT) could 500 with a UNIQUE violation when two
+    // concurrent requests for the same email both saw `existing=null`. The
+    // ON CONFLICT branch also lets us detect already-confirmed subscribers in
+    // a single round trip via RETURNING.
+    const [row] = await db
+      .insert(newsletterSubscriptions)
+      .values({
+        email: normalizedEmail,
+        isActive: false,
+        confirmToken,
+        source,
+      })
+      .onConflictDoUpdate({
+        target: newsletterSubscriptions.email,
+        set: {
           isActive: false,
           confirmToken,
           confirmedAt: null,
           unsubscribedAt: null,
-          source: body.source || 'website',
-        })
-        .where(eq(newsletterSubscriptions.email, normalizedEmail))
-    } else {
-      // New subscriber
-      await db
-        .insert(newsletterSubscriptions)
-        .values({
-          email: normalizedEmail,
-          isActive: false,
-          confirmToken,
-          source: body.source || 'website',
-        })
+          source,
+        },
+        // Skip the overwrite when the row is already confirmed + active —
+        // we want to surface "already registered" instead.
+        setWhere: sql`${newsletterSubscriptions.isActive} = false OR ${newsletterSubscriptions.confirmedAt} IS NULL`,
+      })
+      .returning({
+        isActive: newsletterSubscriptions.isActive,
+        confirmedAt: newsletterSubscriptions.confirmedAt,
+      })
+
+    if (!row) {
+      // setWhere blocked the update — the existing row is confirmed + active.
+      return apiBadRequest('Diese E-Mail-Adresse ist bereits registriert')
     }
 
     // Send confirmation email. sendEmail returns a resolved SendEmailResult on
