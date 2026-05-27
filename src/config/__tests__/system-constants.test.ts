@@ -25,7 +25,7 @@ import {
   PAYMENT_DISPUTE_STATUS,
   ESCROW_STATUS,
 } from '../payment-status'
-import { HELP_REQUEST_STATUS } from '../help-request-status'
+import { HELP_REQUEST_STATUS } from '../activity'
 import { HELPER_STATUS, HELPER_STATUS_LABELS } from '../helper-status'
 
 // ============================================================================

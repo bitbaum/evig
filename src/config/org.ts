@@ -87,6 +87,9 @@ export const CONTACT = {
   phone: '+41 (0)43 960 32 64',
   /** Phone in tel: URI format */
   phoneTel: 'tel:+41439603264',
+  /** Canonical placeholders for user phone input fields */
+  phonePlaceholder: '+41 79 123 45 67',
+  phonePlaceholderLandline: '+41 44 123 45 67',
 } as const
 
 // ============================================================================

@@ -20,6 +20,7 @@ import {
   summarizeWeeklySchedule,
   type WeekdayId,
 } from '@/lib/team/schedule'
+import { CONTACT } from '@/config/org'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
@@ -165,7 +166,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
             type="tel"
             value={form.phone}
             onChange={(e) => onChange('phone', e.target.value)}
-            placeholder="+41 79 123 45 67"
+            placeholder={CONTACT.phonePlaceholder}
           />
         </FormField>
 

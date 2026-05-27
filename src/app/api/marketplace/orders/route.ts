@@ -137,14 +137,22 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         cancelRedirectUrl: `${APP_URL}/marketplace/checkout/${listing.id}?error=cancelled`,
       });
     } catch (gatewayError) {
-      // Rollback: delete order and restore listing to ACTIVE — independent, run in parallel
+      // Rollback: delete order + restore listing to ACTIVE atomically.
+      // Promise.all would leave the listing stuck in RESERVED if the update fails
+      // after the delete succeeds (and vice versa).
       logger.error('Payrexx gateway creation failed, rolling back order', {
         error: gatewayError, orderId, listingId: listing.id,
       });
-      await Promise.all([
-        db.delete(marketplaceOrders).where(eq(marketplaceOrders.id, orderId)),
-        db.update(listings).set({ status: LISTING_STATUS.ACTIVE }).where(eq(listings.id, listing.id)),
-      ]);
+      try {
+        await db.transaction(async (tx) => {
+          await tx.delete(marketplaceOrders).where(eq(marketplaceOrders.id, orderId));
+          await tx.update(listings).set({ status: LISTING_STATUS.ACTIVE }).where(eq(listings.id, listing.id));
+        });
+      } catch (rollbackError) {
+        logger.error('Order rollback failed — manual reconciliation required', {
+          error: rollbackError, orderId, listingId: listing.id,
+        });
+      }
       return apiError(gatewayError, 'Zahlungsgateway konnte nicht erstellt werden. Bitte versuche es erneut.');
     }
 

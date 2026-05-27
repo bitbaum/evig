@@ -19,7 +19,7 @@ import {
   apiBadRequest,
 } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
-import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
+import { HELP_REQUEST_STATUS } from '@/config/activity'
 import { validateResolveHelpRequest } from '@/lib/schemas/activity'
 import { getDbUserId } from '@/lib/api/task-helpers'
 

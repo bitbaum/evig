@@ -8,7 +8,7 @@
 import { auth } from '@/auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { ROLES, type UserRole } from '@/lib/constants'
+import type { UserRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
 import { isStaffEmail } from '@/lib/permissions'
 
@@ -59,24 +59,6 @@ export async function requirePermission(permission: string) {
   // Check specific permission
   if (!staffPermissions.includes(permission)) {
     throw new Error(`Permission required: ${permission}`)
-  }
-
-  return session.user
-}
-
-/**
- * Require specific role (legacy)
- * @deprecated Use requirePermission instead
- */
-export async function requireRole(role: UserRole) {
-  const session = await auth()
-
-  if (!session?.user) {
-    throw new Error('Authentication required')
-  }
-
-  if (session.user.role !== role) {
-    throw new Error(`Role required: ${role}`)
   }
 
   return session.user

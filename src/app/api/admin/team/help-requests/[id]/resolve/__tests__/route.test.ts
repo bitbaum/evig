@@ -79,7 +79,7 @@ jest.mock('drizzle-orm', () => ({
   ),
 }))
 
-jest.mock('@/config/help-request-status', () => ({
+jest.mock('@/config/activity', () => ({
   HELP_REQUEST_STATUS: { RESOLVED: 'resolved', CANCELLED: 'cancelled' },
 }))
 

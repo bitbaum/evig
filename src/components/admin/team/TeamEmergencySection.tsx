@@ -5,6 +5,7 @@ import {
   EMERGENCY_RELATION_LABELS,
   type EmergencyRelation,
 } from '@/config/team'
+import { CONTACT } from '@/config/org'
 import type { TeamProfileFormState } from './useTeamProfileForm'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -34,7 +35,7 @@ export function TeamEmergencySection({ form, onChange }: Props) {
           id="emergency_contact_phone"
           value={form.emergency_contact_phone}
           onChange={(e) => onChange('emergency_contact_phone', e.target.value)}
-          placeholder="+41 79 123 45 67"
+          placeholder={CONTACT.phonePlaceholder}
         />
       </FormField>
 

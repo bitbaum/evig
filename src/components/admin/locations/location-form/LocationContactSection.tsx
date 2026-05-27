@@ -1,6 +1,7 @@
 'use client'
 
 import { Phone } from 'lucide-react'
+import { CONTACT } from '@/config/org'
 import Heading from '@/components/admin/AdminHeading'
 import { Input } from '@/components/ui/input'
 import { FormField } from '@/components/ui/form-field'
@@ -36,7 +37,7 @@ export function LocationContactSection({ formData, onFieldChange }: Props) {
             type="tel"
             value={formData.contact_phone}
             onChange={(e) => onFieldChange('contact_phone', e.target.value)}
-            placeholder="+41 79 123 45 67"
+            placeholder={CONTACT.phonePlaceholder}
           />
         </FormField>
 

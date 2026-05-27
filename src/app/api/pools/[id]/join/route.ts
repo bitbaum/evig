@@ -9,7 +9,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { db } from '@/db'
 import { subscriptionPools, poolMemberships } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
-import { TABLE_NAMES, POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database'
+import { POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database'
 import { logger } from '@/lib/logger'
 
 type Params = { id: string }
@@ -23,65 +23,91 @@ export const POST = withAuth(async (
     const id = context?.params?.id
     if (!id) return apiBadRequest(ERROR_MESSAGES.POOL_ID_REQUIRED)
 
-    // Load pool
-    const [pool] = await db
-      .select({
-        id: subscriptionPools.id,
-        maxMembers: subscriptionPools.maxMembers,
-        status: subscriptionPools.status,
-        memberCount: sql<number>`(
-          SELECT COUNT(*) FROM ${sql.raw(TABLE_NAMES.POOL_MEMBERSHIPS)} pm
-          WHERE pm.pool_id = ${subscriptionPools.id}
-          AND pm.status = ${POOL_MEMBERSHIP_STATUS.ACTIVE}
-        )`,
-      })
-      .from(subscriptionPools)
-      .where(eq(subscriptionPools.id, id))
-      .limit(1)
+    type JoinResult =
+      | { kind: 'created'; membership: typeof poolMemberships.$inferSelect }
+      | { kind: 'reactivated'; membership: typeof poolMemberships.$inferSelect }
+      | { kind: 'error'; status: number; message: string }
 
-    if (!pool) return apiNotFound(ERROR_MESSAGES.POOL_NOT_FOUND)
-    if (pool.status !== POOL_STATUS.ACTIVE) return apiBadRequest('Dieser Pool ist nicht aktiv')
-    if (Number(pool.memberCount) >= pool.maxMembers) {
-      return apiBadRequest('Dieser Pool ist bereits voll')
-    }
-
-    // Check existing membership
-    const [existing] = await db
-      .select({ id: poolMemberships.id, status: poolMemberships.status })
-      .from(poolMemberships)
-      .where(
-        and(
-          eq(poolMemberships.poolId, id),
-          eq(poolMemberships.userId, session.user.id)
-        )
+    // Lock pool row + count active members + check existing membership atomically.
+    // Without this, two concurrent joins on a near-full pool can both pass the
+    // capacity check and over-book the pool.
+    const result: JoinResult = await db.transaction(async (tx) => {
+      const lockedRows = await tx.execute(
+        sql`SELECT id, max_members, status
+            FROM ${subscriptionPools}
+            WHERE id = ${id}
+            FOR UPDATE`
       )
-      .limit(1)
+      const pool = lockedRows.rows[0] as
+        | { id: string; max_members: number; status: string }
+        | undefined
 
-    if (existing) {
-      if (existing.status === POOL_MEMBERSHIP_STATUS.ACTIVE) {
-        return apiBadRequest('Du bist bereits Mitglied dieses Pools')
+      if (!pool) {
+        return { kind: 'error', status: 404, message: ERROR_MESSAGES.POOL_NOT_FOUND }
       }
-      // Re-activate if previously left
-      const [updated] = await db
-        .update(poolMemberships)
-        .set({ status: POOL_MEMBERSHIP_STATUS.ACTIVE, leftAt: null })
-        .where(eq(poolMemberships.id, existing.id))
+      if (pool.status !== POOL_STATUS.ACTIVE) {
+        return { kind: 'error', status: 400, message: 'Dieser Pool ist nicht aktiv' }
+      }
+
+      const [countRow] = await tx
+        .select({ count: sql<number>`COUNT(*)` })
+        .from(poolMemberships)
+        .where(
+          and(
+            eq(poolMemberships.poolId, id),
+            eq(poolMemberships.status, POOL_MEMBERSHIP_STATUS.ACTIVE)
+          )
+        )
+
+      const memberCount = Number(countRow?.count ?? 0)
+      if (memberCount >= pool.max_members) {
+        return { kind: 'error', status: 400, message: 'Dieser Pool ist bereits voll' }
+      }
+
+      const [existing] = await tx
+        .select({ id: poolMemberships.id, status: poolMemberships.status })
+        .from(poolMemberships)
+        .where(
+          and(
+            eq(poolMemberships.poolId, id),
+            eq(poolMemberships.userId, session.user.id)
+          )
+        )
+        .limit(1)
+
+      if (existing) {
+        if (existing.status === POOL_MEMBERSHIP_STATUS.ACTIVE) {
+          return { kind: 'error', status: 400, message: 'Du bist bereits Mitglied dieses Pools' }
+        }
+        const [updated] = await tx
+          .update(poolMemberships)
+          .set({ status: POOL_MEMBERSHIP_STATUS.ACTIVE, leftAt: null })
+          .where(eq(poolMemberships.id, existing.id))
+          .returning()
+        return { kind: 'reactivated', membership: updated }
+      }
+
+      const [membership] = await tx
+        .insert(poolMemberships)
+        .values({
+          poolId: id,
+          userId: session.user.id,
+          role: 'member',
+          status: POOL_MEMBERSHIP_STATUS.ACTIVE,
+        })
         .returning()
-      return apiSuccess(updated)
+
+      return { kind: 'created', membership }
+    })
+
+    if (result.kind === 'error') {
+      return result.status === 404
+        ? apiNotFound(result.message)
+        : apiBadRequest(result.message)
     }
 
-    const [membership] = await db
-      .insert(poolMemberships)
-      .values({
-        poolId: id,
-        userId: session.user.id,
-        role: 'member',
-        status: POOL_MEMBERSHIP_STATUS.ACTIVE,
-      })
-      .returning()
-
-    logger.info('User joined pool', { poolId: id, userId: session.user.id })
-    return apiSuccess(membership, 201)
+    logger.info('User joined pool', { poolId: id, userId: session.user.id, kind: result.kind })
+    return apiSuccess(result.membership, result.kind === 'created' ? 201 : 200)
   } catch (error) {
     logger.error('POST /api/pools/[id]/join failed', { error })
     return apiError(error, 'Fehler beim Beitreten des Pools')

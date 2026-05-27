@@ -27,13 +27,16 @@ export function useTaskActions(taskId: string) {
   const [selectedUserId, setSelectedUserId] = useState('')
 
   useEffect(() => {
+    let cancelled = false
     apiFetch<{ profiles: { user_id: string; name: string | null; email: string }[] }>(
       '/api/admin/team/profiles',
     ).then((res) => {
+      if (cancelled) return
       if (res.success && res.data?.profiles) {
         setStaffMembers(res.data.profiles.map((p) => ({ id: p.user_id, name: p.name, email: p.email })))
       }
     })
+    return () => { cancelled = true }
   }, [])
 
   const handleComplete = async () => {

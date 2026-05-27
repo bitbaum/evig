@@ -6,7 +6,17 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { SuggestionContextValue, PageInfo } from '@/features/feedback/types'
+
+interface PageInfo {
+  path: string
+  title?: string
+  url: string
+}
+
+interface SuggestionContextValue {
+  currentPage: PageInfo
+  isVisible: boolean
+}
 
 const SuggestionContext = createContext<SuggestionContextValue | undefined>(undefined)
 

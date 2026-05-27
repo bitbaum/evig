@@ -18,8 +18,8 @@ import {
   HELP_REQUEST_URGENCY_LABELS,
   type HelpRequestStatus,
   type HelpRequestUrgency,
+  HELP_REQUEST_STATUS,
 } from '@/config/activity'
-import { HELP_REQUEST_STATUS } from '@/config/help-request-status'
 import {
   useHelpRequests,
   useHelpRequestMutations,

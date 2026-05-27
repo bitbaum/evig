@@ -1,6 +1,7 @@
 'use client'
 
 import { Phone, Mail } from 'lucide-react'
+import { CONTACT } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
 import type { ProfileData } from '../hooks/useProfileData'
@@ -53,7 +54,7 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
             value={profile.phone}
             onChange={(e) => handleChange('phone', e.target.value)}
             className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="+41 44 123 45 67 oder 044 123 45 67"
+            placeholder={CONTACT.phonePlaceholderLandline}
           />
         </div>
         <div>
@@ -65,7 +66,7 @@ export function ContactInfoSection({ profile, email, handleChange }: ContactInfo
             value={profile.mobile}
             onChange={(e) => handleChange('mobile', e.target.value)}
             className="w-full px-4 py-2.5 border border-neutral-300 dark:border-neutral-600 rounded-lg bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            placeholder="+41 79 123 45 67 oder 079 123 45 67"
+            placeholder={CONTACT.phonePlaceholder}
           />
         </div>
       </div>
