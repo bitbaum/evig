@@ -92,17 +92,17 @@ Beantworte die Frage basierend auf dem Protokollinhalt. Knapp und klar, unter 20
 
     logger.info('Protocol advisor requested', { questionLength: question.length })
 
-    const result = await Promise.race([
-      callWithFallback({
-        systemPrompt: SYSTEM_PROMPT,
-        userPrompt,
-        maxTokens: 400,
-        temperature: 0.3,
-      }),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Zeitüberschreitung')), 30_000)
-      ),
-    ])
+    // Per-provider timeout caps cascade (Groq → OpenRouter → Ollama) at
+    // ~30s total. Prior Promise.race against an external setTimeout left
+    // the underlying fetch running with no client when the outer timer won
+    // — same leak as vote-advisor (fixed 77322923).
+    const result = await callWithFallback({
+      systemPrompt: SYSTEM_PROMPT,
+      userPrompt,
+      maxTokens: 400,
+      temperature: 0.3,
+      timeoutMs: 10_000,
+    })
 
     if (!result) {
       return NextResponse.json(

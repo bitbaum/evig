@@ -59,20 +59,18 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       userId: session.user.id,
     })
 
-    const EXTRACT_TIMEOUT_MS = 45_000
-    const extractionResult = await Promise.race([
-      registryExtract({
-        formType,
-        text,
-        mode: mode as ExtractMode,
-        currentData,
-        instruction,
-        quickAction,
-      }),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Zeitüberschreitung')), EXTRACT_TIMEOUT_MS)
-      ),
-    ])
+    // registryExtract calls callWithFallback with timeoutMs: 15_000 per
+    // provider — the cascade (Groq → OpenRouter → Ollama) caps at ~45s
+    // total. Prior Promise.race against an external setTimeout left the
+    // underlying fetch running with no client when the outer timer won.
+    const extractionResult = await registryExtract({
+      formType,
+      text,
+      mode: mode as ExtractMode,
+      currentData,
+      instruction,
+      quickAction,
+    })
 
     // Return extraction result directly — it already has { success, data, model, confidence }
     // Don't wrap with apiSuccess() which would double-nest: { success, data: { success, data, ... } }
