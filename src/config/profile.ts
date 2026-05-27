@@ -8,6 +8,7 @@
  */
 
 import { FILE_SIZE_LIMITS } from '@/config/limits'
+import { CONTACT } from '@/config/org'
 
 // ============================================================================
 // PROFILE CONFIGURATION (Public View)
@@ -189,9 +190,9 @@ export const SETTINGS_CONFIG = {
 
       contact: 'Kontaktinformationen',
       phone: 'Telefon',
-      phonePlaceholder: '+41 XX XXX XX XX',
+      phonePlaceholder: CONTACT.phonePlaceholderLandline,
       mobile: 'Mobile',
-      mobilePlaceholder: '+41 XX XXX XX XX',
+      mobilePlaceholder: CONTACT.phonePlaceholder,
 
       address: 'Adresse',
       addressLine1: 'Strasse',
