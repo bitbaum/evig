@@ -87,82 +87,81 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
         // Analyze product description with rule-based logic
         const analysis = analyzeProductDescription(row.Artikelbeschreibung, row.Hersteller);
-
-        // Create AI-extracted product record
-        const [aiProduct] = await db
-          .insert(aiExtractedProducts)
-          .values({
-            productName: analysis.productName,
-            productNameConfidence: String(analysis.confidence),
-            brand: row.Hersteller || analysis.brand,
-            brandConfidence: row.Hersteller ? '0.90' : String(analysis.confidence),
-            category: analysis.category,
-            categoryConfidence: String(analysis.confidence),
-            estimatedPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
-            priceConfidence: row.Verkaufspreis && row.Verkaufspreis !== '0.00' ? '0.80' : '0.30',
-            condition: analysis.condition,
-            conditionConfidence: '0.60',
-            aiProvider: 'csv_import',
-            aiModel: 'rule_based_parser',
-            processingTimeMs: 100,
-            totalConfidence: String(analysis.confidence),
-            rawAiResponse: {
-              source: 'csv_import',
-              original_data: row,
-              analysis_method: 'rule_based'
-            },
-            createdBy: session.user.id,
-            status: APPROVAL_STATUS.PENDING,
-            kivitendoArticleNumber: row.Artikelnummer,
-          })
-          .returning({ id: aiExtractedProducts.id });
-
-        if (!aiProduct) {
-          result.errors.push(`Failed to create AI product for ${row.Artikelnummer}`);
-          result.skipped++;
-          continue;
-        }
-
-        // Calculate and save sustainability score
         const sustainScore = calculateSustainabilityScore(analysis);
-        await db
-          .insert(sustainabilityScores)
-          .values({
-            productId: aiProduct.id,
-            overallScore: sustainScore.overall_score,
-            environmentalScore: sustainScore.environmental_score,
-            socialScore: sustainScore.social_score,
-            economicScore: sustainScore.economic_score,
-            factors: sustainScore.factors,
-            recommendations: sustainScore.recommendations,
-            improvementSuggestions: sustainScore.improvement_suggestions,
-            aiAnalysis: {
-              assessment_method: 'rule_based',
-              data_sources: ['product_description', 'brand_info'],
-              confidence: 0.7
-            },
-            assessedBy: 'csv_import',
-          });
 
-        // Create inventory item
-        const [inventoryRow] = await db
-          .insert(inventoryItems)
-          .values({
-            aiProductId: aiProduct.id,
-            kivitendoArticleNumber: row.Artikelnummer,
-            legacyCsvData: row,
-            status: INVENTORY_ITEM_STATUS.AVAILABLE,
-            acquisitionCostChf: String(parseFloat(row.Verkaufspreis) * 0.7 || 0),
-            sellingPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
-            assignedTo: session.user.id,
-          })
-          .returning({ id: inventoryItems.id });
+        // Per-row transaction: a mid-row failure (sustainability score insert,
+        // inventory item insert) would otherwise leave an orphaned
+        // aiExtractedProducts row with no downstream data. Rolling back the
+        // single row keeps the batch importing the rest of the file.
+        await db.transaction(async (tx) => {
+          const [aiProduct] = await tx
+            .insert(aiExtractedProducts)
+            .values({
+              productName: analysis.productName,
+              productNameConfidence: String(analysis.confidence),
+              brand: row.Hersteller || analysis.brand,
+              brandConfidence: row.Hersteller ? '0.90' : String(analysis.confidence),
+              category: analysis.category,
+              categoryConfidence: String(analysis.confidence),
+              estimatedPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
+              priceConfidence: row.Verkaufspreis && row.Verkaufspreis !== '0.00' ? '0.80' : '0.30',
+              condition: analysis.condition,
+              conditionConfidence: '0.60',
+              aiProvider: 'csv_import',
+              aiModel: 'rule_based_parser',
+              processingTimeMs: 100,
+              totalConfidence: String(analysis.confidence),
+              rawAiResponse: {
+                source: 'csv_import',
+                original_data: row,
+                analysis_method: 'rule_based'
+              },
+              createdBy: session.user.id,
+              status: APPROVAL_STATUS.PENDING,
+              kivitendoArticleNumber: row.Artikelnummer,
+            })
+            .returning({ id: aiExtractedProducts.id });
 
-        if (!inventoryRow) {
-          result.errors.push(`Failed to create inventory item for ${row.Artikelnummer}`);
-          result.skipped++;
-          continue;
-        }
+          if (!aiProduct) {
+            throw new Error(`Failed to create AI product for ${row.Artikelnummer}`);
+          }
+
+          await tx
+            .insert(sustainabilityScores)
+            .values({
+              productId: aiProduct.id,
+              overallScore: sustainScore.overall_score,
+              environmentalScore: sustainScore.environmental_score,
+              socialScore: sustainScore.social_score,
+              economicScore: sustainScore.economic_score,
+              factors: sustainScore.factors,
+              recommendations: sustainScore.recommendations,
+              improvementSuggestions: sustainScore.improvement_suggestions,
+              aiAnalysis: {
+                assessment_method: 'rule_based',
+                data_sources: ['product_description', 'brand_info'],
+                confidence: 0.7
+              },
+              assessedBy: 'csv_import',
+            });
+
+          const [inventoryRow] = await tx
+            .insert(inventoryItems)
+            .values({
+              aiProductId: aiProduct.id,
+              kivitendoArticleNumber: row.Artikelnummer,
+              legacyCsvData: row,
+              status: INVENTORY_ITEM_STATUS.AVAILABLE,
+              acquisitionCostChf: String(parseFloat(row.Verkaufspreis) * 0.7 || 0),
+              sellingPriceChf: String(parseFloat(row.Verkaufspreis) || 0),
+              assignedTo: session.user.id,
+            })
+            .returning({ id: inventoryItems.id });
+
+          if (!inventoryRow) {
+            throw new Error(`Failed to create inventory item for ${row.Artikelnummer}`);
+          }
+        });
 
         result.imported++;
 
