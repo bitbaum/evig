@@ -78,8 +78,9 @@ Dockerfile.dev
 docker-compose.dev.yml
 
 # Database files and uploads
-cms-api/uploads/*
-!cms-api/uploads/.gitkeep
+# Legacy cms-api/ subproject is no longer tracked — keep the whole dir
+# out of git in case a stale local checkout still has it.
+cms-api/
 *.sqlite
 *.db
 
