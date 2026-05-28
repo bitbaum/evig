@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils'
 import { TeamProfileView } from './TeamProfileView'
 import { TeamProfileTimecardsTab } from './TeamProfileTimecardsTab'
 import { TeamProfileActivityTab } from './TeamProfileActivityTab'
+import { TeamLeavePeriodsCard } from './TeamLeavePeriodsCard'
 import type { TeamProfileWithUser } from '@/lib/schemas/team'
 
 type TabKey = 'uebersicht' | 'zeiterfassung' | 'aktivitaet'
@@ -106,12 +107,15 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
       {/* Tab content */}
       <div className="min-h-[400px]">
         {tab === 'uebersicht' && (
-          <TeamProfileView
-            profile={profile}
-            isSuperAdmin={isSuperAdmin}
-            onEdit={() => router.push(`/admin/team/${profile.id}/edit`)}
-            onBack={() => router.push('/admin/team')}
-          />
+          <div className="space-y-4">
+            <TeamProfileView
+              profile={profile}
+              isSuperAdmin={isSuperAdmin}
+              onEdit={() => router.push(`/admin/team/${profile.id}/edit`)}
+              onBack={() => router.push('/admin/team')}
+            />
+            <TeamLeavePeriodsCard profileId={profile.id} />
+          </div>
         )}
         {tab === 'zeiterfassung' && (
           <TeamProfileTimecardsTab userId={profile.user_id} />
