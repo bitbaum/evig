@@ -1,0 +1,7 @@
+# Funding sources for the Revamp-IT non-profit.
+# https://revamp-it.ch is the canonical donation page; it lists the
+# Postfinance IBAN, the in-kind hardware donation flow, and membership
+# options. We do not run a GitHub Sponsors / Patreon / Ko-fi page —
+# we're a Swiss Verein, not an individual maintainer.
+
+custom: ["https://revamp-it.ch/get-involved/donate"]

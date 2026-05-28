@@ -1,173 +1,86 @@
-# Contributing to RevampIT
+# Contributing
 
-We're thrilled that you're interested in contributing to RevampIT! This document provides guidelines and information for contributors to help make the process smooth and effective.
+Thanks for the interest. This document covers the practical workflow for shipping changes to Revamp-IT.
 
-## 🌟 Ways to Contribute
+## Ways to contribute
 
-### Code Contributions
-- 🐛 **Bug Fixes** - Fix issues and improve stability
-- ✨ **New Features** - Implement new functionality
-- 🔧 **Refactoring** - Improve code quality and performance
-- 📝 **Documentation** - Improve existing docs or create new ones
-- 🧪 **Testing** - Add or improve tests
+- **Code** — fix a bug, ship a feature, refactor, add tests
+- **Docs** — improve the [docs/](./docs) index, write a how-to, fix outdated reference material
+- **Translation** — RevampIT ships in seven locales (de · en · fr · es · it · ja · ko); the message catalogues are in [`src/i18n/messages/`](./src/i18n/messages)
+- **Triage** — reproduce bug reports, label issues, close stale ones
+- **Design** — UI/UX critique, accessibility audit, visual polish (mobile-first matters here)
+- **Operations** — donate hardware, time, or money to the [Verein itself](https://revamp-it.ch/get-involved/donate); the platform is one part of the org
 
-### Non-Code Contributions
-- 🎨 **Design** - UI/UX improvements and design assets
-- 🌐 **Translation** - Help with German/English localization
-- 📖 **Documentation** - User guides, tutorials, and API docs
-- 🐛 **Bug Reports** - Report issues and suggest improvements
-- 💡 **Feature Requests** - Suggest new features
+## Prerequisites
 
-## 🚀 Getting Started
+- Node.js **20+**
+- A Postgres instance — easiest path is a free [Neon](https://neon.tech) project; the production app runs on Neon
+- (Optional, for full feature coverage) Meilisearch, Redis (upstash), Listmonk
 
-### Prerequisites
-- Node.js 18+
-- PostgreSQL 13+
-- Git knowledge
-- Basic understanding of Next.js and TypeScript
+## Local setup
 
-### Setting Up Development Environment
-
-1. **Fork and Clone**
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/revampit.git
-   cd revampit
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   # Frontend dependencies
-   npm install
-   
-   # CMS API dependencies  
-   cd cms-api
-   npm install
-   cd ..
-   ```
-
-3. **Environment Setup**
-   ```bash
-   cp .env.example .env.local
-   cp cms-api/.env.example cms-api/.env
-   # Edit environment files with your configuration
-   ```
-
-4. **Database Setup**
-   ```bash
-   # Start PostgreSQL using Docker
-   docker-compose up -d postgres
-   
-   # Run migrations
-   cd cms-api
-   npm run migrate
-   cd ..
-   ```
-
-5. **Start Development Servers**
-   ```bash
-   # Terminal 1: Start CMS API
-   cd cms-api && npm run dev
-   
-   # Terminal 2: Start Frontend  
-   npm run dev
-   ```
-
-## 🛠️ Development Workflow
-
-### Branch Naming
-- `feature/feature-name` - New features
-- `fix/bug-description` - Bug fixes  
-- `docs/documentation-update` - Documentation updates
-- `refactor/component-name` - Code refactoring
-- `test/test-description` - Test additions/improvements
-
-### Commit Messages
-Follow conventional commits format:
-
-```
-type(scope): description
-
-Examples:
-feat(cms): add rich text editor for page content
-fix(auth): resolve JWT token expiration issue  
-docs(readme): update installation instructions
-style(ui): improve button component styling
-test(api): add unit tests for user authentication
+```bash
+git clone https://github.com/g-but/revampit.git
+cd revampit
+cp .env.example .env.local         # fill in DATABASE_URL, AUTH_SECRET, payment + email keys
+npm install
+npm run db:migrate                  # apply scripts/db/migrations/*.sql
+npm run dev                         # Next.js on :3000
 ```
 
-### Pull Request Process
+The app is a **single Next.js 16 application**. There is no separate API server, CMS server, or microservice — everything (pages, API routes, admin surface) lives in `src/app/`. Earlier iterations had a `cms-api/` subproject; it is no longer maintained and its files are not part of the dev loop.
 
-1. **Create Feature Branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
+Full architecture orientation: [`docs/ARCHITECTURE_QUICK_START.md`](./docs/ARCHITECTURE_QUICK_START.md). Every npm script: [`docs/COMMANDS.md`](./docs/COMMANDS.md).
 
-2. **Make Changes**
-   - Write clean, readable code
-   - Follow existing code style
-   - Add/update tests as needed
-   - Update documentation
+## Workflow
 
-3. **Test Your Changes**
-   ```bash
-   npm run test          # Run tests
-   npm run lint          # Check linting
-   npm run type-check    # TypeScript check
-   ```
+### Branch naming
 
-4. **Commit and Push**
-   ```bash
-   git add .
-   git commit -m "feat(scope): description"
-   git push origin feature/amazing-feature
-   ```
+`<type>/<short-slug>` — for example `feat/marketplace-shipping-cost`, `fix/pool-join-race`, `docs/refresh-readme`, `refactor/erfassung-pipeline`.
 
-5. **Open Pull Request**
-   - Use descriptive title and description
-   - Reference related issues
-   - Add screenshots for UI changes
-   - Request review from maintainers
+### Commit messages
 
-## 📋 Code Standards
+Conventional commits. Types we use: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `chore`, `deps`.
 
-### TypeScript
-- Use strict TypeScript configuration
-- Define proper types and interfaces
-- Avoid `any` type unless absolutely necessary
-- Use meaningful variable and function names
+```
+fix(api): pool join — wrap memberCount check + INSERT in FOR UPDATE tx
+```
 
-### React/Next.js
-- Use functional components with hooks
-- Implement proper error boundaries
-- Follow Next.js best practices for routing and data fetching
-- Use server components where appropriate
+Lead the body with **why**, not what — the diff already shows what.
 
-### Styling
-- Use Tailwind CSS for styling
-- Follow mobile-first responsive design
-- Maintain consistent spacing and typography
-- Ensure accessibility standards (WCAG 2.1)
+### Before opening a PR
 
-### Testing
-- Write unit tests for utility functions
-- Add integration tests for API endpoints
-- Include E2E tests for critical user flows
-- Maintain minimum 80% code coverage
+```bash
+npm test               # Jest (7,500+ tests across 500+ suites)
+npm run lint           # ESLint
+npm run typecheck      # tsc --noEmit
+npm run lint:umlauts   # catches ASCII umlaut substitutes in German strings
+```
 
-## 🎉 Recognition
+CI re-runs all of these. PRs blocked by failing CI will not be merged.
 
-Contributors are recognized in several ways:
+## Code standards (enforced, not suggested)
 
-- **README contributors section** - All contributors listed
-- **Release notes** - Major contributors mentioned
-- **Community highlights** - Featured in newsletters
-- **Maintainer opportunities** - Active contributors can become maintainers
+These are the rules the codebase actually relies on. Violations either fail CI or break things at runtime — read [`docs/BEST_PRACTICES.md`](./docs/BEST_PRACTICES.md) for the full set.
 
-## 🙏 Thank You
+| Rule | Why |
+|---|---|
+| `import { logger } from '@/lib/logger'` — never `console.log` | Structured logs; `console.*` is silently dropped in serverless |
+| Use `TABLE_NAMES` from `@/config/database` — never hardcode table strings | One source of truth; renaming a table is one diff |
+| Parameterized queries only — never string-concatenate user input | SQL injection |
+| Use `CONTACT` / `ORG` / `LOCATIONS` from `@/config/org` — never hardcode addresses, phones, emails | Same SSOT principle, applied to org-level data |
+| Swiss German: `ss` (not `ß`), proper `ä/ö/ü` (never `ae/oe/ue`) | Project locale standard; `npm run lint:umlauts` enforces it |
+| Wrap multi-statement writes in `db.transaction(...)` with explicit `FOR UPDATE` when needed | Concurrency safety — TOCTOU races cost us real bugs in 2026-Q1 |
+| Mobile-first responsive Tailwind, 44×44 minimum tap targets | Most users land on phones |
 
-Thank you for contributing to RevampIT! Your contributions help us achieve our mission of sustainable technology and digital inclusion.
+## Reviewing
 
----
+Code reviews focus on: correctness, the rules above, test coverage, and whether the change is the simplest thing that solves the problem (no preemptive abstraction). Tone is direct; don't take it personally.
 
-**Happy Contributing! 🚀**
+## Recognition
 
+Contributors land in [GitHub's contributor graph](https://github.com/g-but/revampit/graphs/contributors); significant contributions get a callout in release notes. We don't currently maintain a separate CONTRIBUTORS file — git history is the source of truth.
+
+## License
+
+By submitting a contribution, you agree it is licensed under the project [MIT License](./LICENSE).
