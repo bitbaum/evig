@@ -19,6 +19,7 @@ import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { responsiveTypography } from '@/lib/responsive'
 
 interface RevampedPageProps {
   params: Promise<{ locale: string }>
@@ -140,7 +141,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <Heading level={2} className="text-4xl font-bold mb-6">{t('whatIs.title')}</Heading>
+              <Heading level={2} className={`${responsiveTypography.section} font-bold mb-6`}>{t('whatIs.title')}</Heading>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
                 {t('whatIs.body')}
               </p>
@@ -179,7 +180,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <Heading level={2} className="text-4xl font-bold mb-6">{t('certificate.title')}</Heading>
+                <Heading level={2} className={`${responsiveTypography.section} font-bold mb-6`}>{t('certificate.title')}</Heading>
                 <p className="text-xl text-neutral-600 mb-8">
                   {t('certificate.subtitle')}
                 </p>
@@ -217,7 +218,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <Heading level={2} className="text-4xl font-bold mb-6">{t('stickers.title')}</Heading>
+              <Heading level={2} className={`${responsiveTypography.section} font-bold mb-6`}>{t('stickers.title')}</Heading>
               <p className="text-xl text-neutral-600">
                 {t('stickers.subtitle')}
               </p>
@@ -273,7 +274,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
       <section className="py-12 sm:py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <Heading level={2} className="text-4xl font-bold mb-6">{t('cta.title')}</Heading>
+            <Heading level={2} className={`${responsiveTypography.section} font-bold mb-6`}>{t('cta.title')}</Heading>
             <p className="text-xl text-neutral-600 mb-12 max-w-3xl mx-auto">
               {t('cta.body')}
             </p>

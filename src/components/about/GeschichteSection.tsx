@@ -165,15 +165,15 @@ export default function GeschichteSection() {
           <Heading level={3} className="text-2xl font-bold mb-6">{t('currentTitle')}</Heading>
           <div className="grid md:grid-cols-3 gap-8">
             <div>
-              <p className="text-4xl font-bold mb-2">{currentState.yearsActive}</p>
+              <p className="text-3xl sm:text-4xl font-bold mb-2">{currentState.yearsActive}</p>
               <p className="text-primary-100">{t('yearsActive')}</p>
             </div>
             <div>
-              <p className="text-4xl font-bold mb-2">{currentState.teamSize}</p>
+              <p className="text-3xl sm:text-4xl font-bold mb-2">{currentState.teamSize}</p>
               <p className="text-primary-100">{t('teamMembers')}</p>
             </div>
             <div>
-              <p className="text-4xl font-bold mb-2">{currentState.devicesPerYear}</p>
+              <p className="text-3xl sm:text-4xl font-bold mb-2">{currentState.devicesPerYear}</p>
               <p className="text-primary-100">{t('devicesPerYear')}</p>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { ROUTES } from '@/config/routes'
+import { responsiveTypography } from '@/lib/responsive'
 
 interface BlogPostHeaderProps {
   post: BlogPost
@@ -11,7 +12,7 @@ interface BlogPostHeaderProps {
 
 export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
   return (
-    <header className="max-w-[680px] mx-auto px-6 py-12">
+    <header className="max-w-[680px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Back Link */}
       <Link
         href={ROUTES.public.blog}
@@ -31,13 +32,13 @@ export default function BlogPostHeader({ post }: BlogPostHeaderProps) {
       )}
 
       {/* Title */}
-      <Heading level={1} className="text-5xl md:text-6xl font-bold text-neutral-900 leading-tight mb-6">
+      <Heading level={1} className={`${responsiveTypography.hero} font-bold text-neutral-900 leading-tight mb-6`}>
         {post.title}
       </Heading>
 
       {/* Excerpt */}
       {post.excerpt && (
-        <p className="text-2xl text-neutral-600 leading-relaxed mb-8">
+        <p className={`${responsiveTypography.bodyLarge} text-neutral-600 leading-relaxed mb-8`}>
           {post.excerpt}
         </p>
       )}

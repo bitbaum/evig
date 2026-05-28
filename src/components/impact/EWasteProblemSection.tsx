@@ -29,7 +29,7 @@ function StatCard({ stat }: { stat: EWasteStat }) {
           {getStatIcon(stat.id)}
         </div>
         <div className="flex-1">
-          <div className="text-4xl font-bold text-white mb-1">
+          <div className="text-3xl sm:text-4xl font-bold text-white mb-1">
             {stat.value}
             <span className="text-lg font-normal ml-2 text-white/80">{stat.unit}</span>
           </div>

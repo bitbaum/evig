@@ -131,14 +131,14 @@ export default function InvitePage() {
         {/* Invite by email */}
         <div className="card-shell p-6 mb-6">
           <Heading level={2} className="text-lg font-semibold mb-4">Per E-Mail einladen</Heading>
-          <form onSubmit={handleInvite} className="flex gap-2">
+          <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-2">
             <input
               type="email"
               required
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="email@beispiel.ch"
-              className="flex-1 text-sm border border-neutral-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="flex-1 text-base sm:text-sm border border-neutral-200 rounded-lg px-3 py-2.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <Button type="submit" variant="primary" size="sm" disabled={sending} className="whitespace-nowrap">
               <Send className="w-4 h-4" />

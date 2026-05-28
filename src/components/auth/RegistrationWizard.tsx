@@ -189,7 +189,7 @@ export function RegistrationWizard() {
   if (isComplete) {
     return (
       <div className="w-full max-w-md mx-auto">
-        <div className="card-shell rounded-2xl p-8">
+        <div className="card-shell rounded-2xl p-6 sm:p-8">
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle2 className="w-8 h-8 text-primary-600" />

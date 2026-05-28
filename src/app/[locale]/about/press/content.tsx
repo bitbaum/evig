@@ -138,15 +138,15 @@ export default function PressPageContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex flex-wrap justify-center gap-8 sm:gap-16">
             <div className="text-center">
-              <p className="text-4xl font-bold text-primary-600">{stats.totalMentions}+</p>
+              <p className="text-3xl sm:text-4xl font-bold text-primary-600">{stats.totalMentions}+</p>
               <p className="text-sm text-neutral-500 mt-1">{t('stats.mediaMentions')}</p>
             </div>
             <div className="text-center">
-              <p className="text-4xl font-bold text-primary-600">{stats.uniqueSources}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-primary-600">{stats.uniqueSources}</p>
               <p className="text-sm text-neutral-500 mt-1">{t('stats.uniqueSources')}</p>
             </div>
             <div className="text-center">
-              <p className="text-4xl font-bold text-primary-600">{stats.partnerships}</p>
+              <p className="text-3xl sm:text-4xl font-bold text-primary-600">{stats.partnerships}</p>
               <p className="text-sm text-neutral-500 mt-1">{t('stats.partnerships')}</p>
             </div>
           </div>

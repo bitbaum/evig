@@ -26,7 +26,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'card-shell p-8 text-center',
+        'card-shell p-6 sm:p-8 text-center',
         className
       )}
     >

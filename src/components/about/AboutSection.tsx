@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
 import { AboutSection as AboutSectionType } from '@/data/about'
 import { CheckCircle } from 'lucide-react'
+import { responsiveTypography } from '@/lib/responsive'
 
 interface AboutSectionProps {
   section: AboutSectionType
@@ -30,7 +31,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
           {/* Section Header */}
           <div className="text-center mb-12">
             {section.title && (
-              <Heading level={2} className={`text-4xl font-bold mb-4 ${textColorClass}`}>
+              <Heading level={2} className={`${responsiveTypography.section} font-bold mb-4 ${textColorClass}`}>
                 {section.title}
               </Heading>
             )}
