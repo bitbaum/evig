@@ -49,9 +49,59 @@ export const teamProfileSchema = z.object({
   // HR Notes (super admin only)
   hr_notes: z.string().max(5000).optional().nullable(),
 
-  // Status
+  // Compensation (added migration 080). Both can coexist for hybrid
+  // employment (salaried base + paid hourly overtime, etc.).
+  hourly_rate_cents: z.number().int().min(0).max(1_000_000).optional().nullable(),
+  salary_chf: z.union([z.number(), z.string()]).optional().nullable(),
+  salary_effective_date: z.string().optional().nullable(),
+
+  // Employment lifecycle (added migration 080)
+  end_date: z.string().optional().nullable(),
+  exit_reason: z.string().max(1000).optional().nullable(),
+
+  // Swiss employment metadata (added migration 080)
+  ahv_number: z.string().max(50).optional().nullable(),
+  canton_tax_code: z.string().max(20).optional().nullable(),
+
+  // Explicit work-state machine (added migration 080)
+  work_state: z.enum(['active', 'on_leave', 'unavailable', 'inactive']).optional().default('active'),
+
+  // Status (legacy boolean — new code should prefer work_state)
   is_active: z.boolean().optional().default(true),
 })
+
+// =============================================================================
+// LEAVE PERIODS + COMPENSATION HISTORY (Phase 4)
+// =============================================================================
+
+export const leavePeriodKindOptions = ['vacation', 'sick', 'parental', 'unpaid', 'military', 'other'] as const
+export type LeavePeriodKind = typeof leavePeriodKindOptions[number]
+
+export const leavePeriodSchema = z.object({
+  team_profile_id: z.string().uuid(),
+  starts_on: z.string().min(1, 'Startdatum erforderlich'),
+  ends_on: z.string().min(1, 'Enddatum erforderlich'),
+  kind: z.enum(leavePeriodKindOptions),
+  notes: z.string().max(1000).optional().nullable(),
+}).refine(d => d.ends_on >= d.starts_on, {
+  message: 'Enddatum darf nicht vor dem Startdatum liegen',
+  path: ['ends_on'],
+})
+
+export type LeavePeriodInput = z.infer<typeof leavePeriodSchema>
+
+export const compensationHistorySchema = z.object({
+  team_profile_id: z.string().uuid(),
+  hourly_rate_cents: z.number().int().min(0).max(1_000_000).optional().nullable(),
+  salary_chf: z.union([z.number(), z.string()]).optional().nullable(),
+  effective_date: z.string().min(1, 'Wirksamkeitsdatum erforderlich'),
+  reason: z.string().max(500).optional().nullable(),
+}).refine(d => d.hourly_rate_cents != null || d.salary_chf != null, {
+  message: 'Mindestens ein Betrag (Stundenlohn oder Gehalt) ist erforderlich',
+  path: ['hourly_rate_cents'],
+})
+
+export type CompensationHistoryInput = z.infer<typeof compensationHistorySchema>
 
 export type TeamProfileInput = z.infer<typeof teamProfileSchema>
 
@@ -111,6 +161,15 @@ export interface TeamProfile {
   hr_notes: string | null
   current_focus: string | null
   current_focus_updated_at: string | null
+  // Phase 4 — compensation + employment lifecycle (migration 080)
+  hourly_rate_cents: number | null
+  salary_chf: string | number | null
+  salary_effective_date: string | null
+  end_date: string | null
+  exit_reason: string | null
+  ahv_number: string | null
+  canton_tax_code: string | null
+  work_state: string
   is_active: boolean
   created_at: string
   updated_at: string

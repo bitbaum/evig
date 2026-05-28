@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, timestamp, integer, date, index } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, timestamp, integer, date, numeric, index } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { users } from './auth'
 
@@ -45,6 +45,29 @@ export const teamProfiles = pgTable('team_profiles', {
   currentFocus: text('current_focus'),
   currentFocusUpdatedAt: timestamp('current_focus_updated_at', { withTimezone: true, mode: 'string' }),
 
+  // Compensation (added by migration 080).
+  // hourlyRateCents + salaryChf coexist: hourly people have hourly_rate,
+  // salaried people have salary_chf, some hybrids have both. The
+  // compensation_history table is the source of truth for changes
+  // over time; these columns hold the *current* values.
+  hourlyRateCents: integer('hourly_rate_cents'),
+  salaryChf: numeric('salary_chf', { precision: 10, scale: 2 }),
+  salaryEffectiveDate: date('salary_effective_date', { mode: 'string' }),
+
+  // Employment lifecycle (added by migration 080)
+  endDate: date('end_date', { mode: 'string' }),
+  exitReason: text('exit_reason'),
+
+  // Swiss employment metadata (added by migration 080)
+  ahvNumber: text('ahv_number'),
+  cantonTaxCode: text('canton_tax_code'),
+
+  // Explicit work-state machine (added by migration 080).
+  // CHECK (work_state IN ('active', 'on_leave', 'unavailable', 'inactive'))
+  // — validated at DB level. isActive (below) stays as the legacy boolean
+  // shortcut; new code should prefer workState.
+  workState: text('work_state').notNull().default('active'),
+
   // Status & timestamps
   isActive: boolean('is_active').default(true),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
@@ -56,6 +79,7 @@ export const teamProfiles = pgTable('team_profiles', {
   index('idx_team_profiles_is_active').on(table.isActive),
   index('idx_team_profiles_skills').using('gin', table.skills),
   index('idx_team_profiles_current_focus').on(table.currentFocusUpdatedAt),
+  index('idx_team_profiles_work_state').on(table.workState),
 ])
 
 export type TeamProfile = typeof teamProfiles.$inferSelect
@@ -178,3 +202,78 @@ export const userContentSubmissions = pgTable('user_content_submissions', {
 
 export type UserContentSubmission = typeof userContentSubmissions.$inferSelect
 export type NewUserContentSubmission = typeof userContentSubmissions.$inferInsert
+
+// =============================================================================
+// COMPENSATION HISTORY (effective-dated rate / salary changes)
+// =============================================================================
+// Audit trail for hourly_rate + salary changes. Payroll uses this to
+// answer "what rate applied to this person in May?" even after a later
+// raise lands on team_profiles. ON DELETE RESTRICT on team_profile_id
+// — financial-audit immutability, same rationale as payment_transactions.
+
+export const compensationHistory = pgTable('compensation_history', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  teamProfileId: uuid('team_profile_id').notNull().references(() => teamProfiles.id, { onDelete: 'restrict' }),
+  hourlyRateCents: integer('hourly_rate_cents'),
+  salaryChf: numeric('salary_chf', { precision: 10, scale: 2 }),
+  effectiveDate: date('effective_date', { mode: 'string' }).notNull(),
+  reason: text('reason'),
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_compensation_history_profile').on(table.teamProfileId, table.effectiveDate),
+])
+
+export type CompensationHistory = typeof compensationHistory.$inferSelect
+export type NewCompensationHistory = typeof compensationHistory.$inferInsert
+
+// =============================================================================
+// LEAVE PERIODS (vacation / sick / parental / unpaid / military / other)
+// =============================================================================
+// Replaces the free-form `availability` text field. Kind values validated
+// at DB level via CHECK constraint added by migration 080. ON DELETE
+// CASCADE on team_profile_id — leave records are profile-scoped.
+
+export const leavePeriods = pgTable('leave_periods', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  teamProfileId: uuid('team_profile_id').notNull().references(() => teamProfiles.id, { onDelete: 'cascade' }),
+  startsOn: date('starts_on', { mode: 'string' }).notNull(),
+  endsOn: date('ends_on', { mode: 'string' }).notNull(),
+  // CHECK (kind IN ('vacation', 'sick', 'parental', 'unpaid', 'military', 'other'))
+  // — validated at DB level (constraint leave_periods_kind_valid).
+  kind: text('kind').notNull(),
+  notes: text('notes'),
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_leave_periods_profile_active').on(table.teamProfileId, table.startsOn, table.endsOn),
+])
+
+export type LeavePeriod = typeof leavePeriods.$inferSelect
+export type NewLeavePeriod = typeof leavePeriods.$inferInsert
+
+// =============================================================================
+// PAYROLL BATCHES (Phase 5 scaffolding — monthly Lohnlauf close + export)
+// =============================================================================
+// Groups approved timecards into a "this month is closed for payroll"
+// concept so accountant exports are reproducible and approved hours
+// stop being editable once the batch is closed.
+
+export const payrollBatches = pgTable('payroll_batches', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  periodStart: date('period_start', { mode: 'string' }).notNull(),
+  periodEnd: date('period_end', { mode: 'string' }).notNull(),
+  closedAt: timestamp('closed_at', { withTimezone: true, mode: 'string' }),
+  closedBy: uuid('closed_by').references(() => users.id, { onDelete: 'restrict' }),
+  exportedAt: timestamp('exported_at', { withTimezone: true, mode: 'string' }),
+  exportedBy: uuid('exported_by').references(() => users.id, { onDelete: 'set null' }),
+  notes: text('notes'),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_payroll_batches_period').on(table.periodStart, table.periodEnd),
+])
+
+export type PayrollBatch = typeof payrollBatches.$inferSelect
+export type NewPayrollBatch = typeof payrollBatches.$inferInsert

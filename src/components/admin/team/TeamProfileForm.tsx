@@ -18,6 +18,7 @@ import {
   Star,
   Clock,
   AlertCircle,
+  Wallet,
 } from 'lucide-react'
 import type { TeamProfileFormProps } from './types'
 import { useTeamProfileForm } from './useTeamProfileForm'
@@ -26,6 +27,7 @@ import { TeamTalentSection } from './TeamTalentSection'
 import { TeamAvailabilitySection } from './TeamAvailabilitySection'
 import { TeamEmergencySection } from './TeamEmergencySection'
 import { TeamHRNotesSection } from './TeamHRNotesSection'
+import { TeamCompensationSection } from './TeamCompensationSection'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
@@ -38,6 +40,7 @@ interface FormSection {
 
 const FORM_SECTIONS: FormSection[] = [
   { id: 'basic', label: 'Grundinformationen', icon: <Briefcase className="w-5 h-5" /> },
+  { id: 'compensation', label: 'Vergütung & Beschäftigung', icon: <Wallet className="w-5 h-5" /> },
   { id: 'talent', label: 'Fähigkeiten & Entwicklung', icon: <Star className="w-5 h-5" /> },
   { id: 'availability', label: 'Verfügbarkeit & Kontakt', icon: <Clock className="w-5 h-5" /> },
   { id: 'emergency', label: 'Notfallkontakt', icon: <AlertCircle className="w-5 h-5" /> },
@@ -168,6 +171,8 @@ export function TeamProfileForm({
                 />
               ) : section.id === 'basic' ? (
                 <TeamBasicInfoSection form={form} onChange={handleChange} />
+              ) : section.id === 'compensation' ? (
+                <TeamCompensationSection form={form} onChange={handleChange} isSuperAdmin={!!isSuperAdmin} />
               ) : section.id === 'availability' ? (
                 <TeamAvailabilitySection form={form} onChange={handleChange} />
               ) : section.id === 'emergency' ? (

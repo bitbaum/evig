@@ -25,6 +25,16 @@ export interface TeamProfileFormState {
   emergency_contact_phone: string
   emergency_contact_relation: string
   hr_notes: string
+  // Phase 4 — compensation + lifecycle. All strings on the form side
+  // (parsed on submit); date inputs use ISO date format.
+  hourly_rate_chf: string
+  salary_chf: string
+  salary_effective_date: string
+  end_date: string
+  exit_reason: string
+  ahv_number: string
+  canton_tax_code: string
+  work_state: string
   is_active: boolean
 }
 
@@ -65,6 +75,19 @@ export function useTeamProfileForm({
     emergency_contact_phone: initialData?.emergency_contact_phone || '',
     emergency_contact_relation: initialData?.emergency_contact_relation || '',
     hr_notes: initialData?.hr_notes || '',
+    // Phase 4: rates come back from the API as cents (integer) and CHF
+    // decimal strings; we render the rate as franc-with-two-decimals
+    // (e.g. 35.00) and parse back to cents on submit.
+    hourly_rate_chf: initialData?.hourly_rate_cents != null
+      ? (initialData.hourly_rate_cents / 100).toFixed(2)
+      : '',
+    salary_chf: initialData?.salary_chf != null ? String(initialData.salary_chf) : '',
+    salary_effective_date: initialData?.salary_effective_date || '',
+    end_date: initialData?.end_date || '',
+    exit_reason: initialData?.exit_reason || '',
+    ahv_number: initialData?.ahv_number || '',
+    canton_tax_code: initialData?.canton_tax_code || '',
+    work_state: initialData?.work_state || 'active',
     is_active: initialData?.is_active ?? true,
   })
 
@@ -117,8 +140,14 @@ export function useTeamProfileForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Strip the franc-string from the payload — we send cents to the API.
+    const { hourly_rate_chf, ...rest } = form
+    const hourlyRateCents = hourly_rate_chf
+      ? Math.round(parseFloat(hourly_rate_chf) * 100)
+      : null
+
     const data = {
-      ...form,
+      ...rest,
       contract_hours: form.contract_hours ? parseInt(form.contract_hours) : null,
       start_date: form.start_date || null,
       department: form.department || null,
@@ -134,6 +163,15 @@ export function useTeamProfileForm({
       emergency_contact_phone: form.emergency_contact_phone || null,
       emergency_contact_relation: form.emergency_contact_relation || null,
       hr_notes: isSuperAdmin ? (form.hr_notes || null) : undefined,
+      // Phase 4 — null-out empty strings so the API stores NULL, not "".
+      hourly_rate_cents: hourlyRateCents,
+      salary_chf: form.salary_chf ? parseFloat(form.salary_chf) : null,
+      salary_effective_date: form.salary_effective_date || null,
+      end_date: form.end_date || null,
+      exit_reason: form.exit_reason || null,
+      ahv_number: form.ahv_number || null,
+      canton_tax_code: form.canton_tax_code || null,
+      work_state: form.work_state || 'active',
     }
 
     try {

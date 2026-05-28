@@ -55,6 +55,15 @@ interface ProfileData {
   hr_notes: string | null
   current_focus: string | null
   current_focus_updated_at: string | null
+  // Phase 4 (migration 080)
+  hourly_rate_cents: number | null
+  salary_chf: string | number | null
+  salary_effective_date: string | null
+  end_date: string | null
+  exit_reason: string | null
+  ahv_number: string | null
+  canton_tax_code: string | null
+  work_state: string
   is_active: boolean
   created_at: string
   updated_at: string
@@ -62,7 +71,13 @@ interface ProfileData {
 
 async function getProfile(id: string, includeHrNotes = false): Promise<ProfileData | null> {
   try {
-    const hrNotesColumn = includeHrNotes ? ', tp.hr_notes' : ''
+    // hr_notes + the new comp/Swiss-employment fields stay super-admin-only.
+    // Non-super-admin staff still see lifecycle (end_date, exit_reason,
+    // work_state) since those govern who can pick up shifts and aren't
+    // financially sensitive.
+    const sensitiveColumns = includeHrNotes
+      ? ', tp.hr_notes, tp.hourly_rate_cents, tp.salary_chf, tp.salary_effective_date, tp.ahv_number, tp.canton_tax_code'
+      : ''
 
     const result = await query<ProfileData>(
       `SELECT
@@ -89,8 +104,11 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
         tp.emergency_contact_phone,
         tp.emergency_contact_relation,
         tp.current_focus,
-        tp.current_focus_updated_at
-        ${hrNotesColumn},
+        tp.current_focus_updated_at,
+        tp.end_date,
+        tp.exit_reason,
+        tp.work_state
+        ${sensitiveColumns},
         tp.is_active,
         tp.created_at,
         tp.updated_at
