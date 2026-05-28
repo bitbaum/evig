@@ -8,7 +8,7 @@
  * Only super admins can access these endpoints.
  */
 
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/db'
 import { users, sessions, accounts, userProfiles } from '@/db/schema'
 import { eq, and, ne, sql } from 'drizzle-orm'
@@ -196,11 +196,37 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
     // exists. Worse: a mid-Promise.all rejection committed one of
     // sessions/accounts and skipped the other. Wrap in a transaction so
     // partial failures roll back to a consistent state.
-    await db.transaction(async (tx) => {
-      await tx.delete(sessions).where(eq(sessions.userId, id))
-      await tx.delete(accounts).where(eq(accounts.userId, id))
-      await tx.delete(users).where(eq(users.id, id))
-    })
+    try {
+      await db.transaction(async (tx) => {
+        await tx.delete(sessions).where(eq(sessions.userId, id))
+        await tx.delete(accounts).where(eq(accounts.userId, id))
+        await tx.delete(users).where(eq(users.id, id))
+      })
+    } catch (error) {
+      // Migration 077 changed payment_transactions.user_id to ON DELETE
+      // RESTRICT so financial audit trail can't silently vanish. If the
+      // user has payment history, surface that as a clear 409 with
+      // operator-actionable text rather than the generic 500 the previous
+      // implementation produced. Postgres error code 23503 = foreign_key_violation.
+      const pgCode = (error as { code?: string })?.code
+      if (pgCode === '23503') {
+        logger.info('User delete blocked by FK constraint', {
+          adminId: session.user.id,
+          targetUserId: id,
+          targetUserEmail: targetUser.email,
+        })
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              'Dieser Benutzer hat Zahlungs-, Bestell- oder Audit-Daten, die aus rechtlichen Gründen erhalten bleiben müssen. ' +
+              'Anonymisiere das Konto stattdessen (E-Mail/Name entfernen, als inaktiv markieren), statt es zu löschen.',
+          },
+          { status: 409 },
+        )
+      }
+      throw error
+    }
 
     logger.info('User deleted by admin', {
       adminId: session.user.id,
