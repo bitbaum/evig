@@ -1,6 +1,6 @@
 # Revamp-IT
 
-Technology deserves a second life. So does the right to use it.
+> Used computers repaired and rehomed — not landfilled.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
@@ -8,9 +8,31 @@ Technology deserves a second life. So does the right to use it.
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791.svg)](https://neon.tech/)
 [![Live](https://img.shields.io/badge/Live-revamp--it.ch-green.svg)](https://revamp-it.ch)
 
-## Mission
+Revamp-IT is a Swiss non-profit association (Verein) operating since 2003 in Zürich. We accept donated computers, refurbish them, and redistribute them — to people who can't reach the commercial channel, to schools and community projects, and through our marketplace. We also run repair workshops and an open IT-Hilfe (IT help) program so the people we serve learn to keep their devices running themselves. This repository is the platform we use to run all of it.
 
-RevampIT is a Swiss nonprofit enabling the free exchange of technology on a nonprofit basis. We redistribute computers, hardware, and software while promoting open-source as the ideal form of human collaboration. Based in Zurich, everything we build serves that mission -- including this codebase.
+## What this platform does
+
+| Surface | Who it serves | What it does |
+|---|---|---|
+| **Storefront** | The public | Sells refurbished hardware (RevampIT-certified) to fund operations |
+| **P2P Marketplace** | Community | Lets members buy / sell / give away tech between each other |
+| **IT-Hilfe** | People who need help | Matches help requests with volunteer technicians; in-person + remote |
+| **Workshops** | Community | Repair Café sessions, Linux installs, digital-skills classes — paid + free |
+| **Erfassung pipeline** | Staff | AI-assisted intake → triage → photo → publish for donated hardware |
+| **Member services** | Members | Member directory, Swiss-compliant donation receipts, voting on association decisions |
+| **HIRN AI** | Staff | In-house knowledge / action assistant; cascades through Groq / OpenRouter / Ollama |
+
+## How a non-profit funds this kind of platform
+
+We are not VC-backed. The economic model is deliberately mixed so no single source carries the whole organization:
+
+1. **Storefront revenue** — refurbished devices sold at affordable prices. Margin funds operations; surplus subsidizes the people who can't pay full price.
+2. **Service revenue** — paid workshops, repair services, IT-Hilfe billable to companies that can pay (free for individuals who can't).
+3. **Donations** — direct cash donations and in-kind hardware donations (we issue Swiss-tax-compliant receipts; see `LEGAL_NONPROFIT_COMPLIANCE.md`).
+4. **Membership** — yearly membership fees (regular CHF 50, reduced CHF 20).
+5. **Grants & partnerships** — selective collaborations with municipal programs and aligned organizations.
+
+The platform is the operational backbone for all five. It is open-source ([MIT](LICENSE)) so other circular-economy organizations can adopt it directly — there's no extractive layer in between.
 
 ## Architecture
 
