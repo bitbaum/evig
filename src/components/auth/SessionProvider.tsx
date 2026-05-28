@@ -2,9 +2,11 @@
 
 import { ReactNode, useEffect, useState } from 'react'
 import { SessionContext } from 'next-auth/react'
+import type { Session } from 'next-auth'
 
 type NextAuthSessionProvider = React.ComponentType<{
   children: ReactNode
+  session?: Session | null
   refetchInterval?: number
   refetchOnWindowFocus?: boolean
   refetchWhenOffline?: boolean
@@ -13,22 +15,33 @@ type NextAuthSessionProvider = React.ComponentType<{
 
 interface Props {
   children: ReactNode
+  /** Session pre-fetched server-side in the root layout. */
+  session?: Session | null
 }
-
-// Stable fallback so SSR and first client render produce identical output.
-// useSession() returns {data:null, status:'loading'} until the real SP mounts.
-const SSR_SESSION_FALLBACK = { data: null, status: 'loading' as const, update: async () => null }
 
 let _cachedSP: NextAuthSessionProvider | null = null
 
 // Lazy-loads next-auth/react client-side to avoid the React-null circular-dependency
 // that can occur in Next.js 16 + next-auth v5 beta SSR bundles during static generation.
-// Before the import resolves (and on the server), children are wrapped in a
-// SessionContext.Provider with a loading-state fallback so useSession() never throws.
-function LazyAuthProvider({ children }: Props) {
-  // Wrap in arrow fn — React calls function args to useState/setState as initializers/updaters.
-  // Passing the component directly would invoke SessionProvider() with no args → crash.
+//
+// When the parent layout passes `session` (fetched via auth() server-side),
+// the fallback context starts in the correct authenticated/unauthenticated
+// state instead of 'loading'. This is what stops the Anmelden/Registrieren
+// flash (or stuck state) for logged-in users — previously useSession()
+// returned 'loading' on first render, the navbar showed login buttons, and
+// if the lazy SP import or its re-render didn't land cleanly (hydration
+// error, slow chunk fetch, etc.) the buttons stayed visible.
+function LazyAuthProvider({ children, session }: Props) {
   const [SP, setSP] = useState<NextAuthSessionProvider | null>(() => _cachedSP)
+
+  // Build a fallback that matches the server-known auth state. `loading`
+  // is only used when we have no server session AND the real SP hasn't
+  // mounted yet — never for an already-authenticated user.
+  const fallback = session?.user
+    ? { data: session, status: 'authenticated' as const, update: async () => session }
+    : session === null
+      ? { data: null, status: 'unauthenticated' as const, update: async () => null }
+      : { data: null, status: 'loading' as const, update: async () => null }
 
   useEffect(() => {
     if (_cachedSP) return
@@ -40,7 +53,7 @@ function LazyAuthProvider({ children }: Props) {
 
   if (!SP) {
     return (
-      <SessionContext.Provider value={SSR_SESSION_FALLBACK}>
+      <SessionContext.Provider value={fallback}>
         {children}
       </SessionContext.Provider>
     )
@@ -48,6 +61,7 @@ function LazyAuthProvider({ children }: Props) {
 
   return (
     <SP
+      session={session}
       refetchInterval={0}
       refetchOnWindowFocus={false}
       refetchWhenOffline={false}
@@ -58,6 +72,6 @@ function LazyAuthProvider({ children }: Props) {
   )
 }
 
-export function SessionProvider({ children }: Props) {
-  return <LazyAuthProvider>{children}</LazyAuthProvider>
+export function SessionProvider({ children, session }: Props) {
+  return <LazyAuthProvider session={session}>{children}</LazyAuthProvider>
 }
