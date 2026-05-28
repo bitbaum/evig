@@ -90,6 +90,12 @@ export const timecardReviewActionSchema = z.object({
   review_notes: z.string().max(TIMECARD_LIMITS.MAX_REVIEW_NOTE_LENGTH).optional().nullable(),
 })
 
+export const timecardBulkReviewSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(100),
+  status: z.enum(timecardReviewStatuses),
+  review_notes: z.string().max(TIMECARD_LIMITS.MAX_REVIEW_NOTE_LENGTH).optional().nullable(),
+})
+
 export type TimecardEntryInput = z.infer<typeof timecardEntrySchema>
 export type TimecardDraftInput = z.infer<typeof timecardDraftSchema>
 export type SubmitTimecardInput = z.infer<typeof submitTimecardSchema>

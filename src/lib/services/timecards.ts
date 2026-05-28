@@ -288,12 +288,19 @@ export async function listTimecards(params: {
   limit?: number
   offset?: number
 } = {}) {
+  // LEFT JOIN team_profiles so the admin approval queue can show
+  // department + position next to each name without a second round trip.
+  // Some users (e.g. external buyers) won't have a profile; those rows
+  // simply get NULL dept/position and the UI handles that.
   const query = db
     .select({
       id: timecards.id,
       user_id: timecards.userId,
       user_name: users.name,
       user_email: users.email,
+      department: teamProfiles.department,
+      position: teamProfiles.position,
+      employment_type: teamProfiles.employmentType,
       period_type: timecards.periodType,
       period_start: timecards.periodStart,
       period_end: timecards.periodEnd,
@@ -309,6 +316,7 @@ export async function listTimecards(params: {
     })
     .from(timecards)
     .innerJoin(users, eq(timecards.userId, users.id))
+    .leftJoin(teamProfiles, eq(teamProfiles.userId, timecards.userId))
     .leftJoin(timecardEntries, eq(timecardEntries.timecardId, timecards.id))
 
   const conditions = []
@@ -334,6 +342,9 @@ export async function listTimecards(params: {
       timecards.id,
       users.name,
       users.email,
+      teamProfiles.department,
+      teamProfiles.position,
+      teamProfiles.employmentType,
     )
     .orderBy(asc(timecards.periodStart), asc(timecards.createdAt))
     .limit(params.limit ?? 50)

@@ -825,6 +825,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'personen',
   },
 
+  'timecard-approvals': {
+    id: 'timecard-approvals',
+    path: '/admin/team/approvals',
+    ui: {
+      label: 'Freigaben',
+      description: 'Eingereichte Zeitkarten im Stapel prüfen',
+      icon: CheckSquare,
+      emoji: '✅',
+      color: 'success',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 203,
+    category: 'management',
+    sidebarGroup: 'personen',
+  },
+
   // ---------------------------------------------------------------------------
   // ANALYSE - Analytics and reporting sections (moved from Hirn)
   // ---------------------------------------------------------------------------
