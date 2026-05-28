@@ -1,0 +1,171 @@
+'use client'
+
+/**
+ * TeamProfileTimecardsTab — shown when HR opens the Zeiterfassung tab on
+ * a team-profile detail page. Lists this user's recent timecards with
+ * status, period, hours and a deep-link into the global approvals
+ * queue when there's something pending.
+ *
+ * Keeps the rendering close to TimecardHistorySidebar (the user-facing
+ * variant) so HR + the staff member see the same shape — the only
+ * difference is HR sees an "Open in approvals" affordance for
+ * submitted rows.
+ */
+
+import { useEffect, useState, useCallback } from 'react'
+import Link from 'next/link'
+import { CheckCircle2, Clock, AlertCircle, Edit3, ExternalLink, RefreshCw } from 'lucide-react'
+import { apiFetch } from '@/lib/api/client'
+import {
+  TIMECARD_STATUS_LABELS,
+  TIMECARD_STATUS_COLORS,
+  formatTimecardDuration,
+  type TimecardStatus,
+} from '@/config/timecards'
+import { formatDateShort } from '@/lib/date-formats'
+
+interface TimecardRow {
+  id: string
+  period_type: string
+  period_start: string
+  period_end: string
+  status: string
+  submitted_at: string | null
+  reviewed_at: string | null
+  review_notes: string | null
+  total_minutes: number
+}
+
+interface ListResponse {
+  items: TimecardRow[]
+}
+
+const STATUS_ICON: Record<string, typeof CheckCircle2> = {
+  draft: Edit3,
+  submitted: Clock,
+  approved: CheckCircle2,
+  rejected: AlertCircle,
+}
+
+function formatPeriod(row: TimecardRow): string {
+  if (row.period_type === 'week') {
+    return `Woche ${formatDateShort(row.period_start)}–${formatDateShort(row.period_end)}`
+  }
+  return new Date(row.period_start).toLocaleString('de-CH', { month: 'long', year: 'numeric' })
+}
+
+interface Props {
+  userId: string
+}
+
+export function TeamProfileTimecardsTab({ userId }: Props) {
+  const [rows, setRows] = useState<TimecardRow[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const load = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    const params = new URLSearchParams({ user_id: userId, limit: '25' })
+    const result = await apiFetch<ListResponse>(`/api/admin/timecards?${params}`)
+    if (result.success && result.data) {
+      setRows(result.data.items)
+    } else {
+      setError(result.error || 'Zeitkarten konnten nicht geladen werden.')
+    }
+    setIsLoading(false)
+  }, [userId])
+
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    void load()
+  }, [load])
+  /* eslint-enable react-hooks/set-state-in-effect */
+
+  const totalMinutes = rows.reduce((sum, r) => sum + (Number(r.total_minutes) || 0), 0)
+  const submittedCount = rows.filter(r => r.status === 'submitted').length
+
+  return (
+    <div className="space-y-3">
+      {/* Header bar — totals + reload */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+        <div className="text-sm text-neutral-600 dark:text-neutral-400">
+          {rows.length === 0 && !isLoading
+            ? 'Noch keine Zeiterfassungen.'
+            : `${rows.length} Karten · ${formatTimecardDuration(totalMinutes)} insgesamt`}
+        </div>
+        <div className="flex items-center gap-2">
+          {submittedCount > 0 && (
+            <Link
+              href="/admin/team/approvals"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 text-warning-700 dark:text-warning-300 text-sm font-medium hover:bg-warning-100 dark:hover:bg-warning-500/20"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              {submittedCount} zu prüfen
+            </Link>
+          )}
+          <button
+            onClick={load}
+            disabled={isLoading}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-neutral-300 dark:border-neutral-600 text-sm font-medium text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-white/[0.04] disabled:opacity-60"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            Aktualisieren
+          </button>
+        </div>
+      </div>
+
+      {error && (
+        <div className="rounded-lg bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 px-4 py-2.5 text-sm text-error-700 dark:text-error-300">
+          {error}
+        </div>
+      )}
+
+      {rows.length > 0 && (
+        <div className="rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 overflow-hidden">
+          <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
+            {rows.map(row => {
+              const status = row.status as TimecardStatus
+              const Icon = STATUS_ICON[status] ?? Clock
+              const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
+              const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
+              const dateRef = row.reviewed_at || row.submitted_at
+              return (
+                <li key={row.id} className="px-4 sm:px-5 py-3 hover:bg-neutral-50 dark:hover:bg-white/[0.02] transition-colors">
+                  <div className="flex items-start gap-3">
+                    <Icon className="w-4 h-4 mt-0.5 text-neutral-500 dark:text-neutral-400 shrink-0" />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <span className="text-sm font-medium text-neutral-900 dark:text-white">
+                          {formatPeriod(row)}
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold text-neutral-900 dark:text-white tabular-nums">
+                            {formatTimecardDuration(Number(row.total_minutes) || 0)}
+                          </span>
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
+                            {statusLabel}
+                          </span>
+                        </div>
+                      </div>
+                      {dateRef && (
+                        <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
+                          {row.reviewed_at ? 'Geprüft' : 'Eingereicht'} {formatDateShort(dateRef)}
+                        </p>
+                      )}
+                      {row.status === 'rejected' && row.review_notes && (
+                        <p className="mt-2 text-xs text-error-700 dark:text-error-300 bg-error-50 dark:bg-error-500/10 rounded-md px-2 py-1.5">
+                          {row.review_notes}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
