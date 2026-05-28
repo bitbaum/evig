@@ -46,6 +46,7 @@ import {
   Lightbulb,
   MessageSquare,
   Clock,
+  Play,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 
@@ -480,6 +481,36 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: false, dashboard: true },
     priority: 45,
+    category: 'activities',
+  },
+
+  'shift-log': {
+    id: 'shift-log',
+    path: '/dashboard/shift',
+    ui: {
+      label: 'Schicht starten',
+      description: 'Aktuelle Schicht erfassen – Tippen, fertig',
+      icon: Play,
+      emoji: '▶️',
+      color: 'success',
+    },
+    visibility: { admin: false, dashboard: true, requiresStaff: true },
+    priority: 5,
+    category: 'activities',
+  },
+
+  'my-timecards': {
+    id: 'my-timecards',
+    path: '/dashboard/timecards',
+    ui: {
+      label: 'Meine Zeiterfassung',
+      description: 'Arbeitszeiten erfassen und einreichen',
+      icon: Clock,
+      emoji: '⏱️',
+      color: 'info',
+    },
+    visibility: { admin: false, dashboard: true, requiresStaff: true },
+    priority: 6,
     category: 'activities',
   },
 
