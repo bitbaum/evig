@@ -23,6 +23,11 @@ export const timecards = pgTable('timecards', {
   reviewedBy: uuid('reviewed_by').references(() => users.id, { onDelete: 'set null' }),
   reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
   reviewNotes: text('review_notes'),
+  // Phase 4 / Phase 5 (migration 080). Linked when a payroll batch closes;
+  // rateAppliedCents is the snapshot of team_profiles.hourly_rate_cents at
+  // close time so a later raise can't retroactively change historical math.
+  payrollBatchId: uuid('payroll_batch_id'),
+  rateAppliedCents: integer('rate_applied_cents'),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 }, (table) => [
@@ -31,6 +36,7 @@ export const timecards = pgTable('timecards', {
   index('idx_timecards_status').on(table.status),
   index('idx_timecards_period').on(table.periodStart, table.periodEnd),
   index('idx_timecards_reviewed_by').on(table.reviewedBy),
+  index('idx_timecards_payroll_batch').on(table.payrollBatchId),
 ])
 
 export type Timecard = typeof timecards.$inferSelect

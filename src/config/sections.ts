@@ -47,6 +47,7 @@ import {
   MessageSquare,
   Clock,
   Play,
+  Wallet,
 } from 'lucide-react'
 import { ORG } from '@/config/org'
 
@@ -837,6 +838,23 @@ export const SECTIONS: Record<string, SectionConfig> = {
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 203,
+    category: 'management',
+    sidebarGroup: 'personen',
+  },
+
+  payroll: {
+    id: 'payroll',
+    path: '/admin/payroll',
+    ui: {
+      label: 'Lohnlauf',
+      description: 'Monat abschliessen und CSV für die Buchhaltung exportieren',
+      icon: Wallet,
+      emoji: '💼',
+      color: 'success',
+    },
+    // Sensitive: super-admin gate enforced server-side too.
+    visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
+    priority: 204,
     category: 'management',
     sidebarGroup: 'personen',
   },
