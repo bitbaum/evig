@@ -1,4 +1,5 @@
-import { pgTable, uuid, text, date, time, timestamp, integer, index, uniqueIndex } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, date, time, timestamp, integer, index, uniqueIndex, check } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 import { users } from './auth'
 import { tasks } from './tasks'
 import { meetingProtocols } from './protocols'
@@ -37,6 +38,11 @@ export const timecards = pgTable('timecards', {
   index('idx_timecards_period').on(table.periodStart, table.periodEnd),
   index('idx_timecards_reviewed_by').on(table.reviewedBy),
   index('idx_timecards_payroll_batch').on(table.payrollBatchId),
+  // Mirrors migration 080's timecards_rate_applied_non_negative.
+  check(
+    'timecards_rate_applied_non_negative',
+    sql`${table.rateAppliedCents} IS NULL OR ${table.rateAppliedCents} >= 0`,
+  ),
 ])
 
 export type Timecard = typeof timecards.$inferSelect

@@ -1,4 +1,5 @@
-import { pgTable, uuid, text, boolean, timestamp, integer, varchar, jsonb, index, uniqueIndex, primaryKey } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, timestamp, integer, varchar, jsonb, index, uniqueIndex, primaryKey, check } from 'drizzle-orm/pg-core'
+import { sql } from 'drizzle-orm'
 
 // =============================================================================
 // USERS
@@ -44,6 +45,11 @@ export const users = pgTable('users', {
   index('idx_users_is_super_admin').on(table.isSuperAdmin),
   // 055: admin user listing sorted by join date
   index('idx_users_staff_created').on(table.isStaff, table.createdAt),
+  // Mirrors the CHECK added by migration 079 (users_token_version_non_negative).
+  // Belt-and-suspenders: the column is NOT NULL DEFAULT 0 and bumped on
+  // permission changes; a regression that decremented past 0 would silently
+  // lock all users with that token version into a permanent stale-token state.
+  check('users_token_version_non_negative', sql`${table.tokenVersion} >= 0`),
 ])
 
 export type User = typeof users.$inferSelect

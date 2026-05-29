@@ -32,6 +32,7 @@ Curated reference for engineers, operators, and contributors. Everything in this
 
 ## Operations
 
+- [MIGRATIONS.md](./MIGRATIONS.md) — canonical migration path (`scripts/db/migrations/`), naming, idempotency rules, Neon application
 - [EMAIL_SETUP.md](./EMAIL_SETUP.md) — Listmonk + Brevo configuration
 - [RELIABILITY.md](./RELIABILITY.md) — uptime expectations, on-call practices
 - [CODE_AUDIT.md](./CODE_AUDIT.md) — running list of known issues being worked on

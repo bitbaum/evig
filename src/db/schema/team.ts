@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, boolean, timestamp, integer, date, numeric, index } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, boolean, timestamp, integer, date, numeric, index, check } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { users } from './auth'
 
@@ -80,6 +80,11 @@ export const teamProfiles = pgTable('team_profiles', {
   index('idx_team_profiles_skills').using('gin', table.skills),
   index('idx_team_profiles_current_focus').on(table.currentFocusUpdatedAt),
   index('idx_team_profiles_work_state').on(table.workState),
+  // Mirrors the CHECK added by migration 080 (team_profiles_work_state_valid).
+  check(
+    'team_profiles_work_state_valid',
+    sql`${table.workState} IN ('active', 'on_leave', 'unavailable', 'inactive')`,
+  ),
 ])
 
 export type TeamProfile = typeof teamProfiles.$inferSelect
@@ -222,6 +227,16 @@ export const compensationHistory = pgTable('compensation_history', {
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
 }, (table) => [
   index('idx_compensation_history_profile').on(table.teamProfileId, table.effectiveDate),
+  // Mirrors migration 080's compensation_history_at_least_one_amount.
+  check(
+    'compensation_history_at_least_one_amount',
+    sql`${table.hourlyRateCents} IS NOT NULL OR ${table.salaryChf} IS NOT NULL`,
+  ),
+  // Mirrors migration 080's compensation_history_amounts_non_negative.
+  check(
+    'compensation_history_amounts_non_negative',
+    sql`(${table.hourlyRateCents} IS NULL OR ${table.hourlyRateCents} >= 0) AND (${table.salaryChf} IS NULL OR ${table.salaryChf} >= 0)`,
+  ),
 ])
 
 export type CompensationHistory = typeof compensationHistory.$inferSelect
@@ -248,6 +263,13 @@ export const leavePeriods = pgTable('leave_periods', {
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
 }, (table) => [
   index('idx_leave_periods_profile_active').on(table.teamProfileId, table.startsOn, table.endsOn),
+  // Mirrors migration 080's leave_periods_kind_valid.
+  check(
+    'leave_periods_kind_valid',
+    sql`${table.kind} IN ('vacation', 'sick', 'parental', 'unpaid', 'military', 'other')`,
+  ),
+  // Mirrors migration 080's leave_periods_dates_ordered.
+  check('leave_periods_dates_ordered', sql`${table.endsOn} >= ${table.startsOn}`),
 ])
 
 export type LeavePeriod = typeof leavePeriods.$inferSelect
@@ -273,6 +295,8 @@ export const payrollBatches = pgTable('payroll_batches', {
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
 }, (table) => [
   index('idx_payroll_batches_period').on(table.periodStart, table.periodEnd),
+  // Mirrors migration 080's payroll_batches_dates_ordered.
+  check('payroll_batches_dates_ordered', sql`${table.periodEnd} >= ${table.periodStart}`),
 ])
 
 export type PayrollBatch = typeof payrollBatches.$inferSelect
