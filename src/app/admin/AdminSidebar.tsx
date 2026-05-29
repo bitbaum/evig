@@ -116,11 +116,13 @@ export function AdminSidebar({
           )}
         </button>
 
+        {/* Mobile close — 44×44 to meet thumb-tap minimum on phones */}
         <button
           onClick={() => setMobileMenuOpen(false)}
-          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:hidden"
+          className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg hover:bg-neutral-100 dark:hover:bg-white/[0.06] lg:hidden"
+          aria-label="Seitenleiste schliessen"
         >
-          <ChevronLeft className="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+          <ChevronLeft className="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
         </button>
       </div>
 
@@ -139,7 +141,7 @@ export function AdminSidebar({
                 <button
                   onClick={() => toggleGroup(group.id)}
                   aria-expanded={isExpanded}
-                  className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-xs font-medium uppercase tracking-widest transition-colors ${
+                  className={`flex w-full items-center justify-between rounded-lg px-2 py-3 lg:py-1.5 text-xs font-medium uppercase tracking-widest transition-colors ${
                     hasActive
                       ? 'text-primary-500 dark:text-primary-500'
                       : 'text-neutral-400 dark:text-neutral-600 hover:text-neutral-600 dark:hover:text-neutral-400'
@@ -165,7 +167,7 @@ export function AdminSidebar({
                         key={section.path}
                         href={section.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 transition-colors ${
+                        className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 transition-colors ${
                           sidebarCollapsed ? 'justify-center' : ''
                         } ${
                           active
@@ -195,22 +197,23 @@ export function AdminSidebar({
           )
         })}
 
-        {/* Hirn AI */}
+        {/* Hirn AI — flat accent, no gradients (matches the rest of the
+            design system; gradients are reserved for hero overlays). */}
         {hasHirnAccess && hirnSection && (
           <div className="mt-4 border-t border-neutral-200 pt-4 dark:border-white/[0.06]">
             <Link
               href={hirnSection.path}
               onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                 sidebarCollapsed ? 'justify-center' : ''
               } ${
                 isActive(hirnSection.path)
-                  ? 'bg-gradient-to-r from-primary-500/10 to-primary-600/10 text-primary-700 dark:text-primary-400 ring-1 ring-primary-500/30'
-                  : 'text-neutral-700 dark:text-neutral-300 hover:bg-gradient-to-r hover:from-primary-500/10 hover:to-primary-600/10'
+                  ? 'bg-primary-500/10 text-primary-700 dark:text-primary-400 ring-1 ring-primary-500/30'
+                  : 'text-neutral-700 dark:text-neutral-300 hover:bg-primary-500/10'
               }`}
               title={sidebarCollapsed ? 'Hirn AI' : undefined}
             >
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center flex-shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center flex-shrink-0">
                 <Brain className="w-4 h-4 text-white" />
               </div>
               {!sidebarCollapsed && (
@@ -240,7 +243,7 @@ export function AdminSidebar({
                 key={href}
                 href={href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-600 dark:hover:bg-white/[0.04] dark:hover:text-white ${
+                className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-600 dark:hover:bg-white/[0.04] dark:hover:text-white ${
                   sidebarCollapsed ? 'justify-center' : ''
                 }`}
                 title={sidebarCollapsed ? label : undefined}

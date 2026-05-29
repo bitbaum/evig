@@ -89,6 +89,9 @@ export interface SectionUI {
   emoji?: string
   /** Color theme */
   color: SectionColor
+  /** Short label for the admin mobile bottom nav (≤8 chars renders cleanly).
+   *  When omitted, falls back to `label`. */
+  mobileBottomNavLabel?: string
 }
 
 export type SectionColor =
@@ -118,6 +121,10 @@ export interface SectionConfig {
   category: SectionCategory
   /** Sidebar group for admin navigation (optional, defaults to none) */
   sidebarGroup?: SidebarGroupId
+  /** Position in the admin mobile bottom nav (1-3). Sections without an
+   *  order don't appear in the bottom nav; "Mehr" opens the full sidebar.
+   *  Used by `getMobileBottomNavSections()`. */
+  mobileBottomNavOrder?: number
 }
 
 export type SectionCategory =
@@ -222,11 +229,13 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: LayoutDashboard,
       emoji: '📊',
       color: 'primary',
+      mobileBottomNavLabel: 'Heute',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 0,
     category: 'core',
     sidebarGroup: 'uebersicht',
+    mobileBottomNavOrder: 1,
   },
 
   profile: {
@@ -709,6 +718,7 @@ export const SECTIONS: Record<string, SectionConfig> = {
     priority: 130,
     category: 'management',
     sidebarGroup: 'betrieb',
+    mobileBottomNavOrder: 2,
   },
 
   protocols: {
@@ -736,11 +746,13 @@ export const SECTIONS: Record<string, SectionConfig> = {
       icon: Vote,
       emoji: '🗳️',
       color: 'info',
+      mobileBottomNavLabel: 'Entscheide',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 132,
     category: 'management',
     sidebarGroup: 'betrieb',
+    mobileBottomNavOrder: 3,
   },
 
   analytics: {
@@ -1088,6 +1100,20 @@ export function getSidebarGroupsWithSections(): Array<{
  */
 export function getHirnSection(): SectionConfig | undefined {
   return SECTIONS.hirn
+}
+
+/**
+ * Sections that should appear in the admin mobile bottom nav, in order.
+ *
+ * The bottom nav surfaces the three most-frequent destinations for
+ * one-tap access from anywhere in the admin surface. Flag a section with
+ * `mobileBottomNavOrder: 1 | 2 | 3` and it shows up here automatically;
+ * the rest stay one extra tap away via the "Mehr" button.
+ */
+export function getMobileBottomNavSections(): SectionConfig[] {
+  return Object.values(SECTIONS)
+    .filter((s): s is SectionConfig => typeof s.mobileBottomNavOrder === 'number')
+    .sort((a, b) => (a.mobileBottomNavOrder ?? 0) - (b.mobileBottomNavOrder ?? 0))
 }
 
 // =============================================================================

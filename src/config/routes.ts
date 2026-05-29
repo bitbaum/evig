@@ -88,5 +88,12 @@ export const ROUTES = {
     register:                 '/auth/register',
     forgotPassword:           '/auth/forgot-password',
     verifyEmail:              '/auth/verify-email',
+    // Legal + membership pages — surface in the footer SSOT instead of
+    // being hardcoded across components. Add new public pages here.
+    impressum:                '/impressum',
+    datenschutz:              '/datenschutz',
+    agb:                      '/agb',
+    transparenz:              '/transparenz',
+    mitgliedWerden:           '/mitglied-werden',
   },
 } as const

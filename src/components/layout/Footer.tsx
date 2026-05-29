@@ -5,6 +5,7 @@ import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
 import { Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { ROUTES } from '@/config/routes'
 
 const footerLocations = [
   {
@@ -142,19 +143,19 @@ export default function Footer() {
         {/* Legal Links */}
         <div className="mt-6 pt-6 border-t border-neutral-800">
           <nav aria-label={tFooter('legal')} className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-neutral-300">
-            <Link href="/impressum" className="hover:text-white transition-colors">
+            <Link href={ROUTES.public.impressum} className="hover:text-white transition-colors">
               {tFooter('impressum')}
             </Link>
-            <Link href="/datenschutz" className="hover:text-white transition-colors">
+            <Link href={ROUTES.public.datenschutz} className="hover:text-white transition-colors">
               {tFooter('privacyPolicy')}
             </Link>
-            <Link href="/agb" className="hover:text-white transition-colors">
+            <Link href={ROUTES.public.agb} className="hover:text-white transition-colors">
               {tFooter('termsOfService')}
             </Link>
-            <Link href="/transparenz" className="hover:text-white transition-colors">
+            <Link href={ROUTES.public.transparenz} className="hover:text-white transition-colors">
               {tFooter('transparency')}
             </Link>
-            <Link href="/mitglied-werden" className="hover:text-white transition-colors">
+            <Link href={ROUTES.public.mitgliedWerden} className="hover:text-white transition-colors">
               {tNav('membership')}
             </Link>
           </nav>
