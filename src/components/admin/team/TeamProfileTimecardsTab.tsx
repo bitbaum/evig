@@ -14,7 +14,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
-import { CheckCircle2, Clock, AlertCircle, Edit3, ExternalLink, RefreshCw } from 'lucide-react'
+import { Clock, ExternalLink, RefreshCw } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import {
   TIMECARD_STATUS_LABELS,
@@ -23,6 +23,7 @@ import {
   type TimecardStatus,
 } from '@/config/timecards'
 import { formatDateShort } from '@/lib/date-formats'
+import { TIMECARD_STATUS_ICONS, formatTimecardPeriod } from '@/lib/team/timecard-display'
 
 interface TimecardRow {
   id: string
@@ -38,20 +39,6 @@ interface TimecardRow {
 
 interface ListResponse {
   items: TimecardRow[]
-}
-
-const STATUS_ICON: Record<string, typeof CheckCircle2> = {
-  draft: Edit3,
-  submitted: Clock,
-  approved: CheckCircle2,
-  rejected: AlertCircle,
-}
-
-function formatPeriod(row: TimecardRow): string {
-  if (row.period_type === 'week') {
-    return `Woche ${formatDateShort(row.period_start)}–${formatDateShort(row.period_end)}`
-  }
-  return new Date(row.period_start).toLocaleString('de-CH', { month: 'long', year: 'numeric' })
 }
 
 interface Props {
@@ -126,7 +113,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
           <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
             {rows.map(row => {
               const status = row.status as TimecardStatus
-              const Icon = STATUS_ICON[status] ?? Clock
+              const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock
               const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
               const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
               const dateRef = row.reviewed_at || row.submitted_at
@@ -137,7 +124,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         <span className="text-sm font-medium text-neutral-900 dark:text-white">
-                          {formatPeriod(row)}
+                          {formatTimecardPeriod(row.period_type, row.period_start, row.period_end)}
                         </span>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-semibold text-neutral-900 dark:text-white tabular-nums">

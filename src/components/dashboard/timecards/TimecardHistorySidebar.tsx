@@ -11,7 +11,8 @@ import { formatTimecardDuration } from '@/config/timecards'
 import { TIMECARD_STATUS_LABELS, TIMECARD_STATUS_COLORS } from '@/config/timecards'
 import type { TimecardStatus } from '@/config/timecards'
 import { formatDateShort } from '@/lib/date-formats'
-import { CheckCircle2, Clock, AlertCircle, Edit3 } from 'lucide-react'
+import { Clock } from 'lucide-react'
+import { TIMECARD_STATUS_ICONS, formatTimecardPeriod } from '@/lib/team/timecard-display'
 
 interface HistoryRow {
   id: string
@@ -26,22 +27,6 @@ interface HistoryRow {
 
 interface Props {
   history: HistoryRow[]
-}
-
-const STATUS_ICON: Record<string, typeof CheckCircle2> = {
-  draft: Edit3,
-  submitted: Clock,
-  approved: CheckCircle2,
-  rejected: AlertCircle,
-}
-
-function formatPeriod(periodType: string, start: string, end: string): string {
-  if (periodType === 'week') {
-    return `Woche ${formatDateShort(start)} – ${formatDateShort(end)}`
-  }
-  // month
-  const month = new Date(start).toLocaleString('de-CH', { month: 'long', year: 'numeric' })
-  return month
 }
 
 export function TimecardHistorySidebar({ history }: Props) {
@@ -67,7 +52,7 @@ export function TimecardHistorySidebar({ history }: Props) {
       <ul className="divide-y divide-neutral-100 dark:divide-white/[0.04]">
         {history.map(row => {
           const status = row.status as TimecardStatus
-          const Icon = STATUS_ICON[status] ?? Clock
+          const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock
           const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
           const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
           const dateRef = row.reviewedAt || row.submittedAt
@@ -78,7 +63,7 @@ export function TimecardHistorySidebar({ history }: Props) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-medium text-neutral-900 dark:text-white truncate">
-                      {formatPeriod(row.periodType, row.periodStart, row.periodEnd)}
+                      {formatTimecardPeriod(row.periodType, row.periodStart, row.periodEnd)}
                     </span>
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}

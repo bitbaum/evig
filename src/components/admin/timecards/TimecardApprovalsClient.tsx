@@ -34,7 +34,7 @@ import {
   formatTimecardDuration,
   type TimecardStatus,
 } from '@/config/timecards'
-import { formatDateShort } from '@/lib/date-formats'
+import { formatTimecardPeriod } from '@/lib/team/timecard-display'
 
 interface ApprovalRow {
   id: string
@@ -67,13 +67,6 @@ interface BulkResultResponse {
 }
 
 type PeriodFilter = 'all' | 'week' | 'month'
-
-function formatPeriod(row: ApprovalRow): string {
-  if (row.period_type === 'week') {
-    return `Woche ${formatDateShort(row.period_start)}–${formatDateShort(row.period_end)}`
-  }
-  return new Date(row.period_start).toLocaleString('de-CH', { month: 'long', year: 'numeric' })
-}
 
 function initials(nameOrEmail: string): string {
   const trimmed = nameOrEmail.trim()
@@ -330,7 +323,7 @@ export function TimecardApprovalsClient() {
                       )}
                     </div>
                     <div className="hidden sm:block min-w-0 text-sm text-neutral-600 dark:text-neutral-400 truncate text-right">
-                      {formatPeriod(row)}
+                      {formatTimecardPeriod(row.period_type, row.period_start, row.period_end)}
                     </div>
                     <div className="font-semibold text-neutral-900 dark:text-white text-right whitespace-nowrap text-sm">
                       {formatTimecardDuration(Number(row.total_minutes) || 0)}
