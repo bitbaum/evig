@@ -25,20 +25,33 @@ interface UseMyListingsErrors {
 
 interface ListingsResponse {
   items: MyListing[]
-  page: number
-  totalPages: number
+  nextCursor: string | null
   total: number
 }
 
+/**
+ * Cursor-stack pagination — keeps the existing Prev/Next UI without
+ * the OFFSET-on-the-server cost. Each call to `goNext()` pushes the
+ * server-returned `nextCursor` onto the stack; `goPrev()` pops one
+ * off. "Current page" is `stack.length + 1`. Filter changes reset
+ * the stack to `[]` (back to page 1).
+ *
+ * Migrated from the legacy `?page=` / `total + totalPages` shape in
+ * the #6 keyset rollout. The total count stays in the response for
+ * the "X Inserate" display; only the navigation mechanic changed.
+ */
 export function useMyListings(errors: UseMyListingsErrors) {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
 
   const [statusFilter, setStatusFilter] = useState('')
-  const [page, setPage] = useState(1)
+  const [cursorStack, setCursorStack] = useState<string[]>([])
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [duplicatingId, setDuplicatingId] = useState<string | null>(null)
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
+
+  const currentCursor = cursorStack[cursorStack.length - 1] ?? null
+  const currentPage = cursorStack.length + 1
 
   // Unauthenticated redirect: separate useEffect that only navigates,
   // no setState, so the react-hooks/set-state-in-effect rule doesn't
@@ -51,14 +64,14 @@ export function useMyListings(errors: UseMyListingsErrors) {
     }
   }, [session, sessionStatus, router])
 
-  // SWR key built from page + statusFilter. SWR refetches automatically
-  // when either changes (replacing the prior useEffect + fetchListings
-  // dance). Conditional null key skips the fetch until session is ready.
+  // SWR key built from cursor + statusFilter. SWR refetches automatically
+  // when either changes. Conditional null key skips the fetch until
+  // session is ready.
   const swrKey = (() => {
     if (sessionStatus !== 'authenticated' || !session?.user) return null
     const params = new URLSearchParams()
     if (statusFilter) params.set('status', statusFilter)
-    params.set('page', String(page))
+    if (currentCursor) params.set('after', currentCursor)
     return `/api/listings/mine?${params.toString()}`
   })()
 
@@ -70,14 +83,26 @@ export function useMyListings(errors: UseMyListingsErrors) {
   } = useSwrFetch<ListingsResponse>(swrKey)
 
   const listings = data?.items ?? []
-  const totalPages = data?.totalPages ?? 1
   const total = data?.total ?? 0
+  const hasNext = !!data?.nextCursor
+  const hasPrev = cursorStack.length > 0
 
   const error = swrError ? errors.loadError : null
 
   const handleStatusFilterChange = (value: string) => {
     setStatusFilter(value)
-    setPage(1)
+    setCursorStack([])
+  }
+
+  const goNext = () => {
+    if (data?.nextCursor) {
+      setCursorStack(prev => [...prev, data.nextCursor!])
+    }
+  }
+
+  const goPrev = () => {
+    if (cursorStack.length === 0) return
+    setCursorStack(prev => prev.slice(0, -1))
   }
 
   const doDelete = async () => {
@@ -90,7 +115,7 @@ export function useMyListings(errors: UseMyListingsErrors) {
       // Optimistic local update: drop the deleted row + decrement total
       // without a full refetch. SWR's mutate with a function lets us
       // patch the cached response in place; the next natural refetch
-      // (page change, filter change, or manual refresh) brings the
+      // (cursor change, filter change, or manual refresh) brings the
       // backend back into sync.
       await mutate(
         (current) => current ? {
@@ -122,12 +147,14 @@ export function useMyListings(errors: UseMyListingsErrors) {
     deletingId,
     duplicatingId,
     pendingDeleteId,
-    page,
-    totalPages,
+    page: currentPage,
+    hasNext,
+    hasPrev,
     total,
-    setPage,
+    goNext,
+    goPrev,
     // Manual refresh for retry buttons — revalidates the current key
-    // (preserves the user's filter + page context).
+    // (preserves the user's filter + cursor context).
     refresh: () => mutate(),
     handleStatusFilterChange,
     doDelete,

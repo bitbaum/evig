@@ -5759,6 +5759,7 @@
       "createFirst": "Erstes Inserat erstellen",
       "totalCount": "{count, plural, one {# Inserat} other {# Inserate}} insgesamt",
       "paginationPage": "Seite {page} von {total}",
+      "paginationCurrentPage": "Seite {page}",
       "prevPage": "Zurück",
       "nextPage": "Weiter",
       "actionEdit": "Bearbeiten",

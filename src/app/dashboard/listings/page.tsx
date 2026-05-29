@@ -40,9 +40,11 @@ export default function MyListingsPage() {
     duplicatingId,
     pendingDeleteId,
     page,
-    totalPages,
+    hasNext,
+    hasPrev,
     total,
-    setPage,
+    goNext,
+    goPrev,
     refresh,
     handleStatusFilterChange,
     doDelete,
@@ -213,26 +215,31 @@ export default function MyListingsPage() {
         </div>
       )}
 
-      {!isLoading && !error && totalPages > 1 && (
+      {!isLoading && !error && (hasNext || hasPrev) && (
         <div className="flex items-center justify-between pt-4">
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
             {t('totalCount', { count: total })}
           </p>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setPage(page - 1)}
-              disabled={page <= 1}
+              onClick={goPrev}
+              disabled={!hasPrev}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
               {t('prevPage')}
             </button>
             <span className="text-sm text-neutral-600 dark:text-neutral-400">
-              {t('paginationPage', { page, total: totalPages })}
+              {/* Keyset doesn't know the total page count up front (total
+                  divided by page size is close but doesn't always
+                  match because of filter changes mid-scroll). Show just
+                  the current page; "more available" is conveyed by the
+                  enabled-state of the Next button. */}
+              {t('paginationCurrentPage', { page })}
             </span>
             <button
-              onClick={() => setPage(page + 1)}
-              disabled={page >= totalPages}
+              onClick={goNext}
+              disabled={!hasNext}
               className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg border border-neutral-300 dark:border-neutral-600 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {t('nextPage')}
