@@ -464,13 +464,17 @@ export const REQUEST_STATUS = {
   MATCHED: 'matched',
   COMPLETED: 'completed',
   CANCELLED: 'cancelled',
+  // Distinct from CANCELLED so the badge tells the requester *why* the
+  // request stopped (deadline passed) vs. they pulled it themselves.
+  // Cron-only transition; no UI button targets this.
+  EXPIRED: 'expired',
 } as const;
 
 export type RequestStatusId = typeof REQUEST_STATUS[keyof typeof REQUEST_STATUS];
 
 /** Valid status transitions (SSOT) — used in user + admin routes */
 export const VALID_REQUEST_TRANSITIONS: Record<string, string[]> = {
-  [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED],
+  [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED, REQUEST_STATUS.EXPIRED],
   [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
 }
 
@@ -484,6 +488,7 @@ export const REQUEST_STATUSES: RequestStatus[] = [
   { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
   { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-neutral-100 text-neutral-500' },
+  { id: REQUEST_STATUS.EXPIRED, name: 'Abgelaufen', description: 'Frist abgelaufen — keine Angebote erhalten', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]
 
 // ============================================================================
