@@ -10,15 +10,12 @@ interface NewsletterSignupProps {
   title?: string
   description?: string
   source?: string
-  /** dark = for use on dark backgrounds (footer) */
-  variant?: 'light' | 'dark'
 }
 
 export function NewsletterSignup({
   title,
   description,
   source = 'website',
-  variant = 'light',
 }: NewsletterSignupProps) {
   const t = useTranslations('home.newsletter')
   const [name, setName] = useState('')
@@ -55,27 +52,27 @@ export function NewsletterSignup({
     }
   }
 
-  const isDark = variant === 'dark'
-
   if (status === 'success') {
     return (
-      <div className={`rounded-lg p-4 text-sm ${isDark ? 'bg-primary-900/40 text-primary-300' : 'bg-primary-50 text-primary-700'}`}>
+      <div className="rounded-lg p-4 text-sm bg-primary-50 text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
         {t('successMessage')}
       </div>
     )
   }
+
+  const inputClass = 'flex h-10 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 placeholder:text-neutral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white dark:placeholder:text-neutral-500'
 
   return (
     <div>
       {(resolvedTitle || resolvedDescription) && (
         <div className="mb-3">
           {resolvedTitle && (
-            <p className={`text-sm font-semibold ${isDark ? 'text-white' : 'text-neutral-900'}`}>
+            <p className="text-sm font-semibold text-neutral-900 dark:text-white">
               {resolvedTitle}
             </p>
           )}
           {resolvedDescription && (
-            <p className={`text-sm mt-0.5 ${isDark ? 'text-neutral-400' : 'text-neutral-500'}`}>
+            <p className="text-sm mt-0.5 text-neutral-500 dark:text-neutral-400">
               {resolvedDescription}
             </p>
           )}
@@ -90,11 +87,7 @@ export function NewsletterSignup({
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder={t('namePlaceholder')}
-          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
-            isDark
-              ? 'border-neutral-600 bg-neutral-800 text-white'
-              : 'border-neutral-300 bg-white dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white text-neutral-900'
-          } sm:max-w-[140px]`}
+          className={`${inputClass} sm:max-w-[140px]`}
         />
         <label htmlFor="newsletter-email" className="sr-only">{t('emailPlaceholder')}</label>
         <input
@@ -104,11 +97,7 @@ export function NewsletterSignup({
           onChange={e => setEmail(e.target.value)}
           placeholder={t('emailPlaceholder')}
           required
-          className={`flex h-10 w-full rounded-md border px-3 py-2 text-sm placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
-            isDark
-              ? 'border-neutral-600 bg-neutral-800 text-white'
-              : 'border-neutral-300 bg-white dark:border-white/[0.1] dark:bg-neutral-800 dark:text-white text-neutral-900'
-          }`}
+          className={inputClass}
         />
         <Button
           type="submit"
@@ -121,7 +110,7 @@ export function NewsletterSignup({
       </form>
 
       {status === 'error' && (
-        <p className={`mt-2 text-sm ${isDark ? 'text-error-400' : 'text-error-600'}`}>
+        <p className="mt-2 text-sm text-error-600 dark:text-error-400">
           {errorMsg}
         </p>
       )}
