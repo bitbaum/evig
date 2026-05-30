@@ -56,15 +56,19 @@ const mockFrom = jest.fn()
 const mockWhere = jest.fn()
 const mockOrderBy = jest.fn()
 const mockInsert = jest.fn()
+// Models the route's atomic-upsert chain:
+//   db.insert(table).values(...).onConflictDoUpdate({...}).returning({...})
+// The chain returns [row] or [] depending on whether the setWhere clause
+// blocked the conflict update — set mockReturning per-test to drive each
+// branch (new subscriber, re-subscribe, already-active rejection).
 const mockValues = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
+const mockOnConflictDoUpdate = jest.fn()
+const mockReturning = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
   },
 }))
 
@@ -145,12 +149,12 @@ beforeEach(() => {
   mockOrderBy.mockResolvedValue([])
   mockFrom.mockReturnValue({ where: mockWhere, orderBy: mockOrderBy })
 
-  // insert chain
-  mockValues.mockResolvedValue(undefined)
-
-  // update chain
-  const mockWhere2 = jest.fn().mockResolvedValue(undefined)
-  mockSet.mockReturnValue({ where: mockWhere2 })
+  // insert chain: .values() -> .onConflictDoUpdate() -> .returning() -> [row]
+  // Default = new subscriber (one inactive row written). Tests override
+  // mockReturning to model already-active (empty array) or re-subscribe.
+  mockReturning.mockResolvedValue([{ isActive: false, confirmedAt: null }])
+  mockOnConflictDoUpdate.mockReturnValue({ returning: mockReturning })
+  mockValues.mockReturnValue({ onConflictDoUpdate: mockOnConflictDoUpdate })
 })
 
 // ============================================================================
@@ -184,8 +188,9 @@ describe('POST /api/newsletter/subscribe — validation', () => {
 
 describe('POST /api/newsletter/subscribe — already active subscriber', () => {
   it('returns 400 when subscriber is already active', async () => {
-    // Simulate existing active subscriber
-    mockWhere.mockResolvedValueOnce([{ isActive: true, confirmedAt: new Date() }])
+    // setWhere clause blocks the conflict-update on already-confirmed rows,
+    // so the upsert resolves with an empty returning() array.
+    mockReturning.mockResolvedValueOnce([])
     const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
       method: 'POST',
       body: JSON.stringify({ email: 'active@example.com' }),
@@ -200,8 +205,7 @@ describe('POST /api/newsletter/subscribe — already active subscriber', () => {
 
 describe('POST /api/newsletter/subscribe — new subscriber', () => {
   it('returns 200 when new subscriber is created', async () => {
-    // No existing subscriber
-    mockWhere.mockResolvedValueOnce([])
+    // Default mockReturning resolution = new-subscriber row.
     const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
       method: 'POST',
       body: JSON.stringify({ email: 'new@example.com' }),
@@ -212,12 +216,12 @@ describe('POST /api/newsletter/subscribe — new subscriber', () => {
     const body = await response.json()
     expect(body.success).toBe(true)
     expect(mockInsert).toHaveBeenCalledTimes(1)
+    expect(mockOnConflictDoUpdate).toHaveBeenCalledTimes(1)
   })
 })
 
 describe('POST /api/newsletter/subscribe — email failure', () => {
   it('returns 502 when sendEmail resolves with success=false (does not swallow silent failure)', async () => {
-    mockWhere.mockResolvedValueOnce([])
     mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP rejected' })
 
     const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
@@ -235,10 +239,9 @@ describe('POST /api/newsletter/subscribe — email failure', () => {
 
 describe('POST /api/newsletter/subscribe — re-subscribe', () => {
   it('returns 200 when re-subscribing (existing but inactive)', async () => {
-    // Existing but not active (inactive subscriber)
-    mockWhere.mockResolvedValueOnce([{ isActive: false, confirmedAt: null }])
-    const mockWhere2 = jest.fn().mockResolvedValue(undefined)
-    mockSet.mockReturnValue({ where: mockWhere2 })
+    // Existing inactive row gets overwritten via ON CONFLICT DO UPDATE,
+    // returning a fresh inactive row.
+    mockReturning.mockResolvedValueOnce([{ isActive: false, confirmedAt: null }])
 
     const req = new NextRequest('http://localhost/api/newsletter/subscribe', {
       method: 'POST',
@@ -249,9 +252,8 @@ describe('POST /api/newsletter/subscribe — re-subscribe', () => {
     expect(response.status).toBe(200)
     const body = await response.json()
     expect(body.success).toBe(true)
-    // Should call update, not insert
-    expect(mockUpdate).toHaveBeenCalledTimes(1)
-    expect(mockInsert).not.toHaveBeenCalled()
+    expect(mockInsert).toHaveBeenCalledTimes(1)
+    expect(mockOnConflictDoUpdate).toHaveBeenCalledTimes(1)
   })
 })
 
