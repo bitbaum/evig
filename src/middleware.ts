@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import createIntlMiddleware from 'next-intl/middleware'
 import { getToken } from 'next-auth/jwt'
-import { routing } from '@/i18n/routing'
+import { routing, locales } from '@/i18n/routing'
 import { csrfMiddleware, generateCsrfToken, createCsrfCookie, getCsrfFromCookies } from '@/lib/auth/csrf'
 
 // next-intl handles locale detection and URL rewriting for public pages
@@ -11,12 +11,24 @@ const intlMiddleware = createIntlMiddleware(routing)
 // Routes that bypass intl routing and are handled directly
 const BYPASS_INTL = ['/api/', '/admin', '/auth', '/dashboard', '/profil', '/vote', '/_next', '/_vercel']
 
+// Non-default locales appear as a URL prefix (e.g. /fr/dashboard). Strip
+// it before running protected-route checks — otherwise `/fr/dashboard` would
+// not match `requiresAuth("/dashboard")` and a logged-out non-German user
+// would reach the dashboard shell before any page-level auth ran.
+const LOCALE_PREFIX_REGEX = new RegExp(`^/(${locales.join('|')})(?=/|$)`)
+
+function stripLocalePrefix(pathname: string): string {
+  return pathname.replace(LOCALE_PREFIX_REGEX, '') || '/'
+}
+
 function requiresAuth(pathname: string): boolean {
-  return pathname.startsWith('/admin') || pathname.startsWith('/dashboard')
+  const p = stripLocalePrefix(pathname)
+  return p.startsWith('/admin') || p.startsWith('/dashboard')
 }
 
 function isAuthBypassed(pathname: string): boolean {
-  return pathname === '/admin/login' || pathname.startsWith('/auth')
+  const p = stripLocalePrefix(pathname)
+  return p === '/admin/login' || p.startsWith('/auth')
 }
 
 function shouldIssueCsrfCookie(pathname: string, method: string): boolean {
