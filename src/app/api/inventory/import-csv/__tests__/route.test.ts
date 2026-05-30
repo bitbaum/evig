@@ -33,10 +33,20 @@ const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockReturning = jest.fn()
 
+// Each CSV row's import runs inside `db.transaction(async tx => { ... })`.
+// The tx exposes a single insert chain — for aiExtractedProducts and
+// inventoryItems it terminates in .returning() with the new row's id,
+// for sustainabilityScores there's no .returning() call (fire-and-forget).
+// Returning a thenable that also has a `.returning` method lets one stub
+// serve both shapes.
+const mockTxInsert = jest.fn()
+const mockTransaction = jest.fn()
+
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
 }))
 
@@ -184,6 +194,27 @@ beforeEach(() => {
   mockSelect.mockReturnValue(selectChainReturning([]))
   mockReturning.mockResolvedValue([{ id: 'new-id' }])
   mockValues.mockReturnValue({ returning: mockReturning })
+
+  // Transaction tx.insert(table).values(payload) returns a thenable that
+  // (a) awaits to undefined (sustainabilityScores path)
+  // (b) exposes .returning() resolving to [{ id }] (aiExtractedProducts +
+  //     inventoryItems paths). Both paths in the route body work with this.
+  const txValuesReturn = () => {
+    const thenable = Promise.resolve(undefined) as Promise<undefined> & {
+      returning: () => Promise<Array<{ id: string }>>
+    }
+    thenable.returning = () => Promise.resolve([{ id: 'tx-row-id' }])
+    return thenable
+  }
+  mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
+    const tx = {
+      insert: (...args: unknown[]) => {
+        mockTxInsert(...args)
+        return { values: txValuesReturn }
+      },
+    }
+    return await cb(tx)
+  })
   // Re-wire analysis mocks that lose impl after resetAllMocks
   const analysisMocks = jest.requireMock('@/lib/inventory/csv-analysis') as {
     analyzeProductDescription: jest.Mock
