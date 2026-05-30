@@ -114,7 +114,9 @@ export function MobileMenu({
         tabIndex={-1}
         className={cn(
           "fixed inset-y-0 right-0 z-[101] w-full sm:max-w-md",
-          "bg-white dark:bg-neutral-900 shadow-2xl dark:shadow-black/40",
+          // Border-only separation matches the rest of the design system —
+          // the translucent backdrop already provides the plane lift.
+          "bg-white dark:bg-neutral-900 border-l border-neutral-200 dark:border-white/[0.06]",
           "flex flex-col",
           "transition-transform duration-300 ease-out",
           isOpen ? "translate-x-0" : "translate-x-full"

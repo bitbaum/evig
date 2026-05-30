@@ -75,6 +75,39 @@ export const LOCATIONS = {
   },
 } as const
 
+/**
+ * Display-shaped view of every LOCATIONS entry — name + the
+ * address lines a card / footer / contact block wants to render,
+ * plus an optional note. Centralises the "street, then postal+city,
+ * then country (or omit it if same as Switzerland)" decision so
+ * consumers don't re-build it inline.
+ */
+export interface LocationDisplay {
+  key: string
+  name: string
+  addressLines: string[]
+  note?: string
+}
+
+export function getLocationsDisplay(): LocationDisplay[] {
+  return Object.entries(LOCATIONS).map(([key, loc]) => {
+    const note = 'note' in loc ? loc.note : undefined
+    return {
+      key,
+      name: loc.name,
+      addressLines: [
+        loc.street,
+        `${loc.postalCode} ${loc.city}`,
+        // Only show country for the primary store (we're a Swiss org, all
+        // locations are CH — the country line is for press / SEO use of
+        // .fullWithCountry rather than visible chrome).
+        ...(key === 'store' ? [loc.country] : []),
+      ],
+      ...(note ? { note } : {}),
+    }
+  })
+}
+
 // ============================================================================
 // CONTACT
 // ============================================================================

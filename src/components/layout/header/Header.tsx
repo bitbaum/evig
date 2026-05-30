@@ -66,8 +66,10 @@ export function Header() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50",
           "transition-all duration-300",
+          // Scrolled state: border-only (no shadow). Double-cueing scroll
+          // with both shadow + border was a calmer-than-x.com signal.
           isScrolled || anyDropdownOpen
-            ? "bg-white/95 backdrop-blur-xl shadow-sm shadow-neutral-200/50 border-b border-neutral-100 dark:bg-neutral-950/95 dark:shadow-none dark:border-white/[0.06]"
+            ? "bg-white/95 backdrop-blur-xl border-b border-neutral-200 dark:bg-neutral-950/95 dark:border-white/[0.06]"
             : "bg-white/80 backdrop-blur-md dark:bg-neutral-950/80"
         )}
       >
