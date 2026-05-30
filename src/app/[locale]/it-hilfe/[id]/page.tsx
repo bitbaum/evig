@@ -86,8 +86,15 @@ export default function ITHilfeDetailPage() {
           {t('backToList')}
         </Link>
 
-        {/* Expiration Banner */}
-        {detail.isExpired && request.status === REQUEST_STATUS.OPEN && (
+        {/* Expiration Banner — covers two states:
+             1. status=OPEN, expires_at < now (window before nightly cron runs)
+             2. status=EXPIRED (cron has transitioned the row)
+             Same message ("Anfrage ist am {date} abgelaufen") works for both;
+             gating it only on status=OPEN would silently hide the banner the
+             morning after the cron, leaving the requester with no explanation
+             for why the action buttons disappeared. */}
+        {(request.status === REQUEST_STATUS.EXPIRED ||
+          (detail.isExpired && request.status === REQUEST_STATUS.OPEN)) && (
           <div className="bg-warning-50 border border-warning-200 rounded-xl p-4 mb-6 flex items-center gap-3">
             <AlertCircle className="w-5 h-5 text-warning-600 flex-shrink-0" aria-hidden="true" />
             <p className="text-warning-800 text-sm font-medium">
