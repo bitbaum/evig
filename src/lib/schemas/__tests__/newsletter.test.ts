@@ -43,6 +43,28 @@ describe('NewsletterSubscribeSchema', () => {
   it('rejects a missing email field', () => {
     expect(NewsletterSubscribeSchema.safeParse({}).success).toBe(false)
   })
+
+  it('accepts an optional name and trims it', () => {
+    const result = NewsletterSubscribeSchema.safeParse({ email: 'anna@example.com', name: '  Anna Müller  ' })
+    expect(result.success).toBe(true)
+    if (!result.success) return
+    expect(result.data.name).toBe('Anna Müller')
+  })
+
+  it('rejects a name longer than 100 chars', () => {
+    expect(NewsletterSubscribeSchema.safeParse({ email: 'a@b.com', name: 'x'.repeat(101) }).success).toBe(false)
+  })
+
+  it('accepts an optional source and trims it', () => {
+    const result = NewsletterSubscribeSchema.safeParse({ email: 'anna@example.com', source: ' footer ' })
+    expect(result.success).toBe(true)
+    if (!result.success) return
+    expect(result.data.source).toBe('footer')
+  })
+
+  it('rejects a source longer than 50 chars', () => {
+    expect(NewsletterSubscribeSchema.safeParse({ email: 'a@b.com', source: 'x'.repeat(51) }).success).toBe(false)
+  })
 })
 
 // ============================================================================

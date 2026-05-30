@@ -33,8 +33,9 @@ export async function POST(request: NextRequest) {
     if (!validation.success) return validation.error
 
     const normalizedEmail = validation.data.email
+    const subscriberName = validation.data.name
     const confirmToken = randomBytes(32).toString('hex')
-    const source = body.source || 'website'
+    const source = validation.data.source ?? 'website'
 
     // Atomic upsert avoids the check-then-act race: the prior pattern (SELECT
     // then UPDATE-or-INSERT) could 500 with a UNIQUE violation when two
@@ -111,11 +112,11 @@ export async function POST(request: NextRequest) {
           },
           body: JSON.stringify({
             email: normalizedEmail,
-            name: normalizedEmail.split('@')[0],
+            name: subscriberName ?? normalizedEmail.split('@')[0],
             lists: [1],
             status: 'enabled',
             preconfirm_subscriptions: false,
-            attribs: { source: body.source || 'website' },
+            attribs: { source },
           }),
         })
 
