@@ -2,6 +2,17 @@
  * @jest-environment node
  *
  * Tests for GET /api/listings/mine
+ *
+ * Behaviors locked:
+ *   401 when not authenticated
+ *   200 with { items, nextCursor, total } when listings exist
+ *   200 with empty items + total=0 when the seller has none
+ *   status filter is honored when valid
+ *
+ * Updated to match the keyset rewrite (db23998a) — route now runs the
+ * items + count queries in Promise.all and returns `{ items, nextCursor,
+ * total }` instead of the legacy `{ items, total, page }` shape with
+ * `.offset()` chaining.
  */
 
 // ── Mocks ──────────────────────────────────────────────────────────────────
@@ -23,19 +34,24 @@ jest.mock('@/lib/api/middleware', () => ({
         const resolvedContext = context?.params ? { params: await context.params } : undefined
         return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext)
       }),
-  parsePagination: () => ({ limit: 20, offset: 0, page: 1 }),
 }))
 
+// Two parallel db.select() calls per request: items (chain ends at .limit())
+// and count (chain ends at .where()). Return distinct chain objects per call
+// via mockReturnValueOnce so each side resolves independently.
 const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockWhere = jest.fn()
-const mockOrderBy = jest.fn()
-const mockLimit = jest.fn()
-const mockOffset = jest.fn()
+
+const mockItemsFrom = jest.fn()
+const mockItemsWhere = jest.fn()
+const mockItemsOrderBy = jest.fn()
+const mockItemsLimit = jest.fn()
+
+const mockCountFrom = jest.fn()
+const mockCountWhere = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
+    select: (...args: unknown[]) => mockSelect(...args),
   },
 }))
 
@@ -44,7 +60,6 @@ jest.mock('@/lib/api/helpers', () => {
   return {
     apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
-    parsePagination: () => ({ limit: 20, offset: 0, page: 1 }),
   }
 })
 
@@ -56,6 +71,18 @@ jest.mock('@/lib/marketplace/listing-helpers', () => ({
   listingThumbnailSubquery: { __sql: 'thumbnail_subquery' },
 }))
 
+jest.mock('@/lib/api/keyset', () => ({
+  parseKeysetParams: (req: Request) => {
+    const url = new URL(req.url)
+    return {
+      after: url.searchParams.get('after'),
+      limit: Number(url.searchParams.get('limit')) || 20,
+    }
+  },
+  buildNextCursor: <T extends { id: string }>(rows: T[], limit: number) =>
+    rows.length === limit ? rows[rows.length - 1].id : null,
+}))
+
 jest.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
   LISTING_STATUSES: ['active', 'removed', 'draft', 'sold'],
@@ -65,6 +92,8 @@ jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
+  or: (...args: unknown[]) => ({ __or: args }),
+  lt: (a: unknown, b: unknown) => ({ __lt: [a, b] }),
   sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
     raw: (s: string) => ({ __raw: s }),
   }),
@@ -92,7 +121,6 @@ const MOCK_SESSION = {
 }
 
 const MOCK_ROW = {
-  _total: 1,
   id: 'listing-1',
   title: 'Dell Laptop',
   price_chf: '350',
@@ -101,8 +129,8 @@ const MOCK_ROW = {
   status: 'active',
   view_count: 10,
   favorite_count: 2,
-  created_at: new Date('2025-01-01'),
-  updated_at: new Date('2025-01-01'),
+  created_at: '2025-01-01T00:00:00.000Z',
+  updated_at: '2025-01-01T00:00:00.000Z',
   thumbnail: null,
 }
 
@@ -112,15 +140,26 @@ function makeRequest(url: string) {
 
 // ── Setup ──────────────────────────────────────────────────────────────────
 
+function setupChains({ rows, total }: { rows: unknown[]; total: number }) {
+  mockItemsLimit.mockResolvedValue(rows)
+  mockItemsOrderBy.mockReturnValue({ limit: mockItemsLimit })
+  mockItemsWhere.mockReturnValue({ orderBy: mockItemsOrderBy })
+  mockItemsFrom.mockReturnValue({ where: mockItemsWhere })
+
+  mockCountWhere.mockResolvedValue([{ total }])
+  mockCountFrom.mockReturnValue({ where: mockCountWhere })
+
+  // Items query is first in Promise.all([items, count]), so first select() call
+  // gets the items chain, second the count chain.
+  mockSelect
+    .mockReturnValueOnce({ from: mockItemsFrom })
+    .mockReturnValueOnce({ from: mockCountFrom })
+}
+
 beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
-
-  mockFrom.mockReturnValue({ where: mockWhere })
-  mockWhere.mockReturnValue({ orderBy: mockOrderBy })
-  mockOrderBy.mockReturnValue({ limit: mockLimit })
-  mockLimit.mockReturnValue({ offset: mockOffset })
-  mockOffset.mockResolvedValue([])
+  setupChains({ rows: [], total: 0 })
 })
 
 // ── Tests ──────────────────────────────────────────────────────────────────
@@ -136,8 +175,8 @@ describe('GET /api/listings/mine', () => {
     expect(body.success).toBe(false)
   })
 
-  it('returns 200 with items array when listings exist', async () => {
-    mockOffset.mockResolvedValue([MOCK_ROW])
+  it('returns 200 with items + total + nextCursor=null when listings fit on one page', async () => {
+    setupChains({ rows: [MOCK_ROW], total: 1 })
 
     const res = await GET(makeRequest('http://localhost:3000/api/listings/mine'))
     const body = await res.json()
@@ -145,14 +184,13 @@ describe('GET /api/listings/mine', () => {
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
     expect(body.data.items).toHaveLength(1)
-    expect(body.data.items[0]).not.toHaveProperty('_total')
     expect(body.data.items[0].id).toBe('listing-1')
     expect(body.data.total).toBe(1)
-    expect(body.data.page).toBe(1)
+    expect(body.data.nextCursor).toBeNull()
   })
 
-  it('returns 200 with empty items when user has no listings', async () => {
-    mockOffset.mockResolvedValue([])
+  it('returns 200 with empty items + total=0 when the seller has none', async () => {
+    setupChains({ rows: [], total: 0 })
 
     const res = await GET(makeRequest('http://localhost:3000/api/listings/mine'))
     const body = await res.json()
@@ -161,30 +199,34 @@ describe('GET /api/listings/mine', () => {
     expect(body.success).toBe(true)
     expect(body.data.items).toHaveLength(0)
     expect(body.data.total).toBe(0)
+    expect(body.data.nextCursor).toBeNull()
+  })
+
+  it('sets nextCursor to last row id when the page is full', async () => {
+    // limit=2, two rows returned → there may be more → cursor = last id
+    const rows = [MOCK_ROW, { ...MOCK_ROW, id: 'listing-2' }]
+    setupChains({ rows, total: 5 })
+
+    const res = await GET(makeRequest('http://localhost:3000/api/listings/mine?limit=2'))
+    const body = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(body.data.items).toHaveLength(2)
+    expect(body.data.nextCursor).toBe('listing-2')
+    expect(body.data.total).toBe(5)
   })
 
   it('applies status filter when valid status query param is provided', async () => {
-    mockOffset.mockResolvedValue([MOCK_ROW])
+    setupChains({ rows: [MOCK_ROW], total: 1 })
 
     const res = await GET(makeRequest('http://localhost:3000/api/listings/mine?status=active'))
     const body = await res.json()
 
     expect(res.status).toBe(200)
     expect(body.success).toBe(true)
-    // Verify db.select was called (chain was traversed)
-    expect(mockSelect).toHaveBeenCalled()
-    expect(mockFrom).toHaveBeenCalled()
-  })
-
-  it('strips _total from each item in the response', async () => {
-    mockOffset.mockResolvedValue([MOCK_ROW, { ...MOCK_ROW, id: 'listing-2', _total: 2 }])
-
-    const res = await GET(makeRequest('http://localhost:3000/api/listings/mine'))
-    const body = await res.json()
-
-    expect(body.data.items).toHaveLength(2)
-    body.data.items.forEach((item: Record<string, unknown>) => {
-      expect(item).not.toHaveProperty('_total')
-    })
+    // Both select chains were traversed (items + count)
+    expect(mockSelect).toHaveBeenCalledTimes(2)
+    expect(mockItemsFrom).toHaveBeenCalled()
+    expect(mockCountFrom).toHaveBeenCalled()
   })
 })
