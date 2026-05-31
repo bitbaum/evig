@@ -107,8 +107,14 @@ export const PATCH = withAdmin<{ id: string }>('it-hilfe-admin', async (request,
       if (!current) return apiNotFound(ERROR_MESSAGES.IT_HILFE_REQUEST_NOT_FOUND)
 
       const allowed = VALID_REQUEST_TRANSITIONS[current.status as string] || []
+      // Admin override: cancel any non-terminal request. EXPIRED is terminal
+      // (auto-set by the close-it-hilfe-requests cron — ed3d7db0) so it
+      // belongs in this exclusion list alongside COMPLETED + CANCELLED;
+      // re-cancelling an already-expired request just muddies the state.
       const isAdminCancel = data.status === REQUEST_STATUS.CANCELLED &&
-        current.status !== REQUEST_STATUS.COMPLETED && current.status !== REQUEST_STATUS.CANCELLED
+        current.status !== REQUEST_STATUS.COMPLETED &&
+        current.status !== REQUEST_STATUS.CANCELLED &&
+        current.status !== REQUEST_STATUS.EXPIRED
 
       if (!allowed.includes(data.status) && !isAdminCancel) {
         return apiBadRequest(`Status kann nicht von "${current.status}" auf "${data.status}" geändert werden`)
@@ -170,7 +176,7 @@ export const DELETE = withAdmin<{ id: string }>('it-hilfe-admin', async (_reques
       })
       .where(and(
         eq(itHilfeRequests.id, id),
-        notInArray(itHilfeRequests.status, [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED])
+        notInArray(itHilfeRequests.status, [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED, REQUEST_STATUS.EXPIRED])
       ))
       .returning({ id: itHilfeRequests.id })
 
