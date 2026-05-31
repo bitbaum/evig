@@ -96,12 +96,20 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       helperId: offer.helperId,
     })
 
-    // Send rejection email (fire-and-forget)
+    // Send rejection email (fire-and-forget). sendCustomEmail resolves
+    // {success:false} on SMTP failure rather than throwing; bare-catch
+    // misses that mode. Same fix class.
     const requestUrl = `${APP_URL}/it-hilfe/${id}`
     sendCustomEmail(
       offer.helperEmail,
       itHilfeOfferRejected(offer.helperName || 'Techniker', requestData.title, requestUrl)
-    ).catch(err => logger.error('Failed to send offer declined email', { err, helperId: offer.helperId }))
+    )
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send offer declined email (resolved)', { error: r.error, helperId: offer.helperId })
+        }
+      })
+      .catch(err => logger.warn('Failed to send offer declined email (rejected)', { error: err, helperId: offer.helperId }))
 
     // In-app notification for helper
     sendItHilfeNotification({

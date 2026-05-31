@@ -142,16 +142,21 @@ export const POST = withAuth<{ id: string }>(async (
       requestId: id,
     })
 
+    // sendCustomEmail resolves {success:false} on SMTP failure rather
+    // than throwing; bare-catch misses that mode. Same fix class.
     const requestUrl = `${APP_URL}/it-hilfe/${id}`
     sendCustomEmail(
       row.requesterEmail,
       itHilfeCompleted(row.requesterName || 'Anfragender', row.title, requestUrl),
-    ).catch((err) =>
-      logger.error('Failed to send itHilfeCompleted email', {
-        error: err,
-        requestId: id,
-      }),
     )
+      .then((r) => {
+        if (!r.success) {
+          logger.warn('Failed to send itHilfeCompleted email (resolved)', { error: r.error, requestId: id })
+        }
+      })
+      .catch((err) =>
+        logger.warn('Failed to send itHilfeCompleted email (rejected)', { error: err, requestId: id }),
+      )
 
     return apiSuccess({ message: 'Anfrage als abgeschlossen markiert' })
   } catch (error) {

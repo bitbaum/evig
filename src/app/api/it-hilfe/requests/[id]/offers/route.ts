@@ -283,6 +283,9 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           offerId: newOffer.id,
         })
       }
+      // sendCustomEmail resolves {success:false} on SMTP failure rather
+      // than throwing; bare-catch misses that mode. Same fix class as
+      // a4f2d601 / 7ef4fd75 / 0caff6ba / aa776a13.
       sendCustomEmail(
         requestData.requester_email,
         itHilfeNewOfferReceived(
@@ -293,7 +296,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
           requestUrl,
           acceptUrl
         )
-      ).catch(err => logger.error('Failed to send new offer notification', { err, requestId: id }))
+      )
+        .then(r => {
+          if (!r.success) {
+            logger.warn('Failed to send new offer notification (resolved)', { error: r.error, requestId: id })
+          }
+        })
+        .catch(err => logger.warn('Failed to send new offer notification (rejected)', { error: err, requestId: id }))
     }
 
     return apiSuccess({

@@ -187,6 +187,8 @@ export const POST = withAuth<{ id: string }>(async (
       requestId: id,
     })
 
+    // sendCustomEmail resolves {success:false} on SMTP failure rather
+    // than throwing; bare-catch misses that mode. Same fix class.
     const requestUrl = `${APP_URL}/it-hilfe/${id}`
     sendCustomEmail(
       offer.helperEmail,
@@ -197,12 +199,15 @@ export const POST = withAuth<{ id: string }>(async (
         reviewText,
         requestUrl,
       ),
-    ).catch((err) =>
-      logger.error('Failed to send itHilfeReviewReceived email', {
-        error: err,
-        requestId: id,
-      }),
     )
+      .then((r) => {
+        if (!r.success) {
+          logger.warn('Failed to send itHilfeReviewReceived email (resolved)', { error: r.error, requestId: id })
+        }
+      })
+      .catch((err) =>
+        logger.warn('Failed to send itHilfeReviewReceived email (rejected)', { error: err, requestId: id }),
+      )
 
     return apiSuccess({
       message: 'Bewertung erfolgreich abgegeben',
