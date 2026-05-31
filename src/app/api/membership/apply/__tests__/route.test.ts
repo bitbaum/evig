@@ -38,21 +38,30 @@ jest.mock('@/config/membership-status', () => ({
   MEMBERSHIP_APPLICATION_STATUS: { APPROVED: 'approved', PENDING: 'pending', REJECTED: 'rejected' },
 }))
 
+// Route now wraps the whole membership-check + insert + activate flow in
+// `db.transaction(async tx => ...)`. The tx exposes the same select/insert/
+// update shape db does, plus `.for('update')` between .where() and .limit()
+// for the SELECT FOR UPDATE row lock. The mocks below model the tx variants;
+// the original `db.*` stubs are kept (unused) so the wider import surface
+// doesn't change.
 const mockSelect = jest.fn()
 const mockFrom = jest.fn()
 const mockWhere = jest.fn()
+const mockFor = jest.fn()
 const mockLimit = jest.fn()
 const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockReturning = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
+const mockTransaction = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
 }))
 
@@ -127,9 +136,10 @@ beforeEach(() => {
   // Fire-and-forget: must return a Promise so .catch() works
   mockSendCustomEmail.mockResolvedValue(undefined)
 
-  // Default select chain: no existing user
+  // Default select chain: tx.select().from().where().for('update').limit(1)
   mockLimit.mockResolvedValue([])
-  mockWhere.mockReturnValue({ limit: mockLimit })
+  mockFor.mockReturnValue({ limit: mockLimit })
+  mockWhere.mockReturnValue({ for: mockFor, limit: mockLimit })
   mockFrom.mockReturnValue({ where: mockWhere })
   mockSelect.mockReturnValue({ from: mockFrom })
 
@@ -137,9 +147,21 @@ beforeEach(() => {
   mockReturning.mockResolvedValue([{ id: 'app-1' }])
   mockValues.mockReturnValue({ returning: mockReturning })
 
-  // update chain
-  const mockWhere2 = jest.fn().mockResolvedValue(undefined)
-  mockSet.mockReturnValue({ where: mockWhere2 })
+  // Default update chain: tx.update().set().where()
+  const mockUpdateWhere = jest.fn().mockResolvedValue(undefined)
+  mockSet.mockReturnValue({ where: mockUpdateWhere })
+
+  // Route runs everything inside db.transaction(cb). Invoke cb with a tx
+  // that delegates to the existing select/insert/update mocks so each test's
+  // mockLimit / mockReturning configuration drives the inner SQL.
+  mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
+    const tx = {
+      select: (...args: unknown[]) => mockSelect(...args),
+      insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+      update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    }
+    return await cb(tx)
+  })
 })
 
 // ============================================================================
