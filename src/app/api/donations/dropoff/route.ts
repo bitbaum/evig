@@ -44,15 +44,29 @@ export async function POST(request: NextRequest) {
 
     // Both emails fire-and-forget so a transient SMTP failure doesn't
     // surface as a 500 to a donor who just filled out the form correctly.
-    sendCustomEmail(
-      CONTACT.email,
-      donationDropoffNotification(fields),
-    ).catch(err => logger.warn('Failed to send donation drop-off notification', { error: err, donorEmail: fields.email }))
+    //
+    // sendCustomEmail() resolves `{ success: false, error }` on SMTP /
+    // Listmonk failure rather than throwing — a bare `.catch()` only
+    // catches actual rejections, so resolved-failures slip through
+    // silently. Inspect each result in a `.then()` and log the resolved
+    // failure mode separately so ops can grep for both shapes. Same
+    // pattern as src/lib/it-hilfe/notifications.ts and the 11+ prior
+    // swallow fixes in this codebase.
+    sendCustomEmail(CONTACT.email, donationDropoffNotification(fields))
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send donation drop-off notification (resolved)', { error: r.error, donorEmail: fields.email })
+        }
+      })
+      .catch(err => logger.warn('Failed to send donation drop-off notification (rejected)', { error: err, donorEmail: fields.email }))
 
-    sendCustomEmail(
-      fields.email,
-      donationDropoffConfirmation(fields),
-    ).catch(err => logger.warn('Failed to send donation drop-off confirmation', { error: err, donorEmail: fields.email }))
+    sendCustomEmail(fields.email, donationDropoffConfirmation(fields))
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send donation drop-off confirmation (resolved)', { error: r.error, donorEmail: fields.email })
+        }
+      })
+      .catch(err => logger.warn('Failed to send donation drop-off confirmation (rejected)', { error: err, donorEmail: fields.email }))
 
     logger.info('Donation drop-off announced', { donorEmail: fields.email, hasPreferredDate: !!fields.preferredDate })
 

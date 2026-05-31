@@ -143,4 +143,25 @@ describe('POST /api/donations/dropoff', () => {
     const res = await POST(makeRequest(VALID_BODY))
     expect(res.status).toBe(200)
   })
+
+  it('still returns 200 when sendCustomEmail resolves { success: false } — but logs the resolved failure', async () => {
+    // sendCustomEmail RESOLVES with {success:false} on SMTP failure rather
+    // than throwing. A bare `.catch()` would miss this — the route uses a
+    // `.then()` to detect resolved-failure and log it. Without this lock
+    // a refactor could silently revert to the bare-catch shape (the bug
+    // I just shipped in a8cc473c and fixed adjacent).
+    const { logger } = jest.requireMock('@/lib/logger') as { logger: { warn: jest.Mock } }
+    mockSendCustomEmail.mockResolvedValue({ success: false, error: 'Listmonk 500' })
+
+    const res = await POST(makeRequest(VALID_BODY))
+    expect(res.status).toBe(200)
+
+    // Give the fire-and-forget .then() chain a tick to flush
+    await new Promise(r => setImmediate(r))
+
+    const resolvedFailureLogs = logger.warn.mock.calls.filter(
+      (call: unknown[]) => typeof call[0] === 'string' && call[0].includes('(resolved)'),
+    )
+    expect(resolvedFailureLogs.length).toBeGreaterThanOrEqual(2)
+  })
 })
