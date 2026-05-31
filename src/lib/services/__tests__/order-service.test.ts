@@ -75,8 +75,9 @@ describe('createOrder', () => {
   })
 
   it('creates an order with inventory items and returns id + timestamp', async () => {
-    // db.execute: inventory lookup
-    mocks.execute.mockResolvedValueOnce({
+    // All four SQL operations now live inside the transaction:
+    // 1) SELECT FOR UPDATE — inventory lookup
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
@@ -84,15 +85,13 @@ describe('createOrder', () => {
         product_name: 'Test Product',
       }],
     })
-
-    // tx.execute calls inside transaction:
-    // 1) INSERT INTO orders RETURNING id, created_at
+    // 2) INSERT INTO orders RETURNING id, created_at
     mocks.txExecute.mockResolvedValueOnce({
       rows: [{ id: 'order-1', created_at: '2024-01-15T10:00:00Z' }],
     })
-    // 2) INSERT INTO order_items
+    // 3) INSERT INTO order_items (per item)
     mocks.txExecute.mockResolvedValueOnce({ rows: [] })
-    // 3) UPDATE inventory_items (decrement)
+    // 4) UPDATE inventory_items (decrement, per item)
     mocks.txExecute.mockResolvedValueOnce({ rows: [] })
 
     const params: CreateOrderParams = {
@@ -105,15 +104,14 @@ describe('createOrder', () => {
     expect(result.orderId).toBe('order-1')
     expect(result.createdAt).toBe('2024-01-15T10:00:00Z')
 
-    // 1 db.execute (inventory lookup) + 1 db.transaction call
-    expect(mocks.execute).toHaveBeenCalledTimes(1)
     expect(mocks.transaction).toHaveBeenCalledTimes(1)
-    // Inside transaction: order insert + order_item insert + inventory decrement
-    expect(mocks.txExecute).toHaveBeenCalledTimes(3)
+    // Inside transaction: inventory lookup + order insert + order_item insert + decrement = 4
+    expect(mocks.txExecute).toHaveBeenCalledTimes(4)
   })
 
   it('includes shipping address when provided', async () => {
-    mocks.execute.mockResolvedValueOnce({
+    // Inventory lookup
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
@@ -121,7 +119,7 @@ describe('createOrder', () => {
         product_name: 'Test Product',
       }],
     })
-
+    // Order INSERT (returns id+created_at), then order_item INSERT + decrement
     mocks.txExecute.mockResolvedValueOnce({
       rows: [{ id: 'order-2', created_at: '2024-01-15' }],
     })
@@ -144,14 +142,13 @@ describe('createOrder', () => {
       shippingAddress: address,
     })
 
-    // The first tx.execute call is the order INSERT — its sql template
-    // should contain the JSON-serialized shipping address in its values
-    const orderInsertCall = mocks.txExecute.mock.calls[0][0]
+    // The SECOND tx.execute call is the order INSERT (first is inventory lookup)
+    const orderInsertCall = mocks.txExecute.mock.calls[1][0]
     expect(orderInsertCall.values).toContainEqual(JSON.stringify(address))
   })
 
   it('passes null when no shipping address', async () => {
-    mocks.execute.mockResolvedValueOnce({
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
@@ -159,7 +156,6 @@ describe('createOrder', () => {
         product_name: 'Test Product',
       }],
     })
-
     mocks.txExecute.mockResolvedValueOnce({
       rows: [{ id: 'order-3', created_at: '2024-01-15' }],
     })
@@ -172,8 +168,8 @@ describe('createOrder', () => {
       paymentTransactionId: 'txn_test',
     })
 
-    // The first tx.execute call is the order INSERT — shipping_address should be null
-    const orderInsertCall = mocks.txExecute.mock.calls[0][0]
+    // SECOND tx.execute call is the order INSERT — shipping_address should be null
+    const orderInsertCall = mocks.txExecute.mock.calls[1][0]
     expect(orderInsertCall.values).toContainEqual(null)
   })
 
@@ -187,7 +183,7 @@ describe('createOrder', () => {
   })
 
   it('throws when inventory item is not found', async () => {
-    mocks.execute.mockResolvedValueOnce({
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [],
     })
 
@@ -200,7 +196,7 @@ describe('createOrder', () => {
   })
 
   it('throws when insufficient inventory', async () => {
-    mocks.execute.mockResolvedValueOnce({
+    mocks.txExecute.mockResolvedValueOnce({
       rows: [{
         id: 'inv-1',
         selling_price_chf: 50,
@@ -218,7 +214,7 @@ describe('createOrder', () => {
   })
 
   it('throws on database error', async () => {
-    mocks.execute.mockRejectedValueOnce(new Error('DB connection failed'))
+    mocks.txExecute.mockRejectedValueOnce(new Error('DB connection failed'))
 
     await expect(
       createOrder({
