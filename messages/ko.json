@@ -5349,6 +5349,23 @@
       "addressLabel": "반납 주소",
       "questionsLink": "질문이 있으신가요? 문의하기 →"
     },
+    "dropoff": {
+      "heading": "기기 반납 신청",
+      "intro": "어떤 기기를 가져오실지 간단히 알려주세요 — 이메일로 확인 후 현장에 담당자가 있도록 준비하겠습니다.",
+      "nameLabel": "이름",
+      "emailLabel": "이메일",
+      "phoneLabel": "전화번호 (선택)",
+      "preferredDateLabel": "희망 일자 (선택)",
+      "devicesLabel": "어떤 기기를 가져오시겠습니까?",
+      "devicesPlaceholder": "예: 오래된 ThinkPad 2대, 모니터 1대, 케이블 몇 개",
+      "notesLabel": "비고 (선택)",
+      "notesPlaceholder": "예: 한 대가 켜지지 않음, 화면이 깨짐",
+      "submit": "신청 보내기",
+      "submitting": "전송 중 …",
+      "successTitle": "신청해 주셔서 감사합니다!",
+      "successBody": "확인 이메일을 보내드렸으며, 일정 확정을 위해 곧 연락드리겠습니다.",
+      "errorGeneric": "신청을 보낼 수 없습니다. 나중에 다시 시도해 주세요."
+    },
     "newsletter": {
       "title": "기부의 영향에 대해 알려드리겠습니다.",
       "description": "광고 없음. 구조된 기기, 절감된 CO₂, 지원된 사람들에 대한 실제 업데이트만."

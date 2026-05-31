@@ -5349,6 +5349,23 @@
       "addressLabel": "Indirizzo di consegna",
       "questionsLink": "Domande? Scrivici →"
     },
+    "dropoff": {
+      "heading": "Annunciare una consegna di dispositivi",
+      "intro": "Dicci brevemente cosa vuoi portare — confermeremo via e-mail e ci assicureremo che qualcuno sia in loco.",
+      "nameLabel": "Nome",
+      "emailLabel": "E-mail",
+      "phoneLabel": "Telefono (opzionale)",
+      "preferredDateLabel": "Data preferita (opzionale)",
+      "devicesLabel": "Quali dispositivi vuoi portare?",
+      "devicesPlaceholder": "es. 2 vecchi ThinkPad, 1 monitor, qualche cavo",
+      "notesLabel": "Note (opzionale)",
+      "notesPlaceholder": "es. un dispositivo non si avvia, lo schermo è rotto",
+      "submit": "Invia annuncio",
+      "submitting": "Invio in corso …",
+      "successTitle": "Grazie per il tuo annuncio!",
+      "successBody": "Ti abbiamo inviato una conferma via e-mail e ti contatteremo a breve per fissare un appuntamento.",
+      "errorGeneric": "Non è stato possibile inviare l'annuncio. Riprova più tardi."
+    },
     "newsletter": {
       "title": "Ti terremo informato sull'impatto della tua donazione.",
       "description": "Nessuna pubblicità. Solo aggiornamenti reali."

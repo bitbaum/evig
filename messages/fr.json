@@ -5313,6 +5313,23 @@
       "addressLabel": "Adresse de dépôt",
       "questionsLink": "Questions ? Écrivez-nous →"
     },
+    "dropoff": {
+      "heading": "Annoncer un dépôt d'appareils",
+      "intro": "Dis-nous brièvement ce que tu souhaites apporter — nous confirmerons par e-mail et nous assurerons que quelqu'un soit sur place.",
+      "nameLabel": "Nom",
+      "emailLabel": "E-mail",
+      "phoneLabel": "Téléphone (optionnel)",
+      "preferredDateLabel": "Date souhaitée (optionnel)",
+      "devicesLabel": "Quels appareils souhaites-tu apporter ?",
+      "devicesPlaceholder": "p. ex. 2 vieux ThinkPad, 1 écran, quelques câbles",
+      "notesLabel": "Remarques (optionnel)",
+      "notesPlaceholder": "p. ex. un appareil ne démarre pas, l'écran est fissuré",
+      "submit": "Envoyer l'annonce",
+      "submitting": "Envoi en cours …",
+      "successTitle": "Merci pour ton annonce !",
+      "successBody": "Nous t'avons envoyé une confirmation par e-mail et reviendrons vers toi prochainement pour fixer un rendez-vous.",
+      "errorGeneric": "L'annonce n'a pas pu être envoyée. Merci de réessayer plus tard."
+    },
     "newsletter": {
       "title": "Nous vous tiendrons informé de l'impact de votre don.",
       "description": "Pas de publicité. Seulement de vraies mises à jour."

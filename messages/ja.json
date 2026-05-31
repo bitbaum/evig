@@ -5349,6 +5349,23 @@
       "addressLabel": "引き渡し住所",
       "questionsLink": "ご質問は？お問い合わせ →"
     },
+    "dropoff": {
+      "heading": "機器の引き渡しを予約する",
+      "intro": "何を持ってきていただけるか簡単にお知らせください — メールで確認し、現地に担当者がいることを確認します。",
+      "nameLabel": "お名前",
+      "emailLabel": "メールアドレス",
+      "phoneLabel": "電話番号（任意）",
+      "preferredDateLabel": "ご希望の日程（任意）",
+      "devicesLabel": "どのような機器を持ってきていただけますか？",
+      "devicesPlaceholder": "例：古いThinkPad 2台、モニター 1台、ケーブル数本",
+      "notesLabel": "備考（任意）",
+      "notesPlaceholder": "例：1台が起動しない、画面にひびが入っている",
+      "submit": "申込みを送信",
+      "submitting": "送信中 …",
+      "successTitle": "お申込みありがとうございます！",
+      "successBody": "確認メールをお送りしました。日程確定のため近日中にご連絡いたします。",
+      "errorGeneric": "送信できませんでした。後ほど再度お試しください。"
+    },
     "newsletter": {
       "title": "寄付の影響についてお知らせします。",
       "description": "広告なし。救済デバイス、節約CO₂、支援者に関する実際の更新情報のみ。"

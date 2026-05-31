@@ -5321,6 +5321,23 @@
       "addressLabel": "Drop-off address",
       "questionsLink": "Questions? Write to us →"
     },
+    "dropoff": {
+      "heading": "Schedule a drop-off",
+      "intro": "Tell us briefly what you'd like to bring — we'll confirm by email and make sure someone is on site.",
+      "nameLabel": "Name",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone (optional)",
+      "preferredDateLabel": "Preferred date (optional)",
+      "devicesLabel": "What devices would you like to bring?",
+      "devicesPlaceholder": "e.g. 2 old ThinkPads, 1 monitor, a few cables",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "e.g. one device won't start, screen is cracked",
+      "submit": "Send announcement",
+      "submitting": "Sending …",
+      "successTitle": "Thanks for your announcement!",
+      "successBody": "We've sent you a confirmation by email and will be in touch shortly to fix a time.",
+      "errorGeneric": "The announcement couldn't be sent. Please try again later."
+    },
     "newsletter": {
       "title": "We'll keep you informed about the impact of your donation.",
       "description": "No ads. Just real updates on devices rescued, CO₂ saved and people supported."
