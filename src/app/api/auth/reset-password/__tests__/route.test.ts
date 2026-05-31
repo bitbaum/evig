@@ -226,3 +226,26 @@ describe('POST /api/auth/reset-password — DB/service errors', () => {
     expect(response.status).toBe(500)
   })
 })
+
+describe('POST /api/auth/reset-password — resolved-failure swallow lock', () => {
+  it('still returns 200 when sendCustomEmail resolves { success: false } — but logs the resolved failure', async () => {
+    // Regression lock for the swallow fix in this commit:
+    // sendCustomEmail resolves {success:false} on SMTP failure rather than
+    // throwing. A bare `.catch()` would miss this. Without this assertion
+    // a refactor could silently revert to the bare-catch shape and the
+    // password-recovery confirmation would fail silently.
+    const { logger } = jest.requireMock('@/lib/logger') as { logger: { warn: jest.Mock } }
+    mockSendCustomEmail.mockResolvedValueOnce({ success: false, error: 'Listmonk 500' })
+
+    const response = await POST(makeRequest(VALID_BODY))
+    expect(response.status).toBe(200)
+
+    // Flush the fire-and-forget .then() chain
+    await new Promise(r => setImmediate(r))
+
+    const resolvedFailureLogs = logger.warn.mock.calls.filter(
+      (call: unknown[]) => typeof call[0] === 'string' && call[0].includes('(resolved)'),
+    )
+    expect(resolvedFailureLogs.length).toBeGreaterThanOrEqual(1)
+  })
+})

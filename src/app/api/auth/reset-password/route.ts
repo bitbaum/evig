@@ -52,16 +52,30 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Fire-and-forget: send password change confirmation email
+    // Fire-and-forget: send password change confirmation email.
+    //
+    // sendCustomEmail RESOLVES `{success:false}` on SMTP / Listmonk
+    // failure rather than throwing — a bare `.catch()` only catches
+    // actual rejections, so resolved-failures slip through silently.
+    // This is the password-recovery flow: a silent send means the user
+    // never gets the "your password was changed" confirmation and may
+    // wonder whether the reset went through (support burden). Same fix
+    // shape as a4f2d601 (dropoff) and 7ef4fd75 (inquiry).
     const userRows = await db
       .select({ name: users.name })
       .from(users)
       .where(eq(users.email, result.email!.toLowerCase()))
 
     const userName = userRows[0]?.name || 'Benutzer'
-    sendCustomEmail(result.email!, passwordChangeConfirmation(userName)).catch(err => {
-      logger.warn('Failed to send password change confirmation email', { error: err, email: result.email })
-    })
+    sendCustomEmail(result.email!, passwordChangeConfirmation(userName))
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send password change confirmation email (resolved)', { error: r.error, email: result.email })
+        }
+      })
+      .catch(err => {
+        logger.warn('Failed to send password change confirmation email (rejected)', { error: err, email: result.email })
+      })
 
     return apiSuccess({
       message: 'Passwort erfolgreich geändert',
