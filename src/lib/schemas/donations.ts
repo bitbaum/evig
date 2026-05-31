@@ -101,6 +101,29 @@ export const CreateDonationSchema = z.discriminatedUnion('donation_type', [
 ])
 
 /**
+ * Public donation drop-off announcement (form on /get-involved/donate).
+ *
+ * Different shape from CreateDeviceDonationSchema on purpose: this is an
+ * *intent* form (donor says "I plan to bring you devices"), not the
+ * admin-side record of a physically-received donation. We collect just
+ * enough for staff to follow up — fewer required fields = higher form
+ * completion vs. the full structured device-category-and-condition flow.
+ *
+ * preferredDate is an ISO date string (YYYY-MM-DD), validated loosely
+ * because we don't gate scheduling on it — staff coordinates via email.
+ */
+export const DonationDropoffSchema = z.object({
+  name: z.string().trim().min(2, 'Name muss mindestens 2 Zeichen haben').max(200),
+  email: z.string().email('Ungültige E-Mail-Adresse'),
+  phone: z.string().trim().min(3).max(30).optional(),
+  preferredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Datum im Format YYYY-MM-DD').optional(),
+  devices: z.string().trim().min(10, 'Bitte beschreibe, welche Geräte du bringen möchtest (mind. 10 Zeichen)').max(1000),
+  notes: z.string().trim().max(2000).optional(),
+})
+
+export type DonationDropoffInput = z.infer<typeof DonationDropoffSchema>
+
+/**
  * Schema for updating a donation
  */
 export const UpdateDonationSchema = z.object({

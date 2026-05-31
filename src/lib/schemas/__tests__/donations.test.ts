@@ -16,6 +16,7 @@ import {
   CreateDonationSchema,
   UpdateDonationSchema,
   GetDonationsQuerySchema,
+  DonationDropoffSchema,
 } from '../donations'
 
 import {
@@ -392,5 +393,67 @@ describe('GetDonationsQuerySchema', () => {
   it('rejects invalid sort_order', () => {
     const result = GetDonationsQuerySchema.safeParse({ sort_order: 'random' })
     expect(result.success).toBe(false)
+  })
+})
+
+// ============================================================================
+// DonationDropoffSchema (public donate-page form)
+// ============================================================================
+
+describe('DonationDropoffSchema', () => {
+  const MIN_VALID = {
+    name: 'Anna Müller',
+    email: 'anna@example.com',
+    devices: 'Zwei alte ThinkPads und ein Monitor',
+  }
+
+  it('accepts a minimal valid submission', () => {
+    expect(DonationDropoffSchema.safeParse(MIN_VALID).success).toBe(true)
+  })
+
+  it('accepts a full submission with all optional fields', () => {
+    const result = DonationDropoffSchema.safeParse({
+      ...MIN_VALID,
+      phone: '+41 79 123 45 67',
+      preferredDate: '2026-06-15',
+      notes: 'Akku ist defekt, sonst läuft alles',
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('trims name and devices', () => {
+    const result = DonationDropoffSchema.safeParse({
+      ...MIN_VALID,
+      name: '  Anna  ',
+      devices: '  Zwei alte ThinkPads und ein Monitor  ',
+    })
+    expect(result.success).toBe(true)
+    if (!result.success) return
+    expect(result.data.name).toBe('Anna')
+    expect(result.data.devices).toBe('Zwei alte ThinkPads und ein Monitor')
+  })
+
+  it('rejects a name shorter than 2 chars', () => {
+    expect(DonationDropoffSchema.safeParse({ ...MIN_VALID, name: 'A' }).success).toBe(false)
+  })
+
+  it('rejects an invalid email', () => {
+    expect(DonationDropoffSchema.safeParse({ ...MIN_VALID, email: 'not-an-email' }).success).toBe(false)
+  })
+
+  it('rejects a devices description shorter than 10 chars', () => {
+    expect(DonationDropoffSchema.safeParse({ ...MIN_VALID, devices: 'kurz' }).success).toBe(false)
+  })
+
+  it('rejects a preferredDate not in YYYY-MM-DD format', () => {
+    expect(
+      DonationDropoffSchema.safeParse({ ...MIN_VALID, preferredDate: '15/06/2026' }).success,
+    ).toBe(false)
+  })
+
+  it('rejects notes over 2000 chars', () => {
+    expect(
+      DonationDropoffSchema.safeParse({ ...MIN_VALID, notes: 'x'.repeat(2001) }).success,
+    ).toBe(false)
   })
 })

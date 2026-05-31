@@ -111,6 +111,9 @@ export { notificationEmail } from './notification';
 // Inquiry (Mitmachen contact form)
 export { inquiryNotification, inquiryConfirmation } from './inquiry';
 
+// Donation drop-off announcement (public donate page form)
+export { donationDropoffNotification, donationDropoffConfirmation } from './donation-dropoff';
+
 // Referral / invitation templates
 export { referralInvitation, referralCouponReceived } from './referral';
 
