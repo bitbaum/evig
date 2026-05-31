@@ -35,17 +35,30 @@ export async function POST(request: NextRequest) {
 
     const { name, email, message, topic } = result.data
 
-    // Notify admin
-    sendCustomEmail(
-      CONTACT.email,
-      inquiryNotification(name, email, topic, message)
-    ).catch(err => logger.warn('Failed to send inquiry notification', { error: err, topic }))
+    // sendCustomEmail() resolves `{ success: false, error }` on SMTP /
+    // Listmonk failure rather than throwing — bare `.catch()` only catches
+    // actual rejections so resolved-failures slip through silently. The
+    // inquiry form is the primary public contact channel for volunteers,
+    // donors and tech-help seekers; a silent send failure means inbound
+    // interest is invisible to staff. Inspect the resolved value in
+    // `.then()` and log both modes separately so ops can grep for the
+    // `(resolved)` vs `(rejected)` suffix. Same shape as the dropoff
+    // route's a4f2d601 fix and the 11+ prior swallow fixes in this codebase.
+    sendCustomEmail(CONTACT.email, inquiryNotification(name, email, topic, message))
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send inquiry notification (resolved)', { error: r.error, topic })
+        }
+      })
+      .catch(err => logger.warn('Failed to send inquiry notification (rejected)', { error: err, topic }))
 
-    // Confirm to submitter
-    sendCustomEmail(
-      email,
-      inquiryConfirmation(name, topic)
-    ).catch(err => logger.warn('Failed to send inquiry confirmation', { error: err, email }))
+    sendCustomEmail(email, inquiryConfirmation(name, topic))
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send inquiry confirmation (resolved)', { error: r.error, email })
+        }
+      })
+      .catch(err => logger.warn('Failed to send inquiry confirmation (rejected)', { error: err, email }))
 
     logger.info('Inquiry submitted', { topic, email })
 

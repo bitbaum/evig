@@ -182,3 +182,26 @@ describe('POST /api/inquiry — unexpected error', () => {
     expect(response.status).toBe(500)
   })
 })
+
+describe('POST /api/inquiry — resolved-failure swallow lock', () => {
+  it('still returns 200 when sendCustomEmail resolves { success: false } — but logs the resolved failure', async () => {
+    // Regression lock for the swallow pattern fixed adjacent to a4f2d601:
+    // sendCustomEmail resolves {success:false} on SMTP failure rather than
+    // throwing. A bare `.catch()` would miss this — the route uses
+    // `.then(r => if !r.success warn)` to detect resolved-failure. Without
+    // this assertion a refactor could silently revert to bare-catch.
+    const { logger } = jest.requireMock('@/lib/logger') as { logger: { warn: jest.Mock } }
+    mockSendCustomEmail.mockResolvedValue({ success: false, error: 'Listmonk 500' })
+
+    const response = await POST(makeRequest(VALID_BODY))
+    expect(response.status).toBe(200)
+
+    // Flush the fire-and-forget .then() chain
+    await new Promise(r => setImmediate(r))
+
+    const resolvedFailureLogs = logger.warn.mock.calls.filter(
+      (call: unknown[]) => typeof call[0] === 'string' && call[0].includes('(resolved)'),
+    )
+    expect(resolvedFailureLogs.length).toBeGreaterThanOrEqual(2)
+  })
+})
