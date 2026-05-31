@@ -473,8 +473,15 @@ export const REQUEST_STATUS = {
 export type RequestStatusId = typeof REQUEST_STATUS[keyof typeof REQUEST_STATUS];
 
 /** Valid status transitions (SSOT) — used in user + admin routes */
+//
+// EXPIRED is NOT listed as a user-reachable transition. The
+// close-it-hilfe-requests cron writes status='expired' directly via
+// `db.update().set(...)`, bypassing this table. Without that distinction,
+// a user could PATCH their own OPEN request with status='expired' and
+// pass validation — wrong, because EXPIRED is the cron's signal that the
+// deadline passed silently, not a user-driven cancel reason.
 export const VALID_REQUEST_TRANSITIONS: Record<string, string[]> = {
-  [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED, REQUEST_STATUS.EXPIRED],
+  [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED],
   [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
 }
 
