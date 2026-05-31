@@ -16,6 +16,10 @@ const mockUpdate = jest.fn()
 const mockSet = jest.fn()
 const mockUpdateWhere = jest.fn()
 const mockUpdateReturning = jest.fn()
+// Route now wraps the duplicate-check + insert-or-update in
+// `db.transaction(async tx => ...)`. Same delegate-to-existing-stubs
+// pattern as 465c8c4d / f1e0e7b8 / 81677367.
+const mockTransaction = jest.fn()
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
@@ -39,6 +43,7 @@ jest.mock('@/db', () => ({
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
 }))
 
@@ -180,6 +185,18 @@ function makeRequest(formData: FormData) {
   })
 }
 
+/**
+ * The duplicate-check select uses `.where(...).for('update')` (SELECT FOR
+ * UPDATE). Return a thenable that's awaitable directly AND exposes `.for()`
+ * resolving to the same rows — one helper serves both the dup-check (calls
+ * .for) and the admin-email select (awaits directly).
+ */
+function whereResolving<T>(rows: T[]): Promise<T[]> & { for: () => Promise<T[]> } {
+  const t = Promise.resolve(rows) as Promise<T[]> & { for: () => Promise<T[]> }
+  t.for = () => Promise.resolve(rows)
+  return t
+}
+
 const VALID_PARSED = {
   businessType: 'individual',
   businessName: null,
@@ -209,7 +226,7 @@ beforeEach(() => {
   mockSendEmail.mockResolvedValue({ success: true })
 
   // Default: no existing application
-  const mockWhere = jest.fn().mockResolvedValue([])
+  const mockWhere = jest.fn().mockReturnValue(whereResolving([]))
   const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
   mockSelect.mockReturnValue({ from: mockFrom })
 
@@ -221,6 +238,17 @@ beforeEach(() => {
   mockUpdateReturning.mockResolvedValue([{ id: 'app-existing' }])
   mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning })
   mockSet.mockReturnValue({ where: mockUpdateWhere })
+
+  // tx delegates to existing stubs so per-test select/insert/update
+  // configuration drives the inner SQL unchanged.
+  mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
+    const tx = {
+      select: (...args: unknown[]) => mockSelect(...args),
+      insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+      update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    }
+    return await cb(tx)
+  })
 })
 
 // ============================================================================
@@ -266,7 +294,7 @@ describe('POST /api/repairer/apply — validation', () => {
 
 describe('POST /api/repairer/apply — duplicate checks', () => {
   it('returns 400 when application is already approved', async () => {
-    const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'approved' }])
+    const mockWhere = jest.fn().mockReturnValue(whereResolving([{ id: 'app-existing', status: 'approved' }]))
     const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
     mockSelect.mockReturnValue({ from: mockFrom })
 
@@ -278,7 +306,7 @@ describe('POST /api/repairer/apply — duplicate checks', () => {
   })
 
   it('returns 400 when application is pending', async () => {
-    const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'pending' }])
+    const mockWhere = jest.fn().mockReturnValue(whereResolving([{ id: 'app-existing', status: 'pending' }]))
     const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
     mockSelect.mockReturnValue({ from: mockFrom })
 
@@ -297,11 +325,11 @@ describe('POST /api/repairer/apply — duplicate checks', () => {
     mockSelect.mockImplementation(() => {
       selectCallCount++
       if (selectCallCount === 1) {
-        const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'rejected' }])
+        const mockWhere = jest.fn().mockReturnValue(whereResolving([{ id: 'app-existing', status: 'rejected' }]))
         const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
         return { from: mockFrom }
       }
-      const mockWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }])
+      const mockWhere = jest.fn().mockReturnValue(whereResolving([{ email: 'admin@revamp-it.ch' }]))
       const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
       return { from: mockFrom }
     })
@@ -322,11 +350,11 @@ describe('POST /api/repairer/apply — duplicate checks', () => {
     mockSelect.mockImplementation(() => {
       selectCallCount++
       if (selectCallCount === 1) {
-        const mockWhere = jest.fn().mockResolvedValue([{ id: 'app-existing', status: 'requires_changes' }])
+        const mockWhere = jest.fn().mockReturnValue(whereResolving([{ id: 'app-existing', status: 'requires_changes' }]))
         const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
         return { from: mockFrom }
       }
-      const mockWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }])
+      const mockWhere = jest.fn().mockReturnValue(whereResolving([{ email: 'admin@revamp-it.ch' }]))
       const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
       return { from: mockFrom }
     })
@@ -353,12 +381,12 @@ describe('POST /api/repairer/apply — success', () => {
       selectCallCount++
       if (selectCallCount === 1) {
         // Check existing application
-        const mockWhere = jest.fn().mockResolvedValue([])
+        const mockWhere = jest.fn().mockReturnValue(whereResolving([]))
         const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
         return { from: mockFrom }
       }
       // Admin emails query
-      const mockWhere = jest.fn().mockResolvedValue([{ email: 'admin@revamp-it.ch' }])
+      const mockWhere = jest.fn().mockReturnValue(whereResolving([{ email: 'admin@revamp-it.ch' }]))
       const mockFrom = jest.fn().mockReturnValue({ where: mockWhere })
       return { from: mockFrom }
     })
