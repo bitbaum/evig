@@ -6,6 +6,7 @@ import { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { Leaf, Monitor, Building2, ArrowDown, Laptop, MonitorSpeaker, Keyboard, HardDrive } from 'lucide-react'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
+import { DropoffForm } from '@/components/donate/DropoffForm'
 import { CopyButton } from '@/components/community/CopyButton'
 import { getEnvironmentalSummary } from '@/data/impact-metrics'
 import Heading from '@/components/ui/Heading'
@@ -214,6 +215,15 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 {t('devices.questionsLink')}
               </a>
             </div>
+          </div>
+        </section>
+
+        {/* Drop-off announcement form */}
+        <section id="anmeldung" className="mb-12 scroll-mt-8">
+          <Heading level={2} className="text-neutral-900 mb-2">{t('dropoff.heading')}</Heading>
+          <p className="text-sm text-neutral-500 mb-6">{t('dropoff.intro')}</p>
+          <div className="rounded-xl border border-neutral-200 bg-white p-6 sm:p-8">
+            <DropoffForm />
           </div>
         </section>
 

@@ -5377,6 +5377,23 @@
       "addressLabel": "Abgabe-Adresse",
       "questionsLink": "Fragen? Schreib uns →"
     },
+    "dropoff": {
+      "heading": "Geräte-Abgabe anmelden",
+      "intro": "Sag uns kurz, was du bringen möchtest — wir bestätigen den Termin per E-Mail und stellen sicher, dass jemand vor Ort ist.",
+      "nameLabel": "Name",
+      "emailLabel": "E-Mail",
+      "phoneLabel": "Telefon (optional)",
+      "preferredDateLabel": "Bevorzugter Termin (optional)",
+      "devicesLabel": "Welche Geräte möchtest du bringen?",
+      "devicesPlaceholder": "z. B. 2 alte ThinkPads, 1 Monitor, ein paar Kabel",
+      "notesLabel": "Anmerkungen (optional)",
+      "notesPlaceholder": "z. B. ein Gerät startet nicht, Bildschirm ist gesprungen",
+      "submit": "Anmeldung absenden",
+      "submitting": "Wird gesendet …",
+      "successTitle": "Danke für deine Anmeldung!",
+      "successBody": "Wir haben dir eine Bestätigung per E-Mail geschickt und melden uns in Kürze, um den Termin zu fixieren.",
+      "errorGeneric": "Anmeldung konnte nicht gesendet werden. Bitte versuche es später erneut."
+    },
     "newsletter": {
       "title": "Wir informieren dich, wie deine Spende wirkt.",
       "description": "Keine Werbung. Nur echte Updates zu Geräten gerettet, CO₂ eingespart und Menschen unterstützt."
