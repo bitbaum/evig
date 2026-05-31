@@ -27,15 +27,22 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }))
 
+// Route wraps duplicate-check + instance-lookup + registration-insert in
+// `db.transaction(async tx => ...)` to avoid two concurrent registrations
+// passing the duplicate check together. The mock delegates tx.select/insert
+// to the existing stubs so the per-test `mockSelect.mockReturnValueOnce(...)`
+// configuration drives the inner SQL unchanged.
 const mockSelect = jest.fn()
 const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockReturning = jest.fn()
+const mockTransaction = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
 }))
 
@@ -164,6 +171,17 @@ beforeEach(() => {
   mockAuth.mockResolvedValue(MOCK_SESSION)
   mockValues.mockReturnValue({ returning: mockReturning })
   mockReturning.mockResolvedValue([{ id: 'registration-1', createdAt: new Date() }])
+
+  // Invoke the tx callback with a delegating object — tests configure
+  // mockSelect via makeWorkshopChain / makeParallelChain just like before;
+  // the cb sees the same chain whether it lands via db.select or tx.select.
+  mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
+    const tx = {
+      select: (...args: unknown[]) => mockSelect(...args),
+      insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    }
+    return await cb(tx)
+  })
 })
 
 // ============================================================================
