@@ -57,9 +57,17 @@ export async function POST(request: NextRequest) {
       ? staffWelcome(userName)
       : welcome(userName)
 
-    sendCustomEmail(email, emailContent).catch(err => {
-      logger.warn('Failed to send welcome email after verification', { error: err, email })
-    })
+    // sendCustomEmail resolves {success:false} on SMTP failure rather
+    // than throwing; bare-catch misses that mode. Same fix class.
+    sendCustomEmail(email, emailContent)
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send welcome email after verification (resolved)', { error: r.error, email })
+        }
+      })
+      .catch(err => {
+        logger.warn('Failed to send welcome email after verification (rejected)', { error: err, email })
+      })
 
     return apiSuccess({
       message: 'E-Mail-Adresse erfolgreich bestätigt',

@@ -34,9 +34,17 @@ export async function POST(request: NextRequest) {
       ? staffWelcome(userName)
       : welcome(userName)
 
-    sendCustomEmail(result.email!, emailContent).catch(err => {
-      logger.warn('Failed to send welcome email after verification', { error: err, email: result.email })
-    })
+    // sendCustomEmail resolves {success:false} on SMTP failure rather
+    // than throwing; bare-catch misses that mode. Same fix class.
+    sendCustomEmail(result.email!, emailContent)
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send welcome email after verification (resolved)', { error: r.error, email: result.email })
+        }
+      })
+      .catch(err => {
+        logger.warn('Failed to send welcome email after verification (rejected)', { error: err, email: result.email })
+      })
 
     return apiSuccess({
       message: 'E-Mail-Adresse erfolgreich bestätigt! Du kannst dich jetzt anmelden.',
@@ -72,9 +80,15 @@ export async function GET(request: NextRequest) {
       ? staffWelcome(getUserName)
       : welcome(getUserName)
 
-    sendCustomEmail(result.email!, getEmailContent).catch(err => {
-      logger.warn('Failed to send welcome email after verification', { error: err, email: result.email })
-    })
+    sendCustomEmail(result.email!, getEmailContent)
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send welcome email after verification (resolved)', { error: r.error, email: result.email })
+        }
+      })
+      .catch(err => {
+        logger.warn('Failed to send welcome email after verification (rejected)', { error: err, email: result.email })
+      })
 
     // Redirect to login with success message
     return NextResponse.redirect(new URL('/auth/login?verified=true', request.url))
