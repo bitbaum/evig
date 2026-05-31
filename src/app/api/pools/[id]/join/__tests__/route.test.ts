@@ -27,6 +27,12 @@ jest.mock('@/lib/api/middleware', () => ({
       }),
 }))
 
+// Route runs the whole pool-lock + capacity-check + existing-membership-
+// check + insert/reactivate flow inside `db.transaction(async tx => ...)`.
+// The pool lookup uses `tx.execute(sql)` (raw SQL SELECT FOR UPDATE), the
+// rest go through tx.select/insert/update. The mock delegates each tx method
+// to a top-level stub so per-test configuration is independent of the
+// transaction wrapper.
 const mockSelect = jest.fn()
 const mockUpdate = jest.fn()
 const mockSet = jest.fn()
@@ -35,12 +41,15 @@ const mockUpdateReturning = jest.fn()
 const mockInsert = jest.fn()
 const mockValues = jest.fn()
 const mockInsertReturning = jest.fn()
+const mockExecute = jest.fn()
+const mockTransaction = jest.fn()
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
     insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
 }))
 
@@ -86,7 +95,9 @@ const MOCK_SESSION = {
   expires: '2027-01-01',
 }
 
-const MOCK_POOL = { id: 'pool-1', maxMembers: 5, status: 'active', memberCount: 2 }
+// Pool row shape matches what the raw `tx.execute(SELECT ... FOR UPDATE)`
+// would return: snake_case columns, not the Drizzle camelCase mapping.
+const MOCK_POOL_ROW = { id: 'pool-1', max_members: 5, status: 'active' }
 const MOCK_MEMBERSHIP = { id: 'mem-1', poolId: 'pool-1', userId: 'user-1', role: 'member', status: 'active' }
 
 function makeContext(id = 'pool-1') {
@@ -97,28 +108,36 @@ function makeRequest() {
   return new NextRequest('http://localhost/api/pools/pool-1/join', { method: 'POST' })
 }
 
-// Persistent mock references so tests can override specific step results
-let mockPoolLimit: jest.Mock
+// Persistent mock references so tests can override specific step results.
+// mockMemberLimit drives the existing-membership lookup; mockCountWhere
+// drives the COUNT(*) query for capacity.
 let mockMemberLimit: jest.Mock
+let mockCountWhere: jest.Mock
 
 beforeEach(() => {
   jest.resetAllMocks()
   mockAuth.mockResolvedValue(MOCK_SESSION)
 
-  // Pool select chain (first db.select call)
-  mockPoolLimit = jest.fn().mockResolvedValue([MOCK_POOL])
-  const poolWhere = jest.fn().mockReturnValue({ limit: mockPoolLimit })
-  const poolFrom = jest.fn().mockReturnValue({ where: poolWhere })
+  // Default: pool found and active.
+  mockExecute.mockResolvedValue({ rows: [MOCK_POOL_ROW] })
 
-  // Membership select chain (second db.select call)
-  mockMemberLimit = jest.fn().mockResolvedValue([]) // no existing membership by default
+  // Count query chain: tx.select({count}).from().where() → [{ count }]
+  // Default: 2 active members (well below max of 5).
+  mockCountWhere = jest.fn().mockResolvedValue([{ count: 2 }])
+  const countFrom = jest.fn().mockReturnValue({ where: mockCountWhere })
+
+  // Membership lookup chain: tx.select(...).from().where().limit(1) → [row?]
+  // Default: no existing membership.
+  mockMemberLimit = jest.fn().mockResolvedValue([])
   const memberWhere = jest.fn().mockReturnValue({ limit: mockMemberLimit })
   const memberFrom = jest.fn().mockReturnValue({ where: memberWhere })
 
-  mockSelect.mockReturnValueOnce({ from: poolFrom })
-  mockSelect.mockReturnValue({ from: memberFrom })
+  // First select() in tx is the COUNT, second is the membership lookup.
+  mockSelect
+    .mockReturnValueOnce({ from: countFrom })
+    .mockReturnValue({ from: memberFrom })
 
-  // Update chain (re-activate left membership)
+  // Update chain (reactivate left membership)
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning })
   mockUpdateReturning.mockResolvedValue([MOCK_MEMBERSHIP])
@@ -126,6 +145,16 @@ beforeEach(() => {
   // Insert chain (new membership)
   mockValues.mockReturnValue({ returning: mockInsertReturning })
   mockInsertReturning.mockResolvedValue([MOCK_MEMBERSHIP])
+
+  mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
+    const tx = {
+      execute: (...args: unknown[]) => mockExecute(...args),
+      select: (...args: unknown[]) => mockSelect(...args),
+      update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+      insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    }
+    return await cb(tx)
+  })
 })
 
 describe('POST /api/pools/[id]/join — unauthenticated', () => {
@@ -138,13 +167,13 @@ describe('POST /api/pools/[id]/join — unauthenticated', () => {
 
 describe('POST /api/pools/[id]/join — validation', () => {
   it('returns 404 when pool not found', async () => {
-    mockPoolLimit.mockResolvedValueOnce([])
+    mockExecute.mockResolvedValueOnce({ rows: [] })
     const response = await POST(makeRequest(), makeContext())
     expect(response.status).toBe(404)
   })
 
   it('returns 400 when pool is not active', async () => {
-    mockPoolLimit.mockResolvedValueOnce([{ ...MOCK_POOL, status: 'closed' }])
+    mockExecute.mockResolvedValueOnce({ rows: [{ ...MOCK_POOL_ROW, status: 'closed' }] })
     const response = await POST(makeRequest(), makeContext())
     expect(response.status).toBe(400)
     const body = await response.json()
@@ -152,7 +181,8 @@ describe('POST /api/pools/[id]/join — validation', () => {
   })
 
   it('returns 400 when pool is full', async () => {
-    mockPoolLimit.mockResolvedValueOnce([{ ...MOCK_POOL, memberCount: 5, maxMembers: 5 }])
+    // Active member count meets/exceeds max_members → capacity check fails.
+    mockCountWhere.mockResolvedValueOnce([{ count: 5 }])
     const response = await POST(makeRequest(), makeContext())
     expect(response.status).toBe(400)
     const body = await response.json()
