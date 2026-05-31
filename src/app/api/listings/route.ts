@@ -319,7 +319,11 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       data.specs
     );
 
-    // Fire-and-forget: send confirmation email
+    // Fire-and-forget: send confirmation email. sendCustomEmail RESOLVES
+    // `{success:false}` on SMTP/Listmonk failure rather than throwing, so a
+    // bare `.catch()` would miss that mode. Use the canonical .then/.catch
+    // shape from src/lib/it-hilfe/notifications.ts (same fix class as
+    // a4f2d601 / 7ef4fd75 / 0caff6ba).
     if (session.user.email && data.status !== LISTING_STATUS.DRAFT) {
       sendCustomEmail(
         session.user.email,
@@ -328,7 +332,13 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           listingTitle: sanitizedTitle,
           listingUrl: `${APP_URL}/marketplace/${result}`,
         })
-      ).catch(err => logger.error('Failed to send listing published email', { error: err, listingId: result }));
+      )
+        .then(r => {
+          if (!r.success) {
+            logger.warn('Failed to send listing published email (resolved)', { error: r.error, listingId: result });
+          }
+        })
+        .catch(err => logger.warn('Failed to send listing published email (rejected)', { error: err, listingId: result }));
     }
 
     return apiSuccess({ id: result }, 201);

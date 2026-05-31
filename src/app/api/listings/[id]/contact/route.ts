@@ -81,6 +81,9 @@ export const POST = withAuth<{ id: string }>(async (
     // /api/messages route shape fixed in 0b773948 (the dashboard page
     // at /dashboard/messages reads `conversation` from searchParams to
     // auto-select the thread).
+    // sendCustomEmail resolves {success:false} on SMTP/Listmonk failure
+    // (bare-catch misses that mode). Canonical .then/.catch shape; same
+    // fix class as a4f2d601 / 7ef4fd75 / 0caff6ba.
     if (listing.sellerEmail) {
       sendCustomEmail(
         listing.sellerEmail,
@@ -91,7 +94,13 @@ export const POST = withAuth<{ id: string }>(async (
           messagePreview: message.substring(0, 200),
           conversationUrl: `${APP_URL}/dashboard/messages?conversation=${conversationId}`,
         })
-      ).catch(err => logger.error('Failed to send marketplace message notification', { error: err, listingId: id }));
+      )
+        .then(r => {
+          if (!r.success) {
+            logger.warn('Failed to send marketplace message notification (resolved)', { error: r.error, listingId: id });
+          }
+        })
+        .catch(err => logger.warn('Failed to send marketplace message notification (rejected)', { error: err, listingId: id }));
     }
 
     return apiSuccess({
