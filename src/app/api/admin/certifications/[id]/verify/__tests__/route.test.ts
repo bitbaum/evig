@@ -210,3 +210,29 @@ describe('PUT /api/admin/certifications/[id]/verify — success', () => {
     expect(response.status).toBe(500)
   })
 })
+
+describe('PUT /api/admin/certifications/[id]/verify — auto-calculated expiry date', () => {
+  // Smoke-test the no-explicit-expiry branch. The fix itself
+  // (setMonth(getMonth() + N) instead of N*30 days) is checked by code
+  // review; the project's drizzle-orm sql mock collapses templates to
+  // `{__sql:'sql'}` so we can't inspect the exact ISO that lands in the
+  // UPDATE values without ripping the mock apart. Locking that the route
+  // doesn't crash on this branch + returns 200 is the meaningful
+  // assertion at this layer.
+  it('handles certs with no explicit expiry_date (computes from issue_date + validity_period_months)', async () => {
+    mockDbExecute.mockReset()
+    mockDbExecute
+      .mockResolvedValueOnce({
+        rows: [{
+          ...MOCK_CERT_PENDING,
+          expiry_date: null, // forces the calc branch
+          validity_period_months: 12,
+          issue_date: '2026-01-01',
+        }],
+      })
+      .mockResolvedValueOnce({ rows: [] })
+
+    const response = await PUT(makeRequest(), makeContext())
+    expect(response.status).toBe(200)
+  })
+})

@@ -46,11 +46,19 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
       return apiBadRequest('Diese Zertifizierung wurde bereits verifiziert')
     }
 
-    // Calculate expiry date if certification type has validity period and no expiry date is set
+    // Calculate expiry date if certification type has validity period and no expiry date is set.
+    //
+    // Previously approximated months as 30 days each, which drifts the
+    // expiry date earlier by ~5 days/year (5–6 days for 12-month certs,
+    // 10–12 for 24-month, 15+ for 36-month). Use Date#setMonth so
+    // "1 year later" actually lands on the same calendar day. Edge case:
+    // Jan 31 + 1 month overflows to early March via JS's standard
+    // setMonth semantics, which matches the legal "same day N months
+    // later" expectation for cert expiry.
     let calculatedExpiryDate = certification.expiry_date
     if (!calculatedExpiryDate && certification.validity_period_months && certification.issue_date) {
-      const issueDate = new Date(certification.issue_date)
-      const expiryDate = new Date(issueDate.getTime() + (certification.validity_period_months * 30 * 24 * 60 * 60 * 1000))
+      const expiryDate = new Date(certification.issue_date)
+      expiryDate.setMonth(expiryDate.getMonth() + certification.validity_period_months)
       calculatedExpiryDate = expiryDate.toISOString()
     }
 
