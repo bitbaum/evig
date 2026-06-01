@@ -40,7 +40,7 @@ export function ChatWindow({
   return (
     <>
       {/* Chat Messages */}
-      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-neutral-50/30 to-transparent">
+      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-neutral-50/50 dark:bg-neutral-900/50">
         {messages.map((message) => (
           <ChatMessage
             key={message.id}

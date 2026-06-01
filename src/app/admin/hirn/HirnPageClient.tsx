@@ -41,7 +41,7 @@ export default function HirnPageClient() {
       {/* Page Header */}
       <div className="flex items-center justify-between p-6 border-b border-neutral-200 dark:border-white/[0.06]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-error-500 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center">
             <Brain className="w-5 h-5 text-white" />
           </div>
           <div>

@@ -57,7 +57,7 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
   const loginUrl = `/auth/login?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white dark:from-neutral-950 dark:to-neutral-950 py-12 px-4">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">

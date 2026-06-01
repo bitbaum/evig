@@ -33,7 +33,6 @@ export async function generateMetadata({ params }: DonatePageProps): Promise<Met
 }
 
 const TIER_ICONS = [Leaf, Monitor, Building2]
-const TIER_COLORS = ['green', 'blue', 'purple'] as const
 const TIER_AMOUNTS = [50, 100, 500]
 const TIER_HIGHLIGHTS = [false, true, false]
 
@@ -101,7 +100,6 @@ export default async function DonatePage({ params }: DonatePageProps) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {tierItems.map((tier, index) => {
               const Icon = TIER_ICONS[index]
-              const color = TIER_COLORS[index]
               const highlight = TIER_HIGHLIGHTS[index]
               return (
                 <div
@@ -116,14 +114,8 @@ export default async function DonatePage({ params }: DonatePageProps) {
                     </span>
                   )}
                   <div className="flex items-center gap-3 mb-3">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-                      color === 'green' ? 'bg-primary-100 dark:bg-primary-900/30' :
-                      color === 'blue' ? 'bg-primary-100 dark:bg-primary-900/30' : 'bg-primary-100 dark:bg-primary-900/30'
-                    }`}>
-                      <Icon className={`h-5 w-5 ${
-                        color === 'green' ? 'text-primary-600' :
-                        color === 'blue' ? 'text-primary-600' : 'text-primary-600'
-                      }`} />
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-900/30">
+                      <Icon className="h-5 w-5 text-primary-600" />
                     </div>
                     <span className="text-2xl font-bold text-neutral-900">CHF {TIER_AMOUNTS[index]}</span>
                   </div>

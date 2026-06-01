@@ -93,7 +93,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       <div className="flex gap-3">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-500 to-primary-600 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-primary-500 flex items-center justify-center">
             <span className="text-white font-medium text-sm">{initials}</span>
           </div>
         </div>

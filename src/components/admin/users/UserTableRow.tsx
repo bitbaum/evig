@@ -67,10 +67,10 @@ function UserInfoCell({
   userIsStaff: boolean
 }) {
   const avatarClass = userIsSuperAdmin
-    ? 'bg-gradient-to-r from-primary-500 to-error-600'
+    ? 'bg-primary-600'
     : userIsStaff
-      ? 'bg-gradient-to-r from-primary-500 to-primary-600'
-      : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
+      ? 'bg-primary-500'
+      : 'bg-neutral-500'
 
   const initials = user.name
     ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2)

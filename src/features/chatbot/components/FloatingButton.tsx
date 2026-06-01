@@ -19,7 +19,7 @@ export function FloatingButton({ currentLanguage, isOpen, onClick }: FloatingBut
       onClick={() => { uiEvents.emit('closeSuggestion'); onClick() }}
       className={cn(
         "fixed z-[600] pointer-events-auto",
-        "bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800",
+        "bg-primary-700 hover:bg-primary-600 dark:bg-primary-600 dark:hover:bg-primary-500",
         "text-white rounded-full shadow-lg hover:shadow-xl",
         "transition-all duration-300 ease-in-out transform hover:scale-105",
         "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",

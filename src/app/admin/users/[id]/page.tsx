@@ -139,10 +139,10 @@ export default async function UserDetailPage({ params }: PageProps) {
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
             userIsSuperAdmin
-              ? 'bg-gradient-to-r from-primary-500 to-error-600'
+              ? 'bg-primary-600'
               : userIsStaff
-                ? 'bg-gradient-to-r from-primary-500 to-primary-700'
-                : 'bg-gradient-to-r from-neutral-400 to-neutral-500'
+                ? 'bg-primary-500'
+                : 'bg-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
           </div>

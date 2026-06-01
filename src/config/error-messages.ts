@@ -19,6 +19,7 @@ export const ERROR_MESSAGES = {
   APPOINTMENT_NOT_FOUND: 'Termin nicht gefunden',
   DOCUMENT_NOT_FOUND: 'Dokument nicht gefunden',
   CERTIFICATION_NOT_FOUND: 'Zertifizierung nicht gefunden',
+  CERTIFICATION_ALREADY_VERIFIED: 'Diese Zertifizierung wurde bereits verifiziert',
   WORKSHOP_NOT_FOUND: 'Workshop nicht gefunden',
   LOCATION_NOT_FOUND: 'Ort nicht gefunden',
   REPAIRER_NOT_FOUND: 'Reparateur nicht gefunden',

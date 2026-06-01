@@ -27,7 +27,7 @@ export function ChatMessage({ message, onSuggestionClick }: ChatMessageProps) {
       <div className={cn(
         "max-w-[85%] p-3 rounded-2xl shadow-sm",
         message.type === 'user'
-          ? "bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-br-md"
+          ? "bg-primary-700 text-white rounded-br-md"
           : "bg-white text-neutral-800 rounded-bl-md border border-neutral-100"
       )}>
         <p className="text-sm leading-relaxed">{message.content}</p>

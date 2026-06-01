@@ -83,8 +83,8 @@ export function TeamProfileView({
           {/* Avatar */}
           <div className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 ${
             profile.is_active
-              ? 'bg-gradient-to-r from-primary-500 to-primary-600'
-              : 'bg-neutral-400'
+              ? 'bg-primary-500'
+              : 'bg-neutral-500'
           }`}>
             <span className="text-white font-bold text-2xl">{initials}</span>
           </div>

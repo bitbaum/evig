@@ -43,7 +43,7 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
     const certification = certificationResult.rows[0] as unknown as CertificationRow
 
     if (certification.verification_status === CERTIFICATION_STATUS.VERIFIED) {
-      return apiBadRequest('Diese Zertifizierung wurde bereits verifiziert')
+      return apiBadRequest(ERROR_MESSAGES.CERTIFICATION_ALREADY_VERIFIED)
     }
 
     // Calculate expiry date if certification type has validity period and no expiry date is set.

@@ -65,7 +65,7 @@ export const aboutConfig: AboutPageConfig = {
   hero: {
     title: 'Technik ein zweites Leben geben',
     description: `Seit über ${new Date().getFullYear() - getDefaultNumeric('founding_year')} Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken.`,
-    backgroundColor: 'bg-gradient-to-r from-primary-600 to-primary-800',
+    backgroundColor: 'bg-primary-700',
     ctas: [
       {
         text: 'Mitmachen',

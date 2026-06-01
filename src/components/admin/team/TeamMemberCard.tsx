@@ -32,8 +32,8 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         {/* Avatar */}
         <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
           member.is_active
-            ? 'bg-gradient-to-r from-primary-500 to-primary-600'
-            : 'bg-neutral-400'
+            ? 'bg-primary-500'
+            : 'bg-neutral-500'
         }`}>
           <span className="text-white font-medium text-sm">{initials}</span>
         </div>

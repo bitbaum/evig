@@ -174,7 +174,7 @@ export default function SuggestionButton() {
             style={{ pointerEvents: 'auto' }}
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-primary-50 to-primary-100 border-b border-neutral-200 px-4 py-3 flex-shrink-0">
+            <div className="bg-neutral-50 dark:bg-neutral-800 border-b border-neutral-200 dark:border-white/[0.06] px-4 py-3 flex-shrink-0">
               <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                   <Edit3 className="w-4 h-4 text-primary-600" />

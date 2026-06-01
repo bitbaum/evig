@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
 
     logger.info('Donation drop-off announced', { donorEmail: fields.email, hasPreferredDate: !!fields.preferredDate })
 
-    return apiSuccess({ message: 'Anmeldung erhalten' })
+    return apiSuccess({ message: 'Drop-off announcement received' })
   } catch (error) {
-    return apiError(error, 'Fehler beim Senden der Anmeldung')
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
   }
 }

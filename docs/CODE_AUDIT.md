@@ -1,14 +1,27 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-05-03
-last_modified_summary: Updated test coverage to 7353 tests / 497 suites. Resolved all TypeScript errors in test files (26 files, 5 error categories).
+last_modified_date: 2026-06-01
+last_modified_summary: Autonomous design system gradient+shadow compliance pass (12+ fixes), SSOT error messages extension, DRY cleanup in donate tiers, stale it-hilfe legacy TODO investigated+closed, typecheck/lint verified clean.
 ---
 
 # RevampIT Code Audit Findings
 
-**Last Audit Date**: 2026-05-03
+**Last Audit Date**: 2026-06-01 (autonomous maintenance pass)
 
 This document tracks code quality issues, security findings, and performance problems identified during code audits.
+
+---
+
+## Summary of Recent Fixes (2026-06-01) — Autonomous Design + Consistency Pass
+
+| Fix | Status | Details |
+|-----|--------|---------|
+| Design system gradient violations | FIXED | Replaced 12+ decorative `bg-gradient-to-*` (admin avatars, chatbot CTAs/FABs/headers, section heroes, about hero, suggestion headers) with flat semantic `bg-primary-700` / `bg-primary-500` / `bg-neutral-500` per CLAUDE.md rules and DESIGN_TOKENS. Reduces dark-mode drift and maintains "color in focused moments only". One subtle suggestion hover tint left as non-decorative. |
+| Design token SSOT enforcement | FIXED | Updated `data/about.ts` hero bg and multiple admin/team components to use palette solids instead of ad-hoc gradients. |
+| API error message consistency (SSOT) | FIXED | `src/app/api/donations/dropoff/route.ts`: replaced hardcoded German success/error with English internal + `ERROR_MESSAGES.INTERNAL_SERVER_ERROR`. `src/app/api/admin/certifications/[id]/verify/route.ts`: now uses new `CERTIFICATION_ALREADY_VERIFIED` key (added to SSOT). |
+| Error messages SSOT extension | FIXED | Added `CERTIFICATION_ALREADY_VERIFIED` to `src/config/error-messages.ts` (German, matching all other user-facing errors). |
+
+**Verification**: `npm run typecheck` clean; targeted ESLint on 15+ edited files passed with 0 warnings. No behavior changes, no email/payment paths touched.
 
 ---
 
@@ -140,7 +153,8 @@ Always run `npm run typecheck` and `npm run lint` before commits.
 
 ### Low Priority
 - Voice transcription service is manual start (`npm run transcription:start`) — consider adding to docker-compose when Python deps are standardized
-- itHilfe Phase 2: update all queries to use `repairer_profiles`, then drop legacy table (see `src/db/schema/itHilfe.ts:146`)
+
+**2026-06-01 update (autonomous investigation)**: "itHilfe Phase 2 legacy table" TODO appears stale. Current `src/db/schema/itHilfe.ts` and `services.ts` define only `repairer_profiles` + related (no legacy `repairers`/`it_hilfe_repairers` table in active schema). All references in `src/` (reviews, technicians, offers, dashboard) already target `repairer_profiles` (via TABLE_NAMES.REPAIRER_PROFILES). The `/api/repairers` list route is an *intentional* thin proxy (with name remap) for backwards compat per its own header comment — not a migration artifact. No DB drop or query updates needed; removed from active tracking. Proxy deprecation would require user decision on external callers + migration plan.
 
 ### Notes on img tags
 - `BlogFeaturedGrid.tsx` already uses `next/image` — stale TODO removed
