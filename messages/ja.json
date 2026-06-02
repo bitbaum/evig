@@ -3022,6 +3022,20 @@
           "マルチユーザーコンピューティング",
           "リソース最適化"
         ]
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "廃棄されたコンピュータモニターが機能的で持続可能なランプに変身します。保護されたワークショップや不動産パートナーとの協力による循環型経済のパイロットプロジェクト – オープンな指示書と科学的支援付き。",
+        "category": "hardware",
+        "status": "ongoing",
+        "year": "2025",
+        "features": [
+          "モニターをランプに変換",
+          "小規模シリーズと品質保証",
+          "社会企業との協力",
+          "ZHAWによる生態学的分析"
+        ],
+        "readMoreLink": "/projects/upcycling"
       }
     ],
     "freiecomputer": {

@@ -4658,6 +4658,20 @@
         "slug": "upcycling",
         "year": "2025",
         "readMoreLink": "/projects/upcycling"
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Les moniteurs d'ordinateur mis au rebut sont transformés en lampes fonctionnelles et durables. Un projet pilote pour l'économie circulaire en collaboration avec des ateliers protégés et des partenaires immobiliers – avec des instructions ouvertes et un accompagnement scientifique.",
+        "slug": "upcycling",
+        "category": "hardware",
+        "status": "ongoing",
+        "year": "2025",
+        "features": [
+          "Transformation de moniteurs en lampes",
+          "Petite série et assurance qualité",
+          "Collaboration avec des entreprises sociales",
+          "Analyses écologiques (ZHAW)"
+        ]
       }
     ],
     "freiecomputer": {

@@ -3048,6 +3048,20 @@
           "Computación multiusuario",
           "Optimización de recursos"
         ]
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Los monitores de ordenador desechados se transforman en lámparas funcionales y sostenibles. Un proyecto piloto para la economía circular en colaboración con talleres protegidos y socios inmobiliarios – con instrucciones abiertas y apoyo científico.",
+        "category": "hardware",
+        "status": "ongoing",
+        "year": "2025",
+        "features": [
+          "Conversión de monitores en lámparas",
+          "Pequeña serie y control de calidad",
+          "Colaboración con empresas sociales",
+          "Análisis ecológicos (ZHAW)"
+        ],
+        "readMoreLink": "/projects/upcycling"
       }
     ],
     "freiecomputer": {
