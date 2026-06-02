@@ -243,7 +243,8 @@
       }
     },
     "proServices": {
-      "text": "Nous proposons également des <link>services IT</link> professionnels: réparation informatique, récupération de données, installation Linux et développement web."
+      "text": "Nous proposons également des {link} professionnels: réparation informatique, récupération de données, installation Linux et développement web.",
+      "linkLabel": "services IT"
     },
     "impact": {
       "title": "Notre impact",
@@ -411,7 +412,7 @@
       "heroSubtitle": "Découvrez notre sélection de {categoryNameLower} reconditionnés – qualité vérifiée à des prix équitables.",
       "productCount": "{count} produits dans cette catégorie",
       "subcategories": "Sous-catégories",
-      "categoryProductCount": "{count, plural, one {# produit} other {# produits}}",
+      "categoryProductCount": "{count} produits",
       "productsLoading": "Chargement des produits",
       "productsComingSoon": "Vous trouverez bientôt ici des appareils reconditionnés dans la catégorie {categoryName} sur notre marketplace.",
       "goToShop": "Accéder à la boutique en ligne",
@@ -686,16 +687,13 @@
     },
     "checkout": {
       "loading": "Chargement...",
-      "backToMarketplace": "Retour au marché",
+      "backToMarketplace": "Retour à la place de marché",
       "backToListing": "Retour à l'annonce",
       "notFound": "Annonce introuvable",
       "loadError": "Erreur lors du chargement de l'annonce",
       "orderError": "Impossible de créer la commande",
       "networkError": "Erreur réseau lors de la création de la commande",
-      "ownListing": {
-        "title": "Votre propre annonce",
-        "message": "Vous ne pouvez pas acheter votre propre annonce."
-      },
+      "ownListing": "Votre propre annonce",
       "title": "Paiement sécurisé",
       "delivery": {
         "title": "Choisir le mode de livraison",
@@ -730,7 +728,7 @@
         "total": "Total",
         "shipping": "Livraison"
       },
-      "buyerProtection": "Protection acheteur — le paiement n'est libéré qu'après confirmation de réception",
+      "buyerProtection": "Protection acheteur — Le montant n'est libéré qu'après confirmation de réception",
       "success": {
         "heading": "Commande réussie!",
         "description": "Votre paiement a été autorisé. Le montant ne sera libéré qu'après confirmation de réception.",
@@ -738,7 +736,30 @@
         "statusLabel": "Statut:",
         "viewOrder": "Voir la commande",
         "continueShopping": "Continuer les achats"
-      }
+      },
+      "ownListingDesc": "Vous ne pouvez pas acheter votre propre annonce.",
+      "backToListingLink": "Retour à l'annonce",
+      "chooseDelivery": "Choisir le mode de livraison",
+      "pickup": "Retrait",
+      "shipping": "Livraison",
+      "shippingNationwide": "Dans toute la Suisse",
+      "free": "Gratuit",
+      "shippingAddress": "Adresse de livraison",
+      "name": "Nom",
+      "street": "Rue",
+      "postalCode": "NPA",
+      "postalCodeInvalid": "Le NPA doit avoir 4 chiffres",
+      "city": "Ville",
+      "redirecting": "Redirection vers le paiement...",
+      "proceed": "Procéder au paiement",
+      "orderSummary": "Résumé de la commande",
+      "seller": "Vendeur",
+      "itemPrice": "Prix de l'article",
+      "shippingCost": "Frais de port",
+      "pickupFree": "Retrait",
+      "serviceFee": "Frais de service ({rate}%)",
+      "serviceFeeIncluded": "incl. {amount}",
+      "total": "Total"
     },
     "checkout_success": {
       "title": "Commande réussie !",
@@ -2698,9 +2719,11 @@
       "emptyFiltered": "Aucune demande avec ce statut",
       "emptyNoFilter": "Aucune demande pour l'instant",
       "emptyFilteredMessage": "Essayez un autre filtre.",
-      "emptyNoFilterMessage": "Créez votre première demande de réparation et obtenez de l'aide de la communauté.",
+      "emptyNoFilterMessage": "Créez votre première demande de réparation et recevez l'aide de la communauté.",
       "createButton": "Créer une demande",
-      "offerCount": "{count, plural, one {# offre} other {# offres}}"
+      "offerCount": "{count, plural, one {# offre} other {# offres}}",
+      "newRequest": "Nouvelle demande",
+      "createRequest": "Créer une demande"
     },
     "myOffers": {
       "title": "Mes offres",
@@ -3271,8 +3294,8 @@
   },
   "getInvolved": {
     "meta": {
-      "title": "S'impliquer",
-      "description": "Rejoignez notre mission pour réduire les déchets électroniques et rendre la technologie accessible à tous."
+      "title": "Participer",
+      "description": "Rejoignez notre mission de réduction des déchets électroniques et rendez la technologie accessible à tous. Devenez bénévole, stagiaire ou partenaire."
     },
     "hero": {
       "title": "Rejoignez notre mission",
@@ -3299,7 +3322,23 @@
           "title": "Impact mondial",
           "description": "Faire une différence dans les communautés locales et mondiales grâce à la technologie."
         }
-      ]
+      ],
+      "sustainability": {
+        "title": "Durabilité",
+        "description": "Nous croyons en la création d'un avenir durable grâce à un usage responsable de la technologie et à la réduction des déchets."
+      },
+      "community": {
+        "title": "Communauté",
+        "description": "Construire des communautés solides grâce à l'éducation technologique et à une participation inclusive."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Trouver des solutions créatives pour rendre la technologie accessible et respectueuse de l'environnement."
+      },
+      "globalImpact": {
+        "title": "Impact global",
+        "description": "Faire une différence dans les communautés locales et mondiales grâce à la technologie."
+      }
     },
     "options": {
       "heading": "Comment s'impliquer",
@@ -3415,11 +3454,11 @@
     "volunteer": {
       "meta": {
         "title": "Bénévolat",
-        "description": "Rejoignez notre équipe de bénévoles dévoués et faites une différence dans votre communauté."
+        "description": "Rejoignez notre équipe de bénévoles engagés et faites une différence dans votre communauté grâce à la technologie et à la durabilité."
       },
       "title": "Devenir bénévole",
-      "description": "Rejoignez notre équipe et aidez à rendre la technologie durable et accessible.",
-      "ctaText": "Exprimer son intérêt",
+      "description": "Rejoignez notre équipe de bénévoles engagés et aidez à rendre la technologie durable et accessible à tous.",
+      "ctaText": "Manifester son intérêt",
       "overview": {
         "title": "Pourquoi faire du bénévolat chez Revamp-IT?",
         "content": "Chez Revamp-IT, nous croyons que tout le monde devrait avoir accès à la technologie. En tant que bénévole, vous ferez partie d'une communauté qui concrétise cette vision."
@@ -3482,16 +3521,25 @@
           "Participez à une brève séance d'orientation",
           "Commencez à faire une différence!"
         ]
-      }
+      },
+      "benefitsTitle": "Avantages du bénévolat",
+      "flexibilityNote": "Nous comprenons que chacun a des horaires différents. Nous proposons des activités bénévoles flexibles qui s'adaptent à vos autres engagements. Que vous puissiez consacrer quelques heures par semaine ou davantage — votre contribution fera la différence.",
+      "howToStartTitle": "Comment commencer",
+      "steps": [
+        "Contactez-nous pour manifester votre intérêt",
+        "Rencontrez notre équipe pour discuter de vos compétences et de vos centres d'intérêt",
+        "Participez à une brève séance d'introduction",
+        "Commencez à faire la différence !"
+      ]
     },
     "technicalExperts": {
       "meta": {
         "title": "Experts techniques",
-        "description": "Partagez votre expertise technique et aidez-nous à développer des solutions innovantes."
+        "description": "Partagez votre expertise technique et aidez-nous à développer des solutions innovantes pour une technologie durable."
       },
       "title": "Experts techniques",
-      "description": "Partagez votre expertise et aidez-nous à développer des solutions innovantes.",
-      "ctaText": "Exprimer son intérêt",
+      "description": "Partagez votre expertise et aidez-nous à développer des solutions innovantes pour une technologie durable.",
+      "ctaText": "Manifester son intérêt",
       "benefitsHeading": "Opportunités pour les experts techniques",
       "overview": {
         "title": "Rejoignez notre équipe technique",
@@ -3563,16 +3611,24 @@
           "Examinez nos directives de développement",
           "Commencez à contribuer"
         ]
-      }
+      },
+      "opportunitiesTitle": "Opportunités pour les experts techniques",
+      "howToStartTitle": "Comment commencer",
+      "howToStartSteps": [
+        "Contactez-nous avec votre domaine de spécialisation et vos intérêts",
+        "Discutez des projets et contributions possibles",
+        "Consultez nos directives et processus de développement",
+        "Commencez à contribuer à nos projets"
+      ]
     },
     "internships": {
       "meta": {
         "title": "Stages",
-        "description": "Acquérez une expérience pratique en technologie et durabilité."
+        "description": "Acquérez une expérience pratique en technologie et en durabilité grâce à notre programme de stages."
       },
       "title": "Opportunités de stage",
-      "description": "Acquérez une expérience précieuse en technologie et durabilité.",
-      "ctaText": "Exprimer son intérêt",
+      "description": "Acquérez une expérience précieuse en technologie et en durabilité tout en ayant un impact réel.",
+      "ctaText": "Manifester son intérêt",
       "benefitsHeading": "Avantages du programme",
       "overview": {
         "title": "Notre programme de stage",
@@ -3643,16 +3699,24 @@
           "Participez à un bref entretien",
           "Commencez votre aventure de stage!"
         ]
-      }
+      },
+      "benefitsTitle": "Avantages du programme",
+      "howToApplyTitle": "Comment postuler",
+      "howToApplySteps": [
+        "Envoyez-nous votre CV et une lettre de motivation",
+        "Indiquez votre domaine d'intérêt et votre disponibilité",
+        "Participez à un court entretien",
+        "Commencez votre stage !"
+      ]
     },
     "partnerships": {
       "meta": {
         "title": "Partenariats",
-        "description": "Créez des solutions technologiques durables ensemble."
+        "description": "Travaillez avec nous pour créer des solutions technologiques durables et avoir un impact durable."
       },
       "title": "Opportunités de partenariat",
       "description": "Joignez-vous à nous pour créer des solutions technologiques durables.",
-      "ctaText": "Exprimer son intérêt",
+      "ctaText": "Manifester son intérêt",
       "benefitsHeading": "Avantages du partenariat",
       "overview": {
         "title": "Pourquoi collaborer avec nous?",
@@ -3723,16 +3787,33 @@
           "Développez un accord de partenariat",
           "Commencez votre aventure de partenariat"
         ]
-      }
+      },
+      "benefitsTitle": "Avantages du partenariat",
+      "processTitle": "Comment nous collaborons",
+      "processSteps": [
+        "Première consultation pour comprendre les objectifs et les possibilités",
+        "Développement du cadre et des objectifs du partenariat",
+        "Mise en œuvre d'initiatives coopératives",
+        "Révisions régulières des progrès et évaluation de l'impact",
+        "Amélioration continue et développement du partenariat"
+      ],
+      "howToStartTitle": "Comment commencer",
+      "howToStartSteps": [
+        "Contactez-nous pour discuter des opportunités de partenariat",
+        "Partagez les objectifs et les intérêts de votre organisation",
+        "Explorez les domaines de collaboration potentiels",
+        "Élaborez un accord de partenariat",
+        "Commencez votre parcours de partenariat"
+      ]
     },
     "workReintegration": {
       "meta": {
-        "title": "Réintégration professionnelle",
-        "description": "Rejoignez notre programme pour acquérir des compétences précieuses et reconstruire votre carrière."
+        "title": "Réinsertion professionnelle",
+        "description": "Participez à notre programme de réinsertion professionnelle pour acquérir des compétences et de l'expérience précieuses dans le domaine technologique tout en reconstruisant votre carrière."
       },
-      "title": "Programme de réintégration professionnelle",
-      "description": "Rejoignez notre programme de soutien pour reconstruire votre carrière.",
-      "ctaText": "Exprimer son intérêt",
+      "title": "Programme de réinsertion professionnelle",
+      "description": "Rejoignez notre programme de soutien pour reconstruire votre carrière dans la technologie et la durabilité.",
+      "ctaText": "Manifester son intérêt",
       "benefitsHeading": "Avantages du programme",
       "overview": {
         "title": "Notre programme",
@@ -3806,15 +3887,23 @@
           "Développez votre plan personnalisé",
           "Commencez votre parcours de réintégration"
         ]
-      }
+      },
+      "benefitsTitle": "Avantages du programme",
+      "howToStartTitle": "Comment commencer",
+      "howToStartSteps": [
+        "Contactez-nous pour discuter de votre situation",
+        "Rencontrez notre équipe pour une évaluation",
+        "Développez votre plan personnalisé",
+        "Commencez votre parcours de réinsertion professionnelle"
+      ]
     },
     "itHilfeTechniker": {
       "meta": {
-        "title": "Technicien IT Help",
-        "description": "Partagez vos connaissances IT et aidez les gens dans votre communauté."
+        "title": "Technicien aide informatique",
+        "description": "Partagez vos connaissances en informatique et aidez des personnes dans votre communauté — avec flexibilité et un impact réel."
       },
-      "title": "Devenir technicien IT Help",
-      "description": "Vos connaissances IT peuvent faciliter la vie des autres.",
+      "title": "Devenir technicien aide informatique",
+      "description": "Vos connaissances en informatique peuvent faciliter la vie des autres. Aidez des personnes de la communauté avec leurs ordinateurs — de manière flexible, simple et efficace.",
       "ctaText": "S'inscrire comme technicien",
       "benefitsHeading": "Ce que vous y gagnez",
       "overview": {
@@ -3874,12 +3963,20 @@
           "Arrangez un rendez-vous",
           "Aidez, apprenez, faites la différence"
         ]
-      }
+      },
+      "benefitsTitle": "Ce que vous y gagnez",
+      "howToStartTitle": "Comment commencer",
+      "howToStartSteps": [
+        "Créez votre profil de technicien avec vos compétences et disponibilités",
+        "Attendez les demandes — vous décidez lesquelles vous acceptez",
+        "Fixez un rendez-vous directement avec la personne qui demande de l'aide",
+        "Aidez, apprenez, faites la différence"
+      ]
     },
     "kontakt": {
       "meta": {
-        "title": "Exprimer son intérêt",
-        "description": "Écrivez-nous brièvement ce qui vous intéresse."
+        "title": "Manifester son intérêt",
+        "description": "Écrivez-nous brièvement ce qui vous intéresse — nous vous répondrons personnellement."
       },
       "backLink": "Toutes les façons de s'impliquer",
       "titlePrefix": "Intérêt pour",
@@ -3888,10 +3985,11 @@
       "topics": {
         "freiwilligenarbeit": "Bénévolat",
         "praktikum": "Stage",
-        "wiedereinstieg": "Réintégration professionnelle",
+        "wiedereinstieg": "Réinsertion professionnelle",
         "technische-experten": "Experts techniques",
         "partnerschaft": "Partenariat",
-        "it-hilfe-techniker": "Technicien IT Help"
+        "it-hilfe-techniker": "Technicien aide informatique",
+        "default": "Participer"
       },
       "form": {
         "nameLabel": "Votre nom",
@@ -3907,6 +4005,85 @@
         "successHeading": "Merci, {name} !",
         "successText": "Nous avons reçu votre demande concernant {topic} et nous vous répondrons bientôt.",
         "successBackLink": "Découvrir d'autres façons de participer"
+      },
+      "backToInvolvement": "Toutes les façons de participer",
+      "title": "Intérêt pour {topic}",
+      "description": "Dites-nous brièvement qui vous êtes et ce qui vous intéresse. Nous vous répondrons personnellement."
+    },
+    "page": {
+      "getStarted": "Commencer",
+      "learnMore": "En savoir plus",
+      "waysTitle": "Comment participer",
+      "testimonialTitle": "Ce que dit notre communauté",
+      "partnersTitle": "Nos organisations partenaires",
+      "ctaTitle": "Prêt(e) à faire la différence?",
+      "ctaDescription": "Rejoignez notre communauté de changeurs et aidez-nous à créer un avenir plus durable grâce à la technologie.",
+      "discoverWorkshops": "Découvrir les ateliers"
+    },
+    "donate": {
+      "meta": {
+        "title": "Faire un don",
+        "description": "Aider directement. Chaque don sauve des appareils des déchets électroniques et rend la technologie accessible à tous."
+      },
+      "heroTitle": "Aider directement.",
+      "heroDescription": "Chaque don sauve des appareils des déchets électroniques, prolonge leur cycle de vie et permet l'accès à la technologie pour ceux qui ne pourraient pas se l'offrir autrement.",
+      "transferNow": "Virer maintenant",
+      "transparencyLabel": "Transparence",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Budget annuel (association à but non lucratif)",
+      "devicesSavedLabel": "appareils sauvés chaque année",
+      "co2SavedLabel": "économisés par an",
+      "impactTitle": "L'impact de votre don",
+      "recommended": "Recommandé",
+      "chooseAmount": "Choisir le montant et virer",
+      "bankTransferTitle": "Virement bancaire",
+      "bankTransferDescription": "Virez sur le compte suivant :",
+      "recipient": "Bénéficiaire",
+      "iban": "IBAN",
+      "bank": "Banque",
+      "purpose": "Motif du paiement",
+      "copy": "Copier",
+      "copyIban": "Copier l'IBAN",
+      "donateDevicesTitle": "Faire don d'appareils",
+      "donateDevicesDescription": "Le matériel dont vous n'avez plus besoin peut offrir une vraie chance à quelqu'un d'autre. Nous acceptons les appareils fonctionnels ou réparables, les remettons en état et les redistribuons.",
+      "weAccept": "Ce que nous acceptons :",
+      "weAcceptList": "Laptops, PC de bureau, moniteurs, claviers, souris, imprimantes — fonctionnels ou réparables.",
+      "weDoNotAccept": "Ce que nous n'acceptons pas :",
+      "weDoNotAcceptList": "Appareils physiquement endommagés, écrans défectueux sans cadre, moniteurs CRT.",
+      "preparation": "Préparation :",
+      "preparationText": "Veuillez effacer vos données personnelles avant de déposer l'appareil (nous pouvons vous aider si nécessaire).",
+      "dropOffAddress": "Adresse de dépôt",
+      "questions": "Questions? Écrivez-nous →",
+      "newsletterTitle": "Nous vous informerons de l'impact de votre don.",
+      "newsletterDescription": "Pas de publicité. Uniquement de vraies mises à jour sur les appareils sauvés, le CO₂ économisé et les personnes aidées.",
+      "purposeTemplate": "Don {org} {month} {year}",
+      "months": [
+        "Janvier",
+        "Février",
+        "Mars",
+        "Avril",
+        "Mai",
+        "Juin",
+        "Juillet",
+        "Août",
+        "Septembre",
+        "Octobre",
+        "Novembre",
+        "Décembre"
+      ],
+      "impact": {
+        "tier1Title": "1 appareil sauvé",
+        "tier1Description": "1 laptop sauvé des déchets électroniques + 285 kg de CO₂ évités.",
+        "tier2Title": "2 appareils + place en atelier",
+        "tier2Description": "2 appareils remis en état + une place dans notre atelier Linux pour quelqu'un qui ne pourrait pas se l'offrir.",
+        "tier3Title": "Don d'entreprise — 10 appareils",
+        "tier3Description": "10 appareils pour des établissements scolaires, des projets sociaux ou des ménages à faibles revenus."
+      },
+      "devices": {
+        "laptop": "Laptops",
+        "desktop": "PC de bureau",
+        "monitor": "Moniteurs",
+        "peripherals": "Périphériques"
       }
     }
   },
@@ -4167,7 +4344,7 @@
   "datenschutz": {
     "meta": {
       "title": "Politique de confidentialité",
-      "description": "Politique de confidentialité de {orgName}"
+      "description": "Politique de confidentialité de revamp-it"
     },
     "title": "Politique de confidentialité",
     "section1": {
@@ -4176,31 +4353,31 @@
     },
     "section2": {
       "title": "2. Collecte et traitement des données personnelles",
-      "intro": "Nous collectons des données personnelles lorsque vous vous inscrivez sur notre plateforme, utilisez nos services ou nous contactez. Cela comprend :",
+      "intro": "Nous collectons des données personnelles lorsque vous vous inscrivez sur notre plateforme, utilisez nos services ou entrez en contact avec nous. Cela comprend :",
       "items": [
         "Nom et adresse e-mail (lors de l'inscription)",
-        "Coordonnées (pour les demandes et réservations)",
+        "Coordonnées (lors de demandes et de réservations)",
         "Données d'utilisation (lors de l'utilisation de la plateforme)"
       ]
     },
     "section3": {
-      "title": "3. Finalité du traitement",
+      "title": "3. Finalité du traitement des données",
       "intro": "Vos données sont utilisées pour :",
       "items": [
-        "Fournir et gérer votre compte utilisateur",
-        "Exécuter les ordres de réparation et les services",
-        "Gérer les inscriptions aux ateliers",
-        "Exploiter la marketplace P2P",
-        "Communiquer sur nos offres (uniquement avec votre consentement)"
+        "La mise à disposition et la gestion de votre compte utilisateur",
+        "L'exécution des réparations et des services",
+        "La gestion des inscriptions aux ateliers",
+        "L'exploitation de la place de marché P2P",
+        "La communication relative à nos offres (uniquement avec votre consentement)"
       ]
     },
     "section4": {
-      "title": "4. Partage des données",
-      "body": "Vos données ne seront pas vendues à des tiers. Le partage n'a lieu que si cela est nécessaire pour fournir nos services (p. ex. aux prestataires de réparation pour les réparations réservées) ou si nous y sommes légalement obligés."
+      "title": "4. Transmission des données",
+      "body": "Vos données ne sont pas vendues à des tiers. Une transmission n'a lieu que si elle est nécessaire à la fourniture de nos services (par ex. à des prestataires de réparation pour des réparations réservées) ou si nous y sommes légalement tenus."
     },
     "section5": {
       "title": "5. Sécurité des données",
-      "body": "Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données contre tout accès non autorisé, perte ou abus. Les mots de passe sont stockés exclusivement sous forme hachée."
+      "body": "Nous mettons en œuvre des mesures techniques et organisationnelles pour protéger vos données contre tout accès non autorisé, perte ou utilisation abusive. Les mots de passe sont stockés exclusivement sous forme hachée."
     },
     "section6": {
       "title": "6. Cookies",
@@ -4208,31 +4385,33 @@
     },
     "section7": {
       "title": "7. Vos droits",
-      "intro": "Vous avez le droit à :",
+      "intro": "Vous avez le droit :",
       "items": [
-        "L'accès à vos données stockées",
-        "La rectification des données inexactes",
-        "La suppression de vos données",
-        "La limitation du traitement",
-        "La portabilité des données (export des données)",
-        "Le retrait des consentements accordés"
+        "D'accéder à vos données stockées",
+        "De corriger les données inexactes",
+        "De supprimer vos données",
+        "De restreindre le traitement",
+        "À la portabilité des données (export)",
+        "De révoquer les consentements accordés"
       ],
       "downloadText": "Les utilisateurs inscrits peuvent télécharger à tout moment une copie complète de leurs données sous",
       "settingsLinkLabel": "Paramètres → Confidentialité",
-      "contactText": "Pour toute autre demande, veuillez contacter :"
+      "contactText": "Pour toute autre demande, veuillez contacter :",
+      "exportText": "Les utilisateurs enregistrés peuvent télécharger à tout moment une copie complète de leurs données sous",
+      "exportLink": "Paramètres → Confidentialité"
     },
     "section8": {
       "title": "8. Durée de conservation",
-      "body": "Nous conservons vos données personnelles uniquement aussi longtemps que nécessaire aux fins mentionnées ou que les délais légaux de conservation l'exigent. Les données de compte et de profil seront supprimées après la suppression du compte, sauf si des obligations légales (p. ex. conservation fiscale des factures) s'y opposent."
+      "body": "Nous conservons vos données personnelles uniquement aussi longtemps que nécessaire aux fins mentionnées ou que des obligations légales de conservation l'exigent. Les données de compte et de profil sont supprimées après la fermeture du compte, sauf obligations légales contraires (par ex. conservation fiscale des factures)."
     },
     "section9": {
       "title": "9. Base juridique",
-      "body": "Le traitement est fondé sur la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, sur l'art. 6, al. 1 du RGPD (exécution du contrat, intérêts légitimes, consentement)."
+      "body": "Le traitement est fondé sur la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, sur l'art. 6 al. 1 du RGPD (exécution d'un contrat, intérêts légitimes, consentement)."
     },
     "section10": {
       "title": "10. Droit applicable",
-      "body": "Cette politique de confidentialité est régie par la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, par le Règlement général européen sur la protection des données (RGPD). Voir aussi notre",
-      "impressumLinkLabel": "Mentions légales"
+      "body": "La présente politique de confidentialité est soumise à la loi fédérale suisse sur la protection des données (LPD) et, le cas échéant, au Règlement général sur la protection des données (RGPD).",
+      "impressumLinkLabel": "mentions légales"
     },
     "asOf": "En vigueur depuis : mars 2026"
   },
@@ -4270,7 +4449,7 @@
   "transparenz": {
     "meta": {
       "title": "Transparence",
-      "description": "Ce que nous faisons et comment nous le faisons. Aperçu de la mission, des chiffres et des méthodes de travail de {orgName}."
+      "description": "Ce que nous faisons et comment nous le faisons. Aperçu de la mission, des chiffres et du mode de fonctionnement."
     },
     "hero": {
       "title": "Transparence",
@@ -4278,16 +4457,36 @@
     },
     "mission": {
       "title": "Notre mission",
-      "body": "En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons à donner une seconde vie au matériel usagé, à rendre les logiciels libres accessibles à tous et à permettre aux gens d'apprendre à utiliser la technologie de manière autonome."
+      "body": "En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons à donner une seconde vie au matériel usagé, à rendre les logiciels libres accessibles à tous et à permettre aux gens d'apprendre à utiliser la technologie de manière autonome.",
+      "text": "{description} En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons pour que le matériel d'occasion ait une seconde vie, que les logiciels libres soient accessibles à tous, et que les personnes puissent apprendre à utiliser la technologie de manière autonome."
     },
     "stats": {
       "title": "Chiffres & faits",
-      "moreLink": "Voir les chiffres d'impact détaillés"
+      "moreLink": "Voir les chiffres d'impact détaillés",
+      "detailLink": "Voir les chiffres d'impact détaillés"
     },
     "howWeWork": {
       "title": "Comment nous travaillons",
-      "subtitle": "Nos trois plateformes communautaires connectent les personnes à la technologie.",
-      "platformCta": "Aller à la plateforme"
+      "subtitle": "Nos trois plateformes communautaires relient les personnes à la technologie.",
+      "platformCta": "Aller à la plateforme",
+      "toPlatform": "Vers la plateforme",
+      "platforms": [
+        {
+          "title": "Place de marché",
+          "description": "Plateforme communautaire pour les équipements informatiques d'occasion. Les utilisateurs peuvent créer des annonces, acheter et vendre – sans frais.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "Aide informatique",
+          "description": "Mise en relation avec des techniciens bénévoles pour les réparations informatiques. Une aide de personne à personne, locale et simple.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "Ateliers",
+          "description": "Cours sur Linux, matériel, programmation et IA. Partager des connaissances et apprendre les uns des autres – en présentiel à Zurich.",
+          "href": "/workshops"
+        }
+      ]
     },
     "platforms": [
       {
@@ -4309,13 +4508,17 @@
     "finances": {
       "title": "Finances",
       "body": "En tant qu'association à but non lucratif, nous divulguons nos finances. Le rapport annuel est présenté lors de l'assemblée générale et est accessible aux membres.",
-      "memberLink": "Devenir membre et avoir un aperçu"
+      "memberLink": "Devenir membre et obtenir un accès",
+      "text": "En tant qu'association à but non lucratif, nous rendons nos finances publiques. Le rapport annuel est présenté à l'assemblée générale et consultable par les membres."
     },
     "board": {
-      "title": "Comité",
+      "title": "Comité directeur",
       "body": "{orgName} est géré par un comité bénévole. Contact :",
       "joinBtn": "Devenir membre",
-      "donateBtn": "Faire un don"
+      "donateBtn": "Faire un don",
+      "text": "{orgName} est dirigé par un comité directeur bénévole. Contact :",
+      "joinCta": "Devenir membre",
+      "donateCta": "Faire un don"
     }
   },
   "notFound": {
@@ -4440,6 +4643,21 @@
         ],
         "slug": "ltsp",
         "year": "2016"
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Discarded computer monitors are transformed into functional, sustainable lamps. A pilot project for the circular economy in collaboration with sheltered workshops and property partners.",
+        "category": "hardware",
+        "status": "ongoing",
+        "features": [
+          "Converting monitors into lamps",
+          "Small series & quality assurance",
+          "Collaboration with social enterprises",
+          "Ecological analyses (ZHAW)"
+        ],
+        "slug": "upcycling",
+        "year": "2025",
+        "readMoreLink": "/projects/upcycling"
       }
     ],
     "freiecomputer": {
@@ -5035,19 +5253,28 @@
           }
         ]
       }
+    },
+    "meta": {
+      "title": "Nos projets",
+      "description": "Découvrez notre large éventail de projets, des contributions open source aux initiatives communautaires et au développement matériel."
     }
   },
   "revamped": {
     "meta": {
-      "title": "Certification REVAMPED | Builds d'ordinateurs durables",
-      "description": "Découvrez notre certification REVAMPED exclusive – garantissant durabilité, qualité et performance dans chaque ordinateur que nous construisons."
+      "title": "Certification REVAMPED | Ordinateurs durables",
+      "description": "Découvrez notre certification exclusive REVAMPED – qui garantit durabilité, qualité et performance dans chaque ordinateur que nous construisons."
     },
     "hero": {
       "title": "La certification REVAMPED",
-      "subtitle": "Chaque ordinateur que nous construisons reçoit notre label REVAMPED exclusif – une garantie de durabilité, qualité et performance qui établit un nouveau standard dans le secteur.",
+      "subtitle": "Chaque ordinateur que nous construisons reçoit notre label exclusif REVAMPED – une garantie de durabilité, de qualité et de performance qui établit une nouvelle norme dans l'industrie.",
       "badge1": "Focus durabilité",
       "badge2": "Garantie qualité",
-      "badge3": "Builds optimisés par IA"
+      "badge3": "Builds optimisés par IA",
+      "badge": {
+        "sustainability": "Axé durabilité",
+        "quality": "Garantie de qualité",
+        "ai": "Optimisé par IA"
+      }
     },
     "heroSection": {
       "title": "De vrais ordinateurs REVAMPED en action",
@@ -5077,14 +5304,23 @@
     },
     "certificate": {
       "title": "Certificat d'authenticité",
-      "subtitle": "Chaque ordinateur REVAMPED est livré avec un certificat détaillé offrant une transparence totale sur votre build durable.",
+      "subtitle": "Chaque ordinateur REVAMPED est livré avec un certificat détaillé offrant une transparence totale sur votre configuration durable.",
       "check1": "Évaluations de durabilité des composants",
       "check2": "Émissions CO₂ économisées par rapport au neuf",
       "check3": "Origine et état des composants",
       "check4": "Benchmarks de performance",
       "check5": "Détails de la couverture garantie",
       "certTitle": "Numérique & physique",
-      "certBody": "Votre certificat comprend un autocollant physique et un QR code numérique pour une vérification instantanée et des informations détaillées sur les composants."
+      "certBody": "Votre certificat comprend un autocollant physique et un QR code numérique pour une vérification instantanée et des informations détaillées sur les composants.",
+      "items": [
+        "Évaluations de durabilité des composants",
+        "Émissions de CO₂ économisées par rapport à un neuf",
+        "Provenance et état des composants",
+        "Benchmarks de performance",
+        "Détails de la couverture de garantie"
+      ],
+      "digitalPhysical": "Numérique & physique",
+      "digitalDesc": "Votre certificat comprend à la fois un autocollant physique et un QR-code numérique pour une vérification instantanée et des informations détaillées sur les composants."
     },
     "stickers": {
       "title": "La collection de labels REVAMPED",
@@ -5100,13 +5336,58 @@
       "sticker3": {
         "title": "Certificat numérique",
         "body": "Système de vérification lié par QR code avec des enregistrements d'authenticité basés sur la blockchain"
+      },
+      "original": {
+        "title": "Design original",
+        "description": "Marque de certification propre et professionnelle, soulignant notre approche axée sur la durabilité des ordinateurs portables."
+      },
+      "eco": {
+        "title": "Variante éco",
+        "description": "Design enrichi qui souligne notre focus environnemental et les principes de l'économie circulaire."
+      },
+      "digital": {
+        "title": "Certificat numérique",
+        "description": "Système de vérification lié à un QR-code avec des enregistrements d'authenticité appuyés par la blockchain."
       }
     },
     "cta": {
       "title": "Rejoignez la révolution REVAMPED",
       "body": "En choisissant un ordinateur REVAMPED, vous n'obtenez pas seulement une excellente machine – vous faites une déclaration sur l'avenir de la technologie. Durable, puissant et construit avec un but.",
       "buildBtn": "Démarrer votre build REVAMPED",
-      "learnBtn": "En savoir plus sur la certification"
+      "learnBtn": "En savoir plus sur la certification",
+      "subtitle": "En choisissant un ordinateur REVAMPED, vous n'obtenez pas seulement une excellente machine – vous faites une déclaration sur l'avenir de la technologie. Durable, performant et construit avec un objectif.",
+      "startBuild": "Démarrer votre configuration REVAMPED",
+      "learnMore": "En savoir plus sur la certification"
+    },
+    "inAction": {
+      "title": "De vrais ordinateurs REVAMPED en action",
+      "subtitle": "Une technologie durable que les gens aiment utiliser. Notre certification REVAMPED n'est pas seulement une promesse – c'est un engagement visible en faveur de la qualité et de la responsabilité environnementale.",
+      "points": [
+        "Principalement des composants d'occasion et reconditionnés",
+        "Réduction significative de l'impact environnemental",
+        "Garantie de qualité sur chaque configuration",
+        "Autocollant de certification physique inclus"
+      ],
+      "ctaBuild": "Construire votre ordinateur",
+      "ctaLearn": "En savoir plus sur la certification"
+    },
+    "meaning": {
+      "title": "Ce que signifie \"REVAMPED\"",
+      "subtitle": "Notre certification n'est pas qu'un label – c'est une norme globale qui garantit que chaque ordinateur répond à nos critères stricts de durabilité, de qualité et de performance.",
+      "pillars": [
+        {
+          "title": "La durabilité en premier",
+          "description": "Nous priorisons les composants d'occasion et reconditionnés partout où c'est possible, réduisant ainsi drastiquement l'impact environnemental tout en maintenant des performances de pointe. Nous appliquons les principes de l'économie circulaire dans chaque configuration."
+        },
+        {
+          "title": "La qualité garantie",
+          "description": "Chaque composant est soigneusement testé, nettoyé et vérifié pour répondre à nos normes strictes de performance et de fiabilité. La qualité n'est jamais compromise au nom de la durabilité."
+        },
+        {
+          "title": "Optimisé par IA",
+          "description": "Notre IA assure une compatibilité parfaite des composants et un réglage optimal des performances pour votre cas d'utilisation spécifique. Chaque configuration est intelligemment conçue pour vos besoins."
+        }
+      ]
     }
   },
   "space": {
@@ -5116,31 +5397,36 @@
     },
     "hero": {
       "title": "De la laiterie à l'espace communautaire",
-      "subtitle": "Depuis 2003, nous nous déplaçons à travers Zurich. Nous cherchons maintenant un nouveau chez-nous – un lieu où durabilité, technologie et communauté se rejoignent.",
+      "subtitle": "Depuis 2003, nous nous déplaçons à travers Zurich. Nous cherchons maintenant un nouveau foyer – un lieu où durabilité, technologie et communauté se rejoignent.",
       "visionBtn": "Notre vision",
-      "donateBtn": "Soutenir le budget de localisation"
+      "donateBtn": "Soutenir le budget de localisation",
+      "ctaVision": "Notre vision",
+      "ctaDonate": "Soutenir le budget de localisation"
     },
     "history": {
       "title": "Notre voyage à travers Zurich",
       "subtitle": "Plus de 20 ans, plusieurs emplacements, une mission : utiliser la technologie de manière durable.",
       "locations": [
         {
-          "highlight": "Lieu de fondation",
-          "description": "Notre lieu de naissance dans l'ancienne cave à fromage. Le légendaire anniversaire de Debian s'y est tenu sur le toit."
+          "period": "2003 – 2008",
+          "name": "Toni Molkerei",
+          "description": "Notre lieu de naissance dans l'ancienne cave à fromages. C'est ici qu'a eu lieu le légendaire anniversaire des 10 ans de Debian sur le toit.",
+          "highlight": "Lieu de fondation"
         },
         {
-          "highlight": "Projets sociaux",
-          "description": "Aux 6e/7e étages du clocher et dans des caves. C'est ici qu'ont démarré nos premiers projets sociaux."
+          "period": "2008 – 2012",
+          "name": "Église réformée Wipkingen",
+          "description": "Au 6e/7e étage du clocher et dans les caves. C'est ici qu'ont démarré nos premiers projets sociaux.",
+          "highlight": "Projets sociaux"
         },
         {
-          "highlight": "Expansion",
-          "description": "Grand espace avec de nombreux postes de travail. Expansion de notre atelier."
-        },
-        {
-          "highlight": "Actuel",
-          "description": "Notre boutique actuelle avec atelier. Stockage supplémentaire à {warehouseStreet}."
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "Grand espace avec de nombreux postes de travail. Expansion de notre atelier.",
+          "highlight": "Expansion"
         }
-      ]
+      ],
+      "currentHighlight": "Actuel"
     },
     "currentLocation": {
       "label": "Boutique actuelle",
@@ -5151,18 +5437,18 @@
     "future": {
       "moveDeadline": "Déménagement avant fin 2026",
       "title": "Notre local de rêve",
-      "subtitle": "Nous devons quitter notre local actuel avant fin 2026. C'est notre chance de créer quelque chose de plus grand.",
+      "subtitle": "Nous devons quitter notre local actuel d'ici fin 2026. C'est notre chance de créer quelque chose de plus grand.",
       "visionTagline": "Vision : {orgName} Community Space",
       "visionDesc": "Un espace ouvert où technologie, durabilité et communauté se retrouvent. Boutique, atelier, coworking, événements – tout sous un même toit.",
       "visionCaption": "Visualisation conceptuelle de notre espace communautaire idéal",
       "features": [
         {
           "name": "Espace boutique",
-          "description": "Surface d'exposition pour les appareils remis à neuf avec conseil"
+          "description": "Surface d'exposition pour appareils reconditionnés avec conseil"
         },
         {
           "name": "Atelier de réparation",
-          "description": "Postes de travail pour les techniciens et réparations communautaires"
+          "description": "Postes de travail pour les techniciens et les réparations communautaires"
         },
         {
           "name": "Coworking",
@@ -5170,28 +5456,28 @@
         },
         {
           "name": "Salle événementielle",
-          "description": "Espace pour ateliers, meetups et petits événements (15–20 personnes)"
+          "description": "Espace pour ateliers, réunions et petits événements (15–20 personnes)"
         },
         {
           "name": "Mini-bibliothèque",
-          "description": "Quelques étagères avec livres tech, magazines et ressources"
+          "description": "Quelques étagères de livres tech, revues et ressources"
         },
         {
           "name": "Coin café",
-          "description": "Point de rencontre pour des échanges informels et du networking"
+          "description": "Point de rencontre pour échanges informels et réseautage"
         },
         {
           "name": "Cuisine",
-          "description": "Cuisine entièrement équipée pour les initiatives Zéro Gaspillage"
+          "description": "Cuisine entièrement équipée pour les initiatives zéro gaspillage alimentaire"
         },
         {
-          "name": "Zéro gaspillage",
-          "description": "Aliments sauvés pour les repas communautaires"
+          "name": "Zéro gaspillage alimentaire",
+          "description": "Aliments sauvés pour les déjeuners communautaires"
         }
       ],
       "params": {
-        "title": "Ce que nous recherchons",
-        "subtitle": "Les paramètres pour notre emplacement idéal",
+        "title": "Ce que nous cherchons",
+        "subtitle": "Les paramètres de notre emplacement idéal",
         "areaLabel": "Surface utile",
         "budgetLabel": "Budget par mois",
         "locationLabel": "Emplacement",
@@ -5200,12 +5486,23 @@
         "contactBtn": "Contactez-nous",
         "areaValue": "250+ m²",
         "budgetValue": "CHF 6'000",
-        "locationValue": "Zurich"
-      }
+        "locationValue": "Zurich",
+        "area": "Surface utile",
+        "budget": "Budget mensuel",
+        "city": "Emplacement",
+        "idealLabel": "L'idéal serait :",
+        "idealText": "Rez-de-chaussée ou facilement accessible, accès PMR, quai de chargement ou possibilité de livraison, dans un quartier animé bien desservi par les transports.",
+        "tipText": "Vous connaissez un espace approprié ? Nous accueillons volontiers toute suggestion !",
+        "contactCta": "Contactez-nous"
+      },
+      "badge": "Déménagement d'ici fin 2026",
+      "visionLabel": "Vision : Espace communautaire",
+      "visionDescription": "Un espace ouvert où technologie, durabilité et communauté se rejoignent. Boutique, atelier, coworking, événements – tout sous un même toit.",
+      "conceptCaption": "Visualisation conceptuelle de notre espace communautaire idéal"
     },
     "impact": {
-      "title": "Pourquoi un espace plus grand signifie plus d'impact",
-      "subtitle": "Avec plus d'espace, nous pouvons multiplier nos KPIs – sauver plus d'appareils, former plus de personnes, obtenir plus d'impact.",
+      "title": "Pourquoi un plus grand espace signifie plus d'impact",
+      "subtitle": "Avec plus d'espace, nous pouvons multiplier nos indicateurs – sauver plus d'appareils, former plus de personnes, créer plus d'impact.",
       "todayLabel": "Aujourd'hui",
       "potentialLabel": "Potentiel",
       "kpis": [
@@ -5239,6 +5536,40 @@
         "body": "Avec un budget plus important, nous pouvons trouver un meilleur emplacement – et multiplier notre impact sur l'environnement et la société. Chaque contribution nous aide à réaliser notre rêve d'espace communautaire.",
         "donateBtn": "Faire un don maintenant",
         "impactBtn": "Voir notre impact"
+      },
+      "today": "Aujourd'hui",
+      "potential": "Potentiel",
+      "items": [
+        {
+          "metric": "Appareils par an",
+          "current": "~500",
+          "potential": "2 000+",
+          "reason": "Plus de postes d'atelier = plus de capacité"
+        },
+        {
+          "metric": "Participants aux ateliers",
+          "current": "~100",
+          "potential": "500+",
+          "reason": "Propre salle pour des cours réguliers"
+        },
+        {
+          "metric": "Membres de la communauté",
+          "current": "~50",
+          "potential": "200+",
+          "reason": "Le coworking attire plus de bénévoles"
+        },
+        {
+          "metric": "Intégration sociale",
+          "current": "~10",
+          "potential": "30+",
+          "reason": "Plus de places de stage grâce aux grands espaces"
+        }
+      ],
+      "donateCta": {
+        "title": "Soutenez notre budget de localisation",
+        "description": "Avec un budget plus important, nous pouvons trouver un meilleur emplacement – et ainsi multiplier notre impact sur l'environnement et la société. Chaque contribution nous aide à réaliser notre rêve d'espace communautaire.",
+        "donateCta": "Faire un don",
+        "impactCta": "Voir notre impact"
       }
     },
     "shopLinks": {
@@ -5247,6 +5578,12 @@
       "currentStore": "Boutique actuelle",
       "shopOverview": "Aperçu de la boutique",
       "onlineShop": "Boutique en ligne"
+    },
+    "current": {
+      "label": "Boutique actuelle",
+      "hours": "Horaires d'ouverture",
+      "hoursValue": "Lun : 9h–12h | Mar–Ven : 13h–17h",
+      "moreInfo": "En savoir plus sur la boutique"
     }
   },
   "donate": {

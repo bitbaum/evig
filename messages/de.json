@@ -288,7 +288,8 @@
       }
     },
     "proServices": {
-      "text": "Wir bieten auch professionelle <link>IT-Dienstleistungen</link> an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung."
+      "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
+      "linkLabel": "IT-Dienstleistungen"
     },
     "impact": {
       "title": "Unsere Wirkung",
@@ -410,15 +411,16 @@
         "mapsInfoBody": "OpenStreetMap ist community-getrieben und datensparsam. Google/Apple Maps bieten oft bessere Navigation, Live-Verkehr und POIs. Wähle, was für dich am besten passt – Transparenz und Wahlfreiheit sind uns wichtig."
       },
       "online": {
-        "title": "Online-Shop",
-        "tagline": "Kaufe direkt bei uns oder über unseren Shopware-Shop.",
-        "benefit1": "Geprüfte Qualität und Garantie",
+        "title": "Online-Shops",
+        "tagline": "Wähle zwischen unserem Online-Shop und dem Shopware-Kanal.",
+        "benefit1": "Geprüfte Qualität und Garantie in allen Kanälen",
         "benefit2": "Faire Preise, nachhaltige Auswahl",
         "benefit3": "Sichere Zahlung",
-        "shopwareShop": "Shopware-Shop (extern)",
+        "shopwareShop": "Zum Shopware-Shop",
         "onlineShop": "{orgName} Online-Shop",
-        "multiShopTitle": "Zwei Shop-Kanäle",
-        "multiShopBody": "Unser {orgName} Online-Shop ist direkt in die Plattform integriert. Der externe Shopware-Shop öffnet sich in einem neuen Fenster."
+        "multiShopTitle": "Mehrere Shop-Kanäle?",
+        "multiShopBody": "Unser {orgName} Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System.",
+        "currentShop": "Aktueller Online-Shop"
       }
     },
     "search": {
@@ -455,7 +457,7 @@
       "heroSubtitle": "Entdecke unsere Auswahl an nachhaltig aufbereiteten {categoryNameLower} – geprüfte Qualität zu fairen Preisen.",
       "productCount": "{count} Produkte in dieser Kategorie",
       "subcategories": "Unterkategorien",
-      "categoryProductCount": "{count, plural, one {# Produkt} other {# Produkte}}",
+      "categoryProductCount": "{count} Produkte",
       "productsLoading": "Produkte werden geladen",
       "productsComingSoon": "Bald findest du hier aufbereitete IT-Geräte in der Kategorie {categoryName} auf unserem Marketplace.",
       "goToShop": "Zum Online-Shop",
@@ -501,7 +503,7 @@
       "detailOgDescription": "{price} — Nachhaltig einkaufen bei {orgName}.",
       "notFoundTitle": "Inserat nicht gefunden | {orgName}"
     },
-    "title": "Marktplatz",
+    "title": "Marketplace",
     "subtitle": "Gebrauchte IT kaufen & verkaufen",
     "sell": {
       "label": "Inserat aufgeben",
@@ -749,10 +751,7 @@
       "loadError": "Fehler beim Laden des Inserats",
       "orderError": "Bestellung konnte nicht erstellt werden",
       "networkError": "Netzwerkfehler beim Erstellen der Bestellung",
-      "ownListing": {
-        "title": "Eigenes Inserat",
-        "message": "Du kannst dein eigenes Inserat nicht kaufen."
-      },
+      "ownListing": "Eigenes Inserat",
       "title": "Sichere Zahlung",
       "delivery": {
         "title": "Lieferart wählen",
@@ -795,7 +794,30 @@
         "statusLabel": "Status:",
         "viewOrder": "Bestellung ansehen",
         "continueShopping": "Weiter einkaufen"
-      }
+      },
+      "ownListingDesc": "du kannst Ihr eigenes Inserat nicht kaufen.",
+      "backToListingLink": "Zurück zum Inserat",
+      "chooseDelivery": "Lieferart wählen",
+      "pickup": "Abholung",
+      "shipping": "Versand",
+      "shippingNationwide": "Schweizweit",
+      "free": "Kostenlos",
+      "shippingAddress": "Lieferadresse",
+      "name": "Name",
+      "street": "Strasse",
+      "postalCode": "PLZ",
+      "postalCodeInvalid": "PLZ muss 4 Ziffern haben",
+      "city": "Ort",
+      "redirecting": "Weiterleitung zur Zahlung...",
+      "proceed": "Weiter zur Zahlung",
+      "orderSummary": "Bestellübersicht",
+      "seller": "Verkäufer",
+      "itemPrice": "Artikelpreis",
+      "shippingCost": "Versandkosten",
+      "pickupFree": "Abholung",
+      "serviceFee": "Servicegebühr ({rate}%)",
+      "serviceFeeIncluded": "inkl. {amount}",
+      "total": "Total"
     },
     "checkout_success": {
       "title": "Bestellung erfolgreich!",
@@ -2760,7 +2782,9 @@
       "emptyFilteredMessage": "Versuche einen anderen Filter.",
       "emptyNoFilterMessage": "Erstelle deine erste Reparaturanfrage und erhalte Hilfe von der Community.",
       "createButton": "Anfrage erstellen",
-      "offerCount": "{count, plural, one {# Angebot} other {# Angebote}}"
+      "offerCount": "{count, plural, one {# Angebot} other {# Angebote}}",
+      "newRequest": "Neue Anfrage",
+      "createRequest": "Anfrage erstellen"
     },
     "myOffers": {
       "title": "Meine Angebote",
@@ -3193,7 +3217,23 @@
           "title": "Globale Wirkung",
           "description": "Einen Unterschied in lokalen und globalen Gemeinschaften durch Technologie machen."
         }
-      ]
+      ],
+      "sustainability": {
+        "title": "Nachhaltigkeit",
+        "description": "Wir glauben an die Schaffung einer nachhaltigen Zukunft durch verantwortungsvolles Technologieeinsatz und Abfallreduzierung."
+      },
+      "community": {
+        "title": "Gemeinschaft",
+        "description": "Starke Gemeinschaften durch Technologiebildung und inklusive Teilnahme aufbauen."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Kreative Lösungen finden, um Technologie zugänglich und umweltfreundlich zu machen."
+      },
+      "globalImpact": {
+        "title": "Globale Wirkung",
+        "description": "Einen Unterschied in lokalen und globalen Gemeinschaften durch Technologie machen."
+      }
     },
     "options": {
       "heading": "Wege zum Mitmachen",
@@ -3376,7 +3416,16 @@
           "Nimm an einer kurzen Einführungssitzung teil",
           "Beginne, einen Unterschied zu machen!"
         ]
-      }
+      },
+      "benefitsTitle": "Vorteile der Freiwilligenarbeit",
+      "flexibilityNote": "Wir verstehen, dass jeder unterschiedliche Zeitpläne hat. Wir bieten flexible Freiwilligentätigkeiten, die sich an deine anderen Verpflichtungen anpassen lassen. Ob du ein paar Stunden pro Woche oder mehr erübrigen kannst — dein Beitrag wird einen Unterschied machen.",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "steps": [
+        "Kontaktiere uns, um dein Interesse zu bekunden",
+        "Triff dich mit unserem Team, um deine Fähigkeiten und Interessen zu besprechen",
+        "Nimm an einer kurzen Einführungssitzung teil",
+        "Beginne, einen Unterschied zu machen!"
+      ]
     },
     "technicalExperts": {
       "meta": {
@@ -3457,7 +3506,15 @@
           "Überprüfe unsere Entwicklungsrichtlinien und -prozesse",
           "Beginne, zu unseren Projekten beizutragen"
         ]
-      }
+      },
+      "opportunitiesTitle": "Möglichkeiten für technische Experten",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Kontaktiere uns mit deinem Fachbereich und deinen Interessen",
+        "Besprich mögliche Projekte und Beiträge",
+        "Überprüfe unsere Entwicklungsrichtlinien und -prozesse",
+        "Beginne, zu unseren Projekten beizutragen"
+      ]
     },
     "internships": {
       "meta": {
@@ -3537,12 +3594,20 @@
           "Führe ein kurzes Gespräch",
           "Beginne deine Praktikumsreise!"
         ]
-      }
+      },
+      "benefitsTitle": "Programmvorteile",
+      "howToApplyTitle": "Wie du dich bewerben kannst",
+      "howToApplySteps": [
+        "Sende uns deinen Lebenslauf und ein Anschreiben",
+        "Gib deinen Interessensbereich und deine Verfügbarkeit an",
+        "Führe ein kurzes Gespräch",
+        "Beginne deine Praktikumsreise!"
+      ]
     },
     "partnerships": {
       "meta": {
         "title": "Partnerschaften",
-        "description": "Schaffe nachhaltige Technologielösungen und eine dauerhafte Wirkung gemeinsam mit uns."
+        "description": "Arbeite mit uns zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen."
       },
       "title": "Partnerschaftsmöglichkeiten",
       "description": "Schliess dich mit uns zusammen, um nachhaltige Technologielösungen zu schaffen und eine dauerhafte Wirkung zu erzielen.",
@@ -3617,12 +3682,29 @@
           "Entwickle eine Partnerschaftsvereinbarung",
           "Beginne deine Partnerschaftsreise"
         ]
-      }
+      },
+      "benefitsTitle": "Partnerschaftsvorteile",
+      "processTitle": "Wie wir zusammenarbeiten",
+      "processSteps": [
+        "Erste Beratung zum Verständnis von Zielen und Möglichkeiten",
+        "Entwicklung von Partnerschaftsrahmen und -zielen",
+        "Umsetzung von kooperativen Initiativen",
+        "Regelmässige Fortschrittsüberprüfungen und Wirkungsbewertung",
+        "Kontinuierliche Verbesserung und Erweiterung der Partnerschaft"
+      ],
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Kontaktiere uns, um Partnerschaftsmöglichkeiten zu besprechen",
+        "Teile die Ziele und Interessen deiner Organisation mit",
+        "Erkunde potenzielle Zusammenarbeitsbereiche",
+        "Entwickle eine Partnerschaftsvereinbarung",
+        "Beginne deine Partnerschaftsreise"
+      ]
     },
     "workReintegration": {
       "meta": {
-        "title": "Arbeitsintegration",
-        "description": "Nimm an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten zu sammeln und deine Karriere wieder aufzubauen."
+        "title": "Arbeitsreintegration",
+        "description": "Nimm an unserem Arbeitsreintegrationsprogramm teil, um wertvolle Fähigkeiten und Erfahrungen in der Technologie zu sammeln und dabei deine Karriere wieder aufzubauen."
       },
       "title": "Arbeitsreintegrationsprogramm",
       "description": "Schliess dich unserem unterstützenden Programm an, um deine Karriere in Technologie und Nachhaltigkeit wieder aufzubauen.",
@@ -3700,7 +3782,15 @@
           "Entwickle deinen personalisierten Plan",
           "Beginne deine Arbeitsreintegrationsreise"
         ]
-      }
+      },
+      "benefitsTitle": "Programmvorteile",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Kontaktiere uns, um deine Situation zu besprechen",
+        "Triff dich mit unserem Team für eine Bewertung",
+        "Entwickle deinen personalisierten Plan",
+        "Beginne deine Arbeitsreintegrationsreise"
+      ]
     },
     "itHilfeTechniker": {
       "meta": {
@@ -3768,7 +3858,15 @@
           "Vereinbare einen Termin direkt mit der anfragenden Person",
           "Hilf, lerne, mach einen Unterschied"
         ]
-      }
+      },
+      "benefitsTitle": "Was du davon hast",
+      "howToStartTitle": "Wie du anfangen kannst",
+      "howToStartSteps": [
+        "Erstelle dein Techniker-Profil mit deinen Fähigkeiten und Verfügbarkeit",
+        "Warte auf Anfragen — du entscheidest, welche du annimmst",
+        "Vereinbare einen Termin direkt mit der anfragenden Person",
+        "Hilf, lerne, mach einen Unterschied"
+      ]
     },
     "kontakt": {
       "meta": {
@@ -3785,7 +3883,8 @@
         "wiedereinstieg": "Wiedereinstieg",
         "technische-experten": "Technische Experten",
         "partnerschaft": "Partnerschaft",
-        "it-hilfe-techniker": "IT-Hilfe Techniker"
+        "it-hilfe-techniker": "IT-Hilfe Techniker",
+        "default": "Mitmachen"
       },
       "form": {
         "nameLabel": "Dein Name",
@@ -3801,6 +3900,85 @@
         "successHeading": "Danke, {name}!",
         "successText": "Wir haben deine Anfrage zu {topic} erhalten und melden uns in Kürze bei dir.",
         "successBackLink": "Weitere Mitmach-Möglichkeiten entdecken"
+      },
+      "backToInvolvement": "Alle Mitmach-Möglichkeiten",
+      "title": "Interesse an {topic}",
+      "description": "Schreib uns kurz, wer du bist und was dich interessiert. Wir melden uns persönlich bei dir."
+    },
+    "page": {
+      "getStarted": "Loslegen",
+      "learnMore": "Mehr erfahren",
+      "waysTitle": "Wege zum Mitmachen",
+      "testimonialTitle": "Was unsere Gemeinschaft sagt",
+      "partnersTitle": "Unsere Partnerorganisationen",
+      "ctaTitle": "Bereit, einen Unterschied zu machen?",
+      "ctaDescription": "Schliess dich unserer Gemeinschaft von Veränderern an und hilf uns, eine nachhaltigere Zukunft durch Technologie zu schaffen.",
+      "discoverWorkshops": "Workshops entdecken"
+    },
+    "donate": {
+      "meta": {
+        "title": "Spenden",
+        "description": "Direkt helfen. Jede Spende rettet Geräte vor dem Elektroschrott und macht Technologie für alle zugänglich."
+      },
+      "heroTitle": "Direkt helfen.",
+      "heroDescription": "Jede Spende rettet Geräte vor dem Elektroschrott, verlängert Lebenszyklen und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
+      "transferNow": "Jetzt überweisen",
+      "transparencyLabel": "Transparenz",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Jahresbudget (gemeinnütziger Verein)",
+      "devicesSavedLabel": "Geräte jährlich gerettet",
+      "co2SavedLabel": "eingespart pro Jahr",
+      "impactTitle": "Was deine Spende bewirkt",
+      "recommended": "Empfohlen",
+      "chooseAmount": "Betrag wählen und überweisen",
+      "bankTransferTitle": "Banküberweisung",
+      "bankTransferDescription": "Überweise auf folgendes Konto:",
+      "recipient": "Empfänger",
+      "iban": "IBAN",
+      "bank": "Bank",
+      "purpose": "Verwendungszweck",
+      "copy": "Kopieren",
+      "copyIban": "IBAN kopieren",
+      "donateDevicesTitle": "Geräte spenden",
+      "donateDevicesDescription": "Hardware, die du nicht mehr brauchst, kann einem anderen Menschen eine echte Chance geben. Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter.",
+      "weAccept": "Was wir annehmen:",
+      "weAcceptList": "Laptops, Desktop-PCs, Monitore, Tastaturen, Mäuse, Drucker — funktionierend oder reparierbar.",
+      "weDoNotAccept": "Was wir nicht annehmen:",
+      "weDoNotAcceptList": "Geräte mit physischen Schäden, defekte Bildschirme ohne Rahmen, CRT-Monitore.",
+      "preparation": "Vorbereitung:",
+      "preparationText": "Bitte lösche deine persönlichen Daten vor der Abgabe (wir helfen dir dabei falls nötig).",
+      "dropOffAddress": "Abgabe-Adresse",
+      "questions": "Fragen? Schreib uns →",
+      "newsletterTitle": "Wir informieren dich, wie deine Spende wirkt.",
+      "newsletterDescription": "Keine Werbung. Nur echte Updates zu Geräten gerettet, CO₂ eingespart und Menschen unterstützt.",
+      "purposeTemplate": "Spende {org} {month} {year}",
+      "months": [
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember"
+      ],
+      "impact": {
+        "tier1Title": "1 Gerät gerettet",
+        "tier1Description": "1 Laptop vor dem Elektroschrott gerettet + 285 kg CO₂ vermieden.",
+        "tier2Title": "2 Geräte + Workshop-Platz",
+        "tier2Description": "2 Geräte aufbereitet + ein Platz in unserem Linux-Workshop für jemanden, der es sich nicht leisten könnte.",
+        "tier3Title": "Firmenspende — 10 Geräte",
+        "tier3Description": "10 Geräte für Bildungseinrichtungen, Sozialprojekte oder einkommensschwache Haushalte."
+      },
+      "devices": {
+        "laptop": "Laptops",
+        "desktop": "Desktop-PCs",
+        "monitor": "Monitore",
+        "peripherals": "Peripherie"
       }
     }
   },
@@ -3928,7 +4106,7 @@
   "datenschutz": {
     "meta": {
       "title": "Datenschutzerklärung",
-      "description": "Datenschutzerklärung von {orgName}"
+      "description": "Datenschutzerklärung von revamp-it"
     },
     "title": "Datenschutzerklärung",
     "section1": {
@@ -3980,7 +4158,9 @@
       ],
       "downloadText": "Angemeldete Nutzer können eine vollständige Kopie ihrer Daten jederzeit selbst herunterladen unter",
       "settingsLinkLabel": "Einstellungen → Datenschutz",
-      "contactText": "Für alle weiteren Anliegen wende dich bitte an:"
+      "contactText": "Für alle weiteren Anliegen wende dich bitte an:",
+      "exportText": "Angemeldete Nutzer können eine vollständige Kopie ihrer Daten jederzeit selbst herunterladen unter",
+      "exportLink": "Einstellungen → Datenschutz"
     },
     "section8": {
       "title": "8. Speicherdauer",
@@ -3992,7 +4172,7 @@
     },
     "section10": {
       "title": "10. Anwendbares Recht",
-      "body": "Diese Datenschutzerklärung unterliegt dem Schweizer Datenschutzgesetz (DSG) sowie, soweit anwendbar, der Europäischen Datenschutz-Grundverordnung (DSGVO). Siehe auch unser",
+      "body": "Diese Datenschutzerklärung unterliegt dem Schweizer Datenschutzgesetz (DSG) sowie, soweit anwendbar, der Europäischen Datenschutz-Grundverordnung (DSGVO).",
       "impressumLinkLabel": "Impressum"
     },
     "asOf": "Stand: März 2026"
@@ -4031,7 +4211,7 @@
   "transparenz": {
     "meta": {
       "title": "Transparenz",
-      "description": "Was wir tun und wie wir es tun. Einblick in Mission, Zahlen und Arbeitsweise von {orgName}."
+      "description": "Was wir tun und wie wir es tun. Einblick in Mission, Zahlen und Arbeitsweise."
     },
     "hero": {
       "title": "Transparenz",
@@ -4039,16 +4219,36 @@
     },
     "mission": {
       "title": "Unsere Mission",
-      "body": "Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass gebrauchte Hardware ein zweites Leben bekommt, offene Software für alle verfügbar ist, und Menschen den Umgang mit Technologie selbstbestimmt erlernen können."
+      "body": "Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass gebrauchte Hardware ein zweites Leben bekommt, offene Software für alle verfügbar ist, und Menschen den Umgang mit Technologie selbstbestimmt erlernen können.",
+      "text": "{description} Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass gebrauchte Hardware ein zweites Leben bekommt, offene Software für alle verfügbar ist, und Menschen den Umgang mit Technologie selbstbestimmt erlernen können."
     },
     "stats": {
       "title": "Zahlen & Fakten",
-      "moreLink": "Detaillierte Wirkungszahlen ansehen"
+      "moreLink": "Detaillierte Wirkungszahlen ansehen",
+      "detailLink": "Detaillierte Wirkungszahlen ansehen"
     },
     "howWeWork": {
       "title": "Wie wir arbeiten",
       "subtitle": "Unsere drei Community-Plattformen verbinden Menschen mit Technologie.",
-      "platformCta": "Zur Plattform"
+      "platformCta": "Zur Plattform",
+      "toPlatform": "Zur Plattform",
+      "platforms": [
+        {
+          "title": "Marktplatz",
+          "description": "Community-Plattform für gebrauchte IT-Geräte. Nutzer können Inserate erstellen, kaufen und verkaufen – ohne Gebühren.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "IT-Hilfe",
+          "description": "Vermittlung von freiwilligen Technikern für Computer-Reparaturen. Hilfe von Mensch zu Mensch, lokal und unkompliziert.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "Workshops",
+          "description": "Kurse zu Linux, Hardware, Programmierung und KI. Wissen teilen und voneinander lernen – vor Ort in Zürich.",
+          "href": "/workshops"
+        }
+      ]
     },
     "platforms": [
       {
@@ -4070,13 +4270,17 @@
     "finances": {
       "title": "Finanzen",
       "body": "Als gemeinnütziger Verein legen wir unsere Finanzen offen. Der Jahresbericht wird an der Generalversammlung präsentiert und ist für Mitglieder einsehbar.",
-      "memberLink": "Mitglied werden und Einblick erhalten"
+      "memberLink": "Mitglied werden und Einblick erhalten",
+      "text": "Als gemeinnütziger Verein legen wir unsere Finanzen offen. Der Jahresbericht wird an der Generalversammlung präsentiert und ist für Mitglieder einsehbar."
     },
     "board": {
       "title": "Vorstand",
       "body": "{orgName} wird von einem ehrenamtlichen Vorstand geführt. Kontakt:",
       "joinBtn": "Mitglied werden",
-      "donateBtn": "Spenden"
+      "donateBtn": "Spenden",
+      "text": "{orgName} wird von einem ehrenamtlichen Vorstand geführt. Kontakt:",
+      "joinCta": "Mitglied werden",
+      "donateCta": "Spenden"
     }
   },
   "notFound": {
@@ -4413,87 +4617,102 @@
     "items": [
       {
         "title": "Kivitendo Modus CH",
-        "description": "Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Ab 2005 suchten wir - zunächst für unsere eigenen Zwecke, aber bald darauf zur Befriedigung der Bedürfnisse unserer Kunden - nach einer Software-Lösung für Buchhaltung, Ressourcen- und Kundenverwaltung.",
-        "category": "software",
-        "status": "active",
+        "description": "Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Ab 2005 suchten wir – zunächst für unsere eigenen Zwecke, aber bald zur Befriedigung der Bedürfnisse unserer Kunden – nach einer Software-Lösung für Buchhaltung, Ressourcen- und Kundenverwaltung.",
+        "readMoreLink": "/projects/kivitendo",
+        "category": "Software-Projekte",
+        "status": "Aktiv",
+        "year": "2015",
         "features": [
           "Premium-Partnerschaft seit 2015",
           "Buchhaltung und Ressourcenverwaltung",
           "Kundenverwaltung",
           "Open-Source ERP-System"
-        ],
-        "slug": "kivitendo",
-        "year": "2015"
+        ]
       },
       {
         "title": "Verein Linuxola",
         "description": "Der Verein Linuxola wurde am 2. Dezember 2005 von acht Personen aus verschiedenen Regionen der Schweiz gegründet. Der Zweck der Organisation ist es, unseren Partnern in Afrika Zugang zu Informationstechnologie und eine Verbindung zu den globalen digitalen Gemeingütern zu bieten.",
-        "category": "community",
-        "status": "active",
+        "readMoreLink": "/projects/linuxola",
+        "category": "Community-Projekte",
+        "status": "Aktiv",
+        "year": "2005",
         "features": [
           "Schweizer Gründung mit 8 Personen",
           "Fokus auf Afrika-Partnerschaften",
           "Zugang zu Informationstechnologie",
           "Verbindung zu digitalen Gemeingütern"
-        ],
-        "slug": "linuxola",
-        "year": "2005"
+        ]
       },
       {
         "title": "FreieComputer.ch",
-        "description": "Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support! revamp-it hat zusammen mit der Unterstützung der engagierten Open-Source-Gemeinschaft zur Entstehung dieses Labels beigetragen.",
-        "category": "community",
-        "status": "active",
+        "description": "Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support! revamp-it hat zusammen mit der engagierten Open-Source-Gemeinschaft zur Entstehung dieses Labels beigetragen.",
+        "readMoreLink": "/projects/freiecomputer",
+        "category": "Community-Projekte",
+        "status": "Aktiv",
+        "year": "2010",
         "features": [
           "Schweizer Label für freie Software",
           "Vorinstallierte Open-Source-Software",
           "Garantierter Support",
           "Community-Unterstützung"
-        ],
-        "slug": "freiecomputer",
-        "year": "2010"
+        ]
       },
       {
         "title": "Compirat",
         "description": "Compirat ist eine Zusammenarbeit zwischen Caritas Zürich und revamp-it. Dank der Unterstützung von Compirat erhalten Menschen mit begrenzten Mitteln im Kanton Zürich die Möglichkeit, das Arbeiten mit Computern in der Nähe ihres Wohnorts zu erlernen.",
-        "category": "community",
-        "status": "active",
+        "readMoreLink": "/projects/compirat",
+        "category": "Community-Projekte",
+        "status": "Aktiv",
+        "year": "2018",
         "features": [
           "Partnerschaft mit Caritas Zürich",
           "Unterstützung für Menschen mit begrenzten Mitteln",
           "Computer-Schulungen im Kanton Zürich",
           "Wohnortnahe Lernmöglichkeiten"
-        ],
-        "slug": "compirat",
-        "year": "2018"
+        ]
       },
       {
         "title": "Hardware-Entwicklung",
         "description": "Die Hardware-Entwicklungsarbeit bei revamp-it konzentriert sich darauf, neue Möglichkeiten stillgelegter Computer-Hardware zu entdecken, Energie- und Ressourcenverbrauch zu optimieren und Anleitungen für den Zusammenbau von Open-Source-Hardware zu erstellen.",
-        "category": "hardware",
-        "status": "ongoing",
+        "readMoreLink": "/projects/hardware",
+        "category": "Hardware-Projekte",
+        "status": "Laufend",
+        "year": "2020",
         "features": [
           "Upcycling stillgelegter Hardware",
           "Energie- und Ressourcenoptimierung",
           "Open-Source-Hardware-Anleitungen",
           "Nachhaltige Entwicklung"
-        ],
-        "slug": "hardware",
-        "year": "2020"
+        ]
       },
       {
-        "title": "LTSP - Linux Terminal Server Project",
+        "title": "LTSP – Linux Terminal Server Project",
         "description": "Das Linux Terminal Server Project konzentriert sich darauf, die Leistung eines schnellen, leistungsstarken Servers zu nutzen, der über ein Netzwerk mit älteren, langsameren Computern verbunden ist. Dies ermöglicht es mehreren Benutzern, gleichzeitig an ihren Clients zu arbeiten, die mit demselben Server verbunden sind.",
-        "category": "software",
-        "status": "active",
+        "readMoreLink": "/projects/ltsp",
+        "category": "Software-Projekte",
+        "status": "Aktiv",
+        "year": "2016",
         "features": [
           "Netzwerk-basierte Serverlösung",
           "Effiziente Nutzung älterer Hardware",
           "Multi-User-Computing",
           "Ressourcenoptimierung"
-        ],
-        "slug": "ltsp",
-        "year": "2016"
+        ]
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft in Zusammenarbeit mit geschützten Werkstätten und Immobilienpartnern – mit offenen Anleitungen und wissenschaftlicher Begleitung.",
+        "readMoreLink": "/projects/upcycling",
+        "slug": "upcycling",
+        "category": "Hardware-Projekte",
+        "status": "Laufend",
+        "year": "2025",
+        "features": [
+          "Umwandlung von Monitoren in Leuchten",
+          "Kleinserie & Qualitätssicherung",
+          "Zusammenarbeit mit Sozialunternehmen",
+          "Ökologische Analysen (ZHAW)"
+        ]
       }
     ],
     "freiecomputer": {
@@ -4796,6 +5015,85 @@
           }
         ]
       }
+    },
+    "meta": {
+      "title": "Unsere Projekte",
+      "description": "Entdecke unser vielfältiges Spektrum an Projekten, von Open-Source-Beiträgen bis hin zu Gemeinschaftsinitiativen und Hardware-Entwicklung."
+    },
+    "upcycling": {
+      "meta": {
+        "title": "Monitor-Upcycling | RevampIT",
+        "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft, soziale Integration in geschützten Werkstätten und Ressourcenschonung – mit offenen Anleitungen und wissenschaftlicher Begleitung."
+      },
+      "hero": {
+        "title": "Monitor-Upcycling",
+        "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
+        "cta1": "Kontakt aufnehmen",
+        "cta2": "Partner werden"
+      },
+      "about": {
+        "title": "Das Projekt",
+        "description": "Im Monitor-Upcycling-Projekt bauen wir ausrangierte Bildschirme zu modernen Leuchten um. Das Projekt umfasst die Produktion einer Kleinserie (ca. 70 Stück), die Erstellung detaillierter, modell-spezifischer Anleitungen (Fotos, Platinen, Pin-Belegung, Sicherheit), eine Kosten-Nutzen-Analyse und Ökobilanz mit der ZHAW, die Klärung der CE-Konformität sowie die Zusammenarbeit mit ERZ für die Gewinnung von Altgeräten. Ein Schlussbericht und die Präsentation vor dem Swico Innovationsfonds sind für den 3. Juli 2026 geplant."
+      },
+      "approach": {
+        "title": "Ziele & Vorgehen",
+        "cards": [
+          {
+            "title": "Kleinserie & Qualität",
+            "description": "Produktion von 30–70 funktionalen Leuchten mit dokumentierten Arbeitsschritten pro Monitor-Modell und strenger Qualitätssicherung.",
+            "features": [
+              "30–70 Einheiten",
+              "Modell-spezifische Anleitungen",
+              "CE-Konformität"
+            ]
+          },
+          {
+            "title": "Wissenschaftliche Begleitung",
+            "description": "Kosten-Nutzen-Analyse und vereinfachte Ökobilanz (LCA-Vergleich) in Kooperation mit der ZHAW – Messung des tatsächlichen Umweltvorteils gegenüber Neuleuchten.",
+            "features": [
+              "LCA-Vergleich",
+              "Umweltvorteil quantifizieren",
+              "Wirtschaftlichkeitsanalyse"
+            ]
+          },
+          {
+            "title": "Partnerschaften & Piloten",
+            "description": "Identifikation und Zusammenarbeit mit geeigneten geschützten Werkstätten (Fokus Elektronikmontage) sowie Immobilienverwaltungen und Facility-Management für Pilotinstallationen in Nebenräumen, Parkhäusern und Technikräumen.",
+            "features": [
+              "Drahtzug, FARO, St. Jakob, Palme u.a.",
+              "Livit, Wincasa, Allreal, ISS",
+              "ERZ & Swico"
+            ]
+          }
+        ]
+      },
+      "nextsteps": {
+        "title": "Nächste Schritte & Meilensteine",
+        "description": "Abschluss der Kleinserie und erste Analysen bis Januar 2026. Fertigstellung des umfassenden Schlussberichts mit allen Listen, Anleitungen und Ergebnissen bis Juni 2026. Präsentation der Projektergebnisse am 3. Juli 2026 vor dem Swico Innovationsfonds. Parallel: Akquise von Fördergeldern (Klimastiftung Schweiz, KliK, Gebert Rüf, Migros Pionierfonds u.a.), weitere Produktions- und Vertriebspartner sowie Vorbereitung der öffentlichen, offenen Publikation der Anleitungen."
+      },
+      "cta": {
+        "title": "Werden Sie Teil des Upcycling-Projekts",
+        "actions": [
+          {
+            "title": "Kontakt & Partnerschaft",
+            "description": "Interessiert an einer Pilotinstallation in Ihren Liegenschaften oder als Produktionspartner in einer geschützten Werkstatt?",
+            "cta": "Jetzt kontaktieren",
+            "href": "/contact"
+          },
+          {
+            "title": "Förderung & Unterstützung",
+            "description": "Unterstützen Sie das Projekt mit einer Spende oder als Stiftungs-/Förderpartner – für mehr Kreislaufwirtschaft und soziale Integration.",
+            "cta": "Fördern",
+            "href": "/get-involved/donate"
+          },
+          {
+            "title": "Technik & Wissen",
+            "description": "Interesse an den offenen Anleitungen, technischen Details oder einer Zusammenarbeit bei der Dokumentation?",
+            "cta": "Kontakt aufnehmen",
+            "href": "/contact"
+          }
+        ]
+      }
     }
   },
   "revamped": {
@@ -4808,7 +5106,12 @@
       "subtitle": "Jeder Computer, den wir bauen, erhält unser exklusives REVAMPED-Label – eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Branche setzt.",
       "badge1": "Nachhaltigkeitsfokus",
       "badge2": "Qualitätsgarantie",
-      "badge3": "KI-optimierte Builds"
+      "badge3": "KI-optimierte Builds",
+      "badge": {
+        "sustainability": "Nachhaltigkeitsfokus",
+        "quality": "Qualitätsgarantie",
+        "ai": "KI-optimierte Builds"
+      }
     },
     "heroSection": {
       "title": "Echte REVAMPED-Computer im Einsatz",
@@ -4845,7 +5148,16 @@
       "check4": "Leistungs-Benchmarks",
       "check5": "Details zur Garantieabdeckung",
       "certTitle": "Digital & physisch",
-      "certBody": "Dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen."
+      "certBody": "Dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen.",
+      "items": [
+        "Nachhaltigkeitsbewertungen der Komponenten",
+        "Eingesparte CO₂-Emissionen gegenüber Neubau",
+        "Herkunft und Zustand der Komponenten",
+        "Leistungs-Benchmarks",
+        "Details zur Garantieabdeckung"
+      ],
+      "digitalPhysical": "Digital & physisch",
+      "digitalDesc": "Dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen."
     },
     "stickers": {
       "title": "Die REVAMPED-Label-Kollektion",
@@ -4861,13 +5173,58 @@
       "sticker3": {
         "title": "Digitales Zertifikat",
         "body": "QR-Code-verknüpftes Verifizierungssystem mit Blockchain-gestützten Authentizitätsaufzeichnungen"
+      },
+      "original": {
+        "title": "Original-Design",
+        "description": "Saubere, professionelle Zertifizierungsmarke, die unseren laptop-fokussierten Nachhaltigkeitsansatz betont."
+      },
+      "eco": {
+        "title": "Öko-Variante",
+        "description": "Erweitertes Design, das unseren Umweltfokus und Kreislaufwirtschaftsprinzipien betont."
+      },
+      "digital": {
+        "title": "Digitales Zertifikat",
+        "description": "QR-Code-verknüpftes Verifizierungssystem mit blockchain-gestützten Authentizitätsaufzeichnungen."
       }
     },
     "cta": {
       "title": "Schliess dich der REVAMPED-Revolution an",
       "body": "Wenn du einen REVAMPED-Computer wählst, erhältst du nicht nur eine grossartige Maschine – du setzt ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.",
       "buildBtn": "Deinen REVAMPED-Build starten",
-      "learnBtn": "Mehr über Zertifizierung erfahren"
+      "learnBtn": "Mehr über Zertifizierung erfahren",
+      "subtitle": "Wenn du einen REVAMPED-Computer wählst, erhältst du nicht nur eine grossartige Maschine – du setzt ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.",
+      "startBuild": "Deinen REVAMPED-Build starten",
+      "learnMore": "Mehr über Zertifizierung erfahren"
+    },
+    "inAction": {
+      "title": "Echte REVAMPED-Computer im Einsatz",
+      "subtitle": "Nachhaltige Technologie, die Menschen gerne verwenden. Unsere REVAMPED-Zertifizierung ist nicht nur ein Versprechen – sie ist ein sichtbares Bekenntnis zu Qualität und Umweltverantwortung.",
+      "points": [
+        "Hauptsächlich gebrauchte und aufgearbeitete Komponenten",
+        "Erhebliche Reduzierung der Umweltauswirkungen",
+        "Qualitätsgarantie auf jeden Build",
+        "Physischer Zertifizierungs-Aufkleber inbegriffen"
+      ],
+      "ctaBuild": "Deinen Computer bauen",
+      "ctaLearn": "Mehr über Zertifizierung erfahren"
+    },
+    "meaning": {
+      "title": "Was \"REVAMPED\" bedeutet",
+      "subtitle": "Unsere Zertifizierung ist nicht nur ein Label – es ist ein umfassender Standard, der sicherstellt, dass jeder Computer unsere strengen Kriterien für Nachhaltigkeit, Qualität und Leistung erfüllt.",
+      "pillars": [
+        {
+          "title": "Nachhaltigkeit zuerst",
+          "description": "Wir priorisieren gebrauchte und aufgearbeitete Komponenten wo immer möglich und reduzieren so die Umweltauswirkungen drastisch, während wir die Spitzenleistung beibehalten. Wir befolgen Kreislaufwirtschaftsprinzipien in jedem Build."
+        },
+        {
+          "title": "Qualität garantiert",
+          "description": "Jede Komponente wird gründlich getestet, gereinigt und verifiziert, um unsere strengen Leistungs- und Zuverlässigkeitsstandards zu erfüllen. Qualität wird niemals für Nachhaltigkeit kompromittiert."
+        },
+        {
+          "title": "KI-optimiert",
+          "description": "Unsere KI gewährleistet perfekte Komponentenkompatibilität und optimale Leistungsabstimmung für deinen spezifischen Anwendungsfall. Jeder Build ist intelligent für deine Bedürfnisse konzipiert."
+        }
+      ]
     }
   },
   "space": {
@@ -4879,29 +5236,34 @@
       "title": "Von der Molkerei zum Community Space",
       "subtitle": "Seit 2003 bewegen wir uns durch Zürich. Jetzt suchen wir ein neues Zuhause – einen Ort, an dem Nachhaltigkeit, Technologie und Gemeinschaft zusammenkommen.",
       "visionBtn": "Unsere Vision",
-      "donateBtn": "Standort-Budget unterstützen"
+      "donateBtn": "Standort-Budget unterstützen",
+      "ctaVision": "Unsere Vision",
+      "ctaDonate": "Standort-Budget unterstützen"
     },
     "history": {
       "title": "Unsere Reise durch Zürich",
       "subtitle": "Über 20 Jahre, mehrere Standorte, eine Mission: Technologie nachhaltig nutzen.",
       "locations": [
         {
-          "highlight": "Gründungsort",
-          "description": "Unser Geburtsort im alten Käsekeller. Hier fand das legendäre Debian 10-Jahre-Jubiläum auf dem Dach statt."
+          "period": "2003 – 2008",
+          "name": "Toni Molkerei",
+          "description": "Unser Geburtsort im alten Käsekeller. Hier fand das legendäre Debian 10-Jahre-Jubiläum auf dem Dach statt.",
+          "highlight": "Gründungsort"
         },
         {
-          "highlight": "Soziale Projekte",
-          "description": "Im 6./7. Stock des Kirchturms und Kellerabteilen. Hier starteten unsere ersten Sozialprojekte."
+          "period": "2008 – 2012",
+          "name": "Reformierte Kirche Wipkingen",
+          "description": "Im 6./7. Stock des Kirchturms und Kellerabteilen. Hier starteten unsere ersten Sozialprojekte.",
+          "highlight": "Soziale Projekte"
         },
         {
-          "highlight": "Expansion",
-          "description": "Grosser Raum mit vielen Arbeitsplätzen. Expansion unserer Werkstatt."
-        },
-        {
-          "highlight": "Aktuell",
-          "description": "Unser aktuelles Ladenlokal mit Werkstatt. Zusätzliches Lager an der {warehouseStreet}."
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "Grosser Raum mit vielen Arbeitsplätzen. Expansion unserer Werkstatt.",
+          "highlight": "Expansion"
         }
-      ]
+      ],
+      "currentHighlight": "Aktuell"
     },
     "currentLocation": {
       "label": "Aktuelles Ladenlokal",
@@ -4923,7 +5285,7 @@
         },
         {
           "name": "Reparatur-Werkstatt",
-          "description": "Arbeitsplätze für Techniker:innen und Community-Reparaturen"
+          "description": "Arbeitsplätze für Technikerinnen und Community-Reparaturen"
         },
         {
           "name": "Coworking",
@@ -4961,8 +5323,19 @@
         "contactBtn": "Kontaktiere uns",
         "areaValue": "250+ m²",
         "budgetValue": "CHF 6'000",
-        "locationValue": "Zürich"
-      }
+        "locationValue": "Zürich",
+        "area": "Nutzfläche",
+        "budget": "Budget pro Monat",
+        "city": "Standort",
+        "idealLabel": "Ideal wäre:",
+        "idealText": "Erdgeschoss oder gut erreichbar, rollstuhlgängig, Laderampe oder Anlieferungsmöglichkeit, in einem lebendigen Quartier mit guter ÖV-Anbindung.",
+        "tipText": "Kennst du einen passenden Raum? Wir freuen uns über jeden Hinweis!",
+        "contactCta": "Kontaktiere uns"
+      },
+      "badge": "Umzug bis Ende 2026",
+      "visionLabel": "Vision: Community Space",
+      "visionDescription": "Ein offener Raum, wo Technologie, Nachhaltigkeit und Gemeinschaft zusammenkommen. Shop, Werkstatt, Coworking, Events – alles unter einem Dach.",
+      "conceptCaption": "Konzept-Visualisierung unseres idealen Community Space"
     },
     "impact": {
       "title": "Warum ein grösserer Raum mehr Wirkung bedeutet",
@@ -5000,6 +5373,40 @@
         "body": "Mit einem grösseren Budget können wir einen besseren Standort finden – und damit unsere Wirkung für Umwelt und Gesellschaft vervielfachen. Jeder Beitrag hilft uns, unseren Traum vom Community Space zu verwirklichen.",
         "donateBtn": "Jetzt spenden",
         "impactBtn": "Unsere Wirkung ansehen"
+      },
+      "today": "Heute",
+      "potential": "Potenzial",
+      "items": [
+        {
+          "metric": "Geräte pro Jahr",
+          "current": "~500",
+          "potential": "2'000+",
+          "reason": "Mehr Werkstattplätze = mehr Kapazität"
+        },
+        {
+          "metric": "Workshop-Teilnehmer",
+          "current": "~100",
+          "potential": "500+",
+          "reason": "Eigener Event-Raum für regelmässige Kurse"
+        },
+        {
+          "metric": "Community-Mitglieder",
+          "current": "~50",
+          "potential": "200+",
+          "reason": "Coworking zieht mehr Freiwillige an"
+        },
+        {
+          "metric": "Soziale Integration",
+          "current": "~10",
+          "potential": "30+",
+          "reason": "Mehr Praktikumsplätze durch grössere Räume"
+        }
+      ],
+      "donateCta": {
+        "title": "Unterstütze unser Standort-Budget",
+        "description": "Mit einem grösseren Budget können wir einen besseren Standort finden – und damit unsere Wirkung für Umwelt und Gesellschaft vervielfachen. Jeder Beitrag hilft uns, unseren Traum vom Community Space zu verwirklichen.",
+        "donateCta": "Jetzt spenden",
+        "impactCta": "Unsere Wirkung ansehen"
       }
     },
     "shopLinks": {
@@ -5008,6 +5415,12 @@
       "currentStore": "Aktuelles Ladenlokal",
       "shopOverview": "Shop-Übersicht",
       "onlineShop": "Online-Shop"
+    },
+    "current": {
+      "label": "Aktuelles Ladenlokal",
+      "hours": "Öffnungszeiten",
+      "hoursValue": "Mo: 9–12 | Di–Fr: 13–17",
+      "moreInfo": "Mehr zum Ladenlokal"
     }
   },
   "support": {

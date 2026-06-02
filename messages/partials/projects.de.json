@@ -113,6 +113,21 @@
           "Multi-User-Computing",
           "Ressourcenoptimierung"
         ]
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft in Zusammenarbeit mit geschützten Werkstätten und Immobilienpartnern – mit offenen Anleitungen und wissenschaftlicher Begleitung.",
+        "readMoreLink": "/projects/upcycling",
+        "slug": "upcycling",
+        "category": "Hardware-Projekte",
+        "status": "Laufend",
+        "year": "2025",
+        "features": [
+          "Umwandlung von Monitoren in Leuchten",
+          "Kleinserie & Qualitätssicherung",
+          "Zusammenarbeit mit Sozialunternehmen",
+          "Ökologische Analysen (ZHAW)"
+        ]
       }
     ]
   }

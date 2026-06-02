@@ -507,7 +507,7 @@
   "datenschutz": {
     "meta": {
       "title": "Política de privacidad",
-      "description": "Política de privacidad de {orgName}"
+      "description": "Política de privacidad de revamp-it"
     },
     "title": "Política de privacidad",
     "section1": {
@@ -515,63 +515,65 @@
       "emailLabel": "Correo electrónico:"
     },
     "section2": {
-      "title": "2. Recopilación y tratamiento de datos personales",
-      "intro": "Recopilamos datos personales cuando te registras en nuestra plataforma, utilizas nuestros servicios o te pones en contacto con nosotros. Esto incluye:",
+      "title": "2. Recogida y tratamiento de datos personales",
+      "intro": "Recogemos datos personales cuando te registras en nuestra plataforma, utilizas nuestros servicios o te pones en contacto con nosotros. Esto incluye:",
       "items": [
         "Nombre y dirección de correo electrónico (al registrarse)",
-        "Datos de contacto (para consultas y reservas)",
+        "Datos de contacto (en consultas y reservas)",
         "Datos de uso (al utilizar la plataforma)"
       ]
     },
     "section3": {
-      "title": "3. Finalidad del tratamiento",
+      "title": "3. Finalidad del tratamiento de datos",
       "intro": "Tus datos se utilizan para:",
       "items": [
-        "Proporcionar y gestionar tu cuenta de usuario",
-        "Llevar a cabo órdenes de reparación y servicios",
-        "Gestionar las inscripciones a talleres",
-        "Operar el marketplace P2P",
+        "Creación y gestión de tu cuenta de usuario",
+        "Tramitación de reparaciones y servicios",
+        "Gestión de inscripciones a talleres",
+        "Funcionamiento del mercado P2P",
         "Comunicaciones sobre nuestras ofertas (solo con tu consentimiento)"
       ]
     },
     "section4": {
-      "title": "4. Compartición de datos",
-      "body": "Tus datos no serán vendidos a terceros. Solo se comparten cuando es necesario para prestar nuestros servicios (p. ej., a proveedores de reparación para reparaciones reservadas) o cuando estamos legalmente obligados a hacerlo."
+      "title": "4. Transferencia de datos",
+      "body": "Tus datos no se venden a terceros. Solo se transmiten cuando es necesario para la prestación de nuestros servicios (p. ej., a proveedores de reparación en reparaciones reservadas) o cuando estamos obligados legalmente a ello."
     },
     "section5": {
       "title": "5. Seguridad de los datos",
-      "body": "Implementamos medidas técnicas y organizativas para proteger tus datos contra el acceso no autorizado, la pérdida o el uso indebido. Las contraseñas se almacenan exclusivamente en forma cifrada."
+      "body": "Aplicamos medidas técnicas y organizativas para proteger tus datos contra accesos no autorizados, pérdidas o usos indebidos. Las contraseñas se almacenan exclusivamente de forma cifrada (hash)."
     },
     "section6": {
       "title": "6. Cookies",
-      "body": "Nuestra plataforma utiliza cookies funcionales para la gestión de sesiones y la autenticación. Las cookies analíticas solo se establecen con tu consentimiento."
+      "body": "Nuestra plataforma utiliza cookies funcionales para la gestión de sesiones y la autenticación. Las cookies analíticas solo se instalan con tu consentimiento."
     },
     "section7": {
       "title": "7. Tus derechos",
       "intro": "Tienes derecho a:",
       "items": [
-        "Acceder a tus datos almacenados",
+        "Acceder a los datos almacenados sobre ti",
         "Rectificar datos inexactos",
-        "Eliminar tus datos",
+        "Suprimir tus datos",
         "Limitar el tratamiento",
-        "Portabilidad de datos (exportación de datos)",
-        "Retirar los consentimientos otorgados"
+        "Portabilidad de datos (exportación)",
+        "Revocar los consentimientos otorgados"
       ],
       "downloadText": "Los usuarios registrados pueden descargar en cualquier momento una copia completa de sus datos en",
       "settingsLinkLabel": "Configuración → Privacidad",
-      "contactText": "Para cualquier otra consulta, contacta con:"
+      "contactText": "Para cualquier otra consulta, por favor contacta con:",
+      "exportText": "Los usuarios registrados pueden descargar en cualquier momento una copia completa de sus datos en",
+      "exportLink": "Ajustes → Privacidad"
     },
     "section8": {
-      "title": "8. Período de conservación",
-      "body": "Almacenamos tus datos personales solo durante el tiempo necesario para los fines indicados o según lo requieran los plazos legales de conservación. Los datos de cuenta y perfil se eliminarán tras la eliminación de la cuenta, salvo que obligaciones legales (p. ej., conservación fiscal de facturas) lo impidan."
+      "title": "8. Periodo de conservación",
+      "body": "Conservamos tus datos personales solo durante el tiempo necesario para los fines indicados o mientras lo exijan las obligaciones legales de conservación. Los datos de cuenta y perfil se eliminan tras la supresión de la cuenta, salvo que obligaciones legales (p. ej., conservación fiscal de facturas) lo impidan."
     },
     "section9": {
       "title": "9. Base jurídica",
-      "body": "El tratamiento se basa en la Ley federal suiza de protección de datos (LPD) y, en su caso, en el art. 6, apdo. 1 del RGPD (ejecución del contrato, intereses legítimos, consentimiento)."
+      "body": "El tratamiento se realiza con fundamento en la Ley federal suiza de protección de datos (LPD) y, en la medida en que sea aplicable, en el art. 6 apdo. 1 del RGPD (ejecución de contrato, intereses legítimos, consentimiento)."
     },
     "section10": {
       "title": "10. Derecho aplicable",
-      "body": "Esta política de privacidad se rige por la Ley federal suiza de protección de datos (LPD) y, en su caso, por el Reglamento General Europeo de Protección de Datos (RGPD). Véase también nuestro",
+      "body": "Esta política de privacidad se rige por la Ley federal suiza de protección de datos (LPD) y, en la medida en que sea aplicable, por el Reglamento General de Protección de Datos europeo (RGPD).",
       "impressumLinkLabel": "Aviso legal"
     },
     "asOf": "Vigente desde: marzo de 2026"
@@ -610,7 +612,7 @@
   "transparenz": {
     "meta": {
       "title": "Transparencia",
-      "description": "Qué hacemos y cómo lo hacemos. Una visión de la misión, cifras y métodos de trabajo de {orgName}."
+      "description": "Qué hacemos y cómo lo hacemos. Una visión de nuestra misión, cifras y forma de trabajar."
     },
     "hero": {
       "title": "Transparencia",
@@ -618,16 +620,36 @@
     },
     "mission": {
       "title": "Nuestra misión",
-      "body": "Como {legalForm} (fundada en {foundingYear}), nos comprometemos a dar una segunda vida al hardware usado, hacer el software libre accesible a todos y permitir que las personas aprendan a usar la tecnología de forma independiente."
+      "body": "Como {legalForm} (fundada en {foundingYear}), nos comprometemos a dar una segunda vida al hardware usado, hacer el software libre accesible a todos y permitir que las personas aprendan a usar la tecnología de forma independiente.",
+      "text": "{description} Como {legalForm} (fundada en {foundingYear}), nos dedicamos a dar una segunda vida al hardware usado, a poner el software libre al alcance de todos y a que las personas puedan aprender a manejar la tecnología de forma autónoma."
     },
     "stats": {
-      "title": "Cifras y hechos",
-      "moreLink": "Ver cifras de impacto detalladas"
+      "title": "Datos y cifras",
+      "moreLink": "Ver cifras de impacto detalladas",
+      "detailLink": "Ver cifras de impacto detalladas"
     },
     "howWeWork": {
       "title": "Cómo trabajamos",
-      "subtitle": "Nuestras tres plataformas comunitarias conectan a las personas con la tecnología.",
-      "platformCta": "Ir a la plataforma"
+      "subtitle": "Nuestras tres plataformas comunitarias conectan a personas con la tecnología.",
+      "platformCta": "Ir a la plataforma",
+      "toPlatform": "Ir a la plataforma",
+      "platforms": [
+        {
+          "title": "Mercado",
+          "description": "Plataforma comunitaria de equipos TI de segunda mano. Los usuarios pueden crear anuncios, comprar y vender — sin comisiones.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "Ayuda TI",
+          "description": "Ponemos en contacto a voluntarios técnicos con personas que necesitan reparar su ordenador. Ayuda de persona a persona, local y sin complicaciones.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "Talleres",
+          "description": "Cursos de Linux, hardware, programación e IA. Compartir conocimiento y aprender juntos — en Zúrich.",
+          "href": "/workshops"
+        }
+      ]
     },
     "platforms": [
       {
@@ -649,13 +671,17 @@
     "finances": {
       "title": "Finanzas",
       "body": "Como asociación sin ánimo de lucro, hacemos públicas nuestras finanzas. El informe anual se presenta en la asamblea general y está disponible para los miembros.",
-      "memberLink": "Hazte miembro y obtén acceso"
+      "memberLink": "Hazte socio/a y accede a la información",
+      "text": "Como asociación sin ánimo de lucro, hacemos públicas nuestras finanzas. El informe anual se presenta en la asamblea general y está disponible para los socios."
     },
     "board": {
       "title": "Junta directiva",
       "body": "{orgName} está dirigido por una junta directiva voluntaria. Contacto:",
       "joinBtn": "Hazte miembro",
-      "donateBtn": "Donar"
+      "donateBtn": "Donar",
+      "text": "{orgName} está dirigida por una junta directiva voluntaria. Contacto:",
+      "joinCta": "Hazte socio/a",
+      "donateCta": "Donar"
     }
   },
   "notFound": {
@@ -1235,8 +1261,8 @@
   },
   "getInvolved": {
     "meta": {
-      "title": "Participar",
-      "description": "Únete a nuestra misión para reducir los residuos electrónicos y hacer la tecnología accesible para todos."
+      "title": "Participa",
+      "description": "Únete a nuestra misión de reducir los residuos electrónicos y hacer la tecnología accesible para todos. Hazte voluntario/a, haz prácticas o conviértete en socio."
     },
     "hero": {
       "title": "Únete a nuestra misión",
@@ -1263,7 +1289,23 @@
           "title": "Impacto global",
           "description": "Marcar la diferencia en comunidades locales y globales a través de la tecnología."
         }
-      ]
+      ],
+      "sustainability": {
+        "title": "Sostenibilidad",
+        "description": "Creemos en crear un futuro sostenible mediante el uso responsable de la tecnología y la reducción de residuos."
+      },
+      "community": {
+        "title": "Comunidad",
+        "description": "Construir comunidades sólidas a través de la educación tecnológica y la participación inclusiva."
+      },
+      "innovation": {
+        "title": "Innovación",
+        "description": "Encontrar soluciones creativas para hacer la tecnología accesible y respetuosa con el medio ambiente."
+      },
+      "globalImpact": {
+        "title": "Impacto global",
+        "description": "Marcar la diferencia en comunidades locales y globales a través de la tecnología."
+      }
     },
     "options": {
       "heading": "Formas de participar",
@@ -1379,10 +1421,10 @@
     "volunteer": {
       "meta": {
         "title": "Voluntariado",
-        "description": "Únete a nuestro equipo de voluntarios dedicados y marca la diferencia en tu comunidad."
+        "description": "Únete a nuestro equipo de voluntarios/as comprometidos/as y genera un impacto en tu comunidad a través de la tecnología y la sostenibilidad."
       },
-      "title": "Convertirse en voluntario",
-      "description": "Únete a nuestro equipo y ayuda a hacer la tecnología sostenible y accesible.",
+      "title": "Ser voluntario/a",
+      "description": "Únete a nuestro equipo de voluntarios/as comprometidos/as y ayuda a hacer la tecnología sostenible y accesible para todos.",
       "ctaText": "Expresar interés",
       "overview": {
         "title": "¿Por qué hacer voluntariado en Revamp-IT?",
@@ -1446,16 +1488,25 @@
           "Asiste a una breve sesión de orientación",
           "¡Empieza a marcar la diferencia!"
         ]
-      }
+      },
+      "benefitsTitle": "Beneficios del voluntariado",
+      "flexibilityNote": "Entendemos que cada persona tiene horarios distintos. Ofrecemos actividades de voluntariado flexibles que se adaptan a tus otros compromisos. Tanto si puedes dedicar unas pocas horas a la semana como más — tu aportación marcará la diferencia.",
+      "howToStartTitle": "Cómo empezar",
+      "steps": [
+        "Contáctanos para expresar tu interés",
+        "Reúnete con nuestro equipo para hablar sobre tus habilidades e intereses",
+        "Participa en una breve sesión introductoria",
+        "¡Empieza a marcar la diferencia!"
+      ]
     },
     "technicalExperts": {
       "meta": {
-        "title": "기술 전문가",
-        "description": "Share your technical expertise and help us develop innovative solutions for sustainable technology."
+        "title": "Expertos técnicos",
+        "description": "Comparte tu experiencia técnica y ayúdanos a desarrollar soluciones innovadoras para la tecnología sostenible."
       },
-      "title": "Technical Experts",
-      "description": "Share your expertise and help us develop innovative solutions for sustainable technology.",
-      "ctaText": "Express interest",
+      "title": "Expertos técnicos",
+      "description": "Comparte tu experiencia y ayúdanos a desarrollar soluciones innovadoras para la tecnología sostenible.",
+      "ctaText": "Expresar interés",
       "benefitsHeading": "Opportunities for technical experts",
       "overview": {
         "title": "Join our technical team",
@@ -1527,16 +1578,24 @@
           "Review our development guidelines and processes",
           "Start contributing to our projects"
         ]
-      }
+      },
+      "opportunitiesTitle": "Oportunidades para expertos técnicos",
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Contáctanos con tu área de especialización e intereses",
+        "Habla sobre posibles proyectos y contribuciones",
+        "Revisa nuestras directrices y procesos de desarrollo",
+        "Empieza a contribuir a nuestros proyectos"
+      ]
     },
     "internships": {
       "meta": {
-        "title": "인턴십",
-        "description": "Gain practical experience in technology and sustainability through our internship program."
+        "title": "Prácticas",
+        "description": "Adquiere experiencia práctica en tecnología y sostenibilidad a través de nuestro programa de prácticas."
       },
-      "title": "Internship opportunities",
-      "description": "Gain valuable experience in technology and sustainability and make real change.",
-      "ctaText": "Express interest",
+      "title": "Oportunidades de prácticas",
+      "description": "Adquiere experiencia valiosa en tecnología y sostenibilidad y genera un cambio real.",
+      "ctaText": "Expresar interés",
       "benefitsHeading": "Program benefits",
       "overview": {
         "title": "About our internship program",
@@ -1607,16 +1666,24 @@
           "Have a brief conversation",
           "Start your internship journey!"
         ]
-      }
+      },
+      "benefitsTitle": "Beneficios del programa",
+      "howToApplyTitle": "Cómo solicitar una plaza",
+      "howToApplySteps": [
+        "Envíanos tu CV y una carta de motivación",
+        "Indica tu área de interés y disponibilidad",
+        "Mantén una breve entrevista",
+        "¡Empieza tu camino de prácticas!"
+      ]
     },
     "partnerships": {
       "meta": {
-        "title": "파트너십",
-        "description": "Create sustainable technology solutions and lasting impact together with us."
+        "title": "Alianzas",
+        "description": "Colabora con nosotros para crear soluciones tecnológicas sostenibles y generar un impacto duradero."
       },
-      "title": "Partnership opportunities",
+      "title": "Oportunidades de colaboración",
       "description": "Join with us to create sustainable technology solutions and achieve lasting impact.",
-      "ctaText": "Express interest",
+      "ctaText": "Expresar interés",
       "benefitsHeading": "Partnership benefits",
       "overview": {
         "title": "Why collaborate with us?",
@@ -1687,16 +1754,33 @@
           "Develop a partnership agreement",
           "Begin your partnership journey"
         ]
-      }
+      },
+      "benefitsTitle": "Beneficios de la colaboración",
+      "processTitle": "Cómo trabajamos juntos",
+      "processSteps": [
+        "Consulta inicial para entender objetivos y posibilidades",
+        "Desarrollo del marco y los objetivos de la colaboración",
+        "Puesta en marcha de iniciativas conjuntas",
+        "Revisiones periódicas de progreso y evaluación de impacto",
+        "Mejora continua y ampliación de la colaboración"
+      ],
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Contáctanos para hablar sobre oportunidades de colaboración",
+        "Comparte los objetivos e intereses de tu organización",
+        "Explora posibles áreas de trabajo conjunto",
+        "Desarrolla un acuerdo de colaboración",
+        "Inicia tu camino de alianza"
+      ]
     },
     "workReintegration": {
       "meta": {
-        "title": "직업 재통합",
-        "description": "Join our work reintegration program to gain valuable skills and rebuild your career."
+        "title": "Reinserción laboral",
+        "description": "Participa en nuestro programa de reinserción laboral para adquirir habilidades y experiencia en tecnología mientras reconstruyes tu carrera."
       },
-      "title": "Work reintegration program",
-      "description": "Join our supportive program to rebuild your career in technology and sustainability.",
-      "ctaText": "Express interest",
+      "title": "Programa de reinserción laboral",
+      "description": "Únete a nuestro programa de apoyo para reconstruir tu carrera en tecnología y sostenibilidad.",
+      "ctaText": "Expresar interés",
       "benefitsHeading": "Program benefits",
       "overview": {
         "title": "About our program",
@@ -1770,16 +1854,24 @@
           "Develop your personalized plan",
           "Begin your work reintegration journey"
         ]
-      }
+      },
+      "benefitsTitle": "Beneficios del programa",
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Contáctanos para hablar sobre tu situación",
+        "Reúnete con nuestro equipo para una evaluación",
+        "Desarrolla tu plan personalizado",
+        "Inicia tu camino de reinserción laboral"
+      ]
     },
     "itHilfeTechniker": {
       "meta": {
-        "title": "IT 도움 기술자",
-        "description": "Share your IT knowledge and help people in your community — flexibly, without prior credentials and with real impact."
+        "title": "Técnico de ayuda TI",
+        "description": "Comparte tus conocimientos TI y ayuda a personas en tu comunidad — de forma flexible, sin requisitos previos y con impacto real."
       },
-      "title": "Become an IT Help Technician",
-      "description": "Your IT knowledge can make other people's lives easier. Help people in the community with their computers — flexible, straightforward, impactful.",
-      "ctaText": "Register as technician",
+      "title": "Ser técnico de ayuda TI",
+      "description": "Tus conocimientos TI pueden facilitar la vida de otras personas. Ayuda a miembros de la comunidad con sus ordenadores — de forma flexible, sin complicaciones y con impacto.",
+      "ctaText": "Registrarse como técnico",
       "benefitsHeading": "What's in it for you",
       "overview": {
         "title": "What IT Help means",
@@ -1838,12 +1930,20 @@
           "Arrange an appointment directly with the requesting person",
           "Help, learn, make a difference"
         ]
-      }
+      },
+      "benefitsTitle": "Qué obtienes",
+      "howToStartTitle": "Cómo empezar",
+      "howToStartSteps": [
+        "Crea tu perfil de técnico con tus habilidades y disponibilidad",
+        "Espera solicitudes — tú decides cuáles aceptas",
+        "Acuerda una cita directamente con quien solicita",
+        "Ayuda, aprende y marca la diferencia"
+      ]
     },
     "kontakt": {
       "meta": {
-        "title": "관심 표명하기",
-        "description": "Write to us briefly about what interests you — we'll get back to you."
+        "title": "Expresar interés",
+        "description": "Cuéntanos brevemente qué te interesa — nos pondremos en contacto contigo."
       },
       "backLink": "Todas las formas de participar",
       "titlePrefix": "Interés en",
@@ -1852,10 +1952,11 @@
       "topics": {
         "freiwilligenarbeit": "Voluntariado",
         "praktikum": "Prácticas",
-        "wiedereinstieg": "Reintegración laboral",
+        "wiedereinstieg": "Reinserción laboral",
         "technische-experten": "Expertos técnicos",
         "partnerschaft": "Alianza",
-        "it-hilfe-techniker": "Técnico IT Help"
+        "it-hilfe-techniker": "Técnico de ayuda TI",
+        "default": "Participar"
       },
       "form": {
         "nameLabel": "Tu nombre",
@@ -1871,6 +1972,85 @@
         "successHeading": "¡Gracias, {name}!",
         "successText": "Hemos recibido tu solicitud sobre {topic} y nos pondremos en contacto contigo pronto.",
         "successBackLink": "Descubrir más formas de participar"
+      },
+      "backToInvolvement": "Todas las formas de participar",
+      "title": "Interés en {topic}",
+      "description": "Cuéntanos brevemente quién eres y qué te interesa. Nos pondremos en contacto contigo personalmente."
+    },
+    "page": {
+      "getStarted": "Empezar",
+      "learnMore": "Más información",
+      "waysTitle": "Formas de participar",
+      "testimonialTitle": "Lo que dice nuestra comunidad",
+      "partnersTitle": "Nuestras organizaciones colaboradoras",
+      "ctaTitle": "¿Listo/a para marcar la diferencia?",
+      "ctaDescription": "Únete a nuestra comunidad de personas que cambian las cosas y ayúdanos a crear un futuro más sostenible a través de la tecnología.",
+      "discoverWorkshops": "Descubrir talleres"
+    },
+    "donate": {
+      "meta": {
+        "title": "Donar",
+        "description": "Ayuda directamente. Cada donación rescata dispositivos de los residuos electrónicos y hace la tecnología accesible para todos."
+      },
+      "heroTitle": "Ayuda directamente.",
+      "heroDescription": "Cada donación rescata dispositivos de los residuos electrónicos, prolonga su ciclo de vida y hace posible la tecnología para personas que de otra manera no podrían permitírsela.",
+      "transferNow": "Transferir ahora",
+      "transparencyLabel": "Transparencia",
+      "annualBudget": "CHF 60k",
+      "annualBudgetLabel": "Presupuesto anual (asociación sin ánimo de lucro)",
+      "devicesSavedLabel": "Dispositivos rescatados al año",
+      "co2SavedLabel": "ahorrado al año",
+      "impactTitle": "Qué logra tu donación",
+      "recommended": "Recomendado",
+      "chooseAmount": "Elegir importe y transferir",
+      "bankTransferTitle": "Transferencia bancaria",
+      "bankTransferDescription": "Transfiere a la siguiente cuenta:",
+      "recipient": "Destinatario",
+      "iban": "IBAN",
+      "bank": "Banco",
+      "purpose": "Concepto",
+      "copy": "Copiar",
+      "copyIban": "Copiar IBAN",
+      "donateDevicesTitle": "Donar dispositivos",
+      "donateDevicesDescription": "El hardware que ya no usas puede dar a otra persona una verdadera oportunidad. Aceptamos dispositivos en funcionamiento o reparables, los reacondicionamos y los redistribuimos.",
+      "weAccept": "Lo que aceptamos:",
+      "weAcceptList": "Portátiles, ordenadores de sobremesa, monitores, teclados, ratones, impresoras — en funcionamiento o reparables.",
+      "weDoNotAccept": "Lo que no aceptamos:",
+      "weDoNotAcceptList": "Dispositivos con daños físicos, pantallas defectuosas sin marco, monitores CRT.",
+      "preparation": "Preparación:",
+      "preparationText": "Por favor, borra tus datos personales antes de entregarlo (te ayudamos si es necesario).",
+      "dropOffAddress": "Dirección de entrega",
+      "questions": "¿Preguntas? Escríbenos →",
+      "newsletterTitle": "Te informamos del impacto de tu donación.",
+      "newsletterDescription": "Sin publicidad. Solo actualizaciones reales sobre dispositivos rescatados, CO₂ ahorrado y personas apoyadas.",
+      "purposeTemplate": "Donación {org} {month} {year}",
+      "months": [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ],
+      "impact": {
+        "tier1Title": "1 dispositivo rescatado",
+        "tier1Description": "1 portátil rescatado de los residuos electrónicos + 285 kg de CO₂ evitados.",
+        "tier2Title": "2 dispositivos + plaza en taller",
+        "tier2Description": "2 dispositivos reacondicionados + una plaza en nuestro taller de Linux para alguien que no podría permitírselo.",
+        "tier3Title": "Donación empresarial — 10 dispositivos",
+        "tier3Description": "10 dispositivos para centros educativos, proyectos sociales o hogares con bajos ingresos."
+      },
+      "devices": {
+        "laptop": "Portátiles",
+        "desktop": "Ordenadores de sobremesa",
+        "monitor": "Monitores",
+        "peripherals": "Periféricos"
       }
     }
   },
@@ -1907,7 +2087,8 @@
       }
     },
     "proServices": {
-      "text": "También ofrecemos <link>servicios TI</link> profesionales: reparación de ordenadores, recuperación de datos, instalación de Linux y desarrollo web."
+      "text": "También ofrecemos {link} profesionales: reparación de ordenadores, recuperación de datos, instalación de Linux y desarrollo web.",
+      "linkLabel": "servicios TI"
     },
     "impact": {
       "title": "Nuestro impacto",
@@ -2126,17 +2307,19 @@
     },
     "myRequests": {
       "title": "Mis solicitudes de reparación",
-      "description": "Gestiona tus solicitudes y ve las ofertas recibidas",
+      "description": "Gestiona tus solicitudes y consulta las ofertas recibidas",
       "myOffersButton": "Mis ofertas",
       "newRequestButton": "Nueva solicitud",
       "filterAll": "Todas ({total})",
-      "fetchError": "No se pudieron cargar las solicitudes. Por favor, recarga la página.",
+      "fetchError": "No se pudieron cargar las solicitudes. Recarga la página.",
       "emptyFiltered": "No hay solicitudes con este estado",
       "emptyNoFilter": "Aún no hay solicitudes",
       "emptyFilteredMessage": "Prueba con otro filtro.",
-      "emptyNoFilterMessage": "Crea tu primera solicitud de reparación y obtén ayuda de la comunidad.",
+      "emptyNoFilterMessage": "Crea tu primera solicitud de reparación y recibe ayuda de la comunidad.",
       "createButton": "Crear solicitud",
-      "offerCount": "{count, plural, one {# oferta} other {# ofertas}}"
+      "offerCount": "{count, plural, one {# oferta} other {# ofertas}}",
+      "newRequest": "Nueva solicitud",
+      "createRequest": "Crear solicitud"
     },
     "myOffers": {
       "title": "Mis ofertas",
@@ -2561,10 +2744,7 @@
       "loadError": "Error al cargar el anuncio",
       "orderError": "No se pudo crear el pedido",
       "networkError": "Error de red al crear el pedido",
-      "ownListing": {
-        "title": "Tu propio anuncio",
-        "message": "No puedes comprar tu propio anuncio."
-      },
+      "ownListing": "Tu propio anuncio",
       "title": "Pago seguro",
       "delivery": {
         "title": "Elegir método de entrega",
@@ -2599,7 +2779,7 @@
         "total": "Total",
         "shipping": "Envío"
       },
-      "buyerProtection": "Protección al comprador — el pago solo se libera tras confirmar la recepción",
+      "buyerProtection": "Protección al comprador — el pago se libera solo tras confirmar la recepción",
       "success": {
         "heading": "¡Pedido realizado con éxito!",
         "description": "Tu pago ha sido autorizado. El importe solo se liberará cuando confirmes la recepción.",
@@ -2607,7 +2787,30 @@
         "statusLabel": "Estado:",
         "viewOrder": "Ver pedido",
         "continueShopping": "Seguir comprando"
-      }
+      },
+      "ownListingDesc": "No puedes comprar tu propio anuncio.",
+      "backToListingLink": "Volver al anuncio",
+      "chooseDelivery": "Elegir método de entrega",
+      "pickup": "Recogida",
+      "shipping": "Envío",
+      "shippingNationwide": "En toda Suiza",
+      "free": "Gratis",
+      "shippingAddress": "Dirección de envío",
+      "name": "Nombre",
+      "street": "Calle",
+      "postalCode": "Código postal",
+      "postalCodeInvalid": "El código postal debe tener 4 dígitos",
+      "city": "Ciudad",
+      "redirecting": "Redirigiendo al pago...",
+      "proceed": "Continuar al pago",
+      "orderSummary": "Resumen del pedido",
+      "seller": "Vendedor",
+      "itemPrice": "Precio del artículo",
+      "shippingCost": "Gastos de envío",
+      "pickupFree": "Recogida",
+      "serviceFee": "Tarifa de servicio ({rate}%)",
+      "serviceFeeIncluded": "incl. {amount}",
+      "total": "Total"
     },
     "checkout_success": {
       "title": "¡Pedido realizado con éxito!",
@@ -2763,88 +2966,88 @@
     },
     "items": [
       {
-        "title": "Kivitendo Modo CH",
-        "description": "Desde julio de 2015, revamp-it es socio premium del proyecto Kivitendo. Desde 2005, buscamos - primero para nuestras propias necesidades, luego para satisfacer las de nuestros clientes - una solución de software para contabilidad, gestión de recursos y clientes.",
-        "category": "software",
-        "status": "active",
+        "title": "Kivitendo Modus CH",
+        "description": "Desde julio de 2015, revamp-it es socio premium del proyecto Kivitendo. A partir de 2005 buscamos — inicialmente para nuestros propios fines, pero pronto para satisfacer las necesidades de nuestros clientes — una solución de software para contabilidad, gestión de recursos y clientes.",
+        "readMoreLink": "/projects/kivitendo",
+        "category": "Proyectos de software",
+        "status": "Activo",
+        "year": "2015",
         "features": [
           "Asociación premium desde 2015",
           "Contabilidad y gestión de recursos",
           "Gestión de clientes",
-          "Sistema ERP de código abierto"
-        ],
-        "slug": "kivitendo",
-        "year": "2015"
+          "Sistema ERP Open Source"
+        ]
       },
       {
-        "title": "Verein Linuxola",
-        "description": "Linuxola fue fundada el 2 de diciembre de 2005 por ocho personas de diversas regiones de Suiza. El propósito de la organización es proporcionar a nuestros socios en África acceso a la tecnología de la información y una conexión con los bienes comunes digitales globales.",
-        "category": "community",
-        "status": "active",
+        "title": "Asociación Linuxola",
+        "description": "La asociación Linuxola fue fundada el 2 de diciembre de 2005 por ocho personas de distintas regiones de Suiza. El propósito de la organización es brindar a nuestros socios en África acceso a la tecnología de la información y una conexión con el procomún digital global.",
+        "readMoreLink": "/projects/linuxola",
+        "category": "Proyectos comunitarios",
+        "status": "Activo",
+        "year": "2005",
         "features": [
           "Fundación suiza con 8 personas",
-          "Enfoque en asociaciones africanas",
+          "Enfoque en alianzas con África",
           "Acceso a tecnología de la información",
-          "Conexión con bienes comunes digitales"
-        ],
-        "slug": "linuxola",
-        "year": "2005"
+          "Conexión con el procomún digital"
+        ]
       },
       {
         "title": "FreieComputer.ch",
-        "description": "¡La etiqueta suiza para ordenadores con software libre preinstalado y soporte garantizado! revamp-it, junto con el apoyo de la comprometida comunidad de código abierto, contribuyó a la creación de esta etiqueta.",
-        "category": "community",
-        "status": "active",
+        "description": "¡El sello suizo para ordenadores con software libre preinstalado y soporte garantizado! revamp-it contribuyó junto con la comprometida comunidad Open Source a la creación de este sello.",
+        "readMoreLink": "/projects/freiecomputer",
+        "category": "Proyectos comunitarios",
+        "status": "Activo",
+        "year": "2010",
         "features": [
-          "Etiqueta suiza para software libre",
-          "Software de código abierto preinstalado",
+          "Sello suizo para software libre",
+          "Software Open Source preinstalado",
           "Soporte garantizado",
-          "Apoyo de la comunidad"
-        ],
-        "slug": "freiecomputer",
-        "year": "2010"
+          "Apoyo comunitario"
+        ]
       },
       {
         "title": "Compirat",
-        "description": "Compirat es una colaboración entre Caritas Zurich y revamp-it. Gracias a Compirat, las personas con recursos limitados en el cantón de Zurich tienen la oportunidad de aprender informática cerca de sus hogares.",
-        "category": "community",
-        "status": "active",
+        "description": "Compirat es una colaboración entre Caritas Zúrich y revamp-it. Gracias al apoyo de Compirat, personas con recursos limitados en el cantón de Zúrich tienen la oportunidad de aprender a usar ordenadores cerca de donde viven.",
+        "readMoreLink": "/projects/compirat",
+        "category": "Proyectos comunitarios",
+        "status": "Activo",
+        "year": "2018",
         "features": [
-          "Asociación con Caritas Zurich",
+          "Alianza con Caritas Zúrich",
           "Apoyo a personas con recursos limitados",
-          "Cursos de informática en el cantón de Zurich",
-          "Oportunidades de aprendizaje locales"
-        ],
-        "slug": "compirat",
-        "year": "2018"
+          "Formación en ordenadores en el cantón de Zúrich",
+          "Aprendizaje cerca del domicilio"
+        ]
       },
       {
         "title": "Desarrollo de hardware",
-        "description": "El trabajo de desarrollo de hardware en revamp-it se centra en descubrir nuevas posibilidades para el hardware informático en desuso, optimizar el consumo de energía y recursos, y crear guías para ensamblar hardware de código abierto.",
-        "category": "hardware",
-        "status": "ongoing",
+        "description": "El trabajo de desarrollo de hardware en revamp-it se centra en descubrir nuevas posibilidades para el hardware informático retirado, optimizar el consumo de energía y recursos, y crear guías para el ensamblaje de hardware Open Source.",
+        "readMoreLink": "/projects/hardware",
+        "category": "Proyectos de hardware",
+        "status": "En curso",
+        "year": "2020",
         "features": [
-          "Reciclaje de hardware en desuso",
+          "Upcycling de hardware retirado",
           "Optimización de energía y recursos",
-          "Guías de hardware de código abierto",
+          "Guías de hardware Open Source",
           "Desarrollo sostenible"
-        ],
-        "slug": "hardware",
-        "year": "2020"
+        ]
       },
       {
-        "title": "LTSP - Linux Terminal Server Project",
-        "description": "El Linux Terminal Server Project se centra en aprovechar la potencia de un servidor rápido y potente conectado a través de una red a ordenadores más antiguos y lentos. Esto permite que varios usuarios trabajen simultáneamente en sus clientes conectados al mismo servidor.",
-        "category": "software",
-        "status": "active",
+        "title": "LTSP — Linux Terminal Server Project",
+        "description": "El Linux Terminal Server Project se centra en aprovechar la potencia de un servidor rápido y potente conectado en red a ordenadores más antiguos y lentos. Esto permite que varios usuarios trabajen simultáneamente en sus clientes, todos conectados al mismo servidor.",
+        "readMoreLink": "/projects/ltsp",
+        "category": "Proyectos de software",
+        "status": "Activo",
+        "year": "2016",
         "features": [
           "Solución de servidor basada en red",
           "Uso eficiente de hardware antiguo",
-          "Informática multiusuario",
+          "Computación multiusuario",
           "Optimización de recursos"
-        ],
-        "slug": "ltsp",
-        "year": "2016"
+        ]
       }
     ],
     "freiecomputer": {
@@ -3440,19 +3643,28 @@
           }
         ]
       }
+    },
+    "meta": {
+      "title": "Nuestros proyectos",
+      "description": "Descubre nuestro diverso espectro de proyectos, desde contribuciones Open Source hasta iniciativas comunitarias y desarrollo de hardware."
     }
   },
   "revamped": {
     "meta": {
-      "title": "Certificación REVAMPED | Builds de computadoras sostenibles",
-      "description": "Descubre nuestra certificación REVAMPED exclusiva – que garantiza sostenibilidad, calidad y rendimiento en cada computadora que construimos."
+      "title": "Certificación REVAMPED | Ordenadores sostenibles",
+      "description": "Descubre nuestra exclusiva certificación REVAMPED — que garantiza sostenibilidad, calidad y rendimiento en cada ordenador que ensamblamos."
     },
     "hero": {
       "title": "La certificación REVAMPED",
-      "subtitle": "Cada computadora que construimos recibe nuestra etiqueta REVAMPED exclusiva – una garantía de sostenibilidad, calidad y rendimiento que establece un nuevo estándar en el sector.",
+      "subtitle": "Cada ordenador que ensamblamos recibe nuestra exclusiva etiqueta REVAMPED — una garantía de sostenibilidad, calidad y rendimiento que marca un nuevo estándar en el sector.",
       "badge1": "Enfoque en sostenibilidad",
       "badge2": "Garantía de calidad",
-      "badge3": "Builds optimizados por IA"
+      "badge3": "Builds optimizados por IA",
+      "badge": {
+        "sustainability": "Enfoque sostenible",
+        "quality": "Garantía de calidad",
+        "ai": "Builds optimizados por IA"
+      }
     },
     "heroSection": {
       "title": "Computadoras REVAMPED reales en acción",
@@ -3482,18 +3694,27 @@
     },
     "certificate": {
       "title": "Certificado de autenticidad",
-      "subtitle": "Cada computadora REVAMPED viene con un certificado detallado que proporciona plena transparencia sobre tu build sostenible.",
+      "subtitle": "Cada ordenador REVAMPED viene con un certificado detallado que ofrece total transparencia sobre tu build sostenible.",
       "check1": "Calificaciones de sostenibilidad de componentes",
       "check2": "Emisiones de CO₂ ahorradas vs. nuevo",
       "check3": "Origen y estado de los componentes",
       "check4": "Benchmarks de rendimiento",
       "check5": "Detalles de cobertura de garantía",
       "certTitle": "Digital y físico",
-      "certBody": "Tu certificado incluye tanto una pegatina física como un código QR digital para verificación instantánea e información detallada sobre componentes."
+      "certBody": "Tu certificado incluye tanto una pegatina física como un código QR digital para verificación instantánea e información detallada sobre componentes.",
+      "items": [
+        "Puntuaciones de sostenibilidad de los componentes",
+        "Emisiones de CO₂ ahorradas frente a un equipo nuevo",
+        "Procedencia y estado de los componentes",
+        "Benchmarks de rendimiento",
+        "Detalles de la cobertura de garantía"
+      ],
+      "digitalPhysical": "Digital y físico",
+      "digitalDesc": "Tu certificado incluye tanto una pegatina física como un código QR digital para verificación instantánea e información detallada sobre los componentes."
     },
     "stickers": {
       "title": "La colección de etiquetas REVAMPED",
-      "subtitle": "Cada diseño representa nuestro compromiso con la informática sostenible y el control de calidad.",
+      "subtitle": "Cada diseño representa nuestro compromiso con la informática sostenible y el aseguramiento de la calidad.",
       "sticker1": {
         "title": "Diseño original",
         "body": "Marca de certificación limpia y profesional que enfatiza nuestro enfoque de sostenibilidad centrado en laptops"
@@ -3505,13 +3726,58 @@
       "sticker3": {
         "title": "Certificado digital",
         "body": "Sistema de verificación vinculado por código QR con registros de autenticidad respaldados por blockchain"
+      },
+      "original": {
+        "title": "Diseño original",
+        "description": "Marca de certificación limpia y profesional que enfatiza nuestro enfoque sostenible centrado en portátiles."
+      },
+      "eco": {
+        "title": "Variante eco",
+        "description": "Diseño ampliado que destaca nuestro enfoque medioambiental y los principios de la economía circular."
+      },
+      "digital": {
+        "title": "Certificado digital",
+        "description": "Sistema de verificación vinculado a código QR con registros de autenticidad respaldados por blockchain."
       }
     },
     "cta": {
       "title": "Únete a la revolución REVAMPED",
       "body": "Al elegir una computadora REVAMPED, no solo obtienes una excelente máquina – haces una declaración sobre el futuro de la tecnología. Sostenible, potente y construida con propósito.",
       "buildBtn": "Iniciar tu build REVAMPED",
-      "learnBtn": "Saber más sobre la certificación"
+      "learnBtn": "Saber más sobre la certificación",
+      "subtitle": "Al elegir un ordenador REVAMPED, no solo obtienes una máquina fantástica — haces una declaración sobre el futuro de la tecnología. Sostenible, potente y construido con propósito.",
+      "startBuild": "Empezar tu build REVAMPED",
+      "learnMore": "Más sobre la certificación"
+    },
+    "inAction": {
+      "title": "Ordenadores REVAMPED reales en uso",
+      "subtitle": "Tecnología sostenible que la gente usa con gusto. Nuestra certificación REVAMPED no es solo una promesa — es un compromiso visible con la calidad y la responsabilidad medioambiental.",
+      "points": [
+        "Principalmente componentes usados y reacondicionados",
+        "Reducción significativa del impacto ambiental",
+        "Garantía de calidad en cada build",
+        "Pegatina de certificación física incluida"
+      ],
+      "ctaBuild": "Ensamblar tu ordenador",
+      "ctaLearn": "Más sobre la certificación"
+    },
+    "meaning": {
+      "title": "Qué significa «REVAMPED»",
+      "subtitle": "Nuestra certificación no es solo una etiqueta — es un estándar integral que garantiza que cada ordenador cumple nuestros estrictos criterios de sostenibilidad, calidad y rendimiento.",
+      "pillars": [
+        {
+          "title": "Sostenibilidad primero",
+          "description": "Priorizamos componentes usados y reacondicionados siempre que es posible, reduciendo drásticamente el impacto ambiental sin sacrificar el máximo rendimiento. Aplicamos los principios de la economía circular en cada build."
+        },
+        {
+          "title": "Calidad garantizada",
+          "description": "Cada componente se prueba a fondo, se limpia y se verifica para cumplir nuestros estrictos estándares de rendimiento y fiabilidad. La calidad nunca se compromete en aras de la sostenibilidad."
+        },
+        {
+          "title": "Optimizado por IA",
+          "description": "Nuestra IA garantiza la compatibilidad perfecta de componentes y el ajuste óptimo del rendimiento para tu caso de uso específico. Cada build está diseñado de forma inteligente para tus necesidades."
+        }
+      ]
     }
   },
   "services": {
@@ -4735,7 +5001,7 @@
       "heroSubtitle": "Descubre nuestra selección de {categoryNameLower} reacondicionados de forma sostenible — calidad verificada a precios justos.",
       "productCount": "{count} productos en esta categoría",
       "subcategories": "Subcategorías",
-      "categoryProductCount": "{count, plural, one {# producto} other {# productos}}",
+      "categoryProductCount": "{count} productos",
       "productsLoading": "Cargando productos",
       "productsComingSoon": "Próximamente encontrarás aquí equipos TI reacondicionados en la categoría {categoryName} en nuestro mercado.",
       "goToShop": "Ir a la tienda en línea",
@@ -4773,35 +5039,40 @@
   "space": {
     "meta": {
       "title": "Nuestras ubicaciones",
-      "description": "De la lechería Toni hasta hoy – la historia de nuestras ubicaciones y nuestra visión de un nuevo espacio comunitario en Zúrich."
+      "description": "De la Toni Molkerei hasta hoy — la historia de nuestras ubicaciones y nuestra visión de un nuevo espacio comunitario en Zúrich."
     },
     "hero": {
       "title": "De la lechería al espacio comunitario",
-      "subtitle": "Desde 2003 nos movemos por Zúrich. Ahora buscamos un nuevo hogar – un lugar donde sostenibilidad, tecnología y comunidad se unan.",
+      "subtitle": "Desde 2003 nos movemos por Zúrich. Ahora buscamos un nuevo hogar — un lugar donde la sostenibilidad, la tecnología y la comunidad se encuentren.",
       "visionBtn": "Nuestra visión",
-      "donateBtn": "Apoyar el fondo de ubicación"
+      "donateBtn": "Apoyar el fondo de ubicación",
+      "ctaVision": "Nuestra visión",
+      "ctaDonate": "Apoyar el presupuesto de ubicación"
     },
     "history": {
-      "title": "Nuestro viaje por Zúrich",
+      "title": "Nuestro recorrido por Zúrich",
       "subtitle": "Más de 20 años, varias ubicaciones, una misión: usar la tecnología de forma sostenible.",
       "locations": [
         {
-          "highlight": "Lugar de fundación",
-          "description": "Nuestro lugar de nacimiento en el antiguo sótano de quesos. El legendario aniversario de 10 años de Debian tuvo lugar en el tejado."
+          "period": "2003 – 2008",
+          "name": "Toni Molkerei",
+          "description": "Nuestro lugar de nacimiento en la antigua quesería. Aquí tuvo lugar la legendaria celebración del 10.° aniversario de Debian en el tejado.",
+          "highlight": "Lugar fundacional"
         },
         {
-          "highlight": "Proyectos sociales",
-          "description": "En los pisos 6°/7° del campanario y sótanos. Aquí comenzaron nuestros primeros proyectos sociales."
+          "period": "2008 – 2012",
+          "name": "Iglesia reformada Wipkingen",
+          "description": "En el 6.°/7.° piso de la torre de la iglesia y en sótanos. Aquí empezaron nuestros primeros proyectos sociales.",
+          "highlight": "Proyectos sociales"
         },
         {
-          "highlight": "Expansión",
-          "description": "Gran espacio con muchos puestos de trabajo. Expansión de nuestro taller."
-        },
-        {
-          "highlight": "Actual",
-          "description": "Nuestra tienda actual con taller. Almacén adicional en {warehouseStreet}."
+          "period": "2012 – 2015",
+          "name": "Röschibachstrasse",
+          "description": "Gran espacio con muchos puestos de trabajo. Expansión de nuestro taller.",
+          "highlight": "Expansión"
         }
-      ]
+      ],
+      "currentHighlight": "Actual"
     },
     "currentLocation": {
       "label": "Tienda actual",
@@ -4811,39 +5082,39 @@
     },
     "future": {
       "moveDeadline": "Traslado antes de finales de 2026",
-      "title": "Nuestro local soñado",
-      "subtitle": "Debemos dejar nuestro local actual antes de finales de 2026. Esta es nuestra oportunidad de crear algo más grande.",
+      "title": "Nuestro local ideal",
+      "subtitle": "Tenemos que dejar nuestro local actual antes de finales de 2026. Es nuestra oportunidad de crear algo más grande.",
       "visionTagline": "Visión: {orgName} Community Space",
       "visionDesc": "Un espacio abierto donde tecnología, sostenibilidad y comunidad se encuentran. Tienda, taller, coworking, eventos – todo bajo un mismo techo.",
       "visionCaption": "Visualización conceptual de nuestro espacio comunitario ideal",
       "features": [
         {
           "name": "Área de tienda",
-          "description": "Espacio de exposición para dispositivos reacondicionados con asesoramiento"
+          "description": "Espacio de exposición para dispositivos reacondicionados con asesoría"
         },
         {
           "name": "Taller de reparación",
-          "description": "Puestos de trabajo para técnicos y reparaciones comunitarias"
+          "description": "Puestos de trabajo para técnicos/as y reparaciones de la comunidad"
         },
         {
           "name": "Coworking",
-          "description": "Puestos de trabajo flexibles para nuestra comunidad"
+          "description": "Espacios de trabajo flexibles para nuestra comunidad"
         },
         {
           "name": "Sala de eventos",
           "description": "Espacio para talleres, meetups y pequeños eventos (15–20 personas)"
         },
         {
-          "name": "Mini biblioteca",
-          "description": "Estantes con libros de tecnología, revistas y recursos"
+          "name": "Mini-biblioteca",
+          "description": "Algunas estanterías con libros de tecnología, revistas y recursos"
         },
         {
-          "name": "Rincón del café",
-          "description": "Punto de encuentro para intercambio informal y networking"
+          "name": "Rincón de café",
+          "description": "Punto de encuentro para el intercambio informal y el networking"
         },
         {
           "name": "Cocina",
-          "description": "Cocina totalmente equipada para iniciativas de Residuo Cero"
+          "description": "Cocina completamente equipada para iniciativas de zero food waste"
         },
         {
           "name": "Zero Food Waste",
@@ -4852,7 +5123,7 @@
       ],
       "params": {
         "title": "Lo que buscamos",
-        "subtitle": "Los parámetros para nuestra ubicación ideal",
+        "subtitle": "Los parámetros de nuestra ubicación ideal",
         "areaLabel": "Superficie útil",
         "budgetLabel": "Presupuesto por mes",
         "locationLabel": "Ubicación",
@@ -4861,12 +5132,23 @@
         "contactBtn": "Contáctanos",
         "areaValue": "250+ m²",
         "budgetValue": "CHF 6.000",
-        "locationValue": "Zúrich"
-      }
+        "locationValue": "Zúrich",
+        "area": "Superficie útil",
+        "budget": "Presupuesto mensual",
+        "city": "Ubicación",
+        "idealLabel": "Lo ideal sería:",
+        "idealText": "Planta baja o acceso fácil, accesible para sillas de ruedas, rampa de carga o zona de descarga, en un barrio animado con buenas conexiones de transporte público.",
+        "tipText": "¿Conoces un espacio adecuado? ¡Nos alegra cualquier sugerencia!",
+        "contactCta": "Contáctanos"
+      },
+      "badge": "Mudanza antes de finales de 2026",
+      "visionLabel": "Visión: Espacio comunitario",
+      "visionDescription": "Un espacio abierto donde la tecnología, la sostenibilidad y la comunidad converjan. Tienda, taller, coworking, eventos — todo bajo un mismo techo.",
+      "conceptCaption": "Visualización conceptual de nuestro espacio comunitario ideal"
     },
     "impact": {
       "title": "Por qué un espacio más grande significa más impacto",
-      "subtitle": "Con más espacio podemos multiplicar nuestros KPIs – salvar más dispositivos, formar a más personas, lograr más impacto.",
+      "subtitle": "Con más espacio podemos multiplicar nuestros KPIs — rescatar más dispositivos, formar a más personas, generar más impacto.",
       "todayLabel": "Hoy",
       "potentialLabel": "Potencial",
       "kpis": [
@@ -4900,14 +5182,54 @@
         "body": "Con un presupuesto mayor podemos encontrar una mejor ubicación – y multiplicar nuestro impacto para el medio ambiente y la sociedad. Cada contribución nos ayuda a hacer realidad nuestro sueño de un espacio comunitario.",
         "donateBtn": "Donar ahora",
         "impactBtn": "Ver nuestro impacto"
+      },
+      "today": "Hoy",
+      "potential": "Potencial",
+      "items": [
+        {
+          "metric": "Dispositivos al año",
+          "current": "~500",
+          "potential": "2.000+",
+          "reason": "Más puestos de taller = más capacidad"
+        },
+        {
+          "metric": "Participantes en talleres",
+          "current": "~100",
+          "potential": "500+",
+          "reason": "Sala de eventos propia para cursos regulares"
+        },
+        {
+          "metric": "Miembros de la comunidad",
+          "current": "~50",
+          "potential": "200+",
+          "reason": "El coworking atrae a más voluntarios"
+        },
+        {
+          "metric": "Integración social",
+          "current": "~10",
+          "potential": "30+",
+          "reason": "Más plazas de prácticas en espacios más grandes"
+        }
+      ],
+      "donateCta": {
+        "title": "Apoya nuestro presupuesto de ubicación",
+        "description": "Con un mayor presupuesto podemos encontrar una mejor ubicación — y así multiplicar nuestro impacto para el medio ambiente y la sociedad. Cada aportación nos ayuda a hacer realidad nuestro sueño del espacio comunitario.",
+        "donateCta": "Donar ahora",
+        "impactCta": "Ver nuestro impacto"
       }
     },
     "shopLinks": {
       "title": "Todas las opciones de compra",
-      "subtitle": "Físico y en línea – elige lo que mejor te convenga.",
-      "currentStore": "Tienda actual",
+      "subtitle": "Física y en línea — elige lo que mejor se adapte a ti.",
+      "currentStore": "Tienda física actual",
       "shopOverview": "Resumen de la tienda",
       "onlineShop": "Tienda en línea"
+    },
+    "current": {
+      "label": "Tienda física actual",
+      "hours": "Horario de atención",
+      "hoursValue": "Lu: 9–12 | Ma–Vi: 13–17",
+      "moreInfo": "Más sobre la tienda física"
     }
   },
   "support": {

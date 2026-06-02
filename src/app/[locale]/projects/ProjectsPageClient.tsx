@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
-import { ArrowRight, Filter, CheckCircle2, Calendar, Code, Globe, Users, Wrench, Rocket, Layers, Server } from 'lucide-react'
+import { ArrowRight, Filter, CheckCircle2, Calendar, Code, Globe, Users, Wrench, Rocket, Layers, Server, Lightbulb } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
@@ -18,6 +18,7 @@ const ICON_BY_SLUG: Record<string, LucideIcon> = {
   compirat:     Users,
   hardware:     Wrench,
   ltsp:         Server,
+  upcycling:    Lightbulb,
 }
 
 type ProjectItem = {
