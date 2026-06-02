@@ -113,6 +113,20 @@
           "멀티 유저 컴퓨팅",
           "자원 최적화"
         ]
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "폐기된 컴퓨터 모니터가 기능적이고 지속 가능한 램프로 변신합니다. 보호 작업장 및 부동산 파트너와의 협력을 통한 순환 경제 파일럿 프로젝트 – 공개 지침서 및 과학적 지원 포함.",
+        "category": "hardware",
+        "status": "ongoing",
+        "year": "2025",
+        "features": [
+          "모니터를 램프로 변환",
+          "소규모 시리즈 및 품질 보증",
+          "사회적 기업과의 협력",
+          "ZHAW의 생태학적 분석"
+        ],
+        "readMoreLink": "/projects/upcycling"
       }
     ]
   }

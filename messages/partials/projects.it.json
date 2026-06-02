@@ -113,6 +113,20 @@
           "Computing multi-utente",
           "Ottimizzazione delle risorse"
         ]
+      },
+      {
+        "title": "Monitor-Upcycling",
+        "description": "I monitor per computer dismessi vengono trasformati in lampade funzionali e sostenibili. Un progetto pilota per l'economia circolare in collaborazione con laboratori protetti e partner immobiliari – con istruzioni aperte e supporto scientifico.",
+        "category": "hardware",
+        "status": "ongoing",
+        "year": "2025",
+        "features": [
+          "Conversione di monitor in lampade",
+          "Piccola serie e garanzia di qualità",
+          "Collaborazione con imprese sociali",
+          "Analisi ecologiche (ZHAW)"
+        ],
+        "readMoreLink": "/projects/upcycling"
       }
     ]
   }

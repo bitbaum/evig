@@ -269,13 +269,7 @@ export default async function Home() {
       <div className="bg-canvas py-8 sm:py-12 border-t border-neutral-100 dark:border-white/[0.04]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-base text-neutral-600 dark:text-neutral-400">
-            {t.rich('proServices.text', {
-              link: (chunks) => (
-                <Link href="/services" className="font-medium text-neutral-900 dark:text-white underline underline-offset-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                  {chunks}
-                </Link>
-              ),
-            })}
+            {t('proServices.text')}
           </p>
         </div>
       </div>
