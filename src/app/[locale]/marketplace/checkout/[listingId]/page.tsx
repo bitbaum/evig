@@ -73,10 +73,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ listingId: 
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-warning-400 mx-auto mb-4" />
         <Heading level={2} className="text-xl text-neutral-900 dark:text-white mb-2">
-          {t('ownListing.title')}
+          {t('ownListing')}
         </Heading>
         <p className="text-neutral-600 dark:text-neutral-400 mb-4">
-          {t('ownListing.message')}
+          {t('ownListingDesc')}
         </p>
         <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-primary-600 hover:text-primary-700 font-medium">
           {t('backToListing')}
