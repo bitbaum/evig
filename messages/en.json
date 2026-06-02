@@ -5287,6 +5287,45 @@
             "href": "/contact"
           }
         ]
+      },
+      "open_questions": {
+        "title": "Open Questions",
+        "questions": [
+          "Which monitor models are best suited? How can monitors with different boards be standardized?",
+          "How can flicker and brightness control be solved across models?",
+          "What is the actual environmental benefit compared to new lights? Is a rough eco-balance sufficient or is a comprehensive LCA expected?",
+          "How much can the lamp cost to be accepted in the market? What willingness to pay exists among customers?",
+          "Which partners assume responsibility for product liability and CE marking in series production?",
+          "How can sufficient quantities of screens to be replaced be secured (cooperation with ERZ, other collection points)?",
+          "Which grants can realistically be acquired and what conditions are attached?",
+          "How should the project be communicated (functional light vs. creative design object)?"
+        ]
+      },
+      "source": {
+        "title": "Open Instructions & Source Code",
+        "description": "The project plans to create detailed instructions per monitor model (photos, boards, pin assignments, safety aspects) and publish them freely on a public platform (this site or wiki) to promote the circular economy. The source code of this platform is open source under the MIT license: https://github.com/g-but/revampit . The instructions will be published here step by step once created and validated."
+      },
+      "ai_brainstorm": {
+        "title": "Brainstorm with AI",
+        "intro": "The detailed, structured content on this page (tasks, open questions, partners, recommendations) is excellent for AI-supported brainstorming on technical, economic and social solutions. Copy relevant sections and use prompts like these to develop solutions:",
+        "prompts": [
+          {
+            "title": "Technical Solutions for Flicker & Control",
+            "prompt": "You are an expert in electronics and circular economy. Based on the Monitor-Upcycling project by revamp-it (summary: [copy \"The Project\" and \"Goals & Approach\"]), brainstorm 4-5 concrete technical solutions for the question: \"How can flicker and brightness control be solved across models?\". Consider: Feasibility in sheltered workshops with electronics know-how (e.g. Drahtzug, FARO), costs for small series, CE conformity, environmental benefit vs. new lights, scalability for small series. Prioritize simple, robust approaches."
+          },
+          {
+            "title": "Communication Strategy",
+            "prompt": "Based on the Monitor-Upcycling project ( [copy recommendations and open questions] ): develop a clear communication strategy that positions the product as a functional, circular alternative. Suggest 3-5 channels, messages and materials that address creative aspects (design object) in a later phase. How can public relations (social media, wiki) support the acquisition of partners and customers?"
+          },
+          {
+            "title": "Funding and Financing Strategy",
+            "prompt": "For the Monitor-Upcycling project (goals, open questions on grants): analyze the mentioned foundations (Klimastiftung Schweiz, KliK, Gebert Rüf, Binding, Migros Pionierfonds, Swiss Re) and propose a parallel application strategy. Which conditions fit best? How to combine with Swico funding and customer revenues for the small series? Give 3-5 concrete next steps."
+          },
+          {
+            "title": "CE and Liability",
+            "prompt": "In the context of the Upcycling project (tasks on CE conformity, open question on product liability): brainstorm how responsibility for CE and liability in series production in sheltered workshops can be regulated. Suggest models (specialist engineer, partner takeover, certification), risks and how to minimize them, taking into account the priorities (electronics know-how partners like Drahtzug)."
+          }
+        ]
       }
     }
   },

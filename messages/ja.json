@@ -3635,6 +3635,120 @@
     "meta": {
       "title": "私たちのプロジェクト",
       "description": "Open Sourceへの貢献からコミュニティイニシアチブ、ハードウェア開発まで、多様なプロジェクトを発見してください。"
+    },
+    "upcycling": {
+      "meta": {
+        "title": "Monitor-Upcycling | RevampIT",
+        "description": "Aus ausrangierten Computermonitoren entstehen funktionale, nachhaltige Leuchten. Ein Pilotprojekt für Kreislaufwirtschaft, soziale Integration in geschützten Werkstätten und Ressourcenschonung – mit offenen Anleitungen und wissenschaftlicher Begleitung."
+      },
+      "hero": {
+        "title": "Monitor-Upcycling",
+        "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
+        "cta1": "Kontakt aufnehmen",
+        "cta2": "Partner werden"
+      },
+      "about": {
+        "title": "Das Projekt",
+        "description": "Im Monitor-Upcycling-Projekt bauen wir ausrangierte Bildschirme zu modernen Leuchten um. Das Projekt umfasst die Produktion einer Kleinserie (ca. 70 Stück), die Erstellung detaillierter, modell-spezifischer Anleitungen (Fotos, Platinen, Pin-Belegung, Sicherheit), eine Kosten-Nutzen-Analyse und Ökobilanz mit der ZHAW, die Klärung der CE-Konformität sowie die Zusammenarbeit mit ERZ für die Gewinnung von Altgeräten. Ein Schlussbericht und die Präsentation vor dem Swico Innovationsfonds sind für den 3. Juli 2026 geplant."
+      },
+      "approach": {
+        "title": "Ziele & Vorgehen",
+        "cards": [
+          {
+            "title": "Kleinserie & Qualität",
+            "description": "Produktion von 30–70 funktionalen Leuchten mit dokumentierten Arbeitsschritten pro Monitor-Modell und strenger Qualitätssicherung.",
+            "features": [
+              "30–70 Einheiten",
+              "Modell-spezifische Anleitungen",
+              "CE-Konformität"
+            ]
+          },
+          {
+            "title": "Wissenschaftliche Begleitung",
+            "description": "Kosten-Nutzen-Analyse und vereinfachte Ökobilanz (LCA-Vergleich) in Kooperation mit der ZHAW – Messung des tatsächlichen Umweltvorteils gegenüber Neuleuchten.",
+            "features": [
+              "LCA-Vergleich",
+              "Umweltvorteil quantifizieren",
+              "Wirtschaftlichkeitsanalyse"
+            ]
+          },
+          {
+            "title": "Partnerschaften & Piloten",
+            "description": "Identifikation und Zusammenarbeit mit geeigneten geschützten Werkstätten (Fokus Elektronikmontage) sowie Immobilienverwaltungen und Facility-Management für Pilotinstallationen in Nebenräumen, Parkhäusern und Technikräumen.",
+            "features": [
+              "Drahtzug, FARO, St. Jakob, Palme u.a.",
+              "Livit, Wincasa, Allreal, ISS",
+              "ERZ & Swico"
+            ]
+          }
+        ]
+      },
+      "nextsteps": {
+        "title": "Nächste Schritte & Meilensteine",
+        "description": "Abschluss der Kleinserie und erste Analysen bis Januar 2026. Fertigstellung des umfassenden Schlussberichts mit allen Listen, Anleitungen und Ergebnissen bis Juni 2026. Präsentation der Projektergebnisse am 3. Juli 2026 vor dem Swico Innovationsfonds. Parallel: Akquise von Fördergeldern (Klimastiftung Schweiz, KliK, Gebert Rüf, Migros Pionierfonds u.a.), weitere Produktions- und Vertriebspartner sowie Vorbereitung der öffentlichen, offenen Publikation der Anleitungen."
+      },
+      "cta": {
+        "title": "Werden Sie Teil des Upcycling-Projekts",
+        "actions": [
+          {
+            "title": "Kontakt & Partnerschaft",
+            "description": "Interessiert an einer Pilotinstallation in Ihren Liegenschaften oder als Produktionspartner in einer geschützten Werkstatt?",
+            "cta": "Jetzt kontaktieren",
+            "href": "/contact"
+          },
+          {
+            "title": "Förderung & Unterstützung",
+            "description": "Unterstützen Sie das Projekt mit einer Spende oder als Stiftungs-/Förderpartner – für mehr Kreislaufwirtschaft und soziale Integration.",
+            "cta": "Fördern",
+            "href": "/get-involved/donate"
+          },
+          {
+            "title": "Technik & Wissen",
+            "description": "Interesse an den offenen Anleitungen, technischen Details oder einer Zusammenarbeit bei der Dokumentation?",
+            "cta": "Kontakt aufnehmen",
+            "href": "/contact"
+          }
+        ]
+      },
+      "open_questions": {
+        "title": "Offene Fragen",
+        "questions": [
+          "Welche Monitor-Modelle sind am besten geeignet? Wie lassen sich Monitore mit unterschiedlichen Boards standardisieren?",
+          "Wie können Flimmern und Helligkeitsregelung modellübergreifend gelöst werden?",
+          "Wie hoch ist der tatsächliche Umweltvorteil gegenüber neuen Leuchten? Reicht eine grobe Ökobilanz oder wird eine umfassende LCA erwartet?",
+          "Wie viel darf die Lampe kosten, damit sie im Markt akzeptiert wird? Welche Preisbereitschaft besteht bei Kunden?",
+          "Welche Partner übernehmen die Verantwortung für Produkthaftung und CE-Kennzeichnung bei Serienproduktion?",
+          "Wie lassen sich ausreichende Mengen an auszutauschenden Bildschirmen sichern (Kooperation mit ERZ, anderen Sammelstellen)?",
+          "Welche Fördergelder können realistisch akquiriert werden und welche Bedingungen sind daran geknüpft?",
+          "Wie soll das Projekt kommuniziert werden (funktionale Leuchte vs. kreatives Designobjekt)?"
+        ]
+      },
+      "source": {
+        "title": "Offene Anleitungen & Source Code",
+        "description": "Das Projekt plant die Erstellung detaillierter Anleitungen pro Monitor-Modell (Fotos, Boards, Pin-Belegung, Sicherheitsaspekte) und deren freie Publikation auf einer öffentlichen Plattform (dieser Site oder Wiki), um die Kreislaufwirtschaft zu fördern. Der Quellcode dieser Plattform ist open source unter MIT-Lizenz: https://github.com/g-but/revampit . Die Anleitungen werden hier schrittweise veröffentlicht, sobald sie erstellt und validiert sind."
+      },
+      "ai_brainstorm": {
+        "title": "Mit KI brainstormen",
+        "intro": "Der detaillierte, strukturierte Inhalt dieser Seite (Aufgaben, offene Fragen, Partner, Empfehlungen) eignet sich hervorragend für KI-gestütztes Brainstorming zu technischen, wirtschaftlichen und sozialen Lösungen. Kopieren Sie relevante Abschnitte und nutzen Sie Prompts wie diese, um Lösungen zu entwickeln:",
+        "prompts": [
+          {
+            "title": "Technische Lösungen für Flimmern & Regelung",
+            "prompt": "Du bist Experte für Elektronik und Kreislaufwirtschaft. Basierend auf dem Monitor-Upcycling Projekt von revamp-it (Zusammenfassung: [kopiere 'Das Projekt' und 'Ziele & Vorgehen']), brainstorme 4-5 konkrete technische Lösungen für die Frage: 'Wie können Flimmern und Helligkeitsregelung modellübergreifend gelöst werden?'. Berücksichtige: Machbarkeit in geschützten Werkstätten mit Elektronik-Know-how (z.B. Drahtzug, FARO), Kosten für Kleinserie, CE-Konformität, Umweltvorteil vs. Neuleuchten, Skalierbarkeit für Kleinserie. Priorisiere einfache, robuste Ansätze."
+          },
+          {
+            "title": "Kommunikationsstrategie",
+            "prompt": "Basierend auf dem Monitor-Upcycling Projekt ( [kopiere Empfehlungen und Offene Fragen] ): entwickle eine klare Kommunikationsstrategie, die das Produkt als funktionale, kreislauffähige Alternative positioniert. Schlage 3-5 Kanäle, Botschaften und Materialien vor, die kreative Aspekte (Designobjekt) in späterer Phase adressieren. Wie kann die Öffentlichkeitsarbeit (Social Media, Wiki) die Akquise von Partnern und Kunden unterstützen?"
+          },
+          {
+            "title": "Förder- und Finanzierungsstrategie",
+            "prompt": "Für das Monitor-Upcycling Projekt (Ziele, offene Fragen zu Fördergeldern): analysiere die genannten Stiftungen (Klimastiftung Schweiz, KliK, Gebert Rüf, Binding, Migros Pionierfonds, Swiss Re) und schlage eine parallele Antragsstrategie vor. Welche Bedingungen passen am besten? Wie kombiniert man mit Swico-Förderung und Kundeneinnahmen für die Kleinserie? Gib 3-5 konkrete nächste Schritte."
+          },
+          {
+            "title": "CE und Haftung",
+            "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
+          }
+        ]
+      }
     }
   },
   "revamped": {

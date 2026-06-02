@@ -10,6 +10,9 @@ type PageMessages = {
   approach: { title: string; cards: RawCard[] }
   nextsteps: { title: string; description: string }
   cta: { title: string; actions: RawAction[] }
+  open_questions: { title: string; questions: string[] }
+  source: { title: string; description: string }
+  ai_brainstorm: { title: string; intro: string; prompts: Array<{ title: string; prompt: string }> }
 }
 
 export async function generateMetadata() {
@@ -54,6 +57,26 @@ export default async function UpcyclingPage() {
         description: p.nextsteps.description,
         backgroundColor: 'white',
         layout: 'single',
+      },
+      // New sections for public info completeness + excellent AI brainstorming utility (open questions, replication source + platform source code, ready-to-use prompts)
+      {
+        title: p.open_questions.title,
+        backgroundColor: 'gray',
+        layout: 'single',
+        cards: p.open_questions.questions.map((q: string) => ({ title: q, description: '' })),
+      },
+      {
+        title: p.source.title,
+        description: p.source.description,
+        backgroundColor: 'white',
+        layout: 'single',
+      },
+      {
+        title: p.ai_brainstorm.title,
+        description: p.ai_brainstorm.intro,
+        backgroundColor: 'gray',
+        layout: 'grid-2',
+        cards: p.ai_brainstorm.prompts.map((pr: { title: string; prompt: string }) => ({ title: pr.title, description: pr.prompt })),
       },
     ],
     cta: {
