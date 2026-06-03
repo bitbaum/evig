@@ -8,7 +8,6 @@
 
 // Detail components
 export { useProtocolDetail } from './useProtocolDetail'
-export { ProtocolWorkflowStepper } from './ProtocolWorkflowStepper'
 export { ProtocolReprocessSection } from './ProtocolReprocessSection'
 export { ProtocolDraftInput } from './ProtocolDraftInput'
 export { ProtocolSummarySection } from './ProtocolSummarySection'

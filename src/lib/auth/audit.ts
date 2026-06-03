@@ -61,6 +61,12 @@ export type AuditEventType =
   | 'user_impersonation_start'
   | 'user_impersonation_end'
 
+  // Compliance events (DSG / GDPR)
+  | 'user_deleted'
+  | 'data_exported'
+  | 'data_export'  // legacy alias used by /api/user/export-data raw INSERT — keep until that route is refactored to use logDataExport()
+  | 'content_moderated'
+
 export interface AuditLogEntry {
   id?: string
   event_type: AuditEventType

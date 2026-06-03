@@ -203,11 +203,11 @@ export default async function TaskDetailPage({
         >
           {TASK_PRIORITY_LABELS[task.priority]}
         </span>
-        {task.is_completed && (
-          <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300">
-            Abgeschlossen
-          </span>
-        )}
+        {/* Removed the duplicate "Abgeschlossen" badge — task.current_status
+            is the SSOT for state; surfacing both `current_status` AND
+            `is_completed` creates "which one is the truth?" ambiguity.
+            (Per admin UX audit 2026-06-03; the boolean is kept in schema
+            for completion-history aggregates.) */}
         {task.is_archived && (
           <span className="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-neutral-100 text-neutral-800">
             Archiviert

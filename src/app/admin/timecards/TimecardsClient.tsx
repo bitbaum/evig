@@ -343,25 +343,15 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
       <div className="rounded-lg border border-neutral-200 bg-white p-4 dark:border-white/[0.06] dark:bg-neutral-900">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-2">
-            <div className="inline-flex rounded-lg border border-neutral-200 bg-neutral-50 p-1 dark:border-white/[0.06] dark:bg-neutral-900">
-              {(['month', 'week'] as PeriodMode[]).map(candidate => (
-                <button
-                  key={candidate}
-                  type="button"
-                  onClick={() => setMode(candidate)}
-                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                    mode === candidate
-                      ? 'bg-white text-neutral-900 shadow-sm dark:bg-neutral-900 dark:text-white'
-                      : 'text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200'
-                  }`}
-                >
-                  {candidate === 'month' ? 'Monat' : 'Woche'}
-                </button>
-              ))}
-            </div>
+            {/* Month/week toggle removed (admin UX audit 2026-06-03): payroll
+                cadence is monthly, never weekly. Week mode added cognitive
+                load + 1-2 clicks per session for ~0 actual users. The mode
+                state machinery is left intact (defaults to 'month') so the
+                rest of this file stays touchable without a full refactor —
+                a follow-up dedicated session can drop the conditionals. */}
             <div>
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-white">
-                {mode === 'month' ? `${monthLabel} ist vorbereitet` : 'Diese Woche ist vorbereitet'}
+                {`${monthLabel} ist vorbereitet`}
               </h2>
               <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">{helperText}</p>
             </div>
@@ -375,7 +365,7 @@ export function TimecardsClient({ workingHours, userName }: TimecardsClientProps
               className="inline-flex items-center gap-2 rounded-lg bg-success-600 px-3 py-2 text-sm font-medium text-white hover:bg-success-700 disabled:bg-neutral-300 disabled:text-neutral-500"
             >
               <Send className="h-4 w-4" />
-              {isSubmitting ? 'Sende…' : 'Bestätigen und einreichen'}
+              {isSubmitting ? 'Sende…' : 'Zur Prüfung einreichen'}
             </button>
             <button
               type="button"

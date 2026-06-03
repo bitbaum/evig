@@ -138,6 +138,7 @@ async function getTasks(
       t.title,
       t.description,
       t.task_type,
+      t.schedule_human,
       t.category,
       t.priority,
       t.current_status,
@@ -323,9 +324,12 @@ export default async function TasksAdminPage({
                 <th className="text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                   Priorität
                 </th>
-                {/* Typ hidden on mobile and tablet */}
+                {/* Zeitplan — replaces "Typ" (per admin UX audit: schedule
+                    is what staff actually need to know — "Jeden Montag" vs
+                    "Wiederkehrend (geplant)" — the human string beats the
+                    type enum). Falls back to type label for one-off tasks. */}
                 <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
-                  Typ
+                  Zeitplan
                 </th>
                 {/* Zugewiesen hidden on mobile and tablet */}
                 <th className="hidden md:table-cell text-left px-4 py-3 text-xs font-semibold text-neutral-500 uppercase tracking-wide">
@@ -380,7 +384,7 @@ export default async function TasksAdminPage({
                   </td>
                   <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">
                     <span className="text-sm text-neutral-600">
-                      {TASK_TYPE_LABELS[task.task_type]}
+                      {task.schedule_human || TASK_TYPE_LABELS[task.task_type]}
                     </span>
                   </td>
                   <td className="hidden md:table-cell px-4 py-3 whitespace-nowrap">

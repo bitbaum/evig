@@ -167,29 +167,26 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           {/* 2. AI Chat — collapsed by default */}
           <ProtocolAIChat title={protocol.title} notes={notes} />
 
-          {/* 3. Attendee mapping callout — shown only when there are unresolved names */}
+          {/* 3. Attendee mapping callout — advisory, not blocking. Per the
+              admin UX audit: this used to scream WARNING (yellow/red) when in
+              reality it's optional metadata. Subtle neutral border now; staff
+              can still map names but the visual weight matches the actual
+              criticality (finalization isn't blocked, task assignments just
+              fall back to manual). */}
           {isReview && notes.detected_attendees && notes.detected_attendees.length > 0 && (
-            <div className={`rounded-lg border p-4 ${
-              allMapped
-                ? 'border-primary-200 bg-primary-50 dark:border-primary-800/30 dark:bg-primary-900/10'
-                : 'border-warning-200 bg-warning-50 dark:border-warning-800/30 dark:bg-warning-900/10'
-            }`}>
+            <div className="rounded-lg border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 p-4">
               <div className="flex items-start gap-3">
-                <UserCheck className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
-                  allMapped ? 'text-primary-600 dark:text-primary-400' : 'text-warning-600 dark:text-warning-400'
-                }`} />
+                <UserCheck className="w-5 h-5 flex-shrink-0 mt-0.5 text-neutral-500 dark:text-neutral-400" />
                 <div className="flex-1 min-w-0">
-                  <h3 className={`text-sm font-semibold mb-1 ${
-                    allMapped ? 'text-primary-900 dark:text-primary-300' : 'text-warning-900 dark:text-warning-300'
-                  }`}>
+                  <h3 className="text-sm font-semibold mb-1 text-neutral-900 dark:text-white">
                     {allMapped
                       ? 'Alle Personen zugeordnet'
-                      : `${unmappedAttendees.length} Person${unmappedAttendees.length !== 1 ? 'en' : ''} noch nicht zugeordnet`
+                      : `Erkannte Personen (${unmappedAttendees.length} noch offen)`
                     }
                   </h3>
                   {!allMapped && (
-                    <p className="text-xs text-warning-700 dark:text-warning-400 mb-3">
-                      Die KI hat Namen aus dem Protokoll erkannt. Ordne sie den Teammitgliedern zu, damit Aufgaben korrekt zugewiesen werden.
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">
+                      Optional. Zuordnung erlaubt automatische Aufgaben­zuweisung; sonst manuell.
                     </p>
                   )}
                   <div className="space-y-2">
