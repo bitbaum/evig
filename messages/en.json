@@ -7045,6 +7045,15 @@
     "stepper": {
       "progressLabel": "Progress",
       "stepOf": "Step {current} of {total}"
+    },
+    "missionStrip": {
+      "ariaLabel": "Our impact",
+      "anchor": "Every purchase keeps a device out of landfill.",
+      "subAnchor": "A Swiss circular-economy nonprofit since 2003.",
+      "devicesRehomed": "devices rehomed",
+      "co2Avoided": "CO₂ avoided",
+      "methodologyLink": "How is this calculated?",
+      "estimateNote": "Estimate — DB unavailable"
     }
   },
   "profil": {

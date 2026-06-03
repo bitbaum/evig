@@ -81,6 +81,11 @@ const serverEnvSchema = z.object({
   TRANSCRIPTION_URL: z.string().optional(),
   REBOOT_CONTENT_TOKEN: z.string().optional(),
 
+  // Sentry — when set, src/instrumentation.ts loads the Sentry SDK and
+  // wires server + edge runtimes. When absent/empty, Sentry never loads
+  // (zero bundle impact, zero startup cost). See sentry.*.config.ts.
+  SENTRY_DSN: z.string().optional(),
+
   // --- Runtime ---------------------------------------------------------------
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 })

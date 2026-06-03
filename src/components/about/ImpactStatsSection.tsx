@@ -9,69 +9,9 @@ import { Leaf, Users } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import Heading from '@/components/ui/Heading'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_WEIGHT_KG, CATEGORY_CO2_KG_OVERRIDE, CO2_PER_KG, AVG_DEVICE_WEIGHT_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
+import { AVG_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
-import { logger } from '@/lib/logger'
-import { LISTING_STATUS } from '@/config/marketplace'
-
-async function fetchImpactStats() {
-  try {
-    const [listingRows, repairRows, userRows] = await Promise.all([
-      query<{ category: string; status: string; count: string }>(
-        `SELECT category, status, COUNT(*) as count
-         FROM ${TABLE_NAMES.LISTINGS}
-         WHERE status != '${LISTING_STATUS.REMOVED}'
-         GROUP BY category, status`
-      ),
-      query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}`
-      ),
-      query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
-      ),
-    ])
-
-    let totalDevices = 0
-    let soldDevices = 0
-    let co2SavedKg = 0
-
-    for (const row of listingRows.rows) {
-      const count = Number(row.count)
-      totalDevices += count
-      if (row.status === LISTING_STATUS.SOLD) {
-        soldDevices += count
-        // Prefer per-category cited value (e.g. Circular Computing for
-        // laptops at 285 kg) over the rough weight × factor. Stays in
-        // sync with the /transparenz/co2 methodology table.
-        const directCo2 = CATEGORY_CO2_KG_OVERRIDE[row.category]
-        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? FALLBACK_DEVICE_WEIGHT_KG
-        const perDevice = directCo2 ?? weightKg * CO2_PER_KG
-        co2SavedKg += count * perDevice
-      }
-    }
-
-    return {
-      totalDevices,
-      soldDevices,
-      co2SavedTons: Math.round((co2SavedKg / 1000) * 10) / 10,
-      repairs: Number(repairRows.rows[0]?.count || 0),
-      users: Number(userRows.rows[0]?.count || 0),
-      live: true,
-    }
-  } catch (error) {
-    logger.warn('ImpactStatsSection: DB unavailable, using defaults', { error })
-    return {
-      totalDevices: getDefaultNumeric('devices_sold_per_year'),
-      soldDevices: getDefaultNumeric('devices_sold_per_year'),
-      co2SavedTons: getDefaultNumeric('annual_co2_saved_tons'),
-      repairs: 0,
-      users: 0,
-      live: false,
-    }
-  }
-}
+import { fetchImpactStats } from '@/lib/impact-stats'
 
 export default async function ImpactStatsSection() {
   const [stats, t] = await Promise.all([

@@ -7109,6 +7109,15 @@
     "stepper": {
       "progressLabel": "Fortschritt",
       "stepOf": "Schritt {current} von {total}"
+    },
+    "missionStrip": {
+      "ariaLabel": "Unsere Wirkung",
+      "anchor": "Jeder Kauf hält ein Gerät aus dem Müll.",
+      "subAnchor": "Wir sind ein Schweizer Non-Profit für Kreislaufwirtschaft seit 2003.",
+      "devicesRehomed": "Geräte weitergegeben",
+      "co2Avoided": "CO₂ vermieden",
+      "methodologyLink": "Wie berechnet?",
+      "estimateNote": "Schätzung — DB derzeit nicht erreichbar"
     }
   },
   "profil": {

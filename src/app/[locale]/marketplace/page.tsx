@@ -3,4 +3,17 @@
 export const dynamic = 'force-dynamic'
 
 import MarketplacePageClient from './MarketplacePageClient'
-export default MarketplacePageClient
+import { MissionStrip } from '@/components/commerce/MissionStrip'
+
+export default function MarketplacePage() {
+  // Server-rendered mission strip above the client-rendered marketplace.
+  // Anchors the page as nonprofit-circular-economy rather than just
+  // "second-hand listings" — shown above the fold so the framing lands
+  // before the listings grid.
+  return (
+    <>
+      <MissionStrip />
+      <MarketplacePageClient />
+    </>
+  )
+}

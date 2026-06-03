@@ -119,3 +119,4 @@ docker-compose.override.yml
 !public/presentations/
 .playwright-mcp/
 public/sitemap.xml
+messages/_missing/

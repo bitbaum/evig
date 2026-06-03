@@ -10,6 +10,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 import { ORG, OPENING_HOURS } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'
+import { MissionStrip } from '@/components/commerce/MissionStrip'
 import { getTranslations } from 'next-intl/server'
 import { ROUTES } from '@/config/routes'
 
@@ -42,6 +43,10 @@ export default async function ShopPage({ params }: ShopPageProps) {
         title={t('page.heroTitle')}
         subtitle={t('page.heroSubtitle')}
       />
+
+      {/* Mission anchor — frames the shop as the nonprofit it is, not a
+          generic second-hand vendor. Live impact + methodology link. */}
+      <MissionStrip />
 
       {/* Routing Options */}
       <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-neutral-900" id="routing">
