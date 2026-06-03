@@ -19,6 +19,7 @@ import {
   formatAmountCHF,
   DONATION_TYPES,
 } from '@/config/donations'
+import { DeviceJourney, type JourneyItem } from '@/components/dashboard/DeviceJourney'
 
 interface Donation {
   id: string
@@ -40,6 +41,11 @@ interface Donation {
   receipt_sent: boolean
   // Dates
   created_at: string
+  // Journey (device donations only)
+  journey?: {
+    total_items: number
+    items: JourneyItem[]
+  }
 }
 
 export default function DonationsDashboard() {
@@ -224,6 +230,14 @@ export default function DonationsDashboard() {
                         {donation.receipt_sent && ` • ${t('receiptSent')}`}
                       </span>
                     </div>
+
+                    {/* Device journey */}
+                    {donation.donation_type === DONATION_TYPES.DEVICE && donation.journey && (
+                      <DeviceJourney
+                        totalItems={donation.journey.total_items}
+                        items={donation.journey.items}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

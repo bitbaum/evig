@@ -10,7 +10,6 @@ import { getCompactMetrics } from '@/data/impact-metrics'
 import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
-import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { CommunityStats } from '@/components/community/CommunityStats'
 import { DESIGN_TOKENS } from '@/lib/design/tokens'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
@@ -229,7 +228,7 @@ export default async function Home() {
             </Heading>
           </div>
 
-          <div className="grid gap-6 sm:gap-8 lg:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
             {actionCards.map((card) => {
               const badge = DESIGN_TOKENS.iconBadges[card.theme]
               const primaryBtn = DESIGN_TOKENS.buttons.primary[card.theme]
@@ -341,14 +340,9 @@ export default async function Home() {
         </div>
       </div>
 
-      {/* Section 5: Newsletter */}
-      <div className="bg-white dark:bg-neutral-900 py-12 sm:py-16 border-t border-neutral-100 dark:border-white/[0.06]">
-        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 text-center">
-          <NewsletterSignup
-            source="homepage-footer"
-          />
-        </div>
-      </div>
+      {/* Newsletter signup intentionally lives only in the global Footer
+          (see src/components/layout/Footer.tsx). Rendering it again on
+          this page was a DRY/UX duplication. */}
     </div>
   )
 }

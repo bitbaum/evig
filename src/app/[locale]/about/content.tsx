@@ -44,7 +44,7 @@ export default async function AboutContent() {
             <div className="relative">
               <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.08]">
                 <Image
-                  src="/images/Article Pics/storefront.png"
+                  src="/images/Article Pics/storefront.webp"
                   alt={`${ORG.name} ${t('mission.imageAlt')}`}
                   fill
                   className="object-cover"

@@ -23,4 +23,5 @@ export * from './protocols'
 export * from './timecards'
 export * from './subscriptions'
 export * from './referral'
+export * from './projects'
 // misc is now a backward-compat re-export barrel; index owns the canonical exports above

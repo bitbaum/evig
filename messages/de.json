@@ -5138,6 +5138,37 @@
             "prompt": "Im Kontext des Upcycling-Projekts (Aufgaben zu CE-Konformität, offene Frage zu Produkthaftung): brainstorme, wie die Verantwortung für CE und Haftung bei Serienproduktion in geschützten Werkstätten geregelt werden kann. Schlage Modelle vor (Fachingenieur, Partner-Übernahme, Zertifizierung), Risiken und wie man sie minimiert, unter Berücksichtigung der Prioritäten (Elektronik-Know-how Partner wie Drahtzug)."
           }
         ]
+      },
+      "needs": {
+        "title": "Was wir brauchen",
+        "intro": "Konkrete Ressourcen, die das Projekt jetzt voranbringen. Klicke auf einen Bedarf, um dein Angebot zu machen — wir melden uns innerhalb weniger Werktage.",
+        "loading": "Bedarfe werden geladen ...",
+        "empty": "Aktuell sind alle Bedarfe abgedeckt. Danke!",
+        "helpCta": "Ich kann helfen",
+        "dialogTitle": "Hilfe anbieten",
+        "dialogIntro": "Erzähl uns kurz, wie du beitragen kannst. Wir melden uns innerhalb weniger Werktage.",
+        "fields": {
+          "name": "Name",
+          "email": "E-Mail",
+          "phone": "Telefon (optional)",
+          "organization": "Organisation (optional)",
+          "message": "Dein Angebot"
+        },
+        "messagePlaceholder": "Was bringst du mit? Hardware, Zeit, Fachwissen, Kontakte?",
+        "submitting": "Wird gesendet ...",
+        "submit": "Angebot senden",
+        "successTitle": "Danke! Wir haben dein Angebot erhalten.",
+        "successBody": "Eine Bestätigung ist an deine E-Mail-Adresse unterwegs. Wir melden uns in Kürze.",
+        "errorGeneric": "Etwas ist schiefgelaufen. Bitte versuche es noch einmal.",
+        "errorTooMany": "Zu viele Anfragen. Bitte versuche es später nochmal.",
+        "typeLabels": {
+          "expertise": "Fachwissen",
+          "hardware": "Hardware",
+          "partner_intro": "Partner-Kontakt",
+          "funding": "Förderung",
+          "volunteer_time": "Freiwilligen-Einsatz"
+        },
+        "cancel": "Schliessen"
       }
     }
   },
@@ -6502,7 +6533,29 @@
       "receiptInfoTitle": "Hinweis zu Spendenquittungen",
       "receiptInfoText": "RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter",
       "loadError": "Fehler beim Laden der Spenden",
-      "networkError": "Netzwerkfehler beim Laden der Daten"
+      "networkError": "Netzwerkfehler beim Laden der Daten",
+      "journey": {
+        "heading": "Reise des Geräts",
+        "awaiting": "Wir holen das Gerät ab oder warten auf die Annahme.",
+        "totalItems": "{count, plural, =0 {Keine Geräte} one {# Gerät} other {# Geräte}}",
+        "countRehomed": "{count, plural, one {# weitergegeben} other {# weitergegeben}}",
+        "countListed": "{count, plural, one {# im Shop} other {# im Shop}}",
+        "countRefurbished": "{count, plural, one {# aufbereitet} other {# aufbereitet}}",
+        "countReceived": "{count, plural, one {# eingegangen} other {# eingegangen}}",
+        "countParts": "{count, plural, one {# als Ersatzteile} other {# als Ersatzteile}}",
+        "countRecycled": "{count, plural, one {# recycelt} other {# recycelt}}",
+        "viewInShop": "Im Shop ansehen",
+        "viewInShopNumbered": "Im Shop ansehen (#{index})",
+        "stage": {
+          "awaiting": "Erwartet",
+          "received": "Eingegangen",
+          "refurbished": "Aufbereitet",
+          "listed": "Im Shop",
+          "rehomed": "Weitergegeben",
+          "parts": "Ersatzteile",
+          "recycled": "Recycelt"
+        }
+      }
     },
     "sellerProfile": {
       "backToDashboard": "Zurück zum Dashboard",
@@ -6800,8 +6853,10 @@
       "messageSent": "Nachricht an {name} gesendet!"
     },
     "co2Badge": {
-      "tooltip": "Geschätzte CO₂-Einsparung gegenüber einem Neugerät (Fraunhofer IZM 2023)",
-      "saved": "~{amount} kg CO₂ eingespart"
+      "tooltip": "Geschätzte CO₂-Einsparung gegenüber einem Neugerät. Methodik & Quellen anzeigen.",
+      "saved": "~{amount} kg CO₂ vermieden",
+      "estimate": "Schätzung",
+      "methodologyLink": "Wie berechnet?"
     },
     "geschichteSection": {
       "badge": "Unsere Geschichte",
@@ -7217,6 +7272,85 @@
         "workshop": "Workshop",
         "service": "Dienstleistung",
         "other": "Einreichung"
+      }
+    },
+    "projects": {
+      "sidebar": "Öffentliche Projekte",
+      "pageTitle": "Öffentliche Projekte",
+      "pageDescription": "Verwalte den Ressourcenbedarf öffentlich sichtbarer Projekte und triagiere eingehende Beiträge.",
+      "detailDescription": "Bedarfe und eingehende Beiträge",
+      "detailTitle": "Projekt: {slug}",
+      "publicPageLink": "Öffentliche Seite",
+      "fallbackTaskProjectLabel": "Aufgaben-Projekt",
+      "stats": {
+        "total": "Projekte gesamt",
+        "active": "Aktiv",
+        "openNeeds": "Offene Bedarfe",
+        "newContributions": "Neue Beiträge"
+      },
+      "empty": {
+        "title": "Noch keine öffentlichen Projekte",
+        "description": "Projekte werden über Migration angelegt (Slug muss zur i18n-Projekt-Seite passen)."
+      },
+      "card": {
+        "inactive": "Inaktiv",
+        "openNeeds": "Offene Bedarfe",
+        "newContributions": "Neue Beiträge"
+      },
+      "needs": {
+        "title": "Bedarfe",
+        "subtitle": "Was das Projekt jetzt braucht. Öffentlich sichtbar, sobald Status = \"Offen\".",
+        "new": "Neuer Bedarf",
+        "addCancel": "Abbrechen",
+        "addSubmit": "Hinzufügen",
+        "placeholderTitle": "Titel",
+        "placeholderDescription": "Beschreibung",
+        "placeholderQuantity": "Zielmenge (optional)",
+        "placeholderUnit": "Einheit (z.B. Monitor, CHF)",
+        "placeholderQuantityShort": "Menge",
+        "placeholderUnitShort": "Einheit",
+        "confirmDelete": "Bedarf wirklich löschen?",
+        "errorSave": "Speichern fehlgeschlagen",
+        "errorDelete": "Löschen fehlgeschlagen",
+        "errorCreate": "Erstellen fehlgeschlagen",
+        "tooltipSave": "Speichern",
+        "tooltipDelete": "Löschen",
+        "empty": "Noch keine Bedarfe definiert.",
+        "fieldType": "Typ",
+        "fieldTitle": "Titel",
+        "fieldStatus": "Status"
+      },
+      "contributions": {
+        "title": "Eingehende Beiträge",
+        "subtitle": "Inbox für Angebote von der öffentlichen Projekt-Seite.",
+        "filterAll": "Alle",
+        "emptyAll": "Keine Beiträge.",
+        "emptyFiltered": "Keine Beiträge im Status „{status}\".",
+        "needFallback": "Allgemein",
+        "needLabel": "Bedarf",
+        "notesPlaceholder": "Interne Notizen (nicht sichtbar für Absender)",
+        "lastEdited": "Zuletzt bearbeitet von {name} am {date}",
+        "tooltipSave": "Speichern",
+        "errorSave": "Speichern fehlgeschlagen"
+      },
+      "typeLabels": {
+        "expertise": "Fachwissen",
+        "hardware": "Hardware",
+        "partner_intro": "Partner-Kontakt",
+        "funding": "Förderung",
+        "volunteer_time": "Freiwilligen-Einsatz"
+      },
+      "needStatusLabels": {
+        "open": "Offen",
+        "matched": "Zugeordnet",
+        "fulfilled": "Erfüllt",
+        "archived": "Archiviert"
+      },
+      "contributionStatusLabels": {
+        "new": "Neu",
+        "contacted": "Kontaktiert",
+        "accepted": "Angenommen",
+        "declined": "Abgelehnt"
       }
     }
   }

@@ -206,7 +206,7 @@ export const aboutConfig: AboutPageConfig = {
     }
   ],
   image: {
-    src: '/images/Article Pics/storefront.png',
+    src: '/images/Article Pics/storefront.webp',
     alt: `${ORG.name} Schaufenster mit Computern und Geräten`
   },
   cta: {

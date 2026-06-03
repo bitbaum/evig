@@ -84,21 +84,43 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
 
     if (permissions !== undefined) {
       update.staffPermissions = permissions
-
       // Also set is_staff = true if granting permissions
-      if (permissions.length > 0) {
-        update.isStaff = true
-      }
+      if (permissions.length > 0) update.isStaff = true
+    }
 
-      // Log permissions change
-      logPermissionsChange(
+    if (newSuperAdminStatus !== undefined) {
+      update.isSuperAdmin = newSuperAdminStatus
+    }
+
+    if (Object.keys(update).length === 0) {
+      return apiBadRequest('Keine Aktualisierungen angegeben')
+    }
+
+    // Bump tokenVersion so the Auth.js jwt callback re-fetches permissions
+    // on the user's next token refresh — see commit 3/3 of the
+    // JWT-stale-permissions sequence for the callback enforcement side.
+    update.tokenVersion = sql`${users.tokenVersion} + 1`
+
+    // ATOMICITY: write the permission change FIRST, then write the audit
+    // log entries with awaited synchronous inserts. If the permission
+    // update fails the route returns 500 before any audit log is written
+    // (no false positives in the audit table). If the audit log write
+    // fails after the update succeeds, logAuditEventSync's internal
+    // catch surfaces it via logger.error so ops can reconcile manually
+    // — but the permission state in DB is real. Full multi-statement
+    // atomicity would need either logAudit*-as-transaction-handle or a
+    // single-statement write+log, both larger refactors than warranted
+    // for this rare flow.
+    await db.update(users).set(update).where(eq(users.id, id))
+
+    if (permissions !== undefined) {
+      await logPermissionsChange(
         auditContext,
         targetUser.id,
         targetUser.email,
         targetUser.staff_permissions || [],
-        permissions
+        permissions,
       )
-
       logger.info('User permissions updated', {
         adminEmail: session.user.email,
         targetEmail: targetUser.email,
@@ -108,16 +130,12 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     }
 
     if (newSuperAdminStatus !== undefined) {
-      update.isSuperAdmin = newSuperAdminStatus
-
-      // Log super admin status change
-      logSuperAdminChange(
+      await logSuperAdminChange(
         auditContext,
         targetUser.id,
         targetUser.email,
-        newSuperAdminStatus
+        newSuperAdminStatus,
       )
-
       logger.info('User super admin status changed', {
         adminEmail: session.user.email,
         targetEmail: targetUser.email,
@@ -125,20 +143,6 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
         newStatus: newSuperAdminStatus,
       })
     }
-
-    if (Object.keys(update).length === 0) {
-      return apiBadRequest('Keine Aktualisierungen angegeben')
-    }
-
-    // Bump tokenVersion so the Auth.js jwt callback re-fetches
-    // permissions on the user's next token refresh. Without this, a
-    // demoted user keeps their old token's staff_permissions /
-    // isSuperAdmin claims until the 30-day maxAge expires or they
-    // manually re-login. See commit 3/3 of the JWT-stale-permissions
-    // sequence for the callback enforcement side.
-    update.tokenVersion = sql`${users.tokenVersion} + 1`
-
-    await db.update(users).set(update).where(eq(users.id, id))
 
     return apiSuccess({ message: 'Benutzerberechtigungen erfolgreich aktualisiert' })
   } catch (error) {

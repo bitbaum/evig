@@ -3,6 +3,11 @@ import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
 import { ORG } from "@/config/org";
 import { auth } from "@/auth";
+// Side-effect import: runs Zod env-var validation at app startup. If any
+// required env var is missing, the process throws with a clear listing
+// instead of failing later with confusing `undefined` errors deep in
+// the auth/db layer. See src/env.ts for the full schema.
+import "@/env";
 import "./globals.css";
 
 const inter = Inter({

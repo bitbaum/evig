@@ -52,7 +52,8 @@
     "transcription:start": "./services/transcription/start.sh",
     "transcription:bg": "[ -d services/transcription/.venv ] && (./services/transcription/start.sh &) || echo 'Transcription venv not found. Run: npm run transcription:setup'",
     "transcription:setup": "python3 -m venv services/transcription/.venv && services/transcription/.venv/bin/pip install faster-whisper flask",
-    "transcribe:local": "node scripts/transcribe-local-audio.mjs"
+    "transcribe:local": "node scripts/transcribe-local-audio.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.1",
@@ -98,6 +99,9 @@
     "uuid": "^14.0.0",
     "zod": "^4.3.6"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "eslint --fix"
+  },
   "devDependencies": {
     "@playwright/test": "^1.55.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -116,8 +120,10 @@
     "drizzle-kit": "^0.31.9",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.1",
+    "husky": "^9.1.7",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.2.0",
+    "lint-staged": "^16.4.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.5.10",
     "postcss-import": "^16.1.0",

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Package, Tag } from 'lucide-react'
 import type { InventoryProduct } from '@/lib/services/inventory-service'
 import { formatCHF } from '@/config/marketplace'
+import { CO2Badge } from '@/components/marketplace/CO2Badge'
 
 interface Props {
   product: InventoryProduct
@@ -44,6 +45,12 @@ export function ProductCard({ product, stockOneLabel }: Props) {
         </div>
         {product.description && (
           <p className="text-sm text-neutral-500 line-clamp-2">{product.description}</p>
+        )}
+        {/* CO₂ Badge — silently hides when category isn't a known KATEGORIEN
+            ID (shop inventory categories are sometimes free text from CSV
+            imports). Credibility-first: better empty than guessed. */}
+        {product.category && (
+          <CO2Badge category={product.category} className="text-xs" />
         )}
         <div className="mt-auto flex items-center justify-between pt-2">
           <div className="flex items-center gap-1.5">

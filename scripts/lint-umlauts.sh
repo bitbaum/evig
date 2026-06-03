@@ -133,6 +133,10 @@ for entry in "${PATTERNS[@]}"; do
     | grep -v 'new Set(' \
     | grep -v "'#" \
     | grep -v 'statutenaenderung' \
+    | grep -v 'not\.toMatch' \
+    | grep -v 'not\.toContain' \
+    | grep -v 'generateSlug' \
+    | grep -v 'proper umlaut' \
     || true)
 
   if [ -n "$matches" ]; then

@@ -347,16 +347,22 @@ export function logAdminAction(
 }
 
 /**
- * Log permissions change
+ * Log permissions change.
+ *
+ * Returns a promise resolving when the audit row is committed. Callers
+ * that must guarantee the log is durable before the response goes back
+ * (permission grants/revocations, super-admin changes) should await this.
+ * Buffered fast-path remains available via logAuditEvent for non-critical
+ * paths.
  */
-export function logPermissionsChange(
+export async function logPermissionsChange(
   ctx: AuditContext,
   targetUserId: string,
   targetEmail: string,
   oldPermissions: string[],
   newPermissions: string[]
-): void {
-  logAuditEvent({
+): Promise<void> {
+  await logAuditEventSync({
     event_type: 'permissions_changed',
     user_id: ctx.userId || null,
     ip_address: ctx.ipAddress,
@@ -374,15 +380,16 @@ export function logPermissionsChange(
 }
 
 /**
- * Log super admin status change
+ * Log super admin status change. Sync write — super-admin grants/revokes
+ * are compliance-critical and must not be lost in a buffer.
  */
-export function logSuperAdminChange(
+export async function logSuperAdminChange(
   ctx: AuditContext,
   targetUserId: string,
   targetEmail: string,
   newStatus: boolean
-): void {
-  logAuditEvent({
+): Promise<void> {
+  await logAuditEventSync({
     event_type: 'role_changed',
     user_id: ctx.userId || null,
     ip_address: ctx.ipAddress,

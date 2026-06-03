@@ -250,8 +250,14 @@ function notifyUnassigned(
       urgency || URGENCY_DEFAULT,
       baseUrl + '/admin/services'
     )
-    sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, emailContent).catch(err => {
-      logger.warn('Failed to send unassigned booking alert', { error: err, appointmentId })
-    })
+    // sendCustomEmail resolves { success: false } on failure rather than
+    // throw — catch both modes per the documented swallow pattern.
+    sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, emailContent)
+      .then(r => {
+        if (!r.success) {
+          logger.warn('Failed to send unassigned booking alert (resolved)', { error: r.error, appointmentId })
+        }
+      })
+      .catch(err => logger.warn('Failed to send unassigned booking alert (rejected)', { error: err, appointmentId }))
   }
 }

@@ -27,14 +27,14 @@ export default function RegisterPage() {
 
   if (status === 'loading' || status === 'authenticated') {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950">
         <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <Link
@@ -50,6 +50,6 @@ export default function RegisterPage() {
         </div>
         <RegistrationWizard />
       </div>
-    </main>
+    </div>
   )
 }

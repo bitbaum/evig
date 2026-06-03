@@ -105,7 +105,7 @@ describe('reviewTimecardSchema', () => {
 describe('timecardAssistSchema', () => {
   it('requires a prompt and period bounds', () => {
     const result = timecardAssistSchema.safeParse({
-      prompt: 'Normale Woche ausfuellen',
+      prompt: 'Normale Woche ausfüllen',
       period_start: '2026-05-11',
       period_end: '2026-05-17',
     })

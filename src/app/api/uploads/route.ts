@@ -63,6 +63,12 @@ export const POST = withAuth(async (request, session) => {
 
       const arrayBuffer = await file.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
+
+      // Re-check size on the actual buffer — file.size is reported by the
+      // browser and can be spoofed or wrong for streamed/chunked uploads.
+      if (buffer.byteLength > FILE_SIZE_LIMITS.UPLOAD_MAX) {
+        return apiBadRequest('Datei zu gross (max 10MB)')
+      }
       const safeName = (file.name || `image_${i}`).replace(/[^a-zA-Z0-9_.-]/g, '_')
       const ext = path.extname(safeName).toLowerCase() || '.jpg'
       const base = path.basename(safeName, ext)

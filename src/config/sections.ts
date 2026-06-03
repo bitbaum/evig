@@ -672,6 +672,22 @@ export const SECTIONS: Record<string, SectionConfig> = {
     sidebarGroup: 'inhalte',
   },
 
+  projects: {
+    id: 'projects',
+    path: '/admin/projects',
+    ui: {
+      label: 'Öffentliche Projekte',
+      description: 'Öffentliche Projekte, Ressourcenbedarf und Beiträge',
+      icon: Lightbulb,
+      emoji: '🚀',
+      color: 'primary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 105.5,
+    category: 'management',
+    sidebarGroup: 'inhalte',
+  },
+
   approvals: {
     id: 'approvals',
     path: '/admin/approvals',

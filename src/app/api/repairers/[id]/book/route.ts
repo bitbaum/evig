@@ -209,9 +209,18 @@ export const POST = withAuth<{ id: string }>(async (
         description,
         appointmentUrl
       )
-      sendCustomEmail(repairerUser.email, emailContent).catch(err => {
-        logger.warn('Failed to send new booking email to repairer', { error: err, appointmentId: result.id })
-      })
+      // sendCustomEmail resolves { success: false } on SMTP/Listmonk failure
+      // rather than throwing — bare .catch() only catches actual rejections so
+      // resolved-failures slip through silently. Inspect both modes so ops
+      // can grep for the (resolved) vs (rejected) suffix. Same pattern as
+      // documented fixes in inquiry/route.ts and dropoff route.
+      sendCustomEmail(repairerUser.email, emailContent)
+        .then(r => {
+          if (!r.success) {
+            logger.warn('Failed to send new booking email to repairer (resolved)', { error: r.error, appointmentId: result.id })
+          }
+        })
+        .catch(err => logger.warn('Failed to send new booking email to repairer (rejected)', { error: err, appointmentId: result.id }))
     }
 
     logger.info('Appointment booked with repairer', {

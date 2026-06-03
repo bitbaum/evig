@@ -50,7 +50,7 @@ export default function SubmitPostPage() {
 
   if (submitStatus === 'success') {
     return (
-      <main>
+      <div>
         {hero}
         <div className="container mx-auto px-4 py-16 max-w-2xl text-center">
           <div className="card-shell rounded-lg p-12">
@@ -71,12 +71,12 @@ export default function SubmitPostPage() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main>
+    <div>
       {hero}
 
       <div className="container mx-auto px-4 py-12 max-w-4xl">
@@ -268,6 +268,6 @@ export default function SubmitPostPage() {
           )}
         </form>
       </div>
-    </main>
+    </div>
   )
 }

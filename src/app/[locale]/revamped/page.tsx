@@ -116,7 +116,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               <div className="relative">
                 <div className="relative rounded-2xl overflow-hidden border border-neutral-200 dark:border-white/[0.08] aspect-[4/3]">
                   <Image
-                    src="/images/certification/revamped-laptop-user.jpg"
+                    src="/images/certification/revamped-laptop-user.webp"
                     alt="Woman with pink hair using a laptop with REVAMPED certification sticker"
                     fill
                     className="object-cover"
@@ -228,7 +228,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               <div className="text-center">
                 <div className="bg-white dark:bg-neutral-900 p-12 rounded-2xl border border-neutral-200 dark:border-white/[0.08] mb-6">
                   <Image
-                    src="/images/certification/sticker-1.png"
+                    src="/images/certification/sticker-1.webp"
                     alt="REVAMPED certification sticker design"
                     width={160}
                     height={160}
@@ -241,7 +241,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               <div className="text-center">
                 <div className="bg-white dark:bg-neutral-900 p-12 rounded-2xl border border-neutral-200 dark:border-white/[0.08] mb-6">
                   <Image
-                    src="/images/certification/sticker-2.png"
+                    src="/images/certification/sticker-2.webp"
                     alt="REVAMPED certification sticker variant"
                     width={160}
                     height={160}

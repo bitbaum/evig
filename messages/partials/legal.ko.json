@@ -1,0 +1,225 @@
+{
+  "agb": {
+    "meta": {
+      "title": "Terms and Conditions",
+      "description": "Terms and Conditions of revamp-it"
+    },
+    "title": "Terms and Conditions",
+    "section1": {
+      "title": "1. Scope",
+      "body": "These Terms and Conditions (T&Cs) apply to all services and offers of {legalName}, {address}."
+    },
+    "section2": {
+      "title": "2. Services",
+      "intro": "{orgName} is a non-profit association committed to the sustainable refurbishment and reuse of IT equipment. Our services include:",
+      "items": [
+        "Refurbishment and sale of second-hand IT equipment",
+        "IT repair services",
+        "Workshops and training",
+        "P2P marketplace for second-hand devices",
+        "IT help and support"
+      ]
+    },
+    "section3": {
+      "title": "3. Prices and Payment",
+      "body": "All prices are in Swiss Francs (CHF) including VAT, unless stated otherwise. Payment terms are specified for each offer."
+    },
+    "section4": {
+      "title": "4. Conclusion of Contract",
+      "body": "A contract is concluded by placing an order via the platform, in the shop or by e-mail, followed by confirmation from {orgName}. Representations on the website constitute a non-binding invitation to submit an offer."
+    },
+    "section5": {
+      "title": "5. Right of Withdrawal",
+      "body": "For in-store purchases there is no statutory right of withdrawal, as Swiss law does not provide for this in physical shops. For online purchases, we grant a voluntary right of return of 14 days from receipt, provided the goods are returned unused and in their original packaging.",
+      "contactLabel": "Contact:"
+    },
+    "section6": {
+      "title": "6. Warranty",
+      "body": "{orgName} provides a warranty on refurbished devices in accordance with the applicable legal provisions. Exact warranty terms are communicated at the point of purchase. For devices sold via the P2P marketplace by third parties, {orgName} assumes no warranty."
+    },
+    "section7": {
+      "title": "7. Liability",
+      "body": "{orgName} is liable within the scope of the applicable legal provisions. Liability for minor negligence is excluded to the extent permitted by law."
+    },
+    "section8": {
+      "title": "8. Data Protection",
+      "body": "Personal data is processed in accordance with our privacy policy. Registered users can export their data at any time.",
+      "privacyLinkLabel": "privacy policy"
+    },
+    "section9": {
+      "title": "9. Final Provisions",
+      "body": "Should individual provisions of these T&Cs prove invalid, the validity of the remaining provisions is not affected. Swiss law applies. The place of jurisdiction is Zurich, Switzerland."
+    },
+    "section10": {
+      "title": "10. Changes",
+      "body": "{orgName} reserves the right to change these T&Cs at any time. The current version is available on this page. Legal information about the provider can be found in the legal notice.",
+      "impressumLinkLabel": "legal notice"
+    },
+    "asOf": "As of: April 2026"
+  },
+  "datenschutz": {
+    "meta": {
+      "title": "Privacy Policy",
+      "description": "Privacy Policy of revamp-it"
+    },
+    "title": "Privacy Policy",
+    "section1": {
+      "title": "1. Data Controller"
+    },
+    "section2": {
+      "title": "2. Collection and Processing of Personal Data",
+      "intro": "We collect personal data when you register on our platform, use our services or get in touch with us. This includes:",
+      "items": [
+        "Name and e-mail address (upon registration)",
+        "Contact details (for enquiries and bookings)",
+        "Usage data (when using the platform)"
+      ]
+    },
+    "section3": {
+      "title": "3. Purpose of Data Processing",
+      "intro": "Your data is used for:",
+      "items": [
+        "Providing and managing your user account",
+        "Carrying out repairs and services",
+        "Managing workshop registrations",
+        "Operating the P2P marketplace",
+        "Communication regarding our offers (with consent only)"
+      ]
+    },
+    "section4": {
+      "title": "4. Data Disclosure",
+      "body": "Your data is not sold to third parties. Disclosure only occurs where necessary to provide our services (e.g. to repair providers for booked repairs) or where we are legally required to do so."
+    },
+    "section5": {
+      "title": "5. Data Security",
+      "body": "We implement technical and organisational measures to protect your data against unauthorised access, loss or misuse. Passwords are stored exclusively in hashed form."
+    },
+    "section6": {
+      "title": "6. Cookies",
+      "body": "Our platform uses functional cookies for session management and authentication. Analytical cookies are only set with your consent."
+    },
+    "section7": {
+      "title": "7. Your Rights",
+      "intro": "You have the right to:",
+      "items": [
+        "Access your stored data",
+        "Correct inaccurate data",
+        "Delete your data",
+        "Restrict processing",
+        "Data portability (data export)",
+        "Revoke granted consents"
+      ],
+      "exportText": "Registered users can download a full copy of their data at any time under",
+      "exportLink": "Settings → Privacy",
+      "contactText": "For all other enquiries, please contact:"
+    },
+    "section8": {
+      "title": "8. Retention Period",
+      "body": "We store your personal data only as long as necessary for the stated purposes or as required by statutory retention obligations. Account and profile data is removed after account deletion, unless legal obligations (e.g. fiscal retention of invoices) prevent this."
+    },
+    "section9": {
+      "title": "9. Legal Basis",
+      "body": "Processing is based on the Swiss Federal Act on Data Protection (FADP) and, where applicable, on Art. 6(1) GDPR (contract performance, legitimate interests, consent)."
+    },
+    "section10": {
+      "title": "10. Applicable Law",
+      "body": "This privacy policy is subject to the Swiss Federal Act on Data Protection (FADP) and, where applicable, the General Data Protection Regulation (GDPR).",
+      "impressumLinkLabel": "legal notice"
+    },
+    "asOf": "As of: March 2026"
+  },
+  "impressum": {
+    "meta": {
+      "title": "Legal Notice",
+      "description": "Legal notice and legal information"
+    },
+    "title": "Legal Notice",
+    "legalInfo": "Information pursuant to Swiss law",
+    "organisation": "Organisation",
+    "contact": "Contact",
+    "emailLabel": "E-mail:",
+    "phoneLabel": "Phone:",
+    "authorised": "Authorised Representative",
+    "authorisedValue": "The Board",
+    "legalForm": "Legal Form",
+    "legalFormValue": "Association under Art. 60 et seq. ZGB (Swiss Civil Code)",
+    "purpose": "Purpose",
+    "purposeText": "{description} {orgName} is a non-profit association committed to the free exchange of technology, the promotion of open-source hardware and software, and the sustainable refurbishment and reuse of IT equipment.",
+    "disclaimer": "Disclaimer",
+    "disclaimerP1": "The author accepts no liability whatsoever regarding the accuracy, correctness, currency, reliability and completeness of the information on this website.",
+    "disclaimerP2": "Liability claims against the author for material or immaterial damage arising from access to or use or non-use of published information, from misuse of the connection or from technical malfunctions are excluded.",
+    "disclaimerP3": "All offers are non-binding. The author expressly reserves the right to change, supplement or delete parts of the pages or the entire offering without prior notice, or to cease publication temporarily or permanently.",
+    "linksDisclaimer": "Disclaimer for Links and References",
+    "linksDisclaimerText": "References and links to third-party websites are outside our area of responsibility. All liability for such websites is disclaimed. Access to and use of such websites is at the sole risk of the user concerned.",
+    "copyright": "Copyright",
+    "copyrightText": "The copyright and all other rights to content, images, photos or other files on this website belong exclusively to {legalName} or the specifically named rights holders. The prior written consent of the copyright holders must be obtained for the reproduction of any elements.",
+    "furtherLegal": "Further Legal Information",
+    "furtherLegalText": "See also our privacy policy and our terms and conditions.",
+    "privacyLinkLabel": "privacy policy",
+    "agbLinkLabel": "terms and conditions",
+    "asOf": "As of: April 2026"
+  },
+  "transparenz": {
+    "meta": {
+      "title": "Transparency",
+      "description": "What we do and how we do it. An insight into our mission, figures and working methods."
+    },
+    "hero": {
+      "title": "Transparency",
+      "subtitle": "What we do and how we do it"
+    },
+    "mission": {
+      "title": "Our Mission",
+      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
+    },
+    "stats": {
+      "title": "Facts & Figures",
+      "detailLink": "View detailed impact figures"
+    },
+    "howWeWork": {
+      "title": "How We Work",
+      "subtitle": "Our three community platforms connect people with technology.",
+      "toPlatform": "Go to Platform",
+      "platforms": [
+        {
+          "title": "Marketplace",
+          "description": "Community platform for second-hand IT equipment. Users can create listings, buy and sell – free of charge.",
+          "href": "/marketplace"
+        },
+        {
+          "title": "IT Help",
+          "description": "Connecting volunteer technicians for computer repairs. Human-to-human help, local and straightforward.",
+          "href": "/it-hilfe"
+        },
+        {
+          "title": "Workshops",
+          "description": "Courses on Linux, hardware, programming and AI. Sharing knowledge and learning from each other – in person in Zurich.",
+          "href": "/workshops"
+        }
+      ]
+    },
+    "finances": {
+      "title": "Finances",
+      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members.",
+      "memberLink": "Become a member and gain access"
+    },
+    "board": {
+      "title": "Board",
+      "text": "{orgName} is run by a voluntary board. Contact:",
+      "joinCta": "Become a Member",
+      "donateCta": "Donate"
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go to Homepage",
+    "reportProblem": "Report a Problem"
+  },
+  "error": {
+    "title": "Something Went Wrong",
+    "description": "An unexpected error occurred. Try reloading the page — if the problem persists, please contact us.",
+    "retry": "Try Again",
+    "goHome": "Go to Homepage"
+  }
+}

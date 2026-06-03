@@ -5326,6 +5326,37 @@
             "prompt": "In the context of the Upcycling project (tasks on CE conformity, open question on product liability): brainstorm how responsibility for CE and liability in series production in sheltered workshops can be regulated. Suggest models (specialist engineer, partner takeover, certification), risks and how to minimize them, taking into account the priorities (electronics know-how partners like Drahtzug)."
           }
         ]
+      },
+      "needs": {
+        "title": "What we need",
+        "intro": "Concrete resources that will move this project forward. Click a need to make your offer — we reply within a few working days.",
+        "loading": "Loading needs ...",
+        "empty": "All needs are currently covered. Thank you!",
+        "helpCta": "I can help",
+        "dialogTitle": "Offer help",
+        "dialogIntro": "Tell us briefly how you can contribute. We reply within a few working days.",
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "phone": "Phone (optional)",
+          "organization": "Organisation (optional)",
+          "message": "Your offer"
+        },
+        "messagePlaceholder": "What can you bring? Hardware, time, expertise, contacts?",
+        "submitting": "Sending ...",
+        "submit": "Send offer",
+        "successTitle": "Thanks! We received your offer.",
+        "successBody": "A confirmation is on its way to your inbox. We will be in touch shortly.",
+        "errorGeneric": "Something went wrong. Please try again.",
+        "errorTooMany": "Too many requests. Please try again later.",
+        "typeLabels": {
+          "expertise": "Expertise",
+          "hardware": "Hardware",
+          "partner_intro": "Partner intro",
+          "funding": "Funding",
+          "volunteer_time": "Volunteer time"
+        },
+        "cancel": "Close"
       }
     }
   },
@@ -6439,7 +6470,29 @@
       "receiptInfoTitle": "Note on donation receipts",
       "receiptInfoText": "RevampIT is a non-profit association. For donations of CHF 100 or more, we are happy to issue a donation confirmation for your tax return. Contact us at",
       "loadError": "Error loading donations",
-      "networkError": "Network error loading data"
+      "networkError": "Network error loading data",
+      "journey": {
+        "heading": "Device journey",
+        "awaiting": "We are collecting the device or waiting for drop-off.",
+        "totalItems": "{count, plural, =0 {No devices} one {# device} other {# devices}}",
+        "countRehomed": "{count, plural, one {# rehomed} other {# rehomed}}",
+        "countListed": "{count, plural, one {# in shop} other {# in shop}}",
+        "countRefurbished": "{count, plural, one {# refurbished} other {# refurbished}}",
+        "countReceived": "{count, plural, one {# received} other {# received}}",
+        "countParts": "{count, plural, one {# used for parts} other {# used for parts}}",
+        "countRecycled": "{count, plural, one {# recycled} other {# recycled}}",
+        "viewInShop": "View in shop",
+        "viewInShopNumbered": "View in shop (#{index})",
+        "stage": {
+          "awaiting": "Awaiting",
+          "received": "Received",
+          "refurbished": "Refurbished",
+          "listed": "In shop",
+          "rehomed": "Rehomed",
+          "parts": "Parts",
+          "recycled": "Recycled"
+        }
+      }
     },
     "sellerProfile": {
       "backToDashboard": "Back to dashboard",
@@ -6736,8 +6789,10 @@
       "messageSent": "Message sent to {name}!"
     },
     "co2Badge": {
-      "tooltip": "Estimated CO₂ savings compared to a new device (Fraunhofer IZM 2023)",
-      "saved": "~{amount} kg CO₂ saved"
+      "tooltip": "Estimated CO₂ savings vs buying new. Click for method & sources.",
+      "saved": "~{amount} kg CO₂ avoided",
+      "estimate": "Estimate",
+      "methodologyLink": "How is this calculated?"
     },
     "geschichteSection": {
       "badge": "Our History",

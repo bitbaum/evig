@@ -120,6 +120,47 @@ export const DONATION_STATUS_LABELS: Record<DonationStatus, string> = {
 }
 
 // =============================================================================
+// DEVICE JOURNEY STAGES
+// =============================================================================
+// Stages a donated device passes through after intake. Computed from
+// inventory_items + marketplace_listings rows linked via sourceDonationId.
+// Ordered by progression so UI can rank "most advanced state achieved" per donation.
+
+export const DONATION_JOURNEY_STAGES = {
+  AWAITING: 'awaiting',       // no inventory_item yet
+  RECEIVED: 'received',       // inventory exists, checklist incomplete
+  REFURBISHED: 'refurbished', // refurbish tier + checklist complete, not yet listed
+  LISTED: 'listed',           // marketplace_listing published
+  REHOMED: 'rehomed',         // sold to a recipient
+  PARTS: 'parts',             // harvested for spare parts (parts tier, complete)
+  RECYCLED: 'recycled',       // SWICO-certified disposal (recycle tier, complete)
+} as const
+
+export type DonationJourneyStage = typeof DONATION_JOURNEY_STAGES[keyof typeof DONATION_JOURNEY_STAGES]
+
+// Progress order — higher = more advanced. parts/recycled are terminal-positive
+// (mission-aligned end states) and rank alongside rehomed.
+export const DONATION_JOURNEY_STAGE_ORDER: Record<DonationJourneyStage, number> = {
+  [DONATION_JOURNEY_STAGES.AWAITING]: 0,
+  [DONATION_JOURNEY_STAGES.RECEIVED]: 1,
+  [DONATION_JOURNEY_STAGES.REFURBISHED]: 2,
+  [DONATION_JOURNEY_STAGES.LISTED]: 3,
+  [DONATION_JOURNEY_STAGES.PARTS]: 4,
+  [DONATION_JOURNEY_STAGES.RECYCLED]: 4,
+  [DONATION_JOURNEY_STAGES.REHOMED]: 4,
+}
+
+export const DONATION_JOURNEY_STAGE_LABELS: Record<DonationJourneyStage, string> = {
+  [DONATION_JOURNEY_STAGES.AWAITING]: 'Erwartet',
+  [DONATION_JOURNEY_STAGES.RECEIVED]: 'Eingegangen',
+  [DONATION_JOURNEY_STAGES.REFURBISHED]: 'Aufbereitet',
+  [DONATION_JOURNEY_STAGES.LISTED]: 'Im Shop',
+  [DONATION_JOURNEY_STAGES.REHOMED]: 'Weitergegeben',
+  [DONATION_JOURNEY_STAGES.PARTS]: 'Ersatzteile',
+  [DONATION_JOURNEY_STAGES.RECYCLED]: 'Recycelt',
+}
+
+// =============================================================================
 // DEVICE VALUE ESTIMATES (in CHF cents)
 // =============================================================================
 
@@ -242,4 +283,11 @@ export function getDonationStatusOptions(): Array<{ value: DonationStatus; label
     value,
     label: DONATION_STATUS_LABELS[value],
   }))
+}
+
+/**
+ * Get journey-stage label
+ */
+export function getDonationJourneyStageLabel(stage: string): string {
+  return DONATION_JOURNEY_STAGE_LABELS[stage as DonationJourneyStage] || stage
 }

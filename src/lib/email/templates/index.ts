@@ -111,6 +111,9 @@ export { notificationEmail } from './notification';
 // Inquiry (Mitmachen contact form)
 export { inquiryNotification, inquiryConfirmation } from './inquiry';
 
+// Project contributions (public project pages — "I can help" form)
+export { projectContributionNotification, projectContributionConfirmation } from './projects';
+
 // Donation drop-off announcement (public donate page form)
 export { donationDropoffNotification, donationDropoffConfirmation } from './donation-dropoff';
 

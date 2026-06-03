@@ -8,8 +8,10 @@ interface ProjectPageProps {
 }
 
 export function ProjectPage({ config }: ProjectPageProps) {
+  // The locale layout's <MainLayout> already provides a single <main>; we
+  // emit a plain <div> here to avoid nested-main invalid HTML / a11y issues.
   return (
-    <main className="min-h-screen">
+    <div className="min-h-screen">
       <ProjectHero hero={config.hero} />
 
       {config.sections.map((section, i) => (
@@ -17,7 +19,7 @@ export function ProjectPage({ config }: ProjectPageProps) {
       ))}
 
       {config.cta && <ProjectCallToAction cta={config.cta} />}
-    </main>
+    </div>
   )
 }
 

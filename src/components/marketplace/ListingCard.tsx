@@ -12,6 +12,7 @@ import { Star, MapPin, Heart, ShieldCheck } from 'lucide-react'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF, GRATIS_CONFIG, VERIFICATION_CONFIG, SPEC_DISPLAY_PRIORITY } from '@/config/marketplace'
 import { ListingImage } from './ListingImage'
+import { CO2Badge } from './CO2Badge'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { useTranslations } from 'next-intl'
@@ -20,6 +21,7 @@ export interface ListingCardData {
   id: string
   title: string
   price_chf: number
+  category: string
   condition: string
   is_revampit: boolean
   pickup_location: string | null
@@ -130,6 +132,13 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
                 {tag}
               </span>
             ))}
+          </div>
+        )}
+
+        {/* CO₂ Badge — only on full-size cards, links to methodology page */}
+        {!isCompact && listing.category && (
+          <div className="mb-2">
+            <CO2Badge category={listing.category} className="text-xs" />
           </div>
         )}
 

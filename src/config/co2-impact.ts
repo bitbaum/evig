@@ -2,16 +2,24 @@
  * CO2 Impact Configuration
  *
  * Estimates CO2 savings from reusing IT equipment instead of buying new.
- * Based on Fraunhofer IZM lifecycle analysis (2023):
- *   - Average IT device: ~285 kg CO2 for manufacturing per 5 kg device
- *   - Reuse avoids ~57 kg CO2 per kg of device weight
+ * The emission factor below is sourced from org-numbers.defaults.ts —
+ * single source of truth for every CO₂ figure with citations attached
+ * (see /transparenz/co2 page for the linked methodology).
  *
- * These are conservative estimates. Actual savings depend on
- * device type, manufacturing location, and replacement frequency.
+ * These are conservative estimates. Actual savings depend on device
+ * type, manufacturing location, and replacement frequency. Always
+ * label outputs with `~` and link to /transparenz/co2 — credibility
+ * comes from showing the math, not from the headline number.
  */
 
-/** kg CO2 saved per kg of reused device weight (Fraunhofer IZM 2023) */
-export const CO2_PER_KG = 57
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+
+/**
+ * kg CO₂e avoided per kg of refurbished device — derived from
+ * `co2_factor_per_kg_device` in `org-numbers.defaults.ts`. That entry
+ * carries methodology + sourceDocument + externalLink + lastVerified.
+ */
+export const CO2_PER_KG: number = getDefaultNumeric('co2_factor_per_kg_device')
 
 /**
  * Average weight (kg) for a generic IT device when no category data is available.
@@ -61,11 +69,21 @@ export const CATEGORY_WEIGHT_KG: Record<string, number> = {
 }
 
 /**
- * Estimate CO2 savings for a product listing.
- * Returns kg CO2 saved, or null if category is unknown.
+ * Estimate CO₂ savings for a product listing in kg CO₂e.
+ *
+ * Returns `null` if the category isn't in CATEGORY_WEIGHT_KG (callers
+ * should hide the badge entirely rather than display a fallback —
+ * showing 0 or a guessed number erodes credibility).
+ *
+ * Rounded to nearest 5 kg under 100, nearest 10 above — spurious
+ * precision ("287.4 kg") signals over-confidence. Always render with
+ * a `~` prefix and a link to /transparenz/co2 in the UI.
  */
 export function estimateCO2Savings(category: string): number | null {
   const weightKg = CATEGORY_WEIGHT_KG[category]
   if (weightKg == null) return null
-  return Math.round(weightKg * CO2_PER_KG)
+  const raw = weightKg * CO2_PER_KG
+  if (raw <= 0) return null
+  const step = raw < 100 ? 5 : 10
+  return Math.round(raw / step) * step
 }

@@ -28,6 +28,8 @@ export const ROUTES = {
     taskProjects:       '/admin/tasks/projects',
     taskProjectNew:     '/admin/tasks/projects/new',
     taskProject:        (id: string) => `/admin/tasks/projects/${id}`,
+    projects:           '/admin/projects',
+    project:            (slug: string) => `/admin/projects/${slug}`,
     team:               '/admin/team',
     teamActivity:       '/admin/team/activity',
     workshops:          '/admin/workshops',

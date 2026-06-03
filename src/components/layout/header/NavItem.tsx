@@ -1,10 +1,18 @@
 'use client'
 
 /**
- * Navigation item with optional mega menu dropdown
+ * Navigation item with optional mega menu dropdown.
+ *
+ * Keyboard model (WCAG 2.1 — APG menubar pattern):
+ *   • Trigger Enter / Space: toggle open. ArrowDown: open + focus first sub-link.
+ *   • While open, Escape closes and returns focus to the trigger.
+ *   • Tab leaves the dropdown naturally (no focus trap — menubars aren't dialogs).
+ *
+ * Hover behavior is preserved for pointer users (mouse-only opening was the
+ * a11y bug — we keep mouse but add keyboard equivalents, not replace).
  */
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback, type KeyboardEvent as ReactKeyboardEvent } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
@@ -26,6 +34,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
   const hasDropdown = item.subItems && item.subItems.length > 0
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLAnchorElement>(null)
 
   const handleMouseEnter = () => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
@@ -44,10 +53,65 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
     }
   }
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsOpen(false)
     onAnyClose()
+  }, [onAnyClose])
+
+  // Focus the first focusable element inside the open dropdown.
+  // Used by ArrowDown on the trigger and by Tab-into-dropdown.
+  const focusFirstInDropdown = useCallback(() => {
+    if (!containerRef.current) return
+    const first = containerRef.current.querySelector<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    )
+    if (first && first !== triggerRef.current) {
+      first.focus()
+    } else {
+      // Skip the trigger itself — go to the next one
+      const all = containerRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      const filtered = Array.from(all).filter(el => el !== triggerRef.current)
+      filtered[0]?.focus()
+    }
+  }, [])
+
+  // Trigger keyboard handler — Enter/Space toggles, ArrowDown opens + focuses.
+  const handleTriggerKeyDown = (e: ReactKeyboardEvent<HTMLAnchorElement>) => {
+    if (!hasDropdown) return
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      const next = !isOpen
+      setIsOpen(next)
+      next ? onAnyOpen() : onAnyClose()
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      if (!isOpen) {
+        setIsOpen(true)
+        onAnyOpen()
+      }
+      // Wait one tick so the dropdown DOM exists before focusing.
+      requestAnimationFrame(() => focusFirstInDropdown())
+    } else if (e.key === 'Escape' && isOpen) {
+      e.preventDefault()
+      handleClose()
+      triggerRef.current?.focus()
+    }
   }
+
+  // Global Escape handler — close the dropdown from anywhere inside it.
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose()
+        triggerRef.current?.focus()
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isOpen, handleClose])
 
   useEffect(() => {
     return () => {
@@ -61,7 +125,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
       <Link
         href={item.href}
         className={cn(
-          "relative px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400",
+          "relative px-4 py-2 text-sm font-medium text-neutral-600 dark:text-neutral-400 whitespace-nowrap",
           "hover:text-neutral-900 dark:hover:text-white transition-colors duration-200",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg"
         )}
@@ -84,10 +148,12 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
     >
       {/* Trigger */}
       <Link
+        ref={triggerRef}
         href={item.href}
         onMouseEnter={handleMouseEnter}
+        onKeyDown={handleTriggerKeyDown}
         className={cn(
-          "group inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg",
+          "group inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap",
           "transition-all duration-200",
           isOpen
             ? "text-neutral-900 bg-neutral-50 dark:text-white dark:bg-white/[0.06]"
@@ -100,7 +166,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         {label}
         <ChevronDown
           className={cn(
-            "w-3.5 h-3.5 text-neutral-500 transition-transform duration-200",
+            "w-3.5 h-3.5 text-neutral-500 transition-transform duration-200 motion-reduce:transition-none",
             isOpen && "rotate-180 text-primary-600 dark:text-primary-400"
           )}
         />

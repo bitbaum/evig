@@ -179,6 +179,11 @@ export const TABLE_NAMES = {
   // Product Taxonomy
   PRODUCT_ATTRIBUTES: 'product_attributes',
   PRODUCT_CATEGORIES: 'product_categories',
+
+  // Public Projects (resource matching)
+  PROJECTS: 'projects',
+  PROJECT_NEEDS: 'project_needs',
+  PROJECT_CONTRIBUTIONS: 'project_contributions',
 } as const;
 
 /**
