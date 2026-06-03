@@ -375,6 +375,16 @@
         "multiShopTitle": "Multiple shop channels?",
         "multiShopBody": "Our {orgName} online shop offers you the best selection of refurbished IT hardware. You can also find our range in the Shopware shop and the legacy system.",
         "currentShop": "Current online shop"
+      },
+      "otherPaths": {
+        "altTitle": "Other paths to affordable tech",
+        "altIntro": "Not everyone here is looking to buy. We also place devices with people who have limited means, and we gladly take your old hardware.",
+        "donateTitle": "Donate hardware",
+        "donateBody": "Working or repairable devices go to revamp-it — we refurbish them and pass them on.",
+        "donateCta": "Donation page",
+        "needTitle": "Need a device but can't afford one?",
+        "needBody": "Through the Compirat program, we place devices together with Caritas Zurich for people with limited means.",
+        "needCta": "See Compirat"
       }
     },
     "search": {

@@ -41,11 +41,11 @@ const serverEnvSchema = z.object({
 
   // --- Database --------------------------------------------------------------
   // One of DATABASE_URL (Neon / production) or DB_HOST+DB_NAME+DB_USER+DB_PASSWORD
-  // (local Docker development) must be set. We don't enforce here — getDbConfig
-  // does that and produces a clearer error.
-  DATABASE_URL: z.string().url().optional(),
+  // (local Docker development) must be set. PRESENCE-only validation;
+  // getDbConfig parses the URL/host and reports a clearer error if malformed.
+  DATABASE_URL: z.string().optional(),
   DB_HOST: z.string().optional(),
-  DB_PORT: z.string().regex(/^\d+$/).optional(),
+  DB_PORT: z.string().optional(),
   DB_NAME: z.string().optional(),
   DB_USER: z.string().optional(),
   DB_PASSWORD: z.string().optional(),
@@ -53,23 +53,32 @@ const serverEnvSchema = z.object({
   // --- Email -----------------------------------------------------------------
   // Email is required for password reset, verification, donations confirmations.
   // Without it, those flows silently fail (we already log the failures, but the
-  // user never gets the email). Required in production; optional in dev.
+  // user never gets the email). We validate PRESENCE only, not format —
+  // production environments may have legitimately weird shapes (e.g.
+  // `EMAIL_FROM=noreply` for relays that prepend a domain, or `EMAIL_PORT`
+  // set as an integer rather than string in some platforms). The email
+  // transport code in src/lib/email/* validates the values at use-time.
   EMAIL_HOST: z.string().min(1, 'EMAIL_HOST required for outbound email'),
   EMAIL_USER: z.string().min(1, 'EMAIL_USER required for outbound email'),
   EMAIL_PASS: z.string().min(1, 'EMAIL_PASS required for outbound email'),
-  EMAIL_FROM: z.string().email().optional(),
-  EMAIL_PORT: z.string().regex(/^\d+$/).optional().default('587'),
+  EMAIL_FROM: z.string().optional(),
+  EMAIL_PORT: z.string().optional(),
   EMAIL_SECURE: z.string().optional(),
 
   // --- App URL ---------------------------------------------------------------
-  NEXT_PUBLIC_SITE_URL: z.string().url('NEXT_PUBLIC_SITE_URL must be a full URL'),
-  NEXT_PUBLIC_API_URL: z.string().url().optional(),
+  // PRESENCE only — we used to enforce .url() but Vercel project envs sometimes
+  // hold values like `${VERCEL_URL}` that are valid at runtime but fail Zod's
+  // strict URL check at build time. Runtime consumers (next.config, metadata
+  // generators) handle malformed URLs gracefully.
+  NEXT_PUBLIC_SITE_URL: z.string().min(1, 'NEXT_PUBLIC_SITE_URL required'),
+  NEXT_PUBLIC_API_URL: z.string().optional(),
 
   // --- Optional integrations -------------------------------------------------
+  // Presence-only. Runtime code validates connectivity at first use.
   GROQ_API_KEY: z.string().optional(),
-  OLLAMA_URL: z.string().url().optional(),
+  OLLAMA_URL: z.string().optional(),
   OLLAMA_MODEL: z.string().optional(),
-  TRANSCRIPTION_URL: z.string().url().optional(),
+  TRANSCRIPTION_URL: z.string().optional(),
   REBOOT_CONTENT_TOKEN: z.string().optional(),
 
   // --- Runtime ---------------------------------------------------------------

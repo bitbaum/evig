@@ -5,7 +5,7 @@ import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { buttonClass } from '@/components/ui/button-class'
-import { Store, ShoppingCart, MapPin, Clock, ExternalLink, Map as MapIcon, Shield } from 'lucide-react'
+import { Store, ShoppingCart, MapPin, Clock, ExternalLink, Map as MapIcon, Shield, Heart, HandHelping } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { SHOPWARE_URL, STORE_ADDRESS, STORE_GOOGLE_MAPS_URL, STORE_OSM_URL } from '@/lib/constants'
 import { ORG, OPENING_HOURS } from '@/config/org'
@@ -144,6 +144,65 @@ export default async function ShopPage({ params }: ShopPageProps) {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission paths beyond "buy" — donor + affordability entry points.
+          Kept visually secondary to the two shop cards above so people who
+          DID come to buy aren't distracted; people who came to give or who
+          can't afford the shop find their path on the same page. */}
+      <section className="py-12 sm:py-16 bg-neutral-50 dark:bg-neutral-950 border-t border-neutral-200 dark:border-white/[0.06]" aria-label={t('page.otherPaths.altTitle')}>
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
+          <div className="text-center mb-8 sm:mb-10">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-2">
+              {t('page.otherPaths.altTitle')}
+            </h2>
+            <p className="text-sm sm:text-base text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
+              {t('page.otherPaths.altIntro')}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+            <Link
+              href="/get-involved/donate"
+              className="group flex gap-3 sm:gap-4 p-5 rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+            >
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+                <Heart className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  {t('page.otherPaths.donateTitle')}
+                </h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+                  {t('page.otherPaths.donateBody')}
+                </p>
+                <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                  {t('page.otherPaths.donateCta')} →
+                </span>
+              </div>
+            </Link>
+
+            <Link
+              href="/projects/compirat"
+              className="group flex gap-3 sm:gap-4 p-5 rounded-xl border border-neutral-200 dark:border-white/[0.06] bg-white dark:bg-neutral-900 hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
+            >
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
+                <HandHelping className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-semibold text-neutral-900 dark:text-white mb-1 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                  {t('page.otherPaths.needTitle')}
+                </h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-2">
+                  {t('page.otherPaths.needBody')}
+                </p>
+                <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                  {t('page.otherPaths.needCta')} →
+                </span>
+              </div>
+            </Link>
           </div>
         </div>
       </section>

@@ -421,6 +421,16 @@
         "multiShopTitle": "Mehrere Shop-Kanäle?",
         "multiShopBody": "Unser {orgName} Online-Shop bietet dir die beste Auswahl an aufgearbeiteter IT-Hardware. Alternativ findest du unser Sortiment auch im Shopware-Shop und im Legacy-System.",
         "currentShop": "Aktueller Online-Shop"
+      },
+      "otherPaths": {
+        "altTitle": "Andere Wege zu bezahlbarer Technik",
+        "altIntro": "Nicht alle landen hier, um zu kaufen — wir vermitteln auch Geräte an Menschen mit geringen Mitteln und nehmen gerne deine alte Hardware entgegen.",
+        "donateTitle": "Hardware spenden",
+        "donateBody": "Funktionstüchtige oder reparierbare Geräte an revamp-it geben — wir bereiten sie auf und geben sie weiter.",
+        "donateCta": "Zur Spenden­seite",
+        "needTitle": "Brauchst du ein Gerät und kannst es dir nicht leisten?",
+        "needBody": "Über das Compirat-Programm vermitteln wir gemeinsam mit Caritas Zürich Geräte an Menschen mit geringen Mitteln.",
+        "needCta": "Compirat ansehen"
       }
     },
     "search": {
