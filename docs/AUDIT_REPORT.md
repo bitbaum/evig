@@ -265,4 +265,47 @@ These warrant separate, focused exercises if specific concerns arise.
 - `npm run lint:umlauts` → **0 violations**.
 
 ### Single-commit decision
-Per session preference: all 9 phases land in a single commit. PR history shows the work as one atomic deliverable. Internal commit message lists each phase for bisect-ability.
+Per session preference: Phase A–I landed in a single commit (`75ef7e96`). PR history shows the work as one atomic deliverable. Internal commit message lists each phase for bisect-ability.
+
+---
+
+## Execution log (Phase J–O, follow-up round, 2026-06-03)
+
+### J — Mission UX on commerce pages
+- Extracted `fetchImpactStats` from `ImpactStatsSection` into shared `src/lib/impact-stats.ts` (SSOT).
+- New `<MissionStrip>` server component rendered above the fold on `/shop` + `/marketplace`. Shows "Jeder Kauf hält ein Gerät aus dem Müll" + live `soldDevices` count + `~co2SavedTons` CO₂ avoided + "Wie berechnet?" methodology link.
+- All commerce numbers now consume the same `fetchImpactStats` — homepage, methodology page, and strip cannot drift apart.
+
+### M — Sentry wiring (inert until DSN added)
+- `@sentry/nextjs` installed.
+- `src/instrumentation.ts` gates entirely on `SENTRY_DSN` env var — when absent, the Sentry SDK is never loaded (zero bundle impact, zero startup cost).
+- `src/sentry.server.config.ts` + `src/sentry.edge.config.ts` cover Node and edge runtimes with 10% trace sampling.
+- `SENTRY_DSN` added to `src/env.ts` schema as optional.
+- To enable: add `SENTRY_DSN` to Vercel env vars. Sourcemap upload via `withSentryConfig` deferred until the DSN exists.
+
+### N — Translation strategy
+- New script `npm run i18n:missing` writes per-locale missing-keys inventory (`messages/_missing/<locale>.json`, gitignored) in translator-friendly `{ key: { de, translation } }` shape.
+- 1,334 total missing keys across 6 non-DE locales — 125 of those per locale are admin strings (acceptable as DE fallback per team convention).
+- `docs/TRANSLATION.md` documents workflow, priority queue by audience impact, rough translator cost (~CHF 90–120 per locale), and why machine-translation is the wrong tool for UI.
+- `scripts/i18n-apply.mjs` reverse-merge script will land when the first translator returns work.
+
+### O — Dependency upgrade investigation
+- `docs/UPGRADE_PLAN.md` catalogs every outdated dep into 3 tiers:
+  - **Tier 1 (safe today):** patch/minor bumps via `npm update` — 30 min.
+  - **Tier 2 (dedicated branch):** React 19 + TypeScript 6 + ESLint 10 — bundle for shared verification cost. 1–2 days, defer 1–2 weeks for `next-auth` v5 GA + ecosystem.
+  - **Tier 3 (wait for ecosystem):** Tailwind 4 — major engine rewrite, wait 3–6 months for Next.js + recharts/framer-motion alignment.
+  - **Do-not-bump:** `@types/node` past Node 20 LTS, several `@types/*` packages with regressed numbering.
+- Removed `@types/puppeteer` (puppeteer ships its own types now — the stub on npm is for legacy puppeteer 5.x and was actively wrong).
+
+### L — DEFERRED: TimecardsClient refactor
+- 669-line god component identified by Phase 1 first-principles audit.
+- Reason for explicit defer: no test coverage on the component, complex multi-period state, refactor risk outweighs mission value (internal admin tool used by ~5 staff). Should be tackled when test coverage exists OR as part of a planned UX rework.
+
+### Pre-flight verification
+- `npm run typecheck` → **0 errors** in everything touched.
+- All four phases land in single commit `682de723`.
+
+### Cumulative state after Phase A–O
+- **8 commits this session window:** `75ef7e96` (A–I) → `70745617` (env hotfix) → `5b0b1d3c` (env hotfix #2 + shop mission UX + CO₂ reconciliation) → `682de723` (J + M + N + O).
+- **Production live on Vercel:** all customer-facing changes deployed and verified (API + DB roundtrip confirmed via `vercel curl`).
+- **Custom domain `revamp-it.ch` is NOT the Vercel deploy** — still served by Apache (returns 404 on new routes). The Vercel deploys at `revampit-*.vercel.app` receive my work. DNS/proxy update needed by whoever owns the domain.
