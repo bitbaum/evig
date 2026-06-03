@@ -15,6 +15,7 @@ import { eq, and, ne, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
 import { logger } from '@/lib/logger'
+import { logUserDeletion } from '@/lib/auth/audit'
 import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
@@ -235,6 +236,20 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
       deletedUserEmail: targetUser.email,
       deletedUserName: targetUser.name,
     })
+
+    // Compliance audit (DSG / GDPR Art. 17) — sync write so the proof
+    // is durable before the response goes back. Logged AFTER the delete
+    // succeeds; if the delete itself failed we already returned.
+    await logUserDeletion(
+      {
+        userId: session.user.id,
+        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown',
+      },
+      id,
+      targetUser.email,
+      'admin_delete',
+    )
 
     return apiSuccess({ message: `Benutzer ${targetUser.email} wurde gelöscht` })
   } catch (error) {

@@ -380,6 +380,68 @@ export async function logPermissionsChange(
 }
 
 /**
+ * Log a user-account deletion. Sync write — compliance-critical (DSG / GDPR
+ * Art. 17 right-to-erasure proof).
+ */
+export async function logUserDeletion(
+  ctx: AuditContext,
+  targetUserId: string,
+  targetEmail: string,
+  reason: 'admin_delete' | 'self_delete' | 'gdpr_request',
+): Promise<void> {
+  await logAuditEventSync({
+    event_type: 'user_deleted',
+    user_id: ctx.userId || null,
+    ip_address: ctx.ipAddress,
+    user_agent: ctx.userAgent,
+    details: { targetUserId, targetEmail, reason },
+    severity: 'critical',
+  })
+}
+
+/**
+ * Log a data-export request (GDPR/DSG portability). Records who requested
+ * what — both for proving compliance and detecting abuse (mass-exfiltration).
+ */
+export async function logDataExport(
+  ctx: AuditContext,
+  targetUserId: string,
+  exportType: 'self' | 'admin' | 'gdpr_request',
+  bytesExported?: number,
+): Promise<void> {
+  await logAuditEventSync({
+    event_type: 'data_exported',
+    user_id: ctx.userId || null,
+    ip_address: ctx.ipAddress,
+    user_agent: ctx.userAgent,
+    details: { targetUserId, exportType, bytesExported },
+    severity: 'warning',
+  })
+}
+
+/**
+ * Log a content-moderation decision (approve / reject of user-submitted
+ * blog posts, listings, workshops, etc.). Async / buffered — not
+ * security-critical, just need-to-have for moderation audit.
+ */
+export function logContentDecision(
+  ctx: AuditContext,
+  contentType: string,
+  contentId: string,
+  decision: 'approved' | 'rejected' | 'edited',
+  note?: string,
+): void {
+  logAuditEvent({
+    event_type: 'content_moderated',
+    user_id: ctx.userId || null,
+    ip_address: ctx.ipAddress,
+    user_agent: ctx.userAgent,
+    details: { contentType, contentId, decision, note },
+    severity: 'info',
+  })
+}
+
+/**
  * Log super admin status change. Sync write — super-admin grants/revokes
  * are compliance-critical and must not be lost in a buffer.
  */

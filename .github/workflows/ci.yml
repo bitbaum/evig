@@ -80,6 +80,65 @@ jobs:
           fi
           npx playwright test tests/e2e/auth-smoke.spec.ts --project=chromium
 
+  # Migration drift check — applies every SQL migration in scripts/db/migrations/
+  # to a throwaway Postgres container in order, asserts no errors, and reports the
+  # final table count. Catches non-idempotent migrations, broken sequences, and
+  # accidental order-dependence before they hit Neon. Non-blocking advisory:
+  # `continue-on-error: true` so a CI hiccup doesn't block merges — but the run
+  # surfaces immediately in the Actions UI.
+  #
+  # Why this exists: schema_migrations tracking is bootstrapped on Neon (083) but
+  # we still have no automated apply step. Drift between merged-but-unapplied
+  # migrations and the live DB grows invisibly without this gate.
+  migrations:
+    name: Migration Drift Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: revampit_drift
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Apply migrations in order
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: ci
+          PGDATABASE: revampit_drift
+        run: |
+          set -e
+          # gen_random_uuid() is native from PG 13+; pgcrypto guarantees it for
+          # any older bases or migrations that explicitly require the extension.
+          psql -c "CREATE EXTENSION IF NOT EXISTS pgcrypto;" || true
+          count=0
+          for f in $(ls scripts/db/migrations/*.sql | sort -V); do
+            count=$((count + 1))
+            echo "→ $(basename "$f")"
+            psql -v ON_ERROR_STOP=1 -1 -f "$f" >/dev/null
+          done
+          echo ""
+          echo "✓ Applied $count migrations cleanly"
+          echo ""
+          echo "Final table count:"
+          psql -tA -c "SELECT COUNT(*) FROM pg_tables WHERE schemaname='public'"
+          echo ""
+          echo "Tracking table state:"
+          psql -tA -c "SELECT COUNT(*) || ' rows in schema_migrations' FROM schema_migrations"
+
   # Unit tests (still non-blocking while suite matures)
   test:
     name: Run Tests

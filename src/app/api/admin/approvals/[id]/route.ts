@@ -12,6 +12,7 @@ import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/help
 import { validateBody, AdminApprovalActionSchema } from '@/lib/schemas'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import { logger } from '@/lib/logger'
+import { logContentDecision } from '@/lib/auth/audit'
 import { sendEmail } from '@/lib/email'
 import { logActivity } from '@/lib/activity'
 
@@ -116,6 +117,20 @@ export const PATCH = withAdmin<{ id: string }>('approvals', async (request, sess
         subjectId: submission.contentId ?? undefined,
         subjectLabel: submission.title ?? submission.contentType ?? undefined,
       })
+
+      // Compliance audit — buffered (info-severity, not security-critical).
+      // Provides a who-decided-what trail separate from the activity feed
+      // (which is user-facing; audit log is admin-only).
+      logContentDecision(
+        {
+          userId: session.user.id,
+          ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+          userAgent: request.headers.get('user-agent') || 'unknown',
+        },
+        submission.contentType ?? 'unknown',
+        submission.contentId ?? id,
+        action === 'approve' ? 'approved' : 'rejected',
+      )
     }
 
     return apiSuccess({
