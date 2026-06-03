@@ -8,6 +8,8 @@ import { ORG_NUMBERS_DEFAULTS } from '@/lib/org-numbers.defaults'
 import { CATEGORY_WEIGHT_KG, CATEGORY_CO2_KG_OVERRIDE, estimateCO2Savings, estimateCO2Source } from '@/config/co2-impact'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 
 /**
  * /transparenz/co2 — Methodology page for the CO₂ savings estimates.
@@ -62,31 +64,15 @@ export default function Co2MethodologyPage() {
 
   return (
     <div className="min-h-screen">
-      <section className="py-16 sm:py-20 bg-white">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 dark:bg-primary-500/15">
-              <Leaf className="h-5 w-5 text-primary-600 dark:text-primary-400" />
-            </div>
-            <p className="text-xs font-medium uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
-              Methodik
-            </p>
-          </div>
+      <PageHero
+        theme="about"
+        icon={Leaf}
+        title="CO₂-Berechnung & Quellen"
+        subtitle="Wir zeigen, woher jede CO₂-Zahl auf dieser Seite stammt. Konservativ gerundet, immer mit verlinkter Quelle. Lieber eine kleinere, ehrliche Zahl als eine grosse, unbelegbare."
+      />
 
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
-            CO₂-Berechnung & Quellen
-          </h1>
-          <p className="text-base sm:text-lg text-neutral-600 dark:text-neutral-300">
-            Wir zeigen, woher jede CO₂-Zahl auf dieser Seite stammt. Wir runden konservativ
-            nach unten, niemals nach oben. Wenn eine Quelle nicht öffentlich verlinkbar ist,
-            schreiben wir das offen hin. Lieber eine kleinere, ehrliche Zahl als eine grosse,
-            unbelegbare.
-          </p>
-        </div>
-      </section>
-
-      <section className="py-12 sm:py-16 bg-neutral-50">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <Section tone="tinted" density="compact">
+        <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-2 mb-4">
             <Calculator className="h-5 w-5 text-primary-600 dark:text-primary-400" />
             <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
@@ -107,10 +93,10 @@ export default function Co2MethodologyPage() {
             </p>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-12 sm:py-16 bg-white">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <Section tone="surface" density="compact">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             Eingangswerte mit Quellen
           </h2>
@@ -161,10 +147,10 @@ export default function Co2MethodologyPage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-12 sm:py-16 bg-neutral-50">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <Section tone="tinted" density="compact">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
             Gewicht pro Geräte­kategorie
           </h2>
@@ -215,10 +201,10 @@ export default function Co2MethodologyPage() {
             </p>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-12 sm:py-16 bg-white">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <Section tone="surface" density="compact">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
             Grenzen dieser Schätzung
           </h2>
@@ -255,10 +241,10 @@ export default function Co2MethodologyPage() {
             </li>
           </ul>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-12 sm:py-16 bg-neutral-50">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <Section tone="tinted" density="compact">
+        <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
             Aktualisierung & Mitwirken
           </h2>
@@ -283,7 +269,7 @@ export default function Co2MethodologyPage() {
             reicht.
           </p>
         </div>
-      </section>
+      </Section>
     </div>
   )
 }

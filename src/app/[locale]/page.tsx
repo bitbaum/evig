@@ -1,7 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
-import { Recycle, Store, Wrench, BookOpen, Heart, Users, Award, Gift } from 'lucide-react'
+import { Store, Wrench, BookOpen, Heart, Users, Award, Gift } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { buttonClass } from '@/components/ui/button-class'
 import type { Metadata } from 'next'
@@ -199,12 +199,15 @@ export default async function Home() {
         }}
       />
 
-      {/* Section 1: Hero */}
+      {/* Section 1: Hero — display scale (the one billboard-sized
+          headline on the entire homepage). Icon removed: the headline
+          itself carries the brand; an icon badge above massive type
+          becomes visual noise. x.ai aesthetic = headline does the work. */}
       <PageHero
         theme="home"
-        icon={Recycle}
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
+        size="display"
       >
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-6">
           <Link

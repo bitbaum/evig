@@ -29,6 +29,7 @@
     "compliance:i18n": "node scripts/i18n-audit.mjs",
     "compliance": "npm run compliance:ssot && npm run compliance:i18n",
     "i18n:missing": "node scripts/i18n-missing.mjs",
+    "i18n:apply": "node scripts/i18n-apply.mjs",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

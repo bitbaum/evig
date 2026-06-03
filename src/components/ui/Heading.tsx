@@ -1,12 +1,19 @@
 import { cn } from '@/lib/utils'
 
 /**
- * Semantic heading component.
+ * Semantic heading component — single source of truth for type scale.
  *
- * variant="admin"  → compact scale for admin/dashboard UIs (default for admin pages)
- * variant="site"   → large responsive scale for the public marketing site
+ *   variant="display" → x.ai-style hero display type (huge, tight tracking)
+ *   variant="site"    → standard public-marketing scale
+ *   variant="admin"   → compact scale for admin/dashboard UIs
  *
  * All sizes can be overridden with `className`.
+ *
+ * Why three scales: hero sections need DRAMATIC type that doesn't fit
+ * "site" (which has to be reasonable for h2/h3 throughout a page).
+ * "display" is opt-in for the one or two headlines per page that
+ * should land like a billboard. Don't sprinkle display level=1 in
+ * the middle of content — that's noise.
  */
 
 const adminScale = {
@@ -23,6 +30,14 @@ const siteScale = {
   4: 'text-lg sm:text-xl md:text-2xl font-bold',
 } as const
 
+// True display: huge, tight, confident. Reserved for one headline per page.
+const displayScale = {
+  1: 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tighter leading-[1.05]',
+  2: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter leading-[1.1]',
+  3: 'text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight',
+  4: 'text-xl sm:text-2xl md:text-3xl font-bold tracking-tight',
+} as const
+
 const tagMap = {
   1: 'h1',
   2: 'h2',
@@ -32,8 +47,8 @@ const tagMap = {
 
 export type HeadingProps = {
   level: 1 | 2 | 3 | 4
-  /** "site" = public marketing scale (default). "admin" = compact scale for dashboards. */
-  variant?: 'admin' | 'site'
+  /** Type scale variant. "site" = default public scale. */
+  variant?: 'admin' | 'site' | 'display'
   children: React.ReactNode
   className?: string
 } & Omit<React.HTMLAttributes<HTMLHeadingElement>, 'children'>
@@ -46,7 +61,10 @@ export default function Heading({
   ...props
 }: HeadingProps) {
   const Tag = tagMap[level]
-  const base = variant === 'site' ? siteScale[level] : adminScale[level]
+  const base =
+    variant === 'display' ? displayScale[level]
+    : variant === 'site' ? siteScale[level]
+    : adminScale[level]
   return (
     <Tag className={cn(base, className)} {...props}>
       {children}

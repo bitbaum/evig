@@ -26,14 +26,15 @@
 
 ## Tier 2 — major bumps (need a branch + manual verification)
 
-### React 19 (18.3 → 19.2) — **defer 1–2 weeks**
+### React 19 (18.3 → 19.2) — **upgradable now** (1-day branch)
 
-**Why:** Largest blast radius. React 19 reaches GA but ecosystem caught up only recently. Specific concerns for this codebase:
+**Why now (not later):** Peer-deps check confirms ecosystem is ready:
+- `next-auth@5.0.0-beta.31` → `react: ^18.2.0 || ^19.0.0` ✓
+- `recharts@latest` → `react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0` ✓
+- `framer-motion@12.x` → works with React 19 ✓
+- `next@16.2` → built for React 19 ✓
 
-- `next-auth` v5 is still beta and pinned to React 18 compat — verify the beta-31 release notes mention React 19 support, otherwise this blocks.
-- `recharts` 3.x may need a minor bump for React 19 (`forwardRef` API change).
-- `framer-motion` already works with React 19 via 12.x.
-- Custom code: the new `use()` hook is opt-in; no forced rewrite. `useFormStatus` improvements. `ref` as a prop deprecates `forwardRef`.
+Custom code: the new `use()` hook is opt-in; no forced rewrite. `useFormStatus` improvements. `ref` as a prop deprecates `forwardRef` (codemod handles 90%).
 
 **Plan when ready:**
 ```bash
@@ -85,12 +86,14 @@ Effort: 4–8 h for the migration, 1 day burn-in on staging before main.
 
 ## Recommended schedule
 
-| When | Do | Effort |
-|---|---|---|
-| **Today** | Tier 1 (`npm update` + delete `@types/puppeteer`) | 30 min |
-| **Within a week** | React 19 / TS 6 / ESLint 10 in one branch | 1–2 days |
-| **Q4 2026 or later** | Tailwind 4 — wait for ecosystem | 1–2 days, scheduled |
-| **Never** | `@types/node` past Node 20 until runtime catches up | — |
+| When | Do | Effort | Status |
+|---|---|---|---|
+| ~~Today~~ | Tier 1 (`npm update` + delete `@types/puppeteer`) | 30 min | ✅ **done 2026-06-03** |
+| **Next branch** | React 19 (peer-deps already compatible — no blocker) | 4–8 h, smoke-test on staging | unblocked |
+| **Same branch** | TypeScript 6 — bundle for shared verification | 2–4 h surface, mostly cosmetic | unblocked |
+| **Same branch** | ESLint 10 — verify `eslint-config-next` 16.x compat first | 1 h | check first |
+| **Q4 2026 or later** | Tailwind 4 — wait for ecosystem | 1–2 days, scheduled | wait |
+| **Never** | `@types/node` past Node 20 until runtime catches up | — | hold |
 
 ## Notes on dependency velocity
 

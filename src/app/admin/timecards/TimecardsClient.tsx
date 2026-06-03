@@ -16,7 +16,6 @@ import {
   formatTimecardDuration,
   sumTimecardMinutes,
   type TimecardEntryCategory,
-  type TimecardStatus,
 } from '@/config/timecards'
 import {
   WEEKDAY_IDS,
@@ -43,46 +42,12 @@ import {
 } from '@/lib/team/timecard-utils'
 import type { Timecard, TimecardEntryInput, TimecardSaveInput } from '@/lib/schemas/timecards'
 import { ROUTES } from '@/config/routes'
-
-type PeriodMode = 'month' | 'week'
+import type { PeriodMode, TimecardAIResult, DraftState } from './types'
+import { createDraft, toDraftState } from './draft-utils'
 
 interface TimecardsClientProps {
   workingHours: string | null
   userName: string
-}
-
-interface TimecardAIResult {
-  entries?: TimecardEntryInput[]
-  notes?: string
-}
-
-interface DraftState {
-  entries: TimecardEntryInput[]
-  notes: string
-  status: TimecardStatus
-  selectedDate: string
-}
-
-
-function createDraft(entries: TimecardEntryInput[], selectedDate: string): DraftState {
-  return {
-    entries,
-    notes: '',
-    status: TIMECARD_STATUSES.DRAFT,
-    selectedDate,
-  }
-}
-
-function toDraftState(timecard: Timecard, fallbackSelectedDate: string): DraftState {
-  return {
-    entries: timecard.entries,
-    notes: timecard.notes ?? '',
-    status: timecard.status as TimecardStatus,
-    selectedDate:
-      timecard.entries.find(entry => entry.work_date === fallbackSelectedDate)?.work_date ||
-      timecard.entries[0]?.work_date ||
-      fallbackSelectedDate,
-  }
 }
 
 export function TimecardsClient({ workingHours, userName }: TimecardsClientProps) {

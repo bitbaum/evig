@@ -64,7 +64,11 @@ export async function generateInvoicePDF(invoice: InvoiceData): Promise<Buffer> 
     const page = await browser.newPage()
     const htmlContent = generateInvoiceHTML(invoice)
 
-    await page.setContent(htmlContent, { waitUntil: 'networkidle0' })
+    // Puppeteer 24.43+ removed 'networkidle0' from setContent's waitUntil
+    // type — only 'load' and 'domcontentloaded' remain. For an inline-HTML
+    // invoice (no external requests beyond fonts CSS that's already on the
+    // page-level wait), 'load' is the correct gate.
+    await page.setContent(htmlContent, { waitUntil: 'load' })
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
